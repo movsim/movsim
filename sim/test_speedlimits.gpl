@@ -1,0 +1,62 @@
+set style line 1 lt 7 lw 3 pt 7 ps 1.5 
+set style line 2 lt 2 lw 4 pt 5 ps 1.5 
+set style line 3 lt 3 lw 4 pt 9 ps 1.5 
+set style line 4 lt 4 lw 4 pt 11 ps 1.5
+set style line 5 lt 7 lw 4 pt 13 ps 1.5
+
+#status farben
+#set palette defined ( 0 "gray", 1 "#98fb98", 2 "blue", 3 "cyan", 4 "#ff4500", 5 "black")
+set style line 10 pt 5 ps 1 lc rgb "gray"
+set style line 11 pt 5 ps 1 lc rgb "#98fb98"
+set style line 12 pt 5 ps 1 lc rgb "blue"
+set style line 13 pt 5 ps 1 lc rgb "cyan"
+set style line 14 pt 5 ps 1 lc rgb "#ff4500"
+set style line 15 pt 5 ps 1 lc rgb "black"
+## Phasen den Ampel
+##  1=green, 2=green_red (yellow1), 3=red, 4=red_green (yellow2)
+set style line 16 pt 5 ps 1 lc rgb "green"
+set style line 17 pt 5 ps 1 lc rgb "#ffa500"
+set style line 18 pt 5 ps 1 lc rgb "red"
+set style line 19 pt 5 ps 1 lc rgb "yellow"
+
+set term post eps enhanced color solid "Helvetica" 26
+
+########################################################
+
+
+set size 1,1
+deltaTL(x,y, pos) = (abs(1.*x-1.*y)<0.1) ? pos: -1000
+
+set xlabel "Time (s)"
+set ylabel "Position (m)"
+unset key
+set pm3d map
+
+set yrange [0:]
+set out "./figs/test_trafficlights_IDM.trajectories.eps"
+splot\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,0,$3)):(1) t "" w p ls 16,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,1,$3)):(1) t "" w p ls 17,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,2,$3)):(1) t "" w p ls 18,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,3,$3)):(1) t "" w p ls 19,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,0,$5)):(1) t "" w p ls 16,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,1,$5)):(1) t "" w p ls 17,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,2,$5)):(1) t "" w p ls 18,\
+ "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,3,$5)):(1) t "" w p ls 19,\
+ "test_trafficlights_IDM.000001.car" u ($1):($2):(1) t "Fz 1" w l ls 1,\
+ "test_trafficlights_IDM.000004.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
+ "test_trafficlights_IDM.000008.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
+ "test_trafficlights_IDM.000012.car" u ($1):($2):(1) t "Fz 3" w l ls 1,\
+ "test_trafficlights_IDM.000016.car" u ($1):($2):(1) t "Fz 4" w l ls 1,\
+ "test_trafficlights_IDM.000020.car" u ($1):($2):(1) t "Fz 5" w l ls 1,\
+ "test_trafficlights_IDM.000024.car" u ($1):($2):(1) t "Fz 6" w l ls 1,\
+ "test_trafficlights_IDM.000028.car" u ($1):($2):(1) t "Fz 1" w l ls 1,\
+ "test_trafficlights_IDM.000032.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
+ "test_trafficlights_IDM.000036.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
+ "test_trafficlights_IDM.000040.car" u ($1):($2):(1) t "Fz 3" w l ls 1
+ 
+ 
+
+
+  
+  

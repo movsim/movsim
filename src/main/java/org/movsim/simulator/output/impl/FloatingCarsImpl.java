@@ -1,0 +1,169 @@
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
+ *                             Martin Treiber <treibi@mtreiber.de>,
+ *                             Ralph Germ <germ@ralphgerm.de>,
+ *                             Martin Budden <mjbudden@gmail.com>
+ *
+ * ----------------------------------------------------------------------
+ * 
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *
+ *  MovSim is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  MovSim is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
+ *  
+ * ----------------------------------------------------------------------
+ */
+package org.movsim.simulator.output.impl;
+
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+
+import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.simulator.Constants;
+import org.movsim.simulator.output.FloatingCars;
+import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.utilities.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+public class FloatingCarsImpl implements FloatingCars {
+    final static Logger logger = LoggerFactory.getLogger(FloatingCarsImpl.class);
+
+    private final String path = "./";
+    private final String projectName;
+    private final String endingFile = ".car";
+    
+    private final DecimalFormatSymbols us  = new DecimalFormatSymbols(Locale.US);
+    private final DecimalFormat fileFormat = new DecimalFormat("000000", us);
+    
+    private HashMap<Integer, PrintWriter> hashMap;
+    
+    private final int nDtOut;
+    
+    //private double timeOffset;
+    
+     // TODO geeignete Datenstruktur fuer GUI 
+    
+    public FloatingCarsImpl(String projectName, boolean writeOutput, FloatingCarInput input){
+        logger.debug("Cstr. FloatingCars");
+        this.projectName = projectName;
+        
+        this.nDtOut = input.getNDt();
+        //timeOffset = -nDtOut; // write t==0
+        
+        // TODO: not yet implemented.
+//        int dn    = input.getDn();
+//        double percOut = input.getPercOut();
+//        
+        
+        String regex = projectName+"[.]\\d+"+endingFile;
+        FileUtils.deleteFileList(path, regex);
+
+        hashMap = new HashMap<Integer, PrintWriter>( 149,0.75f);
+        
+        final List<Integer> fcdList = input.getFloatingCars();
+        for(Integer i : fcdList){
+            addFCD(i);
+        }
+        
+        
+    }
+
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // update
+    // write output in each update step
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    public void update(int itime, double time, double timestep, VehicleContainer vehContainer) {
+
+//    	
+//        
+//        if ((time - timeOffset + Constants.SMALL_VALUE) >= dtOut) {
+//            timeOffset = time;
+//        }
+//        else{
+//        	return; // no update in this call
+//        }
+//
+        
+        if(itime % nDtOut != 0){
+            return; // no update
+        }
+        
+        // logger.debug("update FloatingCars: itime={}", itime);
+        
+    	final List<Vehicle> vehicles = vehContainer.getVehicles();
+
+        for( Vehicle veh : vehicles){
+            if(!veh.isFromOnramp()){
+                 // only mainroad vehicles
+            	final int vehNumber = veh.getVehNumber();
+            	// TODO: further floating cars ...
+//                if( !hashMap.containsKey(vehNumber) ){
+//                    addFCD(vehNumber);
+//                }
+            	// update existing floating cars
+            	if( hashMap.containsKey(vehNumber) ){
+            		final Vehicle frontVeh = vehContainer.getLeader(veh);
+            		writeData(time, veh, frontVeh, hashMap.get(vehNumber));
+            	}
+            }
+        }  // of for
+    }
+                
+     
+    public void closeAllFiles(){
+        if(!hashMap.isEmpty()){
+            Iterator<Integer>  it = hashMap.keySet().iterator();
+            while (it.hasNext()) {
+                Integer id= (Integer)it.next();
+                hashMap.get(id).close();
+                it.remove();
+            }
+        }
+    }
+
+    private String createFileName(int i, String ending) {
+        String filename = path+projectName+"."+fileFormat.format(i) + ending ;
+        return (filename);
+    }
+    
+    private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
+        fstr.printf("%6.2f %6.3f %6.4f %7.5f %7.5f %7.5f %7.5f %6.2f %4d%n", 
+                time, veh.position(), veh.speed(), veh.acc(), veh.netDistance(frontVeh), veh.relSpeed(frontVeh), 
+                veh.accModel(), veh.distanceToTrafficlight(), veh.getIntLane());
+        fstr.flush();
+    }
+    
+    
+    // header information
+    private void addFCD(int vehNumber) {
+    	final String filename = createFileName(vehNumber, endingFile);
+		PrintWriter fstr = FileUtils.getWriter(filename);
+		hashMap.put(vehNumber, fstr);
+		fstr.println(Constants.COMMENT_CHAR + " t[s] x[m] v[m/s] acc[m/s^2] s[m] dv[m/s] accModel[m/s^2] distToTrafficlight[m]");
+		fstr.flush();
+    }
+
+}

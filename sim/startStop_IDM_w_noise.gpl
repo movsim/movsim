@@ -1,0 +1,98 @@
+set style line 1 lt 1 lw 4 pt 7 ps 1.5 
+set style line 2 lt 2 lw 4 pt 5 ps 1.5 
+set style line 3 lt 3 lw 4 pt 9 ps 1.5 
+set style line 4 lt 4 lw 4 pt 11 ps 1.5
+set style line 5 lt 7 lw 4 pt 13 ps 1.5
+
+set style line 10 lt 1 lw 7 pt 7 ps 1.5 
+
+set style line 11 lt 1 lw 6 pt 7 ps 1.5 
+set style line 12 lt 7 lw 3 pt 5 ps 1.5 
+
+#min(x,y)=(x<y) ? x : y
+
+set term post eps enhanced color solid "Helvetica" 26
+set nogrid
+
+########################################################
+
+set xlabel "Dichte {/Symbol r} (1/km)"
+set ylabel "Fluss Q (1/h)"
+
+set title "Fundamentaldiagram Q({/Symbol r})"
+set out "./figs/startStop_IDM_w_noise.fund_IDM1.eps"
+plot "startStop_IDM_w_noise.fund_IDM1" u 1:4 t "" w l ls 10
+
+
+set ylabel "Geschwindigkeit V_{eq} (km/h)"
+set title "Gleichgewichts-Geschwindigkeit V_{eq}({/Symbol r})"
+set out "./figs/startStop_IDM_w_noise.veq_IDM1.eps"
+plot "startStop_IDM_w_noise.fund_IDM1" u 1:3 t "" w l ls 10
+
+set xlabel "Fluss Q (1/h)"
+set title "V-Q-Gleichgewichtsrelation V_{eq}(Q)"
+set out "./figs/startStop_IDM_w_noise.vq_IDM1.eps"
+plot "startStop_IDM_w_noise.fund_IDM1" u 4:3 t "" w l ls 10
+
+########################################################
+
+set title ""
+
+tmin=0
+tmax=158
+##tmaxdata=101.  # Um bei Beschl. Kurve zu stoppen
+
+set xrange [tmin:tmax]
+set xtics 30
+
+#########################################################
+set size 1,0.75
+set xlabel "Zeit (s)"
+#set key center right
+set key  right
+
+
+#########################################################
+
+set ylabel "Abstand (m)"
+set yrange [0:35]
+set ytics 10
+# car 1: Entfernung zur Ampel !
+set out "./figs/startStop_IDM_w_noise.s.eps"
+plot\
+  "startStop_IDM_w_noise.000001.car"  u 1:8 t "Kfz 1"  w l ls 1,\
+  "startStop_IDM_w_noise.000005.car"  u 1:5 t "Kfz 5"  w l ls 2,\
+  "startStop_IDM_w_noise.000010.car"  u 1:5 t "Kfz 10"  w l ls 3,\
+  "startStop_IDM_w_noise.000015.car" u 1:5 t "Kfz 15" w l ls 4,\
+  "startStop_IDM_w_noise.000020.car" u 1:5 t "Kfz 20" w l ls 5
+  
+
+
+#########################################################
+
+set ylabel "Geschwindigkeit (km/h)"
+set yrange [0:55]
+set out "./figs/startStop_IDM_w_noise.v.eps"
+plot\
+  "startStop_IDM_w_noise.000001.car"  u 1:(3.6*$3) t "Kfz 1"  w l ls 1,\
+  "startStop_IDM_w_noise.000005.car"  u 1:(3.6*$3) t "Kfz 5"  w l ls 2,\
+  "startStop_IDM_w_noise.000010.car"  u 1:(3.6*$3) t "Kfz 10"  w l ls 3,\
+  "startStop_IDM_w_noise.000015.car"  u 1:(3.6*$3) t "Kfz 15"  w l ls 4,\
+  "startStop_IDM_w_noise.000020.car" u 1:(3.6*$3) t "Kfz 20" w l ls 5
+
+#########################################################
+
+set ylabel "Beschleunigung (m/s^2)"
+set auto y
+set ytics 1
+set out "./figs/startStop_IDM_w_noise.a.eps"
+plot\
+  "startStop_IDM_w_noise.000001.car"  u 1:4 t "Kfz 1"  w l ls 1,\
+  "startStop_IDM_w_noise.000005.car"  u 1:4 t "Kfz 5"  w l ls 2,\
+  "startStop_IDM_w_noise.000010.car"  u 1:4 t "Kfz 10"  w l ls 3,\
+  "startStop_IDM_w_noise.000015.car"  u 1:4 t "Kfz 15"  w l ls 4,\
+  "startStop_IDM_w_noise.000020.car"  u 1:4 t "Kfz 20" w l ls 5
+  
+
+  
+  
