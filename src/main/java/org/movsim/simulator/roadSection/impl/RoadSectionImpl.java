@@ -32,10 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.movsim.input.InputData;
+import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
-import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
@@ -79,7 +80,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
     private List<TrafficLight> trafficLights;
 
-    private List<Onramp> onramps = null;
+    private List<Onramp> simpleOnramps = null;
     
 
 
@@ -89,8 +90,8 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         this.isWithGUI = isWithGUI;
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
-        this.roadLength = simInput.getRoadLength();
-        this.nLanes = simInput.getLanes();
+        this.roadLength = simInput.getSingleRoadInput().getRoadLength();
+        this.nLanes = simInput.getSingleRoadInput().getLanes();
         
        
 
@@ -109,11 +110,11 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         
         vehGenerator = new VehicleGeneratorImpl(isWithGUI, inputData);
         
-        final SimulationInput simInput = inputData.getSimulationInput();
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, simInput.getUpstreamBoundaryData(), inputData.getProjectName());
+        final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, roadInput.getUpstreamBoundaryData(), inputData.getProjectName());
         
-        flowConsBottlenecks = new FlowConservingBottlenecksImpl(simInput.getFlowConsBottleneckInputData());
-        speedlimits = new SpeedLimitsImpl(simInput.getSpeedLimitInputData());
+        flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
+        speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
         
         initialConditions(inputData.getSimulationInput());
         initTrafficLights(inputData.getSimulationInput());
@@ -150,7 +151,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     }
 
     private void initialConditions(SimulationInput simInput) {
-        List<ICMacroData> icMacroData = simInput.getIcMacroData();
+        List<ICMacroData> icMacroData = simInput.getSingleRoadInput().getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
 
@@ -175,7 +176,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
             }
         } else {
             logger.debug(("choose micro initial conditions"));
-            List<ICMicroData> icSingle = simInput.getIcMicroData();
+            List<ICMicroData> icSingle = simInput.getSingleRoadInput().getIcMicroData();
             for (ICMicroData ic : icSingle) {
                 // TODO counter !!
                 final double posInit = ic.getX();
@@ -192,19 +193,19 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
     private void initTrafficLights(SimulationInput simInput) {
         trafficLights = new ArrayList<TrafficLight>();
-        List<TrafficLightData> trafficLightData = simInput.getTrafficLightData();
+        List<TrafficLightData> trafficLightData = simInput.getSingleRoadInput().getTrafficLightData();
         for (TrafficLightData tlData : trafficLightData) {
             trafficLights.add(new TrafficLightImpl(tlData));
         }
     }
 
     private void initOnramps(InputData inputData) {
-        onramps = new ArrayList<Onramp>();
-        final List<RampData> onrampData = inputData.getSimulationInput().getRamps();
+        simpleOnramps = new ArrayList<Onramp>();
+        final List<SimpleRampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getSimpleRamps();
         final String projectName = inputData.getProjectName();
         int rampIndex=1;
-        for (RampData onrmp : onrampData) {
-            onramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainer, projectName, rampIndex));
+        for (SimpleRampData onrmp : onrampData) {
+            simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainer, projectName, rampIndex));
             rampIndex++;
         }
     }
@@ -290,9 +291,9 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     }
 
     private void updateOnramps(int itime, double dt, double time) {
-        if (onramps.isEmpty())
+        if (simpleOnramps.isEmpty())
             return;
-        for (Onramp onramp : onramps) {
+        for (Onramp onramp : simpleOnramps) {
             onramp.update(itime, dt, time);
         }
     }

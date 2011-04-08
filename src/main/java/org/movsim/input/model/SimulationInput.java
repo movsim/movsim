@@ -1,14 +1,11 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
+/** 
+ * Copyright (C) 2010, 2011 by Arne Kesting  <mail@akesting.de>, 
+ * 				Martin Treiber <treibi@mtreiber.de>,
+ * 				Ralph Germn <germ@ralphgerm.de>
  *
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *  This file is part of MovSim.
  *
  *  MovSim is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,55 +18,29 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  *  
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
-import org.movsim.input.model.simulation.HeterogeneityInputData;
-import org.movsim.input.model.simulation.ICMacroData;
-import org.movsim.input.model.simulation.ICMicroData;
-import org.movsim.input.model.simulation.RampData;
-import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.input.model.simulation.TrafficLightData;
-import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
 
 public interface SimulationInput {
 
     double getTimestep();
 
-    double getRoadLength();
-
     double getMaxSimulationTime();
 
     boolean isWithFixedSeed();
 
     int getRandomSeed();
-
-    boolean isWithWriteFundamentalDiagrams();
     
-    List<HeterogeneityInputData> getHeterogeneityInputData();
-
-    List<ICMacroData> getIcMacroData();
-
-    List<ICMicroData> getIcMicroData();
-
-    UpstreamBoundaryData getUpstreamBoundaryData();
-
-    List<FlowConservingBottleneckDataPoint> getFlowConsBottleneckInputData();
+    ArrayList<RoadInput> getRoadInput();
     
-    List<SpeedLimitDataPoint> getSpeedLimitInputData();
-
-    List<RampData> getRamps();
-
-    List<TrafficLightData> getTrafficLightData();
-
-    int getLanes();
-
+    // quick hack: only one single main road
+    RoadInput getSingleRoadInput();
+    
 }

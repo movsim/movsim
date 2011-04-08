@@ -59,6 +59,8 @@ public class SimOutput {
     
     private final String projectName;
     
+    // TODO: propagate output path information into output modules ... 
+    
     public SimOutput(boolean isWithGUI, InputData simInput, RoadSection roadSection) {
         projectName = simInput.getProjectName();
         

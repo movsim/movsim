@@ -14,6 +14,7 @@ import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
@@ -22,6 +23,7 @@ import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
 import org.movsim.input.model.simulation.impl.ICMacroDataImpl;
 import org.movsim.input.model.simulation.impl.ICMicroDataImpl;
 import org.movsim.input.model.simulation.impl.RampDataImpl;
+import org.movsim.input.model.simulation.impl.SimpleRampDataImpl;
 import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
 import org.movsim.input.model.simulation.impl.TrafficLightDataImpl;
 import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
@@ -45,7 +47,10 @@ public class RoadInputImpl implements RoadInput {
     private List<FlowConservingBottleneckDataPoint> flowConsBottleneckInputData;
     private List<SpeedLimitDataPoint> speedLimitInputData;
     
+    private List<SimpleRampData> simpleRamps;
     private List<RampData> ramps;
+    
+    
     private List<TrafficLightData> trafficLightData;
     
     
@@ -65,6 +70,7 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
         
         // heterogeneity element with vehicle types
+        
         final Element heterogenElem = elem.getChild("TRAFFIC_COMPOSITION");
         isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true : false;
         final List<Element> vehTypeElems = elem.getChild("TRAFFIC_COMPOSITION").getChildren("VEHICLE_TYPE");
@@ -163,8 +169,24 @@ public class RoadInputImpl implements RoadInput {
         });
 
         // -----------------------------------------------------------
+
+        // non-physical ramps implementing a drop-down mechanism without lane-changing decisions   
+        simpleRamps = new ArrayList<SimpleRampData>();
+        final List<Element> simpleRampElems = elem.getChild("RAMPS").getChildren("SIMPLE_RAMP");
+        for (Element simpleRampElem : simpleRampElems) {
+            simpleRamps.add(new SimpleRampDataImpl(simpleRampElem));
+        }
         
-        // Ramps
+        Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
+            public int compare(SimpleRampData o1, SimpleRampData o2) {
+                Double pos1 = new Double((o1).getCenterPosition());
+                Double pos2 = new Double((o2).getCenterPosition());
+                return pos1.compareTo(pos2); // sort with increasing x 
+            }
+        });
+
+     // -----------------------------------------------------------
+        // physical ramps  
         ramps = new ArrayList<RampData>();
         final List<Element> rampElems = elem.getChild("RAMPS").getChildren("RAMP");
         for (Element rampElem : rampElems) {
@@ -281,6 +303,10 @@ public class RoadInputImpl implements RoadInput {
 
     public boolean isWithWriteFundamentalDiagrams(){
         return isWithWriteFundamentalDiagrams;
+    }
+
+    public List<SimpleRampData> getSimpleRamps() {
+        return simpleRamps;
     }
 
     

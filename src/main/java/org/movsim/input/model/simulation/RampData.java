@@ -39,6 +39,8 @@ public interface RampData {
 
     double getRampLength();
     
+    double getRoadLength();
+    
     boolean withLogging();
 
 }

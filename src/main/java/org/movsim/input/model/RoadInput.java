@@ -7,6 +7,7 @@ import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
@@ -33,6 +34,8 @@ public interface RoadInput {
     List<SpeedLimitDataPoint> getSpeedLimitInputData();
 
     List<RampData> getRamps();
+    
+    List<SimpleRampData> getSimpleRamps();
 
     List<TrafficLightData> getTrafficLightData();
 

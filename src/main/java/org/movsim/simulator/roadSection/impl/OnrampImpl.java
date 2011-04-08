@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.Onramp;
@@ -84,7 +85,7 @@ public class OnrampImpl implements Onramp{
     
 
 
-    public OnrampImpl(RampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer, String projectName, int rampIndex){
+    public OnrampImpl(SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer, String projectName, int rampIndex){
         
         this.vehGenerator = vehGenerator;
         vehicleQueue = new LinkedList<Vehicle>();

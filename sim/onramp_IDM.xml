@@ -58,7 +58,7 @@
 
   <!-- improve veh performance at inflow -->
   <FLOW_CONSERVING_INHOMOGENEITIES>
-   <INHOMOGENEITY x="0"     alpha_T="0.8"  /> 
+   <INHOMOGENEITY x="0"    alpha_T="0.8"  /> 
    <INHOMOGENEITY x="2000" alpha_T="1"   />
   </FLOW_CONSERVING_INHOMOGENEITIES>
   
@@ -67,9 +67,9 @@
   </SPEED_LIMITS>
 
   <RAMPS>
-    <RAMP x_center="15000" length="1000" with_logging="true" >
+    <SIMPLE_RAMP x_center="15000" length="1000" with_logging="true" >
        <INFLOW t="0" q_invh="550" />
-    </RAMP>
+    </SIMPLE_RAMP>
   </RAMPS>
 
   <TRAFFICLIGHTS>

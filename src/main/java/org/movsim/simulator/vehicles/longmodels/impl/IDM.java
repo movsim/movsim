@@ -101,11 +101,11 @@ public class IDM extends LongitudinalModelImpl implements LongitudinalModel{
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double TLoc  = alphaT*T; 
-        final double v0Loc = Math.min(alphaV0*v0, me.speedlimit());  // consider external speedlimit
-        final double aLoc = alphaA*a;
+        final double TLocal  = alphaT*T; 
+        final double v0Local = Math.min(alphaV0*v0, me.speedlimit());  // consider external speedlimit
+        final double aLocal = alphaA*a;
         
-        double sstar  = s0 + TLoc*v + s1*Math.sqrt((v+0.0001)/v0Loc) + (0.5*v*dv)/Math.sqrt(aLoc*b);
+        double sstar  = s0 + TLocal*v + s1*Math.sqrt((v+0.0001)/v0Local) + (0.5*v*dv)/Math.sqrt(aLocal*b);
 
 //        if(sstar<s0+0.2*v*Tloc){
 //            sstar=s0+0.2*v*Tloc;
@@ -113,7 +113,7 @@ public class IDM extends LongitudinalModelImpl implements LongitudinalModel{
         if(sstar<s0){ sstar=s0;}  
         
 
-        final double aWanted = aLoc*( 1.- Math.pow((v/v0Loc), delta) - (sstar/s)*(sstar/s));
+        final double aWanted = aLocal*( 1.- Math.pow((v/v0Local), delta) - (sstar/s)*(sstar/s));
 
         // logger.debug("aWantet = {}", aWanted);
         return  aWanted; // limit to -bMax in Vehicle

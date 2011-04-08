@@ -103,7 +103,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         normalizeFractions(sumFraction);
         
         // output fundamental diagrams
-        if( !isWithGUI && simInput.getSimulationInput().isWithWriteFundamentalDiagrams()){
+        if( !isWithGUI && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()){
             writeFundamentalDiagrams();
         }
         
@@ -119,7 +119,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     	
         Map<String, VehicleInput> vehInputMap = createMap(simInput.getVehicleInputData());
         
-        List<HeterogeneityInputData> heterogenInputData = simInput.getSimulationInput().getHeterogeneityInputData();
+        List<HeterogeneityInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput().getHeterogeneityInputData();
         
         double sumFraction=0;
         for( HeterogeneityInputData heterogen : heterogenInputData){

@@ -10,7 +10,7 @@
     <LONGITUDINAL_MODEL>
        <ACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="1"/>
     </LONGITUDINAL_MODEL>
-    <LANE_CHANGING_MODEL/>
+    <LANE_CHANGE_MODEL/>
   </VEHICLE>
 </DRIVER_VEHICLE_UNITS>
 
@@ -26,10 +26,12 @@
   </FLOATING_CAR_DATA>
 </OUTPUT>
 
-<SIMULATION dt="0.2" x_max="20000" t_max="360" lanes="1" with_fixed_seed="true" seed="42">
-  <HETEROGENEITY write_fund_diagrams="true" >
+<SIMULATION dt="0.2" t_max="360" with_fixed_seed="true" seed="42">
+
+  <ROAD id="1" x_max="20000"  lanes="1"  >
+  <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
     <VEHICLE_TYPE label="ACC1" fraction="1"  />
-  </HETEROGENEITY>
+  </TRAFFIC_COMPOSITION>
   
   <INITIAL_CONDITIONS>
   <IC_MICRO x="10"  v="0" />  
@@ -61,8 +63,12 @@
   </INITIAL_CONDITIONS>
 
 
-  <UPSTREAM_BOUNDARY_CONDITIONS>
-  </UPSTREAM_BOUNDARY_CONDITIONS>
+  <TRAFFIC_SOURCE>
+  </TRAFFIC_SOURCE>
+
+  <TRAFFIC_SINK>
+  </TRAFFIC_SINK>
+
 
   <FLOW_CONSERVING_INHOMOGENEITIES>
   </FLOW_CONSERVING_INHOMOGENEITIES>
@@ -78,7 +84,7 @@
   <TRAFFICLIGHTS>
      <TRAFFICLIGHT x="1000" green_time="30" green_red_time="3" red_time="200" red_green_time="2" phase_shift="0" /> 
   </TRAFFICLIGHTS>
-
+  </ROAD>
 </SIMULATION>
 
 </SCENARIO>

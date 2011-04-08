@@ -182,36 +182,26 @@ public class VehicleImpl implements Vehicle, VehicleGUI{
     
     public void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0) {
         
-        // "this" is egoVehicle
-//
-//        double xMe   = (finiteTr()) ? cyclicBuf->get_x(iveh,  it, p_model->get_T_react())   : cyclicBuf->get_x(iveh);
-//        double xLead = (finiteTr()) ? cyclicBuf->get_x(iveh-1,it, p_model->get_T_react())   : cyclicBuf->get_x(iveh-1); 
-//        double vMe   = (finiteTr()) ? cyclicBuf->get_v(iveh,  it, p_model->get_T_react())   : cyclicBuf->get_v(iveh);
-//        double vLead = (finiteTr()) ? cyclicBuf->get_v(iveh-1,it, p_model->get_T_react())   : cyclicBuf->get_v(iveh-1);
-//        double lengthLead = cyclicBuf->get_l(iveh-1);
-//
-//        
-        
-        
         // new: acceleration noise:
         double accError = 0;
         if (noise != null) {
             noise.update(dt);
             accError = noise.getAccError();
-            Vehicle vehFront = vehContainer.getLeader(this);
+            final Vehicle vehFront = vehContainer.getLeader(this);
             if (netDistance(vehFront) < 2.0){
                 accError = Math.min(accError, 0.); // !!!
             }
             // logger.debug("accError = {}", accError);
         }
 
+        
+        // TODO extract to super class
         double alphaTLocal = alphaT;
         double alphaV0Local = alphaV0;
         double alphaALocal = 1;
         
-        // TODO: kombination mit alphaV0: man sollte das Referenz-V0 nehmen
+        // TODO check concept here: kombination mit alphaV0: man sollte das Referenz-V0 nehmen
         // und NICHT das dynamische, durch Speedlimits beeinflusste v0
-        // Das longModel muss diese Werte unterscheiden.
         if(memory!=null){
             final double v0 = longModel.parameterV0();
             memory.update(dt, speed, v0);
@@ -219,10 +209,11 @@ public class VehicleImpl implements Vehicle, VehicleGUI{
             alphaV0Local *= memory.alphaV0();
             alphaALocal *= memory.alphaA();
         }
-        
-        
+                
+        // TODO gekapseltere Aufruf
         accModel = longModel.acc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal); 
 
+        
         //consider red or amber/yellow traffic light:
         if(considerTrafficLight){
             acc = Math.min(accModel, accTrafficLight);

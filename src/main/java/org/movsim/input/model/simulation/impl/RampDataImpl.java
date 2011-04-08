@@ -40,17 +40,22 @@ import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.RampData;
 
 
+// TODO: concept of real onramp with lane changes not yet implemented
 public class RampDataImpl implements RampData {
 
     private List<InflowDataPoint> inflowTimeSeries;
 	private double centerPosition;
 	private double rampLength;
+	private double roadLength;
+	
+	
 	private boolean withLogging;
 
 	@SuppressWarnings("unchecked")
     public RampDataImpl(Element elem){
 	    this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
+        this.roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
         
         final List<Element> inflowElems = elem.getChildren("INFLOW");
@@ -93,21 +98,13 @@ public class RampDataImpl implements RampData {
     public double getRampLength() {
         return rampLength;
     }
+    
+    public double getRoadLength() {
+        return roadLength;
+    }
 
     public boolean withLogging(){
         return withLogging;
     }
-    
-//	public void setInflowTimeSeries(List<InflowDataPoint> listInflowDataPoints) {
-//		this.inflowTimeSeries = listInflowDataPoints;
-//	}
-
-//	public void setCenterPosition(double centerPosition) {
-//		this.centerPosition = centerPosition;
-//	}
-
-//	public void setRampLength(double rampLength) {
-//		this.rampLength = rampLength;
-//	}
-
+  
 }
