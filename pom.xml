@@ -8,6 +8,7 @@
 	<packaging>jar</packaging>
 
 	<name>movsim</name>
+	<description>multi-model, open-source vehicular-traffic simulator </description>
 	<url>http://www.movsim.org</url>
 
 	<properties>
