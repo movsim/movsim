@@ -34,11 +34,11 @@ import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGUI;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longbehavior.Memory;
 import org.movsim.simulator.vehicles.longbehavior.Noise;
 import org.movsim.simulator.vehicles.longbehavior.impl.MemoryImpl;
 import org.movsim.simulator.vehicles.longbehavior.impl.NoiseImpl;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI{
     private double speedlimit; // state variable
     
     
-    private LongitudinalModel longModel;
+    private AccelerationModel longModel;
     
     private Memory memory = null;
     
@@ -80,7 +80,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI{
 
     private CyclicBufferImpl cyclicBuffer; // TODO
 
-    public VehicleImpl(int id, LongitudinalModel longModel, VehicleInput vehInput, CyclicBufferImpl cyclicBuffer ){
+    public VehicleImpl(int id, AccelerationModel longModel, VehicleInput vehInput, CyclicBufferImpl cyclicBuffer ){
         this.id = id;
         
         length = vehInput.getLength();

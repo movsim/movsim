@@ -28,7 +28,7 @@
  */
 package org.movsim.simulator.vehicles.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodels.impl.Gipps;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.Gipps;
 
 
 public class EquilibriumGipps extends EquilibriumPropertiesImpl{

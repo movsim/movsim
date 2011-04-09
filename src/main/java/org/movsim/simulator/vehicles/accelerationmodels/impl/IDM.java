@@ -26,14 +26,14 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels.impl;
+package org.movsim.simulator.vehicles.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.ModelInputDataIDM;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.impl.VehicleImpl;
-import org.movsim.simulator.vehicles.longmodels.LongModelCategory;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
 //Congested traffic states in empirical observations and microscopic simulations
 //Physical Review E 62, 1805–1824 (2000)
 
-public class IDM extends LongitudinalModelImpl implements LongitudinalModel{
+public class IDM extends LongitudinalModelImpl implements AccelerationModel{
     
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
     
@@ -60,7 +60,7 @@ public class IDM extends LongitudinalModelImpl implements LongitudinalModel{
     
     
     public IDM(String modelName, ModelInputDataIDM parameters){
-        super(modelName, LongModelCategory.CONTINUOUS_MODEL);
+        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
         this.v0 = parameters.getV0();
         this.T = parameters.getT();
         this.s0 = parameters.getS0();

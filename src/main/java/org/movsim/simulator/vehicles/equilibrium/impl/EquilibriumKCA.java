@@ -28,7 +28,7 @@
  */
 package org.movsim.simulator.vehicles.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodels.impl.KCA;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.KCA;
 
 public class EquilibriumKCA extends EquilibriumPropertiesImpl {
     

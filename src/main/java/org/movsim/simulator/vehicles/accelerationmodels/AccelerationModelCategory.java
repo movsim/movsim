@@ -26,9 +26,9 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels;
+package org.movsim.simulator.vehicles.accelerationmodels;
 
-public interface LongModelCategory {
+public interface AccelerationModelCategory {
 
 	final int CONTINUOUS_MODEL = 0;
 	final int INTERATED_MAP_MODEL = 1;

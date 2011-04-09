@@ -28,7 +28,7 @@
  */
 package org.movsim.simulator.vehicles.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodels.impl.OVM_VDIFF;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.OVM_VDIFF;
 
 public class EquilibriumOVM_VDIFF extends EquilibriumPropertiesImpl {
 

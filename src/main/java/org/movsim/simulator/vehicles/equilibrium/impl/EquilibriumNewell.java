@@ -28,7 +28,7 @@
  */
 package org.movsim.simulator.vehicles.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodels.impl.Newell;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.Newell;
 
 public class EquilibriumNewell  extends EquilibriumPropertiesImpl {
     

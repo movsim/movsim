@@ -26,18 +26,18 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels.impl;
+package org.movsim.simulator.vehicles.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.ModelInputDataKCA;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.longmodels.LongModelCategory;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 
 
 // paper reference / Kerner book 
-public class KCA extends LongitudinalModelImpl implements LongitudinalModel{
+public class KCA extends LongitudinalModelImpl implements AccelerationModel{
 
     private static final double dtCA = 1; // update timestep for CA !!
     
@@ -52,7 +52,7 @@ public class KCA extends LongitudinalModelImpl implements LongitudinalModel{
 	private double length;
 	
     public KCA(String modelName, ModelInputDataKCA parameters, double length){
-        super(modelName, LongModelCategory.CELLULAR_AUTOMATON);
+        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
         
         this.v0  = parameters.getV0();
         this.k   = parameters.getK();

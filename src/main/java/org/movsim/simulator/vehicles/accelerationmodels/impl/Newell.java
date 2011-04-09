@@ -26,23 +26,23 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels.impl;
+package org.movsim.simulator.vehicles.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.ModelInputDataNewell;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.longmodels.LongModelCategory;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 
 
 // paper reference ...
 // TODO implementation
-public class Newell extends LongitudinalModelImpl implements LongitudinalModel{
+public class Newell extends LongitudinalModelImpl implements AccelerationModel{
 
     private final double dt;
     
     public Newell(String modelName, ModelInputDataNewell parameters){
-        super(modelName, LongModelCategory.INTERATED_MAP_MODEL);
+        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
         this.dt = 1; // model parameter
     }
     

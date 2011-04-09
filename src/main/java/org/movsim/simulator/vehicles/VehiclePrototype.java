@@ -30,8 +30,8 @@ package org.movsim.simulator.vehicles;
 
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.equilibrium.EquilibriumProperties;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
 
 public class VehiclePrototype {
 
@@ -41,14 +41,14 @@ public class VehiclePrototype {
     
     private double reactionTime;
     
-    private LongitudinalModel longModel;
+    private AccelerationModel longModel;
     
     private EquilibriumProperties equiProperties;
     
     private VehicleInput vehicleInput;
     
     
-    public VehiclePrototype(double fraction, LongitudinalModel longModel, EquilibriumProperties equilProperties, VehicleInput vehicleInput){
+    public VehiclePrototype(double fraction, AccelerationModel longModel, EquilibriumProperties equilProperties, VehicleInput vehicleInput){
         this.length = vehicleInput.getLength();
         this.reactionTime = vehicleInput.getReactionTime();
         this.fraction = fraction;
@@ -69,7 +69,7 @@ public class VehiclePrototype {
         this.fraction = normFraction;
     }
 
-    public LongitudinalModel getLongModel() {
+    public AccelerationModel getLongModel() {
         return longModel;
     }
     

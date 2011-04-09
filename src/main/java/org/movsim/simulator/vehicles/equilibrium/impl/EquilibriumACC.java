@@ -28,7 +28,7 @@
  */
 package org.movsim.simulator.vehicles.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodels.impl.ACC;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.ACC;
 
 public class EquilibriumACC extends EquilibriumPropertiesImpl{
 

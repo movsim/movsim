@@ -26,12 +26,12 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels;
+package org.movsim.simulator.vehicles.accelerationmodels;
 
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 
-public interface LongitudinalModel {
+public interface AccelerationModel {
 
     String modelName();
     boolean isCA();

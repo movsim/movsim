@@ -26,13 +26,13 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels.impl;
+package org.movsim.simulator.vehicles.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.ModelInputDataACC;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.longmodels.LongModelCategory;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 
 // Reference for constant-acceleration heuristic:
 // Arne Kesting, Martin Treiber, Dirk Helbing
@@ -42,7 +42,7 @@ import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
 // Reference for improved intelligent driver extension:
 // book ... 
  
-public class ACC extends LongitudinalModelImpl implements LongitudinalModel{
+public class ACC extends LongitudinalModelImpl implements AccelerationModel{
     
 	private double v0;  //  desired velocity (m/s)
     private double T;   // time headway (s)
@@ -57,7 +57,7 @@ public class ACC extends LongitudinalModelImpl implements LongitudinalModel{
     //ModelInputDataACC parameters;
     
     public ACC(String modelName, ModelInputDataACC parameters){
-        super(modelName, LongModelCategory.CONTINUOUS_MODEL);
+        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
         this.v0 = parameters.getV0();
         this.T = parameters.getT();
         this.s0 = parameters.getS0();

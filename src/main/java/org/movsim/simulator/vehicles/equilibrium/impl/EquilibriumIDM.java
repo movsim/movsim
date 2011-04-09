@@ -28,7 +28,7 @@
  */
 package org.movsim.simulator.vehicles.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodels.impl.IDM;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.IDM;
 
 public class EquilibriumIDM extends EquilibriumPropertiesImpl {
 

@@ -26,9 +26,9 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels.impl;
+package org.movsim.simulator.vehicles.accelerationmodels.impl;
 
-import org.movsim.simulator.vehicles.longmodels.LongModelCategory;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
 
 public abstract class LongitudinalModelImpl {
 
@@ -47,11 +47,11 @@ public abstract class LongitudinalModelImpl {
     }
 
     public boolean isCA() {
-        return (modelCategory == LongModelCategory.CELLULAR_AUTOMATON);
+        return (modelCategory == AccelerationModelCategory.CELLULAR_AUTOMATON);
     }
     
     public boolean isIteratedMap() {
-        return (modelCategory == LongModelCategory.INTERATED_MAP_MODEL);
+        return (modelCategory == AccelerationModelCategory.INTERATED_MAP_MODEL);
     }
     
     

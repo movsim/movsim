@@ -26,21 +26,21 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodels.impl;
+package org.movsim.simulator.vehicles.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.longmodels.LongModelCategory;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 
 // paper references Bando Model and velocity-difference model
-public class OVM_VDIFF extends LongitudinalModelImpl implements LongitudinalModel {
+public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationModel {
 
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);
 
@@ -59,7 +59,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements LongitudinalMode
     private int choiceOptFuncVariant; // variants: 0=fullVD orig, 1=fullVD secBased, 2=threePhase
 
     public OVM_VDIFF(String modelName, ModelInputDataOVM_VDIFF parameter) {
-        super(modelName, LongModelCategory.CONTINUOUS_MODEL);
+        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
         this.s0 = parameter.getS0();
         this.v0 = parameter.getV0();
         this.tau = parameter.getTau();

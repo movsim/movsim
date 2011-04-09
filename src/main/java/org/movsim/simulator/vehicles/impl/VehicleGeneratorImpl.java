@@ -49,6 +49,14 @@ import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.ACC;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.Gipps;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.IDM;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.KCA;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.NSM;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.Newell;
+import org.movsim.simulator.vehicles.accelerationmodels.impl.OVM_VDIFF;
 import org.movsim.simulator.vehicles.equilibrium.EquilibriumProperties;
 import org.movsim.simulator.vehicles.equilibrium.impl.EquilibriumACC;
 import org.movsim.simulator.vehicles.equilibrium.impl.EquilibriumGipps;
@@ -57,14 +65,6 @@ import org.movsim.simulator.vehicles.equilibrium.impl.EquilibriumKCA;
 import org.movsim.simulator.vehicles.equilibrium.impl.EquilibriumNSM;
 import org.movsim.simulator.vehicles.equilibrium.impl.EquilibriumNewell;
 import org.movsim.simulator.vehicles.equilibrium.impl.EquilibriumOVM_VDIFF;
-import org.movsim.simulator.vehicles.longmodels.LongitudinalModel;
-import org.movsim.simulator.vehicles.longmodels.impl.ACC;
-import org.movsim.simulator.vehicles.longmodels.impl.Gipps;
-import org.movsim.simulator.vehicles.longmodels.impl.IDM;
-import org.movsim.simulator.vehicles.longmodels.impl.KCA;
-import org.movsim.simulator.vehicles.longmodels.impl.NSM;
-import org.movsim.simulator.vehicles.longmodels.impl.Newell;
-import org.movsim.simulator.vehicles.longmodels.impl.OVM_VDIFF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +78,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private final String projectName;  
     
     // enthaelt die Menge der definierte Models ... notwendig fuer GUI 
-    //private HashMap<String, LongitudinalModel> longModels;
+    //private HashMap<String, AccelerationModel> longModels;
     
     // enthaelt die Heterogenitaet der tatsaechlich simulierten Fahrzeuge 
     private HashMap<String, VehiclePrototype> prototypes;
@@ -92,7 +92,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         this.projectName = simInput.getProjectName();
        
         // erzeuge long models: 
-        //longModels = new HashMap<String, LongitudinalModel>();
+        //longModels = new HashMap<String, AccelerationModel>();
         //createLongModels(simInput);
 
         // erzeuge vehicle prototypen gemaess heterogeneity
@@ -132,7 +132,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             VehicleInput vehInput = vehInputMap.get(keyName);
             
             final double vehLength = vehInput.getLength();
-            final LongitudinalModel longModel = longModelFactory(vehInput.getModelInputData(), vehLength);
+            final AccelerationModel longModel = longModelFactory(vehInput.getModelInputData(), vehLength);
             
             EquilibriumProperties fundDia = fundDiagramFactory(vehLength, longModel);
             
@@ -178,7 +178,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
 
 
-    private EquilibriumProperties fundDiagramFactory(double vehLength, LongitudinalModel longModel){
+    private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModel longModel){
         if( longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_IDM)){
             return new EquilibriumIDM(vehLength, (IDM)longModel);
         }
@@ -208,9 +208,9 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         
     }
     
-    private LongitudinalModel longModelFactory(ModelInputData modelInputData, double vehLength){
+    private AccelerationModel longModelFactory(ModelInputData modelInputData, double vehLength){
         String modelName = modelInputData.getModelName();
-        LongitudinalModel longModel = null;
+        AccelerationModel longModel = null;
         logger.info("modelName = {}", modelName);
         if(modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)){
             longModel = new IDM(modelName, (ModelInputDataIDM)modelInputData);
@@ -266,8 +266,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     
    
     
-    private LongitudinalModel longModelFactory(LongitudinalModel modelToCopy){
-        LongitudinalModel longModel = null;
+    private AccelerationModel longModelFactory(AccelerationModel modelToCopy){
+        AccelerationModel longModel = null;
         final String modelName = modelToCopy.modelName();
         if(modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)){
             longModel = new IDM((IDM)modelToCopy);
@@ -324,7 +324,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         //final double length = prototype.length();
         //final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
-        final LongitudinalModel longModel = longModelFactory(prototype.getLongModel());
+        final AccelerationModel longModel = longModelFactory(prototype.getLongModel());
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
         
         final Vehicle veh = new VehicleImpl(vehID, longModel, vehInput, cyclicBuffer);
