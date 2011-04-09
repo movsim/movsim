@@ -26,22 +26,12 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
-import org.movsim.simulator.vehicles.accelerationmodels.impl.Newell;
+public interface AccelerationModelCategory {
 
-public class EquilibriumNewell  extends EquilibriumPropertiesImpl {
-    
-    public EquilibriumNewell(double length, Newell newellModel) {
-        super(length);  
-
-        calcEquilibrium(newellModel);
-        calcRhoQMax();
-
-    }
-
-    private void calcEquilibrium(Newell newellModel) {
-        // TODO Auto-generated method stub
-        
-    }
+	final int CONTINUOUS_MODEL = 0;
+	final int INTERATED_MAP_MODEL = 1;
+	final int CELLULAR_AUTOMATON = 2;
+	
 }

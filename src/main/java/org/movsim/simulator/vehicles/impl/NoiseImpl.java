@@ -26,11 +26,11 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longbehavior.impl;
+package org.movsim.simulator.vehicles.impl;
 
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.simulator.impl.MyRandom;
-import org.movsim.simulator.vehicles.longbehavior.Noise;
+import org.movsim.simulator.vehicles.Noise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

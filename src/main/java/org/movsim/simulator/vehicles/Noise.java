@@ -26,41 +26,11 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.accelerationmodels.impl;
+package org.movsim.simulator.vehicles;
 
-import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
-
-public abstract class LongitudinalModelImpl {
-
-	
-    private final String modelName;
-
-    private final int modelCategory;
+public interface Noise {
     
-    public LongitudinalModelImpl(String modelName, int modelCategory) {
-        this.modelName = modelName;
-        this.modelCategory = modelCategory;
-    }
-
-    public String modelName() {
-        return modelName;
-    }
-
-    public boolean isCA() {
-        return (modelCategory == AccelerationModelCategory.CELLULAR_AUTOMATON);
-    }
+    void update(double dt);
     
-    public boolean isIteratedMap() {
-        return (modelCategory == AccelerationModelCategory.INTERATED_MAP_MODEL);
-    }
-    
-    
-    public int getModelCategory(){
-    	return modelCategory;
-    }
-    // TODO: fuer alle Modelle ?! analog: T !?
-    public abstract double parameterV0();
-
-    public abstract double getRequiredUpdateTime();
-    
+    double getAccError();
 }

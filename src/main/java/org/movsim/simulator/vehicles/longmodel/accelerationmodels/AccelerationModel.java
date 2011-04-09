@@ -26,15 +26,31 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longbehavior;
+package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
-public interface Memory {
+import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.VehicleContainer;
 
-    void update(double dt, double v, double v0);
+public interface AccelerationModel {
 
-    double alphaA();
-
-    double alphaV0();
-
-    double alphaT();
+    String modelName();
+    boolean isCA();
+    boolean isIteratedMap();
+    int getModelCategory();
+    
+    double getRequiredUpdateTime();
+    
+    double parameterV0();
+    
+    
+    double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
+    
+    double accSimple(double s, double v, double dv);
+    
+    
+    
+    
+    
+    
+    
 }

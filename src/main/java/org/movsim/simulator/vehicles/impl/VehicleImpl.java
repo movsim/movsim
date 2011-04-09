@@ -31,14 +31,13 @@ package org.movsim.simulator.vehicles.impl;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.vehicles.Noise;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGUI;
-import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longbehavior.Memory;
-import org.movsim.simulator.vehicles.longbehavior.Noise;
-import org.movsim.simulator.vehicles.longbehavior.impl.MemoryImpl;
-import org.movsim.simulator.vehicles.longbehavior.impl.NoiseImpl;
+import org.movsim.simulator.vehicles.longmodel.Memory;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

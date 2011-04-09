@@ -26,31 +26,22 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.accelerationmodels;
+package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 
-public interface AccelerationModel {
+public class EquilibriumNewell  extends EquilibriumPropertiesImpl {
+    
+    public EquilibriumNewell(double length, Newell newellModel) {
+        super(length);  
 
-    String modelName();
-    boolean isCA();
-    boolean isIteratedMap();
-    int getModelCategory();
-    
-    double getRequiredUpdateTime();
-    
-    double parameterV0();
-    
-    
-    double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
-    
-    double accSimple(double s, double v, double dv);
-    
-    
-    
-    
-    
-    
-    
+        calcEquilibrium(newellModel);
+        calcRhoQMax();
+
+    }
+
+    private void calcEquilibrium(Newell newellModel) {
+        // TODO Auto-generated method stub
+        
+    }
 }

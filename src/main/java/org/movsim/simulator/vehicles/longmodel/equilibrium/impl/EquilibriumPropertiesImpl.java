@@ -26,12 +26,12 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import java.io.PrintWriter;
 
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.vehicles.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;

@@ -26,12 +26,15 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.accelerationmodels;
+package org.movsim.simulator.vehicles.longmodel;
 
-public interface AccelerationModelCategory {
+public interface Memory {
 
-	final int CONTINUOUS_MODEL = 0;
-	final int INTERATED_MAP_MODEL = 1;
-	final int CELLULAR_AUTOMATON = 2;
-	
+    void update(double dt, double v, double v0);
+
+    double alphaA();
+
+    double alphaV0();
+
+    double alphaT();
 }

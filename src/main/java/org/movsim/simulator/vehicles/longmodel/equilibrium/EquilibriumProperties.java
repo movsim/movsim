@@ -26,7 +26,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.equilibrium;
+package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
 public interface EquilibriumProperties {
     

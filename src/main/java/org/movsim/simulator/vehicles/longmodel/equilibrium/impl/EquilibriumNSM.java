@@ -26,9 +26,9 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.accelerationmodels.impl.NSM;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
 
 public class EquilibriumNSM extends EquilibriumPropertiesImpl {
     

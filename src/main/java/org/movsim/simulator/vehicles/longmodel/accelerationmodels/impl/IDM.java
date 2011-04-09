@@ -26,14 +26,14 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.accelerationmodels.impl;
+package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.ModelInputDataIDM;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModelCategory;
-import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.impl.VehicleImpl;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

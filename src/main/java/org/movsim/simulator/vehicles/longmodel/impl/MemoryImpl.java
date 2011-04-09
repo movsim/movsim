@@ -26,10 +26,10 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longbehavior.impl;
+package org.movsim.simulator.vehicles.longmodel.impl;
 
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
-import org.movsim.simulator.vehicles.longbehavior.Memory;
+import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

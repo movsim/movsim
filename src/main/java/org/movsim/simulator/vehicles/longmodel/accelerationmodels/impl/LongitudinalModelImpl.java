@@ -26,11 +26,41 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longbehavior;
+package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-public interface Noise {
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+
+public abstract class LongitudinalModelImpl {
+
+	
+    private final String modelName;
+
+    private final int modelCategory;
     
-    void update(double dt);
+    public LongitudinalModelImpl(String modelName, int modelCategory) {
+        this.modelName = modelName;
+        this.modelCategory = modelCategory;
+    }
+
+    public String modelName() {
+        return modelName;
+    }
+
+    public boolean isCA() {
+        return (modelCategory == AccelerationModelCategory.CELLULAR_AUTOMATON);
+    }
     
-    double getAccError();
+    public boolean isIteratedMap() {
+        return (modelCategory == AccelerationModelCategory.INTERATED_MAP_MODEL);
+    }
+    
+    
+    public int getModelCategory(){
+    	return modelCategory;
+    }
+    // TODO: fuer alle Modelle ?! analog: T !?
+    public abstract double parameterV0();
+
+    public abstract double getRequiredUpdateTime();
+    
 }

@@ -30,8 +30,8 @@ package org.movsim.simulator.vehicles;
 
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.vehicles.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 public class VehiclePrototype {
 
