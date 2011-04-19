@@ -28,10 +28,24 @@
  */
 package org.movsim.simulator.roadSection;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface RoadSectionGUI.
+ */
 public interface RoadSectionGUI {
 
-    
     // GUI sicht:
+    /**
+     * Upstream inflow.
+     * 
+     * @return the double
+     */
     double upstreamInflow();
+
+    /**
+     * First ramp flow.
+     * 
+     * @return the double
+     */
     double firstRampFlow();
 }

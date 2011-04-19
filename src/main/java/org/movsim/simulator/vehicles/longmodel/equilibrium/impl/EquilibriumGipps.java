@@ -30,9 +30,20 @@ package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EquilibriumGipps.
+ */
+public class EquilibriumGipps extends EquilibriumPropertiesImpl {
 
-public class EquilibriumGipps extends EquilibriumPropertiesImpl{
-    
+    /**
+     * Instantiates a new equilibrium gipps.
+     * 
+     * @param length
+     *            the length
+     * @param gippsModel
+     *            the gipps model
+     */
     public EquilibriumGipps(double length, Gipps gippsModel) {
         super(length);
 
@@ -41,49 +52,58 @@ public class EquilibriumGipps extends EquilibriumPropertiesImpl{
 
     }
 
-
-    
     // Calculates equilibrium velocity of Gipps and Gipps with finite s0
     // and free-acc exponent delta
     // uses numeric iteration procedure and
     // !! calculates THE WHOLE FIELD veq
 
+    /**
+     * Calc equilibrium.
+     * 
+     * @param gippsModel
+     *            the gipps model
+     */
     private void calcEquilibrium(Gipps gippsModel) {
 
         // Find equilibrium velocities veqtab[ir] with simple relaxation
-        // method: Just model for homogeneous traffic solved for 
+        // method: Just model for homogeneous traffic solved for
         // the velocity v_it of one arbitrary vehicle
         // (no brain, but stable and simple method...)
 
-        double v_it  = gippsModel.getV0();           // variable of the relaxation equation
-        int    itmax = 100;  // number of iteration steps in each relaxation
-        double dtmax = 2;    // iteration time step (in s) changes from
-        double dtmin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
+        double v_it = gippsModel.getV0(); // variable of the relaxation equation
+        final int itmax = 100; // number of iteration steps in each relaxation
+        final double dtmax = 2; // iteration time step (in s) changes from
+        final double dtmin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
         // start with rho=0
         vEqTab[0] = gippsModel.getV0();
 
-        for(int ir=1; ir<vEqTab.length; ir++){
-          double rho = rhoMax*ir/vEqTab.length;
-          double s   = 1./rho - 1./rhoMax;
+        for (int ir = 1; ir < vEqTab.length; ir++) {
+            final double rho = rhoMax * ir / vEqTab.length;
+            final double s = 1. / rho - 1. / rhoMax;
 
-          // start iteration with equilibrium velocity for the previous density
-          v_it = vEqTab[ir-1];
+            // start iteration with equilibrium velocity for the previous
+            // density
+            v_it = vEqTab[ir - 1];
 
-          for (int it=1; it<=itmax; it++){
-            double acc = gippsModel.acc(s, v_it, 0., gippsModel.getV0(), gippsModel.getT());
-            double dtloc = dtmax*v_it/gippsModel.getV0() + dtmin; // it. step in [dtmin,dtmax]
-        
-            // actual relaxation 
+            for (int it = 1; it <= itmax; it++) {
+                final double acc = gippsModel.acc(s, v_it, 0., gippsModel.getV0(), gippsModel.getT());
+                final double dtloc = dtmax * v_it / gippsModel.getV0() + dtmin; // it.
+                                                                                // step
+                                                                                // in
+                                                                                // [dtmin,dtmax]
 
-            v_it += dtloc*acc;
-            if(v_it < 0) v_it=0;
+                // actual relaxation
 
-          }
-          vEqTab[ir] = v_it;
+                v_it += dtloc * acc;
+                if (v_it < 0) {
+                    v_it = 0;
+                }
+
+            }
+            vEqTab[ir] = v_it;
 
         }
     }
-   
 
 }

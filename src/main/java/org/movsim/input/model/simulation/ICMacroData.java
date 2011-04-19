@@ -28,12 +28,31 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface ICMacroData.
+ */
 public interface ICMacroData {
 
+    /**
+     * Gets the x.
+     * 
+     * @return the x
+     */
     double getX();
 
+    /**
+     * Gets the rho.
+     * 
+     * @return the rho
+     */
     double getRho();
 
+    /**
+     * Gets the speed.
+     * 
+     * @return the speed
+     */
     double getSpeed();
 
 }

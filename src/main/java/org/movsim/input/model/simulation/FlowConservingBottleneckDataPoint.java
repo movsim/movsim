@@ -28,12 +28,31 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface FlowConservingBottleneckDataPoint.
+ */
 public interface FlowConservingBottleneckDataPoint {
 
+    /**
+     * Gets the position.
+     * 
+     * @return the position
+     */
     double getPosition();
 
+    /**
+     * Gets the alpha t.
+     * 
+     * @return the alpha t
+     */
     double getAlphaT();
 
+    /**
+     * Gets the alpha v0.
+     * 
+     * @return the alpha v0
+     */
     double getAlphaV0();
 
 }

@@ -40,7 +40,10 @@ import org.movsim.input.commandline.SimCommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimCommandLineImpl.
+ */
 public class SimCommandLineImpl implements SimCommandLine {
 
     private static Logger logger = LoggerFactory.getLogger(SimCommandLineImpl.class);
@@ -50,7 +53,10 @@ public class SimCommandLineImpl implements SimCommandLine {
     private boolean gui = false;
 
     /**
+     * Instantiates a new sim command line impl.
      * 
+     * @param args
+     *            the args
      */
     public SimCommandLineImpl(String[] args) {
 
@@ -63,7 +69,7 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * 
+     * Creates the options.
      */
     private void createOptions() {
 
@@ -71,26 +77,31 @@ public class SimCommandLineImpl implements SimCommandLine {
         options.addOption("h", "help", false, "print this message");
         options.addOption("d", "default", false, "simulate with default simulation xmlfile ");
         options.addOption("g", "gui", false, "start a Desktop GUI");
-        
+
         // options.addOption("f", "simulation", true,
         // "argument has to be a xml file specifing the simulation");
 
-        Option xmlSimFile = OptionBuilder.withArgName("file").hasArg()
-                .withDescription("argument has to be a xml file specifing the simulation").create("f");
+        OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription("argument has to be a xml file specifing the simulation");
+        final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
     }
 
     /**
+     * Creates the parser and parse.
+     * 
      * @param args
+     *            the args
      */
     private void createParserAndParse(String[] args) {
         // create the parser
-        CommandLineParser parser = new GnuParser();
+        final CommandLineParser parser = new GnuParser();
         try {
             // parse the command line arguments
-            CommandLine cmdline = parser.parse(options, args);
+            final CommandLine cmdline = parser.parse(options, args);
             parse(cmdline);
-        } catch (ParseException exp) {
+        } catch (final ParseException exp) {
             // oops, something went wrong
             logger.error("Parsing failed.  Reason: {}", exp.getMessage());
             System.out.printf("Parsing failed.  Reason: %s %n", exp.getMessage());
@@ -99,7 +110,10 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
+     * Parses the.
+     * 
      * @param cmdline
+     *            the cmdline
      */
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
@@ -117,7 +131,7 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * 
+     * Opt gui.
      */
     private void optGUI() {
         logger.debug("option --gui");
@@ -125,7 +139,10 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
+     * Opt simulation.
+     * 
      * @param cmdline
+     *            the cmdline
      */
     private void optSimulation(CommandLine cmdline) {
         simulationFilename = cmdline.getOptionValue('f');
@@ -139,29 +156,33 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * 
+     * Opt default.
      */
     private void optDefault() {
         logger.debug("option --default");
     }
 
     /**
-     * 
+     * Opt help.
      */
     private void optHelp() {
         logger.debug("option -h. Exit Programm");
 
-        HelpFormatter formatter = new HelpFormatter();
+        final HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("App", options);
 
         System.exit(0);
     }
 
     /**
+     * Validate simulation file name.
+     * 
      * @param filename
+     *            the filename
+     * @return true, if successful
      */
     private boolean validateSimulationFileName(String filename) {
-        int i = filename.lastIndexOf(".xml");
+        final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             logger.error("Please provide simulation file with ending \".xml\" as argument with option -s, exit. ");
             System.exit(1);
@@ -171,14 +192,32 @@ public class SimCommandLineImpl implements SimCommandLine {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.commandline.SimCommandLine#isWithSimulation()
+     */
+    @Override
     public boolean isWithSimulation() {
         return withSimulation;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.commandline.SimCommandLine#getSimulationFilename()
+     */
+    @Override
     public String getSimulationFilename() {
         return simulationFilename;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.commandline.SimCommandLine#isGui()
+     */
+    @Override
     public boolean isGui() {
         return gui;
     }

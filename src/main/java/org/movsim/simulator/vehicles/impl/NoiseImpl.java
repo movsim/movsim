@@ -34,14 +34,16 @@ import org.movsim.simulator.vehicles.Noise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
 // Acceleration noise (white noise OR correlated noise (wiener process)
 // for reference see paper:
 // M. Treiber, A. Kesting, D. Helbing
 // Understanding widely scattered traffic flows, the capacity drop, and platoons as effects of variance-driven time gaps
 // Phys. Rev. E 74, 016123 (2006) 
 
-
+/**
+ * The Class NoiseImpl.
+ */
 public class NoiseImpl implements Noise {
 
     final static Logger logger = LoggerFactory.getLogger(NoiseImpl.class);
@@ -53,22 +55,27 @@ public class NoiseImpl implements Noise {
 
     private final double tauRelaxAcc; // in s
 
-
-    private double fluctStrength; // fluct. strength (m^2/s^3) of dv/dt=a_det+xi(t), in case of wiener: stand. deviation 
-
+    private final double fluctStrength; // fluct. strength (m^2/s^3) of
+                                        // dv/dt=a_det+xi(t), in case of wiener:
+                                        // stand. deviation
 
     // output: delta-correlated random process, var=Q_acc/dt
     private double xiAcc = 0;
 
-  
+    /**
+     * Instantiates a new noise impl.
+     * 
+     * @param parameters
+     *            the parameters
+     */
     public NoiseImpl(NoiseInputData parameters) {
 
         fluctStrength = parameters.getFluctStrength();
         tauRelaxAcc = parameters.getTau();
-        
-        isWienerProcess = (tauRelaxAcc==0) ? false : true;
+
+        isWienerProcess = (tauRelaxAcc == 0) ? false : true;
         logger.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
-        
+
         // init
         xiAcc = 0;
     }
@@ -77,10 +84,19 @@ public class NoiseImpl implements Noise {
     // update
     // #############################################################
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.Noise#update(double)
+     */
+    @Override
     public void update(double dt) {
 
         final double randomVar = MyRandom.nextDouble(); // G(0,1)
-        final double randomMu0Sigma1 = SQRT12 * (randomVar - 0.5); // Gleichverteilung mit mean=0, var=1
+        final double randomMu0Sigma1 = SQRT12 * (randomVar - 0.5); // Gleichverteilung
+                                                                   // mit
+                                                                   // mean=0,
+                                                                   // var=1
 
         // dv(est)=dv + s/ttc*xi_v(t), xi_v(t)= Wiener(1, tau_dv) process
         // Q_dv such that <(xi_dv)^2> = (stddev_dv)^2
@@ -89,21 +105,25 @@ public class NoiseImpl implements Noise {
         if (isWienerProcess) {
             final double betaAcc = Math.exp(-dt / tauRelaxAcc);
             xiAcc = betaAcc * xiAcc + fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1;
-//            logger.debug("WienerProcess: betaAcc = {}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}", 
-//                    betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1));
-        }
-        else{
+            // logger.debug("WienerProcess: betaAcc = {}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
+            // betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) *
+            // randomMu0Sigma1));
+        } else {
             // delta-correlated acc noise:
             xiAcc = Math.sqrt(fluctStrength / dt) * randomMu0Sigma1;
         }
 
     }
-    
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.Noise#getAccError()
+     */
+    @Override
     public double getAccError() {
-        //logger.debug("xiAcc = ", xiAcc);
+        // logger.debug("xiAcc = ", xiAcc);
         return xiAcc;
     }
-
 
 }

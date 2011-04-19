@@ -34,16 +34,26 @@ import org.movsim.input.model.vehicle.longModel.ModelInputDataNewell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ModelInputDataNewellImpl.
+ */
+public class ModelInputDataNewellImpl extends ModelInputDataImpl implements ModelInputDataNewell {
 
-public class ModelInputDataNewellImpl extends ModelInputDataImpl implements ModelInputDataNewell{
-    
     final static Logger logger = LoggerFactory.getLogger(ModelInputDataNewellImpl.class);
-    
+
     // TODO implementation
-    
+
+    /**
+     * Instantiates a new model input data newell impl.
+     * 
+     * @param modelName
+     *            the model name
+     * @param map
+     *            the map
+     */
     public ModelInputDataNewellImpl(String modelName, Map<String, String> map) {
         super(modelName);
-        
-        
+
     }
 }

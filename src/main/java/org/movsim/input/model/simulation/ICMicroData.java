@@ -28,14 +28,38 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface ICMicroData.
+ */
 public interface ICMicroData {
 
+    /**
+     * Gets the x.
+     * 
+     * @return the x
+     */
     double getX();
 
+    /**
+     * Gets the speed.
+     * 
+     * @return the speed
+     */
     double getSpeed();
-    
+
+    /**
+     * Gets the inits the lane.
+     * 
+     * @return the inits the lane
+     */
     int getInitLane();
 
+    /**
+     * Gets the label.
+     * 
+     * @return the label
+     */
     String getLabel();
 
 }

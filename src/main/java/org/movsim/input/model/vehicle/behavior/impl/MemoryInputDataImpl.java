@@ -32,7 +32,10 @@ import java.util.Map;
 
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MemoryInputDataImpl.
+ */
 public class MemoryInputDataImpl implements MemoryInputData {
 
     // <MEMORY tau="600" alpha_a="1" alpha_v0="1" alpha_T="1.7" />
@@ -45,6 +48,12 @@ public class MemoryInputDataImpl implements MemoryInputData {
 
     private final double resignationMinAlphaA; // unitless
 
+    /**
+     * Instantiates a new memory input data impl.
+     * 
+     * @param map
+     *            the map
+     */
     public MemoryInputDataImpl(Map<String, String> map) {
         tau = Double.parseDouble(map.get("tau"));
         resignationMaxAlphaT = Double.parseDouble(map.get("alpha_T"));
@@ -52,30 +61,48 @@ public class MemoryInputDataImpl implements MemoryInputData {
         resignationMinAlphaA = Double.parseDouble(map.get("alpha_a"));
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.impl.MemoryInputData#getTau()
      */
+    @Override
     public double getTau() {
         return tau;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.impl.MemoryInputData#getResignationMaxAlphaT()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.impl.MemoryInputData#getResignationMaxAlphaT
+     * ()
      */
+    @Override
     public double getResignationMaxAlphaT() {
         return resignationMaxAlphaT;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.impl.MemoryInputData#getResignationMinAlphaV0()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.impl.MemoryInputData#getResignationMinAlphaV0
+     * ()
      */
+    @Override
     public double getResignationMinAlphaV0() {
         return resignationMinAlphaV0;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.impl.MemoryInputData#getResignationMinAlphaA()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.impl.MemoryInputData#getResignationMinAlphaA
+     * ()
      */
+    @Override
     public double getResignationMinAlphaA() {
         return resignationMinAlphaA;
     }

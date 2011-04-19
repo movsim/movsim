@@ -34,19 +34,30 @@ import org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class ModelInputDataOVM_VDIFFImpl extends ModelInputDataImpl implements ModelInputDataOVM_VDIFF{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ModelInputDataOVM_VDIFFImpl.
+ */
+public class ModelInputDataOVM_VDIFFImpl extends ModelInputDataImpl implements ModelInputDataOVM_VDIFF {
 
     final static Logger logger = LoggerFactory.getLogger(ModelInputDataOVM_VDIFFImpl.class);
-    
-    private double s0;
-    private double v0;
-    private double tau;
-    private double lenInteraction;
-    private double beta;
-    private double lambda;
-    private int variant;
 
+    private final double s0;
+    private final double v0;
+    private final double tau;
+    private final double lenInteraction;
+    private final double beta;
+    private final double lambda;
+    private final int variant;
+
+    /**
+     * Instantiates a new model input data ov m_ vdiff impl.
+     * 
+     * @param modelName
+     *            the model name
+     * @param map
+     *            the map
+     */
     public ModelInputDataOVM_VDIFFImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.s0 = Double.parseDouble(map.get("s0"));
@@ -56,61 +67,97 @@ public class ModelInputDataOVM_VDIFFImpl extends ModelInputDataImpl implements M
         this.beta = Double.parseDouble(map.get("beta"));
         this.lambda = Double.parseDouble(map.get("lambda"));
         this.variant = Integer.parseInt(map.get("variant"));
-        
-        if(s0<0 ||  v0<0 || tau<0 || lenInteraction<0 || beta<0 || lambda<0 || variant < 0){
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit", modelName);
+
+        if (s0 < 0 || v0 < 0 || tau < 0 || lenInteraction < 0 || beta < 0 || lambda < 0 || variant < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    modelName);
             System.exit(-1);
         }
-        
+
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getS0()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getS0()
      */
+    @Override
     public double getS0() {
         return s0;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getV0()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getV0()
      */
+    @Override
     public double getV0() {
         return v0;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getTau()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getTau()
      */
+    @Override
     public double getTau() {
         return tau;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getLenInteraction()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getLenInteraction()
      */
+    @Override
     public double getLenInteraction() {
         return lenInteraction;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getBeta()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getBeta()
      */
+    @Override
     public double getBeta() {
         return beta;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getLambda()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getLambda()
      */
-    public double getLambda(){
+    @Override
+    public double getLambda() {
         return lambda;
     }
-    
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF#getVariant()
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
+     * #getVariant()
      */
-    public int getVariant(){
+    @Override
+    public int getVariant() {
         return variant;
     }
-    
+
 }

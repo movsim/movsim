@@ -32,9 +32,22 @@ import java.util.List;
 
 import org.movsim.simulator.roadSection.TrafficLight;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface TrafficLightRecorder.
+ */
 public interface TrafficLightRecorder {
 
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     * @param trafficLights
+     *            the traffic lights
+     */
     void update(int itime, double time, List<TrafficLight> trafficLights);
 
 }

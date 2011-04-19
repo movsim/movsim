@@ -28,12 +28,34 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface EquilibriumProperties.
+ */
 public interface EquilibriumProperties {
-    
+
+    /**
+     * Gets the rho q max.
+     * 
+     * @return the rho q max
+     */
     double getRhoQMax();
-    
+
+    /**
+     * Gets the v eq.
+     * 
+     * @param rho
+     *            the rho
+     * @return the v eq
+     */
     double getVEq(double rho);
-    
+
+    /**
+     * Write output.
+     * 
+     * @param filename
+     *            the filename
+     */
     void writeOutput(String filename);
-    
+
 }

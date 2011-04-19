@@ -37,64 +37,117 @@ import org.movsim.input.model.VehicleInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class InputDataImpl.
+ */
 public class InputDataImpl implements InputData {
-    
+
     final static Logger logger = LoggerFactory.getLogger(InputDataImpl.class);
 
-	private String projectName;
+    private String projectName;
 
-	private boolean withFileOutputScenario = false; // default gesetzt
+    private final boolean withFileOutputScenario = false; // default gesetzt
 
-	private List<VehicleInput> vehicleInputData;
-	
-	private OutputInput outputInput;
+    private List<VehicleInput> vehicleInputData;
+
+    private OutputInput outputInput;
 
     private SimulationInput simulationInput;
-	
-	
-	public InputDataImpl() {
-	    // empty constructor
-	}
-//
-//	public boolean isWithFileOutputScenario() {
-//		return withFileOutputScenario;
-//	}
-//
-//	public void setWithFileOutputScenario(boolean withFileOutputScenario) {
-//		this.withFileOutputScenario = withFileOutputScenario;
-//	}
 
+    /**
+     * Instantiates a new input data impl.
+     */
+    public InputDataImpl() {
+        // empty constructor
+    }
 
-	protected void setProjectName(String projectname) {
-		this.projectName = projectname;
-		logger.debug("Projectname in Bean: {}", projectname);
-	}
+    //
+    // public boolean isWithFileOutputScenario() {
+    // return withFileOutputScenario;
+    // }
+    //
+    // public void setWithFileOutputScenario(boolean withFileOutputScenario) {
+    // this.withFileOutputScenario = withFileOutputScenario;
+    // }
 
-	public String getProjectName() {
-		return projectName;
-	}
+    /**
+     * Sets the project name.
+     * 
+     * @param projectname
+     *            the new project name
+     */
+    protected void setProjectName(String projectname) {
+        this.projectName = projectname;
+        logger.debug("Projectname in Bean: {}", projectname);
+    }
 
-    public void setVehicleInputData(List<VehicleInput> vehicleInputData){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#getProjectName()
+     */
+    @Override
+    public String getProjectName() {
+        return projectName;
+    }
+
+    /**
+     * Sets the vehicle input data.
+     * 
+     * @param vehicleInputData
+     *            the new vehicle input data
+     */
+    public void setVehicleInputData(List<VehicleInput> vehicleInputData) {
         this.vehicleInputData = vehicleInputData;
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#getVehicleInputData()
+     */
+    @Override
     public List<VehicleInput> getVehicleInputData() {
-        return vehicleInputData; 
+        return vehicleInputData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#getOutputInput()
+     */
+    @Override
     public OutputInput getOutputInput() {
         return outputInput;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#getSimulationInput()
+     */
+    @Override
     public SimulationInput getSimulationInput() {
         return simulationInput;
     }
-    
+
+    /**
+     * Sets the output input.
+     * 
+     * @param outputInput
+     *            the new output input
+     */
     public void setOutputInput(OutputInput outputInput) {
         this.outputInput = outputInput;
     }
 
+    /**
+     * Sets the simulation input.
+     * 
+     * @param simulationInput
+     *            the new simulation input
+     */
     public void setSimulationInput(SimulationInput simulationInput) {
         this.simulationInput = simulationInput;
     }

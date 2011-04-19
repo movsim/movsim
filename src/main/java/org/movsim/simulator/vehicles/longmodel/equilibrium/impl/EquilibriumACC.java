@@ -30,8 +30,20 @@ package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
 
-public class EquilibriumACC extends EquilibriumPropertiesImpl{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EquilibriumACC.
+ */
+public class EquilibriumACC extends EquilibriumPropertiesImpl {
 
+    /**
+     * Instantiates a new equilibrium acc.
+     * 
+     * @param length
+     *            the length
+     * @param accModel
+     *            the acc model
+     */
     public EquilibriumACC(double length, ACC accModel) {
         super(length);
 
@@ -44,7 +56,7 @@ public class EquilibriumACC extends EquilibriumPropertiesImpl{
     // and free-acc exponent delta
     // uses numeric iteration procedure and
     // !! calculates THE WHOLE FIELD veq
-    
+
     // output: Arhomax, Atab[], vfactab[] (for calc_rhs! vfactab only hdcorr)
     // veqtab[] (only needed for output),
     // Qmax, rhoQmax (only needed for BC),
@@ -55,9 +67,14 @@ public class EquilibriumACC extends EquilibriumPropertiesImpl{
     // the velocity v_it of one arbitrary vehicle
     // (no brain, but stable and simple method...)
 
-    
+    /**
+     * Calc equilibrium.
+     * 
+     * @param accModel
+     *            the acc model
+     */
     private void calcEquilibrium(ACC accModel) {
-    
+
         double vIter = accModel.getV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
@@ -67,30 +84,35 @@ public class EquilibriumACC extends EquilibriumPropertiesImpl{
         final int length = vEqTab.length;
 
         for (int ir = 1; ir < length; ir++) {
-            double rho = getRho(ir);
-            double s = getNetDistance(rho);
-            // start iteration with equilibrium velocity for the previous density
+            final double rho = getRho(ir);
+            final double s = getNetDistance(rho);
+            // start iteration with equilibrium velocity for the previous
+            // density
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
-                double acc = accModel.accSimple(s, vIter, 0.);
-                double dtloc = dtMax * vIter / accModel.getV0() + dtMin; // it. step in [dtmin,dtmax]
-                
-                //TODO: direkter source code
-//                for (int it=1; it<=itmax; it++){
-//                  double dtloc = dtmax*v_it/v0 + dtmin; // it. step in [dtmin,dtmax]
-//                  double sstar   = s0 + T * v_it + s1*sqrt((v_it+0.000001)/v0);
-//
-//              // acceleration for various variants
-//
-//                  double acc = (s>s0) 
-//                ? a * (1-pow(v_it/v0, 4) - sstar*sstar/(s*s) )
-//                    :0;
+                final double acc = accModel.accSimple(s, vIter, 0.);
+                final double dtloc = dtMax * vIter / accModel.getV0() + dtMin; // it.
+                                                                               // step
+                                                                               // in
+                                                                               // [dtmin,dtmax]
 
-                
+                // TODO: direkter source code
+                // for (int it=1; it<=itmax; it++){
+                // double dtloc = dtmax*v_it/v0 + dtmin; // it. step in
+                // [dtmin,dtmax]
+                // double sstar = s0 + T * v_it + s1*sqrt((v_it+0.000001)/v0);
+                //
+                // // acceleration for various variants
+                //
+                // double acc = (s>s0)
+                // ? a * (1-pow(v_it/v0, 4) - sstar*sstar/(s*s) )
+                // :0;
+
                 // actual relaxation
                 vIter += dtloc * acc;
-                if ((vIter < 0) || (s < accModel.getS0()))
+                if ((vIter < 0) || (s < accModel.getS0())) {
                     vIter = 0;
+                }
             }
             vEqTab[ir] = vIter;
         }

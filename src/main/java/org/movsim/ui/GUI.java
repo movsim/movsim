@@ -29,10 +29,8 @@
 package org.movsim.ui;
 
 /**
- * @author ralph
- *
+ * The Interface GUI.
  */
 public interface GUI {
-
 
 }

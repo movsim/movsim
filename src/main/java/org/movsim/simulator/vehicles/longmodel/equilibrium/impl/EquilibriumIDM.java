@@ -30,8 +30,20 @@ package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EquilibriumIDM.
+ */
 public class EquilibriumIDM extends EquilibriumPropertiesImpl {
 
+    /**
+     * Instantiates a new equilibrium idm.
+     * 
+     * @param length
+     *            the length
+     * @param idmModel
+     *            the idm model
+     */
     public EquilibriumIDM(double length, IDM idmModel) {
         super(length);
 
@@ -40,6 +52,12 @@ public class EquilibriumIDM extends EquilibriumPropertiesImpl {
 
     }
 
+    /**
+     * Calc equilibrium.
+     * 
+     * @param model
+     *            the model
+     */
     private void calcEquilibrium(IDM model) {
         // Find equilibrium velocities veqtab[ir] with simple relaxation
         // method: Just model for homogeneous traffic solved for
@@ -55,17 +73,22 @@ public class EquilibriumIDM extends EquilibriumPropertiesImpl {
         final int length = vEqTab.length;
 
         for (int ir = 1; ir < length; ir++) {
-            double rho = getRho(ir);
-            double s = getNetDistance(rho);
-            // start iteration with equilibrium velocity for the previous density
+            final double rho = getRho(ir);
+            final double s = getNetDistance(rho);
+            // start iteration with equilibrium velocity for the previous
+            // density
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.accSimple(s, vIter, 0.);
-                final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it. step in [dtmin,dtmax]
+                final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it.
+                                                                            // step
+                                                                            // in
+                                                                            // [dtmin,dtmax]
                 // actual relaxation
                 vIter += dtloc * acc;
-                if ((vIter < 0) || (s < model.getS0()))
+                if ((vIter < 0) || (s < model.getS0())) {
                     vIter = 0;
+                }
             }
             vEqTab[ir] = vIter;
         }

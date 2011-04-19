@@ -56,17 +56,20 @@ import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RoadSectionImpl.
+ */
 public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     final static Logger logger = LoggerFactory.getLogger(RoadSectionImpl.class);
 
     private final double roadLength;
-    
+
     private final int nLanes;
 
     private double dt;
-    
-    private boolean isWithGUI;
+
+    private final boolean isWithGUI;
 
     private VehicleContainer vehContainer;
 
@@ -81,23 +84,28 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     private List<TrafficLight> trafficLights;
 
     private List<Onramp> simpleOnramps = null;
-    
 
-
+    /**
+     * Instantiates a new road section impl.
+     * 
+     * @param isWithGUI
+     *            the is with gui
+     * @param inputData
+     *            the input data
+     */
     public RoadSectionImpl(boolean isWithGUI, InputData inputData) {
         logger.info("Cstr. RoadSectionImpl");
-        
+
         this.isWithGUI = isWithGUI;
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
         this.roadLength = simInput.getSingleRoadInput().getRoadLength();
         this.nLanes = simInput.getSingleRoadInput().getLanes();
-        
-       
 
         initialize(inputData);
-        
-        // TODO cross-check --> testing for correct dt setup  .... concept between Simulator, VehGenerator and this roadSection 
+
+        // TODO cross-check --> testing for correct dt setup .... concept
+        // between Simulator, VehGenerator and this roadSection
         if (Math.abs(dt - vehGenerator.requiredTimestep()) > Constants.SMALL_VALUE) {
             this.dt = vehGenerator.requiredTimestep();
             logger.info("model requires specific integration timestep. sets to dt={}", dt);
@@ -105,41 +113,66 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
     }
 
+    /**
+     * Initialize.
+     * 
+     * @param inputData
+     *            the input data
+     */
     private void initialize(InputData inputData) {
         vehContainer = new VehicleContainerImpl();
-        
+
         vehGenerator = new VehicleGeneratorImpl(isWithGUI, inputData);
-        
+
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, roadInput.getUpstreamBoundaryData(), inputData.getProjectName());
-        
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, roadInput.getUpstreamBoundaryData(),
+                inputData.getProjectName());
+
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
-        
+
         initialConditions(inputData.getSimulationInput());
         initTrafficLights(inputData.getSimulationInput());
         initOnramps(inputData);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#roadLength()
+     */
+    @Override
     public double roadLength() {
         return roadLength;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#vehContainer()
+     */
+    @Override
     public VehicleContainer vehContainer() {
         return vehContainer;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#update(int, double)
+     */
+    @Override
     public void update(int iTime, double time) {
 
-        // check for crashes 
+        // check for crashes
         checkForInconsistencies(iTime, time);
-        
+
         updateRoadConditions(time);
 
         // vehicle accelerations
         accelerate(iTime, dt, time);
 
-        // vehicle pos/speed 
+        // vehicle pos/speed
         updatePositionAndSpeed(iTime, dt, time);
 
         updateDownstreamBoundary();
@@ -150,23 +183,31 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
     }
 
+    /**
+     * Initial conditions.
+     * 
+     * @param simInput
+     *            the sim input
+     */
     private void initialConditions(SimulationInput simInput) {
-        List<ICMacroData> icMacroData = simInput.getSingleRoadInput().getIcMacroData();
+        final List<ICMacroData> icMacroData = simInput.getSingleRoadInput().getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
 
             final InitialConditionsMacro icMacro = new InitialConditionsMacroImpl(icMacroData);
-            final double xLocalMin = 0; // if ringroad: set xLocalMin e.g. -SMALL_VAL
+            final double xLocalMin = 0; // if ringroad: set xLocalMin e.g.
+                                        // -SMALL_VAL
 
             double xLocal = roadLength; // start from behind
             while (xLocal > xLocalMin) {
-                VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
                 final double rhoLocal = icMacro.rho(xLocal);
                 double speedInit = icMacro.vInit(xLocal);
                 if (speedInit == 0) {
-                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal); // equil speed
+                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal); // equil
+                                                                            // speed
                 }
-                final int laneEnter = Constants.MOST_RIGHT_LANE; 
+                final int laneEnter = Constants.MOST_RIGHT_LANE;
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
                 vehContainer.add(veh, xLocal, speedInit, laneEnter);
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
@@ -176,70 +217,105 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
             }
         } else {
             logger.debug(("choose micro initial conditions"));
-            List<ICMicroData> icSingle = simInput.getSingleRoadInput().getIcMicroData();
-            for (ICMicroData ic : icSingle) {
+            final List<ICMicroData> icSingle = simInput.getSingleRoadInput().getIcMicroData();
+            for (final ICMicroData ic : icSingle) {
                 // TODO counter !!
                 final double posInit = ic.getX();
                 final double speedInit = ic.getSpeed();
                 final String vehType = ic.getLabel();
                 final int laneInit = ic.getInitLane();
                 logger.info("set vehicle with label = {}", vehType);
-                final Vehicle veh = (vehType.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator.createVehicle(vehType);
-                
+                final Vehicle veh = (vehType.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
+                        .createVehicle(vehType);
+
                 vehContainer.add(veh, posInit, speedInit, laneInit);
             }
         }
     }
 
+    /**
+     * Inits the traffic lights.
+     * 
+     * @param simInput
+     *            the sim input
+     */
     private void initTrafficLights(SimulationInput simInput) {
         trafficLights = new ArrayList<TrafficLight>();
-        List<TrafficLightData> trafficLightData = simInput.getSingleRoadInput().getTrafficLightData();
-        for (TrafficLightData tlData : trafficLightData) {
+        final List<TrafficLightData> trafficLightData = simInput.getSingleRoadInput().getTrafficLightData();
+        for (final TrafficLightData tlData : trafficLightData) {
             trafficLights.add(new TrafficLightImpl(tlData));
         }
     }
 
+    /**
+     * Inits the onramps.
+     * 
+     * @param inputData
+     *            the input data
+     */
     private void initOnramps(InputData inputData) {
         simpleOnramps = new ArrayList<Onramp>();
         final List<SimpleRampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getSimpleRamps();
         final String projectName = inputData.getProjectName();
-        int rampIndex=1;
-        for (SimpleRampData onrmp : onrampData) {
+        int rampIndex = 1;
+        for (final SimpleRampData onrmp : onrampData) {
             simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainer, projectName, rampIndex));
             rampIndex++;
         }
     }
 
+    /**
+     * Update downstream boundary.
+     */
     private void updateDownstreamBoundary() {
         vehContainer.removeVehiclesDownstream(roadLength);
     }
 
+    /**
+     * Update upstream boundary.
+     * 
+     * @param itime
+     *            the itime
+     * @param dt
+     *            the dt
+     * @param time
+     *            the time
+     */
     private void updateUpstreamBoundary(int itime, double dt, double time) {
         upstreamBoundary.update(itime, dt, time);
     }
-    
-    
-    private void checkForInconsistencies(int iTime, double time){
+
+    /**
+     * Check for inconsistencies.
+     * 
+     * @param iTime
+     *            the i time
+     * @param time
+     *            the time
+     */
+    private void checkForInconsistencies(int iTime, double time) {
         // crash test
-        List<Vehicle> vehicles = vehContainer.getVehicles();
-        for (int i=0, N=vehicles.size(); i<N; i++) {
+        final List<Vehicle> vehicles = vehContainer.getVehicles();
+        for (int i = 0, N = vehicles.size(); i < N; i++) {
             final Vehicle egoVeh = vehicles.get(i);
             final Vehicle vehFront = vehContainer.getLeader(egoVeh);
-            final double netDistance = egoVeh.netDistance(vehFront); 
-            if ( netDistance < 0 ) {
+            final double netDistance = egoVeh.netDistance(vehFront);
+            if (netDistance < 0) {
                 logger.error("#########################################################");
                 logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.position());
                 logger.error("  with veh in front at x = {} on lane = {}", vehFront.position(), egoVeh.getIntLane());
                 logger.error("net distance  = {}", netDistance);
                 logger.error("container.size = {}", vehicles.size());
                 final StringBuilder msg = new StringBuilder("\n");
-                for (int j = Math.max(0, i - 8), M=vehicles.size(); j <= Math.min(i + 8, M - 1); j++) {
+                for (int j = Math.max(0, i - 8), M = vehicles.size(); j <= Math.min(i + 8, M - 1); j++) {
                     final Vehicle veh = vehicles.get(j);
-                    msg.append(String.format("veh j = %d , pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%3.1f, targetLane=%1d, id=%d%n", 
-                            j, veh.position(), veh.speed(), veh.accModel(), veh.length(), veh.getLane(), veh.getIntLane(), veh.id()));
+                    msg.append(String
+                            .format("veh j = %d , pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%3.1f, targetLane=%1d, id=%d%n",
+                                    j, veh.position(), veh.speed(), veh.accModel(), veh.length(), veh.getLane(),
+                                    veh.getIntLane(), veh.id()));
                 } // of for
                 logger.error(msg.toString());
-                if(!isWithGUI){
+                if (!isWithGUI) {
                     logger.error(" !!! exit after crash !!! ");
                     System.exit(-99);
                 }
@@ -247,35 +323,61 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         }
     }
 
+    /**
+     * Accelerate.
+     * 
+     * @param iTime
+     *            the i time
+     * @param dt
+     *            the dt
+     * @param time
+     *            the time
+     */
     private void accelerate(int iTime, double dt, double time) {
-        List<Vehicle> vehicles = vehContainer.getVehicles();
+        final List<Vehicle> vehicles = vehContainer.getVehicles();
         for (int i = 0; i < vehicles.size(); i++) {
-            Vehicle veh = vehicles.get(i);
+            final Vehicle veh = vehicles.get(i);
             final double x = veh.position();
             final double alphaT = flowConsBottlenecks.alphaT(x);
             final double alphaV0 = flowConsBottlenecks.alphaV0(x);
-// logger.debug("i={}, x_pos={}", i, x);
-// logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
+            // logger.debug("i={}, x_pos={}", i, x);
+            // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
             veh.calcAcceleration(dt, vehContainer, alphaT, alphaV0);
         }
     }
 
+    /**
+     * Update position and speed.
+     * 
+     * @param iTime
+     *            the i time
+     * @param dt
+     *            the dt
+     * @param time
+     *            the time
+     */
     private void updatePositionAndSpeed(int iTime, double dt, double time) {
-        for (Vehicle veh : vehContainer.getVehicles()) {
+        for (final Vehicle veh : vehContainer.getVehicles()) {
             veh.updatePostionAndSpeed(dt);
         }
     }
 
     // traffic lights haben eigene Phasen-Dynamik !
+    /**
+     * Update road conditions.
+     * 
+     * @param time
+     *            the time
+     */
     private void updateRoadConditions(double time) {
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
-            for(TrafficLight trafficLight : trafficLights){
+            for (final TrafficLight trafficLight : trafficLights) {
                 trafficLight.update(time);
             }
             // second update vehicle status approaching traffic lights
-            for (Vehicle veh : vehContainer.getVehicles()) {
-                for (TrafficLight trafficLight : trafficLights) {
+            for (final Vehicle veh : vehContainer.getVehicles()) {
+                for (final TrafficLight trafficLight : trafficLights) {
                     veh.updateTrafficLight(time, trafficLight);
                 }
             }
@@ -283,40 +385,80 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
         // set speedlimits
         if (!speedlimits.isEmpty()) {
-            for (Vehicle veh : vehContainer.getVehicles()) {
+            for (final Vehicle veh : vehContainer.getVehicles()) {
                 final double pos = veh.position();
                 veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
             }
         }
     }
 
+    /**
+     * Update onramps.
+     * 
+     * @param itime
+     *            the itime
+     * @param dt
+     *            the dt
+     * @param time
+     *            the time
+     */
     private void updateOnramps(int itime, double dt, double time) {
         if (simpleOnramps.isEmpty())
             return;
-        for (Onramp onramp : simpleOnramps) {
+        for (final Onramp onramp : simpleOnramps) {
             onramp.update(itime, dt, time);
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSectionGUI#firstRampFlow()
+     */
+    @Override
     public double firstRampFlow() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSectionGUI#upstreamInflow()
+     */
+    @Override
     public double upstreamInflow() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#getTimestep()
+     */
+    @Override
     public double getTimestep() {
         return dt;
     }
-    
-    public List<TrafficLight> getTrafficLights(){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
+     */
+    @Override
+    public List<TrafficLight> getTrafficLights() {
         return trafficLights;
     }
-    
-    public int nLanes(){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#nLanes()
+     */
+    @Override
+    public int nLanes() {
         return nLanes;
     }
 

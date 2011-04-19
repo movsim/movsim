@@ -28,7 +28,16 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface ModelInputData.
+ */
 public interface ModelInputData {
 
+    /**
+     * Gets the model name.
+     * 
+     * @return the model name
+     */
     String getModelName();
 }

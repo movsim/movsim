@@ -31,14 +31,23 @@ package org.movsim.input.model.output.impl;
 import org.jdom.Element;
 import org.movsim.input.model.output.MacroInput;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MacroInputImpl.
+ */
 public class MacroInputImpl implements MacroInput {
-    
+
     private double dt;
     private double dx;
     private final boolean isInitialized;
-    
-    public MacroInputImpl(Element elem){
+
+    /**
+     * Instantiates a new macro input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public MacroInputImpl(Element elem) {
         if (elem == null) {
             isInitialized = false;
             return;
@@ -46,29 +55,36 @@ public class MacroInputImpl implements MacroInput {
         this.dt = Double.parseDouble(elem.getAttributeValue("dt"));
         this.dx = Double.parseDouble(elem.getAttributeValue("dx"));
         isInitialized = true;
-        
+
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.MacroInput#getDt()
      */
+    @Override
     public double getDt() {
         return dt;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.MacroInput#getDx()
      */
+    @Override
     public double getDx() {
         return dx;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.MacroInput#isWithMacro()
      */
-    public boolean isWithMacro(){
+    @Override
+    public boolean isWithMacro() {
         return isInitialized;
     }
 

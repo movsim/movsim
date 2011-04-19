@@ -32,27 +32,42 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.SpeedLimitInput;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SpeedLimitInputImpl.
+ */
 public class SpeedLimitInputImpl implements SpeedLimitInput {
-	private double x; // in m
-    private double speedlimit; // in m/s (SI units)
-    
+    private final double x; // in m
+    private final double speedlimit; // in m/s (SI units)
+
+    /**
+     * Instantiates a new speed limit input impl.
+     * 
+     * @param map
+     *            the map
+     */
     public SpeedLimitInputImpl(Map<String, String> map) {
         this.x = Double.parseDouble(map.get("x"));
-        this.speedlimit = Double.parseDouble(map.get("vlimit_kmh"))/3.6; 
+        this.speedlimit = Double.parseDouble(map.get("vlimit_kmh")) / 3.6;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.SpeedLimitInput#getPosition()
      */
+    @Override
     public double getPosition() {
         return x;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.simulation.impl.SpeedLimitInput#getSpeedlimit()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.SpeedLimitInput#getSpeedlimit()
      */
+    @Override
     public double getSpeedlimit() {
         return speedlimit;
     }

@@ -35,36 +35,62 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.utilities.Tables;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SpeedLimitsImpl.
+ */
 public class SpeedLimitsImpl implements SpeedLimits {
-	
-	//final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
+
+    // final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
 
     private double[] posValues;
     private double[] speedValues;
-    
-    public SpeedLimitsImpl(List<SpeedLimitDataPoint> speedLimitInputDataPoints){
-    	generateSpaceSeriesData(speedLimitInputDataPoints);
+
+    /**
+     * Instantiates a new speed limits impl.
+     * 
+     * @param speedLimitInputDataPoints
+     *            the speed limit input data points
+     */
+    public SpeedLimitsImpl(List<SpeedLimitDataPoint> speedLimitInputDataPoints) {
+        generateSpaceSeriesData(speedLimitInputDataPoints);
     }
 
-    private void generateSpaceSeriesData(List<SpeedLimitDataPoint> data){
+    /**
+     * Generate space series data.
+     * 
+     * @param data
+     *            the data
+     */
+    private void generateSpaceSeriesData(List<SpeedLimitDataPoint> data) {
         final int size = data.size();
-        posValues  = new double[size];
+        posValues = new double[size];
         speedValues = new double[size];
-        for(int i=0; i<size; i++){
-            posValues[i]   = data.get(i).getPosition(); 
+        for (int i = 0; i < size; i++) {
+            posValues[i] = data.get(i).getPosition();
             speedValues[i] = data.get(i).getSpeedlimit();
         }
     }
-    
-    
-    public boolean isEmpty(){
-    	return (speedValues.length==0);
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.SpeedLimits#isEmpty()
+     */
+    @Override
+    public boolean isEmpty() {
+        return (speedValues.length == 0);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.SpeedLimits#calcSpeedLimit(double)
+     */
+    @Override
     public double calcSpeedLimit(double x) {
-        return (speedValues.length==0) ? Constants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(posValues, speedValues, x);
+        return (speedValues.length == 0) ? Constants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(posValues,
+                speedValues, x);
     }
-
 
 }

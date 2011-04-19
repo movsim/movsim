@@ -28,22 +28,66 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface ModelInputDataKCA.
+ */
 public interface ModelInputDataKCA {
 
+    /**
+     * Gets the model name.
+     * 
+     * @return the model name
+     */
     String getModelName();
-    
+
+    /**
+     * Gets the v0.
+     * 
+     * @return the v0
+     */
     double getV0();
 
+    /**
+     * Gets the k.
+     * 
+     * @return the k
+     */
     double getK();
 
+    /**
+     * Gets the pb0.
+     * 
+     * @return the pb0
+     */
     double getPb0();
 
+    /**
+     * Gets the pb1.
+     * 
+     * @return the pb1
+     */
     double getPb1();
 
+    /**
+     * Gets the pa1.
+     * 
+     * @return the pa1
+     */
     double getPa1();
 
+    /**
+     * Gets the pa2.
+     * 
+     * @return the pa2
+     */
     double getPa2();
 
+    /**
+     * Gets the vp.
+     * 
+     * @return the vp
+     */
     double getVp();
 
 }

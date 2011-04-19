@@ -38,125 +38,129 @@ import java.awt.Rectangle;
 
 import javax.swing.JApplet;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 import org.movsim.ui.GUI;
 import org.movsim.ui.components.ComponentPanel;
 
-
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph
- * 
+ * The Class GUIJApplet.
  */
 public class GUIJApplet extends JApplet implements GUI {
+
+    /**
+     * Instantiates a new gUIJ applet.
+     */
     public GUIJApplet() {
     }
 
-//    final static Logger logger = LoggerFactory.getLogger(GUIJApplet.class);
-    
+    // final static Logger logger = LoggerFactory.getLogger(GUIJApplet.class);
+
     // The bounds of the preferred Displaydevice
     private Rectangle bounds;
 
-    /**
-     * Called when this applet is loaded into the browser.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.applet.Applet#init()
      */
+    @Override
     public void init() {
-//        Locale.setDefault(Locale.US);
-//
-//        // BasicConfigurator for log4j replaced with PropertyConfigurator.
-//        PropertyConfigurator.configure("sim/log4j.properties");
-        
+        // Locale.setDefault(Locale.US);
+        //
+        // // BasicConfigurator for log4j replaced with PropertyConfigurator.
+        // PropertyConfigurator.configure("sim/log4j.properties");
+
         System.out.println("Second Applet");
-        
+
         // Execute a job on the event-dispatching thread:
         // creating this applet's GUI.
         try {
             javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     createGUI();
                 }
             });
-        } catch (Exception e) {
-//            logger.error("createGUI() did ot succesfully complete!");
+        } catch (final Exception e) {
+            // logger.error("createGUI() did ot succesfully complete!");
         }
     }
 
     /**
-     * 
+     * Creates the gui.
      */
     protected void createGUI() {
 
         // Screen
-        
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+
+        final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 
         // Use the getScreenDevices() method to pull out the screen devices from
         // the GraphicsEnvironment object
-        GraphicsDevice[] gs = ge.getScreenDevices();
+        final GraphicsDevice[] gs = ge.getScreenDevices();
 
         for (int j = 0; j < gs.length; j++) {
             System.out.println("Checking Device " + j);
-            GraphicsDevice gd = gs[j];
-            GraphicsConfiguration[] gc = gd.getConfigurations();
+            final GraphicsDevice gd = gs[j];
+            final GraphicsConfiguration[] gc = gd.getConfigurations();
             System.out.println("DefaultConfiguration for Device[" + "] has bounds of "
                     + gd.getDefaultConfiguration().getBounds() + "\n and color model of "
                     + gd.getDefaultConfiguration().getColorModel());
             bounds = gd.getDefaultConfiguration().getBounds();
         }
 
-        System.out.println("bounds height: "+ bounds.height);
+        System.out.println("bounds height: " + bounds.height);
         System.out.println("bounds width: " + bounds.width);
 
-        Container contentPane = getContentPane();
-        
-        getContentPane().setLayout(new BorderLayout());
-        
-        ComponentPanel componentPanel = new ComponentPanel();
-        
-        contentPane.add(componentPanel);
-        
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-        componentPanel.add(tabbedPane, BorderLayout.CENTER);
+        final Container contentPane = getContentPane();
 
+        getContentPane().setLayout(new BorderLayout());
+
+        final ComponentPanel componentPanel = new ComponentPanel();
+
+        contentPane.add(componentPanel);
+
+        final JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
+        componentPanel.add(tabbedPane, BorderLayout.CENTER);
 
     }
 
-    /**
-     * The start() method is always called whenever the applet becomes visible.
-     * It is called immediately after the execution of init() on the first
-     * occasion, and then subsequently when the applet reappears after scrolling
-     * or browsing, for example.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.applet.Applet#start()
      */
     @Override
     public void start() {
         super.start();
     }
 
-    /**
-     * The stop() method is always called by a browser whenever the applet
-     * becomes invisible. This allows any applet code producing effects such as
-     * animation to be stopped.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.applet.Applet#stop()
      */
     @Override
     public void stop() {
         super.stop();
     }
 
-    /**
-     * The destroy() method is called by a browser at some convenient point when
-     * it decides to remove the resources of the applet. It thus allows the
-     * applet a last chance to clean up before it is removed.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.applet.Applet#destroy()
      */
     @Override
     public void destroy() {
         super.destroy();
     }
 
-    /**
-     * This is called by the browser each time the panel's visible area is
-     * affected and is supplied with a Graphics object that facilitates drawing
-     * on its surface. Because paint() overrides the superclass method, a call
-     * of super.paint() is advisable since it ensures that any other components
-     * of the superclass are painted.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.awt.Container#paint(java.awt.Graphics)
      */
     @Override
     public void paint(Graphics g) {

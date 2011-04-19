@@ -30,12 +30,31 @@ package org.movsim.input.model.output;
 
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface DetectorInput.
+ */
 public interface DetectorInput {
 
+    /**
+     * Gets the positions.
+     * 
+     * @return the positions
+     */
     List<Double> getPositions();
 
+    /**
+     * Gets the sample interval.
+     * 
+     * @return the sample interval
+     */
     double getSampleInterval();
 
+    /**
+     * Checks if is with detectors.
+     * 
+     * @return true, if is with detectors
+     */
     boolean isWithDetectors();
 
 }

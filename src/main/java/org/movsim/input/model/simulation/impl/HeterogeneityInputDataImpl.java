@@ -32,23 +32,47 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.HeterogeneityInputData;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class HeterogeneityInputDataImpl.
+ */
 public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
-    
-    private String keyName;
-    private double fraction;
-    
+
+    private final String keyName;
+    private final double fraction;
+
+    /**
+     * Instantiates a new heterogeneity input data impl.
+     * 
+     * @param map
+     *            the map
+     */
     public HeterogeneityInputDataImpl(Map<String, String> map) {
         this.keyName = map.get("label");
         this.fraction = Double.parseDouble(map.get("fraction"));
-	}
-    
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.simulation.impl.HeterogeneityInputData#getKeyName()
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getKeyName
+     * ()
      */
-    public String getKeyName(){ return keyName; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.simulation.impl.HeterogeneityInputData#getFraction()
+    @Override
+    public String getKeyName() {
+        return keyName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getFraction
+     * ()
      */
-    public double getFraction(){ return fraction; }
+    @Override
+    public double getFraction() {
+        return fraction;
+    }
 }

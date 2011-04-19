@@ -38,83 +38,143 @@ import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimulatorImpl.
+ */
 public class SimulatorImpl implements Simulator {
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);
-    
+
     private double time;
     private int itime;
-    
+
     private double timestep;
-    
-    private final double tMax;  // sim duration 
-    
+
+    private final double tMax; // sim duration
+
     private RoadSection roadSection;
     private SimOutput simOutput;
-    
-    private boolean isWithGUI;
-    
-    private InputData simInput; // dynamisch, kann von GUI veraendert werden
-    
-    public SimulatorImpl(boolean isWithGUI, InputData inputData){
-    	this.isWithGUI = isWithGUI;
+
+    private final boolean isWithGUI;
+
+    private final InputData simInput; // dynamisch, kann von GUI veraendert
+                                      // werden
+
+    /**
+     * Instantiates a new simulator impl.
+     * 
+     * @param isWithGUI
+     *            the is with gui
+     * @param inputData
+     *            the input data
+     */
+    public SimulatorImpl(boolean isWithGUI, InputData inputData) {
+        this.isWithGUI = isWithGUI;
         this.simInput = inputData;
         final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep=simInput.getTimestep();  // can be modified by certain models (see below)
-        this.tMax=simInput.getMaxSimulationTime();
-        
+        this.timestep = simInput.getTimestep(); // can be modified by certain
+                                                // models (see below)
+        this.tMax = simInput.getMaxSimulationTime();
+
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-        
+
         restart();
     }
-    
-    private void restart(){
-        time  = 0;
+
+    /**
+     * Restart.
+     */
+    private void restart() {
+        time = 0;
         itime = 0;
         roadSection = new RoadSectionImpl(isWithGUI, simInput);
-        
+
         // model requires specific update time depending on its category !!
-        
+
         // TODO: check functionality
-        if( roadSection.getTimestep() > Constants.SMALL_VALUE){
-        	this.timestep = roadSection.getTimestep();
-        	logger.info("model sets simulation integration timestep to dt={}", timestep);
+        if (roadSection.getTimestep() > Constants.SMALL_VALUE) {
+            this.timestep = roadSection.getTimestep();
+            logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
-        
+
         simOutput = new SimOutput(isWithGUI, simInput, roadSection);
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#run()
+     */
+    @Override
     public void run() {
         logger.info("Simulator.run: start simulation at {} seconds", time);
-        
+
         simOutput.update(itime, time, timestep, roadSection);
 
-        while ( !stopThisRun(time) ) {
+        while (!stopThisRun(time)) {
             time += timestep;
             itime++;
             update();
         }
-        
+
         simOutput.close();
         logger.info("Simulator.run: stop after time = {} seconds", time);
     }
 
+    /**
+     * Stop this run.
+     * 
+     * @param time
+     *            the time
+     * @return true, if successful
+     */
     private boolean stopThisRun(double time) {
         return (time > tMax);
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#update()
+     */
+    @Override
     public void update() {
         if (itime % 100 == 0) {
-            //logger.info("Simulator.update: itime={}", itime);
-            logger.info("Simulator.update: time={}, dt={}", (time/60.), timestep);
+            // logger.info("Simulator.update: itime={}", itime);
+            logger.info("Simulator.update: time={}, dt={}", (time / 60.), timestep);
         }
         roadSection.update(itime, time);
         simOutput.update(itime, time, timestep, roadSection);
     }
 
-    public int iTime() { return itime; }  
-    public double time() { return time; }
-    public double timestep() { return timestep; }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#iTime()
+     */
+    @Override
+    public int iTime() {
+        return itime;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#time()
+     */
+    @Override
+    public double time() {
+        return time;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#timestep()
+     */
+    @Override
+    public double timestep() {
+        return timestep;
+    }
 
 }

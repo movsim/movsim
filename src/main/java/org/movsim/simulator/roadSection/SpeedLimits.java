@@ -28,10 +28,26 @@
  */
 package org.movsim.simulator.roadSection;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface SpeedLimits.
+ */
 public interface SpeedLimits {
 
-	boolean isEmpty();
+    /**
+     * Checks if is empty.
+     * 
+     * @return true, if is empty
+     */
+    boolean isEmpty();
 
-	double calcSpeedLimit(double x);
+    /**
+     * Calc speed limit.
+     * 
+     * @param x
+     *            the x
+     * @return the double
+     */
+    double calcSpeedLimit(double x);
 
 }

@@ -34,11 +34,14 @@ import org.movsim.input.model.vehicle.longModel.ModelInputDataACC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ModelInputDataACCImpl.
+ */
+public class ModelInputDataACCImpl extends ModelInputDataImpl implements ModelInputDataACC {
 
-public class ModelInputDataACCImpl extends ModelInputDataImpl implements ModelInputDataACC{
-    
     final static Logger logger = LoggerFactory.getLogger(ModelInputDataACCImpl.class);
-    
+
     private final double v0;
     private final double T;
     private final double s0;
@@ -47,59 +50,124 @@ public class ModelInputDataACCImpl extends ModelInputDataImpl implements ModelIn
     private final double a;
     private final double b;
     private final double coolness;
-    
-    
-    public ModelInputDataACCImpl(String modelName, Map<String,String> map) {
+
+    /**
+     * Instantiates a new model input data acc impl.
+     * 
+     * @param modelName
+     *            the model name
+     * @param map
+     *            the map
+     */
+    public ModelInputDataACCImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.v0 = Double.parseDouble(map.get("v0"));
-        this.T  = Double.parseDouble(map.get("T"));
+        this.T = Double.parseDouble(map.get("T"));
         this.s0 = Double.parseDouble(map.get("s0"));
         this.s1 = Double.parseDouble(map.get("s1"));
         this.delta = Double.parseDouble(map.get("delta"));
-        this.a  = Double.parseDouble(map.get("a"));
-        this.b  = Double.parseDouble(map.get("b"));
+        this.a = Double.parseDouble(map.get("a"));
+        this.b = Double.parseDouble(map.get("b"));
         this.coolness = Double.parseDouble(map.get("coolness"));
-        if(coolness<0 || coolness > 1){
+        if (coolness < 0 || coolness > 1) {
             logger.error(" coolness parameter = {} not well defined in input. please choose value within [0,1]. exit");
             System.exit(-1);
         }
-        if(v0<0 || T<0 || s0<0 || s1<0 || delta<0 || a<0 || b<0){
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit", modelName);
+        if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    modelName);
             System.exit(-1);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getV0()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getV0()
      */
-    public double getV0(){ return v0; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getT()
+    @Override
+    public double getV0() {
+        return v0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getT()
      */
-    public double getT(){ return T; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getS0()
+    @Override
+    public double getT() {
+        return T;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getS0()
      */
-    public double getS0(){ return s0; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getS1()
+    @Override
+    public double getS0() {
+        return s0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getS1()
      */
-    public double getS1(){ return s1; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getDelta()
+    @Override
+    public double getS1() {
+        return s1;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getDelta
+     * ()
      */
-    public double getDelta(){ return delta; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getA()
+    @Override
+    public double getDelta() {
+        return delta;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getA()
      */
-    public double getA(){ return a; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getB()
+    @Override
+    public double getA() {
+        return a;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getB()
      */
-    public double getB(){ return b; }
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getCoolness()
+    @Override
+    public double getB() {
+        return b;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getCoolness
+     * ()
      */
-    public double getCoolness(){ return coolness; }
-    
+    @Override
+    public double getCoolness() {
+        return coolness;
+    }
+
 }

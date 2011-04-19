@@ -28,13 +28,42 @@
  */
 package org.movsim.simulator.vehicles.longmodel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Memory.
+ */
 public interface Memory {
 
+    /**
+     * Update.
+     * 
+     * @param dt
+     *            the dt
+     * @param v
+     *            the v
+     * @param v0
+     *            the v0
+     */
     void update(double dt, double v, double v0);
 
+    /**
+     * Alpha a.
+     * 
+     * @return the double
+     */
     double alphaA();
 
+    /**
+     * Alpha v0.
+     * 
+     * @return the double
+     */
     double alphaV0();
 
+    /**
+     * Alpha t.
+     * 
+     * @return the double
+     */
     double alphaT();
 }

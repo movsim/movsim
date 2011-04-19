@@ -32,25 +32,45 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SpeedLimitDataPointImpl.
+ */
 public class SpeedLimitDataPointImpl implements SpeedLimitDataPoint {
-	
-	private double x; // in m
-	private double speedlimit; // in m/s
 
-	public SpeedLimitDataPointImpl(Map<String, String> map) {
-		this.x = Double.parseDouble(map.get("x_init"));
-		this.speedlimit = Double.parseDouble(map.get("speedlimit_kmh")) / 3.6;
-	}
+    private final double x; // in m
+    private final double speedlimit; // in m/s
 
-	public double getPosition() {
-		return x;
-	}
+    /**
+     * Instantiates a new speed limit data point impl.
+     * 
+     * @param map
+     *            the map
+     */
+    public SpeedLimitDataPointImpl(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x_init"));
+        this.speedlimit = Double.parseDouble(map.get("speedlimit_kmh")) / 3.6;
+    }
 
-	public double getSpeedlimit() {
-		return speedlimit;
-	}
-	
-	
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.SpeedLimitDataPoint#getPosition()
+     */
+    @Override
+    public double getPosition() {
+        return x;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.SpeedLimitDataPoint#getSpeedlimit()
+     */
+    @Override
+    public double getSpeedlimit() {
+        return speedlimit;
+    }
 
 }

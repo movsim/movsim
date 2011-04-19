@@ -32,39 +32,57 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.InflowDataPoint;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class InflowDataPointImpl.
+ */
 public class InflowDataPointImpl implements InflowDataPoint {
 
-	private double time; // in s (seconds)
-	private double flow; // in 1/s
-	private double speed; // in m/s
+    private final double time; // in s (seconds)
+    private final double flow; // in 1/s
+    private final double speed; // in m/s
 
-	public InflowDataPointImpl(Map<String, String> map) {
-	    this.time = Double.parseDouble(map.get("t"));
-        this.flow = Double.parseDouble(map.get("q_invh"))/3600.; //convert to SI;
+    /**
+     * Instantiates a new inflow data point impl.
+     * 
+     * @param map
+     *            the map
+     */
+    public InflowDataPointImpl(Map<String, String> map) {
+        this.time = Double.parseDouble(map.get("t"));
+        this.flow = Double.parseDouble(map.get("q_invh")) / 3600.; // convert to
+                                                                   // SI;
         this.speed = Double.parseDouble(map.get("v"));
-	}
+    }
 
-
-	/* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.InflowDataPoint#getTime()
      */
-	public double getTime() {
-		return time;
-	}
+    @Override
+    public double getTime() {
+        return time;
+    }
 
-	/* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.InflowDataPoint#getFlow()
      */
-	public double getFlow() {
-		return flow;
-	}
+    @Override
+    public double getFlow() {
+        return flow;
+    }
 
-	/* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.InflowDataPoint#getSpeed()
      */
-	public double getSpeed() {
-		return speed;
-	}
-    
+    @Override
+    public double getSpeed() {
+        return speed;
+    }
+
 }

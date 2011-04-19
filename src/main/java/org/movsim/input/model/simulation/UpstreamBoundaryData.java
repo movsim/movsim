@@ -30,11 +30,24 @@ package org.movsim.input.model.simulation;
 
 import java.util.List;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface UpstreamBoundaryData.
+ */
 public interface UpstreamBoundaryData {
-    
+
+    /**
+     * With logging.
+     * 
+     * @return true, if successful
+     */
     boolean withLogging();
-    
+
+    /**
+     * Gets the inflow time series.
+     * 
+     * @return the inflow time series
+     */
     List<InflowDataPoint> getInflowTimeSeries();
-    
+
 }

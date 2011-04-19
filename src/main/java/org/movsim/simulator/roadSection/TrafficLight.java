@@ -28,37 +28,123 @@
  */
 package org.movsim.simulator.roadSection;
 
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface TrafficLight.
+ */
 public interface TrafficLight {
-    
-    //cycle is GREEN --> GREEN_RED --> RED --> RED_GREEN --> GREEN
-    final int GREEN_LIGHT=0;
-    final int GREEN_RED_LIGHT=1;
-    final int RED_LIGHT=2;
-    final int RED_GREEN_LIGHT=3;
-    
+
+    // cycle is GREEN --> GREEN_RED --> RED --> RED_GREEN --> GREEN
+    final int GREEN_LIGHT = 0;
+    final int GREEN_RED_LIGHT = 1;
+    final int RED_LIGHT = 2;
+    final int RED_GREEN_LIGHT = 3;
+
+    /**
+     * Position.
+     * 
+     * @return the double
+     */
     double position();
 
+    /**
+     * Checks if is green.
+     * 
+     * @return true, if is green
+     */
     boolean isGreen();
+
+    /**
+     * Checks if is green red.
+     * 
+     * @return true, if is green red
+     */
     boolean isGreenRed();
+
+    /**
+     * Checks if is red.
+     * 
+     * @return true, if is red
+     */
     boolean isRed();
+
+    /**
+     * Checks if is red green.
+     * 
+     * @return true, if is red green
+     */
     boolean isRedGreen();
-    
+
+    /**
+     * Status.
+     * 
+     * @return the int
+     */
     int status();
-    
+
     // relativ, fuer Fahrzeug
+    /**
+     * Gets the time for next green.
+     * 
+     * @param alpha
+     *            the alpha
+     * @return the time for next green
+     */
     double getTimeForNextGreen(double alpha);
+
+    /**
+     * Gets the time for next red.
+     * 
+     * @param alpha
+     *            the alpha
+     * @return the time for next red
+     */
     double getTimeForNextRed(double alpha);
-    
+
     // absolut, fuer plots
+    /**
+     * Gets the time for next green.
+     * 
+     * @return the time for next green
+     */
     double getTimeForNextGreen();
+
+    /**
+     * Gets the time for next red.
+     * 
+     * @return the time for next red
+     */
     double getTimeForNextRed();
+
+    /**
+     * Gets the current cycle time.
+     * 
+     * @return the current cycle time
+     */
     double getCurrentCycleTime();
+
+    /**
+     * Gets the cycle time.
+     * 
+     * @return the cycle time
+     */
     double getCycleTime();
-    
+
+    /**
+     * Gets the crit time for next main phase.
+     * 
+     * @param alpha
+     *            the alpha
+     * @return the crit time for next main phase
+     */
     double getCritTimeForNextMainPhase(double alpha);
-    
+
+    /**
+     * Update.
+     * 
+     * @param time
+     *            the time
+     */
     void update(double time);
-   
+
 }

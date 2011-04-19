@@ -38,126 +38,205 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class VehicleContainerImpl implements VehicleContainer{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VehicleContainerImpl.
+ */
+public class VehicleContainerImpl implements VehicleContainer {
     final static Logger logger = LoggerFactory.getLogger(VehicleContainerImpl.class);
 
-    
     // array sorted in x-position with decreasing positions
     // lowest index has most downstream position on road
-    
-    private List<Vehicle> vehicles;
-    
+
+    private final List<Vehicle> vehicles;
+
     private int vehMainroadCounter;
 
     private int vehRampCounter;
-    
-    
-    public VehicleContainerImpl(){
+
+    /**
+     * Instantiates a new vehicle container impl.
+     */
+    public VehicleContainerImpl() {
         vehicles = new ArrayList<Vehicle>();
         vehMainroadCounter = 0;
-        vehRampCounter = -1; // count negative to distinguish from vehicle entered from mainroad
+        vehRampCounter = -1; // count negative to distinguish from vehicle
+                             // entered from mainroad
     }
-    
-    public List<Vehicle> getVehicles(){ return vehicles; }
-    
-    public Vehicle get(int index){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getVehicles()
+     */
+    @Override
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.VehicleContainer#get(int)
+     */
+    @Override
+    public Vehicle get(int index) {
         return vehicles.get(index);
     }
 
-    
-    public int size(){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.VehicleContainer#size()
+     */
+    @Override
+    public int size() {
         return vehicles.size();
     }
-    
-    
+
     // vehicle most downstream (largest long position)
-    public Vehicle getMostDownstream(){
-        if(vehicles.isEmpty()){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getMostDownstream()
+     */
+    @Override
+    public Vehicle getMostDownstream() {
+        if (vehicles.isEmpty())
             return null;
-        }
         return vehicles.get(0);
     }
-    
+
     // vehicle most upstream (smallest long position), greatest index
-    public Vehicle getMostUpstream(){
-        if(vehicles.isEmpty()){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getMostUpstream()
+     */
+    @Override
+    public Vehicle getMostUpstream() {
+        if (vehicles.isEmpty())
             return null;
-        }
-        return vehicles.get(vehicles.size()-1);
+        return vehicles.get(vehicles.size() - 1);
     }
-    
-    
+
     // sollte damit immer aufsteigend in pos sortiert sein
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.VehicleContainer#add(org.movsim.simulator
+     * .vehicles.Vehicle, double, double, int)
+     */
+    @Override
     public void add(Vehicle veh, double xInit, double vInit, int laneInit) {
-    	vehMainroadCounter++;
-    	add(vehMainroadCounter, veh, xInit, vInit, laneInit);
+        vehMainroadCounter++;
+        add(vehMainroadCounter, veh, xInit, vInit, laneInit);
     }
-    
 
-	public void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit) {
-		vehRampCounter--;  // count negative 
-      	add(vehRampCounter, veh, xInit, vInit, laneInit);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.VehicleContainer#addFromRamp(org.movsim
+     * .simulator.vehicles.Vehicle, double, double, int)
+     */
+    @Override
+    public void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit) {
+        vehRampCounter--; // count negative
+        add(vehRampCounter, veh, xInit, vInit, laneInit);
+    }
 
-    
+    /**
+     * Adds the.
+     * 
+     * @param vehNumber
+     *            the veh number
+     * @param veh
+     *            the veh
+     * @param xInit
+     *            the x init
+     * @param vInit
+     *            the v init
+     * @param laneInit
+     *            the lane init
+     */
     private void add(int vehNumber, Vehicle veh, double xInit, double vInit, int laneInit) {
-    	veh.setVehNumber(vehNumber);
+        veh.setVehNumber(vehNumber);
 
-    	veh.init(xInit, vInit, laneInit);
-        
-        if(vehicles.isEmpty()){
+        veh.init(xInit, vInit, laneInit);
+
+        if (vehicles.isEmpty()) {
             vehicles.add(veh);
-        }
-        else if(veh.position() < getMostUpstream().position()){
+        } else if (veh.position() < getMostUpstream().position()) {
             // add after entry with greatest index
             vehicles.add(veh);
-        }
-        else if(veh.position() > getMostDownstream().position()){
+        } else if (veh.position() > getMostDownstream().position()) {
             // add before first entry
             vehicles.add(0, veh);
-        }
-        else{
-            vehicles.add(0, veh); 
+        } else {
+            vehicles.add(0, veh);
             sort(); // robust but runtime performance ?
         }
         logger.info("vehicleContainerImpl: vehicle added: x={}, v={}", veh.position(), veh.speed());
     }
 
-    
-    
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.VehicleContainer#removeVehiclesDownstream
+     * (double)
+     */
+    @Override
     public void removeVehiclesDownstream(double roadLength) {
-        while( !vehicles.isEmpty() && getMostDownstream().position() > roadLength){
+        while (!vehicles.isEmpty() && getMostDownstream().position() > roadLength) {
             vehicles.remove(0);
-            logger.debug(" remove veh ... size = {}", vehicles.size() );
+            logger.debug(" remove veh ... size = {}", vehicles.size());
         }
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.VehicleContainer#removeVehicleMostDownstream
+     * ()
+     */
+    @Override
     public void removeVehicleMostDownstream() {
-        if(!vehicles.isEmpty()){
+        if (!vehicles.isEmpty()) {
             vehicles.remove(0);
         }
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.VehicleContainer#getLeader(org.movsim.simulator
+     * .vehicles.Vehicle)
+     */
+    @Override
     public Vehicle getLeader(Vehicle veh) {
-        int index = vehicles.indexOf(veh); 
-        if( index == -1 || index == 0 ){
+        final int index = vehicles.indexOf(veh);
+        if (index == -1 || index == 0)
             return null;
-        }
-        return vehicles.get(index-1);
+        return vehicles.get(index - 1);
     }
 
-    
     // for multi-lane extensions: sort will be needed
+    /**
+     * Sort.
+     */
     private void sort() {
-        // sortierreihenfolge festgelegt durch "pos2.compareTo(pos1) --> absteigend in pos! OK
-        Collections.sort( vehicles, new Comparator<Vehicle>() {
+        // sortierreihenfolge festgelegt durch "pos2.compareTo(pos1) -->
+        // absteigend in pos! OK
+        Collections.sort(vehicles, new Comparator<Vehicle>() {
+            @Override
             public int compare(Vehicle o1, Vehicle o2) {
-                Double pos1 = new Double((o1).position());
-                Double pos2 = new Double((o2).position());
+                final Double pos1 = new Double((o1).position());
+                final Double pos2 = new Double((o2).position());
                 return pos2.compareTo(pos1);
             }
         });

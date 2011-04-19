@@ -31,8 +31,7 @@ package org.movsim.ui.desktop;
 import javax.swing.JPanel;
 
 /**
- * @author ralph
- *
+ * The Class OutputPanel.
  */
 public class OutputPanel extends JPanel {
 

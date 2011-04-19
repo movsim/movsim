@@ -27,6 +27,7 @@
  * ----------------------------------------------------------------------
  */
 package org.movsim.ui.desktop;
+
 import java.awt.Dimension;
 import java.awt.Image;
 import java.net.URL;
@@ -34,43 +35,90 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SwingHelper.
+ */
 public class SwingHelper {
-	public static void setComponentSize(JComponent comp, int width, int height) {
-		comp.setPreferredSize(new Dimension(width,height));
-		comp.setMinimumSize(comp.getPreferredSize());
-		comp.setMaximumSize(comp.getPreferredSize());
-	}
-	
-	public static ImageIcon createImageIcon(Class bezugsklasse, String path) {
-		// Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
-//		System.out.println(bezugsklasse);
-		URL imgURL = bezugsklasse.getResource(path);
-		if(imgURL != null) {			
-			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
 
-	public static ImageIcon createImageIcon(Class bezugsklasse, String path, int width, int height) {
-		// Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
-		
-		URL imgURL = bezugsklasse.getResource(path);
-//		System.out.println(bezugsklasse);
-		if(imgURL != null) {			
-			return new ImageIcon(new ImageIcon(imgURL).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
-	
-	public static ImageIcon createImageIcon(String path, int width, int height) {
-		// Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
-				
-		return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-		
-	}
+    /**
+     * Sets the component size.
+     * 
+     * @param comp
+     *            the comp
+     * @param width
+     *            the width
+     * @param height
+     *            the height
+     */
+    public static void setComponentSize(JComponent comp, int width, int height) {
+        comp.setPreferredSize(new Dimension(width, height));
+        comp.setMinimumSize(comp.getPreferredSize());
+        comp.setMaximumSize(comp.getPreferredSize());
+    }
+
+    /**
+     * Creates the image icon.
+     * 
+     * @param bezugsklasse
+     *            the bezugsklasse
+     * @param path
+     *            the path
+     * @return the image icon
+     */
+    public static ImageIcon createImageIcon(Class bezugsklasse, String path) {
+        // Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
+        // System.out.println(bezugsklasse);
+        final URL imgURL = bezugsklasse.getResource(path);
+        if (imgURL != null)
+            return new ImageIcon(imgURL);
+        else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
+    /**
+     * Creates the image icon.
+     * 
+     * @param bezugsklasse
+     *            the bezugsklasse
+     * @param path
+     *            the path
+     * @param width
+     *            the width
+     * @param height
+     *            the height
+     * @return the image icon
+     */
+    public static ImageIcon createImageIcon(Class bezugsklasse, String path, int width, int height) {
+        // Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
+
+        final URL imgURL = bezugsklasse.getResource(path);
+        // System.out.println(bezugsklasse);
+        if (imgURL != null)
+            return new ImageIcon(new ImageIcon(imgURL).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+        else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        }
+    }
+
+    /**
+     * Creates the image icon.
+     * 
+     * @param path
+     *            the path
+     * @param width
+     *            the width
+     * @param height
+     *            the height
+     * @return the image icon
+     */
+    public static ImageIcon createImageIcon(String path, int width, int height) {
+        // Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
+
+        return new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+
+    }
 }

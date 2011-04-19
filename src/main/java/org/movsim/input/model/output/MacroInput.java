@@ -28,12 +28,31 @@
  */
 package org.movsim.input.model.output;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface MacroInput.
+ */
 public interface MacroInput {
 
+    /**
+     * Gets the dt.
+     * 
+     * @return the dt
+     */
     double getDt();
 
+    /**
+     * Gets the dx.
+     * 
+     * @return the dx
+     */
     double getDx();
 
+    /**
+     * Checks if is with macro.
+     * 
+     * @return true, if is with macro
+     */
     boolean isWithMacro();
 
 }

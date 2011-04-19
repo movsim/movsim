@@ -1,11 +1,14 @@
-/** 
- * Copyright (C) 2010, 2011 by Arne Kesting  <mail@akesting.de>, 
- * 				Martin Treiber <treibi@mtreiber.de>,
- * 				Ralph Germn <germ@ralphgerm.de>
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
+ *                             Martin Treiber <treibi@mtreiber.de>,
+ *                             Ralph Germ <germ@ralphgerm.de>,
+ *                             Martin Budden <mjbudden@gmail.com>
  *
  * ----------------------------------------------------------------------
  * 
- *  This file is part of MovSim.
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
  *
  *  MovSim is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,7 +21,8 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
  *  
  * ----------------------------------------------------------------------
  */
@@ -33,82 +37,107 @@ import org.movsim.input.model.SimulationInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimulationInputImpl.
+ */
 public class SimulationInputImpl implements SimulationInput {
-    
+
     final static Logger logger = LoggerFactory.getLogger(SimulationInputImpl.class);
-    
-    private double timestep;
-    
-    private double maxSimTime;
-    
-    
+
+    private final double timestep;
+
+    private final double maxSimTime;
+
     private boolean withFixedSeed;
-    private int randomSeed;
-    
+    private final int randomSeed;
+
     ArrayList<RoadInput> roadInput;
-    
-    public SimulationInputImpl(Element elem){
+
+    /**
+     * Instantiates a new simulation input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public SimulationInputImpl(Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
-        maxSimTime  = Double.parseDouble(elem.getAttributeValue("t_max"));
-        randomSeed  = Integer.parseInt(elem.getAttributeValue("seed"));
+        maxSimTime = Double.parseDouble(elem.getAttributeValue("t_max"));
+        randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
         if (elem.getAttributeValue("with_fixed_seed").equalsIgnoreCase("true")) {
             withFixedSeed = true;
-        }
-        else{
+        } else {
             withFixedSeed = false;
         }
-        
-        
-        
+
         final List<Element> roadElems = elem.getChildren("ROAD");
         roadInput = new ArrayList<RoadInput>();
-        for (Element roadElem : roadElems ) {
+        for (final Element roadElem : roadElems) {
             roadInput.add(new RoadInputImpl(roadElem));
         }
-        
-       
+
     }
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.SimulationInput#getTimestep()
      */
+    @Override
     public double getTimestep() {
         return timestep;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.SimulationInput#getMaxSimulationTime()
      */
+    @Override
     public double getMaxSimulationTime() {
         return maxSimTime;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.SimulationInput#isWithFixedSeed()
      */
+    @Override
     public boolean isWithFixedSeed() {
         return withFixedSeed;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.SimulationInput#getRandomSeed()
      */
+    @Override
     public int getRandomSeed() {
         return randomSeed;
     }
 
-    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.SimulationInput#getRoadInput()
+     */
+    @Override
     public ArrayList<RoadInput> getRoadInput() {
         return roadInput;
     }
-    
 
     // Quick hack: assume only one single main road !!!
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.SimulationInput#getSingleRoadInput()
+     */
+    @Override
     public RoadInput getSingleRoadInput() {
         return roadInput.get(0);
     }
-    
+
 }

@@ -30,21 +30,97 @@ package org.movsim.simulator.vehicles;
 
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface VehicleContainer.
+ */
 public interface VehicleContainer {
-    
+
+    /**
+     * Gets the vehicles.
+     * 
+     * @return the vehicles
+     */
     List<Vehicle> getVehicles();
+
+    /**
+     * Size.
+     * 
+     * @return the int
+     */
     int size();
 
+    /**
+     * Gets the.
+     * 
+     * @param index
+     *            the index
+     * @return the vehicle
+     */
     Vehicle get(int index);
+
+    /**
+     * Gets the leader.
+     * 
+     * @param veh
+     *            the veh
+     * @return the leader
+     */
     Vehicle getLeader(Vehicle veh);
+
+    /**
+     * Gets the most upstream.
+     * 
+     * @return the most upstream
+     */
     Vehicle getMostUpstream();
+
+    /**
+     * Gets the most downstream.
+     * 
+     * @return the most downstream
+     */
     Vehicle getMostDownstream();
 
-    
+    /**
+     * Adds the.
+     * 
+     * @param veh
+     *            the veh
+     * @param xInit
+     *            the x init
+     * @param vInit
+     *            the v init
+     * @param laneInit
+     *            the lane init
+     */
     void add(Vehicle veh, double xInit, double vInit, int laneInit);
+
+    /**
+     * Adds the from ramp.
+     * 
+     * @param veh
+     *            the veh
+     * @param xInit
+     *            the x init
+     * @param vInit
+     *            the v init
+     * @param laneInit
+     *            the lane init
+     */
     void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit);
+
+    /**
+     * Removes the vehicles downstream.
+     * 
+     * @param roadLength
+     *            the road length
+     */
     void removeVehiclesDownstream(double roadLength);
+
+    /**
+     * Removes the vehicle most downstream.
+     */
     void removeVehicleMostDownstream();
-    
-    
+
 }

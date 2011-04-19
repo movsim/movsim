@@ -28,10 +28,24 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface HeterogeneityInputData.
+ */
 public interface HeterogeneityInputData {
 
+    /**
+     * Gets the key name.
+     * 
+     * @return the key name
+     */
     String getKeyName();
 
+    /**
+     * Gets the fraction.
+     * 
+     * @return the fraction
+     */
     double getFraction();
 
 }

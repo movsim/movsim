@@ -28,10 +28,24 @@
  */
 package org.movsim.input.model.vehicle.behavior;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface NoiseInputData.
+ */
 public interface NoiseInputData {
 
+    /**
+     * Gets the fluct strength.
+     * 
+     * @return the fluct strength
+     */
     public abstract double getFluctStrength();
 
+    /**
+     * Gets the tau.
+     * 
+     * @return the tau
+     */
     public abstract double getTau();
 
 }

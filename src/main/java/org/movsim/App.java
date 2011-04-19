@@ -47,11 +47,9 @@ import org.movsim.ui.desktop.GUISwing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
- * @author Ralph Germ, Arne Kesting
- * 
- *
+ * The Class App.
  */
 public class App extends JApplet implements AppletStub {
 
@@ -60,26 +58,26 @@ public class App extends JApplet implements AppletStub {
     final static Logger logger = LoggerFactory.getLogger(App.class);
 
     final static String xmlDefault = "sim/startStop_IDM.xml";
-    
-   
 
     protected AppletStub appletstub;
 
     /**
-     * Only called if programm is running as application. If it as run as an
-     * applet the method init() is called.
+     * The main method.
      * 
      * @param args
+     *            the arguments
      */
     public static void main(String[] args) {
 
-        App universalprogram = new App();
+        final App universalprogram = new App();
         universalprogram.runAsAplication(args);
 
     }
 
-    /**
-     * Called when this applet is loaded into a browser or AppletViewer.
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.applet.Applet#init()
      */
     @Override
     public void init() {
@@ -99,19 +97,19 @@ public class App extends JApplet implements AppletStub {
         final String appletToLoad = "org.movsim.ui.japplet.GUIJApplet";
         setBackground(Color.white);
 
-        Thread appletThread = new Thread(new Runnable() {
+        final Thread appletThread = new Thread(new Runnable() {
 
+            @Override
             public void run() {
-                // TODO Auto-generated method stub
                 try {
-                    Class appletClass = Class.forName(appletToLoad);
-                    JApplet realApplet = (JApplet) appletClass.newInstance();
+                    final Class appletClass = Class.forName(appletToLoad);
+                    final JApplet realApplet = (JApplet) appletClass.newInstance();
                     realApplet.setStub(appletstub);
                     setLayout(new GridLayout(1, 0));
                     add(realApplet);
                     realApplet.init();
                     realApplet.start();
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     System.out.println(e);
                 }
                 validate();
@@ -125,8 +123,10 @@ public class App extends JApplet implements AppletStub {
     }
 
     /**
-     * @param args
+     * Run as aplication.
      * 
+     * @param args
+     *            the args
      */
     private void runAsAplication(String[] args) {
 
@@ -134,31 +134,31 @@ public class App extends JApplet implements AppletStub {
 
         // CommandLine args options Parser
         String xmlFilename;
-        SimCommandLine cmdline = new SimCommandLineImpl(args);
+        final SimCommandLine cmdline = new SimCommandLineImpl(args);
         if (cmdline.isWithSimulation()) {
             xmlFilename = cmdline.getSimulationFilename();
         } else {
             xmlFilename = xmlDefault;
         }
 
-        InputDataImpl inputData = new InputDataImpl();
+        final InputDataImpl inputData = new InputDataImpl();
 
         // parse xmlFile and set values in InputBean
-        XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, inputData);
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, inputData);
 
-        Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
-        
+        final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
+
         if (cmdline.isGui()) {
-            GUISwing gui = new GUISwing(inputData, simulator);
+            final GUISwing gui = new GUISwing(inputData, simulator);
         } else {
-            // without graphics 
+            // without graphics
             simulator.run();
         }
 
     }
 
     /**
-     * 
+     * Inits the localization and logger.
      */
     private static void initLocalizationAndLogger() {
         Locale.setDefault(Locale.US);
@@ -170,6 +170,12 @@ public class App extends JApplet implements AppletStub {
         logger.info("Copyright '\u00A9' by Arne Kesting  <mail@akesting.de>, Martin Treiber <treibi@mtreiber.de> and Ralph Germ <ralph@ralphgerm.de> (2010) ]");
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.awt.Container#paint(java.awt.Graphics)
+     */
+    @Override
     public void paint(Graphics g) {
         g.drawString("Loading the BIG ONE ...", 30, 30);
     }
@@ -179,6 +185,7 @@ public class App extends JApplet implements AppletStub {
      * 
      * @see java.applet.AppletStub#appletResize(int, int)
      */
+    @Override
     public void appletResize(int width, int height) {
         resize(width, height);
     }

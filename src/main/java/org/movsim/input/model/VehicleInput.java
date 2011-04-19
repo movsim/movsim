@@ -32,24 +32,73 @@ import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.longModel.ModelInputData;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface VehicleInput.
+ */
 public interface VehicleInput {
 
+    /**
+     * Gets the label.
+     * 
+     * @return the label
+     */
     String getLabel();
 
+    /**
+     * Gets the length.
+     * 
+     * @return the length
+     */
     double getLength();
 
+    /**
+     * Gets the max deceleration.
+     * 
+     * @return the max deceleration
+     */
     double getMaxDeceleration();
-    
+
+    /**
+     * Gets the reaction time.
+     * 
+     * @return the reaction time
+     */
     double getReactionTime();
 
+    /**
+     * Gets the model input data.
+     * 
+     * @return the model input data
+     */
     ModelInputData getModelInputData();
 
+    /**
+     * Checks if is with memory.
+     * 
+     * @return true, if is with memory
+     */
     boolean isWithMemory();
 
+    /**
+     * Gets the memory input data.
+     * 
+     * @return the memory input data
+     */
     MemoryInputData getMemoryInputData();
 
+    /**
+     * Checks if is with noise.
+     * 
+     * @return true, if is with noise
+     */
     boolean isWithNoise();
 
+    /**
+     * Gets the noise input data.
+     * 
+     * @return the noise input data
+     */
     NoiseInputData getNoiseInputData();
 
 }

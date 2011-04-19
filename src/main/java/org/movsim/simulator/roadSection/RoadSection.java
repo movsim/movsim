@@ -32,25 +32,55 @@ import java.util.List;
 
 import org.movsim.simulator.vehicles.VehicleContainer;
 
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface RoadSection.
+ */
 public interface RoadSection {
 
+    /**
+     * Road length.
+     * 
+     * @return the double
+     */
     double roadLength();
-    
+
+    /**
+     * N lanes.
+     * 
+     * @return the int
+     */
     int nLanes();
-    
-    
+
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     */
     void update(int itime, double time);
-    
+
+    /**
+     * Veh container.
+     * 
+     * @return the vehicle container
+     */
     VehicleContainer vehContainer();
-    
+
+    /**
+     * Gets the timestep.
+     * 
+     * @return the timestep
+     */
     double getTimestep();
-    
+
+    /**
+     * Gets the traffic lights.
+     * 
+     * @return the traffic lights
+     */
     List<TrafficLight> getTrafficLights();
-    
-    
-    
-    
-    
+
 }

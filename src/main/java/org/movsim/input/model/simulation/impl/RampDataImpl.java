@@ -39,72 +39,109 @@ import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.RampData;
 
-
+// TODO: Auto-generated Javadoc
 // TODO: concept of real onramp with lane changes not yet implemented
+/**
+ * The Class RampDataImpl.
+ */
 public class RampDataImpl implements RampData {
 
     private List<InflowDataPoint> inflowTimeSeries;
-	private double centerPosition;
-	private double rampLength;
-	private double roadLength;
-	
-	
-	private boolean withLogging;
+    private final double centerPosition;
+    private final double rampLength;
+    private final double roadLength;
 
-	@SuppressWarnings("unchecked")
-    public RampDataImpl(Element elem){
-	    this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
+    private final boolean withLogging;
+
+    /**
+     * Instantiates a new ramp data impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    @SuppressWarnings("unchecked")
+    public RampDataImpl(Element elem) {
+        this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
-        
-        final List<Element> inflowElems = elem.getChildren("INFLOW");
-	    parseAndSortInflowElements(inflowElems);
-	    
-	}
 
+        final List<Element> inflowElems = elem.getChildren("INFLOW");
+        parseAndSortInflowElements(inflowElems);
+
+    }
+
+    /**
+     * Parses the and sort inflow elements.
+     * 
+     * @param inflowElems
+     *            the inflow elems
+     */
     private void parseAndSortInflowElements(List<Element> inflowElems) {
         inflowTimeSeries = new ArrayList<InflowDataPoint>();
-        for (Element inflowElem : inflowElems) {
+        for (final Element inflowElem : inflowElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(inflowElem);
             inflowTimeSeries.add(new InflowDataPointImpl(map));
         }
         Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
+            @Override
             public int compare(InflowDataPoint o1, InflowDataPoint o2) {
-                Double pos1 = new Double((o1).getTime());
-                Double pos2 = new Double((o2).getTime());
-                return pos1.compareTo(pos2); // sort with increasing t 
+                final Double pos1 = new Double((o1).getTime());
+                final Double pos2 = new Double((o2).getTime());
+                return pos1.compareTo(pos2); // sort with increasing t
             }
         });
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.simulation.impl.RampData#getInflowTimeSeries()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.RampData#getInflowTimeSeries()
      */
+    @Override
     public List<InflowDataPoint> getInflowTimeSeries() {
         return inflowTimeSeries;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.RampData#getCenterPosition()
      */
+    @Override
     public double getCenterPosition() {
         return centerPosition;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.RampData#getRampLength()
      */
+    @Override
     public double getRampLength() {
         return rampLength;
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.RampData#getRoadLength()
+     */
+    @Override
     public double getRoadLength() {
         return roadLength;
     }
 
-    public boolean withLogging(){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.RampData#withLogging()
+     */
+    @Override
+    public boolean withLogging() {
         return withLogging;
     }
-  
+
 }

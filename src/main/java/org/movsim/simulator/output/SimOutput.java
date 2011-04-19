@@ -34,7 +34,6 @@ import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
-import org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl;
 import org.movsim.simulator.output.impl.FloatingCarsImpl;
 import org.movsim.simulator.output.impl.LoopDetectors;
 import org.movsim.simulator.output.impl.Macro3DImpl;
@@ -43,85 +42,110 @@ import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimOutput.
+ */
 public class SimOutput {
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
     private Macro3D macro3D = null;
     private FloatingCars floatingCars = null;
     private LoopDetectors detectors = null;
-    
+
     private TrafficLightRecorder trafficLightRecorder = null;
-    
-    
-    private boolean writeOutput;
-    
+
+    private final boolean writeOutput;
+
     private final String projectName;
-    
-    // TODO: propagate output path information into output modules ... 
-    
+
+    // TODO: propagate output path information into output modules ...
+
+    /**
+     * Instantiates a new sim output.
+     * 
+     * @param isWithGUI
+     *            the is with gui
+     * @param simInput
+     *            the sim input
+     * @param roadSection
+     *            the road section
+     */
     public SimOutput(boolean isWithGUI, InputData simInput, RoadSection roadSection) {
         projectName = simInput.getProjectName();
-        
+
         writeOutput = !isWithGUI; // no file output from GUI
-        
+
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
-        
-        OutputInput outputInput = simInput.getOutputInput();
+
+        final OutputInput outputInput = simInput.getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
-        if(floatingCarInput.isWithFCD()){
+        if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCarsImpl(projectName, writeOutput, floatingCarInput);
         }
-        
+
         final MacroInput macroInput = outputInput.getMacroInput();
-        if(macroInput.isWithMacro()){
+        if (macroInput.isWithMacro()) {
             macro3D = new Macro3DImpl(projectName, writeOutput, macroInput, roadSection);
         }
-         
+
         final DetectorInput detInput = outputInput.getDetectorInput();
-        if(detInput.isWithDetectors()){
+        if (detInput.isWithDetectors()) {
             detectors = new LoopDetectors(projectName, writeOutput, detInput);
         }
-        
 
         final TrafficLightRecorderInput trafficLightRecInput = outputInput.getTrafficLightRecorderInput();
-        if(trafficLightRecInput.isWithTrafficLightRecorder()){
-            trafficLightRecorder = new TrafficLightRecorderImpl(projectName, writeOutput, trafficLightRecInput, roadSection.getTrafficLights());
+        if (trafficLightRecInput.isWithTrafficLightRecorder()) {
+            trafficLightRecorder = new TrafficLightRecorderImpl(projectName, writeOutput, trafficLightRecInput,
+                    roadSection.getTrafficLights());
         }
-            
+
     }
-    
-    public void update(int itime, double time, double timestep, RoadSection roadSection){
-        //System.out.println("SimOutput.update: time="+time);
-        if(floatingCars!=null){
+
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     * @param timestep
+     *            the timestep
+     * @param roadSection
+     *            the road section
+     */
+    public void update(int itime, double time, double timestep, RoadSection roadSection) {
+        // System.out.println("SimOutput.update: time="+time);
+        if (floatingCars != null) {
             floatingCars.update(itime, time, timestep, roadSection.vehContainer());
         }
-        if(macro3D!=null){
+        if (macro3D != null) {
             macro3D.update(itime, time, roadSection);
         }
-        if(detectors!=null){
+        if (detectors != null) {
             detectors.update(itime, time, timestep, roadSection.vehContainer());
         }
-        if(trafficLightRecorder!=null){
+        if (trafficLightRecorder != null) {
             trafficLightRecorder.update(itime, time, roadSection.getTrafficLights());
         }
     }
-    
-    
+
     // testweise
-    public void close(){
-    	
-    	if(!writeOutput) return;
-    	
+    /**
+     * Close.
+     */
+    public void close() {
+
+        if (!writeOutput)
+            return;
+
         logger.info("SimOutput: close all files ... ");
-        if(floatingCars!=null){
+        if (floatingCars != null) {
             floatingCars.closeAllFiles();
         }
-        if(detectors!=null){
+        if (detectors != null) {
             detectors.closeFiles();
         }
     }
-    
-    
+
 }

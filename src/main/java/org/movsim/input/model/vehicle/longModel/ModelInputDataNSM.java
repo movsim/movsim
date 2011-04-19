@@ -28,14 +28,38 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface ModelInputDataNSM.
+ */
 public interface ModelInputDataNSM {
 
+    /**
+     * Gets the model name.
+     * 
+     * @return the model name
+     */
     String getModelName();
-    
+
+    /**
+     * Gets the v0.
+     * 
+     * @return the v0
+     */
     double getV0();
 
+    /**
+     * Gets the troedel.
+     * 
+     * @return the troedel
+     */
     double getTroedel();
 
+    /**
+     * Gets the slow to start.
+     * 
+     * @return the slow to start
+     */
     double getSlowToStart();
 
 }

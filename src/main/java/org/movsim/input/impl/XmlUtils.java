@@ -35,16 +35,30 @@ import java.util.Map;
 import org.jdom.Attribute;
 import org.jdom.Element;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class XmlUtils.
+ */
 public class XmlUtils {
-    
-    private XmlUtils(){
-        
+
+    /**
+     * Instantiates a new xml utils.
+     */
+    private XmlUtils() {
+
     }
-    
+
+    /**
+     * Put attributes in hash.
+     * 
+     * @param element
+     *            the element
+     * @return the map
+     */
     public static Map<String, String> putAttributesInHash(Element element) {
-        Map<String, String> map = new HashMap<String, String>();
-        List<Attribute> allAttr = element.getAttributes();
-        for (Attribute currentAttr : allAttr) {
+        final Map<String, String> map = new HashMap<String, String>();
+        final List<Attribute> allAttr = element.getAttributes();
+        for (final Attribute currentAttr : allAttr) {
             map.put(currentAttr.getName(), currentAttr.getValue());
         }
         return map;

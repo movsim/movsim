@@ -34,84 +34,122 @@ import org.movsim.input.model.vehicle.longModel.ModelInputDataKCA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class ModelInputDataKCAImpl extends ModelInputDataImpl implements ModelInputDataKCA{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ModelInputDataKCAImpl.
+ */
+public class ModelInputDataKCAImpl extends ModelInputDataImpl implements ModelInputDataKCA {
 
     final static Logger logger = LoggerFactory.getLogger(ModelInputDataKCAImpl.class);
-    
-    private double v0;
-    private double k;    //Multiplikator fuer sync-Abstand D=lveh+k*v*tau
-    private double pb0; //"Troedelwahrsch." for standing vehicles
-    private double pb1; //  "Troedelwahrsch." for moving vehicles
-    private double pa1; //"Beschl.=Anti-Troedelwahrsch." falls v<vp
-    private double pa2; // "Beschl.=Anti-Troedelwahrsch." falls v>=vp
-    private double vp;   // Geschw., ab der weniger "anti-getroedelt" wird
-    
+
+    private final double v0;
+    private final double k; // Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+    private final double pb0; // "Troedelwahrsch." for standing vehicles
+    private final double pb1; // "Troedelwahrsch." for moving vehicles
+    private final double pa1; // "Beschl.=Anti-Troedelwahrsch." falls v<vp
+    private final double pa2; // "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+    private final double vp; // Geschw., ab der weniger "anti-getroedelt" wird
+
+    /**
+     * Instantiates a new model input data kca impl.
+     * 
+     * @param modelName
+     *            the model name
+     * @param map
+     *            the map
+     */
     public ModelInputDataKCAImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.v0 = Double.parseDouble(map.get("v0"));
-        this.k   = Double.parseDouble(map.get("k"));
+        this.k = Double.parseDouble(map.get("k"));
         this.pb0 = Double.parseDouble(map.get("pb0"));
         this.pb1 = Double.parseDouble(map.get("pb1"));
         this.pa1 = Double.parseDouble(map.get("pa1"));
         this.pa2 = Double.parseDouble(map.get("pa2"));
         this.vp = Double.parseDouble(map.get("vp"));
-        
-        if( v0<0 || k<0 || pb0<0 || pb1<0 || pa1<0 || pa2<0 || vp<0){
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit", modelName);
+
+        if (v0 < 0 || k < 0 || pb0 < 0 || pb1 < 0 || pa1 < 0 || pa2 < 0 || vp < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    modelName);
             System.exit(-1);
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getV0()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getV0()
      */
+    @Override
     public double getV0() {
         return v0;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getK()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getK()
      */
+    @Override
     public double getK() {
         return k;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb0()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb0()
      */
+    @Override
     public double getPb0() {
         return pb0;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb1()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb1()
      */
+    @Override
     public double getPb1() {
         return pb1;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa1()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa1()
      */
+    @Override
     public double getPa1() {
         return pa1;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa2()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa2()
      */
+    @Override
     public double getPa2() {
         return pa2;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getVp()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getVp()
      */
+    @Override
     public double getVp() {
         return vp;
     }
-    
-    
 
 }

@@ -37,18 +37,19 @@ import javax.swing.JPanel;
 
 import org.movsim.simulator.Simulator;
 
-
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph
- * 
+ * The Class ControlPanel.
  */
 public class ControlPanel extends JPanel {
 
-    private Simulator simulator;
+    private final Simulator simulator;
 
     /**
-     * @param simulator 
+     * Instantiates a new control panel.
      * 
+     * @param simulator
+     *            the simulator
      */
     public ControlPanel(final Simulator simulator) {
         this.simulator = simulator;
@@ -56,45 +57,48 @@ public class ControlPanel extends JPanel {
         setBorder(BorderFactory.createEtchedBorder());
         setLayout(null);
 
-
         // Buttons
-        JButton startButton = new JButton("start");
-        JButton pauseButton = new JButton("pause");
-        JButton stopButton = new JButton("stop");
+        final JButton startButton = new JButton("start");
+        final JButton pauseButton = new JButton("pause");
+        final JButton stopButton = new JButton("stop");
 
         startButton.setBounds(20, 20, 80, 22);
         pauseButton.setBounds(120, 20, 80, 22);
         stopButton.setBounds(220, 20, 80, 22);
-        
+
         final Thread simThread = new Thread(new Runnable() {
-            
+
+            @Override
             public void run() {
                 simulator.run();
-                
+
             }
         });
-        
+
         startButton.addActionListener(new ActionListener() {
-            
+
+            @Override
             public void actionPerformed(ActionEvent e) {
                 simThread.run();
             }
         });
-        
+
         pauseButton.addActionListener(new ActionListener() {
-            
+
+            @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO
+                // TODO
             }
         });
-        
+
         stopButton.addActionListener(new ActionListener() {
-            
+
+            @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO 
+                // TODO
             }
         });
-        
+
         add(startButton);
         add(pauseButton);
         add(stopButton);

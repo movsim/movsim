@@ -32,40 +32,57 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.ICMacroData;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ICMacroDataImpl.
+ */
 public class ICMacroDataImpl implements ICMacroData {
 
-    private double x;
-	private double rho;  // in 1/m
-	private double speed; // in m/s, (default value)
-	
-	public ICMacroDataImpl(Map<String, String> map) {
-	    this.x   = Double.parseDouble(map.get("x"));
-        this.rho = Double.parseDouble(map.get("rho_invkm"))/1000.; //convert to SI
-        this.speed = Double.parseDouble(map.get("v"));
-	}
+    private final double x;
+    private final double rho; // in 1/m
+    private final double speed; // in m/s, (default value)
 
-    /* (non-Javadoc)
+    /**
+     * Instantiates a new iC macro data impl.
+     * 
+     * @param map
+     *            the map
+     */
+    public ICMacroDataImpl(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x"));
+        this.rho = Double.parseDouble(map.get("rho_invkm")) / 1000.; // convert
+                                                                     // to SI
+        this.speed = Double.parseDouble(map.get("v"));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.ICMacroData#getX()
      */
+    @Override
     public double getX() {
         return x;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.ICMacroData#getRho()
      */
+    @Override
     public double getRho() {
         return rho;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.ICMacroData#getSpeed()
      */
+    @Override
     public double getSpeed() {
         return speed;
     }
-    
-    
 
 }

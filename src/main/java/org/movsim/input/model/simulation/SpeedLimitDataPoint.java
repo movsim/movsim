@@ -28,10 +28,24 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface SpeedLimitDataPoint.
+ */
 public interface SpeedLimitDataPoint {
 
-	double getPosition();
+    /**
+     * Gets the position.
+     * 
+     * @return the position
+     */
+    double getPosition();
 
-	double getSpeedlimit();
+    /**
+     * Gets the speedlimit.
+     * 
+     * @return the speedlimit
+     */
+    double getSpeedlimit();
 
 }

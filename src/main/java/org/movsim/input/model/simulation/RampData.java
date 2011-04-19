@@ -30,17 +30,45 @@ package org.movsim.input.model.simulation;
 
 import java.util.List;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface RampData.
+ */
 public interface RampData {
 
+    /**
+     * Gets the inflow time series.
+     * 
+     * @return the inflow time series
+     */
     List<InflowDataPoint> getInflowTimeSeries();
 
+    /**
+     * Gets the center position.
+     * 
+     * @return the center position
+     */
     double getCenterPosition();
 
+    /**
+     * Gets the ramp length.
+     * 
+     * @return the ramp length
+     */
     double getRampLength();
-    
+
+    /**
+     * Gets the road length.
+     * 
+     * @return the road length
+     */
     double getRoadLength();
-    
+
+    /**
+     * With logging.
+     * 
+     * @return true, if successful
+     */
     boolean withLogging();
 
 }

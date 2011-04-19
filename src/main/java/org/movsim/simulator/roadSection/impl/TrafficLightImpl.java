@@ -28,157 +28,276 @@
  */
 package org.movsim.simulator.roadSection.impl;
 
-
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-
+// TODO: Auto-generated Javadoc
 // TODO code review, test scenario: test_trafficlights.xml
-public class TrafficLightImpl implements TrafficLight{
+/**
+ * The Class TrafficLightImpl.
+ */
+public class TrafficLightImpl implements TrafficLight {
 
-	final static Logger logger = LoggerFactory.getLogger(TrafficLightImpl.class);
-	  
+    final static Logger logger = LoggerFactory.getLogger(TrafficLightImpl.class);
+
     // transfered parameters:
-    private double position;
-    
-    
+    private final double position;
+
     private int status;
     private int oldStatus;
 
-    //parameter: cycle times
-    private double totalCycleTime; 
-    
-    private double greenTimePeriod;
-    private double redTimePeriod;
-    private double greenRedTimePeriod;
-    private double redGreenTimePeriod; 
-    private double phaseShift;
-    
-    private double currentCycleTime=0;
-    private double lastUpdateTime=0;
+    // parameter: cycle times
+    private double totalCycleTime;
 
-    public TrafficLightImpl(TrafficLightData inputData){
+    private final double greenTimePeriod;
+    private final double redTimePeriod;
+    private final double greenRedTimePeriod;
+    private final double redGreenTimePeriod;
+    private final double phaseShift;
+
+    private double currentCycleTime = 0;
+    private double lastUpdateTime = 0;
+
+    /**
+     * Instantiates a new traffic light impl.
+     * 
+     * @param inputData
+     *            the input data
+     */
+    public TrafficLightImpl(TrafficLightData inputData) {
         position = inputData.getX();
         greenTimePeriod = inputData.getGreenTime();
         redTimePeriod = inputData.getRedTime();
         greenRedTimePeriod = inputData.getGreenRedTimePeriod();
         redGreenTimePeriod = inputData.getRedGreenTimePeriod();
         phaseShift = inputData.getPhaseShift();
-        
+
         initialize();
     }
-    
-    private void initialize(){
-		status = RED_LIGHT; //GREEN_LIGHT; // init 
-		totalCycleTime = redTimePeriod+greenTimePeriod+greenRedTimePeriod+redGreenTimePeriod;
-		currentCycleTime = -phaseShift;  
-		logger.debug("initialize traffic light at pos = {}", position);
-	}
-    
-    
-    public void update(double time){
-		oldStatus=status;
-		currentCycleTime += time-lastUpdateTime;
-		
-//		logger.debug("update at time = {}, status = {}", time, status);
-//	    logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
-	
-		if(currentCycleTime > greenTimePeriod){
-			status=GREEN_RED_LIGHT;
-		}
-		if(currentCycleTime > greenTimePeriod+greenRedTimePeriod){
-			status=RED_LIGHT;
-		}
-		if(currentCycleTime > greenTimePeriod+greenRedTimePeriod+redTimePeriod){
-			status=RED_GREEN_LIGHT;
-		}
-		if(currentCycleTime >= totalCycleTime){
-			status = GREEN_LIGHT;
-			currentCycleTime -= totalCycleTime;
-		}
-		
-		lastUpdateTime=time;
-	}
-    
-//    boolean redLightJustReleased(){
-//		if(oldStatus==RED_LIGHT && (isGreen() || isRedGreen())) return true;
-//		return false;
-//	}
-//	
 
-    public double position(){ return position; }
-    
-	public double getCritTimeForNextMainPhase(double alpha){
-		//  Zeit bis zum naechsten rot bzw. gruen
-		// periode startet bei gruen
-		//restliche period time + alpha*yellowPhase
-		if(status==GREEN_LIGHT || status==GREEN_RED_LIGHT) return (greenTimePeriod+alpha*greenRedTimePeriod-currentCycleTime);
-		if(status==RED_LIGHT  || status==RED_GREEN_LIGHT) return (greenTimePeriod+greenRedTimePeriod+redTimePeriod+alpha*redGreenTimePeriod-currentCycleTime);
-		return 0;
-	}
-	
-    public double getCurrentCycleTime(){ return this.currentCycleTime; }
-	public double getCycleTime(){ return this.totalCycleTime; }	
-	
-	public double getTimeForNextGreen(double alpha){
-		double dt = totalCycleTime-currentCycleTime-(1-alpha)*redGreenTimePeriod;
-		if(dt<0) dt += totalCycleTime;
-		return dt;
-	}
-	
-	public double getTimeForNextRed(double alpha){
-		double dt = greenTimePeriod+alpha*greenRedTimePeriod-currentCycleTime;
-		if(dt<0) dt +=totalCycleTime;
-		return dt;
-	}
-	
-	public double getTimeForNextGreen(){
-		double dt = totalCycleTime-currentCycleTime;
-		if(dt<0) dt += totalCycleTime;
-		return dt;
-	}
-	
-	public double getTimeForNextRed(){
-		double dt = greenTimePeriod+greenRedTimePeriod-currentCycleTime;
-		if(dt<0) dt +=totalCycleTime;
-		return dt;
-	}
-	
-	
-    
-    public boolean isGreen(){
-		return (status==GREEN_LIGHT);
-	}
+    /**
+     * Initialize.
+     */
+    private void initialize() {
+        status = RED_LIGHT; // GREEN_LIGHT; // init
+        totalCycleTime = redTimePeriod + greenTimePeriod + greenRedTimePeriod + redGreenTimePeriod;
+        currentCycleTime = -phaseShift;
+        logger.debug("initialize traffic light at pos = {}", position);
+    }
 
-	public boolean isGreenRed(){
-		return (status==GREEN_RED_LIGHT);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#update(double)
+     */
+    @Override
+    public void update(double time) {
+        oldStatus = status;
+        currentCycleTime += time - lastUpdateTime;
 
-	public boolean isRed(){
-		return (status==RED_LIGHT);
-	}
-	
-	public boolean isRedGreen(){
-		return (status==RED_GREEN_LIGHT);
-	}
-	
-	public int status(){
-	    return status; 
-	} 
+        // logger.debug("update at time = {}, status = {}", time, status);
+        // logger.debug("   actualCycleTime = {}, lastUpdateTime={}",
+        // currentCycleTime, lastUpdateTime);
 
-	String getStatus(){
-		switch(status){
-		case GREEN_LIGHT : return "green";
-		case GREEN_RED_LIGHT : return "green_red";
-		case RED_LIGHT   : return "red";
-		case RED_GREEN_LIGHT  : return "red_green";
-		}
-		return "error: not defined!";
-	}
-	
-    
-    
+        if (currentCycleTime > greenTimePeriod) {
+            status = GREEN_RED_LIGHT;
+        }
+        if (currentCycleTime > greenTimePeriod + greenRedTimePeriod) {
+            status = RED_LIGHT;
+        }
+        if (currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
+            status = RED_GREEN_LIGHT;
+        }
+        if (currentCycleTime >= totalCycleTime) {
+            status = GREEN_LIGHT;
+            currentCycleTime -= totalCycleTime;
+        }
+
+        lastUpdateTime = time;
+    }
+
+    // boolean redLightJustReleased(){
+    // if(oldStatus==RED_LIGHT && (isGreen() || isRedGreen())) return true;
+    // return false;
+    // }
+    //
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#position()
+     */
+    @Override
+    public double position() {
+        return position;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.roadSection.TrafficLight#getCritTimeForNextMainPhase
+     * (double)
+     */
+    @Override
+    public double getCritTimeForNextMainPhase(double alpha) {
+        // Zeit bis zum naechsten rot bzw. gruen
+        // periode startet bei gruen
+        // restliche period time + alpha*yellowPhase
+        if (status == GREEN_LIGHT || status == GREEN_RED_LIGHT)
+            return (greenTimePeriod + alpha * greenRedTimePeriod - currentCycleTime);
+        if (status == RED_LIGHT || status == RED_GREEN_LIGHT)
+            return (greenTimePeriod + greenRedTimePeriod + redTimePeriod + alpha * redGreenTimePeriod - currentCycleTime);
+        return 0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#getCurrentCycleTime()
+     */
+    @Override
+    public double getCurrentCycleTime() {
+        return this.currentCycleTime;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#getCycleTime()
+     */
+    @Override
+    public double getCycleTime() {
+        return this.totalCycleTime;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.roadSection.TrafficLight#getTimeForNextGreen(double)
+     */
+    @Override
+    public double getTimeForNextGreen(double alpha) {
+        double dt = totalCycleTime - currentCycleTime - (1 - alpha) * redGreenTimePeriod;
+        if (dt < 0) {
+            dt += totalCycleTime;
+        }
+        return dt;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.roadSection.TrafficLight#getTimeForNextRed(double)
+     */
+    @Override
+    public double getTimeForNextRed(double alpha) {
+        double dt = greenTimePeriod + alpha * greenRedTimePeriod - currentCycleTime;
+        if (dt < 0) {
+            dt += totalCycleTime;
+        }
+        return dt;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#getTimeForNextGreen()
+     */
+    @Override
+    public double getTimeForNextGreen() {
+        double dt = totalCycleTime - currentCycleTime;
+        if (dt < 0) {
+            dt += totalCycleTime;
+        }
+        return dt;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#getTimeForNextRed()
+     */
+    @Override
+    public double getTimeForNextRed() {
+        double dt = greenTimePeriod + greenRedTimePeriod - currentCycleTime;
+        if (dt < 0) {
+            dt += totalCycleTime;
+        }
+        return dt;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#isGreen()
+     */
+    @Override
+    public boolean isGreen() {
+        return (status == GREEN_LIGHT);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#isGreenRed()
+     */
+    @Override
+    public boolean isGreenRed() {
+        return (status == GREEN_RED_LIGHT);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#isRed()
+     */
+    @Override
+    public boolean isRed() {
+        return (status == RED_LIGHT);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#isRedGreen()
+     */
+    @Override
+    public boolean isRedGreen() {
+        return (status == RED_GREEN_LIGHT);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLight#status()
+     */
+    @Override
+    public int status() {
+        return status;
+    }
+
+    /**
+     * Gets the status.
+     * 
+     * @return the status
+     */
+    String getStatus() {
+        switch (status) {
+        case GREEN_LIGHT:
+            return "green";
+        case GREEN_RED_LIGHT:
+            return "green_red";
+        case RED_LIGHT:
+            return "red";
+        case RED_GREEN_LIGHT:
+            return "red_green";
+        }
+        return "error: not defined!";
+    }
+
 }

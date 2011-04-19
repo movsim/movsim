@@ -34,51 +34,76 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph
- *
+ * The Class SimpleErrorHandler.
  */
 public class SimpleErrorHandler implements ErrorHandler {
     final static Logger logger = LoggerFactory.getLogger(SimpleErrorHandler.class);
     private boolean error;
 
+    /**
+     * Instantiates a new simple error handler.
+     */
     public SimpleErrorHandler() {
         error = false;
     }
+
+    /**
+     * Checks if is error.
+     * 
+     * @return true, if is error
+     */
     public boolean isError() {
         return error;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.xml.sax.ErrorHandler#warning(org.xml.sax.SAXParseException)
      */
+    @Override
     public void warning(SAXParseException exception) throws SAXException {
         logger.warn(getInfo(exception));
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.xml.sax.ErrorHandler#error(org.xml.sax.SAXParseException)
      */
+    @Override
     public void error(SAXParseException exception) throws SAXException {
         logger.error(getInfo(exception));
         error = true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.xml.sax.ErrorHandler#fatalError(org.xml.sax.SAXParseException)
      */
+    @Override
     public void fatalError(SAXParseException exception) throws SAXException {
         logger.error(getInfo(exception));
         error = true;
     }
-    
+
+    /**
+     * Gets the info.
+     * 
+     * @param e
+     *            the e
+     * @return the info
+     */
     private String getInfo(SAXParseException e) {
-        StringBuilder stringb = new StringBuilder();
-        stringb.append("   Public ID: "+e.getPublicId());
-        stringb.append("   System ID: "+e.getSystemId());
-        stringb.append("   Line number: "+e.getLineNumber());
-        stringb.append("   Column number: "+e.getColumnNumber());
-        stringb.append("   Message: "+e.getMessage());
+        final StringBuilder stringb = new StringBuilder();
+        stringb.append("   Public ID: " + e.getPublicId());
+        stringb.append("   System ID: " + e.getSystemId());
+        stringb.append("   Line number: " + e.getLineNumber());
+        stringb.append("   Column number: " + e.getColumnNumber());
+        stringb.append("   Message: " + e.getMessage());
         return stringb.toString();
     }
 }

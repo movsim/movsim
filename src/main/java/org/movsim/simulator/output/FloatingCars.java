@@ -30,10 +30,29 @@ package org.movsim.simulator.output;
 
 import org.movsim.simulator.vehicles.VehicleContainer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface FloatingCars.
+ */
 public interface FloatingCars {
 
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     * @param timestep
+     *            the timestep
+     * @param vehContainer
+     *            the veh container
+     */
     void update(int itime, double time, double timestep, VehicleContainer vehContainer);
 
+    /**
+     * Close all files.
+     */
     void closeAllFiles();
 
 }

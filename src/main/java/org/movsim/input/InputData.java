@@ -34,15 +34,38 @@ import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface InputData.
+ */
 public interface InputData {
-    
-    String getProjectName(); 
-    
+
+    /**
+     * Gets the project name.
+     * 
+     * @return the project name
+     */
+    String getProjectName();
+
+    /**
+     * Gets the output input.
+     * 
+     * @return the output input
+     */
     OutputInput getOutputInput();
-    
+
+    /**
+     * Gets the simulation input.
+     * 
+     * @return the simulation input
+     */
     SimulationInput getSimulationInput();
-    
+
+    /**
+     * Gets the vehicle input data.
+     * 
+     * @return the vehicle input data
+     */
     List<VehicleInput> getVehicleInputData();
 
 }

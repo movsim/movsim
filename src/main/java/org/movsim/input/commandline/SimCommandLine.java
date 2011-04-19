@@ -28,11 +28,31 @@
  */
 package org.movsim.input.commandline;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface SimCommandLine.
+ */
 public interface SimCommandLine {
-    
+
+    /**
+     * Checks if is with simulation.
+     * 
+     * @return true, if is with simulation
+     */
     boolean isWithSimulation();
+
+    /**
+     * Gets the simulation filename.
+     * 
+     * @return the simulation filename
+     */
     String getSimulationFilename();
-    
+
+    /**
+     * Checks if is gui.
+     * 
+     * @return true, if is gui
+     */
     boolean isGui();
-    
+
 }

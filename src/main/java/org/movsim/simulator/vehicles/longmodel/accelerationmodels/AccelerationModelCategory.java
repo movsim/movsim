@@ -28,10 +28,13 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
+/**
+ * The Interface AccelerationModelCategory.
+ */
 public interface AccelerationModelCategory {
 
-	final int CONTINUOUS_MODEL = 0;
-	final int INTERATED_MAP_MODEL = 1;
-	final int CELLULAR_AUTOMATON = 2;
-	
+    final int CONTINUOUS_MODEL = 0;
+    final int INTERATED_MAP_MODEL = 1;
+    final int CELLULAR_AUTOMATON = 2;
+
 }

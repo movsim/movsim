@@ -30,27 +30,50 @@ package org.movsim.simulator.impl;
 
 import java.util.Random;
 
-
-public class MyRandom{
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MyRandom.
+ */
+public class MyRandom {
 
     private static Random rand;
-    
+
+    /**
+     * Instantiates a new my random.
+     */
     private MyRandom() {
-        //enforce singleton property with private constructor
+        // enforce singleton property with private constructor
     }
 
-    public static void initialize(boolean withDefinedSeed, long randomSeed){
+    /**
+     * Initialize.
+     * 
+     * @param withDefinedSeed
+     *            the with defined seed
+     * @param randomSeed
+     *            the random seed
+     */
+    public static void initialize(boolean withDefinedSeed, long randomSeed) {
         rand = (withDefinedSeed) ? new Random(randomSeed) : new Random();
     }
 
-
-    public static int nextInt(){
+    /**
+     * Next int.
+     * 
+     * @return the int
+     */
+    public static int nextInt() {
         return rand.nextInt();
     }
-    
+
     // G(0,1) Gleichverteilung
-    public static double nextDouble(){
+    /**
+     * Next double.
+     * 
+     * @return the double
+     */
+    public static double nextDouble() {
         return rand.nextDouble();
     }
-    
+
 }

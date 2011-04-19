@@ -28,16 +28,49 @@
  */
 package org.movsim.simulator.vehicles;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface VehicleGenerator.
+ */
 public interface VehicleGenerator {
 
-	VehiclePrototype getVehiclePrototype();
+    /**
+     * Gets the vehicle prototype.
+     * 
+     * @return the vehicle prototype
+     */
+    VehiclePrototype getVehiclePrototype();
 
-	Vehicle createVehicle(VehiclePrototype prototype);
+    /**
+     * Creates the vehicle.
+     * 
+     * @param prototype
+     *            the prototype
+     * @return the vehicle
+     */
+    Vehicle createVehicle(VehiclePrototype prototype);
 
-	Vehicle createVehicle();
-	
-	Vehicle createVehicle(String type);
+    /**
+     * Creates the vehicle.
+     * 
+     * @return the vehicle
+     */
+    Vehicle createVehicle();
 
-	double requiredTimestep();
+    /**
+     * Creates the vehicle.
+     * 
+     * @param type
+     *            the type
+     * @return the vehicle
+     */
+    Vehicle createVehicle(String type);
+
+    /**
+     * Required timestep.
+     * 
+     * @return the double
+     */
+    double requiredTimestep();
 
 }

@@ -33,14 +33,38 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface OutputInput.
+ */
 public interface OutputInput {
 
+    /**
+     * Gets the floating car input.
+     * 
+     * @return the floating car input
+     */
     FloatingCarInput getFloatingCarInput();
 
+    /**
+     * Gets the macro input.
+     * 
+     * @return the macro input
+     */
     MacroInput getMacroInput();
 
+    /**
+     * Gets the detector input.
+     * 
+     * @return the detector input
+     */
     DetectorInput getDetectorInput();
-    
+
+    /**
+     * Gets the traffic light recorder input.
+     * 
+     * @return the traffic light recorder input
+     */
     TrafficLightRecorderInput getTrafficLightRecorderInput();
 
 }

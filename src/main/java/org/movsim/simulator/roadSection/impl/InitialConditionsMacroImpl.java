@@ -35,47 +35,66 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.utilities.Tables;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class InitialConditionsMacroImpl.
+ */
+public class InitialConditionsMacroImpl implements InitialConditionsMacro {
 
-public class InitialConditionsMacroImpl implements InitialConditionsMacro{
+    // final static double SMALL_VAL = 1e-7;
 
-   // final static double SMALL_VAL = 1e-7;
-    
     double[] pos;
     double[] rho;
     double[] speed;
-    
-    
-    
-    public InitialConditionsMacroImpl(List<ICMacroData> icData){
-    
+
+    /**
+     * Instantiates a new initial conditions macro impl.
+     * 
+     * @param icData
+     *            the ic data
+     */
+    public InitialConditionsMacroImpl(List<ICMacroData> icData) {
+
         final int size = icData.size();
-        
+
         pos = new double[size];
         rho = new double[size];
         speed = new double[size];
-        
-        // case speed = 0 --> set vehicle ast equilibrium speed  
-        
+
+        // case speed = 0 --> set vehicle ast equilibrium speed
+
         // generateMacroFields: rho guaranteed to be > RHOMIN, v to be < VMAX
-        
-        for(int i=0; i<size; i++){
+
+        for (int i = 0; i < size; i++) {
             final double rhoLocal = icData.get(i).getRho();
-            if(rhoLocal > Constants.SMALL_VALUE){
+            if (rhoLocal > Constants.SMALL_VALUE) {
                 pos[i] = icData.get(i).getX();
                 rho[i] = rhoLocal;
                 final double speedLocal = icData.get(i).getSpeed();
-                speed[i] = (speedLocal<= Constants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
+                speed[i] = (speedLocal <= Constants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
             }
         }
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.roadSection.InitialConditionsMacro#vInit(double)
+     */
+    @Override
     public double vInit(double x) {
         return Tables.intpextp(pos, speed, x);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.InitialConditionsMacro#rho(double)
+     */
+    @Override
     public double rho(double x) {
         return Tables.intpextp(pos, rho, x);
     }
-    
+
 }

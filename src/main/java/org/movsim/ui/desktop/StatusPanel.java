@@ -33,21 +33,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph
- * 
+ * The Class StatusPanel.
  */
 public class StatusPanel extends JPanel {
-    
+
     /**
-     * 
+     * Instantiates a new status panel.
      */
     public StatusPanel() {
         setBorder(BorderFactory.createEtchedBorder());
-        JLabel statusLabel = new JLabel("Status Panel");
+        final JLabel statusLabel = new JLabel("Status Panel");
         SwingHelper.setComponentSize(statusLabel, 100, 22);
-        JTextArea toDo = new JTextArea("Datenanzeige TextArea");
-        
+        final JTextArea toDo = new JTextArea("Datenanzeige TextArea");
+
         add(statusLabel);
         add(toDo);
     }

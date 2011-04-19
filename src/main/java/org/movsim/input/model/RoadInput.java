@@ -1,3 +1,31 @@
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
+ *                             Martin Treiber <treibi@mtreiber.de>,
+ *                             Ralph Germ <germ@ralphgerm.de>,
+ *                             Martin Budden <mjbudden@gmail.com>
+ *
+ * ----------------------------------------------------------------------
+ * 
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *
+ *  MovSim is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  MovSim is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
+ *  
+ * ----------------------------------------------------------------------
+ */
 package org.movsim.input.model;
 
 import java.util.List;
@@ -12,33 +40,101 @@ import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface RoadInput.
+ */
 public interface RoadInput {
+
+    /**
+     * Gets the road length.
+     * 
+     * @return the road length
+     */
     double getRoadLength();
-    
+
+    /**
+     * Gets the lanes.
+     * 
+     * @return the lanes
+     */
     int getLanes();
-    
+
+    /**
+     * Gets the id.
+     * 
+     * @return the id
+     */
     int getId();
 
+    /**
+     * Checks if is with write fundamental diagrams.
+     * 
+     * @return true, if is with write fundamental diagrams
+     */
     boolean isWithWriteFundamentalDiagrams();
-    
+
+    /**
+     * Gets the heterogeneity input data.
+     * 
+     * @return the heterogeneity input data
+     */
     List<HeterogeneityInputData> getHeterogeneityInputData();
 
+    /**
+     * Gets the ic macro data.
+     * 
+     * @return the ic macro data
+     */
     List<ICMacroData> getIcMacroData();
 
+    /**
+     * Gets the ic micro data.
+     * 
+     * @return the ic micro data
+     */
     List<ICMicroData> getIcMicroData();
 
+    /**
+     * Gets the upstream boundary data.
+     * 
+     * @return the upstream boundary data
+     */
     UpstreamBoundaryData getUpstreamBoundaryData();
 
+    /**
+     * Gets the flow cons bottleneck input data.
+     * 
+     * @return the flow cons bottleneck input data
+     */
     List<FlowConservingBottleneckDataPoint> getFlowConsBottleneckInputData();
-    
+
+    /**
+     * Gets the speed limit input data.
+     * 
+     * @return the speed limit input data
+     */
     List<SpeedLimitDataPoint> getSpeedLimitInputData();
 
+    /**
+     * Gets the ramps.
+     * 
+     * @return the ramps
+     */
     List<RampData> getRamps();
-    
+
+    /**
+     * Gets the simple ramps.
+     * 
+     * @return the simple ramps
+     */
     List<SimpleRampData> getSimpleRamps();
 
+    /**
+     * Gets the traffic light data.
+     * 
+     * @return the traffic light data
+     */
     List<TrafficLightData> getTrafficLightData();
-
-    
 
 }

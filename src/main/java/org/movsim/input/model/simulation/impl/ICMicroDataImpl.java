@@ -32,46 +32,68 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.ICMicroData;
 
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ICMicroDataImpl.
+ */
 public class ICMicroDataImpl implements ICMicroData {
 
-    private double initPosition;
-	private double initSpeed;
-	private int initLane; // most right lane: Constants.MOST_RIGHT_LANE
-	private String typeLabel;  // empty string if no type
+    private final double initPosition;
+    private final double initSpeed;
+    private final int initLane; // most right lane: Constants.MOST_RIGHT_LANE
+    private final String typeLabel; // empty string if no type
 
-	public ICMicroDataImpl(Map<String, String> map) {
-	    this.initPosition = Double.parseDouble(map.get("x"));
+    /**
+     * Instantiates a new iC micro data impl.
+     * 
+     * @param map
+     *            the map
+     */
+    public ICMicroDataImpl(Map<String, String> map) {
+        this.initPosition = Double.parseDouble(map.get("x"));
         this.initSpeed = Double.parseDouble(map.get("v"));
-        this.initLane  = Integer.parseInt(map.get("lane"));
+        this.initLane = Integer.parseInt(map.get("lane"));
         this.typeLabel = map.get("label");
-	}
+    }
 
-	/* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.ICMicroData#getX()
      */
-	public double getX() {
+    @Override
+    public double getX() {
         return initPosition;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.ICMicroData#getSpeed()
      */
+    @Override
     public double getSpeed() {
         return initSpeed;
     }
-    
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.ICMicroData#getInitLane()
+     */
+    @Override
     public int getInitLane() {
         return initLane;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.simulation.impl.ICMicroData#getType()
      */
-    public String getLabel(){
-        return typeLabel; 
+    @Override
+    public String getLabel() {
+        return typeLabel;
     }
 
 }

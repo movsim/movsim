@@ -33,33 +33,42 @@ import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
 // Resignation or Memory effect, see paper:
 // M. Treiber, D. Helbing:
 // Memory effects in microscopic traffic models and wide scattering in flow-density data
 // Physical Review E 68, 046119 (2003)
 
+/**
+ * The Class MemoryImpl.
+ */
 public class MemoryImpl implements Memory {
 
     final static Logger logger = LoggerFactory.getLogger(MemoryImpl.class);
 
-    // parameters: 
-    private double tau; // relaxation time 
+    // parameters:
+    private final double tau; // relaxation time
 
-    private double resignationMinAlphaA; 
+    private final double resignationMinAlphaA;
 
-    private double resignationMinAlphaV0;
+    private final double resignationMinAlphaV0;
 
-    private double resignationMaxAlphaT;
+    private final double resignationMaxAlphaT;
 
     // dynamic state variables:
-    
+
     private double alphaA;
 
     private double alphaV0;
 
     private double alphaT;
 
+    /**
+     * Instantiates a new memory impl.
+     * 
+     * @param parameters
+     *            the parameters
+     */
     public MemoryImpl(MemoryInputData parameters) {
         // parameters
         tau = parameters.getTau();
@@ -74,12 +83,19 @@ public class MemoryImpl implements Memory {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.Memory#update(double,
+     * double, double)
+     */
+    @Override
     public void update(double dt, double v, double v0) {
         // exponential moving average
         final double gamma = Math.exp(-dt / tau);
 
         // level of service function
-        double vRel = v / v0;
+        final double vRel = v / v0;
 
         // integration of alpha-factors
         alphaT = gamma * alphaT + (1 - gamma) * (resignationMaxAlphaT + vRel * (1. - resignationMaxAlphaT));
@@ -91,14 +107,32 @@ public class MemoryImpl implements Memory {
 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.Memory#alphaA()
+     */
+    @Override
     public double alphaA() {
         return alphaA;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.Memory#alphaV0()
+     */
+    @Override
     public double alphaV0() {
         return alphaV0;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.Memory#alphaT()
+     */
+    @Override
     public double alphaT() {
         return alphaT;
     }

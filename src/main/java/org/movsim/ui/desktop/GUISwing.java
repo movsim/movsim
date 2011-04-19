@@ -45,18 +45,20 @@ import org.movsim.simulator.Simulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph
- * 
+ * The Class GUISwing.
  */
 public class GUISwing extends JFrame implements WindowListener {
     final static Logger logger = LoggerFactory.getLogger(GUISwing.class);
 
-
     /**
+     * Instantiates a new gUI swing.
+     * 
      * @param simInput
+     *            the sim input
      * @param simulator
+     *            the simulator
      */
     public GUISwing(InputDataImpl simInput, Simulator simulator) {
         super();
@@ -64,18 +66,18 @@ public class GUISwing extends JFrame implements WindowListener {
 
         setLocation(20, 60);
 
-        MenuSwing menuMain = new MenuSwing();
-        
-        ControlPanel controlPanel = new ControlPanel(simulator);
-        
-        RoadPanel roadPanel = new RoadPanel();
-        
-        StatusPanel statusPanel = new StatusPanel();
-        
+        final MenuSwing menuMain = new MenuSwing();
+
+        final ControlPanel controlPanel = new ControlPanel(simulator);
+
+        final RoadPanel roadPanel = new RoadPanel();
+
+        final StatusPanel statusPanel = new StatusPanel();
+
         add(controlPanel, BorderLayout.NORTH);
         add(roadPanel, BorderLayout.CENTER);
         add(statusPanel, BorderLayout.SOUTH);
-            
+
         pack();
         setVisible(true);
     }
@@ -86,6 +88,7 @@ public class GUISwing extends JFrame implements WindowListener {
      * @see
      * java.awt.event.WindowListener#windowOpened(java.awt.event.WindowEvent)
      */
+    @Override
     public void windowOpened(WindowEvent e) {
 
     }
@@ -96,6 +99,7 @@ public class GUISwing extends JFrame implements WindowListener {
      * @see
      * java.awt.event.WindowListener#windowClosing(java.awt.event.WindowEvent)
      */
+    @Override
     public void windowClosing(WindowEvent e) {
         System.exit(0);
     }
@@ -106,6 +110,7 @@ public class GUISwing extends JFrame implements WindowListener {
      * @see
      * java.awt.event.WindowListener#windowClosed(java.awt.event.WindowEvent)
      */
+    @Override
     public void windowClosed(WindowEvent e) {
 
     }
@@ -116,6 +121,7 @@ public class GUISwing extends JFrame implements WindowListener {
      * @see
      * java.awt.event.WindowListener#windowIconified(java.awt.event.WindowEvent)
      */
+    @Override
     public void windowIconified(WindowEvent e) {
 
     }
@@ -127,6 +133,7 @@ public class GUISwing extends JFrame implements WindowListener {
      * java.awt.event.WindowListener#windowDeiconified(java.awt.event.WindowEvent
      * )
      */
+    @Override
     public void windowDeiconified(WindowEvent e) {
 
     }
@@ -137,6 +144,7 @@ public class GUISwing extends JFrame implements WindowListener {
      * @see
      * java.awt.event.WindowListener#windowActivated(java.awt.event.WindowEvent)
      */
+    @Override
     public void windowActivated(WindowEvent e) {
 
     }
@@ -148,44 +156,45 @@ public class GUISwing extends JFrame implements WindowListener {
      * java.awt.event.WindowListener#windowDeactivated(java.awt.event.WindowEvent
      * )
      */
+    @Override
     public void windowDeactivated(WindowEvent e) {
 
     }
 
     /**
-     * @author ralph
-     * 
+     * The Class MenuSwing.
      */
     public class MenuSwing extends JPanel {
 
         /**
-         * 
+         * Instantiates a new menu swing.
          */
         public MenuSwing() {
 
-            JMenuBar menuBar = new JMenuBar();
+            final JMenuBar menuBar = new JMenuBar();
 
-            JMenu menuFile = new JMenu("File");
-            JMenu menuEdit = new JMenu("Edit");
-            JMenu menuHelp = new JMenu("Help");
+            final JMenu menuFile = new JMenu("File");
+            final JMenu menuEdit = new JMenu("Edit");
+            final JMenu menuHelp = new JMenu("Help");
 
             menuFile.setMnemonic('F');
             menuEdit.setMnemonic('E');
             menuHelp.setMnemonic('H');
 
-            Action exitAction = new AbstractAction("Exit") {
+            final Action exitAction = new AbstractAction("Exit") {
+                @Override
                 public void actionPerformed(ActionEvent e) {
                     System.exit(0);
                 }
             };
-            
+
             menuFile.addSeparator();
             menuFile.add(exitAction);
-            
+
             menuBar.add(menuFile);
             menuBar.add(menuEdit);
             menuBar.add(menuHelp);
-            
+
             setJMenuBar(menuBar);
         }
     }

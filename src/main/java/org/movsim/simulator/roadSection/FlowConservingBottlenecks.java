@@ -28,10 +28,28 @@
  */
 package org.movsim.simulator.roadSection;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface FlowConservingBottlenecks.
+ */
 public interface FlowConservingBottlenecks {
-    
+
+    /**
+     * Alpha v0.
+     * 
+     * @param x
+     *            the x
+     * @return the double
+     */
     double alphaV0(double x);
 
+    /**
+     * Alpha t.
+     * 
+     * @param x
+     *            the x
+     * @return the double
+     */
     double alphaT(double x);
 
 }

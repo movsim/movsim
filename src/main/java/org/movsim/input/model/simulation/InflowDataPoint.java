@@ -28,12 +28,31 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface InflowDataPoint.
+ */
 public interface InflowDataPoint {
 
+    /**
+     * Gets the time.
+     * 
+     * @return the time
+     */
     double getTime();
 
+    /**
+     * Gets the flow.
+     * 
+     * @return the flow
+     */
     double getFlow();
 
+    /**
+     * Gets the speed.
+     * 
+     * @return the speed
+     */
     double getSpeed();
 
 }

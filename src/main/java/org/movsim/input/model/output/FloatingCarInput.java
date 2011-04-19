@@ -30,16 +30,45 @@ package org.movsim.input.model.output;
 
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface FloatingCarInput.
+ */
 public interface FloatingCarInput {
 
+    /**
+     * Gets the dn.
+     * 
+     * @return the dn
+     */
     int getDn();
 
+    /**
+     * Gets the n dt.
+     * 
+     * @return the n dt
+     */
     int getNDt();
-    
+
+    /**
+     * Gets the perc out.
+     * 
+     * @return the perc out
+     */
     double getPercOut();
 
+    /**
+     * Checks if is with fcd.
+     * 
+     * @return true, if is with fcd
+     */
     boolean isWithFCD();
 
+    /**
+     * Gets the floating cars.
+     * 
+     * @return the floating cars
+     */
     public List<Integer> getFloatingCars();
-    
+
 }

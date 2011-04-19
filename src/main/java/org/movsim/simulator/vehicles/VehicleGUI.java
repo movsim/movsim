@@ -28,9 +28,23 @@
  */
 package org.movsim.simulator.vehicles;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface VehicleGUI.
+ */
 public interface VehicleGUI {
-    
+
+    /**
+     * Length.
+     * 
+     * @return the double
+     */
     double length();
-    
+
+    /**
+     * Position.
+     * 
+     * @return the double
+     */
     double position();
 }

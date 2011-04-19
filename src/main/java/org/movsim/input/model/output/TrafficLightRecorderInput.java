@@ -28,10 +28,24 @@
  */
 package org.movsim.input.model.output;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface TrafficLightRecorderInput.
+ */
 public interface TrafficLightRecorderInput {
 
+    /**
+     * Gets the n dt.
+     * 
+     * @return the n dt
+     */
     int getnDt();
-    
+
+    /**
+     * Checks if is with traffic light recorder.
+     * 
+     * @return true, if is with traffic light recorder
+     */
     boolean isWithTrafficLightRecorder();
 
 }

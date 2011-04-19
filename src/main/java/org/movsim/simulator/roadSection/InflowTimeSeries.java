@@ -28,10 +28,28 @@
  */
 package org.movsim.simulator.roadSection;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface InflowTimeSeries.
+ */
 public interface InflowTimeSeries {
 
+    /**
+     * Gets the flow.
+     * 
+     * @param time
+     *            the time
+     * @return the flow
+     */
     double getFlow(double time);
 
+    /**
+     * Gets the speed.
+     * 
+     * @param time
+     *            the time
+     * @return the speed
+     */
     double getSpeed(double time);
 
 }

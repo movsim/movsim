@@ -28,21 +28,43 @@
  */
 package org.movsim.simulator;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Simulator.
+ */
 public interface Simulator {
 
+    /**
+     * I time.
+     * 
+     * @return the int
+     */
     int iTime();
+
+    /**
+     * Time.
+     * 
+     * @return the double
+     */
     double time();
+
+    /**
+     * Timestep.
+     * 
+     * @return the double
+     */
     double timestep();
 
+    /**
+     * Run.
+     */
     void run();
 
+    /**
+     * Update.
+     */
     void update();
-    
-    
-    //void restart(); // start with current gui input data
-    
-    
 
+    // void restart(); // start with current gui input data
 
 }

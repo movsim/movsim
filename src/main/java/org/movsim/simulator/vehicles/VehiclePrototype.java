@@ -33,22 +33,38 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VehiclePrototype.
+ */
 public class VehiclePrototype {
 
-    private double length;
-    
+    private final double length;
+
     private double fraction;
-    
-    private double reactionTime;
-    
-    private AccelerationModel longModel;
-    
-    private EquilibriumProperties equiProperties;
-    
-    private VehicleInput vehicleInput;
-    
-    
-    public VehiclePrototype(double fraction, AccelerationModel longModel, EquilibriumProperties equilProperties, VehicleInput vehicleInput){
+
+    private final double reactionTime;
+
+    private final AccelerationModel longModel;
+
+    private final EquilibriumProperties equiProperties;
+
+    private final VehicleInput vehicleInput;
+
+    /**
+     * Instantiates a new vehicle prototype.
+     * 
+     * @param fraction
+     *            the fraction
+     * @param longModel
+     *            the long model
+     * @param equilProperties
+     *            the equil properties
+     * @param vehicleInput
+     *            the vehicle input
+     */
+    public VehiclePrototype(double fraction, AccelerationModel longModel, EquilibriumProperties equilProperties,
+            VehicleInput vehicleInput) {
         this.length = vehicleInput.getLength();
         this.reactionTime = vehicleInput.getReactionTime();
         this.fraction = fraction;
@@ -56,36 +72,99 @@ public class VehiclePrototype {
         this.equiProperties = equilProperties;
         this.vehicleInput = vehicleInput;
     }
-    
-    public double length(){ return length; }
-    
-    public double reactionTime(){ return reactionTime; }
-    
-    public boolean hasReactionTime(){ return (reactionTime + Constants.SMALL_VALUE > 0); }
-    
-    public double fraction(){ return fraction; }
-    
-    public void setFraction(double normFraction){
+
+    /**
+     * Length.
+     * 
+     * @return the double
+     */
+    public double length() {
+        return length;
+    }
+
+    /**
+     * Reaction time.
+     * 
+     * @return the double
+     */
+    public double reactionTime() {
+        return reactionTime;
+    }
+
+    /**
+     * Checks for reaction time.
+     * 
+     * @return true, if successful
+     */
+    public boolean hasReactionTime() {
+        return (reactionTime + Constants.SMALL_VALUE > 0);
+    }
+
+    /**
+     * Fraction.
+     * 
+     * @return the double
+     */
+    public double fraction() {
+        return fraction;
+    }
+
+    /**
+     * Sets the fraction.
+     * 
+     * @param normFraction
+     *            the new fraction
+     */
+    public void setFraction(double normFraction) {
         this.fraction = normFraction;
     }
 
+    /**
+     * Gets the long model.
+     * 
+     * @return the long model
+     */
     public AccelerationModel getLongModel() {
         return longModel;
     }
-    
-    
-    public double getRhoQMax(){
+
+    /**
+     * Gets the rho q max.
+     * 
+     * @return the rho q max
+     */
+    public double getRhoQMax() {
         return equiProperties.getRhoQMax();
     }
-    public double getEquilibriumSpeed(double rho){
+
+    /**
+     * Gets the equilibrium speed.
+     * 
+     * @param rho
+     *            the rho
+     * @return the equilibrium speed
+     */
+    public double getEquilibriumSpeed(double rho) {
         return equiProperties.getVEq(rho);
     }
-    public void writeFundamentalDiagram(String filename){
+
+    /**
+     * Write fundamental diagram.
+     * 
+     * @param filename
+     *            the filename
+     */
+    public void writeFundamentalDiagram(String filename) {
         equiProperties.writeOutput(filename);
     }
-    
+
+    /**
+     * Gets the vehicle input.
+     * 
+     * @return the vehicle input
+     */
     public VehicleInput getVehicleInput() {
         return vehicleInput;
     }
-    
+
 }

@@ -36,76 +36,96 @@ import java.util.List;
 import org.jdom.Element;
 import org.movsim.input.model.output.DetectorInput;
 
-
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DetectorInputImpl.
+ */
 public class DetectorInputImpl implements DetectorInput {
 
-    private List<Double> positions; 
+    private List<Double> positions;
     private double dtSample;
-    
-    private final boolean isInitialized;
-    
-    
-    public DetectorInputImpl(Element elem){
 
-        if( elem == null){
+    private final boolean isInitialized;
+
+    /**
+     * Instantiates a new detector input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public DetectorInputImpl(Element elem) {
+
+        if (elem == null) {
             isInitialized = false;
             return;
         }
-        
+
         parseElement(elem);
         isInitialized = true;
-        
-       
+
     }
 
+    /**
+     * Parses the element.
+     * 
+     * @param elem
+     *            the elem
+     */
     @SuppressWarnings("unchecked")
     private void parseElement(Element elem) {
-        
+
         this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
-        
+
         // Detector
         positions = new ArrayList<Double>();
-        
-        List<Element> crossElems = elem.getChildren("CROSS_SECTION");
-        if( crossElems != null){
-            for (Element crossElem : crossElems) {
+
+        final List<Element> crossElems = elem.getChildren("CROSS_SECTION");
+        if (crossElems != null) {
+            for (final Element crossElem : crossElems) {
                 positions.add(Double.parseDouble(crossElem.getAttributeValue("x")));
             }
         }
-        
-        
+
         Collections.sort(positions, new Comparator<Double>() {
+            @Override
             public int compare(Double o1, Double o2) {
-                Double pos1 = new Double((o1).doubleValue());
-                Double pos2 = new Double((o2).doubleValue());
-                return pos1.compareTo(pos2); // sort with increasing x 
+                final Double pos1 = new Double((o1).doubleValue());
+                final Double pos2 = new Double((o2).doubleValue());
+                return pos1.compareTo(pos2); // sort with increasing x
             }
         });
-        
+
         // -----------------------------------------------------------
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.DetectorInput#getPositions()
      */
+    @Override
     public List<Double> getPositions() {
         return positions;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.DetectorInput#getSampleInterval()
      */
+    @Override
     public double getSampleInterval() {
         return dtSample;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.DetectorInput#isWithDetectors()
      */
-    public boolean isWithDetectors(){
+    @Override
+    public boolean isWithDetectors() {
         return isInitialized;
     }
-    
-    
+
 }

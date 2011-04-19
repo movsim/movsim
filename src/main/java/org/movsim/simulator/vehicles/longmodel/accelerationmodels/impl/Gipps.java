@@ -34,28 +34,45 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 
+// TODO: Auto-generated Javadoc
 // paper reference and modifications ...
 
+/**
+ * The Class Gipps.
+ */
+public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
 
-public class Gipps extends LongitudinalModelImpl implements AccelerationModel{
+    private final double T; // ergibt sich aus dt !!
+    private final double v0;
+    private final double a;
+    private final double b;
+    private final double s0;
 
-    private double T; // ergibt sich aus dt !!
-    private double v0;
-    private double a;
-    private double b;
-    private double s0;
-   
-    public Gipps(String modelName, ModelInputDataGipps parameters){
+    /**
+     * Instantiates a new gipps.
+     * 
+     * @param modelName
+     *            the model name
+     * @param parameters
+     *            the parameters
+     */
+    public Gipps(String modelName, ModelInputDataGipps parameters) {
         super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
-        this.T = parameters.getDt();  // Gipps: dt=T=Tr=tau_relax!
+        this.T = parameters.getDt(); // Gipps: dt=T=Tr=tau_relax!
         this.v0 = parameters.getV0();
         this.a = parameters.getA();
         this.b = parameters.getB();
         this.s0 = parameters.getS0();
     }
-    
+
     // copy constructor
-    public Gipps(Gipps modelToCopy){
+    /**
+     * Instantiates a new gipps.
+     * 
+     * @param modelToCopy
+     *            the model to copy
+     */
+    public Gipps(Gipps modelToCopy) {
         super(modelToCopy.modelName(), modelToCopy.getModelCategory());
         this.T = modelToCopy.getT();
         this.v0 = modelToCopy.getV0();
@@ -63,59 +80,145 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel{
         this.b = modelToCopy.getB();
         this.s0 = modelToCopy.getS0();
     }
-    
-    public double getT(){ return T; }
-    public double getV0(){ return v0; }
-    public double getA(){ return a; }
-    public double getB(){ return b; }
-    public double getS0(){ return s0; }
-    
 
-    public double accSimple(double s, double v, double dv){
-       return acc(s, v, dv, v0, T);
-    }
-    
-    public double acc(double s, double v, double dv, double v0Loc, double aLoc){
-      double vp=v-dv;
-      double vSafe=-b*T+Math.sqrt(b*b*T*T+vp*vp+2*b*Math.max(s-s0,0.)); // safe velocity
-      double vNew=Math.min(vSafe, Math.min(v+aLoc*T, v0Loc));
-      double aWanted = (vNew-v)/T;
-      return aWanted;
+    /**
+     * Gets the t.
+     * 
+     * @return the t
+     */
+    public double getT() {
+        return T;
     }
 
+    /**
+     * Gets the v0.
+     * 
+     * @return the v0
+     */
+    public double getV0() {
+        return v0;
+    }
+
+    /**
+     * Gets the a.
+     * 
+     * @return the a
+     */
+    public double getA() {
+        return a;
+    }
+
+    /**
+     * Gets the b.
+     * 
+     * @return the b
+     */
+    public double getB() {
+        return b;
+    }
+
+    /**
+     * Gets the s0.
+     * 
+     * @return the s0
+     */
+    public double getS0() {
+        return s0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #accSimple(double, double, double)
+     */
+    @Override
+    public double accSimple(double s, double v, double dv) {
+        return acc(s, v, dv, v0, T);
+    }
+
+    /**
+     * Acc.
+     * 
+     * @param s
+     *            the s
+     * @param v
+     *            the v
+     * @param dv
+     *            the dv
+     * @param v0Loc
+     *            the v0 loc
+     * @param aLoc
+     *            the a loc
+     * @return the double
+     */
+    public double acc(double s, double v, double dv, double v0Loc, double aLoc) {
+        final double vp = v - dv;
+        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.)); // safe
+                                                                                                         // velocity
+        final double vNew = Math.min(vSafe, Math.min(v + aLoc * T, v0Loc));
+        final double aWanted = (vNew - v) / T;
+        return aWanted;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
+     */
+    @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
-        
-//        // Local dynamical variables
-//        double s = cyclicBuf->get_s(iveh); //cyclicBuf->get_x(iveh-1) - cyclicBuf->get_l(iveh-1) - cyclicBuf->get_x(iveh);
-//        //xveh[iveh-1]-length[iveh-1]-xveh[iveh];
-//        double v= cyclicBuf->get_v(iveh); //vveh[iveh];
-//        double dv= v - cyclicBuf->get_v(iveh-1); //vveh[iveh];
-      
-      // Local dynamical variables
-      Vehicle vehFront = vehContainer.getLeader(me);
-      double s  = me.netDistance(vehFront); 
-      double v  = me.speed(); 
-      double dv = (vehFront==null) ? 0 : v - vehFront.speed();
 
-      // space dependencies modeled by speedlimits, alpha's
-      // TODO check 
-//      final double Tloc  = alphaT*T; 
-      final double v0Loc = Math.min(alphaV0*v0, me.speedlimit());  // consider external speedlimit
-      final double aLoc = alphaA*a;
-      
-      // actual Gipps formula
-      return  acc(s, v, dv, v0Loc, aLoc);
-        
+        // // Local dynamical variables
+        // double s = cyclicBuf->get_s(iveh); //cyclicBuf->get_x(iveh-1) -
+        // cyclicBuf->get_l(iveh-1) - cyclicBuf->get_x(iveh);
+        // //xveh[iveh-1]-length[iveh-1]-xveh[iveh];
+        // double v= cyclicBuf->get_v(iveh); //vveh[iveh];
+        // double dv= v - cyclicBuf->get_v(iveh-1); //vveh[iveh];
+
+        // Local dynamical variables
+        final Vehicle vehFront = vehContainer.getLeader(me);
+        final double s = me.netDistance(vehFront);
+        final double v = me.speed();
+        final double dv = (vehFront == null) ? 0 : v - vehFront.speed();
+
+        // space dependencies modeled by speedlimits, alpha's
+        // TODO check
+        // final double Tloc = alphaT*T;
+        final double v0Loc = Math.min(alphaV0 * v0, me.speedlimit()); // consider
+                                                                      // external
+                                                                      // speedlimit
+        final double aLoc = alphaA * a;
+
+        // actual Gipps formula
+        return acc(s, v, dv, v0Loc, aLoc);
+
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModelImpl#parameterV0()
+     */
+    @Override
     public double parameterV0() {
         return v0;
     }
 
-
-	public double getRequiredUpdateTime() {
-		return this.T; // iterated map requires specific timestep!!
-	}
-   
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModelImpl#getRequiredUpdateTime()
+     */
+    @Override
+    public double getRequiredUpdateTime() {
+        return this.T; // iterated map requires specific timestep!!
+    }
 
 }

@@ -40,46 +40,53 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph germ
- * 
+ * The Class MainMenu.
  */
 public class MainMenu extends JPanel {
 
     final static Logger logger = LoggerFactory.getLogger(MainMenu.class);
-    private JMenuBar menuBar;
+    private final JMenuBar menuBar;
 
+    /**
+     * Gets the menu bar.
+     * 
+     * @return the menu bar
+     */
     public JMenuBar getMenuBar() {
         return menuBar;
     }
 
     /**
-     * 
+     * Instantiates a new main menu.
      */
     public MainMenu() {
         menuBar = new JMenuBar();
 
-        JMenu menuFile = new JMenu("File");
-        JMenu menuEdit = new JMenu("Edit");
-        JMenu menuHelp = new JMenu("Help");
+        final JMenu menuFile = new JMenu("File");
+        final JMenu menuEdit = new JMenu("Edit");
+        final JMenu menuHelp = new JMenu("Help");
 
         menuFile.setMnemonic('F');
         menuEdit.setMnemonic('E');
         menuHelp.setMnemonic('H');
 
-        JMenuItem menuEditItemSettings = new JMenuItem("Settings");
-        JMenuItem menuFileItemImport = new JMenuItem("Import...");
-        JMenuItem menuFileItemExport = new JMenuItem("Export...");
+        final JMenuItem menuEditItemSettings = new JMenuItem("Settings");
+        final JMenuItem menuFileItemImport = new JMenuItem("Import...");
+        final JMenuItem menuFileItemExport = new JMenuItem("Export...");
 
-        Action exitAction = new AbstractAction("Exit") {
+        final Action exitAction = new AbstractAction("Exit") {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         };
-        
-        Action helpInfoAction = new AbstractAction("About ") {
+
+        final Action helpInfoAction = new AbstractAction("About ") {
+            @Override
             public void actionPerformed(ActionEvent e) {
-//                appInfoDialog();
+                // appInfoDialog();
             }
         };
 
@@ -96,6 +103,6 @@ public class MainMenu extends JPanel {
         menuBar.add(menuEdit);
         menuBar.add(menuHelp);
 
-//        setJMenuBar(menuBar);
+        // setJMenuBar(menuBar);
     }
 }

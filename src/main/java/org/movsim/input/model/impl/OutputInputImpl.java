@@ -39,60 +39,83 @@ import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.MacroInputImpl;
 import org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class OutputInputImpl.
+ */
 public class OutputInputImpl implements OutputInput {
 
     private FloatingCarInput floatingCarInput;
     private MacroInput macroInput;
     private DetectorInput detectorInput;
     private TrafficLightRecorderInput trafficLightRecorderInput;
-    
-    public OutputInputImpl(Element elem){
+
+    /**
+     * Instantiates a new output input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public OutputInputImpl(Element elem) {
         parseElement(elem);
     }
 
-    
+    /**
+     * Parses the element.
+     * 
+     * @param elem
+     *            the elem
+     */
     private void parseElement(Element elem) {
 
         floatingCarInput = new FloatingCarInputImpl(elem.getChild("FLOATING_CAR_DATA"));
-        
+
         macroInput = new MacroInputImpl(elem.getChild("MACRO"));
-        
+
         detectorInput = new DetectorInputImpl(elem.getChild("DETECTORS"));
-        
-        trafficLightRecorderInput = new TrafficLightRecorderInputImpl( elem.getChild("TRAFFICLIGHT_RECORDER") );
-        
-        
+
+        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild("TRAFFICLIGHT_RECORDER"));
+
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.OutputInput#getFloatingCarInput()
      */
+    @Override
     public FloatingCarInput getFloatingCarInput() {
         return floatingCarInput;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.OutputInput#getMacroInput()
      */
+    @Override
     public MacroInput getMacroInput() {
         return macroInput;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.OutputInput#getDetectorInput()
      */
+    @Override
     public DetectorInput getDetectorInput() {
         return detectorInput;
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.OutputInput#getTrafficLightRecorderInput()
+     */
+    @Override
     public TrafficLightRecorderInput getTrafficLightRecorderInput() {
         return trafficLightRecorderInput;
     }
-    
 
-    
 }

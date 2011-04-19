@@ -28,8 +28,10 @@
  */
 package org.movsim.simulator.vehicles.impl;
 
-
 // TODO implementation of cyclicbuffer and then extract interface 
+/**
+ * The Class CyclicBufferImpl.
+ */
 public class CyclicBufferImpl {
 
 }

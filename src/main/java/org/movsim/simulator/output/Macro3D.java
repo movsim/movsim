@@ -30,9 +30,22 @@ package org.movsim.simulator.output;
 
 import org.movsim.simulator.roadSection.RoadSection;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Macro3D.
+ */
 public interface Macro3D {
 
-	void update(int it, double time, RoadSection roadSection);
-	
-	
+    /**
+     * Update.
+     * 
+     * @param it
+     *            the it
+     * @param time
+     *            the time
+     * @param roadSection
+     *            the road section
+     */
+    void update(int it, double time, RoadSection roadSection);
+
 }

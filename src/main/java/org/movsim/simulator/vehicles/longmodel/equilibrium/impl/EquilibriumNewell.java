@@ -30,18 +30,36 @@ package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 
-public class EquilibriumNewell  extends EquilibriumPropertiesImpl {
-    
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EquilibriumNewell.
+ */
+public class EquilibriumNewell extends EquilibriumPropertiesImpl {
+
+    /**
+     * Instantiates a new equilibrium newell.
+     * 
+     * @param length
+     *            the length
+     * @param newellModel
+     *            the newell model
+     */
     public EquilibriumNewell(double length, Newell newellModel) {
-        super(length);  
+        super(length);
 
         calcEquilibrium(newellModel);
         calcRhoQMax();
 
     }
 
+    /**
+     * Calc equilibrium.
+     * 
+     * @param newellModel
+     *            the newell model
+     */
     private void calcEquilibrium(Newell newellModel) {
         // TODO Auto-generated method stub
-        
+
     }
 }

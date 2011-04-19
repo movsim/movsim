@@ -39,39 +39,69 @@ import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class UpstreamBoundaryDataImpl.
+ */
 public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
 
     private List<InflowDataPoint> inflowTimeSeries;
-    private boolean withLogging;
+    private final boolean withLogging;
 
+    /**
+     * Instantiates a new upstream boundary data impl.
+     * 
+     * @param elem
+     *            the elem
+     */
     @SuppressWarnings("unchecked")
-    public UpstreamBoundaryDataImpl(Element elem){
+    public UpstreamBoundaryDataImpl(Element elem) {
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
-        
+
         final List<Element> upInflowElems = elem.getChildren("INFLOW");
         parseAndSortInflowElements(upInflowElems);
     }
-    
-    private void parseAndSortInflowElements(List<Element> upInflowElems){
+
+    /**
+     * Parses the and sort inflow elements.
+     * 
+     * @param upInflowElems
+     *            the up inflow elems
+     */
+    private void parseAndSortInflowElements(List<Element> upInflowElems) {
         inflowTimeSeries = new ArrayList<InflowDataPoint>();
-        for (Element upInflowElem : upInflowElems) {
+        for (final Element upInflowElem : upInflowElems) {
             final Map<String, String> inflowMap = XmlUtils.putAttributesInHash(upInflowElem);
             inflowTimeSeries.add(new InflowDataPointImpl(inflowMap));
         }
         Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
+            @Override
             public int compare(InflowDataPoint o1, InflowDataPoint o2) {
-                Double pos1 = new Double((o1).getTime());
-                Double pos2 = new Double((o2).getTime());
-                return pos1.compareTo(pos2); // sort with increasing t 
+                final Double pos1 = new Double((o1).getTime());
+                final Double pos2 = new Double((o2).getTime());
+                return pos1.compareTo(pos2); // sort with increasing t
             }
         });
     }
-    
-    public List<InflowDataPoint> getInflowTimeSeries(){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.UpstreamBoundaryData#getInflowTimeSeries
+     * ()
+     */
+    @Override
+    public List<InflowDataPoint> getInflowTimeSeries() {
         return inflowTimeSeries;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.UpstreamBoundaryData#withLogging()
+     */
+    @Override
     public boolean withLogging() {
         return withLogging;
     }

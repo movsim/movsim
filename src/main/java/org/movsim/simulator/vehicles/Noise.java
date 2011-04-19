@@ -28,9 +28,24 @@
  */
 package org.movsim.simulator.vehicles;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Noise.
+ */
 public interface Noise {
-    
+
+    /**
+     * Update.
+     * 
+     * @param dt
+     *            the dt
+     */
     void update(double dt);
-    
+
+    /**
+     * Gets the acc error.
+     * 
+     * @return the acc error
+     */
     double getAccError();
 }

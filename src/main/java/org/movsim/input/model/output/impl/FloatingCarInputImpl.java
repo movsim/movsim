@@ -28,7 +28,6 @@
  */
 package org.movsim.input.model.output.impl;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,80 +36,109 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FloatingCarInputImpl.
+ */
 public class FloatingCarInputImpl implements FloatingCarInput {
-    
-	final static Logger logger = LoggerFactory.getLogger(FloatingCarInputImpl.class);
-	
-	private int nDt;
-	
-    private int dn; 
-    private double percOut; 
-    
+
+    final static Logger logger = LoggerFactory.getLogger(FloatingCarInputImpl.class);
+
+    private int nDt;
+
+    private int dn;
+    private double percOut;
+
     private List<Integer> floatingCars;
-    
+
     private final boolean isWithFC;
-    
-    public FloatingCarInputImpl(Element elem){
-        
-    	if(elem == null){
-    	    isWithFC = false; // not initialized
-    	    return;
-    	}
-    	
-        this.nDt =Integer.parseInt(elem.getAttributeValue("n_dt"));
+
+    /**
+     * Instantiates a new floating car input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public FloatingCarInputImpl(Element elem) {
+
+        if (elem == null) {
+            isWithFC = false; // not initialized
+            return;
+        }
+
+        this.nDt = Integer.parseInt(elem.getAttributeValue("n_dt"));
 
         this.dn = Integer.parseInt(elem.getAttributeValue("dn"));
-        if(dn!=0){
+        if (dn != 0) {
             logger.error("dn = {} not yet implemented. exit.", dn);
             System.exit(-1);
         }
         this.percOut = Double.parseDouble(elem.getAttributeValue("perc_out"));
-        if(percOut>0){
-        	logger.error("perc_out = {} (>0) not yet implemented. exit.", percOut);
-        	System.exit(-1);
+        if (percOut > 0) {
+            logger.error("perc_out = {} (>0) not yet implemented. exit.", percOut);
+            System.exit(-1);
         }
-    	
 
         floatingCars = new ArrayList<Integer>();
-        List<Element> fcElems = elem.getChildren("FC");
-        if(fcElems != null){
-        	for(Element fcElem : fcElems){
-        		final int iFC = Integer.parseInt(fcElem.getAttributeValue("number"));
-        		floatingCars.add(new Integer(iFC));
-        	}
+        final List<Element> fcElems = elem.getChildren("FC");
+        if (fcElems != null) {
+            for (final Element fcElem : fcElems) {
+                final int iFC = Integer.parseInt(fcElem.getAttributeValue("number"));
+                floatingCars.add(new Integer(iFC));
+            }
         }
-        
-        isWithFC = (dn!=0 || !floatingCars.isEmpty() || percOut >0);
+
+        isWithFC = (dn != 0 || !floatingCars.isEmpty() || percOut > 0);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.FloatingCarInput#getDn()
      */
+    @Override
     public int getDn() {
         return dn;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.FloatingCarInput#getDt()
      */
+    @Override
     public int getNDt() {
         return nDt;
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.FloatingCarInput#getPercOut()
+     */
+    @Override
     public double getPercOut() {
         return percOut;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.output.impl.FloatingCarInput#isWithFCD()
      */
-    public boolean isWithFCD(){
+    @Override
+    public boolean isWithFCD() {
         return isWithFC;
     }
 
-	public List<Integer> getFloatingCars() {
-		return floatingCars;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.FloatingCarInput#getFloatingCars()
+     */
+    @Override
+    public List<Integer> getFloatingCars() {
+        return floatingCars;
+    }
 
 }

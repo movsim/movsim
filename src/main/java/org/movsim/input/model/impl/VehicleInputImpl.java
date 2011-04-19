@@ -49,7 +49,10 @@ import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VehicleInputImpl.
+ */
 public class VehicleInputImpl implements VehicleInput {
     final static Logger logger = LoggerFactory.getLogger(VehicleInputImpl.class);
 
@@ -57,16 +60,23 @@ public class VehicleInputImpl implements VehicleInput {
 
     private final double length;// cannot be changed while simulating
 
-    private double maxDeceleration; // in m/s^2, positive (default: Infinity)
-    
+    private final double maxDeceleration; // in m/s^2, positive (default:
+                                          // Infinity)
+
     private final double reactionTime; // cannot be changed while simulating
 
     private ModelInputData modelInputData;
 
     private MemoryInputData memoryInputData = null;
-    
+
     private NoiseInputData noiseInputData = null;
 
+    /**
+     * Instantiates a new vehicle input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
     @SuppressWarnings("unchecked")
     public VehicleInputImpl(Element elem) {
         this.label = elem.getAttributeValue("label");
@@ -74,7 +84,7 @@ public class VehicleInputImpl implements VehicleInput {
         this.maxDeceleration = Double.parseDouble(elem.getAttributeValue("b_max"));
         this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
 
-        List<Element> longModelElems = elem.getChild("LONGITUDINAL_MODEL").getChildren();
+        final List<Element> longModelElems = elem.getChild("LONGITUDINAL_MODEL").getChildren();
         if (longModelElems.size() != 1) {
             logger.error("specify only one long model ! exit ");
             System.exit(-1);
@@ -95,89 +105,124 @@ public class VehicleInputImpl implements VehicleInput {
         }
     }
 
-   
-
+    /**
+     * Model input data factory.
+     * 
+     * @param elem
+     *            the elem
+     * @return the model input data
+     */
     private ModelInputData modelInputDataFactory(Element elem) {
-        String modelName = elem.getName();
-        Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equalsIgnoreCase("IDM")) {
+        final String modelName = elem.getName();
+        final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
+        if (modelName.equalsIgnoreCase("IDM"))
             return new ModelInputDataIDMImpl("IDM", map);
-        } else if (modelName.equalsIgnoreCase("ACC")) {
+        else if (modelName.equalsIgnoreCase("ACC"))
             return new ModelInputDataACCImpl("ACC", map);
-        } else if (modelName.equalsIgnoreCase("OVM_VDIFF")) {
+        else if (modelName.equalsIgnoreCase("OVM_VDIFF"))
             return new ModelInputDataOVM_VDIFFImpl("OVM_VDIFF", map);
-        } else if (modelName.equalsIgnoreCase("GIPPS")) {
+        else if (modelName.equalsIgnoreCase("GIPPS"))
             return new ModelInputDataGippsImpl("GIPPS", map);
-        } else if (modelName.equalsIgnoreCase("NEWELL")) {
+        else if (modelName.equalsIgnoreCase("NEWELL"))
             return new ModelInputDataNewellImpl("NEWELL", map);
-        } else if (modelName.equalsIgnoreCase("NSM")) {
+        else if (modelName.equalsIgnoreCase("NSM"))
             return new ModelInputDataNSMImpl("NSM", map);
-        } else if (modelName.equalsIgnoreCase("KCA")) {
+        else if (modelName.equalsIgnoreCase("KCA"))
             return new ModelInputDataKCAImpl("KCA", map);
-        } else {
+        else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);
         }
         return null; // not reached, instead exit
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#getLabel()
      */
+    @Override
     public String getLabel() {
         return label;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#getLength()
      */
+    @Override
     public double getLength() {
         return length;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#getMaxDeceleration()
      */
+    @Override
     public double getMaxDeceleration() {
         return maxDeceleration;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
      */
+    @Override
     public ModelInputData getModelInputData() {
         return modelInputData;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#isWithMemory()
      */
+    @Override
     public boolean isWithMemory() {
         return (memoryInputData != null);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#getMemoryInputData()
      */
+    @Override
     public MemoryInputData getMemoryInputData() {
         return memoryInputData;
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#isWithNoise()
      */
+    @Override
     public boolean isWithNoise() {
         return (noiseInputData != null);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.impl.VehicleInput#getNoiseInputData()
      */
+    @Override
     public NoiseInputData getNoiseInputData() {
         return noiseInputData;
     }
-    
-    public double getReactionTime(){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.VehicleInput#getReactionTime()
+     */
+    @Override
+    public double getReactionTime() {
         return reactionTime;
     }
 

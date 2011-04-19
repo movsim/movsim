@@ -28,23 +28,26 @@
  */
 package org.movsim.simulator;
 
+/**
+ * The Interface Constants.
+ */
 public interface Constants {
-	
+
     final String COMMENT_CHAR = "#";
-    
-	final double SMALL_VALUE = 1e-7;
-	
-	final double MAX_VEHICLE_SPEED = 200/3.6;
-	
-	final int MOST_RIGHT_LANE = 1; // increment lane index for further lanes to the left
-	 
-	final String MODEL_NAME_IDM = "IDM";
-	final String MODEL_NAME_ACC = "ACC";
-	final String MODEL_NAME_OVM_VDIFF = "OVM_VDIFF";
-	final String MODEL_NAME_GIPPS = "GIPPS";
-	final String MODEL_NAME_NEWELL = "NEWELL"; 
-	final String MODEL_NAME_NSM = "NSM";
-	final String MODEL_NAME_KCA = "KCA";
-	 
-	
+
+    final double SMALL_VALUE = 1e-7;
+
+    final double MAX_VEHICLE_SPEED = 200 / 3.6;
+
+    final int MOST_RIGHT_LANE = 1; // increment lane index for further lanes to
+                                   // the left
+
+    final String MODEL_NAME_IDM = "IDM";
+    final String MODEL_NAME_ACC = "ACC";
+    final String MODEL_NAME_OVM_VDIFF = "OVM_VDIFF";
+    final String MODEL_NAME_GIPPS = "GIPPS";
+    final String MODEL_NAME_NEWELL = "NEWELL";
+    final String MODEL_NAME_NSM = "NSM";
+    final String MODEL_NAME_KCA = "KCA";
+
 }

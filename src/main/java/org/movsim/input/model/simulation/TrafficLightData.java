@@ -28,18 +28,52 @@
  */
 package org.movsim.input.model.simulation;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface TrafficLightData.
+ */
 public interface TrafficLightData {
 
+    /**
+     * Gets the x.
+     * 
+     * @return the x
+     */
     double getX();
 
+    /**
+     * Gets the green time.
+     * 
+     * @return the green time
+     */
     double getGreenTime();
 
+    /**
+     * Gets the red time.
+     * 
+     * @return the red time
+     */
     double getRedTime();
 
+    /**
+     * Gets the green red time period.
+     * 
+     * @return the green red time period
+     */
     double getGreenRedTimePeriod();
 
+    /**
+     * Gets the red green time period.
+     * 
+     * @return the red green time period
+     */
     double getRedGreenTimePeriod();
-    
+
+    /**
+     * Gets the phase shift.
+     * 
+     * @return the phase shift
+     */
     double getPhaseShift();
 
 }

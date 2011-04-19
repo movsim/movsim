@@ -31,14 +31,14 @@ package org.movsim.ui.desktop;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author ralph
- * 
+ * The Class RoadPanel.
  */
 public class RoadPanel extends JPanel {
-    
+
     /**
-     * 
+     * Instantiates a new road panel.
      */
     public RoadPanel() {
         SwingHelper.setComponentSize(this, 1200, 500);

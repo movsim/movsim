@@ -28,10 +28,28 @@
  */
 package org.movsim.simulator.roadSection;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface InitialConditionsMacro.
+ */
 public interface InitialConditionsMacro {
-    
+
+    /**
+     * Rho.
+     * 
+     * @param x
+     *            the x
+     * @return the double
+     */
     double rho(double x);
+
+    /**
+     * V init.
+     * 
+     * @param x
+     *            the x
+     * @return the double
+     */
     double vInit(double x);
-    
 
 }

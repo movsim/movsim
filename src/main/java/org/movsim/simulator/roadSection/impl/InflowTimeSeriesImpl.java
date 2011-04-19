@@ -36,9 +36,12 @@ import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class InflowTimeSeriesImpl.
+ */
 public class InflowTimeSeriesImpl implements InflowTimeSeries {
-    
+
     final static Logger logger = LoggerFactory.getLogger(InflowTimeSeriesImpl.class);
 
     private double[] timeValues;
@@ -47,12 +50,22 @@ public class InflowTimeSeriesImpl implements InflowTimeSeries {
 
     private double[] speedValues;
 
-    
-    public InflowTimeSeriesImpl(List<InflowDataPoint> inflowTimeSeries){
+    /**
+     * Instantiates a new inflow time series impl.
+     * 
+     * @param inflowTimeSeries
+     *            the inflow time series
+     */
+    public InflowTimeSeriesImpl(List<InflowDataPoint> inflowTimeSeries) {
         generateTimeSeriesData(inflowTimeSeries);
     }
-    
-    
+
+    /**
+     * Generate time series data.
+     * 
+     * @param inflowTimeSeries
+     *            the inflow time series
+     */
     private void generateTimeSeriesData(List<InflowDataPoint> inflowTimeSeries) {
         final int size = inflowTimeSeries.size();
 
@@ -68,10 +81,22 @@ public class InflowTimeSeriesImpl implements InflowTimeSeries {
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.InflowTimeSeries#getFlow(double)
+     */
+    @Override
     public double getFlow(double time) {
         return Tables.intpextp(timeValues, flowValues, time);
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.InflowTimeSeries#getSpeed(double)
+     */
+    @Override
     public double getSpeed(double time) {
         return Tables.intpextp(timeValues, speedValues, time);
     }

@@ -28,14 +28,38 @@
  */
 package org.movsim.input.model.vehicle.behavior;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface MemoryInputData.
+ */
 public interface MemoryInputData {
 
+    /**
+     * Gets the tau.
+     * 
+     * @return the tau
+     */
     public abstract double getTau();
 
+    /**
+     * Gets the resignation max alpha t.
+     * 
+     * @return the resignation max alpha t
+     */
     public abstract double getResignationMaxAlphaT();
 
+    /**
+     * Gets the resignation min alpha v0.
+     * 
+     * @return the resignation min alpha v0
+     */
     public abstract double getResignationMinAlphaV0();
 
+    /**
+     * Gets the resignation min alpha a.
+     * 
+     * @return the resignation min alpha a
+     */
     public abstract double getResignationMinAlphaA();
 
 }

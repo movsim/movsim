@@ -31,35 +31,54 @@ package org.movsim.input.model.output.impl;
 import org.jdom.Element;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TrafficLightRecorderInputImpl.
+ */
 public class TrafficLightRecorderInputImpl implements TrafficLightRecorderInput {
 
     private int nDt;
-    
+
     private boolean isInitialized;
-    
-    public TrafficLightRecorderInputImpl(Element elem){
+
+    /**
+     * Instantiates a new traffic light recorder input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public TrafficLightRecorderInputImpl(Element elem) {
         if (elem == null) {
             isInitialized = false;
             return;
         }
-        
-        this.nDt =Integer.parseInt(elem.getAttributeValue("n_dt"));
-        
+
+        this.nDt = Integer.parseInt(elem.getAttributeValue("n_dt"));
+
         isInitialized = true;
 
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.output.impl.TrafficLightRecorderInput#getnDt()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.output.impl.TrafficLightRecorderInput#getnDt()
      */
+    @Override
     public int getnDt() {
         return nDt;
     }
 
-    public boolean isWithTrafficLightRecorder(){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.TrafficLightRecorderInput#
+     * isWithTrafficLightRecorder()
+     */
+    @Override
+    public boolean isWithTrafficLightRecorder() {
         return isInitialized;
     }
 
 }
-

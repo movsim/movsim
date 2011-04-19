@@ -28,8 +28,17 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface ModelInputDataNewell.
+ */
 public interface ModelInputDataNewell {
 
+    /**
+     * Gets the model name.
+     * 
+     * @return the model name
+     */
     String getModelName();
-    
+
 }

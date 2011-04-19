@@ -28,10 +28,22 @@
  */
 package org.movsim.simulator.roadSection;
 
-
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface UpstreamBoundary.
+ */
 public interface UpstreamBoundary {
 
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param dt
+     *            the dt
+     * @param time
+     *            the time
+     */
     void update(int itime, double dt, double time);
-    
-    
+
 }
