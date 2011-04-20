@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 // TODO: Auto-generated Javadoc
 /**
  * The Class InputDataImpl.
+ * 
+ * @author Arne, Ralph
  */
 public class InputDataImpl implements InputData {
 
@@ -47,7 +49,7 @@ public class InputDataImpl implements InputData {
 
     private String projectName;
 
-    private final boolean withFileOutputScenario = false; // default gesetzt
+//    private final boolean withFileOutputScenario = false; // default gesetzt
 
     private List<VehicleInput> vehicleInputData;
 
@@ -79,7 +81,7 @@ public class InputDataImpl implements InputData {
      */
     protected void setProjectName(String projectname) {
         this.projectName = projectname;
-        logger.debug("Projectname in Bean: {}", projectname);
+        logger.debug("Projectname: {}", projectname);
     }
 
     /*

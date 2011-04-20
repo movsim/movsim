@@ -41,6 +41,7 @@ import org.xml.sax.SAXException;
 // TODO: Auto-generated Javadoc
 /**
  * The Class LocalDtdResolver.
+ * @author Arne Kesting
  */
 public class LocalDtdResolver implements EntityResolver {
 
@@ -100,14 +101,9 @@ public class LocalDtdResolver implements EntityResolver {
     private InputSource resolveEntity() throws SAXException, IOException {
         logger.info("try loading resource file \"{}\" from class path.", dtdFilename);
         final Properties prop = System.getProperties();
-        System.out.println("classpath:\n" + prop.getProperty("java.class.path", null));
-        System.out.println("getResource via classLoader:");
-        System.out.println(this.getClass().getClassLoader().getResource(dtdFilename));
-        System.out.println("getResourceAsStream via classLoader:");
-        // inputStream =
-        // this.getClass().getClassLoader().getResourceAsStream(dtdResource);
-        // System.out.println(this.getClass().getResource(dtdFilename).toString());
-        // inputStream = this.getClass().getResourceAsStream(dtdFilename);
+        logger.info("classpath:\n" + prop.getProperty("java.class.path", null));
+        logger.info("getResource via classLoader:"+ this.getClass().getClassLoader().getResource(dtdFilename));
+        logger.info("getResourceAsStream via classLoader:");
         if (inputStream == null) {
             logger.error("no resource found (must be on classpath) !!! Exit ");
             System.exit(-1);
@@ -125,7 +121,6 @@ public class LocalDtdResolver implements EntityResolver {
      */
     @Override
     public InputSource resolveEntity(String publicId, String systemId) throws IOException, SAXException {
-        // System.out.println(" ... LocalDtdResolver.resolveEntity called ...");
         return dtdSource;
     }
 

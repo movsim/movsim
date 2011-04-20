@@ -58,15 +58,13 @@ import org.xml.sax.helpers.XMLReaderFactory;
 // TODO: Auto-generated Javadoc
 /**
  * The Class XmlReaderSimInput.
+ * @author Arne Kesting, Ralph Germ
  */
 public class XmlReaderSimInput {
 
     final static Logger logger = LoggerFactory.getLogger(XmlReaderSimInput.class);
 
-    // private String xsdFileName = "sim/validateXml.xsd";
-    private final String dtdFilename = "multiModelTrafficSimulatorInput.dtd";
-
-    private boolean isValid = false;
+    private boolean isValid;
 
     private final InputDataImpl inputData;
 
@@ -75,7 +73,7 @@ public class XmlReaderSimInput {
     private Document doc;
 
     /**
-     * Instantiates a new xml reader sim input.
+     * Instantiates a new xml reader to parse and validate the simulation input.
      * 
      * @param xmlFilename
      *            the xml filename
@@ -94,19 +92,16 @@ public class XmlReaderSimInput {
         logger.info("Begin Parsing: " + xmlFilename);
         readAndValidateXml();
 
-        // System.exit(-1);
+        fromDomToInternalDatastructure();
 
-        logger.info("begin");
-        fromDomToBean();
-
-        logger.info("end XmlReaderSimInput.");
+        logger.info("End XmlReaderSimInput.");
     }
 
     /**
-     * From dom to bean.
+     * From dom to internal data structure.
      */
     @SuppressWarnings("unchecked")
-    private void fromDomToBean() {
+    private void fromDomToInternalDatastructure() {
 
         inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(".xml")));
 
@@ -124,7 +119,6 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        // Output Tag
         final OutputInput outputInput = new OutputInputImpl(root.getChild("OUTPUT"));
         inputData.setOutputInput(outputInput);
 
@@ -138,56 +132,19 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXml() {
-
-        // final boolean doValidation = false; // arne !!
-        // SAXBuilder builder = new SAXBuilder(doValidation);
-
-        // validation against internal dtd file
-        // change doctype if necessary
-
-        isValid = true;
-
-        // TODO dtd validation !!
-        // validate(getInput(xmlFilename));
-
-        if (!isValid) {
-            logger.error("xml input file {} is not well-formed or invalid ... exit!\n", xmlFilename);
-            System.exit(0);
-        }
-
-        System.out.println("now parse input file ...");
-
+        
         doc = getDocument(getInput(xmlFilename));
         validate(getInput(xmlFilename));
+        
+        if (!isValid) {
+            logger.error("xml input file {} is not well-formed or invalid ...", xmlFilename);
+//            System.exit(0);
+        }
 
-        // try {
-        // if(doValidation){
-        // // turns on Schema Validation
-        // builder.setFeature("http://apache.org/xml/features/validation/schema",
-        // true);
-        //
-        // // This gives the XML Schema to be used.
-        // builder.setProperty("http://apache.org/xml/properties/schema/external-schemaLocation",
-        // xsdFileName);
-        // }
-        // SimpleErrorHandler errorHandler = new SimpleErrorHandler();
-        // builder.setErrorHandler(errorHandler);
-        //
-        // doc = builder.build(new File(xmlFilename));
-        // if(doValidation) logger.info((xmlFilename +
-        // " was parsed and verified against " + xsdFileName + "!"));
-        // if (errorHandler.isError()) {
-        // logger.error(("The XML File is not valid. Exit Simulation."));
-        // System.exit(1);
-        // }
-        // } catch (Exception cause) {
-        // logger.error((cause.toString()));
-        // System.exit(1);
-        // }
     }
 
     /**
-     * Gets the document.
+     * Gets the Document
      * 
      * @param inputSource
      *            the input source
@@ -199,53 +156,45 @@ public class XmlReaderSimInput {
             // builder.setEntityResolver(new LocalDtdResolver(dtdFilename));
             // builder.setValidation(true); // requires a "dtd" file !
             builder.setIgnoringElementContentWhitespace(true);
-            // Document doc = builder.build(inputFile);
             final Document doc = builder.build(inputSource);
-            System.out.println();
             return doc;
         } catch (final JDOMException e) {
-            // System.err.println(sFileName + " is not valid .... ");
             e.printStackTrace();
             System.exit(-1);
             return null;
         } catch (final Exception e) {
             e.printStackTrace();
-            // msgError("Error loading XML-File "+sFileName);
             return null;
         }
     }
 
     /**
-     * Validate.
+     * Validates the Inputsource
      * 
      * @param inputSource
      *            the input source
      */
     private void validate(InputSource inputSource) {
-        isValid = true; // global flag !!! also used in errorHandler
-        // no abort if file is invalid ...
+        /**
+         * global flag !!! also used in errorHandler
+         */
+        isValid = true; 
         try {
             logger.debug("validate input ... ");
-            final XMLReader myReader = XMLReaderFactory.createXMLReader();
-            myReader.setFeature("http://xml.org/sax/features/validation", true);
+            final XMLReader myXMLReader = XMLReaderFactory.createXMLReader();
+            myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
             final DefaultHandler handler = new MyErrorHandler();
-            myReader.setErrorHandler(handler);
-            // myReader.setEntityResolver(new LocalDtdResolver(dtdFilename));
-            // File inputFile = new File(sFileName);
-            // InputSource inputSource = new InputSource(new
-            // java.io.FileInputStream(inputFile) );
-            myReader.parse(inputSource);
+            myXMLReader.setErrorHandler(handler);
+            myXMLReader.parse(inputSource);
         } catch (final SAXException e) {
-            System.err.println(e.getMessage());
             isValid = false;
         } catch (final IOException e) {
-            System.out.println(e.toString() + "\n");
             isValid = false;
         }
     }
 
     /**
-     * Gets the input.
+     * Gets the inputsource from filename.
      * 
      * @param filename
      *            the filename
@@ -263,10 +212,11 @@ public class XmlReaderSimInput {
         return inputSource;
     }
 
-    // inner class uses "isValid" flag
 
     /**
-     * The Class MyErrorHandler.
+     * The Inner Class MyErrorHandler.
+     * 
+     * uses global isValid flag 
      */
     class MyErrorHandler extends DefaultHandler {
 
@@ -279,8 +229,7 @@ public class XmlReaderSimInput {
          */
         @Override
         public void warning(SAXParseException e) throws SAXException {
-            System.out.println("Warning: ");
-            printInfo(e);
+            logger.warn(getInfo(e));
         }
 
         /*
@@ -292,8 +241,8 @@ public class XmlReaderSimInput {
          */
         @Override
         public void error(SAXParseException e) throws SAXException {
-            System.out.println("Error: ");
-            printInfo(e);
+            logger.error(getInfo(e));
+            isValid = false;
         }
 
         /*
@@ -304,23 +253,26 @@ public class XmlReaderSimInput {
          */
         @Override
         public void fatalError(SAXParseException e) throws SAXException {
-            System.out.println("Fatal error: ");
-            printInfo(e);
+            logger.error(getInfo(e));
+            isValid = false;
         }
 
+        
         /**
-         * Prints the info.
+         * Gets the info to the corresponding exception
          * 
          * @param e
-         *            the e
+         *            the exception
+         * @return the info
          */
-        private void printInfo(SAXParseException e) {
-            isValid = false;
-            System.out.println("   Public ID: " + e.getPublicId());
-            System.out.println("   System ID: " + e.getSystemId());
-            System.out.println("   Line number: " + e.getLineNumber());
-            System.out.println("   Column number: " + e.getColumnNumber());
-            System.out.println("   Message: " + e.getMessage());
+        private String getInfo(SAXParseException e) {
+            final StringBuilder stringb = new StringBuilder();
+            stringb.append("   Public ID: " + e.getPublicId());
+            stringb.append("   System ID: " + e.getSystemId());
+            stringb.append("   Line number: " + e.getLineNumber());
+            stringb.append("   Column number: " + e.getColumnNumber());
+            stringb.append("   Message: " + e.getMessage());
+            return stringb.toString();
         }
     }
 
