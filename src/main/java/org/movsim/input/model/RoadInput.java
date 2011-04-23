@@ -65,7 +65,7 @@ public interface RoadInput {
      * 
      * @return the id
      */
-    int getId();
+    long getId();
 
     /**
      * Checks if is with write fundamental diagrams.

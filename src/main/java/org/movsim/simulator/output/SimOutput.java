@@ -34,10 +34,12 @@ import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
+import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.output.impl.FloatingCarsImpl;
 import org.movsim.simulator.output.impl.LoopDetectors;
 import org.movsim.simulator.output.impl.Macro3DImpl;
 import org.movsim.simulator.output.impl.TrafficLightRecorderImpl;
+import org.movsim.simulator.output.impl.TrajectoriesImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +54,8 @@ public class SimOutput {
     private Macro3D macro3D = null;
     private FloatingCars floatingCars = null;
     private LoopDetectors detectors = null;
+    
+    private Trajectories trajectories = null;
 
     private TrafficLightRecorder trafficLightRecorder = null;
 
@@ -88,6 +92,11 @@ public class SimOutput {
         if (macroInput.isWithMacro()) {
             macro3D = new Macro3DImpl(projectName, writeOutput, macroInput, roadSection);
         }
+        
+        final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
+        if (trajInput.isInitialized()) {
+            trajectories = new TrajectoriesImpl(projectName, trajInput, roadSection);
+        }
 
         final DetectorInput detInput = outputInput.getDetectorInput();
         if (detInput.isWithDetectors()) {
@@ -122,6 +131,11 @@ public class SimOutput {
         if (macro3D != null) {
             macro3D.update(itime, time, roadSection);
         }
+        
+        if (trajectories != null) {
+            trajectories.update(itime, time, timestep);
+        }
+        
         if (detectors != null) {
             detectors.update(itime, time, timestep, roadSection.vehContainer());
         }

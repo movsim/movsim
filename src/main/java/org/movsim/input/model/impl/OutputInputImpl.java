@@ -34,10 +34,12 @@ import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
+import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.impl.DetectorInputImpl;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.MacroInputImpl;
 import org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl;
+import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -49,6 +51,8 @@ public class OutputInputImpl implements OutputInput {
     private MacroInput macroInput;
     private DetectorInput detectorInput;
     private TrafficLightRecorderInput trafficLightRecorderInput;
+    
+    private TrajectoriesInput trajectoriesInput;
 
     /**
      * Instantiates a new output input impl.
@@ -75,6 +79,8 @@ public class OutputInputImpl implements OutputInput {
         detectorInput = new DetectorInputImpl(elem.getChild("DETECTORS"));
 
         trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild("TRAFFICLIGHT_RECORDER"));
+        
+        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild("TRAJECTORIES"));       
 
     }
 
@@ -117,5 +123,11 @@ public class OutputInputImpl implements OutputInput {
     public TrafficLightRecorderInput getTrafficLightRecorderInput() {
         return trafficLightRecorderInput;
     }
+
+    
+    
+	public TrajectoriesInput getTrajectoriesInput() {
+		return trajectoriesInput;
+	}
 
 }

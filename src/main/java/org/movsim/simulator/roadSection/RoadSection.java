@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.movsim.simulator.vehicles.VehicleContainer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface RoadSection.
  */
@@ -52,6 +51,8 @@ public interface RoadSection {
      */
     int nLanes();
 
+    long id();
+    
     /**
      * Update.
      * 

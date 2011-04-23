@@ -193,9 +193,9 @@ public class FloatingCarsImpl implements FloatingCars {
      *            the fstr
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
-        fstr.printf("%6.2f %6.3f %6.4f %7.5f %7.5f %7.5f %7.5f %6.2f %4d  %6.1f%n", time, veh.position(), veh.speed(),
+        fstr.printf("%6.2f %6.3f %6.4f %7.5f %7.5f %7.5f %7.5f %6.2f %4d%n", time, veh.position(), veh.speed(),
                 veh.acc(), veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.accModel(),
-                veh.distanceToTrafficlight(), veh.getIntLane(), 3.6*veh.speedlimit());
+                veh.distanceToTrafficlight(), veh.getIntLane());
         fstr.flush();
     }
 

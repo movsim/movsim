@@ -68,6 +68,8 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     private final int nLanes;
 
     private double dt;
+    
+    private long id;
 
     private final boolean isWithGUI;
 
@@ -101,6 +103,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         this.dt = simInput.getTimestep();
         this.roadLength = simInput.getSingleRoadInput().getRoadLength();
         this.nLanes = simInput.getSingleRoadInput().getLanes();
+        this.id = simInput.getSingleRoadInput().getId();
 
         initialize(inputData);
 
@@ -145,6 +148,13 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     public double roadLength() {
         return roadLength;
     }
+    
+    
+    //TODO documentation
+    public long id() {
+        return id;
+    }
+    
 
     /*
      * (non-Javadoc)

@@ -119,7 +119,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         final double v = me.speed();
         final double dv = me.relSpeed(vehFront); // only needed for VDIFF
 
-        // speed limit test TODO
+        // speed limit --> OVM causes accidents due to immediate braking reaction  
         final double v0loc = Math.min(alphaV0 * v0, me.speedlimit()); // consider
                                                                       // external
                                                                       // speedlimit

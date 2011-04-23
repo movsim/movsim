@@ -164,7 +164,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             // with fraction == 0
             // if (fraction > 0) {
             sumFraction += fraction;
-            final VehiclePrototype vehProto = new VehiclePrototype(fraction, longModel, fundDia, vehInput);
+            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput);
             prototypes.put(keyName, vehProto);
 
             // set simulation update time here from model classes:
@@ -383,7 +383,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         final AccelerationModel longModel = longModelFactory(prototype.getLongModel());
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
 
-        final Vehicle veh = new VehicleImpl(vehID, longModel, vehInput, cyclicBuffer);
+        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer);
         return veh;
     }
 

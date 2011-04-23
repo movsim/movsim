@@ -32,6 +32,7 @@ import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
+import org.movsim.input.model.output.TrajectoriesInput;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -67,4 +68,8 @@ public interface OutputInput {
      */
     TrafficLightRecorderInput getTrafficLightRecorderInput();
 
+    
+    TrajectoriesInput getTrajectoriesInput();
+    
+    
 }

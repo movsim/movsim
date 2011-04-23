@@ -62,7 +62,7 @@ import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
  */
 public class RoadInputImpl implements RoadInput {
 
-    private int id;
+    private long id;
 
     private double roadLength;
     private int lanes;
@@ -103,7 +103,7 @@ public class RoadInputImpl implements RoadInput {
     @SuppressWarnings("unchecked")
     private void parseRoadElement(Element elem) {
 
-        id = Integer.parseInt(elem.getAttributeValue("id"));
+        id = Long.parseLong(elem.getAttributeValue("id"));
         roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
         lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
 
@@ -379,7 +379,7 @@ public class RoadInputImpl implements RoadInput {
      * @see org.movsim.input.model.RoadInput#getId()
      */
     @Override
-    public int getId() {
+    public long getId() {
         return id;
     }
 

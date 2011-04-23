@@ -39,6 +39,8 @@ public interface Vehicle {
     // final double vMax = 200/3.6;
     final double GAP_INFINITY = 10000;
 
+    String getLabel();
+    
     /**
      * Length.
      * 

@@ -65,6 +65,9 @@ public class MyRandom {
     public static int nextInt() {
         return rand.nextInt();
     }
+    
+   
+    
 
     // G(0,1) Gleichverteilung
     /**
