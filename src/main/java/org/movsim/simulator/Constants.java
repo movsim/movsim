@@ -50,4 +50,6 @@ public interface Constants {
     final String MODEL_NAME_NSM = "NSM";
     final String MODEL_NAME_KCA = "KCA";
 
+    final double GAP_INFINITY = 10000;
+    
 }

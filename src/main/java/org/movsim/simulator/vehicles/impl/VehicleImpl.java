@@ -38,8 +38,10 @@ import org.movsim.simulator.vehicles.VehicleGUI;
 import org.movsim.simulator.vehicles.impl.CyclicBufferImpl;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
 import org.movsim.simulator.vehicles.longmodel.Memory;
+import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl;
+import org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,9 +74,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
     private double lane;
     private int targetLane;
 
-    private boolean considerTrafficLight;
-    private double accTrafficLight;
-
+   
     private double speedlimit; // state variable
 
     private final AccelerationModel longModel;
@@ -82,6 +82,9 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
     private Memory memory = null;
 
     private Noise noise = null;
+    
+    private final TrafficLightApproaching trafficLightApproaching;
+    
 
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
@@ -113,10 +116,9 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         speed = 0;
         acc = 0;
 
-        distanceToTrafficlight = GAP_INFINITY;
-        considerTrafficLight = false;
-
         speedlimit = Constants.MAX_VEHICLE_SPEED;
+        
+        
         // TODO set isFromOnramp
 
         // effekt wirkungslos, wenn Modell nicht ueber entsprechende Modell
@@ -129,6 +131,8 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
             noise = new NoiseImpl(vehInput.getNoiseInputData());
         }
 
+        trafficLightApproaching = new TrafficLightApproachingImpl();
+		
     }
 
     /*
@@ -330,7 +334,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
     @Override
     public double netDistance(Vehicle vehFront) {
         if (vehFront == null)
-            return GAP_INFINITY;
+            return Constants.GAP_INFINITY;
         return (vehFront.position() - position - 0.5 * (length() + vehFront.length()));
     }
 
@@ -389,8 +393,8 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         accModel = longModel.acc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
 
         // consider red or amber/yellow traffic light:
-        if (considerTrafficLight) {
-            acc = Math.min(accModel, accTrafficLight);
+        if (trafficLightApproaching.considerTrafficLight()) {
+            acc = Math.min(accModel, trafficLightApproaching.accApproaching());
             // logger.debug("accModel = {}, accTrafficLight = {}", accModel,
             // accTrafficLight );
         } else {
@@ -434,53 +438,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#updateTrafficLight(double,
-     * org.movsim.simulator.roadSection.TrafficLight)
-     */
-    @Override
-    public void updateTrafficLight(double time, TrafficLight trafficLight) {
-        accTrafficLight = 0;
-        considerTrafficLight = false;
-
-        distanceToTrafficlight = trafficLight.position() - position - 0.5 * length;
-
-        if (distanceToTrafficlight < 0) {
-            distanceToTrafficlight = GAP_INFINITY; // not relevant
-        } else if (!trafficLight.isGreen()) {
-            final double maxDistanceToReact = 1000; // TODO Parameter ... ?!
-            if (distanceToTrafficlight < maxDistanceToReact) {
-                accTrafficLight = Math.min(0, longModel.accSimple(distanceToTrafficlight, speed, speed));
-
-                if (accTrafficLight < 0) {
-                    considerTrafficLight = true;
-                    // logger.debug("distance to trafficLight = {}, accTL = {}",
-                    // distanceToTrafficlight, accTrafficLight);
-                }
-
-                // TODO: decision logic while approaching yellow traffic light
-                // ...
-                // ignoriere TL falls bei Gelb die (zweifache) komfortable
-                // Bremsverzoegerung ueberschritten wird
-                // ODER wenn ich kinematisch nicht mehr bremsen koennte!!!
-                final double bKinMax = 6; // unterhalb von bMax !!!
-                final double comfortBrakeDecel = 4;
-                final double brakeDist = (speed * speed) / (2 * bKinMax);
-                if (trafficLight.isGreenRed()
-                        && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
-                                - position))) {
-                    // ignore traffic light
-                    considerTrafficLight = false;
-                }
-                // System.out.printf("considerTrafficLight=%s, dx=%.2f, accTrafficLight=%.2f  %n",
-                // considerTrafficLight, trafficLight.position()-position,
-                // accTrafficLight, brakeDist );
-            }
-        }
-    }
-
+   
     /*
      * (non-Javadoc)
      * 
@@ -521,5 +479,11 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         return longModel.parameterV0();
 
     }
+
+	@Override
+	public void updateTrafficLight(double time, TrafficLight trafficLight) {
+		trafficLightApproaching.update(this, time, trafficLight, longModel);
+		
+	}
 
 }
