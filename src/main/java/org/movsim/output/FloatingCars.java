@@ -26,7 +26,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output;
+package org.movsim.output;
 
 import org.movsim.simulator.vehicles.VehicleContainer;
 

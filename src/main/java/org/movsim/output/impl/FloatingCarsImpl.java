@@ -26,7 +26,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output.impl;
+package org.movsim.output.impl;
 
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -37,8 +37,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.output.FloatingCars;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.output.FloatingCars;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.FileUtils;

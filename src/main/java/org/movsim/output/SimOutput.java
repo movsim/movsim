@@ -26,7 +26,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output;
+package org.movsim.output;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
@@ -35,11 +35,11 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.simulator.output.impl.FloatingCarsImpl;
-import org.movsim.simulator.output.impl.LoopDetectors;
-import org.movsim.simulator.output.impl.Macro3DImpl;
-import org.movsim.simulator.output.impl.TrafficLightRecorderImpl;
-import org.movsim.simulator.output.impl.TrajectoriesImpl;
+import org.movsim.output.impl.FloatingCarsImpl;
+import org.movsim.output.impl.LoopDetectors;
+import org.movsim.output.impl.Macro3DImpl;
+import org.movsim.output.impl.TrafficLightRecorderImpl;
+import org.movsim.output.impl.TrajectoriesImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

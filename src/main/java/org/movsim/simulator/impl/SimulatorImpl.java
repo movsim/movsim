@@ -30,9 +30,9 @@ package org.movsim.simulator.impl;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.output.SimOutput;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.slf4j.Logger;

@@ -1,12 +1,12 @@
-package org.movsim.simulator.output.impl;
+package org.movsim.output.impl;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.output.Trajectories;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.output.Trajectories;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;

@@ -26,64 +26,28 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output;
+package org.movsim.output;
 
-import org.movsim.simulator.vehicles.VehicleContainer;
+import java.util.List;
+
+import org.movsim.simulator.roadSection.TrafficLight;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface LoopDetector.
+ * The Interface TrafficLightRecorder.
  */
-public interface LoopDetector {
+public interface TrafficLightRecorder {
 
     /**
      * Update.
      * 
+     * @param itime
+     *            the itime
      * @param time
      *            the time
-     * @param vehicles
-     *            the vehicles
+     * @param trafficLights
+     *            the traffic lights
      */
-    public void update(double time, VehicleContainer vehicles);
-
-    /**
-     * Position.
-     * 
-     * @return the double
-     */
-    double position();
-
-    /**
-     * Mean speed.
-     * 
-     * @return the double
-     */
-    double meanSpeed();
-
-    /**
-     * Rho arithmetic.
-     * 
-     * @return the double
-     */
-    double rhoArithmetic();
-
-    /**
-     * Flow.
-     * 
-     * @return the double
-     */
-    double flow();
-
-    /**
-     * Occupancy.
-     * 
-     * @return the double
-     */
-    double occupancy();
-
-    /**
-     * Close files.
-     */
-    void closeFiles();
+    void update(int itime, double time, List<TrafficLight> trafficLights);
 
 }

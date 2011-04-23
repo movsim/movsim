@@ -26,13 +26,13 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output.impl;
+package org.movsim.output.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.movsim.input.model.output.DetectorInput;
-import org.movsim.simulator.output.LoopDetector;
+import org.movsim.output.LoopDetector;
 import org.movsim.simulator.vehicles.VehicleContainer;
 
 // TODO: Auto-generated Javadoc

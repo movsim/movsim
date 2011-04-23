@@ -26,14 +26,14 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output.impl;
+package org.movsim.output.impl;
 
 import java.io.PrintWriter;
 import java.util.List;
 
 import org.movsim.input.model.output.MacroInput;
+import org.movsim.output.Macro3D;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.output.Macro3D;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;

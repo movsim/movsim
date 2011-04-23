@@ -26,12 +26,12 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.output.impl;
+package org.movsim.output.impl;
 
 import java.io.PrintWriter;
 
+import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.output.LoopDetector;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.FileUtils;
