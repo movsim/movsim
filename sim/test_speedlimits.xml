@@ -8,7 +8,7 @@
 
   <VEHICLE label="IDM1" length="8" b_max="9"> 
     <LONGITUDINAL_MODEL>
-       <IDM v0="25" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+       <IDM v0="40" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
     </LONGITUDINAL_MODEL>
     <LANE_CHANGE_MODEL/>
   </VEHICLE>
@@ -17,19 +17,19 @@
 
 
 <OUTPUT>
-  <FLOATING_CAR_DATA n_dt="5" perc_out="0" dn="0">
+  <FLOATING_CAR_DATA n_dt="2" perc_out="0" dn="0">
      <FC number="1" />
      <FC number="2" />
      <FC number="3" />
      <FC number="4" />
      <FC number="5" />
-     <FC number="6" />
+     <FC number="6" /> 
   </FLOATING_CAR_DATA>
 </OUTPUT>
 
 <SIMULATION dt="0.2" t_max="1800" with_fixed_seed="true" seed="42">
 
-  <ROAD id="1" x_max="15000" lanes="1" >
+  <ROAD id="1" x_max="8000" lanes="1" >
   <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
     <VEHICLE_TYPE label="IDM1" fraction="1"  />
   </TRAFFIC_COMPOSITION>

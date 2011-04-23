@@ -63,12 +63,15 @@ public class SpeedLimitsImpl implements SpeedLimits {
      *            the data
      */
     private void generateSpaceSeriesData(List<SpeedLimitDataPoint> data) {
-        final int size = data.size();
+        final int size = data.size()+1;  
         posValues = new double[size];
         speedValues = new double[size];
-        for (int i = 0; i < size; i++) {
-            posValues[i] = data.get(i).getPosition();
-            speedValues[i] = data.get(i).getSpeedlimit();
+        // add constant maximum speed at origin x=0 for correct extrapolation
+        posValues[0] = 0;
+        speedValues[0] = Constants.MAX_VEHICLE_SPEED;
+        for (int i = 1; i < size; i++) {
+            posValues[i] = data.get(i-1).getPosition();
+            speedValues[i] = data.get(i-1).getSpeedlimit();
         }
     }
 
