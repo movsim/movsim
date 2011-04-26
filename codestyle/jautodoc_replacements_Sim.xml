@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+
+<replacements>
+  <replacement key="get" scope="1" mode="0">Gets the</replacement>
+  <replacement key="set" scope="1" mode="0">Sets the</replacement>
+  <replacement key="add" scope="1" mode="0">Adds the</replacement>
+  <replacement key="edit" scope="1" mode="0">Edits the</replacement>
+  <replacement key="remove" scope="1" mode="0">Removes the</replacement>
+  <replacement key="init" scope="1" mode="0">Inits the</replacement>
+  <replacement key="parse" scope="1" mode="0">Parses the</replacement>
+  <replacement key="create" scope="1" mode="0">Creates the</replacement>
+  <replacement key="build" scope="1" mode="0">Builds the</replacement>
+  <replacement key="is" scope="1" mode="0">Checks if is</replacement>
+  <replacement key="print" scope="1" mode="0">Prints the</replacement>
+  <replacement key="has" scope="1" mode="0">Checks for</replacement>
+</replacements>
+
