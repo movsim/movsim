@@ -35,14 +35,14 @@ set pm3d map
 set yrange [0:]
 set out "./figs/test_trafficlights_IDM.trajectories.eps"
 splot\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,0,$3)):(1) t "" w p ls 16,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,1,$3)):(1) t "" w p ls 17,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,2,$3)):(1) t "" w p ls 18,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($2,3,$3)):(1) t "" w p ls 19,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,0,$5)):(1) t "" w p ls 16,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,1,$5)):(1) t "" w p ls 17,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,2,$5)):(1) t "" w p ls 18,\
- "test_trafficlights_IDM.traffic_lights" u ($1):(deltaTL($4,3,$5)):(1) t "" w p ls 19,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($2,0,$3)):(1) t "" w p ls 16,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($2,1,$3)):(1) t "" w p ls 17,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($2,2,$3)):(1) t "" w p ls 18,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($2,3,$3)):(1) t "" w p ls 19,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($4,0,$5)):(1) t "" w p ls 16,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($4,1,$5)):(1) t "" w p ls 17,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($4,2,$5)):(1) t "" w p ls 18,\
+ "test_trafficlights_IDM.trafficlights_log" u ($1):(deltaTL($4,3,$5)):(1) t "" w p ls 19,\
  "test_trafficlights_IDM.000001.car" u ($1):($2):(1) t "Fz 1" w l ls 1,\
  "test_trafficlights_IDM.000004.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
  "test_trafficlights_IDM.000008.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
@@ -54,7 +54,6 @@ splot\
  "test_trafficlights_IDM.000032.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
  "test_trafficlights_IDM.000036.car" u ($1):($2):(1) t "Fz 2" w l ls 1,\
  "test_trafficlights_IDM.000040.car" u ($1):($2):(1) t "Fz 3" w l ls 1
- 
  
 
 
