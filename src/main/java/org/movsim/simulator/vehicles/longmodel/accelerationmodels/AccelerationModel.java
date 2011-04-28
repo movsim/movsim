@@ -45,9 +45,9 @@ public interface AccelerationModel {
     String modelName();
 
     /**
-     * Checks if is cellular automation.
+     * Checks if is cellular automaton.
      * 
-     * @return true, if is cellular automation
+     * @return true, if is cellular automaton
      */
     boolean isCA();
 
