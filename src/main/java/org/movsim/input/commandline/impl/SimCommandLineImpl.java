@@ -40,9 +40,8 @@ import org.movsim.input.commandline.SimCommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class SimCommandLineImpl.
+ * The Class SimCommandLineImpl. MovSim console command lins parser.
  */
 public class SimCommandLineImpl implements SimCommandLine {
 
@@ -102,7 +101,7 @@ public class SimCommandLineImpl implements SimCommandLine {
             final CommandLine cmdline = parser.parse(options, args);
             parse(cmdline);
         } catch (final ParseException exp) {
-            // oops, something went wrong
+            // something went wrong
             logger.error("Parsing failed.  Reason: {}", exp.getMessage());
             System.out.printf("Parsing failed.  Reason: %s %n", exp.getMessage());
             optHelp();
@@ -110,7 +109,7 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * Parses the.
+     * Parses the command line.
      * 
      * @param cmdline
      *            the cmdline
@@ -131,7 +130,7 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * Opt gui.
+     * Option gui.
      */
     private void optGUI() {
         logger.debug("option --gui");
@@ -139,7 +138,7 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * Opt simulation.
+     * Option simulation.
      * 
      * @param cmdline
      *            the cmdline
@@ -156,14 +155,14 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * Opt default.
+     * Option default.
      */
     private void optDefault() {
         logger.debug("option --default");
     }
 
     /**
-     * Opt help.
+     * Option help.
      */
     private void optHelp() {
         logger.debug("option -h. Exit Programm");

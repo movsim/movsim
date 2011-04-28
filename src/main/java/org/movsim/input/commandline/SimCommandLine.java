@@ -28,16 +28,15 @@
  */
 package org.movsim.input.commandline;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface SimCommandLine.
  */
 public interface SimCommandLine {
 
     /**
-     * Checks if is with simulation.
+     * Checks if simulation scenario is passed in as an xml-file.
      * 
-     * @return true, if is with simulation
+     * @return true, if is with simulation configuration
      */
     boolean isWithSimulation();
 
@@ -49,7 +48,7 @@ public interface SimCommandLine {
     String getSimulationFilename();
 
     /**
-     * Checks if is gui.
+     * Checks if application is run with gui or as command line.
      * 
      * @return true, if is gui
      */
