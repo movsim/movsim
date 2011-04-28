@@ -39,6 +39,18 @@ import org.slf4j.LoggerFactory;
 // TODO: Auto-generated Javadoc
 /**
  * The Class IDM.
+ * <p>
+ * Implementation of the 'intelligent driver model'(IDM).
+ * <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM</a>
+ * </p>
+ * <p>
+ * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
+ * </p> 
+ * <p>
+ * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177">
+M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in Empirical Observations and Microscopic Simulations, 
+Phys. Rev. E 62, 1805 (2000)].</a>
+ * </p>
  */
 public class IDM extends LongitudinalModelImpl implements AccelerationModel {
 
@@ -46,18 +58,33 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
 
     // IDM parameters
     /**
-     * 
+     * desired velocity (m/s)
      */
-    private final double v0;// start_stop=15; // desired velocity (m/s)
+    private final double v0;// start_stop=15;
     /**
-     * 
+     * safe time headway (s)
      */
-    private final double T; // time headway (s)
-    private final double s0; // bumper-to-bumper distance in jams or queues
+    private final double T;
+    /**
+     * bumper-to-bumper vehicle distance in jams or queues; minimun gap
+     */
+    private final double s0;
+    /**
+     * gap parameter (m)
+     */
     private final double s1;
-    private final double a; // acceleration (m/s^2)
-    private final double b; // comfortable (desired) deceleration (m/s^2)
-    private final double delta; // acceleration exponent
+    /**
+     * acceleration (m/s^2)
+     */
+    private final double a;
+    /**
+     * comfortable (desired) deceleration (braking), (m/s^2)
+     */
+    private final double b;
+    /**
+     * acceleration exponent
+     */
+    private final double delta;
 
     /**
      * Instantiates a new iDM.
@@ -65,7 +92,7 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      * @param modelName
      *            the model name
      * @param parameters
-     *            the parameters
+     *            the parameters: v0, T, s0, s1, a, b, delta
      */
     public IDM(String modelName, ModelInputDataIDM parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);

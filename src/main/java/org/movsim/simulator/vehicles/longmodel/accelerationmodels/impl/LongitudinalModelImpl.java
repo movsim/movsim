@@ -63,7 +63,7 @@ public abstract class LongitudinalModelImpl {
     }
 
     /**
-     * Checks if is cA.
+     * Checks if is cellular automation.
      * 
      * @return true, if is cA
      */

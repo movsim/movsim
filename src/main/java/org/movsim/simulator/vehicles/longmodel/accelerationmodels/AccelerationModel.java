@@ -45,9 +45,9 @@ public interface AccelerationModel {
     String modelName();
 
     /**
-     * Checks if is cA.
+     * Checks if is cellular automation.
      * 
-     * @return true, if is cA
+     * @return true, if is cellular automation
      */
     boolean isCA();
 
@@ -73,26 +73,26 @@ public interface AccelerationModel {
     double getRequiredUpdateTime();
 
     /**
-     * Parameter v0.
+     * Parameter v0. The desired velocity (m/s).
      * 
      * @return the double
      */
     double parameterV0();
 
     /**
-     * Acc.
+     * Acc. Calculates the acceleration.
      * 
      * @param me
-     *            the me
+     *            the subject vehicle
      * @param vehContainer
-     *            the veh container
+     *            the vehicle container
      * @param alphaT
      *            the alpha t
      * @param alphaV0
      *            the alpha v0
      * @param alphaA
      *            the alpha a
-     * @return the double
+     * @return the double. The acceleration of the subject vehicle.
      */
     double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
 
