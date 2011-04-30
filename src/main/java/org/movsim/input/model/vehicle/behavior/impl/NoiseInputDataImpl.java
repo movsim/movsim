@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -38,7 +36,10 @@ import org.movsim.input.model.vehicle.behavior.NoiseInputData;
  */
 public class NoiseInputDataImpl implements NoiseInputData {
 
+    /** The fluct strength. */
     private final double fluctStrength;
+    
+    /** The tau. */
     private final double tau;
 
     /**

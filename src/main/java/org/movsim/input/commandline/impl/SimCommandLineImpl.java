@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -40,15 +38,25 @@ import org.movsim.input.commandline.SimCommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SimCommandLineImpl. MovSim console command lins parser.
  */
 public class SimCommandLineImpl implements SimCommandLine {
 
+    /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(SimCommandLineImpl.class);
+    
+    /** The options. */
     private Options options;
+    
+    /** The simulation filename. */
     private String simulationFilename;
+    
+    /** The with simulation. */
     private boolean withSimulation = false;
+    
+    /** The gui. */
     private boolean gui = false;
 
     /**

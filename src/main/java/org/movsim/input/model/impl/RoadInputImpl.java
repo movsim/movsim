@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -62,26 +60,43 @@ import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
  */
 public class RoadInputImpl implements RoadInput {
 
+    /** The id. */
     private long id;
 
+    /** The road length. */
     private double roadLength;
+    
+    /** The lanes. */
     private int lanes;
 
+    /** The is with write fundamental diagrams. */
     private boolean isWithWriteFundamentalDiagrams;
 
+    /** The heterogeneity input data. */
     private List<HeterogeneityInputData> heterogeneityInputData;
 
+    /** The ic macro data. */
     private List<ICMacroData> icMacroData;
+    
+    /** The ic micro data. */
     private List<ICMicroData> icMicroData;
 
+    /** The upstream boundary data. */
     private UpstreamBoundaryData upstreamBoundaryData;
 
+    /** The flow cons bottleneck input data. */
     private List<FlowConservingBottleneckDataPoint> flowConsBottleneckInputData;
+    
+    /** The speed limit input data. */
     private List<SpeedLimitDataPoint> speedLimitInputData;
 
+    /** The simple ramps. */
     private List<SimpleRampData> simpleRamps;
+    
+    /** The ramps. */
     private List<RampData> ramps;
 
+    /** The traffic light data. */
     private List<TrafficLightData> trafficLightData;
 
     /**

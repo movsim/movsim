@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -47,22 +45,35 @@ import org.slf4j.LoggerFactory;
  * The Class Macro3DImpl.
  */
 public class Macro3DImpl implements Macro3D {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Macro3DImpl.class);
 
+    /** The dt out. */
     private final double dtOut;
+    
+    /** The dx out. */
     private final double dxOut;
 
+    /** The rho inv km. */
     private double[] rhoInvKm;
 
+    /** The v kmh. */
     private double[] vKmh;
 
+    /** The q inv h. */
     private double[] qInvH;
 
+    /** The writer. */
     private PrintWriter writer;
 
+    /** The roadlength. */
     private final double roadlength;
+    
+    /** The time offset. */
     private double timeOffset;
 
+    /** The write output. */
     private final boolean writeOutput;
 
     /**

@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -43,7 +41,10 @@ public class SpeedLimitsImpl implements SpeedLimits {
 
     // final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
 
+    /** The pos values. */
     private double[] posValues;
+    
+    /** The speed values. */
     private double[] speedValues;
 
     /**

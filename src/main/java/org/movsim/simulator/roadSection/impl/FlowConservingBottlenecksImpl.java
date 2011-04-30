@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -42,8 +40,13 @@ public class FlowConservingBottlenecksImpl implements FlowConservingBottlenecks 
     // final static Logger logger =
     // LoggerFactory.getLogger(FlowConservingBottlenecksImpl.class);
 
+    /** The pos values. */
     private double[] posValues;
+    
+    /** The alpha t values. */
     private double[] alphaTValues;
+    
+    /** The alpha v0 values. */
     private double[] alphaV0Values;
 
     /**

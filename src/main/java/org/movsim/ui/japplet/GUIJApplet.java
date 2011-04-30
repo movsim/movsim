@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -58,6 +56,7 @@ public class GUIJApplet extends JApplet implements GUI {
     // final static Logger logger = LoggerFactory.getLogger(GUIJApplet.class);
 
     // The bounds of the preferred Displaydevice
+    /** The bounds. */
     private Rectangle bounds;
 
     /*

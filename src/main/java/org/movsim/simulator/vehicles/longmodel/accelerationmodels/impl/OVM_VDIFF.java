@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -44,20 +42,28 @@ import org.slf4j.LoggerFactory;
  */
 public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);
 
+    /** The s0. */
     private final double s0;
 
+    /** The v0. */
     private final double v0;
 
+    /** The tau. */
     private final double tau;
 
+    /** The len interaction. */
     private final double lenInteraction;
 
+    /** The beta. */
     private final double beta;
 
+    /** The lambda. */
     private final double lambda;
 
+    /** The choice opt func variant. */
     private final int choiceOptFuncVariant; // variants: 0=fullVD orig, 1=fullVD
                                             // secBased, 2=threePhase
 

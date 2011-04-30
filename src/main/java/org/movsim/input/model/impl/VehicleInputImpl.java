@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -54,21 +52,30 @@ import org.slf4j.LoggerFactory;
  * The Class VehicleInputImpl.
  */
 public class VehicleInputImpl implements VehicleInput {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleInputImpl.class);
 
+    /** The label. */
     private final String label;// cannot be changed while simulating
 
+    /** The length. */
     private final double length;// cannot be changed while simulating
 
+    /** The max deceleration. */
     private final double maxDeceleration; // in m/s^2, positive (default:
                                           // Infinity)
 
-    private final double reactionTime; // cannot be changed while simulating
+    /** The reaction time. */
+                                          private final double reactionTime; // cannot be changed while simulating
 
+    /** The model input data. */
     private ModelInputData modelInputData;
 
+    /** The memory input data. */
     private MemoryInputData memoryInputData = null;
 
+    /** The noise input data. */
     private NoiseInputData noiseInputData = null;
 
     /**

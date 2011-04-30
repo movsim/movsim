@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -45,11 +43,16 @@ import org.xml.sax.SAXException;
  */
 public class LocalDtdResolver implements EntityResolver {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LocalDtdResolver.class);
 
+    /** The dtd filename. */
     private final String dtdFilename;
 
+    /** The dtd source. */
     private InputSource dtdSource;
+    
+    /** The input stream. */
     private InputStream inputStream;
 
     /**

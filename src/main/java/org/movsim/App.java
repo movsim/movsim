@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -55,10 +53,13 @@ public class App extends JApplet implements AppletStub {
 
     // Define a static logger variable
     // Logging with slf4j, a facade for log4j
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(App.class);
 
+    /** The Constant xmlDefault. */
     final static String xmlDefault = "sim/startStop_IDM.xml";
 
+    /** The appletstub. */
     protected AppletStub appletstub;
 
     /**

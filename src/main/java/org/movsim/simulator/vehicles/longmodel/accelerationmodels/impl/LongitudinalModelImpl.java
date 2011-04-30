@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -36,8 +34,10 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public abstract class LongitudinalModelImpl {
 
+    /** The model name. */
     private final String modelName;
 
+    /** The model category. */
     private final int modelCategory;
 
     /**
@@ -91,7 +91,7 @@ public abstract class LongitudinalModelImpl {
 
     // TODO: fuer alle Modelle ?! analog: T !?
     /**
-     * Parameter v0.
+     * Parameter V0.
      * 
      * @return the double
      */

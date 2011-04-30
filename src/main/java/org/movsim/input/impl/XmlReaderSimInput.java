@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -62,14 +60,19 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class XmlReaderSimInput {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(XmlReaderSimInput.class);
 
+    /** The is valid. */
     private boolean isValid;
 
+    /** The input data. */
     private final InputDataImpl inputData;
 
+    /** The xml filename. */
     private final String xmlFilename;
 
+    /** The doc. */
     private Document doc;
 
     /**
@@ -144,10 +147,9 @@ public class XmlReaderSimInput {
     }
 
     /**
-     * Gets the Document
-     * 
-     * @param inputSource
-     *            the input source
+     * Gets the Document.
+     *
+     * @param inputSource the input source
      * @return the document
      */
     private Document getDocument(InputSource inputSource) {
@@ -169,10 +171,9 @@ public class XmlReaderSimInput {
     }
 
     /**
-     * Validates the Inputsource
-     * 
-     * @param inputSource
-     *            the input source
+     * Validates the Inputsource.
+     *
+     * @param inputSource the input source
      */
     private void validate(InputSource inputSource) {
         /**
@@ -259,10 +260,9 @@ public class XmlReaderSimInput {
 
         
         /**
-         * Gets the info to the corresponding exception
-         * 
-         * @param e
-         *            the exception
+         * Gets the info to the corresponding exception.
+         *
+         * @param e the exception
          * @return the info
          */
         private String getInfo(SAXParseException e) {

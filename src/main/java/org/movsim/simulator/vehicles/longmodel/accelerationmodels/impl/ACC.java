@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -48,13 +46,28 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class ACC extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The v0. */
     private final double v0; // desired velocity (m/s)
+    
+    /** The T. */
     private final double T; // time headway (s)
+    
+    /** The s0. */
     private final double s0; // bumper-to-bumper distance in jams or queues
+    
+    /** The s1. */
     private final double s1;
+    
+    /** The a. */
     private final double a; // acceleration (m/s^2)
+    
+    /** The b. */
     private final double b; // comfortable (desired) deceleration (m/s^2)
+    
+    /** The delta. */
     private final double delta; // acceleration exponent
+    
+    /** The coolness. */
     private final double coolness; // factor in [0, 1]
 
     // coolness=0: acc1=IIDM (without CAH), coolness=1 CAH

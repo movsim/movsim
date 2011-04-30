@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -61,30 +59,44 @@ import org.slf4j.LoggerFactory;
  * The Class RoadSectionImpl.
  */
 public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(RoadSectionImpl.class);
 
+    /** The road length. */
     private final double roadLength;
 
+    /** The n lanes. */
     private final int nLanes;
 
+    /** The dt. */
     private double dt;
     
+    /** The id. */
     private long id;
 
+    /** The is with gui. */
     private final boolean isWithGUI;
 
+    /** The veh container. */
     private VehicleContainer vehContainer;
 
+    /** The veh generator. */
     private VehicleGenerator vehGenerator;
 
+    /** The upstream boundary. */
     private UpstreamBoundary upstreamBoundary;
 
+    /** The flow cons bottlenecks. */
     private FlowConservingBottlenecks flowConsBottlenecks;
 
+    /** The speedlimits. */
     private SpeedLimits speedlimits;
 
+    /** The traffic lights. */
     private List<TrafficLight> trafficLights;
 
+    /** The simple onramps. */
     private List<Onramp> simpleOnramps = null;
 
     /**
@@ -151,6 +163,9 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
     
     
     //TODO documentation
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#id()
+     */
     public long id() {
         return id;
     }

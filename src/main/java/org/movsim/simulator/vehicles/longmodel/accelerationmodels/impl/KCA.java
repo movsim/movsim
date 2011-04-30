@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -42,16 +40,31 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class KCA extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The Constant dtCA. */
     private static final double dtCA = 1; // update timestep for CA !!
 
+    /** The v0. */
     private final double v0;
+    
+    /** The k. */
     private final double k; // Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+    
+    /** The pb0. */
     private final double pb0; // "Troedelwahrsch." for standing vehicles
+    
+    /** The pb1. */
     private final double pb1; // "Troedelwahrsch." for moving vehicles
+    
+    /** The pa1. */
     private final double pa1; // "Beschl.=Anti-Troedelwahrsch." falls v<vp
+    
+    /** The pa2. */
     private final double pa2; // "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+    
+    /** The vp. */
     private final double vp; // Geschw., ab der weniger "anti-getroedelt" wird
 
+    /** The length. */
     private double length;
 
     /**

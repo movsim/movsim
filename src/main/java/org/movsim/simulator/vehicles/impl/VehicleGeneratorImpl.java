@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -73,21 +71,27 @@ import org.slf4j.LoggerFactory;
  * The Class VehicleGeneratorImpl.
  */
 public class VehicleGeneratorImpl implements VehicleGenerator {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleGeneratorImpl.class);
 
     // Aufwand mit prototypes wg. einmaliger berechnung des FD
     // Und ggf. einmaliger Neuberechnung FD nach Parameteraenderung !!
 
+    /** The project name. */
     private final String projectName;
 
     // enthaelt die Menge der definierte Models ... notwendig fuer GUI
     // private HashMap<String, AccelerationModel> longModels;
 
     // enthaelt die Heterogenitaet der tatsaechlich simulierten Fahrzeuge
+    /** The prototypes. */
     private final HashMap<String, VehiclePrototype> prototypes;
 
+    /** The required timestep. */
     private double requiredTimestep;
 
+    /** The is with reaction times. */
     private final boolean isWithReactionTimes;
 
     /**

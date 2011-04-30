@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -41,12 +39,22 @@ public class TrafficLightDataImpl implements TrafficLightData {
     // XML : <TRAFFICLIGHT x="1000" green_time="100" green_red_time="3"
     // red_time="20" red_green_time="2" />
 
+    /** The x. */
     private final double x;
+    
+    /** The green time. */
     private final double greenTime;
+    
+    /** The red time. */
     private final double redTime;
+    
+    /** The green red time period. */
     private final double greenRedTimePeriod;
+    
+    /** The red green time period. */
     private final double redGreenTimePeriod;
 
+    /** The phase shift. */
     private final double phaseShift;
 
     /**

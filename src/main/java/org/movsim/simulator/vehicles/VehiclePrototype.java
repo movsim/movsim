@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -39,31 +37,35 @@ import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties
  */
 public class VehiclePrototype {
 
+	/** The label. */
 	private final String label;
 	
+    /** The length. */
     private final double length;
 
+    /** The fraction. */
     private double fraction;
 
+    /** The reaction time. */
     private final double reactionTime;
 
+    /** The long model. */
     private final AccelerationModel longModel;
 
+    /** The equi properties. */
     private final EquilibriumProperties equiProperties;
 
+    /** The vehicle input. */
     private final VehicleInput vehicleInput;
 
     /**
      * Instantiates a new vehicle prototype.
-     * 
-     * @param fraction
-     *            the fraction
-     * @param longModel
-     *            the long model
-     * @param equilProperties
-     *            the equil properties
-     * @param vehicleInput
-     *            the vehicle input
+     *
+     * @param label the label
+     * @param fraction the fraction
+     * @param longModel the long model
+     * @param equilProperties the equil properties
+     * @param vehicleInput the vehicle input
      */
     public VehiclePrototype(String label, double fraction, AccelerationModel longModel, EquilibriumProperties equilProperties,
             VehicleInput vehicleInput) {

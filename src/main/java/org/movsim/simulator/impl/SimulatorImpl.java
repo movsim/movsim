@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -43,20 +41,32 @@ import org.slf4j.LoggerFactory;
  * The Class SimulatorImpl.
  */
 public class SimulatorImpl implements Simulator {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);
 
+    /** The time. */
     private double time;
+    
+    /** The itime. */
     private int itime;
 
+    /** The timestep. */
     private double timestep;
 
+    /** The t max. */
     private final double tMax; // sim duration
 
+    /** The road section. */
     private RoadSection roadSection;
+    
+    /** The sim output. */
     private SimOutput simOutput;
 
+    /** The is with gui. */
     private final boolean isWithGUI;
 
+    /** The sim input. */
     private final InputData simInput; // dynamisch, kann von GUI veraendert
                                       // werden
 

@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -37,7 +35,11 @@ import org.movsim.input.model.simulation.SpeedLimitInput;
  * The Class SpeedLimitInputImpl.
  */
 public class SpeedLimitInputImpl implements SpeedLimitInput {
+    
+    /** The x. */
     private final double x; // in m
+    
+    /** The speedlimit. */
     private final double speedlimit; // in m/s (SI units)
 
     /**

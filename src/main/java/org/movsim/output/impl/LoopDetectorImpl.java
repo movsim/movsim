@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -45,30 +43,57 @@ public class LoopDetectorImpl implements LoopDetector {
     // final static Logger logger =
     // LoggerFactory.getLogger(LoopDetectorImpl.class);
 
+    /** The dt sample. */
     private final double dtSample;
 
+    /** The det position. */
     private final double detPosition;
 
+    /** The time offset. */
     private double timeOffset;
 
+    /** The print writer. */
     private PrintWriter printWriter = null;
 
     // internal state variables
+    /** The veh count. */
     private int vehCount;
+    
+    /** The v sum. */
     private double vSum;
+    
+    /** The occ time. */
     private double occTime;
+    
+    /** The sum inv v. */
     private double sumInvV;
+    
+    /** The sum inv q. */
     private double sumInvQ;
 
     // aggregated variables
+    /** The mean speed. */
     private double meanSpeed;
+    
+    /** The rho arithmetic. */
     private double rhoArithmetic;
+    
+    /** The flow. */
     private double flow;
+    
+    /** The occupancy. */
     private double occupancy;
+    
+    /** The veh count output. */
     private int vehCountOutput;
+    
+    /** The mean harm speed. */
     private double meanHarmSpeed;
+    
+    /** The mean harm timegap. */
     private double meanHarmTimegap;
 
+    /** The write output. */
     private final boolean writeOutput;
 
     /**

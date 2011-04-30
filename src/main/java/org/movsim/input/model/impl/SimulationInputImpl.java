@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -43,15 +41,22 @@ import org.slf4j.LoggerFactory;
  */
 public class SimulationInputImpl implements SimulationInput {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulationInputImpl.class);
 
+    /** The timestep. */
     private final double timestep;
 
+    /** The max sim time. */
     private final double maxSimTime;
 
+    /** The with fixed seed. */
     private boolean withFixedSeed;
+    
+    /** The random seed. */
     private final int randomSeed;
 
+    /** The road input. */
     ArrayList<RoadInput> roadInput;
 
     /**

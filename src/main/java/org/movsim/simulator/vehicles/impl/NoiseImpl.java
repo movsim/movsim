@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -46,21 +44,27 @@ import org.slf4j.LoggerFactory;
  */
 public class NoiseImpl implements Noise {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NoiseImpl.class);
 
+    /** The Constant SQRT12. */
     static final double SQRT12 = Math.sqrt(12.);
 
     // input:
+    /** The is wiener process. */
     private final boolean isWienerProcess;
 
+    /** The tau relax acc. */
     private final double tauRelaxAcc; // in s
 
+    /** The fluct strength. */
     private final double fluctStrength; // fluct. strength (m^2/s^3) of
                                         // dv/dt=a_det+xi(t), in case of wiener:
                                         // stand. deviation
 
     // output: delta-correlated random process, var=Q_acc/dt
-    private double xiAcc = 0;
+    /** The xi acc. */
+                                        private double xiAcc = 0;
 
     /**
      * Instantiates a new noise impl.

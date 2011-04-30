@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -54,36 +52,29 @@ Phys. Rev. E 62, 1805 (2000)].</a>
  */
 public class IDM extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
 
     // IDM parameters
-    /**
-     * desired velocity (m/s)
-     */
+    /** desired velocity (m/s). */
     private final double v0;// start_stop=15;
-    /**
-     * safe time headway (s)
-     */
+    
+    /** safe time headway (s). */
     private final double T;
-    /**
-     * bumper-to-bumper vehicle distance in jams or queues; minimun gap
-     */
+    
+    /** bumper-to-bumper vehicle distance in jams or queues; minimun gap. */
     private final double s0;
-    /**
-     * gap parameter (m)
-     */
+    
+    /** gap parameter (m). */
     private final double s1;
-    /**
-     * acceleration (m/s^2)
-     */
+    
+    /** acceleration (m/s^2). */
     private final double a;
-    /**
-     * comfortable (desired) deceleration (braking), (m/s^2)
-     */
+    
+    /** comfortable (desired) deceleration (braking), (m/s^2). */
     private final double b;
-    /**
-     * acceleration exponent
-     */
+    
+    /** acceleration exponent. */
     private final double delta;
 
     /**
