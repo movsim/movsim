@@ -54,7 +54,8 @@ import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
 import org.movsim.input.model.simulation.impl.TrafficLightDataImpl;
 import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
 
-// TODO: Auto-generated Javadoc
+// TODO: extract element names into XmlElementNames Interface to make them symbolic.
+
 /**
  * The Class RoadInputImpl.
  */

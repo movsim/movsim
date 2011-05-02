@@ -37,6 +37,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
@@ -72,6 +73,9 @@ public class XmlReaderSimInput {
     /** The xml filename. */
     private final String xmlFilename;
 
+    /** The xml filename. */
+    private final String filenameEnding = ".xml";
+
     /** The doc. */
     private Document doc;
 
@@ -106,7 +110,7 @@ public class XmlReaderSimInput {
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
 
-        inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(".xml")));
+        inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
 
         final Element root = doc.getRootElement();
 
@@ -114,7 +118,7 @@ public class XmlReaderSimInput {
 
         final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
 
-        final List<Element> vehicleElements = root.getChild("DRIVER_VEHICLE_UNITS").getChildren();
+        final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
         for (final Element vehElem : vehicleElements) {
             vehicleInputData.add(new VehicleInputImpl(vehElem));
         }
@@ -122,12 +126,12 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final OutputInput outputInput = new OutputInputImpl(root.getChild("OUTPUT"));
+        final OutputInput outputInput = new OutputInputImpl(root.getChild(XmlElementNames.Output));
         inputData.setOutputInput(outputInput);
 
         // -------------------------------------------------------
 
-        final SimulationInput simInput = new SimulationInputImpl(root.getChild("SIMULATION"));
+        final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
         inputData.setSimulationInput(simInput);
     }
 

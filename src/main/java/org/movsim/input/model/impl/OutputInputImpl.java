@@ -27,6 +27,7 @@
 package org.movsim.input.model.impl;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
@@ -78,15 +79,15 @@ public class OutputInputImpl implements OutputInput {
      */
     private void parseElement(Element elem) {
 
-        floatingCarInput = new FloatingCarInputImpl(elem.getChild("FLOATING_CAR_DATA"));
+        floatingCarInput = new FloatingCarInputImpl(elem.getChild(XmlElementNames.OutputFloatingCarData));
 
-        macroInput = new MacroInputImpl(elem.getChild("MACRO"));
+        macroInput = new MacroInputImpl(elem.getChild(XmlElementNames.OutputFloatingMacro));
 
-        detectorInput = new DetectorInputImpl(elem.getChild("DETECTORS"));
+        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputFloatingDetectors));
 
-        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild("TRAFFICLIGHT_RECORDER"));
+        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild(XmlElementNames.OutputFloatingTrafficlightRecorder));
         
-        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild("TRAJECTORIES"));       
+        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputFloatingTrajectories));       
 
     }
 

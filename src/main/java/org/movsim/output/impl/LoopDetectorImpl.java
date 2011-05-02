@@ -314,7 +314,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
 
     public void notifyObservers() {
         for(LoopDetectorObserver obs : observers){
-            obs.notify(timeAtAverage, flow(), meanSpeed(), rhoArithmetic);
+            obs.update(timeAtAverage, flow(), meanSpeed(), rhoArithmetic);
         }
         
     }

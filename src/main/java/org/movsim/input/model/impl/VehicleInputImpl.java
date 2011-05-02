@@ -47,7 +47,7 @@ import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
+//TODO: extract element names into XmlElementNames Interface to make them symbolic.
 /**
  * The Class VehicleInputImpl.
  */
