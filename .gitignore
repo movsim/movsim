@@ -2,3 +2,7 @@
 /.classpath
 /target
 /bin
+/sim/figs/*
+/sim/*.car
+/sim/*.csv
+/sim/*.dat
