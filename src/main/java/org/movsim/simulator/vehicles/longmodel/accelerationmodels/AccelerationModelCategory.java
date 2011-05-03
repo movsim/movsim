@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -28,13 +26,19 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface AccelerationModelCategory.
  */
 public interface AccelerationModelCategory {
 
+    /** The CONTINUOU s_ model. */
     final int CONTINUOUS_MODEL = 0;
+    
+    /** The INTERATE d_ ma p_ model. */
     final int INTERATED_MAP_MODEL = 1;
+    
+    /** The CELLULA r_ automaton. */
     final int CELLULAR_AUTOMATON = 2;
 
 }

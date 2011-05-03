@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -39,6 +37,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
@@ -62,14 +61,22 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class XmlReaderSimInput {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(XmlReaderSimInput.class);
 
+    /** The is valid. */
     private boolean isValid;
 
+    /** The input data. */
     private final InputDataImpl inputData;
 
+    /** The xml filename. */
     private final String xmlFilename;
 
+    /** The xml filename. */
+    private final String filenameEnding = ".xml";
+
+    /** The doc. */
     private Document doc;
 
     /**
@@ -103,7 +110,7 @@ public class XmlReaderSimInput {
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
 
-        inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(".xml")));
+        inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
 
         final Element root = doc.getRootElement();
 
@@ -111,7 +118,7 @@ public class XmlReaderSimInput {
 
         final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
 
-        final List<Element> vehicleElements = root.getChild("DRIVER_VEHICLE_UNITS").getChildren();
+        final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
         for (final Element vehElem : vehicleElements) {
             vehicleInputData.add(new VehicleInputImpl(vehElem));
         }
@@ -119,12 +126,12 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final OutputInput outputInput = new OutputInputImpl(root.getChild("OUTPUT"));
+        final OutputInput outputInput = new OutputInputImpl(root.getChild(XmlElementNames.Output));
         inputData.setOutputInput(outputInput);
 
         // -------------------------------------------------------
 
-        final SimulationInput simInput = new SimulationInputImpl(root.getChild("SIMULATION"));
+        final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
         inputData.setSimulationInput(simInput);
     }
 
@@ -144,10 +151,9 @@ public class XmlReaderSimInput {
     }
 
     /**
-     * Gets the Document
-     * 
-     * @param inputSource
-     *            the input source
+     * Gets the Document.
+     *
+     * @param inputSource the input source
      * @return the document
      */
     private Document getDocument(InputSource inputSource) {
@@ -169,10 +175,9 @@ public class XmlReaderSimInput {
     }
 
     /**
-     * Validates the Inputsource
-     * 
-     * @param inputSource
-     *            the input source
+     * Validates the Inputsource.
+     *
+     * @param inputSource the input source
      */
     private void validate(InputSource inputSource) {
         /**
@@ -259,10 +264,9 @@ public class XmlReaderSimInput {
 
         
         /**
-         * Gets the info to the corresponding exception
-         * 
-         * @param e
-         *            the exception
+         * Gets the info to the corresponding exception.
+         *
+         * @param e the exception
          * @return the info
          */
         private String getInfo(SAXParseException e) {

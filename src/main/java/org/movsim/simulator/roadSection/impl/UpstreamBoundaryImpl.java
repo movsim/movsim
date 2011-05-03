@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -47,24 +45,37 @@ import org.slf4j.LoggerFactory;
  * The Class UpstreamBoundaryImpl.
  */
 public class UpstreamBoundaryImpl implements UpstreamBoundary {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(UpstreamBoundaryImpl.class);
 
+    /** The n wait. */
     private double nWait;
 
+    /** The veh generator. */
     private final VehicleGenerator vehGenerator;
 
+    /** The veh container. */
     private final VehicleContainer vehContainer;
 
+    /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
 
     // logging
+    /** The fstr logging. */
     private PrintWriter fstrLogging;
 
+    /** The entering veh counter. */
     private int enteringVehCounter;
 
     // status of last merging vehicle for logging to file
+    /** The x enter last. */
     private double xEnterLast;
+    
+    /** The v enter last. */
     private double vEnterLast;
+    
+    /** The lane enter last. */
     private int laneEnterLast;
 
     /**

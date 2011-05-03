@@ -1,3 +1,29 @@
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
+ * ----------------------------------------------------------------------
+ * 
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *
+ *  MovSim is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  MovSim is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
+ *  
+ * ----------------------------------------------------------------------
+ */
 package org.movsim.simulator.vehicles.longmodel.impl;
 
 import org.movsim.simulator.Constants;
@@ -6,13 +32,22 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TrafficLightApproachingImpl.
+ */
 public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 
+	/** The consider traffic light. */
 	private boolean considerTrafficLight;
 	
+	/** The acc traffic light. */
 	private double accTrafficLight;
 
 	
+	/**
+	 * Instantiates a new traffic light approaching impl.
+	 */
 	public TrafficLightApproachingImpl(){
 		considerTrafficLight = false;
 	}
@@ -27,6 +62,9 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching#accApproaching()
+	 */
 	public double accApproaching(){
 		return accTrafficLight;
 	}

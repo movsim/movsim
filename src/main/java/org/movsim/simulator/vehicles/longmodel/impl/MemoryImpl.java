@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -44,23 +42,31 @@ import org.slf4j.LoggerFactory;
  */
 public class MemoryImpl implements Memory {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MemoryImpl.class);
 
     // parameters:
+    /** The tau. */
     private final double tau; // relaxation time
 
+    /** The resignation min alpha a. */
     private final double resignationMinAlphaA;
 
+    /** The resignation min alpha v0. */
     private final double resignationMinAlphaV0;
 
+    /** The resignation max alpha t. */
     private final double resignationMaxAlphaT;
 
     // dynamic state variables:
 
+    /** The alpha a. */
     private double alphaA;
 
+    /** The alpha v0. */
     private double alphaV0;
 
+    /** The alpha t. */
     private double alphaT;
 
     /**

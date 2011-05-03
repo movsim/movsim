@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -38,8 +36,13 @@ import org.movsim.input.model.simulation.ICMacroData;
  */
 public class ICMacroDataImpl implements ICMacroData {
 
+    /** The x. */
     private final double x;
+    
+    /** The rho. */
     private final double rho; // in 1/m
+    
+    /** The speed. */
     private final double speed; // in m/s, (default value)
 
     /**

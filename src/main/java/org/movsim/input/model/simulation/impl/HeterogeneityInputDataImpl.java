@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -38,7 +36,10 @@ import org.movsim.input.model.simulation.HeterogeneityInputData;
  */
 public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
 
+    /** The key name. */
     private final String keyName;
+    
+    /** The fraction. */
     private final double fraction;
 
     /**

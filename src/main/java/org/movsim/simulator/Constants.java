@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -28,28 +26,47 @@
  */
 package org.movsim.simulator;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface Constants.
  */
 public interface Constants {
 
+    /** The COMMEN t_ char. */
     final String COMMENT_CHAR = "#";
 
+    /** The SMAL l_ value. */
     final double SMALL_VALUE = 1e-7;
 
+    /** The MA x_ vehicl e_ speed. */
     final double MAX_VEHICLE_SPEED = 200 / 3.6;
 
+    /** The MOS t_ righ t_ lane. */
     final int MOST_RIGHT_LANE = 1; // increment lane index for further lanes to
                                    // the left
 
-    final String MODEL_NAME_IDM = "IDM";
+    /** The MODE l_ nam e_ idm. */
+                                   final String MODEL_NAME_IDM = "IDM";
+    
+    /** The MODE l_ nam e_ acc. */
     final String MODEL_NAME_ACC = "ACC";
+    
+    /** The MODE l_ nam e_ ov m_ vdiff. */
     final String MODEL_NAME_OVM_VDIFF = "OVM_VDIFF";
+    
+    /** The MODE l_ nam e_ gipps. */
     final String MODEL_NAME_GIPPS = "GIPPS";
+    
+    /** The MODE l_ nam e_ newell. */
     final String MODEL_NAME_NEWELL = "NEWELL";
+    
+    /** The MODE l_ nam e_ nsm. */
     final String MODEL_NAME_NSM = "NSM";
+    
+    /** The MODE l_ nam e_ kca. */
     final String MODEL_NAME_KCA = "KCA";
 
+    /** The GA p_ infinity. */
     final double GAP_INFINITY = 10000;
     
 }

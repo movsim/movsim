@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -50,55 +48,80 @@ import org.slf4j.LoggerFactory;
  * The Class VehicleImpl.
  */
 public class VehicleImpl implements Vehicle, VehicleGUI {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleImpl.class);
 
+    /** The label. */
     private final String label;
     
+    /** The length. */
     private final double length;
+    
+    /** The position. */
     private double position;
+    
+    /** The old position. */
     private double oldPosition;
+    
+    /** The speed. */
     private double speed;
+    
+    /** The acc model. */
     private double accModel;
+    
+    /** The acc. */
     private double acc;
 
+    /** The reaction time. */
     private final double reactionTime;
 
+    /** The max decel. */
     private final double maxDecel;
 
+    /** The distance to trafficlight. */
     private double distanceToTrafficlight;
 
+    /** The id. */
     private final int id;
 
+    /** The veh number. */
     private int vehNumber;
 
+    /** The lane. */
     private double lane;
+    
+    /** The target lane. */
     private int targetLane;
 
    
+    /** The speedlimit. */
     private double speedlimit; // state variable
 
+    /** The long model. */
     private final AccelerationModel longModel;
 
+    /** The memory. */
     private Memory memory = null;
 
+    /** The noise. */
     private Noise noise = null;
     
+    /** The traffic light approaching. */
     private final TrafficLightApproaching trafficLightApproaching;
     
 
+    /** The cyclic buffer. */
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
     /**
      * Instantiates a new vehicle impl.
-     * 
-     * @param id
-     *            the id
-     * @param longModel
-     *            the long model
-     * @param vehInput
-     *            the veh input
-     * @param cyclicBuffer
-     *            the cyclic buffer
+     *
+     * @param label the label
+     * @param id the id
+     * @param longModel the long model
+     * @param vehInput the veh input
+     * @param cyclicBuffer the cyclic buffer
      */
     public VehicleImpl(String label, int id, AccelerationModel longModel, VehicleInput vehInput, CyclicBufferImpl cyclicBuffer) {
     	this.label = label;
@@ -149,6 +172,9 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         this.targetLane = lane;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Vehicle#getLabel()
+     */
     public String getLabel() {
         return label;
     }
@@ -480,6 +506,9 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
 
     }
 
+	/* (non-Javadoc)
+	 * @see org.movsim.simulator.vehicles.Vehicle#updateTrafficLight(double, org.movsim.simulator.roadSection.TrafficLight)
+	 */
 	@Override
 	public void updateTrafficLight(double time, TrafficLight trafficLight) {
 		trafficLightApproaching.update(this, time, trafficLight, longModel);

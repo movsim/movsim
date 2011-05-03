@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -49,33 +47,56 @@ import org.slf4j.LoggerFactory;
  */
 public class OnrampImpl implements Onramp {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OnrampImpl.class);
 
+    /** The Constant MINSPACE_MERGE_M. */
     final static double MINSPACE_MERGE_M = 2.0;
 
+    /** The Constant RAMP_VEL_REDUCEFACTOR. */
     final static double RAMP_VEL_REDUCEFACTOR = 0.6;
 
+    /** The veh generator. */
     private final VehicleGenerator vehGenerator;
 
+    /** The main veh container. */
     private final VehicleContainer mainVehContainer;
 
+    /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
 
+    /** The vehicle queue. */
     private final LinkedList<Vehicle> vehicleQueue;
+    
+    /** The x center. */
     private final double xCenter;
+    
+    /** The length. */
     private final double length;
 
+    /** The x up ramp. */
     private final double xUpRamp;// = xCenter-0.5*length;
+    
+    /** The x down ramp. */
     private final double xDownRamp;// = xCenter+0.5*length;
 
+    /** The n wait. */
     private double nWait;
 
+    /** The fstr logging. */
     PrintWriter fstrLogging;
 
     // status of last merging vehicle
+    /** The x enter last merge. */
     private double xEnterLastMerge;
+    
+    /** The v enter last merge. */
     private double vEnterLastMerge;
+    
+    /** The lane enter last merge. */
     private int laneEnterLastMerge;
+    
+    /** The merge count. */
     private int mergeCount;
 
     /**

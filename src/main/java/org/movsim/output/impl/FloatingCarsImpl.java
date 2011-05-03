@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -50,17 +48,29 @@ import org.slf4j.LoggerFactory;
  * The Class FloatingCarsImpl.
  */
 public class FloatingCarsImpl implements FloatingCars {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCarsImpl.class);
 
+    /** The path. */
     private final String path = "./";
+    
+    /** The project name. */
     private final String projectName;
+    
+    /** The ending file. */
     private final String endingFile = ".car";
 
+    /** The us. */
     private final DecimalFormatSymbols us = new DecimalFormatSymbols(Locale.US);
+    
+    /** The file format. */
     private final DecimalFormat fileFormat = new DecimalFormat("000000", us);
 
+    /** The hash map. */
     private final HashMap<Integer, PrintWriter> hashMap;
 
+    /** The n dt out. */
     private final int nDtOut;
 
     // private double timeOffset;

@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -29,48 +27,87 @@
 package org.movsim.output.impl;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import org.movsim.output.LoopDetector;
+import org.movsim.output.LoopDetectorObservable;
+import org.movsim.output.LoopDetectorObserver;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.FileUtils;
 
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class LoopDetectorImpl.
  */
-public class LoopDetectorImpl implements LoopDetector {
+public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
 
     // final static Logger logger =
     // LoggerFactory.getLogger(LoopDetectorImpl.class);
 
+    /** The dt sample. */
     private final double dtSample;
 
+    /** The det position. */
     private final double detPosition;
 
+
+    /** The time when calculating the average */
+    private double timeAtAverage;
+
+    
+    /** The time offset. */
     private double timeOffset;
 
+    /** The print writer. */
     private PrintWriter printWriter = null;
 
     // internal state variables
+    /** The veh count. */
     private int vehCount;
+    
+    /** The v sum. */
     private double vSum;
+    
+    /** The occ time. */
     private double occTime;
+    
+    /** The sum inv v. */
     private double sumInvV;
+    
+    /** The sum inv q. */
     private double sumInvQ;
 
     // aggregated variables
+    /** The mean speed. */
     private double meanSpeed;
+    
+    /** The rho arithmetic. */
     private double rhoArithmetic;
+    
+    /** The flow. */
     private double flow;
+    
+    /** The occupancy. */
     private double occupancy;
+    
+    /** The veh count output. */
     private int vehCountOutput;
+    
+    /** The mean harmonic speed. */
     private double meanHarmSpeed;
+    
+    /** The harmonic mean timegap. */
     private double meanHarmTimegap;
 
+    /** The write output. */
     private final boolean writeOutput;
 
+    
+    private ArrayList<LoopDetectorObserver> observers;
+    
     /**
      * Instantiates a new loop detector impl.
      * 
@@ -140,6 +177,7 @@ public class LoopDetectorImpl implements LoopDetector {
         }
 
         if ((time - timeOffset + Constants.SMALL_VALUE) >= dtSample) {
+            timeAtAverage = time;
             calculateAverages();
             if (writeOutput) {
                 writeAggregatedData(time);
@@ -259,5 +297,26 @@ public class LoopDetectorImpl implements LoopDetector {
     public double rhoArithmetic() {
         return rhoArithmetic;
     }
+    
+    
+    // implementation of Observable pattern
 
+    public void registerObserver(LoopDetectorObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(LoopDetectorObserver observer) {
+        int i = observers.indexOf(observer);
+        if(i>=0){
+            observers.remove(i);
+        }
+    }
+
+    public void notifyObservers() {
+        for(LoopDetectorObserver obs : observers){
+            obs.update(timeAtAverage, flow(), meanSpeed(), rhoArithmetic);
+        }
+        
+    }
+    
 }

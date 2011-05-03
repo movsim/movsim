@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -40,24 +38,42 @@ import org.slf4j.LoggerFactory;
  */
 public class TrafficLightImpl implements TrafficLight {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLightImpl.class);
 
     // transfered parameters:
+    /** The position. */
     private final double position;
 
+    /** The status. */
     private int status;
+    
+    /** The old status. */
     private int oldStatus;
 
     // parameter: cycle times
+    /** The total cycle time. */
     private double totalCycleTime;
 
+    /** The green time period. */
     private final double greenTimePeriod;
+    
+    /** The red time period. */
     private final double redTimePeriod;
+    
+    /** The green red time period. */
     private final double greenRedTimePeriod;
+    
+    /** The red green time period. */
     private final double redGreenTimePeriod;
+    
+    /** The phase shift. */
     private final double phaseShift;
 
+    /** The current cycle time. */
     private double currentCycleTime = 0;
+    
+    /** The last update time. */
     private double lastUpdateTime = 0;
 
     /**

@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -38,9 +36,16 @@ import org.movsim.input.model.simulation.ICMicroData;
  */
 public class ICMicroDataImpl implements ICMicroData {
 
+    /** The init position. */
     private final double initPosition;
+    
+    /** The init speed. */
     private final double initSpeed;
+    
+    /** The init lane. */
     private final int initLane; // most right lane: Constants.MOST_RIGHT_LANE
+    
+    /** The type label. */
     private final String typeLabel; // empty string if no type
 
     /**

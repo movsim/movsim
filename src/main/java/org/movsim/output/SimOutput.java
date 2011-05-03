@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -49,18 +47,29 @@ import org.slf4j.LoggerFactory;
  * The Class SimOutput.
  */
 public class SimOutput {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
+    /** The macro3 d. */
     private Macro3D macro3D = null;
+    
+    /** The floating cars. */
     private FloatingCars floatingCars = null;
+    
+    /** The detectors. */
     private LoopDetectors detectors = null;
     
+    /** The trajectories. */
     private Trajectories trajectories = null;
 
+    /** The traffic light recorder. */
     private TrafficLightRecorder trafficLightRecorder = null;
 
+    /** The write output. */
     private final boolean writeOutput;
 
+    /** The project name. */
     private final String projectName;
 
     // TODO: propagate output path information into output modules ...

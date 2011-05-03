@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -40,14 +38,28 @@ import org.slf4j.LoggerFactory;
  */
 public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelInputDataIDM {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ModelInputDataIDMImpl.class);
 
+    /** The v0. */
     private final double v0;
+    
+    /** The T. */
     private final double T;
+    
+    /** The s0. */
     private final double s0;
+    
+    /** The s1. */
     private final double s1;
+    
+    /** The delta. */
     private final double delta;
+    
+    /** The a. */
     private final double a;
+    
+    /** The b. */
     private final double b;
 
     /**

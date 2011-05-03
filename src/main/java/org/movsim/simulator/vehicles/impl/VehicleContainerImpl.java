@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -43,15 +41,20 @@ import org.slf4j.LoggerFactory;
  * The Class VehicleContainerImpl.
  */
 public class VehicleContainerImpl implements VehicleContainer {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleContainerImpl.class);
 
     // array sorted in x-position with decreasing positions
     // lowest index has most downstream position on road
 
+    /** The vehicles. */
     private final List<Vehicle> vehicles;
 
+    /** The veh mainroad counter. */
     private int vehMainroadCounter;
 
+    /** The veh ramp counter. */
     private int vehRampCounter;
 
     /**

@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -40,12 +38,16 @@ public class MemoryInputDataImpl implements MemoryInputData {
 
     // <MEMORY tau="600" alpha_a="1" alpha_v0="1" alpha_T="1.7" />
 
+    /** The tau. */
     private final double tau; // in seconds
 
+    /** The resignation max alpha t. */
     private final double resignationMaxAlphaT; // unitless
 
+    /** The resignation min alpha v0. */
     private final double resignationMinAlphaV0; // unitless
 
+    /** The resignation min alpha a. */
     private final double resignationMinAlphaA; // unitless
 
     /**

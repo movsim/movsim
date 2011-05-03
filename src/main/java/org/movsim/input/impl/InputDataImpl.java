@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -45,16 +43,21 @@ import org.slf4j.LoggerFactory;
  */
 public class InputDataImpl implements InputData {
 
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InputDataImpl.class);
 
+    /** The project name. */
     private String projectName;
 
 //    private final boolean withFileOutputScenario = false; // default gesetzt
 
-    private List<VehicleInput> vehicleInputData;
+    /** The vehicle input data. */
+private List<VehicleInput> vehicleInputData;
 
+    /** The output input. */
     private OutputInput outputInput;
 
+    /** The simulation input. */
     private SimulationInput simulationInput;
 
     /**

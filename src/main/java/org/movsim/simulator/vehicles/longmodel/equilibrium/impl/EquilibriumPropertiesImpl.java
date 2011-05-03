@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -42,16 +40,26 @@ import org.slf4j.LoggerFactory;
  * The Class EquilibriumPropertiesImpl.
  */
 public abstract class EquilibriumPropertiesImpl implements EquilibriumProperties {
+    
+    /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
+    /** The Constant NRHO. */
     final static int NRHO = 51; // time critical
 
+    /** The rho max. */
     final double rhoMax;
+    
+    /** The length. */
     final double length;
 
+    /** The q max. */
     double qMax;
+    
+    /** The rho q max. */
     double rhoQMax;
 
+    /** The v eq tab. */
     double[] vEqTab;
 
     /**

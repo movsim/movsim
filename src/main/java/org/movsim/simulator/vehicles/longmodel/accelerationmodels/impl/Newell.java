@@ -1,9 +1,7 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting <movsim@akesting.de>, 
- *                             Martin Treiber <treibi@mtreiber.de>,
- *                             Ralph Germ <germ@ralphgerm.de>,
- *                             Martin Budden <mjbudden@gmail.com>
- *
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
  *  This file is part of 
@@ -42,6 +40,7 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class Newell extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The dt. */
     private final double dt;
 
     /**
