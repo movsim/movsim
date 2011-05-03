@@ -51,17 +51,17 @@ accelerationLabel = "Acceleration (m/s^2)"
 car(n) = sprintf("Car %d",n)
 
 # Deutsch
-if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})"
-if (lang eq "de") veqTitle = "Geschwindigkeit V_{eq} (km/h)"
-if (lang eq "de") vqTitle = "Gleichgewichts-Geschwindigkeit V_{eq}({/Symbol r})"
-if (lang eq "de") densityLabel = "Dichte {/Symbol r} (1/km)"
-if (lang eq "de") flowLabel = "Fluss Q (1/h)"
-if (lang eq "de") veqLabel = "Geschwindigkeit V_{eq} (km/h)"
-if (lang eq "de") timeLabel = "Zeit (s)"
-if (lang eq "de") distanceLabel = "Abstand (m)"
-if (lang eq "de") velocityLabel = "Geschwindigkeit (km/h)"
-if (lang eq "de") accelerationLabel = "Beschleunigung (m/s^2)"
-if (lang eq "de") car(n) = sprintf("Kfz %d",n)
+if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
+  veqTitle = "Geschwindigkeit V_{eq} (km/h)";\
+  vqTitle = "Gleichgewichts-Geschwindigkeit V_{eq}({/Symbol r})";\
+  densityLabel = "Dichte {/Symbol r} (1/km)";\
+  flowLabel = "Fluss Q (1/h)";\
+  veqLabel = "Geschwindigkeit V_{eq} (km/h)";\
+  timeLabel = "Zeit (s)";\
+  distanceLabel = "Abstand (m)";\
+  velocityLabel = "Geschwindigkeit (km/h)";\
+  accelerationLabel = "Beschleunigung (m/s^2)";\
+  car(n) = sprintf("Kfz %d",n)
 
 # line styles
 set style line 1 linetype 1 linewidth 4 pointtype 7 pointsize 1.5
