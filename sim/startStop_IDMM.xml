@@ -33,7 +33,7 @@
 
   <ROAD id="1" x_max="20000" lanes="1"  >
   <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
-    <VEHICLE_TYPE label="IDM1" fraction="1"  />
+    <VEHICLE_TYPE label="IDMM1" fraction="1"  />
   </TRAFFIC_COMPOSITION>
   
   <INITIAL_CONDITIONS>
