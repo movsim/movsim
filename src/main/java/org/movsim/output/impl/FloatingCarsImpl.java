@@ -203,7 +203,8 @@ public class FloatingCarsImpl implements FloatingCars {
      *            the fstr
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
-        fstr.printf("%6.2f %6.3f %6.4f %7.5f %7.5f %7.5f %7.5f %6.2f %4d%n", time, veh.position(), veh.speed(),
+        // note: number before decimal point is total width of field, not width of integer part
+        fstr.printf("%8.2f, %9.3f, %8.4f, %9.5f, %10.3f, %8.4f, %9.5f, %8.2f, %4d%n", time, veh.position(), veh.speed(),
                 veh.acc(), veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.accModel(),
                 veh.distanceToTrafficlight(), veh.getIntLane());
         fstr.flush();
@@ -221,7 +222,7 @@ public class FloatingCarsImpl implements FloatingCars {
         final PrintWriter fstr = FileUtils.getWriter(filename);
         hashMap.put(vehNumber, fstr);
         fstr.println(Constants.COMMENT_CHAR
-                + " t[s] x[m] v[m/s] acc[m/s^2] s[m] dv[m/s] accModel[m/s^2] distToTrafficlight[m]");
+                + "   t[s],      s[m],   v[m/s],  a[m/s^2],      ds[m],  dv[m/s],    aModel, distToTrafficlight[m], lane");
         fstr.flush();
     }
 
