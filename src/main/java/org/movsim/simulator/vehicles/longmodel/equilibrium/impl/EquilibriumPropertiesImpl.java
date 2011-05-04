@@ -165,11 +165,11 @@ public abstract class EquilibriumPropertiesImpl implements EquilibriumProperties
         final PrintWriter fstr = FileUtils.getWriter(filename);
         fstr.printf(Constants.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * rhoQMax);
         fstr.printf(Constants.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * qMax);
-        fstr.printf(Constants.COMMENT_CHAR + " rho(1/km)  s(m)  velEq(km/h)   Q(veh/h)%n");
+        fstr.printf(Constants.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n");
         for (int i = 0; i < vEqTab.length; i++) {
             final double rho = getRho(i);
             final double s = getNetDistance(rho);
-            fstr.printf("%8.2f  %8.2f  %8.2f  %8.2f%n", 1000 * rho, s, 3.6 * vEqTab[i], 3600 * rho * vEqTab[i]);
+            fstr.printf("%8.2f, %8.2f, %8.2f, %8.2f%n", 1000 * rho, s, 3.6 * vEqTab[i], 3600 * rho * vEqTab[i]);
         }
         fstr.close();
     }
