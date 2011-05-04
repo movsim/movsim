@@ -1,42 +1,49 @@
-set style line 1 lt 7 lw 3 pt 7 ps 1.5 
-set style line 2 lt 2 lw 4 pt 5 ps 1.5 
-set style line 3 lt 3 lw 4 pt 9 ps 1.5 
-set style line 4 lt 4 lw 4 pt 11 ps 1.5
-set style line 5 lt 7 lw 4 pt 13 ps 1.5
+# gnuplot command file
 
-#status farben
-#set palette defined ( 0 "gray", 1 "#98fb98", 2 "blue", 3 "cyan", 4 "#ff4500", 5 "black")
-set style line 10 pt 5 ps 1 lc rgb "gray"
-set style line 11 pt 5 ps 1 lc rgb "#98fb98"
-set style line 12 pt 5 ps 1 lc rgb "blue"
-set style line 13 pt 5 ps 1 lc rgb "cyan"
-set style line 14 pt 5 ps 1 lc rgb "#ff4500"
-set style line 15 pt 5 ps 1 lc rgb "black"
-## Phasen den Ampel
-##  1=green, 2=green_red (yellow1), 3=red, 4=red_green (yellow2)
-set style line 16 pt 5 ps 1 lc rgb "green"
-set style line 17 pt 5 ps 1 lc rgb "#ffa500"
-set style line 18 pt 5 ps 1 lc rgb "red"
-set style line 19 pt 5 ps 1 lc rgb "yellow"
+# parameterised startStop command file
+# invoke using -e option to set lang parameter, eg:
+# gnuplot -e "lang='de'" test_speedlimits.gpl
+
+if (!exists("lang")) lang = "en"
+#print "lang=".lang
+
+# variables
+baseFile = "test_speedlimits"
+
+# input files
+carFile(n) = sprintf(baseFile.".%06d.car",n)
+
+# output files
+trajectoryOutput = "figs/".baseFile.".trajectories.eps"
+
+# languages
+
+# English
+positionLabel = "Position (km)"
+speedLabel = "Speed (km/h)"
+car(n) = sprintf("Car %d",n)
+
+# Deutsch
+if (lang eq "de")\
+  positionLabel = "Ort (km)";\
+  speedLabel = "Geschwindigkeit (km/h)";\
+  car(n) = sprintf("Kfz %d",n)
+
+# line styles
+set style line 1 linetype 7 linewidth 3 pointtype 7 pointsize 1.5
 
 set term post eps enhanced color solid "Helvetica" 26
 
-########################################################
-
+############################################################
 
 set size 1,1
-deltaTL(x,y, pos) = (abs(1.*x-1.*y)<0.1) ? pos: -1000
 
-set xlabel "Position (km)"
-set ylabel "Speed (km/h)"
+set xlabel positionLabel
+set ylabel speedLabel
 unset key
 set pm3d map
 
-set out "./figs/test_speedlimits.trajectories.eps"
+set out trajectoryOutput
 splot\
- "test_speedlimits.000001.car" u ($2/1000):(3.6*$3):(1) t "car 1" w l ls 1
- 
+  carFile(1) using ($2/1000):(3.6*$3):(1) title car(1) with lines linestyle 1
 
-
-  
-  
