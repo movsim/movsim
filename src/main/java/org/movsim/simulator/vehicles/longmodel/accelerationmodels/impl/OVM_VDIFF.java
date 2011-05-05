@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // paper references Bando Model and velocity-difference model
+// Variants of OVM function need documentation !!!
 /**
  * The Class OVM_VDIFF.
  */
@@ -188,7 +189,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // Triangular OVM function
-            final double T = beta; // "time headway"
+            final double T = beta; // "time headway" // TODO muss alles noch dokumentiert werden!!!
             vOpt = Math.max(Math.min((s - s0) / T, v0loc), 0.);
         } else if (choiceOptFuncVariant == 2) {
             // "Three-phase" OVM function
