@@ -148,7 +148,7 @@ public class TrajectoriesImpl implements Trajectories {
         while (it.hasNext()) {
             Long id= (Long)it.next();
             final PrintWriter fstr = fileHandles.get(id);
-            fstr.println(commentChar + "t[s]  id  x[m]  lane[1]  gap[m]  v[m/s]   dv[m/s]  accReal[m/s^2]   label  vehClass");
+            fstr.println(commentChar + "t[s],  id,  x[m],  lane[1],  gap[m],  v[m/s],  dv[m/s],  accReal[m/s^2],   label,  vehClass");
             fstr.flush();
         }
     }
@@ -223,7 +223,7 @@ public class TrajectoriesImpl implements Trajectories {
         final Vehicle frontVeh = roadSection.vehContainer().getLeader(me); 
         final double s = (frontVeh == null) ? 0 : me.netDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.relSpeed(frontVeh);
-        fstr.printf("%8.2f; %18d; %10.3f; %6.3f; %9.5f; %9.5f; %9.5f; %11.8f; %s%n", 
+        fstr.printf("%8.2f, %18d, %10.3f, %6.3f, %9.5f, %9.5f, %9.5f, %11.8f, %s%n", 
                 time, me.id(), me.position(),  me.getLane(), s, me.speed(), dv, me.acc(), me.getLabel());
         fstr.flush();
     }

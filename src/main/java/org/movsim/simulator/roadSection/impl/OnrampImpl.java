@@ -125,7 +125,7 @@ public class OnrampImpl implements Onramp {
             final String filename = projectName + ".rmp" + rampIndex + "_log";
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(Constants.COMMENT_CHAR
-                    + " time[s]  count[i]  xEnter[m]  vEnter[km/h]  laneEnter[1]  queue[1]  qBC[1/h]%n");
+                    + " time[s],  count[i],  xEnter[m],  vEnter[km/h],  laneEnter[1],  queue[1],  qBC[1/h]%n");
         }
 
         nWait = 0;
@@ -170,7 +170,7 @@ public class OnrampImpl implements Onramp {
                 vehicleQueue.removeFirst();
                 if (fstrLogging != null) {
                     fstrLogging
-                            .printf("%10.1f %6d  %8.2f  %8.2f  %5d  %5d  %8.2f%n", time, mergeCount, xEnterLastMerge,
+                            .printf("%10.1f, %6d,  %8.2f,  %8.2f,  %5d,  %5d,  %8.2f%n", time, mergeCount, xEnterLastMerge,
                                     3.6 * vEnterLastMerge, laneEnterLastMerge, vehicleQueue.size(), 3600 * qBC);
                     fstrLogging.flush();
                 }
