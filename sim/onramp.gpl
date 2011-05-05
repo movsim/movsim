@@ -51,9 +51,9 @@ accelerationLabel = "Acceleration (m/s^2)"
 positionLabel = "Position (km)"
 entranceDistanceLabel = "Distance from entrance (km)"
 enteredVehicleLabel = "Number of entered vehicles"
-inflowRampEnteredTitle = "upstream Boundary"
-inflowRoadEnteredTitle = "onramp Boundary"
-inflowRampFlowTitle = "Q(t) in veh/h"
+inflowRoadEnteredTitle = "upstream Boundary"
+inflowRampEnteredTitle = "onramp Boundary"
+inflowRoadFlowTitle = "demand Q(t) in veh/h"
 
 # Deutsch
 ### TODO - final 4 strings need translation
@@ -70,10 +70,10 @@ if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
   accelerationLabel = "Beschleunigung (m/s^2)";\
   positionLabel = "Ort (km)";\
   entranceDistanceLabel = "Abstand von Zufahrt (km)";\
-  enteredVehicleLabel = "Number of entered vehicles";\
-  inflowRampEnteredTitle = "upstream Boundary";\
-  inflowRoadEnteredTitle = "onramp Boundary";\
-  inflowRampFlowTitle = "Q(t) in veh/h"
+  enteredVehicleLabel = "Anzahl eingefahrender Fahrzeuge";\
+  inflowRoadEnteredTitle = "Zufluss Hauptfahrbahn";\
+  inflowRampEnteredTitle = "Zufluss Auffahrt";\
+  inflowRoadFlowTitle = "Nachfrage Q(t) in Fz/h"
 
 # line styles
 set style line 1 linetype 1 linewidth 7 pointtype 7 pointsize 1.5 lc rgb "#000000"
@@ -145,9 +145,9 @@ set xlabel timeMinuteLabel
 set ylabel enteredVehicleLabel
 set out inflowOutput
 plot\
- roadSourceFile  u ($1/60.):2 t inflowRampEnteredTitle w l ls 1,\
- rampSourceFile  u ($1/60.):2 t inflowRoadEnteredTitle w l ls 3,\
- roadSourceFile  u ($1/60.):7 t inflowRampFlowTitle w l ls 2
+ roadSourceFile  u ($1/60.):2 t inflowRoadEnteredTitle w l ls 1,\
+ rampSourceFile  u ($1/60.):2 t inflowRampEnteredTitle w l ls 3,\
+ roadSourceFile  u ($1/60.):7 t inflowRoadFlowTitle w l ls 2
 
 ############### 3d ###########
 
