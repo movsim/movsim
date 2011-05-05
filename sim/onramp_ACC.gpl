@@ -1,5 +1,7 @@
 # gnuplot command file
 
-ldm = "OVM"
+ldm = "ACC"
 lang = "en"
-load "startStop.gpl"
+load "onramp.gpl"
+
+

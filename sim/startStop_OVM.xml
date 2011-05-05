@@ -8,7 +8,7 @@
 
    <VEHICLE label="OVM1" length="8" b_max="20"> 
      <LONGITUDINAL_MODEL>
-       <OVM_VDIFF v0="15" tau="0.65" s0="0" l_int="8" beta="1.5" lambda="0" variant="0"/>  
+       <OVM_VDIFF v0="15" tau="0.65" s0="0 " l_int="8" beta="1.5" lambda="0" variant="0"/>  
      </LONGITUDINAL_MODEL>
      <LANE_CHANGE_MODEL/>
    </VEHICLE>

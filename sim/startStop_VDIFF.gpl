@@ -66,10 +66,10 @@ plot\
   "startStop_VDIFF.000015.car" u 1:5 t "Kfz 15" w l ls 4,\
   "startStop_VDIFF.000020.car" u 1:5 t "Kfz 20" w l ls 5
   
-set out "./figs/startStop_VDIFF_compare.s.eps"
-plot\
-  "startStop_VDIFF.000001.car"  u 1:8 t "java sim, Kfz 1"  w l ls 11,\
-  "VDIFF_startStopLSA.car1"  u 1:5 t "mic sim, Kfz 1"  w l ls 12
+#set out "./figs/startStop_VDIFF_compare.s.eps"
+#plot\
+#  "startStop_VDIFF.000001.car"  u 1:8 t "java sim, Kfz 1"  w l ls 11,\
+#  "VDIFF_startStopLSA.car1"  u 1:5 t "mic sim, Kfz 1"  w l ls 12
 
  
   
@@ -88,10 +88,10 @@ plot\
   "startStop_VDIFF.000015.car"  u 1:(3.6*$3) t "Kfz 15"  w l ls 4,\
   "startStop_VDIFF.000020.car" u 1:(3.6*$3) t "Kfz 20" w l ls 5
 
-set out "./figs/startStop_VDIFF_compare.v.eps"
-plot\
-  "startStop_VDIFF.000001.car"  u 1:(3.6*$3) t "java sim, Kfz 1"  w l ls 11,\
-  "VDIFF_startStopLSA.car1"     u 1:(3.6*$3) t "mic sim, Kfz 1"  w l ls 12
+#set out "./figs/startStop_VDIFF_compare.v.eps"
+#plot\
+#  "startStop_VDIFF.000001.car"  u 1:(3.6*$3) t "java sim, Kfz 1"  w l ls 11,\
+#  "VDIFF_startStopLSA.car1"     u 1:(3.6*$3) t "mic sim, Kfz 1"  w l ls 12
 
 #########################################################
 
@@ -106,12 +106,12 @@ plot\
   "startStop_VDIFF.000015.car"  u 1:4 t "Kfz 15"  w l ls 4,\
   "startStop_VDIFF.000020.car"  u 1:4 t "Kfz 20" w l ls 5
   
-set out "./figs/startStop_VDIFF_compare.a.eps"
-plot\
-  "startStop_VDIFF.000001.car"  u 1:4 t "java sim, Kfz 1"  w l ls 11,\
-  "VDIFF_startStopLSA.car1"     u 1:4 t "mic sim, Kfz 1"  w l ls 12,\
-  "startStop_VDIFF.000010.car"  u 1:4 t "java sim, Kfz 10"  w l ls 11,\
-  "VDIFF_startStopLSA.car10"     u 1:4 t "mic sim, Kfz 10"  w l ls 12
+#set out "./figs/startStop_VDIFF_compare.a.eps"
+#plot\
+#  "startStop_VDIFF.000001.car"  u 1:4 t "java sim, Kfz 1"  w l ls 11,\
+#  "VDIFF_startStopLSA.car1"     u 1:4 t "mic sim, Kfz 1"  w l ls 12,\
+#  "startStop_VDIFF.000010.car"  u 1:4 t "java sim, Kfz 10"  w l ls 11,\
+#  "VDIFF_startStopLSA.car10"     u 1:4 t "mic sim, Kfz 10"  w l ls 12
 
   
   
