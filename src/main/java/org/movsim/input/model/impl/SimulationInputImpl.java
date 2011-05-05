@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class SimulationInputImpl implements SimulationInput {
     /** The timestep. */
     private final double timestep;
 
-    /** The max sim time. */
+    /** The duration of the simulation. */
     private final double maxSimTime;
 
     /** The with fixed seed. */
@@ -67,7 +68,7 @@ public class SimulationInputImpl implements SimulationInput {
      */
     public SimulationInputImpl(Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
-        maxSimTime = Double.parseDouble(elem.getAttributeValue("t_max"));
+        maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
         if (elem.getAttributeValue("with_fixed_seed").equalsIgnoreCase("true")) {
             withFixedSeed = true;
@@ -75,7 +76,7 @@ public class SimulationInputImpl implements SimulationInput {
             withFixedSeed = false;
         }
 
-        final List<Element> roadElems = elem.getChildren("ROAD");
+        final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         roadInput = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
             roadInput.add(new RoadInputImpl(roadElem));

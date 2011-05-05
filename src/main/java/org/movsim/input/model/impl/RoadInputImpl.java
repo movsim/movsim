@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
@@ -66,7 +67,7 @@ public class RoadInputImpl implements RoadInput {
 
     /** The road length. */
     private double roadLength;
-    
+
     /** The lanes. */
     private int lanes;
 
@@ -78,7 +79,7 @@ public class RoadInputImpl implements RoadInput {
 
     /** The ic macro data. */
     private List<ICMacroData> icMacroData;
-    
+
     /** The ic micro data. */
     private List<ICMicroData> icMicroData;
 
@@ -87,13 +88,13 @@ public class RoadInputImpl implements RoadInput {
 
     /** The flow cons bottleneck input data. */
     private List<FlowConservingBottleneckDataPoint> flowConsBottleneckInputData;
-    
+
     /** The speed limit input data. */
     private List<SpeedLimitDataPoint> speedLimitInputData;
 
     /** The simple ramps. */
     private List<SimpleRampData> simpleRamps;
-    
+
     /** The ramps. */
     private List<RampData> ramps;
 
@@ -120,17 +121,18 @@ public class RoadInputImpl implements RoadInput {
     private void parseRoadElement(Element elem) {
 
         id = Long.parseLong(elem.getAttributeValue("id"));
-        roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
+        roadLength = Double.parseDouble(elem.getAttributeValue("length"));
         lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
 
         // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types
 
-        final Element heterogenElem = elem.getChild("TRAFFIC_COMPOSITION");
+        final Element heterogenElem = elem.getChild(XmlElementNames.RoadTrafficComposition);
         isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
                 : false;
-        final List<Element> vehTypeElems = elem.getChild("TRAFFIC_COMPOSITION").getChildren("VEHICLE_TYPE");
+        final List<Element> vehTypeElems = elem.getChild(XmlElementNames.RoadTrafficComposition).getChildren(
+                XmlElementNames.RoadVehicleType);
         heterogeneityInputData = new ArrayList<HeterogeneityInputData>();
         for (final Element vehTypeElem : vehTypeElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
@@ -140,7 +142,8 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
 
         // Initial Conditions Micro
-        final List<Element> icMicroElems = elem.getChild("INITIAL_CONDITIONS").getChildren("IC_MICRO");
+        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+                XmlElementNames.RoadInitialConditionsIcMicro);
         icMicroData = new ArrayList<ICMicroData>();
         for (final Element icMicroElem : icMicroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMicroElem);
@@ -160,7 +163,8 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
 
         // Initial Conditions Macro
-        final List<Element> icMacroElems = elem.getChild("INITIAL_CONDITIONS").getChildren("IC_MACRO");
+        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+                XmlElementNames.RoadInitialConditionsIcMacro);
         icMacroData = new ArrayList<ICMacroData>();
         for (final Element icMacroElem : icMacroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMacroElem);
@@ -179,21 +183,21 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
 
         // TRAFFIC_SOURCE
-        final Element upInflowElem = elem.getChild("TRAFFIC_SOURCE");
+        final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
         upstreamBoundaryData = new UpstreamBoundaryDataImpl(upInflowElem);
 
         // -----------------------------------------------------------
 
         // TRAFFIC_SINK
-        final Element downInflowElem = elem.getChild("TRAFFIC_SINK");
+        final Element downInflowElem = elem.getChild(XmlElementNames.RoadTrafficSink);
         // nothing to do (not yet implementend)
 
         // -----------------------------------------------------------
 
         // FlowConservingBottlenecks
         flowConsBottleneckInputData = new ArrayList<FlowConservingBottleneckDataPoint>();
-        final List<Element> flowConsElems = elem.getChild("FLOW_CONSERVING_INHOMOGENEITIES").getChildren(
-                "INHOMOGENEITY");
+        final List<Element> flowConsElems = elem.getChild(XmlElementNames.RoadFlowConservingInhomogeneities)
+                .getChildren(XmlElementNames.RoadInhomogeneity);
         for (final Element flowConsElem : flowConsElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(flowConsElem);
             flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPointImpl(map));
@@ -212,7 +216,8 @@ public class RoadInputImpl implements RoadInput {
 
         // speed limits
         speedLimitInputData = new ArrayList<SpeedLimitDataPoint>();
-        final List<Element> speedLimitElems = elem.getChild("SPEED_LIMITS").getChildren("LIMIT");
+        final List<Element> speedLimitElems = elem.getChild(XmlElementNames.RoadSpeedLimits).getChildren(
+                XmlElementNames.RoadSpeedLimit);
         for (final Element speedLimitElem : speedLimitElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(speedLimitElem);
             speedLimitInputData.add(new SpeedLimitDataPointImpl(map));
@@ -232,7 +237,8 @@ public class RoadInputImpl implements RoadInput {
         // non-physical ramps implementing a drop-down mechanism without
         // lane-changing decisions
         simpleRamps = new ArrayList<SimpleRampData>();
-        final List<Element> simpleRampElems = elem.getChild("RAMPS").getChildren("SIMPLE_RAMP");
+        final List<Element> simpleRampElems = elem.getChild(XmlElementNames.RoadRamps).getChildren(
+                XmlElementNames.RoadSimpleRamp);
         for (final Element simpleRampElem : simpleRampElems) {
             simpleRamps.add(new SimpleRampDataImpl(simpleRampElem));
         }
@@ -249,7 +255,7 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
         // physical ramps
         ramps = new ArrayList<RampData>();
-        final List<Element> rampElems = elem.getChild("RAMPS").getChildren("RAMP");
+        final List<Element> rampElems = elem.getChild(XmlElementNames.RoadRamps).getChildren(XmlElementNames.RoadRamp);
         for (final Element rampElem : rampElems) {
             ramps.add(new RampDataImpl(rampElem));
         }
@@ -267,7 +273,8 @@ public class RoadInputImpl implements RoadInput {
 
         // Trafficlights
         trafficLightData = new ArrayList<TrafficLightData>();
-        final List<Element> trafficLigthElems = elem.getChild("TRAFFICLIGHTS").getChildren("TRAFFICLIGHT");
+        final List<Element> trafficLigthElems = elem.getChild(XmlElementNames.RoadTrafficLights).getChildren(
+                XmlElementNames.RoadTrafficLight);
         for (final Element trafficLightElem : trafficLigthElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(trafficLightElem);
             trafficLightData.add(new TrafficLightDataImpl(map));

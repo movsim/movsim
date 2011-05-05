@@ -168,7 +168,7 @@ public class App extends JApplet implements AppletStub {
         PropertyConfigurator.configure("sim/log4j.properties");
 
         // Log Levels: DEBUG < INFO < WARN < ERROR
-        logger.info("Copyright '\u00A9' by Arne Kesting  <mail@akesting.de>, Martin Treiber <treibi@mtreiber.de> and Ralph Germ <ralph@ralphgerm.de> (2010) ]");
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011) ]");
     }
 
     /*

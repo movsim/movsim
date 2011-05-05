@@ -29,13 +29,13 @@
 <!-- general remarks: -->
 <!-- all parameter values are expected in SI units. Otherwise the attribute's name is indicating the unit explicitely -->
 
-<!ELEMENT SCENARIO (DRIVER_VEHICLE_UNITS, OUTPUT, SIMULATION) >
+<!ELEMENT SCENARIO (VEHICLES, OUTPUT, SIMULATION) >
 
 <!-- ##################################################################### -->
 <!-- Vehicle-Driver-Units / Models                                         -->
 <!-- ##################################################################### -->
 
-<!ELEMENT DRIVER_VEHICLE_UNITS (VEHICLE+) >
+<!ELEMENT VEHICLES (VEHICLE+) >
 
 <!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGE_MODEL, MEMORY?, NOISE?) >
 
@@ -149,7 +149,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (MACRO?, FLOATING_CAR_DATA?, TRAJECTORIES?, DETECTORS?, TRAFFICLIGHT_RECORDER?) >
+<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?, DETECTORS?, TRAFFIC_LIGHT_RECORDER?) >
 
 <!-- TODO ralph -->
 <!ATTLIST OUTPUT
@@ -157,8 +157,8 @@ path NMTOKEN "./"
 >
 
 <!-- output of spatio-temporal fields -->
-<!ELEMENT MACRO EMPTY>
-<!ATTLIST MACRO
+<!ELEMENT SPATIOTEMPORAL EMPTY>
+<!ATTLIST SPATIOTEMPORAL
   dt NMTOKEN "60"
   dx NMTOKEN "100"
 >
@@ -202,8 +202,8 @@ number  NMTOKEN #REQUIRED
 
 
 <!-- write time series of all traffic lights in one file  -->
-<!ELEMENT TRAFFICLIGHT_RECORDER EMPTY>
-<!ATTLIST TRAFFICLIGHT_RECORDER
+<!ELEMENT TRAFFIC_LIGHT_RECORDER EMPTY>
+<!ATTLIST TRAFFIC_LIGHT_RECORDER
   n_dt  NMTOKEN "1"
 >
 
@@ -214,16 +214,16 @@ number  NMTOKEN #REQUIRED
 <!ELEMENT SIMULATION (ROAD*)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
-  t_max            NMTOKEN #REQUIRED
+  duration            NMTOKEN #REQUIRED
   with_fixed_seed  (true|false)  "true" 
   seed             NMTOKEN "42"
 > 
 
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFICLIGHTS)>
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS)>
 
 <!ATTLIST ROAD
   id               NMTOKEN #REQUIRED
-  x_max            NMTOKEN #REQUIRED
+  length            NMTOKEN #REQUIRED
   lanes            NMTOKEN "1"
 > 
 
@@ -297,12 +297,12 @@ alpha_v0  NMTOKEN "1"
 
 
 <!-- speed limits -->
-<!ELEMENT SPEED_LIMITS (LIMIT*)>
+<!ELEMENT SPEED_LIMITS (SPEED_LIMIT*)>
 <!ATTLIST SPEED_LIMITS
 > 
 
-<!ELEMENT LIMIT EMPTY>
-<!ATTLIST LIMIT
+<!ELEMENT SPEED_LIMIT EMPTY>
+<!ATTLIST SPEED_LIMIT
 x_init         NMTOKEN #REQUIRED
 speedlimit_kmh NMTOKEN #REQUIRED
 > 
@@ -314,7 +314,7 @@ speedlimit_kmh NMTOKEN #REQUIRED
 > 
 
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
-<!ATTLIST RAMP
+<!ATTLIST SIMPLE_RAMP
 x_center       NMTOKEN #REQUIRED
 length         NMTOKEN "1000"
 with_logging  (true|false)  "false" 
@@ -332,12 +332,12 @@ with_logging  (true|false)  "false"
   
 <!-- traffic lights -->
   
-<!ELEMENT TRAFFICLIGHTS (TRAFFICLIGHT*)>
-<!ATTLIST TRAFFICLIGHTS
+<!ELEMENT TRAFFIC_LIGHTS (TRAFFIC_LIGHT*)>
+<!ATTLIST TRAFFIC_LIGHTS
 > 
   
-<!ELEMENT TRAFFICLIGHT EMPTY>
-<!ATTLIST TRAFFICLIGHT
+<!ELEMENT TRAFFIC_LIGHT EMPTY>
+<!ATTLIST TRAFFIC_LIGHT
 x                NMTOKEN #REQUIRED
 green_time       NMTOKEN #REQUIRED
 green_red_time   NMTOKEN #REQUIRED

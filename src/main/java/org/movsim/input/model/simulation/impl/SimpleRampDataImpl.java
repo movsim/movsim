@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.SimpleRampData;
@@ -67,7 +68,7 @@ public class SimpleRampDataImpl implements SimpleRampData {
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
 
-        final List<Element> inflowElems = elem.getChildren("INFLOW");
+        final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
         parseAndSortInflowElements(inflowElems);
 
     }

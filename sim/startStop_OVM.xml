@@ -4,7 +4,7 @@
 
 <SCENARIO>
 
-<DRIVER_VEHICLE_UNITS>
+<VEHICLES>
 
    <VEHICLE label="OVM1" length="8" b_max="20"> 
      <LONGITUDINAL_MODEL>
@@ -13,7 +13,7 @@
      <LANE_CHANGE_MODEL/>
    </VEHICLE>
 
-</DRIVER_VEHICLE_UNITS>
+</VEHICLES>
 
 
 
@@ -27,9 +27,9 @@
   </FLOATING_CAR_DATA>
 </OUTPUT>
 
-<SIMULATION dt="0.2" t_max="360"  with_fixed_seed="true" seed="42">
+<SIMULATION dt="0.2" duration="360"  with_fixed_seed="true" seed="42">
 
-  <ROAD id="1" x_max="20000" lanes="1">
+  <ROAD id="1" length="20000" lanes="1">
   <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
     <VEHICLE_TYPE label="OVM1" fraction="1"  />
   </TRAFFIC_COMPOSITION>
@@ -81,9 +81,9 @@
   <RAMPS>
   </RAMPS>
 
-  <TRAFFICLIGHTS>
-     <TRAFFICLIGHT x="1000" green_time="30" green_red_time="3" red_time="200" red_green_time="2" phase_shift="0" /> 
-  </TRAFFICLIGHTS>
+  <TRAFFIC_LIGHTS>
+     <TRAFFIC_LIGHT x="1000" green_time="30" green_red_time="3" red_time="200" red_green_time="2" phase_shift="0" /> 
+  </TRAFFIC_LIGHTS>
   </ROAD>
 </SIMULATION>
 

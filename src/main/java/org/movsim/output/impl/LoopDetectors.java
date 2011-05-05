@@ -42,7 +42,7 @@ public class LoopDetectors {
     // LoggerFactory.getLogger(LoopDetectors.class);
 
     /** The detectors. */
-    private List<LoopDetector> detectors = new ArrayList<LoopDetector>();
+    private List<LoopDetector> detectors;
 
     /**
      * Instantiates a new loop detectors.

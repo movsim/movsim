@@ -5,7 +5,7 @@
 
 <SCENARIO>
 
-<DRIVER_VEHICLE_UNITS>
+<VEHICLES>
 
   <VEHICLE label="IDM1" length="6" b_max="9"> 
     <LONGITUDINAL_MODEL>
@@ -13,12 +13,12 @@
     </LONGITUDINAL_MODEL>
     <LANE_CHANGE_MODEL/>
   </VEHICLE>
-</DRIVER_VEHICLE_UNITS>
+</VEHICLES>
 
 
 
 <OUTPUT>
-  <MACRO dx="100" dt="40"/>
+  <SPATIOTEMPORAL dx="100" dt="40"/>
   <TRAJECTORIES dt="1" t_start_min="0" t_end_min="7" x_start_km="2" x_end_km="5" />  
   <DETECTORS dt="60"> 
     <CROSS_SECTION x="1000"/>
@@ -35,9 +35,9 @@
   </DETECTORS>
 </OUTPUT>
 
-<SIMULATION dt="0.4" t_max="7200" with_fixed_seed="true" seed="42">
+<SIMULATION dt="0.4" duration="7200" with_fixed_seed="true" seed="42">
 
-  <ROAD id="1" x_max="20000" lanes="1" >
+  <ROAD id="1" length="20000" lanes="1" >
   <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
     <VEHICLE_TYPE label="IDM1" fraction="1"  />
   </TRAFFIC_COMPOSITION>
@@ -73,8 +73,8 @@
     </SIMPLE_RAMP>
   </RAMPS>
 
-  <TRAFFICLIGHTS>
-  </TRAFFICLIGHTS>
+  <TRAFFIC_LIGHTS>
+  </TRAFFIC_LIGHTS>
   
   
   </ROAD>

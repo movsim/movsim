@@ -5,7 +5,7 @@
 
 <SCENARIO>
 
-<DRIVER_VEHICLE_UNITS>
+<VEHICLES>
 
    <!-- vehicle length ==> cell units --> 
    <VEHICLE label="BARL1" length="1" >  <!-- b_max nicht beschraenken -->
@@ -23,7 +23,7 @@
      <LANE_CHANGE_MODEL/>
    </VEHICLE>
 
-</DRIVER_VEHICLE_UNITS>
+</VEHICLES>
 
 
 
@@ -38,9 +38,9 @@
   </FLOATING_CAR_DATA>
 </OUTPUT>
 
-<SIMULATION dt="1" t_max="360" with_fixed_seed="true" seed="42">
+<SIMULATION dt="1" duration="360" with_fixed_seed="true" seed="42">
 
-  <ROAD id="1" x_max="20000" lanes="1" >
+  <ROAD id="1" length="20000" lanes="1" >
   <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
     <VEHICLE_TYPE label="BARL1" fraction="1"  />
 	<VEHICLE_TYPE label="Obstacle" fraction="0"  />
@@ -93,9 +93,9 @@
   <RAMPS>
   </RAMPS>
 
-  <TRAFFICLIGHTS>
+  <TRAFFIC_LIGHTS>
      <!-- not implemented for CA -->
-  </TRAFFICLIGHTS>
+  </TRAFFIC_LIGHTS>
   </ROAD>
 </SIMULATION>
 
