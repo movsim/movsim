@@ -54,22 +54,22 @@
 <!ATTLIST IDM 
   v0           NMTOKEN #REQUIRED
   s0           NMTOKEN #REQUIRED
-  s1           NMTOKEN #REQUIRED
+  s1           NMTOKEN "0"
   T            NMTOKEN #REQUIRED
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
-  delta        NMTOKEN #REQUIRED
+  delta        NMTOKEN "4"
 >
 
 <!ELEMENT ACC EMPTY>
 <!ATTLIST ACC
   v0           NMTOKEN #REQUIRED
   s0           NMTOKEN #REQUIRED
-  s1           NMTOKEN #REQUIRED
+  s1           NMTOKEN "0"
   T            NMTOKEN #REQUIRED
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
-  delta        NMTOKEN #REQUIRED
+  delta        NMTOKEN "4"
   coolness     NMTOKEN #REQUIRED
 >
 
