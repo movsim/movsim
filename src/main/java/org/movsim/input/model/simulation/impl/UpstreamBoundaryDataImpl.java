@@ -57,10 +57,15 @@ public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
      */
     @SuppressWarnings("unchecked")
     public UpstreamBoundaryDataImpl(Element elem) {
-        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
+        inflowTimeSeries = new ArrayList<InflowDataPoint>();
+        if (elem == null) {
+            withLogging = false;
+        } else {
+            withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
 
-        final List<Element> upInflowElems = elem.getChildren("INFLOW");
-        parseAndSortInflowElements(upInflowElems);
+            final List<Element> upInflowElems = elem.getChildren("INFLOW");
+            parseAndSortInflowElements(upInflowElems);
+        }
     }
 
     /**
@@ -70,7 +75,6 @@ public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
      *            the up inflow elems
      */
     private void parseAndSortInflowElements(List<Element> upInflowElems) {
-        inflowTimeSeries = new ArrayList<InflowDataPoint>();
         for (final Element upInflowElem : upInflowElems) {
             final Map<String, String> inflowMap = XmlUtils.putAttributesInHash(upInflowElem);
             inflowTimeSeries.add(new InflowDataPointImpl(inflowMap));

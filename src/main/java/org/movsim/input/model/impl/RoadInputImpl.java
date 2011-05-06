@@ -196,98 +196,106 @@ public class RoadInputImpl implements RoadInput {
 
         // FlowConservingBottlenecks
         flowConsBottleneckInputData = new ArrayList<FlowConservingBottleneckDataPoint>();
-        final List<Element> flowConsElems = elem.getChild(XmlElementNames.RoadFlowConservingInhomogeneities)
-                .getChildren(XmlElementNames.RoadInhomogeneity);
-        for (final Element flowConsElem : flowConsElems) {
-            final Map<String, String> map = XmlUtils.putAttributesInHash(flowConsElem);
-            flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPointImpl(map));
-        }
-
-        Collections.sort(flowConsBottleneckInputData, new Comparator<FlowConservingBottleneckDataPoint>() {
-            @Override
-            public int compare(FlowConservingBottleneckDataPoint o1, FlowConservingBottleneckDataPoint o2) {
-                final Double pos1 = new Double((o1).getPosition());
-                final Double pos2 = new Double((o2).getPosition());
-                return pos1.compareTo(pos2); // sort with increasing x
+        final Element flowConsBottlenecksElement = elem.getChild(XmlElementNames.RoadFlowConservingInhomogeneities);
+        if (flowConsBottlenecksElement != null) {
+            final List<Element> flowConsElems = flowConsBottlenecksElement.getChildren(XmlElementNames.RoadInhomogeneity);
+            for (final Element flowConsElem : flowConsElems) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(flowConsElem);
+                flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPointImpl(map));
             }
-        });
+
+            Collections.sort(flowConsBottleneckInputData, new Comparator<FlowConservingBottleneckDataPoint>() {
+                @Override
+                public int compare(FlowConservingBottleneckDataPoint o1, FlowConservingBottleneckDataPoint o2) {
+                    final Double pos1 = new Double((o1).getPosition());
+                    final Double pos2 = new Double((o2).getPosition());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+        }
 
         // -----------------------------------------------------------
 
         // speed limits
         speedLimitInputData = new ArrayList<SpeedLimitDataPoint>();
-        final List<Element> speedLimitElems = elem.getChild(XmlElementNames.RoadSpeedLimits).getChildren(
-                XmlElementNames.RoadSpeedLimit);
-        for (final Element speedLimitElem : speedLimitElems) {
-            final Map<String, String> map = XmlUtils.putAttributesInHash(speedLimitElem);
-            speedLimitInputData.add(new SpeedLimitDataPointImpl(map));
-        }
-
-        Collections.sort(speedLimitInputData, new Comparator<SpeedLimitDataPoint>() {
-            @Override
-            public int compare(SpeedLimitDataPoint o1, SpeedLimitDataPoint o2) {
-                final Double pos1 = new Double((o1).getPosition());
-                final Double pos2 = new Double((o2).getPosition());
-                return pos1.compareTo(pos2); // sort with increasing x
+        final Element speedLimitsElement = elem.getChild(XmlElementNames.RoadSpeedLimits);
+        if (speedLimitsElement != null) {
+            final List<Element> speedLimitElems = speedLimitsElement.getChildren(XmlElementNames.RoadSpeedLimit);
+            for (final Element speedLimitElem : speedLimitElems) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(speedLimitElem);
+                speedLimitInputData.add(new SpeedLimitDataPointImpl(map));
             }
-        });
+
+            Collections.sort(speedLimitInputData, new Comparator<SpeedLimitDataPoint>() {
+                @Override
+                public int compare(SpeedLimitDataPoint o1, SpeedLimitDataPoint o2) {
+                    final Double pos1 = new Double((o1).getPosition());
+                    final Double pos2 = new Double((o2).getPosition());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+        }
 
         // -----------------------------------------------------------
 
         // non-physical ramps implementing a drop-down mechanism without
         // lane-changing decisions
         simpleRamps = new ArrayList<SimpleRampData>();
-        final List<Element> simpleRampElems = elem.getChild(XmlElementNames.RoadRamps).getChildren(
-                XmlElementNames.RoadSimpleRamp);
-        for (final Element simpleRampElem : simpleRampElems) {
-            simpleRamps.add(new SimpleRampDataImpl(simpleRampElem));
-        }
-
-        Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
-            @Override
-            public int compare(SimpleRampData o1, SimpleRampData o2) {
-                final Double pos1 = new Double((o1).getCenterPosition());
-                final Double pos2 = new Double((o2).getCenterPosition());
-                return pos1.compareTo(pos2); // sort with increasing x
-            }
-        });
-
-        // -----------------------------------------------------------
-        // physical ramps
         ramps = new ArrayList<RampData>();
-        final List<Element> rampElems = elem.getChild(XmlElementNames.RoadRamps).getChildren(XmlElementNames.RoadRamp);
-        for (final Element rampElem : rampElems) {
-            ramps.add(new RampDataImpl(rampElem));
-        }
-
-        Collections.sort(ramps, new Comparator<RampData>() {
-            @Override
-            public int compare(RampData o1, RampData o2) {
-                final Double pos1 = new Double((o1).getCenterPosition());
-                final Double pos2 = new Double((o2).getCenterPosition());
-                return pos1.compareTo(pos2); // sort with increasing x
+        final Element rampsElement = elem.getChild(XmlElementNames.RoadRamps);
+        if (rampsElement != null) {
+            final List<Element> simpleRampElems = rampsElement.getChildren(XmlElementNames.RoadSimpleRamp);
+            for (final Element simpleRampElem : simpleRampElems) {
+                simpleRamps.add(new SimpleRampDataImpl(simpleRampElem));
             }
-        });
+
+            Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
+                @Override
+                public int compare(SimpleRampData o1, SimpleRampData o2) {
+                    final Double pos1 = new Double((o1).getCenterPosition());
+                    final Double pos2 = new Double((o2).getCenterPosition());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+
+            // -----------------------------------------------------------
+            // physical ramps
+            final List<Element> rampElems = rampsElement.getChildren(XmlElementNames.RoadRamp);
+            for (final Element rampElem : rampElems) {
+                ramps.add(new RampDataImpl(rampElem));
+            }
+
+            Collections.sort(ramps, new Comparator<RampData>() {
+                @Override
+                public int compare(RampData o1, RampData o2) {
+                    final Double pos1 = new Double((o1).getCenterPosition());
+                    final Double pos2 = new Double((o2).getCenterPosition());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+        }
 
         // -----------------------------------------------------------
 
         // Trafficlights
         trafficLightData = new ArrayList<TrafficLightData>();
-        final List<Element> trafficLigthElems = elem.getChild(XmlElementNames.RoadTrafficLights).getChildren(
-                XmlElementNames.RoadTrafficLight);
-        for (final Element trafficLightElem : trafficLigthElems) {
-            final Map<String, String> map = XmlUtils.putAttributesInHash(trafficLightElem);
-            trafficLightData.add(new TrafficLightDataImpl(map));
-        }
-
-        Collections.sort(trafficLightData, new Comparator<TrafficLightData>() {
-            @Override
-            public int compare(TrafficLightData o1, TrafficLightData o2) {
-                final Double pos1 = new Double((o1).getX());
-                final Double pos2 = new Double((o2).getX());
-                return pos1.compareTo(pos2); // sort with increasing x
+        final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
+        if (trafficLightsElement != null) {
+            final List<Element> trafficLigthElems = trafficLightsElement.getChildren(XmlElementNames.RoadTrafficLight);
+            for (final Element trafficLightElem : trafficLigthElems) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(trafficLightElem);
+                trafficLightData.add(new TrafficLightDataImpl(map));
             }
-        });
+
+            Collections.sort(trafficLightData, new Comparator<TrafficLightData>() {
+                @Override
+                public int compare(TrafficLightData o1, TrafficLightData o2) {
+                    final Double pos1 = new Double((o1).getX());
+                    final Double pos2 = new Double((o2).getX());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+        }
 
         // -----------------------------------------------------------
 
