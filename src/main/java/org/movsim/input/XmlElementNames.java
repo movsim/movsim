@@ -6,6 +6,17 @@ public interface XmlElementNames {
     public final String Root = "SCENARIO";
 
     public final String DriverVehicleUnits = "VEHICLES";
+    public final String VehicleMemory = "MEMORY";
+    public final String VehicleNoise = "NOISE";
+    public final String VehicleLongitudinalModel = "LONGITUDINAL_MODEL";
+    public final String VehicleLaneChangeModel ="LANE_CHANGE_MODEL";
+    public final String VehicleLongModelIDM = "IDM";
+    public final String VehicleLongModelACC = "ACC";
+    public final String VehicleLongModelOVM_VDIFF = "OVM_VDIFF";
+    public final String VehicleLongModelGIPPS = "GIPPS";
+    public final String VehicleLongModelNEWELL = "NEWELL";
+    public final String VehicleLongModelNSM = "NSM";
+    public final String VehicleLongModelKCA = "KCA";
     
     public final String Output = "OUTPUT";
     public final String OutputFloatingCarData = "FLOATING_CAR_DATA";

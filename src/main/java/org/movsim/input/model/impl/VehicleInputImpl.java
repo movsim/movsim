@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
@@ -47,27 +48,26 @@ import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//TODO: extract element names into XmlElementNames Interface to make them symbolic.
+//TODO: extract element attr names into XmlElementNames Interface to make them symbolic.
 /**
  * The Class VehicleInputImpl.
  */
 public class VehicleInputImpl implements VehicleInput {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleInputImpl.class);
 
-    /** The label. */
-    private final String label;// cannot be changed while simulating
+    /** The label. cannot be changed while simulating */
+    private final String label;
 
-    /** The length. */
-    private final double length;// cannot be changed while simulating
+    /** The length. cannot be changed while simulating */
+    private final double length;
 
-    /** The max deceleration. */
-    private final double maxDeceleration; // in m/s^2, positive (default:
-                                          // Infinity)
+    /** The max deceleration. in m/s^2, positive (default: Infinity) */
+    private final double maxDeceleration;
 
-    /** The reaction time. */
-                                          private final double reactionTime; // cannot be changed while simulating
+    /** The reaction time. cannot be changed while simulating*/
+    private final double reactionTime;
 
     /** The model input data. */
     private ModelInputData modelInputData;
@@ -91,7 +91,7 @@ public class VehicleInputImpl implements VehicleInput {
         this.maxDeceleration = Double.parseDouble(elem.getAttributeValue("b_max"));
         this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
 
-        final List<Element> longModelElems = elem.getChild("LONGITUDINAL_MODEL").getChildren();
+        final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
         if (longModelElems.size() != 1) {
             logger.error("specify only one long model ! exit ");
             System.exit(-1);
@@ -99,13 +99,13 @@ public class VehicleInputImpl implements VehicleInput {
             modelInputData = modelInputDataFactory(longModelElems.get(0));
         }
 
-        final Element memoryElem = elem.getChild("MEMORY");
+        final Element memoryElem = elem.getChild(XmlElementNames.VehicleMemory);
         if (memoryElem != null) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(memoryElem);
             memoryInputData = new MemoryInputDataImpl(map);
         }
 
-        final Element noiseElem = elem.getChild("NOISE");
+        final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(noiseElem);
             noiseInputData = new NoiseInputDataImpl(map);
@@ -122,20 +122,20 @@ public class VehicleInputImpl implements VehicleInput {
     private ModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equalsIgnoreCase("IDM"))
-            return new ModelInputDataIDMImpl("IDM", map);
-        else if (modelName.equalsIgnoreCase("ACC"))
-            return new ModelInputDataACCImpl("ACC", map);
-        else if (modelName.equalsIgnoreCase("OVM_VDIFF"))
-            return new ModelInputDataOVM_VDIFFImpl("OVM_VDIFF", map);
-        else if (modelName.equalsIgnoreCase("GIPPS"))
-            return new ModelInputDataGippsImpl("GIPPS", map);
-        else if (modelName.equalsIgnoreCase("NEWELL"))
-            return new ModelInputDataNewellImpl("NEWELL", map);
-        else if (modelName.equalsIgnoreCase("NSM"))
-            return new ModelInputDataNSMImpl("NSM", map);
-        else if (modelName.equalsIgnoreCase("KCA"))
-            return new ModelInputDataKCAImpl("KCA", map);
+        if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelIDM))
+            return new ModelInputDataIDMImpl(XmlElementNames.VehicleLongModelIDM, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelACC))
+            return new ModelInputDataACCImpl(XmlElementNames.VehicleLongModelACC, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelOVM_VDIFF))
+            return new ModelInputDataOVM_VDIFFImpl(XmlElementNames.VehicleLongModelOVM_VDIFF, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelGIPPS))
+            return new ModelInputDataGippsImpl(XmlElementNames.VehicleLongModelGIPPS, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNEWELL))
+            return new ModelInputDataNewellImpl(XmlElementNames.VehicleLongModelNEWELL, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNSM))
+            return new ModelInputDataNSMImpl(XmlElementNames.VehicleLongModelNSM, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKCA))
+            return new ModelInputDataKCAImpl(XmlElementNames.VehicleLongModelKCA, map);
         else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);
