@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+
+<!-- (c) Martin Treiber, Arne Kesting 2011      -->
+
+<SCENARIO>
+
+<VEHICLES>
+
+  <VEHICLE label="IDMM1" length="6" b_max="9"> 
+    <LONGITUDINAL_MODEL>
+       <IDM v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+    </LONGITUDINAL_MODEL>
+    <LANE_CHANGE_MODEL/>
+    <MEMORY tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" /> 
+  </VEHICLE>
+</VEHICLES>
+
+
+
+<OUTPUT>
+  <SPATIOTEMPORAL dx="100" dt="40"/>
+  <TRAJECTORIES dt="1" t_start_min="0" t_end_min="7" x_start_km="2" x_end_km="5" />  
+  <DETECTORS dt="60"> 
+    <CROSS_SECTION x="1000"/>
+    <CROSS_SECTION x="6000"/>
+    <CROSS_SECTION x="8000"/>
+    <CROSS_SECTION x="9000"/>
+    <CROSS_SECTION x="10000"/>
+	<CROSS_SECTION x="11000"/>
+    <CROSS_SECTION x="12000"/>
+	<CROSS_SECTION x="13000"/>
+    <CROSS_SECTION x="14000"/>
+	<CROSS_SECTION x="15000"/>
+	<CROSS_SECTION x="16000"/>
+  </DETECTORS>
+</OUTPUT>
+
+<SIMULATION dt="0.4" duration="7200" with_fixed_seed="true" seed="42">
+
+  <ROAD id="1" length="20000" lanes="1" >
+  <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
+    <VEHICLE_TYPE label="IDMM1" fraction="1"  />
+  </TRAFFIC_COMPOSITION>
+  
+  <INITIAL_CONDITIONS>
+    <IC_MACRO x="8600" rho_invkm="2" v="30"/> 
+  </INITIAL_CONDITIONS>
+
+  <!-- auch noch qCap notwendig ?? -->
+  <TRAFFIC_SOURCE with_logging="true" >
+    <INFLOW t="0"     q_invh="200"   v="30" /> 
+    <INFLOW t="1500"  q_invh="2200"  v="22" />
+    <INFLOW t="10800" q_invh="1000"  v="30" /> 
+  </TRAFFIC_SOURCE>
+  
+  <TRAFFIC_SINK>
+  </TRAFFIC_SINK>
+
+
+  <!-- improve veh performance at inflow -->
+  <FLOW_CONSERVING_INHOMOGENEITIES>
+   <INHOMOGENEITY x="0"    alpha_T="0.8"  /> 
+   <INHOMOGENEITY x="2000" alpha_T="1"   />
+  </FLOW_CONSERVING_INHOMOGENEITIES>
+  
+
+  <SPEED_LIMITS>
+  </SPEED_LIMITS>
+
+  <RAMPS>
+    <SIMPLE_RAMP x_center="15000" length="1000" with_logging="true" >
+       <INFLOW t="0" q_invh="550" />
+    </SIMPLE_RAMP>
+  </RAMPS>
+
+  <TRAFFIC_LIGHTS>
+  </TRAFFIC_LIGHTS>
+  
+  
+  </ROAD>
+</SIMULATION>
+
+</SCENARIO>
+

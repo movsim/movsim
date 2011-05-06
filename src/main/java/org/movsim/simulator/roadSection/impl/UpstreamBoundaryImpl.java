@@ -103,7 +103,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             final String filename = projectName + ".upBC_log";
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(Constants.COMMENT_CHAR
-                    + " time[s]  count[i]  xEnter[m]  vEnter[km/h]  laneEnter[1]  queue[1]  qBC[1/h]%n");
+                    + "  time[s],  count,     x[m],  v[km/h],  lane,  queue, qBC[1/h]%n");
         }
     }
 
@@ -146,7 +146,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             if (isEntered) {
                 nWait--;
                 if (fstrLogging != null) {
-                    fstrLogging.printf("%10.1f %6d  %8.2f  %8.2f  %5d  %6.1f  %8.2f%n", time, enteringVehCounter,
+                    fstrLogging.printf("%10.2f, %6d, %8.2f, %8.2f, %5d, %6.1f, %8.2f%n", time, enteringVehCounter,
                             xEnterLast, 3.6 * vEnterLast, laneEnterLast, nWait, 3600 * qBC);
                     fstrLogging.flush();
                 }

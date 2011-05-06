@@ -9,7 +9,7 @@
    <!-- variants: 0=fullVD orig, 1=fullVD secBased, 2=threePhase --> 
   <VEHICLE label="VDIFF1" length="8" b_max="20"> 
     <LONGITUDINAL_MODEL>
-      <OVM_VDIFF v0="15" tau="5" s0="0" l_int="8" beta="1.5" lambda="0.6" variant="0"/>  
+      <OVM_VDIFF v0="15" tau="5" s0="2" l_int="8" beta="1.5" lambda="0.6" variant="0"/>  
     </LONGITUDINAL_MODEL>
     <LANE_CHANGE_MODEL/>
   </VEHICLE>

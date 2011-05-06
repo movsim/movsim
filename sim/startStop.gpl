@@ -35,6 +35,9 @@ compareDistanceOutput = "figs/".baseFile."_compare.s.eps"
 compareVelocityOutput = "figs/".baseFile."_compare.v.eps"
 compareAccelerationOutput = "figs/".baseFile."_compare.a.eps"
 
+
+print "fundOutput =",fundOutput
+print "please make sure that directory figs/ already exists"
 # languages
 
 # English
@@ -50,7 +53,7 @@ velocityLabel = "Velocity (km/h)"
 accelerationLabel = "Acceleration (m/s^2)"
 car(n) = sprintf("Car %d",n)
 
-# Deutsch
+# Deutsch (not really needed)
 if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
   veqTitle = "Geschwindigkeit V_{eq} (km/h)";\
   vqTitle = "Gleichgewichts-Geschwindigkeit V_{eq}({/Symbol r})";\
