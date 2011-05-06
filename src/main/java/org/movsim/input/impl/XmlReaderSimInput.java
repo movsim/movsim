@@ -144,8 +144,8 @@ public class XmlReaderSimInput {
         validate(getInput(xmlFilename));
         
         if (!isValid) {
-            logger.error("xml input file {} is not well-formed or invalid ...", xmlFilename);
-//            System.exit(0);
+            logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
+            System.exit(0);
         }
 
     }

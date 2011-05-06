@@ -53,8 +53,8 @@
     <INFLOW t="10800" q_invh="1000"  v="30" /> 
   </TRAFFIC_SOURCE>
   
-  <TRAFFIC_SINK>
-  </TRAFFIC_SINK>
+  
+  <TRAFFIC_SINK />
 
 
   <!-- improve veh performance at inflow -->
