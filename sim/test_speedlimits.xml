@@ -1,83 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
-<!-- (c) Martin Treiber, Arne Kesting 2010      -->
-
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO>
-
-<VEHICLES>
-
-  <VEHICLE label="IDM1" length="8" b_max="9"> 
-    <LONGITUDINAL_MODEL>
-       <IDM v0="40" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
-    </LONGITUDINAL_MODEL>
-    <LANE_CHANGE_MODEL/>
-  </VEHICLE>
-
- <VEHICLE label="OVM1" length="8" b_max="20"> 
-     <LONGITUDINAL_MODEL>
-       <OVM_VDIFF v0="40" tau="0.65" s0="0" l_int="8" beta="1.5" lambda="0" variant="0"/>  
-     </LONGITUDINAL_MODEL>
-     <LANE_CHANGE_MODEL/>
-   </VEHICLE>
-
- <VEHICLE label="VDIFF1" length="8" b_max="20"> 
-    <LONGITUDINAL_MODEL>
-      <OVM_VDIFF v0="40" tau="5" s0="0" l_int="8" beta="1.5" lambda="0.6" variant="0"/>  
-    </LONGITUDINAL_MODEL>
-    <LANE_CHANGE_MODEL/>
-  </VEHICLE>
-
-
-</VEHICLES>
-
-
-
-<OUTPUT>
-  <FLOATING_CAR_DATA n_dt="2" perc_out="0" dn="0">
-     <FC number="1" />
-  </FLOATING_CAR_DATA>
-</OUTPUT>
-
-<SIMULATION dt="0.2" duration="1800" with_fixed_seed="true" seed="42">
-
-  <ROAD id="1" length="8000" lanes="1" >
-  <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
-    <VEHICLE_TYPE label="IDM1" fraction="1"  />
-    <VEHICLE_TYPE label="OVM1" fraction="1"  />
-    <VEHICLE_TYPE label="VDIFF1" fraction="1"  />
-  </TRAFFIC_COMPOSITION>
-  
-  <INITIAL_CONDITIONS>
-  <IC_MICRO x="10"  v="0"  label="VDIFF1"/>  <!-- label=""-->
-  </INITIAL_CONDITIONS>
-
-
-  <TRAFFIC_SOURCE>
-    <INFLOW t="0"  q_invh="300"   v="30" />
-  </TRAFFIC_SOURCE>
-
-  
-  <TRAFFIC_SINK />
-
-
-  <FLOW_CONSERVING_INHOMOGENEITIES>
-  </FLOW_CONSERVING_INHOMOGENEITIES>
-  
-
-  <SPEED_LIMITS>
-   <SPEED_LIMIT x_init="3000"  speedlimit_kmh="120" />
-   <SPEED_LIMIT x_init="4000"  speedlimit_kmh="60" />
-   <SPEED_LIMIT x_init="5000"  speedlimit_kmh="120" />
-   <SPEED_LIMIT x_init="6000"  speedlimit_kmh="200" /> 
-  </SPEED_LIMITS>
-
-  <RAMPS>
-  </RAMPS>
-
-  <TRAFFIC_LIGHTS>
-  </TRAFFIC_LIGHTS>
-  </ROAD>
-</SIMULATION>
-
+    <VEHICLES>
+        <VEHICLE label="IDM1" length="8" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="40" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+        <VEHICLE label="OVM1" length="8" b_max="20">
+            <LONGITUDINAL_MODEL>
+                <OVM_VDIFF v0="40" tau="0.65" s0="0" l_int="8" beta="1.5" lambda="0" variant="0" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+        <VEHICLE label="VDIFF1" length="8" b_max="20">
+            <LONGITUDINAL_MODEL>
+                <OVM_VDIFF v0="40" tau="5" s0="0" l_int="8" beta="1.5" lambda="0.6" variant="0" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <OUTPUT>
+        <FLOATING_CAR_DATA n_dt="2" perc_out="0" dn="0">
+            <FC number="1" />
+        </FLOATING_CAR_DATA>
+    </OUTPUT>
+    <SIMULATION dt="0.2" duration="1800" with_fixed_seed="true" seed="42">
+        <ROAD id="1" length="8000" lanes="1">
+            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+                <VEHICLE_TYPE label="IDM1" fraction="1" />
+                <VEHICLE_TYPE label="OVM1" fraction="1" />
+                <VEHICLE_TYPE label="VDIFF1" fraction="1" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MICRO x="10" v="0" label="VDIFF1" />
+            </INITIAL_CONDITIONS>
+            <TRAFFIC_SOURCE>
+                <INFLOW t="0" q_invh="300" v="30" />
+            </TRAFFIC_SOURCE>
+            <SPEED_LIMITS>
+                <SPEED_LIMIT x_init="3000" speedlimit_kmh="120" />
+                <SPEED_LIMIT x_init="4000" speedlimit_kmh="60" />
+                <SPEED_LIMIT x_init="5000" speedlimit_kmh="120" />
+                <SPEED_LIMIT x_init="6000" speedlimit_kmh="200" />
+            </SPEED_LIMITS>
+        </ROAD>
+    </SIMULATION>
 </SCENARIO>
-

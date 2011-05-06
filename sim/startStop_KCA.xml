@@ -1,103 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
-
-<!-- (c) Martin Treiber, Arne Kesting 2010      -->
-
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO>
-
-<VEHICLES>
-
-   <!-- vehicle length ==> cell units --> 
-   <VEHICLE label="KCA1" length="20" >   
-     <LONGITUDINAL_MODEL>
-  	 <KCA v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14"  />  <!-- lambda="0.55" ? -->
-     </LONGITUDINAL_MODEL>
-     <LANE_CHANGE_MODEL/>
-   </VEHICLE>
-   
-   <VEHICLE label="Obstacle" length="20" >  
-     <LONGITUDINAL_MODEL>
-	  <KCA v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14"  />  <!-- lambda="0.55" ? -->
-     </LONGITUDINAL_MODEL>
-     <LANE_CHANGE_MODEL/>
-   </VEHICLE>
-
-</VEHICLES>
-
-
-
-<OUTPUT>
-  <FLOATING_CAR_DATA  n_dt="1" perc_out="0" dn="0">
-     <FC number="1" /> <!-- is obstacle -->
-     <FC number="2" />
-     <FC number="6" />
-     <FC number="11" />
-     <FC number="16" />
-     <FC number="21" />
-  </FLOATING_CAR_DATA>
-</OUTPUT>
-
-<!-- depends strongly on randomness resp. seed !!! --> 
-<SIMULATION dt="1" duration="360" with_fixed_seed="true" seed="50">
-
-  <ROAD id="1" length="20000"   lanes="1">
-  <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
-    <VEHICLE_TYPE label="KCA1" fraction="1"  />
-	<VEHICLE_TYPE label="Obstacle" fraction="0"  />
-  </TRAFFIC_COMPOSITION>
-  
-  <INITIAL_CONDITIONS>
-  <IC_MICRO x="20"  v="0" label="KCA1" />  
-  <IC_MICRO x="40"  v="0" label="KCA1" />
-  <IC_MICRO x="60"  v="0" label="KCA1" />
-  <IC_MICRO x="80"  v="0" label="KCA1" />
-  <IC_MICRO x="100"  v="0" label="KCA1" />
-  <IC_MICRO x="120"  v="0" label="KCA1" />
-  <IC_MICRO x="140"  v="0" label="KCA1" />
-  <IC_MICRO x="160"  v="0" label="KCA1" />
-  <IC_MICRO x="180"  v="0" label="KCA1" />
-  <IC_MICRO x="200" v="0" label="KCA1" />
-  <IC_MICRO x="220" v="0" label="KCA1" />
-  <IC_MICRO x="240" v="0" label="KCA1" />
-  <IC_MICRO x="260" v="0" label="KCA1" />
-  <IC_MICRO x="280" v="0" label="KCA1" />
-  <IC_MICRO x="300" v="0" label="KCA1" />
-  <IC_MICRO x="320" v="0" label="KCA1" />
-  <IC_MICRO x="340" v="0" label="KCA1" />
-  <IC_MICRO x="360" v="0" label="KCA1" />
-  <IC_MICRO x="380" v="0" label="KCA1" />
-  <IC_MICRO x="400" v="0" label="KCA1" />
-  <IC_MICRO x="420" v="0" label="KCA1" />
-  <IC_MICRO x="440" v="0" label="KCA1" />
-  <IC_MICRO x="460" v="0" label="KCA1" />
-  <IC_MICRO x="480" v="0" label="KCA1" />
-  <IC_MICRO x="500" v="0" label="KCA1" />  <!-- FC number 2 -->
-  <IC_MICRO x="2000" v="0" label="Obstacle"/> <!-- shifts floating car numbers -->
-  </INITIAL_CONDITIONS>
-
-
-  <TRAFFIC_SOURCE>
-  </TRAFFIC_SOURCE>
-
-  
-  <TRAFFIC_SINK />
-
-
-  <FLOW_CONSERVING_INHOMOGENEITIES>
-  </FLOW_CONSERVING_INHOMOGENEITIES>
-  
-
-  <SPEED_LIMITS>
-  </SPEED_LIMITS>
-
-  <RAMPS>
-  </RAMPS>
-
-  <TRAFFIC_LIGHTS>
-     <!-- not implemented for CA -->
-  </TRAFFIC_LIGHTS>
-  </ROAD>
-</SIMULATION>
-
+	<VEHICLES>
+		<!-- vehicle length ==> cell units -->
+		<VEHICLE label="KCA1" length="20">
+			<LONGITUDINAL_MODEL>
+				<KCA v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
+				<!-- lambda="0.55" ? -->
+			</LONGITUDINAL_MODEL>
+			<LANE_CHANGE_MODEL />
+		</VEHICLE>
+		<VEHICLE label="Obstacle" length="20">
+			<LONGITUDINAL_MODEL>
+				<KCA v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
+				<!-- lambda="0.55" ? -->
+			</LONGITUDINAL_MODEL>
+			<LANE_CHANGE_MODEL />
+		</VEHICLE>
+	</VEHICLES>
+	<OUTPUT>
+		<FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
+			<!-- FC 1 is obstacle -->
+			<FC number="1" />
+			<FC number="2" />
+			<FC number="6" />
+			<FC number="11" />
+			<FC number="16" />
+			<FC number="21" />
+		</FLOATING_CAR_DATA>
+	</OUTPUT>
+	<!-- depends strongly on randomness resp. seed !!! -->
+	<SIMULATION dt="1" duration="360" with_fixed_seed="true" seed="50">
+		<ROAD id="1" length="20000" lanes="1">
+			<TRAFFIC_COMPOSITION write_fund_diagrams="true">
+				<VEHICLE_TYPE label="KCA1" fraction="1" />
+				<VEHICLE_TYPE label="Obstacle" fraction="0" />
+			</TRAFFIC_COMPOSITION>
+			<INITIAL_CONDITIONS>
+				<IC_MICRO  x="20" v="0" label="KCA1" />
+				<IC_MICRO  x="40" v="0" label="KCA1" />
+				<IC_MICRO  x="60" v="0" label="KCA1" />
+				<IC_MICRO  x="80" v="0" label="KCA1" />
+				<IC_MICRO x="100" v="0" label="KCA1" />
+				<IC_MICRO x="120" v="0" label="KCA1" />
+				<IC_MICRO x="140" v="0" label="KCA1" />
+				<IC_MICRO x="160" v="0" label="KCA1" />
+				<IC_MICRO x="180" v="0" label="KCA1" />
+				<IC_MICRO x="200" v="0" label="KCA1" />
+				<IC_MICRO x="220" v="0" label="KCA1" />
+				<IC_MICRO x="240" v="0" label="KCA1" />
+				<IC_MICRO x="260" v="0" label="KCA1" />
+				<IC_MICRO x="280" v="0" label="KCA1" />
+				<IC_MICRO x="300" v="0" label="KCA1" />
+				<IC_MICRO x="320" v="0" label="KCA1" />
+				<IC_MICRO x="340" v="0" label="KCA1" />
+				<IC_MICRO x="360" v="0" label="KCA1" />
+				<IC_MICRO x="380" v="0" label="KCA1" />
+				<IC_MICRO x="400" v="0" label="KCA1" />
+				<IC_MICRO x="420" v="0" label="KCA1" />
+				<IC_MICRO x="440" v="0" label="KCA1" />
+				<IC_MICRO x="460" v="0" label="KCA1" />
+				<IC_MICRO x="480" v="0" label="KCA1" />
+				<IC_MICRO x="500" v="0" label="KCA1" />
+				<!-- shifts floating car numbers -->
+				<IC_MICRO x="2000" v="0" label="Obstacle" />
+			</INITIAL_CONDITIONS>
+			<TRAFFIC_LIGHTS>
+				<!-- not implemented for CA -->
+			</TRAFFIC_LIGHTS>
+		</ROAD>
+	</SIMULATION>
 </SCENARIO>
-

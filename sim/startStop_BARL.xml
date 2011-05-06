@@ -1,103 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
-
-<!-- (c) Martin Treiber, Arne Kesting 2010      -->
-
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO>
-
-<VEHICLES>
-
-   <!-- vehicle length ==> cell units --> 
-   <VEHICLE label="BARL1" length="1" >  <!-- b_max nicht beschraenken -->
-     <LONGITUDINAL_MODEL>
-	   <!-- BARL variant : p0 != p possible --> 
-       <NSM  v0="2" p_troedel="0.1" p_slow_start="0.2"  /> 
-     </LONGITUDINAL_MODEL>
-     <LANE_CHANGE_MODEL/>
-   </VEHICLE>
-   
-   <VEHICLE label="Obstacle" length="1" >  <!-- b_max nicht beschraenken -->
-     <LONGITUDINAL_MODEL>
-       <NSM  v0="0" p_troedel="0" p_slow_start="0"  /> 
-     </LONGITUDINAL_MODEL>
-     <LANE_CHANGE_MODEL/>
-   </VEHICLE>
-
-</VEHICLES>
-
-
-
-<OUTPUT>
-  <FLOATING_CAR_DATA  n_dt="1" perc_out="0" dn="0">
-     <FC number="1" /> <!-- obstacle -->
-     <FC number="2" />
-     <FC number="6" />
-     <FC number="11" />
-     <FC number="16" />
-     <FC number="21" />
-  </FLOATING_CAR_DATA>
-</OUTPUT>
-
-<SIMULATION dt="1" duration="360" with_fixed_seed="true" seed="42">
-
-  <ROAD id="1" length="20000" lanes="1" >
-  <TRAFFIC_COMPOSITION write_fund_diagrams="true" >
-    <VEHICLE_TYPE label="BARL1" fraction="1"  />
-	<VEHICLE_TYPE label="Obstacle" fraction="0"  />
-  </TRAFFIC_COMPOSITION>
-  
-  <INITIAL_CONDITIONS>
-  <IC_MICRO x="1"  v="0" label="BARL1" />  
-  <IC_MICRO x="2"  v="0" label="BARL1" />
-  <IC_MICRO x="3"  v="0" label="BARL1" />
-  <IC_MICRO x="4"  v="0" label="BARL1" />
-  <IC_MICRO x="5"  v="0" label="BARL1" />
-  <IC_MICRO x="6"  v="0" label="BARL1" />
-  <IC_MICRO x="7"  v="0" label="BARL1" />
-  <IC_MICRO x="8"  v="0" label="BARL1" />
-  <IC_MICRO x="9"  v="0" label="BARL1" />
-  <IC_MICRO x="10" v="0" label="BARL1" />
-  <IC_MICRO x="11" v="0" label="BARL1" />
-  <IC_MICRO x="12" v="0" label="BARL1" />
-  <IC_MICRO x="13" v="0" label="BARL1" />
-  <IC_MICRO x="14" v="0" label="BARL1" />
-  <IC_MICRO x="15" v="0" label="BARL1" />
-  <IC_MICRO x="16" v="0" label="BARL1" />
-  <IC_MICRO x="17" v="0" label="BARL1" />
-  <IC_MICRO x="18" v="0" label="BARL1" />
-  <IC_MICRO x="19" v="0" label="BARL1" />
-  <IC_MICRO x="20" v="0" label="BARL1" />
-  <IC_MICRO x="21" v="0" label="BARL1" />
-  <IC_MICRO x="22" v="0" label="BARL1" />
-  <IC_MICRO x="23" v="0" label="BARL1" />
-  <IC_MICRO x="24" v="0" label="BARL1" />
-  <IC_MICRO x="25" v="0" label="BARL1" />
-  <IC_MICRO x="26" v="0" label="BARL1" />
-  <IC_MICRO x="100" v="0" label="Obstacle"/> <!-- shifts floating car numbers -->
-  </INITIAL_CONDITIONS>
-
-
-  <TRAFFIC_SOURCE>
-  </TRAFFIC_SOURCE>
-
-  
-  <TRAFFIC_SINK />
-
-  <FLOW_CONSERVING_INHOMOGENEITIES>
-  </FLOW_CONSERVING_INHOMOGENEITIES>
-  
-
-  <SPEED_LIMITS>
-  </SPEED_LIMITS>
-
-  <RAMPS>
-  </RAMPS>
-
-  <TRAFFIC_LIGHTS>
-     <!-- not implemented for CA -->
-  </TRAFFIC_LIGHTS>
-  </ROAD>
-</SIMULATION>
-
+    <VEHICLES>
+        <!-- vehicle length ==> cell units -->
+        <VEHICLE label="BARL1" length="1">
+            <!-- b_max nicht beschraenken -->
+            <LONGITUDINAL_MODEL>
+                <!-- BARL variant : p0 != p possible -->
+                <NSM v0="2" p_troedel="0.1" p_slow_start="0.2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+        <VEHICLE label="Obstacle" length="1">
+            <!-- b_max nicht beschraenken -->
+            <LONGITUDINAL_MODEL>
+                <NSM v0="0" p_troedel="0" p_slow_start="0" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <OUTPUT>
+        <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
+            <!-- FC 1 is obstacle -->
+            <FC number="1" />
+            <FC number="2" />
+            <FC number="6" />
+            <FC number="11" />
+            <FC number="16" />
+            <FC number="21" />
+        </FLOATING_CAR_DATA>
+    </OUTPUT>
+    <SIMULATION dt="1" duration="360" with_fixed_seed="true" seed="42">
+        <ROAD id="1" length="20000" lanes="1">
+            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+                <VEHICLE_TYPE label="BARL1" fraction="1" />
+                <VEHICLE_TYPE label="Obstacle" fraction="0" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MICRO  x="1" v="0" label="BARL1" />
+                <IC_MICRO  x="2" v="0" label="BARL1" />
+                <IC_MICRO  x="3" v="0" label="BARL1" />
+                <IC_MICRO  x="4" v="0" label="BARL1" />
+                <IC_MICRO  x="5" v="0" label="BARL1" />
+                <IC_MICRO  x="6" v="0" label="BARL1" />
+                <IC_MICRO  x="7" v="0" label="BARL1" />
+                <IC_MICRO  x="8" v="0" label="BARL1" />
+                <IC_MICRO  x="9" v="0" label="BARL1" />
+                <IC_MICRO x="10" v="0" label="BARL1" />
+                <IC_MICRO x="11" v="0" label="BARL1" />
+                <IC_MICRO x="12" v="0" label="BARL1" />
+                <IC_MICRO x="13" v="0" label="BARL1" />
+                <IC_MICRO x="14" v="0" label="BARL1" />
+                <IC_MICRO x="15" v="0" label="BARL1" />
+                <IC_MICRO x="16" v="0" label="BARL1" />
+                <IC_MICRO x="17" v="0" label="BARL1" />
+                <IC_MICRO x="18" v="0" label="BARL1" />
+                <IC_MICRO x="19" v="0" label="BARL1" />
+                <IC_MICRO x="20" v="0" label="BARL1" />
+                <IC_MICRO x="21" v="0" label="BARL1" />
+                <IC_MICRO x="22" v="0" label="BARL1" />
+                <IC_MICRO x="23" v="0" label="BARL1" />
+                <IC_MICRO x="24" v="0" label="BARL1" />
+                <IC_MICRO x="25" v="0" label="BARL1" />
+                <IC_MICRO x="26" v="0" label="BARL1" />
+                <!-- shifts floating car numbers -->
+                <IC_MICRO x="100" v="0" label="Obstacle" />
+            </INITIAL_CONDITIONS>
+            <TRAFFIC_LIGHTS>
+                <!-- not implemented for CA -->
+            </TRAFFIC_LIGHTS>
+        </ROAD>
+    </SIMULATION>
 </SCENARIO>
-
