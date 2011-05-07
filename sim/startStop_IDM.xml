@@ -53,6 +53,15 @@
                 <IC_MICRO x="250" v="0" />
                 <IC_MICRO x="260" v="0" />
             </INITIAL_CONDITIONS>
+            <TRAFFIC_SOURCE>
+            </TRAFFIC_SOURCE>
+            <TRAFFIC_SINK />
+            <FLOW_CONSERVING_INHOMOGENEITIES>
+            </FLOW_CONSERVING_INHOMOGENEITIES>
+            <SPEED_LIMITS>
+            </SPEED_LIMITS>
+            <RAMPS>
+            </RAMPS>
             <TRAFFIC_LIGHTS>
                 <TRAFFIC_LIGHT x="1000" green_time="30" green_red_time="3" red_time="200" red_green_time="2" phase_shift="0" />
             </TRAFFIC_LIGHTS>

@@ -60,6 +60,13 @@
             <TRAFFIC_SOURCE>
                 <INFLOW t="0" q_invh="300" v="30" />
             </TRAFFIC_SOURCE>
+            <TRAFFIC_SINK />
+            <FLOW_CONSERVING_INHOMOGENEITIES>
+            </FLOW_CONSERVING_INHOMOGENEITIES>
+            <SPEED_LIMITS>
+            </SPEED_LIMITS>
+            <RAMPS>
+            </RAMPS>
             <TRAFFIC_LIGHTS>
                 <TRAFFIC_LIGHT x="700" green_time="30" green_red_time="3" red_time="45" red_green_time="2" phase_shift="0" />
                 <TRAFFIC_LIGHT x="1200" green_time="15" green_red_time="3" red_time="45" red_green_time="2" phase_shift="10" />
