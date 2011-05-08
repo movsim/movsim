@@ -1,11 +1,16 @@
 # gnuplot command file
 
 # parameterised startStop command file
-# invoke using -e option to set ldm parameter, eg:
+# invoke using -e option to set parameters, eg:
 # gnuplot -e "lang='de'" onramp_IDM.gpl
 
-if (!exists("lang")) lang = "en"
+set datafile separator ","
+
+# parameters
+if (!exists("inputPath")) inputPath = ""
+if (!exists("outputPath")) outputPath = "figs/"
 if (!exists("ldm")) ldm = "IDM"
+if (!exists("lang")) lang = "en"
 #print "LDM=".ldm
 #print "lang=".lang
 
@@ -14,27 +19,27 @@ baseFile = "onramp_".ldm
 vehicle = ldm."1"
 
 # input files
-fundFile = baseFile.".fund_".vehicle
-datFile = baseFile.".dat"
-detFile(n) = sprintf(baseFile.".x%d_det",n)
-roadSourceFile = "onramp_IDM.upBC_log"
-rampSourceFile = "onramp_IDM.rmp1_log"
+fundFile = inputPath.baseFile.".fund_".vehicle
+datFile = inputPath.baseFile.".dat"
+detFile(n) = sprintf(inputPath.baseFile.".x%d_det",n)
+roadSourceFile = inputPath."onramp_IDM.upBC_log"
+rampSourceFile = inputPath."onramp_IDM.rmp1_log"
 
 # output files
-fundOutput = "figs/".baseFile.".fund_".vehicle.".eps"
-veqOutput = "figs/".baseFile.".veq_".vehicle.".eps"
-vqOutput = "figs/".baseFile.".vq_".vehicle.".eps"
-detOutput = "figs/".baseFile.".det_q.eps"
-detmicroOutput = "figs/".baseFile.".det_q_micro.eps"
-inflowOutput = "figs/".baseFile.".inflow_log.eps"
-v2dOutput = "figs/".baseFile.".v2d.eps"
-v2dallOutput = "figs/".baseFile.".v2d_all.eps"
+fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
+veqOutput = outputPath.baseFile.".veq_".vehicle.".eps"
+vqOutput = outputPath.baseFile.".vq_".vehicle.".eps"
+detOutput = outputPath.baseFile.".det_q.eps"
+detmicroOutput = outputPath.baseFile.".det_q_micro.eps"
+inflowOutput = outputPath.baseFile.".inflow_log.eps"
+v2dOutput = outputPath.baseFile.".v2d.eps"
+v2dallOutput = outputPath.baseFile.".v2d_all.eps"
 
 print "fundOutput =",fundOutput
-print "please make sure that figs/ already exists"
+print "please make sure that ".outputPath." already exists"
 
 
-# languages
+########  Languages  #####################################
 
 # English
 fundTitle =  "Fundamental diagram Q({/Symbol r})"
@@ -54,10 +59,11 @@ enteredVehicleLabel = "Number of entered vehicles"
 inflowRoadEnteredTitle = "upstream Boundary"
 inflowRampEnteredTitle = "onramp Boundary"
 inflowRoadFlowTitle = "demand Q(t) in veh/h"
+colorboxLabel = "V (km/h)"
 
 # Deutsch
-### TODO - final 4 strings need translation
-if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
+if (lang eq "de")\
+  fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
   veqTitle = "Geschwindigkeit V_{eq} (km/h)";\
   vqTitle = "Gleichgewichts-Geschwindigkeit V_{eq}({/Symbol r})";\
   densityLabel = "Dichte {/Symbol r} (1/km)";\
@@ -73,9 +79,12 @@ if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
   enteredVehicleLabel = "Anzahl eingefahrender Fahrzeuge";\
   inflowRoadEnteredTitle = "Zufluss Hauptfahrbahn";\
   inflowRampEnteredTitle = "Zufluss Auffahrt";\
-  inflowRoadFlowTitle = "Nachfrage Q(t) in Fz/h"
+  inflowRoadFlowTitle = "Nachfrage Q(t) in Fz/h"\
+  colorboxLabel = "V (km/h)"
 
-# line styles
+
+########  Line Styles  ###################################
+
 set style line 1 linetype 1 linewidth 7 pointtype 7 pointsize 1.5 lc rgb "#000000"
 set style line 2 linetype 7 linewidth 3 pointtype 5 pointsize 1.5 lc rgb "#dd0000"
 set style line 3 linetype 1 linewidth 7 pointtype 9 pointsize 1.5 lc rgb "#ff8800"
@@ -87,9 +96,8 @@ min(x,y)=(x<y) ? x : y
 set term post eps enhanced color dash "Helvetica" 26
 set nogrid
 
-########################################################
 
-########################################################
+########  Plot Fundamental Diagrams  #####################
 
 set xlabel densityLabel
 
@@ -122,19 +130,19 @@ set ylabel flowLabel
 set xrange [0:150]
 set out detOutput
 plot\
- detFile(8000)  u 3:4 t "-7 km" w p ls 6,\
- detFile(10000) u 3:4 t "-5 km" w p ls 4,\
- detFile(12000) u 3:4 t "-3 km" w p ls 2,\
- detFile(14000) u 3:4 t "-1 km" w p ls 1,\
- fundFile u 1:4 t "FD" w l ls 10
+ detFile(8000)  using 3:4 title "-7 km" with points linestyle 6,\
+ detFile(10000) using 3:4 title "-5 km" with points linestyle 4,\
+ detFile(12000) using 3:4 title "-3 km" with points linestyle 2,\
+ detFile(14000) using 3:4 title "-1 km" with points linestyle 1,\
+ fundFile using 1:4 title "FD" with lines linestyle 10
 
 set out detmicroOutput
 plot\
- detFile(8000)  u ($8*3600/$7):($8*3600) t "-7 km" w p ls 6,\
- detFile(10000) u ($8*3600/$7):($8*3600) t "-5 km" w p ls 4,\
- detFile(12000) u ($8*3600/$7):($8*3600) t "-3 km" w p ls 2,\
- detFile(14000) u ($8*3600/$7):($8*3600) t "-1 km" w p ls 1,\
- fundFile u 1:4 t "FD" w l ls 10
+ detFile(8000)  using ($8*3600/$7):($8*3600) title "-7 km" with points linestyle 6,\
+ detFile(10000) using ($8*3600/$7):($8*3600) title "-5 km" with points linestyle 4,\
+ detFile(12000) using ($8*3600/$7):($8*3600) title "-3 km" with points linestyle 2,\
+ detFile(14000) using ($8*3600/$7):($8*3600) title "-1 km" with points linestyle 1,\
+ fundFile using 1:4 title "FD" with lines linestyle 10
 
 ######################################
 # logging of inflows for testing
@@ -145,9 +153,9 @@ set xlabel timeMinuteLabel
 set ylabel enteredVehicleLabel
 set out inflowOutput
 plot\
- roadSourceFile  u ($1/60.):2 t inflowRoadEnteredTitle w l ls 1,\
- rampSourceFile  u ($1/60.):2 t inflowRampEnteredTitle w l ls 3,\
- roadSourceFile  u ($1/60.):7 t inflowRoadFlowTitle w l ls 2
+ roadSourceFile using ($1/60.):2 title inflowRoadEnteredTitle with lines linestyle 1,\
+ rampSourceFile using ($1/60.):2 title inflowRampEnteredTitle with lines linestyle 3,\
+ roadSourceFile using ($1/60.):7 title inflowRoadFlowTitle with lines linestyle 2
 
 ############### 3d ###########
 
@@ -170,7 +178,7 @@ set nogrid
 set nokey
 
 set size 1.3,1.2
-set label 1 "V (km/h)" at screen 1.1,1.02
+set label 1 colorboxLabel at screen 1.1,1.02
 
 xmin=-8  # km
 xmax=2
@@ -191,7 +199,7 @@ set yrange [xmin:xmax]
 
 unset surface
 set out v2dOutput
-splot datFile u ($2*60):($1-xramp):4 w l ls 99
+splot datFile using ($2*60):($1-xramp):4 with lines linestyle 99
 
 ####
 
@@ -199,7 +207,7 @@ set auto x
 set auto y
 set ylabel positionLabel offset -1.0,0
 set out v2dallOutput
-splot datFile u ($2*60):1:4 w l ls 99
+splot datFile using ($2*60):1:4 with lines linestyle 99
 
 set nolabel
 unset colorbox
