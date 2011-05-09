@@ -28,10 +28,10 @@ if (ldm eq "KCA") c0 = 1
 if (ldm eq "NSM") c0 = 1
 
 # input files
-fundFile = inputPath.baseFile.".fund_".vehicle
-if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1"
-carFile(n) = sprintf(inputPath.baseFile.".%06d.car",c0+n)
-carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d",c0+n)
+fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
+if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
+carFile(n) = sprintf(inputPath.baseFile.".%06d.car.csv",c0+n)
+carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"

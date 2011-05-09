@@ -20,8 +20,8 @@ if (!exists("ldm")) ldm = "IDM"
 baseFile = "test_trafficlights_".ldm
 
 # input files
-trafficlightFile = inputPath.baseFile.".trafficlights_log"
-carFile(n) = sprintf(inputPath.baseFile.".%06d.car",n)
+trafficlightFile = inputPath.baseFile.".trafficlights_log.csv"
+carFile(n) = sprintf(inputPath.baseFile.".%06d.car.csv",n)
 
 # output files
 trafficlightsOutput = outputPath.baseFile.".trajectories.eps"

@@ -282,11 +282,10 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @param sumFraction
      *            the sum fraction
      */
-    @SuppressWarnings("unchecked")
     private void normalizeFractions(double sumFraction) {
-        final Iterator it = prototypes.keySet().iterator();
+        final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
-            final String key = (String) it.next();
+            final String key = it.next();
             final double fraction = prototypes.get(key).fraction();
             prototypes.get(key).setFraction(fraction / sumFraction);
         }
@@ -295,12 +294,11 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     /**
      * Write fundamental diagrams.
      */
-    @SuppressWarnings("unchecked")
     private void writeFundamentalDiagrams() {
-        final Iterator it = prototypes.keySet().iterator();
+        final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
-            final String key = (String) it.next();
-            final String filename = projectName + ".fund_" + key;
+            final String key = it.next();
+            final String filename = projectName + ".fund_" + key + ".csv";
             final VehiclePrototype proto = prototypes.get(key);
             if (proto.fraction() > 0) {
                 // avoid writing fundDia of "obstacles"
@@ -355,13 +353,12 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @see org.movsim.simulator.vehicles.VehicleGenerator#getVehiclePrototype()
      */
     @Override
-    @SuppressWarnings("unchecked")
     public VehiclePrototype getVehiclePrototype() {
         final double randomNumber = MyRandom.nextDouble();
         double sumFraction = 0;
-        final Iterator it = prototypes.keySet().iterator();
+        final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
-            final String key = (String) it.next();
+            final String key = it.next();
             sumFraction += prototypes.get(key).fraction();
             if (sumFraction >= randomNumber)
                 return prototypes.get(key);
@@ -435,11 +432,10 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * 
      * @return true, if successful
      */
-    @SuppressWarnings("unchecked")
     private boolean checkForReactionTimes() {
-        final Iterator it = prototypes.keySet().iterator();
+        final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
-            final String key = (String) it.next();
+            final String key = it.next();
             final VehiclePrototype prototype = prototypes.get(key);
             if (prototype.hasReactionTime())
                 return true;
