@@ -130,7 +130,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
 
         if (writeOutput) {
             final int xDetectorInt = (int) detPosition;
-            final String filename = projectName + ".x" + xDetectorInt + "_det";
+            final String filename = projectName + ".x" + xDetectorInt + "_det.csv";
             printWriter = initFile(filename);
             writeAggregatedData(0);
         }
@@ -313,7 +313,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
 
     public void notifyObservers() {
         for(LoopDetectorObserver obs : observers){
-            obs.update(timeAtAverage, flow(), meanSpeed(), rhoArithmetic);
+            obs.update(timeAtAverage, flow(), meanSpeed(), rhoArithmetic());
         }
         
     }

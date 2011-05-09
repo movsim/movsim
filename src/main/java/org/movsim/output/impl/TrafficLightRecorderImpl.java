@@ -65,7 +65,7 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
         nDt = input.getnDt();
 
         if (writeOutput) {
-            final String filename = projectName + ".trafficlights_log";
+            final String filename = projectName + ".trafficlights_log.csv";
             fstr = FileUtils.getWriter(filename);
             writeHeader(trafficLights);
         }

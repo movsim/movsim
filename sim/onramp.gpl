@@ -21,7 +21,7 @@ vehicle = ldm."1"
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle
 datFile = inputPath.baseFile.".dat"
-detFile(n) = sprintf(inputPath.baseFile.".x%d_det",n)
+detFile(n) = sprintf(inputPath.baseFile.".x%d_det.csv",n)
 roadSourceFile = inputPath."onramp_IDM.upBC_log"
 rampSourceFile = inputPath."onramp_IDM.rmp1_log"
 

@@ -59,7 +59,7 @@ public class FloatingCarsImpl implements FloatingCars {
     private final String projectName;
     
     /** The ending file. */
-    private final String endingFile = ".car";
+    private final String endingFile = ".car.csv";
 
     /** The us. */
     private final DecimalFormatSymbols us = new DecimalFormatSymbols(Locale.US);

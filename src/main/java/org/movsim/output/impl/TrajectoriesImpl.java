@@ -79,9 +79,6 @@ public class TrajectoriesImpl implements Trajectories {
     /** The ending file. */
     private String endingFile = ".traj_jsim.csv";
 
-    /** The comment char. */
-    private char commentChar = '#';
-
     /** The last update time. */
     private double lastUpdateTime = 0;
     
@@ -148,7 +145,7 @@ public class TrajectoriesImpl implements Trajectories {
         while (it.hasNext()) {
             Long id= (Long)it.next();
             final PrintWriter fstr = fileHandles.get(id);
-            fstr.println(commentChar + "t[s],  id,  x[m],  lane[1],  gap[m],  v[m/s],  dv[m/s],  accReal[m/s^2],   label,  vehClass");
+            fstr.println(Constants.COMMENT_CHAR + "t[s],  id,  x[m],  lane[1],  gap[m],  v[m/s],  dv[m/s],  accReal[m/s^2],   label,  vehClass");
             fstr.flush();
         }
     }
