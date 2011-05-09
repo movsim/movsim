@@ -64,7 +64,7 @@ public class SwingHelper {
      *            the path
      * @return the image icon
      */
-    public static ImageIcon createImageIcon(Class bezugsklasse, String path) {
+    public static ImageIcon createImageIcon(Class<?> bezugsklasse, String path) {
         // Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
         // System.out.println(bezugsklasse);
         final URL imgURL = bezugsklasse.getResource(path);
@@ -89,7 +89,7 @@ public class SwingHelper {
      *            the height
      * @return the image icon
      */
-    public static ImageIcon createImageIcon(Class bezugsklasse, String path, int width, int height) {
+    public static ImageIcon createImageIcon(Class<?> bezugsklasse, String path, int width, int height) {
         // Nutzung des klasseneigenen ClassLoaders f�r die Suche nach dem Bild
 
         final URL imgURL = bezugsklasse.getResource(path);

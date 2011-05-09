@@ -103,7 +103,7 @@ public class App extends JApplet implements AppletStub {
             @Override
             public void run() {
                 try {
-                    final Class appletClass = Class.forName(appletToLoad);
+                    final Class<?> appletClass = Class.forName(appletToLoad);
                     final JApplet realApplet = (JApplet) appletClass.newInstance();
                     realApplet.setStub(appletstub);
                     setLayout(new GridLayout(1, 0));
