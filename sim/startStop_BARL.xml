@@ -5,7 +5,7 @@
     <VEHICLES>
         <!-- vehicle length ==> cell units -->
         <VEHICLE label="BARL1" length="1">
-            <!-- b_max nicht beschraenken -->
+            <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
                 <!-- BARL variant : p0 != p possible -->
                 <NSM v0="2" p_troedel="0.1" p_slow_start="0.2" />
@@ -13,7 +13,7 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
         <VEHICLE label="Obstacle" length="1">
-            <!-- b_max nicht beschraenken -->
+            <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
                 <NSM v0="0" p_troedel="0" p_slow_start="0" />
             </LONGITUDINAL_MODEL>
@@ -64,7 +64,7 @@
                 <IC_MICRO x="24" v="0" label="BARL1" />
                 <IC_MICRO x="25" v="0" label="BARL1" />
                 <IC_MICRO x="26" v="0" label="BARL1" />
-                <!-- shifts floating car numbers -->
+                <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="100" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE>
