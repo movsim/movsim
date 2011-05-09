@@ -44,8 +44,8 @@ public class ModelInputDataNSMImpl extends ModelInputDataImpl implements ModelIn
     /** The v0. */
     private final double v0; // desired velocity (cell units/time unit)
     
-    /** The p troedel. */
-    private final double pTroedel; // Troedelwahrscheinlichkeit
+    /** The p slowdown. */
+    private final double pSlowdown; // Troedelwahrscheinlichkeit - slowdown probability
     
     /** The p slow to start. */
     private final double pSlowToStart; // slow-to-start rule (Barlovic)
@@ -63,15 +63,15 @@ public class ModelInputDataNSMImpl extends ModelInputDataImpl implements ModelIn
     public ModelInputDataNSMImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.v0 = Double.parseDouble(map.get("v0"));
-        this.pTroedel = Double.parseDouble(map.get("p_troedel"));
+        this.pSlowdown = Double.parseDouble(map.get("p_slowdown"));
         this.pSlowToStart = Double.parseDouble(map.get("p_slow_start"));
-        if (pSlowToStart < pTroedel) {
-            logger.error("slow to start logic requires pSlowToStart > pTroedel, but input {} < {} ", pSlowToStart,
-                    pTroedel);
+        if (pSlowToStart < pSlowdown) {
+            logger.error("slow to start logic requires pSlowToStart > pSlowdown, but input {} < {} ", pSlowToStart,
+                    pSlowdown);
             System.exit(-1);
         }
 
-        if (v0 < 0 || pTroedel < 0 || pSlowToStart < 0) {
+        if (v0 < 0 || pSlowdown < 0 || pSlowToStart < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     modelName);
             System.exit(-1);
@@ -96,8 +96,8 @@ public class ModelInputDataNSMImpl extends ModelInputDataImpl implements ModelIn
      * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP()
      */
     @Override
-    public double getTroedel() {
-        return pTroedel;
+    public double getSlowdown() {
+        return pSlowdown;
     }
 
     /*

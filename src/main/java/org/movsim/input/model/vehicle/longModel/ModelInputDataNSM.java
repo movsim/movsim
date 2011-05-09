@@ -47,11 +47,11 @@ public interface ModelInputDataNSM {
     double getV0();
 
     /**
-     * Gets the troedel.
+     * Gets the slowdown.
      * 
-     * @return the troedel
+     * @return the slowdown
      */
-    double getTroedel();
+    double getSlowdown();
 
     /**
      * Gets the slow to start.
