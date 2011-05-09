@@ -214,7 +214,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
         printWriter.printf(Constants.COMMENT_CHAR + " dtSample in s = %-8.4f%n", dtSample);
         printWriter.printf(Constants.COMMENT_CHAR + " position xDet = %-8.4f%n", detPosition);
         printWriter.printf(Constants.COMMENT_CHAR + " arithmetic average for density rho%n");
-        printWriter.printf(Constants.COMMENT_CHAR + " t[min],  v[km/h],rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)%n");
+        printWriter.printf(Constants.COMMENT_CHAR + "   t[s],  v[km/h],rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)%n");
         printWriter.flush();
         return printWriter;
     }
@@ -228,7 +228,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
     private void writeAggregatedData(double time) {
         if (printWriter == null)
             return;
-        printWriter.printf("%8.1f, %8.3f, %8.3f, %8.1f, %5d, %8.7f, %8.3f, %8.5f%n", time / 60.0, 3.6 * meanSpeed,
+        printWriter.printf("%8.1f, %8.3f, %8.3f, %8.1f, %5d, %8.7f, %8.3f, %8.5f%n", time, 3.6 * meanSpeed,
                 1000 * rhoArithmetic, 3600 * flow, vehCountOutput, occupancy, 3.6 * meanHarmSpeed, meanHarmTimegap);
         printWriter.flush();
     }

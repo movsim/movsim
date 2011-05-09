@@ -102,7 +102,7 @@ public class Macro3DImpl implements Macro3D {
         if (writeOutput) {
             final String filename = projectName + ".dat";
             writer = FileUtils.getWriter(filename);
-            writer.printf(Constants.COMMENT_CHAR + "    s[km],       t[h],  rho[1/km],    v[km/h],     Q[1/h]%n");
+            writer.printf(Constants.COMMENT_CHAR + "     s[m],       t[s],  rho[1/km],    v[km/h],     Q[1/h]%n");
             writer.flush();
         }
 
@@ -183,7 +183,7 @@ public class Macro3DImpl implements Macro3D {
     private void writeOutput(double time) {
         for (int j = 0; j < rhoInvKm.length; j++) {
             final double x = j * dxOut;
-            writer.printf("%10.3f, %10.6f, %10.4f, %10.4f, %10.4f%n", x / 1000.0, time / 3600.0, rhoInvKm[j], vKmh[j], qInvH[j]);
+            writer.printf("%10.1f, %10.2f, %10.4f, %10.4f, %10.4f%n", x, time, rhoInvKm[j], vKmh[j], qInvH[j]);
         }
         writer.printf("%n"); // block ends
         writer.flush();

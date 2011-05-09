@@ -199,7 +199,7 @@ set yrange [xmin:xmax]
 
 unset surface
 set out v2dOutput
-splot datFile using ($2*60):($1-xramp):4 with lines linestyle 99
+splot datFile using ($2/60):($1/1000-xramp):4 with lines linestyle 99
 
 ####
 
@@ -207,7 +207,7 @@ set auto x
 set auto y
 set ylabel positionLabel offset -1.0,0
 set out v2dallOutput
-splot datFile using ($2*60):1:4 with lines linestyle 99
+splot datFile using ($2/60):($1/1000):4 with lines linestyle 99
 
 set nolabel
 unset colorbox
