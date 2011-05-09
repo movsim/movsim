@@ -46,27 +46,27 @@ public interface Constants {
                                    // the left
 
     /** The MODE l_ nam e_ idm. */
-                                   final String MODEL_NAME_IDM = "IDM";
-    
+    final String MODEL_NAME_IDM = "IDM";
+
     /** The MODE l_ nam e_ acc. */
     final String MODEL_NAME_ACC = "ACC";
-    
+
     /** The MODE l_ nam e_ ov m_ vdiff. */
     final String MODEL_NAME_OVM_VDIFF = "OVM_VDIFF";
-    
+
     /** The MODE l_ nam e_ gipps. */
     final String MODEL_NAME_GIPPS = "GIPPS";
-    
+
     /** The MODE l_ nam e_ newell. */
     final String MODEL_NAME_NEWELL = "NEWELL";
-    
+
     /** The MODE l_ nam e_ nsm. */
     final String MODEL_NAME_NSM = "NSM";
-    
+
     /** The MODE l_ nam e_ kca. */
     final String MODEL_NAME_KCA = "KCA";
 
     /** The GA p_ infinity. */
     final double GAP_INFINITY = 10000;
-    
+
 }

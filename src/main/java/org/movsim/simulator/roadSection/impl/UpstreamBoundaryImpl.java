@@ -100,7 +100,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
         if (upstreamBoundaryData.withLogging()) {
             enteringVehCounter = 1;
-            final String filename = projectName + ".upBC_log";
+            final String filename = projectName + ".upBC_log.csv";
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(Constants.COMMENT_CHAR
                     + "  time[s],  count,     x[m],  v[km/h],  lane,  queue, qBC[1/h]%n");

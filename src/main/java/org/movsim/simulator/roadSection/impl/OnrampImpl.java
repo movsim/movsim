@@ -122,7 +122,7 @@ public class OnrampImpl implements Onramp {
 
         if (rampData.withLogging()) {
             mergeCount = 0;
-            final String filename = projectName + ".rmp" + rampIndex + "_log";
+            final String filename = projectName + ".rmp" + rampIndex + "_log.csv";
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(Constants.COMMENT_CHAR
                     + " time[s],  count[i],  xEnter[m],  vEnter[km/h],  laneEnter[1],  queue[1],  qBC[1/h]%n");

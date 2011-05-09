@@ -100,7 +100,7 @@ public class Macro3DImpl implements Macro3D {
         initialize();
 
         if (writeOutput) {
-            final String filename = projectName + ".dat";
+            final String filename = projectName + ".dat.csv";
             writer = FileUtils.getWriter(filename);
             writer.printf(Constants.COMMENT_CHAR + "     s[m],       t[s],  rho[1/km],    v[km/h],     Q[1/h]%n");
             writer.flush();
