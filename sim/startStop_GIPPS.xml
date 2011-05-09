@@ -60,7 +60,7 @@
                 <IC_MICRO x="240" v="0" label="GIPPS1" />
                 <IC_MICRO x="250" v="0" label="GIPPS1" />
                 <IC_MICRO x="260" v="0" label="GIPPS1" />
-                <!-- shifts floating car numbers -->
+                <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE>
