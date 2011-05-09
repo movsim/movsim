@@ -48,8 +48,8 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
     /** The v0. */
     private final double v0;
     
-    /** The p troedel. */
-    private final double pTroedel;
+    /** The p slowdown. */
+    private final double pSlowdown;
     
     /** The p slow to start. */
     private final double pSlowToStart; // slow-to-start rule for Barlovic model
@@ -65,7 +65,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
     public NSM(String modelName, ModelInputDataNSM parameters) {
         super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
         this.v0 = parameters.getV0();
-        this.pTroedel = parameters.getTroedel();
+        this.pSlowdown = parameters.getSlowdown();
         this.pSlowToStart = parameters.getSlowToStart();
     }
 
@@ -79,7 +79,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
     public NSM(NSM nsmToCopy) {
         super(nsmToCopy.modelName(), nsmToCopy.getModelCategory());
         this.v0 = nsmToCopy.getV0();
-        this.pTroedel = nsmToCopy.getTroedel();
+        this.pSlowdown = nsmToCopy.getSlowdown();
         this.pSlowToStart = nsmToCopy.getSlowToStart();
     }
 
@@ -134,13 +134,13 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
         int vNew = 0;
 
         final double r1 = MyRandom.nextDouble();
-        final double pb = (vLoc < 1) ? pSlowToStart : pTroedel;
-        final int troedel = (r1 < pb) ? 1 : 0;
+        final double pb = (vLoc < 1) ? pSlowToStart : pSlowdown;
+        final int slowdown = (r1 < pb) ? 1 : 0;
 
         final int sLoc = (int) (s + 0.5);
         vNew = Math.min(vLoc + 1, v0Loc);
         vNew = Math.min(vNew, sLoc);
-        vNew = Math.max(0, vNew - troedel);
+        vNew = Math.max(0, vNew - slowdown);
 
         return ((vNew - vLoc) / dtCA);
     }
@@ -177,12 +177,12 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
     }
 
     /**
-     * Gets the troedel.
+     * Gets the slowdown.
      * 
-     * @return the troedel
+     * @return the slowdown
      */
-    public double getTroedel() {
-        return pTroedel;
+    public double getSlowdown() {
+        return pSlowdown;
     }
 
     /**
