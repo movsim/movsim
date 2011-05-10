@@ -53,8 +53,7 @@ public class ICMacroDataImpl implements ICMacroData {
      */
     public ICMacroDataImpl(Map<String, String> map) {
         this.x = Double.parseDouble(map.get("x"));
-        this.rho = Double.parseDouble(map.get("rho_invkm")) / 1000.; // convert
-                                                                     // to SI
+        this.rho = Double.parseDouble(map.get("rho_per_km")) / 1000.0; // convert to SI
         this.speed = Double.parseDouble(map.get("v"));
     }
 

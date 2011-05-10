@@ -247,9 +247,9 @@ number  NMTOKEN #REQUIRED
 
 <!ELEMENT IC_MACRO EMPTY>
 <!ATTLIST IC_MACRO
-  x         NMTOKEN #REQUIRED
-  rho_invkm NMTOKEN #REQUIRED
-  v         NMTOKEN "0"
+  x          NMTOKEN #REQUIRED
+  rho_per_km NMTOKEN #REQUIRED
+  v          NMTOKEN "0"
 > 
 
 <!-- most right lane is =1, increment for further lanes  -->
@@ -276,9 +276,9 @@ with_logging  (true|false) "false"
 
 <!ELEMENT INFLOW EMPTY>
 <!ATTLIST INFLOW
-  t       NMTOKEN #REQUIRED
-  q_invh  NMTOKEN #REQUIRED
-  v       NMTOKEN "100"
+  t           NMTOKEN #REQUIRED
+  q_per_hour  NMTOKEN #REQUIRED
+  v           NMTOKEN "100"
 > 
 
 

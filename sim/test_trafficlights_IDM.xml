@@ -58,7 +58,7 @@
                 <IC_MICRO x="260" v="0" />
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE>
-                <INFLOW t="0" q_invh="300" v="30" />
+                <INFLOW t="0" q_per_hour="300" v="30" />
             </TRAFFIC_SOURCE>
             <TRAFFIC_SINK />
             <FLOW_CONSERVING_INHOMOGENEITIES>

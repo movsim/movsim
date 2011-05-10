@@ -8,14 +8,14 @@
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
                 <!-- BARL variant : p0 != p possible -->
-                <NSM v0="2" p_troedel="0.1" p_slow_start="0.2" />
+                <NSM v0="2" p_slowdown="0.1" p_slow_start="0.2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
         <VEHICLE label="Obstacle" length="1">
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
-                <NSM v0="0" p_troedel="0" p_slow_start="0" />
+                <NSM v0="0" p_slowdown="0" p_slow_start="0" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>

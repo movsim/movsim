@@ -53,8 +53,7 @@ public class InflowDataPointImpl implements InflowDataPoint {
      */
     public InflowDataPointImpl(Map<String, String> map) {
         this.time = Double.parseDouble(map.get("t"));
-        this.flow = Double.parseDouble(map.get("q_invh")) / 3600.; // convert to
-                                                                   // SI;
+        this.flow = Double.parseDouble(map.get("q_per_hour")) / 3600.0; // convert to SI
         this.speed = Double.parseDouble(map.get("v"));
     }
 
