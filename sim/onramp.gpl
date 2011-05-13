@@ -4,7 +4,7 @@
 # invoke using -e option to set parameters, eg:
 # gnuplot -e "lang='de'" onramp_IDM.gpl
 
-set datafile separator ","
+#set datafile separator ","
 
 # parameters
 if (!exists("inputPath")) inputPath = ""
@@ -20,10 +20,10 @@ vehicle = ldm."1"
 
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-datFile = inputPath.baseFile.".dat.csv"
-detFile(n) = sprintf(inputPath.baseFile.".x%d_det.csv",n)
-roadSourceFile = inputPath."onramp_IDM.upBC_log.csv"
-rampSourceFile = inputPath."onramp_IDM.rmp1_log.csv"
+stFile = inputPath.baseFile.".R1_st.csv"
+detFile(n) = sprintf(inputPath.baseFile.".R1x%d_det.csv",n)
+roadSourceFile = inputPath.baseFile.".S1_log.csv"
+rampSourceFile = inputPath.baseFile.".S2_log.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
@@ -153,9 +153,9 @@ set xlabel timeMinuteLabel
 set ylabel enteredVehicleLabel
 set out inflowOutput
 plot\
- roadSourceFile using ($1/60.):2 title inflowRoadEnteredTitle with lines linestyle 1,\
- rampSourceFile using ($1/60.):2 title inflowRampEnteredTitle with lines linestyle 3,\
- roadSourceFile using ($1/60.):7 title inflowRoadFlowTitle with lines linestyle 2
+ roadSourceFile using ($1/60.0):6 title inflowRoadEnteredTitle with lines linestyle 1,\
+ rampSourceFile using ($1/60.0):6 title inflowRampEnteredTitle with lines linestyle 3,\
+ roadSourceFile using ($1/60.0):5 title inflowRoadFlowTitle with lines linestyle 2
 
 ############### 3d ###########
 
@@ -199,7 +199,7 @@ set yrange [xmin:xmax]
 
 unset surface
 set out v2dOutput
-splot datFile using ($2/60):($1/1000-xramp):4 with lines linestyle 99
+splot stFile using ($1/60.0):($2/1000.0-xramp):($3*3.6) with lines linestyle 99
 
 ####
 
@@ -207,7 +207,7 @@ set auto x
 set auto y
 set ylabel positionLabel offset -1.0,0
 set out v2dallOutput
-splot datFile using ($2/60):($1/1000):4 with lines linestyle 99
+splot stFile using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
 
 set nolabel
 unset colorbox

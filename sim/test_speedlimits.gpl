@@ -20,7 +20,7 @@ if (!exists("lang")) lang = "en"
 baseFile = "test_speedlimits"
 
 # input files
-carFile(n) = sprintf(inputPath.baseFile.".%06d.car.csv",n)
+carFile(n) = sprintf(inputPath.baseFile.".V%06d.csv",n)
 
 # output files
 trajectoryOutput = outputPath.baseFile.".trajectories.eps"
@@ -54,4 +54,4 @@ set pm3d map
 
 set out trajectoryOutput
 splot\
-  carFile(1) using ($2/1000):(3.6*$3):(1) title car(1) with lines linestyle 1
+  carFile(1) using ($3/1000):(3.6*$4):(1) title car(1) with lines linestyle 1

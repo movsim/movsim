@@ -47,7 +47,14 @@ import org.slf4j.LoggerFactory;
 public class TrajectoriesImpl implements Trajectories {
 
 	
-	/** The Constant logger. */
+    private static final String extensionFormat = ".R%d_traj.csv";
+    private static final String outputHeading = Constants.COMMENT_CHAR + 
+        "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
+    private static final String outputFormat = 
+    	"%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
+//	"%8.2f, %18d, %6d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f, %s%n";
+
+    /** The Constant logger. */
 	final static Logger logger = LoggerFactory.getLogger(TrajectoriesImpl.class);
 	
     //defaults for optional user input:
@@ -118,7 +125,7 @@ public class TrajectoriesImpl implements Trajectories {
      */
     private void createFileHandles(){
 
-        final String filenameMainroad = projectName+".main_1"+endingFile;
+        final String filenameMainroad = projectName + String.format(extensionFormat, roadSection.id());
         logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSection.id());
         fileHandles.put(roadSection.id(), FileUtils.getWriter(filenameMainroad));
         
@@ -145,7 +152,7 @@ public class TrajectoriesImpl implements Trajectories {
         while (it.hasNext()) {
             Long id= (Long)it.next();
             final PrintWriter fstr = fileHandles.get(id);
-            fstr.println(Constants.COMMENT_CHAR + "t[s],  id,  x[m],  lane[1],  gap[m],  v[m/s],  dv[m/s],  accReal[m/s^2],   label,  vehClass");
+            fstr.println(outputHeading);
             fstr.flush();
         }
     }
@@ -220,8 +227,8 @@ public class TrajectoriesImpl implements Trajectories {
         final Vehicle frontVeh = roadSection.vehContainer().getLeader(me); 
         final double s = (frontVeh == null) ? 0 : me.netDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.relSpeed(frontVeh);
-        fstr.printf("%8.2f, %18d, %10.3f, %6.3f, %9.5f, %9.5f, %9.5f, %11.8f, %s%n", 
-                time, me.id(), me.position(),  me.getLane(), s, me.speed(), dv, me.acc(), me.getLabel());
+        fstr.printf(outputFormat,
+        		time, (int)me.getLane(), me.position(), me.speed(), me.acc(), s,  dv, me.getLabel(), me.id());
         fstr.flush();
     }
 

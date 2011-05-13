@@ -47,6 +47,12 @@ import org.slf4j.LoggerFactory;
  */
 public class OnrampImpl implements Onramp {
 
+    private static final String extensionFormat = ".S%d_log.csv";
+    private static final String outputHeading = Constants.COMMENT_CHAR + 
+    "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
+    private static final String outputFormat = 
+    	"%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OnrampImpl.class);
 
@@ -122,10 +128,10 @@ public class OnrampImpl implements Onramp {
 
         if (rampData.withLogging()) {
             mergeCount = 0;
-            final String filename = projectName + ".rmp" + rampIndex + "_log.csv";
+            final int roadCount = 1;// assuming only one road in the scenario for the moment
+            final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
             fstrLogging = FileUtils.getWriter(filename);
-            fstrLogging.printf(Constants.COMMENT_CHAR
-                    + " time[s],  count[i],  xEnter[m],  vEnter[km/h],  laneEnter[1],  queue[1],  qBC[1/h]%n");
+            fstrLogging.printf(outputHeading);
         }
 
         nWait = 0;
@@ -169,9 +175,8 @@ public class OnrampImpl implements Onramp {
             if (isMerging) {
                 vehicleQueue.removeFirst();
                 if (fstrLogging != null) {
-                    fstrLogging
-                            .printf("%10.1f, %6d,  %8.2f,  %8.2f,  %5d,  %5d,  %8.2f%n", time, mergeCount, xEnterLastMerge,
-                                    3.6 * vEnterLastMerge, laneEnterLastMerge, vehicleQueue.size(), 3600 * qBC);
+                    fstrLogging.printf(outputFormat, time, laneEnterLastMerge, xEnterLastMerge, 3.6 * vEnterLastMerge,
+                    		3600 * qBC, mergeCount, vehicleQueue.size());
                     fstrLogging.flush();
                 }
             }

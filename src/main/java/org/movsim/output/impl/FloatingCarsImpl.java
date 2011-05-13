@@ -27,12 +27,9 @@
 package org.movsim.output.impl;
 
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.output.FloatingCars;
@@ -49,6 +46,12 @@ import org.slf4j.LoggerFactory;
  */
 public class FloatingCarsImpl implements FloatingCars {
     
+    private static final String extensionFormat = ".V%06d.csv";
+    private static final String outputHeading = Constants.COMMENT_CHAR +
+        "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s], distToTrafficlight[m]";
+                                                                                                                 
+    // note: number before decimal point is total width of field, not width of integer part
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.3f, %10.3f, %10.5f, %10.1f%n";
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCarsImpl.class);
 
@@ -59,13 +62,7 @@ public class FloatingCarsImpl implements FloatingCars {
     private final String projectName;
     
     /** The ending file. */
-    private final String endingFile = ".car.csv";
-
-    /** The us. */
-    private final DecimalFormatSymbols us = new DecimalFormatSymbols(Locale.US);
-    
-    /** The file format. */
-    private final DecimalFormat fileFormat = new DecimalFormat("000000", us);
+    private final String endingFile = ".csv";
 
     /** The hash map. */
     private final HashMap<Integer, PrintWriter> hashMap;
@@ -99,7 +96,7 @@ public class FloatingCarsImpl implements FloatingCars {
         // double percOut = input.getPercOut();
         //
 
-        final String regex = projectName + "[.]\\d+" + endingFile;
+        final String regex = projectName + "[.]V\\d+" + endingFile;
         FileUtils.deleteFileList(path, regex);
 
         hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
@@ -186,7 +183,7 @@ public class FloatingCarsImpl implements FloatingCars {
      * @return the string
      */
     private String createFileName(int i, String ending) {
-        final String filename = path + projectName + "." + fileFormat.format(i) + ending;
+        final String filename = path + projectName + String.format(extensionFormat,i);
         return (filename);
     }
 
@@ -204,9 +201,8 @@ public class FloatingCarsImpl implements FloatingCars {
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
         // note: number before decimal point is total width of field, not width of integer part
-        fstr.printf("%8.2f, %9.3f, %8.4f, %9.5f, %10.3f, %8.4f, %9.5f, %8.2f, %4d%n", time, veh.position(), veh.speed(),
-                veh.acc(), veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.accModel(),
-                veh.distanceToTrafficlight(), veh.getIntLane());
+        fstr.printf(outputFormat, time, veh.getIntLane(), veh.position(), veh.speed(), veh.acc(), veh.accModel(),
+        		veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.distanceToTrafficlight());
         fstr.flush();
     }
 
@@ -221,8 +217,7 @@ public class FloatingCarsImpl implements FloatingCars {
         final String filename = createFileName(vehNumber, endingFile);
         final PrintWriter fstr = FileUtils.getWriter(filename);
         hashMap.put(vehNumber, fstr);
-        fstr.println(Constants.COMMENT_CHAR
-                + "   t[s],      s[m],   v[m/s],  a[m/s^2],      ds[m],  dv[m/s],    aModel, distToTrafficlight[m], lane");
+        fstr.println(outputHeading);
         fstr.flush();
     }
 

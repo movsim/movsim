@@ -130,7 +130,8 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
 
         if (writeOutput) {
             final int xDetectorInt = (int) detPosition;
-            final String filename = projectName + ".x" + xDetectorInt + "_det.csv";
+            // road id hard coded as 1 for the moment
+            final String filename = projectName + ".R1x" + xDetectorInt + "_det.csv";
             printWriter = initFile(filename);
             writeAggregatedData(0);
         }

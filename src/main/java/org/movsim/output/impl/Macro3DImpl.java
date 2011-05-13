@@ -45,6 +45,11 @@ import org.slf4j.LoggerFactory;
  * The Class Macro3DImpl.
  */
 public class Macro3DImpl implements Macro3D {
+    private static final String extensionFormat = ".R%d_st.csv";
+    private static final String outputHeading = Constants.COMMENT_CHAR + 
+        "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
+    private static final String outputFormat = 
+    	"%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Macro3DImpl.class);
@@ -58,8 +63,8 @@ public class Macro3DImpl implements Macro3D {
     /** The rho inv km. */
     private double[] rhoInvKm;
 
-    /** The v kmh. */
-    private double[] vKmh;
+    /** The v m/s. */
+    private double[] v;
 
     /** The q inv h. */
     private double[] qInvH;
@@ -100,9 +105,9 @@ public class Macro3DImpl implements Macro3D {
         initialize();
 
         if (writeOutput) {
-            final String filename = projectName + ".dat.csv";
+            final String filename = projectName + String.format(extensionFormat, roadSection.id());
             writer = FileUtils.getWriter(filename);
-            writer.printf(Constants.COMMENT_CHAR + "     s[m],       t[s],  rho[1/km],    v[km/h],     Q[1/h]%n");
+            writer.printf(outputHeading);
             writer.flush();
         }
 
@@ -115,7 +120,7 @@ public class Macro3DImpl implements Macro3D {
         timeOffset = 0;
         final int nxOut = (int) (roadlength / dxOut);
         rhoInvKm = new double[nxOut + 1];
-        vKmh = new double[nxOut + 1];
+        v = new double[nxOut + 1];
         qInvH = new double[nxOut + 1];
     }
 
@@ -139,12 +144,12 @@ public class Macro3DImpl implements Macro3D {
     }
 
     /**
-     * Calc data.
+     * Calculate data.
      * 
      * @param time
      *            the time
      * @param vehContainer
-     *            the veh container
+     *            the vehicle container
      */
     private void calcData(double time, VehicleContainer vehContainer) {
         final List<Vehicle> vehicles = vehContainer.getVehicles();
@@ -168,9 +173,9 @@ public class Macro3DImpl implements Macro3D {
 
         for (int j = 0; j < rhoInvKm.length; j++) {
             final double x = j * dxOut;
-            rhoInvKm[j] = Tables.intpextp(xMicro, rho, x, true) * 1000.;
-            vKmh[j] = Tables.intpextp(xMicro, vMicro, x, true) * 3.6;
-            qInvH[j] = rhoInvKm[j] * vKmh[j];
+            rhoInvKm[j] = Tables.intpextp(xMicro, rho, x, true) * 1000.0;
+            v[j] = Tables.intpextp(xMicro, vMicro, x, true);
+            qInvH[j] = rhoInvKm[j] * v[j] * 3.6;
         }
     }
 
@@ -183,7 +188,8 @@ public class Macro3DImpl implements Macro3D {
     private void writeOutput(double time) {
         for (int j = 0; j < rhoInvKm.length; j++) {
             final double x = j * dxOut;
-            writer.printf("%10.1f, %10.2f, %10.4f, %10.4f, %10.4f%n", x, time, rhoInvKm[j], vKmh[j], qInvH[j]);
+            // 0.0 is placeholder for acceleration
+            writer.printf(outputFormat, time, x, v[j], 0.0, rhoInvKm[j], qInvH[j]);
         }
         writer.printf("%n"); // block ends
         writer.flush();

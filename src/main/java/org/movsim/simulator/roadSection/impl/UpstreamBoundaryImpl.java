@@ -45,6 +45,12 @@ import org.slf4j.LoggerFactory;
  * The Class UpstreamBoundaryImpl.
  */
 public class UpstreamBoundaryImpl implements UpstreamBoundary {
+
+	private static final String extensionFormat = ".S%d_log.csv";
+    private static final String outputHeading = Constants.COMMENT_CHAR + 
+        "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
+    private static final String outputFormat = 
+    	"%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(UpstreamBoundaryImpl.class);
@@ -82,9 +88,9 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * Instantiates a new upstream boundary impl.
      * 
      * @param vehGenerator
-     *            the veh generator
+     *            the vehicle generator
      * @param vehContainer
-     *            the veh container
+     *            the vehicle container
      * @param upstreamBoundaryData
      *            the upstream boundary data
      * @param projectName
@@ -100,10 +106,10 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
         if (upstreamBoundaryData.withLogging()) {
             enteringVehCounter = 1;
-            final String filename = projectName + ".upBC_log.csv";
+            final int roadId = 1; // road id hard coded as 1 for the moment
+            final String filename = projectName + String.format(extensionFormat, roadId);
             fstrLogging = FileUtils.getWriter(filename);
-            fstrLogging.printf(Constants.COMMENT_CHAR
-                    + "  time[s],  count,     x[m],  v[km/h],  lane,  queue, qBC[1/h]%n");
+            fstrLogging.printf(outputHeading);
         }
     }
 
@@ -146,8 +152,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             if (isEntered) {
                 nWait--;
                 if (fstrLogging != null) {
-                    fstrLogging.printf("%10.2f, %6d, %8.2f, %8.2f, %5d, %6.1f, %8.2f%n", time, enteringVehCounter,
-                            xEnterLast, 3.6 * vEnterLast, laneEnterLast, nWait, 3600 * qBC);
+                    fstrLogging.printf(outputFormat, time, laneEnterLast,
+                    		xEnterLast, 3.6 * vEnterLast, 3600 * qBC, enteringVehCounter, nWait);
                     fstrLogging.flush();
                 }
             }

@@ -65,7 +65,8 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
         nDt = input.getnDt();
 
         if (writeOutput) {
-            final String filename = projectName + ".trafficlights_log.csv";
+        	// road id hard coded as 1 for the moment
+            final String filename = projectName + ".R1_tl_log.csv";
             fstr = FileUtils.getWriter(filename);
             writeHeader(trafficLights);
         }
@@ -89,7 +90,7 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
         if (fstr != null) {
             fstr.printf("%8.2f   ", time);
             for (final TrafficLight trafficLight : trafficLights) {
-                fstr.printf("%d  %.1f  ", trafficLight.status(), trafficLight.position());
+                fstr.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status());
             }
             fstr.printf("%n");
             fstr.flush();
@@ -116,8 +117,8 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
                     trafficLight.position());
             counter++;
         }
-        fstr.printf(Constants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "status[1]_TL1",
-                "position[m]_TL1", " etc. ");
+        fstr.printf(Constants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1", 
+        		"status[1]_TL1", " etc. ");
         fstr.flush();
     }
 
