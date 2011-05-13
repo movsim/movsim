@@ -33,7 +33,6 @@ import java.util.Map;
 import org.jdom.Attribute;
 import org.jdom.Element;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class XmlUtils.
  */
