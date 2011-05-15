@@ -154,7 +154,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration            NMTOKEN #REQUIRED
-  with_fixed_seed  (true|false)  "true" 
+  fixed_seed  (true|false)  "true" 
   seed             NMTOKEN "42"
 > 
 
@@ -203,13 +203,13 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- upstream boundary conditions -->
 <!ELEMENT TRAFFIC_SOURCE (INFLOW*)>
 <!ATTLIST TRAFFIC_SOURCE
-with_logging  (true|false)  "false" 
+logging  (true|false)  "false" 
 >          
 
 <!-- downstream boundary conditions (not yet implemented) -->
 <!ELEMENT TRAFFIC_SINK EMPTY>
 <!ATTLIST TRAFFIC_SINK
-with_logging  (true|false) "false" 
+logging  (true|false) "false" 
 >          
 
 
@@ -256,7 +256,7 @@ speedlimit_kmh NMTOKEN #REQUIRED
 <!ATTLIST SIMPLE_RAMP
 x_center       NMTOKEN #REQUIRED
 length         NMTOKEN "1000"
-with_logging  (true|false)  "false" 
+logging  (true|false)  "false" 
 > 
 
 
@@ -266,7 +266,7 @@ with_logging  (true|false)  "false"
 x_center       NMTOKEN #REQUIRED
 length         NMTOKEN "300"
 x_max          NMTOKEN "1000"
-with_logging  (true|false)  "false" 
+logging  (true|false)  "false" 
 > 
   
 <!-- traffic lights -->

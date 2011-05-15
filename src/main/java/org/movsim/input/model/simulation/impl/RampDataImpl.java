@@ -70,7 +70,7 @@ public class RampDataImpl implements RampData {
         this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
-        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
+        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final List<Element> inflowElems = elem.getChildren("INFLOW");
         parseAndSortInflowElements(inflowElems);

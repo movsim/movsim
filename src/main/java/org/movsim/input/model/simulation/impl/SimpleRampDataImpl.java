@@ -66,7 +66,7 @@ public class SimpleRampDataImpl implements SimpleRampData {
     public SimpleRampDataImpl(Element elem) {
         this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
-        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
+        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
         parseAndSortInflowElements(inflowElems);

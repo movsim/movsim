@@ -10,7 +10,7 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="400" with_fixed_seed="true" seed="42">
+    <SIMULATION dt="0.2" duration="400" fixed_seed="true" seed="42">
         <ROAD id="1" length="1500" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="IDM1" fraction="1" />

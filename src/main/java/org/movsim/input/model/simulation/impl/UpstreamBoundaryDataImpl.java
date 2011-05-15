@@ -61,7 +61,7 @@ public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
         if (elem == null) {
             withLogging = false;
         } else {
-            withLogging = Boolean.parseBoolean(elem.getAttributeValue("with_logging"));
+            withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
             final List<Element> upInflowElems = elem.getChildren("INFLOW");
             parseAndSortInflowElements(upInflowElems);

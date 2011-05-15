@@ -69,7 +69,7 @@ public class SimulationInputImpl implements SimulationInput {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
-        if (elem.getAttributeValue("with_fixed_seed").equalsIgnoreCase("true")) {
+        if (elem.getAttributeValue("fixed_seed").equalsIgnoreCase("true")) {
             withFixedSeed = true;
         } else {
             withFixedSeed = false;

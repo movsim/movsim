@@ -11,7 +11,7 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.4" duration="7200" with_fixed_seed="true" seed="42">
+    <SIMULATION dt="0.4" duration="7200" fixed_seed="true" seed="42">
         <ROAD id="1" length="20000" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="IIDM1" fraction="1" />
@@ -20,7 +20,7 @@
                 <IC_MACRO x="8600" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>
             <!-- auch noch qCap notwendig ?? -->
-            <TRAFFIC_SOURCE with_logging="true">
+            <TRAFFIC_SOURCE logging="true">
                 <INFLOW t="0" q_per_hour="200" v="30" />
                 <INFLOW t="1500" q_per_hour="2200" v="22" />
                 <INFLOW t="10800" q_per_hour="1000" v="30" />
@@ -35,7 +35,7 @@
             </SPEED_LIMITS>
             <RAMPS>
                 <SIMPLE_RAMP x_center="15000" length="1000"
-                    with_logging="true">
+                    logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
             </RAMPS>

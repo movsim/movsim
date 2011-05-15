@@ -22,7 +22,7 @@
         </VEHICLE>
     </VEHICLES>
     <!-- depends strongly on randomness resp. seed !!! -->
-    <SIMULATION dt="1" duration="360" with_fixed_seed="true" seed="50">
+    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="50">
         <ROAD id="1" length="20000" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="KCA1" fraction="1" />
