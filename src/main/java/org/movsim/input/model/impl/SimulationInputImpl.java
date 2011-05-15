@@ -36,7 +36,6 @@ import org.movsim.input.model.SimulationInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: extract element names into XmlElementNames Interface to make them symbolic.
 /**
  * The Class SimulationInputImpl.
  */

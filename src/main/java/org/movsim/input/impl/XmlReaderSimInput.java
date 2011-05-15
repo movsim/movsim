@@ -112,7 +112,10 @@ public class XmlReaderSimInput {
 
         inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
 
+        logger.debug("vor doc");
         final Element root = doc.getRootElement();
+
+        logger.debug("nach doc");
 
         // -------------------------------------------------------
 
@@ -126,7 +129,7 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final OutputInput outputInput = new OutputInputImpl(root.getChild(XmlElementNames.Output));
+        final OutputInput outputInput = new OutputInputImpl(root.getChild(XmlElementNames.Simulation).getChild(XmlElementNames.Road).getChild(XmlElementNames.Output));
         inputData.setOutputInput(outputInput);
 
         // -------------------------------------------------------
@@ -139,7 +142,6 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXml() {
-        
         doc = getDocument(getInput(xmlFilename));
         validate(getInput(xmlFilename));
         
