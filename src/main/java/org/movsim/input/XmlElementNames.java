@@ -18,13 +18,6 @@ public interface XmlElementNames {
     public final String VehicleLongModelNSM = "NSM";
     public final String VehicleLongModelKCA = "KCA";
     
-    public final String Output = "OUTPUT";
-    public final String OutputFloatingCarData = "FLOATING_CAR_DATA";
-    public final String OutputFloatingMacro = "SPATIOTEMPORAL";
-    public final String OutputFloatingDetectors = "DETECTORS";
-    public final String OutputFloatingTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
-    public final String OutputFloatingTrajectories = "TRAJECTORIES";
-    
     public final String Simulation = "SIMULATION";
     public final String Road = "ROAD";
     public final String RoadTrafficLight = "TRAFFIC_LIGHT"; 
@@ -44,5 +37,10 @@ public interface XmlElementNames {
     public final String RoadRamp = "RAMP";
     public final String RoadSimpleRamp = "SIMPLE_RAMP";
     public final String RoadInflow = "INFLOW";
-    
+    public final String RoadOutput = "OUTPUT";
+    public final String OutputFloatingCarData = "FLOATING_CAR_DATA";
+    public final String OutputSpatioTemporal = "SPATIOTEMPORAL";
+    public final String OutputDetectors = "DETECTORS";
+    public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
+    public final String OutputTrajectories = "TRAJECTORIES";
     }

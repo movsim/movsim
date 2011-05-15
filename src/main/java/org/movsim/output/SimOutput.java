@@ -90,8 +90,9 @@ public class SimOutput {
         writeOutput = !isWithGUI; // no file output from GUI
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
-
-        final OutputInput outputInput = simInput.getOutputInput();
+        
+        // SingleRoad quickhack!! //TODO
+        final OutputInput outputInput = simInput.getSimulationInput().getSingleRoadInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCarsImpl(projectName, writeOutput, floatingCarInput);

@@ -81,13 +81,13 @@ public class OutputInputImpl implements OutputInput {
 
         floatingCarInput = new FloatingCarInputImpl(elem.getChild(XmlElementNames.OutputFloatingCarData));
 
-        macroInput = new MacroInputImpl(elem.getChild(XmlElementNames.OutputFloatingMacro));
+        macroInput = new MacroInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
-        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputFloatingDetectors));
+        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
 
-        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild(XmlElementNames.OutputFloatingTrafficlightRecorder));
+        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild(XmlElementNames.OutputTrafficlightRecorder));
         
-        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputFloatingTrajectories));       
+        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));       
 
     }
 

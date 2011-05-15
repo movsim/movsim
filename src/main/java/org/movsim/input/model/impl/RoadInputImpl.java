@@ -35,6 +35,7 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
+import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
@@ -100,6 +101,11 @@ public class RoadInputImpl implements RoadInput {
 
     /** The traffic light data. */
     private List<TrafficLightData> trafficLightData;
+    
+    /** The output input. */
+    private OutputInput outputInput;
+
+   
 
     /**
      * Instantiates a new road input impl.
@@ -298,6 +304,10 @@ public class RoadInputImpl implements RoadInput {
         }
 
         // -----------------------------------------------------------
+        
+        // Output
+        final OutputInput outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
+        setOutputInput(outputInput);
 
     }
 
@@ -434,4 +444,11 @@ public class RoadInputImpl implements RoadInput {
         return simpleRamps;
     }
 
+    public OutputInput getOutputInput() {
+        return outputInput;
+    }
+
+    public void setOutputInput(OutputInput outputInput) {
+        this.outputInput = outputInput;
+    }
 }

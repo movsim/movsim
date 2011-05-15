@@ -45,12 +45,6 @@ public interface InputData {
      */
     String getProjectName();
 
-    /**
-     * Gets the output input.
-     * 
-     * @return the output input
-     */
-    OutputInput getOutputInput();
 
     /**
      * Gets the simulation input.

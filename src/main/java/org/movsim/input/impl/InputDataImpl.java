@@ -54,8 +54,6 @@ public class InputDataImpl implements InputData {
     /** The vehicle input data. */
 private List<VehicleInput> vehicleInputData;
 
-    /** The output input. */
-    private OutputInput outputInput;
 
     /** The simulation input. */
     private SimulationInput simulationInput;
@@ -120,31 +118,11 @@ private List<VehicleInput> vehicleInputData;
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.InputData#getOutputInput()
-     */
-    @Override
-    public OutputInput getOutputInput() {
-        return outputInput;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see org.movsim.input.InputData#getSimulationInput()
      */
     @Override
     public SimulationInput getSimulationInput() {
         return simulationInput;
-    }
-
-    /**
-     * Sets the output input.
-     * 
-     * @param outputInput
-     *            the new output input
-     */
-    public void setOutputInput(OutputInput outputInput) {
-        this.outputInput = outputInput;
     }
 
     /**

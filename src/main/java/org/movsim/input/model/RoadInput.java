@@ -135,4 +135,5 @@ public interface RoadInput {
      */
     List<TrafficLightData> getTrafficLightData();
 
+    OutputInput getOutputInput();
 }

@@ -96,11 +96,9 @@ public class XmlReaderSimInput {
             System.exit(1);
         }
 
-        logger.info("Begin Parsing: " + xmlFilename);
+        logger.info("Begin parsing: " + xmlFilename);
         readAndValidateXml();
-
         fromDomToInternalDatastructure();
-
         logger.info("End XmlReaderSimInput.");
     }
 
@@ -112,10 +110,7 @@ public class XmlReaderSimInput {
 
         inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
 
-        logger.debug("vor doc");
         final Element root = doc.getRootElement();
-
-        logger.debug("nach doc");
 
         // -------------------------------------------------------
 
@@ -126,11 +121,6 @@ public class XmlReaderSimInput {
             vehicleInputData.add(new VehicleInputImpl(vehElem));
         }
         inputData.setVehicleInputData(vehicleInputData);
-
-        // -------------------------------------------------------
-
-        final OutputInput outputInput = new OutputInputImpl(root.getChild(XmlElementNames.Simulation).getChild(XmlElementNames.Road).getChild(XmlElementNames.Output));
-        inputData.setOutputInput(outputInput);
 
         // -------------------------------------------------------
 
@@ -161,8 +151,6 @@ public class XmlReaderSimInput {
     private Document getDocument(InputSource inputSource) {
         try {
             final SAXBuilder builder = new SAXBuilder();
-            // builder.setEntityResolver(new LocalDtdResolver(dtdFilename));
-            // builder.setValidation(true); // requires a "dtd" file !
             builder.setIgnoringElementContentWhitespace(true);
             final Document doc = builder.build(inputSource);
             return doc;
