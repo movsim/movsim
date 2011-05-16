@@ -48,7 +48,7 @@ public class SimpleRampDataImpl implements SimpleRampData {
     private List<InflowDataPoint> inflowTimeSeries;
     
     /** The center position. */
-    private final double centerPosition;
+    private final double rampStartPosition;
     
     /** The ramp length. */
     private final double rampLength;
@@ -64,7 +64,7 @@ public class SimpleRampDataImpl implements SimpleRampData {
      */
     @SuppressWarnings("unchecked")
     public SimpleRampDataImpl(Element elem) {
-        this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
+        this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
@@ -112,8 +112,8 @@ public class SimpleRampDataImpl implements SimpleRampData {
      * @see org.movsim.input.model.simulation.SimpleRampData#getCenterPosition()
      */
     @Override
-    public double getCenterPosition() {
-        return centerPosition;
+    public double getRampStartPosition() {
+        return rampStartPosition;
     }
 
     /*

@@ -46,7 +46,7 @@ public interface SimpleRampData {
      * 
      * @return the center position
      */
-    double getCenterPosition();
+    double getRampStartPosition();
 
     /**
      * Gets the ramp length.

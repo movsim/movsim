@@ -74,17 +74,17 @@ public class OnrampImpl implements Onramp {
     /** The vehicle queue. */
     private final LinkedList<Vehicle> vehicleQueue;
     
-    /** The x center. */
+    /** The x center position of the ramp. */
     private final double xCenter;
     
-    /** The length. */
+    /** The length of the ramp. */
     private final double length;
 
-    /** The x up ramp. */
-    private final double xUpRamp;// = xCenter-0.5*length;
+    /** The x up ramp marks the start of ther ramp. */
+    private final double xUpRamp;
     
-    /** The x down ramp. */
-    private final double xDownRamp;// = xCenter+0.5*length;
+    /** The x down ramp marks the end of the ramp. */
+    private final double xDownRamp;
 
     /** The n wait. */
     private double nWait;
@@ -92,8 +92,7 @@ public class OnrampImpl implements Onramp {
     /** The fstr logging. */
     PrintWriter fstrLogging;
 
-    // status of last merging vehicle
-    /** The x enter last merge. */
+    /** The x enter last merge. status of last merging vehicle */
     private double xEnterLastMerge;
     
     /** The v enter last merge. */
@@ -136,11 +135,12 @@ public class OnrampImpl implements Onramp {
 
         nWait = 0;
         inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
-
-        this.xCenter = rampData.getCenterPosition();
+        
         this.length = rampData.getRampLength();
-        xUpRamp = xCenter - 0.5 * length;
-        xDownRamp = xCenter + 0.5 * length;
+        this.xCenter = rampData.getRampStartPosition() + 0.5 * length; //TODO check if needed
+        
+        xUpRamp = rampData.getRampStartPosition();
+        xDownRamp = xUpRamp + length;
 
     }
 
@@ -307,8 +307,8 @@ public class OnrampImpl implements Onramp {
     private boolean tryMerge(Vehicle vehToEnter, VehicleContainer mainVehContainer) {
 
         logger.debug("");
-        final double xUp = xCenter - 0.5 * length; // = xCenter-0.5*length;
-        final double xDown = xCenter + 0.5 * length;
+        final double xUp = xUpRamp;
+        final double xDown = xUpRamp +  length;
         ;// = xCenter+0.5*length;
         // double vLead = Constants.MAX_VEHICLE_SPEED;;// = 200; // very large
         // value //TODO

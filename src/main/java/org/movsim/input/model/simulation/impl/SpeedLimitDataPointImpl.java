@@ -30,17 +30,16 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SpeedLimitDataPointImpl.
  */
 public class SpeedLimitDataPointImpl implements SpeedLimitDataPoint {
 
-    /** The x. */
-    private final double x; // in m
+    /** The x in m. */
+    private final double x;
     
-    /** The speedlimit. */
-    private final double speedlimit; // in m/s
+    /** The speedlimit in m/s. */
+    private final double speedlimit;
 
     /**
      * Instantiates a new speed limit data point impl.
@@ -49,7 +48,7 @@ public class SpeedLimitDataPointImpl implements SpeedLimitDataPoint {
      *            the map
      */
     public SpeedLimitDataPointImpl(Map<String, String> map) {
-        this.x = Double.parseDouble(map.get("x_init"));
+        this.x = Double.parseDouble(map.get("x"));
         this.speedlimit = Double.parseDouble(map.get("speedlimit_kmh")) / 3.6;
     }
 

@@ -258,8 +258,8 @@ public class RoadInputImpl implements RoadInput {
             Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
                 @Override
                 public int compare(SimpleRampData o1, SimpleRampData o2) {
-                    final Double pos1 = new Double((o1).getCenterPosition());
-                    final Double pos2 = new Double((o2).getCenterPosition());
+                    final Double pos1 = new Double((o1).getRampStartPosition());
+                    final Double pos2 = new Double((o2).getRampStartPosition());
                     return pos1.compareTo(pos2); // sort with increasing x
                 }
             });
@@ -274,8 +274,8 @@ public class RoadInputImpl implements RoadInput {
             Collections.sort(ramps, new Comparator<RampData>() {
                 @Override
                 public int compare(RampData o1, RampData o2) {
-                    final Double pos1 = new Double((o1).getCenterPosition());
-                    final Double pos2 = new Double((o2).getCenterPosition());
+                    final Double pos1 = new Double((o1).getRampStartPosition());
+                    final Double pos2 = new Double((o2).getRampStartPosition());
                     return pos1.compareTo(pos2); // sort with increasing x
                 }
             });

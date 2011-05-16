@@ -242,7 +242,7 @@ alpha_v0  NMTOKEN "1"
 
 <!ELEMENT SPEED_LIMIT EMPTY>
 <!ATTLIST SPEED_LIMIT
-x_init         NMTOKEN #REQUIRED
+x         NMTOKEN #REQUIRED
 speedlimit_kmh NMTOKEN #REQUIRED
 > 
 
@@ -254,7 +254,7 @@ speedlimit_kmh NMTOKEN #REQUIRED
 
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
 <!ATTLIST SIMPLE_RAMP
-x_center       NMTOKEN #REQUIRED
+x       NMTOKEN #REQUIRED
 length         NMTOKEN "1000"
 logging  (true|false)  "false" 
 > 
@@ -263,7 +263,7 @@ logging  (true|false)  "false"
 <!-- real physical ramp with merging area (length) and total length of x_max --> 
 <!ELEMENT RAMP (INFLOW*)>
 <!ATTLIST RAMP
-x_center       NMTOKEN #REQUIRED
+x       NMTOKEN #REQUIRED
 length         NMTOKEN "300"
 x_max          NMTOKEN "1000"
 logging  (true|false)  "false" 

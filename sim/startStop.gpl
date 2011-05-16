@@ -30,7 +30,7 @@ if (ldm eq "NSM") c0 = 1
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
 if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
-carFile(n) = sprintf(inputPath.baseFile.".v%06d.csv",c0+n)
+carFile(n) = sprintf(inputPath.baseFile.".V%06d.csv",c0+n)
 carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
 
 # output files

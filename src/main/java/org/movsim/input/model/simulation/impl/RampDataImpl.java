@@ -48,7 +48,7 @@ public class RampDataImpl implements RampData {
     private List<InflowDataPoint> inflowTimeSeries;
     
     /** The center position. */
-    private final double centerPosition;
+    private final double rampStartPosition;
     
     /** The ramp length. */
     private final double rampLength;
@@ -67,7 +67,7 @@ public class RampDataImpl implements RampData {
      */
     @SuppressWarnings("unchecked")
     public RampDataImpl(Element elem) {
-        this.centerPosition = Double.parseDouble(elem.getAttributeValue("x_center"));
+        this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
         this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
@@ -116,8 +116,8 @@ public class RampDataImpl implements RampData {
      * @see org.movsim.input.model.simulation.impl.RampData#getCenterPosition()
      */
     @Override
-    public double getCenterPosition() {
-        return centerPosition;
+    public double getRampStartPosition() {
+        return rampStartPosition;
     }
 
     /*
