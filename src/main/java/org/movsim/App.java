@@ -57,7 +57,7 @@ public class App extends JApplet implements AppletStub {
     final static Logger logger = LoggerFactory.getLogger(App.class);
 
     /** The Constant xmlDefault. */
-    final static String xmlDefault = "sim/startStop_IDM.xml";
+    final static String xmlDefault = "sim/onramp_IDM.xml";
 
     /** The appletstub. */
     protected AppletStub appletstub;
@@ -136,7 +136,7 @@ public class App extends JApplet implements AppletStub {
         // CommandLine args options Parser
         String xmlFilename;
         final SimCommandLine cmdline = new SimCommandLineImpl(args);
-        if (cmdline.isWithSimulation()) {
+        if (cmdline.isWithXmlSimulationConfigFile()) {
             xmlFilename = cmdline.getSimulationFilename();
         } else {
             xmlFilename = xmlDefault;
@@ -145,7 +145,7 @@ public class App extends JApplet implements AppletStub {
         final InputDataImpl inputData = new InputDataImpl();
 
         // parse xmlFile and set values in InputBean
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, inputData);
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, cmdline, inputData);
 
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
 

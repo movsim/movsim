@@ -35,7 +35,7 @@ inflowOutput = outputPath.baseFile.".inflow_log.eps"
 v2dOutput = outputPath.baseFile.".v2d.eps"
 v2dallOutput = outputPath.baseFile.".v2d_all.eps"
 
-print "fundOutput =",fundOutput
+print "fundOutput = ",fundOutput
 print "please make sure that ".outputPath." already exists"
 
 

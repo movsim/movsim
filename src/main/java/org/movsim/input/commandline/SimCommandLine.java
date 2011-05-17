@@ -37,7 +37,7 @@ public interface SimCommandLine {
      * 
      * @return true, if is with simulation configuration
      */
-    boolean isWithSimulation();
+    boolean isWithXmlSimulationConfigFile();
 
     /**
      * Gets the simulation filename.
@@ -52,5 +52,18 @@ public interface SimCommandLine {
      * @return true, if is gui
      */
     boolean isGui();
+    
+    /**
+     * Checks if application is run only to validate xml input file without simulation.
+     * 
+     * @return true, if is only validation
+     */
+    boolean isOnlyValidation();
 
+    /**
+     * Checks if application is run to write internal Xml after validation without simulation.
+     * 
+     * @return true, if is write internal Xml
+     */
+    boolean isWriteInternalXml();
 }

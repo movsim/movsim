@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,10 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.movsim.input.XmlElementNames;
+import org.movsim.input.commandline.SimCommandLine;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
@@ -57,6 +61,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 // TODO: Auto-generated Javadoc
 /**
  * The Class XmlReaderSimInput.
+ * 
  * @author Arne Kesting, Ralph Germ
  */
 public class XmlReaderSimInput {
@@ -79,16 +84,20 @@ public class XmlReaderSimInput {
     /** The doc. */
     private Document doc;
 
+    private SimCommandLine cmdline;
+
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
      * 
      * @param xmlFilename
      *            the xml filename
+     * @param cmdline
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(String xmlFilename, InputDataImpl inputData) {
+    public XmlReaderSimInput(String xmlFilename, SimCommandLine cmdline, InputDataImpl inputData) {
         this.xmlFilename = xmlFilename;
+        this.cmdline = cmdline;
         this.inputData = inputData;
 
         if (!FileUtils.fileExists(xmlFilename)) {
@@ -98,8 +107,36 @@ public class XmlReaderSimInput {
 
         logger.info("Begin parsing: " + xmlFilename);
         readAndValidateXml();
+
+        // write internal xml file:
+        if (cmdline.isWriteInternalXml()) {
+            String outFilename = xmlFilename + ".internal_xml";
+            writeInternalXmlToFile(doc, outFilename);
+            logger.info("internal xml output written to file. Exit.");
+            System.exit(0);
+        }
+
         fromDomToInternalDatastructure();
         logger.info("End XmlReaderSimInput.");
+    }
+
+    /**
+     * Writes the internal xml after validation to file
+     * 
+     * @param doc2
+     * @param outFilename
+     *            the output file name
+     */
+    private void writeInternalXmlToFile(Document doc2, String outFilename) {
+        PrintWriter writer = FileUtils.getWriter(outFilename);
+        XMLOutputter outputter = new XMLOutputter();
+        outputter.setFormat(Format.getPrettyFormat());
+        try {
+            logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
+            outputter.output(doc, writer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -134,9 +171,12 @@ public class XmlReaderSimInput {
     private void readAndValidateXml() {
         doc = getDocument(getInput(xmlFilename));
         validate(getInput(xmlFilename));
-        
+
         if (!isValid) {
             logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
+            System.exit(0);
+        } else if (cmdline.isOnlyValidation()) {
+            logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
             System.exit(0);
         }
 
@@ -144,8 +184,9 @@ public class XmlReaderSimInput {
 
     /**
      * Gets the Document.
-     *
-     * @param inputSource the input source
+     * 
+     * @param inputSource
+     *            the input source
      * @return the document
      */
     private Document getDocument(InputSource inputSource) {
@@ -166,14 +207,13 @@ public class XmlReaderSimInput {
 
     /**
      * Validates the Inputsource.
-     *
-     * @param inputSource the input source
+     * 
+     * @param inputSource
+     *            the input source
      */
     private void validate(InputSource inputSource) {
-        /**
-         * global flag !!! also used in errorHandler
-         */
-        isValid = true; 
+        // global flag !!! also used in errorHandler
+        isValid = true;
         try {
             logger.debug("validate input ... ");
             final XMLReader myXMLReader = XMLReaderFactory.createXMLReader();
@@ -207,11 +247,10 @@ public class XmlReaderSimInput {
         return inputSource;
     }
 
-
     /**
      * The Inner Class MyErrorHandler.
      * 
-     * uses global isValid flag 
+     * uses global isValid flag
      */
     class MyErrorHandler extends DefaultHandler {
 
@@ -252,11 +291,11 @@ public class XmlReaderSimInput {
             isValid = false;
         }
 
-        
         /**
          * Gets the info to the corresponding exception.
-         *
-         * @param e the exception
+         * 
+         * @param e
+         *            the exception
          * @return the info
          */
         private String getInfo(SAXParseException e) {

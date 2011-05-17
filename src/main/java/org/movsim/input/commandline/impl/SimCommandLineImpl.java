@@ -38,9 +38,8 @@ import org.movsim.input.commandline.SimCommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class SimCommandLineImpl. MovSim console command lins parser.
+ * The Class SimCommandLineImpl. MovSim console command line parser.
  */
 public class SimCommandLineImpl implements SimCommandLine {
 
@@ -54,10 +53,16 @@ public class SimCommandLineImpl implements SimCommandLine {
     private String simulationFilename;
     
     /** The with simulation. */
-    private boolean withSimulation = false;
+    private boolean withXmlSimulationConfigFile = false;
     
     /** The gui. */
     private boolean gui = false;
+    
+    /** The flag for only validatiion of xml input file without simulation*/
+    private boolean onlyValidation = false;
+    
+    /** The flag for writing xml config file of the simulation input after validation from dtd */ 
+    private boolean writeInternalXml;
 
     /**
      * Instantiates a new sim command line impl.
@@ -82,15 +87,13 @@ public class SimCommandLineImpl implements SimCommandLine {
 
         options = new Options();
         options.addOption("h", "help", false, "print this message");
-        options.addOption("d", "default", false, "simulate with default simulation xmlfile ");
         options.addOption("g", "gui", false, "start a Desktop GUI");
-
-        // options.addOption("f", "simulation", true,
-        // "argument has to be a xml file specifing the simulation");
-
+        options.addOption( "v", "validate", false, "parse xml input file for validation (without simulation)" );
+        options.addOption( "i", "internal_xml", false, "write internal xml (the simulation configuration) after validation from dtd (without simulation)" );
+        
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
-        OptionBuilder.withDescription("argument has to be a xml file specifing the simulation");
+        OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
     }
@@ -126,22 +129,38 @@ public class SimCommandLineImpl implements SimCommandLine {
         if (cmdline.hasOption("h")) {
             optHelp();
         }
-        if (cmdline.hasOption("d")) {
-            optDefault();
-        }
         if (cmdline.hasOption("f")) {
             optSimulation(cmdline);
         }
         if (cmdline.hasOption("g")) {
             optGUI();
         }
+        if (cmdline.hasOption("v")) {
+            optValidation();
+        }
+        if (cmdline.hasOption("i")) {
+            optInternalXml();
+        }
+    }
+
+    /**
+     * Option: write internal xml (without simulation)
+     */
+    private void optInternalXml() {
+        writeInternalXml = true;
+    }
+
+    /**
+     * Option: parse xml input file for validation (without simulation)
+     */
+    private void optValidation() {
+        onlyValidation = true;
     }
 
     /**
      * Option gui.
      */
     private void optGUI() {
-        logger.debug("option --gui");
         gui = true;
     }
 
@@ -155,18 +174,10 @@ public class SimCommandLineImpl implements SimCommandLine {
         simulationFilename = cmdline.getOptionValue('f');
         if (simulationFilename == null) {
             logger.warn("No configfile as option passed. Start Simulation with default.");
-            optDefault();
         } else {
-            withSimulation = validateSimulationFileName(simulationFilename);
+            withXmlSimulationConfigFile = validateSimulationFileName(simulationFilename);
         }
 
-    }
-
-    /**
-     * Option default.
-     */
-    private void optDefault() {
-        logger.debug("option --default");
     }
 
     /**
@@ -205,8 +216,8 @@ public class SimCommandLineImpl implements SimCommandLine {
      * @see org.movsim.input.commandline.SimCommandLine#isWithSimulation()
      */
     @Override
-    public boolean isWithSimulation() {
-        return withSimulation;
+    public boolean isWithXmlSimulationConfigFile() {
+        return withXmlSimulationConfigFile;
     }
 
     /*
@@ -227,6 +238,14 @@ public class SimCommandLineImpl implements SimCommandLine {
     @Override
     public boolean isGui() {
         return gui;
+    }
+    
+    public boolean isOnlyValidation() {
+        return onlyValidation;
+    }
+    
+    public boolean isWriteInternalXml() {
+        return writeInternalXml;
     }
 
 }
