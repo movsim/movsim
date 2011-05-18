@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,15 +43,14 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.commandline.SimCommandLine;
-import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
-import org.movsim.input.model.impl.OutputInputImpl;
 import org.movsim.input.model.impl.SimulationInputImpl;
 import org.movsim.input.model.impl.VehicleInputImpl;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -169,17 +169,8 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXml() {
-        doc = getDocument(getInput(xmlFilename));
-        validate(getInput(xmlFilename));
-
-        if (!isValid) {
-            logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
-            System.exit(0);
-        } else if (cmdline.isOnlyValidation()) {
-            logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
-            System.exit(0);
-        }
-
+        validate(getInputSourceFromFilename(xmlFilename));
+        doc = getDocument(getInputSourceFromFilename(xmlFilename));
     }
 
     /**
@@ -189,10 +180,20 @@ public class XmlReaderSimInput {
      *            the input source
      * @return the document
      */
-    private Document getDocument(InputSource inputSource) {
+    private Document getDocument(final InputSource inputSource) {
         try {
             final SAXBuilder builder = new SAXBuilder();
             builder.setIgnoringElementContentWhitespace(true);
+            //TODO dtd from resources
+//            builder.setEntityResolver(new EntityResolver() {
+//                
+//                @Override
+//                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+//                    InputStream is = XmlReaderSimInput.class.getResourceAsStream("/sim/multiModelTrafficSimulatorInput.dtd");
+//                    InputSource input = new InputSource(is);
+//                    return input;
+//                }
+//            });
             final Document doc = builder.build(inputSource);
             return doc;
         } catch (final JDOMException e) {
@@ -220,11 +221,28 @@ public class XmlReaderSimInput {
             myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
             final DefaultHandler handler = new MyErrorHandler();
             myXMLReader.setErrorHandler(handler);
+//            myXMLReader.setEntityResolver(new EntityResolver() {
+//                
+//                @Override
+//                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+//                    InputStream is = XmlReaderSimInput.class.getResourceAsStream("/sim/multiModelTrafficSimulatorInput.dtd");
+//                    InputSource input = new InputSource(is);
+//                    return input;
+//                }
+//            });
             myXMLReader.parse(inputSource);
         } catch (final SAXException e) {
             isValid = false;
         } catch (final IOException e) {
             isValid = false;
+        }
+        
+        if (!isValid) {
+            logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
+            System.exit(0);
+        } else if (cmdline.isOnlyValidation()) {
+            logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
+            System.exit(0);
         }
     }
 
@@ -235,7 +253,7 @@ public class XmlReaderSimInput {
      *            the filename
      * @return the input
      */
-    private InputSource getInput(String filename) {
+    private InputSource getInputSourceFromFilename(String filename) {
         final File inputFile = new File(filename);
         InputSource inputSource = null;
         try {

@@ -30,6 +30,7 @@ import java.applet.AppletStub;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.net.URL;
 import java.util.Locale;
 
 import javax.swing.JApplet;
@@ -45,7 +46,6 @@ import org.movsim.ui.desktop.GUISwing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class App.
  */
@@ -165,7 +165,8 @@ public class App extends JApplet implements AppletStub {
         Locale.setDefault(Locale.US);
 
         // BasicConfigurator for log4j replaced with PropertyConfigurator.
-        PropertyConfigurator.configure("sim/log4j.properties");
+        URL resource = App.class.getResource("/sim/log4j.properties");
+        PropertyConfigurator.configure(resource);
 
         // Log Levels: DEBUG < INFO < WARN < ERROR
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011) ]");

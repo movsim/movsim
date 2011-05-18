@@ -137,11 +137,10 @@ public class OnrampImpl implements Onramp {
         inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
         
         this.length = rampData.getRampLength();
-        this.xCenter = rampData.getRampStartPosition() + 0.5 * length; //TODO check if needed
+        this.xCenter = rampData.getRampStartPosition() + 0.5 * length;
         
         xUpRamp = rampData.getRampStartPosition();
         xDownRamp = xUpRamp + length;
-
     }
 
     /*
