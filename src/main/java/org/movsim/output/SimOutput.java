@@ -42,7 +42,6 @@ import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SimOutput.
  */
@@ -91,7 +90,7 @@ public class SimOutput {
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
         
-        // SingleRoad quickhack!! //TODO
+        // SingleRoad quickhack! TODO
         final OutputInput outputInput = simInput.getSimulationInput().getSingleRoadInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
@@ -134,7 +133,7 @@ public class SimOutput {
      *            the road section
      */
     public void update(int itime, double time, double timestep, RoadSection roadSection) {
-        // System.out.println("SimOutput.update: time="+time);
+        
         if (floatingCars != null) {
             floatingCars.update(itime, time, timestep, roadSection.vehContainer());
         }
@@ -143,18 +142,18 @@ public class SimOutput {
         }
         
         if (trajectories != null) {
-            trajectories.update(itime, time, timestep);
+            trajectories.update(itime, time);
         }
         
         if (detectors != null) {
             detectors.update(itime, time, timestep, roadSection.vehContainer());
         }
+        
         if (trafficLightRecorder != null) {
             trafficLightRecorder.update(itime, time, roadSection.getTrafficLights());
         }
     }
 
-    // testweise
     /**
      * Close.
      */
