@@ -6,9 +6,9 @@
         <VEHICLE label="IDMM1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
                 <IDM v0="15" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+                 <MEMORY tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
-            <MEMORY tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" />
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">

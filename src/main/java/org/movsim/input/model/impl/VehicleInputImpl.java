@@ -33,6 +33,7 @@ import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl;
@@ -92,19 +93,21 @@ public class VehicleInputImpl implements VehicleInput {
         this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
 
         final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
-        if (longModelElems.size() != 1) {
-            logger.error("specify only one long model ! exit ");
-            System.exit(-1);
-        } else {
-            modelInputData = modelInputDataFactory(longModelElems.get(0));
+        for (final Element longModelElem : longModelElems) {
+            
+            if(longModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleMemory)){
+                final Map<String, String> map = XmlUtils.putAttributesInHash(longModelElem);
+                memoryInputData = new MemoryInputDataImpl(map);
+            }
+            else if(modelInputData==null){
+                modelInputData = modelInputDataFactory(longModelElems.get(0));
+            }
+            else{
+                logger.error("more than one acceleration model is specified for a vehicle!");
+                System.exit(-1);
+            }
         }
-
-        final Element memoryElem = elem.getChild(XmlElementNames.VehicleMemory);
-        if (memoryElem != null) {
-            final Map<String, String> map = XmlUtils.putAttributesInHash(memoryElem);
-            memoryInputData = new MemoryInputDataImpl(map);
-        }
-
+       
         final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(noiseElem);

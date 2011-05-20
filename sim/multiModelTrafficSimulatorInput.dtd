@@ -37,7 +37,7 @@
 
 <!ELEMENT VEHICLES (VEHICLE+) >
 
-<!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGE_MODEL, MEMORY?, NOISE?) >
+<!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGE_MODEL, NOISE?) >
 
 <!ATTLIST VEHICLE
   label           CDATA   #REQUIRED
@@ -47,7 +47,7 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM | ACC | OVM_VDIFF | GIPPS | NEWELL | NSM | KCA)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, NSM?, KCA?, MEMORY?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -119,13 +119,6 @@ pa2     NMTOKEN #REQUIRED
 vp      NMTOKEN #REQUIRED
 >
 
-
-<!-- no lane changing implemented so far (single lane simulator) -->
-<!ELEMENT LANE_CHANGE_MODEL EMPTY>
-<!ATTLIST LANE_CHANGE_MODEL 
->
-
-
 <!-- Memory model, see paper for reference -->
 <!ELEMENT MEMORY EMPTY>
 <!ATTLIST MEMORY
@@ -134,6 +127,13 @@ alpha_T  NMTOKEN #REQUIRED
 alpha_v0 NMTOKEN #REQUIRED
 alpha_a  NMTOKEN "1"
 >
+
+
+<!-- no lane changing implemented so far (single lane simulator) -->
+<!ELEMENT LANE_CHANGE_MODEL EMPTY>
+<!ATTLIST LANE_CHANGE_MODEL 
+>
+
 
 <!-- Fluctuations:  -->
 <!-- Wiener process (tau!=0) or delta-correlated white noise as alternatives -->
