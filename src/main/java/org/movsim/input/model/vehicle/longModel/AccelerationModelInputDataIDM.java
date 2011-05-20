@@ -28,9 +28,9 @@ package org.movsim.input.model.vehicle.longModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ModelInputDataGipps.
+ * The Interface AccelerationModelInputDataIDM.
  */
-public interface ModelInputDataGipps {
+public interface AccelerationModelInputDataIDM {
 
     /**
      * Gets the model name.
@@ -44,34 +44,48 @@ public interface ModelInputDataGipps {
      * 
      * @return the v0
      */
-    double getV0();
+    public abstract double getV0();
 
     /**
-     * Gets the a.
+     * Gets the t.
      * 
-     * @return the a
+     * @return the t
      */
-    double getA();
-
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    double getB();
+    public abstract double getT();
 
     /**
      * Gets the s0.
      * 
      * @return the s0
      */
-    double getS0();
+    public abstract double getS0();
 
     /**
-     * Gets the dt.
+     * Gets the s1.
      * 
-     * @return the dt
+     * @return the s1
      */
-    double getDt();
+    public abstract double getS1();
+
+    /**
+     * Gets the delta.
+     * 
+     * @return the delta
+     */
+    public abstract double getDelta();
+
+    /**
+     * Gets the a.
+     * 
+     * @return the a
+     */
+    public abstract double getA();
+
+    /**
+     * Gets the b.
+     * 
+     * @return the b
+     */
+    public abstract double getB();
 
 }

@@ -28,18 +28,18 @@ package org.movsim.input.model.vehicle.longModel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ModelInputDataKCAImpl.
+ * The Class AccelerationModelInputDataKCAImpl.
  */
-public class ModelInputDataKCAImpl extends ModelInputDataImpl implements ModelInputDataKCA {
+public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataKCA {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ModelInputDataKCAImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataKCAImpl.class);
 
     /** The v0. */
     private final double v0;
@@ -70,7 +70,7 @@ public class ModelInputDataKCAImpl extends ModelInputDataImpl implements ModelIn
      * @param map
      *            the map
      */
-    public ModelInputDataKCAImpl(String modelName, Map<String, String> map) {
+    public AccelerationModelInputDataKCAImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.v0 = Double.parseDouble(map.get("v0"));
         this.k = Double.parseDouble(map.get("k"));

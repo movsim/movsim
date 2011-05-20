@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataNewell;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -51,7 +51,7 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public Newell(String modelName, ModelInputDataNewell parameters) {
+    public Newell(String modelName, AccelerationModelInputDataNewell parameters) {
         super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
         this.dt = 1; // model parameter
     }

@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -77,7 +77,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      * @param length
      *            the length
      */
-    public KCA(String modelName, ModelInputDataKCA parameters, double length) {
+    public KCA(String modelName, AccelerationModelInputDataKCA parameters, double length) {
         super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
 
         this.v0 = parameters.getV0();

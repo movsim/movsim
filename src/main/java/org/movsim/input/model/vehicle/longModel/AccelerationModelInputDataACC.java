@@ -28,9 +28,9 @@ package org.movsim.input.model.vehicle.longModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ModelInputDataNSM.
+ * The Interface AccelerationModelInputDataACC.
  */
-public interface ModelInputDataNSM {
+public interface AccelerationModelInputDataACC {
 
     /**
      * Gets the model name.
@@ -47,17 +47,52 @@ public interface ModelInputDataNSM {
     double getV0();
 
     /**
-     * Gets the slowdown.
+     * Gets the t.
      * 
-     * @return the slowdown
+     * @return the t
      */
-    double getSlowdown();
+    double getT();
 
     /**
-     * Gets the slow to start.
+     * Gets the s0.
      * 
-     * @return the slow to start
+     * @return the s0
      */
-    double getSlowToStart();
+    double getS0();
+
+    /**
+     * Gets the s1.
+     * 
+     * @return the s1
+     */
+    double getS1();
+
+    /**
+     * Gets the delta.
+     * 
+     * @return the delta
+     */
+    double getDelta();
+
+    /**
+     * Gets the a.
+     * 
+     * @return the a
+     */
+    double getA();
+
+    /**
+     * Gets the b.
+     * 
+     * @return the b
+     */
+    double getB();
+
+    /**
+     * Gets the coolness.
+     * 
+     * @return the coolness
+     */
+    double getCoolness();
 
 }

@@ -28,18 +28,18 @@ package org.movsim.input.model.vehicle.longModel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataIDM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ModelInputDataIDMImpl.
+ * The Class AccelerationModelInputDataACCImpl.
  */
-public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelInputDataIDM {
+public class AccelerationModelInputDataACCImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataACC {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ModelInputDataIDMImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataACCImpl.class);
 
     /** The v0. */
     private final double v0;
@@ -61,16 +61,19 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
     
     /** The b. */
     private final double b;
+    
+    /** The coolness. */
+    private final double coolness;
 
     /**
-     * Instantiates a new model input data idm impl.
+     * Instantiates a new model input data acc impl.
      * 
      * @param modelName
      *            the model name
      * @param map
      *            the map
      */
-    public ModelInputDataIDMImpl(String modelName, Map<String, String> map) {
+    public AccelerationModelInputDataACCImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.v0 = Double.parseDouble(map.get("v0"));
         this.T = Double.parseDouble(map.get("T"));
@@ -79,7 +82,11 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
         this.delta = Double.parseDouble(map.get("delta"));
         this.a = Double.parseDouble(map.get("a"));
         this.b = Double.parseDouble(map.get("b"));
-
+        this.coolness = Double.parseDouble(map.get("coolness"));
+        if (coolness < 0 || coolness > 1) {
+            logger.error(" coolness parameter = {} not well defined in input. please choose value within [0,1]. exit");
+            System.exit(-1);
+        }
         if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     modelName);
@@ -91,7 +98,7 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getV0()
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getV0()
      */
     @Override
     public double getV0() {
@@ -102,7 +109,7 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getT()
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getT()
      */
     @Override
     public double getT() {
@@ -113,7 +120,7 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getS0()
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getS0()
      */
     @Override
     public double getS0() {
@@ -124,7 +131,7 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getS1()
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getS1()
      */
     @Override
     public double getS1() {
@@ -135,7 +142,7 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getDelta
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getDelta
      * ()
      */
     @Override
@@ -147,7 +154,7 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getA()
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getA()
      */
     @Override
     public double getA() {
@@ -158,11 +165,23 @@ public class ModelInputDataIDMImpl extends ModelInputDataImpl implements ModelIn
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getB()
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getB()
      */
     @Override
     public double getB() {
         return b;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACC#getCoolness
+     * ()
+     */
+    @Override
+    public double getCoolness() {
+        return coolness;
     }
 
 }

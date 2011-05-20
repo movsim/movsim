@@ -28,50 +28,51 @@ package org.movsim.input.model.vehicle.longModel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataNSM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ModelInputDataNSMImpl.
+ * The Class AccelerationModelInputDataGippsImpl.
  */
-public class ModelInputDataNSMImpl extends ModelInputDataImpl implements ModelInputDataNSM {
+public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataGipps {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ModelInputDataNSMImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataGippsImpl.class);
 
     /** The v0. */
-    private final double v0; // desired velocity (cell units/time unit)
+    private final double v0;
     
-    /** The p slowdown. */
-    private final double pSlowdown; // Troedelwahrscheinlichkeit - slowdown probability
+    /** The a. */
+    private final double a;
     
-    /** The p slow to start. */
-    private final double pSlowToStart; // slow-to-start rule (Barlovic)
-
-    // dt = 1 constant
+    /** The b. */
+    private final double b;
+    
+    /** The s0. */
+    private final double s0;
+    
+    /** The dt. */
+    private final double dt;
 
     /**
-     * Instantiates a new model input data nsm impl.
+     * Instantiates a new model input data gipps impl.
      * 
      * @param modelName
      *            the model name
      * @param map
      *            the map
      */
-    public ModelInputDataNSMImpl(String modelName, Map<String, String> map) {
+    public AccelerationModelInputDataGippsImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.v0 = Double.parseDouble(map.get("v0"));
-        this.pSlowdown = Double.parseDouble(map.get("p_slowdown"));
-        this.pSlowToStart = Double.parseDouble(map.get("p_slow_start"));
-        if (pSlowToStart < pSlowdown) {
-            logger.error("slow to start logic requires pSlowToStart > pSlowdown, but input {} < {} ", pSlowToStart,
-                    pSlowdown);
-            System.exit(-1);
-        }
+        this.a = Double.parseDouble(map.get("a"));
+        this.b = Double.parseDouble(map.get("b"));
+        this.s0 = Double.parseDouble(map.get("s0"));
+        this.dt = Double.parseDouble(map.get("dt"));
 
-        if (v0 < 0 || pSlowdown < 0 || pSlowToStart < 0) {
+        if (v0 < 0 || a < 0 || b < 0 || s0 < 0 || dt < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     modelName);
             System.exit(-1);
@@ -81,8 +82,7 @@ public class ModelInputDataNSMImpl extends ModelInputDataImpl implements ModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getV0()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps#getV0()
      */
     @Override
     public double getV0() {
@@ -92,23 +92,41 @@ public class ModelInputDataNSMImpl extends ModelInputDataImpl implements ModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps#getA()
      */
     @Override
-    public double getSlowdown() {
-        return pSlowdown;
+    public double getA() {
+        return a;
     }
 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP0()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps#getB()
      */
     @Override
-    public double getSlowToStart() {
-        return pSlowToStart;
+    public double getB() {
+        return b;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps#getS0()
+     */
+    @Override
+    public double getS0() {
+        return s0;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps#getDt()
+     */
+    @Override
+    public double getDt() {
+        return dt;
     }
 
 }

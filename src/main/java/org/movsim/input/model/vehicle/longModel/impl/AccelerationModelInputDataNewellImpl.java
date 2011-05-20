@@ -28,18 +28,18 @@ package org.movsim.input.model.vehicle.longModel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataNewell;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ModelInputDataNewellImpl.
+ * The Class AccelerationModelInputDataNewellImpl.
  */
-public class ModelInputDataNewellImpl extends ModelInputDataImpl implements ModelInputDataNewell {
+public class AccelerationModelInputDataNewellImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataNewell {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ModelInputDataNewellImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataNewellImpl.class);
 
     // TODO implementation
 
@@ -51,7 +51,7 @@ public class ModelInputDataNewellImpl extends ModelInputDataImpl implements Mode
      * @param map
      *            the map
      */
-    public ModelInputDataNewellImpl(String modelName, Map<String, String> map) {
+    public AccelerationModelInputDataNewellImpl(String modelName, Map<String, String> map) {
         super(modelName);
 
     }

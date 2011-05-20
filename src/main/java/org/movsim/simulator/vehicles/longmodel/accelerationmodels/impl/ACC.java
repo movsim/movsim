@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataACC;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -72,7 +72,7 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel {
 
     // coolness=0: acc1=IIDM (without CAH), coolness=1 CAH
 
-    // ModelInputDataACC parameters;
+    // AccelerationModelInputDataACC parameters;
 
     /**
      * Instantiates a new aCC.
@@ -82,7 +82,7 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public ACC(String modelName, ModelInputDataACC parameters) {
+    public ACC(String modelName, AccelerationModelInputDataACC parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
         this.v0 = parameters.getV0();
         this.T = parameters.getT();

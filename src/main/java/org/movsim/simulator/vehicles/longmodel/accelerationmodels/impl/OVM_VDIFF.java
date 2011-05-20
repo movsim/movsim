@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -76,7 +76,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      * @param parameter
      *            the parameter
      */
-    public OVM_VDIFF(String modelName, ModelInputDataOVM_VDIFF parameter) {
+    public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameter) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
         this.s0 = parameter.getS0();
         this.v0 = parameter.getV0();

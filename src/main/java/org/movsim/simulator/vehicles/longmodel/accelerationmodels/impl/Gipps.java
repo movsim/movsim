@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataGipps;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -63,7 +63,7 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public Gipps(String modelName, ModelInputDataGipps parameters) {
+    public Gipps(String modelName, AccelerationModelInputDataGipps parameters) {
         super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
         this.T = parameters.getDt(); // Gipps: dt=T=Tr=tau_relax!
         this.v0 = parameters.getV0();

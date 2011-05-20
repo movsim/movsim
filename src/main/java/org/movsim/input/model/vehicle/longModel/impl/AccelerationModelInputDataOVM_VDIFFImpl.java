@@ -28,18 +28,18 @@ package org.movsim.input.model.vehicle.longModel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ModelInputDataOVM_VDIFFImpl.
+ * The Class AccelerationModelInputDataOVM_VDIFFImpl.
  */
-public class ModelInputDataOVM_VDIFFImpl extends ModelInputDataImpl implements ModelInputDataOVM_VDIFF {
+public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataOVM_VDIFF {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ModelInputDataOVM_VDIFFImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataOVM_VDIFFImpl.class);
 
     /** The s0. */
     private final double s0;
@@ -70,7 +70,7 @@ public class ModelInputDataOVM_VDIFFImpl extends ModelInputDataImpl implements M
      * @param map
      *            the map
      */
-    public ModelInputDataOVM_VDIFFImpl(String modelName, Map<String, String> map) {
+    public AccelerationModelInputDataOVM_VDIFFImpl(String modelName, Map<String, String> map) {
         super(modelName);
         this.s0 = Double.parseDouble(map.get("s0"));
         this.v0 = Double.parseDouble(map.get("v0"));

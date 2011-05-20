@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataNSM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -62,7 +62,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public NSM(String modelName, ModelInputDataNSM parameters) {
+    public NSM(String modelName, AccelerationModelInputDataNSM parameters) {
         super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
         this.v0 = parameters.getV0();
         this.pSlowdown = parameters.getSlowdown();

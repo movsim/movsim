@@ -28,9 +28,9 @@ package org.movsim.input.model.vehicle.longModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ModelInputDataNewell.
+ * The Interface AccelerationModelInputDataOVM_VDIFF.
  */
-public interface ModelInputDataNewell {
+public interface AccelerationModelInputDataOVM_VDIFF {
 
     /**
      * Gets the model name.
@@ -38,5 +38,54 @@ public interface ModelInputDataNewell {
      * @return the model name
      */
     String getModelName();
+
+    /**
+     * Gets the s0.
+     * 
+     * @return the s0
+     */
+    double getS0();
+
+    /**
+     * Gets the v0.
+     * 
+     * @return the v0
+     */
+    double getV0();
+
+    /**
+     * Gets the tau.
+     * 
+     * @return the tau
+     */
+    double getTau();
+
+    /**
+     * Gets the len interaction.
+     * 
+     * @return the len interaction
+     */
+    double getLenInteraction();
+
+    /**
+     * Gets the beta.
+     * 
+     * @return the beta
+     */
+    double getBeta();
+
+    /**
+     * Gets the lambda.
+     * 
+     * @return the lambda
+     */
+    double getLambda();
+
+    /**
+     * Gets the variant.
+     * 
+     * @return the variant
+     */
+    int getVariant();
 
 }

@@ -37,14 +37,14 @@ import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl;
 import org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl;
-import org.movsim.input.model.vehicle.longModel.ModelInputData;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACCImpl;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataGippsImpl;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDMImpl;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCAImpl;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSMImpl;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNewellImpl;
-import org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataIDMImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKCAImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public class VehicleInputImpl implements VehicleInput {
     private final double reactionTime;
 
     /** The model input data. */
-    private ModelInputData modelInputData;
+    private AccelerationModelInputData modelInputData;
 
     /** The memory input data. */
     private MemoryInputData memoryInputData = null;
@@ -119,23 +119,23 @@ public class VehicleInputImpl implements VehicleInput {
      *            the elem
      * @return the model input data
      */
-    private ModelInputData modelInputDataFactory(Element elem) {
+    private AccelerationModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelIDM))
-            return new ModelInputDataIDMImpl(XmlElementNames.VehicleLongModelIDM, map);
+            return new AccelerationModelInputDataIDMImpl(XmlElementNames.VehicleLongModelIDM, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelACC))
-            return new ModelInputDataACCImpl(XmlElementNames.VehicleLongModelACC, map);
+            return new AccelerationModelInputDataACCImpl(XmlElementNames.VehicleLongModelACC, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelOVM_VDIFF))
-            return new ModelInputDataOVM_VDIFFImpl(XmlElementNames.VehicleLongModelOVM_VDIFF, map);
+            return new AccelerationModelInputDataOVM_VDIFFImpl(XmlElementNames.VehicleLongModelOVM_VDIFF, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelGIPPS))
-            return new ModelInputDataGippsImpl(XmlElementNames.VehicleLongModelGIPPS, map);
+            return new AccelerationModelInputDataGippsImpl(XmlElementNames.VehicleLongModelGIPPS, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNEWELL))
-            return new ModelInputDataNewellImpl(XmlElementNames.VehicleLongModelNEWELL, map);
+            return new AccelerationModelInputDataNewellImpl(XmlElementNames.VehicleLongModelNEWELL, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNSM))
-            return new ModelInputDataNSMImpl(XmlElementNames.VehicleLongModelNSM, map);
+            return new AccelerationModelInputDataNSMImpl(XmlElementNames.VehicleLongModelNSM, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKCA))
-            return new ModelInputDataKCAImpl(XmlElementNames.VehicleLongModelKCA, map);
+            return new AccelerationModelInputDataKCAImpl(XmlElementNames.VehicleLongModelKCA, map);
         else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);
@@ -179,7 +179,7 @@ public class VehicleInputImpl implements VehicleInput {
      * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
      */
     @Override
-    public ModelInputData getModelInputData() {
+    public AccelerationModelInputData getModelInputData() {
         return modelInputData;
     }
 

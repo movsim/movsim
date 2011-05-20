@@ -144,8 +144,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         
         // TODO set isFromOnramp
 
-        // effekt wirkungslos, wenn Modell nicht ueber entsprechende Modell
-        // parameter verfuegt.
+        // effekt wirkungslos, wenn Modell nicht ueber entsprechenden Modelparameter verfuegt.
         if (vehInput.isWithMemory()) {
             memory = new MemoryImpl(vehInput.getMemoryInputData());
         }

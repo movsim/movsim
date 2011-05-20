@@ -28,9 +28,9 @@ package org.movsim.input.model.vehicle.longModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ModelInputDataIDM.
+ * The Interface AccelerationModelInputDataKCA.
  */
-public interface ModelInputDataIDM {
+public interface AccelerationModelInputDataKCA {
 
     /**
      * Gets the model name.
@@ -44,48 +44,48 @@ public interface ModelInputDataIDM {
      * 
      * @return the v0
      */
-    public abstract double getV0();
+    double getV0();
 
     /**
-     * Gets the t.
+     * Gets the k.
      * 
-     * @return the t
+     * @return the k
      */
-    public abstract double getT();
+    double getK();
 
     /**
-     * Gets the s0.
+     * Gets the pb0.
      * 
-     * @return the s0
+     * @return the pb0
      */
-    public abstract double getS0();
+    double getPb0();
 
     /**
-     * Gets the s1.
+     * Gets the pb1.
      * 
-     * @return the s1
+     * @return the pb1
      */
-    public abstract double getS1();
+    double getPb1();
 
     /**
-     * Gets the delta.
+     * Gets the pa1.
      * 
-     * @return the delta
+     * @return the pa1
      */
-    public abstract double getDelta();
+    double getPa1();
 
     /**
-     * Gets the a.
+     * Gets the pa2.
      * 
-     * @return the a
+     * @return the pa2
      */
-    public abstract double getA();
+    double getPa2();
 
     /**
-     * Gets the b.
+     * Gets the vp.
      * 
-     * @return the b
+     * @return the vp
      */
-    public abstract double getB();
+    double getVp();
 
 }

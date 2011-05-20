@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.ModelInputDataIDM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -85,7 +85,7 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      * @param parameters
      *            the parameters: v0, T, s0, s1, a, b, delta
      */
-    public IDM(String modelName, ModelInputDataIDM parameters) {
+    public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
         this.v0 = parameters.getV0();
         this.T = parameters.getT();

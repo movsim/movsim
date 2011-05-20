@@ -34,14 +34,14 @@ import java.util.Map;
 import org.movsim.input.InputData;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
-import org.movsim.input.model.vehicle.longModel.ModelInputData;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataACC;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataGipps;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataIDM;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataKCA;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataNSM;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataNewell;
-import org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -249,24 +249,24 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      *            the veh length
      * @return the acceleration model
      */
-    private AccelerationModel longModelFactory(ModelInputData modelInputData, double vehLength) {
+    private AccelerationModel longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
         final String modelName = modelInputData.getModelName();
         AccelerationModel longModel = null;
         logger.info("modelName = {}", modelName);
         if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-            longModel = new IDM(modelName, (ModelInputDataIDM) modelInputData);
+            longModel = new IDM(modelName, (AccelerationModelInputDataIDM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
-            longModel = new ACC(modelName, (ModelInputDataACC) modelInputData);
+            longModel = new ACC(modelName, (AccelerationModelInputDataACC) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
-            longModel = new OVM_VDIFF(modelName, (ModelInputDataOVM_VDIFF) modelInputData);
+            longModel = new OVM_VDIFF(modelName, (AccelerationModelInputDataOVM_VDIFF) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
-            longModel = new Gipps(modelName, (ModelInputDataGipps) modelInputData);
+            longModel = new Gipps(modelName, (AccelerationModelInputDataGipps) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NEWELL))
-            return new Newell(modelName, (ModelInputDataNewell) modelInputData);
+            return new Newell(modelName, (AccelerationModelInputDataNewell) modelInputData);
         else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
-            longModel = new NSM(modelName, (ModelInputDataNSM) modelInputData);
+            longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-            longModel = new KCA(modelName, (ModelInputDataKCA) modelInputData, vehLength); // needs
+            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength); // needs
                                                                                            // vehicle
                                                                                            // length
         } else {

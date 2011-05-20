@@ -28,7 +28,7 @@ package org.movsim.input.model;
 
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
-import org.movsim.input.model.vehicle.longModel.ModelInputData;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -69,7 +69,7 @@ public interface VehicleInput {
      * 
      * @return the model input data
      */
-    ModelInputData getModelInputData();
+    AccelerationModelInputData getModelInputData();
 
     /**
      * Checks if is with memory.

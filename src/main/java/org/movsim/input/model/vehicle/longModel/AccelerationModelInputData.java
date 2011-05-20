@@ -24,38 +24,18 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.vehicle.longModel.impl;
-
-import org.movsim.input.model.vehicle.longModel.ModelInputData;
+package org.movsim.input.model.vehicle.longModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ModelInputDataImpl.
+ * The Interface AccelerationModelInputData.
  */
-public abstract class ModelInputDataImpl implements ModelInputData {
-
-    /** The model name. */
-    private final String modelName;
+public interface AccelerationModelInputData {
 
     /**
-     * Instantiates a new model input data impl.
+     * Gets the model name.
      * 
-     * @param modelName
-     *            the model name
+     * @return the model name
      */
-    public ModelInputDataImpl(String modelName) {
-        this.modelName = modelName;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.ModelInputData#getModelName()
-     */
-    @Override
-    public String getModelName() {
-        return modelName;
-    }
-
+    String getModelName();
 }

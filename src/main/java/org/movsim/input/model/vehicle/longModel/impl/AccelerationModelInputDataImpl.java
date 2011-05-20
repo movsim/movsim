@@ -24,68 +24,38 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.vehicle.longModel;
+package org.movsim.input.model.vehicle.longModel.impl;
+
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface ModelInputDataKCA.
+ * The Class AccelerationModelInputDataImpl.
  */
-public interface ModelInputDataKCA {
+public abstract class AccelerationModelInputDataImpl implements AccelerationModelInputData {
+
+    /** The model name. */
+    private final String modelName;
 
     /**
-     * Gets the model name.
+     * Instantiates a new model input data impl.
      * 
-     * @return the model name
+     * @param modelName
+     *            the model name
      */
-    String getModelName();
+    public AccelerationModelInputDataImpl(String modelName) {
+        this.modelName = modelName;
+    }
 
-    /**
-     * Gets the v0.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the v0
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputData#getModelName()
      */
-    double getV0();
-
-    /**
-     * Gets the k.
-     * 
-     * @return the k
-     */
-    double getK();
-
-    /**
-     * Gets the pb0.
-     * 
-     * @return the pb0
-     */
-    double getPb0();
-
-    /**
-     * Gets the pb1.
-     * 
-     * @return the pb1
-     */
-    double getPb1();
-
-    /**
-     * Gets the pa1.
-     * 
-     * @return the pa1
-     */
-    double getPa1();
-
-    /**
-     * Gets the pa2.
-     * 
-     * @return the pa2
-     */
-    double getPa2();
-
-    /**
-     * Gets the vp.
-     * 
-     * @return the vp
-     */
-    double getVp();
+    @Override
+    public String getModelName() {
+        return modelName;
+    }
 
 }
