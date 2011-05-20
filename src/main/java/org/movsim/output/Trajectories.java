@@ -26,7 +26,6 @@
  */
 package org.movsim.output;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface Trajectories.
  */
@@ -37,8 +36,7 @@ public interface Trajectories {
 	 *
 	 * @param iTime the i time
 	 * @param time the time
-	 * @param timestep the timestep
 	 */
-	void update(int iTime, double time, double timestep);
+	void update(int iTime, double time);
 	
 }

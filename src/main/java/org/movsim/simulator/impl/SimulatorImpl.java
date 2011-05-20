@@ -150,8 +150,7 @@ public class SimulatorImpl implements Simulator {
     @Override
     public void update() {
         if (itime % 100 == 0) {
-            // logger.info("Simulator.update: itime={}", itime);
-            logger.info("Simulator.update: time={}, dt={}", (time / 60.), timestep);
+            logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
         }
         roadSection.update(itime, time);
         simOutput.update(itime, time, timestep, roadSection);

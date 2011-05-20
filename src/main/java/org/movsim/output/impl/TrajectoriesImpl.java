@@ -52,15 +52,12 @@ public class TrajectoriesImpl implements Trajectories {
         "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = 
     	"%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
-//	"%8.2f, %18d, %6d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f, %s%n";
 
     /** The Constant logger. */
 	final static Logger logger = LoggerFactory.getLogger(TrajectoriesImpl.class);
 	
-    //defaults for optional user input:
-    
     /** The dt out. */
-    private double dtOut = 1.0; // write output all dtOut seconds
+    private double dtOut; 
     
     /** The t_start_interval. */
     private double t_start_interval;
@@ -76,15 +73,9 @@ public class TrajectoriesImpl implements Trajectories {
 
     /** The file handles. */
     private HashMap<Long, PrintWriter> fileHandles;
-    
+   
     /** The time. */
     private double time = 0;
-    
-    /** The path. */
-    private String path;
-
-    /** The ending file. */
-    private String endingFile = ".traj_jsim.csv";
 
     /** The last update time. */
     private double lastUpdateTime = 0;
@@ -95,6 +86,9 @@ public class TrajectoriesImpl implements Trajectories {
     /** The project name. */
     private String projectName;
 
+    /** The path. */
+    private String path;
+    
     /**
      * Instantiates a new trajectories impl.
      *
@@ -108,10 +102,10 @@ public class TrajectoriesImpl implements Trajectories {
         this.projectName = projectName;
         
         dtOut = trajectoriesInput.getDt();
-        t_start_interval = trajectoriesInput.getStartPosition();
-        t_end_interval = trajectoriesInput.getEndPosition();
-        x_start_interval = trajectoriesInput.getStartTime();
-        x_end_interval = trajectoriesInput.getEndTime();
+        t_start_interval = trajectoriesInput.getStartTime();
+        t_end_interval = trajectoriesInput.getEndTime();
+        x_start_interval = trajectoriesInput.getStartPosition();
+        x_end_interval = trajectoriesInput.getEndPosition();
         
         this.roadSection = roadSection;
         
@@ -158,13 +152,10 @@ public class TrajectoriesImpl implements Trajectories {
     }
 
     
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // update
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     /* (non-Javadoc)
-     * @see org.movsim.output.Trajectories#update(int, double, double)
+     * @see org.movsim.output.Trajectories#update(int, double)
      */
-    public void update(int iTime, double time, double timestep) {
+    public void update(int iTime, double time) {
         
         if( fileHandles.isEmpty() ){
             // cannot initialize earlier because onramps and offramps are constructed after constructing mainroad
@@ -176,13 +167,13 @@ public class TrajectoriesImpl implements Trajectories {
         if(time >= t_start_interval &&  time<=t_end_interval){
         	
             if(iTime%1000==0){
-            	 logger.info("time = {}, timestep= {}", time, timestep);
+            	 logger.info("time = {}, timestep= {}", time);
             }
             
             if ( (time - lastUpdateTime + Constants.SMALL_VALUE) >= dtOut) {
+                
                 lastUpdateTime = time;
             
-                // mainroad 
                 writeTrajectories(fileHandles.get(roadSection.id()), roadSection.vehContainer());
                 /*
                 // onramps
@@ -211,7 +202,7 @@ public class TrajectoriesImpl implements Trajectories {
             if( (me.position() >= x_start_interval && me.position() <= x_end_interval) ){
             	writeCarData(fstr, i, me);
             } 
-        } //of for
+        }
     }
     
 

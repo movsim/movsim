@@ -320,11 +320,12 @@ number  NMTOKEN #REQUIRED
 <!ELEMENT TRAJECTORIES EMPTY>
 <!ATTLIST TRAJECTORIES
   dt           NMTOKEN "1"
-  t_start_min  NMTOKEN "0"
-  t_end_min    NMTOKEN "1e10"
-  x_start_km   NMTOKEN "0"
-  x_end_km     NMTOKEN "1e10"
+  start_time   NMTOKEN "0"
+  end_time     NMTOKEN "1e10"
+  start_x      NMTOKEN "0"
+  end_x        NMTOKEN "1e10"
 >
+
 
 
 <!-- detectors can be placed with absolute and/or relative positions -->

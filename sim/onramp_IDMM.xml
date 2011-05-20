@@ -43,8 +43,7 @@
             </TRAFFIC_LIGHTS>
             <OUTPUT>
                 <SPATIOTEMPORAL dx="100" dt="40" />
-                <TRAJECTORIES dt="1" t_start_min="0" t_end_min="7"
-                    x_start_km="2" x_end_km="5" />
+                <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
                 <DETECTORS dt="60">
                     <CROSS_SECTION x="1000" />
                     <CROSS_SECTION x="6000" />
