@@ -127,7 +127,7 @@ public class OnrampImpl implements Onramp {
 
         if (rampData.withLogging()) {
             mergeCount = 0;
-            final int roadCount = 1;// assuming only one road in the scenario for the moment
+            final int roadCount = 1; // assuming only one road in the scenario for the moment
             final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
@@ -154,11 +154,6 @@ public class OnrampImpl implements Onramp {
         final double qBC = inflowTimeSeries.getFlow(time);
         nWait += qBC * dt;
 
-        // final double vBC = getSpeed(time);
-
-        // logger.debug("ramp update. nWait = {}, queue.size() = {}", nWait,
-        // vehicleQueue.size());
-        // logger.debug("ramp update. qBC = {}", qBC);
         if (nWait >= 1) {
             // add vehicle that wants to enter to queue
             vehicleQueue.add(vehGenerator.createVehicle());
@@ -183,38 +178,6 @@ public class OnrampImpl implements Onramp {
 
     }
 
-    // private double[] determineBoundaries(VehicleContainer mainVehContainer){
-    // final double xUpRamp = xCenter-0.5*length;
-    // final double xDownRamp = xCenter+0.5*length;
-    //
-    // double xUp; // = xCenter-0.5*length;
-    // double xDown;// = xCenter+0.5*length;
-    // double vLead;// = 200; // very large value //TODO
-    //
-    // List<Vehicle> mainVehicles = mainVehContainer.vehicles();
-    //
-    // if(mainVehicles.size()==0){
-    // // empty road
-    // xUp = xCenter-0.5*length;
-    // xDown = xCenter+0.5*length;
-    // vLead = 200;
-    // }
-    // else if(mainVehicles.get(0).position() < xUpRamp ){
-    // // at least one vehicle on mainroad
-    // // first vehicle on mainroad upstream of ramp section
-    // xUp = xCenter-0.5*length;
-    // xDown = xCenter+0.5*length;
-    // vLead = 200;
-    // }
-    // int index=0;
-    //
-    // do{
-    //
-    // }while(mainVehicles.get(index).position()<)
-    //
-    //
-    // return (new double[]{xUp, xDown, vLead});
-    // }
 
     /**
      * Adds the vehicle from ramp.
@@ -245,8 +208,7 @@ public class OnrampImpl implements Onramp {
      * @return the double
      */
     private double speedToEnter(double speedLeader) {
-        final double vcrit = 10; // / unterhalb vcrit reducefactor allmahelich
-                                 // nicht mehr aktiv
+        final double vcrit = 10; 
         final double reducefact = 1. - (1 - RAMP_VEL_REDUCEFACTOR) * Math.min(1., speedLeader / vcrit);
         return reducefact * speedLeader;
     }
@@ -308,26 +270,16 @@ public class OnrampImpl implements Onramp {
         logger.debug("");
         final double xUp = xUpRamp;
         final double xDown = xUpRamp +  length;
-        ;// = xCenter+0.5*length;
-        // double vLead = Constants.MAX_VEHICLE_SPEED;;// = 200; // very large
-        // value //TODO
 
         final List<Vehicle> mainVehicles = mainVehContainer.getVehicles();
-        // final int size = mainVehicles.size();
 
-        // ArrayList<TestMergeData> testMergeData = new
-        // ArrayList<TestMergeData>();
-
-        final int laneEnter = Constants.MOST_RIGHT_LANE; // single-lane
-                                                         // simulation
+        final int laneEnter = Constants.MOST_RIGHT_LANE; // single-lane simulation
 
         final int mainVehSize = mainVehicles.size();
         if (mainVehSize == 0) {
-            // empty road
             logger.debug("empty road: merge anyway. mainVeh.size() = {}", mainVehSize);
             final double xEnter = xCenter;
-            final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no
-                                                                                       // leader
+            final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no leader
             addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
             return true;
         } else if (mainVehContainer.getMostDownstream().position() <= xCenter) {
@@ -381,7 +333,6 @@ public class OnrampImpl implements Onramp {
             double xEnter = -1;
             double vEnter = -1;
 
-            // Vehicle frontVeh = mainVehicles.get(indexDown);
             double minGap = -1; // init
 
             // compare
@@ -413,7 +364,6 @@ public class OnrampImpl implements Onramp {
                 logger.debug("test gap for most upstream  without back veh: netGap = {}, xEnterTest = {}", netGap,
                         xEnterTest);
                 if (netGap > MINSPACE_MERGE_M && netGap > minGap) {
-                    // new !!
                     minGap = netGap;
                     xEnter = xEnterTest;
                     vEnter = speedToEnter(mainVehicles.get(indexUp).speed());
@@ -427,206 +377,6 @@ public class OnrampImpl implements Onramp {
             }
         }
         return false;
-
-    } // end tryMerge
-
-    // final double gap = actualVeh.netDistance(previousVeh); // single-lane
-    // simulation!
-    // if(gap < minGap){
-    // xEnter = ;
-    // vEnter = 0.5*(actualVeh.speed() + previousVeh.speed());
-    // }
-    // }
-    // previousVeh = actualVeh;
-    // }
-    //
-    //
-    // Vehicle previousVeh = mainVehicles.get(0); // is not empty!
-    //
-    // double xEnter;
-    // double vEnter;
-    // for(int i=1, N=mainVehicles.size(); i<N; i++){
-    // final Vehicle actualVeh = mainVehicles.get(i);
-    // if(actualVeh.position() >= xUp){
-    // final double gap = actualVeh.netDistance(previousVeh); // single-lane
-    // simulation!
-    // if(gap < minGap){
-    // xEnter = ;
-    // vEnter = 0.5*(actualVeh.speed() + previousVeh.speed());
-    // }
-    // }
-    // previousVeh = actualVeh;
-    // }
-
-    //
-    // else if(mainVehicles.get(0).position() < xUpRamp ){
-    // // at least one vehicle on mainroad
-    // // first vehicle on mainroad upstream of ramp section
-    // xUp = xCenter-0.5*length; // TODO verschieben mittig zu upVeh
-    // xDown = xCenter+0.5*length;
-    // vLead = 200; //TODO
-    // }
-    // else if(mainVehicles.get(size-1).position() > xDownRamp ){
-    // // at least one vehicle on mainroad
-    // // most upstream vehicle on mainroad already downstream of ramp section
-    // xUp = xCenter-0.5*length;
-    // xDown = xCenter+0.5*length; // TODO verschieben mittig zu upVe
-    // vLead = 200; //TODO
-    // }
-    // else{
-    // // determine largest gap
-    // // TODO
-    // // determine first vehicle
-    // int index=0;
-    //
-    // while( (mainVehicles.get(index).position() > xDownRamp) && (index<size)
-    // ){
-    // index++;
-    // }
-    // int lastIndex=firstIndex;
-    // while( (mainVehicles.get(lastIndex).position() > xUp) && (lastIndex<size)
-    // ){
-    // lastIndex++;
-    // }
-    // teste gaps
-    // Vehicle vehicle = mainVehicles.get(index);
-    // Vehicle vehFront = mainVehContainer.getLeader(vehicle);
-    // double gap = vehicle.netDistance(vehFront);
-    // do{
-    // xDown = Math.min(xDownRamp, gap);
-    // xUp = vehicle.posFrontBumper();
-    // index++;
-    //
-    // }while(index<size && mainVehicles.get(index).position() > xUp);
-    // // teste gaps
-    // }
-    // TODO check boundaries
-
-    // Determine maximum distance within the ramp section
-    // !! merging behaviour determined by leadVehLength (hack!),
-    // MINSPACE_MERGE_M => constants.h
-    // double maxdist=0;
-    // double leadVehLength=6; //!!! ??????????????????????????????????
-    //
-    // if(noVehDown){s[fi]= xmax-x[fi];} // otherwise no s[fi=imin] defined
-    //
-    // for (int i=fi; i<=min(li+1, imax); i++){
-    // if( min(s[i], 2*(xDown-x[i]))>maxdist){ // min() relev. for first vehicle
-    // maxdist = min(s[i], 2*(xDown-x[i]));
-    // changePos=x[i]+0.5*(maxdist-lvehMerge)+leadVehLength;
-    // leadVehIndex=i-1; // can be -1 //!!!
-    // }
-    // }
-    //
-    // if(noVehUp){
-    // if(2*(x[li]-leadVehLength-xUp) > maxdist){
-    // maxdist=2*(x[li]-leadVehLength-xUp);
-    // changePos=xUp;
-    // leadVehIndex=imax;
-    // }
-    // }
-    //
-    // if(noVehParallelRamp){
-    // // i.e., li<fi
-    // maxdist=length;
-    // changePos=xCenter;
-    // leadVehIndex=fi-1;
-    // }
-    //
-    //
-    // mergeOK = ( maxdist > (lvehMerge+2.0*MINSPACE_MERGE_M) );
-
-    //
-    // if(!mergeOK){
-    // cout <<"Ramp.tryMerge: merge not possible!"
-    // <<" queueLength_veh="<<queueLength_veh
-    // <<" maxdist= "<<maxdist
-    // <<endl;
-    // }
-    // if(check){
-    // cout <<" noVehUp="<<noVehUp
-    // <<" noVehDown="<<noVehDown
-    // <<" noVehParallel="<<noVehParallelRamp
-    // <<" mergeOK="<<mergeOK
-    // <<endl;
-    // }
-    // if(check){
-    // cout <<"Ramp.tryMerge: end: "<<endl
-    // <<" mergeOK="<<mergeOK
-    // <<" maxdist="<<maxdist
-    // <<" noVehUp="<<noVehUp
-    // <<" noVehDown="<<noVehDown
-    // <<" noVehParallel="<<noVehParallelRamp
-    // <<" changePos="<<changePos
-    // <<" leadVehIndex="<<leadVehIndex
-    // <<endl;
-    // }
-
-    // create new vehicle
-
-    // martin mai07: geaendert; !!! RAMP_VEL_REDUCEFACTOR=0.5 (VDT); 0.5 .. 0.7
-    // (sonst)
-    // double vlead=veh[leadVehIndex].getVel();
-    // double vcrit=10; /// unterhalb vcrit reducefactor allmahelich nicht mehr
-    // aktiv
-    // double reducefact=1. - (1-RAMP_VEL_REDUCEFACTOR)* min(1.,vlead/vcrit);
-
-    //
-    //
-    // // TODO
-    // if(mergeOK){
-    // final Vehicle vehToEnter = rmpVehContainer.getMostDownstream();
-    // final double xInit = 0.5*(xBounds[1]-xBounds[0]);
-    // final double vInit = 0; //TODO
-    // // martin mai07: geaendert; !!! RAMP_VEL_REDUCEFACTOR=0.5 (VDT); 0.5 ..
-    // 0.7 (sonst)
-    // double vlead=veh[leadVehIndex].getVel();
-    // double vcrit=10; /// unterhalb vcrit reducefactor allmahelich nicht mehr
-    // aktiv
-    // double reducefact=1. - (1-RAMP_VEL_REDUCEFACTOR)* min(1.,vlead/vcrit);
-    // v = reducefact*veh[leadVehIndex].getVel()
-    // mainVehContainer.add(vehToEnter, xInit, vInit);
-    // rmpVehContainer.removeVehicleMostDownstream();
-    // }
-    //
-    // if(DROP_NONENTERING_RAMP_VEHICLES){
-    // rmpVehContainer.removeVehicleMostDownstream();
-    // }
-    //
-    //
-
-    // class TestMergeData{
-    // private double gap;
-    // private double centerPos;
-    // private double speedVehDown;
-    // private double speedVehUp;
-    //
-    // public TestMergeData(double gap, double xCenter, double vVehDown, double
-    // vVehUp){
-    // this.gap = gap;
-    // this.centerPos = xCenter;
-    // this.speedVehDown = vVehDown;
-    // this.speedVehUp = vVehUp;
-    // }
-    //
-    // public double getGap() {
-    // return gap;
-    // }
-    //
-    // public double getCenterPos() {
-    // return centerPos;
-    // }
-    //
-    // public double getSpeedVehDown() {
-    // return speedVehDown;
-    // }
-    //
-    // public double getSpeedVehUp() {
-    // return speedVehUp;
-    // }
-    //
-    // } // of inner class
-    //
-    //
+    } 
 
 }
