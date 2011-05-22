@@ -63,7 +63,7 @@ velocityLabel = "Velocity (km/h)"
 accelerationLabel = "Acceleration (m/s^2)"
 car(n) = sprintf("Car %d",n)
 
-# Deutsch (not really needed)
+# Deutsch
 if (lang eq "de") fundTitle =  "Fundamentaldiagram Q({/Symbol r})";\
   veqTitle = "Geschwindigkeit V_{eq} (km/h)";\
   vqTitle = "Gleichgewichts-Geschwindigkeit V_{eq}({/Symbol r})";\
