@@ -26,7 +26,7 @@
                 <INFLOW t="10800" q_per_hour="1000" v="30" />
             </TRAFFIC_SOURCE>
             <TRAFFIC_SINK />
-            <!-- improve veh performance at inflow -->
+            <!-- improve vehicle performance at inflow -->
             <FLOW_CONSERVING_INHOMOGENEITIES>
                 <INHOMOGENEITY x="0" alpha_T="0.8" />
                 <INHOMOGENEITY x="2000" alpha_T="1" />
