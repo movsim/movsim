@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class App extends JApplet implements AppletStub {
 
-    // Define a static logger variable
+    // Define a static logger variable 
     // Logging with slf4j, a facade for log4j
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(App.class);
