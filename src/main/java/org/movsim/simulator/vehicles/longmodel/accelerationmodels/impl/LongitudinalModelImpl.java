@@ -41,7 +41,6 @@ public abstract class LongitudinalModelImpl {
     private final int modelCategory;
 
     /**
-     * Instantiates a new longitudinal model impl.
      * 
      * @param modelName
      *            the model name
