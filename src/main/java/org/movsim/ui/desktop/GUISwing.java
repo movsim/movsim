@@ -68,13 +68,13 @@ public class GUISwing extends JFrame implements WindowListener {
 
         final MenuSwing menuMain = new MenuSwing();
 
-        final ControlPanel controlPanel = new ControlPanel(simulator);
+//        final ControlPanel controlPanel = new ControlPanel();
 
         final RoadPanel roadPanel = new RoadPanel();
 
         final StatusPanel statusPanel = new StatusPanel();
 
-        add(controlPanel, BorderLayout.NORTH);
+//        add(controlPanel, BorderLayout.NORTH);
         add(roadPanel, BorderLayout.CENTER);
         add(statusPanel, BorderLayout.SOUTH);
 

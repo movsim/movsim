@@ -26,11 +26,16 @@
  */
 package org.movsim.output.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.output.Macro3D;
+import org.movsim.output.Macro3DObserver;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -80,6 +85,9 @@ public class Macro3DImpl implements Macro3D {
 
     /** The write output. */
     private final boolean writeOutput;
+    private List<double[]> listMacroOutputData = new ArrayList<double[]>();
+    
+    private List<Macro3DObserver> listMacro3DObserver = new ArrayList<Macro3DObserver>();
 
     /**
      * Instantiates a new macro3 d impl.
@@ -110,7 +118,8 @@ public class Macro3DImpl implements Macro3D {
             writer.printf(outputHeading);
             writer.flush();
         }
-
+        
+        
     }
 
     /**
@@ -125,7 +134,8 @@ public class Macro3DImpl implements Macro3D {
     }
 
     /*
-     * (non-Javadoc)
+     * (non-Jaralphgerm
+     * vadoc)
      * 
      * @see org.movsim.simulator.output.Macro3D#update(int, double,
      * org.movsim.simulator.roadSection.RoadSection)
@@ -139,8 +149,34 @@ public class Macro3DImpl implements Macro3D {
             calcData(time, roadSection.vehContainer());
             if (writeOutput) {
                 writeOutput(time);
+            } else {
+                setState(time);
             }
         }
+    }
+
+    /**
+     * @param time
+     */
+    private void setState(double time) {
+       
+        // TODO Auto-generated method stub
+        for (int j = 0; j < rhoInvKm.length; j++) {
+            final double x = j * dxOut;
+            // 0.0 is placeholder for acceleration
+//            writer.printf(outputFormat, time, x, v[j], 0.0, rhoInvKm[j], qInvH[j]);
+            double[] macroOutput = {time,x,v[j]};
+            System.out.println("time,x,v: "+macroOutput[0]+", "+macroOutput[1]+", "+macroOutput[2]);
+            listMacroOutputData.add(macroOutput);
+            notifyMacro3DObservers();
+        } 
+    }
+    
+    public double[] getState() {
+        if (!listMacroOutputData.isEmpty()) {
+            return listMacroOutputData.get(listMacroOutputData.size()-1);
+        }
+        return null;
     }
 
     /**
@@ -193,6 +229,38 @@ public class Macro3DImpl implements Macro3D {
         }
         writer.printf("%n"); // block ends
         writer.flush();
+    }
+
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#registerObserver(org.movsim.output.
+     * Macro3DObserver)
+     */
+    @Override
+    public void registerObserver(Macro3DObserver o) {
+        listMacro3DObserver.add(o);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#removeObserver(org.movsim.output.
+     * Macro3DObserver)
+     */
+    @Override
+    public void removeObserver(Macro3DObserver o) {
+        int i = listMacro3DObserver.indexOf(o);
+        if (i >= 0) {
+            listMacro3DObserver.remove(i);
+        }
+    }
+
+    public void notifyMacro3DObservers() {
+        for (Macro3DObserver o : listMacro3DObserver) {
+            o.updateMacro3D();
+        }
     }
 
 }

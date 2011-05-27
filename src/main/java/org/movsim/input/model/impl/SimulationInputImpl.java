@@ -48,7 +48,7 @@ public class SimulationInputImpl implements SimulationInput {
     private final double timestep;
 
     /** The duration of the simulation. */
-    private final double maxSimTime;
+    private double maxSimTime;
 
     /** The with fixed seed. */
     private boolean withFixedSeed;
@@ -99,9 +99,14 @@ public class SimulationInputImpl implements SimulationInput {
      * @see org.movsim.input.model.impl.SimulationInput#getMaxSimulationTime()
      */
     @Override
-    public double getMaxSimulationTime() {
+    public double getMaxSimTime() {
         return maxSimTime;
     }
+    
+    public void setMaxSimTime(double maxSimTime) {
+        this.maxSimTime = maxSimTime;
+    }
+
 
     /*
      * (non-Javadoc)

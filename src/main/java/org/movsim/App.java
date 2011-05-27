@@ -42,6 +42,8 @@ import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
+import org.movsim.ui.desktop.ControllerInterface;
+import org.movsim.ui.desktop.SimulatorController;
 import org.movsim.ui.desktop.GUISwing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,7 +152,8 @@ public class App extends JApplet implements AppletStub {
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
 
         if (cmdline.isGui()) {
-            final GUISwing gui = new GUISwing(inputData, simulator);
+//            final GUISwing gui = new GUISwing(inputData, simulator);
+            ControllerInterface controller = new SimulatorController(simulator);
         } else {
             // without graphics
             simulator.run();

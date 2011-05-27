@@ -53,12 +53,20 @@ public class SimOutput {
     /** The macro3 d. */
     private Macro3D macro3D = null;
     
+    public Macro3D getMacro3D() {
+        return macro3D;
+    }
+
     /** The floating cars. */
     private FloatingCars floatingCars = null;
     
     /** The detectors. */
     private LoopDetectors detectors = null;
     
+    public LoopDetectors getDetectors() {
+        return detectors;
+    }
+
     /** The trajectories. */
     private Trajectories trajectories = null;
 

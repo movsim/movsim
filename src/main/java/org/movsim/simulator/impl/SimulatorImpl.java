@@ -26,8 +26,14 @@
  */
 package org.movsim.simulator.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.output.LoopDetector;
+import org.movsim.output.LoopDetectorObserver;
+import org.movsim.output.Macro3DObserver;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
@@ -41,25 +47,25 @@ import org.slf4j.LoggerFactory;
  * The Class SimulatorImpl.
  */
 public class SimulatorImpl implements Simulator {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);
 
     /** The time. */
     private double time;
-    
+
     /** The itime. */
     private int itime;
 
     /** The timestep. */
     private double timestep;
 
-    /** The t max. */
-    private final double tMax; // sim duration
+    /** The duration of the simulation. */
+    private final double tMax;
 
     /** The road section. */
     private RoadSection roadSection;
-    
+
     /** The sim output. */
     private SimOutput simOutput;
 
@@ -67,8 +73,11 @@ public class SimulatorImpl implements Simulator {
     private final boolean isWithGUI;
 
     /** The sim input. */
-    private final InputData simInput; // dynamisch, kann von GUI veraendert
-                                      // werden
+    private InputData simInput; // dynamisch, kann von GUI veraendert
+                                // werden
+
+    private List<LoopDetectorObserver> listLoopDetectorObserver = new ArrayList<LoopDetectorObserver>();
+    private List<Macro3DObserver> listMacro3DObserver = new ArrayList<Macro3DObserver>();
 
     /**
      * Instantiates a new simulator impl.
@@ -84,7 +93,7 @@ public class SimulatorImpl implements Simulator {
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
                                                 // models (see below)
-        this.tMax = simInput.getMaxSimulationTime();
+        this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
@@ -94,7 +103,7 @@ public class SimulatorImpl implements Simulator {
     /**
      * Restart.
      */
-    private void restart() {
+    public void restart() {
         time = 0;
         itime = 0;
         roadSection = new RoadSectionImpl(isWithGUI, simInput);
@@ -184,6 +193,102 @@ public class SimulatorImpl implements Simulator {
     @Override
     public double timestep() {
         return timestep;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#getSiminput()
+     */
+    @Override
+    public InputData getSiminput() {
+        return simInput;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.Simulator#setSimInput(org.movsim.input.InputData)
+     */
+    @Override
+    public void setSimInput(InputData simInput) {
+        this.simInput = simInput;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#registerObserver(org.movsim.output.
+     * LoopDetectorObserver)
+     */
+    @Override
+    public void registerObserver(LoopDetectorObserver o) {
+        listLoopDetectorObserver.add(o);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#removeObserver(org.movsim.output.
+     * LoopDetectorObserver)
+     */
+    @Override
+    public void removeObserver(LoopDetectorObserver o) {
+        int i = listLoopDetectorObserver.indexOf(o);
+        if (i >= 0) {
+            listLoopDetectorObserver.remove(i);
+        }
+    }
+
+    public void notifyLoopDetectorObservers() {
+        for (LoopDetectorObserver observer : listLoopDetectorObserver) {
+            List<LoopDetector> det = simOutput.getDetectors().getDetectors();
+            for (LoopDetector d : det) {
+                observer.update(timestep, d.flow(), d.meanSpeed(), d.rhoArithmetic());
+            }
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#registerObserver(org.movsim.output.
+     * Macro3DObserver)
+     */
+    @Override
+    public void registerObserver(Macro3DObserver o) {
+        listMacro3DObserver.add(o);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#removeObserver(org.movsim.output.
+     * Macro3DObserver)
+     */
+    @Override
+    public void removeObserver(Macro3DObserver o) {
+        int i = listMacro3DObserver.indexOf(o);
+        if (i >= 0) {
+            listMacro3DObserver.remove(i);
+        }
+    }
+
+    public void notifyMacro3DObservers() {
+        for (Macro3DObserver o : listMacro3DObserver) {
+            o.updateMacro3D();
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#getSimOutput()
+     */
+    @Override
+    public SimOutput getSimOutput() {
+        return simOutput;
     }
 
 }

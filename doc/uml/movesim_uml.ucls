@@ -1,6 +1,6 @@
-<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
-  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
+<class-diagram version="1.0.1" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" 
     binary="false">    
     <position x="2858" y="1035" width="-1" height="-1"/>    
@@ -9,7 +9,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" 
     binary="false">    
     <position x="2907" y="437" width="-1" height="-1"/>    
@@ -18,7 +18,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.InflowTimeSeriesImpl" 
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.InflowTimeSeriesImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/InflowTimeSeriesImpl.java" 
     binary="false">    
     <position x="2679" y="1312" width="-1" height="-1"/>    
@@ -27,7 +27,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.impl.SimulatorImpl" project="movsim" 
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.impl.SimulatorImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false">    
     <position x="2909" y="205" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -35,16 +35,16 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.InitialConditionsMacroImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/InitialConditionsMacroImpl.java" 
-    binary="false">    
+  <class id="5" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.simulator.roadSection.impl.InitialConditionsMacroImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/InitialConditionsMacroImpl.java" binary="false">    
     <position x="4050" y="1701" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="6" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.roadSection.impl.FlowConservingBottlenecksImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/FlowConservingBottlenecksImpl.java" binary="false">    
     <position x="3454" y="1041" width="-1" height="-1"/>    
@@ -53,7 +53,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.TrafficLightImpl" 
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.TrafficLightImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/TrafficLightImpl.java" 
     binary="false">    
     <position x="3651" y="1040" width="-1" height="-1"/>    
@@ -62,7 +62,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.SpeedLimitsImpl" 
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.SpeedLimitsImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/SpeedLimitsImpl.java" 
     binary="false">    
     <position x="3108" y="1035" width="-1" height="-1"/>    
@@ -71,40 +71,40 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.OnrampImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false">    
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false">    
     <position x="2569" y="1043" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.TrafficLight" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/roadSection/TrafficLight.java" binary="false">    
+  <interface id="10" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.TrafficLight" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/TrafficLight.java" binary="false">    
     <position x="3655" y="857" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.SpeedLimits" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/roadSection/SpeedLimits.java" binary="false">    
+  <interface id="11" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.SpeedLimits" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/SpeedLimits.java" binary="false">    
     <position x="3104" y="850" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.FlowConservingBottlenecks" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/FlowConservingBottlenecks.java" 
-    binary="false">    
+  <interface id="12" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.simulator.roadSection.FlowConservingBottlenecks" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/simulator/roadSection/FlowConservingBottlenecks.java" binary="false">    
     <position x="3469" y="855" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.RoadSectionGUI" 
+  <interface id="13" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.RoadSectionGUI" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSectionGUI.java" binary="false">    
     <position x="3282" y="853" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -112,15 +112,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.RoadSection" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSection.java" binary="false">    
+  <interface id="14" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.RoadSection" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSection.java" binary="false">    
     <position x="2908" y="327" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.UpstreamBoundary" 
+  <interface id="15" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.UpstreamBoundary" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/UpstreamBoundary.java" binary="false">    
     <position x="2933" y="849" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -128,15 +128,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.Onramp" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/roadSection/Onramp.java" binary="false">    
+  <interface id="16" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.Onramp" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/Onramp.java" binary="false">    
     <position x="2654" y="845" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.InflowTimeSeries" 
+  <interface id="17" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.InflowTimeSeries" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/InflowTimeSeries.java" binary="false">    
     <position x="2676" y="1162" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -144,24 +144,24 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.InitialConditionsMacro" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/InitialConditionsMacro.java" 
-    binary="false">    
+  <interface id="18" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.simulator.roadSection.InitialConditionsMacro" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/simulator/roadSection/InitialConditionsMacro.java" binary="false">    
     <position x="4055" y="1596" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.NoiseImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/NoiseImpl.java" binary="false">    
+  <class id="19" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.NoiseImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/NoiseImpl.java" binary="false">    
     <position x="2028" y="2084" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleContainerImpl" 
+  <class id="20" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleContainerImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleContainerImpl.java" 
     binary="false">    
     <position x="2337" y="1043" width="-1" height="-1"/>    
@@ -170,7 +170,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl" 
+  <class id="21" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleGeneratorImpl.java" 
     binary="false">    
     <position x="2028" y="1042" width="-1" height="-1"/>    
@@ -179,7 +179,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.CyclicBufferImpl" 
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.CyclicBufferImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/CyclicBufferImpl.java" 
     binary="false">    
     <position x="2416" y="2087" width="-1" height="-1"/>    
@@ -188,15 +188,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false">    
+  <class id="23" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false">    
     <position x="2364" y="1340" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" 
+  <interface id="24" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
     binary="false">    
@@ -206,7 +206,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="25" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Gipps.java" 
     binary="false">    
@@ -216,7 +216,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="26" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/OVM_VDIFF.java" 
     binary="false">    
@@ -226,7 +226,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" 
+  <interface id="27" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModelCategory.java" 
     binary="false">    
@@ -236,7 +236,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="28" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
     binary="false">    
@@ -246,7 +246,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="29" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/ACC.java" binary="false">    
     <position x="618" y="2318" width="-1" height="-1"/>    
@@ -255,7 +255,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="30" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Newell.java" 
     binary="false">    
@@ -265,7 +265,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="31" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/NSM.java" binary="false">    
     <position x="921" y="2319" width="-1" height="-1"/>    
@@ -274,7 +274,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="32" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/KCA.java" binary="false">    
     <position x="2108" y="2322" width="-1" height="-1"/>    
@@ -283,7 +283,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="33" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/IDM.java" binary="false">    
     <position x="1219" y="2324" width="-1" height="-1"/>    
@@ -292,7 +292,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="34" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
     binary="false">    
@@ -302,7 +302,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="35" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNSM" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumNSM.java" 
     binary="false">    
@@ -312,7 +312,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="36" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumIDM" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumIDM.java" 
     binary="false">    
@@ -322,7 +322,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="37" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_VDIFF" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumOVM_VDIFF.java" 
     binary="false">    
@@ -332,7 +332,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="38" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKCA" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumKCA.java" 
     binary="false">    
@@ -342,7 +342,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="39" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumGipps" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumGipps.java" 
     binary="false">    
@@ -352,7 +352,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="40" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNewell" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumNewell.java" 
     binary="false">    
@@ -362,7 +362,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" 
+  <interface id="41" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/EquilibriumProperties.java" 
     binary="false">    
@@ -372,7 +372,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="42" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumACC" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumACC.java" 
     binary="false">    
@@ -382,7 +382,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.Simulator" project="movsim" 
+  <interface id="43" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.Simulator" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/Simulator.java" binary="false">    
     <position x="2912" y="93" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -390,15 +390,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleGUI" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGUI.java" binary="false">    
+  <interface id="44" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleGUI" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGUI.java" binary="false">    
     <position x="2249" y="1908" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" 
+  <interface id="45" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/TrafficLightApproaching.java" binary="false">    
     <position x="2702" y="1916" width="-1" height="-1"/>    
@@ -407,7 +407,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleContainer" 
+  <interface id="46" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleContainer" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleContainer.java" binary="false">    
     <position x="2336" y="830" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -415,7 +415,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="47" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/impl/TrafficLightApproachingImpl.java" 
     binary="false">    
@@ -425,7 +425,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleGenerator" 
+  <interface id="48" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleGenerator" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGenerator.java" binary="false">    
     <position x="2049" y="830" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -433,7 +433,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.longmodel.Memory" 
+  <interface id="49" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.longmodel.Memory" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/Memory.java" binary="false">    
     <position x="2989" y="1924" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -441,7 +441,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Vehicle" project="movsim" 
+  <interface id="50" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Vehicle" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/Vehicle.java" binary="false">    
     <position x="2356" y="1185" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -449,15 +449,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehiclePrototype" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false">    
+  <class id="51" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehiclePrototype" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false">    
     <position x="1925" y="1185" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Noise" project="movsim" 
+  <interface id="52" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Noise" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/Noise.java" binary="false">    
     <position x="2031" y="1919" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -465,7 +465,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl" 
+  <class id="53" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/impl/MemoryImpl.java" 
     binary="false">    
     <position x="2988" y="2088" width="-1" height="-1"/>    
@@ -474,7 +474,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.SimOutput" project="movsim" 
+  <class id="54" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.SimOutput" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false">    
     <position x="3323" y="412" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -482,7 +482,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.InputData" project="movsim" 
+  <interface id="55" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.InputData" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/InputData.java" binary="false">    
     <position x="2621" y="318" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -490,7 +490,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.impl.InputDataImpl" project="movsim" 
+  <class id="56" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.impl.InputDataImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/impl/InputDataImpl.java" binary="false">    
     <position x="2506" y="439" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -498,7 +498,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.impl.XmlReaderSimInput" project="movsim" 
+  <class id="57" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.impl.XmlReaderSimInput" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/impl/XmlReaderSimInput.java" binary="false">    
     <position x="2564" y="92" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -506,7 +506,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.LoopDetector" project="movsim" 
+  <interface id="58" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.LoopDetector" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/LoopDetector.java" binary="false">    
     <position x="4323" y="763" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -514,7 +514,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.FloatingCars" project="movsim" 
+  <interface id="59" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.FloatingCars" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/FloatingCars.java" binary="false">    
     <position x="4179" y="487" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -522,7 +522,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.Macro3D" project="movsim" 
+  <interface id="60" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.Macro3D" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/Macro3D.java" binary="false">    
     <position x="3845" y="486" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -530,15 +530,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.TrafficLightRecorder" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/output/TrafficLightRecorder.java" binary="false">    
+  <interface id="61" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.TrafficLightRecorder" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/output/TrafficLightRecorder.java" binary="false">    
     <position x="4005" y="486" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.Trajectories" project="movsim" 
+  <interface id="62" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.Trajectories" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/Trajectories.java" binary="false">    
     <position x="3688" y="485" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -546,7 +546,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.Macro3DImpl" project="movsim" 
+  <class id="63" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.Macro3DImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/impl/Macro3DImpl.java" binary="false">    
     <position x="3854" y="671" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -554,15 +554,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.TrafficLightRecorderImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/output/impl/TrafficLightRecorderImpl.java" binary="false">    
+  <class id="64" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.TrafficLightRecorderImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/output/impl/TrafficLightRecorderImpl.java" binary="false">    
     <position x="4012" y="673" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.TrajectoriesImpl" project="movsim" 
+  <class id="65" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.TrajectoriesImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/impl/TrajectoriesImpl.java" binary="false">    
     <position x="3696" y="671" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -570,7 +570,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.LoopDetectorImpl" project="movsim" 
+  <class id="66" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.LoopDetectorImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/impl/LoopDetectorImpl.java" binary="false">    
     <position x="4321" y="845" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -578,7 +578,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.FloatingCarsImpl" project="movsim" 
+  <class id="67" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.FloatingCarsImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/impl/FloatingCarsImpl.java" binary="false">    
     <position x="4184" y="676" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -586,7 +586,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.LoopDetectors" project="movsim" 
+  <class id="68" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.LoopDetectors" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/impl/LoopDetectors.java" binary="false">    
     <position x="4325" y="673" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -594,15 +594,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.SimulationInput" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/SimulationInput.java" binary="false">    
+  <interface id="69" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.SimulationInput" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/SimulationInput.java" binary="false">    
     <position x="1920" y="391" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.VehicleInput" project="movsim" 
+  <interface id="70" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.VehicleInput" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/model/VehicleInput.java" binary="false">    
     <position x="1832" y="519" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -610,7 +610,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.RoadInput" project="movsim" 
+  <interface id="71" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.RoadInput" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/model/RoadInput.java" binary="false">    
     <position x="1561" y="351" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -618,7 +618,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.OutputInput" project="movsim" 
+  <interface id="72" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.OutputInput" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/model/OutputInput.java" binary="false">    
     <position x="1355" y="174" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -626,31 +626,31 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.VehicleInputImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/impl/VehicleInputImpl.java" binary="false">    
+  <class id="73" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.VehicleInputImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/impl/VehicleInputImpl.java" binary="false">    
     <position x="1647" y="650" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.SimulationInputImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/impl/SimulationInputImpl.java" binary="false">    
+  <class id="74" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.SimulationInputImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/impl/SimulationInputImpl.java" binary="false">    
     <position x="1746" y="382" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.OutputInputImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false">    
+  <class id="75" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.OutputInputImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false">    
     <position x="1564" y="207" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.RoadInputImpl" project="movsim" 
+  <class id="76" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.impl.RoadInputImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false">    
     <position x="1384" y="294" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -658,16 +658,16 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.TrafficLightRecorderInput" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/TrafficLightRecorderInput.java" 
-    binary="false">    
+  <interface id="77" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.output.TrafficLightRecorderInput" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/output/TrafficLightRecorderInput.java" binary="false">    
     <position x="1551" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.TrajectoriesInput" 
+  <interface id="78" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.TrajectoriesInput" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/TrajectoriesInput.java" binary="false">    
     <position x="1920" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -675,15 +675,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.DetectorInput" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/output/DetectorInput.java" binary="false">    
+  <interface id="79" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.DetectorInput" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/DetectorInput.java" binary="false">    
     <position x="1744" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.FloatingCarInput" 
+  <interface id="80" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.FloatingCarInput" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/FloatingCarInput.java" binary="false">    
     <position x="2096" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -691,15 +691,15 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.MacroInput" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/output/MacroInput.java" binary="false">    
+  <interface id="81" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.MacroInput" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/MacroInput.java" binary="false">    
     <position x="2272" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.FloatingCarInputImpl" 
+  <class id="82" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.FloatingCarInputImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/FloatingCarInputImpl.java" 
     binary="false">    
     <position x="2104" y="46" width="-1" height="-1"/>    
@@ -708,7 +708,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.TrajectoriesInputImpl" 
+  <class id="83" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.TrajectoriesInputImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/TrajectoriesInputImpl.java" 
     binary="false">    
     <position x="1929" y="51" width="-1" height="-1"/>    
@@ -717,24 +717,24 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/TrafficLightRecorderInputImpl.java" 
-    binary="false">    
+  <class id="84" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/output/impl/TrafficLightRecorderInputImpl.java" binary="false">    
     <position x="1556" y="49" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.MacroInputImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/output/impl/MacroInputImpl.java" binary="false">    
+  <class id="85" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.MacroInputImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/MacroInputImpl.java" binary="false">    
     <position x="2268" y="46" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.DetectorInputImpl" 
+  <class id="86" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.DetectorInputImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/DetectorInputImpl.java" 
     binary="false">    
     <position x="1745" y="53" width="-1" height="-1"/>    
@@ -743,7 +743,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.TrafficLightData" 
+  <interface id="87" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.TrafficLightData" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/TrafficLightData.java" binary="false">    
     <position x="1073" y="357" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -751,7 +751,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" 
+  <interface id="88" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/model/simulation/FlowConservingBottleneckDataPoint.java" binary="false">    
     <position x="1052" y="289" width="-1" height="-1"/>    
@@ -760,7 +760,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.UpstreamBoundaryData" 
+  <interface id="89" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.UpstreamBoundaryData" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/UpstreamBoundaryData.java" 
     binary="false">    
     <position x="1087" y="145" width="-1" height="-1"/>    
@@ -769,7 +769,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.SimpleRampData" 
+  <interface id="90" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.SimpleRampData" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/SimpleRampData.java" binary="false">    
     <position x="1086" y="85" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -777,7 +777,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.InflowDataPoint" 
+  <interface id="91" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.InflowDataPoint" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/InflowDataPoint.java" binary="false">    
     <position x="452" y="160" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -785,16 +785,16 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.HeterogeneityInputData" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/HeterogeneityInputData.java" 
-    binary="false">    
+  <interface id="92" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.HeterogeneityInputData" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/HeterogeneityInputData.java" binary="false">    
     <position x="1079" y="547" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.SpeedLimitDataPoint" 
+  <interface id="93" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.SpeedLimitDataPoint" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/SpeedLimitDataPoint.java" 
     binary="false">    
     <position x="1080" y="436" width="-1" height="-1"/>    
@@ -803,23 +803,23 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.RampData" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/simulation/RampData.java" binary="false">    
+  <interface id="94" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.RampData" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/RampData.java" binary="false">    
     <position x="1086" y="197" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.ICMicroData" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMicroData.java" binary="false">    
+  <interface id="95" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.ICMicroData" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMicroData.java" binary="false">    
     <position x="1077" y="617" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.SpeedLimitInput" 
+  <interface id="96" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.SpeedLimitInput" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/SpeedLimitInput.java" binary="false">    
     <position x="1552" y="499" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -827,171 +827,24 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.ICMacroData" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMacroData.java" binary="false">    
+  <interface id="97" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.ICMacroData" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMacroData.java" binary="false">    
     <position x="1085" y="487" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputDataIDM" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataIDM.java" 
-    binary="false">    
-    <position x="323" y="1012" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputDataGipps" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataGipps.java" 
-    binary="false">    
-    <position x="326" y="889" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputDataNSM" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataNSM.java" 
-    binary="false">    
-    <position x="328" y="947" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputDataKCA" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataKCA.java" 
-    binary="false">    
-    <position x="324" y="1141" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputData" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputData.java" 
-    binary="false">    
-    <position x="1028" y="769" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataOVM_VDIFF.java" binary="false">    
-    <position x="324" y="1076" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputDataNewell" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataNewell.java" 
-    binary="false">    
-    <position x="327" y="1277" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.ModelInputDataACC" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataACC.java" 
-    binary="false">    
-    <position x="321" y="1213" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" 
-    binary="false">    
-    <position x="1033" y="868" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSMImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataNSMImpl.java" binary="false">    
-    <position x="625" y="946" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataOVM_VDIFFImpl.java" 
-    binary="false">    
-    <position x="621" y="1075" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACCImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataACCImpl.java" binary="false">    
-    <position x="622" y="1201" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDMImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataIDMImpl.java" binary="false">    
-    <position x="625" y="1002" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNewellImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataNewellImpl.java" 
-    binary="false">    
-    <position x="622" y="1276" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCAImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataKCAImpl.java" binary="false">    
-    <position x="623" y="1138" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataGippsImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataGippsImpl.java" 
-    binary="false">    
-    <position x="627" y="891" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.behavior.MemoryInputData" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/MemoryInputData.java" 
-    binary="false">    
+  <interface id="98" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.vehicle.behavior.MemoryInputData" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/MemoryInputData.java" binary="false">    
     <position x="1313" y="776" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.behavior.NoiseInputData" 
+  <interface id="99" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.behavior.NoiseInputData" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/NoiseInputData.java" 
     binary="false">    
     <position x="1542" y="777" width="-1" height="-1"/>    
@@ -1000,25 +853,25 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/impl/NoiseInputDataImpl.java" 
-    binary="false">    
+  <class id="100" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/impl/NoiseInputDataImpl.java" binary="false">    
     <position x="1543" y="879" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/impl/MemoryInputDataImpl.java" 
-    binary="false">    
+  <class id="101" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/impl/MemoryInputDataImpl.java" binary="false">    
     <position x="1308" y="882" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" 
+  <class id="102" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/FlowConservingBottleneckDataPointImpl.java" 
     binary="false">    
@@ -1028,16 +881,16 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/HeterogeneityInputDataImpl.java" 
-    binary="false">    
+  <class id="103" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/HeterogeneityInputDataImpl.java" binary="false">    
     <position x="765" y="548" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.ICMacroDataImpl" 
+  <class id="104" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.ICMacroDataImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/ICMacroDataImpl.java" 
     binary="false">    
     <position x="770" y="480" width="-1" height="-1"/>    
@@ -1046,16 +899,16 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.InflowDataPointImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/InflowDataPointImpl.java" 
-    binary="false">    
+  <class id="105" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.impl.InflowDataPointImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/InflowDataPointImpl.java" binary="false">    
     <position x="195" y="166" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.RampDataImpl" 
+  <class id="106" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.RampDataImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/RampDataImpl.java" 
     binary="false">    
     <position x="777" y="188" width="-1" height="-1"/>    
@@ -1064,7 +917,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.SimpleRampDataImpl" 
+  <class id="107" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.SimpleRampDataImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SimpleRampDataImpl.java" 
     binary="false">    
     <position x="773" y="85" width="-1" height="-1"/>    
@@ -1073,43 +926,43 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SpeedLimitDataPointImpl.java" 
-    binary="false">    
+  <class id="108" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SpeedLimitDataPointImpl.java" binary="false">    
     <position x="767" y="428" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.TrafficLightDataImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/TrafficLightDataImpl.java" 
-    binary="false">    
+  <class id="109" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.impl.TrafficLightDataImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/TrafficLightDataImpl.java" binary="false">    
     <position x="755" y="353" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/UpstreamBoundaryDataImpl.java" 
-    binary="false">    
+  <class id="110" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/UpstreamBoundaryDataImpl.java" binary="false">    
     <position x="779" y="137" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.SpeedLimitInputImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SpeedLimitInputImpl.java" 
-    binary="false">    
+  <class id="111" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsim.input.model.simulation.impl.SpeedLimitInputImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SpeedLimitInputImpl.java" binary="false">    
     <position x="1422" y="566" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.ICMicroDataImpl" 
+  <class id="112" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.ICMicroDataImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/ICMicroDataImpl.java" 
     binary="false">    
     <position x="781" y="608" width="-1" height="-1"/>    
@@ -1118,1199 +971,738 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false" navigable="false">      
-      <attribute name="noise"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.Noise" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/Noise.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataOVM_VDIFFImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataOVM_VDIFF" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataOVM_VDIFF.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="inflowTimeSeries"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.InflowTimeSeries" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/InflowTimeSeries.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumACC" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumACC.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehGenerator"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleGenerator" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGenerator.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_VDIFF" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumOVM_VDIFF.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="speedLimitInputData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.SpeedLimitDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/SpeedLimitDataPoint.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.ICMicroDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/ICMicroDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.ICMicroData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMicroData.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/ACC.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="mainVehContainer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleContainer" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleContainer.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.output.impl.DetectorInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/impl/DetectorInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.output.DetectorInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/DetectorInput.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="flowConsBottleneckInputData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/FlowConservingBottleneckDataPoint.java" 
-      binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDMImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataIDMImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDMImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataIDMImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataIDM" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataIDM.java" binary="false"/>  
+    <end type="SOURCE" nodeId="102"/>    
+    <end type="TARGET" nodeId="88"/>  
   </realization>  
   <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleGeneratorImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleGenerator" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGenerator.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.output.SimOutput" 
-      file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false" navigable="false">      
-      <attribute name="floatingCars"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.FloatingCars" 
-      file="/movsim/src/main/java/org/movsim/output/FloatingCars.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.impl.SimulatorImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false" navigable="false">      
-      <attribute name="simOutput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.SimOutput" 
-      file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNSM" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumNSM.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/EquilibriumProperties.java" 
-      binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.SimulationInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/SimulationInputImpl.java" binary="false" navigable="false">      
-      <attribute name="roadInput"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.RoadInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/RoadInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehGenerator"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleGenerator" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGenerator.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/IDM.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.RampDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/RampDataImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="inflowTimeSeries"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.InflowDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/InflowDataPoint.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="simpleOnramps"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.Onramp" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/Onramp.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/NSM.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/OVM_VDIFF.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.impl.SimulatorImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false" navigable="false">      
-      <attribute name="simInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.InputData" 
-      file="/movsim/src/main/java/org/movsim/input/InputData.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.VehiclePrototype" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false" navigable="false">      
-      <attribute name="equiProperties"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/EquilibriumProperties.java" 
-      binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.output.SimOutput" 
-      file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false" navigable="false">      
-      <attribute name="trajectories"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.Trajectories" 
-      file="/movsim/src/main/java/org/movsim/output/Trajectories.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SpeedLimitDataPointImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.SpeedLimitDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/SpeedLimitDataPoint.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCAImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataKCAImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.OutputInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false" navigable="false">      
-      <attribute name="trafficLightRecorderInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.output.TrafficLightRecorderInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/TrafficLightRecorderInput.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="inflowTimeSeries"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.InflowTimeSeries" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/InflowTimeSeries.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.impl.InputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/impl/InputDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.InputData" 
-      file="/movsim/src/main/java/org/movsim/input/InputData.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.output.SimOutput" 
-      file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false" navigable="false">      
-      <attribute name="detectors"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.impl.LoopDetectors" 
-      file="/movsim/src/main/java/org/movsim/output/impl/LoopDetectors.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.output.impl.TrafficLightRecorderImpl" 
-      file="/movsim/src/main/java/org/movsim/output/impl/TrafficLightRecorderImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.output.TrafficLightRecorder" 
-      file="/movsim/src/main/java/org/movsim/output/TrafficLightRecorder.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.VehicleInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/VehicleInputImpl.java" binary="false" navigable="false">      
-      <attribute name="modelInputData"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.VehiclePrototype" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false" navigable="false">      
-      <attribute name="longModel"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.output.impl.LoopDetectors" 
-      file="/movsim/src/main/java/org/movsim/output/impl/LoopDetectors.java" binary="false" navigable="false">      
-      <attribute name="detectors"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.LoopDetector" 
-      file="/movsim/src/main/java/org/movsim/output/LoopDetector.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="simpleRamps"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.SimpleRampData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/SimpleRampData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/impl/TrafficLightRecorderInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.output.TrafficLightRecorderInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/TrafficLightRecorderInput.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.OutputInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false" navigable="false">      
-      <attribute name="detectorInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.output.DetectorInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/DetectorInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFFImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataOVM_VDIFFImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.impl.InputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/impl/InputDataImpl.java" binary="false" navigable="false">      
-      <attribute name="simulationInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.SimulationInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/SimulationInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.output.impl.TrajectoriesImpl" 
-      file="/movsim/src/main/java/org/movsim/output/impl/TrajectoriesImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.output.Trajectories" 
-      file="/movsim/src/main/java/org/movsim/output/Trajectories.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.impl.XmlReaderSimInput" 
-      file="/movsim/src/main/java/org/movsim/input/impl/XmlReaderSimInput.java" binary="false" navigable="false">      
-      <attribute name="inputData"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.impl.InputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/impl/InputDataImpl.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.impl.SimulatorImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.Simulator" 
-      file="/movsim/src/main/java/org/movsim/simulator/Simulator.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="outputInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.OutputInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/OutputInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="trafficLights"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.TrafficLight" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/TrafficLight.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNewell" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumNewell.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false" navigable="false">      
-      <attribute name="longModel"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/UpstreamBoundaryDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.UpstreamBoundaryData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/UpstreamBoundaryData.java" binary="false"/>  
+    <end type="SOURCE" nodeId="110"/>    
+    <end type="TARGET" nodeId="89"/>  
   </realization>  
   <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.TrafficLightImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/TrafficLightImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.TrafficLight" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/TrafficLight.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.OutputInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false" navigable="false">      
-      <attribute name="macroInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.output.MacroInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/MacroInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.ICMacroDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/ICMacroDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.ICMacroData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMacroData.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="icMicroData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.ICMicroData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMicroData.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputData.java" binary="false"/>  
+    <end type="SOURCE" nodeId="25"/>    
+    <end type="TARGET" nodeId="24"/>  
   </realization>  
   <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleGUI" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGUI.java" binary="false"/>  
+    <end type="SOURCE" nodeId="23"/>    
+    <end type="TARGET" nodeId="50"/>  
   </realization>  
   <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehContainer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleContainer" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleContainer.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Newell.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.OutputInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false" navigable="false">      
-      <attribute name="floatingCarInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.output.FloatingCarInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/FloatingCarInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.SpeedLimitsImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/SpeedLimitsImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.SpeedLimits" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/SpeedLimits.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKCA" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumKCA.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Gipps.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/UpstreamBoundaryDataImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="inflowTimeSeries"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.InflowDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/InflowDataPoint.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/NSM.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.impl.VehicleInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/VehicleInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.VehicleInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/VehicleInput.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Gipps.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleGeneratorImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="prototypes"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehiclePrototype" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACCImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataACCImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.output.impl.FloatingCarInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/impl/FloatingCarInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.output.FloatingCarInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/FloatingCarInput.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehicleQueue"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.Vehicle" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/Vehicle.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="trafficLightData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.TrafficLightData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/TrafficLightData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataGippsImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataGippsImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataGipps" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataGipps.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="upstreamBoundary"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.UpstreamBoundary" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/UpstreamBoundary.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.impl.SimulationInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/SimulationInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.SimulationInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/SimulationInput.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumIDM" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumIDM.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.Onramp" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/Onramp.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/ACC.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/IDM.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.VehicleInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/VehicleInputImpl.java" binary="false" navigable="false">      
-      <attribute name="memoryInputData"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.behavior.MemoryInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/MemoryInputData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleContainerImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleContainerImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleContainer" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleContainer.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/impl/TrafficLightApproachingImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/TrafficLightApproaching.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="speedlimits"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.SpeedLimits" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/SpeedLimits.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="icMacroData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.ICMacroData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/ICMacroData.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.OutputInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false" navigable="false">      
-      <attribute name="trajectoriesInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.output.TrajectoriesInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/TrajectoriesInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.impl.InputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/impl/InputDataImpl.java" binary="false" navigable="false">      
-      <attribute name="vehicleInputData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.VehicleInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/VehicleInput.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehGenerator"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleGenerator" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGenerator.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.Vehicle" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/Vehicle.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.InflowDataPointImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/InflowDataPointImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.InflowDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/InflowDataPoint.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false" navigable="false">      
+    <end type="SOURCE" nodeId="23" navigable="false">      
       <attribute name="cyclicBuffer"/>      
       <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.impl.CyclicBufferImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/CyclicBufferImpl.java" binary="false" 
-      navigable="true"/>    
+    </end>    
+    <end type="TARGET" nodeId="22" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.FlowConservingBottlenecksImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/FlowConservingBottlenecksImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.FlowConservingBottlenecks" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/FlowConservingBottlenecks.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.UpstreamBoundary" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/UpstreamBoundary.java" binary="false"/>  
-  </realization>  
   <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.VehiclePrototype" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false" navigable="false">      
-      <attribute name="vehicleInput"/>      
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="longModel"/>      
       <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.VehicleInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/VehicleInput.java" binary="false" navigable="true"/>    
+    </end>    
+    <end type="TARGET" nodeId="24" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
-    <source project="movsim" name="org.movsim.simulator.impl.SimulatorImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false" navigable="false">      
-      <attribute name="roadSection"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.RoadSection" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSection.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="flowConsBottlenecks"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.FlowConservingBottlenecks" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/FlowConservingBottlenecks.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/KCA.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.output.impl.TrajectoriesInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/impl/TrajectoriesInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.output.TrajectoriesInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/TrajectoriesInput.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNewellImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataNewellImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataNewell" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataNewell.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/impl/MemoryImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.Memory" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/Memory.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.RoadInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/RoadInput.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.TrafficLightDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/TrafficLightDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.TrafficLightData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/TrafficLightData.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataGippsImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataGippsImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSMImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataNSMImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/HeterogeneityInputDataImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.HeterogeneityInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/HeterogeneityInputData.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehContainer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.VehicleContainer" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleContainer.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false" navigable="false">      
-      <attribute name="memory"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.Memory" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/Memory.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.output.impl.TrajectoriesImpl" 
-      file="/movsim/src/main/java/org/movsim/output/impl/TrajectoriesImpl.java" binary="false" navigable="false">      
-      <attribute name="roadSection"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.RoadSection" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSection.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSMImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataNSMImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataNSM" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataNSM.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/OVM_VDIFF.java" 
-      binary="false"/>    
-    <target project="movsim" 
-      name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="upstreamBoundaryData"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.UpstreamBoundaryData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/UpstreamBoundaryData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.output.impl.FloatingCarsImpl" 
-      file="/movsim/src/main/java/org/movsim/output/impl/FloatingCarsImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.output.FloatingCars" 
-      file="/movsim/src/main/java/org/movsim/output/FloatingCars.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCAImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataKCAImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataKCA" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataKCA.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.output.impl.LoopDetectorImpl" 
-      file="/movsim/src/main/java/org/movsim/output/impl/LoopDetectorImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.output.LoopDetector" 
-      file="/movsim/src/main/java/org/movsim/output/LoopDetector.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="heterogeneityInputData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.HeterogeneityInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/HeterogeneityInputData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.RoadSection" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSection.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.RoadInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/RoadInputImpl.java" binary="false" navigable="false">      
-      <attribute name="ramps"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.RampData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/RampData.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false" navigable="false">      
-      <attribute name="trafficLightApproaching"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/TrafficLightApproaching.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Newell.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.output.SimOutput" 
-      file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false" navigable="false">      
-      <attribute name="macro3D"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.Macro3D" 
-      file="/movsim/src/main/java/org/movsim/output/Macro3D.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNewellImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataNewellImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataImpl.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.output.impl.Macro3DImpl" 
-      file="/movsim/src/main/java/org/movsim/output/impl/Macro3DImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.output.Macro3D" 
-      file="/movsim/src/main/java/org/movsim/output/Macro3D.java" binary="false"/>  
-  </realization>  
-  <generalization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumGipps" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumGipps.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumPropertiesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/impl/EquilibriumPropertiesImpl.java" 
-      binary="false"/>  
-  </generalization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.impl.VehicleInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/VehicleInputImpl.java" binary="false" navigable="false">      
-      <attribute name="noiseInputData"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.behavior.NoiseInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/NoiseInputData.java" binary="false" 
-      navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.RampDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/RampDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.RampData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/RampData.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.RoadSectionGUI" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSectionGUI.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.NoiseImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/NoiseImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.Noise" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/Noise.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.impl.OutputInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/impl/OutputInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.OutputInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/OutputInput.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/impl/NoiseInputDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.behavior.NoiseInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/NoiseInputData.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.output.impl.MacroInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/impl/MacroInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.output.MacroInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/output/MacroInput.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/FlowConservingBottleneckDataPointImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/FlowConservingBottleneckDataPoint.java" 
-      binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.impl.VehicleContainerImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleContainerImpl.java" binary="false" 
-      navigable="false">      
-      <attribute name="vehicles"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.Vehicle" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/Vehicle.java" binary="false" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.SimpleRampDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SimpleRampDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.SimpleRampData" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/SimpleRampData.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.SpeedLimitInputImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SpeedLimitInputImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.simulation.SpeedLimitInput" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/SpeedLimitInput.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.longModel.impl.ModelInputDataACCImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/impl/ModelInputDataACCImpl.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.longModel.ModelInputDataACC" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/longModel/ModelInputDataACC.java" binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/KCA.java" 
-      binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" 
-      file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
-      binary="false"/>  
-  </realization>  
-  <realization>    
-    <source project="movsim" name="org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/impl/MemoryInputDataImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.input.model.vehicle.behavior.MemoryInputData" 
-      file="/movsim/src/main/java/org/movsim/input/model/vehicle/behavior/MemoryInputData.java" binary="false"/>  
-  </realization>  
-  <association>    
-    <source project="movsim" name="org.movsim.input.model.simulation.impl.SimpleRampDataImpl" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/impl/SimpleRampDataImpl.java" binary="false" 
-      navigable="false">      
+    <end type="SOURCE" nodeId="106" navigable="false">      
       <attribute name="inflowTimeSeries"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.input.model.simulation.InflowDataPoint" 
-      file="/movsim/src/main/java/org/movsim/input/model/simulation/InflowDataPoint.java" binary="false" 
-      navigable="true"/>    
+    </end>    
+    <end type="TARGET" nodeId="91" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
-    <source project="movsim" name="org.movsim.output.SimOutput" 
-      file="/movsim/src/main/java/org/movsim/output/SimOutput.java" binary="false" navigable="false">      
-      <attribute name="trafficLightRecorder"/>      
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="upstreamBoundaryData"/>      
       <multiplicity minimum="0" maximum="1"/>    
-    </source>    
-    <target project="movsim" name="org.movsim.output.TrafficLightRecorder" 
-      file="/movsim/src/main/java/org/movsim/output/TrafficLightRecorder.java" binary="false" navigable="true"/>    
+    </end>    
+    <end type="TARGET" nodeId="89" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="simpleOnramps"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="9" navigable="false">      
+      <attribute name="vehGenerator"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="48" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="21" navigable="false">      
+      <attribute name="prototypes"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="51" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.InitialConditionsMacroImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/InitialConditionsMacroImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.InitialConditionsMacro" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/InitialConditionsMacro.java" binary="false"/>  
+    <end type="SOURCE" nodeId="56"/>    
+    <end type="TARGET" nodeId="55"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="56" navigable="false">      
+      <attribute name="simulationInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="69" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="32"/>    
+    <end type="TARGET" nodeId="24"/>  
   </realization>  
   <realization>    
-    <source project="movsim" name="org.movsim.simulator.roadSection.impl.InflowTimeSeriesImpl" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/InflowTimeSeriesImpl.java" binary="false"/>    
-    <target project="movsim" name="org.movsim.simulator.roadSection.InflowTimeSeries" 
-      file="/movsim/src/main/java/org/movsim/simulator/roadSection/InflowTimeSeries.java" binary="false"/>  
+    <end type="SOURCE" nodeId="63"/>    
+    <end type="TARGET" nodeId="60"/>  
   </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="64"/>    
+    <end type="TARGET" nodeId="61"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="trajectoriesInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="78" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="detectorInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="79" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="107" navigable="false">      
+      <attribute name="inflowTimeSeries"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="91" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="trafficLights"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="66"/>    
+    <end type="TARGET" nodeId="58"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="109"/>    
+    <end type="TARGET" nodeId="87"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="5"/>    
+    <end type="TARGET" nodeId="18"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="upstreamBoundary"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="74" navigable="false">      
+      <attribute name="roadInput"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="71" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="106"/>    
+    <end type="TARGET" nodeId="94"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="47"/>    
+    <end type="TARGET" nodeId="45"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="7"/>    
+    <end type="TARGET" nodeId="10"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="speedLimitInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="93" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="vehGenerator"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="48" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="107"/>    
+    <end type="TARGET" nodeId="90"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="53"/>    
+    <end type="TARGET" nodeId="49"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="23"/>    
+    <end type="TARGET" nodeId="44"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="31"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="19"/>    
+    <end type="TARGET" nodeId="52"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="73" navigable="false">      
+      <attribute name="noiseInputData"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="99" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="110" navigable="false">      
+      <attribute name="inflowTimeSeries"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="91" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="flowConsBottleneckInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="88" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="103"/>    
+    <end type="TARGET" nodeId="92"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="84"/>    
+    <end type="TARGET" nodeId="77"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="85"/>    
+    <end type="TARGET" nodeId="81"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="30"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="6"/>    
+    <end type="TARGET" nodeId="12"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="37"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="29"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="36"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="trafficLightApproaching"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="45" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="memory"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="49" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="floatingCarInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="80" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="31"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="9" navigable="false">      
+      <attribute name="mainVehContainer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="trafficLightData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="87" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="33"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="73"/>    
+    <end type="TARGET" nodeId="70"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="1" navigable="false">      
+      <attribute name="inflowTimeSeries"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="74"/>    
+    <end type="TARGET" nodeId="69"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="51" navigable="false">      
+      <attribute name="equiProperties"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="41" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="54" navigable="false">      
+      <attribute name="detectors"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="68" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="3"/>    
+    <end type="TARGET" nodeId="17"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="73" navigable="false">      
+      <attribute name="memoryInputData"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="98" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="68" navigable="false">      
+      <attribute name="detectors"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="58" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="noise"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="52" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="38"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="104"/>    
+    <end type="TARGET" nodeId="97"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="26"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="speedlimits"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="40"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="trafficLightRecorderInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="77" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="86"/>    
+    <end type="TARGET" nodeId="79"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="76"/>    
+    <end type="TARGET" nodeId="71"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="2"/>    
+    <end type="TARGET" nodeId="13"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="8"/>    
+    <end type="TARGET" nodeId="11"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="21"/>    
+    <end type="TARGET" nodeId="48"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="54" navigable="false">      
+      <attribute name="trajectories"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="62" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="39"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="1" navigable="false">      
+      <attribute name="vehContainer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="flowConsBottlenecks"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="9" navigable="false">      
+      <attribute name="vehicleQueue"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="1" navigable="false">      
+      <attribute name="vehGenerator"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="48" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="4"/>    
+    <end type="TARGET" nodeId="43"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="26"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="100"/>    
+    <end type="TARGET" nodeId="99"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="101"/>    
+    <end type="TARGET" nodeId="98"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="vehContainer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="34"/>    
+    <end type="TARGET" nodeId="41"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="4" navigable="false">      
+      <attribute name="simOutput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="54" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="4" navigable="false">      
+      <attribute name="roadSection"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="112"/>    
+    <end type="TARGET" nodeId="95"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="57" navigable="false">      
+      <attribute name="inputData"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="56" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="83"/>    
+    <end type="TARGET" nodeId="78"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="32"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="heterogeneityInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="92" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="35"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="icMicroData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="95" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="25"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="65" navigable="false">      
+      <attribute name="roadSection"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="51" navigable="false">      
+      <attribute name="longModel"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="33"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="outputInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="82"/>    
+    <end type="TARGET" nodeId="80"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="20" navigable="false">      
+      <attribute name="vehicles"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="42"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="macroInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="81" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="108"/>    
+    <end type="TARGET" nodeId="93"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="54" navigable="false">      
+      <attribute name="trafficLightRecorder"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="61" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="65"/>    
+    <end type="TARGET" nodeId="62"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="111"/>    
+    <end type="TARGET" nodeId="96"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="75"/>    
+    <end type="TARGET" nodeId="72"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="30"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="9"/>    
+    <end type="TARGET" nodeId="16"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="51" navigable="false">      
+      <attribute name="vehicleInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="4" navigable="false">      
+      <attribute name="simInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="55" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="29"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="2"/>    
+    <end type="TARGET" nodeId="14"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="ramps"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="94" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="54" navigable="false">      
+      <attribute name="floatingCars"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="59" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="56" navigable="false">      
+      <attribute name="vehicleInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="54" navigable="false">      
+      <attribute name="macro3D"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="60" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="simpleRamps"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="90" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="20"/>    
+    <end type="TARGET" nodeId="46"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="icMacroData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="97" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="105"/>    
+    <end type="TARGET" nodeId="91"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="1"/>    
+    <end type="TARGET" nodeId="15"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="67"/>    
+    <end type="TARGET" nodeId="59"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="9" navigable="false">      
+      <attribute name="inflowTimeSeries"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
     <attributes public="false" package="false" protected="false" private="false"/>    
     <operations public="false" package="false" protected="false" private="false"/>  

@@ -26,14 +26,18 @@
  */
 package org.movsim.ui.desktop;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.movsim.simulator.Simulator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,8 +45,11 @@ import org.movsim.simulator.Simulator;
  */
 public class ControlPanel extends JPanel {
 
-    /** The simulator. */
-    private final Simulator simulator;
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(ControlPanel.class);
+    final JButton startButton;
+    final JButton pauseButton;
+    final JButton stopButton;
 
     /**
      * Instantiates a new control panel.
@@ -50,53 +57,24 @@ public class ControlPanel extends JPanel {
      * @param simulator
      *            the simulator
      */
-    public ControlPanel(final Simulator simulator) {
-        this.simulator = simulator;
-        SwingHelper.setComponentSize(this, 1200, 80);
-        setBorder(BorderFactory.createEtchedBorder());
-        setLayout(null);
+    public ControlPanel(ActionListener listener) {
+        
+//        SwingHelper.setComponentSize(this, 1200, 80);
+//        setBorder(BorderFactory.createEtchedBorder());
+//        setLayout(null);
 
         // Buttons
-        final JButton startButton = new JButton("start");
-        final JButton pauseButton = new JButton("pause");
-        final JButton stopButton = new JButton("stop");
+        startButton = new JButton("start");
+        pauseButton = new JButton("pause");
+        stopButton = new JButton("stop");
 
         startButton.setBounds(20, 20, 80, 22);
         pauseButton.setBounds(120, 20, 80, 22);
         stopButton.setBounds(220, 20, 80, 22);
-
-        final Thread simThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                simulator.run();
-
-            }
-        });
-
-        startButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                simThread.run();
-            }
-        });
-
-        pauseButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        });
-
-        stopButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO
-            }
-        });
+        
+        startButton.addActionListener(listener);
+        pauseButton.addActionListener(listener);
+        stopButton.addActionListener(listener);
 
         add(startButton);
         add(pauseButton);

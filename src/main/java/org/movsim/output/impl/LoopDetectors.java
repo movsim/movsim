@@ -44,6 +44,10 @@ public class LoopDetectors {
     /** The detectors. */
     private List<LoopDetector> detectors;
 
+    public List<LoopDetector> getDetectors() {
+        return detectors;
+    }
+
     /**
      * Instantiates a new loop detectors.
      * 

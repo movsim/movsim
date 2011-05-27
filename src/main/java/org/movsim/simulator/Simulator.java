@@ -26,6 +26,11 @@
  */
 package org.movsim.simulator;
 
+import org.movsim.input.InputData;
+import org.movsim.output.LoopDetectorObserver;
+import org.movsim.output.Macro3DObserver;
+import org.movsim.output.SimOutput;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface Simulator.
@@ -63,6 +68,20 @@ public interface Simulator {
      */
     void update();
 
-    // void restart(); // start with current gui input data
+    void restart(); // start with current gui input data
+
+    InputData getSiminput();
+    
+    SimOutput getSimOutput();
+
+    void setSimInput(InputData simInput);
+
+    void registerObserver(LoopDetectorObserver o);
+
+    void removeObserver(LoopDetectorObserver o);
+
+    void registerObserver(Macro3DObserver o);
+
+    void removeObserver(Macro3DObserver o);
 
 }

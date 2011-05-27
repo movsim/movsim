@@ -45,5 +45,18 @@ public interface Macro3D {
      *            the road section
      */
     void update(int it, double time, RoadSection roadSection);
+    
+    double[] getState();
 
+    /**
+     * @param o
+     */
+    void removeObserver(Macro3DObserver o);
+
+    /**
+     * @param o
+     */
+    void registerObserver(Macro3DObserver o);
+
+   
 }

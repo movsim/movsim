@@ -319,4 +319,8 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
         
     }
     
+    public void update() {
+        
+    }
+    
 }
