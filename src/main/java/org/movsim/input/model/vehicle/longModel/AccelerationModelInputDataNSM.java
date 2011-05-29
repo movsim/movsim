@@ -30,14 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataNSM.
  */
-public interface AccelerationModelInputDataNSM {
-
-    /**
-     * Gets the model name.
-     * 
-     * @return the model name
-     */
-    String getModelName();
+public interface AccelerationModelInputDataNSM extends AccelerationModelInputData{
 
     /**
      * Gets the v0.

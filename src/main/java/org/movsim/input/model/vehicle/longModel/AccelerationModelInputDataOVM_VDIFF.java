@@ -30,14 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataOVM_VDIFF.
  */
-public interface AccelerationModelInputDataOVM_VDIFF {
-
-    /**
-     * Gets the model name.
-     * 
-     * @return the model name
-     */
-    String getModelName();
+public interface AccelerationModelInputDataOVM_VDIFF extends AccelerationModelInputData{
 
     /**
      * Gets the s0.

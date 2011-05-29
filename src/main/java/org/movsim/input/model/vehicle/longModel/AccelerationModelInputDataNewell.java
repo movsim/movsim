@@ -30,13 +30,8 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataNewell.
  */
-public interface AccelerationModelInputDataNewell {
+public interface AccelerationModelInputDataNewell extends AccelerationModelInputData {
 
-    /**
-     * Gets the model name.
-     * 
-     * @return the model name
-     */
-    String getModelName();
+   
 
 }

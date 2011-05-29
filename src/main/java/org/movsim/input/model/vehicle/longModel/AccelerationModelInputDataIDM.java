@@ -30,62 +30,55 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataIDM.
  */
-public interface AccelerationModelInputDataIDM {
-
-    /**
-     * Gets the model name.
-     * 
-     * @return the model name
-     */
-    String getModelName();
+public interface AccelerationModelInputDataIDM extends AccelerationModelInputData{
 
     /**
      * Gets the v0.
      * 
      * @return the v0
      */
-    public abstract double getV0();
+    double getV0();
 
     /**
      * Gets the t.
      * 
      * @return the t
      */
-    public abstract double getT();
+    double getT();
 
     /**
      * Gets the s0.
      * 
      * @return the s0
      */
-    public abstract double getS0();
+    double getS0();
 
     /**
      * Gets the s1.
      * 
      * @return the s1
      */
-    public abstract double getS1();
+    double getS1();
 
     /**
      * Gets the delta.
      * 
      * @return the delta
      */
-    public abstract double getDelta();
+    double getDelta();
 
     /**
      * Gets the a.
      * 
      * @return the a
      */
-    public abstract double getA();
+    double getA();
 
     /**
      * Gets the b.
      * 
      * @return the b
      */
-    public abstract double getB();
+    double getB();
 
 }

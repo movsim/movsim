@@ -30,14 +30,9 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataGipps.
  */
-public interface AccelerationModelInputDataGipps {
+public interface AccelerationModelInputDataGipps extends AccelerationModelInputData{
 
-    /**
-     * Gets the model name.
-     * 
-     * @return the model name
-     */
-    String getModelName();
+    
 
     /**
      * Gets the v0.

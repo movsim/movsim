@@ -254,7 +254,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         AccelerationModel longModel = null;
         logger.info("modelName = {}", modelName);
         if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-            longModel = new IDM(modelName, (AccelerationModelInputDataIDM) modelInputData);
+            longModel = new IDM(modelName, (AccelerationModelInputDataIDM)modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
             longModel = new ACC(modelName, (AccelerationModelInputDataACC) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
@@ -266,9 +266,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
             longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength); // needs
-                                                                                           // vehicle
-                                                                                           // length
+         // needs vehicle length
+            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength); 
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0); // TODO
