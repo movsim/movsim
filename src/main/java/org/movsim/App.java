@@ -44,7 +44,6 @@ import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.desktop.ControllerInterface;
 import org.movsim.ui.desktop.SimulatorController;
-import org.movsim.ui.desktop.GUISwing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

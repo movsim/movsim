@@ -5,8 +5,6 @@
  */
 package org.movsim.ui.desktop;
 
-import org.movsim.input.InputData;
-import org.movsim.input.model.SimulationInput;
 import org.movsim.simulator.Simulator;
 
 /**

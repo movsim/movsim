@@ -28,7 +28,6 @@ package org.movsim.simulator;
 
 import org.movsim.input.InputData;
 import org.movsim.output.SimObservables;
-import org.movsim.output.SimOutput;
 
 // TODO: Auto-generated Javadoc
 /**

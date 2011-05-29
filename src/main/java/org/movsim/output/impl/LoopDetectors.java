@@ -32,7 +32,6 @@ import java.util.List;
 import org.movsim.input.model.output.DetectorInput;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.fileoutput.FileDetector;
-import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -30,7 +30,6 @@ import java.util.List;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.output.FloatingCars;
-import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.MoveableContainer;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;

@@ -59,7 +59,7 @@ flowLabel = "Flow Q (vehicles/h)"
 veqLabel = "Velocity V_{eq} (km/h)"
 timeLabel = "Time (s)"
 distanceLabel = "Distance (m)"
-velocityLabel = "Velocity (km/h)"
+velocityLabel = "Speed (km/h)"
 accelerationLabel = "Acceleration (m/s^2)"
 car(n) = sprintf("Car %d",n)
 

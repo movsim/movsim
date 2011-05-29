@@ -29,7 +29,6 @@ package org.movsim.input.impl;
 import java.util.List;
 
 import org.movsim.input.InputData;
-import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.slf4j.Logger;

@@ -26,16 +26,11 @@
  */
 package org.movsim.ui.desktop;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.movsim.simulator.Simulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,11 +1,9 @@
 package org.movsim.output.fileoutput;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.movsim.output.SpatioTemporal;
 import org.movsim.output.Observer;
+import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.Constants;
 import org.movsim.utilities.FileUtils;
 

@@ -28,16 +28,12 @@ package org.movsim.output.fileoutput;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
-import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.output.FloatingCars;
 import org.movsim.output.Observer;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
-import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

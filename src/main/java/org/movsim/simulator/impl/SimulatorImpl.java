@@ -26,12 +26,8 @@
  */
 package org.movsim.simulator.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
-import org.movsim.output.LoopDetector;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;

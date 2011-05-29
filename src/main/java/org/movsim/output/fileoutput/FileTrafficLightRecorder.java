@@ -30,7 +30,6 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.movsim.input.model.output.TrafficLightRecorderInput;
-import org.movsim.output.Observer;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.utilities.FileUtils;
