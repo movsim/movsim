@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * The Interface VehicleContainer.
  */
-public interface VehicleContainer {
+public interface VehicleContainer extends MoveableContainer {
 
     /**
      * Gets the vehicles.
@@ -57,15 +57,7 @@ public interface VehicleContainer {
      */
     Vehicle get(int index);
 
-    /**
-     * Gets the leader.
-     * 
-     * @param veh
-     *            the veh
-     * @return the leader
-     */
-    Vehicle getLeader(Vehicle veh);
-
+   
     /**
      * Gets the most upstream.
      * 

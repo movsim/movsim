@@ -26,6 +26,8 @@
  */
 package org.movsim.output;
 
+import java.util.List;
+
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.DetectorInput;
@@ -33,45 +35,45 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.output.fileoutput.FileFloatingCars;
+import org.movsim.output.fileoutput.FileSpatioTemporal;
+import org.movsim.output.fileoutput.FileTrafficLightRecorder;
+import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.impl.FloatingCarsImpl;
 import org.movsim.output.impl.LoopDetectors;
-import org.movsim.output.impl.Macro3DImpl;
-import org.movsim.output.impl.TrafficLightRecorderImpl;
-import org.movsim.output.impl.TrajectoriesImpl;
+import org.movsim.output.impl.SpatioTemporalImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SimOutput.
  */
-public class SimOutput {
+public class SimOutput implements SimObservables {
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
-    /** The macro3 d. */
-    private Macro3D macro3D = null;
+    private SpatioTemporalImpl spatioTemporal = null;
     
-    public Macro3D getMacro3D() {
-        return macro3D;
-    }
+    /** The file spatio temporal. */
+    private FileSpatioTemporal fileSpatioTemporal;
 
     /** The floating cars. */
-    private FloatingCars floatingCars = null;
+    private FloatingCarsImpl floatingCars = null;
+    
+    private FileFloatingCars fileFloatingCars;
+    
     
     /** The detectors. */
     private LoopDetectors detectors = null;
-    
-    public LoopDetectors getDetectors() {
-        return detectors;
-    }
-
+  
     /** The trajectories. */
-    private Trajectories trajectories = null;
+    private FileTrajectories trajectories = null;
 
     /** The traffic light recorder. */
-    private TrafficLightRecorder trafficLightRecorder = null;
+    private FileTrafficLightRecorder fileTrafficLightRecorder = null;
 
     /** The write output. */
     private final boolean writeOutput;
@@ -79,7 +81,6 @@ public class SimOutput {
     /** The project name. */
     private final String projectName;
 
-    // TODO: propagate output path information into output modules ...
 
     /**
      * Instantiates a new sim output.
@@ -102,29 +103,37 @@ public class SimOutput {
         final OutputInput outputInput = simInput.getSimulationInput().getSingleRoadInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
-            floatingCars = new FloatingCarsImpl(projectName, writeOutput, floatingCarInput);
+            floatingCars = new FloatingCarsImpl(roadSection.vehContainer(), floatingCarInput);
+            if(writeOutput){
+                fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
+            }
         }
 
         final MacroInput macroInput = outputInput.getMacroInput();
         if (macroInput.isWithMacro()) {
-            macro3D = new Macro3DImpl(projectName, writeOutput, macroInput, roadSection);
+            spatioTemporal = new SpatioTemporalImpl(macroInput, roadSection);
+            if(writeOutput){
+                fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSection.id(), spatioTemporal);
+            }
         }
         
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
-            trajectories = new TrajectoriesImpl(projectName, trajInput, roadSection);
+            trajectories = new FileTrajectories(projectName, trajInput, roadSection);
         }
 
         final DetectorInput detInput = outputInput.getDetectorInput();
         if (detInput.isWithDetectors()) {
             detectors = new LoopDetectors(projectName, writeOutput, detInput);
         }
+        
 
         final TrafficLightRecorderInput trafficLightRecInput = outputInput.getTrafficLightRecorderInput();
         if (trafficLightRecInput.isWithTrafficLightRecorder()) {
-            trafficLightRecorder = new TrafficLightRecorderImpl(projectName, writeOutput, trafficLightRecInput,
+            fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, writeOutput, trafficLightRecInput,
                     roadSection.getTrafficLights());
         }
+        
 
     }
 
@@ -143,10 +152,10 @@ public class SimOutput {
     public void update(int itime, double time, double timestep, RoadSection roadSection) {
         
         if (floatingCars != null) {
-            floatingCars.update(itime, time, timestep, roadSection.vehContainer());
+            floatingCars.update(itime, time, timestep);
         }
-        if (macro3D != null) {
-            macro3D.update(itime, time, roadSection);
+        if (spatioTemporal != null) {
+            spatioTemporal.update(itime, time, roadSection);
         }
         
         if (trajectories != null) {
@@ -157,26 +166,22 @@ public class SimOutput {
             detectors.update(itime, time, timestep, roadSection.vehContainer());
         }
         
-        if (trafficLightRecorder != null) {
-            trafficLightRecorder.update(itime, time, roadSection.getTrafficLights());
+        if (fileTrafficLightRecorder != null) {
+            fileTrafficLightRecorder.update(itime, time, roadSection.getTrafficLights());
         }
     }
 
-    /**
-     * Close.
-     */
-    public void close() {
-
-        if (!writeOutput)
-            return;
-
-        logger.info("SimOutput: close all files ... ");
-        if (floatingCars != null) {
-            floatingCars.closeAllFiles();
-        }
-        if (detectors != null) {
-            detectors.closeFiles();
-        }
+    public SpatioTemporal getSpatioTemporal(){
+        return getSpatioTemporal();
+    }
+    
+    public FloatingCars getFloatingCars(){
+        return floatingCars;
     }
 
+    public List<LoopDetector> getLoopDetectors(){
+        return detectors.getDetectors();
+    }
+    
+    
 }

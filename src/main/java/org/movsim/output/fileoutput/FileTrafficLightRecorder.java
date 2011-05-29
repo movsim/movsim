@@ -24,22 +24,22 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.output.impl;
+package org.movsim.output.fileoutput;
 
 import java.io.PrintWriter;
 import java.util.List;
 
 import org.movsim.input.model.output.TrafficLightRecorderInput;
-import org.movsim.output.TrafficLightRecorder;
+import org.movsim.output.Observer;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.utilities.FileUtils;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class TrafficLightRecorderImpl.
+ * The Class FileTrafficLightRecorder.
  */
-public class TrafficLightRecorderImpl implements TrafficLightRecorder {
+public class FileTrafficLightRecorder {
 
     /** The fstr. */
     private PrintWriter fstr = null;
@@ -59,7 +59,7 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
      * @param trafficLights
      *            the traffic lights
      */
-    public TrafficLightRecorderImpl(String projectName, boolean writeOutput, TrafficLightRecorderInput input,
+    public FileTrafficLightRecorder(String projectName, boolean writeOutput, TrafficLightRecorderInput input,
             List<TrafficLight> trafficLights) {
 
         nDt = input.getnDt();
@@ -73,13 +73,6 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.impl.TrafficLightRecorder#update(int,
-     * double, java.util.List)
-     */
-    @Override
     public void update(int itime, double time, List<TrafficLight> trafficLights) {
 
         if (itime % nDt != 0)
@@ -118,8 +111,9 @@ public class TrafficLightRecorderImpl implements TrafficLightRecorder {
             counter++;
         }
         fstr.printf(Constants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1", 
-        		"status[1]_TL1", " etc. ");
+                "status[1]_TL1", " etc. ");
         fstr.flush();
     }
+
 
 }

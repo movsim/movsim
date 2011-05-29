@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
@@ -181,7 +182,7 @@ public class VehicleContainerImpl implements VehicleContainer {
             vehicles.add(0, veh);
             sort(); // robust but runtime performance ?
         }
-        logger.info("vehicleContainerImpl: vehicle added: x={}, v={}", veh.position(), veh.speed());
+        logger.debug("vehicleContainerImpl: vehicle added: x={}, v={}", veh.position(), veh.speed());
     }
 
     /*
@@ -221,20 +222,18 @@ public class VehicleContainerImpl implements VehicleContainer {
      * .vehicles.Vehicle)
      */
     @Override
-    public Vehicle getLeader(Vehicle veh) {
+    public Moveable getLeader(Moveable veh) {
         final int index = vehicles.indexOf(veh);
         if (index == -1 || index == 0)
             return null;
         return vehicles.get(index - 1);
     }
 
-    // for multi-lane extensions: sort will be needed
     /**
      * Sort.
      */
     private void sort() {
-        // sortierreihenfolge festgelegt durch "pos2.compareTo(pos1) -->
-        // absteigend in pos! OK
+        // sort order determined by pos2.compareTo(pos1) in descending order 
         Collections.sort(vehicles, new Comparator<Vehicle>() {
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
@@ -244,5 +243,21 @@ public class VehicleContainerImpl implements VehicleContainer {
             }
         });
     }
+
+    @Override
+    public List<Moveable> getMoveables() {
+        List<Moveable> moveables = new ArrayList<Moveable>();
+        for(final Vehicle veh: vehicles){
+            moveables.add(veh);
+        }
+        return moveables;
+    }
+
+    @Override
+    public Moveable getMoveable(int index) {
+        return vehicles.get(index);
+    }
+
+ 
 
 }

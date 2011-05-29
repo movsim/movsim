@@ -29,10 +29,10 @@ package org.movsim.simulator.vehicles.impl;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Noise;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.VehicleGUI;
 import org.movsim.simulator.vehicles.impl.CyclicBufferImpl;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
 import org.movsim.simulator.vehicles.longmodel.Memory;
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class VehicleImpl.
  */
-public class VehicleImpl implements Vehicle, VehicleGUI {
+public class VehicleImpl implements Vehicle{
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleImpl.class);
@@ -89,7 +89,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
     private int vehNumber;
 
     /** The lane. */
-    private double lane;
+    private int lane;
     
     /** The target lane. */
     private int targetLane;
@@ -357,7 +357,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
      * .vehicles.Vehicle)
      */
     @Override
-    public double netDistance(Vehicle vehFront) {
+    public double netDistance(Moveable vehFront) {
         if (vehFront == null)
             return Constants.GAP_INFINITY;
         return (vehFront.position() - position - 0.5 * (length() + vehFront.length()));
@@ -371,7 +371,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
      * .Vehicle)
      */
     @Override
-    public double relSpeed(Vehicle vehFront) {
+    public double relSpeed(Moveable vehFront) {
         if (vehFront == null)
             return 0;
         return (speed - vehFront.speed());
@@ -391,7 +391,7 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
         if (noise != null) {
             noise.update(dt);
             accError = noise.getAccError();
-            final Vehicle vehFront = vehContainer.getLeader(this);
+            final Moveable vehFront = vehContainer.getLeader(this);
             if (netDistance(vehFront) < 2.0) {
                 accError = Math.min(accError, 0.); // !!!
             }
@@ -470,20 +470,11 @@ public class VehicleImpl implements Vehicle, VehicleGUI {
      * @see org.movsim.simulator.vehicles.Vehicle#getLane()
      */
     @Override
-    public double getLane() {
+    public int getLane() {
         return lane;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#getIntLane()
-     */
-    @Override
-    public int getIntLane() {
-        return targetLane;
-    }
-
+  
     /*
      * (non-Javadoc)
      * 

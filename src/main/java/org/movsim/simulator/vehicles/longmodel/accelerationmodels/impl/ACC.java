@@ -27,6 +27,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -127,7 +128,7 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel {
         // TODO kommentare checken/loeschen ... Martin!
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.getLeader(me);
+        final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
         final double v = me.speed();
         final double dv = me.relSpeed(vehFront);

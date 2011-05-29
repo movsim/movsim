@@ -65,14 +65,6 @@ public class SimulatorController implements ControllerInterface {
         view.disablePause();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.ui.desktop.ControllerInterface#setDuration(int)
-     */
-    @Override
-    public void setDurationOfSimulation(double duration) {
-        model.getSiminput().getSimulationInput().setMaxSimTime(duration);
-    }
+  
 
 }

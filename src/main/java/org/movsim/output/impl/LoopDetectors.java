@@ -31,21 +31,30 @@ import java.util.List;
 
 import org.movsim.input.model.output.DetectorInput;
 import org.movsim.output.LoopDetector;
+import org.movsim.output.fileoutput.FileDetector;
+import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class LoopDetectors.
  */
 public class LoopDetectors {
-    // final static Logger logger =
-    // LoggerFactory.getLogger(LoopDetectors.class);
+    final static Logger logger = LoggerFactory.getLogger(LoopDetectors.class);
 
     /** The detectors. */
-    private List<LoopDetector> detectors;
+    private List<LoopDetectorImpl> detectors;
+    
+    private List<FileDetector> fileDetectors;
 
     public List<LoopDetector> getDetectors() {
-        return detectors;
+        final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
+        for(final LoopDetector det: detectors){
+            loopDetectors.add(det);
+        }
+        return loopDetectors;
     }
 
     /**
@@ -60,13 +69,20 @@ public class LoopDetectors {
      */
     public LoopDetectors(String projectName, boolean writeOutput, DetectorInput input) {
 
-        detectors = new ArrayList<LoopDetector>();
+        detectors = new ArrayList<LoopDetectorImpl>();
 
         final double dtSample = input.getSampleInterval();
         final List<Double> positions = input.getPositions();
 
         for (final Double detPosition : positions) {
             detectors.add(new LoopDetectorImpl(projectName, writeOutput, detPosition, dtSample));
+        }
+        
+        if(writeOutput){
+            fileDetectors = new ArrayList<FileDetector>();
+            for (final LoopDetector det : detectors) {
+                fileDetectors.add(new FileDetector(projectName, det));
+            }
         }
 
     }
@@ -84,18 +100,10 @@ public class LoopDetectors {
      *            the veh container
      */
     public void update(int itime, double time, double timestep, VehicleContainer vehContainer) {
-        for (final LoopDetector det : detectors) {
+        for (final LoopDetectorImpl det : detectors) {
             det.update(time, vehContainer);
         }
     }
 
-    /**
-     * Close files.
-     */
-    public void closeFiles() {
-        for (final LoopDetector det : detectors) {
-            det.closeFiles();
-        }
-    }
 
 }

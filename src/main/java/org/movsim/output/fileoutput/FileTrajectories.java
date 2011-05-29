@@ -24,17 +24,16 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.output.impl;
+package org.movsim.output.fileoutput;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.output.Trajectories;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -42,9 +41,9 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class TrajectoriesImpl.
+ * The Class FileTrajectories.
  */
-public class TrajectoriesImpl implements Trajectories {
+public class FileTrajectories {
 
 	
     private static final String extensionFormat = ".R%d_traj.csv";
@@ -54,7 +53,7 @@ public class TrajectoriesImpl implements Trajectories {
     	"%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
 
     /** The Constant logger. */
-	final static Logger logger = LoggerFactory.getLogger(TrajectoriesImpl.class);
+	final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 	
     /** The dt out. */
     private double dtOut; 
@@ -96,7 +95,7 @@ public class TrajectoriesImpl implements Trajectories {
      * @param trajectoriesInput the trajectories input
      * @param roadSection the road section
      */
-    public TrajectoriesImpl(String projectName, TrajectoriesInput trajectoriesInput, RoadSection roadSection) {
+    public FileTrajectories(String projectName, TrajectoriesInput trajectoriesInput, RoadSection roadSection) {
     	logger.info("Constructor");
 
         this.projectName = projectName;
@@ -198,7 +197,7 @@ public class TrajectoriesImpl implements Trajectories {
      */
     private void writeTrajectories(PrintWriter fstr, VehicleContainer vehicles ) {
         for (int i = 0, N = vehicles.size() ; i < N; i++) {
-            Vehicle me = vehicles.get(i);
+            Moveable me = vehicles.get(i);
             if( (me.position() >= x_start_interval && me.position() <= x_end_interval) ){
             	writeCarData(fstr, i, me);
             } 
@@ -214,8 +213,8 @@ public class TrajectoriesImpl implements Trajectories {
      * @param index the index
      * @param me the me
      */
-    private void writeCarData(PrintWriter fstr, int index, Vehicle me) {
-        final Vehicle frontVeh = roadSection.vehContainer().getLeader(me); 
+    private void writeCarData(PrintWriter fstr, int index, Moveable me) {
+        final Moveable frontVeh = roadSection.vehContainer().getLeader(me); 
         final double s = (frontVeh == null) ? 0 : me.netDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.relSpeed(frontVeh);
         fstr.printf(outputFormat,

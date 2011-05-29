@@ -45,6 +45,7 @@ import org.movsim.simulator.roadSection.RoadSectionGUI;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -322,22 +323,22 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         // crash test
         final List<Vehicle> vehicles = vehContainer.getVehicles();
         for (int i = 0, N = vehicles.size(); i < N; i++) {
-            final Vehicle egoVeh = vehicles.get(i);
-            final Vehicle vehFront = vehContainer.getLeader(egoVeh);
+            final Moveable egoVeh = vehicles.get(i);
+            final Moveable vehFront = vehContainer.getLeader(egoVeh);
             final double netDistance = egoVeh.netDistance(vehFront);
             if (netDistance < 0) {
                 logger.error("#########################################################");
                 logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.position());
-                logger.error("  with veh in front at x = {} on lane = {}", vehFront.position(), egoVeh.getIntLane());
+                logger.error("  with veh in front at x = {} on lane = {}", vehFront.position(), egoVeh.getLane());
                 logger.error("net distance  = {}", netDistance);
                 logger.error("container.size = {}", vehicles.size());
                 final StringBuilder msg = new StringBuilder("\n");
                 for (int j = Math.max(0, i - 8), M = vehicles.size(); j <= Math.min(i + 8, M - 1); j++) {
-                    final Vehicle veh = vehicles.get(j);
+                    final Moveable veh = vehicles.get(j);
                     msg.append(String
                             .format("veh j = %d , pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%3.1f, targetLane=%1d, id=%d%n",
                                     j, veh.position(), veh.speed(), veh.accModel(), veh.length(), veh.getLane(),
-                                    veh.getIntLane(), veh.id()));
+                                    veh.getLane(), veh.id()));
                 } // of for
                 logger.error(msg.toString());
                 if (!isWithGUI) {

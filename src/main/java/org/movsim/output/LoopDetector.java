@@ -26,62 +26,19 @@
  */
 package org.movsim.output;
 
-import org.movsim.simulator.vehicles.VehicleContainer;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Interface LoopDetector.
  */
-public interface LoopDetector {
+public interface LoopDetector extends Observable{
 
-    /**
-     * Update.
-     * 
-     * @param time
-     *            the time
-     * @param vehicles
-     *            the vehicles
-     */
-    public void update(double time, VehicleContainer vehicles);
-
-    /**
-     * Position.
-     * 
-     * @return the double
-     */
-    double position();
-
-    /**
-     * Mean speed.
-     * 
-     * @return the double
-     */
-    double meanSpeed();
-
-    /**
-     * Rho arithmetic.
-     * 
-     * @return the double
-     */
-    double rhoArithmetic();
-
-    /**
-     * Flow.
-     * 
-     * @return the double
-     */
-    double flow();
-
-    /**
-     * Occupancy.
-     * 
-     * @return the double
-     */
-    double occupancy();
-
-    /**
-     * Close files.
-     */
-    void closeFiles();
-
+    double getDetPosition();
+    double getMeanSpeed();
+    double getDensityArithmetic();
+    double getFlow();
+    double getOccupancy();
+    int getVehCountOutput();
+    double getMeanSpeedHarmonic(); 
+    double getMeanTimegapHarmonic();
+    double getDtSample(); 
 }

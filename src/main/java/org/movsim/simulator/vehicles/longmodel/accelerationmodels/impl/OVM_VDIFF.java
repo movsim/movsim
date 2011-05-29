@@ -28,6 +28,7 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -121,7 +122,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         // final double v=cyclicBuf->get_v(iveh,it,T_react_local);
 
         // Local dynamic variables
-        final Vehicle vehFront = vehContainer.getLeader(me);
+        final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
         final double v = me.speed();
         final double dv = me.relSpeed(vehFront); // only needed for VDIFF

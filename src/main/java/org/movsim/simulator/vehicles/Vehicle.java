@@ -32,93 +32,7 @@ import org.movsim.simulator.roadSection.TrafficLight;
 /**
  * The Interface Vehicle.
  */
-public interface Vehicle {
-
-   
-
-    /**
-     * Gets the label.
-     *
-     * @return the label
-     */
-    String getLabel();
-    
-    /**
-     * Length.
-     * 
-     * @return the double
-     */
-    double length();
-
-    /**
-     * Position.
-     * 
-     * @return the double
-     */
-    double position();
-
-    /**
-     * Pos front bumper.
-     * 
-     * @return the double
-     */
-    double posFrontBumper();
-
-    /**
-     * Pos read bumper.
-     * 
-     * @return the double
-     */
-    double posReadBumper();
-
-    /**
-     * Old position.
-     * 
-     * @return the double
-     */
-    double oldPosition();
-
-    /**
-     * Checks for reaction time.
-     * 
-     * @return true, if successful
-     */
-    boolean hasReactionTime();
-
-    /**
-     * Gets the desired speed parameter.
-     * 
-     * @return the desired speed parameter
-     */
-    double getDesiredSpeedParameter();
-
-    /**
-     * Speed.
-     * 
-     * @return the double
-     */
-    double speed();
-
-    /**
-     * Acc.
-     * 
-     * @return the double
-     */
-    double acc();
-
-    /**
-     * Acc model.
-     * 
-     * @return the double
-     */
-    double accModel();
-
-    /**
-     * Speedlimit.
-     * 
-     * @return the double
-     */
-    double speedlimit();
+public interface Vehicle extends Moveable{
 
     /**
      * Sets the speedlimit.
@@ -129,20 +43,6 @@ public interface Vehicle {
     void setSpeedlimit(double speedlimit);
 
     /**
-     * Id.
-     * 
-     * @return the int
-     */
-    int id();
-
-    /**
-     * Gets the veh number.
-     * 
-     * @return the veh number
-     */
-    int getVehNumber();
-
-    /**
      * Sets the veh number.
      * 
      * @param vehNumber
@@ -150,27 +50,7 @@ public interface Vehicle {
      */
     void setVehNumber(int vehNumber);
 
-    /**
-     * Checks if is from onramp.
-     * 
-     * @return true, if is from onramp
-     */
-    boolean isFromOnramp();
-
-    /**
-     * Gets the lane.
-     * 
-     * @return the lane
-     */
-    double getLane();
-
-    /**
-     * Gets the int lane.
-     * 
-     * @return the int lane
-     */
-    int getIntLane();
-
+    
     /**
      * Inits the.
      * 
@@ -183,31 +63,7 @@ public interface Vehicle {
      */
     void init(double pos, double v, int lane);
 
-    /**
-     * Net distance.
-     * 
-     * @param vehFront
-     *            the veh front
-     * @return the double
-     */
-    double netDistance(Vehicle vehFront);
-
-    /**
-     * Rel speed.
-     * 
-     * @param vehFront
-     *            the veh front
-     * @return the double
-     */
-    double relSpeed(Vehicle vehFront);
-
-    /**
-     * Distance to trafficlight.
-     * 
-     * @return the double
-     */
-    double distanceToTrafficlight();
-
+    
     /**
      * Update postion and speed.
      * 

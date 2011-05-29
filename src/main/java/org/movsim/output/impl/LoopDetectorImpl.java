@@ -27,25 +27,24 @@
 package org.movsim.output.impl;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import org.movsim.output.LoopDetector;
-import org.movsim.output.LoopDetectorObservable;
-import org.movsim.output.LoopDetectorObserver;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class LoopDetectorImpl.
  */
-public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
+public class LoopDetectorImpl extends ObservableImpl implements LoopDetector{
 
-    // final static Logger logger =
-    // LoggerFactory.getLogger(LoopDetectorImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(LoopDetectorImpl.class);
 
     /** The dt sample. */
     private final double dtSample;
@@ -54,15 +53,8 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
     private final double detPosition;
 
 
-    /** The time when calculating the average */
-    private double timeAtAverage;
-
-    
     /** The time offset. */
     private double timeOffset;
-
-    /** The print writer. */
-    private PrintWriter printWriter = null;
 
     // internal state variables
     /** The veh count. */
@@ -80,12 +72,10 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
     /** The sum inv q. */
     private double sumInvQ;
 
-    // aggregated variables
     /** The mean speed. */
     private double meanSpeed;
     
-    /** The rho arithmetic. */
-    private double rhoArithmetic;
+    private double densityArithmetic;
     
     /** The flow. */
     private double flow;
@@ -97,16 +87,11 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
     private int vehCountOutput;
     
     /** The mean harmonic speed. */
-    private double meanHarmSpeed;
+    private double meanSpeedHarmonic;
     
     /** The harmonic mean timegap. */
-    private double meanHarmTimegap;
+    private double meanTimegapHarmonic;
 
-    /** The write output. */
-    private final boolean writeOutput;
-
-    
-    private ArrayList<LoopDetectorObserver> observers;
     
     /**
      * Instantiates a new loop detector impl.
@@ -121,20 +106,13 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
      *            the dt sample
      */
     public LoopDetectorImpl(String projectName, boolean writeOutput, double detPosition, double dtSample) {
-        this.writeOutput = writeOutput;
         this.detPosition = detPosition;
         this.dtSample = dtSample;
 
         timeOffset = 0;
         reset();
 
-        if (writeOutput) {
-            final int xDetectorInt = (int) detPosition;
-            // road id hard coded as 1 for the moment
-            final String filename = projectName + ".R1x" + xDetectorInt + "_det.csv";
-            printWriter = initFile(filename);
-            writeAggregatedData(0);
-        }
+        notifyObservers(0);
     }
 
     /**
@@ -148,14 +126,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
         sumInvV = 0;
     }
 
-    // call in every simulation update
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#update(double,
-     * org.movsim.simulator.vehicles.VehicleContainer)
-     */
-    @Override
+   
     public void update(double time, VehicleContainer vehicleContainer) {
 
         // brute force search:
@@ -169,7 +140,7 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
                 occTime += veh.length() / speedVeh;
                 sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
                 // calculate brut timegap not from local detector data:
-                final Vehicle vehFront = vehicleContainer.getLeader(veh);
+                final Moveable vehFront = vehicleContainer.getLeader(veh);
                 final double brutTimegap = (vehFront == null) ? 0 : (vehFront.position() - veh.position())
                         / vehFront.speed();
                 sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0; // microscopic
@@ -178,11 +149,8 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
         }
 
         if ((time - timeOffset + Constants.SMALL_VALUE) >= dtSample) {
-            timeAtAverage = time;
             calculateAverages();
-            if (writeOutput) {
-                writeAggregatedData(time);
-            }
+            notifyObservers(time);
             timeOffset = time;
         }
     }
@@ -195,132 +163,77 @@ public class LoopDetectorImpl implements LoopDetector, LoopDetectorObservable{
     private void calculateAverages() {
         flow = vehCount / dtSample;
         meanSpeed = (vehCount == 0) ? 0 : vSum / vehCount;
-        rhoArithmetic = (vehCount == 0) ? 0 : flow / meanSpeed;
+        densityArithmetic = (vehCount == 0) ? 0 : flow / meanSpeed;
         occupancy = occTime / dtSample;
         vehCountOutput = vehCount;
-        meanHarmSpeed = (vehCount == 0) ? 0 : 1. / (sumInvV / vehCount);
-        meanHarmTimegap = (vehCount == 0) ? 0 : sumInvQ / vehCount;
+        meanSpeedHarmonic = (vehCount == 0) ? 0 : 1. / (sumInvV / vehCount);
+        meanTimegapHarmonic = (vehCount == 0) ? 0 : sumInvQ / vehCount;
         reset();
     }
 
     /**
-     * Inits the file.
-     * 
-     * @param filename
-     *            the filename
-     * @return the prints the writer
+     * @return the dtSample
      */
-    private PrintWriter initFile(String filename) {
-        printWriter = FileUtils.getWriter(filename);
-        printWriter.printf(Constants.COMMENT_CHAR + " dtSample in s = %-8.4f%n", dtSample);
-        printWriter.printf(Constants.COMMENT_CHAR + " position xDet = %-8.4f%n", detPosition);
-        printWriter.printf(Constants.COMMENT_CHAR + " arithmetic average for density rho%n");
-        printWriter.printf(Constants.COMMENT_CHAR + "   t[s],  v[km/h],rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)%n");
-        printWriter.flush();
-        return printWriter;
+    public double getDtSample() {
+        return dtSample;
     }
 
     /**
-     * Write aggregated data.
-     * 
-     * @param time
-     *            the time
+     * @return the detPosition
      */
-    private void writeAggregatedData(double time) {
-        if (printWriter == null)
-            return;
-        printWriter.printf("%8.1f, %8.3f, %8.3f, %8.1f, %5d, %8.7f, %8.3f, %8.5f%n", time, 3.6 * meanSpeed,
-                1000 * rhoArithmetic, 3600 * flow, vehCountOutput, occupancy, 3.6 * meanHarmSpeed, meanHarmTimegap);
-        printWriter.flush();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#closeFiles()
-     */
-    @Override
-    public void closeFiles() {
-        if (printWriter != null) {
-            printWriter.close();
-        }
-    }
-
-    // public getters
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#position()
-     */
-    @Override
-    public double position() {
+    public double getDetPosition() {
         return detPosition;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#flow()
+    /**
+     * @return the meanSpeed
      */
-    @Override
-    public double flow() {
-        return flow;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#meanSpeed()
-     */
-    @Override
-    public double meanSpeed() {
+    public double getMeanSpeed() {
         return meanSpeed;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#occupancy()
+    /**
+     * @return the densityArithmetic
      */
-    @Override
-    public double occupancy() {
+    public double getDensityArithmetic() {
+        return densityArithmetic;
+    }
+
+    /**
+     * @return the flow
+     */
+    public double getFlow() {
+        return flow;
+    }
+
+    /**
+     * @return the occupancy
+     */
+    public double getOccupancy() {
         return occupancy;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.output.LoopDetector#rhoArithmetic()
+    /**
+     * @return the vehCountOutput
      */
-    @Override
-    public double rhoArithmetic() {
-        return rhoArithmetic;
-    }
-    
-    
-    // implementation of Observable pattern
-
-    public void registerObserver(LoopDetectorObserver observer) {
-        observers.add(observer);
+    public int getVehCountOutput() {
+        return vehCountOutput;
     }
 
-    public void removeObserver(LoopDetectorObserver observer) {
-        int i = observers.indexOf(observer);
-        if(i>=0){
-            observers.remove(i);
-        }
+    /**
+     * @return the meanSpeedHarmonic
+     */
+    public double getMeanSpeedHarmonic() {
+        return meanSpeedHarmonic;
     }
 
-    public void notifyObservers() {
-        for(LoopDetectorObserver obs : observers){
-            obs.update(timeAtAverage, flow(), meanSpeed(), rhoArithmetic());
-        }
-        
+    /**
+     * @return the meanTimegapHarmonic
+     */
+    public double getMeanTimegapHarmonic() {
+        return meanTimegapHarmonic;
     }
-    
-    public void update() {
-        
-    }
+
+       
     
 }

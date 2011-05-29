@@ -28,6 +28,7 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.simulator.impl.MyRandom;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -94,7 +95,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.getLeader(me);
+        final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
         final double v = me.speed();
         final double dv = me.relSpeed(vehFront);

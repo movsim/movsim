@@ -2,31 +2,29 @@ package org.movsim.ui.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
-import org.movsim.output.Macro3DObserver;
+import org.movsim.output.LoopDetector;
+import org.movsim.output.Observer;
 import org.movsim.simulator.Simulator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.swing.*;
 
 /**
  * @author ralph
  *
  */
-public class SimulatorView implements ActionListener, Macro3DObserver{
+public class SimulatorView implements Observer, ActionListener{
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorView.class);
@@ -51,8 +49,13 @@ public class SimulatorView implements ActionListener, Macro3DObserver{
     public SimulatorView(Simulator simulator, ControllerInterface controller) {
         this.simulator = simulator;
         this.controller = controller;
-        simulator.getSimOutput().getMacro3D().registerObserver((Macro3DObserver)this);
-//        simulator.registerObserver((Macro3DObserver)this);
+        
+        simulator.getSimObservables().getSpatioTemporal().registerObserver(this);
+        simulator.getSimObservables().getFloatingCars().registerObserver(this);
+        List<LoopDetector>  loopDetectors = simulator.getSimObservables().getLoopDetectors();
+        for(final LoopDetector loopDet : loopDetectors){
+            loopDet.registerObserver(this);
+        }
     }
     
     
@@ -106,25 +109,24 @@ public class SimulatorView implements ActionListener, Macro3DObserver{
     /* (non-Javadoc)
      * @see org.movsim.output.Macro3DObserver#updateMacro3D()
      */
-    @Override
-    public void updateMacro3D() {
-        double[] state = simulator.getSimOutput().getMacro3D().getState();
-        System.out.println("state: "+ state[0] + " " +state[1] + " " +state[2]);
-        durationLabel.setText(String.valueOf(state[0]));
-        System.out.println(String.valueOf(state[0]));
-        
-        //  open up standard input
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        String userName = null;
-
-        try {
-           userName = br.readLine();
-        } catch (IOException ioe) {
-           System.out.println("IO error trying to read your name!");
-           System.exit(1);
-        }
-    }
+//    public void updateMacro3D() {
+//        double[] state = simulator.getSimOutput().getMacro3D().getState();
+//        System.out.println("state: "+ state[0] + " " +state[1] + " " +state[2]);
+//        durationLabel.setText(String.valueOf(state[0]));
+//        System.out.println(String.valueOf(state[0]));
+//        
+//        //  open up standard input
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//
+//        String userName = null;
+//
+//        try {
+//           userName = br.readLine();
+//        } catch (IOException ioe) {
+//           System.out.println("IO error trying to read your name!");
+//           System.exit(1);
+//        }
+//    }
 
     /* (non-Javadoc)
      * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
@@ -187,5 +189,21 @@ public class SimulatorView implements ActionListener, Macro3DObserver{
     public void enableStop() {
         controlPanel.stopButton.setEnabled(true);
     }
+
+
+    @Override
+    public void notifyObserver(double time) {
+        // TODO: aktuelle Daten liegen vor, hole die Daten ab
+        double[] flows = simulator.getSimObservables().getSpatioTemporal().getFlow();
+        System.out.println("update view: "+flows);
+        System.exit(0);
+    }
+
+
+
+
+
+
+
 
 }

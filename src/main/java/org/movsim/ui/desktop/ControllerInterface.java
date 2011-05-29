@@ -13,5 +13,4 @@ public interface ControllerInterface {
     void start();
     void stop();
     void pause();
-    void setDurationOfSimulation(double duration);
 }

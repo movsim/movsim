@@ -26,37 +26,21 @@
  */
 package org.movsim.output;
 
-import org.movsim.simulator.roadSection.RoadSection;
-
 // TODO: Auto-generated Javadoc
 /**
- * The Interface Macro3D.
+ * The Interface SpatioTemporal.
  */
-public interface Macro3D {
+public interface SpatioTemporal extends Observable {
 
-    /**
-     * Update.
-     * 
-     * @param it
-     *            the it
-     * @param time
-     *            the time
-     * @param roadSection
-     *            the road section
-     */
-    void update(int it, double time, RoadSection roadSection);
-    
-    double[] getState();
+    double getDtOut();
 
-    /**
-     * @param o
-     */
-    void removeObserver(Macro3DObserver o);
+    double getDxOut();
 
-    /**
-     * @param o
-     */
-    void registerObserver(Macro3DObserver o);
+    double[] getDensity();
 
-   
+    double[] getAverageSpeed();
+
+    double[] getFlow();
+
+    double getTimeOffset();
 }

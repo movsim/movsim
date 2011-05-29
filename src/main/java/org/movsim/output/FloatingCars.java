@@ -26,31 +26,21 @@
  */
 package org.movsim.output;
 
-import org.movsim.simulator.vehicles.VehicleContainer;
+import java.util.List;
+
+import org.movsim.simulator.vehicles.MoveableContainer;
+
 
 // TODO: Auto-generated Javadoc
 /**
  * The Interface FloatingCars.
  */
-public interface FloatingCars {
+public interface FloatingCars extends Observable{
 
-    /**
-     * Update.
-     * 
-     * @param itime
-     *            the itime
-     * @param time
-     *            the time
-     * @param timestep
-     *            the timestep
-     * @param vehContainer
-     *            the veh container
-     */
-    void update(int itime, double time, double timestep, VehicleContainer vehContainer);
-
-    /**
-     * Close all files.
-     */
-    void closeAllFiles();
+    List<Integer> getFcdList();
+    
+    MoveableContainer getMoveableContainer();
+    
+    
 
 }

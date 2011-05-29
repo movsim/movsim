@@ -27,6 +27,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -188,7 +189,7 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         // double dv= v - cyclicBuf->get_v(iveh-1); //vveh[iveh];
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.getLeader(me);
+        final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
         final double v = me.speed();
         final double dv = (vehFront == null) ? 0 : v - vehFront.speed();
