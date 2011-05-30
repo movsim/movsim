@@ -26,11 +26,13 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+import org.movsim.utilities.Observable;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface AccelerationModelInputData.
  */
-public interface AccelerationModelInputData {
+public interface AccelerationModelInputData extends Observable{
 
     /**
      * Gets the model name.

@@ -29,14 +29,14 @@ package org.movsim.output;
 import java.util.List;
 
 import org.movsim.simulator.vehicles.MoveableContainer;
-import org.movsim.utilities.Observable;
+import org.movsim.utilities.ObservableInTime;
 
 
 // TODO: Auto-generated Javadoc
 /**
  * The Interface FloatingCars.
  */
-public interface FloatingCars extends Observable{
+public interface FloatingCars extends ObservableInTime{
 
     List<Integer> getFcdList();
     

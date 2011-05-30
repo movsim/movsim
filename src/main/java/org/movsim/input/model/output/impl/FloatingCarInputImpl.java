@@ -66,6 +66,7 @@ public class FloatingCarInputImpl implements FloatingCarInput {
      */
     public FloatingCarInputImpl(Element elem) {
 
+        
         if (elem == null) {
             isWithFC = false; // not initialized
             return;

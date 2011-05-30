@@ -27,12 +27,14 @@
 package org.movsim.input.model.vehicle.longModel.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
+import org.movsim.utilities.ObservableInTime;
+import org.movsim.utilities.impl.ObservableImpl;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class AccelerationModelInputDataImpl.
  */
-public abstract class AccelerationModelInputDataImpl implements AccelerationModelInputData {
+public abstract class AccelerationModelInputDataImpl extends ObservableImpl implements AccelerationModelInputData {
 
     /** The model name. */
     private final String modelName;

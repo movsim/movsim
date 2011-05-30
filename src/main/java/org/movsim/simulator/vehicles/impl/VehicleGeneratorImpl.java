@@ -135,11 +135,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      */
     private double createPrototypes(InputData simInput) {
 
-        requiredTimestep = simInput.getSimulationInput().getTimestep(); // default
-                                                                        // for
-                                                                        // continuous
-                                                                        // micro
-                                                                        // models
+        // default for continuous micro models
+        requiredTimestep = simInput.getSimulationInput().getTimestep(); 
 
         final Map<String, VehicleInput> vehInputMap = createMap(simInput.getVehicleInputData());
 

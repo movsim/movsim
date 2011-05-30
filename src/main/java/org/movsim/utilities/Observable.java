@@ -1,8 +1,6 @@
 package org.movsim.utilities;
 
-
-
 public interface Observable {
-    void registerObserver(ObserverInTime observer);
-    void removeObserver(ObserverInTime observer);
+    void registerObserver(Observer observer);
+    void removeObserver(Observer observer);
 }

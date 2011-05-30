@@ -245,16 +245,15 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
             logger.debug(("choose micro initial conditions"));
             final List<ICMicroData> icSingle = simInput.getSingleRoadInput().getIcMicroData();
             for (final ICMicroData ic : icSingle) {
-                // TODO counter !!
+                // TODO counter 
                 final double posInit = ic.getX();
                 final double speedInit = ic.getSpeed();
-                final String vehType = ic.getLabel();
+                final String vehTypeFromFile = ic.getLabel();
                 final int laneInit = ic.getInitLane();
-                logger.info("set vehicle with label = {}", vehType);
-                final Vehicle veh = (vehType.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
-                        .createVehicle(vehType);
-
+                final Vehicle veh = (vehTypeFromFile.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
+                        .createVehicle(vehTypeFromFile);
                 vehContainer.add(veh, posInit, speedInit, laneInit);
+                logger.info("set vehicle with label = {}", veh.getLabel());
             }
         }
     }

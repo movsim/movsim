@@ -188,36 +188,43 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
 
     public void setV0(double v0) {
         this.v0 = v0;
+        notifyObservers();
     }
 
 
     public void setT(double timegap) {
         this.T = timegap;
+        notifyObservers();
     }
 
 
     public void setS0(double s0) {
         this.s0 = s0;
+        notifyObservers();
     }
 
 
     public void setS1(double s1) {
         this.s1 = s1;
+        notifyObservers();
     }
 
 
     public void setDelta(double delta) {
         this.delta = delta;
+        notifyObservers();
     }
 
 
     public void setA(double a) {
         this.a = a;
+        notifyObservers();
     }
 
 
     public void setB(double b) {
         this.b = b;
+        notifyObservers();
     }
 
 }

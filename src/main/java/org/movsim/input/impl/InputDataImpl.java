@@ -48,10 +48,9 @@ public class InputDataImpl implements InputData {
     /** The project name. */
     private String projectName;
 
-//    private final boolean withFileOutputScenario = false; // default gesetzt
 
     /** The vehicle input data. */
-private List<VehicleInput> vehicleInputData;
+    private List<VehicleInput> vehicleInputData;
 
 
     /** The simulation input. */
@@ -61,17 +60,8 @@ private List<VehicleInput> vehicleInputData;
      * Instantiates a new input data impl.
      */
     public InputDataImpl() {
-        // empty constructor
     }
 
-    //
-    // public boolean isWithFileOutputScenario() {
-    // return withFileOutputScenario;
-    // }
-    //
-    // public void setWithFileOutputScenario(boolean withFileOutputScenario) {
-    // this.withFileOutputScenario = withFileOutputScenario;
-    // }
 
     /**
      * Sets the project name.

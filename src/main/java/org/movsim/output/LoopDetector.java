@@ -26,13 +26,13 @@
  */
 package org.movsim.output;
 
-import org.movsim.utilities.Observable;
+import org.movsim.utilities.ObservableInTime;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Interface LoopDetector.
  */
-public interface LoopDetector extends Observable{
+public interface LoopDetector extends ObservableInTime{
 
     double getDetPosition();
     double getMeanSpeed();

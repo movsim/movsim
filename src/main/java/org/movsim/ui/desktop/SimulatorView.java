@@ -14,7 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
+import org.movsim.output.FloatingCars;
 import org.movsim.output.LoopDetector;
+import org.movsim.output.SpatioTemporal;
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
@@ -50,11 +55,38 @@ public class SimulatorView implements ObserverInTime, ActionListener{
         this.simulator = simulator;
         this.controller = controller;
         
-        simulator.getSimObservables().getSpatioTemporal().registerObserver(this);
-        simulator.getSimObservables().getFloatingCars().registerObserver(this);
+        final SpatioTemporal spatioTemporal = simulator.getSimObservables().getSpatioTemporal();
+        if(spatioTemporal == null){
+            System.out.println("error, expected spatiotemporal xml configuration for use case here ");
+            System.exit(0);
+        }
+        else{
+            spatioTemporal.registerObserver((ObserverInTime)this);
+        }
+            
+        final FloatingCars floatingCars = simulator.getSimObservables().getFloatingCars();
+        if(floatingCars == null){
+            System.out.println("error, expected floating_cars xml configuration for use case here ");
+            System.exit(0);
+        }
+        else{
+            floatingCars.registerObserver((ObserverInTime)this);
+        }
+        
+        // TESTWEISE
+        List<VehicleInput> vehicleInput = simulator.getSimInput().getVehicleInputData();
+        AccelerationModelInputDataIDM parametersIDM = (AccelerationModelInputDataIDM)vehicleInput.get(0).getModelInputData();
+        parametersIDM.getT();
+//        parametersIDM.setT(2.0);
+
+//        System.out.println("exit here ");
+//        System.exit(0);
+
+        
+        
         List<LoopDetector>  loopDetectors = simulator.getSimObservables().getLoopDetectors();
         for(final LoopDetector loopDet : loopDetectors){
-            loopDet.registerObserver(this);
+            loopDet.registerObserver((ObserverInTime)this);
         }
     }
     

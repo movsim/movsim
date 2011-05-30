@@ -84,6 +84,12 @@ public interface AccelerationModelInputDataIDM extends AccelerationModelInputDat
     
     void resetParametersToDefault();
     
+    
+
+    void setV0(double v0);
+
+    void setT(double timegap);
+    
     void setS0(double s0);
 
     void setS1(double s1);
@@ -93,4 +99,6 @@ public interface AccelerationModelInputDataIDM extends AccelerationModelInputDat
     void setA(double a);
 
     void setB(double b);
+    
+    
 }

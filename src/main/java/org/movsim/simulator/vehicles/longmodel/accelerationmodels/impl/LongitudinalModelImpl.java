@@ -26,7 +26,9 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.movsim.utilities.Observer;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -39,7 +41,9 @@ public abstract class LongitudinalModelImpl {
 
     /** The model category. */
     private final int modelCategory;
-
+    
+    public AccelerationModelInputData parameters;
+    
     /**
      * 
      * @param modelName
@@ -47,11 +51,26 @@ public abstract class LongitudinalModelImpl {
      * @param modelCategory
      *            the model category
      */
+    public LongitudinalModelImpl(String modelName, int modelCategory, AccelerationModelInputData parameters) {
+        this.modelName = modelName;
+        this.modelCategory = modelCategory;
+        this.parameters = parameters;
+        parameters.registerObserver((Observer) this);        
+    }
+    
+    
     public LongitudinalModelImpl(String modelName, int modelCategory) {
         this.modelName = modelName;
         this.modelCategory = modelCategory;
     }
-
+    
+    
+    public void removeObserver(){
+        if(parameters!=null){
+            parameters.removeObserver((Observer) this);
+        }
+    }
+    
     /**
      * Model name.
      * 
@@ -87,14 +106,7 @@ public abstract class LongitudinalModelImpl {
     public int getModelCategory() {
         return modelCategory;
     }
-
-    // TODO: fuer alle Modelle ?! analog: T !?
-    /**
-     * Parameter V0.
-     * 
-     * @return the double
-     */
-    public abstract double parameterV0();
+    
 
     /**
      * Gets the required update time.
@@ -102,5 +114,13 @@ public abstract class LongitudinalModelImpl {
      * @return the required update time
      */
     public abstract double getRequiredUpdateTime();
+    
+    
+    /**
+     * Parameter V0.
+     * 
+     * @return the double
+     */
+    public abstract double parameterV0();
 
 }

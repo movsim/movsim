@@ -26,13 +26,13 @@
  */
 package org.movsim.output;
 
-import org.movsim.utilities.Observable;
+import org.movsim.utilities.ObservableInTime;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Interface SpatioTemporal.
  */
-public interface SpatioTemporal extends Observable {
+public interface SpatioTemporal extends ObservableInTime {
 
     double getDtOut();
 

@@ -503,4 +503,9 @@ public class VehicleImpl implements Vehicle{
 		
 	}
 
+    @Override
+    public void removeObservers() {
+        longModel.removeObserver();
+    }
+
 }

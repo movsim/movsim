@@ -171,8 +171,10 @@ public class SimOutput implements SimObservables {
         }
     }
 
+    
+    
     public SpatioTemporal getSpatioTemporal(){
-        return getSpatioTemporal();
+        return spatioTemporal;
     }
     
     public FloatingCars getFloatingCars(){

@@ -32,6 +32,7 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.movsim.utilities.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,35 +52,36 @@ M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in Empirical O
 Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
-public class IDM extends LongitudinalModelImpl implements AccelerationModel {
+public class IDM extends LongitudinalModelImpl implements AccelerationModel, Observer {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
 
     // IDM parameters
     /** desired velocity (m/s). */
-    private final double v0;// start_stop=15;
+    private double v0;// start_stop=15;
     
     /** safe time headway (s). */
-    private final double T;
+    private double T;
     
     /** bumper-to-bumper vehicle distance in jams or queues; minimun gap. */
-    private final double s0;
+    private double s0;
     
     /** gap parameter (m). */
-    private final double s1;
+    private double s1;
     
     /** acceleration (m/s^2). */
-    private final double a;
+    private double a;
     
     /** comfortable (desired) deceleration (braking), (m/s^2). */
-    private final double b;
+    private double b;
     
     /** acceleration exponent. */
-    private final double delta;
+    private double delta;
 
+    
     /**
-     * Instantiates a new iDM.
+     * Instantiates a new IDM.
      * 
      * @param modelName
      *            the model name
@@ -87,16 +89,23 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters: v0, T, s0, s1, a, b, delta
      */
     public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
-        this.v0 = parameters.getV0();
-        this.T = parameters.getT();
-        this.s0 = parameters.getS0();
-        this.s1 = parameters.getS1();
-        this.a = parameters.getA();
-        this.b = parameters.getB();
-        this.delta = parameters.getDelta();
+        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
+        initIDMParameters();
     }
 
+    
+    private void initIDMParameters(){
+        v0 = ((AccelerationModelInputDataIDM) parameters).getV0();
+        this.T = ((AccelerationModelInputDataIDM) parameters).getT();
+        this.s0 = ((AccelerationModelInputDataIDM) parameters).getS0();
+        this.s1 = ((AccelerationModelInputDataIDM) parameters).getS1();
+        this.a = ((AccelerationModelInputDataIDM) parameters).getA();
+        this.b = ((AccelerationModelInputDataIDM) parameters).getB();
+        this.delta = ((AccelerationModelInputDataIDM) parameters).getDelta();
+        logger.debug("init IDM parameters");
+    }
+    
+    
     /**
      * Instantiates a new iDM.
      * 
@@ -256,6 +265,12 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
     @Override
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
+    }
+
+    @Override
+    public void notifyObserver() {
+        initIDMParameters();   
+        logger.debug("observer notified");
     }
 
 }

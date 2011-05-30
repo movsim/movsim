@@ -95,5 +95,8 @@ public interface Vehicle extends Moveable{
      *            the traffic light
      */
     void updateTrafficLight(double time, TrafficLight trafficLight);
+    
+    
+    void removeObservers();
 
 }

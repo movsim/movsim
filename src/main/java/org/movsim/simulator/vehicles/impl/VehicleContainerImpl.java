@@ -195,7 +195,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public void removeVehiclesDownstream(double roadLength) {
         while (!vehicles.isEmpty() && getMostDownstream().position() > roadLength) {
-            //vehicles.get(0).; //TODO 
+            vehicles.get(0).removeObservers();  // delete references when leaving the simulation
             vehicles.remove(0);
             logger.debug(" remove veh ... size = {}", vehicles.size());
         }
