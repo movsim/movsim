@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.utilities;
+package org.movsim.utilities.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

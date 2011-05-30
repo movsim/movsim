@@ -26,6 +26,8 @@
  */
 package org.movsim.output;
 
+import org.movsim.utilities.Observable;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface SpatioTemporal.

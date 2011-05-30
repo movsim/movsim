@@ -29,6 +29,7 @@ package org.movsim.output;
 import java.util.List;
 
 import org.movsim.simulator.vehicles.MoveableContainer;
+import org.movsim.utilities.Observable;
 
 
 // TODO: Auto-generated Javadoc

@@ -2,12 +2,12 @@ package org.movsim.output.fileoutput;
 
 import java.io.PrintWriter;
 
-import org.movsim.output.Observer;
 import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.Constants;
-import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.ObserverInTime;
+import org.movsim.utilities.impl.FileUtils;
 
-public class FileSpatioTemporal implements Observer {
+public class FileSpatioTemporal implements ObserverInTime {
     
     private static final String extensionFormat = ".R%d_st.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR + 
@@ -23,7 +23,7 @@ public class FileSpatioTemporal implements Observer {
     public FileSpatioTemporal(String projectName, long roadSectionID, SpatioTemporal spatioTemporal){
 
         this.spatioTemporal = spatioTemporal;
-        spatioTemporal.registerObserver((Observer)this);
+        spatioTemporal.registerObserver((ObserverInTime)this);
         
         final String filename = projectName + String.format(extensionFormat, roadSectionID);
         writer = FileUtils.getWriter(filename);

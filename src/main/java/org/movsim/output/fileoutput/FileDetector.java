@@ -3,11 +3,11 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 
 import org.movsim.output.LoopDetector;
-import org.movsim.output.Observer;
 import org.movsim.simulator.Constants;
-import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.ObserverInTime;
+import org.movsim.utilities.impl.FileUtils;
 
-public class FileDetector implements Observer{
+public class FileDetector implements ObserverInTime{
     
 
     private static final String extensionFormat = "_det.csv";

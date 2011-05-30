@@ -46,7 +46,7 @@ import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.impl.SimulationInputImpl;
 import org.movsim.input.model.impl.VehicleInputImpl;
-import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;

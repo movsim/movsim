@@ -32,6 +32,7 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.vehicles.MoveableContainer;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.utilities.impl.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

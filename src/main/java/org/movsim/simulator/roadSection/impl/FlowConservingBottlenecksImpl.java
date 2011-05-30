@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.impl.Tables;
 
 // TODO: Auto-generated Javadoc
 /**

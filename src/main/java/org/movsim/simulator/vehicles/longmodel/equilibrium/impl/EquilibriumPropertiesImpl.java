@@ -30,8 +30,8 @@ import java.io.PrintWriter;
 
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
-import org.movsim.utilities.FileUtils;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.impl.FileUtils;
+import org.movsim.utilities.impl.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

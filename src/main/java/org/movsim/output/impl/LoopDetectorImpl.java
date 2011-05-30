@@ -31,6 +31,7 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.utilities.impl.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

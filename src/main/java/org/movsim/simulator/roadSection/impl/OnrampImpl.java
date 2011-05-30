@@ -37,7 +37,7 @@ import org.movsim.simulator.roadSection.Onramp;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -81,4 +81,16 @@ public interface AccelerationModelInputDataIDM extends AccelerationModelInputDat
      */
     double getB();
 
+    
+    void resetParametersToDefault();
+    
+    void setS0(double s0);
+
+    void setS1(double s1);
+
+    void setDelta(double delta);
+
+    void setA(double a);
+
+    void setB(double b);
 }

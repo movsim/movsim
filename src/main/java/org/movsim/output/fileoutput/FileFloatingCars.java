@@ -31,10 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.movsim.output.FloatingCars;
-import org.movsim.output.Observer;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
-import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.ObserverInTime;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FloatingCarsImpl.
  */
-public class FileFloatingCars implements Observer{
+public class FileFloatingCars implements ObserverInTime{
     
     private static final String extensionFormat = ".V%06d.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR +

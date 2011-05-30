@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.movsim.output.LoopDetector;
-import org.movsim.output.Observer;
 import org.movsim.simulator.Simulator;
+import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * @author ralph
  *
  */
-public class SimulatorView implements Observer, ActionListener{
+public class SimulatorView implements ObserverInTime, ActionListener{
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorView.class);

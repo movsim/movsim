@@ -42,25 +42,33 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataIDMImpl.class);
 
     /** The v0. */
-    private final double v0;
+    private double v0;
+    
+    private final double v0Default;
     
     /** The T. */
-    private final double T;
+    private double T;
+    private final double TDefault;
     
     /** The s0. */
-    private final double s0;
+    private double s0;
+    private final double s0Default;
     
     /** The s1. */
-    private final double s1;
+    private double s1;
+    private final double s1Default;
     
     /** The delta. */
-    private final double delta;
+    private double delta;
+    private final double deltaDefault;
     
     /** The a. */
-    private final double a;
+    private double a;
+    private final double aDefault;
     
     /** The b. */
-    private final double b;
+    private double b;
+    private final double bDefault;
 
     /**
      * Instantiates a new model input data idm impl.
@@ -72,13 +80,13 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
      */
     public AccelerationModelInputDataIDMImpl(String modelName, Map<String, String> map) {
         super(modelName);
-        this.v0 = Double.parseDouble(map.get("v0"));
-        this.T = Double.parseDouble(map.get("T"));
-        this.s0 = Double.parseDouble(map.get("s0"));
-        this.s1 = Double.parseDouble(map.get("s1"));
-        this.delta = Double.parseDouble(map.get("delta"));
-        this.a = Double.parseDouble(map.get("a"));
-        this.b = Double.parseDouble(map.get("b"));
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        TDefault = T = Double.parseDouble(map.get("T"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        s1Default = s1 = Double.parseDouble(map.get("s1"));
+        deltaDefault = delta = Double.parseDouble(map.get("delta"));
+        aDefault = a = Double.parseDouble(map.get("a"));
+        bDefault = b = Double.parseDouble(map.get("b"));
 
         if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
@@ -87,6 +95,18 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
         }
     }
 
+    
+    public void resetParametersToDefault(){
+        v0 = v0Default;
+        T = TDefault;
+        s0 = s0Default;
+        s1 = s1Default;
+        delta = deltaDefault;
+        a = aDefault;
+        b = bDefault;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * 
@@ -163,6 +183,41 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     @Override
     public double getB() {
         return b;
+    }
+
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+    }
+
+
+    public void setT(double timegap) {
+        this.T = timegap;
+    }
+
+
+    public void setS0(double s0) {
+        this.s0 = s0;
+    }
+
+
+    public void setS1(double s1) {
+        this.s1 = s1;
+    }
+
+
+    public void setDelta(double delta) {
+        this.delta = delta;
+    }
+
+
+    public void setA(double a) {
+        this.a = a;
+    }
+
+
+    public void setB(double b) {
+        this.b = b;
     }
 
 }

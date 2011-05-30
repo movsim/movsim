@@ -33,7 +33,8 @@ import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.impl.ObservableImpl;
+import org.movsim.utilities.impl.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

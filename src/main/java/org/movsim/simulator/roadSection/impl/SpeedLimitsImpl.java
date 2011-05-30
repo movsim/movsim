@@ -31,7 +31,7 @@ import java.util.List;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.SpeedLimits;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.impl.Tables;
 
 // TODO: Auto-generated Javadoc
 /**

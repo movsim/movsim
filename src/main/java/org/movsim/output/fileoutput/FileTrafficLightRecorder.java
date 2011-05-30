@@ -32,7 +32,7 @@ import java.util.List;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
-import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.impl.FileUtils;
 
 // TODO: Auto-generated Javadoc
 /**

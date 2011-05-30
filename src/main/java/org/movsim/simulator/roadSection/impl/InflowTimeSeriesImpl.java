@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
-import org.movsim.utilities.Tables;
+import org.movsim.utilities.impl.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.utilities;
+package org.movsim.utilities.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

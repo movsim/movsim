@@ -97,7 +97,6 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
         this.delta = parameters.getDelta();
     }
 
-    // copy constructor
     /**
      * Instantiates a new iDM.
      * 
