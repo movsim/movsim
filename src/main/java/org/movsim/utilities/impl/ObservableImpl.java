@@ -25,12 +25,18 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
 
     @Override
     public void removeObserver(ObserverInTime observer) {
-        observersInTime.remove(observer);
+        int i = observersInTime.indexOf(observer);
+        if (i >= 0) {
+            observersInTime.remove(observer);
+        }
     }
 
     @Override
     public void removeObserver(Observer observer) {
-        observers.remove(observer);
+        int i = observers.indexOf(observer);
+        if (i >= 0) {
+            observers.remove(observer);
+        }
     }
    
     
