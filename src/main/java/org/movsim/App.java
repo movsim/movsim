@@ -26,14 +26,8 @@
  */
 package org.movsim;
 
-import java.applet.AppletStub;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.net.URL;
 import java.util.Locale;
-
-import javax.swing.JApplet;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.commandline.SimCommandLine;
@@ -50,7 +44,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class App.
  */
-public class App extends JApplet implements AppletStub {
+public class App {
 
     // Define a static logger variable 
     // Logging with slf4j, a facade for log4j
@@ -60,8 +54,6 @@ public class App extends JApplet implements AppletStub {
     /** The Constant xmlDefault. */
     final static String xmlDefault = "sim/onramp_IDM.xml";
 
-    /** The appletstub. */
-    protected AppletStub appletstub;
 
     /**
      * The main method.
@@ -76,53 +68,6 @@ public class App extends JApplet implements AppletStub {
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.applet.Applet#init()
-     */
-    @Override
-    public void init() {
-
-        appletstub = this;
-
-        // initLocalizationAndLogger();
-
-        // InputBean mit Default-Werten erstellen
-        // SimInputDataImpl simInput = new SimInputDataImpl();
-
-        // parse xmlFile and set values in InputBean
-        // XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlDefault,
-        // simInput);
-
-        // String appletToLoad = getParameter("appletToLoad");
-        final String appletToLoad = "org.movsim.ui.japplet.GUIJApplet";
-        setBackground(Color.white);
-
-        final Thread appletThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    final Class<?> appletClass = Class.forName(appletToLoad);
-                    final JApplet realApplet = (JApplet) appletClass.newInstance();
-                    realApplet.setStub(appletstub);
-                    setLayout(new GridLayout(1, 0));
-                    add(realApplet);
-                    realApplet.init();
-                    realApplet.start();
-                } catch (final Exception e) {
-                    System.out.println(e);
-                }
-                validate();
-
-            }
-        });
-
-        appletThread.run();
-
-        super.init();
-    }
 
     /**
      * Run as aplication.
@@ -145,13 +90,12 @@ public class App extends JApplet implements AppletStub {
 
         final InputDataImpl inputData = new InputDataImpl();
 
-        // parse xmlFile and set values in InputBean
+        // parse xmlFile and set values
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, cmdline, inputData);
 
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
 
         if (cmdline.isGui()) {
-//            final GUISwing gui = new GUISwing(inputData, simulator);
             ControllerInterface controller = new SimulatorController(simulator);
         } else {
             // without graphics
@@ -174,24 +118,5 @@ public class App extends JApplet implements AppletStub {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011) ]");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.awt.Container#paint(java.awt.Graphics)
-     */
-    @Override
-    public void paint(Graphics g) {
-        g.drawString("Loading the BIG ONE ...", 30, 30);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.applet.AppletStub#appletResize(int, int)
-     */
-    @Override
-    public void appletResize(int width, int height) {
-        resize(width, height);
-    }
 
 }

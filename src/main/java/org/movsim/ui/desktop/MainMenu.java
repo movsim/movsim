@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.ui.components;
+package org.movsim.ui.desktop;
 
 import java.awt.event.ActionEvent;
 
