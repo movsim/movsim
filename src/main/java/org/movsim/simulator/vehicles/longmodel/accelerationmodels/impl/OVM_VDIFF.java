@@ -26,6 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
@@ -48,26 +49,26 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);
 
     /** The s0. */
-    private final double s0;
+    private double s0;
 
     /** The v0. */
-    private final double v0;
+    private double v0;
 
     /** The tau. */
-    private final double tau;
+    private double tau;
 
     /** The len interaction. */
-    private final double lenInteraction;
+    private double lenInteraction;
 
     /** The beta. */
-    private final double beta;
+    private double beta;
 
     /** The lambda. */
-    private final double lambda;
+    private double lambda;
 
-    /** The choice opt func variant. */
-    private final int choiceOptFuncVariant; // variants: 0=fullVD orig, 1=fullVD
-                                            // secBased, 2=threePhase
+    /** The choice opt func variant. 
+     * variants: 0=fullVD orig, 1=fullVD,secBased, 2=threePhase */
+    private int choiceOptFuncVariant; 
 
     /**
      * Instantiates a new oV m_ vdiff.
@@ -79,13 +80,19 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      */
     public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameter) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
-        this.s0 = parameter.getS0();
-        this.v0 = parameter.getV0();
-        this.tau = parameter.getTau();
-        this.lenInteraction = parameter.getLenInteraction();
-        this.beta = parameter.getBeta();
-        this.lambda = parameter.getLambda(); // parameter of VDIFF variant
-        choiceOptFuncVariant = parameter.getVariant();
+        initParameters();
+    }
+    
+    @Override
+    protected void initParameters() {
+        logger.debug("init model parameters");        
+        this.s0 = ((AccelerationModelInputDataOVM_VDIFF) parameters).getS0();
+        this.v0 = ((AccelerationModelInputDataOVM_VDIFF) parameters).getV0();
+        this.tau = ((AccelerationModelInputDataOVM_VDIFF) parameters).getTau();
+        this.lenInteraction = ((AccelerationModelInputDataOVM_VDIFF) parameters).getLenInteraction();
+        this.beta = ((AccelerationModelInputDataOVM_VDIFF) parameters).getBeta();
+        this.lambda = ((AccelerationModelInputDataOVM_VDIFF) parameters).getLambda(); 
+        choiceOptFuncVariant = ((AccelerationModelInputDataOVM_VDIFF) parameters).getVariant();
     }
 
     /**

@@ -27,12 +27,15 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // paper reference / Kerner book 
@@ -41,31 +44,41 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class KCA extends LongitudinalModelImpl implements AccelerationModel {
 
-    /** The Constant dtCA. */
-    private static final double dtCA = 1; // update timestep for CA !!
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(KCA.class);
+    
+    /** The Constant dtCA. 
+     *  constant update timestep for CA */
+    private static final double dtCA = 1; //
 
     /** The v0. */
-    private final double v0;
+    private double v0;
     
-    /** The k. */
-    private final double k; // Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+    /** The k. 
+     * Multiplikator fuer sync-Abstand D=lveh+k*v*tau */
+    private double k; 
     
-    /** The pb0. */
-    private final double pb0; // "Troedelwahrsch." for standing vehicles
+    /** The pb0. 
+     * "Troedelwahrsch." for standing vehicles */
+    private double pb0; 
     
-    /** The pb1. */
-    private final double pb1; // "Troedelwahrsch." for moving vehicles
+    /** The pb1. 
+     * "Troedelwahrsch." for moving vehicles */
+    private double pb1; 
     
-    /** The pa1. */
-    private final double pa1; // "Beschl.=Anti-Troedelwahrsch." falls v<vp
+    /** The pa1. 
+     * "Beschl.=Anti-Troedelwahrsch." falls v<vp*/
+    private double pa1; 
     
-    /** The pa2. */
-    private final double pa2; // "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+    /** The pa2. 
+     * "Beschl.=Anti-Troedelwahrsch." falls v>=vp*/
+    private double pa2; 
     
-    /** The vp. */
-    private final double vp; // Geschw., ab der weniger "anti-getroedelt" wird
+    /** The vp. 
+     * Geschw., ab der weniger "anti-getroedelt" wird */
+    private double vp;  
 
-    /** The length. */
+    /** The vehicle length. */
     private double length;
 
     /**
@@ -80,16 +93,21 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      */
     public KCA(String modelName, AccelerationModelInputDataKCA parameters, double length) {
         super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
-
-        this.v0 = parameters.getV0();
-        this.k = parameters.getK();
-        this.pb0 = parameters.getPb0();
-        this.pb1 = parameters.getPb1();
-        this.pa1 = parameters.getPa1();
-        this.pa2 = parameters.getPa2();
-        this.vp = parameters.getVp();
-
         this.length = length; // model parameter!
+        initParameters();
+    }
+    
+    @Override
+    protected void initParameters() {
+        logger.debug("init model parameters");
+        this.v0 = ((AccelerationModelInputDataKCA) parameters).getV0();
+        this.k = ((AccelerationModelInputDataKCA) parameters).getK();
+        this.pb0 = ((AccelerationModelInputDataKCA) parameters).getPb0();
+        this.pb1 = ((AccelerationModelInputDataKCA) parameters).getPb1();
+        this.pa1 = ((AccelerationModelInputDataKCA) parameters).getPa1();
+        this.pa2 = ((AccelerationModelInputDataKCA) parameters).getPa2();
+        this.vp = ((AccelerationModelInputDataKCA) parameters).getVp();
+        
     }
 
     // copy constructor
@@ -273,5 +291,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
     public double getVp() {
         return vp;
     }
+
+    
 
 }

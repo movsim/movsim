@@ -66,16 +66,15 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
     public void notifyObservers(double time) {
         for (final ObserverInTime o : observersInTime ) {
             o.notifyObserver(time);
-            
         }
-        logger.debug(" n = {} observers notified at time = {}", observersInTime.size(), time);
+        //logger.debug(" n = {} observers notified at time = {}", observersInTime.size(), time);
     }
     
     public void notifyObservers() {
         for (final Observer o : observers ) {
             o.notifyObserver();
         }
-        logger.debug(" n = {} observers notified", observers.size());
+        //logger.debug(" n = {} observers notified", observers.size());
     }
 
 }

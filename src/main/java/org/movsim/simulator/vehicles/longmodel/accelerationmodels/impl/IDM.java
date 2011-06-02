@@ -52,7 +52,7 @@ M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in Empirical O
 Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
-public class IDM extends LongitudinalModelImpl implements AccelerationModel, Observer {
+public class IDM extends LongitudinalModelImpl implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
@@ -90,19 +90,19 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel, Obs
      */
     public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
-        initIDMParameters();
+        initParameters();
     }
 
-    
-    private void initIDMParameters(){
-        v0 = ((AccelerationModelInputDataIDM) parameters).getV0();
+    @Override
+    protected void initParameters(){
+        logger.debug("init model parameters");
+        this.v0 = ((AccelerationModelInputDataIDM) parameters).getV0();
         this.T = ((AccelerationModelInputDataIDM) parameters).getT();
         this.s0 = ((AccelerationModelInputDataIDM) parameters).getS0();
         this.s1 = ((AccelerationModelInputDataIDM) parameters).getS1();
         this.a = ((AccelerationModelInputDataIDM) parameters).getA();
         this.b = ((AccelerationModelInputDataIDM) parameters).getB();
         this.delta = ((AccelerationModelInputDataIDM) parameters).getDelta();
-        logger.debug("init IDM parameters");
     }
     
     
@@ -267,10 +267,5 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel, Obs
         return 0; // continuous model requires no specific timestep
     }
 
-    @Override
-    public void notifyObserver() {
-        initIDMParameters();   
-        logger.debug("observer notified");
-    }
 
 }

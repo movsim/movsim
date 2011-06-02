@@ -26,7 +26,9 @@
  */
 package org.movsim.input.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
@@ -104,6 +106,18 @@ public class InputDataImpl implements InputData {
         return vehicleInputData;
     }
 
+
+    
+    // testweise hier
+    public Map<String, VehicleInput> createVehicleInputDataMap() {
+        final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
+        for (final VehicleInput vehInput : vehicleInputData) {
+            final String keyName = vehInput.getLabel();
+            map.put(keyName, vehInput);
+        }
+        return map;
+    }
+    
     /*
      * (non-Javadoc)
      * 

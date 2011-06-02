@@ -27,13 +27,19 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.movsim.utilities.Observer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
+
+
 // Reference for constant-acceleration heuristic:
 // Arne Kesting, Martin Treiber, Dirk Helbing
 // Enhanced Intelligent Driver Model to access the impact of driving strategies on traffic capacity
@@ -45,35 +51,42 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
 /**
  * The Class ACC.
  */
-public class ACC extends LongitudinalModelImpl implements AccelerationModel {
+public class ACC extends LongitudinalModelImpl implements AccelerationModel, Observer {
 
-    /** The v0. */
-    private final double v0; // desired velocity (m/s)
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(ACC.class);
     
-    /** The T. */
-    private final double T; // time headway (s)
+    /** The v0. 
+     * desired velocity (m/s) */
+    private double v0; 
     
-    /** The s0. */
-    private final double s0; // bumper-to-bumper distance in jams or queues
+    /** The T. 
+     * time headway (s)*/
+    private double T; 
+    
+    /** The s0. 
+     * bumper-to-bumper distance (m)*/
+    private double s0; 
     
     /** The s1. */
-    private final double s1;
+    private double s1;
     
-    /** The a. */
-    private final double a; // acceleration (m/s^2)
+    /** The a. 
+     * acceleration (m/s^2) */
+    private double a; 
     
-    /** The b. */
-    private final double b; // comfortable (desired) deceleration (m/s^2)
+    /** The b. 
+     * comfortable (desired) deceleration (m/s^2) */
+    private double b; 
     
-    /** The delta. */
-    private final double delta; // acceleration exponent
+    /** The delta. 
+     * acceleration exponent (1) */
+    private double delta; 
     
-    /** The coolness. */
-    private final double coolness; // factor in [0, 1]
-
-    // coolness=0: acc1=IIDM (without CAH), coolness=1 CAH
-
-    // AccelerationModelInputDataACC parameters;
+    /** The coolness. 
+     * coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH 
+     * factor in range [0, 1]*/
+    private double coolness;  
 
     /**
      * Instantiates a new aCC.
@@ -85,15 +98,22 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel {
      */
     public ACC(String modelName, AccelerationModelInputDataACC parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
-        this.v0 = parameters.getV0();
-        this.T = parameters.getT();
-        this.s0 = parameters.getS0();
-        this.s1 = parameters.getS1();
-        this.a = parameters.getA();
-        this.b = parameters.getB();
-        this.delta = parameters.getDelta();
-        this.coolness = parameters.getCoolness();
+        initParameters();
     }
+
+    @Override
+    protected void initParameters() {
+        logger.debug("init model parameters");
+        this.v0 = ((AccelerationModelInputDataACC) parameters).getV0();
+        this.T = ((AccelerationModelInputDataACC) parameters).getT();
+        this.s0 = ((AccelerationModelInputDataACC) parameters).getS0();
+        this.s1 = ((AccelerationModelInputDataACC) parameters).getS1();
+        this.a = ((AccelerationModelInputDataACC) parameters).getA();
+        this.b = ((AccelerationModelInputDataACC) parameters).getB();
+        this.delta = ((AccelerationModelInputDataACC) parameters).getDelta();
+        this.coolness = ((AccelerationModelInputDataACC) parameters).getCoolness();   
+    }
+
 
     // copy constructor
     /**

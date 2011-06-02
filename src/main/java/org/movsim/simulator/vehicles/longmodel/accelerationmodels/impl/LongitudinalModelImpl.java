@@ -29,13 +29,17 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.movsim.utilities.Observer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class LongitudinalModelImpl.
  */
-public abstract class LongitudinalModelImpl {
+public abstract class LongitudinalModelImpl implements Observer{
 
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelImpl.class);
+    
     /** The model name. */
     private final String modelName;
 
@@ -43,6 +47,8 @@ public abstract class LongitudinalModelImpl {
     private final int modelCategory;
     
     public AccelerationModelInputData parameters;
+    
+    protected abstract void initParameters();
     
     /**
      * 
@@ -123,4 +129,8 @@ public abstract class LongitudinalModelImpl {
      */
     public abstract double parameterV0();
 
+    public void notifyObserver() {
+        initParameters();   
+        logger.debug("observer notified");
+    }
 }
