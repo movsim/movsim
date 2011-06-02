@@ -78,8 +78,8 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      * @param parameter
      *            the parameter
      */
-    public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameter) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
+    public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameters) {
+        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
     
@@ -101,16 +101,16 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      * @param vdiffToCopy
      *            the vdiff to copy
      */
-    public OVM_VDIFF(OVM_VDIFF vdiffToCopy) {
-        super(vdiffToCopy.modelName(), vdiffToCopy.getModelCategory());
-        this.s0 = vdiffToCopy.getS0();
-        this.v0 = vdiffToCopy.getV0();
-        this.tau = vdiffToCopy.getTau();
-        this.lenInteraction = vdiffToCopy.getLenInteraction();
-        this.beta = vdiffToCopy.getBeta();
-        this.lambda = vdiffToCopy.getLambda();
-        this.choiceOptFuncVariant = vdiffToCopy.getOptFuncVariant();
-    }
+//    public OVM_VDIFF(OVM_VDIFF vdiffToCopy) {
+//        super(vdiffToCopy.modelName(), vdiffToCopy.getModelCategory());
+//        this.s0 = vdiffToCopy.getS0();
+//        this.v0 = vdiffToCopy.getV0();
+//        this.tau = vdiffToCopy.getTau();
+//        this.lenInteraction = vdiffToCopy.getLenInteraction();
+//        this.beta = vdiffToCopy.getBeta();
+//        this.lambda = vdiffToCopy.getLambda();
+//        this.choiceOptFuncVariant = vdiffToCopy.getOptFuncVariant();
+//    }
 
     /*
      * (non-Javadoc)

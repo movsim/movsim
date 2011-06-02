@@ -180,7 +180,7 @@ public class VehicleInputImpl implements VehicleInput {
      * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
      */
     @Override
-    public AccelerationModelInputData getModelInputData() {
+    public AccelerationModelInputData getAccelerationModelInputData() {
         return modelInputData;
     }
 

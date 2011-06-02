@@ -58,7 +58,7 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters
      */
     public Newell(String modelName, AccelerationModelInputDataNewell parameters) {
-        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
+        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
         this.dt = 1; // model parameter
         initParameters();
     }
@@ -77,10 +77,10 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      * @param newellToCopy
      *            the newell to copy
      */
-    public Newell(Newell newellToCopy) {
-        super(newellToCopy.modelName(), newellToCopy.getModelCategory());
-        this.dt = newellToCopy.getRequiredUpdateTime();
-    }
+//    public Newell(Newell newellToCopy) {
+//        super(newellToCopy.modelName(), newellToCopy.getModelCategory());
+//        this.dt = newellToCopy.getRequiredUpdateTime();
+//    }
 
     /*
      * (non-Javadoc)

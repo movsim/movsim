@@ -92,7 +92,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      *            the length
      */
     public KCA(String modelName, AccelerationModelInputDataKCA parameters, double length) {
-        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
+        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON, parameters);
         this.length = length; // model parameter!
         initParameters();
     }
@@ -117,16 +117,16 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      * @param kcaToCopy
      *            the kca to copy
      */
-    public KCA(KCA kcaToCopy) {
-        super(kcaToCopy.modelName(), kcaToCopy.getModelCategory());
-        this.v0 = kcaToCopy.getV0();
-        this.k = kcaToCopy.getK();
-        this.pb0 = kcaToCopy.getPb0();
-        this.pb1 = kcaToCopy.getPb1();
-        this.pa1 = kcaToCopy.getPa1();
-        this.pa2 = kcaToCopy.getPa2();
-        this.vp = kcaToCopy.getVp();
-    }
+//    public KCA(KCA kcaToCopy) {
+//        super(kcaToCopy.modelName(), kcaToCopy.getModelCategory());
+//        this.v0 = kcaToCopy.getV0();
+//        this.k = kcaToCopy.getK();
+//        this.pb0 = kcaToCopy.getPb0();
+//        this.pb1 = kcaToCopy.getPb1();
+//        this.pa1 = kcaToCopy.getPa1();
+//        this.pa2 = kcaToCopy.getPa2();
+//        this.vp = kcaToCopy.getVp();
+//    }
 
     /*
      * (non-Javadoc)

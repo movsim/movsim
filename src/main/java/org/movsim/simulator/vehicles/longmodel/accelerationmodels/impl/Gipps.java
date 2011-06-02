@@ -74,7 +74,7 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters
      */
     public Gipps(String modelName, AccelerationModelInputDataGipps parameters) {
-        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
+        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
         initParameters();
     }
     
@@ -96,14 +96,14 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * @param modelToCopy
      *            the model to copy
      */
-    public Gipps(Gipps modelToCopy) {
-        super(modelToCopy.modelName(), modelToCopy.getModelCategory());
-        this.T = modelToCopy.getT();
-        this.v0 = modelToCopy.getV0();
-        this.a = modelToCopy.getA();
-        this.b = modelToCopy.getB();
-        this.s0 = modelToCopy.getS0();
-    }
+//    public Gipps(Gipps modelToCopy) {
+//        super(modelToCopy.modelName(), modelToCopy.getModelCategory());
+//        this.T = modelToCopy.getT();
+//        this.v0 = modelToCopy.getV0();
+//        this.a = modelToCopy.getA();
+//        this.b = modelToCopy.getB();
+//        this.s0 = modelToCopy.getS0();
+//    }
 
     /**
      * Gets the t.

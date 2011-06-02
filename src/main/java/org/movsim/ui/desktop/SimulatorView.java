@@ -75,7 +75,7 @@ public class SimulatorView implements ObserverInTime, ActionListener{
         
         // TESTWEISE
         List<VehicleInput> vehicleInput = simulator.getSimInput().getVehicleInputData();
-        AccelerationModelInputDataIDM parametersIDM = (AccelerationModelInputDataIDM)vehicleInput.get(0).getModelInputData();
+        AccelerationModelInputDataIDM parametersIDM = (AccelerationModelInputDataIDM)vehicleInput.get(0).getAccelerationModelInputData();
         parametersIDM.getT();
 //        parametersIDM.setT(2.0);
 

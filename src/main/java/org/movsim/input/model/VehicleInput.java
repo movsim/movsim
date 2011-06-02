@@ -69,7 +69,7 @@ public interface VehicleInput {
      * 
      * @return the model input data
      */
-    AccelerationModelInputData getModelInputData();
+    AccelerationModelInputData getAccelerationModelInputData();
 
     /**
      * Checks if is with memory.

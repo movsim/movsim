@@ -97,7 +97,7 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
      *            the parameters
      */
     public ACC(String modelName, AccelerationModelInputDataACC parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL);
+        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
 
@@ -122,17 +122,17 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
      * @param accToCopy
      *            the acc to copy
      */
-    public ACC(ACC accToCopy) {
-        super(accToCopy.modelName(), accToCopy.getModelCategory());
-        this.v0 = accToCopy.getV0();
-        this.T = accToCopy.getT();
-        this.s0 = accToCopy.getS0();
-        this.s1 = accToCopy.getS1();
-        this.a = accToCopy.getA();
-        this.b = accToCopy.getB();
-        this.delta = accToCopy.getDelta();
-        this.coolness = accToCopy.getCoolness();
-    }
+//    public ACC(ACC accToCopy) {
+//        super(accToCopy.modelName(), accToCopy.getModelCategory());
+//        this.v0 = accToCopy.getV0();
+//        this.T = accToCopy.getT();
+//        this.s0 = accToCopy.getS0();
+//        this.s1 = accToCopy.getS1();
+//        this.a = accToCopy.getA();
+//        this.b = accToCopy.getB();
+//        this.delta = accToCopy.getDelta();
+//        this.coolness = accToCopy.getCoolness();
+//    }
 
     /*
      * (non-Javadoc)

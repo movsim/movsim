@@ -112,16 +112,16 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      * @param idmToCopy
      *            the idm to copy
      */
-    public IDM(IDM idmToCopy) {
-        super(idmToCopy.modelName(), idmToCopy.getModelCategory());
-        this.v0 = idmToCopy.getV0();
-        this.T = idmToCopy.getT();
-        this.s0 = idmToCopy.getS0();
-        this.s1 = idmToCopy.getS1();
-        this.a = idmToCopy.getA();
-        this.b = idmToCopy.getB();
-        this.delta = idmToCopy.getDelta();
-    }
+//    public IDM(IDM idmToCopy) {
+//        super(idmToCopy.modelName(), idmToCopy.getModelCategory());
+//        this.v0 = idmToCopy.getV0();
+//        this.T = idmToCopy.getT();
+//        this.s0 = idmToCopy.getS0();
+//        this.s1 = idmToCopy.getS1();
+//        this.a = idmToCopy.getA();
+//        this.b = idmToCopy.getB();
+//        this.delta = idmToCopy.getDelta();
+//    }
 
     /**
      * Gets the v0.

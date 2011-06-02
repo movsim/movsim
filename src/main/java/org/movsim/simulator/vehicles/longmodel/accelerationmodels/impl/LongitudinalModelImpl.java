@@ -65,10 +65,10 @@ public abstract class LongitudinalModelImpl implements Observer{
     }
     
     
-    public LongitudinalModelImpl(String modelName, int modelCategory) {
-        this.modelName = modelName;
-        this.modelCategory = modelCategory;
-    }
+//    public LongitudinalModelImpl(String modelName, int modelCategory) {
+//        this.modelName = modelName;
+//        this.modelCategory = modelCategory;
+//    }
     
     
     public void removeObserver(){

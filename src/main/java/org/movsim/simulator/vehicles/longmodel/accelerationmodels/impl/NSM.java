@@ -70,7 +70,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters
      */
     public NSM(String modelName, AccelerationModelInputDataNSM parameters) {
-        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
+        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON, parameters);
         initParameters();
     }
 
@@ -89,12 +89,12 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      * @param nsmToCopy
      *            the nsm to copy
      */
-    public NSM(NSM nsmToCopy) {
-        super(nsmToCopy.modelName(), nsmToCopy.getModelCategory());
-        this.v0 = nsmToCopy.getV0();
-        this.pSlowdown = nsmToCopy.getSlowdown();
-        this.pSlowToStart = nsmToCopy.getSlowToStart();
-    }
+//    public NSM(NSM nsmToCopy) {
+//        super(nsmToCopy.modelName(), nsmToCopy.getModelCategory());
+//        this.v0 = nsmToCopy.getV0();
+//        this.pSlowdown = nsmToCopy.getSlowdown();
+//        this.pSlowToStart = nsmToCopy.getSlowToStart();
+//    }
 
     /*
      * (non-Javadoc)

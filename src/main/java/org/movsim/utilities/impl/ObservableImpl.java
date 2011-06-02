@@ -45,7 +45,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
             logger.debug(" observer removed from observer list");
         }
         else{
-            logger.warn(" try to remove observer from observer list but observer is not contained in list");
+            logger.warn(" try to remove observerInTime from observer list but observer is not contained in list");
         }
     }
 
