@@ -42,6 +42,10 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
         final int i = observersInTime.indexOf(observer);
         if (i >= 0) {
             observersInTime.remove(observer);
+            logger.debug(" observer removed from observer list");
+        }
+        else{
+            logger.warn(" try to remove observer from observer list but observer is not contained in list");
         }
     }
 
@@ -51,6 +55,10 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
         final int i = observers.indexOf(observer);
         if (i >= 0) {
             observers.remove(observer);
+            logger.debug(" observer removed from observer list");
+        }
+        else{
+            logger.warn(" try to remove observer from observer list but observer is not contained in list");
         }
     }
    
@@ -58,13 +66,16 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
     public void notifyObservers(double time) {
         for (final ObserverInTime o : observersInTime ) {
             o.notifyObserver(time);
+            
         }
+        logger.debug(" n = {} observers notified at time = {}", observersInTime.size(), time);
     }
     
     public void notifyObservers() {
         for (final Observer o : observers ) {
             o.notifyObserver();
         }
+        logger.debug(" n = {} observers notified", observers.size());
     }
 
 }
