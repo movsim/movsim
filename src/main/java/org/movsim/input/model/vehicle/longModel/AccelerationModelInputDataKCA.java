@@ -82,5 +82,36 @@ public interface AccelerationModelInputDataKCA extends AccelerationModelInputDat
      * @return the vp
      */
     double getVp();
+    
+    
+    double getV0Default();
+
+    double getkDefault();
+
+    double getPb0Default();
+
+    double getPb1Default();
+
+    double getPa1Default();
+
+    double getPa2Default();
+
+    double getVpDefault();
+    
+    
+    void setV0(double v0);
+
+    void setK(double k);
+    
+    void setPb0(double pb0);
+
+    void setPb1(double pb1);
+
+    void setPa1(double pa1);
+
+    void setPa2(double pa2);
+
+    void setVp(double vp);
+
 
 }

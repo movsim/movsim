@@ -196,6 +196,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      *            the vehicle input data
      * @return the map
      */
+    
+    // TODO auslagern auf Input seite
     private Map<String, VehicleInput> createMap(List<VehicleInput> vehicleInputData) {
         final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
         for (final VehicleInput vehInput : vehicleInputData) {
@@ -272,37 +274,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return longModel;
     }
 
-    /**
-     * Normalize fractions.
-     * 
-     * @param sumFraction
-     *            the sum fraction
-     */
-    private void normalizeFractions(double sumFraction) {
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final double fraction = prototypes.get(key).fraction();
-            prototypes.get(key).setFraction(fraction / sumFraction);
-        }
-    }
-
-    /**
-     * Write fundamental diagrams.
-     */
-    private void writeFundamentalDiagrams() {
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final String filename = projectName + ".fund_" + key + ".csv";
-            final VehiclePrototype proto = prototypes.get(key);
-            if (proto.fraction() > 0) {
-                // avoid writing fundDia of "obstacles"
-                proto.writeFundamentalDiagram(filename);
-            }
-        }
-    }
-
+    
+    
     /**
      * Long model factory.
      * 
@@ -332,11 +305,64 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return longModel;
     }
 
+    
+    
+    /**
+     * Normalize fractions.
+     * 
+     * @param sumFraction
+     *            the sum fraction
+     */
+    private void normalizeFractions(double sumFraction) {
+        final Iterator<String> it = prototypes.keySet().iterator();
+        while (it.hasNext()) {
+            final String key = it.next();
+            final double fraction = prototypes.get(key).fraction();
+            prototypes.get(key).setFraction(fraction / sumFraction);
+        }
+    }
+
+    /**
+     * Write fundamental diagrams.
+     */
+    
+    // TODO: auslagern in separate Klasse 
+    private void writeFundamentalDiagrams() {
+        final Iterator<String> it = prototypes.keySet().iterator();
+        while (it.hasNext()) {
+            final String key = it.next();
+            final String filename = projectName + ".fund_" + key + ".csv";
+            final VehiclePrototype proto = prototypes.get(key);
+            if (proto.fraction() > 0) {
+                // avoid writing fundDia of "obstacles"
+                proto.writeFundamentalDiagram(filename);
+            }
+        }
+    }
+
+    
+    /**
+     * Check for reaction times.
+     * 
+     * @return true, if successful
+     */
+    private boolean checkForReactionTimes() {
+        final Iterator<String> it = prototypes.keySet().iterator();
+        while (it.hasNext()) {
+            final String key = it.next();
+            final VehiclePrototype prototype = prototypes.get(key);
+            if (prototype.hasReactionTime())
+                return true;
+        }
+        return false;
+    }
+    
     /**
      * Cyclic buffer factory.
      * 
      * @return the cyclic buffer impl
      */
+    
     private CyclicBufferImpl cyclicBufferFactory() {
         if (isWithReactionTimes)
             return new CyclicBufferImpl();
@@ -423,20 +449,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return requiredTimestep;
     }
 
-    /**
-     * Check for reaction times.
-     * 
-     * @return true, if successful
-     */
-    private boolean checkForReactionTimes() {
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final VehiclePrototype prototype = prototypes.get(key);
-            if (prototype.hasReactionTime())
-                return true;
-        }
-        return false;
-    }
+   
 
 }

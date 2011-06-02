@@ -41,16 +41,21 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataNSMImpl.class);
 
-    /** The v0. */
-    private final double v0; // desired velocity (cell units/time unit)
+    /** The v0.
+     * desired velocity (cell units/time unit) */
+    private double v0; 
+    private final double v0Default;
     
-    /** The p slowdown. */
-    private final double pSlowdown; // Troedelwahrscheinlichkeit - slowdown probability
+    /** The p slowdown.
+     * Troedelwahrscheinlichkeit - slowdown probability */
+    private double pSlowdown; 
+    private final double pSlowdownDefault;
     
-    /** The p slow to start. */
-    private final double pSlowToStart; // slow-to-start rule (Barlovic)
+    /** The p slow to start. 
+     * slow-to-start rule (Barlovic)*/
+    private double pSlowToStart;
+    private final double pSlowToStartDefault;
 
-    // dt = 1 constant
 
     /**
      * Instantiates a new model input data nsm impl.
@@ -62,22 +67,36 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
      */
     public AccelerationModelInputDataNSMImpl(String modelName, Map<String, String> map) {
         super(modelName);
-        this.v0 = Double.parseDouble(map.get("v0"));
-        this.pSlowdown = Double.parseDouble(map.get("p_slowdown"));
-        this.pSlowToStart = Double.parseDouble(map.get("p_slow_start"));
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        pSlowToStartDefault = pSlowToStart = Double.parseDouble(map.get("p_slow_start"));
+        pSlowdownDefault = pSlowdown = Double.parseDouble(map.get("p_slowdown"));
+        checkParameters();
+    }
+
+    @Override
+    protected void checkParameters() {
         if (pSlowToStart < pSlowdown) {
             logger.error("slow to start logic requires pSlowToStart > pSlowdown, but input {} < {} ", pSlowToStart,
                     pSlowdown);
+            logger.error("please check parameters. exit", getModelName());
             System.exit(-1);
         }
 
         if (v0 < 0 || pSlowdown < 0 || pSlowToStart < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName);
+                    getModelName());
             System.exit(-1);
         }
     }
-
+    
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        pSlowToStart = pSlowToStartDefault;
+        pSlowdown = pSlowdownDefault;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * 
@@ -109,6 +128,41 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     @Override
     public double getSlowToStart() {
         return pSlowToStart;
+    }
+
+    public double getV0Default() {
+        return v0Default;
+    }
+
+    public double getpSlowdown() {
+        return pSlowdown;
+    }
+
+    public double getpSlowdownDefault() {
+        return pSlowdownDefault;
+    }
+
+    public double getpSlowToStart() {
+        return pSlowToStart;
+    }
+
+    public double getpSlowToStartDefault() {
+        return pSlowToStartDefault;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+    public void setpSlowdown(double pSlowdown) {
+        this.pSlowdown = pSlowdown;
+        parametersUpdated();
+    }
+
+    public void setpSlowToStart(double pSlowToStart) {
+        this.pSlowToStart = pSlowToStart;
+        parametersUpdated();
     }
 
 }

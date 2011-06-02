@@ -80,5 +80,35 @@ public interface AccelerationModelInputDataOVM_VDIFF extends AccelerationModelIn
      * @return the variant
      */
     int getVariant();
+    
+
+    double getV0Default();
+
+    double getTauDefault();
+
+    double getLenInteractionDefault();
+
+    double getBetaDefault();
+
+    double getLambdaDefault();
+
+    double getS0Default();
+
+    int getVariantDefault();
+
+    void setV0(double v0);
+
+    void setTau(double tau);
+
+
+    void setLenInteraction(double lenInteraction);
+
+    void setBeta(double beta);
+
+    void setLambda(double lambda);
+
+    void setS0(double s0);
+
+    void setVariant(int variant);
 
 }

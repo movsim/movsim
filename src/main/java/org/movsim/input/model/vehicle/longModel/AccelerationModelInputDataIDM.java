@@ -80,12 +80,23 @@ public interface AccelerationModelInputDataIDM extends AccelerationModelInputDat
      * @return the b
      */
     double getB();
+    
+    double getV0Default();
+    double getTDefault();
+
+    double getS0Default();
+    double getS1Default();
+
+    double getDeltaDefault();
+
+    double getaDefault();
+
+    double getbDefault();
+
 
     
     void resetParametersToDefault();
     
-    
-
     void setV0(double v0);
 
     void setT(double timegap);

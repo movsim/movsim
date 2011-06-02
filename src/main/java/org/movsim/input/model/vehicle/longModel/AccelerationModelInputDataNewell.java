@@ -31,7 +31,6 @@ package org.movsim.input.model.vehicle.longModel;
  * The Interface AccelerationModelInputDataNewell.
  */
 public interface AccelerationModelInputDataNewell extends AccelerationModelInputData {
-
    
 
 }

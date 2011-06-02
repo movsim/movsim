@@ -40,4 +40,6 @@ public interface AccelerationModelInputData extends Observable{
      * @return the model name
      */
     String getModelName();
+    
+    void resetParametersToDefault();
 }

@@ -42,18 +42,24 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataGippsImpl.class);
 
     /** The v0. */
-    private final double v0;
+    private double v0;
+    private final double v0Default;
     
     /** The a. */
-    private final double a;
+    private double a;
+    private final double aDefault;
     
     /** The b. */
-    private final double b;
+    private double b;
+    private final double bDefault;
     
     /** The s0. */
-    private final double s0;
+    private double s0;
+    private final double s0Default;
     
-    /** The dt. */
+    /** The dt.
+     *  cannot change update time step interactively, therefore no default nor set method */
+    
     private final double dt;
 
     /**
@@ -66,18 +72,41 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
      */
     public AccelerationModelInputDataGippsImpl(String modelName, Map<String, String> map) {
         super(modelName);
-        this.v0 = Double.parseDouble(map.get("v0"));
-        this.a = Double.parseDouble(map.get("a"));
-        this.b = Double.parseDouble(map.get("b"));
-        this.s0 = Double.parseDouble(map.get("s0"));
-        this.dt = Double.parseDouble(map.get("dt"));
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        aDefault = a = Double.parseDouble(map.get("a"));
+        bDefault = b = Double.parseDouble(map.get("b"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        dt = Double.parseDouble(map.get("dt"));
 
+        checkParameters();
+        
+    }
+    
+    
+    @Override
+    protected void checkParameters() {
         if (v0 < 0 || a < 0 || b < 0 || s0 < 0 || dt < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName);
+                    getModelName());
             System.exit(-1);
         }
+        if (v0 == 0 || a == 0 || b == 0 || dt == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName());
+            System.exit(-1);
+        }
+        
     }
+
+
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        a = aDefault;
+        b = bDefault;
+        s0 = s0Default;
+    }
+
 
     /*
      * (non-Javadoc)
@@ -129,4 +158,49 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
         return dt;
     }
 
+
+    public double getV0Default() {
+        return v0Default;
+    }
+
+
+    public double getaDefault() {
+        return aDefault;
+    }
+
+
+    public double getbDefault() {
+        return bDefault;
+    }
+
+
+    public double getS0Default() {
+        return s0Default;
+    }
+
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+
+    public void setA(double a) {
+        this.a = a;
+        parametersUpdated();
+    }
+
+
+    public void setB(double b) {
+        this.b = b;
+        parametersUpdated();
+    }
+
+
+    public void setS0(double s0) {
+        this.s0 = s0;
+        parametersUpdated();
+    }
+
+    
 }

@@ -38,6 +38,15 @@ public abstract class AccelerationModelInputDataImpl extends ObservableImpl impl
 
     /** The model name. */
     private final String modelName;
+    
+    public abstract void resetParametersToDefault();
+    
+    protected abstract void checkParameters();
+    
+    protected void parametersUpdated(){
+        checkParameters();
+        notifyObservers();
+    }
 
     /**
      * Instantiates a new model input data impl.
