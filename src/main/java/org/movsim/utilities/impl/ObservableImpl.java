@@ -20,7 +20,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
     
     @Override
     public void registerObserver(ObserverInTime observer) {
-        if( observers.contains(observer) ){
+        if( observersInTime.contains(observer) ){
             logger.error(" observer already registered, please fix this inconsistency. exit");
             System.exit(-1);
         }
