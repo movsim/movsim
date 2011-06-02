@@ -39,17 +39,16 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
     @Override
     public void removeObserver(ObserverInTime observer) {
         observersInTime.remove(observer);
-     // ake: this applies only if *same* observer is registered multiple times, this is not consistent behavior; we now check this case when registering
-//        int i = observersInTime.indexOf(observer);
-
-//        if (i >= 0) {
-//            observersInTime.remove(observer);
-//        }
+        final int i = observersInTime.indexOf(observer);
+        if (i >= 0) {
+            observersInTime.remove(observer);
+        }
     }
 
     @Override
     public void removeObserver(Observer observer) {
-        int i = observers.indexOf(observer);
+        observers.remove(observer);
+        final int i = observers.indexOf(observer);
         if (i >= 0) {
             observers.remove(observer);
         }
