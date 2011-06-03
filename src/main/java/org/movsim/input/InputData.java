@@ -26,7 +26,9 @@
  */
 package org.movsim.input;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
@@ -58,5 +60,10 @@ public interface InputData {
      * @return the vehicle input data
      */
     List<VehicleInput> getVehicleInputData();
+    
+    
+    Map<String, VehicleInput> createVehicleInputDataMap();
+    
+    
 
 }

@@ -27,12 +27,15 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // Nagel-Schreckenberg or Barlovic-Model
@@ -42,18 +45,21 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class NSM extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(NSM.class);
+    
     // unit time for CA:
     /** The Constant dtCA. */
     private static final double dtCA = 1; // update timestep for CA !!
 
     /** The v0. */
-    private final double v0;
+    private double v0;
     
     /** The p slowdown. */
-    private final double pSlowdown;
+    private double pSlowdown;
     
     /** The p slow to start. */
-    private final double pSlowToStart; // slow-to-start rule for Barlovic model
+    private double pSlowToStart; // slow-to-start rule for Barlovic model
 
     /**
      * Instantiates a new nSM.
@@ -64,12 +70,18 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters
      */
     public NSM(String modelName, AccelerationModelInputDataNSM parameters) {
-        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON);
-        this.v0 = parameters.getV0();
-        this.pSlowdown = parameters.getSlowdown();
-        this.pSlowToStart = parameters.getSlowToStart();
+        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON, parameters);
+        initParameters();
     }
 
+    @Override
+    protected void initParameters() {
+        logger.debug("init model parameters");
+        this.v0 = ((AccelerationModelInputDataNSM) parameters).getV0();
+        this.pSlowdown = ((AccelerationModelInputDataNSM) parameters).getSlowdown();
+        this.pSlowToStart = ((AccelerationModelInputDataNSM) parameters).getSlowToStart();
+    }
+    
     // copy constructor
     /**
      * Instantiates a new nSM.
@@ -77,12 +89,12 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      * @param nsmToCopy
      *            the nsm to copy
      */
-    public NSM(NSM nsmToCopy) {
-        super(nsmToCopy.modelName(), nsmToCopy.getModelCategory());
-        this.v0 = nsmToCopy.getV0();
-        this.pSlowdown = nsmToCopy.getSlowdown();
-        this.pSlowToStart = nsmToCopy.getSlowToStart();
-    }
+//    public NSM(NSM nsmToCopy) {
+//        super(nsmToCopy.modelName(), nsmToCopy.getModelCategory());
+//        this.v0 = nsmToCopy.getV0();
+//        this.pSlowdown = nsmToCopy.getSlowdown();
+//        this.pSlowToStart = nsmToCopy.getSlowToStart();
+//    }
 
     /*
      * (non-Javadoc)

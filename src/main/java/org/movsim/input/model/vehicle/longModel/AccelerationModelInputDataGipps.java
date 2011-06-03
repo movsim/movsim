@@ -68,5 +68,23 @@ public interface AccelerationModelInputDataGipps extends AccelerationModelInputD
      * @return the dt
      */
     double getDt();
+    
+    
+    public double getV0Default();
+
+    public double getaDefault();
+
+    public double getbDefault();
+
+    public double getS0Default();
+
+    public void setV0(double v0);
+
+    public void setA(double a);
+
+    public void setB(double b);
+
+    public void setS0(double s0);
+
 
 }

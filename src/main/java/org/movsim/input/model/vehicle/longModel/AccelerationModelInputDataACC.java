@@ -89,5 +89,38 @@ public interface AccelerationModelInputDataACC extends AccelerationModelInputDat
      * @return the coolness
      */
     double getCoolness();
+    
+    
+    public double getV0Default();
+
+    public double getTDefault();
+
+    public double getS0Default();
+
+    public double getS1Default();
+
+    public double getDeltaDefault();
+
+    public double getaDefault();
+
+    public double getbDefault();
+
+    public double getCoolnessDefault();
+
+    public void setV0(double v0);
+
+    public void setT(double T);
+
+    public void setS0(double s0);
+
+    public void setS1(double s1);
+
+    public void setDelta(double delta);
+
+    public void setA(double a);
+
+    public void setB(double b);
+
+    public void setCoolness(double coolness);
 
 }

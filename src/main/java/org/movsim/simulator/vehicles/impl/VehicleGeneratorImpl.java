@@ -42,6 +42,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
+import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -106,11 +107,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
         this.projectName = simInput.getProjectName();
 
-        // erzeuge long models:
-        // longModels = new HashMap<String, AccelerationModel>();
-        // createLongModels(simInput);
-
-        // erzeuge vehicle prototypen gemaess heterogeneity
+        // create vehicle prototyps according to traffic composition (heterogeneity)
         prototypes = new HashMap<String, VehiclePrototype>();
         final double sumFraction = createPrototypes(simInput);
 
@@ -119,7 +116,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
         // output fundamental diagrams
         if (!isWithGUI && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
-            writeFundamentalDiagrams();
+            FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
         }
 
         isWithReactionTimes = checkForReactionTimes();
@@ -138,7 +135,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         // default for continuous micro models
         requiredTimestep = simInput.getSimulationInput().getTimestep(); 
 
-        final Map<String, VehicleInput> vehInputMap = createMap(simInput.getVehicleInputData());
+        final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
 
         final List<HeterogeneityInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput()
                 .getHeterogeneityInputData();
@@ -148,22 +145,18 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             final String keyName = heterogen.getKeyName();
             logger.debug("key name={}", keyName);
             if (!vehInputMap.containsKey(keyName)) {
-                logger.info("no corresponding vehicle found. Ignore heterogeneity with label={}", keyName);
-                continue;
+                logger.error("no corresponding vehicle found. check vehicle input with label={}", keyName);
+                System.exit(-1);
             }
             final VehicleInput vehInput = vehInputMap.get(keyName);
-
             final double vehLength = vehInput.getLength();
-            final AccelerationModel longModel = longModelFactory(vehInput.getModelInputData(), vehLength);
+            final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(), vehLength);
 
             final EquilibriumProperties fundDia = fundDiagramFactory(vehLength, longModel);
 
             final double fraction = heterogen.getFraction();
             logger.info("fraction = {}", fraction);
 
-            // TODO check logic: prototypes (e.g. obstacles) needed for IC but
-            // with fraction == 0
-            // if (fraction > 0) {
             sumFraction += fraction;
             final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput);
             prototypes.put(keyName, vehProto);
@@ -183,27 +176,11 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
                 }
             }
             logger.debug("simulation timestep: dt={}. ", requiredTimestep);
-            // }
-
         }
         return sumFraction;
     }
-
-    /**
-     * Creates the map.
-     * 
-     * @param vehicleInputData
-     *            the vehicle input data
-     * @return the map
-     */
-    private Map<String, VehicleInput> createMap(List<VehicleInput> vehicleInputData) {
-        final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
-        for (final VehicleInput vehInput : vehicleInputData) {
-            final String keyName = vehInput.getLabel();
-            map.put(keyName, vehInput);
-        }
-        return map;
-    }
+    
+    
 
     /**
      * Fund diagram factory.
@@ -238,7 +215,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     }
 
     /**
-     * Long model factory.
+     * Long model factory with vehicle length
+     *  vehicle length is only needed for KCA (explicit model parameter)
      * 
      * @param modelInputData
      *            the model input data
@@ -263,15 +241,47 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
             longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-         // needs vehicle length
             longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength); 
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
-            System.exit(0); // TODO
+            System.exit(0);
         }
         return longModel;
     }
 
+    
+    
+    /**
+     * Long model factory.
+     * 
+     * @param modelToCopy
+     *            the model to copy
+     * @return the acceleration model
+     */
+//    private AccelerationModel longModelFactory(AccelerationModel modelToCopy) {
+//        AccelerationModel longModel = null;
+//        final String modelName = modelToCopy.modelName();
+//        if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
+//            longModel = new IDM((IDM) modelToCopy);
+//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
+//            longModel = new ACC((ACC) modelToCopy);
+//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
+//            longModel = new OVM_VDIFF((OVM_VDIFF) modelToCopy);
+//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
+//            longModel = new Gipps((Gipps) modelToCopy);
+//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
+//            longModel = new NSM((NSM) modelToCopy);
+//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
+//            longModel = new KCA((KCA) modelToCopy);
+//        } else {
+//            logger.error("create model by copy constructor: Model {} not known ! %n", modelName);
+//            System.exit(0); 
+//        }
+//        return longModel;
+//    }
+
+    
+    
     /**
      * Normalize fractions.
      * 
@@ -287,56 +297,31 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         }
     }
 
+   
+
+    
     /**
-     * Write fundamental diagrams.
+     * Check for reaction times.
+     * 
+     * @return true, if successful
      */
-    private void writeFundamentalDiagrams() {
+    private boolean checkForReactionTimes() {
         final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
             final String key = it.next();
-            final String filename = projectName + ".fund_" + key + ".csv";
-            final VehiclePrototype proto = prototypes.get(key);
-            if (proto.fraction() > 0) {
-                // avoid writing fundDia of "obstacles"
-                proto.writeFundamentalDiagram(filename);
-            }
+            final VehiclePrototype prototype = prototypes.get(key);
+            if (prototype.hasReactionTime())
+                return true;
         }
+        return false;
     }
-
-    /**
-     * Long model factory.
-     * 
-     * @param modelToCopy
-     *            the model to copy
-     * @return the acceleration model
-     */
-    private AccelerationModel longModelFactory(AccelerationModel modelToCopy) {
-        AccelerationModel longModel = null;
-        final String modelName = modelToCopy.modelName();
-        if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-            longModel = new IDM((IDM) modelToCopy);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
-            longModel = new ACC((ACC) modelToCopy);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
-            longModel = new OVM_VDIFF((OVM_VDIFF) modelToCopy);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
-            longModel = new Gipps((Gipps) modelToCopy);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
-            longModel = new NSM((NSM) modelToCopy);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-            longModel = new KCA((KCA) modelToCopy);
-        } else {
-            logger.error("create model by copy constructor: Model {} not known ! %n", modelName);
-            System.exit(0); // TODO
-        }
-        return longModel;
-    }
-
+    
     /**
      * Cyclic buffer factory.
      * 
      * @return the cyclic buffer impl
      */
+    
     private CyclicBufferImpl cyclicBufferFactory() {
         if (isWithReactionTimes)
             return new CyclicBufferImpl();
@@ -374,10 +359,13 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     @Override
     public Vehicle createVehicle(VehiclePrototype prototype) {
         final int vehID = MyRandom.nextInt(); // for veh index
-        // final double length = prototype.length();
+        //final double length = prototype.length();
         // final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
-        final AccelerationModel longModel = longModelFactory(prototype.getLongModel());
+        // TODO !!!! gleich mit standard cstr aufrufen !?
+        // longModelFactory(AccelerationModelInputData modelInputData, double vehLength) 
+        //final AccelerationModel longModel = longModelFactory(prototype.getLongModel());
+        final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(), prototype.length());
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
 
         final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer);
@@ -423,20 +411,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return requiredTimestep;
     }
 
-    /**
-     * Check for reaction times.
-     * 
-     * @return true, if successful
-     */
-    private boolean checkForReactionTimes() {
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final VehiclePrototype prototype = prototypes.get(key);
-            if (prototype.hasReactionTime())
-                return true;
-        }
-        return false;
-    }
+   
 
 }

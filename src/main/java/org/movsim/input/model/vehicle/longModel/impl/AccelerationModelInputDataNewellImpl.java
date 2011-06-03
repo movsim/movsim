@@ -54,5 +54,20 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     public AccelerationModelInputDataNewellImpl(String modelName, Map<String, String> map) {
         super(modelName);
 
+        checkParameters();
     }
+    
+    @Override
+    protected void checkParameters() {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    @Override
+    public void resetParametersToDefault() {
+        // TODO Auto-generated method stub
+        
+    }
+
+   
 }

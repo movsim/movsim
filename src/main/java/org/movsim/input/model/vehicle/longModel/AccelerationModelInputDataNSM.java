@@ -52,5 +52,22 @@ public interface AccelerationModelInputDataNSM extends AccelerationModelInputDat
      * @return the slow to start
      */
     double getSlowToStart();
+    
+    
+    double getV0Default();
+
+    double getpSlowdown();
+
+    double getpSlowdownDefault();
+
+    double getpSlowToStart();
+
+    double getpSlowToStartDefault();
+
+    void setV0(double v0);
+
+    void setpSlowdown(double pSlowdown);
+
+    void setpSlowToStart(double pSlowToStart);
 
 }

@@ -42,25 +42,41 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataKCAImpl.class);
 
     /** The v0. */
-    private final double v0;
+    private double v0;
+    private final double v0Default;
     
-    /** The k. */
-    private final double k; // Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+    /** The k. 
+     *  Multiplikator fuer sync-Abstand D=lveh+k*v*tau*/
+    private double k;  
+    private final double kDefault;
     
-    /** The pb0. */
-    private final double pb0; // "Troedelwahrsch." for standing vehicles
     
-    /** The pb1. */
-    private final double pb1; // "Troedelwahrsch." for moving vehicles
+    /** The pb0. 
+     *  "Troedelwahrsch." for standing vehicles */
+    private double pb0; 
+    private final double pb0Default;
     
-    /** The pa1. */
-    private final double pa1; // "Beschl.=Anti-Troedelwahrsch." falls v<vp
+    /** The pb1. 
+     * "Troedelwahrsch." for moving vehicles */
+    private double pb1; 
+    private final double pb1Default;
     
-    /** The pa2. */
-    private final double pa2; // "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+    /** The pa1.
+     * "Beschl.=Anti-Troedelwahrsch." falls v<vp */
+    private double pa1; 
+    private final double pa1Default;
     
-    /** The vp. */
-    private final double vp; // Geschw., ab der weniger "anti-getroedelt" wird
+    
+    /** The pa2. 
+     * "Beschl.=Anti-Troedelwahrsch." falls v>=vp*/
+    private double pa2; 
+    private final double pa2Default;
+    
+    /** The vp. 
+     * Geschw., ab der weniger "anti-getroedelt" wird */
+    private double vp; 
+    private final double vpDefault;
+    
 
     /**
      * Instantiates a new model input data kca impl.
@@ -72,19 +88,35 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      */
     public AccelerationModelInputDataKCAImpl(String modelName, Map<String, String> map) {
         super(modelName);
-        this.v0 = Double.parseDouble(map.get("v0"));
-        this.k = Double.parseDouble(map.get("k"));
-        this.pb0 = Double.parseDouble(map.get("pb0"));
-        this.pb1 = Double.parseDouble(map.get("pb1"));
-        this.pa1 = Double.parseDouble(map.get("pa1"));
-        this.pa2 = Double.parseDouble(map.get("pa2"));
-        this.vp = Double.parseDouble(map.get("vp"));
-
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        kDefault = k = Double.parseDouble(map.get("k"));
+        pb0Default = pb0 = Double.parseDouble(map.get("pb0"));
+        pb1Default = pb1 = Double.parseDouble(map.get("pb1"));
+        pa1Default = pa1 = Double.parseDouble(map.get("pa1"));
+        pa2Default = pa2 = Double.parseDouble(map.get("pa2"));
+        vpDefault = vp = Double.parseDouble(map.get("vp"));
+        checkParameters();
+    }
+    
+    @Override
+    protected void checkParameters() {
         if (v0 < 0 || k < 0 || pb0 < 0 || pb1 < 0 || pa1 < 0 || pa2 < 0 || vp < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName);
+                    getModelName());
             System.exit(-1);
         }
+    }
+
+    
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        k = kDefault;
+        pb0 = pb0Default;
+        pb1 = pb1Default;
+        pa1 = pa1Default;
+        pa2 = pa2Default;
+        vp = vpDefault;
     }
 
     /*
@@ -164,4 +196,68 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
         return vp;
     }
 
+    public double getV0Default() {
+        return v0Default;
+    }
+
+    public double getkDefault() {
+        return kDefault;
+    }
+
+    public double getPb0Default() {
+        return pb0Default;
+    }
+
+    public double getPb1Default() {
+        return pb1Default;
+    }
+
+    public double getPa1Default() {
+        return pa1Default;
+    }
+
+    public double getPa2Default() {
+        return pa2Default;
+    }
+
+    public double getVpDefault() {
+        return vpDefault;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+    public void setK(double k) {
+        this.k = k;
+        parametersUpdated();
+    }
+
+    public void setPb0(double pb0) {
+        this.pb0 = pb0;
+        parametersUpdated();
+    }
+
+    public void setPb1(double pb1) {
+        this.pb1 = pb1;
+        parametersUpdated();
+    }
+
+    public void setPa1(double pa1) {
+        this.pa1 = pa1;
+        parametersUpdated();
+    }
+
+    public void setPa2(double pa2) {
+        this.pa2 = pa2;
+        parametersUpdated();
+    }
+
+    public void setVp(double vp) {
+        this.vp = vp;
+        parametersUpdated();
+    }
+
+   
 }

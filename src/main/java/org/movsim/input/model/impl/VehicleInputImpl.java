@@ -93,7 +93,6 @@ public class VehicleInputImpl implements VehicleInput {
 
         final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
         for (final Element longModelElem : longModelElems) {
-            
             if(longModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleMemory)){
                 final Map<String, String> map = XmlUtils.putAttributesInHash(longModelElem);
                 memoryInputData = new MemoryInputDataImpl(map);
@@ -181,7 +180,7 @@ public class VehicleInputImpl implements VehicleInput {
      * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
      */
     @Override
-    public AccelerationModelInputData getModelInputData() {
+    public AccelerationModelInputData getAccelerationModelInputData() {
         return modelInputData;
     }
 

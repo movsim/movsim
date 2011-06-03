@@ -41,26 +41,35 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataOVM_VDIFFImpl.class);
 
-    /** The s0. */
-    private final double s0;
     
     /** The v0. */
-    private final double v0;
+    private double v0;
+    private final double v0Default;
     
     /** The tau. */
-    private final double tau;
+    private double tau;
+    private final double tauDefault;
     
     /** The len interaction. */
-    private final double lenInteraction;
+    private double lenInteraction;
+    private final double lenInteractionDefault;
     
     /** The beta. */
-    private final double beta;
+    private double beta;
+    private final double betaDefault;
     
     /** The lambda. */
-    private final double lambda;
+    private double lambda;
+    private final double lambdaDefault;
+    
+    /** The s0. */
+    private double s0;
+    private final double s0Default;
+    
     
     /** The variant. */
-    private final int variant;
+    private int variant;
+    private final int variantDefault;
 
     /**
      * Instantiates a new model input data ov m_ vdiff impl.
@@ -72,20 +81,39 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
      */
     public AccelerationModelInputDataOVM_VDIFFImpl(String modelName, Map<String, String> map) {
         super(modelName);
-        this.s0 = Double.parseDouble(map.get("s0"));
-        this.v0 = Double.parseDouble(map.get("v0"));
-        this.tau = Double.parseDouble(map.get("tau"));
-        this.lenInteraction = Double.parseDouble(map.get("l_int"));
-        this.beta = Double.parseDouble(map.get("beta"));
-        this.lambda = Double.parseDouble(map.get("lambda"));
-        this.variant = Integer.parseInt(map.get("variant"));
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        tauDefault = tau = Double.parseDouble(map.get("tau"));
+        lenInteractionDefault = lenInteraction = Double.parseDouble(map.get("l_int"));
+        betaDefault = beta = Double.parseDouble(map.get("beta"));
+        lambdaDefault = lambda = Double.parseDouble(map.get("lambda"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        variantDefault = variant = Integer.parseInt(map.get("variant"));
 
+        checkParameters();
+
+    }
+    
+
+    @Override
+    protected void checkParameters() {
         if (s0 < 0 || v0 < 0 || tau < 0 || lenInteraction < 0 || beta < 0 || lambda < 0 || variant < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName);
+                    getModelName());
             System.exit(-1);
         }
+    }
 
+    
+    
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        tau = tauDefault;
+        lenInteraction = lenInteractionDefault;
+        beta = betaDefault;
+        lambda = lambdaDefault;
+        s0 = s0Default;
+        variant = variantDefault;
     }
 
     /*
@@ -171,5 +199,83 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     public int getVariant() {
         return variant;
     }
+
+
+    public double getV0Default() {
+        return v0Default;
+    }
+
+
+    public double getTauDefault() {
+        return tauDefault;
+    }
+
+
+    public double getLenInteractionDefault() {
+        return lenInteractionDefault;
+    }
+
+
+    public double getBetaDefault() {
+        return betaDefault;
+    }
+
+
+    public double getLambdaDefault() {
+        return lambdaDefault;
+    }
+
+
+    public double getS0Default() {
+        return s0Default;
+    }
+
+
+    public int getVariantDefault() {
+        return variantDefault;
+    }
+
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+
+    public void setTau(double tau) {
+        this.tau = tau;
+        parametersUpdated();
+    }
+
+
+    public void setLenInteraction(double lenInteraction) {
+        this.lenInteraction = lenInteraction;
+        parametersUpdated();
+    }
+
+
+    public void setBeta(double beta) {
+        this.beta = beta;
+        parametersUpdated();
+    }
+
+
+    public void setLambda(double lambda) {
+        this.lambda = lambda;
+        parametersUpdated();
+    }
+
+
+    public void setS0(double s0) {
+        this.s0 = s0;
+        parametersUpdated();
+    }
+
+
+    public void setVariant(int variant) {
+        this.variant = variant;
+        parametersUpdated();
+    }
+
 
 }

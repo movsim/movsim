@@ -87,15 +87,26 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
         deltaDefault = delta = Double.parseDouble(map.get("delta"));
         aDefault = a = Double.parseDouble(map.get("a"));
         bDefault = b = Double.parseDouble(map.get("b"));
+        checkParameters();
+        
+    }
 
+    @Override
+    protected void checkParameters() {
         if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName);
+                    getModelName());
+            System.exit(-1);
+        }
+        
+        if (T == 0 || a == 0 || b == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName());
             System.exit(-1);
         }
     }
 
-    
+    @Override
     public void resetParametersToDefault(){
         v0 = v0Default;
         T = TDefault;
@@ -184,47 +195,78 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     public double getB() {
         return b;
     }
+    
+    public double getV0Default() {
+        return v0Default;
+    }
+
+    public double getTDefault() {
+        return TDefault;
+    }
+
+    public double getS0Default() {
+        return s0Default;
+    }
+
+    public double getS1Default() {
+        return s1Default;
+    }
+
+    public double getDeltaDefault() {
+        return deltaDefault;
+    }
+
+    public double getaDefault() {
+        return aDefault;
+    }
+
+    public double getbDefault() {
+        return bDefault;
+    }
+
 
 
     public void setV0(double v0) {
         this.v0 = v0;
-        notifyObservers();
+        parametersUpdated();
     }
 
 
     public void setT(double timegap) {
         this.T = timegap;
-        notifyObservers();
+        parametersUpdated();
     }
 
 
     public void setS0(double s0) {
         this.s0 = s0;
-        notifyObservers();
+        parametersUpdated();
     }
 
 
     public void setS1(double s1) {
         this.s1 = s1;
-        notifyObservers();
+        parametersUpdated();
     }
 
 
     public void setDelta(double delta) {
         this.delta = delta;
-        notifyObservers();
+        parametersUpdated();
     }
 
 
     public void setA(double a) {
         this.a = a;
-        notifyObservers();
+        parametersUpdated();
     }
 
 
     public void setB(double b) {
         this.b = b;
-        notifyObservers();
+        parametersUpdated();
     }
 
+    
+ 
 }

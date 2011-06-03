@@ -26,12 +26,16 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.movsim.utilities.Observer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // paper reference and modifications ...
@@ -41,20 +45,25 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
 
-    /** The T. */
-    private final double T; // ergibt sich aus dt !!
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(Gipps.class);
+    
+    /** The T. 
+     * results from update timestep dt 
+     * dt = T = Tr = tau_relax*/
+    private double T;
     
     /** The v0. */
-    private final double v0;
+    private double v0;
     
     /** The a. */
-    private final double a;
+    private double a;
     
     /** The b. */
-    private final double b;
+    private double b;
     
     /** The s0. */
-    private final double s0;
+    private double s0;
 
     /**
      * Instantiates a new gipps.
@@ -65,13 +74,20 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters
      */
     public Gipps(String modelName, AccelerationModelInputDataGipps parameters) {
-        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
-        this.T = parameters.getDt(); // Gipps: dt=T=Tr=tau_relax!
-        this.v0 = parameters.getV0();
-        this.a = parameters.getA();
-        this.b = parameters.getB();
-        this.s0 = parameters.getS0();
+        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
+        initParameters();
     }
+    
+    @Override
+    protected void initParameters() {
+        logger.debug("init model parameters");
+        this.T = ((AccelerationModelInputDataGipps) parameters).getDt(); 
+        this.v0 = ((AccelerationModelInputDataGipps) parameters).getV0();
+        this.a = ((AccelerationModelInputDataGipps) parameters).getA();
+        this.b = ((AccelerationModelInputDataGipps) parameters).getB();
+        this.s0 = ((AccelerationModelInputDataGipps) parameters).getS0();
+    }
+
 
     // copy constructor
     /**
@@ -80,14 +96,14 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * @param modelToCopy
      *            the model to copy
      */
-    public Gipps(Gipps modelToCopy) {
-        super(modelToCopy.modelName(), modelToCopy.getModelCategory());
-        this.T = modelToCopy.getT();
-        this.v0 = modelToCopy.getV0();
-        this.a = modelToCopy.getA();
-        this.b = modelToCopy.getB();
-        this.s0 = modelToCopy.getS0();
-    }
+//    public Gipps(Gipps modelToCopy) {
+//        super(modelToCopy.modelName(), modelToCopy.getModelCategory());
+//        this.T = modelToCopy.getT();
+//        this.v0 = modelToCopy.getV0();
+//        this.a = modelToCopy.getA();
+//        this.b = modelToCopy.getB();
+//        this.s0 = modelToCopy.getS0();
+//    }
 
     /**
      * Gets the t.
@@ -229,4 +245,5 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         return this.T; // iterated map requires specific timestep!!
     }
 
+    
 }

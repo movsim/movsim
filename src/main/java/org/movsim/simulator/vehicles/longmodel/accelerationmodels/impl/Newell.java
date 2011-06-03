@@ -26,11 +26,14 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // paper reference ...
@@ -40,6 +43,9 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class Newell extends LongitudinalModelImpl implements AccelerationModel {
 
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(Newell.class);
+   
     /** The dt. */
     private final double dt;
 
@@ -52,10 +58,18 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      *            the parameters
      */
     public Newell(String modelName, AccelerationModelInputDataNewell parameters) {
-        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL);
+        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
         this.dt = 1; // model parameter
+        initParameters();
     }
 
+    @Override
+    protected void initParameters() {
+        logger.debug("init model parameters");
+        //this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
+        
+    }
+    
     // copy constructor
     /**
      * Instantiates a new newell.
@@ -63,10 +77,10 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      * @param newellToCopy
      *            the newell to copy
      */
-    public Newell(Newell newellToCopy) {
-        super(newellToCopy.modelName(), newellToCopy.getModelCategory());
-        this.dt = newellToCopy.getRequiredUpdateTime();
-    }
+//    public Newell(Newell newellToCopy) {
+//        super(newellToCopy.modelName(), newellToCopy.getModelCategory());
+//        this.dt = newellToCopy.getRequiredUpdateTime();
+//    }
 
     /*
      * (non-Javadoc)
