@@ -38,7 +38,6 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
 
     @Override
     public void removeObserver(ObserverInTime observer) {
-        observersInTime.remove(observer);
         final int i = observersInTime.indexOf(observer);
         if (i >= 0) {
             observersInTime.remove(observer);
@@ -51,7 +50,6 @@ public abstract class ObservableImpl implements ObservableInTime, Observable{
 
     @Override
     public void removeObserver(Observer observer) {
-        observers.remove(observer);
         final int i = observers.indexOf(observer);
         if (i >= 0) {
             observers.remove(observer);
