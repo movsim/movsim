@@ -25,10 +25,6 @@ import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author ralph
- *
- */
 public class SimulatorView implements ObserverInTime, ActionListener{
     
     /** The Constant logger. */
@@ -138,31 +134,6 @@ public class SimulatorView implements ObserverInTime, ActionListener{
         });
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.output.Macro3DObserver#updateMacro3D()
-     */
-//    public void updateMacro3D() {
-//        double[] state = simulator.getSimOutput().getMacro3D().getState();
-//        System.out.println("state: "+ state[0] + " " +state[1] + " " +state[2]);
-//        durationLabel.setText(String.valueOf(state[0]));
-//        System.out.println(String.valueOf(state[0]));
-//        
-//        //  open up standard input
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//
-//        String userName = null;
-//
-//        try {
-//           userName = br.readLine();
-//        } catch (IOException ioe) {
-//           System.out.println("IO error trying to read your name!");
-//           System.exit(1);
-//        }
-//    }
-
-    /* (non-Javadoc)
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == controlPanel.startButton) {
@@ -176,48 +147,28 @@ public class SimulatorView implements ObserverInTime, ActionListener{
     }
 
 
-    /**
-     * 
-     */
     public void disableStart() {
         controlPanel.startButton.setEnabled(false);
     }
 
-
-    /**
-     * 
-     */
     public void disablePause() {
         controlPanel.pauseButton.setEnabled(false);
     }
 
-
-    /**
-     * 
-     */
     public void disableStop() {
         controlPanel.stopButton.setEnabled(false);
     }
     
-    /**
-     * 
-     */
     public void enableStart() {
         controlPanel.startButton.setEnabled(true);
     }
 
 
-    /**
-     * 
-     */
     public void enablePause() {
         controlPanel.pauseButton.setEnabled(true);
     }
 
 
-    /**
-     * 
-     */
     public void enableStop() {
         controlPanel.stopButton.setEnabled(true);
     }
@@ -226,9 +177,6 @@ public class SimulatorView implements ObserverInTime, ActionListener{
     @Override
     public void notifyObserver(double time) {
         // TODO: aktuelle Daten liegen vor, hole die Daten ab
-        double[] flows = simulator.getSimObservables().getSpatioTemporal().getFlow();
-        System.out.println("update view: "+flows);
-        System.exit(0);
     }
 
 
