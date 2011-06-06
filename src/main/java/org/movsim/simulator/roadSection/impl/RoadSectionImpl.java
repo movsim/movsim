@@ -219,6 +219,8 @@ public class RoadSectionImpl implements RoadSection {
         updateUpstreamBoundary(iTime, dt, time);
 
         updateOnramps(iTime, dt, time);
+        
+        detectors.update(iTime, time, dt, vehContainer);
 
     }
 

@@ -197,16 +197,7 @@ public class SimulatorImpl implements Simulator {
         return simInput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.Simulator#setSimInput(org.movsim.input.InputData)
-     */
-    @Override
-    public void setSimInput(InputData simInput) {
-        this.simInput = simInput;
-    }
+  
 
     @Override
     public SimObservables getSimObservables() {

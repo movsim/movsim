@@ -48,14 +48,6 @@ public class LoopDetectors {
     
     private List<FileDetector> fileDetectors;
 
-    public List<LoopDetector> getDetectors() {
-        final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
-        for(final LoopDetector det: detectors){
-            loopDetectors.add(det);
-        }
-        return loopDetectors;
-    }
-
     /**
      * Instantiates a new loop detectors.
      * 
@@ -106,5 +98,13 @@ public class LoopDetectors {
         }
     }
 
+    // for View
+    public List<LoopDetector> getDetectors() {
+        final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
+        for(final LoopDetector det: detectors){
+            loopDetectors.add(det);
+        }
+        return loopDetectors;
+    }
 
 }
