@@ -36,10 +36,8 @@ import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
-import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**

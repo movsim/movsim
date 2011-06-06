@@ -1,11 +1,8 @@
 package org.movsim.simulator.roadSection.impl;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.movsim.input.XmlElementNames;
-import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;

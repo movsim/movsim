@@ -26,7 +26,6 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;

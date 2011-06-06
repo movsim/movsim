@@ -34,6 +34,9 @@ import java.util.List;
  */
 public interface DetectorInput {
 
+    
+    boolean isWithLogging();
+    
     /**
      * Gets the positions.
      * 

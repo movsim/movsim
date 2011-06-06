@@ -33,13 +33,10 @@ import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
-import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.impl.FloatingCarsImpl;
-import org.movsim.output.impl.LoopDetectors;
 import org.movsim.output.impl.SpatioTemporalImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
@@ -64,14 +61,8 @@ public class SimOutput implements SimObservables {
     
     private FileFloatingCars fileFloatingCars;
     
-    
-    /** The detectors. */
-    private LoopDetectors detectors = null;
-  
     /** The trajectories. */
     private FileTrajectories trajectories = null;
-
-  
 
     /** The write output. */
     private final boolean writeOutput;
@@ -79,6 +70,8 @@ public class SimOutput implements SimObservables {
     /** The project name. */
     private final String projectName;
 
+    
+    private final RoadSection roadSection;
 
     /**
      * Instantiates a new sim output.
@@ -92,7 +85,9 @@ public class SimOutput implements SimObservables {
      */
     public SimOutput(boolean isWithGUI, InputData simInput, RoadSection roadSection) {
         projectName = simInput.getProjectName();
-
+        this.roadSection = roadSection;
+        
+        // more restrictive than in other output classes TODO
         writeOutput = !isWithGUI; // no file output from GUI
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
@@ -121,10 +116,6 @@ public class SimOutput implements SimObservables {
         }
 
         
-        final DetectorInput detInput = simInput.getSimulationInput().getSingleRoadInput().getDetectorInput();
-        if (detInput.isWithDetectors()) {
-            detectors = new LoopDetectors(projectName, writeOutput, detInput);
-        }
         
     }
 
@@ -140,7 +131,7 @@ public class SimOutput implements SimObservables {
      * @param roadSection
      *            the road section
      */
-    public void update(int itime, double time, double timestep, RoadSection roadSection) {
+    public void update(int itime, double time, double timestep) {
         
         if (floatingCars != null) {
             floatingCars.update(itime, time, timestep);
@@ -153,14 +144,7 @@ public class SimOutput implements SimObservables {
             trajectories.update(itime, time);
         }
         
-        if (detectors != null) {
-            detectors.update(itime, time, timestep, roadSection.vehContainer());
-        }
-        
-       
     }
-
-    
     
     public SpatioTemporal getSpatioTemporal(){
         return spatioTemporal;
@@ -171,7 +155,7 @@ public class SimOutput implements SimObservables {
     }
 
     public List<LoopDetector> getLoopDetectors(){
-        return detectors.getDetectors();
+        return roadSection.getLoopDetectors();
     }
     
     

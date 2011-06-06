@@ -66,18 +66,20 @@ public class LoopDetectors {
      * @param input
      *            the input
      */
-    public LoopDetectors(String projectName, boolean writeOutput, DetectorInput input) {
+    public LoopDetectors(String projectName, DetectorInput input) {
 
         detectors = new ArrayList<LoopDetectorImpl>();
 
         final double dtSample = input.getSampleInterval();
+        
+        
         final List<Double> positions = input.getPositions();
 
         for (final Double detPosition : positions) {
-            detectors.add(new LoopDetectorImpl(projectName, writeOutput, detPosition, dtSample));
+            detectors.add(new LoopDetectorImpl(projectName, detPosition, dtSample));
         }
         
-        if(writeOutput){
+        if( input.isWithLogging() ){
             fileDetectors = new ArrayList<FileDetector>();
             for (final LoopDetector det : detectors) {
                 fileDetectors.add(new FileDetector(projectName, det));

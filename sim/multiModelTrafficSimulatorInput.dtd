@@ -31,6 +31,10 @@
 
 <!ELEMENT SCENARIO (VEHICLES, SIMULATION) >
 
+<!-- todo Ralph for configuring output path -->
+<!ATTLIST SCENARIO
+  path  CDATA  "."
+>
 <!-- ##################################################################### -->
 <!-- Vehicle-Driver-Units / Models                                         -->
 <!-- ##################################################################### -->
@@ -150,7 +154,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (ROAD*)>
+<!ELEMENT SIMULATION (ROAD*, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration            NMTOKEN #REQUIRED
@@ -158,7 +162,7 @@ fluct_strength   NMTOKEN #REQUIRED
   seed             NMTOKEN "42"
 > 
 
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS, OUTPUT)>
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
 
 <!ATTLIST ROAD
   id               NMTOKEN #REQUIRED

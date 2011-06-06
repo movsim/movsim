@@ -58,7 +58,7 @@
                     green_red_time="3" red_time="200" red_green_time="2"
                     phase_shift="0" />
             </TRAFFIC_LIGHTS>
-
+            <DETECTORS />
             <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
                     <FC number="1" />

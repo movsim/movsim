@@ -135,4 +135,8 @@ public class DetectorInputImpl implements DetectorInput {
         return isInitialized;
     }
 
+    public boolean isWithLogging() {
+        return withLogging;
+    }
+
 }

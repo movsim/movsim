@@ -68,6 +68,7 @@
             <TRAFFIC_LIGHTS>
                 <!-- not implemented for CA -->
             </TRAFFIC_LIGHTS>
+            <DETECTORS />
             <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
                     <!-- FC 1 is obstacle -->

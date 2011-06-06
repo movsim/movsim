@@ -19,7 +19,6 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
 import org.movsim.output.FloatingCars;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.SpatioTemporal;
-import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;

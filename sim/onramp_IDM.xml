@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
-<SCENARIO>
+<SCENARIO path="." >
     <VEHICLES>
         <VEHICLE label="IDM1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
@@ -53,11 +53,10 @@
                 <CROSS_SECTION x="15000" />
                 <CROSS_SECTION x="16000" />
              </DETECTORS>
-            <OUTPUT>
+        </ROAD>
+        <OUTPUT>
                 <SPATIOTEMPORAL dx="100" dt="40" />
                 <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
-             
             </OUTPUT>
-        </ROAD>
     </SIMULATION>
 </SCENARIO>

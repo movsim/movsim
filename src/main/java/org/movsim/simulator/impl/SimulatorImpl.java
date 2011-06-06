@@ -121,7 +121,7 @@ public class SimulatorImpl implements Simulator {
     public void run() {
         logger.info("Simulator.run: start simulation at {} seconds", time);
 
-        simOutput.update(itime, time, timestep, roadSection);
+        simOutput.update(itime, time, timestep);
 
         while (!stopThisRun(time)) {
             time += timestep;
@@ -154,7 +154,7 @@ public class SimulatorImpl implements Simulator {
             logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
         }
         roadSection.update(itime, time);
-        simOutput.update(itime, time, timestep, roadSection);
+        simOutput.update(itime, time, timestep);
     }
 
     /*

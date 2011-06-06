@@ -41,23 +41,23 @@
             </RAMPS>
             <TRAFFIC_LIGHTS>
             </TRAFFIC_LIGHTS>
-            <OUTPUT>
-                <SPATIOTEMPORAL dx="100" dt="40" />
-                <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
-                <DETECTORS dt="60">
-                    <CROSS_SECTION x="1000" />
-                    <CROSS_SECTION x="6000" />
-                    <CROSS_SECTION x="8000" />
-                    <CROSS_SECTION x="9000" />
-                    <CROSS_SECTION x="10000" />
-                    <CROSS_SECTION x="11000" />
-                    <CROSS_SECTION x="12000" />
-                    <CROSS_SECTION x="13000" />
-                    <CROSS_SECTION x="14000" />
-                    <CROSS_SECTION x="15000" />
-                    <CROSS_SECTION x="16000" />
-                </DETECTORS>
-            </OUTPUT>
+      	    <DETECTORS dt="60" logging="true">
+               <CROSS_SECTION x="1000" />
+               <CROSS_SECTION x="6000" />
+               <CROSS_SECTION x="8000" />
+               <CROSS_SECTION x="9000" />
+               <CROSS_SECTION x="10000" />
+               <CROSS_SECTION x="11000" />
+               <CROSS_SECTION x="12000" />
+               <CROSS_SECTION x="13000" />
+               <CROSS_SECTION x="14000" />
+               <CROSS_SECTION x="15000" />
+               <CROSS_SECTION x="16000" />
+            </DETECTORS>
         </ROAD>
+        <OUTPUT>
+           <SPATIOTEMPORAL dx="100" dt="40" />
+           <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
+       </OUTPUT>
     </SIMULATION>
 </SCENARIO>

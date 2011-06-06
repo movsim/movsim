@@ -103,7 +103,7 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector{
      * @param dtSample
      *            the dt sample
      */
-    public LoopDetectorImpl(String projectName, boolean writeOutput, double detPosition, double dtSample) {
+    public LoopDetectorImpl(String projectName, double detPosition, double dtSample) {
         this.detPosition = detPosition;
         this.dtSample = dtSample;
 

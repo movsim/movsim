@@ -28,6 +28,7 @@ package org.movsim.simulator.roadSection;
 
 import java.util.List;
 
+import org.movsim.output.LoopDetector;
 import org.movsim.simulator.vehicles.VehicleContainer;
 
 // TODO: Auto-generated Javadoc
@@ -87,5 +88,9 @@ public interface RoadSection {
      * @return the traffic lights
      */
     List<TrafficLight> getTrafficLights();
+    
+    List<LoopDetector> getLoopDetectors();
 
 }
+
+

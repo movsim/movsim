@@ -35,7 +35,6 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
-import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;

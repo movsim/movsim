@@ -32,10 +32,12 @@ import java.util.List;
 import org.movsim.input.InputData;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
-import org.movsim.input.model.simulation.TrafficLightData;
+import org.movsim.output.LoopDetector;
+import org.movsim.output.impl.LoopDetectors;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
@@ -94,6 +96,10 @@ public class RoadSectionImpl implements RoadSection {
 
     /** The speedlimits. */
     private SpeedLimits speedlimits;
+    
+
+    /** The detectors. */
+    private LoopDetectors detectors = null;
 
   
 
@@ -148,6 +154,11 @@ public class RoadSectionImpl implements RoadSection {
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
         
         trafficLights = new TrafficLightsImpl(inputData.getProjectName(), roadInput.getTrafficLightsInput());
+        
+        final DetectorInput detInput = roadInput.getDetectorInput();
+        if (detInput.isWithDetectors()) {
+            detectors = new LoopDetectors(inputData.getProjectName(), detInput);
+        }
 
         initialConditions(inputData.getSimulationInput());
         
@@ -452,6 +463,11 @@ public class RoadSectionImpl implements RoadSection {
     @Override
     public int nLanes() {
         return nLanes;
+    }
+
+    @Override
+    public List<LoopDetector> getLoopDetectors() {
+        return detectors.getDetectors();
     }
 
 }
