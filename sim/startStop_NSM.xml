@@ -69,7 +69,8 @@
                 <!-- not implemented for CA -->
             </TRAFFIC_LIGHTS>
 	    <DETECTORS />
-            <OUTPUT>
+        </ROAD>
+                    <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
                     <!-- FC 1 is obstacle -->
                     <FC number="1" />
@@ -80,6 +81,6 @@
                     <FC number="21" />
                 </FLOATING_CAR_DATA>
             </OUTPUT>
-        </ROAD>
+
     </SIMULATION>
 </SCENARIO>

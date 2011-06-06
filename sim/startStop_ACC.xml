@@ -58,7 +58,9 @@
                     green_red_time="3" red_time="200" red_green_time="2"
                     phase_shift="0" />
             </TRAFFIC_LIGHTS>
-            <OUTPUT>
+            <DETECTORS />
+        </ROAD>
+         <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="5">
                     <FC number="1" />
                     <FC number="5" />
@@ -67,6 +69,5 @@
                     <FC number="20" />
                 </FLOATING_CAR_DATA>
             </OUTPUT>
-        </ROAD>
     </SIMULATION>
 </SCENARIO>

@@ -59,7 +59,8 @@
                     phase_shift="0" />
             </TRAFFIC_LIGHTS>
             <DETECTORS />
-            <OUTPUT>
+        </ROAD>
+                    <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="5" perc_out="0" dn="0">
                     <FC number="1" />
                     <FC number="5" />
@@ -68,6 +69,6 @@
                     <FC number="20" />
                 </FLOATING_CAR_DATA>
             </OUTPUT>
-        </ROAD>
+
     </SIMULATION>
 </SCENARIO>
