@@ -198,7 +198,7 @@ public class FileTrajectories {
     private void writeTrajectories(PrintWriter fstr, VehicleContainer vehicles ) {
         for (int i = 0, N = vehicles.size() ; i < N; i++) {
             Moveable me = vehicles.get(i);
-            if( (me.position() >= x_start_interval && me.position() <= x_end_interval) ){
+            if( (me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval) ){
             	writeCarData(fstr, i, me);
             } 
         }
@@ -218,7 +218,7 @@ public class FileTrajectories {
         final double s = (frontVeh == null) ? 0 : me.netDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.relSpeed(frontVeh);
         fstr.printf(outputFormat,
-        		time, (int)me.getLane(), me.position(), me.speed(), me.acc(), s,  dv, me.getLabel(), me.id());
+        		time, (int)me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s,  dv, me.getLabel(), me.id());
         fstr.flush();
     }
 

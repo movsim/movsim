@@ -92,7 +92,7 @@ public class App {
 
         // parse xmlFile and set values
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, cmdline, inputData);
-
+       
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
 
         if (cmdline.isGui()) {

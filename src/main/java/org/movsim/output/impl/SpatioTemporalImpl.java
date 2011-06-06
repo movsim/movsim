@@ -28,7 +28,7 @@ package org.movsim.output.impl;
 
 import java.util.List;
 
-import org.movsim.input.model.output.MacroInput;
+import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -73,7 +73,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
      * @param input the input
      * @param roadSection the road section
      */
-    public SpatioTemporalImpl(MacroInput input, RoadSection roadSection) {
+    public SpatioTemporalImpl(SpatioTemporalInput input, RoadSection roadSection) {
 
         dtOut = input.getDt();
         dxOut = input.getDx();
@@ -122,8 +122,8 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         final double[] xMicro = new double[size];
 
         for (int i = 0; i < size; i++) {
-            vMicro[i] = vehicles.get(i).speed();
-            xMicro[i] = vehicles.get(i).position();
+            vMicro[i] = vehicles.get(i).getSpeed();
+            xMicro[i] = vehicles.get(i).getPosition();
         }
 
         // calculate density
@@ -142,44 +142,26 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         }
     }
 
-    /**
-     * @return the dtOut
-     */
     public double getDtOut() {
         return dtOut;
     }
 
-    /**
-     * @return the dxOut
-     */
     public double getDxOut() {
         return dxOut;
     }
 
-    /**
-     * @return the density
-     */
     public double[] getDensity() {
         return density;
     }
 
-    /**
-     * @return the averageSpeed
-     */
     public double[] getAverageSpeed() {
         return averageSpeed;
     }
 
-    /**
-     * @return the flow
-     */
     public double[] getFlow() {
         return flow;
     }
 
-    /**
-     * @return the timeOffset
-     */
     public double getTimeOffset() {
         return timeOffset;
     }

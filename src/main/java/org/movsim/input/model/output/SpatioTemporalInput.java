@@ -28,9 +28,9 @@ package org.movsim.input.model.output;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface MacroInput.
+ * The Interface SpatioTemporalInput.
  */
-public interface MacroInput {
+public interface SpatioTemporalInput {
 
     /**
      * Gets the dt.

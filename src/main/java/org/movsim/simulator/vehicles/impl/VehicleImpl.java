@@ -192,7 +192,7 @@ public class VehicleImpl implements Vehicle{
      * @see org.movsim.simulator.vehicles.Vehicle#position()
      */
     @Override
-    public double position() {
+    public double getPosition() {
         return position;
     }
 
@@ -242,7 +242,7 @@ public class VehicleImpl implements Vehicle{
      * @see org.movsim.simulator.vehicles.Vehicle#speed()
      */
     @Override
-    public double speed() {
+    public double getSpeed() {
         return speed;
     }
 
@@ -283,7 +283,7 @@ public class VehicleImpl implements Vehicle{
      * @see org.movsim.simulator.vehicles.Vehicle#acc()
      */
     @Override
-    public double acc() {
+    public double getAcc() {
         return acc;
     }
 
@@ -358,7 +358,7 @@ public class VehicleImpl implements Vehicle{
     public double netDistance(Moveable vehFront) {
         if (vehFront == null)
             return Constants.GAP_INFINITY;
-        return (vehFront.position() - position - 0.5 * (length() + vehFront.length()));
+        return (vehFront.getPosition() - position - 0.5 * (length() + vehFront.length()));
     }
 
     /*
@@ -372,7 +372,7 @@ public class VehicleImpl implements Vehicle{
     public double relSpeed(Moveable vehFront) {
         if (vehFront == null)
             return 0;
-        return (speed - vehFront.speed());
+        return (speed - vehFront.getSpeed());
     }
 
     /*

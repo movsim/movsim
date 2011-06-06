@@ -390,14 +390,6 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface id="44" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleGUI" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGUI.java" binary="false">    
-    <position x="2249" y="1908" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
   <interface id="45" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/TrafficLightApproaching.java" binary="false">    
@@ -522,54 +514,6 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface id="60" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.Macro3D" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/output/Macro3D.java" binary="false">    
-    <position x="3845" y="486" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface id="61" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.TrafficLightRecorder" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/output/TrafficLightRecorder.java" binary="false">    
-    <position x="4005" y="486" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <interface id="62" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.Trajectories" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/output/Trajectories.java" binary="false">    
-    <position x="3688" y="485" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </interface>  
-  <class id="63" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.Macro3DImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/output/impl/Macro3DImpl.java" binary="false">    
-    <position x="3854" y="671" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class id="64" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.TrafficLightRecorderImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/output/impl/TrafficLightRecorderImpl.java" binary="false">    
-    <position x="4012" y="673" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
-  <class id="65" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.TrajectoriesImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/output/impl/TrajectoriesImpl.java" binary="false">    
-    <position x="3696" y="671" width="-1" height="-1"/>    
-    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="false" package="false" protected="false" private="false"/>      
-      <operations public="false" package="false" protected="false" private="false"/>    
-    </display>  
-  </class>  
   <class id="66" corner="BOTTOM_RIGHT" language="java" name="org.movsim.output.impl.LoopDetectorImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/output/impl/LoopDetectorImpl.java" binary="false">    
     <position x="4321" y="845" width="-1" height="-1"/>    
@@ -691,8 +635,8 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface id="81" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.MacroInput" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/MacroInput.java" binary="false">    
+  <interface id="81" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.SpatioTemporalInput" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/SpatioTemporalInput.java" binary="false">    
     <position x="2272" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -726,8 +670,9 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class id="85" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.MacroInputImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/MacroInputImpl.java" binary="false">    
+  <class id="85" corner="BOTTOM_RIGHT" language="java" name="org.movsiorg.movsim.input.model.output.impl.SpatioTemporalInputImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/SpatioTemporalInputImpl.java" 
+    binary="false">    
     <position x="2268" y="46" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      
@@ -971,44 +916,40 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <realization>    
-    <end type="SOURCE" nodeId="102"/>    
-    <end type="TARGET" nodeId="88"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="110"/>    
-    <end type="TARGET" nodeId="89"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="25"/>    
-    <end type="TARGET" nodeId="24"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="23"/>    
-    <end type="TARGET" nodeId="50"/>  
-  </realization>  
   <association>    
-    <end type="SOURCE" nodeId="23" navigable="false">      
-      <attribute name="cyclicBuffer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="22" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="23" navigable="false">      
-      <attribute name="longModel"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="24" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="106" navigable="false">      
+    <end type="SOURCE" nodeId="107" navigable="false">      
       <attribute name="inflowTimeSeries"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" nodeId="91" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="106"/>    
+    <end type="TARGET" nodeId="94"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="2"/>    
+    <end type="TARGET" nodeId="13"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="speedlimits"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="29"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="1" navigable="false">      
+      <attribute name="inflowTimeSeries"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
@@ -1019,158 +960,6 @@
     <end type="TARGET" nodeId="89" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="simpleOnramps"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="9" navigable="false">      
-      <attribute name="vehGenerator"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="48" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="21" navigable="false">      
-      <attribute name="prototypes"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="51" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="56"/>    
-    <end type="TARGET" nodeId="55"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="56" navigable="false">      
-      <attribute name="simulationInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="69" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="32"/>    
-    <end type="TARGET" nodeId="24"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="63"/>    
-    <end type="TARGET" nodeId="60"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="64"/>    
-    <end type="TARGET" nodeId="61"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="75" navigable="false">      
-      <attribute name="trajectoriesInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="78" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="75" navigable="false">      
-      <attribute name="detectorInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="79" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="107" navigable="false">      
-      <attribute name="inflowTimeSeries"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="91" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="trafficLights"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="66"/>    
-    <end type="TARGET" nodeId="58"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="109"/>    
-    <end type="TARGET" nodeId="87"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="5"/>    
-    <end type="TARGET" nodeId="18"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="upstreamBoundary"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="74" navigable="false">      
-      <attribute name="roadInput"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="71" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="106"/>    
-    <end type="TARGET" nodeId="94"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="47"/>    
-    <end type="TARGET" nodeId="45"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="7"/>    
-    <end type="TARGET" nodeId="10"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="speedLimitInputData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="93" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="vehGenerator"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="48" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="107"/>    
-    <end type="TARGET" nodeId="90"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="53"/>    
-    <end type="TARGET" nodeId="49"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="23"/>    
-    <end type="TARGET" nodeId="44"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="31"/>    
-    <end type="TARGET" nodeId="24"/>  
-  </realization>  
   <realization>    
     <end type="SOURCE" nodeId="19"/>    
     <end type="TARGET" nodeId="52"/>  
@@ -1193,52 +982,52 @@
   </association>  
   <association>    
     <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="flowConsBottleneckInputData"/>      
+      <attribute name="ramps"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" nodeId="88" navigable="true"/>    
+    <end type="TARGET" nodeId="94" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="103"/>    
-    <end type="TARGET" nodeId="92"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="84"/>    
-    <end type="TARGET" nodeId="77"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="85"/>    
-    <end type="TARGET" nodeId="81"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="30"/>    
-    <end type="TARGET" nodeId="24"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="6"/>    
-    <end type="TARGET" nodeId="12"/>  
-  </realization>  
   <generalization>    
     <end type="SOURCE" nodeId="37"/>    
     <end type="TARGET" nodeId="34"/>  
   </generalization>  
-  <realization>    
-    <end type="SOURCE" nodeId="29"/>    
-    <end type="TARGET" nodeId="24"/>  
-  </realization>  
   <generalization>    
-    <end type="SOURCE" nodeId="36"/>    
+    <end type="SOURCE" nodeId="38"/>    
     <end type="TARGET" nodeId="34"/>  
   </generalization>  
-  <association>    
-    <end type="SOURCE" nodeId="23" navigable="false">      
-      <attribute name="trafficLightApproaching"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="45" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="31"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="56"/>    
+    <end type="TARGET" nodeId="55"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="25"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="108"/>    
+    <end type="TARGET" nodeId="93"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="110"/>    
+    <end type="TARGET" nodeId="89"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="9"/>    
+    <end type="TARGET" nodeId="16"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="4"/>    
+    <end type="TARGET" nodeId="43"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="100"/>    
+    <end type="TARGET" nodeId="99"/>  
+  </realization>  
   <association>    
     <end type="SOURCE" nodeId="23" navigable="false">      
       <attribute name="memory"/>      
@@ -1247,53 +1036,21 @@
     <end type="TARGET" nodeId="49" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association>    
-    <end type="SOURCE" nodeId="75" navigable="false">      
-      <attribute name="floatingCarInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="80" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="31"/>    
-    <end type="TARGET" nodeId="28"/>  
-  </generalization>  
-  <association>    
-    <end type="SOURCE" nodeId="9" navigable="false">      
-      <attribute name="mainVehContainer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="46" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="trafficLightData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="87" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <realization>    
-    <end type="SOURCE" nodeId="33"/>    
-    <end type="TARGET" nodeId="24"/>  
+    <end type="SOURCE" nodeId="75"/>    
+    <end type="TARGET" nodeId="72"/>  
   </realization>  
   <realization>    
-    <end type="SOURCE" nodeId="73"/>    
-    <end type="TARGET" nodeId="70"/>  
+    <end type="SOURCE" nodeId="85"/>    
+    <end type="TARGET" nodeId="81"/>  
   </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="1" navigable="false">      
-      <attribute name="inflowTimeSeries"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <realization>    
-    <end type="SOURCE" nodeId="74"/>    
-    <end type="TARGET" nodeId="69"/>  
+    <end type="SOURCE" nodeId="67"/>    
+    <end type="TARGET" nodeId="59"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="111"/>    
+    <end type="TARGET" nodeId="96"/>  
   </realization>  
   <association>    
     <end type="SOURCE" nodeId="51" navigable="false">      
@@ -1303,17 +1060,169 @@
     <end type="TARGET" nodeId="41" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="23"/>    
+    <end type="TARGET" nodeId="50"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="31"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
   <association>    
-    <end type="SOURCE" nodeId="54" navigable="false">      
-      <attribute name="detectors"/>      
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="longModel"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="68" navigable="true"/>    
+    <end type="TARGET" nodeId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="speedLimitInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="93" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="20" navigable="false">      
+      <attribute name="vehicles"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="32"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="upstreamBoundary"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="104"/>    
+    <end type="TARGET" nodeId="97"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="106" navigable="false">      
+      <attribute name="inflowTimeSeries"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="91" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="109"/>    
+    <end type="TARGET" nodeId="87"/>  
+  </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="26"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="trajectoriesInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="78" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="2"/>    
+    <end type="TARGET" nodeId="14"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="34"/>    
+    <end type="TARGET" nodeId="41"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="vehContainer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="74" navigable="false">      
+      <attribute name="roadInput"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="71" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="26"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="20"/>    
+    <end type="TARGET" nodeId="46"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="5"/>    
+    <end type="TARGET" nodeId="18"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="57" navigable="false">      
+      <attribute name="inputData"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="56" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="112"/>    
+    <end type="TARGET" nodeId="95"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="trafficLightApproaching"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="45" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="29"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="1" navigable="false">      
+      <attribute name="vehGenerator"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="48" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="83"/>    
+    <end type="TARGET" nodeId="78"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="8"/>    
+    <end type="TARGET" nodeId="11"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="vehGenerator"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="48" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
     <end type="SOURCE" nodeId="3"/>    
     <end type="TARGET" nodeId="17"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="1"/>    
+    <end type="TARGET" nodeId="15"/>  
   </realization>  
   <association>    
     <end type="SOURCE" nodeId="73" navigable="false">      
@@ -1324,46 +1233,6 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
-    <end type="SOURCE" nodeId="68" navigable="false">      
-      <attribute name="detectors"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="58" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="23" navigable="false">      
-      <attribute name="noise"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="52" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="38"/>    
-    <end type="TARGET" nodeId="34"/>  
-  </generalization>  
-  <realization>    
-    <end type="SOURCE" nodeId="104"/>    
-    <end type="TARGET" nodeId="97"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="26"/>    
-    <end type="TARGET" nodeId="24"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="speedlimits"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="40"/>    
-    <end type="TARGET" nodeId="34"/>  
-  </generalization>  
-  <association>    
     <end type="SOURCE" nodeId="75" navigable="false">      
       <attribute name="trafficLightRecorderInput"/>      
       <multiplicity minimum="0" maximum="1"/>    
@@ -1371,97 +1240,81 @@
     <end type="TARGET" nodeId="77" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="macroInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="81" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="simpleOnramps"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="simpleRamps"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="90" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <realization>    
-    <end type="SOURCE" nodeId="86"/>    
-    <end type="TARGET" nodeId="79"/>  
+    <end type="SOURCE" nodeId="73"/>    
+    <end type="TARGET" nodeId="70"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="flowConsBottleneckInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="88" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="36"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="trafficLights"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="102"/>    
+    <end type="TARGET" nodeId="88"/>  
   </realization>  
   <realization>    
     <end type="SOURCE" nodeId="76"/>    
     <end type="TARGET" nodeId="71"/>  
   </realization>  
   <realization>    
-    <end type="SOURCE" nodeId="2"/>    
-    <end type="TARGET" nodeId="13"/>  
+    <end type="SOURCE" nodeId="74"/>    
+    <end type="TARGET" nodeId="69"/>  
   </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="8"/>    
-    <end type="TARGET" nodeId="11"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="21"/>    
-    <end type="TARGET" nodeId="48"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="54" navigable="false">      
-      <attribute name="trajectories"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="62" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="39"/>    
-    <end type="TARGET" nodeId="34"/>  
-  </generalization>  
-  <association>    
-    <end type="SOURCE" nodeId="1" navigable="false">      
-      <attribute name="vehContainer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="46" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="flowConsBottlenecks"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association>    
     <end type="SOURCE" nodeId="9" navigable="false">      
-      <attribute name="vehicleQueue"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="50" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="1" navigable="false">      
-      <attribute name="vehGenerator"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="48" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="4"/>    
-    <end type="TARGET" nodeId="43"/>  
-  </realization>  
-  <generalization>    
-    <end type="SOURCE" nodeId="26"/>    
-    <end type="TARGET" nodeId="28"/>  
-  </generalization>  
-  <realization>    
-    <end type="SOURCE" nodeId="100"/>    
-    <end type="TARGET" nodeId="99"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="101"/>    
-    <end type="TARGET" nodeId="98"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="2" navigable="false">      
-      <attribute name="vehContainer"/>      
+      <attribute name="mainVehContainer"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" nodeId="46" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
-    <end type="SOURCE" nodeId="34"/>    
-    <end type="TARGET" nodeId="41"/>  
+    <end type="SOURCE" nodeId="6"/>    
+    <end type="TARGET" nodeId="12"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="107"/>    
+    <end type="TARGET" nodeId="90"/>  
   </realization>  
   <association>    
     <end type="SOURCE" nodeId="4" navigable="false">      
@@ -1473,82 +1326,62 @@
   </association>  
   <association>    
     <end type="SOURCE" nodeId="4" navigable="false">      
-      <attribute name="roadSection"/>      
+      <attribute name="simInput"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="14" navigable="true"/>    
+    <end type="TARGET" nodeId="55" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
-    <end type="SOURCE" nodeId="112"/>    
-    <end type="TARGET" nodeId="95"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="57" navigable="false">      
-      <attribute name="inputData"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="56" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="83"/>    
-    <end type="TARGET" nodeId="78"/>  
-  </realization>  
-  <generalization>    
-    <end type="SOURCE" nodeId="32"/>    
-    <end type="TARGET" nodeId="28"/>  
-  </generalization>  
-  <association>    
-    <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="heterogeneityInputData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="92" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="35"/>    
-    <end type="TARGET" nodeId="34"/>  
-  </generalization>  
-  <association>    
-    <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="icMicroData"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" nodeId="95" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
     <end type="SOURCE" nodeId="25"/>    
-    <end type="TARGET" nodeId="28"/>  
-  </generalization>  
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="30"/>    
+    <end type="TARGET" nodeId="24"/>  
+  </realization>  
   <association>    
-    <end type="SOURCE" nodeId="65" navigable="false">      
-      <attribute name="roadSection"/>      
+    <end type="SOURCE" nodeId="2" navigable="false">      
+      <attribute name="flowConsBottlenecks"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="14" navigable="true"/>    
+    <end type="TARGET" nodeId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
-    <end type="SOURCE" nodeId="51" navigable="false">      
-      <attribute name="longModel"/>      
+    <end type="SOURCE" nodeId="9" navigable="false">      
+      <attribute name="vehGenerator"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="24" navigable="true"/>    
+    <end type="TARGET" nodeId="48" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="33"/>    
-    <end type="TARGET" nodeId="28"/>  
-  </generalization>  
+  <realization>    
+    <end type="SOURCE" nodeId="101"/>    
+    <end type="TARGET" nodeId="98"/>  
+  </realization>  
   <association>    
-    <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="outputInput"/>      
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="detectorInput"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="72" navigable="true"/>    
+    <end type="TARGET" nodeId="79" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="noise"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="52" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="21" navigable="false">      
+      <attribute name="prototypes"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="51" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
@@ -1556,95 +1389,47 @@
     <end type="TARGET" nodeId="80"/>  
   </realization>  
   <association>    
-    <end type="SOURCE" nodeId="20" navigable="false">      
-      <attribute name="vehicles"/>      
+    <end type="SOURCE" nodeId="4" navigable="false">      
+      <attribute name="roadSection"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="84"/>    
+    <end type="TARGET" nodeId="77"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="47"/>    
+    <end type="TARGET" nodeId="45"/>  
+  </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="53"/>    
+    <end type="TARGET" nodeId="49"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="trafficLightData"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" nodeId="50" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="42"/>    
-    <end type="TARGET" nodeId="34"/>  
-  </generalization>  
-  <association>    
-    <end type="SOURCE" nodeId="75" navigable="false">      
-      <attribute name="macroInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="81" navigable="true"/>    
+    <end type="TARGET" nodeId="87" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
-    <end type="SOURCE" nodeId="108"/>    
-    <end type="TARGET" nodeId="93"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="54" navigable="false">      
-      <attribute name="trafficLightRecorder"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="61" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization>    
-    <end type="SOURCE" nodeId="65"/>    
-    <end type="TARGET" nodeId="62"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="111"/>    
-    <end type="TARGET" nodeId="96"/>  
-  </realization>  
-  <realization>    
-    <end type="SOURCE" nodeId="75"/>    
-    <end type="TARGET" nodeId="72"/>  
+    <end type="SOURCE" nodeId="103"/>    
+    <end type="TARGET" nodeId="92"/>  
   </realization>  
   <generalization>    
     <end type="SOURCE" nodeId="30"/>    
     <end type="TARGET" nodeId="28"/>  
   </generalization>  
-  <realization>    
-    <end type="SOURCE" nodeId="9"/>    
-    <end type="TARGET" nodeId="16"/>  
-  </realization>  
-  <association>    
-    <end type="SOURCE" nodeId="51" navigable="false">      
-      <attribute name="vehicleInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="70" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="4" navigable="false">      
-      <attribute name="simInput"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="55" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization>    
-    <end type="SOURCE" nodeId="29"/>    
-    <end type="TARGET" nodeId="28"/>  
-  </generalization>  
-  <realization>    
-    <end type="SOURCE" nodeId="2"/>    
-    <end type="TARGET" nodeId="14"/>  
-  </realization>  
   <association>    
     <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="ramps"/>      
+      <attribute name="icMicroData"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </end>    
-    <end type="TARGET" nodeId="94" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
-    <end type="SOURCE" nodeId="54" navigable="false">      
-      <attribute name="floatingCars"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="59" navigable="true"/>    
+    <end type="TARGET" nodeId="95" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association>    
@@ -1657,24 +1442,52 @@
   </association>  
   <association>    
     <end type="SOURCE" nodeId="54" navigable="false">      
-      <attribute name="macro3D"/>      
+      <attribute name="detectors"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="60" navigable="true"/>    
+    <end type="TARGET" nodeId="68" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="42"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
   <association>    
-    <end type="SOURCE" nodeId="76" navigable="false">      
-      <attribute name="simpleRamps"/>      
-      <multiplicity minimum="0" maximum="2147483647"/>    
+    <end type="SOURCE" nodeId="75" navigable="false">      
+      <attribute name="floatingCarInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" nodeId="90" navigable="true"/>    
+    <end type="TARGET" nodeId="80" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="40"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="56" navigable="false">      
+      <attribute name="simulationInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="69" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization>    
-    <end type="SOURCE" nodeId="20"/>    
-    <end type="TARGET" nodeId="46"/>  
+    <end type="SOURCE" nodeId="86"/>    
+    <end type="TARGET" nodeId="79"/>  
   </realization>  
+  <realization>    
+    <end type="SOURCE" nodeId="105"/>    
+    <end type="TARGET" nodeId="91"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="9" navigable="false">      
+      <attribute name="vehicleQueue"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="50" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association>    
     <end type="SOURCE" nodeId="76" navigable="false">      
       <attribute name="icMacroData"/>      
@@ -1683,24 +1496,92 @@
     <end type="TARGET" nodeId="97" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="33"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
   <realization>    
-    <end type="SOURCE" nodeId="105"/>    
-    <end type="TARGET" nodeId="91"/>  
+    <end type="SOURCE" nodeId="21"/>    
+    <end type="TARGET" nodeId="48"/>  
   </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="1" navigable="false">      
+      <attribute name="vehContainer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="35"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="outputInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="72" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <realization>    
-    <end type="SOURCE" nodeId="1"/>    
-    <end type="TARGET" nodeId="15"/>  
+    <end type="SOURCE" nodeId="7"/>    
+    <end type="TARGET" nodeId="10"/>  
   </realization>  
+  <generalization>    
+    <end type="SOURCE" nodeId="32"/>    
+    <end type="TARGET" nodeId="28"/>  
+  </generalization>  
+  <association>    
+    <end type="SOURCE" nodeId="51" navigable="false">      
+      <attribute name="longModel"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <end type="SOURCE" nodeId="39"/>    
+    <end type="TARGET" nodeId="34"/>  
+  </generalization>  
   <realization>    
-    <end type="SOURCE" nodeId="67"/>    
-    <end type="TARGET" nodeId="59"/>  
+    <end type="SOURCE" nodeId="33"/>    
+    <end type="TARGET" nodeId="24"/>  
   </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="76" navigable="false">      
+      <attribute name="heterogeneityInputData"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" nodeId="92" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <end type="SOURCE" nodeId="66"/>    
+    <end type="TARGET" nodeId="58"/>  
+  </realization>  
+  <association>    
+    <end type="SOURCE" nodeId="51" navigable="false">      
+      <attribute name="vehicleInput"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="70" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
   <association>    
     <end type="SOURCE" nodeId="9" navigable="false">      
       <attribute name="inflowTimeSeries"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" nodeId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <end type="SOURCE" nodeId="23" navigable="false">      
+      <attribute name="cyclicBuffer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" nodeId="22" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    

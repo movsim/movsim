@@ -18,11 +18,11 @@ public interface Moveable {
     double length();
 
     /**
-     * Position.
+     * Gets the position of the floating car.
      * 
      * @return the double
      */
-    double position();
+    double getPosition();
 
     /**
      * Pos front bumper.
@@ -60,18 +60,18 @@ public interface Moveable {
     double getDesiredSpeedParameter();
 
     /**
-     * Speed.
+     * GetS the speed of the floating car.
      * 
      * @return the double
      */
-    double speed();
+    double getSpeed();
 
     /**
-     * Acc.
+     * Gets The Accelation of the floating car.
      * 
      * @return the double
      */
-    double acc();
+    double getAcc();
 
     /**
      * Acc model.

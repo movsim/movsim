@@ -150,10 +150,10 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
-        final double v = me.speed();
+        final double v = me.getSpeed();
         final double dv = me.relSpeed(vehFront);
         final double aLeadDummy = 0;
-        final double a_lead = (vehFront == null) ? aLeadDummy : vehFront.acc();
+        final double a_lead = (vehFront == null) ? aLeadDummy : vehFront.getAcc();
 
         // space dependencies modelled by speedlimits, alpha's
         // space dependencies modeled by speedlimits, alpha's

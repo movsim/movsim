@@ -131,7 +131,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         // Local dynamic variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
-        final double v = me.speed();
+        final double v = me.getSpeed();
         final double dv = me.relSpeed(vehFront); // only needed for VDIFF
 
         // speed limit --> OVM causes accidents due to immediate braking reaction  

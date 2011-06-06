@@ -327,8 +327,8 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
             final double netDistance = egoVeh.netDistance(vehFront);
             if (netDistance < 0) {
                 logger.error("#########################################################");
-                logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.position());
-                logger.error("  with veh in front at x = {} on lane = {}", vehFront.position(), egoVeh.getLane());
+                logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
+                logger.error("  with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
                 logger.error("net distance  = {}", netDistance);
                 logger.error("container.size = {}", vehicles.size());
                 final StringBuilder msg = new StringBuilder("\n");
@@ -336,7 +336,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
                     final Moveable veh = vehicles.get(j);
                     msg.append(String
                             .format("veh j = %d , pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%3.1f, targetLane=%1d, id=%d%n",
-                                    j, veh.position(), veh.speed(), veh.accModel(), veh.length(), veh.getLane(),
+                                    j, veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(),
                                     veh.getLane(), veh.id()));
                 } // of for
                 logger.error(msg.toString());
@@ -362,7 +362,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         final List<Vehicle> vehicles = vehContainer.getVehicles();
         for (int i = 0; i < vehicles.size(); i++) {
             final Vehicle veh = vehicles.get(i);
-            final double x = veh.position();
+            final double x = veh.getPosition();
             final double alphaT = flowConsBottlenecks.alphaT(x);
             final double alphaV0 = flowConsBottlenecks.alphaV0(x);
             // logger.debug("i={}, x_pos={}", i, x);
@@ -411,7 +411,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         // set speedlimits
         if (!speedlimits.isEmpty()) {
             for (final Vehicle veh : vehContainer.getVehicles()) {
-                final double pos = veh.position();
+                final double pos = veh.getPosition();
                 veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
             }
         }

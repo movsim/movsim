@@ -76,14 +76,14 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        double distanceToTrafficlight = trafficLight.position() - me.position() - 0.5 * me.length();
+        double distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.length();
 
         if (distanceToTrafficlight < 0) {
             distanceToTrafficlight = Constants.GAP_INFINITY; // not relevant
         } else if (!trafficLight.isGreen()) {
             final double maxDistanceToReact = 1000; // TODO Parameter ... ?!
             if (distanceToTrafficlight < maxDistanceToReact) {
-            	final double speed = me.speed();
+            	final double speed = me.getSpeed();
                 accTrafficLight = Math.min(0, longModel.accSimple(distanceToTrafficlight, speed, speed));
 
                 if (accTrafficLight < 0) {
@@ -102,7 +102,7 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
                 final double brakeDist = (speed * speed) / (2 * bKinMax);
                 if (trafficLight.isGreenRed()
                         && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
-                                - me.position()))) {
+                                - me.getPosition()))) {
                     // ignore traffic light
                     considerTrafficLight = false;
                 }

@@ -207,8 +207,8 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
-        final double v = me.speed();
-        final double dv = (vehFront == null) ? 0 : v - vehFront.speed();
+        final double v = me.getSpeed();
+        final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
 
         // space dependencies modeled by speedlimits, alpha's
         // TODO check

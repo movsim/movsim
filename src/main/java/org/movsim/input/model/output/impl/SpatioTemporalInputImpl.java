@@ -27,13 +27,13 @@
 package org.movsim.input.model.output.impl;
 
 import org.jdom.Element;
-import org.movsim.input.model.output.MacroInput;
+import org.movsim.input.model.output.SpatioTemporalInput;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class MacroInputImpl.
+ * The Class SpatioTemporalInputImpl.
  */
-public class MacroInputImpl implements MacroInput {
+public class SpatioTemporalInputImpl implements SpatioTemporalInput {
 
     /** The dt. */
     private double dt;
@@ -50,7 +50,7 @@ public class MacroInputImpl implements MacroInput {
      * @param elem
      *            the elem
      */
-    public MacroInputImpl(Element elem) {
+    public SpatioTemporalInputImpl(Element elem) {
         if (elem == null) {
             isInitialized = false;
             return;

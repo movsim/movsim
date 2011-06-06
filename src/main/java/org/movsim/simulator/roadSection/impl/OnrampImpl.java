@@ -227,7 +227,7 @@ public class OnrampImpl implements Onramp {
             System.exit(-1);
         }
         for (int i = 0, N = mainVehicles.size(); i < N; i++) {
-            final double pos = mainVehicles.get(i).position();
+            final double pos = mainVehicles.get(i).getPosition();
             if (pos <= xDownRamp && pos >= xUpRamp)
                 return i; // first vehicle in down direction
         }
@@ -249,7 +249,7 @@ public class OnrampImpl implements Onramp {
         }
         final int N = mainVehicles.size();
         for (int i = N - 1; i > -0; i--) {
-            final double pos = mainVehicles.get(i).position();
+            final double pos = mainVehicles.get(i).getPosition();
             if (pos <= xDownRamp && pos >= xUpRamp)
                 return i; // first vehicle in down direction
         }
@@ -282,23 +282,23 @@ public class OnrampImpl implements Onramp {
             final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no leader
             addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
             return true;
-        } else if (mainVehContainer.getMostDownstream().position() <= xCenter) {
+        } else if (mainVehContainer.getMostDownstream().getPosition() <= xCenter) {
             // most downstream mainroad vehicle is upstream of onramp
             final Vehicle mainVehDown = mainVehContainer.getMostDownstream();
-            final double xEnter = Math.max(xCenter, mainVehDown.position() + 0.5 * length);
+            final double xEnter = Math.max(xCenter, mainVehDown.getPosition() + 0.5 * length);
             final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no
                                                                                        // leader
             logger.debug("most downstream veh is still upstream of ramp center. mainVeh.size() = {}. posMostDown = {}",
-                    mainVehSize, mainVehDown.position());
+                    mainVehSize, mainVehDown.getPosition());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
             return true;
-        } else if (mainVehContainer.getMostUpstream().position() >= xCenter) {
+        } else if (mainVehContainer.getMostUpstream().getPosition() >= xCenter) {
             // most upstream mainroad vehicle has already passed onramp
             final Vehicle mainVehUp = mainVehContainer.getMostUpstream();
-            final double xEnter = Math.min(xCenter, mainVehUp.position() - 0.5 * length);
-            final double vEnter = speedToEnter(mainVehUp.speed());
+            final double xEnter = Math.min(xCenter, mainVehUp.getPosition() - 0.5 * length);
+            final double vEnter = speedToEnter(mainVehUp.getSpeed());
             logger.debug("most upstream veh is already downstream of ramp center. mainVeh.size() = {}, posMostUp = {}",
-                    mainVehSize, mainVehUp.position());
+                    mainVehSize, mainVehUp.getPosition());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
             return true;
         } else {
@@ -318,7 +318,7 @@ public class OnrampImpl implements Onramp {
 
             if (indexUp == -1 && indexDown == -1) {
                 for (int i = 0; i < mainVehSize; i++) {
-                    logger.debug("i = {}, position() = {} ", i, mainVehicles.get(i).position());
+                    logger.debug("i = {}, position() = {} ", i, mainVehicles.get(i).getPosition());
                 }
                 // enter in center
                 final double xEnter = xCenter;
@@ -328,7 +328,7 @@ public class OnrampImpl implements Onramp {
             }
 
             for (int i = indexDown; i <= indexUp; i++) {
-                logger.debug("i = {}, position() = {} ", i, mainVehicles.get(i).position());
+                logger.debug("i = {}, position() = {} ", i, mainVehicles.get(i).getPosition());
             }
             double xEnter = -1;
             double vEnter = -1;
@@ -338,11 +338,11 @@ public class OnrampImpl implements Onramp {
             // compare
             for (int i = indexDown; i <= Math.min(indexUp + 1, mainVehSize - 1); i++) {
                 final Vehicle actualVeh = mainVehicles.get(i);
-                final double posFront = (i > 0) ? mainVehicles.get(i - 1).position() : Double.MAX_VALUE; // abfrage
-                final double xEnterTest = Math.min(Math.max(xUp, 0.5 * (actualVeh.position() + posFront)), xDown);
-                double netGap = xEnterTest - actualVeh.position() - 0.5 * (actualVeh.length() + vehToEnter.length());
+                final double posFront = (i > 0) ? mainVehicles.get(i - 1).getPosition() : Double.MAX_VALUE; // abfrage
+                final double xEnterTest = Math.min(Math.max(xUp, 0.5 * (actualVeh.getPosition() + posFront)), xDown);
+                double netGap = xEnterTest - actualVeh.getPosition() - 0.5 * (actualVeh.length() + vehToEnter.length());
                 if (i == indexUp + 1) {
-                    netGap = mainVehicles.get(i - 1).position() - xEnterTest - 0.5
+                    netGap = mainVehicles.get(i - 1).getPosition() - xEnterTest - 0.5
                             * (mainVehicles.get(i - 1).length() + vehToEnter.length());
                 }
 
@@ -351,14 +351,14 @@ public class OnrampImpl implements Onramp {
                     // new !!
                     minGap = netGap;
                     xEnter = xEnterTest;
-                    vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).speed()) : speedToEnter(vehToEnter
+                    vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).getSpeed()) : speedToEnter(vehToEnter
                             .getDesiredSpeedParameter());
                 }
             }
             // check between indexUp+1 and indexUp
             if (indexUp == mainVehSize) {
                 // compare directly. assume position at 0
-                final double posFront = mainVehicles.get(indexUp).position();
+                final double posFront = mainVehicles.get(indexUp).getPosition();
                 final double xEnterTest = Math.min(Math.max(xUp, 0.5 * (0 + posFront)), xDown);
                 final double netGap = posFront - xEnterTest - vehToEnter.length();
                 logger.debug("test gap for most upstream  without back veh: netGap = {}, xEnterTest = {}", netGap,
@@ -366,7 +366,7 @@ public class OnrampImpl implements Onramp {
                 if (netGap > MINSPACE_MERGE_M && netGap > minGap) {
                     minGap = netGap;
                     xEnter = xEnterTest;
-                    vEnter = speedToEnter(mainVehicles.get(indexUp).speed());
+                    vEnter = speedToEnter(mainVehicles.get(indexUp).getSpeed());
                 }
             }
 

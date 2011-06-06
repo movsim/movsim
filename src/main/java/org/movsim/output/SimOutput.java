@@ -32,7 +32,7 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.MacroInput;
+import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
@@ -109,7 +109,7 @@ public class SimOutput implements SimObservables {
             }
         }
 
-        final MacroInput macroInput = outputInput.getMacroInput();
+        final SpatioTemporalInput macroInput = outputInput.getMacroInput();
         if (macroInput.isWithMacro()) {
             spatioTemporal = new SpatioTemporalImpl(macroInput, roadSection);
             if(writeOutput){
@@ -182,7 +182,7 @@ public class SimOutput implements SimObservables {
     }
 
     public List<LoopDetector> getLoopDetectors(){
-        return detectors.getDetectors();
+        return detectors != null ? detectors.getDetectors() : null;
     }
     
     

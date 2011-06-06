@@ -172,17 +172,17 @@ public class VehicleContainerImpl implements VehicleContainer {
 
         if (vehicles.isEmpty()) {
             vehicles.add(veh);
-        } else if (veh.position() < getMostUpstream().position()) {
+        } else if (veh.getPosition() < getMostUpstream().getPosition()) {
             // add after entry with greatest index
             vehicles.add(veh);
-        } else if (veh.position() > getMostDownstream().position()) {
+        } else if (veh.getPosition() > getMostDownstream().getPosition()) {
             // add before first entry
             vehicles.add(0, veh);
         } else {
             vehicles.add(0, veh);
             sort(); // robust but runtime performance ?
         }
-        logger.debug("vehicleContainerImpl: vehicle added: x={}, v={}", veh.position(), veh.speed());
+        logger.debug("vehicleContainerImpl: vehicle added: x={}, v={}", veh.getPosition(), veh.getSpeed());
     }
 
     /*
@@ -194,7 +194,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public void removeVehiclesDownstream(double roadLength) {
-        while (!vehicles.isEmpty() && getMostDownstream().position() > roadLength) {
+        while (!vehicles.isEmpty() && getMostDownstream().getPosition() > roadLength) {
             vehicles.get(0).removeObservers();  // delete references when leaving the simulation
             vehicles.remove(0);
             logger.debug(" remove veh ... size = {}", vehicles.size());
@@ -238,8 +238,8 @@ public class VehicleContainerImpl implements VehicleContainer {
         Collections.sort(vehicles, new Comparator<Vehicle>() {
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
-                final Double pos1 = new Double((o1).position());
-                final Double pos2 = new Double((o2).position());
+                final Double pos1 = new Double((o1).getPosition());
+                final Double pos2 = new Double((o2).getPosition());
                 return pos2.compareTo(pos1);
             }
         });

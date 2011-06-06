@@ -31,12 +31,12 @@ import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.MacroInput;
+import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.impl.DetectorInputImpl;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
-import org.movsim.input.model.output.impl.MacroInputImpl;
+import org.movsim.input.model.output.impl.SpatioTemporalInputImpl;
 import org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl;
 import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
 
@@ -50,7 +50,7 @@ public class OutputInputImpl implements OutputInput {
     private FloatingCarInput floatingCarInput;
     
     /** The macro input. */
-    private MacroInput macroInput;
+    private SpatioTemporalInput macroInput;
     
     /** The detector input. */
     private DetectorInput detectorInput;
@@ -81,7 +81,7 @@ public class OutputInputImpl implements OutputInput {
 
         floatingCarInput = new FloatingCarInputImpl(elem.getChild(XmlElementNames.OutputFloatingCarData));
 
-        macroInput = new MacroInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
+        macroInput = new SpatioTemporalInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
         detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
 
@@ -107,7 +107,7 @@ public class OutputInputImpl implements OutputInput {
      * @see org.movsim.input.model.impl.OutputInput#getMacroInput()
      */
     @Override
-    public MacroInput getMacroInput() {
+    public SpatioTemporalInput getMacroInput() {
         return macroInput;
     }
 

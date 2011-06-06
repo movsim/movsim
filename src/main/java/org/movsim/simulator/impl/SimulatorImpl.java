@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class SimulatorImpl.
  */
-public class SimulatorImpl implements Simulator {
+public class SimulatorImpl implements Simulator, Runnable {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);

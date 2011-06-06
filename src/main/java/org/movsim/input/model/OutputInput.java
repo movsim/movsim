@@ -28,7 +28,7 @@ package org.movsim.input.model;
 
 import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.MacroInput;
+import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 
@@ -50,7 +50,7 @@ public interface OutputInput {
      * 
      * @return the macro input
      */
-    MacroInput getMacroInput();
+    SpatioTemporalInput getMacroInput();
 
     /**
      * Gets the detector input.

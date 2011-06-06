@@ -15,13 +15,16 @@ public class SimulatorController implements ControllerInterface {
 
     private SimulatorView view;
     private Simulator model;
+    private Thread simThread;
 
     public SimulatorController(Simulator model) {
         this.model = model;
         view = new SimulatorView(model, this);
         view.createControls();
-        view.createOutputViews();
-        // model.initialize();
+//        view.createOutputViews();
+
+        simThread = new Thread((Runnable) model);
+
     }
 
     /*
@@ -34,8 +37,8 @@ public class SimulatorController implements ControllerInterface {
         view.disableStart();
         view.enablePause();
         view.enableStop();
-//        model.restart();
-        model.run();
+        // model.restart();
+        simThread.start();
     }
 
     /*
@@ -60,9 +63,11 @@ public class SimulatorController implements ControllerInterface {
     public void pause() {
         view.enableStart();
         view.enableStop();
-        view.disablePause();
-    }
+        view.enablePause();
 
-  
+        // test
+//        view.updateViews();
+        view.showfc();
+    }
 
 }

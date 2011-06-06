@@ -159,7 +159,7 @@ public class FileFloatingCars implements ObserverInTime{
      */
     private void writeData(double time, Moveable veh, Moveable frontVeh, PrintWriter fstr) {
         // note: number before decimal point is total width of field, not width of integer part
-        fstr.printf(outputFormat, time, veh.getLane(), veh.position(), veh.speed(), veh.acc(), veh.accModel(),
+        fstr.printf(outputFormat, time, veh.getLane(), veh.getPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
         		veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.distanceToTrafficlight());
         fstr.flush();
     }
