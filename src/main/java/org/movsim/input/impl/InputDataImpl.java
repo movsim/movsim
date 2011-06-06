@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.InputData;
+import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.slf4j.Logger;
@@ -57,6 +58,9 @@ public class InputDataImpl implements InputData {
 
     /** The simulation input. */
     private SimulationInput simulationInput;
+    
+    private OutputInput outputInput;
+    
 
     /**
      * Instantiates a new input data impl.

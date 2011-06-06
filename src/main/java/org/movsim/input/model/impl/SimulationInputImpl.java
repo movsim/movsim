@@ -31,6 +31,7 @@ import java.util.List;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
+import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.slf4j.Logger;
@@ -58,6 +59,9 @@ public class SimulationInputImpl implements SimulationInput {
 
     /** The road input. */
     ArrayList<RoadInput> roadInput;
+    
+    /** The output input. */
+    private OutputInput outputInput;
 
     /**
      * Instantiates a new simulation input impl.
@@ -80,6 +84,12 @@ public class SimulationInputImpl implements SimulationInput {
         for (final Element roadElem : roadElems) {
             roadInput.add(new RoadInputImpl(roadElem));
         }
+        
+        
+        // -------------------------------------------------------
+        // Output
+        outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
+        
 
     }
 
@@ -150,4 +160,8 @@ public class SimulationInputImpl implements SimulationInput {
         return roadInput.get(0);
     }
 
+    
+    public OutputInput getOutputInput() {
+        return outputInput;
+    }
 }

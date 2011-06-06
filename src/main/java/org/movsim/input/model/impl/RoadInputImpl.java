@@ -45,7 +45,6 @@ import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 import org.movsim.input.model.simulation.impl.DetectorInputImpl;
@@ -56,7 +55,6 @@ import org.movsim.input.model.simulation.impl.ICMicroDataImpl;
 import org.movsim.input.model.simulation.impl.RampDataImpl;
 import org.movsim.input.model.simulation.impl.SimpleRampDataImpl;
 import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
-import org.movsim.input.model.simulation.impl.TrafficLightDataImpl;
 import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
 
@@ -108,8 +106,7 @@ public class RoadInputImpl implements RoadInput {
     /** The detector input. */
     private DetectorInput detectorInput;
     
-    /** The output input. */
-    private OutputInput outputInput;
+   
 
    
 
@@ -301,9 +298,7 @@ public class RoadInputImpl implements RoadInput {
 
         // -----------------------------------------------------------
         
-        // Output
-        outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
-        //setOutputInput(outputInput);
+  
 
     }
 
@@ -443,11 +438,6 @@ public class RoadInputImpl implements RoadInput {
     }
 
    
-    
-
-    public OutputInput getOutputInput() {
-        return outputInput;
-    }
 
     public TrafficLightsInput getTrafficLightsInput() {
         return trafficLightsInput;

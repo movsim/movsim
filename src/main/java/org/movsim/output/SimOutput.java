@@ -98,7 +98,7 @@ public class SimOutput implements SimObservables {
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
         
         // SingleRoad quickhack! TODO
-        final OutputInput outputInput = simInput.getSimulationInput().getSingleRoadInput().getOutputInput();
+        final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCarsImpl(roadSection.vehContainer(), floatingCarInput);

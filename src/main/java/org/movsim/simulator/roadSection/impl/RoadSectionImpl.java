@@ -90,7 +90,7 @@ public class RoadSectionImpl implements RoadSection {
     /** The flow cons bottlenecks. */
     private FlowConservingBottlenecks flowConsBottlenecks;
     
-    private TrafficLights trafficLights;
+    private TrafficLightsImpl trafficLights;
 
     /** The speedlimits. */
     private SpeedLimits speedlimits;
@@ -147,7 +147,7 @@ public class RoadSectionImpl implements RoadSection {
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
         
-        trafficLights = new TrafficLights(inputData.getProjectName(), roadInput.getTrafficLightsInput());
+        trafficLights = new TrafficLightsImpl(inputData.getProjectName(), roadInput.getTrafficLightsInput());
 
         initialConditions(inputData.getSimulationInput());
         

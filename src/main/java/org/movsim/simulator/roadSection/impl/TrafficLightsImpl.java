@@ -10,14 +10,15 @@ import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.roadSection.TrafficLights;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TrafficLights {
+public class TrafficLightsImpl implements TrafficLights{
     
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
+    final static Logger logger = LoggerFactory.getLogger(TrafficLightsImpl.class);
 
     /** The n dt. */
     private final int nDt;
@@ -30,7 +31,7 @@ public class TrafficLights {
     private FileTrafficLightRecorder fileTrafficLightRecorder = null;
     
     
-    public TrafficLights(String projectName, TrafficLightsInput trafficLightsInput){
+    public TrafficLightsImpl(String projectName, TrafficLightsInput trafficLightsInput){
         
         initTrafficLights(trafficLightsInput);
         
@@ -58,6 +59,7 @@ public class TrafficLights {
     }
     
     public void update(int itime, double time, List<Vehicle> vehicles) {
+        
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
             for (final TrafficLight trafficLight : trafficLights) {
@@ -76,12 +78,7 @@ public class TrafficLights {
         }
     }
 
-
-    public int getnDt() {
-        return nDt;
-    }
-
-
+    @Override
     public List<TrafficLight> getTrafficLights() {
         return trafficLights;
     }

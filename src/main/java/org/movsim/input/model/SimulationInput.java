@@ -78,5 +78,8 @@ public interface SimulationInput {
      * @return the single road input
      */
     RoadInput getSingleRoadInput();
+    
+
+    OutputInput getOutputInput();
 
 }

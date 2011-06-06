@@ -35,8 +35,6 @@ import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.MacroInputImpl;
 import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
-import org.movsim.input.model.simulation.DetectorInput;
-import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -76,7 +74,6 @@ public class OutputInputImpl implements OutputInput {
 
         macroInput = new MacroInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
-        
         trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));       
 
     }
@@ -101,11 +98,6 @@ public class OutputInputImpl implements OutputInput {
         return macroInput;
     }
 
-   
-
-    
-    
-    
 	/* (non-Javadoc)
 	 * @see org.movsim.input.model.OutputInput#getTrajectoriesInput()
 	 */

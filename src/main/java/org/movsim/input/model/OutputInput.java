@@ -29,7 +29,6 @@ package org.movsim.input.model;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.input.model.simulation.DetectorInput;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -141,6 +141,4 @@ public interface RoadInput {
      * @return the detector input
      */
     DetectorInput getDetectorInput();
-    
-    OutputInput getOutputInput();
 }
