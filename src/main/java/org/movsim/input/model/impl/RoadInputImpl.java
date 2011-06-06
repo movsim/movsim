@@ -37,6 +37,7 @@ import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.RoadInput;
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -46,6 +47,7 @@ import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 import org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl;
 import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
 import org.movsim.input.model.simulation.impl.ICMacroDataImpl;
@@ -101,6 +103,9 @@ public class RoadInputImpl implements RoadInput {
 
     /** The traffic light data. */
     private List<TrafficLightData> trafficLightData;
+    
+    /** The detector input. */
+    private DetectorInput detectorInput;
     
     /** The output input. */
     private OutputInput outputInput;
@@ -303,11 +308,15 @@ public class RoadInputImpl implements RoadInput {
             });
         }
 
+        // -----------------------------------------------------------        
+        
+        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
+
         // -----------------------------------------------------------
         
         // Output
-        final OutputInput outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
-        setOutputInput(outputInput);
+        outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
+        //setOutputInput(outputInput);
 
     }
 
@@ -443,12 +452,20 @@ public class RoadInputImpl implements RoadInput {
     public List<SimpleRampData> getSimpleRamps() {
         return simpleRamps;
     }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.OutputInput#getDetectorInput()
+     */
+    @Override
+    public DetectorInput getDetectorInput() {
+        return detectorInput;
+    }
+    
 
     public OutputInput getOutputInput() {
         return outputInput;
     }
 
-    public void setOutputInput(OutputInput outputInput) {
-        this.outputInput = outputInput;
-    }
 }

@@ -151,43 +151,44 @@ public void removeObserver(){
     }
 
     
-    
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (id ^ (id >>> 32));
-        result = prime * result + modelCategory;
-        result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
-        return result;
-    }
-
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        LongitudinalModelImpl other = (LongitudinalModelImpl) obj;
-        if (id != other.id)
-            return false;
-        if (modelCategory != other.modelCategory)
-            return false;
-        if (modelName == null) {
-            if (other.modelName != null)
-                return false;
-        } else if (!modelName.equals(other.modelName))
-            return false;
-        return true;
-    }
+    // not needed for collections in ObserableImpl
+//    
+//
+//    /* (non-Javadoc)
+//     * @see java.lang.Object#hashCode()
+//     */
+//    @Override
+//    public int hashCode() {
+//        final int prime = 31;
+//        int result = 1;
+//        result = prime * result + (int) (id ^ (id >>> 32));
+//        result = prime * result + modelCategory;
+//        result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
+//        return result;
+//    }
+//
+//
+//    /* (non-Javadoc)
+//     * @see java.lang.Object#equals(java.lang.Object)
+//     */
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj)
+//            return true;
+//        if (obj == null)
+//            return false;
+//        if (getClass() != obj.getClass())
+//            return false;
+//        LongitudinalModelImpl other = (LongitudinalModelImpl) obj;
+//        if (id != other.id)
+//            return false;
+//        if (modelCategory != other.modelCategory)
+//            return false;
+//        if (modelName == null) {
+//            if (other.modelName != null)
+//                return false;
+//        } else if (!modelName.equals(other.modelName))
+//            return false;
+//        return true;
+//    }
 }

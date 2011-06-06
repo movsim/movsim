@@ -675,7 +675,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </interface>  
-  <interface id="79" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.DetectorInput" 
+  <interface id="79" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.DetectorInput" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/DetectorInput.java" binary="false">    
     <position x="1744" y="124" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -734,7 +734,7 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class id="86" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.output.impl.DetectorInputImpl" 
+  <class id="86" corner="BOTTOM_RIGHT" language="java" name="org.movsim.input.model.simulation.impl.DetectorInputImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/DetectorInputImpl.java" 
     binary="false">    
     <position x="1745" y="53" width="-1" height="-1"/>    

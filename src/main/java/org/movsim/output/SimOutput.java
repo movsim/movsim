@@ -30,11 +30,11 @@ import java.util.List;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
-import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
@@ -122,7 +122,8 @@ public class SimOutput implements SimObservables {
             trajectories = new FileTrajectories(projectName, trajInput, roadSection);
         }
 
-        final DetectorInput detInput = outputInput.getDetectorInput();
+        
+        final DetectorInput detInput = simInput.getSimulationInput().getSingleRoadInput().getDetectorInput();
         if (detInput.isWithDetectors()) {
             detectors = new LoopDetectors(projectName, writeOutput, detInput);
         }

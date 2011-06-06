@@ -28,6 +28,7 @@ package org.movsim.input.model;
 
 import java.util.List;
 
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -134,6 +135,13 @@ public interface RoadInput {
      * @return the traffic light data
      */
     List<TrafficLightData> getTrafficLightData();
-
+    
+    /**
+     * Gets the detector input.
+     * 
+     * @return the detector input
+     */
+    DetectorInput getDetectorInput();
+    
     OutputInput getOutputInput();
 }

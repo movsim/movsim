@@ -71,9 +71,9 @@ public interface SimulationInput {
      */
     ArrayList<RoadInput> getRoadInput();
 
-    // quick hack: only one single main road
     /**
-     * Gets the single road input.
+     * Gets the single road input. 
+     * Quick hack: only one single main road
      * 
      * @return the single road input
      */

@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.output;
+package org.movsim.input.model.simulation;
 
 import java.util.List;
 

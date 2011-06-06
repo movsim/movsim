@@ -26,11 +26,11 @@
  */
 package org.movsim.input.model;
 
-import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
 import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.input.model.simulation.DetectorInput;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,12 +52,6 @@ public interface OutputInput {
      */
     MacroInput getMacroInput();
 
-    /**
-     * Gets the detector input.
-     * 
-     * @return the detector input
-     */
-    DetectorInput getDetectorInput();
 
     /**
      * Gets the traffic light recorder input.
