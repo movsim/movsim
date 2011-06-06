@@ -32,7 +32,6 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
-import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
@@ -72,8 +71,7 @@ public class SimOutput implements SimObservables {
     /** The trajectories. */
     private FileTrajectories trajectories = null;
 
-    /** The traffic light recorder. */
-    private FileTrafficLightRecorder fileTrafficLightRecorder = null;
+  
 
     /** The write output. */
     private final boolean writeOutput;
@@ -128,14 +126,6 @@ public class SimOutput implements SimObservables {
             detectors = new LoopDetectors(projectName, writeOutput, detInput);
         }
         
-
-        final TrafficLightRecorderInput trafficLightRecInput = outputInput.getTrafficLightRecorderInput();
-        if (trafficLightRecInput.isWithTrafficLightRecorder()) {
-            fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, writeOutput, trafficLightRecInput,
-                    roadSection.getTrafficLights());
-        }
-        
-
     }
 
     /**
@@ -167,9 +157,7 @@ public class SimOutput implements SimObservables {
             detectors.update(itime, time, timestep, roadSection.vehContainer());
         }
         
-        if (fileTrafficLightRecorder != null) {
-            fileTrafficLightRecorder.update(itime, time, roadSection.getTrafficLights());
-        }
+       
     }
 
     

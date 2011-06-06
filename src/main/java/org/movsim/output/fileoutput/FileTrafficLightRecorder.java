@@ -29,7 +29,6 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.utilities.impl.FileUtils;
@@ -58,17 +57,14 @@ public class FileTrafficLightRecorder {
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightRecorder(String projectName, boolean writeOutput, TrafficLightRecorderInput input,
-            List<TrafficLight> trafficLights) {
+    public FileTrafficLightRecorder(String projectName, int nDt, List<TrafficLight> trafficLights) {
 
-        nDt = input.getnDt();
-
-        if (writeOutput) {
-        	// road id hard coded as 1 for the moment
-            final String filename = projectName + ".R1_tl_log.csv";
-            fstr = FileUtils.getWriter(filename);
-            writeHeader(trafficLights);
-        }
+        this.nDt = nDt;
+        
+        // road id hard coded as 1 for the moment
+        final String filename = projectName + ".R1_tl_log.csv";
+        fstr = FileUtils.getWriter(filename);
+        writeHeader(trafficLights);
 
     }
 

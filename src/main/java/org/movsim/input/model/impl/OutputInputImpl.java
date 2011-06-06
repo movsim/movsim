@@ -31,11 +31,9 @@ import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
-import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.MacroInputImpl;
-import org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl;
 import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.impl.DetectorInputImpl;
@@ -52,9 +50,7 @@ public class OutputInputImpl implements OutputInput {
     /** The macro input. */
     private MacroInput macroInput;
     
-    /** The traffic light recorder input. */
-    private TrafficLightRecorderInput trafficLightRecorderInput;
-    
+ 
     /** The trajectories input. */
     private TrajectoriesInput trajectoriesInput;
 
@@ -80,7 +76,6 @@ public class OutputInputImpl implements OutputInput {
 
         macroInput = new MacroInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
-        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild(XmlElementNames.OutputTrafficlightRecorder));
         
         trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));       
 
@@ -108,16 +103,7 @@ public class OutputInputImpl implements OutputInput {
 
    
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.OutputInput#getTrafficLightRecorderInput()
-     */
-    @Override
-    public TrafficLightRecorderInput getTrafficLightRecorderInput() {
-        return trafficLightRecorderInput;
-    }
-
+    
     
     
 	/* (non-Javadoc)

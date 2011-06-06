@@ -28,7 +28,6 @@ package org.movsim.input.model;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.MacroInput;
-import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.simulation.DetectorInput;
 
@@ -53,14 +52,6 @@ public interface OutputInput {
     MacroInput getMacroInput();
 
 
-    /**
-     * Gets the traffic light recorder input.
-     * 
-     * @return the traffic light recorder input
-     */
-    TrafficLightRecorderInput getTrafficLightRecorderInput();
-
-    
     /**
      * Gets the trajectories input.
      *

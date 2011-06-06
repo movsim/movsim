@@ -52,12 +52,12 @@
             </SPEED_LIMITS>
             <RAMPS>
             </RAMPS>
-            <TRAFFIC_LIGHTS>
+            <TRAFFIC_LIGHTS n_dt="5" logging="true">
                 <TRAFFIC_LIGHT x="1000" green_time="30"
                     green_red_time="3" red_time="200" red_green_time="2"
                     phase_shift="0" />
             </TRAFFIC_LIGHTS>
-            <DETECTORS/>
+            <DETECTORS />
             
             <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="5" perc_out="0" dn="0">
@@ -67,7 +67,6 @@
                     <FC number="15" />
                     <FC number="20" />
                 </FLOATING_CAR_DATA>
-                <!-- <TRAFFIC_LIGHT_RECORDER n_dt="5" /> -->
             </OUTPUT>
         </ROAD>
     </SIMULATION>

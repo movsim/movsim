@@ -37,7 +37,9 @@ import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightData;
+import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -129,12 +131,9 @@ public interface RoadInput {
      */
     List<SimpleRampData> getSimpleRamps();
 
-    /**
-     * Gets the traffic light data.
-     * 
-     * @return the traffic light data
-     */
-    List<TrafficLightData> getTrafficLightData();
+    
+    TrafficLightsInput getTrafficLightsInput();
+    
     
     /**
      * Gets the detector input.

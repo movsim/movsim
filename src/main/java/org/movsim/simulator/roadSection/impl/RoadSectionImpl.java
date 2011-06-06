@@ -41,7 +41,6 @@ import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.simulator.roadSection.Onramp;
 import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.roadSection.RoadSectionGUI;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
@@ -59,7 +58,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class RoadSectionImpl.
  */
-public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
+public class RoadSectionImpl implements RoadSection {
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(RoadSectionImpl.class);
@@ -90,12 +89,13 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
     /** The flow cons bottlenecks. */
     private FlowConservingBottlenecks flowConsBottlenecks;
+    
+    private TrafficLights trafficLights;
 
     /** The speedlimits. */
     private SpeedLimits speedlimits;
 
-    /** The traffic lights. */
-    private List<TrafficLight> trafficLights;
+  
 
     /** The simple onramps. */
     private List<Onramp> simpleOnramps = null;
@@ -146,9 +146,11 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
+        
+        trafficLights = new TrafficLights(inputData.getProjectName(), roadInput.getTrafficLightsInput());
 
         initialConditions(inputData.getSimulationInput());
-        initTrafficLights(inputData.getSimulationInput());
+        
         initOnramps(inputData);
     }
 
@@ -193,7 +195,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         // check for crashes
         checkForInconsistencies(iTime, time);
 
-        updateRoadConditions(time);
+        updateRoadConditions(iTime, time);
 
         // vehicle accelerations
         accelerate(iTime, dt, time);
@@ -258,19 +260,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         }
     }
 
-    /**
-     * Inits the traffic lights.
-     * 
-     * @param simInput
-     *            the sim input
-     */
-    private void initTrafficLights(SimulationInput simInput) {
-        trafficLights = new ArrayList<TrafficLight>();
-        final List<TrafficLightData> trafficLightData = simInput.getSingleRoadInput().getTrafficLightData();
-        for (final TrafficLightData tlData : trafficLightData) {
-            trafficLights.add(new TrafficLightImpl(tlData));
-        }
-    }
+   
 
     /**
      * Inits the onramps.
@@ -394,21 +384,10 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
      * @param time
      *            the time
      */
-    private void updateRoadConditions(double time) {
-        if (!trafficLights.isEmpty()) {
-            // first update traffic light status
-            for (final TrafficLight trafficLight : trafficLights) {
-                trafficLight.update(time);
-            }
-            // second update vehicle status approaching traffic lights
-            for (final Vehicle veh : vehContainer.getVehicles()) {
-                for (final TrafficLight trafficLight : trafficLights) {
-                    veh.updateTrafficLight(time, trafficLight);
-                }
-            }
-        }
-
-        // set speedlimits
+    private void updateRoadConditions(int iTime, double time) {
+        
+        trafficLights.update(iTime, time, vehContainer.getVehicles());
+        
         if (!speedlimits.isEmpty()) {
             for (final Vehicle veh : vehContainer.getVehicles()) {
                 final double pos = veh.position();
@@ -435,27 +414,15 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.RoadSectionGUI#firstRampFlow()
-     */
-    @Override
-    public double firstRampFlow() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.RoadSectionGUI#upstreamInflow()
-     */
-    @Override
-    public double upstreamInflow() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+//    public double firstRampFlow() {
+//        // TODO Auto-generated method stub
+//        return 0;
+//    }
+//
+//    public double upstreamInflow() {
+//        // TODO Auto-generated method stub
+//        return 0;
+//    }
 
     /*
      * (non-Javadoc)
@@ -474,7 +441,7 @@ public class RoadSectionImpl implements RoadSection, RoadSectionGUI {
      */
     @Override
     public List<TrafficLight> getTrafficLights() {
-        return trafficLights;
+        return trafficLights.getTrafficLights();
     }
 
     /*
