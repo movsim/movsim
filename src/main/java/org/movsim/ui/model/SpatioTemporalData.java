@@ -1,4 +1,4 @@
-package org.movsim.ui.desktop;
+package org.movsim.ui.model;
 
 
 public class SpatioTemporalData {

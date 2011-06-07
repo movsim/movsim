@@ -36,8 +36,8 @@ import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
-import org.movsim.ui.desktop.ControllerInterface;
-import org.movsim.ui.desktop.SimulatorController;
+import org.movsim.ui.controller.ControllerInterface;
+import org.movsim.ui.controller.SimulatorController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

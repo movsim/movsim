@@ -3,9 +3,10 @@
  * Copyright (C) 2010 by Ralph Germ (http://www.ralphgerm.de)
  * 
  */
-package org.movsim.ui.desktop;
+package org.movsim.ui.controller;
 
 import org.movsim.simulator.Simulator;
+import org.movsim.ui.desktop.SimulatorView;
 
 /**
  * @author ralph

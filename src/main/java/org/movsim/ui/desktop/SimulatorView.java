@@ -21,6 +21,10 @@ import org.movsim.output.LoopDetector;
 import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.vehicles.Moveable;
+import org.movsim.ui.controller.ControllerInterface;
+import org.movsim.ui.model.DetectorDataPoint;
+import org.movsim.ui.model.FloatingCarDataPoint;
+import org.movsim.ui.model.SpatioTemporalData;
 import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,9 +143,6 @@ public class SimulatorView implements ObserverInTime, ActionListener {
         controlFrame.setVisible(true);
     }
 
-    /**
-     * 
-     */
     private void activateWindowExitButton(JFrame frame) {
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent evnt) {
