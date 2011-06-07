@@ -20,8 +20,9 @@ public class SimulatorController implements ControllerInterface {
     public SimulatorController(Simulator model) {
         this.model = model;
         view = new SimulatorView(model, this);
+
         view.createControls();
-//        view.createOutputViews();
+        // view.createOutputViews();
 
         simThread = new Thread((Runnable) model);
 
@@ -66,8 +67,7 @@ public class SimulatorController implements ControllerInterface {
         view.enablePause();
 
         // test
-//        view.updateViews();
-        view.showfc();
+        // view.updateViews();
     }
 
 }

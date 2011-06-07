@@ -1,18 +1,7 @@
 package org.movsim.ui.desktop;
 
-import info.monitorenter.gui.chart.Chart2D;
-import info.monitorenter.gui.chart.ITrace2D;
-import info.monitorenter.gui.chart.ITracePoint2D;
-import info.monitorenter.gui.chart.io.ADataCollector;
-import info.monitorenter.gui.chart.io.RandomDataCollectorOffset;
-import info.monitorenter.gui.chart.traces.Trace2DLtd;
-import info.monitorenter.gui.chart.traces.Trace2DSimple;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -23,19 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
 import org.movsim.output.FloatingCars;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.SpatioTemporal;
-import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.vehicles.Moveable;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +57,6 @@ public class SimulatorView implements ObserverInTime, ActionListener {
     private List<Integer> listOfFloatingCars;
 
     private Map<Integer, List<FloatingCarDataPoint>> floatingcarsDataPoints;
-
-    private ADataCollector collector;
 
     public SimulatorView(Simulator simulator, ControllerInterface controller) {
 
@@ -138,26 +121,6 @@ public class SimulatorView implements ObserverInTime, ActionListener {
 //        viewFrame.pack();
 //        viewFrame.setVisible(true);
         
-        // Create a chart:  
-        Chart2D chart = new Chart2D();
-        // Create an ITrace: 
-        // Note that dynamic charts need limited amount of values!!! 
-        ITrace2D trace = new Trace2DLtd(200); 
-        trace.setColor(Color.RED);
-     
-        // Add the trace to the chart. This has to be done before adding points (deadlock prevention): 
-        chart.addTrace(trace);
-        
-        // Make it visible:
-        // Create a frame. 
-        JFrame frame = new JFrame("MinimalDynamicChart");
-        // add the chart to the frame: 
-        frame.getContentPane().add(chart);
-        frame.setSize(400,300);
-        frame.setVisible(true); 
-        // Every 50 milliseconds a new value is collected. 
-//       ADataCollector collector = new RandomDataCollectorOffset(trace, 100);
-        // Start an internal Thread that adds the values: 
         
         
     }
@@ -242,58 +205,22 @@ public class SimulatorView implements ObserverInTime, ActionListener {
 
     public void updateViews() {
 
-        // test chart
-        Chart2D chart = new Chart2D();
-
-        ITrace2D trace = new Trace2DSimple();
-        trace.setColor(Color.red);
-//        trace.addTracePainter();
-
-        chart.addTrace(trace);
 
         // test mit 2.det
         List<DetectorDataPoint> det2 = hashDetectors.get(detectorNames.get(2));
 
-        // add data to trace
-        for (DetectorDataPoint dp : det2) {
-            trace.addPoint(dp.getFlow(), dp.getDensity());
-        }
 
         // Make it visible:
         // Create a frame.
-        JFrame frame = new JFrame("MinimalStaticChart");
+        JFrame frame = new JFrame("Minimal Chart");
         // add the chart to the frame:
-        frame.getContentPane().add(chart);
+        
+        
         frame.setSize(400, 300);
         frame.setVisible(true);
 
     }
     
-    public void showfc() {
-     // test chart
-        Chart2D chart = new Chart2D();
-
-        ITrace2D trace = new Trace2DSimple();
-        trace.setColor(Color.red);
-//        trace.addTracePainter();
-
-        chart.addTrace(trace);
-        
-        // add data to trace
-        List<FloatingCarDataPoint> list = floatingcarsDataPoints.get(5);
-        for (FloatingCarDataPoint dp: list) {
-            trace.addPoint(dp.getPosition(), dp.getSpeed());
-        }
-        
-        
-     // Make it visible:
-        // Create a frame.
-        JFrame frame = new JFrame("MinimalStaticChart");
-        // add the chart to the frame:
-        frame.getContentPane().add(chart);
-        frame.setSize(400, 300);
-        frame.setVisible(true);
-    }
 
     private void pullLoopDetectorData(double time) {
         for (LoopDetector det : loopDetectors) {
