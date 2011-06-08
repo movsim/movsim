@@ -36,8 +36,9 @@ import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
-import org.movsim.ui.controller.ControllerInterface;
-import org.movsim.ui.controller.SimulatorController;
+import org.movsim.ui.controller.Controller;
+import org.movsim.ui.controller.impl.SimulatorController;
+import org.movsim.ui.controller.impl.SimulatorGUIController;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,10 +96,10 @@ public class App {
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
 
         if (cmdline.isGui()) {
-            ControllerInterface controller = new SimulatorController(simulator);
+            Controller controller = new SimulatorGUIController(simulator);
         } else {
-            // without graphics
-            simulator.run();
+            // commandline tool
+            Controller controller = new SimulatorController(simulator); // or just: simulator.run();
         }
 
     }
@@ -110,6 +111,7 @@ public class App {
         Locale.setDefault(Locale.US);
 
         // BasicConfigurator for log4j replaced with PropertyConfigurator.
+        // log4j.properties from file system overrides log4j.properties from resources
         if (FileUtils.fileExists("log4j.properties")) {
             String log4jConfig = "log4j.properties";
             PropertyConfigurator.configure(log4jConfig);

@@ -1,13 +1,6 @@
 package org.movsim.ui.controller;
 
-public interface ControllerInterface {
-    void start();
-
-    void stop();
-
-    void pause();
-
-    // void reset();
+public interface GUIContoller {
 
     // set timewarp
 
@@ -21,5 +14,4 @@ public interface ControllerInterface {
     // void displayChartsOfFloatingCars();
 
     // display roadPanel
-
 }
