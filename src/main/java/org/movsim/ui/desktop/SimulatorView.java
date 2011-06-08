@@ -1,7 +1,6 @@
 package org.movsim.ui.desktop;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -112,21 +111,19 @@ public class SimulatorView implements ObserverInTime, ActionListener {
 
     public void createOutputViews() {
         // create all Swing components
-//        viewFrame = new JFrame("View");
-//        activateWindowExitButton(viewFrame);
-//
-//        // viewFrame.setSize(400, 400);
-//        viewFrame.setLocation(200, 80);
-//
-//        viewPanel = new JPanel();
-//        viewPanel.setSize(400, 400);
-//
-//        viewFrame.add(viewPanel, BorderLayout.CENTER);
-//        viewFrame.pack();
-//        viewFrame.setVisible(true);
-        
-        
-        
+        // viewFrame = new JFrame("View");
+        // activateWindowExitButton(viewFrame);
+        //
+        // // viewFrame.setSize(400, 400);
+        // viewFrame.setLocation(200, 80);
+        //
+        // viewPanel = new JPanel();
+        // viewPanel.setSize(400, 400);
+        //
+        // viewFrame.add(viewPanel, BorderLayout.CENTER);
+        // viewFrame.pack();
+        // viewFrame.setVisible(true);
+
     }
 
     public void createControls() {
@@ -206,22 +203,18 @@ public class SimulatorView implements ObserverInTime, ActionListener {
 
     public void updateViews() {
 
-
         // test mit 2.det
         List<DetectorDataPoint> det2 = hashDetectors.get(detectorNames.get(2));
-
 
         // Make it visible:
         // Create a frame.
         JFrame frame = new JFrame("Minimal Chart");
         // add the chart to the frame:
-        
-        
+
         frame.setSize(400, 300);
         frame.setVisible(true);
 
     }
-    
 
     private void pullLoopDetectorData(double time) {
         for (LoopDetector det : loopDetectors) {
@@ -230,7 +223,7 @@ public class SimulatorView implements ObserverInTime, ActionListener {
             List<DetectorDataPoint> list = hashDetectors.get(s);
             list.add(new DetectorDataPoint(time, det.getFlow() * 3600, det.getDensityArithmetic() * 1000, det
                     .getMeanSpeed() * 3.6));
-            
+
         }
     }
 
@@ -247,15 +240,14 @@ public class SimulatorView implements ObserverInTime, ActionListener {
             List<FloatingCarDataPoint> data = floatingcarsDataPoints.get(fc);
             if (data == null) {
                 ArrayList<FloatingCarDataPoint> list = new ArrayList<FloatingCarDataPoint>();
-                list.add(new FloatingCarDataPoint(time, floatingCar.getPosition(), floatingCar.getSpeed()*3.6, floatingCar
-                        .getAcc()));
+                list.add(new FloatingCarDataPoint(time, floatingCar.getPosition(), floatingCar.getSpeed() * 3.6,
+                        floatingCar.getAcc()));
                 floatingcarsDataPoints.put(fc, list);
             } else {
                 floatingcarsDataPoints.get(fc).add(
-                        new FloatingCarDataPoint(time, floatingCar.getPosition(), floatingCar.getSpeed()*3.6, floatingCar
-                                .getAcc()));
+                        new FloatingCarDataPoint(time, floatingCar.getPosition(), floatingCar.getSpeed() * 3.6,
+                                floatingCar.getAcc()));
             }
-
 
         }
     }

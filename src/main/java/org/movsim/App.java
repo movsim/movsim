@@ -38,6 +38,7 @@ import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.controller.ControllerInterface;
 import org.movsim.ui.controller.SimulatorController;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,14 +47,13 @@ import org.slf4j.LoggerFactory;
  */
 public class App {
 
-    // Define a static logger variable 
+    // Define a static logger variable
     // Logging with slf4j, a facade for log4j
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(App.class);
 
     /** The Constant xmlDefault. */
     final static String xmlDefault = "sim/onramp_IDM.xml";
-
 
     /**
      * The main method.
@@ -67,7 +67,6 @@ public class App {
         universalprogram.runAsAplication(args);
 
     }
-
 
     /**
      * Run as aplication.
@@ -92,7 +91,7 @@ public class App {
 
         // parse xmlFile and set values
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, cmdline, inputData);
-       
+
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
 
         if (cmdline.isGui()) {
@@ -111,12 +110,16 @@ public class App {
         Locale.setDefault(Locale.US);
 
         // BasicConfigurator for log4j replaced with PropertyConfigurator.
-        URL resource = App.class.getResource("/sim/log4j.properties");
-        PropertyConfigurator.configure(resource);
+        if (FileUtils.fileExists("log4j.properties")) {
+            String log4jConfig = "log4j.properties";
+            PropertyConfigurator.configure(log4jConfig);
+        } else {
+            URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+            PropertyConfigurator.configure(log4jConfig);
+        }
 
         // Log Levels: DEBUG < INFO < WARN < ERROR
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011) ]");
     }
-
 
 }

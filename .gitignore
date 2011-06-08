@@ -5,3 +5,7 @@
 /sim/figs/*
 /sim/*.csv
 /sim/*.internal_xml
+log4j.properties
+multiModel*.dtd
+*.log
+*.log.*

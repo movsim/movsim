@@ -26,6 +26,13 @@
  */
 package org.movsim.input.commandline.impl;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -35,6 +42,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.input.commandline.SimCommandLine;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,23 +53,26 @@ public class SimCommandLineImpl implements SimCommandLine {
 
     /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(SimCommandLineImpl.class);
-    
+
     /** The options. */
     private Options options;
-    
+
     /** The simulation filename. */
     private String simulationFilename;
-    
+
     /** The with simulation. */
     private boolean withXmlSimulationConfigFile = false;
-    
+
     /** The gui. */
     private boolean gui = false;
-    
-    /** The flag for only validatiion of xml input file without simulation*/
+
+    /** The flag for only validatiion of xml input file without simulation */
     private boolean onlyValidation = false;
-    
-    /** The flag for writing xml config file of the simulation input after validation from dtd */ 
+
+    /**
+     * The flag for writing xml config file of the simulation input after
+     * validation from dtd
+     */
     private boolean writeInternalXml;
 
     /**
@@ -88,9 +99,11 @@ public class SimCommandLineImpl implements SimCommandLine {
         options = new Options();
         options.addOption("h", "help", false, "print this message");
         options.addOption("g", "gui", false, "start a Desktop GUI");
-        options.addOption( "v", "validate", false, "parse xml input file for validation (without simulation)" );
-        options.addOption( "i", "internal_xml", false, "write internal xml (the simulation configuration) after validation from dtd (without simulation)" );
-        
+        options.addOption("v", "validate", false, "parse xml input file for validation (without simulation)");
+        options.addOption("i", "internal_xml", false,
+                "write internal xml (the simulation configuration) after validation from dtd (without simulation)");
+        options.addOption("w", "write dtd", false, "write dtd file to filesystem");
+
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
@@ -140,6 +153,33 @@ public class SimCommandLineImpl implements SimCommandLine {
         }
         if (cmdline.hasOption("i")) {
             optInternalXml();
+        }
+        if (cmdline.hasOption("w")) {
+            optWriteDtd();
+        }
+    }
+
+    /**
+     * Option: writes multiModelTrafficSimulatirInput.dtd to file system
+     */
+    private void optWriteDtd() {
+        try {
+            InputStream resourceAsStream = SimCommandLineImpl.class.getResourceAsStream("/sim/multiModelTrafficSimulatorInput.dtd");
+            PrintWriter writer = FileUtils.getWriter("multiModelTrafficSimulatorInput.dtd");
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
+            for(String line=bufferedReader.readLine(); line!=null; line=bufferedReader.readLine()) {
+                writer.write(line+"\n");
+            }
+
+            bufferedReader.close();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
@@ -239,11 +279,11 @@ public class SimCommandLineImpl implements SimCommandLine {
     public boolean isGui() {
         return gui;
     }
-    
+
     public boolean isOnlyValidation() {
         return onlyValidation;
     }
-    
+
     public boolean isWriteInternalXml() {
         return writeInternalXml;
     }
