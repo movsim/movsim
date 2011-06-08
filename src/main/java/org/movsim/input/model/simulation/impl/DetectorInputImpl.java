@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.output.impl;
+package org.movsim.input.model.simulation.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jdom.Element;
-import org.movsim.input.model.output.DetectorInput;
+import org.movsim.input.model.simulation.DetectorInput;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -45,7 +45,11 @@ public class DetectorInputImpl implements DetectorInput {
     
     /** The dt sample. */
     private double dtSample;
-
+    
+    /** The with logging. */
+    private boolean withLogging;
+    
+    
     /** The is initialized. */
     private final boolean isInitialized;
 
@@ -77,7 +81,8 @@ public class DetectorInputImpl implements DetectorInput {
     private void parseElement(Element elem) {
 
         this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
-
+        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+        
         // Detector
         positions = new ArrayList<Double>();
 
@@ -128,6 +133,10 @@ public class DetectorInputImpl implements DetectorInput {
     @Override
     public boolean isWithDetectors() {
         return isInitialized;
+    }
+
+    public boolean isWithLogging() {
+        return withLogging;
     }
 
 }

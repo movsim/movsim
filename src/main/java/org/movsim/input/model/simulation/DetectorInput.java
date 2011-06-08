@@ -24,61 +24,38 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.output.impl;
+package org.movsim.input.model.simulation;
 
-import org.jdom.Element;
-import org.movsim.input.model.output.TrafficLightRecorderInput;
+import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class TrafficLightRecorderInputImpl.
+ * The Interface DetectorInput.
  */
-public class TrafficLightRecorderInputImpl implements TrafficLightRecorderInput {
+public interface DetectorInput {
 
-    /** The n dt. */
-    private int nDt;
-
-    /** The is initialized. */
-    private boolean isInitialized;
+    
+    boolean isWithLogging();
+    
+    /**
+     * Gets the positions.
+     * 
+     * @return the positions
+     */
+    List<Double> getPositions();
 
     /**
-     * Instantiates a new traffic light recorder input impl.
+     * Gets the sample interval.
      * 
-     * @param elem
-     *            the elem
+     * @return the sample interval
      */
-    public TrafficLightRecorderInputImpl(Element elem) {
-        if (elem == null) {
-            isInitialized = false;
-            return;
-        }
+    double getSampleInterval();
 
-        this.nDt = Integer.parseInt(elem.getAttributeValue("n_dt"));
-
-        isInitialized = true;
-
-    }
-
-    /*
-     * (non-Javadoc)
+    /**
+     * Checks if is with detectors.
      * 
-     * @see
-     * org.movsim.input.model.output.impl.TrafficLightRecorderInput#getnDt()
+     * @return true, if is with detectors
      */
-    @Override
-    public int getnDt() {
-        return nDt;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.TrafficLightRecorderInput#
-     * isWithTrafficLightRecorder()
-     */
-    @Override
-    public boolean isWithTrafficLightRecorder() {
-        return isInitialized;
-    }
+    boolean isWithDetectors();
 
 }

@@ -35,8 +35,8 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
-import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.RoadInput;
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -44,8 +44,9 @@ import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.input.model.simulation.TrafficLightData;
+import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 import org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl;
 import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
 import org.movsim.input.model.simulation.impl.ICMacroDataImpl;
@@ -53,7 +54,7 @@ import org.movsim.input.model.simulation.impl.ICMicroDataImpl;
 import org.movsim.input.model.simulation.impl.RampDataImpl;
 import org.movsim.input.model.simulation.impl.SimpleRampDataImpl;
 import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
-import org.movsim.input.model.simulation.impl.TrafficLightDataImpl;
+import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
 
 // TODO: extract element names into XmlElementNames Interface to make them symbolic.
@@ -99,11 +100,12 @@ public class RoadInputImpl implements RoadInput {
     /** The ramps. */
     private List<RampData> ramps;
 
-    /** The traffic light data. */
-    private List<TrafficLightData> trafficLightData;
+    private TrafficLightsInput trafficLightsInput; 
     
-    /** The output input. */
-    private OutputInput outputInput;
+    /** The detector input. */
+    private DetectorInput detectorInput;
+    
+   
 
    
 
@@ -283,31 +285,19 @@ public class RoadInputImpl implements RoadInput {
 
         // -----------------------------------------------------------
 
+        
         // Trafficlights
-        trafficLightData = new ArrayList<TrafficLightData>();
+        
         final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
-        if (trafficLightsElement != null) {
-            final List<Element> trafficLigthElems = trafficLightsElement.getChildren(XmlElementNames.RoadTrafficLight);
-            for (final Element trafficLightElem : trafficLigthElems) {
-                final Map<String, String> map = XmlUtils.putAttributesInHash(trafficLightElem);
-                trafficLightData.add(new TrafficLightDataImpl(map));
-            }
+        trafficLightsInput = new TrafficLightsInputImpl(trafficLightsElement); 
 
-            Collections.sort(trafficLightData, new Comparator<TrafficLightData>() {
-                @Override
-                public int compare(TrafficLightData o1, TrafficLightData o2) {
-                    final Double pos1 = new Double((o1).getX());
-                    final Double pos2 = new Double((o2).getX());
-                    return pos1.compareTo(pos2); // sort with increasing x
-                }
-            });
-        }
+        // -----------------------------------------------------------        
+        
+        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
 
         // -----------------------------------------------------------
         
-        // Output
-        final OutputInput outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
-        setOutputInput(outputInput);
+  
 
     }
 
@@ -394,15 +384,7 @@ public class RoadInputImpl implements RoadInput {
         return ramps;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getTrafficLightData()
-     */
-    @Override
-    public List<TrafficLightData> getTrafficLightData() {
-        return trafficLightData;
-    }
+   
 
     /*
      * (non-Javadoc)
@@ -443,12 +425,21 @@ public class RoadInputImpl implements RoadInput {
     public List<SimpleRampData> getSimpleRamps() {
         return simpleRamps;
     }
-
-    public OutputInput getOutputInput() {
-        return outputInput;
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.OutputInput#getDetectorInput()
+     */
+    @Override
+    public DetectorInput getDetectorInput() {
+        return detectorInput;
     }
 
-    public void setOutputInput(OutputInput outputInput) {
-        this.outputInput = outputInput;
+   
+
+    public TrafficLightsInput getTrafficLightsInput() {
+        return trafficLightsInput;
     }
+
 }

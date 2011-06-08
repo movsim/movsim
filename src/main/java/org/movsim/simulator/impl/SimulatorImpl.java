@@ -121,7 +121,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void run() {
         logger.info("Simulator.run: start simulation at {} seconds", time);
 
-        simOutput.update(itime, time, timestep, roadSection);
+        simOutput.update(itime, time, timestep);
 
         while (!stopThisRun(time)) {
             time += timestep;
@@ -154,7 +154,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
         }
         roadSection.update(itime, time);
-        simOutput.update(itime, time, timestep, roadSection);
+        simOutput.update(itime, time, timestep);
     }
 
     /*
@@ -197,16 +197,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         return simInput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.Simulator#setSimInput(org.movsim.input.InputData)
-     */
-    @Override
-    public void setSimInput(InputData simInput) {
-        this.simInput = simInput;
-    }
+  
 
     @Override
     public SimObservables getSimObservables() {

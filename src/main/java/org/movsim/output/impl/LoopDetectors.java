@@ -29,7 +29,7 @@ package org.movsim.output.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.movsim.input.model.output.DetectorInput;
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.fileoutput.FileDetector;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -48,14 +48,6 @@ public class LoopDetectors {
     
     private List<FileDetector> fileDetectors;
 
-    public List<LoopDetector> getDetectors() {
-        final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
-        for(final LoopDetector det: detectors){
-            loopDetectors.add(det);
-        }
-        return loopDetectors;
-    }
-
     /**
      * Instantiates a new loop detectors.
      * 
@@ -66,18 +58,20 @@ public class LoopDetectors {
      * @param input
      *            the input
      */
-    public LoopDetectors(String projectName, boolean writeOutput, DetectorInput input) {
+    public LoopDetectors(String projectName, DetectorInput input) {
 
         detectors = new ArrayList<LoopDetectorImpl>();
 
         final double dtSample = input.getSampleInterval();
+        
+        
         final List<Double> positions = input.getPositions();
 
         for (final Double detPosition : positions) {
-            detectors.add(new LoopDetectorImpl(projectName, writeOutput, detPosition, dtSample));
+            detectors.add(new LoopDetectorImpl(projectName, detPosition, dtSample));
         }
         
-        if(writeOutput){
+        if( input.isWithLogging() ){
             fileDetectors = new ArrayList<FileDetector>();
             for (final LoopDetector det : detectors) {
                 fileDetectors.add(new FileDetector(projectName, det));
@@ -104,5 +98,13 @@ public class LoopDetectors {
         }
     }
 
+    // for View
+    public List<LoopDetector> getDetectors() {
+        final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
+        for(final LoopDetector det: detectors){
+            loopDetectors.add(det);
+        }
+        return loopDetectors;
+    }
 
 }

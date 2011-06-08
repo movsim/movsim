@@ -90,7 +90,8 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
                     getModelName());
             System.exit(-1);
         }
-        if (v0 == 0 || a == 0 || b == 0 || dt == 0) {
+        
+        if ( a == 0 || b == 0 || dt == 0) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName());
             System.exit(-1);

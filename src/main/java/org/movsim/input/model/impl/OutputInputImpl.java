@@ -29,16 +29,14 @@ package org.movsim.input.model.impl;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.OutputInput;
-import org.movsim.input.model.output.DetectorInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
-import org.movsim.input.model.output.TrafficLightRecorderInput;
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.input.model.output.impl.DetectorInputImpl;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.SpatioTemporalInputImpl;
-import org.movsim.input.model.output.impl.TrafficLightRecorderInputImpl;
 import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
+import org.movsim.input.model.simulation.DetectorInput;
+import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -51,12 +49,6 @@ public class OutputInputImpl implements OutputInput {
     
     /** The macro input. */
     private SpatioTemporalInput macroInput;
-    
-    /** The detector input. */
-    private DetectorInput detectorInput;
-    
-    /** The traffic light recorder input. */
-    private TrafficLightRecorderInput trafficLightRecorderInput;
     
     /** The trajectories input. */
     private TrajectoriesInput trajectoriesInput;
@@ -83,10 +75,6 @@ public class OutputInputImpl implements OutputInput {
 
         macroInput = new SpatioTemporalInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
-        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
-
-        trafficLightRecorderInput = new TrafficLightRecorderInputImpl(elem.getChild(XmlElementNames.OutputTrafficlightRecorder));
-        
         trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));       
 
     }
@@ -111,28 +99,6 @@ public class OutputInputImpl implements OutputInput {
         return macroInput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.OutputInput#getDetectorInput()
-     */
-    @Override
-    public DetectorInput getDetectorInput() {
-        return detectorInput;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.OutputInput#getTrafficLightRecorderInput()
-     */
-    @Override
-    public TrafficLightRecorderInput getTrafficLightRecorderInput() {
-        return trafficLightRecorderInput;
-    }
-
-    
-    
 	/* (non-Javadoc)
 	 * @see org.movsim.input.model.OutputInput#getTrajectoriesInput()
 	 */

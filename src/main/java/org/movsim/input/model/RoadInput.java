@@ -28,6 +28,7 @@ package org.movsim.input.model;
 
 import java.util.List;
 
+import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -35,7 +36,7 @@ import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.input.model.simulation.TrafficLightData;
+import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
 // TODO: Auto-generated Javadoc
@@ -128,12 +129,14 @@ public interface RoadInput {
      */
     List<SimpleRampData> getSimpleRamps();
 
+    
+    TrafficLightsInput getTrafficLightsInput();
+    
+    
     /**
-     * Gets the traffic light data.
+     * Gets the detector input.
      * 
-     * @return the traffic light data
+     * @return the detector input
      */
-    List<TrafficLightData> getTrafficLightData();
-
-    OutputInput getOutputInput();
+    DetectorInput getDetectorInput();
 }

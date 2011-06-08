@@ -155,7 +155,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             final EquilibriumProperties fundDia = fundDiagramFactory(vehLength, longModel);
 
             final double fraction = heterogen.getFraction();
-            logger.info("fraction = {}", fraction);
+            logger.debug("fraction = {}", fraction);
 
             sumFraction += fraction;
             final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput);
@@ -227,7 +227,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private AccelerationModel longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
         final String modelName = modelInputData.getModelName();
         AccelerationModel longModel = null;
-        logger.info("modelName = {}", modelName);
+        //logger.debug("modelName = {}", modelName);
         if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
             longModel = new IDM(modelName, (AccelerationModelInputDataIDM)modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
@@ -297,9 +297,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         }
     }
 
-   
-
-    
     /**
      * Check for reaction times.
      * 
@@ -397,7 +394,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             System.exit(-1);
         }
         final VehiclePrototype prototype = prototypes.get(typeLabel);
-        logger.info("create vehicle with label = {}", typeLabel);
+        logger.debug("create vehicle with label = {}", typeLabel);
         return createVehicle(prototype);
     }
 

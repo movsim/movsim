@@ -31,6 +31,10 @@
 
 <!ELEMENT SCENARIO (VEHICLES, SIMULATION) >
 
+<!-- todo Ralph for configuring output path -->
+<!ATTLIST SCENARIO
+  path  CDATA  "."
+>
 <!-- ##################################################################### -->
 <!-- Vehicle-Driver-Units / Models                                         -->
 <!-- ##################################################################### -->
@@ -150,7 +154,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (ROAD*)>
+<!ELEMENT SIMULATION (ROAD*, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration            NMTOKEN #REQUIRED
@@ -158,11 +162,11 @@ fluct_strength   NMTOKEN #REQUIRED
   seed             NMTOKEN "42"
 > 
 
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, OUTPUT)>
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
 
 <!ATTLIST ROAD
   id               NMTOKEN #REQUIRED
-  length            NMTOKEN #REQUIRED
+  length           NMTOKEN #REQUIRED
   lanes            NMTOKEN "1"
 > 
 
@@ -220,8 +224,6 @@ logging  (true|false) "false"
   v           NMTOKEN "100"
 > 
 
-
-
 <!-- Flow-conserving inhomogeneities -->
 <!ELEMENT FLOW_CONSERVING_INHOMOGENEITIES (INHOMOGENEITY*)>
 <!ATTLIST FLOW_CONSERVING_INHOMOGENEITIES
@@ -273,7 +275,10 @@ logging  (true|false)  "false"
   
 <!ELEMENT TRAFFIC_LIGHTS (TRAFFIC_LIGHT*)>
 <!ATTLIST TRAFFIC_LIGHTS
-> 
+  n_dt  NMTOKEN "1"
+  logging  (true|false)  "false" 
+>  
+
   
 <!ELEMENT TRAFFIC_LIGHT EMPTY>
 <!ATTLIST TRAFFIC_LIGHT
@@ -285,15 +290,28 @@ red_green_time   NMTOKEN #REQUIRED
 phase_shift      NMTOKEN "0"
 > 
 
+
+<!-- detectors can be placed with absolute and/or relative positions -->
+<!ELEMENT DETECTORS  (CROSS_SECTION*) >
+<!-- 1 min as default aggregation interval -->
+<!ATTLIST DETECTORS
+  dt  NMTOKEN "60" 
+  logging  (true|false)  "false" 
+>
+
+<!ELEMENT CROSS_SECTION EMPTY>
+<!ATTLIST CROSS_SECTION 
+  x  NMTOKEN #REQUIRED 
+>
+
+
 <!-- ##################################################################### -->
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?, DETECTORS?, TRAFFIC_LIGHT_RECORDER?) >
+<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?) >
 
-<!-- TODO ralph -->
 <!ATTLIST OUTPUT
-path CDATA "./"
 >
 
 <!-- output of spatio-temporal fields -->
@@ -325,30 +343,6 @@ number  NMTOKEN #REQUIRED
   start_x      NMTOKEN "0"
   end_x        NMTOKEN "1e10"
 >
-
-
-
-<!-- detectors can be placed with absolute and/or relative positions -->
-<!ELEMENT DETECTORS  (CROSS_SECTION+) >
-<!-- 1 min as default aggregation interval -->
-<!ATTLIST DETECTORS
-  dt  NMTOKEN "60" 
->
-
-<!ELEMENT CROSS_SECTION EMPTY>
-<!ATTLIST CROSS_SECTION 
-  x  NMTOKEN #REQUIRED 
->
-
-
-
-<!-- write time series of all traffic lights in one file  -->
-<!ELEMENT TRAFFIC_LIGHT_RECORDER EMPTY>
-<!ATTLIST TRAFFIC_LIGHT_RECORDER
-  n_dt  NMTOKEN "1"
->  
-  
-             
 
 
 

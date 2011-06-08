@@ -66,11 +66,9 @@ public interface Simulator {
      */
     void update();
 
-    void restart(); // start with current gui input data
+    void restart(); 
 
     InputData getSimInput();
-    
-    void setSimInput(InputData simInput);
     
     SimObservables getSimObservables();
 

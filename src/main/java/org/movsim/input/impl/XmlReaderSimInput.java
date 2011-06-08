@@ -161,6 +161,9 @@ public class XmlReaderSimInput {
 
         final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
         inputData.setSimulationInput(simInput);
+        
+       
+        
     }
 
     /**
