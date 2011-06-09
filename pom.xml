@@ -15,14 +15,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!-- <repositories> -->
-    <!-- <repository> -->
-    <!-- <id>my</id> -->
-    <!-- <url>file://${basedir}/lib</url> -->
-    <!-- </repository> -->
-    <!-- </repositories> -->
-
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -56,11 +48,6 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
-            <groupId>jchart2d</groupId>
-            <artifactId>jchart2d</artifactId>
-            <version>3.2.1</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -78,6 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <!--  <version> </version> -->
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
