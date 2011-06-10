@@ -305,6 +305,7 @@ public class VehicleImpl implements Vehicle{
     @Override
     public double distanceToTrafficlight() {
         return distanceToTrafficlight;
+        //trafficLightApproaching
     }
 
     /*
@@ -384,7 +385,7 @@ public class VehicleImpl implements Vehicle{
     @Override
     public void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0) {
 
-        // new: acceleration noise:
+        // acceleration noise:
         double accError = 0;
         if (noise != null) {
             noise.update(dt);

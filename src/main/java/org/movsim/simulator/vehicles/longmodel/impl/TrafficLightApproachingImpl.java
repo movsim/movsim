@@ -43,6 +43,8 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 	
 	/** The acc traffic light. */
 	private double accTrafficLight;
+	
+	private double distanceToTrafficlight;
 
 	
 	/**
@@ -53,22 +55,6 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 	}
 	
 
-	
-	/* (non-Javadoc)
-	 * @see org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#considerTrafficLight()
-	 */
-	public boolean considerTrafficLight(){
-		return considerTrafficLight;
-	}
-	
-	
-	/* (non-Javadoc)
-	 * @see org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching#accApproaching()
-	 */
-	public double accApproaching(){
-		return accTrafficLight;
-	}
-	
     /* (non-Javadoc)
 	 * @see org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#updateTrafficLight(org.movsim.simulator.vehicles.Vehicle, double, org.movsim.simulator.roadSection.TrafficLight, org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel)
 	 */
@@ -76,7 +62,7 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        double distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.length();
+        distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.length();
 
         if (distanceToTrafficlight < 0) {
             distanceToTrafficlight = Constants.GAP_INFINITY; // not relevant
@@ -112,5 +98,30 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
             }
         }
     }
+
+
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#considerTrafficLight()
+     */
+    public boolean considerTrafficLight(){
+        return considerTrafficLight;
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching#accApproaching()
+     */
+    public double accApproaching(){
+        return accTrafficLight;
+    }
+    
+    
+
+    public double getDistanceToTrafficlight() {
+        return distanceToTrafficlight;
+    }
+    
+
 
 }
