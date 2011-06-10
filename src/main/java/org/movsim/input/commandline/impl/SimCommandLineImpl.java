@@ -206,6 +206,25 @@ public class SimCommandLineImpl implements SimCommandLine {
         // }
         
         // TODO loop properly, not hard coded
+        FileUtils.createDir("sim", "");
+
+        // //Iterate over resources does not work?!?
+        // String path = "sim/";
+        // ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        // Enumeration<?> resourceUrls;
+        // try {
+        // resourceUrls = cl.getResources(path);
+        // List<URL> result = new ArrayList<URL>();
+        // while (resourceUrls.hasMoreElements()) {
+        // URL url = (URL) resourceUrls.nextElement();
+        // System.out.println("file: " + url.getFile());
+        // result.add(url);
+        // }
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
+        
+        // TODO loop properly
         String[] models = { "IDM", "IIDM", "ACC", "OVM", "VDIFF", "BARL", "GIPPS", "KCA", "NSM"};
         String[] scenario = { "onramp", "startStop" };
         for (String sce : scenario) {
