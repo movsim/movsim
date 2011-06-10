@@ -26,6 +26,7 @@
  */
 package org.movsim;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Locale;
 
@@ -112,9 +113,9 @@ public class App {
 
         // BasicConfigurator for log4j replaced with PropertyConfigurator.
         // log4j.properties from file system overrides log4j.properties from resources
-        if (FileUtils.fileExists("log4j.properties")) {
-            String log4jConfig = "log4j.properties";
-            PropertyConfigurator.configure(log4jConfig);
+            final File file = new File("log4j.properties");
+            if (file.exists() && file.isFile()) {
+            PropertyConfigurator.configure("log4j.properties");
         } else {
             URL log4jConfig = App.class.getResource("/sim/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);

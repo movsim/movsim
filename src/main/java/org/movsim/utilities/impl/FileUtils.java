@@ -29,15 +29,18 @@ package org.movsim.utilities.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.movsim.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,27 +151,26 @@ public class FileUtils {
         return (false);
     }
 
-    // check if directory exists (in fact the same as file)
     /**
-     * Dir exists.
+     * Dir exists. check if directory exists (in fact the same as file)
      * 
      * @param path
      *            the path
      * @param msg
-     *            the msg
+     *            the additional message
      * @return true, if successful
      */
     public static boolean dirExists(String path, String msg) {
         final File file = new File(path);
-        if (file.exists() && file.isDirectory())
-            // Logger.log(msg + ": \"" + file.getName() + "\" exists!");
+        if (file.exists() && file.isDirectory()) {
+            logger.info("{}: {} exists!", msg, file.getName() );
             return (true);
+        }
         return (false);
     }
 
-    // create directory
     /**
-     * Creates the dir.
+     * Creates the directory, if it does not exit already. Elsewise, does nothing.
      * 
      * @param path
      *            the path
@@ -342,6 +344,32 @@ public class FileUtils {
             e.printStackTrace();
         }
         writer.close();
+    }
+
+    public static void resourceToFile(String res, String filename) {
+        try {
+            InputStream resourceAsStream = App.class.getResourceAsStream(res);
+            
+            if (resourceAsStream == null) {
+                logger.debug("resource {} not included!", res);
+                return;
+            }
+
+            PrintWriter writer = FileUtils.getWriter(filename);
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
+            for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
+                writer.println(line);
+            }
+
+            bufferedReader.close();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }

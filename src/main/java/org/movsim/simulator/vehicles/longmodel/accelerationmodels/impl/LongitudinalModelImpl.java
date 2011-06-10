@@ -37,59 +37,60 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class LongitudinalModelImpl.
  */
-public abstract class LongitudinalModelImpl implements Observer{
+public abstract class LongitudinalModelImpl implements Observer {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LongitudinalModelImpl.class);
-    
+
     /** The model name. */
     private final String modelName;
 
     /** The model category. */
     private final int modelCategory;
-    
+
     /** The parameters. */
     public AccelerationModelInputData parameters;
-    
+
     /**
      * Inits the parameters.
      */
     protected abstract void initParameters();
-    
+
     /** The id. */
     protected long id;
-    
+
     /**
      * Instantiates a new longitudinal model impl.
-     *
-     * @param modelName the model name
-     * @param modelCategory the model category
-     * @param parameters the parameters
+     * 
+     * @param modelName
+     *            the model name
+     * @param modelCategory
+     *            the model category
+     * @param parameters
+     *            the parameters
      */
     public LongitudinalModelImpl(String modelName, int modelCategory, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.modelCategory = modelCategory;
         this.parameters = parameters;
         this.id = MyRandom.nextInt();
-        parameters.registerObserver((Observer) this);        
+        parameters.registerObserver((Observer) this);
     }
-    
-    
-//    public LongitudinalModelImpl(String modelName, int modelCategory) {
-//        this.modelName = modelName;
-//        this.modelCategory = modelCategory;
-//    }
-    
-    
+
+    // public LongitudinalModelImpl(String modelName, int modelCategory) {
+    // this.modelName = modelName;
+    // this.modelCategory = modelCategory;
+    // }
+
     /**
- * Removes the observer.
- */
-public void removeObserver(){
-        if(parameters!=null){
+     * Removes the observer.
+     */
+    public void removeObserver() {
+        if (parameters != null) {
             parameters.removeObserver((Observer) this);
         }
     }
-    
+
     /**
      * Model name.
      * 
@@ -125,7 +126,6 @@ public void removeObserver(){
     public int getModelCategory() {
         return modelCategory;
     }
-    
 
     /**
      * Gets the required update time.
@@ -133,8 +133,7 @@ public void removeObserver(){
      * @return the required update time
      */
     public abstract double getRequiredUpdateTime();
-    
-    
+
     /**
      * Parameter V0.
      * 
@@ -142,53 +141,55 @@ public void removeObserver(){
      */
     public abstract double parameterV0();
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.utilities.Observer#notifyObserver()
      */
     public void notifyObserver() {
-        initParameters();   
+        initParameters();
         logger.debug("observer notified");
     }
 
-    
     // not needed for collections in ObserableImpl
-//    
-//
-//    /* (non-Javadoc)
-//     * @see java.lang.Object#hashCode()
-//     */
-//    @Override
-//    public int hashCode() {
-//        final int prime = 31;
-//        int result = 1;
-//        result = prime * result + (int) (id ^ (id >>> 32));
-//        result = prime * result + modelCategory;
-//        result = prime * result + ((modelName == null) ? 0 : modelName.hashCode());
-//        return result;
-//    }
-//
-//
-//    /* (non-Javadoc)
-//     * @see java.lang.Object#equals(java.lang.Object)
-//     */
-//    @Override
-//    public boolean equals(Object obj) {
-//        if (this == obj)
-//            return true;
-//        if (obj == null)
-//            return false;
-//        if (getClass() != obj.getClass())
-//            return false;
-//        LongitudinalModelImpl other = (LongitudinalModelImpl) obj;
-//        if (id != other.id)
-//            return false;
-//        if (modelCategory != other.modelCategory)
-//            return false;
-//        if (modelName == null) {
-//            if (other.modelName != null)
-//                return false;
-//        } else if (!modelName.equals(other.modelName))
-//            return false;
-//        return true;
-//    }
+    //
+    //
+    // /* (non-Javadoc)
+    // * @see java.lang.Object#hashCode()
+    // */
+    // @Override
+    // public int hashCode() {
+    // final int prime = 31;
+    // int result = 1;
+    // result = prime * result + (int) (id ^ (id >>> 32));
+    // result = prime * result + modelCategory;
+    // result = prime * result + ((modelName == null) ? 0 :
+    // modelName.hashCode());
+    // return result;
+    // }
+    //
+    //
+    // /* (non-Javadoc)
+    // * @see java.lang.Object#equals(java.lang.Object)
+    // */
+    // @Override
+    // public boolean equals(Object obj) {
+    // if (this == obj)
+    // return true;
+    // if (obj == null)
+    // return false;
+    // if (getClass() != obj.getClass())
+    // return false;
+    // LongitudinalModelImpl other = (LongitudinalModelImpl) obj;
+    // if (id != other.id)
+    // return false;
+    // if (modelCategory != other.modelCategory)
+    // return false;
+    // if (modelName == null) {
+    // if (other.modelName != null)
+    // return false;
+    // } else if (!modelName.equals(other.modelName))
+    // return false;
+    // return true;
+    // }
 }

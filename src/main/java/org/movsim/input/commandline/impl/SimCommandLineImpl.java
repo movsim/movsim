@@ -26,13 +26,6 @@
  */
 package org.movsim.input.commandline.impl;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -101,9 +94,14 @@ public class SimCommandLineImpl implements SimCommandLine {
         options.addOption("g", "gui", false, "start a Desktop GUI");
         options.addOption("v", "validate", false, "parse xml input file for validation (without simulation)");
         options.addOption("i", "internal_xml", false,
-                "write internal xml (the simulation configuration) after validation from dtd (without simulation)");
-        options.addOption("w", "write dtd", false, "write dtd file to filesystem");
-
+                "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
+        options.addOption("w", "write dtd", false, "Writes dtd file to filesystem.");
+        options.addOption(
+                "l",
+                "logproperties",
+                false,
+                "Writes log4f.properties to file. You can adjust the logging properties to your needs. Just place the file in calling directory of MovSim.");
+        options.addOption("s", "scenarios", false, "Writes example scenarios as xml for simulation to folder 'sim'.");
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
@@ -157,30 +155,66 @@ public class SimCommandLineImpl implements SimCommandLine {
         if (cmdline.hasOption("w")) {
             optWriteDtd();
         }
+        if (cmdline.hasOption("l")) {
+            optWriteLoggingProperties();
+        }
+        if (cmdline.hasOption("s")) {
+            optWriteScenarios();
+        }
+    }
+
+    /**
+     * Option: Writes all example scenarios from jar resources to /sim folder
+     * 
+     * @throws ClassNotFoundException
+     */
+    private void optWriteScenarios() {
+        FileUtils.createDir("sim", "");
+
+        // //Iterate over resources does not work?!?
+        // String path = "sim/";
+        // ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        // Enumeration<?> resourceUrls;
+        // try {
+        // resourceUrls = cl.getResources(path);
+        // List<URL> result = new ArrayList<URL>();
+        // while (resourceUrls.hasMoreElements()) {
+        // URL url = (URL) resourceUrls.nextElement();
+        // System.out.println("file: " + url.getFile());
+        // result.add(url);
+        // }
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
+        
+        // TODO loop properly
+        String[] models = { "IDM", "IIDM", "ACC", "OVM", "VDIFF", "BARL", "GIPPS", "KCA", "NSM"};
+        String[] scenario = { "onramp", "startStop" };
+        for (String sce : scenario) {
+            for (String model : models) {
+                FileUtils.resourceToFile("/sim/" + sce  + "_" + model + ".xml", "sim/"+ sce  + "_" + model + ".xml");
+            }
+        }
+        logger.info("Example scenarios written to folder 'sim'. Exit.");
+        System.exit(0);
+    }
+
+    /**
+     * Option: writes log4j.properties to local filesystem
+     */
+    private void optWriteLoggingProperties() {
+        String resource = "/sim/log4j.properties";
+        String filename = "log4j.properties";
+        FileUtils.resourceToFile(resource, filename);
     }
 
     /**
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private void optWriteDtd() {
-        try {
-            InputStream resourceAsStream = SimCommandLineImpl.class.getResourceAsStream("/sim/multiModelTrafficSimulatorInput.dtd");
-            PrintWriter writer = FileUtils.getWriter("multiModelTrafficSimulatorInput.dtd");
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
-            for(String line=bufferedReader.readLine(); line!=null; line=bufferedReader.readLine()) {
-                writer.write(line+"\n");
-            }
-
-            bufferedReader.close();
-            writer.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String resource = "/sim/multiModelTrafficSimulatorInput.dtd";
+        String filename = "multiModelTrafficSimulatorInput.dtd";
+        FileUtils.resourceToFile(resource, filename);
     }
 
     /**
