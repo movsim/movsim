@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<SCENARIO>
+    <VEHICLES>
+        <VEHICLE label="ACC1" length="8" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5"
+                    coolness="1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
+        <ROAD id="1" length="20000" lanes="1">
+            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+                <VEHICLE_TYPE label="ACC1" fraction="1" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MICRO x="10" v="0" />
+                <IC_MICRO x="20" v="0" />
+                <IC_MICRO x="30" v="0" />
+                <IC_MICRO x="40" v="0" />
+                <IC_MICRO x="50" v="0" />
+                <IC_MICRO x="60" v="0" />
+                <IC_MICRO x="70" v="0" />
+                <IC_MICRO x="80" v="0" />
+                <IC_MICRO x="90" v="0" />
+                <IC_MICRO x="100" v="0" />
+                <IC_MICRO x="110" v="0" />
+                <IC_MICRO x="120" v="0" />
+                <IC_MICRO x="130" v="0" />
+                <IC_MICRO x="140" v="0" />
+                <IC_MICRO x="150" v="0" />
+                <IC_MICRO x="160" v="0" />
+                <IC_MICRO x="170" v="0" />
+                <IC_MICRO x="180" v="0" />
+                <IC_MICRO x="190" v="0" />
+                <IC_MICRO x="200" v="0" />
+                <IC_MICRO x="210" v="0" />
+                <IC_MICRO x="220" v="0" />
+                <IC_MICRO x="230" v="0" />
+                <IC_MICRO x="240" v="0" />
+                <IC_MICRO x="250" v="0" />
+                <IC_MICRO x="260" v="0" />
+            </INITIAL_CONDITIONS>
+            <TRAFFIC_SOURCE>
+            </TRAFFIC_SOURCE>
+            <TRAFFIC_SINK />
+            <FLOW_CONSERVING_INHOMOGENEITIES>
+            </FLOW_CONSERVING_INHOMOGENEITIES>
+            <SPEED_LIMITS>
+            </SPEED_LIMITS>
+            <RAMPS>
+            </RAMPS>
+            <TRAFFIC_LIGHTS>
+                <TRAFFIC_LIGHT x="1000" green_time="30"
+                    green_red_time="3" red_time="200" red_green_time="2"
+                    phase_shift="0" />
+            </TRAFFIC_LIGHTS>
+            <DETECTORS />
+        </ROAD>
+         <OUTPUT>
+                <FLOATING_CAR_DATA n_dt="5">
+                    <FC number="1" />
+                    <FC number="5" />
+                    <FC number="10" />
+                    <FC number="15" />
+                    <FC number="20" />
+                </FLOATING_CAR_DATA>
+            </OUTPUT>
+    </SIMULATION>
+</SCENARIO>
