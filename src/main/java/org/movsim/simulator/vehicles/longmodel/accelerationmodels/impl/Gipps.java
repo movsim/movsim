@@ -86,23 +86,6 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         this.s0 = ((AccelerationModelInputDataGipps) parameters).getS0();
     }
 
-
-    // copy constructor
-    /**
-     * Instantiates a new gipps.
-     * 
-     * @param modelToCopy
-     *            the model to copy
-     */
-//    public Gipps(Gipps modelToCopy) {
-//        super(modelToCopy.modelName(), modelToCopy.getModelCategory());
-//        this.T = modelToCopy.getT();
-//        this.v0 = modelToCopy.getV0();
-//        this.a = modelToCopy.getA();
-//        this.b = modelToCopy.getB();
-//        this.s0 = modelToCopy.getS0();
-//    }
-
     /**
      * Gets the t.
      * 

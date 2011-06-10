@@ -114,25 +114,6 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
     }
 
 
-    // copy constructor
-    /**
-     * Instantiates a new aCC.
-     * 
-     * @param accToCopy
-     *            the acc to copy
-     */
-//    public ACC(ACC accToCopy) {
-//        super(accToCopy.modelName(), accToCopy.getModelCategory());
-//        this.v0 = accToCopy.getV0();
-//        this.T = accToCopy.getT();
-//        this.s0 = accToCopy.getS0();
-//        this.s1 = accToCopy.getS1();
-//        this.a = accToCopy.getA();
-//        this.b = accToCopy.getB();
-//        this.delta = accToCopy.getDelta();
-//        this.coolness = accToCopy.getCoolness();
-//    }
-
     /*
      * (non-Javadoc)
      * 

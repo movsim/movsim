@@ -109,24 +109,6 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
         
     }
 
-    // copy constructor
-    /**
-     * Instantiates a new kCA.
-     * 
-     * @param kcaToCopy
-     *            the kca to copy
-     */
-//    public KCA(KCA kcaToCopy) {
-//        super(kcaToCopy.modelName(), kcaToCopy.getModelCategory());
-//        this.v0 = kcaToCopy.getV0();
-//        this.k = kcaToCopy.getK();
-//        this.pb0 = kcaToCopy.getPb0();
-//        this.pb1 = kcaToCopy.getPb1();
-//        this.pa1 = kcaToCopy.getPa1();
-//        this.pa2 = kcaToCopy.getPa2();
-//        this.vp = kcaToCopy.getVp();
-//    }
-
     /*
      * (non-Javadoc)
      * 
