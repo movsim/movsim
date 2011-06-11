@@ -72,8 +72,8 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = Constants.INVALID_GAP; // not relevant
         } else if (!trafficLight.isGreen()) {
-            final double maxDistanceToReact = Constants.GAP_INFINITY; // TODO define it as parameter ("range of sight" or so) ?!
-            if (distanceToTrafficlight < maxDistanceToReact) {
+            final double maxRangeOfSight = Constants.GAP_INFINITY; // TODO define it as parameter ("range of sight" or so) ?!
+            if (distanceToTrafficlight < maxRangeOfSight) {
             	final double speed = me.getSpeed();
                 accTrafficLight = Math.min(0, longModel.accSimple(distanceToTrafficlight, speed, speed));
 
@@ -93,7 +93,9 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
                     // ignore traffic light
                     considerTrafficLight = false;
                 }
-                logger.debug("considerTrafficLight: distToTrafficlight={}, accTrafficLight={}", distanceToTrafficlight, accTrafficLight);
+//                if(me.getVehNumber()==1){
+//                    logger.debug("considerTrafficLight=true: distToTrafficlight={}, accTrafficLight={}", distanceToTrafficlight, accTrafficLight);
+//                }
             }
         }
     }
