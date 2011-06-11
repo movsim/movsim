@@ -77,9 +77,6 @@ public class VehicleImpl implements Vehicle{
     /** The max decel. */
     private final double maxDecel;
 
-    /** The distance to trafficlight. */
-    private double distanceToTrafficlight;
-
     /** The id. */
     private final int id;
 
@@ -89,10 +86,6 @@ public class VehicleImpl implements Vehicle{
     /** The lane. */
     private int lane;
     
-    /** The target lane. */
-    private int targetLane;
-
-   
     /** The speedlimit. */
     private double speedlimit; // state variable
 
@@ -166,7 +159,6 @@ public class VehicleImpl implements Vehicle{
         this.oldPosition = pos;
         this.speed = v;
         this.lane = lane;
-        this.targetLane = lane;
     }
 
     /* (non-Javadoc)
@@ -304,8 +296,7 @@ public class VehicleImpl implements Vehicle{
      */
     @Override
     public double distanceToTrafficlight() {
-        return distanceToTrafficlight;
-        //trafficLightApproaching
+        return trafficLightApproaching.getDistanceToTrafficlight();
     }
 
     /*

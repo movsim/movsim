@@ -401,6 +401,10 @@ public class RoadSectionImpl implements RoadSection {
         
         trafficLights.update(iTime, time, vehContainer.getVehicles());
         
+        updateSpeedLimits(vehContainer.getVehicles());
+    }
+
+    private void updateSpeedLimits(List<Vehicle> vehicles) {
         if (!speedlimits.isEmpty()) {
             for (final Vehicle veh : vehContainer.getVehicles()) {
                 final double pos = veh.getPosition();

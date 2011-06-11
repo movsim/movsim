@@ -31,6 +31,8 @@ import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -38,6 +40,9 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(TrafficLightApproachingImpl.class);
+    
 	/** The consider traffic light. */
 	private boolean considerTrafficLight;
 	
@@ -46,12 +51,12 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 	
 	private double distanceToTrafficlight;
 
-	
 	/**
 	 * Instantiates a new traffic light approaching impl.
 	 */
 	public TrafficLightApproachingImpl(){
 		considerTrafficLight = false;
+		distanceToTrafficlight = Constants.INVALID_GAP;
 	}
 	
 
@@ -64,26 +69,22 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 
         distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.length();
 
-        if (distanceToTrafficlight < 0) {
-            distanceToTrafficlight = Constants.GAP_INFINITY; // not relevant
+        if (distanceToTrafficlight <= 0) {
+            distanceToTrafficlight = Constants.INVALID_GAP; // not relevant
         } else if (!trafficLight.isGreen()) {
-            final double maxDistanceToReact = 1000; // TODO Parameter ... ?!
+            final double maxDistanceToReact = Constants.GAP_INFINITY; // TODO define it as parameter ("range of sight" or so) ?!
             if (distanceToTrafficlight < maxDistanceToReact) {
             	final double speed = me.getSpeed();
                 accTrafficLight = Math.min(0, longModel.accSimple(distanceToTrafficlight, speed, speed));
 
                 if (accTrafficLight < 0) {
                     considerTrafficLight = true;
-                    // logger.debug("distance to trafficLight = {}, accTL = {}",
-                    // distanceToTrafficlight, accTrafficLight);
+                    logger.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
                 }
 
                 // TODO: decision logic while approaching yellow traffic light
-                // ...
-                // ignoriere TL falls bei Gelb die (zweifache) komfortable
-                // Bremsverzoegerung ueberschritten wird
-                // ODER wenn ich kinematisch nicht mehr bremsen koennte!!!
-                final double bKinMax = 6; // unterhalb von bMax !!!
+                // ignore traffic light if accTL exceeds two times comfortable deceleration or if kinematic braking is not possible anymore
+                final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax 
                 final double comfortBrakeDecel = 4;
                 final double brakeDist = (speed * speed) / (2 * bKinMax);
                 if (trafficLight.isGreenRed()
@@ -92,9 +93,7 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
                     // ignore traffic light
                     considerTrafficLight = false;
                 }
-                // System.out.printf("considerTrafficLight=%s, dx=%.2f, accTrafficLight=%.2f  %n",
-                // considerTrafficLight, trafficLight.position()-position,
-                // accTrafficLight, brakeDist );
+                logger.debug("considerTrafficLight: distToTrafficlight={}, accTrafficLight={}", distanceToTrafficlight, accTrafficLight);
             }
         }
     }
@@ -115,7 +114,6 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
     public double accApproaching(){
         return accTrafficLight;
     }
-    
     
 
     public double getDistanceToTrafficlight() {
