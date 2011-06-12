@@ -81,19 +81,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
         this.pSlowToStart = ((AccelerationModelInputDataNSM) parameters).getSlowToStart();
     }
     
-    // copy constructor
-    /**
-     * Instantiates a new nSM.
-     * 
-     * @param nsmToCopy
-     *            the nsm to copy
-     */
-//    public NSM(NSM nsmToCopy) {
-//        super(nsmToCopy.modelName(), nsmToCopy.getModelCategory());
-//        this.v0 = nsmToCopy.getV0();
-//        this.pSlowdown = nsmToCopy.getSlowdown();
-//        this.pSlowToStart = nsmToCopy.getSlowToStart();
-//    }
+    
 
     /*
      * (non-Javadoc)

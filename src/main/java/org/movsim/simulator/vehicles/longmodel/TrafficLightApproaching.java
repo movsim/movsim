@@ -50,6 +50,8 @@ public interface TrafficLightApproaching {
 	 */
 	double accApproaching();
 
+    double getDistanceToTrafficlight();
+
 	/**
 	 * Update.
 	 *

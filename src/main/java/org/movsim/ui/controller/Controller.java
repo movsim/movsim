@@ -8,5 +8,7 @@ public interface Controller {
     void pause();
 
     // void reset();
+    
+    //void update();
 
 }

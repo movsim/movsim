@@ -94,14 +94,13 @@ public class App {
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFilename, cmdline, inputData);
 
         final Simulator simulator = new SimulatorImpl(cmdline.isGui(), inputData);
-
+        
+        // TODO raus für release
         if (cmdline.isGui()) {
             Controller controller = new SimulatorGUIController(simulator);
         } else {
             // commandline tool
-            Controller controller = new SimulatorController(simulator); // or
-                                                                        // just:
-                                                                        // simulator.run();
+            final Controller controller = new SimulatorController(simulator); 
         }
 
     }
@@ -111,20 +110,15 @@ public class App {
      */
     private static void initLocalizationAndLogger() {
         Locale.setDefault(Locale.US);
-
-        // BasicConfigurator for log4j replaced with PropertyConfigurator.
-        // log4j.properties from file system overrides log4j.properties from
-        // resources
-        final File file = new File("log4j.properties");
-        if (file.exists() && file.isFile()) {
+            final File file = new File("log4j.properties");
+            if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
         } else {
-            URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+            final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);
         }
-
         // Log Levels: DEBUG < INFO < WARN < ERROR
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011) ]");
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011)");
     }
 
 }

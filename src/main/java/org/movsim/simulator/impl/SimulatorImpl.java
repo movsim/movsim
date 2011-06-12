@@ -204,8 +204,5 @@ public class SimulatorImpl implements Simulator, Runnable {
         return simOutput;
     }
 
-    
-
-
 
 }

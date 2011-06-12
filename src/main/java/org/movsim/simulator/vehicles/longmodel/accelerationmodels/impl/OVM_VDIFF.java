@@ -94,23 +94,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         choiceOptFuncVariant = ((AccelerationModelInputDataOVM_VDIFF) parameters).getVariant();
     }
 
-    /**
-     * Instantiates a new oV m_ vdiff.
-     * 
-     * @param vdiffToCopy
-     *            the vdiff to copy
-     */
-//    public OVM_VDIFF(OVM_VDIFF vdiffToCopy) {
-//        super(vdiffToCopy.modelName(), vdiffToCopy.getModelCategory());
-//        this.s0 = vdiffToCopy.getS0();
-//        this.v0 = vdiffToCopy.getV0();
-//        this.tau = vdiffToCopy.getTau();
-//        this.lenInteraction = vdiffToCopy.getLenInteraction();
-//        this.beta = vdiffToCopy.getBeta();
-//        this.lambda = vdiffToCopy.getLambda();
-//        this.choiceOptFuncVariant = vdiffToCopy.getOptFuncVariant();
-//    }
-
+    
     /*
      * (non-Javadoc)
      * 

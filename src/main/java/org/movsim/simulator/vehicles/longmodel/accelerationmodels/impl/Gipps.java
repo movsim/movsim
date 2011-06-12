@@ -86,23 +86,6 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         this.s0 = ((AccelerationModelInputDataGipps) parameters).getS0();
     }
 
-
-    // copy constructor
-    /**
-     * Instantiates a new gipps.
-     * 
-     * @param modelToCopy
-     *            the model to copy
-     */
-//    public Gipps(Gipps modelToCopy) {
-//        super(modelToCopy.modelName(), modelToCopy.getModelCategory());
-//        this.T = modelToCopy.getT();
-//        this.v0 = modelToCopy.getV0();
-//        this.a = modelToCopy.getA();
-//        this.b = modelToCopy.getB();
-//        this.s0 = modelToCopy.getS0();
-//    }
-
     /**
      * Gets the t.
      * 
@@ -211,13 +194,13 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         // space dependencies modeled by speedlimits, alpha's
         // TODO check
         // final double Tloc = alphaT*T;
-        final double v0Loc = Math.min(alphaV0 * v0, me.speedlimit()); // consider
+        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit()); // consider
                                                                       // external
                                                                       // speedlimit
-        final double aLoc = alphaA * a;
+        final double TLocal = alphaT * T;
 
         // actual Gipps formula
-        return acc(s, v, dv, v0Loc, aLoc);
+        return acc(s, v, dv, v0Local, TLocal);
 
     }
 

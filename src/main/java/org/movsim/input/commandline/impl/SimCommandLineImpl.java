@@ -79,7 +79,7 @@ public class SimCommandLineImpl implements SimCommandLine {
      *            the args
      */
     public SimCommandLineImpl(String[] args) {
-
+        
         logger.debug("Begin CommandLine Parser");
 
         createOptions();
@@ -94,18 +94,14 @@ public class SimCommandLineImpl implements SimCommandLine {
     private void createOptions() {
 
         options = new Options();
-        options.addOption("h", "help", false, "print this message");
-        options.addOption("g", "gui", false, "start a Desktop GUI");
-        options.addOption("v", "validate", false, "parse xml input file for validation (without simulation)");
+        options.addOption("h", "help", false, "prints this message");
+        options.addOption("g", "gui", false, "starts a Desktop GUI --> deprecated !!! TODO ");
+        options.addOption("v", "validate", false, "parses xml input file for validation (without simulation)");
         options.addOption("i", "internal_xml", false,
                 "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
-        options.addOption("w", "write dtd", false, "Writes dtd file to filesystem.");
-        options.addOption(
-                "l",
-                "logproperties",
-                false,
-                "Writes log4f.properties to file. You can adjust the logging properties to your needs. Just place the file in calling directory of MovSim.");
-        options.addOption("s", "scenarios", false, "Writes example scenarios as xml for simulation to folder 'sim'.");
+        options.addOption("w", "write dtd", false, "writes dtd file to file");
+        options.addOption("l", "log", false, "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
+        options.addOption("s", "scenarios", false, "writes example scenarios as xml for simulation into the directory \"sim\".");
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
@@ -280,7 +276,8 @@ public class SimCommandLineImpl implements SimCommandLine {
         logger.debug("option -h. Exit Programm");
 
         final HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("App", options);
+        
+        formatter.printHelp("movsim", options);
 
         System.exit(0);
     }

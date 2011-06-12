@@ -69,17 +69,7 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
         
     }
     
-    // copy constructor
-    /**
-     * Instantiates a new newell.
-     * 
-     * @param newellToCopy
-     *            the newell to copy
-     */
-//    public Newell(Newell newellToCopy) {
-//        super(newellToCopy.modelName(), newellToCopy.getModelCategory());
-//        this.dt = newellToCopy.getRequiredUpdateTime();
-//    }
+   
 
     /*
      * (non-Javadoc)

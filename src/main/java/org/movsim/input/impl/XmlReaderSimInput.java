@@ -114,7 +114,7 @@ public class XmlReaderSimInput {
         if (cmdline.isWriteInternalXml()) {
             String outFilename = xmlFilename + ".internal_xml";
             writeInternalXmlToFile(doc, outFilename);
-            logger.info("internal xml output written to file. Exit.");
+            logger.info("internal xml output written to file {}. Exit.", outFilename);
             System.exit(0);
         }
 
