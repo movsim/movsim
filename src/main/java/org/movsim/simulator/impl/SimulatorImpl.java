@@ -225,8 +225,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, (InputDataImpl) inputData); //TODO why InputData impl?
 
         final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain
-                                                // models (see below)
+        this.timestep = simInput.getTimestep(); // can be modified by certain models
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());

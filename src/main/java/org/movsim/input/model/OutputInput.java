@@ -48,7 +48,7 @@ public interface OutputInput {
      * 
      * @return the macro input
      */
-    SpatioTemporalInput getMacroInput();
+    SpatioTemporalInput getSpatioTemporalInput();
 
     /**
      * Gets the trajectories input.

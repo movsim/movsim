@@ -102,9 +102,9 @@ public class SimOutput implements SimObservables {
             }
         }
 
-        final SpatioTemporalInput macroInput = outputInput.getMacroInput();
-        if (macroInput.isWithMacro()) {
-            spatioTemporal = new SpatioTemporalImpl(macroInput, roadSection);
+        final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
+        if (spatioTemporalInput.isWithMacro()) {
+            spatioTemporal = new SpatioTemporalImpl(spatioTemporalInput, roadSection);
             if(writeOutput){
                 fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSection.id(), spatioTemporal);
             }
