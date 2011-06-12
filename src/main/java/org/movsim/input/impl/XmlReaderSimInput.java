@@ -26,13 +26,13 @@
  */
 package org.movsim.input.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.management.MXBean;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -49,12 +49,14 @@ import org.movsim.input.model.impl.VehicleInputImpl;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -83,6 +85,8 @@ public class XmlReaderSimInput {
     private Document doc;
 
     private SimCommandLine cmdline;
+
+    private String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
 
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
@@ -170,8 +174,8 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXml() {
-        validate(getInputSourceFromFilename(xmlFilename));
-        doc = getDocument(getInputSourceFromFilename(xmlFilename));
+        validate(FileUtils.getInputSourceFromFilename(xmlFilename));
+        doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
 
     /**
@@ -185,16 +189,15 @@ public class XmlReaderSimInput {
         try {
             final SAXBuilder builder = new SAXBuilder();
             builder.setIgnoringElementContentWhitespace(true);
-            //TODO dtd from resources
-//            builder.setEntityResolver(new EntityResolver() {
-//                
-//                @Override
-//                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-//                    InputStream is = XmlReaderSimInput.class.getResourceAsStream("/sim/multiModelTrafficSimulatorInput.dtd");
-//                    InputSource input = new InputSource(is);
-//                    return input;
-//                }
-//            });
+            builder.setEntityResolver(new EntityResolver() {
+                
+                @Override
+                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+                    InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                    InputSource input = new InputSource(is);
+                    return input;
+                }
+            });
             final Document doc = builder.build(inputSource);
             return doc;
         } catch (final JDOMException e) {
@@ -222,15 +225,18 @@ public class XmlReaderSimInput {
             myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
             final DefaultHandler handler = new MyErrorHandler();
             myXMLReader.setErrorHandler(handler);
-//            myXMLReader.setEntityResolver(new EntityResolver() {
-//                
-//                @Override
-//                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-//                    InputStream is = XmlReaderSimInput.class.getResourceAsStream("/sim/multiModelTrafficSimulatorInput.dtd");
-//                    InputSource input = new InputSource(is);
-//                    return input;
-//                }
-//            });
+            
+            //overriding dtd source from xml file with internal dtd from jar
+            myXMLReader.setEntityResolver(new EntityResolver() {
+                
+                @Override
+                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+                    InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                    InputSource input = new InputSource(is);
+                    return input;
+                }
+            });
+            
             myXMLReader.parse(inputSource);
         } catch (final SAXException e) {
             isValid = false;
@@ -247,24 +253,6 @@ public class XmlReaderSimInput {
         }
     }
 
-    /**
-     * Gets the inputsource from filename.
-     * 
-     * @param filename
-     *            the filename
-     * @return the input
-     */
-    private InputSource getInputSourceFromFilename(String filename) {
-        final File inputFile = new File(filename);
-        InputSource inputSource = null;
-        try {
-            inputSource = new InputSource(new FileInputStream(inputFile));
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-        return inputSource;
-    }
 
     /**
      * The Inner Class MyErrorHandler.

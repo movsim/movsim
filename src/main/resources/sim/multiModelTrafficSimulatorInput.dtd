@@ -29,15 +29,19 @@
 <!-- general remarks: -->
 <!-- all parameter values are expected in SI units. Otherwise the attribute's name is indicating the unit explicitely -->
 
-<!ELEMENT SCENARIO (DRIVER_VEHICLE_UNITS, OUTPUT, SIMULATION) >
+<!ELEMENT SCENARIO (VEHICLES, SIMULATION) >
 
+<!-- todo Ralph for configuring output path -->
+<!ATTLIST SCENARIO
+  path  CDATA  "."
+>
 <!-- ##################################################################### -->
 <!-- Vehicle-Driver-Units / Models                                         -->
 <!-- ##################################################################### -->
 
-<!ELEMENT DRIVER_VEHICLE_UNITS (VEHICLE+) >
+<!ELEMENT VEHICLES (VEHICLE+) >
 
-<!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGING_MODEL, MEMORY?, NOISE?) >
+<!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGE_MODEL, NOISE?) >
 
 <!ATTLIST VEHICLE
   label           CDATA   #REQUIRED
@@ -47,29 +51,29 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM | ACC | OVM_VDIFF | GIPPS | NEWELL | NSM | KCA)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, NSM?, KCA?, MEMORY?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
 <!ATTLIST IDM 
   v0           NMTOKEN #REQUIRED
   s0           NMTOKEN #REQUIRED
-  s1           NMTOKEN #REQUIRED
+  s1           NMTOKEN "0"
   T            NMTOKEN #REQUIRED
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
-  delta        NMTOKEN #REQUIRED
+  delta        NMTOKEN "4"
 >
 
 <!ELEMENT ACC EMPTY>
 <!ATTLIST ACC
   v0           NMTOKEN #REQUIRED
   s0           NMTOKEN #REQUIRED
-  s1           NMTOKEN #REQUIRED
+  s1           NMTOKEN "0"
   T            NMTOKEN #REQUIRED
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
-  delta        NMTOKEN #REQUIRED
+  delta        NMTOKEN "4"
   coolness     NMTOKEN #REQUIRED
 >
 
@@ -104,7 +108,7 @@
 <!ELEMENT NSM EMPTY>
 <!ATTLIST NSM
 v0           NMTOKEN #REQUIRED
-p_troedel    NMTOKEN #REQUIRED
+p_slowdown   NMTOKEN #REQUIRED
 p_slow_start NMTOKEN #REQUIRED
 >
 
@@ -119,13 +123,6 @@ pa2     NMTOKEN #REQUIRED
 vp      NMTOKEN #REQUIRED
 >
 
-
-<!-- no lane changing implemented so far (single lane simulator) -->
-<!ELEMENT LANE_CHANGING_MODEL EMPTY>
-<!ATTLIST LANE_CHANGING_MODEL 
->
-
-
 <!-- Memory model, see paper for reference -->
 <!ELEMENT MEMORY EMPTY>
 <!ATTLIST MEMORY
@@ -134,6 +131,13 @@ alpha_T  NMTOKEN #REQUIRED
 alpha_v0 NMTOKEN #REQUIRED
 alpha_a  NMTOKEN "1"
 >
+
+
+<!-- no lane changing implemented so far (single lane simulator) -->
+<!ELEMENT LANE_CHANGE_MODEL EMPTY>
+<!ATTLIST LANE_CHANGE_MODEL 
+>
+
 
 <!-- Fluctuations:  -->
 <!-- Wiener process (tau!=0) or delta-correlated white noise as alternatives -->
@@ -145,16 +149,174 @@ tau              NMTOKEN "0"
 fluct_strength   NMTOKEN #REQUIRED 
 >
 
+
+<!-- ##################################################################### -->
+<!-- Infrastructure and Simulation settings                                -->
+<!-- ##################################################################### -->
+
+<!ELEMENT SIMULATION (ROAD*, OUTPUT)>
+<!ATTLIST SIMULATION
+  dt               NMTOKEN #REQUIRED
+  duration            NMTOKEN #REQUIRED
+  fixed_seed  (true|false)  "true" 
+  seed             NMTOKEN "42"
+> 
+
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
+
+<!ATTLIST ROAD
+  id               NMTOKEN #REQUIRED
+  length           NMTOKEN #REQUIRED
+  lanes            NMTOKEN "1"
+> 
+
+
+<!ELEMENT TRAFFIC_COMPOSITION (VEHICLE_TYPE+)>
+<!ATTLIST TRAFFIC_COMPOSITION
+  write_fund_diagrams  (false|true) "false"
+>
+
+<!ELEMENT VEHICLE_TYPE EMPTY >
+<!ATTLIST VEHICLE_TYPE
+  label     CDATA    #REQUIRED
+  fraction  NMTOKEN  #REQUIRED
+>
+
+<!-- initial conditions (IC) -->
+
+<!ELEMENT INITIAL_CONDITIONS (IC_MACRO*, IC_MICRO*)>
+<!ATTLIST INITIAL_CONDITIONS 
+> 
+
+<!ELEMENT IC_MACRO EMPTY>
+<!ATTLIST IC_MACRO
+  x          NMTOKEN #REQUIRED
+  rho_per_km NMTOKEN #REQUIRED
+  v          NMTOKEN "0"
+> 
+
+<!-- most right lane is =1, increment for further lanes  -->
+<!ELEMENT IC_MICRO EMPTY>
+<!ATTLIST IC_MICRO
+  x       NMTOKEN #REQUIRED
+  v       NMTOKEN #REQUIRED
+  lane    NMTOKEN "1"
+  label   CDATA ""
+> 
+
+<!-- upstream boundary conditions -->
+<!ELEMENT TRAFFIC_SOURCE (INFLOW*)>
+<!ATTLIST TRAFFIC_SOURCE
+logging  (true|false)  "false" 
+>          
+
+<!-- downstream boundary conditions (not yet implemented) -->
+<!ELEMENT TRAFFIC_SINK EMPTY>
+<!ATTLIST TRAFFIC_SINK
+logging  (true|false) "false" 
+>          
+
+
+<!ELEMENT INFLOW EMPTY>
+<!ATTLIST INFLOW
+  t           NMTOKEN #REQUIRED
+  q_per_hour  NMTOKEN #REQUIRED
+  v           NMTOKEN "100"
+> 
+
+<!-- Flow-conserving inhomogeneities -->
+<!ELEMENT FLOW_CONSERVING_INHOMOGENEITIES (INHOMOGENEITY*)>
+<!ATTLIST FLOW_CONSERVING_INHOMOGENEITIES
+> 
+
+<!ELEMENT INHOMOGENEITY EMPTY>
+<!ATTLIST INHOMOGENEITY
+x         NMTOKEN #REQUIRED
+alpha_T   NMTOKEN "1"
+alpha_v0  NMTOKEN "1"
+> 
+
+
+<!-- speed limits -->
+<!ELEMENT SPEED_LIMITS (SPEED_LIMIT*)>
+<!ATTLIST SPEED_LIMITS
+> 
+
+<!ELEMENT SPEED_LIMIT EMPTY>
+<!ATTLIST SPEED_LIMIT
+x         NMTOKEN #REQUIRED
+speedlimit_kmh NMTOKEN #REQUIRED
+> 
+
+  
+<!-- ramps (onramps only) -->
+<!ELEMENT RAMPS (SIMPLE_RAMP*, RAMP*)>
+<!ATTLIST RAMPS
+> 
+
+<!ELEMENT SIMPLE_RAMP (INFLOW*)>
+<!ATTLIST SIMPLE_RAMP
+x       NMTOKEN #REQUIRED
+length         NMTOKEN "1000"
+logging  (true|false)  "false" 
+> 
+
+
+<!-- real physical ramp with merging area (length) and total length of x_max --> 
+<!ELEMENT RAMP (INFLOW*)>
+<!ATTLIST RAMP
+x       NMTOKEN #REQUIRED
+length         NMTOKEN "300"
+x_max          NMTOKEN "1000"
+logging  (true|false)  "false" 
+> 
+  
+<!-- traffic lights -->
+  
+<!ELEMENT TRAFFIC_LIGHTS (TRAFFIC_LIGHT*)>
+<!ATTLIST TRAFFIC_LIGHTS
+  n_dt  NMTOKEN "1"
+  logging  (true|false)  "false" 
+>  
+
+  
+<!ELEMENT TRAFFIC_LIGHT EMPTY>
+<!ATTLIST TRAFFIC_LIGHT
+x                NMTOKEN #REQUIRED
+green_time       NMTOKEN #REQUIRED
+green_red_time   NMTOKEN #REQUIRED
+red_time         NMTOKEN #REQUIRED
+red_green_time   NMTOKEN #REQUIRED
+phase_shift      NMTOKEN "0"
+> 
+
+
+<!-- detectors can be placed with absolute and/or relative positions -->
+<!ELEMENT DETECTORS  (CROSS_SECTION*) >
+<!-- 1 min as default aggregation interval -->
+<!ATTLIST DETECTORS
+  dt  NMTOKEN "60" 
+  logging  (true|false)  "false" 
+>
+
+<!ELEMENT CROSS_SECTION EMPTY>
+<!ATTLIST CROSS_SECTION 
+  x  NMTOKEN #REQUIRED 
+>
+
+
 <!-- ##################################################################### -->
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (MACRO?, FLOATING_CAR_DATA?, DETECTORS?, TRAFFICLIGHT_RECORDER?) >
+<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?) >
 
+<!ATTLIST OUTPUT
+>
 
 <!-- output of spatio-temporal fields -->
-<!ELEMENT MACRO EMPTY>
-<!ATTLIST MACRO
+<!ELEMENT SPATIOTEMPORAL EMPTY>
+<!ATTLIST SPATIOTEMPORAL
   dt NMTOKEN "60"
   dx NMTOKEN "100"
 >
@@ -172,145 +334,15 @@ dn        NMTOKEN "0"
 number  NMTOKEN #REQUIRED
 >
 
-
-<!-- detectors can be placed with absolute and/or relative positions -->
-<!ELEMENT DETECTORS  (CROSS_SECTION+) >
-<!-- 1 min as default aggregation interval -->
-<!ATTLIST DETECTORS
-  dt  NMTOKEN "60" 
+<!-- <TRAJECTORIES dt_s="1" t_start_min="0" t_end_min="7" />  -->
+<!ELEMENT TRAJECTORIES EMPTY>
+<!ATTLIST TRAJECTORIES
+  dt           NMTOKEN "1"
+  start_time   NMTOKEN "0"
+  end_time     NMTOKEN "1e10"
+  start_x      NMTOKEN "0"
+  end_x        NMTOKEN "1e10"
 >
-
-<!ELEMENT CROSS_SECTION EMPTY>
-<!ATTLIST CROSS_SECTION 
-  x  NMTOKEN #REQUIRED 
->
-
-
-
-<!-- write time series of all traffic lights in one file  -->
-<!ELEMENT TRAFFICLIGHT_RECORDER EMPTY>
-<!ATTLIST TRAFFICLIGHT_RECORDER
-  n_dt  NMTOKEN "1"
->
-
-<!-- ##################################################################### -->
-<!-- Infrastructure and Simulation settings                                -->
-<!-- ##################################################################### -->
-
-<!ELEMENT SIMULATION (HETEROGENEITY, INITIAL_CONDITIONS, UPSTREAM_BOUNDARY_CONDITIONS, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFICLIGHTS)>
-<!ATTLIST SIMULATION
-  dt               NMTOKEN #REQUIRED
-  x_max            NMTOKEN #REQUIRED
-  t_max            NMTOKEN #REQUIRED
-  lanes            NMTOKEN "1"
-  with_fixed_seed  (true|false)  "true" 
-  seed             NMTOKEN "42"
-> 
-
-<!ELEMENT HETEROGENEITY (VEHICLE_TYPE+)>
-<!ATTLIST HETEROGENEITY
-  write_fund_diagrams  (false|true) "false"
->
-
-<!ELEMENT VEHICLE_TYPE EMPTY >
-<!ATTLIST VEHICLE_TYPE
-  label     CDATA    #REQUIRED
-  fraction  NMTOKEN  #REQUIRED
->
-
-<!-- initial conditions -->
-
-<!ELEMENT INITIAL_CONDITIONS (IC_MACRO*, IC_MICRO*)>
-<!ATTLIST INITIAL_CONDITIONS 
-> 
-
-<!ELEMENT IC_MACRO EMPTY>
-<!ATTLIST IC_MACRO
-  x         NMTOKEN #REQUIRED
-  rho_invkm NMTOKEN #REQUIRED
-  v         NMTOKEN "0"
-> 
-
-<!-- most right lane is =1, increment for further lanes  -->
-<!ELEMENT IC_MICRO EMPTY>
-<!ATTLIST IC_MICRO
-  x       NMTOKEN #REQUIRED
-  v       NMTOKEN #REQUIRED
-  lane    NMTOKEN "1"
-  label   CDATA ""
-> 
-
-<!-- boundary conditions -->
-<!ELEMENT UPSTREAM_BOUNDARY_CONDITIONS (INFLOW*)>
-<!ATTLIST UPSTREAM_BOUNDARY_CONDITIONS
-with_logging  (true|false)  "false" 
->          
-
-<!ELEMENT INFLOW EMPTY>
-<!ATTLIST INFLOW
-  t       NMTOKEN #REQUIRED
-  q_invh  NMTOKEN #REQUIRED
-  v       NMTOKEN "100"
-> 
-
-
-
-<!-- Flow-conserving inhomogeneities -->
-<!ELEMENT FLOW_CONSERVING_INHOMOGENEITIES (INHOMOGENEITY*)>
-<!ATTLIST FLOW_CONSERVING_INHOMOGENEITIES
-> 
-
-<!ELEMENT INHOMOGENEITY EMPTY>
-<!ATTLIST INHOMOGENEITY
-x         NMTOKEN #REQUIRED
-alpha_T   NMTOKEN "1"
-alpha_v0  NMTOKEN "1"
-> 
-
-
-<!-- speed limits -->
-<!ELEMENT SPEED_LIMITS (LIMIT*)>
-<!ATTLIST SPEED_LIMITS
-> 
-
-<!ELEMENT LIMIT EMPTY>
-<!ATTLIST LIMIT
-x_init         NMTOKEN #REQUIRED
-speedlimit_kmh NMTOKEN #REQUIRED
-> 
-
-  
-<!-- ramps (onramps only) -->
-<!ELEMENT RAMPS (RAMP*)>
-<!ATTLIST RAMPS
-> 
-
-<!ELEMENT RAMP (INFLOW*)>
-<!ATTLIST RAMP
-x_center       NMTOKEN #REQUIRED
-length         NMTOKEN "1000"
-with_logging  (true|false)  "false" 
-> 
-  
-<!-- traffic lights -->
-  
-<!ELEMENT TRAFFICLIGHTS (TRAFFICLIGHT*)>
-<!ATTLIST TRAFFICLIGHTS
-> 
-  
-<!ELEMENT TRAFFICLIGHT EMPTY>
-<!ATTLIST TRAFFICLIGHT
-x                NMTOKEN #REQUIRED
-green_time       NMTOKEN #REQUIRED
-green_red_time   NMTOKEN #REQUIRED
-red_time         NMTOKEN #REQUIRED
-red_green_time   NMTOKEN #REQUIRED
-phase_shift      NMTOKEN "0"
-> 
-
-  
-  
-             
 
 
 

@@ -29,6 +29,7 @@ package org.movsim.utilities.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -43,6 +44,7 @@ import java.util.regex.Pattern;
 import org.movsim.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -163,14 +165,15 @@ public class FileUtils {
     public static boolean dirExists(String path, String msg) {
         final File file = new File(path);
         if (file.exists() && file.isDirectory()) {
-            logger.info("{}: {} exists!", msg, file.getName() );
+            logger.info("{}: {} exists!", msg, file.getName());
             return (true);
         }
         return (false);
     }
 
     /**
-     * Creates the directory, if it does not exit already. Elsewise, does nothing.
+     * Creates the directory, if it does not exit already. Elsewise, does
+     * nothing.
      * 
      * @param path
      *            the path
@@ -349,7 +352,7 @@ public class FileUtils {
     public static void resourceToFile(String res, String filename) {
         try {
             InputStream resourceAsStream = App.class.getResourceAsStream(res);
-            
+
             if (resourceAsStream == null) {
                 logger.debug("resource {} not included!", res);
                 return;
@@ -372,4 +375,22 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Gets the inputsource from filename.
+     * 
+     * @param filename
+     *            the filename
+     * @return the input
+     */
+    public static InputSource getInputSourceFromFilename(String filename) {
+        final File inputFile = new File(filename);
+        InputSource inputSource = null;
+        try {
+            inputSource = new InputSource(new FileInputStream(inputFile));
+        } catch (final FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        return inputSource;
+    }
 }

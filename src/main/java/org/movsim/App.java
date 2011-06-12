@@ -40,7 +40,6 @@ import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
 import org.movsim.ui.controller.impl.SimulatorController;
 import org.movsim.ui.controller.impl.SimulatorGUIController;
-import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +99,9 @@ public class App {
             Controller controller = new SimulatorGUIController(simulator);
         } else {
             // commandline tool
-            Controller controller = new SimulatorController(simulator); // or just: simulator.run();
+            Controller controller = new SimulatorController(simulator); // or
+                                                                        // just:
+                                                                        // simulator.run();
         }
 
     }
@@ -112,9 +113,10 @@ public class App {
         Locale.setDefault(Locale.US);
 
         // BasicConfigurator for log4j replaced with PropertyConfigurator.
-        // log4j.properties from file system overrides log4j.properties from resources
-            final File file = new File("log4j.properties");
-            if (file.exists() && file.isFile()) {
+        // log4j.properties from file system overrides log4j.properties from
+        // resources
+        final File file = new File("log4j.properties");
+        if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
         } else {
             URL log4jConfig = App.class.getResource("/sim/log4j.properties");
