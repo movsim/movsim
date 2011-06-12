@@ -183,26 +183,19 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             return true;
         }
         // (2) check if gap to leader is sufficiently large
-        final double netGapToLeader = leader.getPosition() - leader.length(); // origin
-                                                                           // of
-                                                                           // road
-                                                                           // section
-                                                                           // is
-                                                                           // assumed
-                                                                           // to
-                                                                           // be
-                                                                           // zero
+        // origin of  road section is assumed to be zero
+        final double netGapToLeader = leader.getPosition() - leader.length(); 
         double gapAtQMax = 1. / vehPrototype.getRhoQMax();
         if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
             final double tau = 1;
             gapAtQMax = leader.getSpeed() * tau;
         }
-
-        final double minRequiredGap = 0.8 * gapAtQMax; // minimal distance set
-                                                       // to 80 % of 1/rho at
-                                                       // flow maximum in
-                                                       // fundamental
-                                                       // diagram
+        // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
+        double minRequiredGap = 0.8 * gapAtQMax;
+        if (vehPrototype.getLongModel().isCA()){
+            final double tau=1;
+            minRequiredGap = leader.getSpeed()*tau;
+        }
         if (netGapToLeader > minRequiredGap) {
             enterVehicle(time, minRequiredGap, vehPrototype, leader);
             return true;

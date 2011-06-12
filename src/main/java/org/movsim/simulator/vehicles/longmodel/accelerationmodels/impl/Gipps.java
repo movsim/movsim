@@ -143,26 +143,11 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         return acc(s, v, dv, v0, T);
     }
 
-    /**
-     * Acc.
-     * 
-     * @param s
-     *            the s
-     * @param v
-     *            the v
-     * @param dv
-     *            the dv
-     * @param v0Loc
-     *            the v0 loc
-     * @param aLoc
-     *            the a loc
-     * @return the double
-     */
-    public double acc(double s, double v, double dv, double v0Loc, double aLoc) {
+    public double acc(double s, double v, double dv, double v0Loc, double TLoc) {
         final double vp = v - dv;
-        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.)); // safe
-                                                                                                         // velocity
-        final double vNew = Math.min(vSafe, Math.min(v + aLoc * T, v0Loc));
+        // safe speed 
+        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.)); 
+        final double vNew = Math.min(vSafe, Math.min(v + a * TLoc, v0Loc));
         final double aWanted = (vNew - v) / T;
         return aWanted;
     }
@@ -178,13 +163,6 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
-        // // Local dynamical variables
-        // double s = cyclicBuf->get_s(iveh); //cyclicBuf->get_x(iveh-1) -
-        // cyclicBuf->get_l(iveh-1) - cyclicBuf->get_x(iveh);
-        // //xveh[iveh-1]-length[iveh-1]-xveh[iveh];
-        // double v= cyclicBuf->get_v(iveh); //vveh[iveh];
-        // double dv= v - cyclicBuf->get_v(iveh-1); //vveh[iveh];
-
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
@@ -192,11 +170,15 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
 
         // space dependencies modeled by speedlimits, alpha's
-        // TODO check
-        // final double Tloc = alphaT*T;
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit()); // consider
-                                                                      // external
-                                                                      // speedlimit
+   
+        // consider external speedlimit
+        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit()); 
+   
+        //#############################################################
+        // space dependencies modelled by alpha_T
+        // (!!! watch for alpha_T: dt unchanged, possibly inconsistent!)
+        //#############################################################
+
         final double TLocal = alphaT * T;
 
         // actual Gipps formula

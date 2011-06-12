@@ -49,7 +49,7 @@ public class FileFloatingCars implements ObserverInTime{
         "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s], distToTrafficlight[m]";
                                                                                                                  
     // note: number before decimal point is total width of field, not width of integer part
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.3f, %10.3f, %10.5f, %10.1f%n";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.3f, %10.3f, %10.5f, %10.2f%n";
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
@@ -87,7 +87,6 @@ public class FileFloatingCars implements ObserverInTime{
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
         
-
         final String regex = projectName + "[.]V\\d+" + endingFile;
         FileUtils.deleteFileList(path, regex);
 

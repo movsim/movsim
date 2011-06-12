@@ -20,7 +20,6 @@
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="8600" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>
-            <!-- auch noch qCap notwendig ?? -->
             <TRAFFIC_SOURCE logging="true">
                 <INFLOW t="0" q_per_hour="200" v="30" />
                 <INFLOW t="1500" q_per_hour="2200" v="22" />

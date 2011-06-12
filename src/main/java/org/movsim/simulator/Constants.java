@@ -66,7 +66,10 @@ public interface Constants {
     /** The MODE l_ nam e_ kca. */
     final String MODEL_NAME_KCA = "KCA";
 
-    /** The GA p_ infinity. */
+    /** The gap infinity. */
     final double GAP_INFINITY = 10000;
+
+    /** The invalid gap */
+    final double INVALID_GAP = -1;
 
 }

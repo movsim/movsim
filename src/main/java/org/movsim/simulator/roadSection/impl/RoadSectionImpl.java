@@ -331,17 +331,18 @@ public class RoadSectionImpl implements RoadSection {
             if (netDistance < 0) {
                 logger.error("#########################################################");
                 logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
-                logger.error("  with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
+                if(vehFront!=null){
+                    logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
+                }
                 logger.error("net distance  = {}", netDistance);
                 logger.error("container.size = {}", vehicles.size());
                 final StringBuilder msg = new StringBuilder("\n");
                 for (int j = Math.max(0, i - 8), M = vehicles.size(); j <= Math.min(i + 8, M - 1); j++) {
                     final Moveable veh = vehicles.get(j);
                     msg.append(String
-                            .format("veh j = %d , pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%3.1f, targetLane=%1d, id=%d%n",
-                                    j, veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(),
-                                    veh.getLane(), veh.id()));
-                } // of for
+                            .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n",
+                                    j, veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(), veh.id()));
+                } 
                 logger.error(msg.toString());
                 if (!isWithGUI) {
                     logger.error(" !!! exit after crash !!! ");
@@ -401,6 +402,10 @@ public class RoadSectionImpl implements RoadSection {
         
         trafficLights.update(iTime, time, vehContainer.getVehicles());
         
+        updateSpeedLimits(vehContainer.getVehicles());
+    }
+
+    private void updateSpeedLimits(List<Vehicle> vehicles) {
         if (!speedlimits.isEmpty()) {
             for (final Vehicle veh : vehContainer.getVehicles()) {
                 final double pos = veh.getPosition();
