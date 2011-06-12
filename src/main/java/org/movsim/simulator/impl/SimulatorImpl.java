@@ -83,8 +83,7 @@ public class SimulatorImpl implements Simulator, Runnable {
      * @param instantaneousFileOutput
      *            Gives instantaneous file output of simulation results.
      * @param cmdline
-     * @param inputData
-     *            the input data
+     *            cmdline parser
      */
     public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
         this.instantaneousFileOutput = instantaneousFileOutput;
