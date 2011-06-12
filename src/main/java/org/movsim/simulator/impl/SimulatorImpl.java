@@ -26,15 +26,8 @@
  */
 package org.movsim.simulator.impl;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Locale;
-
-import org.apache.log4j.PropertyConfigurator;
-import org.movsim.App;
 import org.movsim.input.InputData;
 import org.movsim.input.commandline.SimCommandLine;
-import org.movsim.input.commandline.impl.SimCommandLineImpl;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;

@@ -40,8 +40,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.input.commandline.SimCommandLine;
 import org.movsim.utilities.impl.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class SimCommandLineImpl. MovSim console command line parser.
