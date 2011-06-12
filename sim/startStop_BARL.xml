@@ -7,7 +7,7 @@
         <VEHICLE label="BARL1" length="1">
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
-                <!-- BARL variant : p0 != p possible -->
+                 <!-- BARL variant : p_slow_start != p_slowdown -->
                 <NSM v0="2" p_slowdown="0.1" p_slow_start="0.2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />

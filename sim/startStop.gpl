@@ -146,7 +146,7 @@ set size 1,0.75
 set key right
 
 
-########  Distance (separation) Plot  ####################
+########  Distance (separation) Plot with real traffic light ##########
 
 set ylabel distanceLabel
 set yrange [0:35]
@@ -157,12 +157,22 @@ set ytics 10
 # car 1: Entfernung zur Ampel !
 # car 1 is lead car, so take distance to traffic light (col 8), rather than distance to car in front
 set out distanceOutput
-plot\
+
+if(c0 = 0) plot\
   carFile(1)  using 1:(xscale*$9) title car(1)  with lines linestyle 1,\
   carFile(5)  using 1:(xscale*$7) title car(5)  with lines linestyle 2,\
   carFile(10) using 1:(xscale*$7) title car(10) with lines linestyle 3,\
   carFile(15) using 1:(xscale*$7) title car(15) with lines linestyle 4,\
   carFile(20) using 1:(xscale*$7) title car(20) with lines linestyle 5
+
+
+if(c0 = 1) plot\
+  carFile(1)  using 1:(xscale*$7) title car(1)  with lines linestyle 1,\
+  carFile(5)  using 1:(xscale*$7) title car(5)  with lines linestyle 2,\
+  carFile(10) using 1:(xscale*$7) title car(10) with lines linestyle 3,\
+  carFile(15) using 1:(xscale*$7) title car(15) with lines linestyle 4,\
+  carFile(20) using 1:(xscale*$7) title car(20) with lines linestyle 5
+
 
 if (compare eq "true")\
   set out compareDistanceOutput;\

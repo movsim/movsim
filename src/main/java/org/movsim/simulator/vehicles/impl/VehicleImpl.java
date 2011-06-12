@@ -438,6 +438,7 @@ public class VehicleImpl implements Vehicle{
         if (longModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             position = (int) (position + dt * speed + 0.5);
+            
         } else {
             // continuous micro models and iterated maps
             if (speed < 0) {
