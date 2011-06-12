@@ -26,7 +26,17 @@
  */
 package org.movsim.simulator.impl;
 
+import java.io.File;
+import java.net.URL;
+import java.util.Locale;
+
+import org.apache.log4j.PropertyConfigurator;
+import org.movsim.App;
 import org.movsim.input.InputData;
+import org.movsim.input.commandline.SimCommandLine;
+import org.movsim.input.commandline.impl.SimCommandLineImpl;
+import org.movsim.input.impl.InputDataImpl;
+import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
@@ -56,7 +66,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     private double timestep;
 
     /** The duration of the simulation. */
-    private final double tMax;
+    private double tMax;
 
     /** The road section. */
     private RoadSection roadSection;
@@ -68,29 +78,27 @@ public class SimulatorImpl implements Simulator, Runnable {
     private final boolean isWithGUI;
 
     /** The sim input. */
-    private InputData simInput; // dynamisch, kann von GUI veraendert
-                                // werden
+    private InputData inputData;
+    
+    private String xmlFileName;
 
+    private SimCommandLine cmdline;
 
     /**
      * Instantiates a new simulator impl.
      * 
      * @param isWithGUI
      *            the is with gui
+     * @param cmdline
      * @param inputData
      *            the input data
      */
-    public SimulatorImpl(boolean isWithGUI, InputData inputData) {
+    public SimulatorImpl(boolean isWithGUI, SimCommandLine cmdline) {
         this.isWithGUI = isWithGUI;
-        this.simInput = inputData;
-        final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain
-                                                // models (see below)
-        this.tMax = simInput.getMaxSimTime();
-
-        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-
-        restart();
+        this.cmdline = cmdline;
+        
+        xmlFileName = cmdline.getSimulationFilename();
+        this.inputData = new InputDataImpl();
     }
 
     /**
@@ -99,7 +107,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void restart() {
         time = 0;
         itime = 0;
-        roadSection = new RoadSectionImpl(isWithGUI, simInput);
+        roadSection = new RoadSectionImpl(isWithGUI, inputData);
 
         // model requires specific update time depending on its category !!
 
@@ -109,7 +117,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(isWithGUI, simInput, roadSection);
+        simOutput = new SimOutput(isWithGUI, inputData, roadSection);
     }
 
     /*
@@ -194,15 +202,43 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public InputData getSimInput() {
-        return simInput;
+        return inputData;
     }
-
-  
 
     @Override
     public SimObservables getSimObservables() {
         return simOutput;
     }
 
+    public String getXmlFileName() {
+        return xmlFileName;
+    }
+
+    public void setXmlFileName(String xmlFileName) {
+        this.xmlFileName = xmlFileName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#initialize()
+     */
+    @Override
+    public void initialize() {
+
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011)");
+
+        // parse xmlFile and set values
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, (InputDataImpl) inputData); //TODO why InputData impl?
+
+        final SimulationInput simInput = inputData.getSimulationInput();
+        this.timestep = simInput.getTimestep(); // can be modified by certain
+                                                // models (see below)
+        this.tMax = simInput.getMaxSimTime();
+
+        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
+
+        restart();
+    }
 
 }

@@ -72,5 +72,10 @@ public interface Simulator {
     
     SimObservables getSimObservables();
 
+    void initialize();
+    
+    void setXmlFileName(String xmlFileName);
+    String getXmlFileName();
+
 
 }

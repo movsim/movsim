@@ -33,13 +33,6 @@ package org.movsim.input.commandline;
 public interface SimCommandLine {
 
     /**
-     * Checks if simulation scenario is passed in as an xml-file.
-     * 
-     * @return true, if is with simulation configuration
-     */
-    boolean isWithXmlSimulationConfigFile();
-
-    /**
      * Gets the simulation filename.
      * 
      * @return the simulation filename
@@ -52,16 +45,18 @@ public interface SimCommandLine {
      * @return true, if is gui
      */
     boolean isGui();
-    
+
     /**
-     * Checks if application is run only to validate xml input file without simulation.
+     * Checks if application is run only to validate xml input file without
+     * simulation.
      * 
      * @return true, if is only validation
      */
     boolean isOnlyValidation();
 
     /**
-     * Checks if application is run to write internal Xml after validation without simulation.
+     * Checks if application is run to write internal Xml after validation
+     * without simulation.
      * 
      * @return true, if is write internal Xml
      */

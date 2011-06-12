@@ -90,6 +90,7 @@ public class XmlReaderSimInput {
 
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
+     * @param xmlFileName 
      * 
      * @param xmlFilename
      *            the xml filename
@@ -97,10 +98,11 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(String xmlFilename, SimCommandLine cmdline, InputDataImpl inputData) {
-        this.xmlFilename = xmlFilename;
+    public XmlReaderSimInput(String xmlFileName, SimCommandLine cmdline, InputDataImpl inputData) {
         this.cmdline = cmdline;
         this.inputData = inputData;
+
+        this.xmlFilename = xmlFileName;
 
         if (!FileUtils.fileExists(xmlFilename)) {
             logger.error("XML File does not exist. Exit Simulation.");

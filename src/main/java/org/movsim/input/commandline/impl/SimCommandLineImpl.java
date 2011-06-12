@@ -48,17 +48,14 @@ import org.slf4j.LoggerFactory;
  */
 public class SimCommandLineImpl implements SimCommandLine {
 
-    /** The logger. */
-    private static Logger logger = LoggerFactory.getLogger(SimCommandLineImpl.class);
+    /** The Constant xmlDefault. */
+    final static String xmlDefault = "sim/onramp_IDM.xml";
 
     /** The options. */
     private Options options;
 
     /** The simulation filename. */
     private String simulationFilename;
-
-    /** The with simulation. */
-    private boolean withXmlSimulationConfigFile = false;
 
     /** The gui. */
     private boolean gui = false;
@@ -79,13 +76,9 @@ public class SimCommandLineImpl implements SimCommandLine {
      *            the args
      */
     public SimCommandLineImpl(String[] args) {
-        
-        logger.debug("Begin CommandLine Parser");
 
         createOptions();
         createParserAndParse(args);
-
-        logger.debug("End CommandLine Parser");
     }
 
     /**
@@ -100,8 +93,10 @@ public class SimCommandLineImpl implements SimCommandLine {
         options.addOption("i", "internal_xml", false,
                 "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
         options.addOption("w", "write dtd", false, "writes dtd file to file");
-        options.addOption("l", "log", false, "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
-        options.addOption("s", "scenarios", false, "writes example scenarios as xml for simulation into the directory \"sim\".");
+        options.addOption("l", "log", false,
+                "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
+        options.addOption("s", "scenarios", false,
+                "writes example scenarios as xml for simulation into the directory \"sim\".");
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
@@ -124,7 +119,6 @@ public class SimCommandLineImpl implements SimCommandLine {
             parse(cmdline);
         } catch (final ParseException exp) {
             // something went wrong
-            logger.error("Parsing failed.  Reason: {}", exp.getMessage());
             System.out.printf("Parsing failed.  Reason: %s %n", exp.getMessage());
             optHelp();
         }
@@ -139,9 +133,6 @@ public class SimCommandLineImpl implements SimCommandLine {
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
             optHelp();
-        }
-        if (cmdline.hasOption("f")) {
-            optSimulation(cmdline);
         }
         if (cmdline.hasOption("g")) {
             optGUI();
@@ -161,6 +152,8 @@ public class SimCommandLineImpl implements SimCommandLine {
         if (cmdline.hasOption("s")) {
             optWriteScenarios();
         }
+
+        optSimulation(cmdline);
     }
 
     /**
@@ -170,19 +163,20 @@ public class SimCommandLineImpl implements SimCommandLine {
      */
     private void optWriteScenarios() {
         try {
-        InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(isr);
-        System.out.println("Writing scenarios to folder 'sim'");
-        System.out.println("Overrides existing filenames. Do you want to proceed? <y/n>");
-        String proceed = br.readLine();;
-        if (!(proceed.equals("yes")|| (proceed.equals("y")))) {
-            System.out.println("Exit. Nothing written.");
-            System.exit(0);
-        }
+            InputStreamReader isr = new InputStreamReader(System.in);
+            BufferedReader br = new BufferedReader(isr);
+            System.out.println("Writing scenarios to folder 'sim'");
+            System.out.println("Overrides existing filenames. Do you want to proceed? <y/n>");
+            String proceed = br.readLine();
+            ;
+            if (!(proceed.equals("yes") || (proceed.equals("y")))) {
+                System.out.println("Exit. Nothing written.");
+                System.exit(0);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         // TODO loop properly, not hard coded
         FileUtils.createDir("sim", "");
 
@@ -201,16 +195,16 @@ public class SimCommandLineImpl implements SimCommandLine {
         // } catch (IOException e) {
         // e.printStackTrace();
         // }
-        
+
         // TODO loop properly
-        String[] models = { "IDM", "IIDM", "IDMM", "ACC", "OVM", "VDIFF", "BARL", "GIPPS", "KCA", "NSM"};
+        String[] models = { "IDM", "IIDM", "IDMM", "ACC", "OVM", "VDIFF", "BARL", "GIPPS", "KCA", "NSM" };
         String[] scenario = { "onramp", "startStop" };
         for (String sce : scenario) {
             for (String model : models) {
-                FileUtils.resourceToFile("/sim/" + sce  + "_" + model + ".xml", "sim/"+ sce  + "_" + model + ".xml");
+                FileUtils.resourceToFile("/sim/" + sce + "_" + model + ".xml", "sim/" + sce + "_" + model + ".xml");
             }
         }
-        logger.info("Example scenarios written to folder 'sim'. Exit.");
+        System.out.println("Example scenarios written to folder \"sim\". Exit.");
         System.exit(0);
     }
 
@@ -262,9 +256,10 @@ public class SimCommandLineImpl implements SimCommandLine {
     private void optSimulation(CommandLine cmdline) {
         simulationFilename = cmdline.getOptionValue('f');
         if (simulationFilename == null) {
-            logger.warn("No configfile as option passed. Start Simulation with default.");
+            System.out.println("No configfile as option passed. Start Simulation with default.");
+            simulationFilename = xmlDefault;
         } else {
-            withXmlSimulationConfigFile = validateSimulationFileName(simulationFilename);
+            validateSimulationFileName(simulationFilename);
         }
 
     }
@@ -273,10 +268,10 @@ public class SimCommandLineImpl implements SimCommandLine {
      * Option help.
      */
     private void optHelp() {
-        logger.debug("option -h. Exit Programm");
+        System.out.println("option -h. Exit Programm");
 
         final HelpFormatter formatter = new HelpFormatter();
-        
+
         formatter.printHelp("movsim", options);
 
         System.exit(0);
@@ -292,22 +287,12 @@ public class SimCommandLineImpl implements SimCommandLine {
     private boolean validateSimulationFileName(String filename) {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
-            logger.error("Please provide simulation file with ending \".xml\" as argument with option -s, exit. ");
+            System.out
+                    .println("Please provide simulation file with ending \".xml\" as argument with option -s, exit. ");
             System.exit(1);
         }
-        logger.info("projectName = " + filename.substring(0, i));
         return true;
 
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.commandline.SimCommandLine#isWithSimulation()
-     */
-    @Override
-    public boolean isWithXmlSimulationConfigFile() {
-        return withXmlSimulationConfigFile;
     }
 
     /*
