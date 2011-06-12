@@ -103,7 +103,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(boolean isWithGUI, InputData simInput) {
+    public VehicleGeneratorImpl(boolean instantaneousFileOutput, InputData simInput) {
 
         this.projectName = simInput.getProjectName();
 
@@ -115,7 +115,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         normalizeFractions(sumFraction);
 
         // output fundamental diagrams
-        if (!isWithGUI && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
+        if (instantaneousFileOutput && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
             FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
         }
 

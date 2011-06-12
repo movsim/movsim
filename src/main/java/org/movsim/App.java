@@ -50,7 +50,7 @@ public class App {
         // CommandLine args options Parser
         final SimCommandLine cmdline = new SimCommandLineImpl(args);
 
-        final Simulator simulator = new SimulatorImpl(false, cmdline);
+        final Simulator simulator = new SimulatorImpl(true, cmdline);
 
         final Controller controller = new SimulatorController(simulator);
     }

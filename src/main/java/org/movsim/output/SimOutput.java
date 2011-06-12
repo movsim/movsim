@@ -83,12 +83,12 @@ public class SimOutput implements SimObservables {
      * @param roadSection
      *            the road section
      */
-    public SimOutput(boolean isWithGUI, InputData simInput, RoadSection roadSection) {
+    public SimOutput(boolean instantaneousFileOutput, InputData simInput, RoadSection roadSection) {
         projectName = simInput.getProjectName();
         this.roadSection = roadSection;
         
         // more restrictive than in other output classes TODO
-        writeOutput = !isWithGUI; // no file output from GUI
+        writeOutput = instantaneousFileOutput; // no file output from GUI
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
         

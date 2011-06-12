@@ -68,7 +68,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     private SimOutput simOutput;
 
     /** The is with gui. */
-    private final boolean isWithGUI;
+    private final boolean instantaneousFileOutput;
 
     /** The sim input. */
     private InputData inputData;
@@ -80,14 +80,14 @@ public class SimulatorImpl implements Simulator, Runnable {
     /**
      * Instantiates a new simulator impl.
      * 
-     * @param isWithGUI
-     *            the is with gui
+     * @param instantaneousFileOutput
+     *            Gives instantaneous file output of simulation results.
      * @param cmdline
      * @param inputData
      *            the input data
      */
-    public SimulatorImpl(boolean isWithGUI, SimCommandLine cmdline) {
-        this.isWithGUI = isWithGUI;
+    public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
+        this.instantaneousFileOutput = instantaneousFileOutput;
         this.cmdline = cmdline;
         
         xmlFileName = cmdline.getSimulationFilename();
@@ -100,7 +100,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void restart() {
         time = 0;
         itime = 0;
-        roadSection = new RoadSectionImpl(isWithGUI, inputData);
+        roadSection = new RoadSectionImpl(instantaneousFileOutput, inputData);
 
         // model requires specific update time depending on its category !!
 
@@ -110,7 +110,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(isWithGUI, inputData, roadSection);
+        simOutput = new SimOutput(instantaneousFileOutput, inputData, roadSection);
     }
 
     /*

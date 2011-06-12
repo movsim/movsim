@@ -78,7 +78,7 @@ public class RoadSectionImpl implements RoadSection {
     private long id;
 
     /** The is with gui. */
-    private final boolean isWithGUI;
+    private final boolean instantaneousFileOutput;
 
     /** The veh container. */
     private VehicleContainer vehContainer;
@@ -114,10 +114,10 @@ public class RoadSectionImpl implements RoadSection {
      * @param inputData
      *            the input data
      */
-    public RoadSectionImpl(boolean isWithGUI, InputData inputData) {
+    public RoadSectionImpl(boolean instantaneousFileOutput, InputData inputData) {
         logger.info("Cstr. RoadSectionImpl");
 
-        this.isWithGUI = isWithGUI;
+        this.instantaneousFileOutput = instantaneousFileOutput;
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
         this.roadLength = simInput.getSingleRoadInput().getRoadLength();
@@ -144,7 +144,7 @@ public class RoadSectionImpl implements RoadSection {
     private void initialize(InputData inputData) {
         vehContainer = new VehicleContainerImpl();
 
-        vehGenerator = new VehicleGeneratorImpl(isWithGUI, inputData);
+        vehGenerator = new VehicleGeneratorImpl(instantaneousFileOutput, inputData);
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
         upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, roadInput.getUpstreamBoundaryData(),
@@ -344,7 +344,7 @@ public class RoadSectionImpl implements RoadSection {
                                     j, veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(), veh.id()));
                 } 
                 logger.error(msg.toString());
-                if (!isWithGUI) {
+                if (instantaneousFileOutput) {
                     logger.error(" !!! exit after crash !!! ");
                     System.exit(-99);
                 }
