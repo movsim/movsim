@@ -88,8 +88,11 @@ public class SimulatorImpl implements Simulator, Runnable {
     public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
         this.instantaneousFileOutput = instantaneousFileOutput;
         this.cmdline = cmdline;
-        
-        xmlFileName = cmdline.getSimulationFilename();
+        if (cmdline != null) {
+            xmlFileName = cmdline.getSimulationFilename();
+        } else {
+            xmlFileName = "sim/onramp_IDM.xml";
+        }
         this.inputData = new InputDataImpl();
     }
 

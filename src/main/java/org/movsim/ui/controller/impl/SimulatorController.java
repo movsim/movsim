@@ -1,15 +1,9 @@
 package org.movsim.ui.controller.impl;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Locale;
-
-import org.apache.log4j.PropertyConfigurator;
-import org.movsim.App;
 import org.movsim.simulator.Simulator;
 import org.movsim.ui.controller.Controller;
 
-public class SimulatorController implements Controller {
+public class SimulatorController extends Controller {
 
     private Simulator model;
     private Thread simThread;
@@ -18,8 +12,8 @@ public class SimulatorController implements Controller {
         this.model = model;
 
         initLocalizationAndLogger();
+        initializeModel();
         
-        model.initialize();
         simThread = new Thread((Runnable) model);
         start();
 
@@ -55,19 +49,12 @@ public class SimulatorController implements Controller {
 
     }
 
-    /**
-     * Inits the localization and logger.
+    /* (non-Javadoc)
+     * @see org.movsim.ui.controller.Controller#initializeModel()
      */
-    private static void initLocalizationAndLogger() {
-        Locale.setDefault(Locale.US);
-        final File file = new File("log4j.properties");
-        if (file.exists() && file.isFile()) {
-            PropertyConfigurator.configure("log4j.properties");
-        } else {
-            final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
-            PropertyConfigurator.configure(log4jConfig);
-        }
-        // Log Levels: DEBUG < INFO < WARN < ERROR;
+    @Override
+    public void initializeModel() {
+        model.initialize();        
     }
 
 }

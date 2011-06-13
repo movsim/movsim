@@ -90,8 +90,6 @@ public class XmlReaderSimInput {
 
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
-     * @param xmlFileName 
-     * 
      * @param xmlFilename
      *            the xml filename
      * @param cmdline
