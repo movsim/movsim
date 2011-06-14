@@ -158,7 +158,11 @@ set ytics 10
 # car 1 is lead car, so take distance to traffic light (col 8), rather than distance to car in front
 set out distanceOutput
 
-if(c0 = 0) plot\
+print "carFile(1)=", carFile(1)," c0=",c0
+plot\
+  carFile(1)  using 1:(xscale*$9) title car(1)  with lines linestyle 1
+
+if(c0 == 0) plot\
   carFile(1)  using 1:(xscale*$9) title car(1)  with lines linestyle 1,\
   carFile(5)  using 1:(xscale*$7) title car(5)  with lines linestyle 2,\
   carFile(10) using 1:(xscale*$7) title car(10) with lines linestyle 3,\
@@ -166,7 +170,7 @@ if(c0 = 0) plot\
   carFile(20) using 1:(xscale*$7) title car(20) with lines linestyle 5
 
 
-if(c0 = 1) plot\
+if(c0 == 1) plot\
   carFile(1)  using 1:(xscale*$7) title car(1)  with lines linestyle 1,\
   carFile(5)  using 1:(xscale*$7) title car(5)  with lines linestyle 2,\
   carFile(10) using 1:(xscale*$7) title car(10) with lines linestyle 3,\
