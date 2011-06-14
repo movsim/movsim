@@ -121,7 +121,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         final double v0loc = Math.min(alphaV0 * v0, me.speedlimit()); // consider
                                                                       // external
                                                                       // speedlimit
-//System.out.println("Test: accSimple(...)="+accSimple(10000.,3.6664,3.6664));System.exit(1);
+  //System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
         return acc(s, v, dv, alphaT, v0loc);
     }
 
