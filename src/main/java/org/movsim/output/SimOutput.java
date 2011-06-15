@@ -65,7 +65,7 @@ public class SimOutput implements SimObservables {
     private FileTrajectories trajectories = null;
 
     /** The write output. */
-    private final boolean writeOutput;
+    private boolean writeOutput;
 
     /** The project name. */
     private final String projectName;
@@ -88,7 +88,8 @@ public class SimOutput implements SimObservables {
         this.roadSection = roadSection;
         
         // more restrictive than in other output classes TODO
-        writeOutput = instantaneousFileOutput; // no file output from GUI
+        
+        writeOutput = instantaneousFileOutput;
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
         
@@ -112,7 +113,9 @@ public class SimOutput implements SimObservables {
         
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
-            trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+            if (writeOutput) {
+                trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+            }
         }
 
         

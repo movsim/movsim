@@ -68,11 +68,11 @@ public class SimulatorImpl implements Simulator, Runnable {
     private SimOutput simOutput;
 
     /** The is with gui. */
-    private final boolean instantaneousFileOutput;
+    private boolean instantaneousFileOutput;
 
     /** The sim input. */
     private InputData inputData;
-    
+
     private String xmlFileName;
 
     private SimCommandLine cmdline;
@@ -81,9 +81,10 @@ public class SimulatorImpl implements Simulator, Runnable {
      * Instantiates a new simulator impl.
      * 
      * @param instantaneousFileOutput
-     *            Gives instantaneous file output of simulation results.
+     *            Gives instantaneous file output of simulation results to
+     *            predefined files in the "sim" folder.
      * @param cmdline
-     *            cmdline parser
+     *            commandline
      */
     public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
         this.instantaneousFileOutput = instantaneousFileOutput;
@@ -223,11 +224,12 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011)");
 
-        // parse xmlFile and set values
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, (InputDataImpl) inputData); //TODO why InputData impl?
+        // parse xmlFile and set values // TODO why InputData impl?
 
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, (InputDataImpl) inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain models
+        this.timestep = simInput.getTimestep(); // can be modified by certain
+                                                // models
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());

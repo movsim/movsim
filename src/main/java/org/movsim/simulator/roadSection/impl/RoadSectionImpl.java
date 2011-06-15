@@ -77,8 +77,7 @@ public class RoadSectionImpl implements RoadSection {
     /** The id. */
     private long id;
 
-    /** The is with gui. */
-    private final boolean instantaneousFileOutput;
+    private boolean instantaneousFileOutput;
 
     /** The veh container. */
     private VehicleContainer vehContainer;
