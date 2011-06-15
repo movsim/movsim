@@ -75,7 +75,7 @@ public class InputDataImpl implements InputData {
      * @param projectname
      *            the new project name
      */
-    protected void setProjectName(String projectname) {
+    public void setProjectName(String projectname) {
         this.projectName = projectname;
         logger.debug("Projectname: {}", projectname);
     }

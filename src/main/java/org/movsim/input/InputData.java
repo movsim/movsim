@@ -44,6 +44,8 @@ public interface InputData {
      * @return the project name
      */
     String getProjectName();
+    
+    void setProjectName(String projectName);
 
 
     /**

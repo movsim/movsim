@@ -215,6 +215,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     public void setXmlFileName(String xmlFileName) {
         this.xmlFileName = xmlFileName;
+        inputData.setProjectName(xmlFileName);
     }
 
     /*
