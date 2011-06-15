@@ -26,6 +26,8 @@ if (ldm eq "BARL") c0 = 1
 if (ldm eq "GIPPS") c0 = 1
 if (ldm eq "KCA") c0 = 1
 if (ldm eq "NSM") c0 = 1
+if (ldm eq "VDIFF") c0 = 1
+if (ldm eq "OVM") c0 = 1
 
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
@@ -135,6 +137,7 @@ tmax=158
 if (ldm eq "BARL") tmax=120
 if (ldm eq "KCA") tmax=120
 if (ldm eq "NSM") tmax=120
+if (ldm eq "VDIFF") tmax=360
 ##tmaxdata=101.  # Um bei Beschl. Kurve zu stoppen
 
 set xrange [tmin:tmax]

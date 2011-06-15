@@ -187,9 +187,8 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
         // space dependencies modeled by speedlimits, alpha's
 
         final double TLocal = alphaT * T;
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit()); // consider
-                                                                        // external
-                                                                        // speedlimit
+        // consider external speedlimit
+        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit()); 
         final double aLocal = alphaA * a;
 
         double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
@@ -204,7 +203,7 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
 
         final double aWanted = aLocal * (1. - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
 
-        // logger.debug("aWantet = {}", aWanted);
+        // logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
     }
 
