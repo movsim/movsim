@@ -1,6 +1,5 @@
 #!/bin/bash
 java -jar target/movsim-0.1-jar-with-dependencies.jar -f sim/$1.xml $2 $3 $4 $5
 cd sim
-echo "Ich bin hier!"
 gnuplot $1.gpl
 cd ..

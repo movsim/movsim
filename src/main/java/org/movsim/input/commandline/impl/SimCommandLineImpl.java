@@ -26,10 +26,6 @@
  */
 package org.movsim.input.commandline.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -45,6 +41,8 @@ import org.movsim.utilities.impl.FileUtils;
  * The Class SimCommandLineImpl. MovSim console command line parser.
  */
 public class SimCommandLineImpl implements SimCommandLine {
+    
+    final static String releaseVersion = "1.0";
 
     /** The Constant xmlDefault. */
     final static String xmlDefault = "sim/onramp_IDM.xml";
@@ -66,6 +64,7 @@ public class SimCommandLineImpl implements SimCommandLine {
      * validation from dtd
      */
     private boolean writeInternalXml;
+
 
     /**
      * Instantiates a new sim command line impl.
@@ -93,8 +92,7 @@ public class SimCommandLineImpl implements SimCommandLine {
         options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
-        options.addOption("s", "scenarios", false,
-                "writes example scenarios as xml for simulation into the directory \"sim\".");
+        options.addOption("v", "version", false, "prints version number of this MovSim release");;
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
@@ -147,63 +145,18 @@ public class SimCommandLineImpl implements SimCommandLine {
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
         }
-        if (cmdline.hasOption("s")) {
-            optWriteScenarios();
+        if (cmdline.hasOption("v")) {
+            optPrintVersion();
         }
-
         optSimulation(cmdline);
     }
 
+
     /**
-     * Option: Writes all example scenarios from jar resources to /sim folder
-     * 
-     * @throws ClassNotFoundException
+     * Option: prints the version number of this Movsim release 
      */
-    private void optWriteScenarios() {
-        try {
-            InputStreamReader isr = new InputStreamReader(System.in);
-            BufferedReader br = new BufferedReader(isr);
-            System.out.println("Writing scenarios to folder 'sim'");
-            System.out.println("Overrides existing filenames. Do you want to proceed? <y/n>");
-            String proceed = br.readLine();
-            ;
-            if (!(proceed.equals("yes") || (proceed.equals("y")))) {
-                System.out.println("Exit. Nothing written.");
-                System.exit(0);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // TODO loop properly, not hard coded
-        FileUtils.createDir("sim", "");
-
-        // //Iterate over resources does not work?!?
-        // String path = "sim/";
-        // ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        // Enumeration<?> resourceUrls;
-        // try {
-        // resourceUrls = cl.getResources(path);
-        // List<URL> result = new ArrayList<URL>();
-        // while (resourceUrls.hasMoreElements()) {
-        // URL url = (URL) resourceUrls.nextElement();
-        // System.out.println("file: " + url.getFile());
-        // result.add(url);
-        // }
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-
-        // TODO loop properly
-        String[] models = { "IDM", "IIDM", "IDMM", "ACC", "OVM", "VDIFF", "BARL", "GIPPS", "KCA", "NSM" };
-        String[] scenario = { "onramp", "startStop" };
-        for (String sce : scenario) {
-            for (String model : models) {
-                FileUtils.resourceToFile("/sim/" + sce + "_" + model + ".xml", "sim/" + sce + "_" + model + ".xml");
-            }
-        }
-        System.out.println("Example scenarios written to folder \"sim\". Exit.");
-        System.exit(0);
+    private void optPrintVersion() {
+        System.out.println("MovSim release: " + releaseVersion);
     }
 
     /**
