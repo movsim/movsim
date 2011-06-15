@@ -81,8 +81,11 @@ public class SimulatorImpl implements Simulator, Runnable {
      * Instantiates a new simulator impl.
      * 
      * @param instantaneousFileOutput
-     *            Gives instantaneous file output of simulation results to
-     *            predefined files in the "sim" folder.
+     *            Gives instantaneous file output of some simulation results
+     *            (floating cars data, fundamental diagram, saptiotemporal data,
+     *            trajectories) to predefined files in the "sim" folder. Also
+     *            pay attention to the logging attributes in the xml files!
+     *            These are independent to this flag.
      * @param cmdline
      *            commandline
      */
