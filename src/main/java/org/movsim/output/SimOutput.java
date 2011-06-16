@@ -112,7 +112,9 @@ public class SimOutput implements SimObservables {
         
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
-            trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+            if (writeOutput) {
+                trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+            }
         }
 
         

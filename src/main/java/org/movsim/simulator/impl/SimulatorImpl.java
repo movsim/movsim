@@ -68,7 +68,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     private SimOutput simOutput;
 
     /** The is with gui. */
-    private boolean instantaneousFileOutput;
+    private boolean instantaneousFileOutput = true;
 
     /** The sim input. */
     private InputData inputData;
@@ -91,8 +91,8 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
         this.instantaneousFileOutput = instantaneousFileOutput;
-        this.cmdline = cmdline;
         if (cmdline != null) {
+            this.cmdline = cmdline;
             xmlFileName = cmdline.getSimulationFilename();
         } else {
             xmlFileName = "sim/onramp_IDM.xml";

@@ -26,6 +26,7 @@
  */
 package org.movsim.input.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -55,7 +56,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class XmlReaderSimInput.
@@ -84,10 +84,15 @@ public class XmlReaderSimInput {
 
     private SimCommandLine cmdline;
 
-    private String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
+    private String dtdFilename = File.separator + "sim" + File.separator+ "multiModelTrafficSimulatorInput.dtd";
+
+    private InputStream appletinputstream;
+
+    private InputSource appletresource;
 
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
+     * 
      * @param xmlFilename
      *            the xml filename
      * @param cmdline
@@ -99,17 +104,28 @@ public class XmlReaderSimInput {
         this.inputData = inputData;
 
         this.xmlFilename = xmlFileName;
-
-        if (!FileUtils.fileExists(xmlFilename)) {
-            logger.error("XML File does not exist. Exit Simulation.");
-            System.exit(1);
-        }
+        boolean appletFlag;
+//        if (!FileUtils.fileExists(xmlFilename)) {
+//            logger.error("XML File does not exist. Exit Simulation.");
+//            // System.exit(1);
+//
+//            // test for applet: xml from resource
+//            appletFlag = true;
+//            
+//        } else {
+            appletFlag = true;
+//        }
 
         logger.info("Begin parsing: " + xmlFilename);
-        readAndValidateXml();
+        
+        if (!appletFlag) {
+            readAndValidateXmlFromFileName();
+        }  else {
+            readXmlFromResources();
+        }
 
         // write internal xml file:
-        if (cmdline.isWriteInternalXml()) {
+        if (cmdline != null && cmdline.isWriteInternalXml()) {
             String outFilename = xmlFilename + ".internal_xml";
             writeInternalXmlToFile(doc, outFilename);
             logger.info("internal xml output written to file {}. Exit.", outFilename);
@@ -163,18 +179,27 @@ public class XmlReaderSimInput {
 
         final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
         inputData.setSimulationInput(simInput);
-        
-       
-        
+
     }
 
     /**
      * Read and validate xml.
      */
-    private void readAndValidateXml() {
+    private void readAndValidateXmlFromFileName() {
         validate(FileUtils.getInputSourceFromFilename(xmlFilename));
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
+    
+    private void readXmlFromResources() {
+        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator+xmlFilename);
+        appletresource = new InputSource(appletinputstream);
+        validate(appletresource);
+        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator+xmlFilename);
+        appletresource = new InputSource(appletinputstream);
+        doc = getDocument(appletresource); 
+        System.out.println("from resource");
+    }
+
 
     /**
      * Gets the Document.
@@ -188,7 +213,7 @@ public class XmlReaderSimInput {
             final SAXBuilder builder = new SAXBuilder();
             builder.setIgnoringElementContentWhitespace(true);
             builder.setEntityResolver(new EntityResolver() {
-                
+
                 @Override
                 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
                     InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
@@ -223,10 +248,10 @@ public class XmlReaderSimInput {
             myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
             final DefaultHandler handler = new MyErrorHandler();
             myXMLReader.setErrorHandler(handler);
-            
-            //overriding dtd source from xml file with internal dtd from jar
+
+            // overriding dtd source from xml file with internal dtd from jar
             myXMLReader.setEntityResolver(new EntityResolver() {
-                
+
                 @Override
                 public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
                     InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
@@ -234,23 +259,22 @@ public class XmlReaderSimInput {
                     return input;
                 }
             });
-            
+
             myXMLReader.parse(inputSource);
         } catch (final SAXException e) {
             isValid = false;
         } catch (final IOException e) {
             isValid = false;
         }
-        
+
         if (!isValid) {
             logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
             System.exit(0);
-        } else if (cmdline.isOnlyValidation()) {
+        } else if (cmdline != null && cmdline.isOnlyValidation()) {
             logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
             System.exit(0);
         }
     }
-
 
     /**
      * The Inner Class MyErrorHandler.
