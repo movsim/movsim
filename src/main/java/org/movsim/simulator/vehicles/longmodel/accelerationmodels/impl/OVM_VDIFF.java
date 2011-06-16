@@ -117,11 +117,11 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         final double v = me.getSpeed();
         final double dv = me.relSpeed(vehFront); // only needed for VDIFF
 
+        
         // speed limit --> OVM causes accidents due to immediate braking reaction  
-        final double v0loc = Math.min(alphaV0 * v0, me.speedlimit()); // consider
-                                                                      // external
-                                                                      // speedlimit
-  //System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
+        // consider external speedlimit
+        final double v0loc = Math.min(alphaV0 * v0, me.speedlimit());
+        // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
         return acc(s, v, dv, alphaT, v0loc);
     }
 
@@ -156,9 +156,15 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      */
     private double acc(double s, double v, double dv, double alphaT, double v0loc) {
 
+        
         // logger.debug("alphaT = {}", alphaT);
-        // logger.debug("v0loc = {}", v0loc);
+        // logger.info("v0loc = {}", v0loc);
 
+        if(alphaT!=1){
+            logger.error("alphaT={}", alphaT);
+            System.exit(-1);
+        }
+        
         double lenInteractionLoc = lenInteraction * alphaT;
         if (lenInteractionLoc < 1e-6) {
             lenInteractionLoc = 1e-6;
@@ -199,9 +205,9 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         // calc acceleration
         double aWanted = 0; // return value
         if (choiceOptFuncVariant <= 1) {
-            aWanted = (vOpt - v) / tau - lambda * dv; // OVM: lambda == 0
             // original VDIFF model
-
+            // OVM: lambda == 0
+            aWanted = (vOpt - v) / tau - lambda * dv; 
         } else if (choiceOptFuncVariant == 2) {
             aWanted = (vOpt - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, Constants.SMALL_VALUE);
             // aWanted = Math.min(aWanted, 5.); // limit max acceleration
