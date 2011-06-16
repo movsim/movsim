@@ -32,8 +32,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.management.MXBean;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
