@@ -105,16 +105,16 @@ public class XmlReaderSimInput {
 
         this.xmlFilename = xmlFileName;
         boolean appletFlag;
-//        if (!FileUtils.fileExists(xmlFilename)) {
-//            logger.error("XML File does not exist. Exit Simulation.");
-//            // System.exit(1);
-//
-//            // test for applet: xml from resource
-//            appletFlag = true;
-//            
-//        } else {
+        if (!FileUtils.fileExists(xmlFilename)) {
+            logger.error("XML File does not exist. Exit Simulation.");
+            // System.exit(1); /TODO
+
+            // test for applet: xml from resource
             appletFlag = true;
-//        }
+            
+        } else {
+            appletFlag = false;
+        }
 
         logger.info("Begin parsing: " + xmlFilename);
         
