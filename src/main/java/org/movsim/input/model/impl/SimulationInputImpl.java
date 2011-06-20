@@ -113,11 +113,6 @@ public class SimulationInputImpl implements SimulationInput {
         return maxSimTime;
     }
     
-    public void setMaxSimTime(double maxSimTime) {
-        this.maxSimTime = maxSimTime;
-    }
-
-
     /*
      * (non-Javadoc)
      * 

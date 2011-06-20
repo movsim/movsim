@@ -48,8 +48,6 @@ public interface SimulationInput {
      */
     double getMaxSimTime();
     
-    void setMaxSimTime(double maxSimTime);
-
     /**
      * Checks if is with fixed seed.
      * 
