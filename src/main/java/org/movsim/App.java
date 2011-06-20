@@ -47,6 +47,7 @@ public class App {
     public static void main(String[] args) {
         
         // CommandLine args options Parser
+        // Results are set in ProjectMetaData
         final SimCommandLine cmdline = new SimCommandLine(args);
 
         final Simulator simulator = new SimulatorImpl();
