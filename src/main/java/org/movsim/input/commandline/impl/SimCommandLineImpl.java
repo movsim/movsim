@@ -26,6 +26,8 @@
  */
 package org.movsim.input.commandline.impl;
 
+import java.io.File;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -156,7 +158,7 @@ public class SimCommandLineImpl implements SimCommandLine {
      * Option: writes log4j.properties to local filesystem
      */
     private void optWriteLoggingProperties() {
-        String resource = "/sim/log4j.properties";
+        String resource = File.separator + "sim" + File.separator +"log4j.properties";
         String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
     }
