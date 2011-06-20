@@ -1,6 +1,8 @@
 package org.movsim.input.impl;
 
-public class ProjectMetaDataImpl {
+import org.movsim.input.ProjectMetaData;
+
+public class ProjectMetaDataImpl implements ProjectMetaData{
 
     private static String projectName = "onramp_IDM";
     private static String pathToProjectXmlFile;
