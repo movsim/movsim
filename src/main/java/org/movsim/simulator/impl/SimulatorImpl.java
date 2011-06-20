@@ -26,6 +26,8 @@
  */
 package org.movsim.simulator.impl;
 
+import java.io.File;
+
 import org.movsim.input.InputData;
 import org.movsim.input.commandline.SimCommandLine;
 import org.movsim.input.impl.InputDataImpl;
@@ -95,7 +97,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             this.cmdline = cmdline;
             xmlFileName = cmdline.getSimulationFilename();
         } else {
-            xmlFileName = "sim/onramp_IDM.xml";
+            xmlFileName = "sim"+ File.separator + "onramp_IDM.xml";
         }
         this.inputData = new InputDataImpl();
     }

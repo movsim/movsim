@@ -39,14 +39,14 @@ import org.jdom.Element;
 public class XmlUtils {
 
     /**
-     * Instantiates a new xml utils.
+     * private constructer
      */
     private XmlUtils() {
 
     }
 
     /**
-     * Put attributes in hash.
+     * Put all attributes in hash with corresponding values.
      * 
      * @param element
      *            the element
