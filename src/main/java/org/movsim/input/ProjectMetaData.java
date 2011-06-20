@@ -8,7 +8,13 @@ public class ProjectMetaData {
     private static boolean instantaneousFileOutput;
     private static boolean onlyValidation = false;
     private static boolean writeInternalXml = false;
-    private static boolean xmlFromResources = false; // for applet
+    
+    /** Needed for Applet */
+    private static boolean xmlFromResources = false;
+    
+    
+    private ProjectMetaData() {
+    }
 
     public static String getProjectName() {
         return projectName;

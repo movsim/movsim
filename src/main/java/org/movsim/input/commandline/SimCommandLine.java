@@ -185,7 +185,10 @@ public class SimCommandLine {
         } else {
             boolean isXml = validateSimulationFileName(simulationFilename);
             if (isXml) {
-                setProjectName();
+                // workaround  //TODO
+                ProjectMetaData.setProjectName(simulationFilename);
+                
+                setProjectName(); //TODO
                 setPathToProjectXmlFile();
             }
         }

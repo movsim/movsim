@@ -101,7 +101,8 @@ public class XmlReaderSimInput {
         this.inputData = inputData;
 
         this.xmlFilename = xmlFileName;
-        boolean appletFlag;
+
+        logger.info("Begin parsing: " + xmlFilename);
         if (!FileUtils.fileExists(xmlFilename) && !ProjectMetaData.isXmlFromResources()) {
             logger.error("XML File does not exist. Exit Simulation.");
              System.exit(1);
