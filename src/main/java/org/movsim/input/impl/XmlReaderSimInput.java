@@ -39,8 +39,8 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.commandline.SimCommandLine;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.impl.SimulationInputImpl;
@@ -82,8 +82,6 @@ public class XmlReaderSimInput {
     /** The doc. */
     private Document doc;
 
-    private SimCommandLine cmdline;
-
     private String dtdFilename = File.separator + "sim" + File.separator+ "multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
@@ -99,33 +97,26 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(String xmlFileName, SimCommandLine cmdline, InputDataImpl inputData) {
-        this.cmdline = cmdline;
+    public XmlReaderSimInput(String xmlFileName, InputDataImpl inputData) {
         this.inputData = inputData;
 
         this.xmlFilename = xmlFileName;
         boolean appletFlag;
-        if (!FileUtils.fileExists(xmlFilename)) {
+        if (!FileUtils.fileExists(xmlFilename) && !ProjectMetaData.isXmlFromResources()) {
             logger.error("XML File does not exist. Exit Simulation.");
-            // System.exit(1); /TODO
-
-            // test for applet: xml from resource
-            appletFlag = true;
-            
-        } else {
-            appletFlag = false;
+             System.exit(1);
         }
 
         logger.info("Begin parsing: " + xmlFilename);
         
-        if (!appletFlag) {
-            readAndValidateXmlFromFileName();
-        }  else {
+        if (ProjectMetaData.isXmlFromResources()) {
             readXmlFromResources();
+        }  else {
+            readAndValidateXmlFromFileName();
         }
 
         // write internal xml file:
-        if (cmdline != null && cmdline.isWriteInternalXml()) {
+        if (ProjectMetaData.isWriteInternalXml()) {
             String outFilename = xmlFilename + ".internal_xml";
             writeInternalXmlToFile(doc, outFilename);
             logger.info("internal xml output written to file {}. Exit.", outFilename);
@@ -270,7 +261,7 @@ public class XmlReaderSimInput {
         if (!isValid) {
             logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
             System.exit(0);
-        } else if (cmdline != null && cmdline.isOnlyValidation()) {
+        } else if (ProjectMetaData.isOnlyValidation()) {
             logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
             System.exit(0);
         }

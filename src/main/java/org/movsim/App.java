@@ -27,7 +27,6 @@
 package org.movsim;
 
 import org.movsim.input.commandline.SimCommandLine;
-import org.movsim.input.commandline.impl.SimCommandLineImpl;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
@@ -48,9 +47,9 @@ public class App {
     public static void main(String[] args) {
         
         // CommandLine args options Parser
-        final SimCommandLine cmdline = new SimCommandLineImpl(args);
+        final SimCommandLine cmdline = new SimCommandLine(args);
 
-        final Simulator simulator = new SimulatorImpl(true, cmdline);
+        final Simulator simulator = new SimulatorImpl();
 
         final Controller controller = new SimulatorController(simulator);
     }

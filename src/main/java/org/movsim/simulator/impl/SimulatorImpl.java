@@ -26,10 +26,8 @@
  */
 package org.movsim.simulator.impl;
 
-import java.io.File;
-
 import org.movsim.input.InputData;
-import org.movsim.input.commandline.SimCommandLine;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
@@ -77,7 +75,6 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private String xmlFileName;
 
-    private SimCommandLine cmdline;
 
     /**
      * Instantiates a new simulator impl.
@@ -91,14 +88,9 @@ public class SimulatorImpl implements Simulator, Runnable {
      * @param cmdline
      *            commandline
      */
-    public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
-        this.instantaneousFileOutput = instantaneousFileOutput;
-        if (cmdline != null) {
-            this.cmdline = cmdline;
-            xmlFileName = cmdline.getSimulationFilename();
-        } else {
-            xmlFileName = "sim"+ File.separator + "onramp_IDM.xml";
-        }
+    public SimulatorImpl() {
+        this.instantaneousFileOutput = ProjectMetaData.isInstantaneousFileOutput(); //TODO eliminate
+        xmlFileName = ProjectMetaData.getProjectName(); //TODO eliminate
         this.inputData = new InputDataImpl();
     }
 
@@ -232,7 +224,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         // parse xmlFile and set values
 
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, inputData);
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
                                                 // models
