@@ -42,7 +42,7 @@ public interface SimulationInput {
     double getTimestep();
 
     /**
-     * Gets the max simulation time.
+     * Gets the duration of the simulation.
      * 
      * @return the max simulation time
      */

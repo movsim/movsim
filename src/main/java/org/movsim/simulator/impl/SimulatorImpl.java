@@ -71,7 +71,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     private boolean instantaneousFileOutput = true;
 
     /** The sim input. */
-    private InputData inputData;
+    private InputDataImpl inputData;
 
     private String xmlFileName;
 
@@ -228,9 +228,9 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011)");
 
-        // parse xmlFile and set values // TODO why InputData impl?
+        // parse xmlFile and set values
 
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, (InputDataImpl) inputData);
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
                                                 // models
