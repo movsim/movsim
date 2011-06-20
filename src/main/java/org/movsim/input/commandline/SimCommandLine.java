@@ -39,12 +39,6 @@ public interface SimCommandLine {
      */
     String getSimulationFilename();
 
-    /**
-     * Checks if application is run with gui or as command line.
-     * 
-     * @return true, if is gui
-     */
-    boolean isGui();
 
     /**
      * Checks if application is run only to validate xml input file without

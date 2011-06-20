@@ -53,9 +53,6 @@ public class SimCommandLineImpl implements SimCommandLine {
     /** The simulation filename. */
     private String simulationFilename;
 
-    /** The gui. */
-    private boolean gui = false;
-
     /** The flag for only validatiion of xml input file without simulation */
     private boolean onlyValidation = false;
 
@@ -85,7 +82,6 @@ public class SimCommandLineImpl implements SimCommandLine {
 
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
-        options.addOption("g", "gui", false, "starts a Desktop GUI --> deprecated !!! TODO ");
         options.addOption("v", "validate", false, "parses xml input file for validation (without simulation)");
         options.addOption("i", "internal_xml", false,
                 "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
@@ -129,9 +125,6 @@ public class SimCommandLineImpl implements SimCommandLine {
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
             optHelp();
-        }
-        if (cmdline.hasOption("g")) {
-            optGUI();
         }
         if (cmdline.hasOption("v")) {
             optValidation();
@@ -192,13 +185,6 @@ public class SimCommandLineImpl implements SimCommandLine {
     }
 
     /**
-     * Option gui.
-     */
-    private void optGUI() {
-        gui = true;
-    }
-
-    /**
      * Option simulation.
      * 
      * @param cmdline
@@ -239,7 +225,7 @@ public class SimCommandLineImpl implements SimCommandLine {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             System.out
-                    .println("Please provide simulation file with ending \".xml\" as argument with option -s, exit. ");
+                    .println("Please provide simulation file with ending \".xml\" as argument with option -f, exit. ");
             System.exit(1);
         }
         return true;
@@ -256,15 +242,6 @@ public class SimCommandLineImpl implements SimCommandLine {
         return simulationFilename;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.commandline.SimCommandLine#isGui()
-     */
-    @Override
-    public boolean isGui() {
-        return gui;
-    }
 
     public boolean isOnlyValidation() {
         return onlyValidation;
