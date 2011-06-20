@@ -27,8 +27,8 @@
 package org.movsim.simulator.impl;
 
 import org.movsim.input.InputData;
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.impl.InputDataImpl;
+import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.output.SimObservables;
@@ -89,8 +89,8 @@ public class SimulatorImpl implements Simulator, Runnable {
      *            commandline
      */
     public SimulatorImpl() {
-        this.instantaneousFileOutput = ProjectMetaData.isInstantaneousFileOutput(); //TODO eliminate
-        xmlFileName = ProjectMetaData.getProjectName(); //TODO eliminate
+        this.instantaneousFileOutput = ProjectMetaDataImpl.isInstantaneousFileOutput(); //TODO eliminate
+        xmlFileName = ProjectMetaDataImpl.getProjectName(); //TODO eliminate
         this.inputData = new InputDataImpl();
     }
 

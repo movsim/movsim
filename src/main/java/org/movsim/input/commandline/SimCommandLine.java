@@ -36,14 +36,14 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.movsim.input.ProjectMetaData;
+import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class SimCommandLine. MovSim console command line parser.
- * Sets the ProjectMetaData.
+ * Sets the ProjectMetaDataImpl.
  */
 public class SimCommandLine {
     
@@ -166,14 +166,14 @@ public class SimCommandLine {
      * Option: write internal xml (without simulation)
      */
     private void optInternalXml() {
-        ProjectMetaData.setWriteInternalXml(true);
+        ProjectMetaDataImpl.setWriteInternalXml(true);
     }
 
     /**
      * Option: parse xml input file for validation (without simulation)
      */
     private void optValidation() {
-        ProjectMetaData.setOnlyValidation(true);
+        ProjectMetaDataImpl.setOnlyValidation(true);
     }
 
     /**
@@ -191,7 +191,7 @@ public class SimCommandLine {
             boolean isXml = validateSimulationFileName(simulationFilename);
             if (isXml) {
                 // workaround  //TODO
-                ProjectMetaData.setProjectName(simulationFilename);
+                ProjectMetaDataImpl.setProjectName(simulationFilename);
             }
         }
 

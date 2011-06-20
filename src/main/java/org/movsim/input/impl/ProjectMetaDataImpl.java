@@ -1,6 +1,6 @@
-package org.movsim.input;
+package org.movsim.input.impl;
 
-public class ProjectMetaData {
+public class ProjectMetaDataImpl {
 
     private static String projectName = "onramp_IDM";
     private static String pathToProjectXmlFile;
@@ -14,7 +14,7 @@ public class ProjectMetaData {
     
     
     // private constructor: singleton pattern
-    private ProjectMetaData() {
+    private ProjectMetaDataImpl() {
         
     }
 
@@ -23,7 +23,7 @@ public class ProjectMetaData {
     }
 
     public static void setProjectName(String projectName) {
-        ProjectMetaData.projectName = projectName;
+        ProjectMetaDataImpl.projectName = projectName;
     }
 
     public static String getPathToProjectXmlFile() {
@@ -31,7 +31,7 @@ public class ProjectMetaData {
     }
 
     public static void setPathToProjectXmlFile(String pathToProjectXmlFile) {
-        ProjectMetaData.pathToProjectXmlFile = pathToProjectXmlFile;
+        ProjectMetaDataImpl.pathToProjectXmlFile = pathToProjectXmlFile;
     }
 
     public static String getOutputPath() {
@@ -39,7 +39,7 @@ public class ProjectMetaData {
     }
 
     public static void setOutputPath(String outputPath) {
-        ProjectMetaData.outputPath = outputPath;
+        ProjectMetaDataImpl.outputPath = outputPath;
     }
 
     public static boolean isInstantaneousFileOutput() {
@@ -47,11 +47,11 @@ public class ProjectMetaData {
     }
 
     public static void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
-        ProjectMetaData.instantaneousFileOutput = instantaneousFileOutput;
+        ProjectMetaDataImpl.instantaneousFileOutput = instantaneousFileOutput;
     }
 
     public static void setOnlyValidation(boolean onlyValidation) {
-        ProjectMetaData.onlyValidation = onlyValidation;
+        ProjectMetaDataImpl.onlyValidation = onlyValidation;
     }
 
     public static boolean isOnlyValidation() {
@@ -59,7 +59,7 @@ public class ProjectMetaData {
     }
 
     public static void setWriteInternalXml(boolean writeInternalXml) {
-        ProjectMetaData.writeInternalXml = writeInternalXml;
+        ProjectMetaDataImpl.writeInternalXml = writeInternalXml;
     }
 
     public static boolean isWriteInternalXml() {
@@ -67,7 +67,7 @@ public class ProjectMetaData {
     }
 
     public static void setXmlFromResources(boolean xmlFromResources) {
-        ProjectMetaData.xmlFromResources = xmlFromResources;
+        ProjectMetaDataImpl.xmlFromResources = xmlFromResources;
     }
 
     public static boolean isXmlFromResources() {
