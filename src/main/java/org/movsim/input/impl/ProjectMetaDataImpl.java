@@ -7,7 +7,7 @@ public class ProjectMetaDataImpl implements ProjectMetaData{
     private static String projectName = "onramp_IDM";
     private static String pathToProjectXmlFile;
     private static String outputPath;
-    private static boolean instantaneousFileOutput;
+    private static boolean instantaneousFileOutput=true;  //AKE
     private static boolean onlyValidation = false;
     private static boolean writeInternalXml = false;
     

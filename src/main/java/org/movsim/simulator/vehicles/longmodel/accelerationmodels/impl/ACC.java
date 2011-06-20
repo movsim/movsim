@@ -125,8 +125,11 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
-        // TODO kommentare checken/loeschen ... Martin!
-
+     // treat special case of v0=0 (standing obstacle)
+        if(v0==0){
+            return 0;
+        }
+        
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
@@ -135,7 +138,6 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
         final double aLeadDummy = 0;
         final double a_lead = (vehFront == null) ? aLeadDummy : vehFront.getAcc();
 
-        // space dependencies modelled by speedlimits, alpha's
         // space dependencies modeled by speedlimits, alpha's
 
         final double Tloc = alphaT * T;
@@ -277,8 +279,14 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
      */
     @Override
     public double accSimple(double s, double v, double dv) {
-        double sstar = s0 + T * v + 0.5 * v * dv / Math.sqrt(a * b); // desired
-                                                                     // distance
+        
+        // treat special case of v0=0 (standing obstacle)
+        if(v0==0){
+            return 0;
+        }
+        
+        // desired distance
+        double sstar = s0 + T * v + 0.5 * v * dv / Math.sqrt(a * b); 
         sstar += s1 * Math.sqrt((v + 0.000001) / v0);
         if (sstar < s0) {
             sstar = s0;
@@ -287,13 +295,7 @@ public class ACC extends LongitudinalModelImpl implements AccelerationModel, Obs
         return aWanted;
     }
 
-    // private double maxSmooth(double x1, double x2, double dx){
-    // return 0.5*(x1+x2) + Math.sqrt(0.25*(x1-x2)*(x1-x2) + dx*dx);
-    // }
-    //
-    // private double minSmooth(double x1, double x2, double dx){
-    // return 0.5*(x1+x2) - Math.sqrt(0.25*(x1-x2)*(x1-x2) + dx*dx);
-    // }
+   
 
     /**
      * Gets the v0.

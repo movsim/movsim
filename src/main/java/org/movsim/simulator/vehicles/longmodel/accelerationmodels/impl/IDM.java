@@ -178,6 +178,12 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      */
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+
+        // treat special case of v0=0 (standing obstacle)
+        if(v0==0){
+            return 0;
+        }
+        
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.netDistance(vehFront);
@@ -194,16 +200,13 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
         double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
                 / Math.sqrt(aLocal * b);
 
-        // if(sstar<s0+0.2*v*Tloc){
-        // sstar=s0+0.2*v*Tloc;
-        // }
         if (sstar < s0) {
             sstar = s0;
         }
 
         final double aWanted = aLocal * (1. - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
 
-        // logger.debug("aWanted = {}", aWanted);
+        logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
     }
 
@@ -216,8 +219,14 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      */
     @Override
     public double accSimple(double s, double v, double dv) {
-        double sstar = s0 + T * v + 0.5 * v * dv / Math.sqrt(a * b); // desired
-                                                                     // distance
+        
+        // treat special case of v0=0 (standing obstacle)
+        if(v0==0){
+            return 0;
+        }
+        
+        // desired distance
+        double sstar = s0 + T * v + 0.5 * v * dv / Math.sqrt(a * b); 
         sstar += s1 * Math.sqrt((v + 0.000001) / v0);
         if (sstar < s0) {
             sstar = s0;

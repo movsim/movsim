@@ -252,37 +252,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     }
 
     /**
-     * Long model factory.
-     * 
-     * @param modelToCopy
-     *            the model to copy
-     * @return the acceleration model
-     */
-    // private AccelerationModel longModelFactory(AccelerationModel modelToCopy)
-    // {
-    // AccelerationModel longModel = null;
-    // final String modelName = modelToCopy.modelName();
-    // if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-    // longModel = new IDM((IDM) modelToCopy);
-    // } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
-    // longModel = new ACC((ACC) modelToCopy);
-    // } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
-    // longModel = new OVM_VDIFF((OVM_VDIFF) modelToCopy);
-    // } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
-    // longModel = new Gipps((Gipps) modelToCopy);
-    // } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
-    // longModel = new NSM((NSM) modelToCopy);
-    // } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-    // longModel = new KCA((KCA) modelToCopy);
-    // } else {
-    // logger.error("create model by copy constructor: Model {} not known ! %n",
-    // modelName);
-    // System.exit(0);
-    // }
-    // return longModel;
-    // }
-
-    /**
      * Normalize fractions.
      * 
      * @param sumFraction
@@ -359,15 +328,9 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         // final double length = prototype.length();
         // final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
-        // TODO !!!! gleich mit standard cstr aufrufen !?
-        // longModelFactory(AccelerationModelInputData modelInputData, double
-        // vehLength)
-        // final AccelerationModel longModel =
-        // longModelFactory(prototype.getLongModel());
         final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
-
         final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer);
         return veh;
     }
