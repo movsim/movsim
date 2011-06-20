@@ -220,7 +220,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void initialize() {
 
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011)");
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2011)");
 
         // parse xmlFile and set values
 

@@ -13,7 +13,9 @@ public class ProjectMetaData {
     private static boolean xmlFromResources = false;
     
     
+    // private constructor: singleton pattern
     private ProjectMetaData() {
+        
     }
 
     public static String getProjectName() {

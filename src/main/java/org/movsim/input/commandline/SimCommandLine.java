@@ -38,12 +38,17 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.utilities.impl.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class SimCommandLine. MovSim console command line parser.
  * Sets the ProjectMetaData.
  */
 public class SimCommandLine {
+    
+    
+    final static Logger logger = LoggerFactory.getLogger(SimCommandLine.class);
 
     final static String releaseVersion = "1.0";
 
@@ -75,7 +80,7 @@ public class SimCommandLine {
         options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
-        options.addOption("v", "version", false, "prints version number of this MovSim release");
+        options.addOption("v", "version", false, "prints version number of this movsim release");
         ;
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
@@ -136,7 +141,7 @@ public class SimCommandLine {
      * Option: prints the version number of this Movsim release
      */
     private void optPrintVersion() {
-        System.out.println("MovSim release: " + releaseVersion);
+        System.out.println("movsim release version: " + releaseVersion);
     }
 
     /**
@@ -187,24 +192,10 @@ public class SimCommandLine {
             if (isXml) {
                 // workaround  //TODO
                 ProjectMetaData.setProjectName(simulationFilename);
-                
-                setProjectName(); //TODO
-                setPathToProjectXmlFile();
             }
         }
 
     }
-
-    private void setPathToProjectXmlFile() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    private void setProjectName() {
-        // TODO Auto-generated method stub
-        
-    }
-
     /**
      * Option help.
      */
