@@ -1,80 +1,110 @@
 package org.movsim.input.impl;
 
 import org.movsim.input.ProjectMetaData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ProjectMetaDataImpl implements ProjectMetaData{
+public class ProjectMetaDataImpl implements ProjectMetaData {
+    
+    private static ProjectMetaDataImpl singleton = new ProjectMetaDataImpl();
+    
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(ProjectMetaDataImpl.class);
 
-    private static String projectName = "onramp_IDM";
-    private static String pathToProjectXmlFile;
-    private static String outputPath;
-    private static boolean instantaneousFileOutput=true;  //AKE
-    private static boolean onlyValidation = false;
-    private static boolean writeInternalXml = false;
+    private String projectName = "onramp_IDM"; // for testing
+    private String pathToProjectXmlFile;
+    private String outputPath;
+    private boolean instantaneousFileOutput=true;
+    private boolean onlyValidation = false;
+    private boolean writeInternalXml = false;
     
     /** Needed for Applet */
-    private static boolean xmlFromResources = false;
+    private boolean xmlFromResources = false;
     
     
     // private constructor: singleton pattern
     private ProjectMetaDataImpl() {
         
     }
-
-    public static String getProjectName() {
+    
+    // package restricted access
+    static ProjectMetaDataImpl getInstanceImpl() {
+        return singleton;
+    }
+    
+    // could be made public. Isn't needed, because getters are available through inputData
+    static ProjectMetaData getInstance() {
+        return singleton;
+    }
+    
+    public String getProjectName() {
         return projectName;
     }
 
-    public static void setProjectName(String projectName) {
-        ProjectMetaDataImpl.projectName = projectName;
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+        logger.debug("Projectname: {}", projectName);
     }
 
-    public static String getPathToProjectXmlFile() {
+
+    public String getPathToProjectXmlFile() {
         return pathToProjectXmlFile;
     }
 
-    public static void setPathToProjectXmlFile(String pathToProjectXmlFile) {
-        ProjectMetaDataImpl.pathToProjectXmlFile = pathToProjectXmlFile;
+
+    public void setPathToProjectXmlFile(String pathToProjectXmlFile) {
+        this.pathToProjectXmlFile = pathToProjectXmlFile;
     }
 
-    public static String getOutputPath() {
+
+    public String getOutputPath() {
         return outputPath;
     }
 
-    public static void setOutputPath(String outputPath) {
-        ProjectMetaDataImpl.outputPath = outputPath;
+
+    public void setOutputPath(String outputPath) {
+        this.outputPath = outputPath;
     }
 
-    public static boolean isInstantaneousFileOutput() {
+
+    public boolean isInstantaneousFileOutput() {
         return instantaneousFileOutput;
     }
 
-    public static void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
-        ProjectMetaDataImpl.instantaneousFileOutput = instantaneousFileOutput;
+
+    public void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
+        this.instantaneousFileOutput = instantaneousFileOutput;
     }
 
-    public static void setOnlyValidation(boolean onlyValidation) {
-        ProjectMetaDataImpl.onlyValidation = onlyValidation;
-    }
 
-    public static boolean isOnlyValidation() {
+    public boolean isOnlyValidation() {
         return onlyValidation;
     }
 
-    public static void setWriteInternalXml(boolean writeInternalXml) {
-        ProjectMetaDataImpl.writeInternalXml = writeInternalXml;
+
+    public void setOnlyValidation(boolean onlyValidation) {
+        this.onlyValidation = onlyValidation;
     }
 
-    public static boolean isWriteInternalXml() {
+
+    public boolean isWriteInternalXml() {
         return writeInternalXml;
     }
 
-    public static void setXmlFromResources(boolean xmlFromResources) {
-        ProjectMetaDataImpl.xmlFromResources = xmlFromResources;
+
+    public void setWriteInternalXml(boolean writeInternalXml) {
+        this.writeInternalXml = writeInternalXml;
     }
 
-    public static boolean isXmlFromResources() {
+
+    public boolean isXmlFromResources() {
         return xmlFromResources;
     }
 
+
+    public void setXmlFromResources(boolean xmlFromResources) {
+        this.xmlFromResources = xmlFromResources;
+    }
 
 }

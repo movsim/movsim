@@ -28,12 +28,10 @@ public abstract class Controller {
     
     public abstract void start();
 
-    public abstract void stop();
+    public abstract void reset();
 
     public abstract void pause();
 
-    // void reset();
-    
     //void update();
 
 }

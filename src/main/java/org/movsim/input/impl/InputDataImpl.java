@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.InputData;
-import org.movsim.input.model.OutputInput;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.slf4j.Logger;
@@ -48,24 +48,20 @@ public class InputDataImpl implements InputData {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InputDataImpl.class);
 
-    /** The project name. */
-    private String projectName;
-
-
     /** The vehicle input data. */
     private List<VehicleInput> vehicleInputData;
-
 
     /** The simulation input. */
     private SimulationInput simulationInput;
     
-    private OutputInput outputInput;
+    private ProjectMetaDataImpl projectMetaDataImpl;
     
 
     /**
      * Instantiates a new input data impl.
      */
     public InputDataImpl() {
+        projectMetaDataImpl = ProjectMetaDataImpl.getInstanceImpl();
     }
 
 
@@ -76,18 +72,7 @@ public class InputDataImpl implements InputData {
      *            the new project name
      */
     public void setProjectName(String projectname) {
-        this.projectName = projectname;
-        logger.debug("Projectname: {}", projectname);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.InputData#getProjectName()
-     */
-    @Override
-    public String getProjectName() {
-        return projectName;
+        this.projectMetaDataImpl.setProjectName(projectname);
     }
 
     /**
@@ -140,6 +125,15 @@ public class InputDataImpl implements InputData {
      */
     public void setSimulationInput(SimulationInput simulationInput) {
         this.simulationInput = simulationInput;
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.InputData#getProjectMetaData()
+     */
+    @Override
+    public ProjectMetaData getProjectMetaData() {
+        return (ProjectMetaData)projectMetaDataImpl;
     }
 
 }

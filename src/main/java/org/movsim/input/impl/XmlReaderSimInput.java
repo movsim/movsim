@@ -39,6 +39,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
@@ -87,6 +88,8 @@ public class XmlReaderSimInput {
 
     private InputSource appletresource;
 
+    private ProjectMetaData projectMetaData;
+
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
      * 
@@ -96,27 +99,28 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(String xmlFileName, InputDataImpl inputData) {
+    public XmlReaderSimInput(InputDataImpl inputData) {
+        projectMetaData = ProjectMetaDataImpl.getInstance();
         this.inputData = inputData;
 
-        this.xmlFilename = xmlFileName;
+        this.xmlFilename = projectMetaData.getProjectName(); //TODO Path + File
 
         logger.info("Begin parsing: " + xmlFilename);
-        if (!ProjectMetaDataImpl.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
+        if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
             logger.error("XML File does not exist. Exit Simulation.");
              System.exit(1);
         }
 
         logger.info("Begin parsing: " + xmlFilename);
         
-        if (ProjectMetaDataImpl.isXmlFromResources()) {
+        if (projectMetaData.isXmlFromResources()) {
             readXmlFromResources();
         }  else {
             readAndValidateXmlFromFileName();
         }
 
         // write internal xml file:
-        if (ProjectMetaDataImpl.isWriteInternalXml()) {
+        if (projectMetaData.isWriteInternalXml()) {
             String outFilename = xmlFilename + ".internal_xml";
             writeInternalXmlToFile(doc, outFilename);
             logger.info("internal xml output written to file {}. Exit.", outFilename);
@@ -177,7 +181,7 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        validate(FileUtils.getInputSourceFromFilename(xmlFilename));
+        validate(FileUtils.getInputSourceFromFilename(xmlFilename));  // TODO path
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
     
@@ -261,7 +265,7 @@ public class XmlReaderSimInput {
         if (!isValid) {
             logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
             System.exit(0);
-        } else if (ProjectMetaDataImpl.isOnlyValidation()) {
+        } else if (projectMetaData.isOnlyValidation()) {
             logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
             System.exit(0);
         }

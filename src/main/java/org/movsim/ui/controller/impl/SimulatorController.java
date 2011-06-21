@@ -35,7 +35,7 @@ public class SimulatorController extends Controller {
      * @see org.movsim.ui.desktop.ControllerInterface#stop()
      */
     @Override
-    public void stop() {
+    public void reset() {
 
     }
 

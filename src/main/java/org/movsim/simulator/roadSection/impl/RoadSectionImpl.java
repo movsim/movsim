@@ -113,10 +113,9 @@ public class RoadSectionImpl implements RoadSection {
      * @param inputData
      *            the input data
      */
-    public RoadSectionImpl(boolean instantaneousFileOutput, InputData inputData) {
+    public RoadSectionImpl(InputData inputData) {
         logger.info("Cstr. RoadSectionImpl");
-
-        this.instantaneousFileOutput = instantaneousFileOutput;
+        this.instantaneousFileOutput = inputData.getProjectMetaData().isInstantaneousFileOutput();
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
         this.roadLength = simInput.getSingleRoadInput().getRoadLength();
@@ -143,20 +142,20 @@ public class RoadSectionImpl implements RoadSection {
     private void initialize(InputData inputData) {
         vehContainer = new VehicleContainerImpl();
 
-        vehGenerator = new VehicleGeneratorImpl(instantaneousFileOutput, inputData);
+        vehGenerator = new VehicleGeneratorImpl(inputData);
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
         upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, roadInput.getUpstreamBoundaryData(),
-                inputData.getProjectName());
+                inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
         
-        trafficLights = new TrafficLightsImpl(inputData.getProjectName(), roadInput.getTrafficLightsInput());
+        trafficLights = new TrafficLightsImpl(inputData.getProjectMetaData().getProjectName(), roadInput.getTrafficLightsInput());
         
         final DetectorInput detInput = roadInput.getDetectorInput();
         if (detInput.isWithDetectors()) {
-            detectors = new LoopDetectors(inputData.getProjectName(), detInput);
+            detectors = new LoopDetectors(inputData.getProjectMetaData().getProjectName(), detInput);
         }
 
         initialConditions(inputData.getSimulationInput());
@@ -283,7 +282,7 @@ public class RoadSectionImpl implements RoadSection {
     private void initOnramps(InputData inputData) {
         simpleOnramps = new ArrayList<Onramp>();
         final List<SimpleRampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getSimpleRamps();
-        final String projectName = inputData.getProjectName();
+        final String projectName = inputData.getProjectMetaData().getProjectName();
         int rampIndex = 1;
         for (final SimpleRampData onrmp : onrampData) {
             simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainer, projectName, rampIndex));

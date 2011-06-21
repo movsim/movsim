@@ -74,9 +74,4 @@ public interface Simulator {
 
     void initialize();
     
-    void setXmlFileName(String xmlFileName);
-    
-    String getXmlFileName();
-
-
 }

@@ -83,12 +83,12 @@ public class SimOutput implements SimObservables {
      * @param roadSection
      *            the road section
      */
-    public SimOutput(boolean instantaneousFileOutput, InputData simInput, RoadSection roadSection) {
-        projectName = simInput.getProjectName();
+    public SimOutput(InputData simInput, RoadSection roadSection) {
+        projectName = simInput.getProjectMetaData().getProjectName();
         this.roadSection = roadSection;
         
         // more restrictive than in other output classes TODO
-        writeOutput = instantaneousFileOutput; // no file output from GUI
+        writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput(); // no file output from GUI
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
         

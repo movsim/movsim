@@ -37,16 +37,8 @@ import org.movsim.input.model.VehicleInput;
  * The Interface InputData.
  */
 public interface InputData {
-
-    /**
-     * Gets the project name.
-     * 
-     * @return the project name
-     */
-    String getProjectName();
     
-    void setProjectName(String projectName);
-
+    ProjectMetaData getProjectMetaData();
 
     /**
      * Gets the simulation input.

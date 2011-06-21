@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.commandline;
+package org.movsim.input.impl;
 
 import java.io.File;
 
@@ -36,7 +36,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +54,8 @@ public class SimCommandLine {
     /** The options. */
     private Options options;
 
+    private ProjectMetaDataImpl projectMetaData;
+
     /**
      * Instantiates a new sim command line impl.
      * 
@@ -62,6 +63,8 @@ public class SimCommandLine {
      *            the args
      */
     public SimCommandLine(String[] args) {
+        
+        projectMetaData = ProjectMetaDataImpl.getInstanceImpl();
 
         createOptions();
         createParserAndParse(args);
@@ -166,14 +169,14 @@ public class SimCommandLine {
      * Option: write internal xml (without simulation)
      */
     private void optInternalXml() {
-        ProjectMetaDataImpl.setWriteInternalXml(true);
+        projectMetaData.setWriteInternalXml(true);
     }
 
     /**
      * Option: parse xml input file for validation (without simulation)
      */
     private void optValidation() {
-        ProjectMetaDataImpl.setOnlyValidation(true);
+        projectMetaData.setOnlyValidation(true);
     }
 
     /**
@@ -191,7 +194,7 @@ public class SimCommandLine {
             boolean isXml = validateSimulationFileName(simulationFilename);
             if (isXml) {
                 // workaround  //TODO
-                ProjectMetaDataImpl.setProjectName(simulationFilename);
+                projectMetaData.setProjectName(simulationFilename);
             }
         }
 

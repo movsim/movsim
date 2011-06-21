@@ -67,30 +67,10 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The sim output. */
     private SimOutput simOutput;
 
-    /** The is with gui. */
-    private boolean instantaneousFileOutput = true;
-
     /** The sim input. */
     private InputDataImpl inputData;
 
-    private String xmlFileName;
-
-
-    /**
-     * Instantiates a new simulator impl.
-     * 
-     * @param instantaneousFileOutput
-     *            Gives instantaneous file output of some simulation results
-     *            (floating cars data, fundamental diagram, saptiotemporal data,
-     *            trajectories) to predefined files in the "sim" folder. Also
-     *            pay attention to the logging attributes in the xml files!
-     *            These are independent to this flag.
-     * @param cmdline
-     *            commandline
-     */
     public SimulatorImpl() {
-        this.instantaneousFileOutput = ProjectMetaDataImpl.isInstantaneousFileOutput(); //TODO eliminate
-        xmlFileName = ProjectMetaDataImpl.getProjectName(); //TODO eliminate
         this.inputData = new InputDataImpl();
     }
 
@@ -100,7 +80,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void restart() {
         time = 0;
         itime = 0;
-        roadSection = new RoadSectionImpl(instantaneousFileOutput, inputData);
+        roadSection = new RoadSectionImpl(inputData);
 
         // model requires specific update time depending on its category !!
 
@@ -110,7 +90,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(instantaneousFileOutput, inputData, roadSection);
+        simOutput = new SimOutput(inputData, roadSection);
     }
 
     /*
@@ -203,15 +183,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         return simOutput;
     }
 
-    public String getXmlFileName() {
-        return xmlFileName;
-    }
-
-    public void setXmlFileName(String xmlFileName) {
-        this.xmlFileName = xmlFileName;
-        inputData.setProjectName(xmlFileName);
-    }
-
     /*
      * (non-Javadoc)
      * 
@@ -224,7 +195,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         // parse xmlFile and set values
 
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, inputData);
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
                                                 // models

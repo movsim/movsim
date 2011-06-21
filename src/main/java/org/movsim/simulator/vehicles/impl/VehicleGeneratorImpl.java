@@ -95,18 +95,19 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     /** The is with reaction times. */
     private final boolean isWithReactionTimes;
 
+    private boolean instantaneousFileOutput;
+
     /**
      * Instantiates a new vehicle generator impl. And writes fundamental diagram
      * to file system if the param instantaneousFileOutput is true.
      * 
-     * @param instantaneousFileOutput
-     *            writes to file system
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(boolean instantaneousFileOutput, InputData simInput) {
+    public VehicleGeneratorImpl(InputData simInput) {
 
-        this.projectName = simInput.getProjectName();
+        this.projectName = simInput.getProjectMetaData().getProjectName();
+        this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         // create vehicle prototyps according to traffic composition
         // (heterogeneity)

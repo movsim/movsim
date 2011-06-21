@@ -1,9 +1,18 @@
 package org.movsim.input;
 
-import org.movsim.input.impl.ProjectMetaDataImpl;
-
 public interface ProjectMetaData {
 
-    // TODO
+    String getProjectName();
 
+    String getPathToProjectXmlFile();
+
+    String getOutputPath();
+
+    boolean isInstantaneousFileOutput();
+
+    boolean isOnlyValidation();
+
+    boolean isWriteInternalXml();
+
+    boolean isXmlFromResources();
 }
