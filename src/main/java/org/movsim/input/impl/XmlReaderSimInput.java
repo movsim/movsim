@@ -105,7 +105,6 @@ public class XmlReaderSimInput {
 
         this.xmlFilename = projectMetaData.getProjectName(); //TODO Path + File
 
-        logger.info("Begin parsing: " + xmlFilename);
         if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
             logger.error("XML File does not exist. Exit Simulation.");
              System.exit(1);

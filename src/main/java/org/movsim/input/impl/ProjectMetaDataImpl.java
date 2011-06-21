@@ -44,7 +44,7 @@ public class ProjectMetaDataImpl implements ProjectMetaData {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-        logger.debug("Projectname: {}", projectName);
+        logger.info("Projectname: {}", projectName);
     }
 
 
