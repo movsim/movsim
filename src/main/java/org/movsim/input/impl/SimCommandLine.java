@@ -36,20 +36,14 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.movsim.simulator.Constants;
 import org.movsim.utilities.impl.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Class SimCommandLine. MovSim console command line parser.
  * Sets the ProjectMetaDataImpl.
  */
 public class SimCommandLine {
-    
-    
-    final static Logger logger = LoggerFactory.getLogger(SimCommandLine.class);
-
-    final static String releaseVersion = "1.0";
 
     /** The options. */
     private Options options;
@@ -144,7 +138,7 @@ public class SimCommandLine {
      * Option: prints the version number of this Movsim release
      */
     private void optPrintVersion() {
-        System.out.println("movsim release version: " + releaseVersion);
+        System.out.println("movsim release version: " + Constants.RELEASE_VERSION);
     }
 
     /**

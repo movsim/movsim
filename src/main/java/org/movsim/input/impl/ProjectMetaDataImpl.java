@@ -11,7 +11,7 @@ public class ProjectMetaDataImpl implements ProjectMetaData {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ProjectMetaDataImpl.class);
 
-    private String projectName = "onramp_IDM"; // for testing
+    private String projectName; // for testing
     private String pathToProjectXmlFile;
     private String outputPath;
     private boolean instantaneousFileOutput=true;

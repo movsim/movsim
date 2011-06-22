@@ -57,6 +57,11 @@ public class InputDataImpl implements InputData {
     private ProjectMetaDataImpl projectMetaDataImpl;
     
 
+    public ProjectMetaDataImpl getProjectMetaDataImpl() {
+        return projectMetaDataImpl;
+    }
+
+
     /**
      * Instantiates a new input data impl.
      */
@@ -74,6 +79,7 @@ public class InputDataImpl implements InputData {
     public void setProjectName(String projectname) {
         this.projectMetaDataImpl.setProjectName(projectname);
     }
+    
 
     /**
      * Sets the vehicle input data.
