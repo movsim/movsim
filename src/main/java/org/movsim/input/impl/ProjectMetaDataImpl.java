@@ -8,9 +8,6 @@ public class ProjectMetaDataImpl implements ProjectMetaData {
     
     private static ProjectMetaDataImpl singleton = new ProjectMetaDataImpl();
     
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ProjectMetaDataImpl.class);
-
     private String projectName; // for testing
     private String pathToProjectXmlFile;
     private String outputPath;
@@ -44,7 +41,6 @@ public class ProjectMetaDataImpl implements ProjectMetaData {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-        logger.info("Projectname: {}", projectName);
     }
 
 
