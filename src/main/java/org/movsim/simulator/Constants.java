@@ -32,7 +32,8 @@ package org.movsim.simulator;
  */
 public interface Constants {
 
-    final String RELEASE_VERSION = "1.0";
+    // TODO: connection with maven version number
+    final String RELEASE_VERSION = "1.0";  
 
     /** The COMMEN t_ char. */
     final String COMMENT_CHAR = "#";

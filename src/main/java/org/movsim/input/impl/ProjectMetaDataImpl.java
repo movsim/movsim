@@ -1,14 +1,12 @@
 package org.movsim.input.impl;
 
 import org.movsim.input.ProjectMetaData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ProjectMetaDataImpl implements ProjectMetaData {
     
     private static ProjectMetaDataImpl singleton = new ProjectMetaDataImpl();
     
-    private String projectName; // for testing
+    private String projectName = ""; 
     private String pathToProjectXmlFile;
     private String outputPath;
     private boolean instantaneousFileOutput=true;

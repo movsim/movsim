@@ -62,6 +62,17 @@ public class SimCommandLine {
 
         createOptions();
         createParserAndParse(args);
+        
+        final String projectName = projectMetaData.getProjectName();
+        if( projectMetaData.isWriteInternalXml() && projectName.isEmpty()){
+            System.err.println("no xml file for simulation configuration found!");
+            System.exit(-1);
+        }
+        
+        if(!FileUtils.fileExists(projectName)){
+            System.err.println("no file \""+projectName+"\" for simulation configuration found!");
+            System.exit(-1);
+        }
     }
 
     /**
@@ -139,6 +150,8 @@ public class SimCommandLine {
      */
     private void optPrintVersion() {
         System.out.println("movsim release version: " + Constants.RELEASE_VERSION);
+        
+        System.exit(0);
     }
 
     /**
@@ -148,6 +161,9 @@ public class SimCommandLine {
         String resource = File.separator + "sim" + File.separator + "log4j.properties";
         String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
+        System.out.println("logger properties file written to " + filename);
+        
+        System.exit(0);
     }
 
     /**
@@ -157,6 +173,10 @@ public class SimCommandLine {
         String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
         String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
+
+        System.out.println("dtd file written to " + filename);
+        
+        System.exit(0);
     }
 
     /**
@@ -180,12 +200,15 @@ public class SimCommandLine {
      *            the cmdline
      */
     private void optSimulation(CommandLine cmdline) {
-        String simulationFilename = cmdline.getOptionValue('f');
+        final String simulationFilename = cmdline.getOptionValue('f');
         // TODO separate path
         if (simulationFilename == null) {
-            System.out.println("No configfile as option passed. Start Simulation with default.");
+            // default not necessary anymore
+            // System.out.println("No configfile as option passed. Start Simulation with default.");
+            System.err.println("No xml configuration file! Please specify via the option -f.");
+            System.exit(-1);
         } else {
-            boolean isXml = validateSimulationFileName(simulationFilename);
+            final boolean isXml = validateSimulationFileName(simulationFilename);
             if (isXml) {
                 // workaround  //TODO
                 projectMetaData.setProjectName(simulationFilename);
