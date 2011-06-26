@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Newell.
  */
-public class Newell extends LongitudinalModelImpl implements AccelerationModel {
+public class Newell extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
@@ -109,7 +109,7 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -121,7 +121,7 @@ public class Newell extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

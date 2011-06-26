@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class LongitudinalModelImpl.
+ * The Class LongitudinalModel.
  */
-public abstract class LongitudinalModelImpl implements Observer {
+public abstract class LongitudinalModel implements Observer {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModel.class);
 
     /** The model name. */
     private final String modelName;
@@ -69,7 +69,7 @@ public abstract class LongitudinalModelImpl implements Observer {
      * @param parameters
      *            the parameters
      */
-    public LongitudinalModelImpl(String modelName, int modelCategory, AccelerationModelInputData parameters) {
+    public LongitudinalModel(String modelName, int modelCategory, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.modelCategory = modelCategory;
         this.parameters = parameters;
@@ -77,7 +77,7 @@ public abstract class LongitudinalModelImpl implements Observer {
         parameters.registerObserver((Observer) this);
     }
 
-    // public LongitudinalModelImpl(String modelName, int modelCategory) {
+    // public LongitudinalModel(String modelName, int modelCategory) {
     // this.modelName = modelName;
     // this.modelCategory = modelCategory;
     // }

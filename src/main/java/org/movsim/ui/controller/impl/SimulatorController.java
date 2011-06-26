@@ -11,9 +11,9 @@ public class SimulatorController extends Controller {
     public SimulatorController(Simulator model) {
         this.model = model;
 
-        initLocalizationAndLogger();
+        // initLocalizationAndLogger(); // already initialized in SimCommanLine
         initializeModel();
-        
+
         simThread = new Thread((Runnable) model);
         start();
 
@@ -49,12 +49,14 @@ public class SimulatorController extends Controller {
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.ui.controller.Controller#initializeModel()
      */
     @Override
     public void initializeModel() {
-        model.initialize();        
+        model.initialize();
     }
 
 }

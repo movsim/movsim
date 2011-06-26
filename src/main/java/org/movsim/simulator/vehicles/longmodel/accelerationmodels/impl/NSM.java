@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class NSM.
  */
-public class NSM extends LongitudinalModelImpl implements AccelerationModel {
+public class NSM extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
@@ -149,7 +149,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -160,7 +160,7 @@ public class NSM extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

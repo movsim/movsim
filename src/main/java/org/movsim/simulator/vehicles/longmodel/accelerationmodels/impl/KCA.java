@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class KCA.
  */
-public class KCA extends LongitudinalModelImpl implements AccelerationModel {
+public class KCA extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(KCA.class);
@@ -192,7 +192,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -203,7 +203,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

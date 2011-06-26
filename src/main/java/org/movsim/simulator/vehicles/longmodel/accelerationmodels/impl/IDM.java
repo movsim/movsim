@@ -51,7 +51,7 @@ M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in Empirical O
 Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
-public class IDM extends LongitudinalModelImpl implements AccelerationModel {
+public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
@@ -239,7 +239,7 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -250,7 +250,7 @@ public class IDM extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

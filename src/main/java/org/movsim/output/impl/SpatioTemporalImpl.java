@@ -67,12 +67,6 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
     private double timeOffset;
 
     
-    /**
-     * Instantiates a new macro3 d impl.
-     *
-     * @param input the input
-     * @param roadSection the road section
-     */
     public SpatioTemporalImpl(SpatioTemporalInput input, RoadSection roadSection) {
 
         dtOut = input.getDt();
@@ -98,8 +92,6 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
 
     public void update(int it, double time, RoadSection roadSection) {
         if ((time - timeOffset) >= dtOut) {
-            // logger.info("update: write to file. time = {}h", time / 60.,
-            // time/3600.);
             timeOffset = time;
             calcData(time, roadSection.vehContainer());
             notifyObservers(time);

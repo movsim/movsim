@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Gipps.
  */
-public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
+public class Gipps extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Gipps.class);
@@ -190,7 +190,7 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -201,7 +201,7 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

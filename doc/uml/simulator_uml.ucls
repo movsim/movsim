@@ -1,4 +1,4 @@
-<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
+<class-diagram version="0.9.86" icons="true" automaticImage="PNG" always-add-relationships="false" 
   generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" 
@@ -237,8 +237,8 @@
     </display>  
   </interface>  
   <class corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
+    name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelModel" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/LongitudinalModel.java" 
     binary="false">    
     <position x="1216" y="2574" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      

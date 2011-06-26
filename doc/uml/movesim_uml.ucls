@@ -237,8 +237,8 @@
     </display>  
   </interface>  
   <class id="28" corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelImpl" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModelImpl.java" 
+    name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModelModel" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/LongitudinalModel.java" 
     binary="false">    
     <position x="1216" y="2574" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
@@ -670,9 +670,9 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <class id="85" corner="BOTTOM_RIGHT" language="java" name="org.movsiorg.movsim.input.model.output.impl.SpatioTemporalInputImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/input/model/output/impl/SpatioTemporalInputImpl.java" 
-    binary="false">    
+  <class id="85" corner="BOTTOM_RIGHT" language="java" 
+    name="org.movsiorg.movsim.input.model.output.impl.SpatioTemporalInputImpl" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/input/model/output/impl/SpatioTemporalInputImpl.java" binary="false">    
     <position x="2268" y="46" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="false" package="false" protected="false" private="false"/>      

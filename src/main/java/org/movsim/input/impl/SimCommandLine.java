@@ -27,6 +27,8 @@
 package org.movsim.input.impl;
 
 import java.io.File;
+import java.net.URL;
+import java.util.Locale;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -36,12 +38,14 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.log4j.PropertyConfigurator;
+import org.movsim.App;
 import org.movsim.simulator.Constants;
 import org.movsim.utilities.impl.FileUtils;
 
 /**
- * The Class SimCommandLine. MovSim console command line parser.
- * Sets the ProjectMetaDataImpl.
+ * The Class SimCommandLine. MovSim console command line parser. Sets the
+ * ProjectMetaDataImpl.
  */
 public class SimCommandLine {
 
@@ -58,21 +62,23 @@ public class SimCommandLine {
      */
     public SimCommandLine(String[] args) {
         
+        initLocalizationAndLogger();
+
         projectMetaData = ProjectMetaDataImpl.getInstanceImpl();
 
         createOptions();
         createParserAndParse(args);
-        
+
         final String projectName = projectMetaData.getProjectName();
-        if( projectMetaData.isWriteInternalXml() && projectName.isEmpty()){
+        if (projectMetaData.isWriteInternalXml() && projectName.isEmpty()) {
             System.err.println("no xml file for simulation configuration found!");
             System.exit(-1);
         }
-        
-        if(!FileUtils.fileExists(projectName)){
-            System.err.println("no file \""+projectName+"\" for simulation configuration found!");
-            System.exit(-1);
-        }
+
+         if(!FileUtils.fileExists(projectName)){
+         System.err.println("no file \""+projectName+"\" for simulation configuration found!");
+         System.exit(-1);
+         }
     }
 
     /**
@@ -150,7 +156,7 @@ public class SimCommandLine {
      */
     private void optPrintVersion() {
         System.out.println("movsim release version: " + Constants.RELEASE_VERSION);
-        
+
         System.exit(0);
     }
 
@@ -162,7 +168,7 @@ public class SimCommandLine {
         String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("logger properties file written to " + filename);
-        
+
         System.exit(0);
     }
 
@@ -175,7 +181,7 @@ public class SimCommandLine {
         FileUtils.resourceToFile(resource, filename);
 
         System.out.println("dtd file written to " + filename);
-        
+
         System.exit(0);
     }
 
@@ -203,19 +209,18 @@ public class SimCommandLine {
         final String simulationFilename = cmdline.getOptionValue('f');
         // TODO separate path
         if (simulationFilename == null) {
-            // default not necessary anymore
-            // System.out.println("No configfile as option passed. Start Simulation with default.");
             System.err.println("No xml configuration file! Please specify via the option -f.");
             System.exit(-1);
         } else {
             final boolean isXml = validateSimulationFileName(simulationFilename);
             if (isXml) {
-                // workaround  //TODO
+                // workaround //TODO
                 projectMetaData.setProjectName(simulationFilename);
             }
         }
 
     }
+
     /**
      * Option help.
      */
@@ -247,4 +252,17 @@ public class SimCommandLine {
 
     }
 
+    private void initLocalizationAndLogger() {
+        Locale.setDefault(Locale.US);
+        
+        final File file = new File("log4j.properties");
+        if (file.exists() && file.isFile()) {
+            PropertyConfigurator.configure("log4j.properties");
+        } else {
+            final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+            PropertyConfigurator.configure(log4jConfig);
+        }
+        
+        // Log Levels: DEBUG < INFO < WARN < ERROR;
+    }
 }
