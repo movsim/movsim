@@ -32,7 +32,7 @@
             <SPEED_LIMITS/>
             <RAMPS>
                 <SIMPLE_RAMP x="2000" length="100" logging="true">
-                    <INFLOW t="0" q_per_hour="100" />
+                    <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
             </RAMPS>
             <TRAFFIC_LIGHTS>

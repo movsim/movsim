@@ -159,15 +159,12 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
         // logger.debug("alphaT = {}", alphaT);
         // logger.info("v0loc = {}", v0loc);
 
-        if(alphaT!=1){
-            logger.error("alphaT={}", alphaT);
-            System.exit(-1);
-        }
+//        if(alphaT!=1){
+//            logger.error("alphaT={}", alphaT);
+//            System.exit(-1);
+//        }
         
-        double lenInteractionLoc = lenInteraction * alphaT;
-        if (lenInteractionLoc < 1e-6) {
-            lenInteractionLoc = 1e-6;
-        }
+        final double lenInteractionLoc = Math.max(1e-6, lenInteraction * alphaT);
 
         // final double betaLoc=beta*alpha_T;
         final double betaLoc = beta;
