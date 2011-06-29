@@ -45,9 +45,9 @@ public class MemoryImpl implements Memory {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MemoryImpl.class);
 
-    // parameters:
-    /** The tau. */
-    private final double tau; // relaxation time
+    /** The tau. 
+     * relaxation time */
+    private final double tau;
 
     /** The resignation min alpha a. */
     private final double resignationMinAlphaA;
@@ -58,15 +58,16 @@ public class MemoryImpl implements Memory {
     /** The resignation max alpha t. */
     private final double resignationMaxAlphaT;
 
-    // dynamic state variables:
-
-    /** The alpha a. */
+    /** The alpha a. 
+     * dynamic state variable */
     private double alphaA;
 
-    /** The alpha v0. */
+    /** The alpha v0. 
+     * dynamic state variable */
     private double alphaV0;
 
-    /** The alpha t. */
+    /** The alpha t. 
+     * dynamic state variable */
     private double alphaT;
 
     /**
@@ -82,7 +83,7 @@ public class MemoryImpl implements Memory {
         resignationMinAlphaV0 = parameters.getResignationMinAlphaV0();
         resignationMinAlphaA = parameters.getResignationMinAlphaA();
 
-        // init
+        // initialize dynamic state variables
         alphaA = 1;
         alphaV0 = 1;
         alphaT = 1;

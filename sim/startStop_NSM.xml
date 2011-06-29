@@ -65,15 +65,12 @@
             </SPEED_LIMITS>
             <RAMPS>
             </RAMPS>
-            <TRAFFIC_LIGHTS>
-                <!-- not implemented for CA -->
-            </TRAFFIC_LIGHTS>
+            <TRAFFIC_LIGHTS />
 	    <DETECTORS />
         </ROAD>
                     <OUTPUT>
                 <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
                     <!-- FC 1 is obstacle -->
-                    <FC number="1" />
                     <FC number="2" />
                     <FC number="6" />
                     <FC number="11" />

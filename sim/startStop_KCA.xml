@@ -8,7 +8,6 @@
             <LONGITUDINAL_MODEL>
                 <KCA v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
                     vp="14" />
-                <!-- lambda="0.55" ? -->
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
@@ -16,13 +15,12 @@
             <LONGITUDINAL_MODEL>
                 <KCA v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
                     vp="14" />
-                <!-- lambda="0.55" ? -->
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <!-- depends strongly on randomness resp. seed !!! -->
-    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="50">
+    <!-- depends strongly on randomness resp. seed ! -->
+    <SIMULATION dt="1" duration="360" fixed_seed="false" > <!--  <seed="50"> -->
         <ROAD id="1" length="20000" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="KCA1" fraction="1" />
@@ -71,17 +69,15 @@
             </TRAFFIC_LIGHTS>
             <DETECTORS />
         </ROAD>
-                    <OUTPUT>
-                <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
-                    <!-- FC 1 is obstacle -->
-                    <FC number="1" />
-                    <FC number="2" />
-                    <FC number="6" />
-                    <FC number="11" />
-                    <FC number="16" />
-                    <FC number="21" />
-                </FLOATING_CAR_DATA>
-            </OUTPUT>
-
+        <OUTPUT>
+        <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
+            <!-- FC 1 is obstacle -->
+            <FC number="2" />
+            <FC number="6" />
+            <FC number="11" />
+            <FC number="16" />
+            <FC number="21" />
+        </FLOATING_CAR_DATA>
+      </OUTPUT>
     </SIMULATION>
 </SCENARIO>
