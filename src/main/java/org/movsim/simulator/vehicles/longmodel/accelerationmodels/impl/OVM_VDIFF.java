@@ -155,7 +155,6 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * @return the double
      */
     private double acc(double s, double v, double dv, double alphaT, double v0loc) {
-
         
         // logger.debug("alphaT = {}", alphaT);
         // logger.info("v0loc = {}", v0loc);

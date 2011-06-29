@@ -138,15 +138,15 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
     }
     
     // Implementation of ACC model with improved IDM (IIDM)
-    private double acc(double s, double v, double dv, double aLead, double Tloc, double v0Loc, double aLoc) {
+    private double acc(double s, double v, double dv, double aLead, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0 == 0) {
+        if (v0Local == 0) {
             return 0;
         }
         // IIDM
 
         final double sstar =
-                s0 + Math.max(Tloc * v + s1 * Math.sqrt((v + 0.00001) / v0Loc) + 0.5 * v * dv / Math.sqrt(a * b), 0.);
+                s0 + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(a * b), 0.);
         final double z = sstar / Math.max(s, 0.01);
         final double accEmpty = (v <= v0) ? a * (1 - Math.pow((v / v0), delta)) : -b * (1 - Math.pow((v0 / v), a * delta / b));
         final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * a / accEmpty, 100.)));

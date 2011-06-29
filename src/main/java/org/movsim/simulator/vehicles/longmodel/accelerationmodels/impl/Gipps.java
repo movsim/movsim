@@ -131,26 +131,7 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
         return s0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #accSimple(double, double, double)
-     */
-    @Override
-    public double accSimple(double s, double v, double dv) {
-        return acc(s, v, dv, v0, T);
-    }
-
-    public double acc(double s, double v, double dv, double v0Loc, double TLoc) {
-        final double vp = v - dv;
-        // safe speed 
-        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.)); 
-        final double vNew = Math.min(vSafe, Math.min(v + a * TLoc, v0Loc));
-        final double aWanted = (vNew - v) / T;
-        return aWanted;
-    }
+     
 
     /*
      * (non-Javadoc)
@@ -184,6 +165,28 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
         // actual Gipps formula
         return acc(s, v, dv, v0Local, TLocal);
 
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #accSimple(double, double, double)
+     */
+    @Override
+    public double accSimple(double s, double v, double dv) {
+        return acc(s, v, dv, v0, T);
+    }
+
+    
+    private double acc(double s, double v, double dv, double v0Local, double TLocal) {
+        final double vp = v - dv;
+        // safe speed 
+        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.)); 
+        final double vNew = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
+        final double aWanted = (vNew - v) / T;
+        return aWanted;
     }
 
     /*
