@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "NSM"
+lang = "en"
+load "onrampCA.gpl"
+

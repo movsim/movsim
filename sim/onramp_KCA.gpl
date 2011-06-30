@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "KCA"
+lang = "en"
+load "onrampCA.gpl"
+

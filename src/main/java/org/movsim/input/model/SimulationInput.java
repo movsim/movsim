@@ -54,6 +54,8 @@ public interface SimulationInput {
      * @return true, if is with fixed seed
      */
     boolean isWithFixedSeed();
+    
+    boolean isWithCrashExit();
 
     /**
      * Gets the random seed.
@@ -79,5 +81,7 @@ public interface SimulationInput {
     
 
     OutputInput getOutputInput();
+    
+    
 
 }

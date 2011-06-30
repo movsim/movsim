@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "BARL"
+lang = "en"
+load "onrampCA.gpl"
+
