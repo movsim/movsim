@@ -2,7 +2,7 @@
 # first test script for running/updating all simulations
 
 run="runapp"
-onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF"
+onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF IDM_w_noise"
 startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF BARL NSM KCA"
 
 #######################################################
