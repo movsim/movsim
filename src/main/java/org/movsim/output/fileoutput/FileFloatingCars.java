@@ -42,24 +42,25 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FloatingCarsImpl.
  */
-public class FileFloatingCars implements ObserverInTime{
-    
+public class FileFloatingCars implements ObserverInTime {
+
     private static final String extensionFormat = ".V%06d.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR +
-        "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s], distToTrafficlight[m]";
-                                                                                                                 
-    // note: number before decimal point is total width of field, not width of integer part
+    private static final String outputHeading = Constants.COMMENT_CHAR
+            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s], distToTrafficlight[m]";
+
+    // note: number before decimal point is total width of field, not width of
+    // integer part
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.3f, %10.3f, %10.5f, %10.2f%n";
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
     /** The path. */
     private final String path = "./";
-    
+
     /** The project name. */
     private final String projectName;
-    
+
     /** The ending file. */
     private final String endingFile = ".csv";
 
@@ -67,26 +68,22 @@ public class FileFloatingCars implements ObserverInTime{
     private final HashMap<Integer, PrintWriter> hashMap;
 
     private FloatingCars floatingCars;
- 
-   
-    
+
     /**
      * Instantiates a new floating cars impl.
      * 
      * @param projectName
      *            the project name
-     * @param writeOutput
-     *            the write output
-     * @param input
-     *            the input
+     * @param floatingCars
+     *            the floating cars
      */
     public FileFloatingCars(String projectName, FloatingCars floatingCars) {
         logger.debug("Cstr. FloatingCars");
         this.projectName = projectName;
-        
+
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
-        
+
         final String regex = projectName + "[.]V\\d+" + endingFile;
         FileUtils.deleteFileList(path, regex);
 
@@ -97,8 +94,7 @@ public class FileFloatingCars implements ObserverInTime{
             addFCD(i);
         }
     }
-    
-    
+
     /**
      * Adds the fcd.
      * 
@@ -113,8 +109,14 @@ public class FileFloatingCars implements ObserverInTime{
         fstr.flush();
     }
 
+    /**
+     * Write output.
+     * 
+     * @param updateTime
+     *            the update time
+     */
     public void writeOutput(double updateTime) {
-       
+
         final List<Moveable> vehicles = floatingCars.getMoveableContainer().getMoveables();
 
         for (final Moveable veh : vehicles) {
@@ -126,10 +128,9 @@ public class FileFloatingCars implements ObserverInTime{
                     writeData(updateTime, veh, frontVeh, hashMap.get(vehNumber));
                 }
             }
-        } 
+        }
     }
 
-   
     /**
      * Creates the file name.
      * 
@@ -140,7 +141,7 @@ public class FileFloatingCars implements ObserverInTime{
      * @return the string
      */
     private String createFileName(int i, String ending) {
-        final String filename = path + projectName + String.format(extensionFormat,i);
+        final String filename = path + projectName + String.format(extensionFormat, i);
         return (filename);
     }
 
@@ -157,12 +158,18 @@ public class FileFloatingCars implements ObserverInTime{
      *            the fstr
      */
     private void writeData(double time, Moveable veh, Moveable frontVeh, PrintWriter fstr) {
-        // note: number before decimal point is total width of field, not width of integer part
+        // note: number before decimal point is total width of field, not width
+        // of integer part
         fstr.printf(outputFormat, time, veh.getLane(), veh.getPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
-        		veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.distanceToTrafficlight());
+                veh.netDistance(frontVeh), veh.relSpeed(frontVeh), veh.distanceToTrafficlight());
         fstr.flush();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.utilities.ObserverInTime#notifyObserver(double)
+     */
     @Override
     public void notifyObserver(double time) {
         writeOutput(time);

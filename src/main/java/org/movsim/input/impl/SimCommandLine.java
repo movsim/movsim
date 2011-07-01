@@ -43,6 +43,7 @@ import org.movsim.App;
 import org.movsim.simulator.Constants;
 import org.movsim.utilities.impl.FileUtils;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SimCommandLine. MovSim console command line parser. Sets the
  * ProjectMetaDataImpl.
@@ -61,7 +62,7 @@ public class SimCommandLine {
      *            the args
      */
     public SimCommandLine(String[] args) {
-        
+
         initLocalizationAndLogger();
 
         projectMetaData = ProjectMetaDataImpl.getInstanceImpl();
@@ -75,10 +76,10 @@ public class SimCommandLine {
             System.exit(-1);
         }
 
-         if(!FileUtils.fileExists(projectName)){
-         System.err.println("no file \""+projectName+"\" for simulation configuration found!");
-         System.exit(-1);
-         }
+        if (!FileUtils.fileExists(projectName)) {
+            System.err.println("no file \"" + projectName + "\" for simulation configuration found!");
+            System.exit(-1);
+        }
     }
 
     /**
@@ -152,7 +153,7 @@ public class SimCommandLine {
     }
 
     /**
-     * Option: prints the version number of this Movsim release
+     * Option: prints the version number of this Movsim release.
      */
     private void optPrintVersion() {
         System.out.println("movsim release version: " + Constants.RELEASE_VERSION);
@@ -186,14 +187,14 @@ public class SimCommandLine {
     }
 
     /**
-     * Option: write internal xml (without simulation)
+     * Option: write internal xml (without simulation).
      */
     private void optInternalXml() {
         projectMetaData.setWriteInternalXml(true);
     }
 
     /**
-     * Option: parse xml input file for validation (without simulation)
+     * Option: parse xml input file for validation (without simulation).
      */
     private void optValidation() {
         projectMetaData.setOnlyValidation(true);
@@ -252,9 +253,12 @@ public class SimCommandLine {
 
     }
 
+    /**
+     * Inits the localization and logger.
+     */
     private void initLocalizationAndLogger() {
         Locale.setDefault(Locale.US);
-        
+
         final File file = new File("log4j.properties");
         if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
@@ -262,7 +266,7 @@ public class SimCommandLine {
             final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);
         }
-        
+
         // Log Levels: DEBUG < INFO < WARN < ERROR;
     }
 }

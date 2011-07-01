@@ -38,13 +38,13 @@ public class ICMicroDataImpl implements ICMicroData {
 
     /** The init position. */
     private final double initPosition;
-    
+
     /** The init speed. */
     private final double initSpeed;
-    
+
     /** The init lane. */
     private final int initLane; // most right lane: Constants.MOST_RIGHT_LANE
-    
+
     /** The type label. */
     private final String typeLabel; // empty string if no type
 

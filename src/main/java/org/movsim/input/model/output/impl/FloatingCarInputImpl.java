@@ -48,7 +48,7 @@ public class FloatingCarInputImpl implements FloatingCarInput {
 
     /** The dn. */
     private int dn;
-    
+
     /** The perc out. */
     private double percOut;
 
@@ -66,7 +66,6 @@ public class FloatingCarInputImpl implements FloatingCarInput {
      */
     public FloatingCarInputImpl(Element elem) {
 
-        
         if (elem == null) {
             isWithFC = false; // not initialized
             return;

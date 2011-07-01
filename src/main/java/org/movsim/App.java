@@ -32,11 +32,11 @@ import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
 import org.movsim.ui.controller.impl.SimulatorController;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class App.
  */
 public class App {
-
 
     /**
      * The main method.
@@ -45,7 +45,7 @@ public class App {
      *            the arguments
      */
     public static void main(String[] args) {
-        
+
         // CommandLine args options Parser
         // Results are set in ProjectMetaDataImpl
         final SimCommandLine cmdline = new SimCommandLine(args);

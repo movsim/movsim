@@ -1,3 +1,6 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.output.fileoutput;
 
 import java.io.PrintWriter;
@@ -7,6 +10,10 @@ import org.movsim.simulator.Constants;
 import org.movsim.utilities.ObserverInTime;
 import org.movsim.utilities.impl.FileUtils;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FileSpatioTemporal.
+ */
 public class FileSpatioTemporal implements ObserverInTime {
 
     private static final String extensionFormat = ".R%d_st.csv";
@@ -19,10 +26,20 @@ public class FileSpatioTemporal implements ObserverInTime {
 
     private SpatioTemporal spatioTemporal;
 
+    /**
+     * Instantiates a new file spatio temporal.
+     * 
+     * @param projectName
+     *            the project name
+     * @param roadSectionID
+     *            the road section id
+     * @param spatioTemporal
+     *            the spatio temporal
+     */
     public FileSpatioTemporal(String projectName, long roadSectionID, SpatioTemporal spatioTemporal) {
 
         this.spatioTemporal = spatioTemporal;
-        spatioTemporal.registerObserver((ObserverInTime) this);
+        spatioTemporal.registerObserver(this);
 
         final String filename = projectName + String.format(extensionFormat, roadSectionID);
         writer = FileUtils.getWriter(filename);
@@ -48,6 +65,11 @@ public class FileSpatioTemporal implements ObserverInTime {
         writer.flush();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.utilities.ObserverInTime#notifyObserver(double)
+     */
     @Override
     public void notifyObserver(double time) {
         writeOutput(time);

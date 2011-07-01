@@ -37,7 +37,12 @@ import org.movsim.input.model.VehicleInput;
  * The Interface InputData.
  */
 public interface InputData {
-    
+
+    /**
+     * Gets the project meta data.
+     * 
+     * @return the project meta data
+     */
     ProjectMetaData getProjectMetaData();
 
     /**
@@ -53,10 +58,12 @@ public interface InputData {
      * @return the vehicle input data
      */
     List<VehicleInput> getVehicleInputData();
-    
-    
+
+    /**
+     * Creates the vehicle input data map.
+     * 
+     * @return the map
+     */
     Map<String, VehicleInput> createVehicleInputDataMap();
-    
-    
 
 }

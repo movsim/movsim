@@ -1,6 +1,6 @@
 #!/bin/bash
 dirFigs="figs"
-java -jar target/movsim-0.1-jar-with-dependencies.jar -f sim/$1.xml $2 $3 $4 $5
+java -jar target/movsim-1.0-jar-with-dependencies.jar -f sim/$1.xml $2 $3 $4 $5
 cd sim
 if [ ! -d $dirFigs ]; then
     mkdir $dirFigs

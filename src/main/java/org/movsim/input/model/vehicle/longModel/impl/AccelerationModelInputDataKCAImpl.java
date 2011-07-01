@@ -36,7 +36,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class AccelerationModelInputDataKCAImpl.
  */
-public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataKCA {
+public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDataImpl implements
+        AccelerationModelInputDataKCA {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataKCAImpl.class);
@@ -44,39 +45,42 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
     /** The v0. */
     private double v0;
     private final double v0Default;
-    
-    /** The k. 
-     *  Multiplikator fuer sync-Abstand D=lveh+k*v*tau*/
-    private double k;  
+
+    /**
+     * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+     */
+    private double k;
     private final double kDefault;
-    
-    
-    /** The pb0. 
-     *  "Troedelwahrsch." for standing vehicles */
-    private double pb0; 
+
+    /**
+     * The pb0. "Troedelwahrsch." for standing vehicles
+     */
+    private double pb0;
     private final double pb0Default;
-    
-    /** The pb1. 
-     * "Troedelwahrsch." for moving vehicles */
-    private double pb1; 
+
+    /**
+     * The pb1. "Troedelwahrsch." for moving vehicles
+     */
+    private double pb1;
     private final double pb1Default;
-    
-    /** The pa1.
-     * "Beschl.=Anti-Troedelwahrsch." falls v<vp */
-    private double pa1; 
+
+    /**
+     * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v<vp
+     */
+    private double pa1;
     private final double pa1Default;
-    
-    
-    /** The pa2. 
-     * "Beschl.=Anti-Troedelwahrsch." falls v>=vp*/
-    private double pa2; 
+
+    /**
+     * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+     */
+    private double pa2;
     private final double pa2Default;
-    
-    /** The vp. 
-     * Geschw., ab der weniger "anti-getroedelt" wird */
-    private double vp; 
+
+    /**
+     * The vp. Geschw., ab der weniger "anti-getroedelt" wird
+     */
+    private double vp;
     private final double vpDefault;
-    
 
     /**
      * Instantiates a new model input data kca impl.
@@ -97,7 +101,14 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
         vpDefault = vp = Double.parseDouble(map.get("vp"));
         checkParameters();
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #checkParameters()
+     */
     @Override
     protected void checkParameters() {
         if (v0 < 0 || k < 0 || pb0 < 0 || pb1 < 0 || pa1 < 0 || pa2 < 0 || vp < 0) {
@@ -107,7 +118,13 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
         }
     }
 
-    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #resetParametersToDefault()
+     */
     @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
@@ -196,68 +213,179 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
         return vp;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getV0Default()
+     */
+    @Override
     public double getV0Default() {
         return v0Default;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getkDefault()
+     */
+    @Override
     public double getkDefault() {
         return kDefault;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getPb0Default()
+     */
+    @Override
     public double getPb0Default() {
         return pb0Default;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getPb1Default()
+     */
+    @Override
     public double getPb1Default() {
         return pb1Default;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getPa1Default()
+     */
+    @Override
     public double getPa1Default() {
         return pa1Default;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getPa2Default()
+     */
+    @Override
     public double getPa2Default() {
         return pa2Default;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #getVpDefault()
+     */
+    @Override
     public double getVpDefault() {
         return vpDefault;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setV0(double)
+     */
+    @Override
     public void setV0(double v0) {
         this.v0 = v0;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setK(double)
+     */
+    @Override
     public void setK(double k) {
         this.k = k;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setPb0(double)
+     */
+    @Override
     public void setPb0(double pb0) {
         this.pb0 = pb0;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setPb1(double)
+     */
+    @Override
     public void setPb1(double pb1) {
         this.pb1 = pb1;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setPa1(double)
+     */
+    @Override
     public void setPa1(double pa1) {
         this.pa1 = pa1;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setPa2(double)
+     */
+    @Override
     public void setPa2(double pa2) {
         this.pa2 = pa2;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * #setVp(double)
+     */
+    @Override
     public void setVp(double vp) {
         this.vp = vp;
         parametersUpdated();
     }
 
-   
 }

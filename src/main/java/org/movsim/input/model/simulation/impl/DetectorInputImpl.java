@@ -42,14 +42,13 @@ public class DetectorInputImpl implements DetectorInput {
 
     /** The positions. */
     private List<Double> positions;
-    
+
     /** The dt sample. */
     private double dtSample;
-    
+
     /** The with logging. */
     private boolean withLogging;
-    
-    
+
     /** The is initialized. */
     private final boolean isInitialized;
 
@@ -82,7 +81,7 @@ public class DetectorInputImpl implements DetectorInput {
 
         this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
-        
+
         // Detector
         positions = new ArrayList<Double>();
 
@@ -135,6 +134,12 @@ public class DetectorInputImpl implements DetectorInput {
         return isInitialized;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.DetectorInput#isWithLogging()
+     */
+    @Override
     public boolean isWithLogging() {
         return withLogging;
     }

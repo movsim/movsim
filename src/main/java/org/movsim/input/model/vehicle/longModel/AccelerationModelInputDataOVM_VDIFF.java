@@ -30,7 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataOVM_VDIFF.
  */
-public interface AccelerationModelInputDataOVM_VDIFF extends AccelerationModelInputData{
+public interface AccelerationModelInputDataOVM_VDIFF extends AccelerationModelInputData {
 
     /**
      * Gets the s0.
@@ -80,35 +80,110 @@ public interface AccelerationModelInputDataOVM_VDIFF extends AccelerationModelIn
      * @return the variant
      */
     int getVariant();
-    
 
+    /**
+     * Gets the v0 default.
+     * 
+     * @return the v0 default
+     */
     double getV0Default();
 
+    /**
+     * Gets the tau default.
+     * 
+     * @return the tau default
+     */
     double getTauDefault();
 
+    /**
+     * Gets the len interaction default.
+     * 
+     * @return the len interaction default
+     */
     double getLenInteractionDefault();
 
+    /**
+     * Gets the beta default.
+     * 
+     * @return the beta default
+     */
     double getBetaDefault();
 
+    /**
+     * Gets the lambda default.
+     * 
+     * @return the lambda default
+     */
     double getLambdaDefault();
 
+    /**
+     * Gets the s0 default.
+     * 
+     * @return the s0 default
+     */
     double getS0Default();
 
+    /**
+     * Gets the variant default.
+     * 
+     * @return the variant default
+     */
     int getVariantDefault();
 
+    /**
+     * Sets the v0.
+     * 
+     * @param v0
+     *            the new v0
+     */
     void setV0(double v0);
 
+    /**
+     * Sets the tau.
+     * 
+     * @param tau
+     *            the new tau
+     */
     void setTau(double tau);
 
-
+    /**
+     * Sets the len interaction.
+     * 
+     * @param lenInteraction
+     *            the new len interaction
+     */
     void setLenInteraction(double lenInteraction);
 
+    /**
+     * Sets the beta.
+     * 
+     * @param beta
+     *            the new beta
+     */
     void setBeta(double beta);
 
+    /**
+     * Sets the lambda.
+     * 
+     * @param lambda
+     *            the new lambda
+     */
     void setLambda(double lambda);
 
+    /**
+     * Sets the s0.
+     * 
+     * @param s0
+     *            the new s0
+     */
     void setS0(double s0);
 
+    /**
+     * Sets the variant.
+     * 
+     * @param variant
+     *            the new variant
+     */
     void setVariant(int variant);
 
 }

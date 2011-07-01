@@ -1,13 +1,26 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.ui.controller.impl;
 
 import org.movsim.simulator.Simulator;
 import org.movsim.ui.controller.Controller;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SimulatorController.
+ */
 public class SimulatorController extends Controller {
 
     private Simulator model;
     private Thread simThread;
 
+    /**
+     * Instantiates a new simulator controller.
+     * 
+     * @param model
+     *            the model
+     */
     public SimulatorController(Simulator model) {
         this.model = model;
 

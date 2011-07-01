@@ -35,8 +35,6 @@ import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.SpatioTemporalInputImpl;
 import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
-import org.movsim.input.model.simulation.DetectorInput;
-import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -46,10 +44,10 @@ public class OutputInputImpl implements OutputInput {
 
     /** The floating car input. */
     private FloatingCarInput floatingCarInput;
-    
+
     /** The macro input. */
     private SpatioTemporalInput spatioTemporalInput;
-    
+
     /** The trajectories input. */
     private TrajectoriesInput trajectoriesInput;
 
@@ -75,7 +73,7 @@ public class OutputInputImpl implements OutputInput {
 
         spatioTemporalInput = new SpatioTemporalInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
-        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));       
+        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));
 
     }
 
@@ -99,11 +97,14 @@ public class OutputInputImpl implements OutputInput {
         return spatioTemporalInput;
     }
 
-	/* (non-Javadoc)
-	 * @see org.movsim.input.model.OutputInput#getTrajectoriesInput()
-	 */
-	public TrajectoriesInput getTrajectoriesInput() {
-		return trajectoriesInput;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.OutputInput#getTrajectoriesInput()
+     */
+    @Override
+    public TrajectoriesInput getTrajectoriesInput() {
+        return trajectoriesInput;
+    }
 
 }

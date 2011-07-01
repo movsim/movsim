@@ -219,7 +219,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
     /**
      * Long model factory with vehicle length vehicle length is only needed for
-     * KCA (explicit model parameter)
+     * KCA (explicit model parameter).
      * 
      * @param modelInputData
      *            the model input data

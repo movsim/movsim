@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
  * The Class RoadSectionImpl.
  */
 public class RoadSectionImpl implements RoadSection {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(RoadSectionImpl.class);
 
@@ -73,13 +73,12 @@ public class RoadSectionImpl implements RoadSection {
 
     /** The dt. */
     private double dt;
-    
+
     /** The id. */
     private long id;
 
-    
     private final boolean withCrashExit;
-    
+
     private boolean instantaneousFileOutput;
 
     /** The veh container. */
@@ -93,16 +92,14 @@ public class RoadSectionImpl implements RoadSection {
 
     /** The flow cons bottlenecks. */
     private FlowConservingBottlenecks flowConsBottlenecks;
-    
+
     private TrafficLightsImpl trafficLights;
 
     /** The speedlimits. */
     private SpeedLimits speedlimits;
-    
 
     /** The detectors. */
     private LoopDetectors detectors = null;
-
 
     /** The simple onramps. */
     private List<Onramp> simpleOnramps = null;
@@ -110,8 +107,6 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Instantiates a new road section impl.
      * 
-     * @param isWithGUI
-     *            the is with gui
      * @param inputData
      *            the input data
      */
@@ -153,16 +148,17 @@ public class RoadSectionImpl implements RoadSection {
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
-        
-        trafficLights = new TrafficLightsImpl(inputData.getProjectMetaData().getProjectName(), roadInput.getTrafficLightsInput());
-        
+
+        trafficLights = new TrafficLightsImpl(inputData.getProjectMetaData().getProjectName(),
+                roadInput.getTrafficLightsInput());
+
         final DetectorInput detInput = roadInput.getDetectorInput();
         if (detInput.isWithDetectors()) {
             detectors = new LoopDetectors(inputData.getProjectMetaData().getProjectName(), detInput);
         }
 
         initialConditions(inputData.getSimulationInput());
-        
+
         initOnramps(inputData);
     }
 
@@ -175,16 +171,17 @@ public class RoadSectionImpl implements RoadSection {
     public double roadLength() {
         return roadLength;
     }
-    
-    
-    //TODO documentation
-    /* (non-Javadoc)
+
+    // TODO documentation
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.RoadSection#id()
      */
+    @Override
     public long id() {
         return id;
     }
-    
 
     /*
      * (non-Javadoc)
@@ -220,7 +217,7 @@ public class RoadSectionImpl implements RoadSection {
         updateUpstreamBoundary(iTime, dt, time);
 
         updateOnramps(iTime, dt, time);
-        
+
         detectors.update(iTime, time, dt, vehContainer);
 
     }
@@ -261,7 +258,7 @@ public class RoadSectionImpl implements RoadSection {
             logger.debug(("choose micro initial conditions"));
             final List<ICMicroData> icSingle = simInput.getSingleRoadInput().getIcMicroData();
             for (final ICMicroData ic : icSingle) {
-                // TODO counter 
+                // TODO counter
                 final double posInit = ic.getX();
                 final double speedInit = ic.getSpeed();
                 final String vehTypeFromFile = ic.getLabel();
@@ -273,8 +270,6 @@ public class RoadSectionImpl implements RoadSection {
             }
         }
     }
-
-   
 
     /**
      * Inits the onramps.
@@ -332,7 +327,7 @@ public class RoadSectionImpl implements RoadSection {
             if (netDistance < 0) {
                 logger.error("#########################################################");
                 logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
-                if(vehFront!=null){
+                if (vehFront != null) {
                     logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
                 }
                 logger.error("net distance  = {}", netDistance);
@@ -340,13 +335,13 @@ public class RoadSectionImpl implements RoadSection {
                 final StringBuilder msg = new StringBuilder("\n");
                 for (int j = Math.max(0, i - 8), M = vehicles.size(); j <= Math.min(i + 8, M - 1); j++) {
                     final Moveable veh = vehicles.get(j);
-                    msg.append(String
-                            .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n",
-                                    j, veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(), veh.id()));
-                } 
+                    msg.append(String.format(
+                            "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
+                            veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(), veh.id()));
+                }
                 logger.error(msg.toString());
                 if (instantaneousFileOutput) {
-                    if(withCrashExit){
+                    if (withCrashExit) {
                         logger.error(" !!! exit after crash !!! ");
                         System.exit(-99);
                     }
@@ -398,16 +393,24 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Update road conditions.
      * 
+     * @param iTime
+     *            the i time
      * @param time
      *            the time
      */
     private void updateRoadConditions(int iTime, double time) {
-        
+
         trafficLights.update(iTime, time, vehContainer.getVehicles());
-        
+
         updateSpeedLimits(vehContainer.getVehicles());
     }
 
+    /**
+     * Update speed limits.
+     * 
+     * @param vehicles
+     *            the vehicles
+     */
     private void updateSpeedLimits(List<Vehicle> vehicles) {
         if (!speedlimits.isEmpty()) {
             for (final Vehicle veh : vehContainer.getVehicles()) {
@@ -435,15 +438,15 @@ public class RoadSectionImpl implements RoadSection {
         }
     }
 
-//    public double firstRampFlow() {
-//        // TODO Auto-generated method stub
-//        return 0;
-//    }
-//
-//    public double upstreamInflow() {
-//        // TODO Auto-generated method stub
-//        return 0;
-//    }
+    // public double firstRampFlow() {
+    // // TODO Auto-generated method stub
+    // return 0;
+    // }
+    //
+    // public double upstreamInflow() {
+    // // TODO Auto-generated method stub
+    // return 0;
+    // }
 
     /*
      * (non-Javadoc)
@@ -475,6 +478,11 @@ public class RoadSectionImpl implements RoadSection {
         return nLanes;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()
+     */
     @Override
     public List<LoopDetector> getLoopDetectors() {
         return detectors.getDetectors();

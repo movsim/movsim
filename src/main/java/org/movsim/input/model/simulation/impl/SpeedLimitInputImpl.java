@@ -35,10 +35,10 @@ import org.movsim.input.model.simulation.SpeedLimitInput;
  * The Class SpeedLimitInputImpl.
  */
 public class SpeedLimitInputImpl implements SpeedLimitInput {
-    
+
     /** The x. */
     private final double x; // in m
-    
+
     /** The speedlimit. */
     private final double speedlimit; // in m/s (SI units)
 

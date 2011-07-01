@@ -349,6 +349,14 @@ public class FileUtils {
         writer.close();
     }
 
+    /**
+     * Resource to file.
+     * 
+     * @param res
+     *            the res
+     * @param filename
+     *            the filename
+     */
     public static void resourceToFile(String res, String filename) {
         try {
             InputStream resourceAsStream = App.class.getResourceAsStream(res);

@@ -45,69 +45,70 @@ import org.slf4j.LoggerFactory;
  */
 public class FileTrajectories {
 
-	
     private static final String extensionFormat = ".R%d_traj.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR + 
-        "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
-    private static final String outputFormat = 
-    	"%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
+    private static final String outputHeading = Constants.COMMENT_CHAR
+            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
 
     /** The Constant logger. */
-	final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
-	
+    final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
+
     /** The dt out. */
-    private double dtOut; 
-    
+    private double dtOut;
+
     /** The t_start_interval. */
     private double t_start_interval;
-    
+
     /** The t_end_interval. */
-    private double t_end_interval; 
-    
+    private double t_end_interval;
+
     /** The x_start_interval. */
     private double x_start_interval;
-    
+
     /** The x_end_interval. */
     private double x_end_interval;
 
     /** The file handles. */
     private HashMap<Long, PrintWriter> fileHandles;
-   
+
     /** The time. */
     private double time = 0;
 
     /** The last update time. */
     private double lastUpdateTime = 0;
-    
+
     /** The road section. */
-    private RoadSection roadSection; 
-    
+    private RoadSection roadSection;
+
     /** The project name. */
     private String projectName;
 
     /** The path. */
     private String path;
-    
+
     /**
      * Instantiates a new trajectories impl.
-     *
-     * @param projectName the project name
-     * @param trajectoriesInput the trajectories input
-     * @param roadSection the road section
+     * 
+     * @param projectName
+     *            the project name
+     * @param trajectoriesInput
+     *            the trajectories input
+     * @param roadSection
+     *            the road section
      */
     public FileTrajectories(String projectName, TrajectoriesInput trajectoriesInput, RoadSection roadSection) {
-    	logger.info("Constructor");
+        logger.info("Constructor");
 
         this.projectName = projectName;
-        
+
         dtOut = trajectoriesInput.getDt();
         t_start_interval = trajectoriesInput.getStartTime();
         t_end_interval = trajectoriesInput.getEndTime();
         x_start_interval = trajectoriesInput.getStartPosition();
         x_end_interval = trajectoriesInput.getEndPosition();
-        
+
         this.roadSection = roadSection;
-        
+
         fileHandles = new HashMap<Long, PrintWriter>();
         logger.info("path = {}", path);
         logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
@@ -116,113 +117,114 @@ public class FileTrajectories {
     /**
      * Creates the file handles.
      */
-    private void createFileHandles(){
+    private void createFileHandles() {
 
         final String filenameMainroad = projectName + String.format(extensionFormat, roadSection.id());
         logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSection.id());
         fileHandles.put(roadSection.id(), FileUtils.getWriter(filenameMainroad));
-        
+
         /*
-        // onramps
-        int counter = 1;
-        for(IOnRamp rmp : mainroad.onramps()){
-            final String filename = projectName+".onr_"+Integer.toString(counter)+endingFile;
-            fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-            counter++;
-        }
-        // offramps
-        counter = 1;
-        for(IStreet rmp : mainroad.offramps()){
-            final String filename = projectName+".offr_"+Integer.toString(counter)+endingFile;
-            fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-            counter++;
-        }
-        */
-        
-        
+         * // onramps int counter = 1; for(IOnRamp rmp : mainroad.onramps()){
+         * final String filename =
+         * projectName+".onr_"+Integer.toString(counter)+endingFile;
+         * fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
+         * counter++; } // offramps counter = 1; for(IStreet rmp :
+         * mainroad.offramps()){ final String filename =
+         * projectName+".offr_"+Integer.toString(counter)+endingFile;
+         * fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
+         * counter++; }
+         */
+
         // write headers
-        Iterator<Long>  it = fileHandles.keySet().iterator();
+        Iterator<Long> it = fileHandles.keySet().iterator();
         while (it.hasNext()) {
-            Long id= (Long)it.next();
+            Long id = it.next();
             final PrintWriter fstr = fileHandles.get(id);
             fstr.println(outputHeading);
             fstr.flush();
         }
     }
 
-    
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.output.Trajectories#update(int, double)
      */
+    /**
+     * Update.
+     * 
+     * @param iTime
+     *            the i time
+     * @param time
+     *            the time
+     */
     public void update(int iTime, double time) {
-        
-        if( fileHandles.isEmpty() ){
-            // cannot initialize earlier because onramps and offramps are constructed after constructing mainroad
+
+        if (fileHandles.isEmpty()) {
+            // cannot initialize earlier because onramps and offramps are
+            // constructed after constructing mainroad
             createFileHandles();
         }
-        
+
         this.time = time;
-        //check time interval for output:
-        if(time >= t_start_interval &&  time<=t_end_interval){
-        	
-            if(iTime%1000==0){
-            	 logger.info("time = {}, timestep= {}", time);
+        // check time interval for output:
+        if (time >= t_start_interval && time <= t_end_interval) {
+
+            if (iTime % 1000 == 0) {
+                logger.info("time = {}, timestep= {}", time);
             }
-            
-            if ( (time - lastUpdateTime + Constants.SMALL_VALUE) >= dtOut) {
-                
+
+            if ((time - lastUpdateTime + Constants.SMALL_VALUE) >= dtOut) {
+
                 lastUpdateTime = time;
-            
+
                 writeTrajectories(fileHandles.get(roadSection.id()), roadSection.vehContainer());
                 /*
-                // onramps
-                for(IOnRamp rmp : mainroad.onramps()){
-                    writeTrajectories(fileHandles.get(rmp.roadIndex()), rmp.vehContainer());  
-                }
-                // offramps
-                for(IStreet rmp : mainroad.offramps()){
-                    writeTrajectories(fileHandles.get(rmp.roadIndex()), rmp.vehContainer());
-                }*/
-            } //of if
-        }  
+                 * // onramps for(IOnRamp rmp : mainroad.onramps()){
+                 * writeTrajectories(fileHandles.get(rmp.roadIndex()),
+                 * rmp.vehContainer()); } // offramps for(IStreet rmp :
+                 * mainroad.offramps()){
+                 * writeTrajectories(fileHandles.get(rmp.roadIndex()),
+                 * rmp.vehContainer()); }
+                 */
+            } // of if
+        }
     }
-
-
 
     /**
      * Write trajectories.
-     *
-     * @param fstr the fstr
-     * @param vehicles the vehicles
+     * 
+     * @param fstr
+     *            the fstr
+     * @param vehicles
+     *            the vehicles
      */
-    private void writeTrajectories(PrintWriter fstr, VehicleContainer vehicles ) {
-        for (int i = 0, N = vehicles.size() ; i < N; i++) {
+    private void writeTrajectories(PrintWriter fstr, VehicleContainer vehicles) {
+        for (int i = 0, N = vehicles.size(); i < N; i++) {
             Moveable me = vehicles.get(i);
-            if( (me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval) ){
-            	writeCarData(fstr, i, me);
-            } 
+            if ((me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval)) {
+                writeCarData(fstr, i, me);
+            }
         }
     }
-    
 
-            
     /**
      * Write car data.
-     *
-     * @param fstr the fstr
-     * @param index the index
-     * @param me the me
+     * 
+     * @param fstr
+     *            the fstr
+     * @param index
+     *            the index
+     * @param me
+     *            the me
      */
     private void writeCarData(PrintWriter fstr, int index, Moveable me) {
-        final Moveable frontVeh = roadSection.vehContainer().getLeader(me); 
+        final Moveable frontVeh = roadSection.vehContainer().getLeader(me);
         final double s = (frontVeh == null) ? 0 : me.netDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.relSpeed(frontVeh);
-        fstr.printf(outputFormat,
-        		time, (int)me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s,  dv, me.getLabel(), me.id());
+        fstr.printf(outputFormat, time, me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s, dv,
+                me.getLabel(), me.id());
         fstr.flush();
     }
 
-
 }
-
-

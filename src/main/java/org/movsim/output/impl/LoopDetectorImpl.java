@@ -35,12 +35,11 @@ import org.movsim.utilities.impl.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class LoopDetectorImpl.
  */
-public class LoopDetectorImpl extends ObservableImpl implements LoopDetector{
+public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
 
     final static Logger logger = LoggerFactory.getLogger(LoopDetectorImpl.class);
 
@@ -50,54 +49,50 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector{
     /** The det position. */
     private final double detPosition;
 
-
     /** The time offset. */
     private double timeOffset;
 
     // internal state variables
     /** The veh count. */
     private int vehCount;
-    
+
     /** The v sum. */
     private double vSum;
-    
+
     /** The occ time. */
     private double occTime;
-    
+
     /** The sum inv v. */
     private double sumInvV;
-    
+
     /** The sum inv q. */
     private double sumInvQ;
 
     /** The mean speed. */
     private double meanSpeed;
-    
+
     private double densityArithmetic;
-    
+
     /** The flow. */
     private double flow;
-    
+
     /** The occupancy. */
     private double occupancy;
-    
+
     /** The veh count output. */
     private int vehCountOutput;
-    
+
     /** The mean harmonic speed. */
     private double meanSpeedHarmonic;
-    
+
     /** The harmonic mean timegap. */
     private double meanTimegapHarmonic;
 
-    
     /**
      * Instantiates a new loop detector impl.
      * 
      * @param projectName
      *            the project name
-     * @param writeOutput
-     *            the write output
      * @param detPosition
      *            the det position
      * @param dtSample
@@ -124,7 +119,14 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector{
         sumInvV = 0;
     }
 
-   
+    /**
+     * Update.
+     * 
+     * @param time
+     *            the time
+     * @param vehicleContainer
+     *            the vehicle container
+     */
     public void update(double time, VehicleContainer vehicleContainer) {
 
         // brute force search:
@@ -170,68 +172,93 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector{
     }
 
     /**
+     * Gets the dt sample.
+     * 
      * @return the dtSample
      */
+    @Override
     public double getDtSample() {
         return dtSample;
     }
 
     /**
+     * Gets the det position.
+     * 
      * @return the detPosition
      */
+    @Override
     public double getDetPosition() {
         return detPosition;
     }
 
     /**
+     * Gets the mean speed.
+     * 
      * @return the meanSpeed
      */
+    @Override
     public double getMeanSpeed() {
         return meanSpeed;
     }
 
     /**
+     * Gets the density arithmetic.
+     * 
      * @return the densityArithmetic
      */
+    @Override
     public double getDensityArithmetic() {
         return densityArithmetic;
     }
 
     /**
+     * Gets the flow.
+     * 
      * @return the flow
      */
+    @Override
     public double getFlow() {
         return flow;
     }
 
     /**
+     * Gets the occupancy.
+     * 
      * @return the occupancy
      */
+    @Override
     public double getOccupancy() {
         return occupancy;
     }
 
     /**
+     * Gets the veh count output.
+     * 
      * @return the vehCountOutput
      */
+    @Override
     public int getVehCountOutput() {
         return vehCountOutput;
     }
 
     /**
+     * Gets the mean speed harmonic.
+     * 
      * @return the meanSpeedHarmonic
      */
+    @Override
     public double getMeanSpeedHarmonic() {
         return meanSpeedHarmonic;
     }
 
     /**
+     * Gets the mean timegap harmonic.
+     * 
      * @return the meanTimegapHarmonic
      */
+    @Override
     public double getMeanTimegapHarmonic() {
         return meanTimegapHarmonic;
     }
 
-       
-    
 }

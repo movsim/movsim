@@ -44,7 +44,7 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
-   
+
     /** The dt. */
     private final double dt;
 
@@ -62,14 +62,18 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
         initParameters();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        //this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
-        
+        // this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
+
     }
-    
-   
 
     /*
      * (non-Javadoc)

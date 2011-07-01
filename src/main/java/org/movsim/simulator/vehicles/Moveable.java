@@ -1,15 +1,21 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.simulator.vehicles;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface Moveable.
+ */
 public interface Moveable {
-    
 
     /**
      * Gets the label.
-     *
+     * 
      * @return the label
      */
     String getLabel();
-    
+
     /**
      * Length.
      * 
@@ -87,8 +93,6 @@ public interface Moveable {
      */
     double speedlimit();
 
-    
-
     /**
      * Id.
      * 
@@ -103,7 +107,6 @@ public interface Moveable {
      */
     int getVehNumber();
 
-    
     /**
      * Checks if is from onramp.
      * 
@@ -111,11 +114,12 @@ public interface Moveable {
      */
     boolean isFromOnramp();
 
+    /**
+     * Gets the lane.
+     * 
+     * @return the lane
+     */
     int getLane();
-
-   
-
-    
 
     /**
      * Net distance.

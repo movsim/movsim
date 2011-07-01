@@ -106,7 +106,10 @@ public interface AccelerationModel {
      * @return the double
      */
     double accSimple(double s, double v, double dv);
-    
+
+    /**
+     * Removes the observer.
+     */
     void removeObserver();
 
 }

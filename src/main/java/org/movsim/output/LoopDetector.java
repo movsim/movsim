@@ -32,15 +32,68 @@ import org.movsim.utilities.ObservableInTime;
 /**
  * The Interface LoopDetector.
  */
-public interface LoopDetector extends ObservableInTime{
+public interface LoopDetector extends ObservableInTime {
 
+    /**
+     * Gets the det position.
+     * 
+     * @return the det position
+     */
     double getDetPosition();
+
+    /**
+     * Gets the mean speed.
+     * 
+     * @return the mean speed
+     */
     double getMeanSpeed();
+
+    /**
+     * Gets the density arithmetic.
+     * 
+     * @return the density arithmetic
+     */
     double getDensityArithmetic();
+
+    /**
+     * Gets the flow.
+     * 
+     * @return the flow
+     */
     double getFlow();
+
+    /**
+     * Gets the occupancy.
+     * 
+     * @return the occupancy
+     */
     double getOccupancy();
+
+    /**
+     * Gets the veh count output.
+     * 
+     * @return the veh count output
+     */
     int getVehCountOutput();
-    double getMeanSpeedHarmonic(); 
+
+    /**
+     * Gets the mean speed harmonic.
+     * 
+     * @return the mean speed harmonic
+     */
+    double getMeanSpeedHarmonic();
+
+    /**
+     * Gets the mean timegap harmonic.
+     * 
+     * @return the mean timegap harmonic
+     */
     double getMeanTimegapHarmonic();
-    double getDtSample(); 
+
+    /**
+     * Gets the dt sample.
+     * 
+     * @return the dt sample
+     */
+    double getDtSample();
 }

@@ -66,12 +66,28 @@ public interface Simulator {
      */
     void update();
 
-    void restart(); 
+    /**
+     * Restart.
+     */
+    void restart();
 
+    /**
+     * Gets the sim input.
+     * 
+     * @return the sim input
+     */
     InputData getSimInput();
-    
+
+    /**
+     * Gets the sim observables.
+     * 
+     * @return the sim observables
+     */
     SimObservables getSimObservables();
 
+    /**
+     * Initialize.
+     */
     void initialize();
-    
+
 }

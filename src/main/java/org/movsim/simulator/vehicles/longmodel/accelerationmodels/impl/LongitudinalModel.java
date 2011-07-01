@@ -74,7 +74,7 @@ public abstract class LongitudinalModel implements Observer {
         this.modelCategory = modelCategory;
         this.parameters = parameters;
         this.id = MyRandom.nextInt();
-        parameters.registerObserver((Observer) this);
+        parameters.registerObserver(this);
     }
 
     // public LongitudinalModel(String modelName, int modelCategory) {
@@ -87,7 +87,7 @@ public abstract class LongitudinalModel implements Observer {
      */
     public void removeObserver() {
         if (parameters != null) {
-            parameters.removeObserver((Observer) this);
+            parameters.removeObserver(this);
         }
     }
 
@@ -146,6 +146,7 @@ public abstract class LongitudinalModel implements Observer {
      * 
      * @see org.movsim.utilities.Observer#notifyObserver()
      */
+    @Override
     public void notifyObserver() {
         initParameters();
         logger.debug("observer notified");

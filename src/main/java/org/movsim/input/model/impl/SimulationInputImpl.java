@@ -37,6 +37,7 @@ import org.movsim.input.model.SimulationInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SimulationInputImpl.
  */
@@ -53,15 +54,15 @@ public class SimulationInputImpl implements SimulationInput {
 
     /** The with fixed seed. */
     private boolean withFixedSeed;
-    
+
     private boolean withCrashExit;
-    
+
     /** The random seed. */
     private final int randomSeed;
 
     /** The road input. */
     ArrayList<RoadInput> roadInput;
-    
+
     /** The output input. */
     private OutputInput outputInput;
 
@@ -91,12 +92,10 @@ public class SimulationInputImpl implements SimulationInput {
         for (final Element roadElem : roadElems) {
             roadInput.add(new RoadInputImpl(roadElem));
         }
-        
-        
+
         // -------------------------------------------------------
         // Output
         outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
-        
 
     }
 
@@ -119,7 +118,7 @@ public class SimulationInputImpl implements SimulationInput {
     public double getMaxSimTime() {
         return maxSimTime;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -150,8 +149,6 @@ public class SimulationInputImpl implements SimulationInput {
         return roadInput;
     }
 
-
-
     /*
      * (non-Javadoc)
      * 
@@ -163,11 +160,22 @@ public class SimulationInputImpl implements SimulationInput {
         return roadInput.get(0);
     }
 
-    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.SimulationInput#getOutputInput()
+     */
+    @Override
     public OutputInput getOutputInput() {
         return outputInput;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.SimulationInput#isWithCrashExit()
+     */
+    @Override
     public boolean isWithCrashExit() {
         return withCrashExit;
     }

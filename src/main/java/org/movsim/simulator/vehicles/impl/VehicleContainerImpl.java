@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  * The Class VehicleContainerImpl.
  */
 public class VehicleContainerImpl implements VehicleContainer {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleContainerImpl.class);
 
@@ -195,7 +195,8 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public void removeVehiclesDownstream(double roadLength) {
         while (!vehicles.isEmpty() && getMostDownstream().getPosition() > roadLength) {
-            vehicles.get(0).removeObservers();  // delete references when leaving the simulation
+            vehicles.get(0).removeObservers(); // delete references when leaving
+                                               // the simulation
             vehicles.remove(0);
             logger.debug(" remove veh ... size = {}", vehicles.size());
         }
@@ -234,7 +235,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      * Sort.
      */
     private void sort() {
-        // sort order determined by pos2.compareTo(pos1) in descending order 
+        // sort order determined by pos2.compareTo(pos1) in descending order
         Collections.sort(vehicles, new Comparator<Vehicle>() {
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
@@ -245,20 +246,28 @@ public class VehicleContainerImpl implements VehicleContainer {
         });
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveables()
+     */
     @Override
     public List<Moveable> getMoveables() {
         List<Moveable> moveables = new ArrayList<Moveable>();
-        for(final Vehicle veh: vehicles){
+        for (final Vehicle veh : vehicles) {
             moveables.add(veh);
         }
         return moveables;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveable(int)
+     */
     @Override
     public Moveable getMoveable(int index) {
         return vehicles.get(index);
     }
-
- 
 
 }

@@ -36,37 +36,36 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class AccelerationModelInputDataOVM_VDIFFImpl.
  */
-public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataOVM_VDIFF {
+public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelInputDataImpl implements
+        AccelerationModelInputDataOVM_VDIFF {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataOVM_VDIFFImpl.class);
 
-    
     /** The v0. */
     private double v0;
     private final double v0Default;
-    
+
     /** The tau. */
     private double tau;
     private final double tauDefault;
-    
+
     /** The len interaction. */
     private double lenInteraction;
     private final double lenInteractionDefault;
-    
+
     /** The beta. */
     private double beta;
     private final double betaDefault;
-    
+
     /** The lambda. */
     private double lambda;
     private final double lambdaDefault;
-    
+
     /** The s0. */
     private double s0;
     private final double s0Default;
-    
-    
+
     /** The variant. */
     private int variant;
     private final int variantDefault;
@@ -92,8 +91,14 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
         checkParameters();
 
     }
-    
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #checkParameters()
+     */
     @Override
     protected void checkParameters() {
         if (s0 < 0 || v0 < 0 || tau < 0 || lenInteraction < 0 || beta < 0 || lambda < 0 || variant < 0) {
@@ -101,12 +106,17 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
                     getModelName());
             System.exit(-1);
         }
-        
+
         // TODO further param check
     }
 
-    
-    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #resetParametersToDefault()
+     */
     @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
@@ -202,82 +212,179 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
         return variant;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getV0Default()
+     */
+    @Override
     public double getV0Default() {
         return v0Default;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getTauDefault()
+     */
+    @Override
     public double getTauDefault() {
         return tauDefault;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getLenInteractionDefault()
+     */
+    @Override
     public double getLenInteractionDefault() {
         return lenInteractionDefault;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getBetaDefault()
+     */
+    @Override
     public double getBetaDefault() {
         return betaDefault;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getLambdaDefault()
+     */
+    @Override
     public double getLambdaDefault() {
         return lambdaDefault;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getS0Default()
+     */
+    @Override
     public double getS0Default() {
         return s0Default;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #getVariantDefault()
+     */
+    @Override
     public int getVariantDefault() {
         return variantDefault;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setV0(double)
+     */
+    @Override
     public void setV0(double v0) {
         this.v0 = v0;
         parametersUpdated();
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setTau(double)
+     */
+    @Override
     public void setTau(double tau) {
         this.tau = tau;
         parametersUpdated();
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setLenInteraction(double)
+     */
+    @Override
     public void setLenInteraction(double lenInteraction) {
         this.lenInteraction = lenInteraction;
         parametersUpdated();
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setBeta(double)
+     */
+    @Override
     public void setBeta(double beta) {
         this.beta = beta;
         parametersUpdated();
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setLambda(double)
+     */
+    @Override
     public void setLambda(double lambda) {
         this.lambda = lambda;
         parametersUpdated();
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setS0(double)
+     */
+    @Override
     public void setS0(double s0) {
         this.s0 = s0;
         parametersUpdated();
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
+     * #setVariant(int)
+     */
+    @Override
     public void setVariant(int variant) {
         this.variant = variant;
         parametersUpdated();
     }
-
 
 }

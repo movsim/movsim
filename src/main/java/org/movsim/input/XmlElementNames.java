@@ -1,15 +1,20 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.input;
 
+/**
+ * The Interface XmlElementNames.
+ */
 public interface XmlElementNames {
 
-    
     public final String Root = "SCENARIO";
 
     public final String DriverVehicleUnits = "VEHICLES";
     public final String VehicleMemory = "MEMORY";
     public final String VehicleNoise = "NOISE";
     public final String VehicleLongitudinalModel = "LONGITUDINAL_MODEL";
-    public final String VehicleLaneChangeModel ="LANE_CHANGE_MODEL";
+    public final String VehicleLaneChangeModel = "LANE_CHANGE_MODEL";
     public final String VehicleLongModelIDM = "IDM";
     public final String VehicleLongModelACC = "ACC";
     public final String VehicleLongModelOVM_VDIFF = "OVM_VDIFF";
@@ -17,13 +22,13 @@ public interface XmlElementNames {
     public final String VehicleLongModelNEWELL = "NEWELL";
     public final String VehicleLongModelNSM = "NSM";
     public final String VehicleLongModelKCA = "KCA";
-    
+
     public final String Simulation = "SIMULATION";
     public final String Road = "ROAD";
-    public final String RoadTrafficLight = "TRAFFIC_LIGHT"; 
-    public final String RoadTrafficLights = "TRAFFIC_LIGHTS"; 
-    public final String RoadTrafficComposition = "TRAFFIC_COMPOSITION"; 
-    public final String RoadVehicleType ="VEHICLE_TYPE";
+    public final String RoadTrafficLight = "TRAFFIC_LIGHT";
+    public final String RoadTrafficLights = "TRAFFIC_LIGHTS";
+    public final String RoadTrafficComposition = "TRAFFIC_COMPOSITION";
+    public final String RoadVehicleType = "VEHICLE_TYPE";
     public final String RoadInitialConditions = "INITIAL_CONDITIONS";
     public final String RoadInitialConditionsIcMicro = "IC_MICRO";
     public final String RoadInitialConditionsIcMacro = "IC_MACRO";
@@ -43,4 +48,4 @@ public interface XmlElementNames {
     public final String OutputDetectors = "DETECTORS";
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
-    }
+}

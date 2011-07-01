@@ -32,7 +32,7 @@ import org.movsim.utilities.Observable;
 /**
  * The Interface AccelerationModelInputData.
  */
-public interface AccelerationModelInputData extends Observable{
+public interface AccelerationModelInputData extends Observable {
 
     /**
      * Gets the model name.
@@ -40,6 +40,9 @@ public interface AccelerationModelInputData extends Observable{
      * @return the model name
      */
     String getModelName();
-    
+
+    /**
+     * Reset parameters to default.
+     */
     void resetParametersToDefault();
 }

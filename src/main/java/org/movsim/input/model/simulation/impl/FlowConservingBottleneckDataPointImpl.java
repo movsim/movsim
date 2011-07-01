@@ -38,10 +38,10 @@ public class FlowConservingBottleneckDataPointImpl implements FlowConservingBott
 
     /** The x. */
     private final double x; // in m
-    
+
     /** The alpha t. */
     private final double alphaT;
-    
+
     /** The alpha v0. */
     private final double alphaV0;
 

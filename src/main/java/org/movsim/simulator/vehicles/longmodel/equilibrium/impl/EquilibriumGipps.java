@@ -52,7 +52,7 @@ public class EquilibriumGipps extends EquilibriumPropertiesImpl {
 
     // Calculates equilibrium velocity of Gipps and Gipps with finite s0
     // and free-acc exponent delta
-    // uses numeric iteration procedure 
+    // uses numeric iteration procedure
 
     /**
      * Calc equilibrium.

@@ -28,7 +28,6 @@ package org.movsim.simulator.impl;
 
 import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
-import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.output.SimObservables;
@@ -70,6 +69,9 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The sim input. */
     private InputDataImpl inputData;
 
+    /**
+     * Instantiates a new simulator impl.
+     */
     public SimulatorImpl() {
         this.inputData = new InputDataImpl();
     }
@@ -77,6 +79,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     /**
      * Restart.
      */
+    @Override
     public void restart() {
         time = 0;
         itime = 0;
@@ -178,6 +181,11 @@ public class SimulatorImpl implements Simulator, Runnable {
         return inputData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#getSimObservables()
+     */
     @Override
     public SimObservables getSimObservables() {
         return simOutput;

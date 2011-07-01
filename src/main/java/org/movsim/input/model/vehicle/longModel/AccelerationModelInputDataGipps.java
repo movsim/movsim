@@ -30,9 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataGipps.
  */
-public interface AccelerationModelInputDataGipps extends AccelerationModelInputData{
-
-    
+public interface AccelerationModelInputDataGipps extends AccelerationModelInputData {
 
     /**
      * Gets the v0.
@@ -68,23 +66,65 @@ public interface AccelerationModelInputDataGipps extends AccelerationModelInputD
      * @return the dt
      */
     double getDt();
-    
-    
+
+    /**
+     * Gets the v0 default.
+     * 
+     * @return the v0 default
+     */
     public double getV0Default();
 
+    /**
+     * Gets the a default.
+     * 
+     * @return the a default
+     */
     public double getaDefault();
 
+    /**
+     * Gets the b default.
+     * 
+     * @return the b default
+     */
     public double getbDefault();
 
+    /**
+     * Gets the s0 default.
+     * 
+     * @return the s0 default
+     */
     public double getS0Default();
 
+    /**
+     * Sets the v0.
+     * 
+     * @param v0
+     *            the new v0
+     */
     public void setV0(double v0);
 
+    /**
+     * Sets the a.
+     * 
+     * @param a
+     *            the new a
+     */
     public void setA(double a);
 
+    /**
+     * Sets the b.
+     * 
+     * @param b
+     *            the new b
+     */
     public void setB(double b);
 
+    /**
+     * Sets the s0.
+     * 
+     * @param s0
+     *            the new s0
+     */
     public void setS0(double s0);
-
 
 }

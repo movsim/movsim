@@ -31,17 +31,24 @@ import java.util.List;
 import org.movsim.simulator.vehicles.MoveableContainer;
 import org.movsim.utilities.ObservableInTime;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Interface FloatingCars.
  */
-public interface FloatingCars extends ObservableInTime{
+public interface FloatingCars extends ObservableInTime {
 
+    /**
+     * Gets the fcd list.
+     * 
+     * @return the fcd list
+     */
     List<Integer> getFcdList();
-    
+
+    /**
+     * Gets the moveable container.
+     * 
+     * @return the moveable container
+     */
     MoveableContainer getMoveableContainer();
-    
-    
 
 }

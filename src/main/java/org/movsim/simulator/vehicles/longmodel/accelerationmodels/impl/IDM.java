@@ -25,14 +25,16 @@ import org.slf4j.LoggerFactory;
  * The Class IDM.
  * <p>
  * Implementation of the 'intelligent driver model'(IDM). <a
- * href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
+ * href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia
+ * article IDM.</a>
  * </p>
  * <p>
  * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
  * </p>
  * <p>
- * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic
- * States in Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
+ * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A.
+ * Hennecke, and D. Helbing, Congested Traffic States in Empirical Observations
+ * and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
 public class IDM extends LongitudinalModel implements AccelerationModel {
@@ -63,14 +65,23 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Instantiates a new IDM.
-     * @param modelName the model name
-     * @param parameters the parameters: v0, T, s0, s1, a, b, delta
+     * 
+     * @param modelName
+     *            the model name
+     * @param parameters
+     *            the parameters: v0, T, s0, s1, a, b, delta
      */
     public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
@@ -85,6 +96,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the v0.
+     * 
      * @return the v0
      */
     public double getV0() {
@@ -93,6 +105,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the t.
+     * 
      * @return the t
      */
     public double getT() {
@@ -101,6 +114,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the s0.
+     * 
      * @return the s0
      */
     public double getS0() {
@@ -109,6 +123,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the s1.
+     * 
      * @return the s1
      */
     public double getS1() {
@@ -117,6 +132,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the delta.
+     * 
      * @return the delta
      */
     public double getDelta() {
@@ -125,6 +141,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the a.
+     * 
      * @return the a
      */
     public double getA() {
@@ -133,6 +150,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /**
      * Gets the b.
+     * 
      * @return the b
      */
     public double getB() {
@@ -141,13 +159,14 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #acc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
-
-        
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
@@ -162,26 +181,47 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
         final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
         final double aLocal = alphaA * a;
 
-        return acc(s,v,dv, TLocal, v0Local, aLocal);
-        
+        return acc(s, v, dv, TLocal, v0Local, aLocal);
+
     }
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #accSimple(double, double, double)
      */
     @Override
     public double accSimple(double s, double v, double dv) {
-        return acc(s,v,dv, T, v0, a);
+        return acc(s, v, dv, T, v0, a);
     }
 
+    /**
+     * Acc.
+     * 
+     * @param s
+     *            the s
+     * @param v
+     *            the v
+     * @param dv
+     *            the dv
+     * @param TLocal
+     *            the t local
+     * @param v0Local
+     *            the v0 local
+     * @param aLocal
+     *            the a local
+     * @return the double
+     */
     private double acc(double s, double v, double dv, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
         if (v0Local == 0) {
             return 0;
         }
-        
-        double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv) / Math.sqrt(aLocal * b);
+
+        double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
+                / Math.sqrt(aLocal * b);
 
         if (sstar < s0) {
             sstar = s0;
@@ -195,7 +235,9 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -204,7 +246,9 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#getRequiredUpdateTime()
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

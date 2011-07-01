@@ -45,29 +45,29 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class VehicleImpl.
  */
-public class VehicleImpl implements Vehicle{
-    
+public class VehicleImpl implements Vehicle {
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleImpl.class);
 
     /** The label. */
     private final String label;
-    
+
     /** The length. */
     private final double length;
-    
+
     /** The position. */
     private double position;
-    
+
     /** The old position. */
     private double oldPosition;
-    
+
     /** The speed. */
     private double speed;
-    
+
     /** The acc model. */
     private double accModel;
-    
+
     /** The acc. */
     private double acc;
 
@@ -85,7 +85,7 @@ public class VehicleImpl implements Vehicle{
 
     /** The lane. */
     private int lane;
-    
+
     /** The speedlimit. */
     private double speedlimit; // state variable
 
@@ -97,25 +97,30 @@ public class VehicleImpl implements Vehicle{
 
     /** The noise. */
     private Noise noise = null;
-    
+
     /** The traffic light approaching. */
     private final TrafficLightApproaching trafficLightApproaching;
-    
 
     /** The cyclic buffer. */
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
     /**
      * Instantiates a new vehicle impl.
-     *
-     * @param label the label
-     * @param id the id
-     * @param longModel the long model
-     * @param vehInput the veh input
-     * @param cyclicBuffer the cyclic buffer
+     * 
+     * @param label
+     *            the label
+     * @param id
+     *            the id
+     * @param longModel
+     *            the long model
+     * @param vehInput
+     *            the veh input
+     * @param cyclicBuffer
+     *            the cyclic buffer
      */
-    public VehicleImpl(String label, int id, AccelerationModel longModel, VehicleInput vehInput, CyclicBufferImpl cyclicBuffer) {
-    	this.label = label;
+    public VehicleImpl(String label, int id, AccelerationModel longModel, VehicleInput vehInput,
+            CyclicBufferImpl cyclicBuffer) {
+        this.label = label;
         this.id = id;
 
         length = vehInput.getLength();
@@ -131,11 +136,11 @@ public class VehicleImpl implements Vehicle{
         acc = 0;
 
         speedlimit = Constants.MAX_VEHICLE_SPEED;
-        
-        
+
         // TODO set isFromOnramp
 
-        // effekt wirkungslos, wenn Modell nicht ueber entsprechenden Modelparameter verfuegt.
+        // effekt wirkungslos, wenn Modell nicht ueber entsprechenden
+        // Modelparameter verfuegt.
         if (vehInput.isWithMemory()) {
             memory = new MemoryImpl(vehInput.getMemoryInputData());
         }
@@ -145,7 +150,7 @@ public class VehicleImpl implements Vehicle{
         }
 
         trafficLightApproaching = new TrafficLightApproachingImpl();
-		
+
     }
 
     /*
@@ -161,13 +166,16 @@ public class VehicleImpl implements Vehicle{
         this.lane = lane;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.vehicles.Vehicle#getLabel()
      */
+    @Override
     public String getLabel() {
         return label;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -438,7 +446,7 @@ public class VehicleImpl implements Vehicle{
         if (longModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             position = (int) (position + dt * speed + 0.5);
-            
+
         } else {
             // continuous micro models and iterated maps
             if (speed < 0) {
@@ -454,7 +462,6 @@ public class VehicleImpl implements Vehicle{
         }
     }
 
-   
     /*
      * (non-Javadoc)
      * 
@@ -465,7 +472,6 @@ public class VehicleImpl implements Vehicle{
         return lane;
     }
 
-  
     /*
      * (non-Javadoc)
      * 
@@ -487,15 +493,23 @@ public class VehicleImpl implements Vehicle{
 
     }
 
-	/* (non-Javadoc)
-	 * @see org.movsim.simulator.vehicles.Vehicle#updateTrafficLight(double, org.movsim.simulator.roadSection.TrafficLight)
-	 */
-	@Override
-	public void updateTrafficLight(double time, TrafficLight trafficLight) {
-		trafficLightApproaching.update(this, time, trafficLight, longModel);
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.Vehicle#updateTrafficLight(double,
+     * org.movsim.simulator.roadSection.TrafficLight)
+     */
+    @Override
+    public void updateTrafficLight(double time, TrafficLight trafficLight) {
+        trafficLightApproaching.update(this, time, trafficLight, longModel);
 
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.Vehicle#removeObservers()
+     */
     @Override
     public void removeObservers() {
         longModel.removeObserver();

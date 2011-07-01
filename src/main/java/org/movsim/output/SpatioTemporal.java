@@ -34,15 +34,45 @@ import org.movsim.utilities.ObservableInTime;
  */
 public interface SpatioTemporal extends ObservableInTime {
 
+    /**
+     * Gets the dt out.
+     * 
+     * @return the dt out
+     */
     double getDtOut();
 
+    /**
+     * Gets the dx out.
+     * 
+     * @return the dx out
+     */
     double getDxOut();
 
+    /**
+     * Gets the density.
+     * 
+     * @return the density
+     */
     double[] getDensity();
 
+    /**
+     * Gets the average speed.
+     * 
+     * @return the average speed
+     */
     double[] getAverageSpeed();
 
+    /**
+     * Gets the flow.
+     * 
+     * @return the flow
+     */
     double[] getFlow();
 
+    /**
+     * Gets the time offset.
+     * 
+     * @return the time offset
+     */
     double getTimeOffset();
 }

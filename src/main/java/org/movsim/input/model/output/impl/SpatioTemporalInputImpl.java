@@ -37,10 +37,10 @@ public class SpatioTemporalInputImpl implements SpatioTemporalInput {
 
     /** The dt. */
     private double dt;
-    
+
     /** The dx. */
     private double dx;
-    
+
     /** The is initialized. */
     private final boolean isInitialized;
 

@@ -72,20 +72,30 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
     private double delta;
 
     /**
-     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in range [0, 1]
+     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration
+     * heuristic, CAH), coolness=1 CAH factor in range [0, 1]
      */
     private double coolness;
 
     /**
      * Instantiates a new aCC.
-     * @param modelName the model name
-     * @param parameters the parameters
+     * 
+     * @param modelName
+     *            the model name
+     * @param parameters
+     *            the parameters
      */
     public ACC(String modelName, AccelerationModelInputDataACC parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
@@ -101,8 +111,11 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #acc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
@@ -126,18 +139,38 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     }
 
-   
-
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #accSimple(double, double, double)
      */
     @Override
     public double accSimple(double s, double v, double dv) {
         return acc(s, v, dv, 0, T, v0, a);
     }
-    
+
     // Implementation of ACC model with improved IDM (IIDM)
+    /**
+     * Acc.
+     * 
+     * @param s
+     *            the s
+     * @param v
+     *            the v
+     * @param dv
+     *            the dv
+     * @param aLead
+     *            the a lead
+     * @param TLocal
+     *            the t local
+     * @param v0Local
+     *            the v0 local
+     * @param aLocal
+     *            the a local
+     * @return the double
+     */
     private double acc(double s, double v, double dv, double aLead, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
         if (v0Local == 0) {
@@ -145,10 +178,11 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
         }
         // IIDM
 
-        final double sstar =
-                s0 + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(a * b), 0.);
+        final double sstar = s0
+                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(a * b), 0.);
         final double z = sstar / Math.max(s, 0.01);
-        final double accEmpty = (v <= v0) ? a * (1 - Math.pow((v / v0), delta)) : -b * (1 - Math.pow((v0 / v), a * delta / b));
+        final double accEmpty = (v <= v0) ? a * (1 - Math.pow((v / v0), delta)) : -b
+                * (1 - Math.pow((v0 / v), a * delta / b));
         final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * a / accEmpty, 100.)));
         final double accInt = a * (1 - z * z);
 
@@ -161,21 +195,20 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
         final double vLead = v - dvp;
         final double denomCAH = vLead * vLead - 2 * s * aLeadRestricted;
 
-        final double accCAH =
-                ((vLead * dvp < -2 * s * aLeadRestricted) && (denomCAH != 0)) ? v * v * aLeadRestricted / denomCAH : aLeadRestricted -
-                        0.5 * dvp * dvp / Math.max(s, 0.0001);
+        final double accCAH = ((vLead * dvp < -2 * s * aLeadRestricted) && (denomCAH != 0)) ? v * v * aLeadRestricted
+                / denomCAH : aLeadRestricted - 0.5 * dvp * dvp / Math.max(s, 0.0001);
 
         // ACC with IIDM
 
-        final double accACC_IIDM =
-                (accIIDM > accCAH) ? accIIDM : (1 - coolness) * accIIDM + coolness *
-                        (accCAH + b * Math.tanh((accIIDM - accCAH) / b));
+        final double accACC_IIDM = (accIIDM > accCAH) ? accIIDM : (1 - coolness) * accIIDM + coolness
+                * (accCAH + b * Math.tanh((accIIDM - accCAH) / b));
 
         return accACC_IIDM;
     }
 
     /**
      * Gets the v0.
+     * 
      * @return the v0
      */
     public double getV0() {
@@ -184,6 +217,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the t.
+     * 
      * @return the t
      */
     public double getT() {
@@ -192,6 +226,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the s0.
+     * 
      * @return the s0
      */
     public double getS0() {
@@ -200,6 +235,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the s1.
+     * 
      * @return the s1
      */
     public double getS1() {
@@ -208,6 +244,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the delta.
+     * 
      * @return the delta
      */
     public double getDelta() {
@@ -216,6 +253,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the a.
+     * 
      * @return the a
      */
     public double getA() {
@@ -224,6 +262,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the b.
+     * 
      * @return the b
      */
     public double getB() {
@@ -232,7 +271,9 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -241,6 +282,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /**
      * Gets the coolness.
+     * 
      * @return the coolness
      */
     public double getCoolness() {
@@ -249,7 +291,9 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
     /*
      * (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#getRequiredUpdateTime()
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

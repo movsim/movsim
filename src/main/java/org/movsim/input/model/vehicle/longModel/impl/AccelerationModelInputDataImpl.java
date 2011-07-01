@@ -37,12 +37,25 @@ public abstract class AccelerationModelInputDataImpl extends ObservableImpl impl
 
     /** The model name. */
     private final String modelName;
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputData#
+     * resetParametersToDefault()
+     */
+    @Override
     public abstract void resetParametersToDefault();
-    
+
+    /**
+     * Check parameters.
+     */
     protected abstract void checkParameters();
-    
-    protected void parametersUpdated(){
+
+    /**
+     * Parameters updated.
+     */
+    protected void parametersUpdated() {
         checkParameters();
         notifyObservers();
     }
@@ -60,8 +73,8 @@ public abstract class AccelerationModelInputDataImpl extends ObservableImpl impl
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputData#getModelName()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputData#
+     * getModelName()
      */
     @Override
     public String getModelName() {

@@ -30,7 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataNSM.
  */
-public interface AccelerationModelInputDataNSM extends AccelerationModelInputData{
+public interface AccelerationModelInputDataNSM extends AccelerationModelInputData {
 
     /**
      * Gets the v0.
@@ -52,22 +52,64 @@ public interface AccelerationModelInputDataNSM extends AccelerationModelInputDat
      * @return the slow to start
      */
     double getSlowToStart();
-    
-    
+
+    /**
+     * Gets the v0 default.
+     * 
+     * @return the v0 default
+     */
     double getV0Default();
 
+    /**
+     * Gets the p slowdown.
+     * 
+     * @return the p slowdown
+     */
     double getpSlowdown();
 
+    /**
+     * Gets the p slowdown default.
+     * 
+     * @return the p slowdown default
+     */
     double getpSlowdownDefault();
 
+    /**
+     * Gets the p slow to start.
+     * 
+     * @return the p slow to start
+     */
     double getpSlowToStart();
 
+    /**
+     * Gets the p slow to start default.
+     * 
+     * @return the p slow to start default
+     */
     double getpSlowToStartDefault();
 
+    /**
+     * Sets the v0.
+     * 
+     * @param v0
+     *            the new v0
+     */
     void setV0(double v0);
 
+    /**
+     * Sets the p slowdown.
+     * 
+     * @param pSlowdown
+     *            the new p slowdown
+     */
     void setpSlowdown(double pSlowdown);
 
+    /**
+     * Sets the p slow to start.
+     * 
+     * @param pSlowToStart
+     *            the new p slow to start
+     */
     void setpSlowToStart(double pSlowToStart);
 
 }

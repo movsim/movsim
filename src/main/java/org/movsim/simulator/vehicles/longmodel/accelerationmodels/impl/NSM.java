@@ -46,17 +46,17 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
-    
+
     // unit time for CA:
     /** The Constant dtCA. */
     private static final double dtCA = 1; // update timestep for CA !!
 
     /** The v0. */
     private double v0;
-    
+
     /** The p slowdown. */
     private double pSlowdown;
-    
+
     /** The p slow to start. */
     private double pSlowToStart; // slow-to-start rule for Barlovic model
 
@@ -73,6 +73,12 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
         initParameters();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
@@ -80,8 +86,6 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
         this.pSlowdown = ((AccelerationModelInputDataNSM) parameters).getSlowdown();
         this.pSlowToStart = ((AccelerationModelInputDataNSM) parameters).getSlowToStart();
     }
-    
-    
 
     /*
      * (non-Javadoc)

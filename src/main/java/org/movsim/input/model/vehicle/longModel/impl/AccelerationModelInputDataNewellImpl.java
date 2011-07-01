@@ -36,7 +36,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class AccelerationModelInputDataNewellImpl.
  */
-public class AccelerationModelInputDataNewellImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataNewell {
+public class AccelerationModelInputDataNewellImpl extends AccelerationModelInputDataImpl implements
+        AccelerationModelInputDataNewell {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataNewellImpl.class);
@@ -56,18 +57,31 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
 
         checkParameters();
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #checkParameters()
+     */
     @Override
     protected void checkParameters() {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #resetParametersToDefault()
+     */
     @Override
     public void resetParametersToDefault() {
         // TODO Auto-generated method stub
-        
+
     }
 
-   
 }

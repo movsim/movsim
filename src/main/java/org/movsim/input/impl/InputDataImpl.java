@@ -53,14 +53,17 @@ public class InputDataImpl implements InputData {
 
     /** The simulation input. */
     private SimulationInput simulationInput;
-    
-    private ProjectMetaDataImpl projectMetaDataImpl;
-    
 
+    private ProjectMetaDataImpl projectMetaDataImpl;
+
+    /**
+     * Gets the project meta data impl.
+     * 
+     * @return the project meta data impl
+     */
     public ProjectMetaDataImpl getProjectMetaDataImpl() {
         return projectMetaDataImpl;
     }
-
 
     /**
      * Instantiates a new input data impl.
@@ -68,7 +71,6 @@ public class InputDataImpl implements InputData {
     public InputDataImpl() {
         projectMetaDataImpl = ProjectMetaDataImpl.getInstanceImpl();
     }
-
 
     /**
      * Sets the project name.
@@ -79,7 +81,6 @@ public class InputDataImpl implements InputData {
     public void setProjectName(String projectname) {
         this.projectMetaDataImpl.setProjectName(projectname);
     }
-    
 
     /**
      * Sets the vehicle input data.
@@ -101,9 +102,13 @@ public class InputDataImpl implements InputData {
         return vehicleInputData;
     }
 
-
-    
     // testweise hier
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#createVehicleInputDataMap()
+     */
+    @Override
     public Map<String, VehicleInput> createVehicleInputDataMap() {
         final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
         for (final VehicleInput vehInput : vehicleInputData) {
@@ -112,7 +117,7 @@ public class InputDataImpl implements InputData {
         }
         return map;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -133,13 +138,14 @@ public class InputDataImpl implements InputData {
         this.simulationInput = simulationInput;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.InputData#getProjectMetaData()
      */
     @Override
     public ProjectMetaData getProjectMetaData() {
-        return (ProjectMetaData)projectMetaDataImpl;
+        return projectMetaDataImpl;
     }
 
 }

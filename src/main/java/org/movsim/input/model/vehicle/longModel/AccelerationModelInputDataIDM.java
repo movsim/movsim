@@ -30,7 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataIDM.
  */
-public interface AccelerationModelInputDataIDM extends AccelerationModelInputData{
+public interface AccelerationModelInputDataIDM extends AccelerationModelInputData {
 
     /**
      * Gets the v0.
@@ -80,36 +80,119 @@ public interface AccelerationModelInputDataIDM extends AccelerationModelInputDat
      * @return the b
      */
     double getB();
-    
+
+    /**
+     * Gets the v0 default.
+     * 
+     * @return the v0 default
+     */
     double getV0Default();
+
+    /**
+     * Gets the t default.
+     * 
+     * @return the t default
+     */
     double getTDefault();
 
+    /**
+     * Gets the s0 default.
+     * 
+     * @return the s0 default
+     */
     double getS0Default();
+
+    /**
+     * Gets the s1 default.
+     * 
+     * @return the s1 default
+     */
     double getS1Default();
 
+    /**
+     * Gets the delta default.
+     * 
+     * @return the delta default
+     */
     double getDeltaDefault();
 
+    /**
+     * Gets the a default.
+     * 
+     * @return the a default
+     */
     double getaDefault();
 
+    /**
+     * Gets the b default.
+     * 
+     * @return the b default
+     */
     double getbDefault();
 
-
-    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputData#
+     * resetParametersToDefault()
+     */
+    @Override
     void resetParametersToDefault();
-    
+
+    /**
+     * Sets the v0.
+     * 
+     * @param v0
+     *            the new v0
+     */
     void setV0(double v0);
 
+    /**
+     * Sets the t.
+     * 
+     * @param timegap
+     *            the new t
+     */
     void setT(double timegap);
-    
+
+    /**
+     * Sets the s0.
+     * 
+     * @param s0
+     *            the new s0
+     */
     void setS0(double s0);
 
+    /**
+     * Sets the s1.
+     * 
+     * @param s1
+     *            the new s1
+     */
     void setS1(double s1);
 
+    /**
+     * Sets the delta.
+     * 
+     * @param delta
+     *            the new delta
+     */
     void setDelta(double delta);
 
+    /**
+     * Sets the a.
+     * 
+     * @param a
+     *            the new a
+     */
     void setA(double a);
 
+    /**
+     * Sets the b.
+     * 
+     * @param b
+     *            the new b
+     */
     void setB(double b);
-    
-    
+
 }

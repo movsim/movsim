@@ -41,16 +41,16 @@ public class TrafficLightDataImpl implements TrafficLightData {
 
     /** The x. */
     private final double x;
-    
+
     /** The green time. */
     private final double greenTime;
-    
+
     /** The red time. */
     private final double redTime;
-    
+
     /** The green red time period. */
     private final double greenRedTimePeriod;
-    
+
     /** The red green time period. */
     private final double redGreenTimePeriod;
 

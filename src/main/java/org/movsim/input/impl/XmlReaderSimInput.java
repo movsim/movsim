@@ -82,7 +82,7 @@ public class XmlReaderSimInput {
     /** The doc. */
     private Document doc;
 
-    private String dtdFilename = File.separator + "sim" + File.separator+ "multiModelTrafficSimulatorInput.dtd";
+    private String dtdFilename = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
 
@@ -93,9 +93,6 @@ public class XmlReaderSimInput {
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
      * 
-     * @param xmlFilename
-     *            the xml filename
-     * @param cmdline
      * @param inputData
      *            the input data
      */
@@ -103,18 +100,18 @@ public class XmlReaderSimInput {
         projectMetaData = inputData.getProjectMetaData();
         this.inputData = inputData;
 
-        this.xmlFilename = projectMetaData.getProjectName(); //TODO Path + File
+        this.xmlFilename = projectMetaData.getProjectName(); // TODO Path + File
 
         if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
             logger.error("XML File does not exist. Exit Simulation.");
-             System.exit(1);
+            System.exit(1);
         }
 
         logger.info("Begin parsing: " + xmlFilename);
-        
+
         if (projectMetaData.isXmlFromResources()) {
             readXmlFromResources();
-        }  else {
+        } else {
             readAndValidateXmlFromFileName();
         }
 
@@ -131,9 +128,10 @@ public class XmlReaderSimInput {
     }
 
     /**
-     * Writes the internal xml after validation to file
+     * Writes the internal xml after validation to file.
      * 
      * @param doc2
+     *            the doc2
      * @param outFilename
      *            the output file name
      */
@@ -180,20 +178,23 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        validate(FileUtils.getInputSourceFromFilename(xmlFilename));  // TODO path
+        validate(FileUtils.getInputSourceFromFilename(xmlFilename)); // TODO
+                                                                     // path
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
-    
+
+    /**
+     * Read xml from resources.
+     */
     private void readXmlFromResources() {
-        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator+xmlFilename);
+        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator + xmlFilename);
         appletresource = new InputSource(appletinputstream);
         validate(appletresource);
-        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator+xmlFilename);
+        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator + xmlFilename);
         appletresource = new InputSource(appletinputstream);
-        doc = getDocument(appletresource); 
+        doc = getDocument(appletresource);
         System.out.println("from resource");
     }
-
 
     /**
      * Gets the Document.
