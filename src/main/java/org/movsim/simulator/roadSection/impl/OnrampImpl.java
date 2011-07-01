@@ -208,9 +208,9 @@ public class OnrampImpl implements Onramp {
      * @return the double
      */
     private double speedToEnter(double speedLeader) {
-        final double vcrit = 10; 
-        final double reducefact = 1. - (1 - RAMP_VEL_REDUCEFACTOR) * Math.min(1., speedLeader / vcrit);
-        return reducefact * speedLeader;
+        final double vCrit = 10.;  
+        final double reduceFactor = 1. - (1 - RAMP_VEL_REDUCEFACTOR) * Math.min(1., speedLeader / vCrit);
+        return reduceFactor * speedLeader;
     }
 
     /**

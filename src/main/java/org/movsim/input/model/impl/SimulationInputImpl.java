@@ -54,6 +54,8 @@ public class SimulationInputImpl implements SimulationInput {
     /** The with fixed seed. */
     private boolean withFixedSeed;
     
+    private boolean withCrashExit;
+    
     /** The random seed. */
     private final int randomSeed;
 
@@ -77,6 +79,11 @@ public class SimulationInputImpl implements SimulationInput {
             withFixedSeed = true;
         } else {
             withFixedSeed = false;
+        }
+        if (elem.getAttributeValue("crash_exit").equalsIgnoreCase("true")) {
+            withCrashExit = true;
+        } else {
+            withCrashExit = false;
         }
 
         final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
@@ -143,7 +150,7 @@ public class SimulationInputImpl implements SimulationInput {
         return roadInput;
     }
 
-    // Quick hack: assume only one single main road !!!
+
 
     /*
      * (non-Javadoc)
@@ -152,11 +159,16 @@ public class SimulationInputImpl implements SimulationInput {
      */
     @Override
     public RoadInput getSingleRoadInput() {
+        // Quick hack: assume only one single main road !!!
         return roadInput.get(0);
     }
 
     
     public OutputInput getOutputInput() {
         return outputInput;
+    }
+
+    public boolean isWithCrashExit() {
+        return withCrashExit;
     }
 }

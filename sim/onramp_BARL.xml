@@ -4,27 +4,27 @@
 <SCENARIO path="." >
     <VEHICLES>
        <!-- vehicle length ==> cell units -->
-        <VEHICLE label="NSM1" length="1">
+        <VEHICLE label="BARL1" length="1">
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
                 <!-- BARL variant : p_slow_start != p_slowdown -->
-                <NSM v0="5" p_slowdown="0.2" p_slow_start="0.2" />
+                <NSM v0="5" p_slowdown="0.2" p_slow_start="0.4" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="1" duration="7200" fixed_seed="false" seed="42" crash_exit="false">
+    <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false" >
          <!-- scaled units for time and space -->
         <ROAD id="1" length="4000" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="NSM1" fraction="1" />
+                <VEHICLE_TYPE label="BARL1" fraction="1" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="2000" rho_per_km="2" v="3" />
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE logging="true">
                 <INFLOW t="0" q_per_hour="100"    v="11" />
-                <INFLOW t="600" q_per_hour="2000" v="9" />
+                <INFLOW t="600" q_per_hour="2050" v="9" />
             </TRAFFIC_SOURCE>
             <TRAFFIC_SINK />
             <!-- improve vehicle performance at inflow -->

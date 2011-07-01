@@ -77,6 +77,9 @@ public class RoadSectionImpl implements RoadSection {
     /** The id. */
     private long id;
 
+    
+    private final boolean withCrashExit;
+    
     private boolean instantaneousFileOutput;
 
     /** The veh container. */
@@ -100,7 +103,6 @@ public class RoadSectionImpl implements RoadSection {
     /** The detectors. */
     private LoopDetectors detectors = null;
 
-  
 
     /** The simple onramps. */
     private List<Onramp> simpleOnramps = null;
@@ -118,6 +120,7 @@ public class RoadSectionImpl implements RoadSection {
         this.instantaneousFileOutput = inputData.getProjectMetaData().isInstantaneousFileOutput();
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
+        this.withCrashExit = simInput.isWithCrashExit();
         this.roadLength = simInput.getSingleRoadInput().getRoadLength();
         this.nLanes = simInput.getSingleRoadInput().getLanes();
         this.id = simInput.getSingleRoadInput().getId();
@@ -343,8 +346,10 @@ public class RoadSectionImpl implements RoadSection {
                 } 
                 logger.error(msg.toString());
                 if (instantaneousFileOutput) {
-                    logger.error(" !!! exit after crash !!! ");
-                    System.exit(-99);
+                    if(withCrashExit){
+                        logger.error(" !!! exit after crash !!! ");
+                        System.exit(-99);
+                    }
                 }
             }
         }
