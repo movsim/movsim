@@ -203,5 +203,8 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
         parametersUpdated();
     }
 
-    
+    public void setDt(double s0) {
+        this.s0 = s0;
+        parametersUpdated();
+    }
 }

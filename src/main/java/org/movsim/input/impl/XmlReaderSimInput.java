@@ -100,7 +100,7 @@ public class XmlReaderSimInput {
      *            the input data
      */
     public XmlReaderSimInput(InputDataImpl inputData) {
-        projectMetaData = ProjectMetaDataImpl.getInstance();
+        projectMetaData = inputData.getProjectMetaData();
         this.inputData = inputData;
 
         this.xmlFilename = projectMetaData.getProjectName(); //TODO Path + File
