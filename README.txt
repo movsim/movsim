@@ -1,20 +1,49 @@
 =========================================================================
 MovSim
 
-MovSim: multi-model open-source vehicular-traffic simulator
-
+MovSim = multi-model open-source vehicular-traffic simulator
 
 http://www.movsim.org
+
+Demonstration: www.verkehrsdynamik.de 
 
 =========================================================================
 
 Description:
 
+microscopic traffic simulator with xml-based configuration and csv text output 
+
+features:
+
+- one-lane simulator of one mainroad
+- onramp and flow-conserving bottlenecks
+- traffic-lights
+- multiple models and different model classes (continuous models like Intelligent Driver Model, 
+  coupled-map models like Gipps and cellular automata like Nagel-Schreckenberg)
+- text-file output of detectors, spatiotemporal fields, floating-car data etc. 
+ 
 
 -------------------------------------------------------------------------
 
 Usage:
 
+build with maven from command line: 
+mvn install
+
+run predefined simulation scenarios in sim/ (*.xml) and 
+plot simulation results with gnuplot (/sim/*.gpl) with runapp-script:
+
+./runapp startStop_IDM
+
+etc.
+
+command-line options:
+
+java -jar target/movsim-1.0-jar-with-dependencies.jar -h
+ 
+
+
+  
 
 -------------------------------------------------------------------------
 
