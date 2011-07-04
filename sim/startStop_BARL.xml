@@ -13,7 +13,6 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
         <VEHICLE label="Obstacle" length="1">
-            <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
                 <NSM v0="0" p_slowdown="0" p_slow_start="0" />
             </LONGITUDINAL_MODEL>
@@ -71,15 +70,14 @@
             <DETECTORS />
         </ROAD>
         <OUTPUT>
-                <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
-                    <!-- FC 1 is obstacle -->
-                    <FC number="1" />
-                    <FC number="2" />
-                    <FC number="6" />
-                    <FC number="11" />
-                    <FC number="16" />
-                    <FC number="21" />
-                </FLOATING_CAR_DATA>
-            </OUTPUT>
+          <FLOATING_CAR_DATA n_dt="1" perc_out="0" dn="0">
+             <!-- FC 1 is obstacle -->
+             <FC number="2" />
+             <FC number="6" />
+             <FC number="11" />
+             <FC number="16" />
+             <FC number="21" />
+         </FLOATING_CAR_DATA>
+       </OUTPUT>
     </SIMULATION>
 </SCENARIO>

@@ -35,13 +35,13 @@ public interface TrafficLight {
     // cycle is GREEN --> GREEN_RED --> RED --> RED_GREEN --> GREEN
     /** The GREE n_ light. */
     final int GREEN_LIGHT = 0;
-    
+
     /** The GREE n_ re d_ light. */
     final int GREEN_RED_LIGHT = 1;
-    
+
     /** The RE d_ light. */
     final int RED_LIGHT = 2;
-    
+
     /** The RE d_ gree n_ light. */
     final int RED_GREEN_LIGHT = 3;
 

@@ -43,10 +43,10 @@ public class InitialConditionsMacroImpl implements InitialConditionsMacro {
 
     /** The pos. */
     double[] pos;
-    
+
     /** The rho. */
     double[] rho;
-    
+
     /** The speed. */
     double[] speed;
 

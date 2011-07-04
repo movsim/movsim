@@ -36,26 +36,29 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class AccelerationModelInputDataNSMImpl.
  */
-public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDataImpl implements AccelerationModelInputDataNSM {
+public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDataImpl implements
+        AccelerationModelInputDataNSM {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataNSMImpl.class);
 
-    /** The v0.
-     * desired velocity (cell units/time unit) */
-    private double v0; 
+    /**
+     * The v0. desired velocity (cell units/time unit)
+     */
+    private double v0;
     private final double v0Default;
-    
-    /** The p slowdown.
-     * Troedelwahrscheinlichkeit - slowdown probability */
-    private double pSlowdown; 
+
+    /**
+     * The p slowdown. Troedelwahrscheinlichkeit - slowdown probability
+     */
+    private double pSlowdown;
     private final double pSlowdownDefault;
-    
-    /** The p slow to start. 
-     * slow-to-start rule (Barlovic)*/
+
+    /**
+     * The p slow to start. slow-to-start rule (Barlovic)
+     */
     private double pSlowToStart;
     private final double pSlowToStartDefault;
-
 
     /**
      * Instantiates a new model input data nsm impl.
@@ -73,6 +76,13 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
         checkParameters();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #checkParameters()
+     */
     @Override
     protected void checkParameters() {
         if (pSlowToStart < pSlowdown) {
@@ -88,15 +98,21 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
             System.exit(-1);
         }
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
+     * #resetParametersToDefault()
+     */
     @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
         pSlowToStart = pSlowToStartDefault;
         pSlowdown = pSlowdownDefault;
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -130,36 +146,100 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
         return pSlowToStart;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #getV0Default()
+     */
+    @Override
     public double getV0Default() {
         return v0Default;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #getpSlowdown()
+     */
+    @Override
     public double getpSlowdown() {
         return pSlowdown;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #getpSlowdownDefault()
+     */
+    @Override
     public double getpSlowdownDefault() {
         return pSlowdownDefault;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #getpSlowToStart()
+     */
+    @Override
     public double getpSlowToStart() {
         return pSlowToStart;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #getpSlowToStartDefault()
+     */
+    @Override
     public double getpSlowToStartDefault() {
         return pSlowToStartDefault;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #setV0(double)
+     */
+    @Override
     public void setV0(double v0) {
         this.v0 = v0;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #setpSlowdown(double)
+     */
+    @Override
     public void setpSlowdown(double pSlowdown) {
         this.pSlowdown = pSlowdown;
         parametersUpdated();
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
+     * #setpSlowToStart(double)
+     */
+    @Override
     public void setpSlowToStart(double pSlowToStart) {
         this.pSlowToStart = pSlowToStart;
         parametersUpdated();

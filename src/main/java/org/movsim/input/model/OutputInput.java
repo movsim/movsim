@@ -52,10 +52,9 @@ public interface OutputInput {
 
     /**
      * Gets the trajectories input.
-     *
+     * 
      * @return the trajectories input
      */
     TrajectoriesInput getTrajectoriesInput();
-    
-    
+
 }

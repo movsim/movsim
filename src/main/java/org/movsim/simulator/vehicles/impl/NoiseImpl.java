@@ -64,7 +64,7 @@ public class NoiseImpl implements Noise {
 
     // output: delta-correlated random process, var=Q_acc/dt
     /** The xi acc. */
-                                        private double xiAcc = 0;
+    private double xiAcc = 0;
 
     /**
      * Instantiates a new noise impl.

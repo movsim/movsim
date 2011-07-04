@@ -41,24 +41,22 @@ import org.slf4j.LoggerFactory;
  * The Class FloatingCarsImpl.
  */
 public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCarsImpl.class);
-    
+
     private List<Integer> fcdList;
-    
+
     /** The n dt out. */
     private final int nDtOut;
-    
+
     private VehicleContainer vehContainer;
 
     /**
      * Instantiates a new floating cars impl.
      * 
-     * @param projectName
-     *            the project name
-     * @param writeOutput
-     *            the write output
+     * @param vehContainer
+     *            the veh container
      * @param input
      *            the input
      */
@@ -72,22 +70,41 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
 
     }
 
-       public void update(int itime, double time, double timestep) {
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     * @param timestep
+     *            the timestep
+     */
+    public void update(int itime, double time, double timestep) {
 
-        if (itime % nDtOut == 0){
+        if (itime % nDtOut == 0) {
             notifyObservers(time);
             logger.debug("update FloatingCars: itime={}", itime);
         }
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.FloatingCars#getFcdList()
+     */
     @Override
     public List<Integer> getFcdList() {
         return fcdList;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.FloatingCars#getMoveableContainer()
+     */
     @Override
-    public MoveableContainer getMoveableContainer(){
+    public MoveableContainer getMoveableContainer() {
         return vehContainer;
     }
 

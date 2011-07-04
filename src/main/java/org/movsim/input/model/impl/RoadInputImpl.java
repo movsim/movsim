@@ -57,6 +57,7 @@ import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
 import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
 
+// TODO: Auto-generated Javadoc
 // TODO: extract element names into XmlElementNames Interface to make them symbolic.
 
 /**
@@ -100,14 +101,10 @@ public class RoadInputImpl implements RoadInput {
     /** The ramps. */
     private List<RampData> ramps;
 
-    private TrafficLightsInput trafficLightsInput; 
-    
+    private TrafficLightsInput trafficLightsInput;
+
     /** The detector input. */
     private DetectorInput detectorInput;
-    
-   
-
-   
 
     /**
      * Instantiates a new road input impl.
@@ -206,7 +203,8 @@ public class RoadInputImpl implements RoadInput {
         flowConsBottleneckInputData = new ArrayList<FlowConservingBottleneckDataPoint>();
         final Element flowConsBottlenecksElement = elem.getChild(XmlElementNames.RoadFlowConservingInhomogeneities);
         if (flowConsBottlenecksElement != null) {
-            final List<Element> flowConsElems = flowConsBottlenecksElement.getChildren(XmlElementNames.RoadInhomogeneity);
+            final List<Element> flowConsElems = flowConsBottlenecksElement
+                    .getChildren(XmlElementNames.RoadInhomogeneity);
             for (final Element flowConsElem : flowConsElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(flowConsElem);
                 flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPointImpl(map));
@@ -285,19 +283,16 @@ public class RoadInputImpl implements RoadInput {
 
         // -----------------------------------------------------------
 
-        
         // Trafficlights
-        
-        final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
-        trafficLightsInput = new TrafficLightsInputImpl(trafficLightsElement); 
 
-        // -----------------------------------------------------------        
-        
+        final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
+        trafficLightsInput = new TrafficLightsInputImpl(trafficLightsElement);
+
+        // -----------------------------------------------------------
+
         detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
 
         // -----------------------------------------------------------
-        
-  
 
     }
 
@@ -384,8 +379,6 @@ public class RoadInputImpl implements RoadInput {
         return ramps;
     }
 
-   
-
     /*
      * (non-Javadoc)
      * 
@@ -425,7 +418,7 @@ public class RoadInputImpl implements RoadInput {
     public List<SimpleRampData> getSimpleRamps() {
         return simpleRamps;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -436,8 +429,12 @@ public class RoadInputImpl implements RoadInput {
         return detectorInput;
     }
 
-   
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.RoadInput#getTrafficLightsInput()
+     */
+    @Override
     public TrafficLightsInput getTrafficLightsInput() {
         return trafficLightsInput;
     }

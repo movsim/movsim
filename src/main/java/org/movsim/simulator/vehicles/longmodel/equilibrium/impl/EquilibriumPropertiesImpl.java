@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * The Class EquilibriumPropertiesImpl.
  */
 public abstract class EquilibriumPropertiesImpl implements EquilibriumProperties {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
@@ -49,13 +49,13 @@ public abstract class EquilibriumPropertiesImpl implements EquilibriumProperties
 
     /** The rho max. */
     final double rhoMax;
-    
+
     /** The length. */
     final double length;
 
     /** The q max. */
     double qMax;
-    
+
     /** The rho q max. */
     double rhoQMax;
 

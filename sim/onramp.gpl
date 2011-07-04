@@ -166,7 +166,7 @@ set pm3d; set pm3d map
 set cntrparam bspline
 set cntrparam levels 15
 unset clabel  # dann lauter gleiche Kontourlinien;
-                     # Farbe und Typ mit "w l ls" beim splot-Kommando
+              # Farbe und Typ mit "w l ls" beim splot-Kommando
 
 #set view 20,63
 #set hidden3d

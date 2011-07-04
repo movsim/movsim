@@ -47,20 +47,20 @@ import org.slf4j.LoggerFactory;
  * The Class SimOutput.
  */
 public class SimOutput implements SimObservables {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
     private SpatioTemporalImpl spatioTemporal = null;
-    
+
     /** The file spatio temporal. */
     private FileSpatioTemporal fileSpatioTemporal;
 
     /** The floating cars. */
     private FloatingCarsImpl floatingCars = null;
-    
+
     private FileFloatingCars fileFloatingCars;
-    
+
     /** The trajectories. */
     private FileTrajectories trajectories = null;
 
@@ -70,34 +70,35 @@ public class SimOutput implements SimObservables {
     /** The project name. */
     private final String projectName;
 
-    
     private final RoadSection roadSection;
 
     /**
      * Instantiates a new sim output.
      * 
-     * @param isWithGUI
-     *            the is with gui
      * @param simInput
      *            the sim input
      * @param roadSection
      *            the road section
      */
-    public SimOutput(boolean instantaneousFileOutput, InputData simInput, RoadSection roadSection) {
-        projectName = simInput.getProjectName();
+    public SimOutput(InputData simInput, RoadSection roadSection) {
+        projectName = simInput.getProjectMetaData().getProjectName();
         this.roadSection = roadSection;
-        
+
         // more restrictive than in other output classes TODO
-        writeOutput = instantaneousFileOutput; // no file output from GUI
+        writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput(); // no
+                                                                                 // file
+                                                                                 // output
+                                                                                 // from
+                                                                                 // GUI
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
-        
+
         // SingleRoad quickhack! TODO
         final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCarsImpl(roadSection.vehContainer(), floatingCarInput);
-            if(writeOutput){
+            if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
             }
         }
@@ -105,18 +106,18 @@ public class SimOutput implements SimObservables {
         final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInput.isWithMacro()) {
             spatioTemporal = new SpatioTemporalImpl(spatioTemporalInput, roadSection);
-            if(writeOutput){
+            if (writeOutput) {
                 fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSection.id(), spatioTemporal);
             }
         }
-        
+
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
-            trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+            if (writeOutput) {
+                trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+            }
         }
 
-        
-        
     }
 
     /**
@@ -128,35 +129,50 @@ public class SimOutput implements SimObservables {
      *            the time
      * @param timestep
      *            the timestep
-     * @param roadSection
-     *            the road section
      */
     public void update(int itime, double time, double timestep) {
-        
+
         if (floatingCars != null) {
             floatingCars.update(itime, time, timestep);
         }
         if (spatioTemporal != null) {
             spatioTemporal.update(itime, time, roadSection);
         }
-        
+
         if (trajectories != null) {
             trajectories.update(itime, time);
         }
-        
+
     }
-    
-    public SpatioTemporal getSpatioTemporal(){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SimObservables#getSpatioTemporal()
+     */
+    @Override
+    public SpatioTemporal getSpatioTemporal() {
         return spatioTemporal;
     }
-    
-    public FloatingCars getFloatingCars(){
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SimObservables#getFloatingCars()
+     */
+    @Override
+    public FloatingCars getFloatingCars() {
         return floatingCars;
     }
 
-    public List<LoopDetector> getLoopDetectors(){
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SimObservables#getLoopDetectors()
+     */
+    @Override
+    public List<LoopDetector> getLoopDetectors() {
         return roadSection.getLoopDetectors();
     }
-    
-    
+
 }

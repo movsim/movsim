@@ -36,31 +36,39 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
  */
 public interface TrafficLightApproaching {
 
-	/**
-	 * Consider traffic light.
-	 *
-	 * @return true, if successful
-	 */
-	boolean considerTrafficLight();
-	
-	/**
-	 * Acc approaching.
-	 *
-	 * @return the double
-	 */
-	double accApproaching();
+    /**
+     * Consider traffic light.
+     * 
+     * @return true, if successful
+     */
+    boolean considerTrafficLight();
 
+    /**
+     * Acc approaching.
+     * 
+     * @return the double
+     */
+    double accApproaching();
+
+    /**
+     * Gets the distance to trafficlight.
+     * 
+     * @return the distance to trafficlight
+     */
     double getDistanceToTrafficlight();
 
-	/**
-	 * Update.
-	 *
-	 * @param me the me
-	 * @param time the time
-	 * @param trafficLight the traffic light
-	 * @param longModel the long model
-	 */
-	void update(Vehicle me, double time, TrafficLight trafficLight,
-			AccelerationModel longModel);
+    /**
+     * Update.
+     * 
+     * @param me
+     *            the me
+     * @param time
+     *            the time
+     * @param trafficLight
+     *            the traffic light
+     * @param longModel
+     *            the long model
+     */
+    void update(Vehicle me, double time, TrafficLight trafficLight, AccelerationModel longModel);
 
 }

@@ -53,11 +53,11 @@ public interface RoadSection {
 
     /**
      * Id.
-     *
+     * 
      * @return the long
      */
     long id();
-    
+
     /**
      * Update.
      * 
@@ -88,9 +88,12 @@ public interface RoadSection {
      * @return the traffic lights
      */
     List<TrafficLight> getTrafficLights();
-    
+
+    /**
+     * Gets the loop detectors.
+     * 
+     * @return the loop detectors
+     */
     List<LoopDetector> getLoopDetectors();
 
 }
-
-

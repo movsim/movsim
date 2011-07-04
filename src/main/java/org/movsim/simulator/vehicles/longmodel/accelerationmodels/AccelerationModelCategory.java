@@ -34,10 +34,10 @@ public interface AccelerationModelCategory {
 
     /** The CONTINUOUS model. */
     final int CONTINUOUS_MODEL = 0;
-    
+
     /** The INTERATED map_ model. */
     final int INTERATED_MAP_MODEL = 1;
-    
+
     /** The Cellular automaton. */
     final int CELLULAR_AUTOMATON = 2;
 

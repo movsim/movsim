@@ -42,10 +42,10 @@ public class FlowConservingBottlenecksImpl implements FlowConservingBottlenecks 
 
     /** The pos values. */
     private double[] posValues;
-    
+
     /** The alpha t values. */
     private double[] alphaTValues;
-    
+
     /** The alpha v0 values. */
     private double[] alphaV0Values;
 

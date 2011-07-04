@@ -30,6 +30,7 @@ import java.util.Map;
 
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SpeedLimitDataPointImpl.
  */
@@ -37,7 +38,7 @@ public class SpeedLimitDataPointImpl implements SpeedLimitDataPoint {
 
     /** The x in m. */
     private final double x;
-    
+
     /** The speedlimit in m/s. */
     private final double speedlimit;
 

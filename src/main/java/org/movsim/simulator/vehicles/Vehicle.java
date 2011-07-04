@@ -32,7 +32,7 @@ import org.movsim.simulator.roadSection.TrafficLight;
 /**
  * The Interface Vehicle.
  */
-public interface Vehicle extends Moveable{
+public interface Vehicle extends Moveable {
 
     /**
      * Sets the speedlimit.
@@ -50,7 +50,6 @@ public interface Vehicle extends Moveable{
      */
     void setVehNumber(int vehNumber);
 
-    
     /**
      * Inits the.
      * 
@@ -63,7 +62,6 @@ public interface Vehicle extends Moveable{
      */
     void init(double pos, double v, int lane);
 
-    
     /**
      * Update postion and speed.
      * 
@@ -95,8 +93,10 @@ public interface Vehicle extends Moveable{
      *            the traffic light
      */
     void updateTrafficLight(double time, TrafficLight trafficLight);
-    
-    
+
+    /**
+     * Removes the observers.
+     */
     void removeObservers();
 
 }

@@ -41,41 +41,48 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class KCA.
  */
-public class KCA extends LongitudinalModelImpl implements AccelerationModel {
+public class KCA extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(KCA.class);
-    
-    /** The Constant dtCA. 
-     *  constant update timestep for CA */
+
+    /**
+     * The Constant dtCA. constant update timestep for CA
+     */
     private static final double dtCA = 1; //
 
     /** The v0. */
     private double v0;
-    
-    /** The k. 
-     * Multiplikator fuer sync-Abstand D=lveh+k*v*tau */
-    private double k; 
-    
-    /** The pb0. 
-     * "Troedelwahrsch." for standing vehicles */
-    private double pb0; 
-    
-    /** The pb1. 
-     * "Troedelwahrsch." for moving vehicles */
-    private double pb1; 
-    
-    /** The pa1. 
-     * "Beschl.=Anti-Troedelwahrsch." falls v<vp*/
-    private double pa1; 
-    
-    /** The pa2. 
-     * "Beschl.=Anti-Troedelwahrsch." falls v>=vp*/
-    private double pa2; 
-    
-    /** The vp. 
-     * Geschw., ab der weniger "anti-getroedelt" wird */
-    private double vp;  
+
+    /**
+     * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+     */
+    private double k;
+
+    /**
+     * The pb0. "Troedelwahrsch." for standing vehicles
+     */
+    private double pb0;
+
+    /**
+     * The pb1. "Troedelwahrsch." for moving vehicles
+     */
+    private double pb1;
+
+    /**
+     * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v<vp
+     */
+    private double pa1;
+
+    /**
+     * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+     */
+    private double pa2;
+
+    /**
+     * The vp. Geschw., ab der weniger "anti-getroedelt" wird
+     */
+    private double vp;
 
     /** The vehicle length. */
     private double length;
@@ -95,7 +102,13 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
         this.length = length; // model parameter!
         initParameters();
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
@@ -106,7 +119,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
         this.pa1 = ((AccelerationModelInputDataKCA) parameters).getPa1();
         this.pa2 = ((AccelerationModelInputDataKCA) parameters).getPa2();
         this.vp = ((AccelerationModelInputDataKCA) parameters).getVp();
-        
+
     }
 
     /*
@@ -192,7 +205,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -203,7 +216,7 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {
@@ -272,7 +285,5 @@ public class KCA extends LongitudinalModelImpl implements AccelerationModel {
     public double getVp() {
         return vp;
     }
-
-    
 
 }

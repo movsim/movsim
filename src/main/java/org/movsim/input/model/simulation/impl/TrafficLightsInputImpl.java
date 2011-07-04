@@ -1,3 +1,6 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.input.model.simulation.impl;
 
 import java.util.ArrayList;
@@ -12,23 +15,32 @@ import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 
-public class TrafficLightsInputImpl implements TrafficLightsInput{
-    
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TrafficLightsInputImpl.
+ */
+public class TrafficLightsInputImpl implements TrafficLightsInput {
+
     private List<TrafficLightData> trafficLightData;
-    
+
     private int nDtSample;
-    
+
     /** The with logging. */
     private boolean withLogging;
-    
-    
-    public TrafficLightsInputImpl(Element elem){
-        
+
+    /**
+     * Instantiates a new traffic lights input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public TrafficLightsInputImpl(Element elem) {
+
         trafficLightData = new ArrayList<TrafficLightData>();
 
         this.nDtSample = Integer.parseInt(elem.getAttributeValue("n_dt"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
-        
+
         @SuppressWarnings("unchecked")
         final List<Element> trafficLightElems = elem.getChildren(XmlElementNames.RoadTrafficLight);
         for (final Element trafficLightElem : trafficLightElems) {
@@ -41,25 +53,41 @@ public class TrafficLightsInputImpl implements TrafficLightsInput{
             public int compare(TrafficLightData o1, TrafficLightData o2) {
                 final Double pos1 = new Double((o1).getX());
                 final Double pos2 = new Double((o2).getX());
-                    return pos1.compareTo(pos2); // sort with increasing x
-                }
-            });
-        }
+                return pos1.compareTo(pos2); // sort with increasing x
+            }
+        });
+    }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.TrafficLightsInput#getTrafficLightData
+     * ()
+     */
+    @Override
     public List<TrafficLightData> getTrafficLightData() {
         return trafficLightData;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.TrafficLightsInput#getnDtSample()
+     */
+    @Override
     public int getnDtSample() {
         return nDtSample;
     }
 
-
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.TrafficLightsInput#isWithLogging()
+     */
+    @Override
     public boolean isWithLogging() {
         return withLogging;
     }
-        
-}
 
+}

@@ -17,6 +17,7 @@ if (!exists("lang")) lang = "en"
 
 ###############  Scalings CA (NSM, BARL, KCA)#######
 xscale=7.5
+if (ldm eq "KCA") xscale=0.5
 tscale=1.
 vscale=xscale/tscale
 rhoscale=1./xscale
@@ -115,17 +116,17 @@ set xlabel densityLabel
 set title ldm." ".fundTitle
 set ylabel flowLabel
 set out fundOutput
-plot fundFile using 1:4 title "" with lines linestyle 10
+plot fundFile using ($1/xscale):4 title "" with lines linestyle 10
 
 set title ldm." ".veqTitle
 set ylabel veqLabel
 set out veqOutput
-plot fundFile using 1:3 title "" with lines linestyle 10
+plot fundFile using ($1/xscale):($3*vscale) title "" with lines linestyle 10
 
 set title ldm." ".vqTitle
 set xlabel flowLabel
 set out vqOutput
-plot fundFile u 4:3 title "" with lines linestyle 10
+plot fundFile u 4:($3*vscale) title "" with lines linestyle 10
 
 ########################################################
 
@@ -145,12 +146,21 @@ Qfun(q)    =(q<=0.00001) ? 0 : 3600/avgInterval*q
 
 set xrange [0:150]
 set out detOutput
-plot\
+
+
+if (ldm eq "KCA") plot\
+ detFile(16000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
+ detFile(20000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
+ detFile(24000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
+ detFile(28000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-1.5 km" with points linestyle 1,\
+ fundFile using 1:4 title "FD" with lines linestyle 10; else plot\
  detFile(1200) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
  detFile(1400) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
  detFile(1600) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
  detFile(1800) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-1.5 km" with points linestyle 1,\
  fundFile using 1:4 title "FD" with lines linestyle 10
+
+
 
 ######################################
 # logging of inflows for testing
@@ -174,7 +184,7 @@ set pm3d; set pm3d map
 set cntrparam bspline
 set cntrparam levels 15
 unset clabel  # dann lauter gleiche Kontourlinien;
-                     # Farbe und Typ mit "w l ls" beim splot-Kommando
+              # Farbe und Typ mit "w l ls" beim splot-Kommando
 
 #set view 20,63
 #set hidden3d
@@ -192,7 +202,7 @@ xmin=-8  # km
 xmax=2
 xramp=15.  # km
 tmin=0
-tmax=90 # min
+#tmax=90 # min
 tmax=120
 #tshift=20.
 

@@ -38,7 +38,7 @@ public class NoiseInputDataImpl implements NoiseInputData {
 
     /** The fluct strength. */
     private final double fluctStrength;
-    
+
     /** The tau. */
     private final double tau;
 

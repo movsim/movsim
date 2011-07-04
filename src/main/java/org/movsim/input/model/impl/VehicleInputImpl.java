@@ -48,6 +48,7 @@ import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataO
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 //TODO: extract element attr names into XmlElementNames Interface to make them symbolic.
 /**
  * The Class VehicleInputImpl.
@@ -66,7 +67,7 @@ public class VehicleInputImpl implements VehicleInput {
     /** The max deceleration. in m/s^2, positive (default: Infinity) */
     private final double maxDeceleration;
 
-    /** The reaction time. cannot be changed while simulating*/
+    /** The reaction time. cannot be changed while simulating */
     private final double reactionTime;
 
     /** The model input data. */
@@ -93,19 +94,17 @@ public class VehicleInputImpl implements VehicleInput {
 
         final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
         for (final Element longModelElem : longModelElems) {
-            if(longModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleMemory)){
+            if (longModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleMemory)) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(longModelElem);
                 memoryInputData = new MemoryInputDataImpl(map);
-            }
-            else if(modelInputData==null){
+            } else if (modelInputData == null) {
                 modelInputData = modelInputDataFactory(longModelElems.get(0));
-            }
-            else{
+            } else {
                 logger.error("more than one acceleration model is specified for a vehicle!");
                 System.exit(-1);
             }
         }
-       
+
         final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(noiseElem);

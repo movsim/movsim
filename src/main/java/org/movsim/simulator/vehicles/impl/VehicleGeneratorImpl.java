@@ -72,7 +72,7 @@ import org.slf4j.LoggerFactory;
  * The Class VehicleGeneratorImpl.
  */
 public class VehicleGeneratorImpl implements VehicleGenerator {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleGeneratorImpl.class);
 
@@ -95,19 +95,22 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     /** The is with reaction times. */
     private final boolean isWithReactionTimes;
 
+    private boolean instantaneousFileOutput;
+
     /**
-     * Instantiates a new vehicle generator impl.
+     * Instantiates a new vehicle generator impl. And writes fundamental diagram
+     * to file system if the param instantaneousFileOutput is true.
      * 
-     * @param isWithGUI
-     *            the is with gui
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(boolean instantaneousFileOutput, InputData simInput) {
+    public VehicleGeneratorImpl(InputData simInput) {
 
-        this.projectName = simInput.getProjectName();
+        this.projectName = simInput.getProjectMetaData().getProjectName();
+        this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
-        // create vehicle prototyps according to traffic composition (heterogeneity)
+        // create vehicle prototyps according to traffic composition
+        // (heterogeneity)
         prototypes = new HashMap<String, VehiclePrototype>();
         final double sumFraction = createPrototypes(simInput);
 
@@ -115,8 +118,10 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         normalizeFractions(sumFraction);
 
         // output fundamental diagrams
-        if (instantaneousFileOutput && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
+        if (instantaneousFileOutput
+                && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
             FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
+
         }
 
         isWithReactionTimes = checkForReactionTimes();
@@ -133,7 +138,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private double createPrototypes(InputData simInput) {
 
         // default for continuous micro models
-        requiredTimestep = simInput.getSimulationInput().getTimestep(); 
+        requiredTimestep = simInput.getSimulationInput().getTimestep();
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
 
@@ -179,8 +184,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         }
         return sumFraction;
     }
-    
-    
 
     /**
      * Fund diagram factory.
@@ -215,8 +218,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     }
 
     /**
-     * Long model factory with vehicle length
-     *  vehicle length is only needed for KCA (explicit model parameter)
+     * Long model factory with vehicle length vehicle length is only needed for
+     * KCA (explicit model parameter).
      * 
      * @param modelInputData
      *            the model input data
@@ -227,9 +230,9 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private AccelerationModel longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
         final String modelName = modelInputData.getModelName();
         AccelerationModel longModel = null;
-        //logger.debug("modelName = {}", modelName);
+        // logger.debug("modelName = {}", modelName);
         if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-            longModel = new IDM(modelName, (AccelerationModelInputDataIDM)modelInputData);
+            longModel = new IDM(modelName, (AccelerationModelInputDataIDM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
             longModel = new ACC(modelName, (AccelerationModelInputDataACC) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
@@ -241,7 +244,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
             longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength); 
+            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength);
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0);
@@ -249,39 +252,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return longModel;
     }
 
-    
-    
-    /**
-     * Long model factory.
-     * 
-     * @param modelToCopy
-     *            the model to copy
-     * @return the acceleration model
-     */
-//    private AccelerationModel longModelFactory(AccelerationModel modelToCopy) {
-//        AccelerationModel longModel = null;
-//        final String modelName = modelToCopy.modelName();
-//        if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-//            longModel = new IDM((IDM) modelToCopy);
-//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
-//            longModel = new ACC((ACC) modelToCopy);
-//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
-//            longModel = new OVM_VDIFF((OVM_VDIFF) modelToCopy);
-//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
-//            longModel = new Gipps((Gipps) modelToCopy);
-//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
-//            longModel = new NSM((NSM) modelToCopy);
-//        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-//            longModel = new KCA((KCA) modelToCopy);
-//        } else {
-//            logger.error("create model by copy constructor: Model {} not known ! %n", modelName);
-//            System.exit(0); 
-//        }
-//        return longModel;
-//    }
-
-    
-    
     /**
      * Normalize fractions.
      * 
@@ -312,13 +282,13 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         }
         return false;
     }
-    
+
     /**
      * Cyclic buffer factory.
      * 
      * @return the cyclic buffer impl
      */
-    
+
     private CyclicBufferImpl cyclicBufferFactory() {
         if (isWithReactionTimes)
             return new CyclicBufferImpl();
@@ -356,15 +326,12 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     @Override
     public Vehicle createVehicle(VehiclePrototype prototype) {
         final int vehID = MyRandom.nextInt(); // for veh index
-        //final double length = prototype.length();
+        // final double length = prototype.length();
         // final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
-        // TODO !!!! gleich mit standard cstr aufrufen !?
-        // longModelFactory(AccelerationModelInputData modelInputData, double vehLength) 
-        //final AccelerationModel longModel = longModelFactory(prototype.getLongModel());
-        final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(), prototype.length());
+        final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
+                prototype.length());
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
-
         final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer);
         return veh;
     }
@@ -407,7 +374,5 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     public double requiredTimestep() {
         return requiredTimestep;
     }
-
-   
 
 }

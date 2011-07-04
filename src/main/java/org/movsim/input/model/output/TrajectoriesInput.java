@@ -32,47 +32,46 @@ package org.movsim.input.model.output;
  */
 public interface TrajectoriesInput {
 
-	
-	/**
-	 * Gets the dt.
-	 *
-	 * @return the dt
-	 */
-	double getDt();
-	
-	/**
-	 * Gets the start time.
-	 *
-	 * @return the start time
-	 */
-	double getStartTime();
-	
-	/**
-	 * Gets the end time.
-	 *
-	 * @return the end time
-	 */
-	double getEndTime();
-	
-	/**
-	 * Gets the start position.
-	 *
-	 * @return the start position
-	 */
-	double getStartPosition();
-	
-	/**
-	 * Gets the end position.
-	 *
-	 * @return the end position
-	 */
-	double getEndPosition();
-	
-	/**
-	 * Checks if is initialized.
-	 *
-	 * @return true, if is initialized
-	 */
-	boolean isInitialized();
+    /**
+     * Gets the dt.
+     * 
+     * @return the dt
+     */
+    double getDt();
+
+    /**
+     * Gets the start time.
+     * 
+     * @return the start time
+     */
+    double getStartTime();
+
+    /**
+     * Gets the end time.
+     * 
+     * @return the end time
+     */
+    double getEndTime();
+
+    /**
+     * Gets the start position.
+     * 
+     * @return the start position
+     */
+    double getStartPosition();
+
+    /**
+     * Gets the end position.
+     * 
+     * @return the end position
+     */
+    double getEndPosition();
+
+    /**
+     * Checks if is initialized.
+     * 
+     * @return true, if is initialized
+     */
+    boolean isInitialized();
 
 }

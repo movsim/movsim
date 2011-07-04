@@ -46,13 +46,13 @@ public class SimpleRampDataImpl implements SimpleRampData {
 
     /** The inflow time series. */
     private List<InflowDataPoint> inflowTimeSeries;
-    
+
     /** The center position. */
     private final double rampStartPosition;
-    
+
     /** The ramp length. */
     private final double rampLength;
-    
+
     /** The with logging. */
     private final boolean withLogging;
 

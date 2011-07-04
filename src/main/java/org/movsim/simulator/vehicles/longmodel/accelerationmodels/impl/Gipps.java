@@ -41,25 +41,25 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Gipps.
  */
-public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
+public class Gipps extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Gipps.class);
-    
-    /** The T. 
-     * results from update timestep dt 
-     * dt = T = Tr = tau_relax*/
+
+    /**
+     * The T. results from update timestep dt dt = T = Tr = tau_relax
+     */
     private double T;
-    
+
     /** The v0. */
     private double v0;
-    
+
     /** The a. */
     private double a;
-    
+
     /** The b. */
     private double b;
-    
+
     /** The s0. */
     private double s0;
 
@@ -75,11 +75,17 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
         initParameters();
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        this.T = ((AccelerationModelInputDataGipps) parameters).getDt(); 
+        this.T = ((AccelerationModelInputDataGipps) parameters).getDt();
         this.v0 = ((AccelerationModelInputDataGipps) parameters).getV0();
         this.a = ((AccelerationModelInputDataGipps) parameters).getA();
         this.b = ((AccelerationModelInputDataGipps) parameters).getB();
@@ -136,27 +142,6 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * 
      * @see
      * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #accSimple(double, double, double)
-     */
-    @Override
-    public double accSimple(double s, double v, double dv) {
-        return acc(s, v, dv, v0, T);
-    }
-
-    public double acc(double s, double v, double dv, double v0Loc, double TLoc) {
-        final double vp = v - dv;
-        // safe speed 
-        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.)); 
-        final double vNew = Math.min(vSafe, Math.min(v + a * TLoc, v0Loc));
-        final double aWanted = (vNew - v) / T;
-        return aWanted;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
      * #acc(org.movsim.simulator.vehicles.Vehicle,
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
@@ -170,14 +155,14 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
         final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
 
         // space dependencies modeled by speedlimits, alpha's
-   
+
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit()); 
-   
-        //#############################################################
+        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
+
+        // #############################################################
         // space dependencies modelled by alpha_T
         // (!!! watch for alpha_T: dt unchanged, possibly inconsistent!)
-        //#############################################################
+        // #############################################################
 
         final double TLocal = alphaT * T;
 
@@ -189,8 +174,44 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
     /*
      * (non-Javadoc)
      * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
+     * #accSimple(double, double, double)
+     */
+    @Override
+    public double accSimple(double s, double v, double dv) {
+        return acc(s, v, dv, v0, T);
+    }
+
+    /**
+     * Acc.
+     * 
+     * @param s
+     *            the s
+     * @param v
+     *            the v
+     * @param dv
+     *            the dv
+     * @param v0Local
+     *            the v0 local
+     * @param TLocal
+     *            the t local
+     * @return the double
+     */
+    private double acc(double s, double v, double dv, double v0Local, double TLocal) {
+        final double vp = v - dv;
+        // safe speed
+        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.));
+        final double vNew = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
+        final double aWanted = (vNew - v) / T;
+        return aWanted;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -201,12 +222,11 @@ public class Gipps extends LongitudinalModelImpl implements AccelerationModel {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {
         return this.T; // iterated map requires specific timestep!!
     }
 
-    
 }

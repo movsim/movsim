@@ -48,10 +48,9 @@ import org.slf4j.LoggerFactory;
 public class OnrampImpl implements Onramp {
 
     private static final String extensionFormat = ".S%d_log.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR + 
-    "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
-    private static final String outputFormat = 
-    	"%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
+    private static final String outputHeading = Constants.COMMENT_CHAR
+            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
+    private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OnrampImpl.class);
@@ -73,16 +72,16 @@ public class OnrampImpl implements Onramp {
 
     /** The vehicle queue. */
     private final LinkedList<Vehicle> vehicleQueue;
-    
+
     /** The x center position of the ramp. */
     private final double xCenter;
-    
+
     /** The length of the ramp. */
     private final double length;
 
     /** The x up ramp marks the start of ther ramp. */
     private final double xUpRamp;
-    
+
     /** The x down ramp marks the end of the ramp. */
     private final double xDownRamp;
 
@@ -94,13 +93,13 @@ public class OnrampImpl implements Onramp {
 
     /** The x enter last merge. status of last merging vehicle */
     private double xEnterLastMerge;
-    
+
     /** The v enter last merge. */
     private double vEnterLastMerge;
-    
+
     /** The lane enter last merge. */
     private int laneEnterLastMerge;
-    
+
     /** The merge count. */
     private int mergeCount;
 
@@ -127,7 +126,8 @@ public class OnrampImpl implements Onramp {
 
         if (rampData.withLogging()) {
             mergeCount = 0;
-            final int roadCount = 1; // assuming only one road in the scenario for the moment
+            final int roadCount = 1; // assuming only one road in the scenario
+                                     // for the moment
             final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
@@ -135,10 +135,10 @@ public class OnrampImpl implements Onramp {
 
         nWait = 0;
         inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
-        
+
         this.length = rampData.getRampLength();
         this.xCenter = rampData.getRampStartPosition() + 0.5 * length;
-        
+
         xUpRamp = rampData.getRampStartPosition();
         xDownRamp = xUpRamp + length;
     }
@@ -170,14 +170,13 @@ public class OnrampImpl implements Onramp {
                 vehicleQueue.removeFirst();
                 if (fstrLogging != null) {
                     fstrLogging.printf(outputFormat, time, laneEnterLastMerge, xEnterLastMerge, 3.6 * vEnterLastMerge,
-                    		3600 * qBC, mergeCount, vehicleQueue.size());
+                            3600 * qBC, mergeCount, vehicleQueue.size());
                     fstrLogging.flush();
                 }
             }
         }
 
     }
-
 
     /**
      * Adds the vehicle from ramp.
@@ -208,9 +207,9 @@ public class OnrampImpl implements Onramp {
      * @return the double
      */
     private double speedToEnter(double speedLeader) {
-        final double vcrit = 10; 
-        final double reducefact = 1. - (1 - RAMP_VEL_REDUCEFACTOR) * Math.min(1., speedLeader / vcrit);
-        return reducefact * speedLeader;
+        final double vCrit = 10.;
+        final double reduceFactor = 1. - (1 - RAMP_VEL_REDUCEFACTOR) * Math.min(1., speedLeader / vCrit);
+        return reduceFactor * speedLeader;
     }
 
     /**
@@ -269,17 +268,19 @@ public class OnrampImpl implements Onramp {
 
         logger.debug("");
         final double xUp = xUpRamp;
-        final double xDown = xUpRamp +  length;
+        final double xDown = xUpRamp + length;
 
         final List<Vehicle> mainVehicles = mainVehContainer.getVehicles();
 
-        final int laneEnter = Constants.MOST_RIGHT_LANE; // single-lane simulation
+        final int laneEnter = Constants.MOST_RIGHT_LANE; // single-lane
+                                                         // simulation
 
         final int mainVehSize = mainVehicles.size();
         if (mainVehSize == 0) {
             logger.debug("empty road: merge anyway. mainVeh.size() = {}", mainVehSize);
             final double xEnter = xCenter;
-            final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no leader
+            final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no
+                                                                                       // leader
             addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
             return true;
         } else if (mainVehContainer.getMostDownstream().getPosition() <= xCenter) {
@@ -377,6 +378,6 @@ public class OnrampImpl implements Onramp {
             }
         }
         return false;
-    } 
+    }
 
 }

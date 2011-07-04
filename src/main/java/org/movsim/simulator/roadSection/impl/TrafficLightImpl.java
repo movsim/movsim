@@ -47,7 +47,7 @@ public class TrafficLightImpl implements TrafficLight {
 
     /** The status. */
     private int status;
-    
+
     /** The old status. */
     private int oldStatus;
 
@@ -57,22 +57,22 @@ public class TrafficLightImpl implements TrafficLight {
 
     /** The green time period. */
     private final double greenTimePeriod;
-    
+
     /** The red time period. */
     private final double redTimePeriod;
-    
+
     /** The green red time period. */
     private final double greenRedTimePeriod;
-    
+
     /** The red green time period. */
     private final double redGreenTimePeriod;
-    
+
     /** The phase shift. */
     private final double phaseShift;
 
     /** The current cycle time. */
     private double currentCycleTime = 0;
-    
+
     /** The last update time. */
     private double lastUpdateTime = 0;
 

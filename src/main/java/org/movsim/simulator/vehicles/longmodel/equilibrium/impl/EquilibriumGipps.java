@@ -52,8 +52,7 @@ public class EquilibriumGipps extends EquilibriumPropertiesImpl {
 
     // Calculates equilibrium velocity of Gipps and Gipps with finite s0
     // and free-acc exponent delta
-    // uses numeric iteration procedure and
-    // !! calculates THE WHOLE FIELD veq
+    // uses numeric iteration procedure
 
     /**
      * Calc equilibrium.
@@ -80,19 +79,15 @@ public class EquilibriumGipps extends EquilibriumPropertiesImpl {
             final double rho = rhoMax * ir / vEqTab.length;
             final double s = 1. / rho - 1. / rhoMax;
 
-            // start iteration with equilibrium velocity for the previous
-            // density
+            // start iteration with equilibrium speed for previous density
             v_it = vEqTab[ir - 1];
 
             for (int it = 1; it <= itmax; it++) {
-                final double acc = gippsModel.acc(s, v_it, 0., gippsModel.getV0(), gippsModel.getT());
-                final double dtloc = dtmax * v_it / gippsModel.getV0() + dtmin; // it.
-                                                                                // step
-                                                                                // in
-                                                                                // [dtmin,dtmax]
+                final double acc = gippsModel.accSimple(s, v_it, 0.);
+                // iteration step in [dtmin,dtmax]
+                final double dtloc = dtmax * v_it / gippsModel.getV0() + dtmin;
 
                 // actual relaxation
-
                 v_it += dtloc * acc;
                 if (v_it < 0) {
                     v_it = 0;

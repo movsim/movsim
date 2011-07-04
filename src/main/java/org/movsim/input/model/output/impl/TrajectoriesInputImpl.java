@@ -33,114 +33,104 @@ import org.movsim.input.model.output.TrajectoriesInput;
 /**
  * The Class TrajectoriesInputImpl.
  */
-public class TrajectoriesInputImpl implements TrajectoriesInput{
+public class TrajectoriesInputImpl implements TrajectoriesInput {
 
-	/** The dt. */
-	private double dt;
-	
-	/** The start time. */
-	private double startTime;
-	
-	/** The end time. */
-	private double endTime;
-	
-	/** The start position. */
-	private double startPosition;
-	
-	/** The end position. */
-	private double endPosition;
-	
-	/** The is initialized. */
-	private boolean isInitialized;
-	
-	
-	
-	 /**
- 	 * Instantiates a new trajectories input impl.
- 	 *
- 	 * @param elem the elem
- 	 */
- 	public TrajectoriesInputImpl(Element elem) {
-		 if (elem == null) {
-			 isInitialized = false;
-			 return;
-		 }
-		 
-		 dt = Double.parseDouble(elem.getAttributeValue("dt"));
-		 startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
-		 endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
-		 startPosition = Double.parseDouble(elem.getAttributeValue("start_x"));
-		 endPosition = Double.parseDouble(elem.getAttributeValue("end_x"));
-		 isInitialized = true;
-	 }
+    /** The dt. */
+    private double dt;
 
+    /** The start time. */
+    private double startTime;
 
+    /** The end time. */
+    private double endTime;
 
-	/**
-	 * Gets the dt.
-	 *
-	 * @return the dt
-	 */
-	public double getDt() {
-		return dt;
-	}
+    /** The start position. */
+    private double startPosition;
 
+    /** The end position. */
+    private double endPosition;
 
+    /** The is initialized. */
+    private boolean isInitialized;
 
-	/**
-	 * Gets the start time.
-	 *
-	 * @return the startTime
-	 */
-	public double getStartTime() {
-		return startTime;
-	}
+    /**
+     * Instantiates a new trajectories input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public TrajectoriesInputImpl(Element elem) {
+        if (elem == null) {
+            isInitialized = false;
+            return;
+        }
 
+        dt = Double.parseDouble(elem.getAttributeValue("dt"));
+        startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
+        endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
+        startPosition = Double.parseDouble(elem.getAttributeValue("start_x"));
+        endPosition = Double.parseDouble(elem.getAttributeValue("end_x"));
+        isInitialized = true;
+    }
 
+    /**
+     * Gets the dt.
+     * 
+     * @return the dt
+     */
+    @Override
+    public double getDt() {
+        return dt;
+    }
 
-	/**
-	 * Gets the end time.
-	 *
-	 * @return the endTime
-	 */
-	public double getEndTime() {
-		return endTime;
-	}
+    /**
+     * Gets the start time.
+     * 
+     * @return the startTime
+     */
+    @Override
+    public double getStartTime() {
+        return startTime;
+    }
 
+    /**
+     * Gets the end time.
+     * 
+     * @return the endTime
+     */
+    @Override
+    public double getEndTime() {
+        return endTime;
+    }
 
+    /**
+     * Gets the start position.
+     * 
+     * @return the startPosition
+     */
+    @Override
+    public double getStartPosition() {
+        return startPosition;
+    }
 
-	/**
-	 * Gets the start position.
-	 *
-	 * @return the startPosition
-	 */
-	public double getStartPosition() {
-		return startPosition;
-	}
+    /**
+     * Gets the end position.
+     * 
+     * @return the endPosition
+     */
+    @Override
+    public double getEndPosition() {
+        return endPosition;
+    }
 
-
-
-	/**
-	 * Gets the end position.
-	 *
-	 * @return the endPosition
-	 */
-	public double getEndPosition() {
-		return endPosition;
-	}
-
-
-
-	/**
-	 * Checks if is initialized.
-	 *
-	 * @return the isInitialized
-	 */
-	public boolean isInitialized() {
-		return isInitialized;
-	}
-
-
-
+    /**
+     * Checks if is initialized.
+     * 
+     * @return the isInitialized
+     */
+    @Override
+    public boolean isInitialized() {
+        return isInitialized;
+    }
 
 }

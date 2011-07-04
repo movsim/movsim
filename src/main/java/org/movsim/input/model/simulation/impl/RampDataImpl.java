@@ -46,13 +46,13 @@ public class RampDataImpl implements RampData {
 
     /** The inflow time series. */
     private List<InflowDataPoint> inflowTimeSeries;
-    
+
     /** The center position. */
     private final double rampStartPosition;
-    
+
     /** The ramp length. */
     private final double rampLength;
-    
+
     /** The road length. */
     private final double roadLength;
 

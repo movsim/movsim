@@ -1,3 +1,6 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.simulator.roadSection.impl;
 
 import java.util.ArrayList;
@@ -12,8 +15,12 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TrafficLightsImpl implements TrafficLights{
-    
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TrafficLightsImpl.
+ */
+public class TrafficLightsImpl implements TrafficLights {
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLightsImpl.class);
 
@@ -22,30 +29,35 @@ public class TrafficLightsImpl implements TrafficLights{
 
     /** The traffic lights. */
     private List<TrafficLight> trafficLights;
-    
-    
+
     /** The traffic light recorder. */
     private FileTrafficLightRecorder fileTrafficLightRecorder = null;
-    
-    
-    public TrafficLightsImpl(String projectName, TrafficLightsInput trafficLightsInput){
-        
+
+    /**
+     * Instantiates a new traffic lights impl.
+     * 
+     * @param projectName
+     *            the project name
+     * @param trafficLightsInput
+     *            the traffic lights input
+     */
+    public TrafficLightsImpl(String projectName, TrafficLightsInput trafficLightsInput) {
+
         initTrafficLights(trafficLightsInput);
-        
+
         nDt = trafficLightsInput.getnDtSample();
 
-        if(trafficLightsInput.isWithLogging()){
+        if (trafficLightsInput.isWithLogging()) {
             fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, nDt, trafficLights);
         }
-        
+
     }
-    
-    
+
     /**
      * Inits the traffic lights.
      * 
-     * @param simInput
-     *            the sim input
+     * @param trafficLightsInput
+     *            the traffic lights input
      */
     private void initTrafficLights(TrafficLightsInput trafficLightsInput) {
         trafficLights = new ArrayList<TrafficLight>();
@@ -54,9 +66,19 @@ public class TrafficLightsImpl implements TrafficLights{
             trafficLights.add(new TrafficLightImpl(tlData));
         }
     }
-    
+
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     * @param vehicles
+     *            the vehicles
+     */
     public void update(int itime, double time, List<Vehicle> vehicles) {
-        
+
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
             for (final TrafficLight trafficLight : trafficLights) {
@@ -69,12 +91,17 @@ public class TrafficLightsImpl implements TrafficLights{
                 }
             }
         }
-        
+
         if (fileTrafficLightRecorder != null) {
             fileTrafficLightRecorder.update(itime, time, trafficLights);
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.TrafficLights#getTrafficLights()
+     */
     @Override
     public List<TrafficLight> getTrafficLights() {
         return trafficLights;

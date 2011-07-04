@@ -43,35 +43,35 @@ import org.slf4j.LoggerFactory;
  * The Class SpatioTemporalImpl.
  */
 public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporalImpl.class);
 
     /** The dt out. */
     private final double dtOut;
-    
+
     /** The dx out. */
     private final double dxOut;
 
-    
     private double[] density;
 
     private double[] averageSpeed;
 
     private double[] flow;
- 
+
     /** The roadlength. */
     private final double roadlength;
-    
+
     /** The time offset. */
     private double timeOffset;
 
-    
     /**
-     * Instantiates a new macro3 d impl.
-     *
-     * @param input the input
-     * @param roadSection the road section
+     * Instantiates a new spatio temporal impl.
+     * 
+     * @param input
+     *            the input
+     * @param roadSection
+     *            the road section
      */
     public SpatioTemporalImpl(SpatioTemporalInput input, RoadSection roadSection) {
 
@@ -82,7 +82,6 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
 
         initialize();
 
-        
     }
 
     /**
@@ -96,10 +95,18 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         flow = new double[nxOut + 1];
     }
 
+    /**
+     * Update.
+     * 
+     * @param it
+     *            the it
+     * @param time
+     *            the time
+     * @param roadSection
+     *            the road section
+     */
     public void update(int it, double time, RoadSection roadSection) {
         if ((time - timeOffset) >= dtOut) {
-            // logger.info("update: write to file. time = {}h", time / 60.,
-            // time/3600.);
             timeOffset = time;
             calcData(time, roadSection.vehContainer());
             notifyObservers(time);
@@ -142,30 +149,64 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         }
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SpatioTemporal#getDtOut()
+     */
+    @Override
     public double getDtOut() {
         return dtOut;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SpatioTemporal#getDxOut()
+     */
+    @Override
     public double getDxOut() {
         return dxOut;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SpatioTemporal#getDensity()
+     */
+    @Override
     public double[] getDensity() {
         return density;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SpatioTemporal#getAverageSpeed()
+     */
+    @Override
     public double[] getAverageSpeed() {
         return averageSpeed;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SpatioTemporal#getFlow()
+     */
+    @Override
     public double[] getFlow() {
         return flow;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.output.SpatioTemporal#getTimeOffset()
+     */
+    @Override
     public double getTimeOffset() {
         return timeOffset;
     }
-
-
 
 }

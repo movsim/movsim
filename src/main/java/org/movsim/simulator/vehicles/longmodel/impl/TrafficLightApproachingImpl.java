@@ -42,27 +42,34 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLightApproachingImpl.class);
-    
-	/** The consider traffic light. */
-	private boolean considerTrafficLight;
-	
-	/** The acc traffic light. */
-	private double accTrafficLight;
-	
-	private double distanceToTrafficlight;
 
-	/**
-	 * Instantiates a new traffic light approaching impl.
-	 */
-	public TrafficLightApproachingImpl(){
-		considerTrafficLight = false;
-		distanceToTrafficlight = Constants.INVALID_GAP;
-	}
-	
+    /** The consider traffic light. */
+    private boolean considerTrafficLight;
 
-    /* (non-Javadoc)
-	 * @see org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#updateTrafficLight(org.movsim.simulator.vehicles.Vehicle, double, org.movsim.simulator.roadSection.TrafficLight, org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel)
-	 */
+    /** The acc traffic light. */
+    private double accTrafficLight;
+
+    private double distanceToTrafficlight;
+
+    /**
+     * Instantiates a new traffic light approaching impl.
+     */
+    public TrafficLightApproachingImpl() {
+        considerTrafficLight = false;
+        distanceToTrafficlight = Constants.INVALID_GAP;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#
+     * updateTrafficLight(org.movsim.simulator.vehicles.Vehicle, double,
+     * org.movsim.simulator.roadSection.TrafficLight,
+     * org.movsim.simulator.vehicles
+     * .longmodel.accelerationmodels.AccelerationModel)
+     */
+    @Override
     public void update(Vehicle me, double time, TrafficLight trafficLight, AccelerationModel longModel) {
         accTrafficLight = 0;
         considerTrafficLight = false;
@@ -72,9 +79,14 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = Constants.INVALID_GAP; // not relevant
         } else if (!trafficLight.isGreen()) {
-            final double maxRangeOfSight = Constants.GAP_INFINITY; // TODO define it as parameter ("range of sight" or so) ?!
+            final double maxRangeOfSight = Constants.GAP_INFINITY; // TODO
+                                                                   // define it
+                                                                   // as
+                                                                   // parameter
+                                                                   // ("range of sight"
+                                                                   // or so) ?!
             if (distanceToTrafficlight < maxRangeOfSight) {
-            	final double speed = me.getSpeed();
+                final double speed = me.getSpeed();
                 accTrafficLight = Math.min(0, longModel.accSimple(distanceToTrafficlight, speed, speed));
 
                 if (accTrafficLight < 0) {
@@ -83,8 +95,10 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
                 }
 
                 // TODO: decision logic while approaching yellow traffic light
-                // ignore traffic light if accTL exceeds two times comfortable deceleration or if kinematic braking is not possible anymore
-                final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax 
+                // ignore traffic light if accTL exceeds two times comfortable
+                // deceleration or if kinematic braking is not possible anymore
+                final double bKinMax = 6; // typical value: bIDM <
+                                          // comfortBrakeDecel < bKinMax < bMax
                 final double comfortBrakeDecel = 4;
                 final double brakeDist = (speed * speed) / (2 * bKinMax);
                 if (trafficLight.isGreenRed()
@@ -93,35 +107,46 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
                     // ignore traffic light
                     considerTrafficLight = false;
                 }
-//                if(me.getVehNumber()==1){
-//                    logger.debug("considerTrafficLight=true: distToTrafficlight={}, accTrafficLight={}", distanceToTrafficlight, accTrafficLight);
-//                }
+                // if(me.getVehNumber()==1){
+                // logger.debug("considerTrafficLight=true: distToTrafficlight={}, accTrafficLight={}",
+                // distanceToTrafficlight, accTrafficLight);
+                // }
             }
         }
     }
 
-
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#considerTrafficLight()
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproaching#
+     * considerTrafficLight()
      */
-    public boolean considerTrafficLight(){
+    @Override
+    public boolean considerTrafficLight() {
         return considerTrafficLight;
     }
-    
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching#accApproaching()
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching#
+     * accApproaching()
      */
-    public double accApproaching(){
+    @Override
+    public double accApproaching() {
         return accTrafficLight;
     }
-    
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching#
+     * getDistanceToTrafficlight()
+     */
+    @Override
     public double getDistanceToTrafficlight() {
         return distanceToTrafficlight;
     }
-    
-
 
 }

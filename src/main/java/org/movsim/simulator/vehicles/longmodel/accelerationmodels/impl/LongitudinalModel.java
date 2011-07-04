@@ -35,12 +35,12 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class LongitudinalModelImpl.
+ * The Class LongitudinalModel.
  */
-public abstract class LongitudinalModelImpl implements Observer {
+public abstract class LongitudinalModel implements Observer {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModel.class);
 
     /** The model name. */
     private final String modelName;
@@ -69,15 +69,15 @@ public abstract class LongitudinalModelImpl implements Observer {
      * @param parameters
      *            the parameters
      */
-    public LongitudinalModelImpl(String modelName, int modelCategory, AccelerationModelInputData parameters) {
+    public LongitudinalModel(String modelName, int modelCategory, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.modelCategory = modelCategory;
         this.parameters = parameters;
         this.id = MyRandom.nextInt();
-        parameters.registerObserver((Observer) this);
+        parameters.registerObserver(this);
     }
 
-    // public LongitudinalModelImpl(String modelName, int modelCategory) {
+    // public LongitudinalModel(String modelName, int modelCategory) {
     // this.modelName = modelName;
     // this.modelCategory = modelCategory;
     // }
@@ -87,7 +87,7 @@ public abstract class LongitudinalModelImpl implements Observer {
      */
     public void removeObserver() {
         if (parameters != null) {
-            parameters.removeObserver((Observer) this);
+            parameters.removeObserver(this);
         }
     }
 
@@ -146,6 +146,7 @@ public abstract class LongitudinalModelImpl implements Observer {
      * 
      * @see org.movsim.utilities.Observer#notifyObserver()
      */
+    @Override
     public void notifyObserver() {
         initParameters();
         logger.debug("observer notified");

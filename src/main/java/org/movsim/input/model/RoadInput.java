@@ -129,10 +129,13 @@ public interface RoadInput {
      */
     List<SimpleRampData> getSimpleRamps();
 
-    
+    /**
+     * Gets the traffic lights input.
+     * 
+     * @return the traffic lights input
+     */
     TrafficLightsInput getTrafficLightsInput();
-    
-    
+
     /**
      * Gets the detector input.
      * 

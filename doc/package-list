@@ -1,7 +1,7 @@
 org.movsim
 org.movsim.input
 org.movsim.input.commandline
-org.movsim.input.commandline.impl
+org.movsim.input.commandline
 org.movsim.input.impl
 org.movsim.input.model
 org.movsim.input.model.impl

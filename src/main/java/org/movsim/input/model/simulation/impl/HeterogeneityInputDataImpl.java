@@ -38,7 +38,7 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
 
     /** The key name. */
     private final String keyName;
-    
+
     /** The fraction. */
     private final double fraction;
 

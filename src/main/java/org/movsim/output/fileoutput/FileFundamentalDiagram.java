@@ -1,3 +1,6 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.output.fileoutput;
 
 import java.util.HashMap;
@@ -5,11 +8,26 @@ import java.util.Iterator;
 
 import org.movsim.simulator.vehicles.VehiclePrototype;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FileFundamentalDiagram.
+ */
 public class FileFundamentalDiagram {
 
-    private FileFundamentalDiagram(){
+    /**
+     * Instantiates a new file fundamental diagram.
+     */
+    private FileFundamentalDiagram() {
     }
-    
+
+    /**
+     * Write fundamental diagrams.
+     * 
+     * @param projectName
+     *            the project name
+     * @param prototypes
+     *            the prototypes
+     */
     public static void writeFundamentalDiagrams(String projectName, HashMap<String, VehiclePrototype> prototypes) {
         final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {

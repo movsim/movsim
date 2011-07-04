@@ -37,9 +37,9 @@ import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties
  */
 public class VehiclePrototype {
 
-	/** The label. */
-	private final String label;
-	
+    /** The label. */
+    private final String label;
+
     /** The length. */
     private final double length;
 
@@ -60,16 +60,21 @@ public class VehiclePrototype {
 
     /**
      * Instantiates a new vehicle prototype.
-     *
-     * @param label the label
-     * @param fraction the fraction
-     * @param longModel the long model
-     * @param equilProperties the equil properties
-     * @param vehicleInput the vehicle input
+     * 
+     * @param label
+     *            the label
+     * @param fraction
+     *            the fraction
+     * @param longModel
+     *            the long model
+     * @param equilProperties
+     *            the equil properties
+     * @param vehicleInput
+     *            the vehicle input
      */
-    public VehiclePrototype(String label, double fraction, AccelerationModel longModel, EquilibriumProperties equilProperties,
-            VehicleInput vehicleInput) {
-    	this.label = label;
+    public VehiclePrototype(String label, double fraction, AccelerationModel longModel,
+            EquilibriumProperties equilProperties, VehicleInput vehicleInput) {
+        this.label = label;
         this.length = vehicleInput.getLength();
         this.reactionTime = vehicleInput.getReactionTime();
         this.fraction = fraction;
@@ -86,7 +91,7 @@ public class VehiclePrototype {
     public String getLabel() {
         return label;
     }
-    
+
     /**
      * Length.
      * 

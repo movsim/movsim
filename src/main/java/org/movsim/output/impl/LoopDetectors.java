@@ -45,7 +45,7 @@ public class LoopDetectors {
 
     /** The detectors. */
     private List<LoopDetectorImpl> detectors;
-    
+
     private List<FileDetector> fileDetectors;
 
     /**
@@ -53,8 +53,6 @@ public class LoopDetectors {
      * 
      * @param projectName
      *            the project name
-     * @param writeOutput
-     *            the write output
      * @param input
      *            the input
      */
@@ -63,15 +61,14 @@ public class LoopDetectors {
         detectors = new ArrayList<LoopDetectorImpl>();
 
         final double dtSample = input.getSampleInterval();
-        
-        
+
         final List<Double> positions = input.getPositions();
 
         for (final Double detPosition : positions) {
             detectors.add(new LoopDetectorImpl(projectName, detPosition, dtSample));
         }
-        
-        if( input.isWithLogging() ){
+
+        if (input.isWithLogging()) {
             fileDetectors = new ArrayList<FileDetector>();
             for (final LoopDetector det : detectors) {
                 fileDetectors.add(new FileDetector(projectName, det));
@@ -99,9 +96,14 @@ public class LoopDetectors {
     }
 
     // for View
+    /**
+     * Gets the detectors.
+     * 
+     * @return the detectors
+     */
     public List<LoopDetector> getDetectors() {
         final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
-        for(final LoopDetector det: detectors){
+        for (final LoopDetector det : detectors) {
             loopDetectors.add(det);
         }
         return loopDetectors;

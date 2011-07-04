@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.InputData;
-import org.movsim.input.model.OutputInput;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.slf4j.Logger;
@@ -48,26 +48,29 @@ public class InputDataImpl implements InputData {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InputDataImpl.class);
 
-    /** The project name. */
-    private String projectName;
-
-
     /** The vehicle input data. */
     private List<VehicleInput> vehicleInputData;
 
-
     /** The simulation input. */
     private SimulationInput simulationInput;
-    
-    private OutputInput outputInput;
-    
+
+    private ProjectMetaDataImpl projectMetaDataImpl;
+
+    /**
+     * Gets the project meta data impl.
+     * 
+     * @return the project meta data impl
+     */
+    public ProjectMetaDataImpl getProjectMetaDataImpl() {
+        return projectMetaDataImpl;
+    }
 
     /**
      * Instantiates a new input data impl.
      */
     public InputDataImpl() {
+        projectMetaDataImpl = ProjectMetaDataImpl.getInstanceImpl();
     }
-
 
     /**
      * Sets the project name.
@@ -75,19 +78,8 @@ public class InputDataImpl implements InputData {
      * @param projectname
      *            the new project name
      */
-    protected void setProjectName(String projectname) {
-        this.projectName = projectname;
-        logger.debug("Projectname: {}", projectname);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.InputData#getProjectName()
-     */
-    @Override
-    public String getProjectName() {
-        return projectName;
+    public void setProjectName(String projectname) {
+        this.projectMetaDataImpl.setProjectName(projectname);
     }
 
     /**
@@ -110,9 +102,13 @@ public class InputDataImpl implements InputData {
         return vehicleInputData;
     }
 
-
-    
     // testweise hier
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#createVehicleInputDataMap()
+     */
+    @Override
     public Map<String, VehicleInput> createVehicleInputDataMap() {
         final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
         for (final VehicleInput vehInput : vehicleInputData) {
@@ -121,7 +117,7 @@ public class InputDataImpl implements InputData {
         }
         return map;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -140,6 +136,16 @@ public class InputDataImpl implements InputData {
      */
     public void setSimulationInput(SimulationInput simulationInput) {
         this.simulationInput = simulationInput;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.InputData#getProjectMetaData()
+     */
+    @Override
+    public ProjectMetaData getProjectMetaData() {
+        return projectMetaDataImpl;
     }
 
 }

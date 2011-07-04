@@ -27,7 +27,6 @@
 package org.movsim.simulator.impl;
 
 import org.movsim.input.InputData;
-import org.movsim.input.commandline.SimCommandLine;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
@@ -67,42 +66,24 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The sim output. */
     private SimOutput simOutput;
 
-    /** The is with gui. */
-    private final boolean instantaneousFileOutput;
-
     /** The sim input. */
-    private InputData inputData;
-    
-    private String xmlFileName;
-
-    private SimCommandLine cmdline;
+    private InputDataImpl inputData;
 
     /**
      * Instantiates a new simulator impl.
-     * 
-     * @param instantaneousFileOutput
-     *            Gives instantaneous file output of simulation results.
-     * @param cmdline
-     *            cmdline parser
      */
-    public SimulatorImpl(boolean instantaneousFileOutput, SimCommandLine cmdline) {
-        this.instantaneousFileOutput = instantaneousFileOutput;
-        this.cmdline = cmdline;
-        if (cmdline != null) {
-            xmlFileName = cmdline.getSimulationFilename();
-        } else {
-            xmlFileName = "sim/onramp_IDM.xml";
-        }
+    public SimulatorImpl() {
         this.inputData = new InputDataImpl();
     }
 
     /**
      * Restart.
      */
+    @Override
     public void restart() {
         time = 0;
         itime = 0;
-        roadSection = new RoadSectionImpl(instantaneousFileOutput, inputData);
+        roadSection = new RoadSectionImpl(inputData);
 
         // model requires specific update time depending on its category !!
 
@@ -112,7 +93,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(instantaneousFileOutput, inputData, roadSection);
+        simOutput = new SimOutput(inputData, roadSection);
     }
 
     /*
@@ -200,17 +181,14 @@ public class SimulatorImpl implements Simulator, Runnable {
         return inputData;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#getSimObservables()
+     */
     @Override
     public SimObservables getSimObservables() {
         return simOutput;
-    }
-
-    public String getXmlFileName() {
-        return xmlFileName;
-    }
-
-    public void setXmlFileName(String xmlFileName) {
-        this.xmlFileName = xmlFileName;
     }
 
     /*
@@ -221,13 +199,14 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void initialize() {
 
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2010, 2011)");
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2011)");
 
         // parse xmlFile and set values
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(xmlFileName, cmdline, (InputDataImpl) inputData); //TODO why InputData impl?
 
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain models
+        this.timestep = simInput.getTimestep(); // can be modified by certain
+                                                // models
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());

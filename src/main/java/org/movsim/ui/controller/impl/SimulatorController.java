@@ -1,19 +1,31 @@
+/*
+ * Copyright by Ralph Germ (http://www.ralphgerm.de)
+ */
 package org.movsim.ui.controller.impl;
 
 import org.movsim.simulator.Simulator;
 import org.movsim.ui.controller.Controller;
 
+/**
+ * The Class SimulatorController.
+ */
 public class SimulatorController extends Controller {
 
     private Simulator model;
     private Thread simThread;
 
+    /**
+     * Instantiates a new simulator controller.
+     * 
+     * @param model
+     *            the model
+     */
     public SimulatorController(Simulator model) {
         this.model = model;
 
-        initLocalizationAndLogger();
+        // initLocalizationAndLogger(); // already initialized in SimCommanLine
         initializeModel();
-        
+
         simThread = new Thread((Runnable) model);
         start();
 
@@ -35,7 +47,7 @@ public class SimulatorController extends Controller {
      * @see org.movsim.ui.desktop.ControllerInterface#stop()
      */
     @Override
-    public void stop() {
+    public void reset() {
 
     }
 
@@ -49,12 +61,14 @@ public class SimulatorController extends Controller {
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.ui.controller.Controller#initializeModel()
      */
     @Override
     public void initializeModel() {
-        model.initialize();        
+        model.initialize();
     }
 
 }

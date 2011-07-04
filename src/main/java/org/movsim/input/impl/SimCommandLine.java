@@ -24,11 +24,11 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.commandline.impl;
+package org.movsim.input.impl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.net.URL;
+import java.util.Locale;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -38,34 +38,22 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.movsim.input.commandline.SimCommandLine;
+import org.apache.log4j.PropertyConfigurator;
+import org.movsim.App;
+import org.movsim.simulator.Constants;
 import org.movsim.utilities.impl.FileUtils;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class SimCommandLineImpl. MovSim console command line parser.
+ * The Class SimCommandLine. MovSim console command line parser. Sets the
+ * ProjectMetaDataImpl.
  */
-public class SimCommandLineImpl implements SimCommandLine {
-
-    /** The Constant xmlDefault. */
-    final static String xmlDefault = "sim/onramp_IDM.xml";
+public class SimCommandLine {
 
     /** The options. */
     private Options options;
 
-    /** The simulation filename. */
-    private String simulationFilename;
-
-    /** The gui. */
-    private boolean gui = false;
-
-    /** The flag for only validatiion of xml input file without simulation */
-    private boolean onlyValidation = false;
-
-    /**
-     * The flag for writing xml config file of the simulation input after
-     * validation from dtd
-     */
-    private boolean writeInternalXml;
+    private ProjectMetaDataImpl projectMetaData;
 
     /**
      * Instantiates a new sim command line impl.
@@ -73,10 +61,25 @@ public class SimCommandLineImpl implements SimCommandLine {
      * @param args
      *            the args
      */
-    public SimCommandLineImpl(String[] args) {
+    public SimCommandLine(String[] args) {
+
+        initLocalizationAndLogger();
+
+        projectMetaData = ProjectMetaDataImpl.getInstanceImpl();
 
         createOptions();
         createParserAndParse(args);
+
+        final String projectName = projectMetaData.getProjectName();
+        if (projectMetaData.isWriteInternalXml() && projectName.isEmpty()) {
+            System.err.println("no xml file for simulation configuration found!");
+            System.exit(-1);
+        }
+
+        if (!FileUtils.fileExists(projectName)) {
+            System.err.println("no file \"" + projectName + "\" for simulation configuration found!");
+            System.exit(-1);
+        }
     }
 
     /**
@@ -86,15 +89,14 @@ public class SimCommandLineImpl implements SimCommandLine {
 
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
-        options.addOption("g", "gui", false, "starts a Desktop GUI --> deprecated !!! TODO ");
         options.addOption("v", "validate", false, "parses xml input file for validation (without simulation)");
         options.addOption("i", "internal_xml", false,
                 "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
         options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
-        options.addOption("s", "scenarios", false,
-                "writes example scenarios as xml for simulation into the directory \"sim\".");
+        options.addOption("v", "version", false, "prints version number of this movsim release");
+        ;
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
@@ -132,9 +134,6 @@ public class SimCommandLineImpl implements SimCommandLine {
         if (cmdline.hasOption("h")) {
             optHelp();
         }
-        if (cmdline.hasOption("g")) {
-            optGUI();
-        }
         if (cmdline.hasOption("v")) {
             optValidation();
         }
@@ -147,62 +146,18 @@ public class SimCommandLineImpl implements SimCommandLine {
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
         }
-        if (cmdline.hasOption("s")) {
-            optWriteScenarios();
+        if (cmdline.hasOption("v")) {
+            optPrintVersion();
         }
-
         optSimulation(cmdline);
     }
 
     /**
-     * Option: Writes all example scenarios from jar resources to /sim folder
-     * 
-     * @throws ClassNotFoundException
+     * Option: prints the version number of this Movsim release.
      */
-    private void optWriteScenarios() {
-        try {
-            InputStreamReader isr = new InputStreamReader(System.in);
-            BufferedReader br = new BufferedReader(isr);
-            System.out.println("Writing scenarios to folder 'sim'");
-            System.out.println("Overrides existing filenames. Do you want to proceed? <y/n>");
-            String proceed = br.readLine();
-            ;
-            if (!(proceed.equals("yes") || (proceed.equals("y")))) {
-                System.out.println("Exit. Nothing written.");
-                System.exit(0);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void optPrintVersion() {
+        System.out.println("movsim release version: " + Constants.RELEASE_VERSION);
 
-        // TODO loop properly, not hard coded
-        FileUtils.createDir("sim", "");
-
-        // //Iterate over resources does not work?!?
-        // String path = "sim/";
-        // ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        // Enumeration<?> resourceUrls;
-        // try {
-        // resourceUrls = cl.getResources(path);
-        // List<URL> result = new ArrayList<URL>();
-        // while (resourceUrls.hasMoreElements()) {
-        // URL url = (URL) resourceUrls.nextElement();
-        // System.out.println("file: " + url.getFile());
-        // result.add(url);
-        // }
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-
-        // TODO loop properly
-        String[] models = { "IDM", "IIDM", "IDMM", "ACC", "OVM", "VDIFF", "BARL", "GIPPS", "KCA", "NSM" };
-        String[] scenario = { "onramp", "startStop" };
-        for (String sce : scenario) {
-            for (String model : models) {
-                FileUtils.resourceToFile("/sim/" + sce + "_" + model + ".xml", "sim/" + sce + "_" + model + ".xml");
-            }
-        }
-        System.out.println("Example scenarios written to folder \"sim\". Exit.");
         System.exit(0);
     }
 
@@ -210,39 +165,39 @@ public class SimCommandLineImpl implements SimCommandLine {
      * Option: writes log4j.properties to local filesystem
      */
     private void optWriteLoggingProperties() {
-        String resource = "/sim/log4j.properties";
+        String resource = File.separator + "sim" + File.separator + "log4j.properties";
         String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
+        System.out.println("logger properties file written to " + filename);
+
+        System.exit(0);
     }
 
     /**
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private void optWriteDtd() {
-        String resource = "/sim/multiModelTrafficSimulatorInput.dtd";
+        String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
         String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
+
+        System.out.println("dtd file written to " + filename);
+
+        System.exit(0);
     }
 
     /**
-     * Option: write internal xml (without simulation)
+     * Option: write internal xml (without simulation).
      */
     private void optInternalXml() {
-        writeInternalXml = true;
+        projectMetaData.setWriteInternalXml(true);
     }
 
     /**
-     * Option: parse xml input file for validation (without simulation)
+     * Option: parse xml input file for validation (without simulation).
      */
     private void optValidation() {
-        onlyValidation = true;
-    }
-
-    /**
-     * Option gui.
-     */
-    private void optGUI() {
-        gui = true;
+        projectMetaData.setOnlyValidation(true);
     }
 
     /**
@@ -252,12 +207,17 @@ public class SimCommandLineImpl implements SimCommandLine {
      *            the cmdline
      */
     private void optSimulation(CommandLine cmdline) {
-        simulationFilename = cmdline.getOptionValue('f');
+        final String simulationFilename = cmdline.getOptionValue('f');
+        // TODO separate path
         if (simulationFilename == null) {
-            System.out.println("No configfile as option passed. Start Simulation with default.");
-            simulationFilename = xmlDefault;
+            System.err.println("No xml configuration file! Please specify via the option -f.");
+            System.exit(-1);
         } else {
-            validateSimulationFileName(simulationFilename);
+            final boolean isXml = validateSimulationFileName(simulationFilename);
+            if (isXml) {
+                // workaround //TODO
+                projectMetaData.setProjectName(simulationFilename);
+            }
         }
 
     }
@@ -286,39 +246,27 @@ public class SimCommandLineImpl implements SimCommandLine {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             System.out
-                    .println("Please provide simulation file with ending \".xml\" as argument with option -s, exit. ");
+                    .println("Please provide simulation file with ending \".xml\" as argument with option -f, exit. ");
             System.exit(1);
         }
         return true;
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.commandline.SimCommandLine#getSimulationFilename()
+    /**
+     * Inits the localization and logger.
      */
-    @Override
-    public String getSimulationFilename() {
-        return simulationFilename;
-    }
+    private void initLocalizationAndLogger() {
+        Locale.setDefault(Locale.US);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.commandline.SimCommandLine#isGui()
-     */
-    @Override
-    public boolean isGui() {
-        return gui;
-    }
+        final File file = new File("log4j.properties");
+        if (file.exists() && file.isFile()) {
+            PropertyConfigurator.configure("log4j.properties");
+        } else {
+            final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+            PropertyConfigurator.configure(log4jConfig);
+        }
 
-    public boolean isOnlyValidation() {
-        return onlyValidation;
+        // Log Levels: DEBUG < INFO < WARN < ERROR;
     }
-
-    public boolean isWriteInternalXml() {
-        return writeInternalXml;
-    }
-
 }

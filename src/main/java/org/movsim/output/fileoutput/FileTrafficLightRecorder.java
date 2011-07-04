@@ -50,17 +50,15 @@ public class FileTrafficLightRecorder {
      * 
      * @param projectName
      *            the project name
-     * @param writeOutput
-     *            the write output
-     * @param input
-     *            the input
+     * @param nDt
+     *            the n dt
      * @param trafficLights
      *            the traffic lights
      */
     public FileTrafficLightRecorder(String projectName, int nDt, List<TrafficLight> trafficLights) {
 
         this.nDt = nDt;
-        
+
         // road id hard coded as 1 for the moment
         final String filename = projectName + ".R1_tl_log.csv";
         fstr = FileUtils.getWriter(filename);
@@ -68,6 +66,16 @@ public class FileTrafficLightRecorder {
 
     }
 
+    /**
+     * Update.
+     * 
+     * @param itime
+     *            the itime
+     * @param time
+     *            the time
+     * @param trafficLights
+     *            the traffic lights
+     */
     public void update(int itime, double time, List<TrafficLight> trafficLights) {
 
         if (itime % nDt != 0)
@@ -105,10 +113,9 @@ public class FileTrafficLightRecorder {
                     trafficLight.position());
             counter++;
         }
-        fstr.printf(Constants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1", 
+        fstr.printf(Constants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1",
                 "status[1]_TL1", " etc. ");
         fstr.flush();
     }
-
 
 }

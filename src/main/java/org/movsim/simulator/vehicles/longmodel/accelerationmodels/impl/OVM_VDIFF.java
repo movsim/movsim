@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OVM_VDIFF.
  */
-public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationModel {
+public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);
@@ -65,36 +65,43 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
     /** The lambda. */
     private double lambda;
 
-    /** The choice opt func variant. 
-     * variants: 0=fullVD orig, 1=fullVD,secBased, 2=threePhase */
-    private int choiceOptFuncVariant; 
+    /**
+     * The choice opt func variant. variants: 0=fullVD orig, 1=fullVD,secBased,
+     * 2=threePhase
+     */
+    private int choiceOptFuncVariant;
 
     /**
      * Instantiates a new oV m_ vdiff.
      * 
      * @param modelName
      *            the model name
-     * @param parameter
-     *            the parameter
+     * @param parameters
+     *            the parameters
      */
     public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameters) {
         super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
-    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
+     * LongitudinalModel#initParameters()
+     */
     @Override
     protected void initParameters() {
-        logger.debug("init model parameters");        
+        logger.debug("init model parameters");
         this.s0 = ((AccelerationModelInputDataOVM_VDIFF) parameters).getS0();
         this.v0 = ((AccelerationModelInputDataOVM_VDIFF) parameters).getV0();
         this.tau = ((AccelerationModelInputDataOVM_VDIFF) parameters).getTau();
         this.lenInteraction = ((AccelerationModelInputDataOVM_VDIFF) parameters).getLenInteraction();
         this.beta = ((AccelerationModelInputDataOVM_VDIFF) parameters).getBeta();
-        this.lambda = ((AccelerationModelInputDataOVM_VDIFF) parameters).getLambda(); 
+        this.lambda = ((AccelerationModelInputDataOVM_VDIFF) parameters).getLambda();
         choiceOptFuncVariant = ((AccelerationModelInputDataOVM_VDIFF) parameters).getVariant();
     }
 
-    
     /*
      * (non-Javadoc)
      * 
@@ -117,11 +124,11 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         final double v = me.getSpeed();
         final double dv = me.relSpeed(vehFront); // only needed for VDIFF
 
-        // speed limit --> OVM causes accidents due to immediate braking reaction  
-        final double v0loc = Math.min(alphaV0 * v0, me.speedlimit()); // consider
-                                                                      // external
-                                                                      // speedlimit
-  //System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
+        // speed limit --> OVM causes accidents due to immediate braking
+        // reaction
+        // consider external speedlimit
+        final double v0loc = Math.min(alphaV0 * v0, me.speedlimit());
+        // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
         return acc(s, v, dv, alphaT, v0loc);
     }
 
@@ -157,12 +164,14 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
     private double acc(double s, double v, double dv, double alphaT, double v0loc) {
 
         // logger.debug("alphaT = {}", alphaT);
-        // logger.debug("v0loc = {}", v0loc);
+        // logger.info("v0loc = {}", v0loc);
 
-        double lenInteractionLoc = lenInteraction * alphaT;
-        if (lenInteractionLoc < 1e-6) {
-            lenInteractionLoc = 1e-6;
-        }
+        // if(alphaT!=1){
+        // logger.error("alphaT={}", alphaT);
+        // System.exit(-1);
+        // }
+
+        final double lenInteractionLoc = Math.max(1e-6, lenInteraction * alphaT);
 
         // final double betaLoc=beta*alpha_T;
         final double betaLoc = beta;
@@ -180,7 +189,8 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // Triangular OVM function
-            final double T = beta; // "time headway" // TODO muss alles noch dokumentiert werden!!!
+            final double T = beta; // "time headway" // TODO muss alles noch
+                                   // dokumentiert werden!!!
             vOpt = Math.max(Math.min((s - s0) / T, v0loc), 0.);
         } else if (choiceOptFuncVariant == 2) {
             // "Three-phase" OVM function
@@ -199,9 +209,9 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
         // calc acceleration
         double aWanted = 0; // return value
         if (choiceOptFuncVariant <= 1) {
-            aWanted = (vOpt - v) / tau - lambda * dv; // OVM: lambda == 0
             // original VDIFF model
-
+            // OVM: lambda == 0
+            aWanted = (vOpt - v) / tau - lambda * dv;
         } else if (choiceOptFuncVariant == 2) {
             aWanted = (vOpt - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, Constants.SMALL_VALUE);
             // aWanted = Math.min(aWanted, 5.); // limit max acceleration
@@ -276,7 +286,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#parameterV0()
+     * LongitudinalModel#parameterV0()
      */
     @Override
     public double parameterV0() {
@@ -296,7 +306,7 @@ public class OVM_VDIFF extends LongitudinalModelImpl implements AccelerationMode
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModelImpl#getRequiredUpdateTime()
+     * LongitudinalModel#getRequiredUpdateTime()
      */
     @Override
     public double getRequiredUpdateTime() {

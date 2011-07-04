@@ -46,12 +46,11 @@ import org.slf4j.LoggerFactory;
  */
 public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
-	private static final String extensionFormat = ".S%d_log.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR + 
-        "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
-    private static final String outputFormat = 
-    	"%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
-    
+    private static final String extensionFormat = ".S%d_log.csv";
+    private static final String outputHeading = Constants.COMMENT_CHAR
+            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
+    private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(UpstreamBoundaryImpl.class);
 
@@ -77,10 +76,10 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     // status of last merging vehicle for logging to file
     /** The x enter last. */
     private double xEnterLast;
-    
+
     /** The v enter last. */
     private double vEnterLast;
-    
+
     /** The lane enter last. */
     private int laneEnterLast;
 
@@ -152,8 +151,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             if (isEntered) {
                 nWait--;
                 if (fstrLogging != null) {
-                    fstrLogging.printf(outputFormat, time, laneEnterLast,
-                    		xEnterLast, 3.6 * vEnterLast, 3600 * qBC, enteringVehCounter, nWait);
+                    fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * qBC,
+                            enteringVehCounter, nWait);
                     fstrLogging.flush();
                 }
             }
@@ -183,18 +182,19 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             return true;
         }
         // (2) check if gap to leader is sufficiently large
-        // origin of  road section is assumed to be zero
-        final double netGapToLeader = leader.getPosition() - leader.length(); 
+        // origin of road section is assumed to be zero
+        final double netGapToLeader = leader.getPosition() - leader.length();
         double gapAtQMax = 1. / vehPrototype.getRhoQMax();
         if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
             final double tau = 1;
             gapAtQMax = leader.getSpeed() * tau;
         }
-        // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
+        // minimal distance set to 80% of 1/rho at flow maximum in fundamental
+        // diagram
         double minRequiredGap = 0.8 * gapAtQMax;
-        if (vehPrototype.getLongModel().isCA()){
-            final double tau=1;
-            minRequiredGap = leader.getSpeed()*tau;
+        if (vehPrototype.getLongModel().isCA()) {
+            final double tau = 1;
+            minRequiredGap = leader.getSpeed() * tau;
         }
         if (netGapToLeader > minRequiredGap) {
             enterVehicle(time, minRequiredGap, vehPrototype, leader);

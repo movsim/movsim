@@ -42,13 +42,11 @@ public interface SimulationInput {
     double getTimestep();
 
     /**
-     * Gets the max simulation time.
+     * Gets the duration of the simulation.
      * 
      * @return the max simulation time
      */
     double getMaxSimTime();
-    
-    void setMaxSimTime(double maxSimTime);
 
     /**
      * Checks if is with fixed seed.
@@ -56,6 +54,13 @@ public interface SimulationInput {
      * @return true, if is with fixed seed
      */
     boolean isWithFixedSeed();
+
+    /**
+     * Checks if is with crash exit.
+     * 
+     * @return true, if is with crash exit
+     */
+    boolean isWithCrashExit();
 
     /**
      * Gets the random seed.
@@ -72,14 +77,17 @@ public interface SimulationInput {
     ArrayList<RoadInput> getRoadInput();
 
     /**
-     * Gets the single road input. 
-     * Quick hack: only one single main road
+     * Gets the single road input. Quick hack: only one single main road
      * 
      * @return the single road input
      */
     RoadInput getSingleRoadInput();
-    
 
+    /**
+     * Gets the output input.
+     * 
+     * @return the output input
+     */
     OutputInput getOutputInput();
 
 }

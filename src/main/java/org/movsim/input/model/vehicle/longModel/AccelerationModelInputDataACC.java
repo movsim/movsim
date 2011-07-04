@@ -30,9 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
 /**
  * The Interface AccelerationModelInputDataACC.
  */
-public interface AccelerationModelInputDataACC extends AccelerationModelInputData{
-
-  
+public interface AccelerationModelInputDataACC extends AccelerationModelInputData {
 
     /**
      * Gets the v0.
@@ -89,38 +87,125 @@ public interface AccelerationModelInputDataACC extends AccelerationModelInputDat
      * @return the coolness
      */
     double getCoolness();
-    
-    
+
+    /**
+     * Gets the v0 default.
+     * 
+     * @return the v0 default
+     */
     public double getV0Default();
 
+    /**
+     * Gets the t default.
+     * 
+     * @return the t default
+     */
     public double getTDefault();
 
+    /**
+     * Gets the s0 default.
+     * 
+     * @return the s0 default
+     */
     public double getS0Default();
 
+    /**
+     * Gets the s1 default.
+     * 
+     * @return the s1 default
+     */
     public double getS1Default();
 
+    /**
+     * Gets the delta default.
+     * 
+     * @return the delta default
+     */
     public double getDeltaDefault();
 
+    /**
+     * Gets the a default.
+     * 
+     * @return the a default
+     */
     public double getaDefault();
 
+    /**
+     * Gets the b default.
+     * 
+     * @return the b default
+     */
     public double getbDefault();
 
+    /**
+     * Gets the coolness default.
+     * 
+     * @return the coolness default
+     */
     public double getCoolnessDefault();
 
+    /**
+     * Sets the v0.
+     * 
+     * @param v0
+     *            the new v0
+     */
     public void setV0(double v0);
 
+    /**
+     * Sets the t.
+     * 
+     * @param T
+     *            the new t
+     */
     public void setT(double T);
 
+    /**
+     * Sets the s0.
+     * 
+     * @param s0
+     *            the new s0
+     */
     public void setS0(double s0);
 
+    /**
+     * Sets the s1.
+     * 
+     * @param s1
+     *            the new s1
+     */
     public void setS1(double s1);
 
+    /**
+     * Sets the delta.
+     * 
+     * @param delta
+     *            the new delta
+     */
     public void setDelta(double delta);
 
+    /**
+     * Sets the a.
+     * 
+     * @param a
+     *            the new a
+     */
     public void setA(double a);
 
+    /**
+     * Sets the b.
+     * 
+     * @param b
+     *            the new b
+     */
     public void setB(double b);
 
+    /**
+     * Sets the coolness.
+     * 
+     * @param coolness
+     *            the new coolness
+     */
     public void setCoolness(double coolness);
 
 }

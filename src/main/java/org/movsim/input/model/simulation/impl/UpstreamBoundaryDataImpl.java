@@ -45,7 +45,7 @@ public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
 
     /** The inflow time series. */
     private List<InflowDataPoint> inflowTimeSeries;
-    
+
     /** The with logging. */
     private final boolean withLogging;
 

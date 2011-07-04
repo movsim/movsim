@@ -26,8 +26,7 @@
  */
 package org.movsim;
 
-import org.movsim.input.commandline.SimCommandLine;
-import org.movsim.input.commandline.impl.SimCommandLineImpl;
+import org.movsim.input.impl.SimCommandLine;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
@@ -38,7 +37,6 @@ import org.movsim.ui.controller.impl.SimulatorController;
  */
 public class App {
 
-
     /**
      * The main method.
      * 
@@ -46,11 +44,12 @@ public class App {
      *            the arguments
      */
     public static void main(String[] args) {
-        
-        // CommandLine args options Parser
-        final SimCommandLine cmdline = new SimCommandLineImpl(args);
 
-        final Simulator simulator = new SimulatorImpl(true, cmdline);
+        // CommandLine args options Parser
+        // Results are set in ProjectMetaDataImpl
+        final SimCommandLine cmdline = new SimCommandLine(args);
+
+        final Simulator simulator = new SimulatorImpl();
 
         final Controller controller = new SimulatorController(simulator);
     }
