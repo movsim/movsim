@@ -26,10 +26,11 @@
  */
 package org.movsim.input.impl;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,6 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class XmlReaderSimInput.
  * 
@@ -82,7 +82,10 @@ public class XmlReaderSimInput {
     /** The doc. */
     private Document doc;
 
-    private String dtdFilename = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
+    // dtd from resources. No File.separator!!!
+    private String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
+    // private String dtdFilename = File.separator + "sim" + File.separator +
+    // "multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
 
@@ -101,30 +104,41 @@ public class XmlReaderSimInput {
         this.inputData = inputData;
 
         this.xmlFilename = projectMetaData.getProjectName(); // TODO Path + File
+        
+        // TODO Remove AccessController: Is not needed anymore
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
-        if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
-            logger.error("XML File does not exist. Exit Simulation.");
-            System.exit(1);
-        }
+            @Override
+            public Object run() {
 
-        logger.info("Begin parsing: " + xmlFilename);
+                if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
+                    logger.error("XML File does not exist. Exit Simulation.");
+                    System.exit(1);
+                }
 
-        if (projectMetaData.isXmlFromResources()) {
-            readXmlFromResources();
-        } else {
-            readAndValidateXmlFromFileName();
-        }
+                logger.info("Begin parsing: " + xmlFilename);
 
-        // write internal xml file:
-        if (projectMetaData.isWriteInternalXml()) {
-            String outFilename = xmlFilename + ".internal_xml";
-            writeInternalXmlToFile(doc, outFilename);
-            logger.info("internal xml output written to file {}. Exit.", outFilename);
-            System.exit(0);
-        }
+                if (projectMetaData.isXmlFromResources()) {
+                    readXmlFromResources();
+                } else {
+                    readAndValidateXmlFromFileName();
+                }
 
-        fromDomToInternalDatastructure();
-        logger.info("End XmlReaderSimInput.");
+                // write internal xml file:
+                if (projectMetaData.isWriteInternalXml()) {
+                    String outFilename = xmlFilename + ".internal_xml";
+                    writeInternalXmlToFile(doc, outFilename);
+                    logger.info("internal xml output written to file {}. Exit.", outFilename);
+                    System.exit(0);
+                }
+
+                fromDomToInternalDatastructure();
+                logger.info("End XmlReaderSimInput.");
+
+                return null;
+            }
+        });
+
     }
 
     /**
@@ -187,13 +201,22 @@ public class XmlReaderSimInput {
      * Read xml from resources.
      */
     private void readXmlFromResources() {
-        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator + xmlFilename);
-        appletresource = new InputSource(appletinputstream);
-        validate(appletresource);
-        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(File.separator + xmlFilename);
-        appletresource = new InputSource(appletinputstream);
-        doc = getDocument(appletresource);
-        System.out.println("from resource");
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
+            @Override
+            public Object run() {
+
+                appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFilename);
+                appletresource = new InputSource(appletinputstream);
+                validate(appletresource);
+                appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFilename);
+                appletresource = new InputSource(appletinputstream);
+                doc = getDocument(appletresource);
+
+                return null;
+            }
+        });
+
     }
 
     /**
@@ -204,28 +227,40 @@ public class XmlReaderSimInput {
      * @return the document
      */
     private Document getDocument(final InputSource inputSource) {
-        try {
-            final SAXBuilder builder = new SAXBuilder();
-            builder.setIgnoringElementContentWhitespace(true);
-            builder.setEntityResolver(new EntityResolver() {
 
-                @Override
-                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                    InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-                    InputSource input = new InputSource(is);
-                    return input;
+        Document doc = (Document) AccessController.doPrivileged(new PrivilegedAction<Object>() {
+
+            @Override
+            public Object run() {
+
+                try {
+                    final SAXBuilder builder = new SAXBuilder();
+                    builder.setIgnoringElementContentWhitespace(true);
+                    builder.setEntityResolver(new EntityResolver() {
+
+                        @Override
+                        public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
+                                IOException {
+                            InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                            InputSource input = new InputSource(is);
+                            return input;
+                        }
+                    });
+                    final Document document = builder.build(inputSource);
+                    return document;
+                } catch (final JDOMException e) {
+                    e.printStackTrace();
+                    System.exit(-1);
+                    return null;
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                    return null;
                 }
-            });
-            final Document doc = builder.build(inputSource);
-            return doc;
-        } catch (final JDOMException e) {
-            e.printStackTrace();
-            System.exit(-1);
-            return null;
-        } catch (final Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+
+            }
+        });
+
+        return doc;
     }
 
     /**
@@ -234,41 +269,54 @@ public class XmlReaderSimInput {
      * @param inputSource
      *            the input source
      */
-    private void validate(InputSource inputSource) {
+    private void validate(final InputSource inputSource) {
         // global flag !!! also used in errorHandler
         isValid = true;
-        try {
-            logger.debug("validate input ... ");
-            final XMLReader myXMLReader = XMLReaderFactory.createXMLReader();
-            myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
-            final DefaultHandler handler = new MyErrorHandler();
-            myXMLReader.setErrorHandler(handler);
 
-            // overriding dtd source from xml file with internal dtd from jar
-            myXMLReader.setEntityResolver(new EntityResolver() {
+        AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
-                @Override
-                public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                    InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-                    InputSource input = new InputSource(is);
-                    return input;
+            @Override
+            public Object run() {
+
+                try {
+                    logger.debug("validate input ... ");
+                    final XMLReader myXMLReader = XMLReaderFactory.createXMLReader();
+                    myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
+                    final DefaultHandler handler = new MyErrorHandler();
+                    myXMLReader.setErrorHandler(handler);
+
+                    // overriding dtd source from xml file with internal dtd
+                    // from jar
+
+                    myXMLReader.setEntityResolver(new EntityResolver() {
+
+                        @Override
+                        public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
+                                IOException {
+                            InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                            InputSource input = new InputSource(is);
+                            return input;
+                        }
+                    });
+
+                    myXMLReader.parse(inputSource);
+                } catch (final SAXException e) {
+                    isValid = false;
+                } catch (final IOException e) {
+                    isValid = false;
                 }
-            });
 
-            myXMLReader.parse(inputSource);
-        } catch (final SAXException e) {
-            isValid = false;
-        } catch (final IOException e) {
-            isValid = false;
-        }
+                if (!isValid) {
+                    logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
+                    System.exit(0);
+                } else if (projectMetaData.isOnlyValidation()) {
+                    logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
+                    System.exit(0);
+                }
 
-        if (!isValid) {
-            logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFilename);
-            System.exit(0);
-        } else if (projectMetaData.isOnlyValidation()) {
-            logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
-            System.exit(0);
-        }
+                return null;
+            }
+        });
     }
 
     /**

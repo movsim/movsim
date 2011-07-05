@@ -202,7 +202,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2011)");
 
         // parse xmlFile and set values
-
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
