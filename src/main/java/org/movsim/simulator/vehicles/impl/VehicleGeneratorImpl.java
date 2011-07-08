@@ -38,7 +38,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
@@ -52,7 +52,7 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationMo
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
@@ -60,7 +60,7 @@ import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumACC;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumGipps;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumIDM;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKCA;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKKW;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNSM;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNewell;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_VDIFF;
@@ -207,8 +207,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             return new EquilibriumNewell(vehLength, (Newell) longModel);
         else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NSM))
             return new EquilibriumNSM(vehLength, (NSM) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_KCA))
-            return new EquilibriumKCA(vehLength, (KCA) longModel);
+        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_KKW))
+            return new EquilibriumKKW(vehLength, (KKW) longModel);
         else {
             logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName());
             System.exit(0);
@@ -219,7 +219,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
     /**
      * Long model factory with vehicle length vehicle length is only needed for
-     * KCA (explicit model parameter).
+     * KKW (explicit model parameter).
      * 
      * @param modelInputData
      *            the model input data
@@ -243,8 +243,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             return new Newell(modelName, (AccelerationModelInputDataNewell) modelInputData);
         else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
             longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength);
+        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KKW)) {
+            longModel = new KKW(modelName, (AccelerationModelInputDataKKW) modelInputData, vehLength);
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0);

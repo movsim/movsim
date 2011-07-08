@@ -28,19 +28,19 @@ package org.movsim.input.model.vehicle.longModel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class AccelerationModelInputDataKCAImpl.
+ * The Class AccelerationModelInputDataKKWImpl.
  */
-public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDataImpl implements
-        AccelerationModelInputDataKCA {
+public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDataImpl implements
+        AccelerationModelInputDataKKW {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataKCAImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataKKWImpl.class);
 
     /** The v0. */
     private double v0;
@@ -90,7 +90,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataKCAImpl(String modelName, Map<String, String> map) {
+    public AccelerationModelInputDataKKWImpl(String modelName, Map<String, String> map) {
         super(modelName);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         kDefault = k = Double.parseDouble(map.get("k"));
@@ -217,7 +217,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getV0Default()
      */
     @Override
@@ -229,7 +229,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getkDefault()
      */
     @Override
@@ -241,7 +241,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getPb0Default()
      */
     @Override
@@ -253,7 +253,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getPb1Default()
      */
     @Override
@@ -265,7 +265,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getPa1Default()
      */
     @Override
@@ -277,7 +277,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getPa2Default()
      */
     @Override
@@ -289,7 +289,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #getVpDefault()
      */
     @Override
@@ -301,7 +301,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setV0(double)
      */
     @Override
@@ -314,7 +314,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setK(double)
      */
     @Override
@@ -327,7 +327,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setPb0(double)
      */
     @Override
@@ -340,7 +340,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setPb1(double)
      */
     @Override
@@ -353,7 +353,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setPa1(double)
      */
     @Override
@@ -366,7 +366,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setPa2(double)
      */
     @Override
@@ -379,7 +379,7 @@ public class AccelerationModelInputDataKCAImpl extends AccelerationModelInputDat
      * (non-Javadoc)
      * 
      * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA
+     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
      * #setVp(double)
      */
     @Override

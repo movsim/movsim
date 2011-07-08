@@ -41,7 +41,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataIDMImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKCAImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKKWImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
@@ -135,7 +135,7 @@ public class VehicleInputImpl implements VehicleInput {
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNSM))
             return new AccelerationModelInputDataNSMImpl(XmlElementNames.VehicleLongModelNSM, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKCA))
-            return new AccelerationModelInputDataKCAImpl(XmlElementNames.VehicleLongModelKCA, map);
+            return new AccelerationModelInputDataKKWImpl(XmlElementNames.VehicleLongModelKCA, map);
         else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);

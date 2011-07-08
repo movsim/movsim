@@ -21,7 +21,7 @@ public interface XmlElementNames {
     public final String VehicleLongModelGIPPS = "GIPPS";
     public final String VehicleLongModelNEWELL = "NEWELL";
     public final String VehicleLongModelNSM = "NSM";
-    public final String VehicleLongModelKCA = "KCA";
+    public final String VehicleLongModelKCA = "KKW";
 
     public final String Simulation = "SIMULATION";
     public final String Road = "ROAD";

@@ -67,7 +67,7 @@ public interface Constants {
     final String MODEL_NAME_NSM = "NSM";
 
     /** The MODE l_ nam e_ kca. */
-    final String MODEL_NAME_KCA = "KCA";
+    final String MODEL_NAME_KKW = "KKW";
 
     /** The gap infinity. */
     final double GAP_INFINITY = 10000;

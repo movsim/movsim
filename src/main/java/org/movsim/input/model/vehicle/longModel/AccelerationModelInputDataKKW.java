@@ -28,9 +28,9 @@ package org.movsim.input.model.vehicle.longModel;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface AccelerationModelInputDataKCA.
+ * The Interface AccelerationModelInputDataKKW.
  */
-public interface AccelerationModelInputDataKCA extends AccelerationModelInputData {
+public interface AccelerationModelInputDataKKW extends AccelerationModelInputData {
 
     /**
      * Gets the v0.

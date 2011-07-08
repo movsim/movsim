@@ -51,7 +51,7 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, NSM?, KCA?, MEMORY?)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, NSM?, KKW?, MEMORY?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -112,8 +112,8 @@ p_slowdown   NMTOKEN #REQUIRED
 p_slow_start NMTOKEN #REQUIRED
 >
 
-<!ELEMENT KCA EMPTY>
-<!ATTLIST KCA
+<!ELEMENT KKW EMPTY>
+<!ATTLIST KKW
 v0      NMTOKEN #REQUIRED
 k       NMTOKEN #REQUIRED
 pb0     NMTOKEN #REQUIRED

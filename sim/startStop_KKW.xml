@@ -4,16 +4,16 @@
 <SCENARIO>
     <VEHICLES>
         <!-- vehicle length ==> cell units -->
-        <VEHICLE label="KCA1" length="20">
+        <VEHICLE label="KKW1" length="20">
             <LONGITUDINAL_MODEL>
-                <KCA v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
+                <KKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
                     vp="14" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
         <VEHICLE label="Obstacle" length="20">
             <LONGITUDINAL_MODEL>
-                <KCA v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
+                <KKW v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
                     vp="14" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
@@ -23,35 +23,35 @@
     <SIMULATION dt="1" duration="360" fixed_seed="false" > <!--  <seed="50"> -->
         <ROAD id="1" length="20000" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="KCA1" fraction="1" />
+                <VEHICLE_TYPE label="KKW1" fraction="1" />
                 <VEHICLE_TYPE label="Obstacle" fraction="0" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MICRO x="20" v="0" label="KCA1" />
-                <IC_MICRO x="40" v="0" label="KCA1" />
-                <IC_MICRO x="60" v="0" label="KCA1" />
-                <IC_MICRO x="80" v="0" label="KCA1" />
-                <IC_MICRO x="100" v="0" label="KCA1" />
-                <IC_MICRO x="120" v="0" label="KCA1" />
-                <IC_MICRO x="140" v="0" label="KCA1" />
-                <IC_MICRO x="160" v="0" label="KCA1" />
-                <IC_MICRO x="180" v="0" label="KCA1" />
-                <IC_MICRO x="200" v="0" label="KCA1" />
-                <IC_MICRO x="220" v="0" label="KCA1" />
-                <IC_MICRO x="240" v="0" label="KCA1" />
-                <IC_MICRO x="260" v="0" label="KCA1" />
-                <IC_MICRO x="280" v="0" label="KCA1" />
-                <IC_MICRO x="300" v="0" label="KCA1" />
-                <IC_MICRO x="320" v="0" label="KCA1" />
-                <IC_MICRO x="340" v="0" label="KCA1" />
-                <IC_MICRO x="360" v="0" label="KCA1" />
-                <IC_MICRO x="380" v="0" label="KCA1" />
-                <IC_MICRO x="400" v="0" label="KCA1" />
-                <IC_MICRO x="420" v="0" label="KCA1" />
-                <IC_MICRO x="440" v="0" label="KCA1" />
-                <IC_MICRO x="460" v="0" label="KCA1" />
-                <IC_MICRO x="480" v="0" label="KCA1" />
-                <IC_MICRO x="500" v="0" label="KCA1" />
+                <IC_MICRO x="20" v="0" label="KKW1" />
+                <IC_MICRO x="40" v="0" label="KKW1" />
+                <IC_MICRO x="60" v="0" label="KKW1" />
+                <IC_MICRO x="80" v="0" label="KKW1" />
+                <IC_MICRO x="100" v="0" label="KKW1" />
+                <IC_MICRO x="120" v="0" label="KKW1" />
+                <IC_MICRO x="140" v="0" label="KKW1" />
+                <IC_MICRO x="160" v="0" label="KKW1" />
+                <IC_MICRO x="180" v="0" label="KKW1" />
+                <IC_MICRO x="200" v="0" label="KKW1" />
+                <IC_MICRO x="220" v="0" label="KKW1" />
+                <IC_MICRO x="240" v="0" label="KKW1" />
+                <IC_MICRO x="260" v="0" label="KKW1" />
+                <IC_MICRO x="280" v="0" label="KKW1" />
+                <IC_MICRO x="300" v="0" label="KKW1" />
+                <IC_MICRO x="320" v="0" label="KKW1" />
+                <IC_MICRO x="340" v="0" label="KKW1" />
+                <IC_MICRO x="360" v="0" label="KKW1" />
+                <IC_MICRO x="380" v="0" label="KKW1" />
+                <IC_MICRO x="400" v="0" label="KKW1" />
+                <IC_MICRO x="420" v="0" label="KKW1" />
+                <IC_MICRO x="440" v="0" label="KKW1" />
+                <IC_MICRO x="460" v="0" label="KKW1" />
+                <IC_MICRO x="480" v="0" label="KKW1" />
+                <IC_MICRO x="500" v="0" label="KKW1" />
                 <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="2000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>

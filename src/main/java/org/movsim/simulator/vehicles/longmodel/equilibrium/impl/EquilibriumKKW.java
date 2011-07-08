@@ -26,13 +26,13 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class EquilibriumKCA.
+ * The Class EquilibriumKKW.
  */
-public class EquilibriumKCA extends EquilibriumPropertiesImpl {
+public class EquilibriumKKW extends EquilibriumPropertiesImpl {
 
     /**
      * Instantiates a new equilibrium kca.
@@ -42,7 +42,7 @@ public class EquilibriumKCA extends EquilibriumPropertiesImpl {
      * @param kcaModel
      *            the kca model
      */
-    public EquilibriumKCA(double length, KCA kcaModel) {
+    public EquilibriumKKW(double length, KKW kcaModel) {
         super(length);
 
         calcEquilibrium(kcaModel);
@@ -56,7 +56,7 @@ public class EquilibriumKCA extends EquilibriumPropertiesImpl {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(KCA model) {
+    private void calcEquilibrium(KKW model) {
         double vIter = model.getV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from

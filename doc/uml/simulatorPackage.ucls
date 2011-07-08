@@ -356,8 +356,8 @@
     </display>  
   </class>  
   <class id="49" corner="BOTTOM_RIGHT" language="java" 
-    name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/KCA.java" binary="false">    
+    name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW" project="movsim" 
+    file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/KKW.java" binary="false">    
     <position x="2486" y="2636" width="-1" height="-1"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      

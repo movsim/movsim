@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -39,12 +39,12 @@ import org.slf4j.LoggerFactory;
 // TODO: Auto-generated Javadoc
 // paper reference / Kerner book 
 /**
- * The Class KCA.
+ * The Class KKW.
  */
-public class KCA extends LongitudinalModel implements AccelerationModel {
+public class KKW extends LongitudinalModel implements AccelerationModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(KCA.class);
+    final static Logger logger = LoggerFactory.getLogger(KKW.class);
 
     /**
      * The Constant dtCA. constant update timestep for CA
@@ -97,7 +97,7 @@ public class KCA extends LongitudinalModel implements AccelerationModel {
      * @param length
      *            the length
      */
-    public KCA(String modelName, AccelerationModelInputDataKCA parameters, double length) {
+    public KKW(String modelName, AccelerationModelInputDataKKW parameters, double length) {
         super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON, parameters);
         this.length = length; // model parameter!
         initParameters();
@@ -112,13 +112,13 @@ public class KCA extends LongitudinalModel implements AccelerationModel {
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        this.v0 = ((AccelerationModelInputDataKCA) parameters).getV0();
-        this.k = ((AccelerationModelInputDataKCA) parameters).getK();
-        this.pb0 = ((AccelerationModelInputDataKCA) parameters).getPb0();
-        this.pb1 = ((AccelerationModelInputDataKCA) parameters).getPb1();
-        this.pa1 = ((AccelerationModelInputDataKCA) parameters).getPa1();
-        this.pa2 = ((AccelerationModelInputDataKCA) parameters).getPa2();
-        this.vp = ((AccelerationModelInputDataKCA) parameters).getVp();
+        this.v0 = ((AccelerationModelInputDataKKW) parameters).getV0();
+        this.k = ((AccelerationModelInputDataKKW) parameters).getK();
+        this.pb0 = ((AccelerationModelInputDataKKW) parameters).getPb0();
+        this.pb1 = ((AccelerationModelInputDataKKW) parameters).getPb1();
+        this.pa1 = ((AccelerationModelInputDataKKW) parameters).getPa1();
+        this.pa2 = ((AccelerationModelInputDataKKW) parameters).getPa2();
+        this.vp = ((AccelerationModelInputDataKKW) parameters).getVp();
 
     }
 

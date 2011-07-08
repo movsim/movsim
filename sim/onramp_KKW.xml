@@ -4,10 +4,10 @@
 <SCENARIO path="." >
     <VEHICLES>
        <!-- vehicle length ==> cell units -->
-        <VEHICLE label="KCA1" length="15">
+        <VEHICLE label="KKW1" length="15">
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
-              <KCA v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" />
+              <KKW v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
@@ -16,7 +16,7 @@
          <!-- scaled units for time and space -->
         <ROAD id="1" length="40000" lanes="1">
             <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="KCA1" fraction="1" />
+                <VEHICLE_TYPE label="KKW1" fraction="1" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="2000" rho_per_km="2" v="3" />
