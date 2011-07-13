@@ -15,9 +15,9 @@ if (!exists("lang")) lang = "en"
 #print "lan=".lang
 
 
-###############  Scalings CA (NSM, BARL, KCA)#######
+###############  Scalings CA (NSM, BARL, KKW)#######
 xscale=7.5
-if (ldm eq "KCA") xscale=0.5
+if (ldm eq "KKW") xscale=0.5
 tscale=1.
 vscale=xscale/tscale
 rhoscale=1./xscale
@@ -148,7 +148,7 @@ set xrange [0:150]
 set out detOutput
 
 
-if (ldm eq "KCA") plot\
+if (ldm eq "KKW") plot\
  detFile(16000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
  detFile(20000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
  detFile(24000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
