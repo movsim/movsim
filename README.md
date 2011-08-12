@@ -31,6 +31,11 @@ Install the [git](http://git-scm.com/download) version control system.
 Download this repository:
 
     git clone git@github.com:movsim/movsim.git
+    
+or
+       
+    https://github.com/movsim/movsim.git
+              
 
 Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 6
 of Java (JRE 1.6 or higher).
