@@ -34,7 +34,7 @@ Download this repository:
     
 or
        
-    https://github.com/movsim/movsim.git
+    git clone https://github.com/movsim/movsim.git
               
 
 Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 6
