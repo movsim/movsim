@@ -34,7 +34,7 @@
             <RAMPS>
                 <SIMPLE_RAMP x="15000" length="1000"
                     logging="true">
-                    <INFLOW t="0" q_per_hour="550" />
+                    <INFLOW t="0" q_per_hour="0" />
                 </SIMPLE_RAMP>
             </RAMPS>
             <TRAFFIC_LIGHTS>
@@ -54,7 +54,7 @@
             </DETECTORS>
         </ROAD>
         <OUTPUT>
-<!--                <SPATIOTEMPORAL dx="100" dt="40" />-->
+                <SPATIOTEMPORAL dx="100" dt="40" />
                 <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
             </OUTPUT>
     </SIMULATION>

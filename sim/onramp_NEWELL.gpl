@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "NEWELL"
+lang = "en"
+load "onramp.gpl"
+

@@ -131,6 +131,7 @@ public class OnrampImpl implements Onramp {
             final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
+            fstrLogging.flush();
         }
 
         nWait = 0;
