@@ -26,7 +26,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
      */
     public AccelerationModelInputDataKraussImpl(String modelName, Map<String, String> map) {
         super(modelName, map);
-        epsilonDefault = Double.parseDouble(map.get("epsilon"));
+        epsilon = epsilonDefault = Double.parseDouble(map.get("epsilon"));
         checkParameters();
     }
 
@@ -37,11 +37,12 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
 
     public void resetParametersToDefault() {
         super.resetParametersToDefault();
-        setEpsilon(epsilonDefault);
+        epsilon = epsilonDefault;
     }
 
     public void setEpsilon(double epsilon) {
         this.epsilon = epsilon;
+        parametersUpdated();
     }
 
     public double getEpsilon() {
