@@ -5,13 +5,13 @@
     <VEHICLES>
         <VEHICLE label="KRAUSS1" length="8" b_max="20">
             <LONGITUDINAL_MODEL>
-                <KRAUSS v0="15" a="1.5" b="1.0" s0="2" dt="1.1" epsilon="0.4" />
+                <KRAUSS v0="15" a="1.0" b="1.0" s0="2" dt="1.1" epsilon="0.5" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
         <VEHICLE label="Obstacle" length="0" b_max="20">
             <LONGITUDINAL_MODEL>
-                <KRAUSS v0="0" a="1.5" b="1.0" s0="2" dt="1.1" epsilon="0.4"/>
+                <KRAUSS v0="0" a="1.5" b="1.0" s0="2" dt="1.1" epsilon="0.5"/>
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>

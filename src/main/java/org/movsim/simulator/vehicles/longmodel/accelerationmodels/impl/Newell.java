@@ -124,9 +124,15 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
     
     private double acc(double s, double v, double dv, double v0Local, double dtLocal) {
         
-        final double vNew = Math.min(Math.max(s-(s0/dtLocal), 0), v0Local);
+        final double vNew = Math.min(Math.max((s-s0)/dtLocal, 0), v0Local);
         
-        final double aWanted = (vNew - v) / dtLocal;
+        double aWanted = (vNew - v) / dtLocal;
+        
+
+        // if (s/v < dt) {
+        // aWanted = -10000000;
+        // }
+        
         return aWanted;
     }
 

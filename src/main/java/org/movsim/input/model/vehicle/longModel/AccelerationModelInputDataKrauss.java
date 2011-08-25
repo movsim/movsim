@@ -12,4 +12,9 @@ package org.movsim.input.model.vehicle.longModel;
 public interface AccelerationModelInputDataKrauss extends AccelerationModelInputData, AccelerationModelInputDataGipps {
 
     double getEpsilon();
+
+    /**
+     * @param bChangeValue
+     */
+    void setEpsilon(double bChangeValue);
 }

@@ -453,12 +453,15 @@ public class VehicleImpl implements Vehicle {
                 speed = 0;
             }
             final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
+            
             position += advance;
             speed += dt * acc;
             if (speed < 0) {
                 speed = 0;
                 acc = 0;
             }
+            
+
         }
     }
 
