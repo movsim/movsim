@@ -31,5 +31,56 @@ package org.movsim.input.model.vehicle.longModel;
  * The Interface AccelerationModelInputDataNewell.
  */
 public interface AccelerationModelInputDataNewell extends AccelerationModelInputData {
+    /**
+     * Gets the v0.
+     * 
+     * @return the v0
+     */
+    double getV0();
 
+    /**
+     * Gets the s0.
+     * 
+     * @return the s0
+     */
+    double getS0();
+
+    /**
+     * Gets the dt.
+     * 
+     * @return the dt
+     */
+    double getDt();
+
+    /**
+     * Gets the v0 default.
+     * 
+     * @return the v0 default
+     */
+    public double getV0Default();
+
+
+    /**
+     * Gets the s0 default.
+     * 
+     * @return the s0 default
+     */
+    public double getS0Default();
+
+    /**
+     * Sets the v0.
+     * 
+     * @param v0
+     *            the new v0
+     */
+    public void setV0(double v0);
+
+
+    /**
+     * Sets the s0.
+     * 
+     * @param s0
+     *            the new s0
+     */
+    public void setS0(double s0);
 }

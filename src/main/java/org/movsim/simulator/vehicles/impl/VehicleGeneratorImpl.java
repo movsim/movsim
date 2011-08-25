@@ -39,6 +39,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
@@ -53,6 +54,7 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
@@ -61,6 +63,7 @@ import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumACC;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumGipps;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumIDM;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKKW;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKrauss;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNSM;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNewell;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_VDIFF;
@@ -203,6 +206,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             return new EquilibriumOVM_VDIFF(vehLength, (OVM_VDIFF) longModel);
         else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_GIPPS))
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
+        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_KRAUSS))
+            return new EquilibriumKrauss(vehLength, (Krauss) longModel);
         else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NEWELL))
             return new EquilibriumNewell(vehLength, (Newell) longModel);
         else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NSM))
@@ -239,9 +244,11 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             longModel = new OVM_VDIFF(modelName, (AccelerationModelInputDataOVM_VDIFF) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
             longModel = new Gipps(modelName, (AccelerationModelInputDataGipps) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NEWELL))
+        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KRAUSS)) {
+            longModel = new Krauss(modelName, (AccelerationModelInputDataKrauss) modelInputData);
+        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NEWELL)) {
             return new Newell(modelName, (AccelerationModelInputDataNewell) modelInputData);
-        else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
+        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
             longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KKW)) {
             longModel = new KKW(modelName, (AccelerationModelInputDataKKW) modelInputData, vehLength);

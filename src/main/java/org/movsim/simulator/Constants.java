@@ -69,10 +69,13 @@ public interface Constants {
     /** The MODE l_ nam e_ kca. */
     final String MODEL_NAME_KKW = "KKW";
 
+    final String MODEL_NAME_KRAUSS = "KRAUSS";
+
     /** The gap infinity. */
     final double GAP_INFINITY = 10000;
 
     /** The invalid gap */
     final double INVALID_GAP = -1;
+
 
 }

@@ -22,6 +22,7 @@ public interface XmlElementNames {
     public final String VehicleLongModelNEWELL = "NEWELL";
     public final String VehicleLongModelNSM = "NSM";
     public final String VehicleLongModelKCA = "KKW";
+    public final String VehicleLongModelKRAUSS = "KRAUSS";
 
     public final String Simulation = "SIMULATION";
     public final String Road = "ROAD";
@@ -48,4 +49,5 @@ public interface XmlElementNames {
     public final String OutputDetectors = "DETECTORS";
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
+
 }

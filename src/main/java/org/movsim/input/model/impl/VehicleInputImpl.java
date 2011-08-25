@@ -42,6 +42,7 @@ import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataA
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataIDMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKKWImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKraussImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
@@ -130,6 +131,8 @@ public class VehicleInputImpl implements VehicleInput {
             return new AccelerationModelInputDataOVM_VDIFFImpl(XmlElementNames.VehicleLongModelOVM_VDIFF, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelGIPPS))
             return new AccelerationModelInputDataGippsImpl(XmlElementNames.VehicleLongModelGIPPS, map);
+        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKRAUSS))
+            return new AccelerationModelInputDataKraussImpl(XmlElementNames.VehicleLongModelKRAUSS, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNEWELL))
             return new AccelerationModelInputDataNewellImpl(XmlElementNames.VehicleLongModelNEWELL, map);
         else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNSM))

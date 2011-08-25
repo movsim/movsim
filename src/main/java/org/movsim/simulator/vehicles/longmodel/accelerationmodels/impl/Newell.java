@@ -27,6 +27,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -36,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // TODO paper reference ...
-// TODO implementation
 /**
  * The Class Newell.
  */
@@ -46,7 +46,15 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
 
     /** The dt. */
-    private final double dt;
+    private double dt;
+    
+//    private double T;
+
+    /** The v0. */
+    private double v0;
+
+    /** The s0. */
+    private double s0;
 
     /**
      * Instantiates a new newell.
@@ -58,7 +66,6 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      */
     public Newell(String modelName, AccelerationModelInputDataNewell parameters) {
         super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
-        this.dt = 1; // model parameter
         initParameters();
     }
 
@@ -71,8 +78,10 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        // this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
-
+         this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
+         this.dt = ((AccelerationModelInputDataNewell) parameters).getDt();
+         this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
+         this.s0 = ((AccelerationModelInputDataNewell) parameters).getS0();
     }
 
     /*
@@ -85,15 +94,20 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      */
     @Override
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
-        // TODO Auto-generated method stub
-        // // space dependencies modeled by speedlimits, alpha's
-        //
-        // final double Tloc = alphaT*T;
-        // final double v0loc = Math.min(alphaV0*v0, me.speedlimit()); //
-        // consider external speedlimit
-        // final double aloc = alphaA*a;
+        
+        // Local dynamical variables
+        final Moveable vehFront = vehContainer.getLeader(me);
+        final double s = me.netDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
 
-        return 0;
+        // consider external speedlimit
+        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
+
+        final double tLocal = alphaT * dt;
+        
+        // actual Newell formula
+        return acc(s, v, dv, v0Local, tLocal);
     }
 
     /*
@@ -105,8 +119,15 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      */
     @Override
     public double accSimple(double s, double v, double dv) {
-        // TODO Auto-generated method stub
-        return 0;
+        return acc(s, v, dv, v0, dt);
+    }
+    
+    private double acc(double s, double v, double dv, double v0Local, double dtLocal) {
+        
+        final double vNew = Math.min(Math.max(s-(s0/dtLocal), 0), v0Local);
+        
+        final double aWanted = (vNew - v) / dtLocal;
+        return aWanted;
     }
 
     /*
@@ -117,8 +138,7 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      */
     @Override
     public double parameterV0() {
-        // TODO Auto-generated method stub
-        return 0;
+        return v0;
     }
 
     /*
@@ -129,7 +149,7 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      */
     @Override
     public double getRequiredUpdateTime() {
-        return dt; // cellular automaton requires specific dt
+        return dt;
     }
 
 }

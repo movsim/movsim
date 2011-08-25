@@ -42,7 +42,17 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataNewellImpl.class);
 
-    // TODO implementation
+
+    /** The v0. */
+    private double v0;
+    private final double v0Default;
+    
+    /** The s0. */
+    private double s0;
+    private final double s0Default;
+    
+    /** The dt. */
+    private double dt;
 
     /**
      * Instantiates a new model input data newell impl.
@@ -54,6 +64,9 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
      */
     public AccelerationModelInputDataNewellImpl(String modelName, Map<String, String> map) {
         super(modelName);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        dt = Double.parseDouble(map.get("dt"));
 
         checkParameters();
     }
@@ -80,8 +93,35 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
      */
     @Override
     public void resetParametersToDefault() {
-        // TODO Auto-generated method stub
-
+        v0 = v0Default;
+        s0 = s0Default;
     }
 
+    public double getV0() {
+        return v0;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+    }
+
+    public double getS0() {
+        return s0;
+    }
+
+    public void setS0(double s0) {
+        this.s0 = s0;
+    }
+
+    public double getV0Default() {
+        return v0Default;
+    }
+
+    public double getS0Default() {
+        return s0Default;
+    }
+
+    public double getDt() {
+        return dt;
+    }
 }
