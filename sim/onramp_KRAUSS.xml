@@ -5,7 +5,7 @@
     <VEHICLES>
         <VEHICLE label="KRAUSS1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <KRAUSS v0="33.33" a="1.5" b="1.0" s0="3" dt="1.0" epsilon="0.4" />
+                <KRAUSS v0="33.33" a="1.0" b="1.0" s0="3" dt="1.0" epsilon="0.4" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
