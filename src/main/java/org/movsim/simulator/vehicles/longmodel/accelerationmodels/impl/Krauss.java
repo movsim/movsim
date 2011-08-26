@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class Krauss.
+ * 
  * @author Martin Treiber, Ralph Germ
  */
 public class Krauss extends LongitudinalModel implements AccelerationModel {
@@ -64,7 +65,11 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
 
     /** The s0. */
     private double s0;
-
+    
+    /** The dimensionless epsilon has similar effects as the braking
+        probability of the Nagel-S CA
+        default value 0.4 (PRE) or 1 (EPJB)
+    */
     private double epsilon;
 
     /**
@@ -94,9 +99,6 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
         this.a = ((AccelerationModelInputDataKrauss) parameters).getA();
         this.b = ((AccelerationModelInputDataKrauss) parameters).getB();
         this.s0 = ((AccelerationModelInputDataKrauss) parameters).getS0();
-        // the dimensionless epsilon has similar effects as the braking
-        // probability of the Nagel-S CA
-        // default value 0.4 (PRE) or 1 (EPJB)
         this.epsilon = ((AccelerationModelInputDataKrauss) parameters).getEpsilon();
     }
 
@@ -219,7 +221,7 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
      */
     private double acc(double s, double v, double dv, double v0Local, double TLocal) {
         final double vp = v - dv;
-        /*
+        /**
          * safe speed; I checked that the complicated formula in PRE 55, 5601
          * (1997) is essentially my vSafe formula for the simple Gipps model.
          * The complicated formula considers effects of finite dt; this is
@@ -229,7 +231,7 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
          */
         final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.));
 
-        /*
+        /**
          * vUpper =upper limit of new speed (denoted v1 in PRE) corresponds to
          * vNew of the Gipps model
          */
@@ -240,14 +242,12 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
         // three additional code lines!
         // ===============================================
 
-        /*
+        /**
          * vLower =lower limit of new speed (denoted v0 in PRE) some
          * modifications due to dimensional units were applied. Notice that
          * vLower may be > vUpper in some cut-in situations: these
          * inconsistencies were not recognized/treated in the PRE publication
          */
-        // System.out.println("ooo:  "+ Math.max(0, (v - b * TLocal)));
-
         double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
         final double r = Math.random(); // should be an instance of a
                                         // uniform(0,1) distributed pseudorandom
@@ -255,12 +255,6 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
         final double vNew = vLower + r * (vUpper - vLower);
         // ===============================================
         final double aWanted = (vNew - v) / TLocal;
-        // System.out.println();
-        // System.out.println("r: "+r);
-        // System.out.println("v: "+ v);
-        // System.out.println("Vupper: " + vUpper);
-        // System.out.println("vLower: "+vLower);
-        // System.out.println("VNew: "+ vNew);
 
         return aWanted;
     }
