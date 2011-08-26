@@ -1,3 +1,29 @@
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
+ * ----------------------------------------------------------------------
+ * 
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *
+ *  MovSim is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  MovSim is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
+ *  
+ * ----------------------------------------------------------------------
+ */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
@@ -14,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class Krauss.
+ * @author Martin Treiber, Ralph Germ
  */
 public class Krauss extends LongitudinalModel implements AccelerationModel {
 
@@ -219,8 +246,8 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
          * vLower may be > vUpper in some cut-in situations: these
          * inconsistencies were not recognized/treated in the PRE publication
          */
-//        System.out.println("ooo:  "+ Math.max(0, (v - b * TLocal)));
-        
+        // System.out.println("ooo:  "+ Math.max(0, (v - b * TLocal)));
+
         double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
         final double r = Math.random(); // should be an instance of a
                                         // uniform(0,1) distributed pseudorandom
@@ -228,13 +255,13 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
         final double vNew = vLower + r * (vUpper - vLower);
         // ===============================================
         final double aWanted = (vNew - v) / TLocal;
-//        System.out.println();
-//        System.out.println("r: "+r);
-//        System.out.println("v: "+ v);
-//        System.out.println("Vupper: " + vUpper);
-//        System.out.println("vLower: "+vLower);
-//        System.out.println("VNew: "+ vNew);
-        
+        // System.out.println();
+        // System.out.println("r: "+r);
+        // System.out.println("v: "+ v);
+        // System.out.println("Vupper: " + vUpper);
+        // System.out.println("vLower: "+vLower);
+        // System.out.println("VNew: "+ vNew);
+
         return aWanted;
     }
 
