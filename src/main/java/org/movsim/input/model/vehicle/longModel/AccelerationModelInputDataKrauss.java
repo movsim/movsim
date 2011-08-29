@@ -30,7 +30,7 @@ package org.movsim.input.model.vehicle.longModel;
  * @author ralph
  * 
  */
-public interface AccelerationModelInputDataKrauss extends AccelerationModelInputData, AccelerationModelInputDataGipps {
+public interface AccelerationModelInputDataKrauss extends AccelerationModelInputDataGipps {
 
     double getEpsilon();
 
