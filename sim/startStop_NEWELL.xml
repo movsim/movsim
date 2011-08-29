@@ -3,9 +3,9 @@
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO>
     <VEHICLES>
-        <VEHICLE label="NEWELL1" length="8" b_max="20">
+        <VEHICLE label="NEWELL1" length="8" b_max="100000000">
             <LONGITUDINAL_MODEL>
-                <NEWELL v0="15" s0="10" dt="1.0" />
+                <NEWELL v0="15" s0="2" dt="1.0" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>

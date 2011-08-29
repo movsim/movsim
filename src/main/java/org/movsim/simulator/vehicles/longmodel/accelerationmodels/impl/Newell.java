@@ -128,10 +128,10 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
         
         double aWanted = (vNew - v) / dtLocal;
         
-        // workaround to avoid crash does work because of update function
-        // if (s/v < dt) {
-        // aWanted = -10000000;
-        // }
+        // workaround to avoid crash
+         if (s/v < dt) {
+         aWanted = -10000000;
+         }
         
         return aWanted;
     }
