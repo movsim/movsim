@@ -81,6 +81,17 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     @Override
     protected void checkParameters() {
         // TODO Auto-generated method stub
+        if (v0 < 0 || s0 < 0 || dt < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName());
+            System.exit(-1);
+        }
+
+        if (dt == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName());
+            System.exit(-1);
+        }
 
     }
 
