@@ -51,8 +51,8 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The time. */
     private double time;
 
-    /** The itime. */
-    private int itime;
+    /** The iterationCount. */
+    private int iterationCount;
 
     /** The timestep. */
     private double timestep;
@@ -82,7 +82,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void restart() {
         time = 0;
-        itime = 0;
+        iterationCount = 0;
         roadSection = new RoadSectionImpl(inputData);
 
         // model requires specific update time depending on its category !!
@@ -96,6 +96,10 @@ public class SimulatorImpl implements Simulator, Runnable {
         simOutput = new SimOutput(inputData, roadSection);
     }
 
+    public RoadSection getRoadSection() {
+        return roadSection;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -105,11 +109,11 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void run() {
         logger.info("Simulator.run: start simulation at {} seconds", time);
 
-        simOutput.update(itime, time, timestep);
+        simOutput.update(iterationCount, time, timestep);
 
         while (!stopThisRun(time)) {
             time += timestep;
-            itime++;
+            iterationCount++;
             update();
         }
 
@@ -134,11 +138,11 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void update() {
-        if (itime % 100 == 0) {
+        if (iterationCount % 100 == 0) {
             logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
         }
-        roadSection.update(itime, time);
-        simOutput.update(itime, time, timestep);
+        roadSection.update(iterationCount, time);
+        simOutput.update(iterationCount, time, timestep);
     }
 
     /*
@@ -147,8 +151,8 @@ public class SimulatorImpl implements Simulator, Runnable {
      * @see org.movsim.simulator.Simulator#iTime()
      */
     @Override
-    public int iTime() {
-        return itime;
+    public int iterationCount() {
+        return iterationCount;
     }
 
     /*

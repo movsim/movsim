@@ -35,12 +35,11 @@ public interface Onramp {
     /**
      * Update.
      * 
-     * @param itime
-     *            the itime
+     * @param itimeiterationCount
      * @param dt
      *            the dt
      * @param time
      *            the time
      */
-    void update(int itime, double dt, double time);
+    void update(int iterationCount, double dt, double time);
 }

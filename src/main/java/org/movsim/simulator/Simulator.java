@@ -28,6 +28,7 @@ package org.movsim.simulator;
 
 import org.movsim.input.InputData;
 import org.movsim.output.SimObservables;
+import org.movsim.simulator.roadSection.RoadSection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -36,11 +37,11 @@ import org.movsim.output.SimObservables;
 public interface Simulator {
 
     /**
-     * I time.
+     * The total number of updates.
      * 
      * @return the int
      */
-    int iTime();
+    int iterationCount();
 
     /**
      * Time.
@@ -52,7 +53,7 @@ public interface Simulator {
     /**
      * Timestep.
      * 
-     * @return the double
+     * @return the double which represents the timestep of the next update.
      */
     double timestep();
 
@@ -62,7 +63,7 @@ public interface Simulator {
     void run();
 
     /**
-     * Update.
+     * Calls the update for the Roadsection and SimulationOutput
      */
     void update();
 
@@ -72,22 +73,23 @@ public interface Simulator {
     void restart();
 
     /**
-     * Gets the sim input.
+     * Gets the sim input. All simulation input data.
      * 
      * @return the sim input
      */
     InputData getSimInput();
 
     /**
-     * Gets the sim observables.
+     * Gets the sim observables. Floating cars, Virtual Detectors, SpatioTemporal. 
      * 
      * @return the sim observables
      */
     SimObservables getSimObservables();
 
     /**
-     * Initialize.
+     * Initializes from xml. Calls restart.
      */
     void initialize();
-
+    
+    RoadSection getRoadSection();
 }

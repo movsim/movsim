@@ -199,26 +199,26 @@ public class RoadSectionImpl implements RoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#update(int, double)
      */
     @Override
-    public void update(int iTime, double time) {
+    public void update(int iterationCount, double time) {
 
         // check for crashes
-        checkForInconsistencies(iTime, time);
+        checkForInconsistencies(iterationCount, time);
 
-        updateRoadConditions(iTime, time);
+        updateRoadConditions(iterationCount, time);
 
         // vehicle accelerations
-        accelerate(iTime, dt, time);
+        accelerate(iterationCount, dt, time);
 
         // vehicle pos/speed
-        updatePositionAndSpeed(iTime, dt, time);
+        updatePositionAndSpeed(iterationCount, dt, time);
 
         updateDownstreamBoundary();
 
-        updateUpstreamBoundary(iTime, dt, time);
+        updateUpstreamBoundary(iterationCount, dt, time);
 
-        updateOnramps(iTime, dt, time);
+        updateOnramps(iterationCount, dt, time);
 
-        detectors.update(iTime, time, dt, vehContainer);
+        detectors.update(iterationCount, time, dt, vehContainer);
 
     }
 
@@ -298,26 +298,24 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Update upstream boundary.
      * 
-     * @param itime
-     *            the itime
+     * @param iterationCount
      * @param dt
      *            the dt
      * @param time
      *            the time
      */
-    private void updateUpstreamBoundary(int itime, double dt, double time) {
-        upstreamBoundary.update(itime, dt, time);
+    private void updateUpstreamBoundary(int iterationCount, double dt, double time) {
+        upstreamBoundary.update(iterationCount, dt, time);
     }
 
     /**
      * Check for inconsistencies.
      * 
-     * @param iTime
-     *            the i time
+     * @param iterationCount
      * @param time
      *            the time
      */
-    private void checkForInconsistencies(int iTime, double time) {
+    private void checkForInconsistencies(int iterationCount, double time) {
         // crash test
         final List<Vehicle> vehicles = vehContainer.getVehicles();
         for (int i = 0, N = vehicles.size(); i < N; i++) {
@@ -353,14 +351,14 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Accelerate.
      * 
-     * @param iTime
+     * @param iterationCount
      *            the i time
      * @param dt
      *            the dt
      * @param time
      *            the time
      */
-    private void accelerate(int iTime, double dt, double time) {
+    private void accelerate(int iterationCount, double dt, double time) {
         final List<Vehicle> vehicles = vehContainer.getVehicles();
         for (int i = 0; i < vehicles.size(); i++) {
             final Vehicle veh = vehicles.get(i);
@@ -376,14 +374,13 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Update position and speed.
      * 
-     * @param iTime
-     *            the i time
+     * @param iterationCount
      * @param dt
      *            the dt
      * @param time
      *            the time
      */
-    private void updatePositionAndSpeed(int iTime, double dt, double time) {
+    private void updatePositionAndSpeed(int iterationCount, double dt, double time) {
         for (final Vehicle veh : vehContainer.getVehicles()) {
             veh.updatePostionAndSpeed(dt);
         }
@@ -393,14 +390,13 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Update road conditions.
      * 
-     * @param iTime
-     *            the i time
+     * @param iterationCount
      * @param time
      *            the time
      */
-    private void updateRoadConditions(int iTime, double time) {
+    private void updateRoadConditions(int iterationCount, double time) {
 
-        trafficLights.update(iTime, time, vehContainer.getVehicles());
+        trafficLights.update(iterationCount, time, vehContainer.getVehicles());
 
         updateSpeedLimits(vehContainer.getVehicles());
     }
@@ -423,18 +419,17 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Update onramps.
      * 
-     * @param itime
-     *            the itime
+     * @param iterationCount
      * @param dt
      *            the dt
      * @param time
      *            the time
      */
-    private void updateOnramps(int itime, double dt, double time) {
+    private void updateOnramps(int iterationCount, double dt, double time) {
         if (simpleOnramps.isEmpty())
             return;
         for (final Onramp onramp : simpleOnramps) {
-            onramp.update(itime, dt, time);
+            onramp.update(iterationCount, dt, time);
         }
     }
 

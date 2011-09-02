@@ -61,12 +61,12 @@ public interface RoadSection {
     /**
      * Update.
      * 
-     * @param itime
-     *            the itime
+     * @param iterationCount
+     *            the number of updates
      * @param time
-     *            the time
+     *            the simulation time
      */
-    void update(int itime, double time);
+    void update(int iterationCount, double time);
 
     /**
      * Veh container.

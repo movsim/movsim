@@ -69,16 +69,16 @@ public class FileTrafficLightRecorder {
     /**
      * Update.
      * 
-     * @param itime
+     * @param iterationCount
      *            the itime
      * @param time
      *            the time
      * @param trafficLights
      *            the traffic lights
      */
-    public void update(int itime, double time, List<TrafficLight> trafficLights) {
+    public void update(int iterationCount, double time, List<TrafficLight> trafficLights) {
 
-        if (itime % nDt != 0)
+        if (iterationCount % nDt != 0)
             // no update; nothing to do
             return;
 

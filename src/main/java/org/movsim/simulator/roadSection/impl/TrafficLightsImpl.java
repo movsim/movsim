@@ -70,14 +70,14 @@ public class TrafficLightsImpl implements TrafficLights {
     /**
      * Update.
      * 
-     * @param itime
+     * @param iterationCount
      *            the itime
      * @param time
      *            the time
      * @param vehicles
      *            the vehicles
      */
-    public void update(int itime, double time, List<Vehicle> vehicles) {
+    public void update(int iterationCount, double time, List<Vehicle> vehicles) {
 
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
@@ -93,7 +93,7 @@ public class TrafficLightsImpl implements TrafficLights {
         }
 
         if (fileTrafficLightRecorder != null) {
-            fileTrafficLightRecorder.update(itime, time, trafficLights);
+            fileTrafficLightRecorder.update(iterationCount, time, trafficLights);
         }
     }
 
