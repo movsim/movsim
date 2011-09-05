@@ -33,9 +33,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
 // TODO: Auto-generated Javadoc
 // TODO: concept of real onramp with lane changes not yet implemented
@@ -58,6 +60,8 @@ public class RampDataImpl implements RampData {
 
     /** The with logging. */
     private final boolean withLogging;
+    
+    private final UpstreamBoundaryData upstreamData;
 
     /**
      * Instantiates a new ramp data impl.
@@ -72,8 +76,11 @@ public class RampDataImpl implements RampData {
         this.roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
-        final List<Element> inflowElems = elem.getChildren("INFLOW");
-        parseAndSortInflowElements(inflowElems);
+        final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
+        upstreamData = new UpstreamBoundaryDataImpl(upInflowElem);
+        
+        //final List<Element> inflowElems = elem.getChildren("INFLOW");
+       //parseAndSortInflowElements(inflowElems);
 
     }
 
@@ -83,21 +90,21 @@ public class RampDataImpl implements RampData {
      * @param inflowElems
      *            the inflow elems
      */
-    private void parseAndSortInflowElements(List<Element> inflowElems) {
-        inflowTimeSeries = new ArrayList<InflowDataPoint>();
-        for (final Element inflowElem : inflowElems) {
-            final Map<String, String> map = XmlUtils.putAttributesInHash(inflowElem);
-            inflowTimeSeries.add(new InflowDataPointImpl(map));
-        }
-        Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
-            @Override
-            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
-                final Double pos1 = new Double((o1).getTime());
-                final Double pos2 = new Double((o2).getTime());
-                return pos1.compareTo(pos2); // sort with increasing t
-            }
-        });
-    }
+//    private void parseAndSortInflowElements(List<Element> inflowElems) {
+//        inflowTimeSeries = new ArrayList<InflowDataPoint>();
+//        for (final Element inflowElem : inflowElems) {
+//            final Map<String, String> map = XmlUtils.putAttributesInHash(inflowElem);
+//            inflowTimeSeries.add(new InflowDataPointImpl(map));
+//        }
+//        Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
+//            @Override
+//            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
+//                final Double pos1 = new Double((o1).getTime());
+//                final Double pos2 = new Double((o2).getTime());
+//                return pos1.compareTo(pos2); // sort with increasing t
+//            }
+//        });
+//    }
 
     /*
      * (non-Javadoc)
@@ -105,10 +112,10 @@ public class RampDataImpl implements RampData {
      * @see
      * org.movsim.input.model.simulation.impl.RampData#getInflowTimeSeries()
      */
-    @Override
-    public List<InflowDataPoint> getInflowTimeSeries() {
-        return inflowTimeSeries;
-    }
+//    @Override
+//    public List<InflowDataPoint> getInflowTimeSeries() {
+//        return upstreamData.getInflowTimeSeries();
+//    }
 
     /*
      * (non-Javadoc)
@@ -148,6 +155,11 @@ public class RampDataImpl implements RampData {
     @Override
     public boolean withLogging() {
         return withLogging;
+    }
+
+    @Override
+    public UpstreamBoundaryData getUpstreamBoundaryData() {
+        return upstreamData;
     }
 
 }

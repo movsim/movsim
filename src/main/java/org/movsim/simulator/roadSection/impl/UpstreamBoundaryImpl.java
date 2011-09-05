@@ -49,7 +49,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
-            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
+            + "     t[s], lane,  xEnter[m],    v[km/h],   total qBC[1/h],    count,      queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
 
     /** The Constant logger. */
@@ -118,6 +118,13 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         return (iLane==vehContainers.size()-1 ? 0 : iLane+1);
     }
     
+    
+    public double getTotalInflow(double time){
+        // inflow over all lanes
+        final double qBC = inflowTimeSeries.getFlowPerLane(time);
+        final int nLanes = vehContainers.size();
+        return nLanes * qBC;
+    }
     /*
      * (non-Javadoc)
      * 
@@ -127,10 +134,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     @Override
     public void update(int itime, double dt, double time) {
         // integrate inflow demand
-
-        final int nLanes = vehContainers.size();
-        final double qBC = inflowTimeSeries.getFlowPerLane(time);
-        nWait += qBC * dt * nLanes;  // flow *per* lane assumed
+        final double totalInflow = getTotalInflow(time);
+        nWait +=  totalInflow * dt;  
         if (nWait >= 1) {
             // try to insert new vehicle at inflow 
             // iterate periodically over n lanes  
@@ -139,11 +144,11 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
                 iLane = getNewLaneIndex(iLane);
                 final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 // lane index is identical to vehicle's lane number 
-                final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, iLane, time, qBC);
+                final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, iLane, time, totalInflow);
                 if (isEntered) {
                     nWait--;
                     if (fstrLogging != null) {
-                        fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * qBC,
+                        fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * totalInflow,
                                 enteringVehCounter, nWait);
                         fstrLogging.flush();
                     }
@@ -250,8 +255,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         addVehicle(vehContainer, lane, vehPrototype, xEnter, vEnter);
 //        logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",
 //         xEnter, vEnter);
-        System.out.printf("add vehicle from upstream boundary: xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
-          xLast, vLast, xEnter, vEnter, lane, rhoEnter, vMaxEq, vMaxKin );
+//        System.out.printf("add vehicle from upstream boundary: xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
+//          xLast, vLast, xEnter, vEnter, lane, rhoEnter, vMaxEq, vMaxKin );
     }
 
     

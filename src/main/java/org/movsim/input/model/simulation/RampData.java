@@ -34,12 +34,15 @@ import java.util.List;
  */
 public interface RampData {
 
-    /**
-     * Gets the inflow time series.
-     * 
-     * @return the inflow time series
-     */
-    List<InflowDataPoint> getInflowTimeSeries();
+//    /**
+//     * Gets the inflow time series.
+//     * 
+//     * @return the inflow time series
+//     */
+//    List<InflowDataPoint> getInflowTimeSeries();
+    
+    
+    UpstreamBoundaryData getUpstreamBoundaryData();
 
     /**
      * Gets the center position.

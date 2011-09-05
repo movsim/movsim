@@ -35,6 +35,7 @@ import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
+import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.impl.LoopDetectors;
@@ -82,7 +83,7 @@ public class RoadSectionImpl implements RoadSection {
     private boolean instantaneousFileOutput;
 
     
-    /** The veh container. */
+    /** The veh container list (for each lane). */
     private List<VehicleContainer> vehContainers;
 
     /** The veh generator. */
@@ -276,13 +277,25 @@ public class RoadSectionImpl implements RoadSection {
      *            the input data
      */
     private void initOnramps(InputData inputData) {
+        
         simpleOnramps = new ArrayList<Onramp>();
-        final List<SimpleRampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getSimpleRamps();
+        
         final String projectName = inputData.getProjectMetaData().getProjectName();
+        
+        // add simple onramps (with dropping mechanism)
+        final List<SimpleRampData> simpleOnrampData = inputData.getSimulationInput().getSingleRoadInput().getSimpleRamps();
         int rampIndex = 1;
-        for (final SimpleRampData onrmp : onrampData) {
+        for (final SimpleRampData onrmp : simpleOnrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
             simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
+            rampIndex++;
+        }
+        
+        // and simply add the new onramp with lane-changing decision and true merging 
+        final List<RampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getRamps();
+        for (final RampData onrmp : onrampData) {
+            // merging from onramp only to most-right lane (shoulder lane)
+            simpleOnramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
             rampIndex++;
         }
     }

@@ -276,7 +276,7 @@ logging  (true|false)  "false"
 
 
 <!-- real physical ramp with merging area (length) and total length of x_max --> 
-<!ELEMENT RAMP (INFLOW*)>
+<!ELEMENT RAMP (TRAFFIC_SOURCE)>
 <!ATTLIST RAMP
 x       NMTOKEN #REQUIRED
 length         NMTOKEN "300"

@@ -27,30 +27,36 @@
 package org.movsim.simulator.roadSection.impl;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.Onramp;
+import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class OnrampImpl.
  */
-public class OnrampImpl implements Onramp {
+public class OnrampMobilImpl implements Onramp {
 
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
     private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE; 
 
+    
+    
+    
     
     
     private static final String extensionFormat = ".S%d_log.csv";
@@ -66,6 +72,19 @@ public class OnrampImpl implements Onramp {
 
     /** The Constant RAMP_VEL_REDUCEFACTOR. */
     final static double RAMP_VEL_REDUCEFACTOR = 0.6;
+    
+    
+    final static int N_LANES = 1;
+    
+    /** The veh container list (for each lane). */
+    private List<VehicleContainer> vehContainers;
+
+    
+    /** The upstream boundary. */
+    private UpstreamBoundary upstreamBoundary;
+    
+    
+    
 
     /** The veh generator. */
     private final VehicleGenerator vehGenerator;
@@ -74,7 +93,7 @@ public class OnrampImpl implements Onramp {
     private final VehicleContainer mainVehContainer;
 
     /** The inflow time series. */
-    private final InflowTimeSeries inflowTimeSeries;
+   // private final InflowTimeSeries inflowTimeSeries;
 
     /** The vehicle queue. */
     private final LinkedList<Vehicle> vehicleQueue;
@@ -122,13 +141,24 @@ public class OnrampImpl implements Onramp {
      * @param rampIndex
      *            the ramp index
      */
-    public OnrampImpl(SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
+    public OnrampMobilImpl(RampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
             String projectName, int rampIndex) {
 
         this.vehGenerator = vehGenerator;
         vehicleQueue = new LinkedList<Vehicle>();
-        this.mainVehContainer = mainVehContainer;  // container of mainroad's most-right lane 
+        this.mainVehContainer = mainVehContainer;  // container of mainroad's most-right lane
+        
+        
+        // create vehicle container for onramp lane
+        vehContainers = new ArrayList<VehicleContainer>();
+        for(int iLane = 0; iLane < N_LANES; iLane++){
+            vehContainers.add(new VehicleContainerImpl());
+        }
+        
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, rampData.getUpstreamBoundaryData(),
+                projectName);
 
+        
         mergeCount = 0;
         if (rampData.withLogging()) {
             final int roadCount = 1; // assuming only one road in the scenario
@@ -140,7 +170,7 @@ public class OnrampImpl implements Onramp {
         }
 
         nWait = 0;
-        inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
+        //inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
 
         this.length = rampData.getRampLength();
         this.xCenter = rampData.getRampStartPosition() + 0.5 * length;
@@ -155,35 +185,33 @@ public class OnrampImpl implements Onramp {
      * @see org.movsim.simulator.roadSection.Onramp#update(int, double, double)
      */
     @Override
-    public void update(int itime, double dt, double time) {
+    public void update(int iterationCount, double dt, double time) {
 
-        final double qBC = inflowTimeSeries.getFlowPerLane(time);
-        nWait += qBC * dt;
+//
+//        // check for crashes
+//        checkForInconsistencies(iterationCount, time);
+//
+//        //updateRoadConditions(iterationCount, time);
+//
+//        // vehicle accelerations
+//        accelerate(iterationCount, dt, time);
+//
+//        // vehicle pos/speed
+//        updatePositionAndSpeed(iterationCount, dt, time);
+//
+//        updateDownstreamBoundary();
+//
+//        updateUpstreamBoundary(iterationCount, dt, time);
 
-        if (nWait >= 1) {
-            // add vehicle that wants to enter to queue
-            vehicleQueue.add(vehGenerator.createVehicle());
-            nWait--;
-            logger.debug("add vehicle to queue: onramp nWait = {}, queue.size() = {}.", nWait, vehicleQueue.size());
-        }
-
-        // tryMerge calculates position and index for the lane change
-        // actual veh. length not dyn. relevant for this simulation -> lvehTest
-
-        if (vehicleQueue.size() >= 1) {
-            
-            final boolean isMerging = tryMerge(vehicleQueue.getFirst(), mainVehContainer);
-            
-            
-            if (isMerging) {
-                vehicleQueue.removeFirst();
-                if (fstrLogging != null) {
-                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
-                            3600 * qBC, mergeCount, vehicleQueue.size());
-                    fstrLogging.flush();
-                }
-            }
-        }
+        //detectors.update(iterationCount, time, dt, vehContainers);
+        
+                
+//                if (fstrLogging != null) {
+//                    final double qBC  = upstreamBoundary.getTotalInflow(time);
+//                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
+//                            3600 * qBC, mergeCount, vehicleQueue.size());
+//                    fstrLogging.flush();
+//                }
 
     }
 
