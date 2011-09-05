@@ -122,9 +122,9 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront);
+        final double dv = me.getRelSpeed(vehFront);
 
         final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
 
@@ -132,7 +132,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
 
         final double Tloc = alphaT * T;
         // consider external speedlimit
-        final double v0Loc = Math.min(alphaV0 * v0, me.speedlimit());
+        final double v0Loc = Math.min(alphaV0 * v0, me.getSpeedlimit());
         final double aLoc = alphaA * a;
 
         return acc(s, v, dv, aLead, Tloc, v0Loc, aLoc);

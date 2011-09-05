@@ -97,12 +97,12 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
         
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
 
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
 
         final double tLocal = alphaT * dt;
         

@@ -134,9 +134,9 @@ public class KKW extends LongitudinalModel implements AccelerationModel {
     public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront);
+        final double dv = me.getRelSpeed(vehFront);
         return accSimple(s, v, dv, alphaT, alphaV0);
     }
 

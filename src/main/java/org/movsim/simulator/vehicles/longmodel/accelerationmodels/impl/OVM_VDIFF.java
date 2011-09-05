@@ -120,14 +120,14 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
 
         // Local dynamic variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront); // only needed for VDIFF
+        final double dv = me.getRelSpeed(vehFront); // only needed for VDIFF
 
         // speed limit --> OVM causes accidents due to immediate braking
         // reaction
         // consider external speedlimit
-        final double v0loc = Math.min(alphaV0 * v0, me.speedlimit());
+        final double v0loc = Math.min(alphaV0 * v0, me.getSpeedlimit());
         // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
         return acc(s, v, dv, alphaT, v0loc);
     }

@@ -183,7 +183,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         }
         // (2) check if gap to leader is sufficiently large
         // origin of road section is assumed to be zero
-        final double netGapToLeader = leader.getPosition() - leader.length();
+        final double netGapToLeader = leader.getPosition() - leader.getLength();
         double gapAtQMax = 1. / vehPrototype.getRhoQMax();
         if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
             final double tau = 1;
@@ -234,14 +234,14 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      *            the leader
      */
     private void enterVehicle(double time, double sFreeMin, VehiclePrototype vehPrototype, Vehicle leader) {
-        final double sFree = leader.getPosition() - leader.length();
+        final double sFree = leader.getPosition() - leader.getLength();
         final double xLast = leader.getPosition();
         final double vLast = leader.getSpeed();
         final double aLast = leader.getAcc();
 
         final double speedDefault = inflowTimeSeries.getSpeed(time);
         final double vEnterTest = Math.min(speedDefault, 1.5 * vLast);
-        final double lengthLast = leader.length();
+        final double lengthLast = leader.getLength();
 
         final double qBC = inflowTimeSeries.getFlow(time);
         final double xEnter = Math.min(vEnterTest * nWait / Math.max(qBC, 0.001), xLast - sFreeMin - lengthLast);

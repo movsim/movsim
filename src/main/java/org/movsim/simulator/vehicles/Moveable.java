@@ -21,7 +21,7 @@ public interface Moveable {
      * 
      * @return the double
      */
-    double length();
+    double getLength();
 
     /**
      * Gets the position of the floating car.
@@ -49,7 +49,7 @@ public interface Moveable {
      * 
      * @return the double
      */
-    double oldPosition();
+    double getOldPosition();
 
     /**
      * Checks for reaction time.
@@ -91,14 +91,14 @@ public interface Moveable {
      * 
      * @return the double
      */
-    double speedlimit();
+    double getSpeedlimit();
 
     /**
      * Id.
      * 
      * @return the int
      */
-    int id();
+    int getId();
 
     /**
      * Gets the veh number.
@@ -128,7 +128,7 @@ public interface Moveable {
      *            the veh front
      * @return the double
      */
-    double netDistance(Moveable vehFront);
+    double getNetDistance(Moveable vehFront);
 
     /**
      * Rel speed.
@@ -137,13 +137,13 @@ public interface Moveable {
      *            the veh front
      * @return the double
      */
-    double relSpeed(Moveable vehFront);
+    double getRelSpeed(Moveable vehFront);
 
     /**
      * Distance to trafficlight.
      * 
      * @return the double
      */
-    double distanceToTrafficlight();
+    double getDistanceToTrafficlight();
 
 }

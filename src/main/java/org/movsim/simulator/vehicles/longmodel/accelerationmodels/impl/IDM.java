@@ -170,15 +170,15 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront);
+        final double dv = me.getRelSpeed(vehFront);
 
         // space dependencies modeled by speedlimits, alpha's
 
         final double TLocal = alphaT * T;
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
         final double aLocal = alphaA * a;
 
         return acc(s, v, dv, TLocal, v0Local, aLocal);

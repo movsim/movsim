@@ -168,7 +168,7 @@ public class RoadSectionImpl implements RoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#roadLength()
      */
     @Override
-    public double roadLength() {
+    public double getRoadLength() {
         return roadLength;
     }
 
@@ -179,7 +179,7 @@ public class RoadSectionImpl implements RoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#id()
      */
     @Override
-    public long id() {
+    public long getId() {
         return id;
     }
 
@@ -189,7 +189,7 @@ public class RoadSectionImpl implements RoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#vehContainer()
      */
     @Override
-    public VehicleContainer vehContainer() {
+    public VehicleContainer getVehContainer() {
         return vehContainer;
     }
 
@@ -321,7 +321,7 @@ public class RoadSectionImpl implements RoadSection {
         for (int i = 0, N = vehicles.size(); i < N; i++) {
             final Moveable egoVeh = vehicles.get(i);
             final Moveable vehFront = vehContainer.getLeader(egoVeh);
-            final double netDistance = egoVeh.netDistance(vehFront);
+            final double netDistance = egoVeh.getNetDistance(vehFront);
             if (netDistance < 0) {
                 logger.error("#########################################################");
                 logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
@@ -335,7 +335,7 @@ public class RoadSectionImpl implements RoadSection {
                     final Moveable veh = vehicles.get(j);
                     msg.append(String.format(
                             "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
-                            veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.length(), veh.getLane(), veh.id()));
+                            veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
                 }
                 logger.error(msg.toString());
                 if (instantaneousFileOutput) {
@@ -469,7 +469,7 @@ public class RoadSectionImpl implements RoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#nLanes()
      */
     @Override
-    public int nLanes() {
+    public int getNumberOfLanes() {
         return nLanes;
     }
 

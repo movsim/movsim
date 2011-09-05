@@ -132,12 +132,12 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
         // brute force search:
 
         for (final Vehicle veh : vehicleContainer.getVehicles()) {
-            if ((veh.oldPosition() < detPosition) && (veh.getPosition() >= detPosition)) {
+            if ((veh.getOldPosition() < detPosition) && (veh.getPosition() >= detPosition)) {
                 // new vehicle crossed detector
                 vehCount++;
                 final double speedVeh = veh.getSpeed();
                 vSum += speedVeh;
-                occTime += veh.length() / speedVeh;
+                occTime += veh.getLength() / speedVeh;
                 sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
                 // calculate brut timegap not from local detector data:
                 final Moveable vehFront = vehicleContainer.getLeader(veh);

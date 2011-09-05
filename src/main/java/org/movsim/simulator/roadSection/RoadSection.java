@@ -42,21 +42,21 @@ public interface RoadSection {
      * 
      * @return the double
      */
-    double roadLength();
+    double getRoadLength();
 
     /**
      * N lanes.
      * 
      * @return the int
      */
-    int nLanes();
+    int getNumberOfLanes();
 
     /**
      * Id.
      * 
      * @return the long
      */
-    long id();
+    long getId();
 
     /**
      * Update.
@@ -73,7 +73,7 @@ public interface RoadSection {
      * 
      * @return the vehicle container
      */
-    VehicleContainer vehContainer();
+    VehicleContainer getVehContainer();
 
     /**
      * Gets the timestep.

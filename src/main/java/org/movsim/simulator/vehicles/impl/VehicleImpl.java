@@ -182,7 +182,7 @@ public class VehicleImpl implements Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#length()
      */
     @Override
-    public double length() {
+    public double getLength() {
         return length;
     }
 
@@ -222,7 +222,7 @@ public class VehicleImpl implements Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#oldPosition()
      */
     @Override
-    public double oldPosition() {
+    public double getOldPosition() {
         return oldPosition;
     }
 
@@ -262,7 +262,7 @@ public class VehicleImpl implements Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#speedlimit()
      */
     @Override
-    public double speedlimit() {
+    public double getSpeedlimit() {
         return speedlimit;
     }
 
@@ -303,7 +303,7 @@ public class VehicleImpl implements Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#distanceToTrafficlight()
      */
     @Override
-    public double distanceToTrafficlight() {
+    public double getDistanceToTrafficlight() {
         return trafficLightApproaching.getDistanceToTrafficlight();
     }
 
@@ -313,7 +313,7 @@ public class VehicleImpl implements Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#id()
      */
     @Override
-    public int id() {
+    public int getId() {
         return id;
     }
 
@@ -355,10 +355,10 @@ public class VehicleImpl implements Vehicle {
      * .vehicles.Vehicle)
      */
     @Override
-    public double netDistance(Moveable vehFront) {
+    public double getNetDistance(Moveable vehFront) {
         if (vehFront == null)
             return Constants.GAP_INFINITY;
-        return (vehFront.getPosition() - position - 0.5 * (length() + vehFront.length()));
+        return (vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength()));
     }
 
     /*
@@ -369,7 +369,7 @@ public class VehicleImpl implements Vehicle {
      * .Vehicle)
      */
     @Override
-    public double relSpeed(Moveable vehFront) {
+    public double getRelSpeed(Moveable vehFront) {
         if (vehFront == null)
             return 0;
         return (speed - vehFront.getSpeed());
@@ -390,7 +390,7 @@ public class VehicleImpl implements Vehicle {
             noise.update(dt);
             accError = noise.getAccError();
             final Moveable vehFront = vehContainer.getLeader(this);
-            if (netDistance(vehFront) < 2.0) {
+            if (getNetDistance(vehFront) < 2.0) {
                 accError = Math.min(accError, 0.); // !!!
             }
             // logger.debug("accError = {}", accError);

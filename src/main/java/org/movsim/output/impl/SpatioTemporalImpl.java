@@ -78,7 +78,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         dtOut = input.getDt();
         dxOut = input.getDx();
 
-        roadlength = roadSection.roadLength();
+        roadlength = roadSection.getRoadLength();
 
         initialize();
 
@@ -108,7 +108,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
     public void update(int it, double time, RoadSection roadSection) {
         if ((time - timeOffset) >= dtOut) {
             timeOffset = time;
-            calcData(time, roadSection.vehContainer());
+            calcData(time, roadSection.getVehContainer());
             notifyObservers(time);
         }
     }
@@ -137,7 +137,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         localDensity[0] = 0;
         for (int i = 1; i < size; i++) {
             final double dist = xMicro[i - 1] - xMicro[i];
-            final double length = vehicles.get(i - 1).length();
+            final double length = vehicles.get(i - 1).getLength();
             localDensity[i] = (dist > length) ? 1 / dist : 1 / length;
         }
 

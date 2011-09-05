@@ -342,10 +342,10 @@ public class OnrampImpl implements Onramp {
                 final Vehicle actualVeh = mainVehicles.get(i);
                 final double posFront = (i > 0) ? mainVehicles.get(i - 1).getPosition() : Double.MAX_VALUE; // abfrage
                 final double xEnterTest = Math.min(Math.max(xUp, 0.5 * (actualVeh.getPosition() + posFront)), xDown);
-                double netGap = xEnterTest - actualVeh.getPosition() - 0.5 * (actualVeh.length() + vehToEnter.length());
+                double netGap = xEnterTest - actualVeh.getPosition() - 0.5 * (actualVeh.getLength() + vehToEnter.getLength());
                 if (i == indexUp + 1) {
                     netGap = mainVehicles.get(i - 1).getPosition() - xEnterTest - 0.5
-                            * (mainVehicles.get(i - 1).length() + vehToEnter.length());
+                            * (mainVehicles.get(i - 1).getLength() + vehToEnter.getLength());
                 }
 
                 logger.debug("netGap = {}, xEnterTest = {}", netGap, xEnterTest);
@@ -362,7 +362,7 @@ public class OnrampImpl implements Onramp {
                 // compare directly. assume position at 0
                 final double posFront = mainVehicles.get(indexUp).getPosition();
                 final double xEnterTest = Math.min(Math.max(xUp, 0.5 * (0 + posFront)), xDown);
-                final double netGap = posFront - xEnterTest - vehToEnter.length();
+                final double netGap = posFront - xEnterTest - vehToEnter.getLength();
                 logger.debug("test gap for most upstream  without back veh: netGap = {}, xEnterTest = {}", netGap,
                         xEnterTest);
                 if (netGap > MINSPACE_MERGE_M && netGap > minGap) {

@@ -169,14 +169,14 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
 
         // space dependencies modeled by speedlimits, alpha's
 
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
 
         // #############################################################
         // space dependencies modelled by alpha_T

@@ -97,7 +97,7 @@ public class SimOutput implements SimObservables {
         final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
-            floatingCars = new FloatingCarsImpl(roadSection.vehContainer(), floatingCarInput);
+            floatingCars = new FloatingCarsImpl(roadSection.getVehContainer(), floatingCarInput);
             if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
             }
@@ -107,7 +107,7 @@ public class SimOutput implements SimObservables {
         if (spatioTemporalInput.isWithMacro()) {
             spatioTemporal = new SpatioTemporalImpl(spatioTemporalInput, roadSection);
             if (writeOutput) {
-                fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSection.id(), spatioTemporal);
+                fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSection.getId(), spatioTemporal);
             }
         }
 

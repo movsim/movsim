@@ -119,9 +119,9 @@ public class FileTrajectories {
      */
     private void createFileHandles() {
 
-        final String filenameMainroad = projectName + String.format(extensionFormat, roadSection.id());
-        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSection.id());
-        fileHandles.put(roadSection.id(), FileUtils.getWriter(filenameMainroad));
+        final String filenameMainroad = projectName + String.format(extensionFormat, roadSection.getId());
+        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSection.getId());
+        fileHandles.put(roadSection.getId(), FileUtils.getWriter(filenameMainroad));
 
         /*
          * // onramps int counter = 1; for(IOnRamp rmp : mainroad.onramps()){
@@ -178,7 +178,7 @@ public class FileTrajectories {
 
                 lastUpdateTime = time;
 
-                writeTrajectories(fileHandles.get(roadSection.id()), roadSection.vehContainer());
+                writeTrajectories(fileHandles.get(roadSection.getId()), roadSection.getVehContainer());
                 /*
                  * // onramps for(IOnRamp rmp : mainroad.onramps()){
                  * writeTrajectories(fileHandles.get(rmp.roadIndex()),
@@ -219,11 +219,11 @@ public class FileTrajectories {
      *            the me
      */
     private void writeCarData(PrintWriter fstr, int index, Moveable me) {
-        final Moveable frontVeh = roadSection.vehContainer().getLeader(me);
-        final double s = (frontVeh == null) ? 0 : me.netDistance(frontVeh);
-        final double dv = (frontVeh == null) ? 0 : me.relSpeed(frontVeh);
+        final Moveable frontVeh = roadSection.getVehContainer().getLeader(me);
+        final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
+        final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
         fstr.printf(outputFormat, time, me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s, dv,
-                me.getLabel(), me.id());
+                me.getLabel(), me.getId());
         fstr.flush();
     }
 

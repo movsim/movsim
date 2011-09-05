@@ -74,7 +74,7 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.length();
+        distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.getLength();
 
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = Constants.INVALID_GAP; // not relevant
