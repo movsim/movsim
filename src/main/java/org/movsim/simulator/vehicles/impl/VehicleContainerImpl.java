@@ -141,9 +141,6 @@ public class VehicleContainerImpl implements VehicleContainer {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.VehicleContainer#addFromRamp(org.movsim
-     * .simulator.vehicles.Vehicle, double, double, int)
      */
     @Override
     public void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit) {

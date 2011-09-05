@@ -47,6 +47,11 @@ import org.slf4j.LoggerFactory;
  */
 public class OnrampImpl implements Onramp {
 
+    /** The lane for entering the mainroad  
+     *  only MOST_RIGHT_LANE possible to enter*/
+    private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE; 
+
+    
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
@@ -97,9 +102,7 @@ public class OnrampImpl implements Onramp {
     /** The v enter last merge. */
     private double vEnterLastMerge;
 
-    /** The lane enter last merge. */
-    private int laneEnterLastMerge;
-
+    
     /** The merge count. */
     private int mergeCount;
 
@@ -122,7 +125,7 @@ public class OnrampImpl implements Onramp {
 
         this.vehGenerator = vehGenerator;
         vehicleQueue = new LinkedList<Vehicle>();
-        this.mainVehContainer = mainVehContainer;
+        this.mainVehContainer = mainVehContainer;  // container of mainroad's most-right lane 
 
         if (rampData.withLogging()) {
             mergeCount = 0;
@@ -170,7 +173,7 @@ public class OnrampImpl implements Onramp {
             if (isMerging) {
                 vehicleQueue.removeFirst();
                 if (fstrLogging != null) {
-                    fstrLogging.printf(outputFormat, time, laneEnterLastMerge, xEnterLastMerge, 3.6 * vEnterLastMerge,
+                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
                             3600 * qBC, mergeCount, vehicleQueue.size());
                     fstrLogging.flush();
                 }
@@ -191,13 +194,13 @@ public class OnrampImpl implements Onramp {
      * @param laneEnter
      *            the lane enter
      */
-    private void addVehicleFromRamp(Vehicle vehToEnter, double xEnter, double vEnter, int laneEnter) {
-        mainVehContainer.addFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
+    private void addVehicleFromRamp(Vehicle vehToEnter, double xEnter, double vEnter) {
+        mainVehContainer.addFromRamp(vehToEnter, xEnter, vEnter, LANE_TO_MERGE_ON_MAINROAD);
         // update status for last merge
         mergeCount++;
         xEnterLastMerge = xEnter;
         vEnterLastMerge = vEnter;
-        laneEnterLastMerge = laneEnter;
+        //LANE_TO_MERGE_ON_MAINROAD = laneEnter; 
     }
 
     /**
@@ -282,7 +285,7 @@ public class OnrampImpl implements Onramp {
             final double xEnter = xCenter;
             final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no
                                                                                        // leader
-            addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
+            addVehicleFromRamp(vehToEnter, xEnter, vEnter);
             return true;
         } else if (mainVehContainer.getMostDownstream().getPosition() <= xCenter) {
             // most downstream mainroad vehicle is upstream of onramp
@@ -292,7 +295,7 @@ public class OnrampImpl implements Onramp {
                                                                                        // leader
             logger.debug("most downstream veh is still upstream of ramp center. mainVeh.size() = {}. posMostDown = {}",
                     mainVehSize, mainVehDown.getPosition());
-            addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
+            addVehicleFromRamp(vehToEnter, xEnter, vEnter);
             return true;
         } else if (mainVehContainer.getMostUpstream().getPosition() >= xCenter) {
             // most upstream mainroad vehicle has already passed onramp
@@ -301,7 +304,7 @@ public class OnrampImpl implements Onramp {
             final double vEnter = speedToEnter(mainVehUp.getSpeed());
             logger.debug("most upstream veh is already downstream of ramp center. mainVeh.size() = {}, posMostUp = {}",
                     mainVehSize, mainVehUp.getPosition());
-            addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
+            addVehicleFromRamp(vehToEnter, xEnter, vEnter);
             return true;
         } else {
             logger.debug("okay, try merge mainVeh.size() = {}", mainVehSize);
@@ -325,7 +328,7 @@ public class OnrampImpl implements Onramp {
                 // enter in center
                 final double xEnter = xCenter;
                 final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter());
-                addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
+                addVehicleFromRamp(vehToEnter, xEnter, vEnter);
                 return true;
             }
 
@@ -374,7 +377,7 @@ public class OnrampImpl implements Onramp {
 
             if (xEnter > 0) {
                 logger.debug("enter from ramp. squeeze in at x = {} with speed = {}", xEnter, vEnter);
-                addVehicleFromRamp(vehToEnter, xEnter, vEnter, laneEnter);
+                addVehicleFromRamp(vehToEnter, xEnter, vEnter);
                 return true;
             }
         }
