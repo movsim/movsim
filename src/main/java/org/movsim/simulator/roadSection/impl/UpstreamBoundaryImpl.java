@@ -63,9 +63,6 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
 
-    /** The fstr logging. */
-    private PrintWriter fstrLogging;
-
     /** The entering veh counter. */
     private int enteringVehCounter;
 
@@ -97,7 +94,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         this.vehGenerator = vehGenerator;
         this.vehContainers = vehContainers;
         nWait = 0;
-
+        enteringVehCounter = 1;
         inflowTimeSeries = new InflowTimeSeriesImpl(upstreamBoundaryData.getInflowTimeSeries());
 
         if (upstreamBoundaryData.withLogging()) {
@@ -135,10 +132,9 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
                 if (isEntered) {
                     nWait--;
                     if (fileUpstreamBoundary != null) {
-                        fileUpstreamBoundary.update();
-                        fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * qBC,
+                        fileUpstreamBoundary.update(time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * qBC,
                                 enteringVehCounter, nWait);
-                        fstrLogging.flush();
+                        
                     }
                     return; // only one insert per simulation update
                 }
