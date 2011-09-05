@@ -39,7 +39,7 @@ public interface InflowTimeSeries {
      *            the time
      * @return the flow
      */
-    double getFlow(double time);
+    double getFlowPerLane(double time);
 
     /**
      * Gets the speed.
