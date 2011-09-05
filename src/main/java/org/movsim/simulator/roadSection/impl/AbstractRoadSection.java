@@ -115,7 +115,7 @@ public abstract class AbstractRoadSection  {
      * @param time
      *            the time
      */
-    protected void accelerate(int iterationCount, double dt, double time) {
+    public void accelerate(long iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
             final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
             for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
@@ -139,7 +139,7 @@ public abstract class AbstractRoadSection  {
      * @param time
      *            the time
      */
-    protected void updatePositionAndSpeed(int iterationCount, double dt, double time) {
+    public void updatePositionAndSpeed(long iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
             for (final Vehicle veh : vehContainerLane.getVehicles()) {
                 veh.updatePostionAndSpeed(dt);
@@ -154,7 +154,7 @@ public abstract class AbstractRoadSection  {
      * @param time
      *            the time
      */
-    protected void checkForInconsistencies(int iterationCount, double time) {
+    public void checkForInconsistencies(long iterationCount, double time) {
         // crash test, iterate over all lanes separately
         for (int laneIndex = 0, laneIndexMax = vehContainers.size(); laneIndex < laneIndexMax; laneIndex++) {
             final VehicleContainer vehContainerLane = vehContainers.get(laneIndex);

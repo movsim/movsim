@@ -26,6 +26,8 @@
  */
 package org.movsim.simulator;
 
+import java.util.List;
+
 import org.movsim.input.InputData;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.roadSection.RoadSection;
@@ -39,9 +41,9 @@ public interface Simulator {
     /**
      * The total number of updates.
      * 
-     * @return the int
+     * @return the long
      */
-    int iterationCount();
+    long iterationCount();
 
     /**
      * Time.
@@ -91,5 +93,7 @@ public interface Simulator {
      */
     void initialize();
     
-    RoadSection getRoadSection();
+    List<RoadSection> getRoadSections();
+    
+//    RoadSection getRoadSection();
 }

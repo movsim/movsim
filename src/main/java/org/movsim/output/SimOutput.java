@@ -80,9 +80,9 @@ public class SimOutput implements SimObservables {
      * @param roadSection
      *            the road section
      */
-    public SimOutput(InputData simInput, RoadSection roadSection) {
+    public SimOutput(InputData simInput, List<RoadSection> roadSections) {
         projectName = simInput.getProjectMetaData().getProjectName();
-        this.roadSection = roadSection;
+        this.roadSection = roadSections.get(0); // TODO here only for *one* roadsection
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput(); // no
@@ -130,7 +130,7 @@ public class SimOutput implements SimObservables {
      * @param timestep
      *            the timestep
      */
-    public void update(int itime, double time, double timestep) {
+    public void update(long itime, double time, double timestep) {
 
         if (floatingCars != null) {
             floatingCars.update(itime, time, timestep);

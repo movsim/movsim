@@ -139,30 +139,28 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * 
      * @see org.movsim.simulator.roadSection.RoadSection#update(int, double)
      */
-    @Override
-    @Deprecated
-    public void update(int iterationCount, double time) {
-
-        // check for crashes
-        checkForInconsistencies(iterationCount, time);
-
-        updateRoadConditions(iterationCount, time);
-
-        // vehicle accelerations
-        accelerate(iterationCount, dt, time);
-
-        // vehicle pos/speed
-        updatePositionAndSpeed(iterationCount, dt, time);
-
-        updateDownstreamBoundary();
-
-        updateUpstreamBoundary(iterationCount, dt, time);
-
-        updateOnramps(iterationCount, dt, time);
-
-        detectors.update(iterationCount, time, dt, vehContainers);
-
-    }
+//    public void update(long iterationCount, double time) {
+//
+//        // check for crashes
+//        checkForInconsistencies(iterationCount, time);
+//
+//        updateRoadConditions(iterationCount, time);
+//
+//        // vehicle accelerations
+//        accelerate(iterationCount, dt, time);
+//
+//        // vehicle pos/speed
+//        updatePositionAndSpeed(iterationCount, dt, time);
+//
+//        updateDownstreamBoundary();
+//
+//        updateUpstreamBoundary(iterationCount, dt, time);
+//
+//        updateOnramps(iterationCount, dt, time);
+//
+//        detectors.update(iterationCount, time, dt, vehContainers);
+//
+//    }
 
     /**
      * Initial conditions.
@@ -263,7 +261,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param time
      *            the time
      */
-    public void updateUpstreamBoundary(int iterationCount, double dt, double time) {
+    public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
         upstreamBoundary.update(iterationCount, dt, time);
     }
     /**
@@ -360,7 +358,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param time
      *            the time
      */
-    public void updateRoadConditions(int iterationCount, double time) {
+    public void updateRoadConditions(long iterationCount, double time) {
 
         trafficLights.update(iterationCount, time, vehContainers);
 
@@ -393,24 +391,13 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param time
      *            the time
      */
-    public void updateOnramps(int iterationCount, double dt, double time) {
+    public void updateOnramps(long iterationCount, double dt, double time) {
         if (simpleOnramps.isEmpty())
             return;
         for (final Onramp onramp : simpleOnramps) {
             onramp.update(iterationCount, dt, time);
         }
     }
-
-    // public double firstRampFlow() {
-    // // TODO Auto-generated method stub
-    // return 0;
-    // }
-    //
-    // public double upstreamInflow() {
-    // // TODO Auto-generated method stub
-    // return 0;
-    // }
-
   
 
     /*
@@ -435,14 +422,10 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         return detectors.getDetectors();
     }
 
-   
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#updateDetectors(long, double, double)
-     */
     @Override
-    public void updateDetectors(int iterationCount, double dt, double simulationTime) {
-        detectors.update(iterationCount, simulationTime, dt, vehContainers);
+    public void updateDetectors(long iterationCount, double dt, double time){
+        detectors.update(iterationCount, time, dt, vehContainers);
     }
+   
 
 }

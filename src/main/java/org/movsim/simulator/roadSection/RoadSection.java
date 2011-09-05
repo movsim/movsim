@@ -66,7 +66,7 @@ public interface RoadSection {
      * @param time
      *            the simulation time
      */
-    void update(int iterationCount, double time);
+    // void update(long iterationCount, double time);
 
     
     VehicleContainer getVehContainer(int laneIndex);
@@ -94,25 +94,20 @@ public interface RoadSection {
      */
     List<LoopDetector> getLoopDetectors();
     
-    void checkForInconsistencies(int iterationCount, double time);
+    void checkForInconsistencies(long iterationCount, double time);
     
-    void accelerate(int iterationCount, double dt, double time);
+    void accelerate(long iterationCount, double dt, double time);
     
-    void updateRoadConditions(int iterationCount, double time);
+    void updateRoadConditions(long iterationCount, double time);
     
-    void updatePositionAndSpeed(int iterationCount, double dt, double time);
+    void updatePositionAndSpeed(long iterationCount, double dt, double time);
     
     void updateDownstreamBoundary();
     
-    void updateUpstreamBoundary(int iterationCount, double dt, double time);
+    void updateUpstreamBoundary(long iterationCount, double dt, double time);
     
-    void updateOnramps(int iterationCount, double dt, double time);
+    void updateOnramps(long iterationCount, double dt, double time);
 
-    /**
-     * @param iterationCount
-     * @param dt
-     * @param simulationTime
-     */
-    void updateDetectors(int iterationCount, double dt, double simulationTime);
+    void updateDetectors(long iterationCount, double dt, double simulationTime);
 
 }

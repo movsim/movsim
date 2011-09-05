@@ -26,10 +26,14 @@
  */
 package org.movsim.simulator.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.output.LoopDetector;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
@@ -52,7 +56,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     private double time;
 
     /** The iterationCount. */
-    private int iterationCount;
+    private long iterationCount;
 
     /** The timestep. */
     private double timestep;
@@ -61,7 +65,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     private double tMax;
 
     /** The road section. */
-    private RoadSection roadSection;
+    private List<RoadSection> roadSections;
 
     /** The sim output. */
     private SimOutput simOutput;
@@ -74,6 +78,7 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     public SimulatorImpl() {
         this.inputData = new InputDataImpl();
+        roadSections = new ArrayList<RoadSection>();
     }
 
     /**
@@ -83,21 +88,24 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void restart() {
         time = 0;
         iterationCount = 0;
-        roadSection = new RoadSectionImpl(inputData);
+        roadSections.clear();
+        roadSections.add(new RoadSectionImpl(inputData));
 
         // model requires specific update time depending on its category !!
 
         // TODO: check functionality
-        if (roadSection.getTimestep() > Constants.SMALL_VALUE) {
-            this.timestep = roadSection.getTimestep();
+        if (roadSections.get(0).getTimestep() > Constants.SMALL_VALUE) {
+            this.timestep = roadSections.get(0).getTimestep();
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(inputData, roadSection);
+        simOutput = new SimOutput(inputData, roadSections);
     }
 
-    public RoadSection getRoadSection() {
-        return roadSection;
+    
+    @Override
+    public List<RoadSection> getRoadSections() {
+        return roadSections;
     }
 
     /*
@@ -141,7 +149,47 @@ public class SimulatorImpl implements Simulator, Runnable {
         if (iterationCount % 100 == 0) {
             logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
         }
-        roadSection.update(iterationCount, time);
+        
+        // roadSection.update(iterationCount, time);
+        // parallel update of all roadSections 
+        
+        
+        final double dt = this.timestep; // TODO
+        // check for crashes
+        for(RoadSection roadSection : roadSections){
+            roadSection.checkForInconsistencies(iterationCount, time);
+        }
+        
+        for(RoadSection roadSection : roadSections){
+            roadSection.updateRoadConditions(iterationCount, time);
+        }
+
+        // vehicle accelerations
+        for(RoadSection roadSection : roadSections){
+            roadSection.accelerate(iterationCount, dt, time);
+        }
+
+        // vehicle pos/speed
+        for(RoadSection roadSection : roadSections){
+            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
+        }
+
+        for(RoadSection roadSection : roadSections){
+            roadSection.updateDownstreamBoundary();
+        }
+
+        for(RoadSection roadSection : roadSections){
+            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
+        }
+
+        for(RoadSection roadSection : roadSections){
+            roadSection.updateOnramps(iterationCount, dt, time);
+        }
+
+        for(RoadSection roadSection : roadSections){
+            roadSection.updateDetectors(iterationCount, dt, time);
+        }
+        
         simOutput.update(iterationCount, time, timestep);
     }
 
@@ -151,7 +199,7 @@ public class SimulatorImpl implements Simulator, Runnable {
      * @see org.movsim.simulator.Simulator#iTime()
      */
     @Override
-    public int iterationCount() {
+    public long iterationCount() {
         return iterationCount;
     }
 
@@ -216,5 +264,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         restart();
     }
+
+   
 
 }

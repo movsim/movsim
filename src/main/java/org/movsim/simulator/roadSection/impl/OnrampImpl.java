@@ -155,7 +155,7 @@ public class OnrampImpl implements Onramp {
      * @see org.movsim.simulator.roadSection.Onramp#update(int, double, double)
      */
     @Override
-    public void update(int itime, double dt, double time) {
+    public void update(long itime, double dt, double time) {
 
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         nWait += qBC * dt;

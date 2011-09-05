@@ -41,5 +41,5 @@ public interface Onramp {
      * @param time
      *            the time
      */
-    void update(int iterationCount, double dt, double time);
+    void update(long iterationCount, double dt, double time);
 }

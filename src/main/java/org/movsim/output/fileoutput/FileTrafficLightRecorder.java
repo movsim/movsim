@@ -76,7 +76,7 @@ public class FileTrafficLightRecorder {
      * @param trafficLights
      *            the traffic lights
      */
-    public void update(int iterationCount, double time, List<TrafficLight> trafficLights) {
+    public void update(long iterationCount, double time, List<TrafficLight> trafficLights) {
 
         if (iterationCount % nDt != 0)
             // no update; nothing to do

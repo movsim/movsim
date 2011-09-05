@@ -106,7 +106,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
      * @param roadSection
      *            the road section
      */
-    public void update(int it, double time, RoadSection roadSection) {
+    public void update(long it, double time, RoadSection roadSection) {
         if ((time - timeOffset) >= dtOut) {
             timeOffset = time;
             // TODO quick hack for multi-lane compatibility

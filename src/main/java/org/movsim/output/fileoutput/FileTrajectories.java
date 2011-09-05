@@ -160,7 +160,7 @@ public class FileTrajectories {
      * @param time
      *            the time
      */
-    public void update(int iTime, double time) {
+    public void update(long iTime, double time) {
 
         if (fileHandles.isEmpty()) {
             // cannot initialize earlier because onramps and offramps are

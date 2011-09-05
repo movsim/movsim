@@ -78,7 +78,7 @@ public class TrafficLightsImpl implements TrafficLights {
      * @param vehicles
      *            the vehicles
      */
-    public void update(int iterationCount, double time, List<VehicleContainer> vehContainers) {
+    public void update(long iterationCount, double time, List<VehicleContainer> vehContainers) {
 
         if (!trafficLights.isEmpty()) {
             // first update traffic light status

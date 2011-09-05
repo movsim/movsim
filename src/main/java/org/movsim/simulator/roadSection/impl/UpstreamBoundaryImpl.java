@@ -132,7 +132,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * double, double)
      */
     @Override
-    public void update(int itime, double dt, double time) {
+    public void update(long itime, double dt, double time) {
         // integrate inflow demand
         final double totalInflow = getTotalInflow(time);
         nWait +=  totalInflow * dt;  

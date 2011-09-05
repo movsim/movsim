@@ -185,7 +185,7 @@ public class OnrampMobilImpl implements Onramp {
      * @see org.movsim.simulator.roadSection.Onramp#update(int, double, double)
      */
     @Override
-    public void update(int iterationCount, double dt, double time) {
+    public void update(long iterationCount, double dt, double time) {
 
 //
 //        // check for crashes

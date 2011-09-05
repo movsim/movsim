@@ -41,7 +41,7 @@ public interface UpstreamBoundary {
      * @param time
      *            the time
      */
-    void update(int iterationCount, double dt, double time);
+    void update(long iterationCount, double dt, double time);
     
     /**
      * Gets the total inflow over all lanes
