@@ -1,4 +1,4 @@
-package org.movsim.input.model.simulation.impl;
+package org.movsim.simulator.roadSection.impl;
 
 import java.util.List;
 
@@ -6,7 +6,6 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
-import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
