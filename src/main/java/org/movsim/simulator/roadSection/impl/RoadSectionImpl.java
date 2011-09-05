@@ -134,9 +134,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         initOnramps(inputData);
     }
 
-   
-
-   
 
     /*
      * (non-Javadoc)
