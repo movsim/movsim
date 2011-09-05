@@ -195,6 +195,7 @@ public class RoadSectionImpl implements RoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#update(int, double)
      */
     @Override
+    @Deprecated
     public void update(int iterationCount, double time) {
 
         // check for crashes
@@ -290,7 +291,7 @@ public class RoadSectionImpl implements RoadSection {
     /**
      * Update downstream boundary.
      */
-    private void updateDownstreamBoundary() {
+    public void updateDownstreamBoundary() {
         for(VehicleContainer vehContainerLane : vehContainers){
             vehContainerLane.removeVehiclesDownstream(roadLength);
         }
@@ -305,7 +306,7 @@ public class RoadSectionImpl implements RoadSection {
      * @param time
      *            the time
      */
-    private void updateUpstreamBoundary(int iterationCount, double dt, double time) {
+    public void updateUpstreamBoundary(int iterationCount, double dt, double time) {
         upstreamBoundary.update(iterationCount, dt, time);
     }
 
@@ -316,7 +317,7 @@ public class RoadSectionImpl implements RoadSection {
      * @param time
      *            the time
      */
-    private void checkForInconsistencies(int iterationCount, double time) {
+    public void checkForInconsistencies(int iterationCount, double time) {
         // crash test, iterate over all lanes separately
         for (int laneIndex = 0, laneIndexMax = vehContainers.size(); laneIndex < laneIndexMax; laneIndex++) {
             final VehicleContainer vehContainerLane = vehContainers.get(laneIndex);
@@ -363,7 +364,7 @@ public class RoadSectionImpl implements RoadSection {
      * @param time
      *            the time
      */
-    private void accelerate(int iterationCount, double dt, double time) {
+    public void accelerate(int iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
             final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
             for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
@@ -387,7 +388,7 @@ public class RoadSectionImpl implements RoadSection {
      * @param time
      *            the time
      */
-    private void updatePositionAndSpeed(int iterationCount, double dt, double time) {
+    public void updatePositionAndSpeed(int iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
             for (final Vehicle veh : vehContainerLane.getVehicles()) {
                 veh.updatePostionAndSpeed(dt);
@@ -403,7 +404,7 @@ public class RoadSectionImpl implements RoadSection {
      * @param time
      *            the time
      */
-    private void updateRoadConditions(int iterationCount, double time) {
+    public void updateRoadConditions(int iterationCount, double time) {
 
         
         trafficLights.update(iterationCount, time, vehContainers);
@@ -437,7 +438,7 @@ public class RoadSectionImpl implements RoadSection {
      * @param time
      *            the time
      */
-    private void updateOnramps(int iterationCount, double dt, double time) {
+    public void updateOnramps(int iterationCount, double dt, double time) {
         if (simpleOnramps.isEmpty())
             return;
         for (final Onramp onramp : simpleOnramps) {
@@ -503,6 +504,14 @@ public class RoadSectionImpl implements RoadSection {
     @Override
     public VehicleContainer getVehContainer(int laneIndex) {
         return vehContainers.get(laneIndex);
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#updateDetectors(long, double, double)
+     */
+    @Override
+    public void updateDetectors(int iterationCount, double dt, double simulationTime) {
+        detectors.update(iterationCount, simulationTime, dt, vehContainers);
     }
 
 }

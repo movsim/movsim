@@ -26,6 +26,9 @@
  */
 package org.movsim.output;
 
+import java.util.List;
+
+import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.ObservableInTime;
 
 // TODO: Auto-generated Javadoc
@@ -96,4 +99,5 @@ public interface LoopDetector extends ObservableInTime {
      * @return the dt sample
      */
     double getDtSample();
+    
 }

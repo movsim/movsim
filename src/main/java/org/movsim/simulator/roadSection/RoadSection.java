@@ -93,5 +93,26 @@ public interface RoadSection {
      * @return the loop detectors
      */
     List<LoopDetector> getLoopDetectors();
+    
+    void checkForInconsistencies(int iterationCount, double time);
+    
+    void accelerate(int iterationCount, double dt, double time);
+    
+    void updateRoadConditions(int iterationCount, double time);
+    
+    void updatePositionAndSpeed(int iterationCount, double dt, double time);
+    
+    void updateDownstreamBoundary();
+    
+    void updateUpstreamBoundary(int iterationCount, double dt, double time);
+    
+    void updateOnramps(int iterationCount, double dt, double time);
+
+    /**
+     * @param iterationCount
+     * @param dt
+     * @param simulationTime
+     */
+    void updateDetectors(int iterationCount, double dt, double simulationTime);
 
 }
