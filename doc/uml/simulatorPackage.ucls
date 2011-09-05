@@ -394,14 +394,6 @@
     </display>  
   </class>  
   <association>    
-    <end type="SOURCE" nodeId="1" navigable="false">      
-      <attribute name="vehContainer"/>      
-      <multiplicity minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" nodeId="37" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association>    
     <end type="SOURCE" nodeId="11" navigable="false">      
       <attribute name="inflowTimeSeries"/>      
       <multiplicity minimum="0" maximum="1"/>    

@@ -30,6 +30,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.output.fileoutput.FileUpstreamBoundaryData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
@@ -47,11 +48,6 @@ import org.slf4j.LoggerFactory;
  */
 public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
-    private static final String extensionFormat = ".S%d_log.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
-            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
-    private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
-
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(UpstreamBoundaryImpl.class);
 
@@ -67,7 +63,6 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
 
-    // logging
     /** The fstr logging. */
     private PrintWriter fstrLogging;
 
@@ -83,6 +78,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     /** The lane enter last. */
     private int laneEnterLast;
+    private FileUpstreamBoundaryData fileUpstreamBoundary;
 
     /**
      * Instantiates a new upstream boundary impl.
@@ -105,11 +101,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         inflowTimeSeries = new InflowTimeSeriesImpl(upstreamBoundaryData.getInflowTimeSeries());
 
         if (upstreamBoundaryData.withLogging()) {
-            enteringVehCounter = 1;
-            final int roadId = 1; // road id hard coded as 1 for the moment
-            final String filename = projectName + String.format(extensionFormat, roadId);
-            fstrLogging = FileUtils.getWriter(filename);
-            fstrLogging.printf(outputHeading);
+            fileUpstreamBoundary = new FileUpstreamBoundaryData(projectName);
         }
     }
 
@@ -142,7 +134,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
                 final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, iLane, time, qBC);
                 if (isEntered) {
                     nWait--;
-                    if (fstrLogging != null) {
+                    if (fileUpstreamBoundary != null) {
+                        fileUpstreamBoundary.update();
                         fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * qBC,
                                 enteringVehCounter, nWait);
                         fstrLogging.flush();
