@@ -89,7 +89,7 @@ public class InflowTimeSeriesImpl implements InflowTimeSeries {
      * @see org.movsim.simulator.roadSection.InflowTimeSeries#getFlow(double)
      */
     @Override
-    public double getFlow(double time) {
+    public double getFlowPerLane(double time) {
         return Tables.intpextp(timeValues, flowValues, time);
     }
 

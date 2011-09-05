@@ -148,7 +148,7 @@ public class RoadSectionImpl implements RoadSection {
         vehGenerator = new VehicleGeneratorImpl(inputData);
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), roadInput.getUpstreamBoundaryData(),
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getUpstreamBoundaryData(),
                 inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
