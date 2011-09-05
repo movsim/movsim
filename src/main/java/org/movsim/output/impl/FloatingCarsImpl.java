@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.output.FloatingCars;
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.MoveableContainer;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.ObservableImpl;
@@ -50,7 +51,7 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
     /** The n dt out. */
     private final int nDtOut;
 
-    private VehicleContainer vehContainer;
+    private List<VehicleContainer> vehContainers;
 
     /**
      * Instantiates a new floating cars impl.
@@ -60,10 +61,10 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
      * @param input
      *            the input
      */
-    public FloatingCarsImpl(VehicleContainer vehContainer, FloatingCarInput input) {
+    public FloatingCarsImpl(final List<VehicleContainer> vehContainers, final FloatingCarInput input) {
         logger.debug("Cstr. FloatingCars");
 
-        this.vehContainer = vehContainer;
+        this.vehContainers = vehContainers;
         this.nDtOut = input.getNDt();
 
         this.fcdList = input.getFloatingCars();
@@ -101,11 +102,13 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.output.FloatingCars#getMoveableContainer()
      */
     @Override
-    public MoveableContainer getMoveableContainer() {
-        return vehContainer;
+    public List<VehicleContainer> getVehicleContainers(){
+        return vehContainers;
     }
-
+    
+    public MoveableContainer getMoveableContainer(){
+        return vehContainers.get(Constants.MOST_RIGHT_LANE);
+    }
 }

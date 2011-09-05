@@ -89,9 +89,9 @@ public class LoopDetectors {
      * @param vehContainer
      *            the veh container
      */
-    public void update(int itime, double time, double timestep, VehicleContainer vehContainer) {
+    public void update(int itime, double time, double timestep, List<VehicleContainer> vehContainers) {
         for (final LoopDetectorImpl det : detectors) {
-            det.update(time, vehContainer);
+            det.update(time, vehContainers);
         }
     }
 

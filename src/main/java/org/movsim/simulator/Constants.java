@@ -45,7 +45,7 @@ public interface Constants {
     final double MAX_VEHICLE_SPEED = 200 / 3.6;
 
     /** The MOS t_ righ t_ lane. */
-    final int MOST_RIGHT_LANE = 1; // increment lane index for further lanes to
+    final int MOST_RIGHT_LANE = 0; // increment lane index for further lanes to
                                    // the left
 
     /** The MODE l_ nam e_ idm. */

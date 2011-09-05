@@ -68,12 +68,10 @@ public interface RoadSection {
      */
     void update(int iterationCount, double time);
 
-    /**
-     * Veh container.
-     * 
-     * @return the vehicle container
-     */
-    VehicleContainer getVehContainer();
+    
+    VehicleContainer getVehContainer(int laneIndex);
+    
+    List<VehicleContainer> getVehContainers();
 
     /**
      * Gets the timestep.

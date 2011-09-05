@@ -81,8 +81,9 @@ public class RoadSectionImpl implements RoadSection {
 
     private boolean instantaneousFileOutput;
 
+    
     /** The veh container. */
-    private VehicleContainer vehContainer;
+    private List<VehicleContainer> vehContainers;
 
     /** The veh generator. */
     private VehicleGenerator vehGenerator;
@@ -138,12 +139,16 @@ public class RoadSectionImpl implements RoadSection {
      *            the input data
      */
     private void initialize(InputData inputData) {
-        vehContainer = new VehicleContainerImpl();
+        
+        vehContainers = new ArrayList<VehicleContainer>();
+        for(int iLane = 0; iLane < nLanes; iLane++){
+            vehContainers.add(new VehicleContainerImpl());
+        }
 
         vehGenerator = new VehicleGeneratorImpl(inputData);
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainer, roadInput.getUpstreamBoundaryData(),
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), roadInput.getUpstreamBoundaryData(),
                 inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
@@ -183,15 +188,6 @@ public class RoadSectionImpl implements RoadSection {
         return id;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.RoadSection#vehContainer()
-     */
-    @Override
-    public VehicleContainer getVehContainer() {
-        return vehContainer;
-    }
 
     /*
      * (non-Javadoc)
@@ -218,7 +214,7 @@ public class RoadSectionImpl implements RoadSection {
 
         updateOnramps(iterationCount, dt, time);
 
-        detectors.update(iterationCount, time, dt, vehContainer);
+        detectors.update(iterationCount, time, dt, vehContainers);
 
     }
 
@@ -229,6 +225,8 @@ public class RoadSectionImpl implements RoadSection {
      *            the sim input
      */
     private void initialConditions(SimulationInput simInput) {
+        
+        // TODO: consider multi-lane case !!!
         final List<ICMacroData> icMacroData = simInput.getSingleRoadInput().getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
@@ -248,7 +246,7 @@ public class RoadSectionImpl implements RoadSection {
                 }
                 final int laneEnter = Constants.MOST_RIGHT_LANE;
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                vehContainer.add(veh, xLocal, speedInit, laneEnter);
+                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit, laneEnter); // TODO 
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
 
                 xLocal -= 1 / rhoLocal;
@@ -265,7 +263,7 @@ public class RoadSectionImpl implements RoadSection {
                 final int laneInit = ic.getInitLane();
                 final Vehicle veh = (vehTypeFromFile.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
                         .createVehicle(vehTypeFromFile);
-                vehContainer.add(veh, posInit, speedInit, laneInit);
+                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, posInit, speedInit, laneInit); // TODO: consider multi-lane case !!!
                 logger.info("set vehicle with label = {}", veh.getLabel());
             }
         }
@@ -283,7 +281,8 @@ public class RoadSectionImpl implements RoadSection {
         final String projectName = inputData.getProjectMetaData().getProjectName();
         int rampIndex = 1;
         for (final SimpleRampData onrmp : onrampData) {
-            simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainer, projectName, rampIndex));
+            // merging from onramp only to most-right lane (shoulder lane)
+            simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
             rampIndex++;
         }
     }
@@ -292,7 +291,9 @@ public class RoadSectionImpl implements RoadSection {
      * Update downstream boundary.
      */
     private void updateDownstreamBoundary() {
-        vehContainer.removeVehiclesDownstream(roadLength);
+        for(VehicleContainer vehContainerLane : vehContainers){
+            vehContainerLane.removeVehiclesDownstream(roadLength);
+        }
     }
 
     /**
@@ -316,32 +317,36 @@ public class RoadSectionImpl implements RoadSection {
      *            the time
      */
     private void checkForInconsistencies(int iterationCount, double time) {
-        // crash test
-        final List<Vehicle> vehicles = vehContainer.getVehicles();
-        for (int i = 0, N = vehicles.size(); i < N; i++) {
-            final Moveable egoVeh = vehicles.get(i);
-            final Moveable vehFront = vehContainer.getLeader(egoVeh);
-            final double netDistance = egoVeh.getNetDistance(vehFront);
-            if (netDistance < 0) {
-                logger.error("#########################################################");
-                logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
-                if (vehFront != null) {
-                    logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
-                }
-                logger.error("net distance  = {}", netDistance);
-                logger.error("container.size = {}", vehicles.size());
-                final StringBuilder msg = new StringBuilder("\n");
-                for (int j = Math.max(0, i - 8), M = vehicles.size(); j <= Math.min(i + 8, M - 1); j++) {
-                    final Moveable veh = vehicles.get(j);
-                    msg.append(String.format(
-                            "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
-                            veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
-                }
-                logger.error(msg.toString());
-                if (instantaneousFileOutput) {
-                    if (withCrashExit) {
-                        logger.error(" !!! exit after crash !!! ");
-                        System.exit(-99);
+        // crash test, iterate over all lanes separately
+        for (int laneIndex = 0, laneIndexMax = vehContainers.size(); laneIndex < laneIndexMax; laneIndex++) {
+            final VehicleContainer vehContainerLane = vehContainers.get(laneIndex);
+            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+                final Moveable egoVeh = vehiclesOnLane.get(i);
+                final Moveable vehFront = vehContainerLane.getLeader(egoVeh);
+                final double netDistance = egoVeh.getNetDistance(vehFront);
+                if (netDistance < 0) {
+                    logger.error("#########################################################");
+                    logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
+                    if (vehFront != null) {
+                        logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
+                    }
+                    logger.error("net distance  = {}", netDistance);
+                    logger.error("lane index    = {}", laneIndex);
+                    logger.error("container.size = {}", vehiclesOnLane.size());
+                    final StringBuilder msg = new StringBuilder("\n");
+                    for (int j = Math.max(0, i - 8), M = vehiclesOnLane.size(); j <= Math.min(i + 8, M - 1); j++) {
+                        final Moveable veh = vehiclesOnLane.get(j);
+                        msg.append(String.format(
+                                "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
+                                veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
+                    }
+                    logger.error(msg.toString());
+                    if (instantaneousFileOutput) {
+                        if (withCrashExit) {
+                            logger.error(" !!! exit after crash !!! ");
+                            System.exit(-99);
+                        }
                     }
                 }
             }
@@ -359,15 +364,17 @@ public class RoadSectionImpl implements RoadSection {
      *            the time
      */
     private void accelerate(int iterationCount, double dt, double time) {
-        final List<Vehicle> vehicles = vehContainer.getVehicles();
-        for (int i = 0; i < vehicles.size(); i++) {
-            final Vehicle veh = vehicles.get(i);
-            final double x = veh.getPosition();
-            final double alphaT = flowConsBottlenecks.alphaT(x);
-            final double alphaV0 = flowConsBottlenecks.alphaV0(x);
-            // logger.debug("i={}, x_pos={}", i, x);
-            // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-            veh.calcAcceleration(dt, vehContainer, alphaT, alphaV0);
+        for (VehicleContainer vehContainerLane : vehContainers) {
+            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+                final Vehicle veh = vehiclesOnLane.get(i);
+                final double x = veh.getPosition();
+                final double alphaT = flowConsBottlenecks.alphaT(x);
+                final double alphaV0 = flowConsBottlenecks.alphaV0(x);
+                // logger.debug("i={}, x_pos={}", i, x);
+                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
+                veh.calcAcceleration(dt, vehContainerLane, alphaT, alphaV0);
+            }
         }
     }
 
@@ -381,8 +388,10 @@ public class RoadSectionImpl implements RoadSection {
      *            the time
      */
     private void updatePositionAndSpeed(int iterationCount, double dt, double time) {
-        for (final Vehicle veh : vehContainer.getVehicles()) {
-            veh.updatePostionAndSpeed(dt);
+        for (VehicleContainer vehContainerLane : vehContainers) {
+            for (final Vehicle veh : vehContainerLane.getVehicles()) {
+                veh.updatePostionAndSpeed(dt);
+            }
         }
     }
 
@@ -396,9 +405,10 @@ public class RoadSectionImpl implements RoadSection {
      */
     private void updateRoadConditions(int iterationCount, double time) {
 
-        trafficLights.update(iterationCount, time, vehContainer.getVehicles());
+        
+        trafficLights.update(iterationCount, time, vehContainers);
 
-        updateSpeedLimits(vehContainer.getVehicles());
+        updateSpeedLimits(vehContainers);
     }
 
     /**
@@ -407,11 +417,13 @@ public class RoadSectionImpl implements RoadSection {
      * @param vehicles
      *            the vehicles
      */
-    private void updateSpeedLimits(List<Vehicle> vehicles) {
+    private void updateSpeedLimits(List<VehicleContainer> vehContainers) {
         if (!speedlimits.isEmpty()) {
-            for (final Vehicle veh : vehContainer.getVehicles()) {
-                final double pos = veh.getPosition();
-                veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
+            for (VehicleContainer vehContainerLane : vehContainers) {
+                for (final Vehicle veh : vehContainerLane.getVehicles()) {
+                    final double pos = veh.getPosition();
+                    veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
+                }
             }
         }
     }
@@ -481,6 +493,16 @@ public class RoadSectionImpl implements RoadSection {
     @Override
     public List<LoopDetector> getLoopDetectors() {
         return detectors.getDetectors();
+    }
+
+    @Override
+    public List<VehicleContainer> getVehContainers() {
+        return vehContainers;
+    }
+
+    @Override
+    public VehicleContainer getVehContainer(int laneIndex) {
+        return vehContainers.get(laneIndex);
     }
 
 }

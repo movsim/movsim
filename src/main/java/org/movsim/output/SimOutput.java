@@ -97,7 +97,7 @@ public class SimOutput implements SimObservables {
         final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
-            floatingCars = new FloatingCarsImpl(roadSection.getVehContainer(), floatingCarInput);
+            floatingCars = new FloatingCarsImpl(roadSection.getVehContainers(), floatingCarInput);
             if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
             }

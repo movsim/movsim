@@ -29,11 +29,13 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Moveable;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
@@ -178,7 +180,7 @@ public class FileTrajectories {
 
                 lastUpdateTime = time;
 
-                writeTrajectories(fileHandles.get(roadSection.getId()), roadSection.getVehContainer());
+                writeTrajectories(fileHandles.get(roadSection.getId()), roadSection.getVehContainers());
                 /*
                  * // onramps for(IOnRamp rmp : mainroad.onramps()){
                  * writeTrajectories(fileHandles.get(rmp.roadIndex()),
@@ -199,11 +201,15 @@ public class FileTrajectories {
      * @param vehicles
      *            the vehicles
      */
-    private void writeTrajectories(PrintWriter fstr, VehicleContainer vehicles) {
-        for (int i = 0, N = vehicles.size(); i < N; i++) {
-            Moveable me = vehicles.get(i);
-            if ((me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval)) {
-                writeCarData(fstr, i, me);
+    private void writeTrajectories(PrintWriter fstr, List<VehicleContainer> vehContainers) {
+        for (VehicleContainer vehContainerLane : vehContainers) {
+            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+                final Moveable me = vehiclesOnLane.get(i);
+                if ((me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval)) {
+                    final Moveable frontVeh = vehContainerLane.getLeader(me);
+                    writeCarData(fstr, i, me, frontVeh);
+                }
             }
         }
     }
@@ -218,8 +224,7 @@ public class FileTrajectories {
      * @param me
      *            the me
      */
-    private void writeCarData(PrintWriter fstr, int index, Moveable me) {
-        final Moveable frontVeh = roadSection.getVehContainer().getLeader(me);
+    private void writeCarData(PrintWriter fstr, int index, final Moveable me, final Moveable frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
         fstr.printf(outputFormat, time, me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s, dv,

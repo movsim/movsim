@@ -28,7 +28,9 @@ package org.movsim.output;
 
 import java.util.List;
 
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.MoveableContainer;
+import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.ObservableInTime;
 
 // TODO: Auto-generated Javadoc
@@ -44,11 +46,14 @@ public interface FloatingCars extends ObservableInTime {
      */
     List<Integer> getFcdList();
 
+    
+    List<VehicleContainer> getVehicleContainers();
+    
     /**
-     * Gets the moveable container.
+     * Gets the moveable container of the MOST_RIGHT_LANE 
+     * 
      * 
      * @return the moveable container
      */
-    MoveableContainer getMoveableContainer();
-
+    MoveableContainer getMoveableContainer(); // TODO: compatibility for movsim applet, returns only most right lane container!!!
 }

@@ -26,6 +26,8 @@
  */
 package org.movsim.output.impl;
 
+import java.util.List;
+
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
@@ -127,24 +129,26 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
      * @param vehicleContainer
      *            the vehicle container
      */
-    public void update(double time, VehicleContainer vehicleContainer) {
+    public void update(double time, List<VehicleContainer> vehicleContainers) {
 
-        // brute force search:
+        // brute force search: iterate over all lanes
 
-        for (final Vehicle veh : vehicleContainer.getVehicles()) {
-            if ((veh.getOldPosition() < detPosition) && (veh.getPosition() >= detPosition)) {
-                // new vehicle crossed detector
-                vehCount++;
-                final double speedVeh = veh.getSpeed();
-                vSum += speedVeh;
-                occTime += veh.getLength() / speedVeh;
-                sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
-                // calculate brut timegap not from local detector data:
-                final Moveable vehFront = vehicleContainer.getLeader(veh);
-                final double brutTimegap = (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition())
-                        / vehFront.getSpeed();
-                sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0; // microscopic
-                                                                     // flow
+        for (VehicleContainer vehContainerLane : vehicleContainers) {
+            for (final Vehicle veh : vehContainerLane.getVehicles()) {
+                if ((veh.getOldPosition() < detPosition) && (veh.getPosition() >= detPosition)) {
+                    // new vehicle crossed detector
+                    vehCount++;
+                    final double speedVeh = veh.getSpeed();
+                    vSum += speedVeh;
+                    occTime += veh.getLength() / speedVeh;
+                    sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
+                    // calculate brut timegap not from local detector data:
+                    final Moveable vehFront = vehContainerLane.getLeader(veh);
+                    final double brutTimegap =
+                            (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition()) / vehFront.getSpeed();
+                    sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0; // microscopic
+                                                                         // flow
+                }
             }
         }
 
