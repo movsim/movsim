@@ -31,14 +31,15 @@ import java.util.List;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.utilities.impl.Tables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FlowConservingBottlenecksImpl.
  */
 public class FlowConservingBottlenecksImpl implements FlowConservingBottlenecks {
-    // final static Logger logger =
-    // LoggerFactory.getLogger(FlowConservingBottlenecksImpl.class);
+    
+     final static Logger logger = LoggerFactory.getLogger(FlowConservingBottlenecksImpl.class);
 
     /** The pos values. */
     private double[] posValues;
