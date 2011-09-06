@@ -14,7 +14,7 @@ import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractRoadSection  {
+public abstract class AbstractRoadSection {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AbstractRoadSection.class);

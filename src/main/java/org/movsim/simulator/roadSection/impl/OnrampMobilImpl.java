@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OnrampImpl.
  */
-public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, RoadSection {
+public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
 
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
@@ -168,8 +168,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
         
     }
 
-    @Override
-    public void update(long iterationCount, double dt, double time) {
+//    @Override
+//    public void update(long iterationCount, double dt, double time) {
 //
 //
 //        // check for crashes
@@ -204,7 +204,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
 ////                    fstrLogging.flush();
 ////                }
 //
-    }
+//    }
     
     
     @Override
@@ -239,49 +239,19 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
 //    }
 //    
 
-    @Override
-    public OnrampMobilImpl getMobilRampHack() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    
-    // hack: TODO redesign !!!
-    @Override
-    public List<TrafficLight> getTrafficLights() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<LoopDetector> getLoopDetectors() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+   
 
     @Override
     public void updateRoadConditions(long iterationCount, double time) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void updateDownstreamBoundary() {
         // TODO Auto-generated method stub
-        
     }
 
-    @Override
-    public void updateOnramps(long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void updateDetectors(long iterationCount, double dt, double simulationTime) {
-        // TODO Auto-generated method stub
-        
-    }
+   
 
 
    

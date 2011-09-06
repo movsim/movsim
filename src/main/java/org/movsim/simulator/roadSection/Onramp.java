@@ -30,7 +30,7 @@ package org.movsim.simulator.roadSection;
 /**
  * The Interface Onramp.
  */
-public interface Onramp {
+public interface Onramp extends AbstractRoadSection{
 
     /**
      * Update.
@@ -41,5 +41,5 @@ public interface Onramp {
      * @param time
      *            the time
      */
-    void update(long iterationCount, double dt, double time);
+    //void update(long iterationCount, double dt, double time);
 }

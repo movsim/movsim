@@ -281,7 +281,7 @@ speedlimit_kmh NMTOKEN #REQUIRED
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
 <!ATTLIST SIMPLE_RAMP
 x        NMTOKEN #REQUIRED
-merge_length   NMTOKEN "200"
+merge_length   NMTOKEN #REQUIRED
 logging  (true|false)  "false" 
 > 
 

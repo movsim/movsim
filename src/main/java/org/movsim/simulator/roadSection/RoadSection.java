@@ -36,51 +36,9 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 /**
  * The Interface RoadSection.
  */
-public interface RoadSection {
+public interface RoadSection extends AbstractRoadSection {
 
-    /**
-     * Road length.
-     * 
-     * @return the double
-     */
-    double getRoadLength();
-
-    /**
-     * N lanes.
-     * 
-     * @return the int
-     */
-    int getNumberOfLanes();
-
-    /**
-     * Id.
-     * 
-     * @return the long
-     */
-    long getId();
-
-    /**
-     * Update.
-     * 
-     * @param iterationCount
-     *            the number of updates
-     * @param time
-     *            the simulation time
-     */
-    // void update(long iterationCount, double time);
-
-    
-    VehicleContainer getVehContainer(int laneIndex);
-    
-    List<VehicleContainer> getVehContainers();
-
-    /**
-     * Gets the timestep.
-     * 
-     * @return the timestep
-     */
-    double getTimestep();
-
+   
     /**
      * Gets the traffic lights.
      * 
@@ -95,25 +53,11 @@ public interface RoadSection {
      */
     List<LoopDetector> getLoopDetectors();
     
-    void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit);
-    
-    void laneChanging(long iterationCount, double dt, double time);
-    
-    void accelerate(long iterationCount, double dt, double time);
-    
-    void updateRoadConditions(long iterationCount, double time);
-    
-    void updatePositionAndSpeed(long iterationCount, double dt, double time);
-    
-    void updateDownstreamBoundary();
-    
-    void updateUpstreamBoundary(long iterationCount, double dt, double time);
-    
-    void updateOnramps(long iterationCount, double dt, double time);
+    //void updateOnramps(long iterationCount, double dt, double time);
 
     void updateDetectors(long iterationCount, double dt, double simulationTime);
     
     // hack for debugging/testing
-    OnrampMobilImpl getMobilRampHack();
+    Onramp getMobilRampHack();
 }
 

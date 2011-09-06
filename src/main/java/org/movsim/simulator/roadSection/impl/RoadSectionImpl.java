@@ -341,13 +341,13 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      */
     
     
-    public void updateOnramps(long iterationCount, double dt, double time) {
-        if (onramps.isEmpty())
-            return;
-        for (final Onramp onramp : onramps) {
-            onramp.update(iterationCount, dt, time);
-        }
-    }
+//    public void updateOnramps(long iterationCount, double dt, double time) {
+//        if (onramps.isEmpty())
+//            return;
+//        for (final Onramp onramp : onramps) {
+//            onramp.update(iterationCount, dt, time);
+//        }
+//    }
   
 
     /*
@@ -378,8 +378,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     }
    
     @Override
-    public OnrampMobilImpl getMobilRampHack(){
-        return (OnrampMobilImpl)onramps.get(0); 
+    public Onramp getMobilRampHack(){
+        return onramps.get(0); 
     }
 
     @Override

@@ -50,8 +50,6 @@ public class OnrampImpl implements Onramp {
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
     private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE; 
-
-    
     
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
@@ -149,13 +147,9 @@ public class OnrampImpl implements Onramp {
         xDownRamp = xUpRamp + length;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.Onramp#update(int, double, double)
-     */
     @Override
-    public void update(long itime, double dt, double time) {
+    public void laneChanging(long iterationCount, double dt, double time) {
+        //public void update(long itime, double dt, double time) {
 
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         nWait += qBC * dt;
@@ -386,6 +380,81 @@ public class OnrampImpl implements Onramp {
             }
         }
         return false;
+    }
+    
+    
+    @Override
+    public double getRoadLength() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getNumberOfLanes() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public long getId() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public VehicleContainer getVehContainer(int laneIndex) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<VehicleContainer> getVehContainers() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public double getTimestep() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
+        // TODO Auto-generated method stub
+        
+    }
+
+   
+
+    @Override
+    public void accelerate(long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateRoadConditions(long iterationCount, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updatePositionAndSpeed(long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateDownstreamBoundary() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
     }
 
 
