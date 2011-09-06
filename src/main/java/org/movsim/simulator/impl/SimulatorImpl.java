@@ -40,6 +40,8 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
+import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +74,9 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     /** The sim input. */
     private InputDataImpl inputData;
+    
+    /** The veh generator. */
+    protected VehicleGenerator vehGenerator;
 
     /**
      * Instantiates a new simulator impl.
@@ -79,6 +84,8 @@ public class SimulatorImpl implements Simulator, Runnable {
     public SimulatorImpl() {
         this.inputData = new InputDataImpl();
         roadSections = new ArrayList<RoadSection>();
+        
+        vehGenerator = new VehicleGeneratorImpl(inputData);
     }
 
     /**
@@ -89,7 +96,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         time = 0;
         iterationCount = 0;
         roadSections.clear();
-        roadSections.add(new RoadSectionImpl(inputData));
+        roadSections.add(new RoadSectionImpl(inputData, vehGenerator));
 
         // model requires specific update time depending on its category !!
 

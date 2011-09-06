@@ -77,15 +77,19 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     /** The simple onramps. */
     private List<Onramp> simpleOnramps = null;
 
+    /** The veh generator. */
+    protected VehicleGenerator vehGenerator;
+    
     /**
      * Instantiates a new road section impl.
      * 
      * @param inputData
      *            the input data
      */
-    public RoadSectionImpl(InputData inputData) {
+    public RoadSectionImpl(InputData inputData, VehicleGenerator vehGenerator) {
         super(inputData);
         logger.info("Cstr. RoadSectionImpl");
+        this.vehGenerator = vehGenerator;
         
         initialize(inputData);
 
@@ -110,8 +114,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         for(int iLane = 0; iLane < nLanes; iLane++){
             vehContainers.add(new VehicleContainerImpl());
         }
-
-        vehGenerator = new VehicleGeneratorImpl(inputData);
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
         upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getUpstreamBoundaryData(),

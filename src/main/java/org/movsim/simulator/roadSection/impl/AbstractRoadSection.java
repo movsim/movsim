@@ -37,8 +37,7 @@ public abstract class AbstractRoadSection  {
     /** The veh container list (for each lane). */
     protected List<VehicleContainer> vehContainers;
 
-    /** The veh generator. */
-    protected VehicleGenerator vehGenerator;
+   
 
     /** The upstream boundary. */
     protected UpstreamBoundary upstreamBoundary;
