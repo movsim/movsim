@@ -232,6 +232,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     } // of mergeToMainroad()
 
+    
+    // TODO
 //    void setObstacleAtEndOfLane() {
 //        logger.debug("set obstacle at pos={} with length={}", pos, length);
 //        vehContainers.get(0).add(new Obstacle(x, lane, length));
