@@ -28,6 +28,7 @@ package org.movsim.simulator.roadSection;
 
 import java.util.List;
 
+import org.movsim.input.InputData;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -57,7 +58,9 @@ public interface RoadSection extends AbstractRoadSection {
 
     void updateDetectors(long iterationCount, double dt, double simulationTime);
     
-    // hack for debugging/testing
-    Onramp getMobilRampHack();
+//    // hack for debugging/testing
+//   RoadSection getMobilRampHack();
+    
+    List<RoadSection> onrampFactory(final InputData inputData); 
 }
 

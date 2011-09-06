@@ -42,7 +42,6 @@ import org.movsim.output.impl.LoopDetectors;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
-import org.movsim.simulator.roadSection.Onramp;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
@@ -73,9 +72,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     /** The detectors. */
     private LoopDetectors detectors = null;
-
-    /** The simple onramps. */
-    private List<Onramp> onramps = null;
 
     
     /**
@@ -129,7 +125,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         initialConditions(inputData.getSimulationInput());
 
-        initOnramps(inputData);
     }
 
 
@@ -145,7 +140,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 //
 //        updateRoadConditions(iterationCount, time);
 //
-//        laneChanging(iterationCount, dt, time);  
+//        laneChanging(iterationCount, dt, time);  // check order 
 //    
 //        // vehicle accelerations
 //        accelerate(iterationCount, dt, time);
@@ -215,15 +210,11 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         }
     }
 
-    /**
-     * Inits the onramps.
-     * 
-     * @param inputData
-     *            the input data
-     */
-    private void initOnramps(InputData inputData) {
+    
+    // just hack for "pulling out" the onramps contructed in the mainroad roadsection
+    public List<RoadSection> onrampFactory(final InputData inputData) {
         
-        onramps = new ArrayList<Onramp>();
+        List<RoadSection> onramps = new ArrayList<RoadSection>();
         
         final String projectName = inputData.getProjectMetaData().getProjectName();
         
@@ -243,6 +234,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
             onramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
             rampIndex++;
         }
+        return onramps;
     }
 
     /**
@@ -253,7 +245,12 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
             vehContainerLane.removeVehiclesDownstream(roadLength);
         }
     }
-
+    
+    
+    @Override
+    public void laneChanging(long iterationCount, double dt, double time) {
+        // TODO
+    }
    
    
     /**
@@ -377,14 +374,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         detectors.update(iterationCount, time, dt, vehContainers);
     }
    
-    @Override
-    public Onramp getMobilRampHack(){
-        return onramps.get(0); 
-    }
 
-    @Override
-    public void laneChanging(long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-    }
+ 
     
 }

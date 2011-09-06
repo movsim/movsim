@@ -33,7 +33,6 @@ import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.SimulationInput;
-import org.movsim.output.LoopDetector;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
@@ -96,6 +95,14 @@ public class SimulatorImpl implements Simulator, Runnable {
         iterationCount = 0;
         roadSections.clear();
         roadSections.add(new RoadSectionImpl(inputData, vehGenerator));
+        
+        // quick hack for pulling out onramps from mainroads
+        List<RoadSection> onramps = roadSections.get(0).onrampFactory(inputData);
+        for(RoadSection onramp : onramps){
+            roadSections.add(onramp);
+        }
+        
+        
 
         // model requires specific update time depending on its category !!
 
@@ -165,7 +172,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         // check for crashes
         for (RoadSection roadSection : roadSections) {
             roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-            roadSection.getMobilRampHack().checkForInconsistencies(iterationCount, time, isWithCrashExit);
+//            roadSection.getMobilRampHack().checkForInconsistencies(iterationCount, time, isWithCrashExit);
         }
 
         for (RoadSection roadSection : roadSections) {
@@ -175,19 +182,19 @@ public class SimulatorImpl implements Simulator, Runnable {
         // lane changes and merges from onramps/ to offramps
         for (RoadSection roadSection : roadSections) {
             roadSection.laneChanging(iterationCount, dt, time);
-            roadSection.getMobilRampHack().laneChanging(iterationCount, dt, time);
+//            roadSection.getMobilRampHack().laneChanging(iterationCount, dt, time);
         }
 
         // vehicle accelerations
         for (RoadSection roadSection : roadSections) {
             roadSection.accelerate(iterationCount, dt, time);
-            roadSection.getMobilRampHack().accelerate(iterationCount, dt, time);
+//            roadSection.getMobilRampHack().accelerate(iterationCount, dt, time);
         }
 
         // vehicle pos/speed
         for (RoadSection roadSection : roadSections) {
             roadSection.updatePositionAndSpeed(iterationCount, dt, time);
-            roadSection.getMobilRampHack().updatePositionAndSpeed(iterationCount, dt, time);
+//            roadSection.getMobilRampHack().updatePositionAndSpeed(iterationCount, dt, time);
         }
 
         for (RoadSection roadSection : roadSections) {
@@ -196,7 +203,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         for (RoadSection roadSection : roadSections) {
             roadSection.updateUpstreamBoundary(iterationCount, dt, time);
-            roadSection.getMobilRampHack().updateUpstreamBoundary(iterationCount, dt, time);
+//            roadSection.getMobilRampHack().updateUpstreamBoundary(iterationCount, dt, time);
         }
 
 

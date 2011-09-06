@@ -31,13 +31,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.input.InputData;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.roadSection.InflowTimeSeries;
-import org.movsim.simulator.roadSection.Onramp;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
@@ -52,7 +51,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OnrampImpl.
  */
-public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
+public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection {
 
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
@@ -249,6 +248,30 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
     @Override
     public void updateDownstreamBoundary() {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public List<TrafficLight> getTrafficLights() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<LoopDetector> getLoopDetectors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateDetectors(long iterationCount, double dt, double simulationTime) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<RoadSection> onrampFactory(InputData inputData) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
    
