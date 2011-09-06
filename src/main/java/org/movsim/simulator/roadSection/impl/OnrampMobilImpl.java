@@ -49,7 +49,6 @@ import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The Class OnrampImpl.
  */
@@ -83,8 +82,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
     /** The x center position of the ramp. */
     private final double xCenter;
 
-    /** The length of the ramp. */
-    private final double length;
+    private final double mergeLength;
 
     /** The x up ramp marks the start of ther ramp. */
     private final double xUpRamp;
@@ -133,8 +131,16 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
             String projectName, int rampIndex) {
 
         super(rampData, vehGenerator);
-        this.mainVehContainer = mainVehContainerMostRightLane;  // container of mainroad's most-right lane
         
+        
+        // vehicles start at initial position 
+        mergeLength = rampData.getRampMergingLength();
+        
+        xUpRamp = rampData.getRampStartPosition();
+        xCenter = rampData.getRampStartPosition() + 0.5 * mergeLength;
+        xDownRamp = xUpRamp + mergeLength;
+        
+        this.mainVehContainer = mainVehContainerMostRightLane;  // container of mainroad's most-right lane
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
@@ -159,11 +165,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
 
         nWait = 0;
 
-        this.length = rampData.getRampLength();
-        this.xCenter = rampData.getRampStartPosition() + 0.5 * length;
-
-        xUpRamp = rampData.getRampStartPosition();
-        xDownRamp = xUpRamp + length;
+        
     }
 
     @Override
@@ -231,8 +233,11 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, Road
 
     } // of mergeToMainroad()
 
-    
-    
+//    void setObstacleAtEndOfLane() {
+//        logger.debug("set obstacle at pos={} with length={}", pos, length);
+//        vehContainers.get(0).add(new Obstacle(x, lane, length));
+//    }
+//    
 
     @Override
     public OnrampMobilImpl getMobilRampHack() {

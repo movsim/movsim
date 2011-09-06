@@ -37,7 +37,7 @@
                 <!-- <SIMPLE_RAMP x="1400" length="200" logging="false">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP> -->
-                <RAMP x="1400" length="200" x_max="1000" logging="true">
+                <RAMP x="1400" length="1000" merge_length="200" logging="true">
 	          <TRAFFIC_SOURCE logging="true">
                      <INFLOW t="0" q_per_hour="500" />
                   </TRAFFIC_SOURCE>

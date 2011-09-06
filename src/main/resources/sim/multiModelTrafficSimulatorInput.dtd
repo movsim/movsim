@@ -280,8 +280,8 @@ speedlimit_kmh NMTOKEN #REQUIRED
 
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
 <!ATTLIST SIMPLE_RAMP
-x       NMTOKEN #REQUIRED
-length         NMTOKEN "1000"
+x        NMTOKEN #REQUIRED
+merge_length   NMTOKEN "200"
 logging  (true|false)  "false" 
 > 
 
@@ -289,10 +289,10 @@ logging  (true|false)  "false"
 <!-- real physical ramp with merging area (length) and total length of x_max --> 
 <!ELEMENT RAMP (TRAFFIC_SOURCE)>
 <!ATTLIST RAMP
-x       NMTOKEN #REQUIRED
-length         NMTOKEN "300"
-x_max          NMTOKEN "1000"
-logging  (true|false)  "false" 
+x             NMTOKEN #REQUIRED
+length        NMTOKEN "1000"
+merge_length  NMTOKEN "300"
+logging       (true|false)  "false" 
 > 
   
 <!-- traffic lights -->

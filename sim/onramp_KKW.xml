@@ -31,7 +31,7 @@
             <SPEED_LIMITS/>
             <RAMPS>
                 <!-- scaled units! -->
-                <SIMPLE_RAMP x="30000" length="1000" logging="true">
+                <SIMPLE_RAMP x="30000" merge_length="1000" logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
             </RAMPS>

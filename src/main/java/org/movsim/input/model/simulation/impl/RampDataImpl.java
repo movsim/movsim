@@ -46,17 +46,14 @@ import org.movsim.input.model.simulation.UpstreamBoundaryData;
  */
 public class RampDataImpl implements RampData {
 
-    /** The inflow time series. */
-    private List<InflowDataPoint> inflowTimeSeries;
-
     /** The center position. */
     private final double rampStartPosition;
 
-    /** The ramp length. */
-    private final double rampLength;
-
     /** The road length. */
     private final double roadLength;
+    
+    /** The ramp length. */
+    private final double rampMergingLength;
 
     /** The with logging. */
     private final boolean withLogging;
@@ -72,69 +69,28 @@ public class RampDataImpl implements RampData {
     @SuppressWarnings("unchecked")
     public RampDataImpl(Element elem) {
         this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-        this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
-        this.roadLength = Double.parseDouble(elem.getAttributeValue("x_max"));
+        this.roadLength = Double.parseDouble(elem.getAttributeValue("length"));
+        this.rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
         upstreamData = new UpstreamBoundaryDataImpl(upInflowElem);
         
-        //final List<Element> inflowElems = elem.getChildren("INFLOW");
-       //parseAndSortInflowElements(inflowElems);
 
     }
 
-    /**
-     * Parses the and sort inflow elements.
-     * 
-     * @param inflowElems
-     *            the inflow elems
-     */
-//    private void parseAndSortInflowElements(List<Element> inflowElems) {
-//        inflowTimeSeries = new ArrayList<InflowDataPoint>();
-//        for (final Element inflowElem : inflowElems) {
-//            final Map<String, String> map = XmlUtils.putAttributesInHash(inflowElem);
-//            inflowTimeSeries.add(new InflowDataPointImpl(map));
-//        }
-//        Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
-//            @Override
-//            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
-//                final Double pos1 = new Double((o1).getTime());
-//                final Double pos2 = new Double((o2).getTime());
-//                return pos1.compareTo(pos2); // sort with increasing t
-//            }
-//        });
-//    }
+    
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.RampData#getInflowTimeSeries()
-     */
-//    @Override
-//    public List<InflowDataPoint> getInflowTimeSeries() {
-//        return upstreamData.getInflowTimeSeries();
-//    }
+ 
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.RampData#getCenterPosition()
-     */
     @Override
     public double getRampStartPosition() {
         return rampStartPosition;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.RampData#getRampLength()
-     */
     @Override
-    public double getRampLength() {
-        return rampLength;
+    public double getRampMergingLength() {
+        return rampMergingLength;
     }
 
     /*

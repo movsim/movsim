@@ -159,12 +159,15 @@ public class SimulatorImpl implements Simulator, Runnable {
         // roadSection.update(iterationCount, time);
         // parallel update of all roadSections 
         
+        final boolean isTestingMobilOnramp = false;
         
         final double dt = this.timestep; // TODO
         // check for crashes
         for(RoadSection roadSection : roadSections){
             roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-            roadSection.getMobilRampHack().checkForInconsistencies(iterationCount, time, isWithCrashExit);
+            if(isTestingMobilOnramp){
+                roadSection.getMobilRampHack().checkForInconsistencies(iterationCount, time, isWithCrashExit);
+            }
         }
         
         for(RoadSection roadSection : roadSections){
@@ -174,21 +177,25 @@ public class SimulatorImpl implements Simulator, Runnable {
         // lane changes and merges from onramps/ to offramps
         for(RoadSection roadSection : roadSections){
             roadSection.laneChanging(iterationCount, dt, time);
-            roadSection.getMobilRampHack().laneChanging(iterationCount, dt, time);
+            if(isTestingMobilOnramp){
+                roadSection.getMobilRampHack().laneChanging(iterationCount, dt, time);
+            }
         }
         
         // vehicle accelerations
         for(RoadSection roadSection : roadSections){
             roadSection.accelerate(iterationCount, dt, time);
-            roadSection.getMobilRampHack().accelerate(iterationCount, dt, time);
+            if(isTestingMobilOnramp){
+                roadSection.getMobilRampHack().accelerate(iterationCount, dt, time);
+            }
         }
 
-        
-        
         // vehicle pos/speed
         for(RoadSection roadSection : roadSections){
             roadSection.updatePositionAndSpeed(iterationCount, dt, time);
-            roadSection.getMobilRampHack().updatePositionAndSpeed(iterationCount, dt, time);
+            if(isTestingMobilOnramp){
+                roadSection.getMobilRampHack().updatePositionAndSpeed(iterationCount, dt, time);
+            }
         }
 
         for(RoadSection roadSection : roadSections){
@@ -197,13 +204,18 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         for(RoadSection roadSection : roadSections){
             roadSection.updateUpstreamBoundary(iterationCount, dt, time);
-            roadSection.getMobilRampHack().updateUpstreamBoundary(iterationCount, dt, time);
+            if(isTestingMobilOnramp){
+                roadSection.getMobilRampHack().updateUpstreamBoundary(iterationCount, dt, time);
+            }
         }
 
-//        for(RoadSection roadSection : roadSections){
-//            roadSection.updateOnramps(iterationCount, dt, time);
-//        }
+        if(!isTestingMobilOnramp){
+            for(RoadSection roadSection : roadSections){
+                roadSection.updateOnramps(iterationCount, dt, time);
+            }
+        }
 
+        
         for(RoadSection roadSection : roadSections){
             roadSection.updateDetectors(iterationCount, dt, time);
         }

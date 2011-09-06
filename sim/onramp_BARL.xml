@@ -31,7 +31,7 @@
             <FLOW_CONSERVING_INHOMOGENEITIES />
             <SPEED_LIMITS/>
             <RAMPS>
-                <SIMPLE_RAMP x="2000" length="100" logging="true">
+                <SIMPLE_RAMP x="2000" merge_length="100" logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
             </RAMPS>

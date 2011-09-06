@@ -33,7 +33,7 @@
             <SPEED_LIMITS>
             </SPEED_LIMITS>
             <RAMPS>
-                <SIMPLE_RAMP x="15000" length="1000"
+                <SIMPLE_RAMP x="15000" merge_length="1000"
                     logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>

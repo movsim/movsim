@@ -2,7 +2,8 @@
 # first test script for running/updating all simulations
 
 run=". runapp"
-onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS"
+onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL KKW NEWELL NSM"
+
 startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL NSM KCA NEWELL"
 
 #######################################################
@@ -25,7 +26,7 @@ do
   read -p pressKey
 done;
 
-#exit
+
 
 
 for m in ${onramp}
@@ -36,6 +37,4 @@ do
   $run $proj
   read -p pressKey
 done;
-
-exit
 

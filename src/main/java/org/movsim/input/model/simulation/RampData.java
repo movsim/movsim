@@ -26,7 +26,6 @@
  */
 package org.movsim.input.model.simulation;
 
-import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -56,7 +55,7 @@ public interface RampData {
      * 
      * @return the ramp length
      */
-    double getRampLength();
+    double getRampMergingLength();
 
     /**
      * Gets the road length.
