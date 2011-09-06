@@ -94,7 +94,7 @@ public interface RoadSection {
      */
     List<LoopDetector> getLoopDetectors();
     
-    void checkForInconsistencies(long iterationCount, double time);
+    void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit);
     
     void accelerate(long iterationCount, double dt, double time);
     

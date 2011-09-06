@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.simulation.RampData;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Moveable;
@@ -30,9 +31,12 @@ public abstract class AbstractRoadSection  {
     /** The id. */
     protected final long id;
     
-    protected final boolean withCrashExit;
+   // protected final boolean withCrashExit;
     
     protected final boolean instantaneousFileOutput;
+
+    /** The veh generator. */
+    protected final VehicleGenerator vehGenerator;
     
     /** The veh container list (for each lane). */
     protected List<VehicleContainer> vehContainers;
@@ -46,16 +50,27 @@ public abstract class AbstractRoadSection  {
     /** The flow cons bottlenecks. */
     protected FlowConservingBottlenecks flowConsBottlenecks;
     
-    public AbstractRoadSection(InputData inputData){
+    public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){
+        this.vehGenerator = vehGenerator;
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
-        this.withCrashExit = simInput.isWithCrashExit();
+       // this.withCrashExit = simInput.isWithCrashExit();
         this.roadLength = simInput.getSingleRoadInput().getRoadLength();
         this.nLanes = simInput.getSingleRoadInput().getLanes();
         this.id = simInput.getSingleRoadInput().getId();
         this.instantaneousFileOutput = inputData.getProjectMetaData().isInstantaneousFileOutput();
     }
 
+    public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
+        this.vehGenerator = vehGenerator;
+        this.roadLength = rampData.getRampLength();
+        this.nLanes = 1;
+        this.id = 99;
+        this.instantaneousFileOutput = false;
+    }
+
+    
+    
     /*
      * (non-Javadoc)
      * 
@@ -147,13 +162,26 @@ public abstract class AbstractRoadSection  {
     }
     
     /**
+     * Update upstream boundary.
+     * 
+     * @param iterationCount
+     * @param dt
+     *            the dt
+     * @param time
+     *            the time
+     */
+    public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
+        upstreamBoundary.update(iterationCount, dt, time);
+    }
+    
+    /**
      * Check for inconsistencies.
      * 
      * @param iterationCount
      * @param time
      *            the time
      */
-    public void checkForInconsistencies(long iterationCount, double time) {
+    public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
         // crash test, iterate over all lanes separately
         for (int laneIndex = 0, laneIndexMax = vehContainers.size(); laneIndex < laneIndexMax; laneIndex++) {
             final VehicleContainer vehContainerLane = vehContainers.get(laneIndex);
@@ -180,7 +208,7 @@ public abstract class AbstractRoadSection  {
                     }
                     logger.error(msg.toString());
                     if (instantaneousFileOutput) {
-                        if (withCrashExit) {
+                        if (isWithCrashExit) {
                             logger.error(" !!! exit after crash !!! ");
                             System.exit(-99);
                         }

@@ -77,6 +77,8 @@ public class SimulatorImpl implements Simulator, Runnable {
     
     /** The veh generator. */
     protected VehicleGenerator vehGenerator;
+    
+    private final boolean isWithCrashExit;
 
     /**
      * Instantiates a new simulator impl.
@@ -84,8 +86,8 @@ public class SimulatorImpl implements Simulator, Runnable {
     public SimulatorImpl() {
         this.inputData = new InputDataImpl();
         roadSections = new ArrayList<RoadSection>();
-        
         vehGenerator = new VehicleGeneratorImpl(inputData);
+        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
     }
 
     /**
@@ -164,7 +166,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         final double dt = this.timestep; // TODO
         // check for crashes
         for(RoadSection roadSection : roadSections){
-            roadSection.checkForInconsistencies(iterationCount, time);
+            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
         }
         
         for(RoadSection roadSection : roadSections){

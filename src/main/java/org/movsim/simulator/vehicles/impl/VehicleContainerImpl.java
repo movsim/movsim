@@ -58,10 +58,13 @@ public class VehicleContainerImpl implements VehicleContainer {
     /** The veh ramp counter. */
     private int vehRampCounter;
 
+    
+    private final int laneIndex;  // TODO laneInit not necessary anymore ?!
     /**
      * Instantiates a new vehicle container impl.
      */
-    public VehicleContainerImpl() {
+    public VehicleContainerImpl(int laneIndex) {
+        this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
         vehMainroadCounter = 0;
         vehRampCounter = -1; // count negative to distinguish from vehicle

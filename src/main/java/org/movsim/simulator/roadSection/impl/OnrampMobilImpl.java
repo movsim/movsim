@@ -48,16 +48,12 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OnrampImpl.
  */
-public class OnrampMobilImpl implements Onramp {
+public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
 
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
     private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE; 
 
-    
-    
-    
-    
     
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
@@ -79,15 +75,6 @@ public class OnrampMobilImpl implements Onramp {
     /** The veh container list (for each lane). */
     private List<VehicleContainer> vehContainers;
 
-    
-    /** The upstream boundary. */
-    private UpstreamBoundary upstreamBoundary;
-    
-    
-    
-
-    /** The veh generator. */
-    private final VehicleGenerator vehGenerator;
 
     /** The main veh container. */
     private final VehicleContainer mainVehContainer;
@@ -96,7 +83,7 @@ public class OnrampMobilImpl implements Onramp {
    // private final InflowTimeSeries inflowTimeSeries;
 
     /** The vehicle queue. */
-    private final LinkedList<Vehicle> vehicleQueue;
+    //private final LinkedList<Vehicle> vehicleQueue;
 
     /** The x center position of the ramp. */
     private final double xCenter;
@@ -127,6 +114,9 @@ public class OnrampMobilImpl implements Onramp {
     private int mergeCount;
     
     
+    private final boolean isWithCrashExit = true;
+    
+    
     /**
      * Instantiates a new onramp impl.
      * 
@@ -134,26 +124,26 @@ public class OnrampMobilImpl implements Onramp {
      *            the ramp data
      * @param vehGenerator
      *            the veh generator
-     * @param mainVehContainer
+     * @param mainVehContainerMostRightLane
      *            the main veh container
      * @param projectName
      *            the project name
      * @param rampIndex
      *            the ramp index
      */
-    public OnrampMobilImpl(RampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
+    
+    
+    // TODO: create from Simulator 
+    public OnrampMobilImpl(final RampData rampData, final VehicleGenerator vehGenerator, final VehicleContainer mainVehContainerMostRightLane,
             String projectName, int rampIndex) {
 
-        this.vehGenerator = vehGenerator;
-        vehicleQueue = new LinkedList<Vehicle>();
-        this.mainVehContainer = mainVehContainer;  // container of mainroad's most-right lane
-        
+        super(rampData, vehGenerator);
+        this.mainVehContainer = mainVehContainerMostRightLane;  // container of mainroad's most-right lane
+        //vehicleQueue = new LinkedList<Vehicle>();
         
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
-        for(int iLane = 0; iLane < N_LANES; iLane++){
-            vehContainers.add(new VehicleContainerImpl());
-        }
+        vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
         
         upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, rampData.getUpstreamBoundaryData(),
                 projectName);
@@ -170,7 +160,6 @@ public class OnrampMobilImpl implements Onramp {
         }
 
         nWait = 0;
-        //inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
 
         this.length = rampData.getRampLength();
         this.xCenter = rampData.getRampStartPosition() + 0.5 * length;
@@ -187,21 +176,21 @@ public class OnrampMobilImpl implements Onramp {
     @Override
     public void update(long iterationCount, double dt, double time) {
 
-//
-//        // check for crashes
-//        checkForInconsistencies(iterationCount, time);
-//
-//        //updateRoadConditions(iterationCount, time);
-//
-//        // vehicle accelerations
-//        accelerate(iterationCount, dt, time);
-//
-//        // vehicle pos/speed
-//        updatePositionAndSpeed(iterationCount, dt, time);
-//
-//        updateDownstreamBoundary();
-//
-//        updateUpstreamBoundary(iterationCount, dt, time);
+
+        // check for crashes
+        checkForInconsistencies(iterationCount, time, isWithCrashExit);
+
+        //updateRoadConditions(iterationCount, time);
+
+        // vehicle accelerations
+        accelerate(iterationCount, dt, time);
+
+        // vehicle pos/speed
+        updatePositionAndSpeed(iterationCount, dt, time);
+
+        //updateDownstreamBoundary();
+
+        updateUpstreamBoundary(iterationCount, dt, time);
 
         //detectors.update(iterationCount, time, dt, vehContainers);
         

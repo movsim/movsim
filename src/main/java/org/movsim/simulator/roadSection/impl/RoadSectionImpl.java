@@ -77,8 +77,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     /** The simple onramps. */
     private List<Onramp> simpleOnramps = null;
 
-    /** The veh generator. */
-    protected VehicleGenerator vehGenerator;
     
     /**
      * Instantiates a new road section impl.
@@ -86,10 +84,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param inputData
      *            the input data
      */
-    public RoadSectionImpl(InputData inputData, VehicleGenerator vehGenerator) {
-        super(inputData);
+    public RoadSectionImpl(final InputData inputData, final VehicleGenerator vehGenerator) {
+        super(inputData, vehGenerator);
         logger.info("Cstr. RoadSectionImpl");
-        this.vehGenerator = vehGenerator;
         
         initialize(inputData);
 
@@ -111,8 +108,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     private void initialize(InputData inputData) {
         
         vehContainers = new ArrayList<VehicleContainer>();
-        for(int iLane = 0; iLane < nLanes; iLane++){
-            vehContainers.add(new VehicleContainerImpl());
+        for(int laneIndex = 0; laneIndex < nLanes; laneIndex++){
+            vehContainers.add(new VehicleContainerImpl(laneIndex));
         }
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
@@ -254,62 +251,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         }
     }
 
-    /**
-     * Update upstream boundary.
-     * 
-     * @param iterationCount
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
-     */
-    public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
-        upstreamBoundary.update(iterationCount, dt, time);
-    }
-    /**
-     * Check for inconsistencies.
-     * 
-     * @param iterationCount
-     * @param time
-     *            the time
-     */
-    public void checkForInconsistencies(int iterationCount, double time) {
-        // crash test, iterate over all lanes separately
-        for (int laneIndex = 0, laneIndexMax = vehContainers.size(); laneIndex < laneIndexMax; laneIndex++) {
-            final VehicleContainer vehContainerLane = vehContainers.get(laneIndex);
-            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-                final Moveable egoVeh = vehiclesOnLane.get(i);
-                final Moveable vehFront = vehContainerLane.getLeader(egoVeh);
-                final double netDistance = egoVeh.getNetDistance(vehFront);
-                if (netDistance < 0) {
-                    logger.error("#########################################################");
-                    logger.error("Crash of Vehicle i = {} at x = {}m", i, egoVeh.getPosition());
-                    if (vehFront != null) {
-                        logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
-                    }
-                    logger.error("net distance  = {}", netDistance);
-                    logger.error("lane index    = {}", laneIndex);
-                    logger.error("container.size = {}", vehiclesOnLane.size());
-                    final StringBuilder msg = new StringBuilder("\n");
-                    for (int j = Math.max(0, i - 8), M = vehiclesOnLane.size(); j <= Math.min(i + 8, M - 1); j++) {
-                        final Moveable veh = vehiclesOnLane.get(j);
-                        msg.append(String.format(
-                                "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
-                                veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
-                    }
-                    logger.error(msg.toString());
-                    if (instantaneousFileOutput) {
-                        if (withCrashExit) {
-                            logger.error(" !!! exit after crash !!! ");
-                            System.exit(-99);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+   
+   
     /**
      * Accelerate.
      * 
