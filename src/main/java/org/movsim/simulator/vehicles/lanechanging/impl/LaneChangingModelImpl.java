@@ -164,11 +164,11 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     @Override
     public void updateLaneChangeStatusFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane){
         if (laneChangeStatus() == NO_CHANGE) {
-            boolean otherVehsChangeSufficientlyLongAgo = true; 
+            final boolean otherVehsChangeSufficientlyLongAgo = true; 
             final Vehicle frontMain = vehContainerTargetLane.findLeader(me);
             final Vehicle backMain = vehContainerTargetLane.findFollower(me); 
             
-            boolean changeSafe = mandatoryWeavingChange(me, frontMain, backMain); // TODO
+            final boolean changeSafe = mandatoryWeavingChange(me, frontMain, backMain); // TODO
             if (otherVehsChangeSufficientlyLongAgo && changeSafe) {
                 lane = startLane = MOST_RIGHT + TO_RIGHT; // count
                 targetLane = MOST_RIGHT;

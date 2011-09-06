@@ -72,6 +72,14 @@ public class VehicleContainerImpl implements VehicleContainer {
                              // entered from mainroad
     }
 
+    
+    
+    @Override
+    public int getLaneIndex(){
+        return laneIndex;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * 
@@ -137,11 +145,10 @@ public class VehicleContainerImpl implements VehicleContainer {
      * .vehicles.Vehicle, double, double, int)
      */
     
-    // TODO drop laneInit ...
     @Override
-    public void add(final Vehicle veh, double xInit, double vInit, int laneInit) {
+    public void add(final Vehicle veh, double xInit, double vInit) {
         vehMainroadCounter++;
-        add(vehMainroadCounter, veh, xInit, vInit, laneInit);
+        add(vehMainroadCounter, veh, xInit, vInit, laneIndex);
     }
 
     /*
@@ -155,7 +162,7 @@ public class VehicleContainerImpl implements VehicleContainer {
         add(vehRampCounter, veh, xInit, vInit, laneIndex);
     }
     @Override
-    public void addFromRamp(final Vehicle veh){
+    public void addFromRamp(Vehicle veh){
         vehRampCounter--; // count negative
         add(vehRampCounter, veh, veh.getPosition(), veh.getSpeed(), laneIndex);
     }
@@ -285,14 +292,32 @@ public class VehicleContainerImpl implements VehicleContainer {
    
     
     @Override
-    public Vehicle findLeader(Moveable veh) {
-        // TODO Auto-generated method stub
+    public Vehicle findLeader(final Moveable veh) {
+        // TODO efficient implementation 
+        final double position = veh.getPosition();
+        // decrease index for traversing in downstream direction
+        // return first vehicle on lane with *higher* position than veh
+        for (int i = vehicles.size()-1; i>=0; i--) {
+            final Vehicle vehOnLane = vehicles.get(i);
+            if(vehOnLane.getPosition() >= position){
+                return vehOnLane;
+            }
+        }
         return null;
     }
 
     @Override
-    public Vehicle findFollower(Moveable veh) {
-        // TODO Auto-generated method stub
+    public Vehicle findFollower(final Moveable veh) {
+     // TODO efficient implementation 
+        final double position = veh.getPosition();
+        // increase index for traversing in downstream direction
+        // return first vehicle on lane with *lower* position than veh
+        for (int i = 0, N = vehicles.size(); i < N; i++) {
+            final Vehicle vehOnLane = vehicles.get(i);
+            if(vehOnLane.getPosition() <= position){
+                return vehOnLane;
+            }
+        }
         return null;
     }
 

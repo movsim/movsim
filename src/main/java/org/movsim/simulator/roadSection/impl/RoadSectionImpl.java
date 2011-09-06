@@ -75,7 +75,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     private LoopDetectors detectors = null;
 
     /** The simple onramps. */
-    private List<Onramp> simpleOnramps = null;
+    private List<Onramp> onramps = null;
 
     
     /**
@@ -145,6 +145,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 //
 //        updateRoadConditions(iterationCount, time);
 //
+//        laneChanging(iterationCount, dt, time);  
+//    
 //        // vehicle accelerations
 //        accelerate(iterationCount, dt, time);
 //
@@ -189,7 +191,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 }
                 final int laneEnter = Constants.MOST_RIGHT_LANE;
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit, laneEnter); // TODO 
+                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);  
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
 
                 xLocal -= 1 / rhoLocal;
@@ -206,7 +208,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 final int laneInit = ic.getInitLane();
                 final Vehicle veh = (vehTypeFromFile.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
                         .createVehicle(vehTypeFromFile);
-                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, posInit, speedInit, laneInit); // TODO: consider multi-lane case !!!
+                // TODO: consider multi-lane case, distribute over all lanes
+                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);  
                 logger.info("set vehicle with label = {}", veh.getLabel());
             }
         }
@@ -220,7 +223,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      */
     private void initOnramps(InputData inputData) {
         
-        simpleOnramps = new ArrayList<Onramp>();
+        onramps = new ArrayList<Onramp>();
         
         final String projectName = inputData.getProjectMetaData().getProjectName();
         
@@ -229,7 +232,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         int rampIndex = 1;
         for (final SimpleRampData onrmp : simpleOnrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            simpleOnramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
+            onramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
             rampIndex++;
         }
         
@@ -237,7 +240,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         final List<RampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getRamps();
         for (final RampData onrmp : onrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            simpleOnramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
+            onramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
             rampIndex++;
         }
     }
@@ -336,10 +339,12 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param time
      *            the time
      */
+    
+    
     public void updateOnramps(long iterationCount, double dt, double time) {
-        if (simpleOnramps.isEmpty())
+        if (onramps.isEmpty())
             return;
-        for (final Onramp onramp : simpleOnramps) {
+        for (final Onramp onramp : onramps) {
             onramp.update(iterationCount, dt, time);
         }
     }
@@ -372,5 +377,14 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         detectors.update(iterationCount, time, dt, vehContainers);
     }
    
+    @Override
+    public OnrampMobilImpl getMobilRampHack(){
+        return (OnrampMobilImpl)onramps.get(0); 
+    }
 
+    @Override
+    public void laneChanging(long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+    }
+    
 }

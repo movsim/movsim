@@ -34,6 +34,9 @@ import java.util.List;
  */
 public interface VehicleContainer extends MoveableContainer {
 
+    
+    int getLaneIndex();
+    
     /**
      * Gets the vehicles.
      * 
@@ -81,10 +84,8 @@ public interface VehicleContainer extends MoveableContainer {
      *            the x init
      * @param vInit
      *            the v init
-     * @param laneInit
-     *            the lane init
      */
-    void add(final Vehicle veh, double xInit, double vInit, int laneInit);
+    void add(final Vehicle veh, double xInit, double vInit);
 
     /**
      * Adds the from ramp.
@@ -98,7 +99,7 @@ public interface VehicleContainer extends MoveableContainer {
      */
     void addFromRamp(final Vehicle veh, double xInit, double vInit);
     
-    void addFromRamp(final Vehicle veh);
+    void addFromRamp(Vehicle veh);
 
     /**
      * Removes the vehicles downstream.

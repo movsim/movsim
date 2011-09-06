@@ -144,7 +144,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
                 iLane = getNewLaneIndex(iLane);
                 final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 // lane index is identical to vehicle's lane number 
-                final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, iLane, time, totalInflow);
+                final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, time, totalInflow);
                 if (isEntered) {
                     nWait--;
                     if (fstrLogging != null) {
@@ -171,7 +171,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      *            the q bc
      * @return true, if successful
      */
-    private boolean tryEnteringNewVehicle(final VehicleContainer vehContainer, int lane, double time, double qBC) {
+    private boolean tryEnteringNewVehicle(final VehicleContainer vehContainer, double time, double qBC) {
 
         // type of new vehicle
         final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(); 
@@ -179,7 +179,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
         // (1) empty road
         if (leader == null) {
-            enterVehicleOnEmptyRoad(vehContainer, lane, time, vehPrototype);
+            enterVehicleOnEmptyRoad(vehContainer, time, vehPrototype);
             return true;
         }
         // (2) check if gap to leader is sufficiently large
@@ -198,7 +198,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             minRequiredGap = leader.getSpeed() * tau;
         }
         if (netGapToLeader > minRequiredGap) {
-            enterVehicle(vehContainer, lane, time, minRequiredGap, vehPrototype, leader);
+            enterVehicle(vehContainer, time, minRequiredGap, vehPrototype, leader);
             return true;
         }
         // no entering possible
@@ -213,10 +213,10 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param vehPrototype
      *            the veh prototype
      */
-    private void enterVehicleOnEmptyRoad(final VehicleContainer vehContainer, int lane, double time, VehiclePrototype vehPrototype) {
+    private void enterVehicleOnEmptyRoad(final VehicleContainer vehContainer, double time, VehiclePrototype vehPrototype) {
         final double xEnter = 0;
         final double vEnter = inflowTimeSeries.getSpeed(time);
-        addVehicle(vehContainer, lane, vehPrototype, xEnter, vEnter);
+        addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
 //        logger.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
@@ -232,7 +232,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param leader
      *            the leader
      */
-    private void enterVehicle(final VehicleContainer vehContainer, int lane, double time, double sFreeMin, VehiclePrototype vehPrototype, Vehicle leader) {
+    private void enterVehicle(final VehicleContainer vehContainer, double time, double sFreeMin, VehiclePrototype vehPrototype, Vehicle leader) {
         final double sFree = leader.getPosition() - leader.getLength();
         final double xLast = leader.getPosition();
         final double vLast = leader.getSpeed();
@@ -252,7 +252,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
         //final int laneEnter = Constants.MOST_RIGHT_LANE;
 
-        addVehicle(vehContainer, lane, vehPrototype, xEnter, vEnter);
+        addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
 //        logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",
 //         xEnter, vEnter);
 //        System.out.printf("add vehicle from upstream boundary: xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
@@ -272,13 +272,13 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param laneEnter
      *            the lane enter
      */
-    private void addVehicle(final VehicleContainer vehContainer, int laneEnter, final VehiclePrototype vehPrototype, double xEnter, double vEnter) {
+    private void addVehicle(final VehicleContainer vehContainer, final VehiclePrototype vehPrototype, double xEnter, double vEnter) {
         final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-        vehContainer.add(veh, xEnter, vEnter, laneEnter);
+        vehContainer.add(veh, xEnter, vEnter);
         // status variables of entering vehicle for logging
         enteringVehCounter++;
         xEnterLast = xEnter;
         vEnterLast = vEnter;
-        laneEnterLast = laneEnter;
+        laneEnterLast = vehContainer.getLaneIndex();
     }
 }

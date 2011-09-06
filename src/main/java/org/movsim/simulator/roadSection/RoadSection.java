@@ -29,6 +29,7 @@ package org.movsim.simulator.roadSection;
 import java.util.List;
 
 import org.movsim.output.LoopDetector;
+import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
 import org.movsim.simulator.vehicles.VehicleContainer;
 
 // TODO: Auto-generated Javadoc
@@ -96,6 +97,8 @@ public interface RoadSection {
     
     void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit);
     
+    void laneChanging(long iterationCount, double dt, double time);
+    
     void accelerate(long iterationCount, double dt, double time);
     
     void updateRoadConditions(long iterationCount, double time);
@@ -109,5 +112,8 @@ public interface RoadSection {
     void updateOnramps(long iterationCount, double dt, double time);
 
     void updateDetectors(long iterationCount, double dt, double simulationTime);
-
+    
+    // hack for debugging/testing
+    OnrampMobilImpl getMobilRampHack();
 }
+

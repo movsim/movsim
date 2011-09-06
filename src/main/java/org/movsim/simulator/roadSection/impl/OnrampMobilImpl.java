@@ -34,9 +34,12 @@ import java.util.List;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
+import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.Onramp;
+import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -50,7 +53,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OnrampImpl.
  */
-public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
+public class OnrampMobilImpl extends AbstractRoadSection implements Onramp, RoadSection {
 
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
@@ -74,16 +77,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
     
     final static int N_LANES = 1;
     
-
-
     /** The main veh container. */
     private final VehicleContainer mainVehContainer;
-
-    /** The inflow time series. */
-   // private final InflowTimeSeries inflowTimeSeries;
-
-    /** The vehicle queue. */
-    //private final LinkedList<Vehicle> vehicleQueue;
 
     /** The x center position of the ramp. */
     private final double xCenter;
@@ -139,7 +134,6 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
 
         super(rampData, vehGenerator);
         this.mainVehContainer = mainVehContainerMostRightLane;  // container of mainroad's most-right lane
-        //vehicleQueue = new LinkedList<Vehicle>();
         
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
@@ -174,47 +168,54 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
 
     @Override
     public void update(long iterationCount, double dt, double time) {
-
-
-        // check for crashes
-        checkForInconsistencies(iterationCount, time, isWithCrashExit);
-
-        //updateRoadConditions(iterationCount, time);
-
-        // vehicle accelerations
-        accelerate(iterationCount, dt, time);
-
-        // vehicle pos/speed
-        updatePositionAndSpeed(iterationCount, dt, time);
-
-        // adaptation of vehicle parameters in merging region
-        //updateLaneChangeParameters();
-
-        mergeToMainroad(dt); // own method for onramp; vehicle vanishes
-
-        updateUpstreamBoundary(iterationCount, dt, time);
-
-        //detectors.update(iterationCount, time, dt, vehContainers);
-        
-     // periodic queuing:
-//        if (withPeriodicQueue) {
-//            requeueSlowVehicles();
-//        }
-//                
-//                if (fstrLogging != null) {
-//                    final double qBC  = upstreamBoundary.getTotalInflow(time);
-//                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
-//                            3600 * qBC, mergeCount, vehicleQueue.size());
-//                    fstrLogging.flush();
-//                }
-
+//
+//
+//        // check for crashes
+//        checkForInconsistencies(iterationCount, time, isWithCrashExit);
+//
+//        //updateRoadConditions(iterationCount, time);
+//
+//        // vehicle accelerations
+//        accelerate(iterationCount, dt, time);
+//
+//        // vehicle pos/speed
+//        updatePositionAndSpeed(iterationCount, dt, time);
+//
+//        // adaptation of vehicle parameters in merging region
+//        //updateLaneChangeParameters();
+//
+//        mergeToMainroad(dt); // own method for onramp; vehicle vanishes
+//
+//        updateUpstreamBoundary(iterationCount, dt, time);
+//
+//        //detectors.update(iterationCount, time, dt, vehContainers);
+//        
+//     // periodic queuing:
+////        if (withPeriodicQueue) {
+////            requeueSlowVehicles();
+////        }
+////                
+////                if (fstrLogging != null) {
+////                    final double qBC  = upstreamBoundary.getTotalInflow(time);
+////                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
+////                            3600 * qBC, mergeCount, vehicleQueue.size());
+////                    fstrLogging.flush();
+////                }
+//
     }
     
+    
+    @Override
+    public void laneChanging(long iterationCount, double dt, double time) {
+        mergeToMainroad(dt); // own method for onramp; vehicle vanishes
+    }
     
     private void mergeToMainroad(double dt) {
         // loop over on-ramp veh (i=0 is obstacle !! )
         final VehicleContainer vehContainer = vehContainers.get(0);
-        for(final Vehicle veh : vehContainer.getVehicles()) { 
+        // iterator not possible in this for-loop because size() changes dynamically
+        for(int i=0; i< vehContainer.size(); i++){
+            final Vehicle veh = vehContainer.getVehicles().get(i); 
             final double pos = veh.getPosition();
             if (pos > xUpRamp ) { 
                 System.out.println("mergeToMainroad: veh in ramp region! pos = " + pos);
@@ -222,15 +223,60 @@ public class OnrampMobilImpl extends AbstractRoadSection implements Onramp {
                 veh.getLaneChangingModel().updateLaneChangeStatusFromRamp(dt, veh, mainVehContainer);
 
                 if (veh.getLaneChangingModel().laneChanging()) {
-                    mainVehContainer.addFromRamp(veh);
+                   mainVehContainer.addFromRamp(veh);
                     vehContainer.removeVehicle(veh);
                 }
             } 
         } 
 
-
-
     } // of mergeToMainroad()
+
+    
+    
+
+    @Override
+    public OnrampMobilImpl getMobilRampHack() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    
+    // hack: TODO redesign !!!
+    @Override
+    public List<TrafficLight> getTrafficLights() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<LoopDetector> getLoopDetectors() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void updateRoadConditions(long iterationCount, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateDownstreamBoundary() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateOnramps(long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateDetectors(long iterationCount, double dt, double simulationTime) {
+        // TODO Auto-generated method stub
+        
+    }
 
 
    

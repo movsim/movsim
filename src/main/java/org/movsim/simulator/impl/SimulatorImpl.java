@@ -84,7 +84,7 @@ public class SimulatorImpl implements Simulator, Runnable {
      * Instantiates a new simulator impl.
      */
     public SimulatorImpl() {
-        // 
+        inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
     }
 
     /**
@@ -164,20 +164,31 @@ public class SimulatorImpl implements Simulator, Runnable {
         // check for crashes
         for(RoadSection roadSection : roadSections){
             roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
+            roadSection.getMobilRampHack().checkForInconsistencies(iterationCount, time, isWithCrashExit);
         }
         
         for(RoadSection roadSection : roadSections){
             roadSection.updateRoadConditions(iterationCount, time);
         }
 
+        // lane changes and merges from onramps/ to offramps
+        for(RoadSection roadSection : roadSections){
+            roadSection.laneChanging(iterationCount, dt, time);
+            roadSection.getMobilRampHack().laneChanging(iterationCount, dt, time);
+        }
+        
         // vehicle accelerations
         for(RoadSection roadSection : roadSections){
             roadSection.accelerate(iterationCount, dt, time);
+            roadSection.getMobilRampHack().accelerate(iterationCount, dt, time);
         }
 
+        
+        
         // vehicle pos/speed
         for(RoadSection roadSection : roadSections){
             roadSection.updatePositionAndSpeed(iterationCount, dt, time);
+            roadSection.getMobilRampHack().updatePositionAndSpeed(iterationCount, dt, time);
         }
 
         for(RoadSection roadSection : roadSections){
@@ -186,11 +197,12 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         for(RoadSection roadSection : roadSections){
             roadSection.updateUpstreamBoundary(iterationCount, dt, time);
+            roadSection.getMobilRampHack().updateUpstreamBoundary(iterationCount, dt, time);
         }
 
-        for(RoadSection roadSection : roadSections){
-            roadSection.updateOnramps(iterationCount, dt, time);
-        }
+//        for(RoadSection roadSection : roadSections){
+//            roadSection.updateOnramps(iterationCount, dt, time);
+//        }
 
         for(RoadSection roadSection : roadSections){
             roadSection.updateDetectors(iterationCount, dt, time);
@@ -260,7 +272,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         
         // parse xmlFile and set values
         
-        inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
+        
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
