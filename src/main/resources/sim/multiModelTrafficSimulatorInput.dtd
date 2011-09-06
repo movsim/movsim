@@ -145,11 +145,22 @@ alpha_a  NMTOKEN "1"
 >
 
 
-<!-- no lane changing implemented so far (single lane simulator) -->
-<!ELEMENT LANE_CHANGE_MODEL EMPTY>
+<!ELEMENT LANE_CHANGE_MODEL (MOBIL?)>
 <!ATTLIST LANE_CHANGE_MODEL 
+eur_rules  (true|false) "false"
+crit_speed_eur_kmh  NMTOKEN "90"
 >
 
+
+<!-- MOBIL as concrete lane-changing model -->
+<!ELEMENT MOBIL EMPTY>
+<!ATTLIST MOBIL 
+b_safe          NMTOKEN "4.0"
+s_min           NMTOKEN "2.0"
+threshold       NMTOKEN "0.2"
+bias_right      NMTOKEN "0.25"
+politeness      NMTOKEN "0.1"
+>
 
 <!-- Fluctuations:  -->
 <!-- Wiener process (tau!=0) or delta-correlated white noise as alternatives -->

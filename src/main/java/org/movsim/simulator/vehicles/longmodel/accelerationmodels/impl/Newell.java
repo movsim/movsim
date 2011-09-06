@@ -93,22 +93,38 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
         
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
 
         // consider external speedlimit
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
 
-        final double tLocal = alphaT * dt;
+        // TODO check modelling of parameter dt=T (dt is the constant update time and cannot be changed)
+        final double tLocal = alphaT * dt;   
         
         // actual Newell formula
         return acc(s, v, dv, v0Local, tLocal);
     }
+    
+    
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
+        final double dtLocal = dt;
+
+        return acc(s, v, dv, v0Local, dtLocal);
+    }
+
 
     /*
      * (non-Javadoc)
@@ -118,7 +134,7 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, v0, dt);
     }
     
@@ -129,9 +145,9 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
         double aWanted = (vNew - v) / dtLocal;
         
         // workaround to avoid crash
-         if (s/v < dt) {
-         aWanted = -10000000;
-         }
+        if (s / v < dt) {
+            aWanted = -10000000; 
+        }
         
         return aWanted;
     }

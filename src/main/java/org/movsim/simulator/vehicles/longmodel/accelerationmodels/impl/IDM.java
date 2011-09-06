@@ -166,7 +166,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
@@ -176,13 +176,27 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double TLocal = alphaT * T;
+        final double localT = alphaT * T;
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
-        final double aLocal = alphaA * a;
+        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double localA = alphaA * a;
 
-        return acc(s, v, dv, TLocal, v0Local, aLocal);
+        return acc(s, v, dv, localT, localV0, localA);
 
+    }
+    
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double localT = T;;
+        final double localV0 = Math.min(v0, me.getSpeedlimit());
+        final double localA = a;
+
+        return acc(s, v, dv, localT, localV0, localA);
     }
 
     /*
@@ -193,7 +207,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, T, v0, a);
     }
 

@@ -146,7 +146,7 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
@@ -171,6 +171,20 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
 
     }
 
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double TLocal = T;
+        final double v0Local =  Math.min(v0, me.getSpeedlimit());
+
+        return acc(s, v, dv, v0Local, TLocal);
+    }
+
+    
     /*
      * (non-Javadoc)
      * 
@@ -179,7 +193,7 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, v0, T);
     }
 

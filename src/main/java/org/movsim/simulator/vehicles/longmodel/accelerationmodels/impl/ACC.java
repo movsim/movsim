@@ -118,7 +118,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
@@ -138,6 +138,21 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
         return acc(s, v, dv, aLead, Tloc, v0Loc, aLoc);
 
     }
+    
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
+        
+        final double TLocal = T;;
+        final double v0Local =  Math.min(v0, me.getSpeedlimit());
+        final double aLocal = a;
+
+        return acc(s, v, dv, aLead, TLocal, v0Local, aLocal);
+    }
 
     /*
      * (non-Javadoc)
@@ -147,7 +162,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, 0, T, v0, a);
     }
 
@@ -299,5 +314,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
     }
+
+   
 
 }

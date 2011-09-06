@@ -200,12 +200,11 @@ public class OnrampImpl implements Onramp {
      *            the lane enter
      */
     private void addVehicleFromRamp(Vehicle vehToEnter, double xEnter, double vEnter) {
-        mainVehContainer.addFromRamp(vehToEnter, xEnter, vEnter, LANE_TO_MERGE_ON_MAINROAD);
+        mainVehContainer.addFromRamp(vehToEnter, xEnter, vEnter);
         // update status for last merge
         mergeCount++;
         xEnterLastMerge = xEnter;
         vEnterLastMerge = vEnter;
-        //LANE_TO_MERGE_ON_MAINROAD = laneEnter; 
     }
 
     /**

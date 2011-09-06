@@ -71,7 +71,7 @@ public class EquilibriumKKW extends EquilibriumPropertiesImpl {
             // density
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
-                final double acc = model.accSimple(s, vIter, 0.);
+                final double acc = model.calcAccSimple(s, vIter, 0.);
                 final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it.
                                                                             // step
                                                                             // in

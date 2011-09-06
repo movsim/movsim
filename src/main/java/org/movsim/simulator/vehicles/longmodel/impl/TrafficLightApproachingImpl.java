@@ -87,7 +87,7 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
                                                                    // or so) ?!
             if (distanceToTrafficlight < maxRangeOfSight) {
                 final double speed = me.getSpeed();
-                accTrafficLight = Math.min(0, longModel.accSimple(distanceToTrafficlight, speed, speed));
+                accTrafficLight = Math.min(0, longModel.calcAccSimple(distanceToTrafficlight, speed, speed));
 
                 if (accTrafficLight < 0) {
                     considerTrafficLight = true;

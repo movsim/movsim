@@ -99,8 +99,8 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(InputDataImpl inputData) {
-        projectMetaData = inputData.getProjectMetaData();
+    public XmlReaderSimInput(final InputDataImpl inputData) {
+        projectMetaData = inputData.getProjectMetaData(); 
         this.inputData = inputData;
 
         this.xmlFilename = projectMetaData.getProjectName(); // TODO Path + File
@@ -171,6 +171,8 @@ public class XmlReaderSimInput {
 
         final Element root = doc.getRootElement();
 
+        final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
+        
         // -------------------------------------------------------
 
         final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
@@ -183,7 +185,7 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
+        
         inputData.setSimulationInput(simInput);
 
     }

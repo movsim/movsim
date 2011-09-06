@@ -49,6 +49,7 @@ import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
@@ -107,7 +108,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(InputData simInput) {
+    public VehicleGeneratorImpl(final InputData simInput) {
 
         this.projectName = simInput.getProjectMetaData().getProjectName();
         this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
@@ -138,7 +139,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      *            the sim input
      * @return the double
      */
-    private double createPrototypes(InputData simInput) {
+    private double createPrototypes(final InputData simInput) {
 
         // default for continuous micro models
         requiredTimestep = simInput.getSimulationInput().getTimestep();
@@ -338,8 +339,12 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         final VehicleInput vehInput = prototype.getVehicleInput();
         final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
+        
+        // TODO 
+        final LaneChangingModelImpl lcModel = new LaneChangingModelImpl();
+        
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
-        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer);
+        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel);
         return veh;
     }
 

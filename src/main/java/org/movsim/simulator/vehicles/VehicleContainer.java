@@ -84,7 +84,7 @@ public interface VehicleContainer extends MoveableContainer {
      * @param laneInit
      *            the lane init
      */
-    void add(Vehicle veh, double xInit, double vInit, int laneInit);
+    void add(final Vehicle veh, double xInit, double vInit, int laneInit);
 
     /**
      * Adds the from ramp.
@@ -95,10 +95,10 @@ public interface VehicleContainer extends MoveableContainer {
      *            the x init
      * @param vInit
      *            the v init
-     * @param laneInit
-     *            the lane init
      */
-    void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit);
+    void addFromRamp(final Vehicle veh, double xInit, double vInit);
+    
+    void addFromRamp(final Vehicle veh);
 
     /**
      * Removes the vehicles downstream.
@@ -112,5 +112,16 @@ public interface VehicleContainer extends MoveableContainer {
      * Removes the vehicle most downstream.
      */
     void removeVehicleMostDownstream();
+    
+    
+    void removeVehicle(final Vehicle veh);
+    
+    
+    // for vehicles sharing the same lane/container
+    Vehicle getLeader(final Moveable veh);
+        
+    Vehicle findLeader(final Moveable veh);
+    
+    Vehicle findFollower(final Moveable veh);
 
 }

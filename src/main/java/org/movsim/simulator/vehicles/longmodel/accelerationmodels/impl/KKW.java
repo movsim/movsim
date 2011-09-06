@@ -131,13 +131,28 @@ public class KKW extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
-        return accSimple(s, v, dv, alphaT, alphaV0);
+        
+        return acc(s, v, dv, alphaT, alphaV0);
+    }
+    
+    
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double alphaT = 1; 
+        final double alphaV0 = 1;
+
+        return acc(s, v, dv, alphaT, alphaV0);
     }
 
     /*
@@ -148,8 +163,8 @@ public class KKW extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
-        return accSimple(s, v, dv, 1, 1);
+    public double calcAccSimple(double s, double v, double dv) {
+        return acc(s, v, dv, 1, 1);
     }
 
     /**
@@ -167,7 +182,7 @@ public class KKW extends LongitudinalModel implements AccelerationModel {
      *            the alpha v0
      * @return the double
      */
-    private double accSimple(double s, double v, double dv, double alphaT, double alphaV0) {
+    private double acc(double s, double v, double dv, double alphaT, double alphaV0) {
 
         final int v0Loc = (int) (alphaV0 * v0 + 0.5); // adapt v0 spatially
         final int vLoc = (int) (v + 0.5);

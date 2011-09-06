@@ -33,9 +33,11 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Noise;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
 import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModel;
 import org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl;
 import org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl;
 import org.slf4j.Logger;
@@ -87,10 +89,13 @@ public class VehicleImpl implements Vehicle {
     private int lane;
 
     /** The speedlimit. */
-    private double speedlimit; // state variable
+    private double speedlimit; 
 
     /** The long model. */
-    private final AccelerationModel longModel;
+    private final AccelerationModel accelerationModel;
+    
+    /** The lane-changing model. */
+    private final LaneChangingModelImpl lcModel;
 
     /** The memory. */
     private Memory memory = null;
@@ -111,15 +116,15 @@ public class VehicleImpl implements Vehicle {
      *            the label
      * @param id
      *            the id
-     * @param longModel
+     * @param accelerationModel
      *            the long model
      * @param vehInput
      *            the veh input
      * @param cyclicBuffer
      *            the cyclic buffer
      */
-    public VehicleImpl(String label, int id, AccelerationModel longModel, VehicleInput vehInput,
-            CyclicBufferImpl cyclicBuffer) {
+    public VehicleImpl(String label, int id, final AccelerationModel longModel, final VehicleInput vehInput,
+            final CyclicBufferImpl cyclicBuffer, final LaneChangingModelImpl lcModel) {
         this.label = label;
         this.id = id;
 
@@ -127,7 +132,8 @@ public class VehicleImpl implements Vehicle {
         reactionTime = vehInput.getReactionTime();
         maxDecel = vehInput.getMaxDeceleration();
 
-        this.longModel = longModel;
+        this.accelerationModel = longModel;
+        this.lcModel = lcModel;
         this.cyclicBuffer = cyclicBuffer;
 
         oldPosition = 0;
@@ -405,7 +411,7 @@ public class VehicleImpl implements Vehicle {
         // Referenz-V0 nehmen
         // und NICHT das dynamische, durch Speedlimits beeinflusste v0
         if (memory != null) {
-            final double v0 = longModel.parameterV0();
+            final double v0 = accelerationModel.parameterV0();
             memory.update(dt, speed, v0);
             alphaTLocal *= memory.alphaT();
             alphaV0Local *= memory.alphaV0();
@@ -413,7 +419,7 @@ public class VehicleImpl implements Vehicle {
         }
 
         // TODO gekapseltere Aufruf
-        accModel = longModel.acc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+        accModel = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
 
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching.considerTrafficLight()) {
@@ -443,7 +449,7 @@ public class VehicleImpl implements Vehicle {
 
         oldPosition = position;
 
-        if (longModel.isCA()) {
+        if (accelerationModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             position = (int) (position + dt * speed + 0.5);
 
@@ -492,7 +498,7 @@ public class VehicleImpl implements Vehicle {
      */
     @Override
     public double getDesiredSpeedParameter() {
-        return longModel.parameterV0();
+        return accelerationModel.parameterV0();
 
     }
 
@@ -504,7 +510,7 @@ public class VehicleImpl implements Vehicle {
      */
     @Override
     public void updateTrafficLight(double time, TrafficLight trafficLight) {
-        trafficLightApproaching.update(this, time, trafficLight, longModel);
+        trafficLightApproaching.update(this, time, trafficLight, accelerationModel);
 
     }
 
@@ -515,7 +521,17 @@ public class VehicleImpl implements Vehicle {
      */
     @Override
     public void removeObservers() {
-        longModel.removeObserver();
+        accelerationModel.removeObserver();
     }
 
+    @Override
+    public LaneChangingModelImpl getLaneChangingModel(){
+        return lcModel;
+    }
+
+    @Override
+    public AccelerationModel getAccelerationModel(){
+        return accelerationModel;
+    }
+    
 }

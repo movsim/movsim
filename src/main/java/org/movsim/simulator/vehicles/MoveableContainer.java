@@ -41,6 +41,6 @@ public interface MoveableContainer {
      *            the veh
      * @return the leader
      */
-    Moveable getLeader(Moveable veh);
+    //Moveable getLeader(Moveable veh);
 
 }

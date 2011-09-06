@@ -111,12 +111,7 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
-
-        // TODO: reaction time ?!
-        // final double T_react_local = T_react;
-        // final double s=cyclicBuf->get_s(iveh,it,T_react_local);
-        // final double v=cyclicBuf->get_v(iveh,it,T_react_local);
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamic variables
         final Moveable vehFront = vehContainer.getLeader(me);
@@ -124,14 +119,26 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront); // only needed for VDIFF
 
-        // speed limit --> OVM causes accidents due to immediate braking
-        // reaction
-        // consider external speedlimit
-        final double v0loc = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        // speed limit: OVM causes accidents due to immediate braking reaction
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
         // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
-        return acc(s, v, dv, alphaT, v0loc);
+        return acc(s, v, dv, alphaT, v0Local);
     }
 
+    
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double alphaT = 1;
+        final double v0Local =  Math.min(v0, me.getSpeedlimit());
+
+        return acc(s, v, dv, alphaT, v0Local);
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -140,7 +147,7 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         final double alphaT = 1;
         // final double alphaV0 = 1;
         return acc(s, v, dv, alphaT, v0);

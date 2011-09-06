@@ -14,7 +14,6 @@ public interface XmlElementNames {
     public final String VehicleMemory = "MEMORY";
     public final String VehicleNoise = "NOISE";
     public final String VehicleLongitudinalModel = "LONGITUDINAL_MODEL";
-    public final String VehicleLaneChangeModel = "LANE_CHANGE_MODEL";
     public final String VehicleLongModelIDM = "IDM";
     public final String VehicleLongModelACC = "ACC";
     public final String VehicleLongModelOVM_VDIFF = "OVM_VDIFF";
@@ -24,6 +23,10 @@ public interface XmlElementNames {
     public final String VehicleLongModelKCA = "KKW";
     public final String VehicleLongModelKRAUSS = "KRAUSS";
 
+    public final String VehicleLaneChangeModel = "LANE_CHANGE_MODEL";
+    public final String VehicleLaneChangeModelMobil = "MOBIL";
+    
+    
     public final String Simulation = "SIMULATION";
     public final String Road = "ROAD";
     public final String RoadTrafficLight = "TRAFFIC_LIGHT";

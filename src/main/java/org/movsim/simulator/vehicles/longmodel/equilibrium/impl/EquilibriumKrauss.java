@@ -78,7 +78,7 @@ public class EquilibriumKrauss extends EquilibriumPropertiesImpl{
             v_it = vEqTab[ir - 1];
 
             for (int it = 1; it <= itmax; it++) {
-                final double acc = model.accSimple(s, v_it, 0.);
+                final double acc = model.calcAccSimple(s, v_it, 0.);
                 // iteration step in [dtmin,dtmax]
                 final double dtloc = dtmax * v_it / model.getV0() + dtmin;
 

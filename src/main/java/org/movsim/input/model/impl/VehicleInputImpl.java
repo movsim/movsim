@@ -37,6 +37,8 @@ import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl;
 import org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl;
+import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
+import org.movsim.input.model.vehicle.laneChanging.impl.LaneChangingInputDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
@@ -73,6 +75,8 @@ public class VehicleInputImpl implements VehicleInput {
 
     /** The model input data. */
     private AccelerationModelInputData modelInputData;
+    
+    private LaneChangingInputData laneChangingInputData;
 
     /** The memory input data. */
     private MemoryInputData memoryInputData = null;
@@ -105,6 +109,10 @@ public class VehicleInputImpl implements VehicleInput {
                 System.exit(-1);
             }
         }
+        
+        
+        final Element lcModelElem = elem.getChild(XmlElementNames.VehicleLaneChangeModel);
+        laneChangingInputData = new LaneChangingInputDataImpl(lcModelElem);
 
         final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {
@@ -185,6 +193,11 @@ public class VehicleInputImpl implements VehicleInput {
     public AccelerationModelInputData getAccelerationModelInputData() {
         return modelInputData;
     }
+    
+    @Override
+    public LaneChangingInputData getLaneChangingInputData() {
+        return laneChangingInputData;
+    }
 
     /*
      * (non-Javadoc)
@@ -235,5 +248,7 @@ public class VehicleInputImpl implements VehicleInput {
     public double getReactionTime() {
         return reactionTime;
     }
+
+   
 
 }

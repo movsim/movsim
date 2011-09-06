@@ -27,6 +27,9 @@
 package org.movsim.simulator.vehicles;
 
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModel;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -98,5 +101,8 @@ public interface Vehicle extends Moveable {
      * Removes the observers.
      */
     void removeObservers();
+    
+    LaneChangingModelImpl getLaneChangingModel();
 
+    AccelerationModel getAccelerationModel();
 }

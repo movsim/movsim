@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -135,8 +136,10 @@ public class VehicleContainerImpl implements VehicleContainer {
      * org.movsim.simulator.vehicles.VehicleContainer#add(org.movsim.simulator
      * .vehicles.Vehicle, double, double, int)
      */
+    
+    // TODO drop laneInit ...
     @Override
-    public void add(Vehicle veh, double xInit, double vInit, int laneInit) {
+    public void add(final Vehicle veh, double xInit, double vInit, int laneInit) {
         vehMainroadCounter++;
         add(vehMainroadCounter, veh, xInit, vInit, laneInit);
     }
@@ -146,9 +149,15 @@ public class VehicleContainerImpl implements VehicleContainer {
      * 
      */
     @Override
-    public void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit) {
+    public void addFromRamp(final Vehicle veh, double xInit, double vInit) {
+        //final int laneInit = Constants.MOST_RIGHT_LANE;
         vehRampCounter--; // count negative
-        add(vehRampCounter, veh, xInit, vInit, laneInit);
+        add(vehRampCounter, veh, xInit, vInit, laneIndex);
+    }
+    @Override
+    public void addFromRamp(final Vehicle veh){
+        vehRampCounter--; // count negative
+        add(vehRampCounter, veh, veh.getPosition(), veh.getSpeed(), laneIndex);
     }
 
     /**
@@ -165,7 +174,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @param laneInit
      *            the lane init
      */
-    private void add(int vehNumber, Vehicle veh, double xInit, double vInit, int laneInit) {
+    private void add(int vehNumber, final Vehicle veh, double xInit, double vInit, int laneInit) {
         veh.setVehNumber(vehNumber);
 
         veh.init(xInit, vInit, laneInit);
@@ -215,21 +224,24 @@ public class VehicleContainerImpl implements VehicleContainer {
             vehicles.remove(0);
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.vehicles.VehicleContainer#getLeader(org.movsim.simulator
-     * .vehicles.Vehicle)
-     */
+    
     @Override
-    public Moveable getLeader(Moveable veh) {
+    public void removeVehicle(final Vehicle veh){
+        if (!vehicles.isEmpty()) {
+            vehicles.remove(veh);
+        }
+    }
+
+  
+   
+    @Override
+    public Vehicle getLeader(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
         if (index == -1 || index == 0)
             return null;
         return vehicles.get(index - 1);
     }
+    
 
     /**
      * Sort.
@@ -270,4 +282,20 @@ public class VehicleContainerImpl implements VehicleContainer {
         return vehicles.get(index);
     }
 
+   
+    
+    @Override
+    public Vehicle findLeader(Moveable veh) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Vehicle findFollower(Moveable veh) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    
+    
 }

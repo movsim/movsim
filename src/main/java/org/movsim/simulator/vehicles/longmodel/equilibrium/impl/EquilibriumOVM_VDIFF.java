@@ -76,7 +76,7 @@ public class EquilibriumOVM_VDIFF extends EquilibriumPropertiesImpl {
             vIterate = vEqTab[ir - 1];
 
             for (int it = 1; it <= iterMax; it++) {
-                final double acc = model.accSimple(s, vIterate, 0);
+                final double acc = model.calcAccSimple(s, vIterate, 0);
                 final double dtLoc = dtMax * vIterate / model.getV0() + dtMin; // it.
                                                                                // step
                                                                                // in

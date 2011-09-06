@@ -77,35 +77,13 @@ public interface AccelerationModel {
      */
     double parameterV0();
 
-    /**
-     * Acc. Calculates the acceleration.
-     * 
-     * @param me
-     *            the subject vehicle
-     * @param vehContainer
-     *            the vehicle container
-     * @param alphaT
-     *            the alpha t
-     * @param alphaV0
-     *            the alpha v0
-     * @param alphaA
-     *            the alpha a
-     * @return the double. The acceleration of the subject vehicle.
-     */
-    double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
+   
+    double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
+    
+    double calcAcc(final Vehicle me, final Vehicle vehFront);
 
-    /**
-     * Acc simple.
-     * 
-     * @param s
-     *            the s
-     * @param v
-     *            the v
-     * @param dv
-     *            the dv
-     * @return the double
-     */
-    double accSimple(double s, double v, double dv);
+  
+    double calcAccSimple(double s, double v, double dv);
 
     /**
      * Removes the observer.

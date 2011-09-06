@@ -76,18 +76,15 @@ public class SimulatorImpl implements Simulator, Runnable {
     private InputDataImpl inputData;
     
     /** The veh generator. */
-    protected VehicleGenerator vehGenerator;
+    private VehicleGenerator vehGenerator;
     
-    private final boolean isWithCrashExit;
+    private boolean isWithCrashExit;
 
     /**
      * Instantiates a new simulator impl.
      */
     public SimulatorImpl() {
-        this.inputData = new InputDataImpl();
-        roadSections = new ArrayList<RoadSection>();
-        vehGenerator = new VehicleGeneratorImpl(inputData);
-        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
+        // 
     }
 
     /**
@@ -259,10 +256,11 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void initialize() {
-
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2011)");
-
+        
         // parse xmlFile and set values
+        
+        inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
@@ -270,6 +268,11 @@ public class SimulatorImpl implements Simulator, Runnable {
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
+        
+        
+        roadSections = new ArrayList<RoadSection>();
+        vehGenerator = new VehicleGeneratorImpl(inputData);
+        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
         restart();
     }

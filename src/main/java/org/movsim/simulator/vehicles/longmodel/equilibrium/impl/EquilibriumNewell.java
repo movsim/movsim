@@ -74,7 +74,7 @@ public class EquilibriumNewell extends EquilibriumPropertiesImpl {
             v_it = vEqTab[ir - 1];
 
             for (int it = 1; it <= itmax; it++) {
-                final double acc = newellModel.accSimple(s, v_it, 0.);
+                final double acc = newellModel.calcAccSimple(s, v_it, 0.);
                 // iteration step in [dtmin,dtmax]
                 final double dtloc = dtmax * v_it / newellModel.parameterV0() + dtmin;
 
