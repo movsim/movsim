@@ -12,6 +12,13 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
+        <!-- Obstacle is system type. Do not change. -->
+        <VEHICLE label="Obstacle" length="0">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1" duration="7200" fixed_seed="false" seed="42" crash_exit="false">
          <!-- scaled units for time and space -->

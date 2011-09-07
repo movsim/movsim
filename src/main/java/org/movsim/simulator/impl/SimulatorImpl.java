@@ -79,6 +79,9 @@ public class SimulatorImpl implements Simulator, Runnable {
     
     private boolean isWithCrashExit;
 
+    
+    private String projectName;
+    
     /**
      * Instantiates a new simulator impl.
      */
@@ -102,6 +105,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             roadSections.add(onramp);
         }
         
+        projectName = inputData.getProjectMetaData().getProjectName();
         
 
         // model requires specific update time depending on its category !!
@@ -128,7 +132,7 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void run() {
-        logger.info("Simulator.run: start simulation at {} seconds", time);
+        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", time, projectName);
 
         simOutput.update(iterationCount, time, timestep);
 
@@ -138,7 +142,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             update();
         }
 
-        logger.info("Simulator.run: stop after time = {} seconds", time);
+        logger.info("Simulator.run: stop after time = {} seconds of simulation project={}", time, projectName);
     }
 
     /**
@@ -160,7 +164,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void update() {
         if (iterationCount % 100 == 0) {
-            logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
+            logger.info("Simulator.update : time={} seconds, dt={}", time, timestep);
         }
         
         // parallel update of all roadSections 

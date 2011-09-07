@@ -152,23 +152,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
                 .getHeterogeneityInputData();
         
         
-        // TODO more explicit design !!!
-        // add Obstacle as permanent Vehicle_Type
-        // check first if Obstacle is part of heterogeneity
-        boolean obstacleEntryIsContained = false;
-        for(HeterogeneityInputData het : heterogenInputData){
-            if(het.getKeyName().equals(Constants.OBSTACLE_KEY_NAME)){
-        	obstacleEntryIsContained = true;
-            }
-        }
-        if(!obstacleEntryIsContained){
-            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
-            mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
-            mapEntryObstacle.put("fraction", "0");
-            heterogenInputData.add(new HeterogeneityInputDataImpl(mapEntryObstacle));
-        }
-
-
+        addObstacleSystemVehicleType(heterogenInputData);
+        
         double sumFraction = 0;
         for (final HeterogeneityInputData heterogen : heterogenInputData) {
             final String keyName = heterogen.getKeyName();
@@ -208,7 +193,30 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         }
         return sumFraction;
     }
-
+    
+    
+    // add Obstacle as permanent Vehicle_Type
+    // first check if Obstacle is already part of user defined heterogeneity input 
+    private void addObstacleSystemVehicleType(List<HeterogeneityInputData> heterogenInputData) {
+        boolean obstacleEntryIsContained = false;
+        for (HeterogeneityInputData het : heterogenInputData) {
+            if (het.getKeyName().equals(Constants.OBSTACLE_KEY_NAME)) {
+                obstacleEntryIsContained = true;
+            }
+        }
+        
+        if (obstacleEntryIsContained) {
+            logger.info("vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite", Constants.OBSTACLE_KEY_NAME);
+        }
+        else{
+            logger.info("vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity", Constants.OBSTACLE_KEY_NAME);
+            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
+            mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
+            mapEntryObstacle.put("fraction", "0");
+            heterogenInputData.add(new HeterogeneityInputDataImpl(mapEntryObstacle));
+        } 
+    }
+    
     /**
      * Fund diagram factory.
      * 

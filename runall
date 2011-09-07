@@ -4,7 +4,7 @@
 run=". runapp"
 onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL KKW NEWELL NSM"
 
-startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL NSM KCA NEWELL"
+startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL NSM KKW NEWELL"
 
 #######################################################
 function deleteSimOutput(){
@@ -17,7 +17,7 @@ function deleteSimOutput(){
     cd ..
 }
 #######################################################
-for m in ${onramp}
+for m in ${startStop}
 do
   proj="startStop_$m"
   echo "project = $proj"

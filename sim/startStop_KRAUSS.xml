@@ -9,9 +9,10 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="0" b_max="20">
+        <!-- Obstacle is system type. Do not change. -->
+        <VEHICLE label="Obstacle" length="0">
             <LONGITUDINAL_MODEL>
-                <KRAUSS v0="0" a="1.5" b="1.0" s0="2" dt="1" epsilon="0.4"/>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
