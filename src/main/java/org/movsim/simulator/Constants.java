@@ -70,6 +70,8 @@ public interface Constants {
     final String MODEL_NAME_KKW = "KKW";
 
     final String MODEL_NAME_KRAUSS = "KRAUSS";
+    
+    final String OBSTACLE_KEY_NAME = "Obstacle";
 
     /** The gap infinity. */
     final double GAP_INFINITY = 10000;

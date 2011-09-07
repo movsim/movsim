@@ -82,10 +82,8 @@ public class XmlReaderSimInput {
     /** The doc. */
     private Document doc;
 
-    // dtd from resources. No File.separator!!!
+    // dtd from resources. do *not* use the File.separator character
     private String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
-    // private String dtdFilename = File.separator + "sim" + File.separator +
-    // "multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
 
@@ -126,7 +124,7 @@ public class XmlReaderSimInput {
 
                 // write internal xml file:
                 if (projectMetaData.isWriteInternalXml()) {
-                    String outFilename = xmlFilename + ".internal_xml";
+                    final String outFilename = xmlFilename + ".internal_xml";
                     writeInternalXmlToFile(doc, outFilename);
                     logger.info("internal xml output written to file {}. Exit.", outFilename);
                     System.exit(0);
@@ -149,13 +147,13 @@ public class XmlReaderSimInput {
      * @param outFilename
      *            the output file name
      */
-    private void writeInternalXmlToFile(Document doc2, String outFilename) {
+    private void writeInternalXmlToFile(final Document localDoc, String outFilename) {
         PrintWriter writer = FileUtils.getWriter(outFilename);
         XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());
         try {
             logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
-            outputter.output(doc, writer);
+            outputter.output(localDoc, writer);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,6 +176,7 @@ public class XmlReaderSimInput {
         final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
 
         final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
+        
         for (final Element vehElem : vehicleElements) {
             vehicleInputData.add(new VehicleInputImpl(vehElem));
         }
@@ -230,7 +229,7 @@ public class XmlReaderSimInput {
      */
     private Document getDocument(final InputSource inputSource) {
 
-        Document doc = (Document) AccessController.doPrivileged(new PrivilegedAction<Object>() {
+        final Document doc = (Document) AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
             @Override
             public Object run() {

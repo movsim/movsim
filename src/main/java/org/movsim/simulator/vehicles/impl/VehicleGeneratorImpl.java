@@ -32,8 +32,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.InputData;
+import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
+import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
@@ -148,6 +150,24 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
         final List<HeterogeneityInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput()
                 .getHeterogeneityInputData();
+        
+        
+        // TODO more explicit design !!!
+        // add Obstacle as permanent Vehicle_Type
+        // check first if Obstacle is part of heterogeneity
+        boolean obstacleEntryIsContained = false;
+        for(HeterogeneityInputData het : heterogenInputData){
+            if(het.getKeyName().equals(Constants.OBSTACLE_KEY_NAME)){
+        	obstacleEntryIsContained = true;
+            }
+        }
+        if(obstacleEntryIsContained){
+            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
+            mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
+            mapEntryObstacle.put("fraction", "0");
+            heterogenInputData.add(new HeterogeneityInputDataImpl(mapEntryObstacle));
+        }
+
 
         double sumFraction = 0;
         for (final HeterogeneityInputData heterogen : heterogenInputData) {
@@ -219,7 +239,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName());
             System.exit(0);
         }
-        return null; // not reached after exit !
+        return null; // should not be reached after exit
 
     }
 

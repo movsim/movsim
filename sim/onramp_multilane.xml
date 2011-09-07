@@ -11,6 +11,13 @@
                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.25" politeness="0.1"   /> 
 	    </LANE_CHANGE_MODEL>
         </VEHICLE>
+
+        <VEHICLE label="Obstacle" length="0">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.4" duration="7200" fixed_seed="true" seed="42">
         <ROAD id="1" length="2000" lanes="2">

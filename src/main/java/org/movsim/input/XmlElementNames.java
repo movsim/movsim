@@ -11,6 +11,7 @@ public interface XmlElementNames {
     public final String Root = "SCENARIO";
 
     public final String DriverVehicleUnits = "VEHICLES";
+    public final String DriverVehicleUnit = "VEHICLE";
     public final String VehicleMemory = "MEMORY";
     public final String VehicleNoise = "NOISE";
     public final String VehicleLongitudinalModel = "LONGITUDINAL_MODEL";
