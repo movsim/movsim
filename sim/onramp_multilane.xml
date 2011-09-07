@@ -27,7 +27,7 @@
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="600" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE logging="true">
+            <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="200" v="30" />
                 <INFLOW t="1500" q_per_hour="2200" v="22" />
                 <INFLOW t="10800" q_per_hour="1000" v="30" />
@@ -44,8 +44,8 @@
                 <!-- <SIMPLE_RAMP x="1400" length="200" logging="false">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP> -->
-                <RAMP x="1400" length="1000" merge_length="200" logging="true">
-	          <TRAFFIC_SOURCE logging="true">
+                <RAMP x="1400" length="1000" merge_length="200" logging="false">
+	          <TRAFFIC_SOURCE logging="false">
                      <INFLOW t="0" q_per_hour="500" />
                   </TRAFFIC_SOURCE>
                 </RAMP>

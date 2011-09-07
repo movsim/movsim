@@ -238,6 +238,7 @@ public class VehicleImpl implements Vehicle {
      * @param position
      *            the new position
      */
+    @Override
     public void setPosition(double position) {
         this.position = position;
     }
@@ -533,5 +534,7 @@ public class VehicleImpl implements Vehicle {
     public AccelerationModel getAccelerationModel(){
         return accelerationModel;
     }
+    
+    
     
 }

@@ -105,4 +105,7 @@ public interface Vehicle extends Moveable {
     LaneChangingModelImpl getLaneChangingModel();
 
     AccelerationModel getAccelerationModel();
+    
+    
+    void setPosition(double newPos);
 }

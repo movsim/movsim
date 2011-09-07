@@ -79,7 +79,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     private final VehicleContainer mainVehContainer;
 
     /** The x center position of the ramp. */
-    private final double xCenter;
+    //private final double xCenter;
 
     private final double mergeLength;
 
@@ -87,7 +87,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     private final double xUpRamp;
 
     /** The x down ramp marks the end of the ramp. */
-    private final double xDownRamp;
+    //private final double xDownRamp;
+    
+    private final double xOffsetMain;
 
     /** The n wait. */
     private double nWait;
@@ -132,19 +134,30 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         super(rampData, vehGenerator);
         
         
+        // local coordinate system
+        // ramp from x=0 to x=roadLength
+        // merging possible from x=roadLength-mergeLength to x=roadLength
+        // offset to main road: rampData.getRampStartPosition() - xUpRamp
+
         // vehicles start at initial position 
         mergeLength = rampData.getRampMergingLength();
         
-        xUpRamp = rampData.getRampStartPosition();
-        xCenter = rampData.getRampStartPosition() + 0.5 * mergeLength;
-        xDownRamp = xUpRamp + mergeLength;
+        xUpRamp = roadLength - mergeLength; //rampData.getRampStartPosition();
+        //xCenter = rampData.getRampStartPosition() + 0.5 * mergeLength;
+        //xDownRamp = xUpRamp + mergeLength;
+        
+        xOffsetMain = rampData.getRampStartPosition()-xUpRamp;
+        
+        logger.debug("xOffsetMain = {}", xOffsetMain);
+        if(xOffsetMain<0){
+            logger.error("xOffsetMain = {}. negative values not allowed.", xOffsetMain);
+        }
         
         this.mainVehContainer = mainVehContainerMostRightLane;  // container of mainroad's most-right lane
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
         setObstacleAtEndOfLane();
-        
         
         // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
@@ -216,17 +229,23 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // loop over on-ramp veh (i=0 is obstacle !! )
         final VehicleContainer vehContainer = vehContainers.get(0);
         // iterator not possible in this for-loop because size() changes dynamically
-        for(int i=0; i< vehContainer.size(); i++){
+        // ignore Obstacle as first vehicle !!!
+        for(int i=1; i< vehContainer.size(); i++){
             final Vehicle veh = vehContainer.getVehicles().get(i); 
             final double pos = veh.getPosition();
+            //System.out.println("here: pos="+pos+", offsetMain="+xOffsetMain);
             if (pos > xUpRamp ) { 
-                System.out.println("mergeToMainroad: veh in ramp region! pos = " + pos);
-
+        	final double newPos = pos+xOffsetMain;  // position on main road
+                logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
+                veh.setPosition(newPos);
                 veh.getLaneChangingModel().updateLaneChangeStatusFromRamp(dt, veh, mainVehContainer);
 
                 if (veh.getLaneChangingModel().laneChanging()) {
                    mainVehContainer.addFromRamp(veh);
-                    vehContainer.removeVehicle(veh);
+                   vehContainer.removeVehicle(veh);
+                }
+                else{
+                    veh.setPosition(pos);
                 }
             } 
         } 
