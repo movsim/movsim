@@ -143,9 +143,10 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
+        setObstacleAtEndOfLane();
         
         
-        // TODO only dummy here
+        // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
         
         upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, rampData.getUpstreamBoundaryData(),
@@ -233,12 +234,13 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     } // of mergeToMainroad()
 
     
-    // TODO
-//    void setObstacleAtEndOfLane() {
-//        logger.debug("set obstacle at pos={} with length={}", pos, length);
-//        vehContainers.get(0).add(new Obstacle(x, lane, length));
-//    }
-//    
+    private void setObstacleAtEndOfLane() {
+        final Vehicle obstacle = vehGenerator.createVehicle(Constants.OBSTACLE_KEY_NAME);
+        final double posInit = roadLength;
+        final double speedInit = 0;
+        vehContainers.get(0).add(obstacle, posInit, speedInit);
+        logger.debug("set obstacle at pos={} with length={}", posInit, obstacle.getLength());
+    }
 
    
 

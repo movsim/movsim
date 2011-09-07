@@ -161,7 +161,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         	obstacleEntryIsContained = true;
             }
         }
-        if(obstacleEntryIsContained){
+        if(!obstacleEntryIsContained){
             final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
             mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
             mapEntryObstacle.put("fraction", "0");
