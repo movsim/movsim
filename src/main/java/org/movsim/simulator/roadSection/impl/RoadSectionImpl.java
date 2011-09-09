@@ -262,7 +262,10 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 		final List<Vehicle> vehiclesOnLane = vehContainerLane
 		        .getVehicles();
 		for (Vehicle veh : vehiclesOnLane) {
-		    if( veh.doLaneChanging(vehContainers)){
+		    if(veh.isLaneChanging()){
+			veh.updateContinuousLaneChange(dt); // TODO
+		    }
+		    else if( veh.doLaneChanging(vehContainers)){
 			stagedVehicles.add(veh);
 		    }
 		}

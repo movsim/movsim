@@ -29,6 +29,7 @@ package org.movsim.simulator.vehicles.impl;
 import java.util.List;
 
 import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.vehicle.laneChanging.impl.TransveralDynamicsImpl;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Moveable;
@@ -103,6 +104,8 @@ public class VehicleImpl implements Vehicle {
     
     /** The lane-changing model. */
     private final LaneChangingModelImpl lcModel;
+    
+    private final TransveralDynamicsImpl transDynamicsModel;
 
     /** The memory. */
     private Memory memory = null;
@@ -142,6 +145,8 @@ public class VehicleImpl implements Vehicle {
         this.accelerationModel = longModel;
         this.lcModel = lcModel;
         lcModel.initialize(this);
+        
+        transDynamicsModel = new TransveralDynamicsImpl();  // TODO
         
         this.cyclicBuffer = cyclicBuffer;
 
@@ -567,7 +572,22 @@ public class VehicleImpl implements Vehicle {
 	if(targetLane<0){
 	    logger.error("invalid targetLane={}", targetLane);
 	}
+	// initiates a lane-change
         this.targetLane = targetLane;
+        transDynamicsModel.performLaneChange(lane, targetLane);
+    }
+    
+    
+    
+    
+    @Override
+    public boolean isLaneChanging(){
+	return false;
+    }
+
+    @Override
+    public void updateContinuousLaneChange(double dt){
+	transDynamicsModel.update(dt);
     }
     
 }

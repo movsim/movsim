@@ -50,6 +50,7 @@ public interface Constants {
     
     // TODO
     final int TO_LEFT = 1;
+    
     final int TO_RIGHT = -1;
     
     
