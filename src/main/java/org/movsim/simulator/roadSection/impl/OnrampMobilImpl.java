@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.print.attribute.Size2DSyntax;
+
 import org.movsim.input.InputData;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.RampData;
@@ -129,11 +131,16 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
      */
     
     
-    // TODO: create from Simulator 
+    // TODO: create from Simulator
+    
+    // TODO assume only *one* lane here !!!
+    
     public OnrampMobilImpl(final RampData rampData, final VehicleGenerator vehGenerator, final VehicleContainer mainVehContainerMostRightLane,
             String projectName, int rampIndex) {
 
         super(rampData, vehGenerator);
+        
+        
         
         
         // local coordinate system
@@ -182,81 +189,53 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
         
     }
-
-//    @Override
-//    public void update(long iterationCount, double dt, double time) {
-//
-//
-//        // check for crashes
-//        checkForInconsistencies(iterationCount, time, isWithCrashExit);
-//
-//        //updateRoadConditions(iterationCount, time);
-//
-//        // vehicle accelerations
-//        accelerate(iterationCount, dt, time);
-//
-//        // vehicle pos/speed
-//        updatePositionAndSpeed(iterationCount, dt, time);
-//
-//        // adaptation of vehicle parameters in merging region
-//        //updateLaneChangeParameters();
-//
-//        mergeToMainroad(dt); // own method for onramp; vehicle vanishes
-//
-//        updateUpstreamBoundary(iterationCount, dt, time);
-//
-//        //detectors.update(iterationCount, time, dt, vehContainers);
-//        
-//     // periodic queuing:
-////        if (withPeriodicQueue) {
-////            requeueSlowVehicles();
-////        }
-////                
-////                if (fstrLogging != null) {
-////                    final double qBC  = upstreamBoundary.getTotalInflow(time);
-////                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
-////                            3600 * qBC, mergeCount, vehicleQueue.size());
-////                    fstrLogging.flush();
-////                }
-//
-//    }
     
     
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
-        mergeToMainroad(dt); // own method for onramp; vehicle vanishes
+
+	stagedVehicles.clear();
+	
+	assert vehContainers.size()==1;
+	final VehicleContainer vehContainer = vehContainers.get(0);
+	
+	// loop over on-ramp veh (i=0 is obstacle !! )
+        // ignore Obstacle as first vehicle !!!
+	for (Vehicle veh : vehContainer.getVehicles()) {
+	    if( !veh.getLabel().equals(Constants.OBSTACLE_KEY_NAME) && tryToMergeToMainroad(veh) ){
+		stagedVehicles.add(veh);
+	    }
+	}
+	
+	// assign staged vehicles to new lanes
+	for(final Vehicle veh : stagedVehicles){
+	    vehContainer.removeVehicle(veh);
+	    mainVehContainer.addFromRamp(veh);
+	}
+	            
     }
     
-    private void mergeToMainroad(double dt) {
-        // loop over on-ramp veh (i=0 is obstacle !! )
-        final VehicleContainer vehContainer = vehContainers.get(0);
-        // iterator not possible in this for-loop because size() changes dynamically
-        // ignore Obstacle as first vehicle !!!
-        for(int i=1; i< vehContainer.size(); i++){
-            final Vehicle veh = vehContainer.getVehicles().get(i); 
-            final double pos = veh.getPosition();
-            //System.out.println("here: pos="+pos+", offsetMain="+xOffsetMain);
-            if (pos > xUpRamp ) { 
-        	final double newPos = pos+xOffsetMain;  // position on main road
-                //logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
-                veh.setPosition(newPos);
-                final boolean isSafeChange = veh.getLaneChangingModel().checkLaneChangeFromRamp(dt, mainVehContainer);
+    private boolean tryToMergeToMainroad(final Vehicle veh) {
+	final double pos = veh.getPosition();
+	if (pos > xUpRamp ) { 
+	    final double newPos = pos+xOffsetMain;  // position on main road
+	    veh.setPosition(newPos);  // important mapping to coordinate system of mainroad !!!
+	    logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
+	    final boolean isSafeChange = veh.getLaneChangingModel().checkLaneChangeFromRamp(dt, mainVehContainer);
 
-                //if (veh.getLaneChangingModel().laneChanging()) {
-                if(isSafeChange){
-                    logger.debug("safeChange --> pos = {}, positionOnMainraod = {}", pos, newPos);
-                    mainVehContainer.addFromRamp(veh);
-                    vehContainer.removeVehicle(veh);
-                }
-                else{
-                    // reset vehicle's position to ramp coordinates
-                    System.out.println("mergeToMainroad: not safeChange .. ");
-                    veh.setPosition(pos);
-                }
-            } 
+	    //if (veh.getLaneChangingModel().laneChanging()) {
+	    if(isSafeChange){
+		logger.debug("safeChange --> pos = {}, positionOnMainraod = {}", pos, newPos);
+		return true;  
+	    }
+	    else{
+		// reset vehicle's position to ramp coordinates
+		System.out.println("mergeToMainroad: not safeChange .. ");
+		veh.setPosition(pos);
+	    }
         } 
-
-    } // of mergeToMainroad()
+	return false;
+    }
 
     
     private void setObstacleAtEndOfLane() {

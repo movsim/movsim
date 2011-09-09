@@ -1,5 +1,6 @@
 package org.movsim.simulator.roadSection.impl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.InputData;
@@ -40,6 +41,10 @@ public abstract class AbstractRoadSection {
     
     /** The veh container list (for each lane). */
     protected List<VehicleContainer> vehContainers;
+    
+    
+    
+    protected List<Vehicle> stagedVehicles;
 
     /** The upstream boundary. */
     protected UpstreamBoundary upstreamBoundary;
@@ -48,6 +53,8 @@ public abstract class AbstractRoadSection {
     /** The flow cons bottlenecks. */
     protected FlowConservingBottlenecks flowConsBottlenecks;
     
+    
+    // TODO same constructor for onramp and mainroad (and offramp) 
     public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){
         this.vehGenerator = vehGenerator;
         final SimulationInput simInput = inputData.getSimulationInput();
@@ -57,6 +64,7 @@ public abstract class AbstractRoadSection {
         this.nLanes = simInput.getSingleRoadInput().getLanes();
         this.id = simInput.getSingleRoadInput().getId();
         this.instantaneousFileOutput = inputData.getProjectMetaData().isInstantaneousFileOutput();
+        init();
     }
 
     public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
@@ -64,9 +72,14 @@ public abstract class AbstractRoadSection {
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
         this.id = 99;
-        this.instantaneousFileOutput = false;
+        this.instantaneousFileOutput = false;  // TODO
+        init();
     }
 
+    
+    private void init(){
+	stagedVehicles = new LinkedList<Vehicle>();
+    }
     
     
     /*

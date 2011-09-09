@@ -248,7 +248,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     }
     
     
-    private List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
+    
     
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {

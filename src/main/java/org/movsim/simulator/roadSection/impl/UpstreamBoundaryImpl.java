@@ -258,8 +258,9 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
         addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
 //        logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}", xEnter, vEnter);
-        System.out.printf("add vehicle from upstream boundary: vehType=%s, xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
-          vehPrototype.getLabel(), xLast, vLast, xEnter, vEnter, vehContainer.getLaneIndex(), rhoEnter, vMaxEq, vMaxKin );
+        
+//        System.out.printf("add vehicle from upstream boundary: vehType=%s, xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
+//          vehPrototype.getLabel(), xLast, vLast, xEnter, vEnter, vehContainer.getLaneIndex(), rhoEnter, vMaxEq, vMaxKin );
     }
 
     
