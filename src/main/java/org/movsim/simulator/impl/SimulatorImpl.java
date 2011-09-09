@@ -173,32 +173,30 @@ public class SimulatorImpl implements Simulator, Runnable {
         // onramps are part of mainroad section in current implementation  
         
         final double dt = this.timestep; 
+        
         // check for crashes
         for (RoadSection roadSection : roadSections) {
             roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-//            roadSection.getMobilRampHack().checkForInconsistencies(iterationCount, time, isWithCrashExit);
         }
 
         for (RoadSection roadSection : roadSections) {
             roadSection.updateRoadConditions(iterationCount, time);
         }
 
+        
         // lane changes and merges from onramps/ to offramps
         for (RoadSection roadSection : roadSections) {
             roadSection.laneChanging(iterationCount, dt, time);
-//            roadSection.getMobilRampHack().laneChanging(iterationCount, dt, time);
         }
 
         // vehicle accelerations
         for (RoadSection roadSection : roadSections) {
             roadSection.accelerate(iterationCount, dt, time);
-//            roadSection.getMobilRampHack().accelerate(iterationCount, dt, time);
         }
 
         // vehicle pos/speed
         for (RoadSection roadSection : roadSections) {
             roadSection.updatePositionAndSpeed(iterationCount, dt, time);
-//            roadSection.getMobilRampHack().updatePositionAndSpeed(iterationCount, dt, time);
         }
 
         for (RoadSection roadSection : roadSections) {
@@ -207,7 +205,6 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         for (RoadSection roadSection : roadSections) {
             roadSection.updateUpstreamBoundary(iterationCount, dt, time);
-//            roadSection.getMobilRampHack().updateUpstreamBoundary(iterationCount, dt, time);
         }
 
 

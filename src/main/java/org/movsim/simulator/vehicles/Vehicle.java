@@ -26,6 +26,8 @@
  */
 package org.movsim.simulator.vehicles;
 
+import java.util.List;
+
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -108,4 +110,11 @@ public interface Vehicle extends Moveable {
     
     
     void setPosition(double newPos);
+
+    boolean doLaneChanging(final List<VehicleContainer> vehContainers);
+    
+
+    int getTargetLane();
+    
+    void setTargetLane(int targetLane);
 }

@@ -75,6 +75,8 @@ public interface VehicleContainer extends MoveableContainer {
      */
     Vehicle getMostDownstream();
 
+    void add(final Vehicle veh);
+    
     /**
      * Adds the.
      * 
@@ -118,11 +120,11 @@ public interface VehicleContainer extends MoveableContainer {
     void removeVehicle(final Vehicle veh);
     
     
-    // for vehicles sharing the same lane/container
+    // returns also "virtual" leaders when veh is not located in considered lane 
     Vehicle getLeader(final Moveable veh);
-        
-    Vehicle findLeader(final Moveable veh);
     
-    Vehicle findFollower(final Moveable veh);
+    // returns also "virtual" leaders when veh is not located in considered lane
+    Vehicle getFollower(final Moveable veh);
+    
 
 }

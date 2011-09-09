@@ -44,9 +44,15 @@ public interface Constants {
     /** The MA x_ vehicl e_ speed. */
     final double MAX_VEHICLE_SPEED = 200 / 3.6;
 
-    /** The MOS t_ righ t_ lane. */
+    /** The most right lane (related to list index) */
     final int MOST_RIGHT_LANE = 0; // increment lane index for further lanes to
                                    // the left
+    
+    // TODO
+    final int TO_LEFT = 1;
+    final int TO_RIGHT = -1;
+    
+    
 
     /** The MODE l_ nam e_ idm. */
     final String MODEL_NAME_IDM = "IDM";

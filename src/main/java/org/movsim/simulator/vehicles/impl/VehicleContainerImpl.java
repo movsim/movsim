@@ -135,6 +135,13 @@ public class VehicleContainerImpl implements VehicleContainer {
             return null;
         return vehicles.get(vehicles.size() - 1);
     }
+    
+    
+    public void add(final Vehicle veh){
+	final double xInit = veh.getPosition();
+	final double vInit = veh.getSpeed();
+	this.add(veh, xInit, vInit);
+    }
 
     // sollte damit immer aufsteigend in pos sortiert sein
     /*
@@ -184,7 +191,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     private void add(int vehNumber, final Vehicle veh, double xInit, double vInit, int laneInit) {
         veh.setVehNumber(vehNumber);
 
-        veh.init(xInit, vInit, laneInit);
+        veh.init(xInit, vInit, laneInit); // sets new lane index after lane change
 
         if (vehicles.isEmpty()) {
             vehicles.add(veh);
@@ -244,9 +251,30 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public Vehicle getLeader(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
-        if (index == -1 || index == 0)
-            return null;
+        if ( index == 0){
+            // no leader downstream
+            return null;    
+        }
+        else if (index == -1 ){
+            // return virtual leader for vehicle veh which is not not considered lane
+            return findVirtualLeader(veh); 
+        }
         return vehicles.get(index - 1);
+    }
+    
+    
+    @Override
+    public Vehicle getFollower(final Moveable veh) {
+        final int index = vehicles.indexOf(veh);
+        if ( index == vehicles.size()-1 ){
+            return null;
+        }
+        else if (index == -1){
+            // veh is not contained in this lane
+            // return virtual leader for vehicle veh which is not not considered lane
+            return findVirtualFollower(veh); 
+        }
+        return vehicles.get(index + 1);
     }
     
 
@@ -291,8 +319,9 @@ public class VehicleContainerImpl implements VehicleContainer {
 
    
     
-    @Override
-    public Vehicle findLeader(final Moveable veh) {
+    
+    
+    private Vehicle findVirtualLeader(final Moveable veh) {
         // TODO efficient implementation 
         final double position = veh.getPosition();
         // decrease index for traversing in downstream direction
@@ -306,8 +335,7 @@ public class VehicleContainerImpl implements VehicleContainer {
         return null;
     }
 
-    @Override
-    public Vehicle findFollower(final Moveable veh) {
+    private Vehicle findVirtualFollower(final Moveable veh) {
      // TODO efficient implementation 
         final double position = veh.getPosition();
         // increase index for traversing in downstream direction

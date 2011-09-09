@@ -26,6 +26,8 @@
  */
 package org.movsim.simulator.vehicles.impl;
 
+import java.util.List;
+
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
@@ -88,6 +90,11 @@ public class VehicleImpl implements Vehicle {
     /** The lane. */
     private int lane;
 
+    
+    private int targetLane; 
+
+
+
     /** The speedlimit. */
     private double speedlimit; 
 
@@ -134,6 +141,8 @@ public class VehicleImpl implements Vehicle {
 
         this.accelerationModel = longModel;
         this.lcModel = lcModel;
+        lcModel.initialize(this);
+        
         this.cyclicBuffer = cyclicBuffer;
 
         oldPosition = 0;
@@ -170,6 +179,7 @@ public class VehicleImpl implements Vehicle {
         this.oldPosition = pos;
         this.speed = v;
         this.lane = lane;
+        this.targetLane = lane;
     }
 
     /*
@@ -536,6 +546,28 @@ public class VehicleImpl implements Vehicle {
         return accelerationModel;
     }
     
+    @Override
+    public boolean doLaneChanging(final List<VehicleContainer> vehContainers){
+	// no lane changing when not configured in xml 
+	if(!lcModel.isInitialized()){
+	    return false;
+	}
+	return lcModel.considerLaneChanging(vehContainers);
+    }
     
+
+
+    @Override
+    public int getTargetLane() {
+        return targetLane;
+    }
+
+    @Override
+    public void setTargetLane(int targetLane) {
+	if(targetLane<0){
+	    logger.error("invalid targetLane={}", targetLane);
+	}
+        this.targetLane = targetLane;
+    }
     
 }

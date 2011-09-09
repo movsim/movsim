@@ -20,6 +20,8 @@ public class LaneChangingInputDataImpl implements LaneChangingInputData {
     private double critSpeedEuroRules; // in SI (m/s)
 
     private LaneChangingMobilData lcMobilData;
+    
+    private boolean isInitializedMobilData = false;
 
     public LaneChangingInputDataImpl(final Element elem) {
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
@@ -34,6 +36,7 @@ public class LaneChangingInputDataImpl implements LaneChangingInputData {
             if (lcModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleLaneChangeModelMobil)) {
                 final Map<String, String> mapModel = XmlUtils.putAttributesInHash(lcModelElem);
                 lcMobilData.init(mapModel);
+                isInitializedMobilData = true;
             } else {
                 logger.error("lane-changing model with name {} not yet implemented!", lcModelElem.getName());
                 // logger.error("more than one lane-changing model is specified for a vehicle!");
@@ -41,6 +44,11 @@ public class LaneChangingInputDataImpl implements LaneChangingInputData {
             }
         }
 
+    }
+
+    @Override
+    public boolean isInitializedMobilData() {
+        return isInitializedMobilData;
     }
 
     @Override

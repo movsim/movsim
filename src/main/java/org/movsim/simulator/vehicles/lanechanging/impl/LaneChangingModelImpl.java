@@ -26,6 +26,8 @@
  */
 package org.movsim.simulator.vehicles.lanechanging.impl;
 
+import java.util.List;
+
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
@@ -34,6 +36,7 @@ import org.movsim.simulator.roadSection.impl.OnrampImpl;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.impl.VehicleImpl;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -138,6 +141,11 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
 
     final LaneChangingMobilData mobilParameter;
+
+
+    private VehicleImpl me;
+    
+    private final boolean isInitialized;
     
     
     public LaneChangingModelImpl(LaneChangingInputData lcInputData){
@@ -145,14 +153,18 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         this.withEuropeanRules = lcInputData.isWithEuropeanRules();
         this.vCritEur = lcInputData.getCritSpeedEuroRules();
         
-        mobilParameter = lcInputData.getLcMobilData();
         
+        isInitialized = lcInputData.isInitializedMobilData();
+        
+        // valid lane change model only if configured by xml 
+        mobilParameter = lcInputData.getLcMobilData();
+        if(isInitialized){
         bSafeRef = bSafe = mobilParameter.getSafeDeceleration();
         biasRightRef = biasRight = mobilParameter.getRightBiasAcceleration();
         gapMin = mobilParameter.getMinimumGap();
         thresholdRef = threshold = mobilParameter.getThresholdAcceleration();
         pRef = p = mobilParameter.getPoliteness();
-        
+        }
     }
 
     public final int targetLane() {
@@ -180,13 +192,13 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     
     
     @Override
-    public boolean checkLaneChangeFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane){
+    public boolean checkLaneChangeFromRamp(double dt, final VehicleContainer vehContainerTargetLane){
 //        if (laneChangeStatus() == NO_CHANGE) {
             final boolean otherVehsChangeSufficientlyLongAgo = true; 
-            final Vehicle frontMain = vehContainerTargetLane.findLeader(me);
-            final Vehicle backMain = vehContainerTargetLane.findFollower(me); 
+            final Vehicle frontMain = vehContainerTargetLane.getLeader(me); // works also for the "virtual" leader of me in considered lane
+            final Vehicle backMain = vehContainerTargetLane.getFollower(me); 
             
-            final boolean changeSafe = mandatoryWeavingChange(me, frontMain, backMain); // TODO
+            final boolean changeSafe = mandatoryWeavingChange(frontMain, backMain); // TODO
 //            if (otherVehsChangeSufficientlyLongAgo && changeSafe) {
 //                lane = startLane = MOST_RIGHT + TO_RIGHT; // count
 //                targetLane = MOST_RIGHT;
@@ -247,7 +259,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     // and from Mainroad to OffRamp
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
-    private boolean mandatoryWeavingChange(final Vehicle me, final Vehicle frontVeh, final Vehicle backVeh) {
+    private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);
@@ -280,55 +292,201 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return (false);
     }
 
-   
- // perform actual lane change
-    // updates acc_trans, vel_trans, and (double-valued) lane=transv. position
-    // could also be called accelerate_trans(dt) + translate_trans(dt)
-
-    public void translate_trans(double dt) {
-        if (WITH_INSTANT_LANECHANGE) {
-            lane = targetLane;
-            // laneChangeStatus=NO_CHANGE;
-            startLane = targetLane;
-            testLaneChangeFinish(); // arne 20.11.2007 testweise um mandatory wieder zu "reseten"
-        } else {
-            if (Math.abs(targetLane - lane) < 0.00001) {
-//              Logger.log("Vehicle.translate_trans: "
-//                      + " targetLane=lane: omitting update of" + " acc_trans ...");
-//              printDiagnostics();
-            } else {
-                boolean firstPhase = (Math.abs(targetLane - lane) > 0.5 * Math.abs(targetLane
-                        - startLane));
-                // acc_trans crucial for CoffeeMeter dynamics:
-                acc_trans = (firstPhase) ? A_LANECHANGE * (targetLane - startLane)
-                        : -0.5 * vel_trans * vel_trans / ACTUAL_LANE_WIDTH / (targetLane - lane);
-                vel_trans += acc_trans * dt;
-            }
-
-//          Logger.log("pos=" + (int) pos + " lane=" + lane + " targetLane="
-//                  + targetLane + " vel_trans=" + vel_trans + " acc_trans=" + acc_trans);
-            lane += (vel_trans * dt - 0.5 * acc_trans * dt * dt) / ACTUAL_LANE_WIDTH;
-
-            testLaneChangeFinish(); // Treiber 28.09.04
-
-            // MULTILANE:
-            // if(!((lane>-1)&&(lane<MOST_RIGHT))){Logger.log("error:
-            // lane="+lane);}
-        } // of else (with continous lane change)
-    } // of translate_trans
-    
-    
-    
-    public void setMandatoryChange(int incentive) {
-        if (incentive == NO_CHANGE || incentive == TO_RIGHT || incentive == TO_LEFT) {
-            mandatoryChange = incentive;
-            System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
-        } else {
-//            Logger.log("LaneChange.setMandatoryChange:");
-//            Logger.log("Value error: incentive = " + incentive);
-            System.exit(-1); // debugging
-        }
+ 
+    public void initialize(VehicleImpl vehicleImpl) {
+	this.me = vehicleImpl;
     }
+
+    
+    
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // Basic MOBIL strategy:
+    // asymmetric rules for european traffic
+    // symmetric rules for US traffic
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    public boolean considerLaneChanging(final List<VehicleContainer> vehContainers) {
+
+	final int currentLane = me.getLane();
+	
+	// init with largest possible deceleration 
+        double accToLeft = -Double.MAX_VALUE;
+        double accToRight = -Double.MAX_VALUE;
+
+	
+	// consider lane-changing to right (decreasing lane index)
+	if( currentLane-1 >= Constants.MOST_RIGHT_LANE ){
+	    accToRight = calcAccelerationInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane-1) );
+	}
+	
+	// consider lane-changing to left (increasing the lane index)
+	if( currentLane+1 < vehContainers.size() ){
+	    accToLeft = calcAccelerationInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane+1));
+	}
+	
+        // decision process: set new target lane 
+        if ((accToRight > 0) || (accToLeft > 0)) {
+            logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
+            logger.debug("currentLane={}", currentLane);
+            if (accToRight > accToLeft) {
+        	me.setTargetLane(currentLane+Constants.TO_RIGHT);
+        	
+            } else {
+        	me.setTargetLane(currentLane+Constants.TO_LEFT);
+            }
+            return true;   
+        }
+        
+        return false;
+    }
+
+    private double calcAccelerationInNewLane(final VehicleContainer ownLane, final VehicleContainer newLane) {
+	return calcAccelerationBalanceInNewLaneSymmetric(ownLane, newLane);
+    }
+    
+    
+
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // Symmetric MOBIL criterion
+    // calc balance:
+    // deltaMe+p*(deltaOldBack+deltaNewBack)-threshold-bias
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    private double calcAccelerationBalanceInNewLaneSymmetric(final VehicleContainer ownLane, final VehicleContainer newLane) {
+
+        // apply only in case of mandatory lane change!!!
+        // double alpha_T = (mandatoryChange==NO_CHANGE)? 1 :
+        // ALPHA_T_AFTER_LANECHANGE;
+
+        double prospectiveBalance = -Double.MAX_VALUE;
+
+        // (1) check "karenzzeit" of vehicles ahead
+        final Vehicle newFront = newLane.getLeader(me);
+        
+        final Vehicle oldFront = ownLane.getLeader(me); 
+
+//        if (!lastChangeSufficientlyLongAgo(newFront, oldFront))
+//            return (prospectiveBalance);
+
+        // (2) safety incentive (in two steps)
+
+        final Vehicle newBack = newLane.getFollower(me);
+
+        double gapFront = me.getNetDistance(newFront);
+        double gapBack = (newBack == null) ? Constants.GAP_INFINITY : newBack.getNetDistance(me);
+
+        // (i) first check distances
+        // negative net distances possible because of different veh lengths!
+        if ((gapFront < gapMin) || (gapBack < gapMin)) {
+            return prospectiveBalance;
+        }
+
+        final double newBackNewAcc = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me); 
+            
+        // (ii) check (MOBIL) security constraint for new follower
+
+        if ( newBackNewAcc <= -bSafe ) {
+            return prospectiveBalance;
+        }
+
+        // (3)check now incentive criterion
+         
+        
+        final double meNewAcc = me.getAccelerationModel().calcAcc(me, newFront);
+        final double meOldAcc = me.getAccelerationModel().calcAcc(me, oldFront);
+
+        // check for mandatory change
+//        if (mandatoryLaneChange(changeTo, meNewAcc, me, newBack, microstreet.mostRightLane()))
+//            return (ModelConstants.BMAX);
+
+        // calculate accelerations of new and old back vehicle
+        // for actual and prospective situation
+        // newBackNewAcc already calculated above
+        // int iOldBack = me.iBack();
+        // IMoveableExt oldBack = (iOldBack == -1) ? null : microstreet.vehContainer().get(iOldBack);
+        final Vehicle oldBack = ownLane.getFollower(me);
+
+        final double oldBackOldAcc = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me) : 0;
+        final double oldBackNewAcc = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, newFront) : 0;
+        final double newBackOldAcc = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack, newFront) : 0;
+
+        // (ii) MOBIL trade-off for driver and neigbourhood
+        // (gleichmaessiges Auffuellen der Spur:)
+        // vehicles already on the correct lane want to change
+        // if other lane is empty
+        final double oldBackDiffAcc = oldBackNewAcc - oldBackOldAcc;
+        final double newBackDiffAcc = newBackNewAcc - newBackOldAcc;
+        final double meDiffAcc = meNewAcc - meOldAcc;
+
+        // bias sign applies for euro as symmetric rules!!!
+        // but in case of mandatory lc the sign is modified!
+        final int changeTo = newLane.getLaneIndex() - ownLane.getLaneIndex();
+        final double biasSign = (changeTo == Constants.TO_LEFT) ? 1 : -1;
+
+        final double actualBiasRight = biasRight;
+        // if(mandatoryChange!=NO_CHANGE){actualBiasRight = mandatoryBias;}
+       
+        // finally: all in one MOBIL's incentive formula:
+        prospectiveBalance = meDiffAcc + p * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign * actualBiasRight;
+       
+        return prospectiveBalance;
+    }
+
+    
+    
+    
+    // perform actual lane change
+       // updates acc_trans, vel_trans, and (double-valued) lane=transv. position
+       // could also be called accelerate_trans(dt) + translate_trans(dt)
+
+       public void translate_trans(double dt) {
+           if (WITH_INSTANT_LANECHANGE) {
+               lane = targetLane;
+               // laneChangeStatus=NO_CHANGE;
+               startLane = targetLane;
+               testLaneChangeFinish(); // arne 20.11.2007 testweise um mandatory wieder zu "reseten"
+           } else {
+               if (Math.abs(targetLane - lane) < 0.00001) {
+//                 Logger.log("Vehicle.translate_trans: "
+//                         + " targetLane=lane: omitting update of" + " acc_trans ...");
+//                 printDiagnostics();
+               } else {
+                   boolean firstPhase = (Math.abs(targetLane - lane) > 0.5 * Math.abs(targetLane
+                           - startLane));
+                   // acc_trans crucial for CoffeeMeter dynamics:
+                   acc_trans = (firstPhase) ? A_LANECHANGE * (targetLane - startLane)
+                           : -0.5 * vel_trans * vel_trans / ACTUAL_LANE_WIDTH / (targetLane - lane);
+                   vel_trans += acc_trans * dt;
+               }
+
+//             Logger.log("pos=" + (int) pos + " lane=" + lane + " targetLane="
+//                     + targetLane + " vel_trans=" + vel_trans + " acc_trans=" + acc_trans);
+               lane += (vel_trans * dt - 0.5 * acc_trans * dt * dt) / ACTUAL_LANE_WIDTH;
+
+               testLaneChangeFinish(); // Treiber 28.09.04
+
+               // MULTILANE:
+               // if(!((lane>-1)&&(lane<MOST_RIGHT))){Logger.log("error:
+               // lane="+lane);}
+           } // of else (with continous lane change)
+       } // of translate_trans
+       
+       
+       
+       public void setMandatoryChange(int incentive) {
+           if (incentive == NO_CHANGE || incentive == TO_RIGHT || incentive == TO_LEFT) {
+               mandatoryChange = incentive;
+               System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
+           } else {
+//               Logger.log("LaneChange.setMandatoryChange:");
+//               Logger.log("Value error: incentive = " + incentive);
+               System.exit(-1); // debugging
+           }
+       }
+
+    public boolean isInitialized() {
+	return isInitialized;
+    }
+    
     
 }
 

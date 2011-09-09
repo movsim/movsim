@@ -27,6 +27,7 @@
 package org.movsim.simulator.roadSection.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.InputData;
@@ -247,9 +248,35 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     }
     
     
+    private List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
+    
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
-        // TODO
+	
+	
+	stagedVehicles.clear();
+	
+	// no lane changes if there are less than two lanes
+	if(vehContainers.size()>1){
+	    for (VehicleContainer vehContainerLane : vehContainers) {
+		final List<Vehicle> vehiclesOnLane = vehContainerLane
+		        .getVehicles();
+		for (Vehicle veh : vehiclesOnLane) {
+		    if( veh.doLaneChanging(vehContainers)){
+			stagedVehicles.add(veh);
+		    }
+		}
+	    }
+	}
+	
+
+	// assign staged vehicles to new lanes
+	for(final Vehicle veh : stagedVehicles){
+	    vehContainers.get(veh.getLane()).removeVehicle(veh);
+	    vehContainers.get(veh.getTargetLane()).add(veh);
+	}
+	            
+	
     }
    
    
