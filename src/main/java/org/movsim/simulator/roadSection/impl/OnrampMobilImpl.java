@@ -53,6 +53,10 @@ import org.slf4j.LoggerFactory;
  */
 public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection {
 
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(OnrampImpl.class);
+
+    
     /** The lane for entering the mainroad  
      *  only MOST_RIGHT_LANE possible to enter*/
     private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE; 
@@ -63,9 +67,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(OnrampImpl.class);
-
+    
     /** The Constant MINSPACE_MERGE_M. */
     final static double MINSPACE_MERGE_M = 2.0;
 
@@ -157,7 +159,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
-        setObstacleAtEndOfLane();
+        setObstacleAtEndOfLane(); // 
         
         // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
@@ -236,15 +238,19 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             //System.out.println("here: pos="+pos+", offsetMain="+xOffsetMain);
             if (pos > xUpRamp ) { 
         	final double newPos = pos+xOffsetMain;  // position on main road
-                logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
+                //logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
                 veh.setPosition(newPos);
-                veh.getLaneChangingModel().updateLaneChangeStatusFromRamp(dt, veh, mainVehContainer);
+                final boolean isSafeChange = veh.getLaneChangingModel().checkLaneChangeFromRamp(dt, veh, mainVehContainer);
 
-                if (veh.getLaneChangingModel().laneChanging()) {
-                   mainVehContainer.addFromRamp(veh);
-                   vehContainer.removeVehicle(veh);
+                //if (veh.getLaneChangingModel().laneChanging()) {
+                if(isSafeChange){
+                    logger.debug("safeChange --> pos = {}, positionOnMainraod = {}", pos, newPos);
+                    mainVehContainer.addFromRamp(veh);
+                    vehContainer.removeVehicle(veh);
                 }
                 else{
+                    // reset vehicle's position to ramp coordinates
+                    System.out.println("mergeToMainroad: not safeChange .. ");
                     veh.setPosition(pos);
                 }
             } 

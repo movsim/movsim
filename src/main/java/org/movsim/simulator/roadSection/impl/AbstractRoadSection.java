@@ -205,11 +205,9 @@ public abstract class AbstractRoadSection {
                                 veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
                     }
                     logger.error(msg.toString());
-                    if (instantaneousFileOutput) {
-                        if (isWithCrashExit) {
-                            logger.error(" !!! exit after crash !!! ");
-                            System.exit(-99);
-                        }
+                    if (isWithCrashExit) {
+                	logger.error(" !!! exit after crash !!! ");
+                	System.exit(-99);
                     }
                 }
             }

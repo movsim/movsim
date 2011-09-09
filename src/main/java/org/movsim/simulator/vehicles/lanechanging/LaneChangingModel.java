@@ -5,6 +5,7 @@ import org.movsim.simulator.vehicles.Vehicle;
 
 public interface LaneChangingModel {
 
-    void updateLaneChangeStatusFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane);
+    //void checkLaneChangeFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane);
+    boolean checkLaneChangeFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane);
 
 }

@@ -5,5 +5,5 @@ public interface LaneChangingInputData{
 
     boolean isWithEuropeanRules();
     double getCritSpeedEuroRules();
-    public LaneChangingMobilData getLcMobilData();
+    LaneChangingMobilData getLcMobilData();
 }

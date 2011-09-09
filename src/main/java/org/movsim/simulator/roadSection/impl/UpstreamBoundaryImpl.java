@@ -114,7 +114,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     }
 
     
-    private int getNewLaneIndex(int iLane){
+    
+    private int getNewCyclicLaneIndexForEntering(int iLane){
         return (iLane==vehContainers.size()-1 ? 0 : iLane+1);
     }
     
@@ -141,7 +142,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
             // iterate periodically over n lanes  
             int iLane = laneEnterLast;
             for (int i = 0, N = vehContainers.size(); i < N; i++) {
-                iLane = getNewLaneIndex(iLane);
+                iLane = getNewCyclicLaneIndexForEntering(iLane);
                 final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 // lane index is identical to vehicle's lane number 
                 final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, time, totalInflow);
@@ -217,7 +218,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         final double xEnter = 0;
         final double vEnter = inflowTimeSeries.getSpeed(time);
         addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
-//        logger.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
+        logger.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
     /**
@@ -233,12 +234,15 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      *            the leader
      */
     private void enterVehicle(final VehicleContainer vehContainer, double time, double sFreeMin, VehiclePrototype vehPrototype, Vehicle leader) {
+	
+	final double speedDefault = inflowTimeSeries.getSpeed(time);
+	
         final double sFree = leader.getPosition() - leader.getLength();
         final double xLast = leader.getPosition();
         final double vLast = leader.getSpeed();
         final double aLast = leader.getAcc();
 
-        final double speedDefault = inflowTimeSeries.getSpeed(time);
+        
         final double vEnterTest = Math.min(speedDefault, 1.5 * vLast);
         final double lengthLast = leader.getLength();
 
@@ -253,10 +257,9 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         //final int laneEnter = Constants.MOST_RIGHT_LANE;
 
         addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
-//        logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",
-//         xEnter, vEnter);
+//        logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}", xEnter, vEnter);
 //        System.out.printf("add vehicle from upstream boundary: xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
-//          xLast, vLast, xEnter, vEnter, lane, rhoEnter, vMaxEq, vMaxKin );
+//          xLast, vLast, xEnter, vEnter, vehContainer.getLaneIndex(), rhoEnter, vMaxEq, vMaxKin );
     }
 
     

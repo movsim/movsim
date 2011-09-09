@@ -6,15 +6,25 @@ import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 
 public class LaneChangingMobilModelDataImpl implements LaneChangingMobilData {
     
-    private final double safeDeceleration;
-    private final double minimumGap;
-    private final double thresholdAcceleration;
-    private final double rightBiasAcceleration; 
-    private final double politeness; 
+    private double safeDeceleration;
+    private double minimumGap;
+    private double thresholdAcceleration;
+    private double rightBiasAcceleration; 
+    private double politeness; 
      
 
-    public LaneChangingMobilModelDataImpl(Map<String, String> map){
-        safeDeceleration = Double.parseDouble(map.get("b_safe"));
+
+    public LaneChangingMobilModelDataImpl(){
+	
+    }
+    
+//    public LaneChangingMobilModelDataImpl(Map<String, String> map){
+//        init(map);
+//    }
+    
+    
+    public void init(final Map<String, String> map){
+	safeDeceleration = Double.parseDouble(map.get("b_safe"));
         minimumGap = Double.parseDouble(map.get("s_min"));
         thresholdAcceleration = Double.parseDouble(map.get("threshold"));
         rightBiasAcceleration = Double.parseDouble(map.get("bias_right"));

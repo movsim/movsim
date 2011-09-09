@@ -362,9 +362,10 @@ public class VehicleImpl implements Vehicle {
      * .vehicles.Vehicle)
      */
     @Override
-    public double getNetDistance(Moveable vehFront) {
-        if (vehFront == null)
+    public double getNetDistance(final Moveable vehFront) {
+        if (vehFront == null){
             return Constants.GAP_INFINITY;
+        }
         return (vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength()));
     }
 

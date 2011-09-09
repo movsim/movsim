@@ -26,16 +26,26 @@
  */
 package org.movsim.simulator.vehicles.lanechanging.impl;
 
+import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
+import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.roadSection.impl.OnrampImpl;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class LaneChangingModelImpl.
  */
 public class LaneChangingModelImpl implements LaneChangingModel {
+    
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LaneChangingModelImpl.class);
+
     
     private static final int MOST_RIGHT = Constants.MOST_RIGHT_LANE;
 
@@ -127,12 +137,24 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     double acc_trans = 0;
 
 
-    public LaneChangingModelImpl(){
-        // TODO init
+    final LaneChangingMobilData mobilParameter;
+    
+    
+    public LaneChangingModelImpl(LaneChangingInputData lcInputData){
+	//logger.debug("init model parameters");
+        this.withEuropeanRules = lcInputData.isWithEuropeanRules();
+        this.vCritEur = lcInputData.getCritSpeedEuroRules();
+        
+        mobilParameter = lcInputData.getLcMobilData();
+        
+        bSafeRef = bSafe = mobilParameter.getSafeDeceleration();
+        biasRightRef = biasRight = mobilParameter.getRightBiasAcceleration();
+        gapMin = mobilParameter.getMinimumGap();
+        thresholdRef = threshold = mobilParameter.getThresholdAcceleration();
+        pRef = p = mobilParameter.getPoliteness();
+        
     }
 
-
-    
     public final int targetLane() {
         return (targetLane);
     }
@@ -141,47 +163,43 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return startLane;
     }
 
-    public boolean laneChanging() {
-        return (laneChangeStatus() != NO_CHANGE);
-    }
-
- // arne 4-10-04
-    public final int laneChangeStatus() {
-        double dir = targetLane - startLane;
-        if (dir > 0)
-            return (TO_RIGHT);
-        else
-            if (dir < 0) return (TO_LEFT);
-        // if(Math.abs(dir)>=2){
-        // Logger.log("Error: laneChangeStatus = "+dir);
-        // }
-        return (NO_CHANGE);
-    }
+//    public boolean laneChanging() {
+//        return (laneChangeStatus() != NO_CHANGE);
+//    }
+//
+//    public final int laneChangeStatus() {
+//        double dir = targetLane - startLane;
+//        if (dir > 0)
+//            return (TO_RIGHT);
+//        else
+//            if (dir < 0) return (TO_LEFT);
+//        return (NO_CHANGE);
+//    }
     
         
     
     
     @Override
-    public void updateLaneChangeStatusFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane){
-        if (laneChangeStatus() == NO_CHANGE) {
+    public boolean checkLaneChangeFromRamp(double dt, final Vehicle me, final VehicleContainer vehContainerTargetLane){
+//        if (laneChangeStatus() == NO_CHANGE) {
             final boolean otherVehsChangeSufficientlyLongAgo = true; 
             final Vehicle frontMain = vehContainerTargetLane.findLeader(me);
             final Vehicle backMain = vehContainerTargetLane.findFollower(me); 
             
             final boolean changeSafe = mandatoryWeavingChange(me, frontMain, backMain); // TODO
-            if (otherVehsChangeSufficientlyLongAgo && changeSafe) {
-                lane = startLane = MOST_RIGHT + TO_RIGHT; // count
-                targetLane = MOST_RIGHT;
-                resetDelay();
-                System.out.println("updateLaneChangeStatusOnRamp: safety OK:"
-                      + " Starting lanechange ..." + " laneChangeStatus=" + laneChangeStatus()
-                      + " targetLane=" + targetLane + " startLane=" + startLane);
-            }
-        } 
-        else {
-            testLaneChangeFinish();
-        }
-
+//            if (otherVehsChangeSufficientlyLongAgo && changeSafe) {
+//                lane = startLane = MOST_RIGHT + TO_RIGHT; // count
+//                targetLane = MOST_RIGHT;
+//                resetDelay();
+////                System.out.println("updateLaneChangeStatusOnRamp: safety OK:"
+////                      + " Starting lanechange ..." + " laneChangeStatus=" + laneChangeStatus()
+////                      + " targetLane=" + targetLane + " startLane=" + startLane);
+//            }
+//        } 
+//        else {
+//            testLaneChangeFinish();
+//        }
+            return changeSafe;
     }
     
     // Flips unterbinden durch Karenzzeit LANECHANGE_TDELAY_S nach erfolgtem Spurwechsel
@@ -228,32 +246,35 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     // Lane Change from OnRamp to Mainroad
     // and from Mainroad to OffRamp
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     private boolean mandatoryWeavingChange(final Vehicle me, final Vehicle frontVeh, final Vehicle backVeh) {
 
         // safety incentive (in two steps)
-        final double gapFront = (frontVeh == null) ? 5000 : me.getNetDistance(frontVeh);
-        final double gapBack  = (backVeh == null) ? 5000 : backVeh.getNetDistance(me);
+        final double gapFront = me.getNetDistance(frontVeh);
+        final double gapBack  = (backVeh == null) ? Constants.GAP_INFINITY : backVeh.getNetDistance(me);
 
         // (i) first check distances
         // negative netto distances possible because of different veh lengths!
         if ((gapFront < gapMin) || (gapBack < gapMin)) {
-            System.out.println("mandatoryWeavingChange:" + " gapFront = " + gapFront + " gapBack = " + gapBack);
-            return (false);
+            logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
+            return false; 
         }
 
-        double backNewAcc = (backVeh == null) ? 0 : backVeh.getAccelerationModel().calcAcc(backVeh, me);
+        final double backNewAcc = (backVeh == null) ? 0 : backVeh.getAccelerationModel().calcAcc(backVeh, me);
 
         // (ii) check security constraint for new follower
         // normal acceleration generally admitted here
         if (backNewAcc <= -bSafe) {
-            System.out.println("mandatoryWeavingChange: backNewAcc = " + backNewAcc);
+            logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
+            logger.debug("backNewAcc={}, bSafe={}", backNewAcc, bSafe);
             return (false);
         }
         
-        // check for mandatory change (change to left assumed)
         final double meNewAcc = me.getAccelerationModel().calcAcc(me, frontVeh);
         if (meNewAcc >= -bSafeRef) {
-            System.out.println("mandatoryWeavingChange: meNewAcc = " + meNewAcc+", bSafeRef="+bSafeRef+", bSafe="+bSafe);
+            logger.debug("meNewAcc={}, bSafe={}", meNewAcc, bSafe);
+            logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
+            logger.debug("backNewAcc={}, bSafe={}", backNewAcc, bSafe);
             return (true);
         }
         return (false);

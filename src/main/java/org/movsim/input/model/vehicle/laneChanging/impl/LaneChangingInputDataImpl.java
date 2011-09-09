@@ -26,11 +26,14 @@ public class LaneChangingInputDataImpl implements LaneChangingInputData {
         isWithEuropeanRules = Boolean.parseBoolean(map.get("eur_rules"));
         critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur_kmh"))/3.6; // convert to SI
 
+        lcMobilData = new LaneChangingMobilModelDataImpl();
+	    
+	  
         final List<Element> lcModelElems = elem.getChildren();
         for (final Element lcModelElem : lcModelElems) {
             if (lcModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleLaneChangeModelMobil)) {
                 final Map<String, String> mapModel = XmlUtils.putAttributesInHash(lcModelElem);
-                lcMobilData = new LaneChangingMobilModelDataImpl(mapModel);
+                lcMobilData.init(mapModel);
             } else {
                 logger.error("lane-changing model with name {} not yet implemented!", lcModelElem.getName());
                 // logger.error("more than one lane-changing model is specified for a vehicle!");
