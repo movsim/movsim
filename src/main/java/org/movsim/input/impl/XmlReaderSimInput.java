@@ -117,7 +117,7 @@ public class XmlReaderSimInput {
                 logger.info("Begin parsing: " + xmlFilename);
 
                 if (projectMetaData.isXmlFromResources()) {
-                    readXmlFromResources();
+                    readAndValidateXmlFromResources();
                 } else {
                     readAndValidateXmlFromFileName();
                 }
@@ -199,9 +199,9 @@ public class XmlReaderSimInput {
     }
 
     /**
-     * Read xml from resources.
+     * Validates and reads xml from resources.
      */
-    private void readXmlFromResources() {
+    private void readAndValidateXmlFromResources() {
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
             @Override
