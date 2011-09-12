@@ -115,7 +115,7 @@ public class MovsimViewerFacade {
         return model.getRoadSections().get(1); // hack
     }
     
-    public RoadSection findRoadById(int id) {
+    public RoadSection findRoadById(long id) {
         return model.findRoadById(id);
     }
     

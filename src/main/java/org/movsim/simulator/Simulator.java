@@ -95,6 +95,6 @@ public interface Simulator {
     
     List<RoadSection> getRoadSections();
     
-    public RoadSection findRoadById(int id);
+    public RoadSection findRoadById(long id);
     
 }

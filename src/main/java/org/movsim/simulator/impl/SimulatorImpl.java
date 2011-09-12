@@ -125,7 +125,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         return roadSections;
     }
     
-    public RoadSection findRoadById(int id) {
+    public RoadSection findRoadById(long id) {
         for (final RoadSection roadSection : roadSections) {
             if (roadSection.getId() == id) {
                 return roadSection;
