@@ -26,16 +26,8 @@
  */
 package org.movsim.input.model.simulation.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.impl.XmlUtils;
-import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
@@ -45,6 +37,8 @@ import org.movsim.input.model.simulation.UpstreamBoundaryData;
  * The Class RampDataImpl.
  */
 public class RampDataImpl implements RampData {
+    
+    private final long id;
 
     /** The center position. */
     private final double rampStartPosition;
@@ -68,6 +62,7 @@ public class RampDataImpl implements RampData {
      */
     @SuppressWarnings("unchecked")
     public RampDataImpl(Element elem) {
+        this.id = Long.parseLong(elem.getAttributeValue("id"));
         this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
         this.roadLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
@@ -116,6 +111,14 @@ public class RampDataImpl implements RampData {
     @Override
     public UpstreamBoundaryData getUpstreamBoundaryData() {
         return upstreamData;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.RampData#getId()
+     */
+    @Override
+    public long getId() {
+        return id;
     }
 
 }

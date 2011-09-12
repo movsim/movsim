@@ -40,6 +40,7 @@ public interface RampData {
 //     */
 //    List<InflowDataPoint> getInflowTimeSeries();
     
+    long getId();
     
     UpstreamBoundaryData getUpstreamBoundaryData();
 
