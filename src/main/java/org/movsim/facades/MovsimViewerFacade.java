@@ -1,6 +1,7 @@
 package org.movsim.facades;
 
 import java.net.URL;
+import java.util.List;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.App;
@@ -14,49 +15,41 @@ import org.slf4j.LoggerFactory;
 
 public class MovsimViewerFacade {
 
-    
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MovsimViewerFacade.class);
 
     public void initLocalizationAndLogger() {
-   	final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
-   	PropertyConfigurator.configure(log4jConfig);
+        final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+        PropertyConfigurator.configure(log4jConfig);
     }
-    
-    
-    // private SimulatorView view;
-    private Simulator model;
 
-    //private Thread simThread;
+    private Simulator model;
 
     private InputDataImpl inputData;
 
     private ProjectMetaDataImpl projectMetaDataImpl;
 
-    
-    public MovsimViewerFacade(){
-	
-	model = new SimulatorImpl();
+    public MovsimViewerFacade() {
 
-	// init Logger
-	initLocalizationAndLogger();
+        model = new SimulatorImpl();
 
-	inputData = (InputDataImpl) model.getSimInput();
-	projectMetaDataImpl = inputData.getProjectMetaDataImpl();
+        // init Logger
+        initLocalizationAndLogger();
 
-	// TODO set project config
-	projectMetaDataImpl.setInstantaneousFileOutput(false);
-	projectMetaDataImpl.setXmlFromResources(true);
-	// TODO extract path
-	
-	// reads from src/main/resources --> sim/
-	projectMetaDataImpl.setProjectName("/sim/onramp_multilane.xml");
+        inputData = (InputDataImpl) model.getSimInput();
+        projectMetaDataImpl = inputData.getProjectMetaDataImpl();
 
-	initializeModel();
+        // TODO set project config
+        projectMetaDataImpl.setInstantaneousFileOutput(false);
+        projectMetaDataImpl.setXmlFromResources(true);
+        // TODO extract path
 
-	
+        // reads from src/main/resources --> sim/
+        projectMetaDataImpl.setProjectName("/sim/onramp_multilane.xml");
+
+        initializeModel();
+
     }
-    
 
     /*
      * (non-Javadoc)
@@ -64,12 +57,12 @@ public class MovsimViewerFacade {
      * @see org.movsim.ui.desktop.ControllerInterface#start()
      */
     public void start() {
-	// threadSuspended = false;
-	model.run();
+        // threadSuspended = false;
+        model.run();
     }
 
     public void continuesim() {
-	// threadSuspended = false;
+        // threadSuspended = false;
     }
 
     /*
@@ -78,8 +71,7 @@ public class MovsimViewerFacade {
      * @see org.movsim.ui.desktop.ControllerInterface#pause()
      */
     public void pause() {
-	
-	
+
     }
 
     /*
@@ -88,14 +80,14 @@ public class MovsimViewerFacade {
      * @see org.movsim.ui.controller.Controller#initializeModel()
      */
     public void initializeModel() {
-	model.initialize();
+        model.initialize();
     }
 
-    /**
-     * @param string
-     * 
-     */
     public void loadScenarioFromXml(String scenario) {
+        String xmlFileName = "/sim/" + scenario + ".xml";
+
+        inputData.setProjectName(xmlFileName);
+        initializeModel();
     }
 
     public void resetWthParams() {
@@ -107,38 +99,40 @@ public class MovsimViewerFacade {
     public void resetToDefault() {
     }
 
-    public void update(){
-	model.update();
-    }
-    public Simulator getSimulatorCore(){
-	return model;
+    public void update() {
+        model.update();
     }
 
+    public Simulator getSimulatorCore() {
+        return model;
+    }
 
     public RoadSection getMainroad() {
-	return model.getRoadSections().get(0);  //hack
+        return model.getRoadSections().get(0); // hack
     }
-
 
     public RoadSection getOnramp() {
-	return model.getRoadSections().get(1);  //hack
+        return model.getRoadSections().get(1); // hack
     }
-
+    
+    public RoadSection findRoadById(int id) {
+        return model.findRoadById(id);
+    }
+    
+    public List<RoadSection> getRoadSections() {
+        return model.getRoadSections();
+    }
 
     public double getTimestep() {
-	return model.timestep();
+        return model.timestep();
     }
-
 
     public long getIterationCount() {
-	return model.iterationCount();
+        return model.iterationCount();
     }
-
 
     public double getSimulationTime() {
-	return model.time();
+        return model.time();
     }
 
-    
-   
 }
