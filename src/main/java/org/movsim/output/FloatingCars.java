@@ -28,7 +28,6 @@ package org.movsim.output;
 
 import java.util.List;
 
-import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.MoveableContainer;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.ObservableInTime;

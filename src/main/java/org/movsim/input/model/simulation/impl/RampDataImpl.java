@@ -26,16 +26,8 @@
  */
 package org.movsim.input.model.simulation.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.impl.XmlUtils;
-import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 
