@@ -33,7 +33,6 @@ import org.movsim.input.model.vehicle.laneChanging.impl.MOBILImpl;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.impl.VehicleImpl;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

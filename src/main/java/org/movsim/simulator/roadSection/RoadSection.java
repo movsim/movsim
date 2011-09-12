@@ -30,8 +30,6 @@ import java.util.List;
 
 import org.movsim.input.InputData;
 import org.movsim.output.LoopDetector;
-import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
-import org.movsim.simulator.vehicles.VehicleContainer;
 
 // TODO: Auto-generated Javadoc
 /**

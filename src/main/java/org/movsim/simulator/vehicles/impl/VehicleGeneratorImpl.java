@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.InputData;
-import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.HeterogeneityInputData;
 import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
