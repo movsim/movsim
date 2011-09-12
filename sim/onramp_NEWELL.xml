@@ -41,7 +41,7 @@
             <RAMPS>
                 <SIMPLE_RAMP x="15000" merge_length="1000"
                     logging="true">
-                    <INFLOW t="0" q_per_hour="0" />
+                    <INFLOW t="0" q_per_hour="500" />
                 </SIMPLE_RAMP>
             </RAMPS>
             <TRAFFIC_LIGHTS>

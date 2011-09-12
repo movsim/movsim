@@ -71,7 +71,7 @@ public abstract class AbstractRoadSection {
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
-        this.id = 99;
+        this.id = rampData.getId();
         this.instantaneousFileOutput = false;  // TODO
         init();
     }

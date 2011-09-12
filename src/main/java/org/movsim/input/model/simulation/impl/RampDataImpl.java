@@ -37,6 +37,8 @@ import org.movsim.input.model.simulation.UpstreamBoundaryData;
  * The Class RampDataImpl.
  */
 public class RampDataImpl implements RampData {
+    
+    private final long id;
 
     /** The center position. */
     private final double rampStartPosition;
@@ -60,6 +62,7 @@ public class RampDataImpl implements RampData {
      */
     @SuppressWarnings("unchecked")
     public RampDataImpl(Element elem) {
+        this.id = Long.parseLong(elem.getAttributeValue("id"));
         this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
         this.roadLength = Double.parseDouble(elem.getAttributeValue("length"));
         this.rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
@@ -108,6 +111,14 @@ public class RampDataImpl implements RampData {
     @Override
     public UpstreamBoundaryData getUpstreamBoundaryData() {
         return upstreamData;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.RampData#getId()
+     */
+    @Override
+    public long getId() {
+        return id;
     }
 
 }

@@ -1,6 +1,7 @@
 package org.movsim.facades;
 
 import java.net.URL;
+import java.util.List;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.App;
@@ -78,6 +79,13 @@ public class MovsimViewerFacade {
 	model.initialize();
     }
 
+ public void loadScenarioFromXml(String scenario) {
+        String xmlFileName = "/sim/" + scenario + ".xml";
+
+        inputData.setProjectName(xmlFileName);
+        initializeModel();
+    }
+
     public void reset() {
 	model.reset();
     }
@@ -101,6 +109,13 @@ public class MovsimViewerFacade {
 	return model.getRoadSections().get(1);  //hack
     }
 
+  public RoadSection findRoadById(long id) {
+        return model.findRoadById(id);
+    }
+    
+    public List<RoadSection> getRoadSections() {
+        return model.getRoadSections();
+    }
 
     public double getTimestep() {
 	return model.timestep();

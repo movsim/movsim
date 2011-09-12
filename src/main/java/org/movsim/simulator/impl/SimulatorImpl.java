@@ -152,6 +152,15 @@ public class SimulatorImpl implements Simulator, Runnable {
     public List<RoadSection> getRoadSections() {
         return roadSections;
     }
+    
+    public RoadSection findRoadById(long id) {
+        for (final RoadSection roadSection : roadSections) {
+            if (roadSection.getId() == id) {
+                return roadSection;
+            }
+        }
+        return null;
+    }
 
     /*
      * (non-Javadoc)
