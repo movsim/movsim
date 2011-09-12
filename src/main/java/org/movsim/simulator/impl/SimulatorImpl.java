@@ -89,24 +89,52 @@ public class SimulatorImpl implements Simulator, Runnable {
         inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#initialize()
+     */
+    @Override
+    public void initialize() {
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
+        
+        // parse xmlFile and set values
+        
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+        final SimulationInput simInput = inputData.getSimulationInput();
+        this.timestep = simInput.getTimestep(); // can be modified by certain
+                                                // models
+        this.tMax = simInput.getMaxSimTime();
+
+        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
+        
+        
+        roadSections = new ArrayList<RoadSection>();
+        vehGenerator = new VehicleGeneratorImpl(inputData);
+        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
+
+        reset(); // former name: restart
+    }
+
+   
+    
     /**
      * Restart.
      */
     @Override
-    public void restart() {
+    public void reset() {
         time = 0;
         iterationCount = 0;
         roadSections.clear();
         roadSections.add(new RoadSectionImpl(inputData, vehGenerator));
         
         // quick hack for pulling out onramps from mainroads
-        List<RoadSection> onramps = roadSections.get(0).onrampFactory(inputData);
+        final List<RoadSection> onramps = roadSections.get(0).onrampFactory(inputData);
         for(RoadSection onramp : onramps){
             roadSections.add(onramp);
         }
         
         projectName = inputData.getProjectMetaData().getProjectName();
-        
 
         // model requires specific update time depending on its category !!
 
@@ -137,8 +165,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         simOutput.update(iterationCount, time, timestep);
 
         while (!stopThisRun(time)) {
-            time += timestep;
-            iterationCount++;
+            
             update();
         }
 
@@ -163,6 +190,10 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void update() {
+	
+	time += timestep;
+        iterationCount++;
+	
         if (iterationCount % 100 == 0) {
             logger.info("Simulator.update : time={} seconds, dt={}", time, timestep);
         }
@@ -172,7 +203,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         // TODO book-keeping all *all* roadSections in one Collection for iteration
         // onramps are part of mainroad section in current implementation  
         
-        final double dt = this.timestep; 
+        final double dt = this.timestep;   // TODO
         
         // check for crashes
         for (RoadSection roadSection : roadSections) {
@@ -263,34 +294,6 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public SimObservables getSimObservables() {
         return simOutput;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#initialize()
-     */
-    @Override
-    public void initialize() {
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
-        
-        // parse xmlFile and set values
-        
-        
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
-        final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain
-                                                // models
-        this.tMax = simInput.getMaxSimTime();
-
-        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-        
-        
-        roadSections = new ArrayList<RoadSection>();
-        vehGenerator = new VehicleGeneratorImpl(inputData);
-        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
-
-        restart();
     }
 
    

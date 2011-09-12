@@ -72,7 +72,7 @@ public interface Simulator {
     /**
      * Restart.
      */
-    void restart();
+    void reset();
 
     /**
      * Gets the sim input. All simulation input data.

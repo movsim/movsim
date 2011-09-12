@@ -225,7 +225,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 	    }
 	    else{
 		// reset vehicle's position to ramp coordinates
-		System.out.println("mergeToMainroad: not safeChange .. ");
+//		System.out.println("mergeToMainroad: not safeChange .. ");
 		veh.setPosition(pos);
 	    }
         } 

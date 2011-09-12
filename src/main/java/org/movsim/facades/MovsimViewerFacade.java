@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MovsimViewerFacade {
-
     
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MovsimViewerFacade.class);
@@ -63,24 +62,12 @@ public class MovsimViewerFacade {
      * 
      * @see org.movsim.ui.desktop.ControllerInterface#start()
      */
-    public void start() {
-	// threadSuspended = false;
-	model.run();
-    }
+//    public void start() {
+//	// threadSuspended = false;
+//	model.run();
+//    }
 
-    public void continuesim() {
-	// threadSuspended = false;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.ui.desktop.ControllerInterface#pause()
-     */
-    public void pause() {
-	
-	
-    }
+   
 
     /*
      * (non-Javadoc)
@@ -91,28 +78,18 @@ public class MovsimViewerFacade {
 	model.initialize();
     }
 
-    /**
-     * @param string
-     * 
-     */
-    public void loadScenarioFromXml(String scenario) {
-    }
-
-    public void resetWthParams() {
-    }
-
     public void reset() {
-    }
-
-    public void resetToDefault() {
+	model.reset();
     }
 
     public void update(){
 	model.update();
     }
-    public Simulator getSimulatorCore(){
-	return model;
-    }
+    
+    
+//    public Simulator getSimulatorCore(){
+//	return model;
+//    }
 
 
     public RoadSection getMainroad() {
@@ -138,6 +115,19 @@ public class MovsimViewerFacade {
     public double getSimulationTime() {
 	return model.time();
     }
+
+
+//    public double getMainroadInflow() {
+//	// TODO Auto-generated method stub
+//	return 0;
+//    }
+//
+//
+//    public double getRampInflow() {
+//	// TODO Auto-generated method stub
+//	return 0;
+//    }
+
 
     
    
