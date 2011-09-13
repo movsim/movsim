@@ -70,6 +70,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     /** The detectors. */
     private LoopDetectors detectors = null;
+    
+    
+    private int countVehiclesToOfframp;
 
     /**
      * Instantiates a new road section impl.
@@ -100,6 +103,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      */
     private void initialize(InputData inputData) {
 
+        countVehiclesToOfframp = 0;
+        
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
             vehContainers.add(new VehicleContainerImpl(laneIndex));
@@ -123,36 +128,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         initialConditions(inputData.getSimulationInput());
 
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.RoadSection#update(int, double)
-     */
-    // public void update(long iterationCount, double time) {
-    //
-    // // check for crashes
-    // checkForInconsistencies(iterationCount, time);
-    //
-    // updateRoadConditions(iterationCount, time);
-    //
-    // laneChanging(iterationCount, dt, time); // check order
-    //
-    // // vehicle accelerations
-    // accelerate(iterationCount, dt, time);
-    //
-    // // vehicle pos/speed
-    // updatePositionAndSpeed(iterationCount, dt, time);
-    //
-    // updateDownstreamBoundary();
-    //
-    // updateUpstreamBoundary(iterationCount, dt, time);
-    //
-    // updateOnramps(iterationCount, dt, time);
-    //
-    // detectors.update(iterationCount, time, dt, vehContainers);
-    //
-    // }
 
     /**
      * Initial conditions.
@@ -281,8 +256,10 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
 
-        final double fractionToOfframp = 0.1; // TODO compare total flows on
-                                              // mainroad and offramp
+        
+        // TODO extract as parameter to xml configuration
+        // TODO treat each offramp separately for correct book-keeping
+        final double fractionToOfframp = 0.1; 
 
         for (final RoadSection rmp : ramps) {
             // quick hack
@@ -296,7 +273,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     final double pos = veh.getPosition();
                     if (pos > rmp.getRampPositionToMainroad()
                             && pos < rmp.getRampPositionToMainroad() + rmp.getRampMergingLength()) {
-                        logger.debug("in merging to offramp: veh pos={}", veh.getPosition());
+                        //logger.debug("in merging to offramp: veh pos={}", veh.getPosition());
                         // check if lane change is possible
                         final double oldPos = veh.getPosition();
                         final double newPos = veh.getPosition() - rmp.getRampPositionToMainroad();
@@ -305,7 +282,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                                 rmpContainer);
                         veh.setPosition(oldPos);
                         // local decision to change to offramp
-                        final boolean isDesired = MyRandom.nextDouble() < fractionToOfframp;
+                        final double fractionOfLeavingVehicles = upstreamBoundary.getEnteringVehCounter()==0 ? 0 : countVehiclesToOfframp/(double)upstreamBoundary.getEnteringVehCounter();
+                        final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframp;
+                        logger.debug("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles, upstreamBoundary.getEnteringVehCounter());
                         if (isSafeChange && isDesired) {
                             stagedVehicles.add(veh);
                         }
@@ -317,6 +296,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     final double vInit = veh.getSpeed();
                     vehContainers.get(Constants.MOST_RIGHT_LANE).removeVehicle(veh);
                     rmpContainer.add(veh, xInit, vInit);
+                    countVehiclesToOfframp++;
                 }
             }
         }

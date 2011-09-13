@@ -113,21 +113,22 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         }
     }
 
-    
-    
-    private int getNewCyclicLaneIndexForEntering(int iLane){
-        return (iLane==vehContainers.size()-1 ? 0 : iLane+1);
+    @Override
+    public int getEnteringVehCounter() {
+        return enteringVehCounter;
     }
-    
-    
-    private double getTotalInflow(double time){
+
+    private int getNewCyclicLaneIndexForEntering(int iLane) {
+        return (iLane == vehContainers.size() - 1 ? 0 : iLane + 1);
+    }
+
+    private double getTotalInflow(double time) {
         // inflow over all lanes
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         final int nLanes = vehContainers.size();
         return nLanes * qBC;
     }
-    
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -138,21 +139,21 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     public void update(long itime, double dt, double time) {
         // integrate inflow demand
         final double totalInflow = getTotalInflow(time);
-        nWait +=  totalInflow * dt;  
+        nWait += totalInflow * dt;
         if (nWait >= 1) {
-            // try to insert new vehicle at inflow 
-            // iterate periodically over n lanes  
+            // try to insert new vehicle at inflow
+            // iterate periodically over n lanes
             int iLane = laneEnterLast;
             for (int i = 0, N = vehContainers.size(); i < N; i++) {
                 iLane = getNewCyclicLaneIndexForEntering(iLane);
                 final VehicleContainer vehContainerLane = vehContainers.get(iLane);
-                // lane index is identical to vehicle's lane number 
+                // lane index is identical to vehicle's lane number
                 final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, time, totalInflow);
                 if (isEntered) {
                     nWait--;
                     if (fstrLogging != null) {
-                        fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast, 3600 * totalInflow,
-                                enteringVehCounter, nWait);
+                        fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast,
+                                3600 * totalInflow, enteringVehCounter, nWait);
                         fstrLogging.flush();
                     }
                     return; // only one insert per simulation update
@@ -161,10 +162,6 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         }
     }
 
-
-   
-
-    
     /**
      * Try entering new vehicle.
      * 
@@ -177,7 +174,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     private boolean tryEnteringNewVehicle(final VehicleContainer vehContainer, double time, double qBC) {
 
         // type of new vehicle
-        final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(); 
+        final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
         final Vehicle leader = vehContainer.getMostUpstream();
 
         // (1) empty road
@@ -235,16 +232,16 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param leader
      *            the leader
      */
-    private void enterVehicle(final VehicleContainer vehContainer, double time, double sFreeMin, VehiclePrototype vehPrototype, Vehicle leader) {
-	
-	final double speedDefault = inflowTimeSeries.getSpeed(time);
-	
+    private void enterVehicle(final VehicleContainer vehContainer, double time, double sFreeMin,
+            VehiclePrototype vehPrototype, Vehicle leader) {
+
+        final double speedDefault = inflowTimeSeries.getSpeed(time);
+
         final double sFree = leader.getPosition() - leader.getLength();
         final double xLast = leader.getPosition();
         final double vLast = leader.getSpeed();
         final double aLast = leader.getAcc();
 
-        
         final double vEnterTest = Math.min(speedDefault, 1.5 * vLast);
         final double lengthLast = leader.getLength();
 
@@ -256,16 +253,17 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         final double bEff = Math.max(0.1, bMax + aLast);
         final double vMaxKin = vLast + Math.sqrt(2 * sFree * bEff);
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
-        //final int laneEnter = Constants.MOST_RIGHT_LANE;
+        // final int laneEnter = Constants.MOST_RIGHT_LANE;
 
         addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
-//        logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}", xEnter, vEnter);
-        
-//        System.out.printf("add vehicle from upstream boundary: vehType=%s, xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
-//          vehPrototype.getLabel(), xLast, vLast, xEnter, vEnter, vehContainer.getLaneIndex(), rhoEnter, vMaxEq, vMaxKin );
+        // logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",
+        // xEnter, vEnter);
+
+        // System.out.printf("add vehicle from upstream boundary: vehType=%s, xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
+        // vehPrototype.getLabel(), xLast, vLast, xEnter, vEnter,
+        // vehContainer.getLaneIndex(), rhoEnter, vMaxEq, vMaxKin );
     }
 
-    
     /**
      * Adds the vehicle.
      * 
@@ -278,7 +276,8 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param laneEnter
      *            the lane enter
      */
-    private void addVehicle(final VehicleContainer vehContainer, final VehiclePrototype vehPrototype, double xEnter, double vEnter) {
+    private void addVehicle(final VehicleContainer vehContainer, final VehiclePrototype vehPrototype, double xEnter,
+            double vEnter) {
         final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
         vehContainer.add(veh, xEnter, vEnter);
         // status variables of entering vehicle for logging

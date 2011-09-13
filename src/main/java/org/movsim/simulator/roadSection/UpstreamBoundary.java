@@ -43,5 +43,6 @@ public interface UpstreamBoundary {
      */
     void update(long iterationCount, double dt, double time);
     
+    int getEnteringVehCounter();
 
 }
