@@ -157,7 +157,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
-         
+        setObstacleAtEndOfLane();
 
         // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
@@ -179,12 +179,12 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     }
     
-    @Override
-    public void accelerate(long iterationCount, double dt, double time) {
-        setObstacleAtEndOfLane();
-        super.accelerate(iterationCount, dt, time);
-        removeObstacleAtEndOfLane();
-    }
+//    @Override
+//    public void accelerate(long iterationCount, double dt, double time) {
+//        setObstacleAtEndOfLane();
+//        super.accelerate(iterationCount, dt, time);
+//        removeObstacleAtEndOfLane();
+//    }
 
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
@@ -240,13 +240,13 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         logger.debug("set obstacle at pos={} with length={}", posInit, obstacle.getLength());
     }
     
-    
-    private void removeObstacleAtEndOfLane(){
-        final Vehicle veh = vehContainers.get(0).getMostDownstream();
-        assert veh.getLabel().equals(Constants.OBSTACLE_KEY_NAME);
-        vehContainers.get(0).removeVehicleMostDownstream();
-        //logger.debug("remove obstacle from end of onramp after acceleration calculation");
-    }
+//    
+//    private void removeObstacleAtEndOfLane(){
+//        final Vehicle veh = vehContainers.get(0).getMostDownstream();
+//        assert veh.getLabel().equals(Constants.OBSTACLE_KEY_NAME);
+//        vehContainers.get(0).removeVehicleMostDownstream();
+//        //logger.debug("remove obstacle from end of onramp after acceleration calculation");
+//    }
 
     @Override
     public void updateRoadConditions(long iterationCount, double time) {
