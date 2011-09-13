@@ -72,6 +72,8 @@ public interface Constants {
 
     /** The MODE l_ nam e_ nsm. */
     final String MODEL_NAME_NSM = "NSM";
+    
+    final String MODEL_NAME_BARL = "BARL";
 
     /** The MODE l_ nam e_ kca. */
     final String MODEL_NAME_KKW = "KKW";
@@ -85,6 +87,7 @@ public interface Constants {
 
     /** The invalid gap */
     final double INVALID_GAP = -1;
+
 
 
 }
