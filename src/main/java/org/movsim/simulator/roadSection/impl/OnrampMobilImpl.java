@@ -217,7 +217,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             veh.setPosition(newPos); // important mapping to coordinate system
                                      // of mainroad !!!
             logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
-            final boolean isSafeChange = veh.getLaneChangingModel().checkLaneChangeFromRamp(dt, mainVehContainer);
+            final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(dt, mainVehContainer);
 
             // if (veh.getLaneChangingModel().laneChanging()) {
             if (isSafeChange) {
@@ -291,6 +291,12 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     public List<RoadSection> rampFactory(InputData inputData) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

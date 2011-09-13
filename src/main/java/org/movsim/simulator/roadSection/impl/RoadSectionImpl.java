@@ -40,6 +40,7 @@ import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.impl.LoopDetectors;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.simulator.roadSection.OfframpImpl;
 import org.movsim.simulator.roadSection.RoadSection;
@@ -229,8 +230,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         final List<RampData> rampData = inputData.getSimulationInput().getSingleRoadInput().getRamps();
         for (final RampData rmp : rampData) {
-            if( (rmp.getId() > 0 )  ){
-            // merging from onramp only to most-right lane (shoulder lane)
+            if ((rmp.getId() > 0)) {
+                // merging from onramp only to most-right lane (shoulder lane)
                 ramps.add(new OnrampMobilImpl(rmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE),
                         projectName, rampIndex));
                 rampIndex++;
@@ -264,8 +265,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
                 for (Vehicle veh : vehiclesOnLane) {
                     if (veh.considerLaneChanging(dt, vehContainers)) {
-                      stagedVehicles.add(veh);
-                  }
+                        stagedVehicles.add(veh);
+                    }
                 }
             }
         }
@@ -275,6 +276,52 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
             vehContainers.get(veh.getLane()).removeVehicle(veh);
             vehContainers.get(veh.getTargetLane()).add(veh);
         }
+
+    }
+
+    public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
+
+        final double fractionToOfframp = 0.1; // TODO compare total flows on
+                                              // mainroad and offramp
+
+        for (final RoadSection rmp : ramps) {
+            // quick hack
+            if (rmp instanceof OfframpImpl) {
+                stagedVehicles.clear();
+                final VehicleContainer vehContainerRightLane = vehContainers.get(Constants.MOST_RIGHT_LANE);
+                final VehicleContainer rmpContainer = rmp.getVehContainer(rmp.getNumberOfLanes() - 1); // most
+                                                                                                       // left
+                                                                                                       // lane
+                for (final Vehicle veh : vehContainerRightLane.getVehicles()) {
+                    final double pos = veh.getPosition();
+                    if (pos > rmp.getRampPositionToMainroad()
+                            && pos < rmp.getRampPositionToMainroad() + rmp.getRampMergingLength()) {
+                        logger.debug("in merging to offramp: veh pos={}", veh.getPosition());
+                        // check if lane change is possible
+                        final double oldPos = veh.getPosition();
+                        final double newPos = veh.getPosition() - rmp.getRampPositionToMainroad();
+                        veh.setPosition(newPos); // mapping to coordinate system of offramp
+                        final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(dt,
+                                rmpContainer);
+                        veh.setPosition(oldPos);
+                        // local decision to change to offramp
+                        final boolean isDesired = MyRandom.nextDouble() < fractionToOfframp;
+                        if (isSafeChange && isDesired) {
+                            stagedVehicles.add(veh);
+                        }
+                    }
+                }
+                // assign staged vehicles to offrmp
+                for (final Vehicle veh : stagedVehicles) {
+                    final double xInit = veh.getPosition() - rmp.getRampPositionToMainroad();
+                    final double vInit = veh.getSpeed();
+                    vehContainers.get(Constants.MOST_RIGHT_LANE).removeVehicle(veh);
+                    rmpContainer.add(veh, xInit, vInit);
+                }
+            }
+        }
+
+        stagedVehicles.clear();
 
     }
 

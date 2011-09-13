@@ -36,6 +36,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     public OfframpImpl(final RampData rampData){
         super(rampData);
         
+
         // vehicles start at initial position
         mergeLength = rampData.getRampMergingLength();
         xToMain = rampData.getRampStartPosition();
@@ -51,6 +52,8 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
         // TODO Auto-generated method stub
+        
+        
     }
 
     @Override
@@ -62,9 +65,9 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     @Override
     // identical to RoadSectionImpl
     public void updateDownstreamBoundary() {
-//        for (VehicleContainer vehContainerLane : vehContainers) {
-//            vehContainerLane.removeVehiclesDownstream(roadLength);
-//        }
+        for (VehicleContainer vehContainerLane : vehContainers) {
+            vehContainerLane.removeVehiclesDownstream(roadLength);
+        }
     }
 
     @Override
@@ -105,6 +108,17 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
         //upstreamBoundary.update(iterationCount, dt, time);
     }
+
+
+
+    @Override
+    public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    
+    
     
     
     

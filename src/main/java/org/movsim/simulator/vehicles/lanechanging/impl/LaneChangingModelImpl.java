@@ -143,10 +143,11 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         
     
     
+    
+
     @Override
-    public boolean checkLaneChangeFromRamp(double dt, final VehicleContainer vehContainerTargetLane){
-//        if (laneChangeStatus() == NO_CHANGE) {
-            final boolean otherVehsChangeSufficientlyLongAgo = true; 
+    public boolean isMandatoryLaneChangeSafe(double dt, final VehicleContainer vehContainerTargetLane){
+            //final boolean otherVehsChangeSufficientlyLongAgo = true; 
             final Vehicle frontMain = vehContainerTargetLane.getLeader(me); // works also for the "virtual" leader of me in considered lane
             final Vehicle backMain = vehContainerTargetLane.getFollower(me); 
             

@@ -42,8 +42,6 @@ public abstract class AbstractRoadSection {
     /** The veh container list (for each lane). */
     protected List<VehicleContainer> vehContainers;
     
-    
-    
     protected List<Vehicle> stagedVehicles;
 
     /** The upstream boundary. */
@@ -162,8 +160,9 @@ public abstract class AbstractRoadSection {
             for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
                 final Vehicle veh = vehiclesOnLane.get(i);
                 final double x = veh.getPosition();
-                final double alphaT = flowConsBottlenecks.alphaT(x);
-                final double alphaV0 = flowConsBottlenecks.alphaV0(x);
+                // TODO treat null case
+                final double alphaT = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaT(x);
+                final double alphaV0 = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
                 veh.calcAcceleration(dt, vehContainerLane, alphaT, alphaV0);

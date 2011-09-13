@@ -494,4 +494,10 @@ public class OnrampImpl implements RoadSection {
         return null;
     }
 
+    @Override
+    public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
