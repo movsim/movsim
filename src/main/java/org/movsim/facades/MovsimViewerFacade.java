@@ -113,6 +113,10 @@ public class MovsimViewerFacade {
         return model.time();
     }
 
+    public double getMaxSimTime() {
+        return inputData.getSimulationInput().getMaxSimTime();
+    }
+
     // public double getMainroadInflow() {
     // // TODO Auto-generated method stub
     // return 0;
