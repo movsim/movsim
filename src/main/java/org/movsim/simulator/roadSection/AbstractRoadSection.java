@@ -79,7 +79,9 @@ public interface AbstractRoadSection {
         
         void updateUpstreamBoundary(long iterationCount, double dt, double time);
         
-        
+
+        double getRampMergingLength();  // TODO redesign for network view
+        double getRampPositionToMainroad(); // TODO redesign for network view
        
     }
 

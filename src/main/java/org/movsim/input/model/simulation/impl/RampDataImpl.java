@@ -70,8 +70,6 @@ public class RampDataImpl implements RampData {
 
         final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
         upstreamData = new UpstreamBoundaryDataImpl(upInflowElem);
-        
-
     }
 
     

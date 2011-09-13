@@ -50,10 +50,11 @@ import org.slf4j.LoggerFactory;
  */
 public class OnrampImpl implements RoadSection {
 
-    /** The lane for entering the mainroad  
-     *  only MOST_RIGHT_LANE possible to enter*/
-    private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE; 
-    
+    /**
+     * The lane for entering the mainroad only MOST_RIGHT_LANE possible to enter
+     */
+    private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE;
+
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
@@ -104,11 +105,9 @@ public class OnrampImpl implements RoadSection {
     /** The v enter last merge. */
     private double vEnterLastMerge;
 
-    
     /** The merge count. */
     private int mergeCount;
-    
-    
+
     /**
      * Instantiates a new onramp impl.
      * 
@@ -128,7 +127,8 @@ public class OnrampImpl implements RoadSection {
 
         this.vehGenerator = vehGenerator;
         vehicleQueue = new LinkedList<Vehicle>();
-        this.mainVehContainer = mainVehContainer;  // container of mainroad's most-right lane 
+        this.mainVehContainer = mainVehContainer; // container of mainroad's
+                                                  // most-right lane
 
         mergeCount = 0;
         if (rampData.withLogging()) {
@@ -152,7 +152,7 @@ public class OnrampImpl implements RoadSection {
 
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
-        //public void update(long itime, double dt, double time) {
+        // public void update(long itime, double dt, double time) {
 
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         nWait += qBC * dt;
@@ -168,15 +168,14 @@ public class OnrampImpl implements RoadSection {
         // actual veh. length not dyn. relevant for this simulation -> lvehTest
 
         if (vehicleQueue.size() >= 1) {
-            
+
             final boolean isMerging = tryMerge(vehicleQueue.getFirst(), mainVehContainer);
-            
-            
+
             if (isMerging) {
                 vehicleQueue.removeFirst();
                 if (fstrLogging != null) {
-                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge, 3.6 * vEnterLastMerge,
-                            3600 * qBC, mergeCount, vehicleQueue.size());
+                    fstrLogging.printf(outputFormat, time, LANE_TO_MERGE_ON_MAINROAD, xEnterLastMerge,
+                            3.6 * vEnterLastMerge, 3600 * qBC, mergeCount, vehicleQueue.size());
                     fstrLogging.flush();
                 }
             }
@@ -346,7 +345,8 @@ public class OnrampImpl implements RoadSection {
                 final Vehicle actualVeh = mainVehicles.get(i);
                 final double posFront = (i > 0) ? mainVehicles.get(i - 1).getPosition() : Double.MAX_VALUE; // abfrage
                 final double xEnterTest = Math.min(Math.max(xUp, 0.5 * (actualVeh.getPosition() + posFront)), xDown);
-                double netGap = xEnterTest - actualVeh.getPosition() - 0.5 * (actualVeh.getLength() + vehToEnter.getLength());
+                double netGap = xEnterTest - actualVeh.getPosition() - 0.5
+                        * (actualVeh.getLength() + vehToEnter.getLength());
                 if (i == indexUp + 1) {
                     netGap = mainVehicles.get(i - 1).getPosition() - xEnterTest - 0.5
                             * (mainVehicles.get(i - 1).getLength() + vehToEnter.getLength());
@@ -384,8 +384,7 @@ public class OnrampImpl implements RoadSection {
         }
         return false;
     }
-    
-    
+
     @Override
     public double getRoadLength() {
         // TODO Auto-generated method stub
@@ -425,39 +424,37 @@ public class OnrampImpl implements RoadSection {
     @Override
     public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
         // TODO Auto-generated method stub
-        
-    }
 
-   
+    }
 
     @Override
     public void accelerate(long iterationCount, double dt, double time) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void updateRoadConditions(long iterationCount, double time) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void updatePositionAndSpeed(long iterationCount, double dt, double time) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void updateDownstreamBoundary() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -475,7 +472,7 @@ public class OnrampImpl implements RoadSection {
     @Override
     public void updateDetectors(long iterationCount, double dt, double simulationTime) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -484,5 +481,16 @@ public class OnrampImpl implements RoadSection {
         return null;
     }
 
+    @Override
+    public double getRampMergingLength() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getRampPositionToMainroad() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 }

@@ -69,7 +69,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     /** The detectors. */
     private LoopDetectors detectors = null;
 
-    
     /**
      * Instantiates a new road section impl.
      * 
@@ -79,7 +78,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     public RoadSectionImpl(final InputData inputData, final VehicleGenerator vehGenerator) {
         super(inputData, vehGenerator);
         logger.info("Cstr. RoadSectionImpl");
-        
+
         initialize(inputData);
 
         // TODO cross-check --> testing for correct dt setup .... concept
@@ -98,9 +97,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      *            the input data
      */
     private void initialize(InputData inputData) {
-        
+
         vehContainers = new ArrayList<VehicleContainer>();
-        for(int laneIndex = 0; laneIndex < nLanes; laneIndex++){
+        for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
             vehContainers.add(new VehicleContainerImpl(laneIndex));
         }
 
@@ -123,36 +122,35 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     }
 
-
     /*
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.roadSection.RoadSection#update(int, double)
      */
-//    public void update(long iterationCount, double time) {
-//
-//        // check for crashes
-//        checkForInconsistencies(iterationCount, time);
-//
-//        updateRoadConditions(iterationCount, time);
-//
-//        laneChanging(iterationCount, dt, time);  // check order 
-//    
-//        // vehicle accelerations
-//        accelerate(iterationCount, dt, time);
-//
-//        // vehicle pos/speed
-//        updatePositionAndSpeed(iterationCount, dt, time);
-//
-//        updateDownstreamBoundary();
-//
-//        updateUpstreamBoundary(iterationCount, dt, time);
-//
-//        updateOnramps(iterationCount, dt, time);
-//
-//        detectors.update(iterationCount, time, dt, vehContainers);
-//
-//    }
+    // public void update(long iterationCount, double time) {
+    //
+    // // check for crashes
+    // checkForInconsistencies(iterationCount, time);
+    //
+    // updateRoadConditions(iterationCount, time);
+    //
+    // laneChanging(iterationCount, dt, time); // check order
+    //
+    // // vehicle accelerations
+    // accelerate(iterationCount, dt, time);
+    //
+    // // vehicle pos/speed
+    // updatePositionAndSpeed(iterationCount, dt, time);
+    //
+    // updateDownstreamBoundary();
+    //
+    // updateUpstreamBoundary(iterationCount, dt, time);
+    //
+    // updateOnramps(iterationCount, dt, time);
+    //
+    // detectors.update(iterationCount, time, dt, vehContainers);
+    //
+    // }
 
     /**
      * Initial conditions.
@@ -161,7 +159,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      *            the sim input
      */
     private void initialConditions(SimulationInput simInput) {
-        
+
         // TODO: consider multi-lane case !!!
         final List<ICMacroData> icMacroData = simInput.getSingleRoadInput().getIcMacroData();
         if (!icMacroData.isEmpty()) {
@@ -182,7 +180,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 }
                 final int laneEnter = Constants.MOST_RIGHT_LANE;
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);  
+                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
 
                 xLocal -= 1 / rhoLocal;
@@ -200,34 +198,38 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 final Vehicle veh = (vehTypeFromFile.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
                         .createVehicle(vehTypeFromFile);
                 // TODO: consider multi-lane case, distribute over all lanes
-                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);  
+                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
                 logger.info("set vehicle with label = {}", veh.getLabel());
             }
         }
     }
 
-    
-    // just hack for "pulling out" the onramps contructed in the mainroad roadsection
+    // just hack for "pulling out" the onramps contructed in the mainroad
+    // roadsection
     public List<RoadSection> onrampFactory(final InputData inputData) {
-        
+
         List<RoadSection> onramps = new ArrayList<RoadSection>();
-        
+
         final String projectName = inputData.getProjectMetaData().getProjectName();
-        
+
         // add simple onramps (with dropping mechanism)
-        final List<SimpleRampData> simpleOnrampData = inputData.getSimulationInput().getSingleRoadInput().getSimpleRamps();
+        final List<SimpleRampData> simpleOnrampData = inputData.getSimulationInput().getSingleRoadInput()
+                .getSimpleRamps();
         int rampIndex = 1;
         for (final SimpleRampData onrmp : simpleOnrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            onramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
+            onramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName,
+                    rampIndex));
             rampIndex++;
         }
-        
-        // and simply add the new onramp with lane-changing decision and true merging 
+
+        // and simply add the new onramp with lane-changing decision and true
+        // merging
         final List<RampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getRamps();
         for (final RampData onrmp : onrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            onramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName, rampIndex));
+            onramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE),
+                    projectName, rampIndex));
             rampIndex++;
         }
         return onramps;
@@ -237,47 +239,38 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * Update downstream boundary.
      */
     public void updateDownstreamBoundary() {
-        for(VehicleContainer vehContainerLane : vehContainers){
+        for (VehicleContainer vehContainerLane : vehContainers) {
             vehContainerLane.removeVehiclesDownstream(roadLength);
         }
     }
-    
-    
-    
-    
+
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
-	
-	
-	stagedVehicles.clear();
-	
-	// no lane changes if there are less than two lanes
-	if(vehContainers.size()>1){
-	    for (VehicleContainer vehContainerLane : vehContainers) {
-		final List<Vehicle> vehiclesOnLane = vehContainerLane
-		        .getVehicles();
-		for (Vehicle veh : vehiclesOnLane) {
-		    if(veh.isLaneChanging()){
-			veh.updateContinuousLaneChange(dt); // TODO
-		    }
-		    else if( veh.doLaneChanging(vehContainers)){
-			stagedVehicles.add(veh);
-		    }
-		}
-	    }
-	}
-	
 
-	// assign staged vehicles to new lanes
-	for(final Vehicle veh : stagedVehicles){
-	    vehContainers.get(veh.getLane()).removeVehicle(veh);
-	    vehContainers.get(veh.getTargetLane()).add(veh);
-	}
-	            
-	
+        stagedVehicles.clear();
+
+        // no lane changes if there are less than two lanes
+        if (vehContainers.size() > 1) {
+            for (VehicleContainer vehContainerLane : vehContainers) {
+                final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+                for (Vehicle veh : vehiclesOnLane) {
+                    if (veh.isLaneChanging()) {
+                        veh.updateContinuousLaneChange(dt); // TODO
+                    } else if (veh.doLaneChanging(vehContainers)) {
+                        stagedVehicles.add(veh);
+                    }
+                }
+            }
+        }
+
+        // assign staged vehicles to new lanes
+        for (final Vehicle veh : stagedVehicles) {
+            vehContainers.get(veh.getLane()).removeVehicle(veh);
+            vehContainers.get(veh.getTargetLane()).add(veh);
+        }
+
     }
-   
-   
+
     /**
      * Accelerate.
      * 
@@ -361,16 +354,14 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param time
      *            the time
      */
-    
-    
-//    public void updateOnramps(long iterationCount, double dt, double time) {
-//        if (onramps.isEmpty())
-//            return;
-//        for (final Onramp onramp : onramps) {
-//            onramp.update(iterationCount, dt, time);
-//        }
-//    }
-  
+
+    // public void updateOnramps(long iterationCount, double dt, double time) {
+    // if (onramps.isEmpty())
+    // return;
+    // for (final Onramp onramp : onramps) {
+    // onramp.update(iterationCount, dt, time);
+    // }
+    // }
 
     /*
      * (non-Javadoc)
@@ -381,8 +372,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     public List<TrafficLight> getTrafficLights() {
         return trafficLights.getTrafficLights();
     }
-
-   
 
     /*
      * (non-Javadoc)
@@ -395,11 +384,20 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     }
 
     @Override
-    public void updateDetectors(long iterationCount, double dt, double time){
+    public void updateDetectors(long iterationCount, double dt, double time) {
         detectors.update(iterationCount, time, dt, vehContainers);
     }
-   
 
- 
-    
+    @Override
+    public double getRampMergingLength() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getRampPositionToMainroad() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }
