@@ -79,13 +79,15 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     private final double mergeLength;
 
-    /** The x up ramp marks the start of ther ramp. */
+    /** The x up ramp marks the start of the ramp. */
     private final double xUpRamp;
 
     /** The x down ramp marks the end of the ramp. */
     // private final double xDownRamp;
 
     private final double xOffsetMain;
+    
+    private final double xToMain;
 
     /** The n wait. */
     private double nWait;
@@ -140,6 +142,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // xCenter = rampData.getRampStartPosition() + 0.5 * mergeLength;
         // xDownRamp = xUpRamp + mergeLength;
 
+        xToMain = rampData.getRampStartPosition();
         xOffsetMain = rampData.getRampStartPosition() - xUpRamp;
 
         logger.debug("xOffsetMain = {}", xOffsetMain);
@@ -271,7 +274,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     @Override
     public double getRampPositionToMainroad() {
-        return xOffsetMain;
+        return xToMain;
     }
 
 }
