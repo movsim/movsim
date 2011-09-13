@@ -79,13 +79,15 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     private final double mergeLength;
 
-    /** The x up ramp marks the start of ther ramp. */
+    /** The x up ramp marks the start of the ramp. */
     private final double xUpRamp;
 
     /** The x down ramp marks the end of the ramp. */
     // private final double xDownRamp;
 
     private final double xOffsetMain;
+    
+    private final double xToMain;
 
     /** The n wait. */
     private double nWait;
@@ -140,6 +142,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // xCenter = rampData.getRampStartPosition() + 0.5 * mergeLength;
         // xDownRamp = xUpRamp + mergeLength;
 
+        xToMain = rampData.getRampStartPosition();
         xOffsetMain = rampData.getRampStartPosition() - xUpRamp;
 
         logger.debug("xOffsetMain = {}", xOffsetMain);
@@ -154,7 +157,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
-        setObstacleAtEndOfLane(); //
+         
 
         // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
@@ -174,6 +177,13 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
         nWait = 0;
 
+    }
+    
+    @Override
+    public void accelerate(long iterationCount, double dt, double time) {
+        setObstacleAtEndOfLane();
+        super.accelerate(iterationCount, dt, time);
+        removeObstacleAtEndOfLane();
     }
 
     @Override
@@ -229,6 +239,14 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         vehContainers.get(0).add(obstacle, posInit, speedInit);
         logger.debug("set obstacle at pos={} with length={}", posInit, obstacle.getLength());
     }
+    
+    
+    private void removeObstacleAtEndOfLane(){
+        final Vehicle veh = vehContainers.get(0).getMostDownstream();
+        assert veh.getLabel().equals(Constants.OBSTACLE_KEY_NAME);
+        vehContainers.get(0).removeVehicleMostDownstream();
+        //logger.debug("remove obstacle from end of onramp after acceleration calculation");
+    }
 
     @Override
     public void updateRoadConditions(long iterationCount, double time) {
@@ -271,7 +289,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     @Override
     public double getRampPositionToMainroad() {
-        return xOffsetMain;
+        return xToMain;
     }
 
 }

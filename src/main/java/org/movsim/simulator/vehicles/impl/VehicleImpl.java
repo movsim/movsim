@@ -54,6 +54,9 @@ public class VehicleImpl implements Vehicle {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleImpl.class);
 
+    final static double THRESHOLD_BRAKELIGHT_ON = 0.2; // m/s^2
+    final static double THRESHOLD_BRAKELIGHT_OFF = 0.1; // m/s^2
+
     /** The label. */
     private final String label;
 
@@ -75,6 +78,8 @@ public class VehicleImpl implements Vehicle {
     /** The acc. */
     private double acc;
 
+    private double oldAcc;
+
     /** The reaction time. */
     private final double reactionTime;
 
@@ -90,20 +95,17 @@ public class VehicleImpl implements Vehicle {
     /** The lane. */
     private int lane;
 
-    
-    private int targetLane; 
-
-
+    private int targetLane;
 
     /** The speedlimit. */
-    private double speedlimit; 
+    private double speedlimit;
 
     /** The long model. */
     private final AccelerationModel accelerationModel;
-    
+
     /** The lane-changing model. */
     private final LaneChangingModelImpl lcModel;
-    
+
     private final TransveralDynamicsImpl transDynamicsModel;
 
     /** The memory. */
@@ -144,9 +146,9 @@ public class VehicleImpl implements Vehicle {
         this.accelerationModel = longModel;
         this.lcModel = lcModel;
         lcModel.initialize(this);
-        
-        transDynamicsModel = new TransveralDynamicsImpl();  // TODO
-        
+
+        transDynamicsModel = new TransveralDynamicsImpl(); // TODO
+
         this.cyclicBuffer = cyclicBuffer;
 
         oldPosition = 0;
@@ -377,7 +379,7 @@ public class VehicleImpl implements Vehicle {
      */
     @Override
     public double getNetDistance(final Moveable vehFront) {
-        if (vehFront == null){
+        if (vehFront == null) {
             return Constants.GAP_INFINITY;
         }
         return (vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength()));
@@ -406,6 +408,7 @@ public class VehicleImpl implements Vehicle {
     @Override
     public void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0) {
 
+        oldAcc = acc;
         // acceleration noise:
         double accError = 0;
         if (noise != null) {
@@ -475,14 +478,13 @@ public class VehicleImpl implements Vehicle {
                 speed = 0;
             }
             final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
-            
+
             position += advance;
             speed += dt * acc;
             if (speed < 0) {
                 speed = 0;
                 acc = 0;
             }
-            
 
         }
     }
@@ -541,25 +543,23 @@ public class VehicleImpl implements Vehicle {
     }
 
     @Override
-    public LaneChangingModelImpl getLaneChangingModel(){
+    public LaneChangingModelImpl getLaneChangingModel() {
         return lcModel;
     }
 
     @Override
-    public AccelerationModel getAccelerationModel(){
+    public AccelerationModel getAccelerationModel() {
         return accelerationModel;
     }
-    
-    @Override
-    public boolean doLaneChanging(final List<VehicleContainer> vehContainers){
-	// no lane changing when not configured in xml 
-	if(!lcModel.isInitialized()){
-	    return false;
-	}
-	return lcModel.considerLaneChanging(vehContainers);
-    }
-    
 
+    @Override
+    public boolean doLaneChanging(final List<VehicleContainer> vehContainers) {
+        // no lane changing when not configured in xml
+        if (!lcModel.isInitialized()) {
+            return false;
+        }
+        return lcModel.considerLaneChanging(vehContainers);
+    }
 
     @Override
     public int getTargetLane() {
@@ -568,25 +568,40 @@ public class VehicleImpl implements Vehicle {
 
     @Override
     public void setTargetLane(int targetLane) {
-	if(targetLane<0){
-	    logger.error("invalid targetLane={}", targetLane);
-	}
-	// initiates a lane-change
+        if (targetLane < 0) {
+            logger.error("invalid targetLane={}", targetLane);
+        }
+        // initiates a lane-change
         this.targetLane = targetLane;
         transDynamicsModel.performLaneChange(lane, targetLane);
     }
-    
-    
-    
-    
+
     @Override
-    public boolean isLaneChanging(){
-	return false;
+    public boolean isLaneChanging() {
+        return false;
     }
 
     @Override
-    public void updateContinuousLaneChange(double dt){
-	transDynamicsModel.update(dt);
+    public void updateContinuousLaneChange(double dt) {
+        transDynamicsModel.update(dt);
     }
-    
+
+    private boolean isBrakeLightOn = false;
+
+    @Override
+    public boolean isBrakeLightOn() {
+        updateBrakeLightStatus();
+        return isBrakeLightOn;
+    }
+
+    private void updateBrakeLightStatus() {
+        if (isBrakeLightOn) {
+            if (acc > -THRESHOLD_BRAKELIGHT_OFF || speed <= 0.0001) {
+                isBrakeLightOn = false;
+            }
+        } else if (oldAcc > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON) {
+            isBrakeLightOn = true;
+        }
+    }
+
 }
