@@ -41,6 +41,7 @@ import org.movsim.output.LoopDetector;
 import org.movsim.output.impl.LoopDetectors;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
+import org.movsim.simulator.roadSection.OfframpImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
@@ -206,9 +207,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     // just hack for "pulling out" the onramps contructed in the mainroad
     // roadsection
-    public List<RoadSection> onrampFactory(final InputData inputData) {
+    public List<RoadSection> rampFactory(final InputData inputData) {
 
-        List<RoadSection> onramps = new ArrayList<RoadSection>();
+        List<RoadSection> ramps = new ArrayList<RoadSection>();
 
         final String projectName = inputData.getProjectMetaData().getProjectName();
 
@@ -216,23 +217,31 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         final List<SimpleRampData> simpleOnrampData = inputData.getSimulationInput().getSingleRoadInput()
                 .getSimpleRamps();
         int rampIndex = 1;
-        for (final SimpleRampData onrmp : simpleOnrampData) {
+        for (final SimpleRampData rmpSimpl : simpleOnrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            onramps.add(new OnrampImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName,
+            ramps.add(new OnrampImpl(rmpSimpl, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName,
                     rampIndex));
             rampIndex++;
         }
 
         // and simply add the new onramp with lane-changing decision and true
         // merging
-        final List<RampData> onrampData = inputData.getSimulationInput().getSingleRoadInput().getRamps();
-        for (final RampData onrmp : onrampData) {
+
+        final List<RampData> rampData = inputData.getSimulationInput().getSingleRoadInput().getRamps();
+        for (final RampData rmp : rampData) {
+            if( (rmp.getId() > 0 )  ){
             // merging from onramp only to most-right lane (shoulder lane)
-            onramps.add(new OnrampMobilImpl(onrmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE),
-                    projectName, rampIndex));
-            rampIndex++;
+                ramps.add(new OnrampMobilImpl(rmp, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE),
+                        projectName, rampIndex));
+                rampIndex++;
+            }
+            // quick hack for considering offramp (identified by negative id)
+            if ((rmp.getId() < 0)) {
+                ramps.add(new OfframpImpl(rmp));
+                rampIndex++;
+            }
         }
-        return onramps;
+        return ramps;
     }
 
     /**

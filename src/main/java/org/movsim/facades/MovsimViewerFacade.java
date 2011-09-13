@@ -92,13 +92,6 @@ public class MovsimViewerFacade {
     // return model;
     // }
 
-    public RoadSection getMainroad() {
-        return model.getRoadSections().get(0); // hack
-    }
-
-    public RoadSection getOnramp() {
-        return model.getRoadSections().get(1); // hack
-    }
 
     public RoadSection findRoadById(long id) {
         return model.findRoadById(id);

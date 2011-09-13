@@ -475,11 +475,6 @@ public class OnrampImpl implements RoadSection {
 
     }
 
-    @Override
-    public List<RoadSection> onrampFactory(InputData inputData) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     @Override
     public double getRampMergingLength() {
@@ -491,6 +486,12 @@ public class OnrampImpl implements RoadSection {
     public double getRampPositionToMainroad() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public List<RoadSection> rampFactory(InputData inputData) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

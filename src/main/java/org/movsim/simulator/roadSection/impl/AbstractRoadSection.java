@@ -67,6 +67,8 @@ public abstract class AbstractRoadSection {
         init();
     }
 
+    
+    // onramp
     public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
@@ -75,10 +77,24 @@ public abstract class AbstractRoadSection {
         this.instantaneousFileOutput = false;  // TODO
         init();
     }
+    
+    
+    
+    // offramp
+    public AbstractRoadSection(final RampData rampData){
+        this.vehGenerator = null;
+        this.roadLength = rampData.getRoadLength();
+        this.nLanes = 1;
+        this.id = rampData.getId();
+        this.instantaneousFileOutput = false;  
+        init();
+    }
 
     
+    
+    
     private void init(){
-	stagedVehicles = new LinkedList<Vehicle>();
+        stagedVehicles = new LinkedList<Vehicle>();
     }
     
     

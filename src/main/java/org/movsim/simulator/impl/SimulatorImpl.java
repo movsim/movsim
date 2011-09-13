@@ -129,7 +129,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         roadSections.add(new RoadSectionImpl(inputData, vehGenerator));
         
         // quick hack for pulling out onramps from mainroads
-        final List<RoadSection> onramps = roadSections.get(0).onrampFactory(inputData);
+        final List<RoadSection> onramps = roadSections.get(0).rampFactory(inputData);
         for(RoadSection onramp : onramps){
             roadSections.add(onramp);
         }
