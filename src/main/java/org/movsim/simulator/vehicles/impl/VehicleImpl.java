@@ -553,10 +553,13 @@ public class VehicleImpl implements Vehicle {
     }
 
     @Override
-    public boolean doLaneChanging(final List<VehicleContainer> vehContainers) {
+    public boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers) {
         // no lane changing when not configured in xml
         if (!lcModel.isInitialized()) {
             return false;
+        }
+        if (isLaneChanging()) {
+            updateContinuousLaneChange(dt); // TODO
         }
         return lcModel.considerLaneChanging(vehContainers);
     }

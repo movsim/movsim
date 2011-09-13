@@ -110,7 +110,7 @@ public interface Vehicle extends Moveable {
     
     void setPosition(double newPos);
 
-    boolean doLaneChanging(final List<VehicleContainer> vehContainers);
+    boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers);
     
 
     int getTargetLane();
