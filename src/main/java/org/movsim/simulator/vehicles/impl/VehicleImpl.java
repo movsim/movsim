@@ -120,6 +120,8 @@ public class VehicleImpl implements Vehicle {
     /** The cyclic buffer. */
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
+    private boolean isBrakeLightOn;
+    
     /**
      * Instantiates a new vehicle impl.
      * 
@@ -155,6 +157,7 @@ public class VehicleImpl implements Vehicle {
         position = 0;
         speed = 0;
         acc = 0;
+        isBrakeLightOn = false;
 
         speedlimit = Constants.MAX_VEHICLE_SPEED;
 
@@ -558,9 +561,11 @@ public class VehicleImpl implements Vehicle {
         if (!lcModel.isInitialized()) {
             return false;
         }
-        if (isLaneChanging()) {
-            updateContinuousLaneChange(dt); // TODO
+        if (transDynamicsModel.isLaneChanging()) {
+            transDynamicsModel.update(dt);
+            return false;
         }
+        
         return lcModel.considerLaneChanging(vehContainers);
     }
 
@@ -571,25 +576,13 @@ public class VehicleImpl implements Vehicle {
 
     @Override
     public void setTargetLane(int targetLane) {
-        if (targetLane < 0) {
-            logger.error("invalid targetLane={}", targetLane);
-        }
+        assert targetLane >=0;
+
         // initiates a lane-change
         this.targetLane = targetLane;
         transDynamicsModel.performLaneChange(lane, targetLane);
     }
 
-    @Override
-    public boolean isLaneChanging() {
-        return false;
-    }
-
-    @Override
-    public void updateContinuousLaneChange(double dt) {
-        transDynamicsModel.update(dt);
-    }
-
-    private boolean isBrakeLightOn = false;
 
     @Override
     public boolean isBrakeLightOn() {

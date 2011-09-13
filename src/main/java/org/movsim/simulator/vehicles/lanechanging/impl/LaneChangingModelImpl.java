@@ -224,8 +224,6 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     }
 
     
-    
-    
     public boolean considerLaneChanging(final List<VehicleContainer> vehContainers) {
 	final int currentLane = me.getLane();
 	

@@ -117,7 +117,4 @@ public interface Vehicle extends Moveable {
     
     void setTargetLane(int targetLane);
 
-    boolean isLaneChanging();
-
-    void updateContinuousLaneChange(double dt);
 }
