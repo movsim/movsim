@@ -130,15 +130,6 @@ public class VehicleContainerImpl implements VehicleContainer {
         return vehicles.get(vehicles.size() - 1);
     }
     
-    
-    
-//    public void add(final Vehicle veh) {
-//        final double xInit = veh.getPosition();
-//        final double vInit = veh.getSpeed();
-//        this.add(veh, xInit, vInit, laneIndex);
-//    }
-
-    // sollte damit immer aufsteigend in pos sortiert sein
     /*
      * (non-Javadoc)
      * 
@@ -152,15 +143,6 @@ public class VehicleContainerImpl implements VehicleContainer {
         add(veh, xInit, vInit, laneIndex);
     }
 
-//    /*
-//     * (non-Javadoc)
-//     * 
-//     */
-//    @Override
-//    public void addFromRamp(final Vehicle veh, double xInit, double vInit) {
-//        add(veh, xInit, vInit, laneIndex);
-//    }
-//    
     
     @Override
     public void add(Vehicle veh){
@@ -311,12 +293,9 @@ public class VehicleContainerImpl implements VehicleContainer {
         return vehicles.get(index);
     }
 
-   
-    
-    
     
     private Vehicle findVirtualLeader(final Moveable veh) {
-        // TODO efficient implementation 
+        // TODO efficient implementation with interval intersection
         final double position = veh.getPosition();
         // decrease index for traversing in downstream direction
         // return first vehicle on lane with *higher* position than veh

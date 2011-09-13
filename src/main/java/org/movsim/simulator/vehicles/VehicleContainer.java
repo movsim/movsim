@@ -34,9 +34,8 @@ import java.util.List;
  */
 public interface VehicleContainer extends MoveableContainer {
 
-    
     int getLaneIndex();
-    
+
     /**
      * Gets the vehicles.
      * 
@@ -87,8 +86,6 @@ public interface VehicleContainer extends MoveableContainer {
      */
     void add(final Vehicle veh, double xInit, double vInit);
 
-   
-    
     void add(Vehicle veh);
 
     /**
@@ -103,16 +100,13 @@ public interface VehicleContainer extends MoveableContainer {
      * Removes the vehicle most downstream.
      */
     void removeVehicleMostDownstream();
-    
-    
+
     void removeVehicle(final Vehicle veh);
-    
-    
-    // returns also "virtual" leaders when veh is not located in considered lane 
+
+    // returns also "virtual" leaders when veh is not located in considered lane
     Vehicle getLeader(final Moveable veh);
-    
+
     // returns also "virtual" leaders when veh is not located in considered lane
     Vehicle getFollower(final Moveable veh);
-    
 
 }

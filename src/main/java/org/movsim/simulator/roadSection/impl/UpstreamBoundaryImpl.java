@@ -120,12 +120,14 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     }
     
     
-    public double getTotalInflow(double time){
+    private double getTotalInflow(double time){
         // inflow over all lanes
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         final int nLanes = vehContainers.size();
         return nLanes * qBC;
     }
+    
+    
     /*
      * (non-Javadoc)
      * 
