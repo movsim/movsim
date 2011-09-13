@@ -75,8 +75,6 @@ public interface VehicleContainer extends MoveableContainer {
      */
     Vehicle getMostDownstream();
 
-    void add(final Vehicle veh);
-    
     /**
      * Adds the.
      * 
@@ -89,19 +87,9 @@ public interface VehicleContainer extends MoveableContainer {
      */
     void add(final Vehicle veh, double xInit, double vInit);
 
-    /**
-     * Adds the from ramp.
-     * 
-     * @param veh
-     *            the veh
-     * @param xInit
-     *            the x init
-     * @param vInit
-     *            the v init
-     */
-    void addFromRamp(final Vehicle veh, double xInit, double vInit);
+   
     
-    void addFromRamp(Vehicle veh);
+    void add(Vehicle veh);
 
     /**
      * Removes the vehicles downstream.

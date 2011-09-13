@@ -205,7 +205,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // assign staged vehicles to new lanes
         for (final Vehicle veh : stagedVehicles) {
             vehContainer.removeVehicle(veh);
-            mainVehContainer.addFromRamp(veh);
+            mainVehContainer.add(veh);
         }
 
     }

@@ -52,11 +52,8 @@ public class VehicleContainerImpl implements VehicleContainer {
     /** The vehicles. */
     private final List<Vehicle> vehicles;
 
-    /** The veh mainroad counter. */
-    private int vehMainroadCounter;
-
-    /** The veh ramp counter. */
-    private int vehRampCounter;
+    /** The veh counter. */
+    private int vehCounter;
 
     
     private final int laneIndex;  // TODO laneInit not necessary anymore ?!
@@ -66,9 +63,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     public VehicleContainerImpl(int laneIndex) {
         this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
-        vehMainroadCounter = 0;
-        vehRampCounter = -1; // count negative to distinguish from vehicle
-                             // entered from mainroad
+        vehCounter = 0;
     }
 
     
@@ -136,11 +131,12 @@ public class VehicleContainerImpl implements VehicleContainer {
     }
     
     
-    public void add(final Vehicle veh){
-	final double xInit = veh.getPosition();
-	final double vInit = veh.getSpeed();
-	this.add(veh, xInit, vInit);
-    }
+    
+//    public void add(final Vehicle veh) {
+//        final double xInit = veh.getPosition();
+//        final double vInit = veh.getSpeed();
+//        this.add(veh, xInit, vInit, laneIndex);
+//    }
 
     // sollte damit immer aufsteigend in pos sortiert sein
     /*
@@ -153,24 +149,22 @@ public class VehicleContainerImpl implements VehicleContainer {
     
     @Override
     public void add(final Vehicle veh, double xInit, double vInit) {
-        vehMainroadCounter++;
-        add(vehMainroadCounter, veh, xInit, vInit, laneIndex);
+        add(veh, xInit, vInit, laneIndex);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     */
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     */
+//    @Override
+//    public void addFromRamp(final Vehicle veh, double xInit, double vInit) {
+//        add(veh, xInit, vInit, laneIndex);
+//    }
+//    
+    
     @Override
-    public void addFromRamp(final Vehicle veh, double xInit, double vInit) {
-        //final int laneInit = Constants.MOST_RIGHT_LANE;
-        vehRampCounter--; // count negative
-        add(vehRampCounter, veh, xInit, vInit, laneIndex);
-    }
-    @Override
-    public void addFromRamp(Vehicle veh){
-        vehRampCounter--; // count negative
-        add(vehRampCounter, veh, veh.getPosition(), veh.getSpeed(), laneIndex);
+    public void add(Vehicle veh){
+        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex);
     }
 
     /**
@@ -187,8 +181,9 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @param laneInit
      *            the lane init
      */
-    private void add(int vehNumber, final Vehicle veh, double xInit, double vInit, int laneInit) {
-        veh.setVehNumber(vehNumber);
+    private void add(final Vehicle veh, double xInit, double vInit, int laneInit) {
+        vehCounter++;
+        veh.setVehNumber(vehCounter);
 
         veh.init(xInit, vInit, laneInit); // sets new lane index after lane change
 

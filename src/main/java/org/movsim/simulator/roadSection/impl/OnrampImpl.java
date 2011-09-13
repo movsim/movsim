@@ -196,7 +196,7 @@ public class OnrampImpl implements RoadSection {
      *            the lane enter
      */
     private void addVehicleFromRamp(Vehicle vehToEnter, double xEnter, double vEnter) {
-        mainVehContainer.addFromRamp(vehToEnter, xEnter, vEnter);
+        mainVehContainer.add(vehToEnter, xEnter, vEnter);
         // update status for last merge
         mergeCount++;
         xEnterLastMerge = xEnter;
