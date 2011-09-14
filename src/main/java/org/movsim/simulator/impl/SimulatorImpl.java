@@ -171,10 +171,10 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void run() {
         logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", time, projectName);
 
+        // TODO check if first output update has to be called in update for external call!!
         simOutput.update(iterationCount, time, timestep);
 
-        while (!stopThisRun(time)) {
-            
+        while (!isSimulationRunFinished()) {
             update();
         }
 
@@ -188,7 +188,7 @@ public class SimulatorImpl implements Simulator, Runnable {
      *            the time
      * @return true, if successful
      */
-    private boolean stopThisRun(double time) {
+    public boolean isSimulationRunFinished() {
         return (time > tMax);
     }
 
@@ -199,10 +199,10 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void update() {
-	
-	time += timestep;
+
+        time += timestep;
         iterationCount++;
-	
+
         if (iterationCount % 100 == 0) {
             logger.info("Simulator.update : time={} seconds, dt={}", time, timestep);
         }

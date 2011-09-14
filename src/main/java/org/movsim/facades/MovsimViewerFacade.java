@@ -24,7 +24,7 @@ public class MovsimViewerFacade {
     }
 
     // private SimulatorView view;
-    private Simulator model;
+    private final Simulator model;
 
     // private Thread simThread;
 
@@ -45,12 +45,12 @@ public class MovsimViewerFacade {
         // TODO set project config
         projectMetaDataImpl.setInstantaneousFileOutput(false);
         projectMetaDataImpl.setXmlFromResources(true);
-        // TODO extract path
 
+        // not needed; exclicit initialization by loadScenarioFromXml
         // reads from src/main/resources --> sim/
-        projectMetaDataImpl.setProjectName("/sim/onramp_multilane.xml");
+        //projectMetaDataImpl.setProjectName("/sim/onramp_multilane.xml");
 
-        initializeModel();
+        //initializeModel();
 
     }
 
@@ -75,7 +75,6 @@ public class MovsimViewerFacade {
 
     public void loadScenarioFromXml(String scenario) {
         String xmlFileName = "/sim/" + scenario + ".xml";
-
         inputData.setProjectName(xmlFileName);
         initializeModel();
     }
@@ -87,12 +86,11 @@ public class MovsimViewerFacade {
     public void update() {
         model.update();
     }
-
-    // public Simulator getSimulatorCore(){
-    // return model;
-    // }
-
-
+    
+    public boolean isSimulationRunFinished(){
+        return model.isSimulationRunFinished();
+    }
+    
     public RoadSection findRoadById(long id) {
         return model.findRoadById(id);
     }

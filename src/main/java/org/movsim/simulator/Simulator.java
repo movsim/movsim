@@ -68,6 +68,8 @@ public interface Simulator {
      * Calls the update for the Roadsection and SimulationOutput
      */
     void update();
+    
+    boolean isSimulationRunFinished();
 
     /**
      * Restart.
