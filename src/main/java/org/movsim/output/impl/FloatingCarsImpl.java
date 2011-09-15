@@ -74,18 +74,18 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
     /**
      * Update.
      * 
-     * @param itime
+     * @param iterationCount
      *            the itime
      * @param time
      *            the time
      * @param timestep
      *            the timestep
      */
-    public void update(long itime, double time, double timestep) {
+    public void update(long iterationCount, double time, double timestep) {
 
-        if (itime % nDtOut == 0) {
+        if (iterationCount % nDtOut == 0) {
             notifyObservers(time);
-            logger.debug("update FloatingCars: itime={}", itime);
+            logger.debug("update FloatingCars: iterationCount={}", iterationCount);
         }
     }
 
