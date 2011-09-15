@@ -114,4 +114,6 @@ public interface Vehicle extends Moveable {
     int getTargetLane();
 
     boolean inProcessOfLaneChanging();
+
+    void initLaneChangeFromOnramp();
 }

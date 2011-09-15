@@ -72,7 +72,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     final static int N_LANES = 1;
 
     /** The main veh container. */
-    private final VehicleContainer mainVehContainer;
+    private final VehicleContainer mainVehContainerMostRightLane;
 
     /** The x center position of the ramp. */
     // private final double xCenter;
@@ -150,10 +150,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             logger.error("xOffsetMain = {}. negative values not allowed.", xOffsetMain);
         }
 
-        this.mainVehContainer = mainVehContainerMostRightLane; // container of
-                                                               // mainroad's
-                                                               // most-right
-                                                               // lane
+        this.mainVehContainerMostRightLane = mainVehContainerMostRightLane; 
+        
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
@@ -179,13 +177,6 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     }
     
-//    @Override
-//    public void accelerate(long iterationCount, double dt, double time) {
-//        setObstacleAtEndOfLane();
-//        super.accelerate(iterationCount, dt, time);
-//        removeObstacleAtEndOfLane();
-//    }
-
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
 
@@ -194,7 +185,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         assert vehContainers.size() == 1;
         final VehicleContainer vehContainer = vehContainers.get(0);
 
-        // loop over on-ramp veh (i=0 is obstacle !! )
+        // TODO consider redesign here? better book-keeping outside vehicle container?
+        // loop over on-ramp veh (i=0 is obstacle !!! )
         // ignore Obstacle as first vehicle !!!
         for (Vehicle veh : vehContainer.getVehicles()) {
             if (!veh.getLabel().equals(Constants.OBSTACLE_KEY_NAME) && tryToMergeToMainroad(veh)) {
@@ -205,7 +197,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // assign staged vehicles to new lanes
         for (final Vehicle veh : stagedVehicles) {
             vehContainer.removeVehicle(veh);
-            mainVehContainer.add(veh);
+            mainVehContainerMostRightLane.addFromOnramp(veh);
         }
 
     }
@@ -217,7 +209,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             veh.setPosition(newPos); // important mapping to coordinate system
                                      // of mainroad !!!
             logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
-            final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(dt, mainVehContainer);
+            final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(dt, mainVehContainerMostRightLane);
 
             // if (veh.getLaneChangingModel().laneChanging()) {
             if (isSafeChange) {

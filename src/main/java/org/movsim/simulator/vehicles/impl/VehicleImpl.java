@@ -197,10 +197,10 @@ public class VehicleImpl implements Vehicle {
     // central book-keeping of lanes (lane and laneOld)
     @Override
     public void init(double pos, double v, int lane) {
+        this.laneOld = this.lane; // remember previous lane
         this.position = pos;
         this.positionOld = pos;
         this.speed = v;
-        this.laneOld = this.lane; // remember previous lane
         // targetlane not needed anymore for book-keeping, vehicle is in new lane
         this.targetLane = this.lane = lane;
     }
@@ -604,6 +604,15 @@ public class VehicleImpl implements Vehicle {
         }
         return false;
     }
+    
+    @Override
+    public void initLaneChangeFromOnramp() {
+        this.laneOld = Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT;  // virtual lane index from onramp
+        resetDelay();
+        final double delayInit = 0.2;  // needs only to be > 0;
+        updateLaneChangingDelay(delayInit);
+        logger.info("do lane change from onramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
+    }
 
     @Override
     public int getTargetLane() {
@@ -631,7 +640,7 @@ public class VehicleImpl implements Vehicle {
     public double getContinousLane() {
         if (inProcessOfLaneChanging()) {
             final double fractionTimeLaneChange = Math.min(1, tLaneChangingDelay / FINITE_LANE_CHANGE_TIME_S);
-            return fractionTimeLaneChange * getLane() + (1 - fractionTimeLaneChange) * laneOld;
+            return fractionTimeLaneChange * lane + (1 - fractionTimeLaneChange) * laneOld;
         }
         return getLane();
     }
@@ -655,5 +664,7 @@ public class VehicleImpl implements Vehicle {
             isBrakeLightOn = true;
         }
     }
+
+   
 
 }

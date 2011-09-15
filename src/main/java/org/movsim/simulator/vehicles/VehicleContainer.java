@@ -109,4 +109,6 @@ public interface VehicleContainer extends MoveableContainer {
     // returns also "virtual" leaders when veh is not located in considered lane
     Vehicle getFollower(final Moveable veh);
 
+    void addFromOnramp(Vehicle veh);
+
 }
