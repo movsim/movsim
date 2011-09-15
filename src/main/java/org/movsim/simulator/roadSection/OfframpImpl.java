@@ -20,8 +20,6 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OfframpImpl.class);
     
-    //final static int N_LANES = 1;
-
     private final double mergeLength;
 
     /** The x up ramp marks the start of the ramp. */
@@ -48,13 +46,6 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     }
     
     
-    
-    @Override
-    public void laneChanging(long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-        
-        
-    }
 
     @Override
     public void updateRoadConditions(long iterationCount, double time) {

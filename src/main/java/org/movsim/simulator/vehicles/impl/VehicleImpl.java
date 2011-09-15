@@ -588,6 +588,11 @@ public class VehicleImpl implements Vehicle {
             updateLaneChangingDelay(dt);
             return false;
         }
+        
+        // no lane-changing decision necessary for one-lane road
+        if(vehContainers.size() < 2){
+            return false;
+        }
 
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
@@ -606,12 +611,15 @@ public class VehicleImpl implements Vehicle {
     }
     
     @Override
-    public void initLaneChangeFromOnramp() {
-        this.laneOld = Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT;  // virtual lane index from onramp
+    public void initLaneChangeFromRamp(int oldLane) {
+        laneOld = oldLane; //Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT;  // virtual lane index from onramp
         resetDelay();
         final double delayInit = 0.2;  // needs only to be > 0;
         updateLaneChangingDelay(delayInit);
-        logger.info("do lane change from onramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
+        logger.info("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
+        if(oldLane==Constants.TO_LEFT){
+            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane, getContinousLane());
+        }
     }
 
     @Override

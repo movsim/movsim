@@ -187,6 +187,31 @@ public abstract class AbstractRoadSection {
         }
     }
     
+    
+    // general lane-changing update also for one-lane roads for updating vehicle's lane-changing process 
+    public void laneChanging(long iterationCount, double dt, double time) {
+        for (final VehicleContainer vehContainerLane : vehContainers) {
+
+            stagedVehicles.clear();
+
+            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+            for (final Vehicle veh : vehiclesOnLane) {
+                if (veh.considerLaneChanging(dt, vehContainers)) {
+                    stagedVehicles.add(veh);
+                }
+            }
+
+            // assign staged vehicles to new lanes
+            // necessary update of new situation *after* lane-changing decisions
+
+            for (final Vehicle veh : stagedVehicles) {
+                vehContainers.get(veh.getLane()).removeVehicle(veh);
+                vehContainers.get(veh.getTargetLane()).add(veh);
+            }
+
+        }
+    }
+
     /**
      * Update upstream boundary.
      * 

@@ -229,46 +229,13 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         }
     }
 
-    @Override
-    public void laneChanging(long iterationCount, double dt, double time) {
-
-        stagedVehicles.clear();
-
-        // no lane changes if there are less than two lanes
-        if (vehContainers.size() > 1) {
-            for (final VehicleContainer vehContainerLane : vehContainers) {
-                
-                stagedVehicles.clear();
-                
-                
-                final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-                for (final Vehicle veh : vehiclesOnLane) {
-                    if (veh.considerLaneChanging(dt, vehContainers)) {
-                        stagedVehicles.add(veh);
-                    }
-                }
-
-                // assign staged vehicles to new lanes
-                // necessary update of new situation *after* lane-changing decisions
-                
-                for (final Vehicle veh : stagedVehicles) {
-                    vehContainers.get(veh.getLane()).removeVehicle(veh);
-                    vehContainers.get(veh.getTargetLane()).add(veh);
-                }
-
-                
-            }
-        }
-
-
-    }
+   
 
     public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
-
         
         // TODO extract as parameter to xml configuration
         // TODO treat each offramp separately for correct book-keeping
-        final double fractionToOfframp = 0.1; 
+        final double fractionToOfframp = 0.3; 
 
         for (final RoadSection rmp : ramps) {
             // quick hack
@@ -304,7 +271,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     final double xInit = veh.getPosition() - rmp.getRampPositionToMainroad();
                     final double vInit = veh.getSpeed();
                     vehContainers.get(Constants.MOST_RIGHT_LANE).removeVehicle(veh);
-                    rmpContainer.add(veh, xInit, vInit);
+                    rmpContainer.addFromToRamp(veh, xInit, vInit, Constants.TO_LEFT);
+                    //System.exit(-1);
+                    //rmpContainer.add(veh, xInit, vInit);
                     countVehiclesToOfframp++;
                 }
             }

@@ -145,14 +145,14 @@ public class VehicleContainerImpl implements VehicleContainer {
 
     
     @Override
-    public void add(Vehicle veh){
+    public void add(final Vehicle veh){
         add(veh, veh.getPosition(), veh.getSpeed(), laneIndex);
     }
     
     @Override
-    public void addFromOnramp(Vehicle veh){
-        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex);
-        veh.initLaneChangeFromOnramp();  // TODO quick hack for continous lane change (special case treatment) 
+    public void addFromToRamp(final Vehicle veh, double xInit, double vInit, int oldLane){
+        add(veh, xInit, vInit, laneIndex);
+        veh.initLaneChangeFromRamp(oldLane);  // TODO quick hack for continous lane change (special case treatment) 
     }
     
 
