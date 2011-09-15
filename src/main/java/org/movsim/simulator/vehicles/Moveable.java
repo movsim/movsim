@@ -16,12 +16,22 @@ public interface Moveable {
      */
     String getLabel();
 
+    
+    
     /**
      * Length.
      * 
      * @return the double
      */
     double getLength();
+    
+    /**
+     * Width
+     * 
+     * @return the double
+     */
+    double getWidth();
+
 
     /**
      * Gets the position of the floating car.

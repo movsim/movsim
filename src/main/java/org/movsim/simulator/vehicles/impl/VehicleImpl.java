@@ -229,6 +229,12 @@ public class VehicleImpl implements Vehicle {
         return length;
     }
 
+    
+    @Override
+    public double getWidth() {
+        return Constants.VEHICLE_WIDTH;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -686,6 +692,7 @@ public class VehicleImpl implements Vehicle {
     public PhysicalQuantities physicalQuantities() {
         return physQuantities;
     }
+
 
    
 

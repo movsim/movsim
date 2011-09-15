@@ -29,6 +29,10 @@ public class PhysicalQuantities {
         return xScale*me.getLength();
     }
     
+    public double getWidth(){
+        return me.getWidth();
+    }
+    
     public double getPosition(){
         return xScale * me.getPosition();
     }
