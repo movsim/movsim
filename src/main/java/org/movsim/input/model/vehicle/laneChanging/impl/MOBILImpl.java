@@ -68,6 +68,16 @@ public class MOBILImpl {
         // (2) safety incentive (in two steps)
 
         final Vehicle newBack = newLane.getFollower(me);
+        
+        
+        // finite delay
+        final boolean oldFrontVehIsLaneChanging = (oldFront==null)? false : oldFront.inProcessOfLaneChanging();
+        final boolean newFrontVehIsLaneChanging = (newFront==null)? false : newFront.inProcessOfLaneChanging();
+        final boolean newBackVehIsLaneChanging = (newBack==null)? false : newBack.inProcessOfLaneChanging();
+        if ( oldFrontVehIsLaneChanging || newFrontVehIsLaneChanging || newBackVehIsLaneChanging ) {
+            return prospectiveBalance;
+        }
+        
 
         double gapFront = me.getNetDistance(newFront);
         double gapBack = (newBack == null) ? Constants.GAP_INFINITY : newBack.getNetDistance(me);

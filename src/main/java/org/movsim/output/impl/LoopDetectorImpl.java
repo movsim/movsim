@@ -135,7 +135,7 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
 
         for (VehicleContainer vehContainerLane : vehicleContainers) {
             for (final Vehicle veh : vehContainerLane.getVehicles()) {
-                if ((veh.getOldPosition() < detPosition) && (veh.getPosition() >= detPosition)) {
+                if ((veh.getPositionOld() < detPosition) && (veh.getPosition() >= detPosition)) {
                     // new vehicle crossed detector
                     vehCount++;
                     final double speedVeh = veh.getSpeed();

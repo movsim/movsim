@@ -52,7 +52,8 @@ public interface Constants {
     final int TO_LEFT = 1;
     
     final int TO_RIGHT = -1;
-    
+     
+    final int NO_CHANGE = 0;
     
 
     /** The MODE l_ nam e_ idm. */
@@ -87,6 +88,8 @@ public interface Constants {
 
     /** The invalid gap */
     final double INVALID_GAP = -1;
+
+   
 
 
 

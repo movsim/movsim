@@ -9,18 +9,21 @@
                     coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL>
-               <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.25" politeness="0.1"   /> 
+                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2"
+                    bias_right="0.25" politeness="0.1" />
             </LANE_CHANGE_MODEL>
 
         </VEHICLE>
 
- 	<!-- trucks --> 
-	<VEHICLE label="ACC2" length="16" b_max="9">
+        <!-- trucks -->
+        <VEHICLE label="ACC2" length="16" b_max="9">
             <LONGITUDINAL_MODEL>
-                <ACC v0="25" T="1.5" s0="4" s1="2" delta="4" a="0.6" b="1.5" coolness="1" />
+                <ACC v0="25" T="1.5" s0="4" s1="2" delta="4" a="0.6" b="1.5"
+                    coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL>
-               <MOBIL b_safe="4.0" s_min="4.0" threshold="0.2" bias_right="0.25" politeness="0.1"   /> 
+                <MOBIL b_safe="4.0" s_min="4.0" threshold="0.2"
+                    bias_right="0.25" politeness="0.1" />
             </LANE_CHANGE_MODEL>
 
         </VEHICLE>
@@ -29,9 +32,11 @@
             <LONGITUDINAL_MODEL>
                 <IDM v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur_kmh="90">
-               <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.25" politeness="0.1"   /> 
-	    </LANE_CHANGE_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false"
+                crit_speed_eur_kmh="90">
+                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2"
+                    bias_right="0.25" politeness="0.1" />
+            </LANE_CHANGE_MODEL>
         </VEHICLE>
 
         <VEHICLE label="Obstacle" length="0">
@@ -41,11 +46,12 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.4" duration="7200" fixed_seed="true" seed="42" crash_exit="true">
+    <SIMULATION dt="0.2" duration="7200" fixed_seed="true" seed="42"
+        crash_exit="true">
         <ROAD id="0" length="2000" lanes="2">
             <TRAFFIC_COMPOSITION write_fund_diagrams="false">
                 <!-- <VEHICLE_TYPE label="IDM1" fraction="0" /> -->
-                <!-- <VEHICLE_TYPE label="ACC1" fraction="0.8" /> -->
+                <VEHICLE_TYPE label="ACC1" fraction="0.8" />
                 <VEHICLE_TYPE label="ACC2" fraction="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
@@ -65,15 +71,12 @@
             <SPEED_LIMITS>
             </SPEED_LIMITS>
             <RAMPS>
-                
-                <RAMP id="1" x="1400" length="1000" merge_length="200" logging="false">
-	          <TRAFFIC_SOURCE logging="false">
-                     <INFLOW t="0" q_per_hour="500" />
-                  </TRAFFIC_SOURCE>
-                </RAMP>
-                <RAMP id="-1" x="800" length="700" merge_length="200" logging="false">
-	          <TRAFFIC_SOURCE logging="false">
-                  </TRAFFIC_SOURCE>
+                <!-- <SIMPLE_RAMP x="1400" length="200" logging="false"> <INFLOW 
+                    t="0" q_per_hour="550" /> </SIMPLE_RAMP> -->
+                <RAMP id="1" x="800" length="1000" merge_length="200" logging="false">
+                    <TRAFFIC_SOURCE logging="false">
+                        <INFLOW t="0" q_per_hour="500" />
+                    </TRAFFIC_SOURCE>
                 </RAMP>
             </RAMPS>
             <TRAFFIC_LIGHTS>

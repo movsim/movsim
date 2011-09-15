@@ -222,6 +222,7 @@ public abstract class AbstractRoadSection {
                     if (vehFront != null) {
                         logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), egoVeh.getLane());
                     }
+                    logger.error("roadID = {}", getId());
                     logger.error("net distance  = {}", netDistance);
                     logger.error("lane index    = {}", laneIndex);
                     logger.error("container.size = {}", vehiclesOnLane.size());

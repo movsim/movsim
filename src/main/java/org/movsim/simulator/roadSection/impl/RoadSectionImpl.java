@@ -236,21 +236,30 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         // no lane changes if there are less than two lanes
         if (vehContainers.size() > 1) {
-            for (VehicleContainer vehContainerLane : vehContainers) {
+            for (final VehicleContainer vehContainerLane : vehContainers) {
+                
+                stagedVehicles.clear();
+                
+                
                 final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-                for (Vehicle veh : vehiclesOnLane) {
+                for (final Vehicle veh : vehiclesOnLane) {
                     if (veh.considerLaneChanging(dt, vehContainers)) {
                         stagedVehicles.add(veh);
                     }
                 }
+
+                // assign staged vehicles to new lanes
+                // necessary update of new situation *after* lane-changing decisions
+                
+                for (final Vehicle veh : stagedVehicles) {
+                    vehContainers.get(veh.getLane()).removeVehicle(veh);
+                    vehContainers.get(veh.getTargetLane()).add(veh);
+                }
+
+                
             }
         }
 
-        // assign staged vehicles to new lanes
-        for (final Vehicle veh : stagedVehicles) {
-            vehContainers.get(veh.getLane()).removeVehicle(veh);
-            vehContainers.get(veh.getTargetLane()).add(veh);
-        }
 
     }
 

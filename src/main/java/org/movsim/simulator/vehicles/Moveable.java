@@ -42,14 +42,14 @@ public interface Moveable {
      * 
      * @return the double
      */
-    double posReadBumper();
+    double posRearBumper();
 
     /**
      * Old position.
      * 
      * @return the double
      */
-    double getOldPosition();
+    double getPositionOld();
 
     /**
      * Checks for reaction time.
@@ -120,6 +120,9 @@ public interface Moveable {
      * @return the lane
      */
     int getLane();
+    
+    double getContinousLane();
+    
 
     /**
      * Net distance.

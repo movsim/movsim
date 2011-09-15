@@ -102,19 +102,16 @@ public interface Vehicle extends Moveable {
      * Removes the observers.
      */
     void removeObservers();
-    
+
     LaneChangingModelImpl getLaneChangingModel();
 
     AccelerationModel getAccelerationModel();
-    
-    
+
     void setPosition(double newPos);
 
     boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers);
-    
 
     int getTargetLane();
-    
-    void setTargetLane(int targetLane);
 
+    boolean inProcessOfLaneChanging();
 }
