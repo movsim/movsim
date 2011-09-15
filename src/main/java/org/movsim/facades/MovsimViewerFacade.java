@@ -46,23 +46,7 @@ public class MovsimViewerFacade {
         projectMetaDataImpl.setInstantaneousFileOutput(false);
         projectMetaDataImpl.setXmlFromResources(true);
 
-        // not needed; exclicit initialization by loadScenarioFromXml
-        // reads from src/main/resources --> sim/
-        //projectMetaDataImpl.setProjectName("/sim/onramp_multilane.xml");
-
-        //initializeModel();
-
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.ui.desktop.ControllerInterface#start()
-     */
-    // public void start() {
-    // // threadSuspended = false;
-    // model.run();
-    // }
 
     /*
      * (non-Javadoc)
