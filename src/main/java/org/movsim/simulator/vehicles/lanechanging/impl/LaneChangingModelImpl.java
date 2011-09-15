@@ -29,7 +29,6 @@ package org.movsim.simulator.vehicles.lanechanging.impl;
 import java.util.List;
 
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
-import org.movsim.input.model.vehicle.laneChanging.impl.MOBILImpl;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;

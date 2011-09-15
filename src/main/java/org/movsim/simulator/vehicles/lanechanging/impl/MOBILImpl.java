@@ -1,4 +1,4 @@
-package org.movsim.input.model.vehicle.laneChanging.impl;
+package org.movsim.simulator.vehicles.lanechanging.impl;
 
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.movsim.simulator.Constants;
