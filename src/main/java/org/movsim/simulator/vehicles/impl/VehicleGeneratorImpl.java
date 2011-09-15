@@ -171,7 +171,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             logger.debug("fraction = {}", fraction);
 
             sumFraction += fraction;
-            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput);
+            final double relRandomizationV0 = heterogen.getRelativeRandomizationDesiredSpeed();
+            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput, relRandomizationV0);
             prototypes.put(keyName, vehProto);
 
             // set simulation update time here from model classes:
@@ -212,6 +213,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
             mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
             mapEntryObstacle.put("fraction", "0");
+            mapEntryObstacle.put("relative_v0_randomization", "0");
             heterogenInputData.add(new HeterogeneityInputDataImpl(mapEntryObstacle));
         } 
     }
@@ -367,7 +369,10 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
         
-        // TODO 
+        
+        longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
+        
+        // TODO lane-changing model impl
         final LaneChangingModelImpl lcModel = new LaneChangingModelImpl(vehInput.getLaneChangingInputData());
         
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();

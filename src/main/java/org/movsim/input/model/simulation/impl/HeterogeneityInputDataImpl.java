@@ -42,6 +42,9 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
     /** The fraction. */
     private final double fraction;
 
+    
+    private final double relativeRandomizationDesiredSpeed;
+    
     /**
      * Instantiates a new heterogeneity input data impl.
      * 
@@ -51,6 +54,8 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
     public HeterogeneityInputDataImpl(Map<String, String> map) {
         this.keyName = map.get("label");
         this.fraction = Double.parseDouble(map.get("fraction"));
+        System.out.println("rand="+map.get("relative_v0_randomization"));
+        this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
     }
 
     /*
@@ -75,5 +80,11 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
     @Override
     public double getFraction() {
         return fraction;
+    }
+    
+    
+    @Override
+    public double getRelativeRandomizationDesiredSpeed() {
+        return relativeRandomizationDesiredSpeed;
     }
 }

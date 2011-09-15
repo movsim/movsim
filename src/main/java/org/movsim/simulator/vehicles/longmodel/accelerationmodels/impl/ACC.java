@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class ACC.
  */
-public class ACC extends LongitudinalModel implements AccelerationModel, Observer {
+public class ACC extends AccelerationModelAbstract implements AccelerationModel, Observer {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ACC.class);
@@ -291,7 +291,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -314,6 +314,13 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
     }
+
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
+    }
+
+   
 
   
 

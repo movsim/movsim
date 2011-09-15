@@ -57,6 +57,10 @@ public class VehiclePrototype {
 
     /** The vehicle input. */
     private final VehicleInput vehicleInput;
+    
+    
+    private final double relativeRandomizationV0;
+
 
     /**
      * Instantiates a new vehicle prototype.
@@ -73,7 +77,7 @@ public class VehiclePrototype {
      *            the vehicle input
      */
     public VehiclePrototype(String label, double fraction, AccelerationModel longModel,
-            EquilibriumProperties equilProperties, VehicleInput vehicleInput) {
+            EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0) {
         this.label = label;
         this.length = vehicleInput.getLength();
         this.reactionTime = vehicleInput.getReactionTime();
@@ -81,6 +85,7 @@ public class VehiclePrototype {
         this.longModel = longModel;
         this.equiProperties = equilProperties;
         this.vehicleInput = vehicleInput;
+        this.relativeRandomizationV0 = relativeRandomizationV0;
     }
 
     /**
@@ -186,4 +191,8 @@ public class VehiclePrototype {
         return vehicleInput;
     }
 
+    
+    public double getRelativeRandomizationV0() {
+        return relativeRandomizationV0;
+    }
 }

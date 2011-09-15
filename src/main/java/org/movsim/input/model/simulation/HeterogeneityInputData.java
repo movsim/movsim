@@ -45,5 +45,7 @@ public interface HeterogeneityInputData {
      * @return the fraction
      */
     double getFraction();
+    
+    double getRelativeRandomizationDesiredSpeed();
 
 }

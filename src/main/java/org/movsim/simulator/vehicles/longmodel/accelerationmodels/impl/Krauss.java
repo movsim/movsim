@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Martin Treiber, Ralph Germ
  */
-public class Krauss extends LongitudinalModel implements AccelerationModel {
+public class Krauss extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);
@@ -267,7 +267,7 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -280,6 +280,11 @@ public class Krauss extends LongitudinalModel implements AccelerationModel {
     @Override
     public double getRequiredUpdateTime() {
         return this.T; // iterated map requires specific timestep!!
+    }
+
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
     }
 
 }

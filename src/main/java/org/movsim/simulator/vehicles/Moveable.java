@@ -69,13 +69,6 @@ public interface Moveable {
     boolean hasReactionTime();
 
     /**
-     * Gets the desired speed parameter.
-     * 
-     * @return the desired speed parameter
-     */
-    double getDesiredSpeedParameter();
-
-    /**
      * GetS the speed of the floating car.
      * 
      * @return the double

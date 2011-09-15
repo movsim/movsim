@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class NSM.
  */
-public class NSM extends LongitudinalModel implements AccelerationModel {
+public class NSM extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
@@ -174,7 +174,7 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -214,6 +214,11 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      */
     public double getSlowToStart() {
         return pSlowToStart;
+    }
+
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = (int)v0;
     }
 
 }

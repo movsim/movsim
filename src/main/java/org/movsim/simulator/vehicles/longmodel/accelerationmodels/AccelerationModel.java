@@ -70,19 +70,14 @@ public interface AccelerationModel {
      */
     double getRequiredUpdateTime();
 
-    /**
-     * Parameter v0. The desired velocity (m/s).
-     * 
-     * @return the double
-     */
-    double parameterV0();
+    double getDesiredSpeedParameterV0();
+    
+    void setRelativeRandomizationV0(double relRandomizationFactor);
 
-   
     double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
     
     double calcAcc(final Vehicle me, final Vehicle vehFront);
 
-  
     double calcAccSimple(double s, double v, double dv);
 
     /**

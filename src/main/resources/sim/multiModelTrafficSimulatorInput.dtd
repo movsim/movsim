@@ -204,6 +204,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!ATTLIST VEHICLE_TYPE
   label     CDATA    #REQUIRED
   fraction  NMTOKEN  #REQUIRED
+  relative_v0_randomization NMTOKEN "0.0"
 >
 
 <!-- initial conditions (IC) -->

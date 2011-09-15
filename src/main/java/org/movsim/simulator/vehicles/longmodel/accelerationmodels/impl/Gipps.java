@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Gipps.
  */
-public class Gipps extends LongitudinalModel implements AccelerationModel {
+public class Gipps extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Gipps.class);
@@ -228,7 +228,7 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -241,6 +241,11 @@ public class Gipps extends LongitudinalModel implements AccelerationModel {
     @Override
     public double getRequiredUpdateTime() {
         return this.T; // iterated map requires specific timestep!!
+    }
+
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
     }
 
 }

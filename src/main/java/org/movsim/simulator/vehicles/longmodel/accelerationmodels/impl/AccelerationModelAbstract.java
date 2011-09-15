@@ -38,10 +38,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class LongitudinalModel.
  */
-public abstract class LongitudinalModel implements Observer {
+public abstract class AccelerationModelAbstract implements Observer {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModel.class);
+    final static Logger logger = LoggerFactory.getLogger(AccelerationModelAbstract.class);
 
     /** The model name. */
     private final String modelName;
@@ -73,7 +73,7 @@ public abstract class LongitudinalModel implements Observer {
      * @param parameters
      *            the parameters
      */
-    public LongitudinalModel(String modelName, int modelCategory, AccelerationModelInputData parameters) {
+    public AccelerationModelAbstract(String modelName, int modelCategory, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.modelCategory = modelCategory;
         this.parameters = parameters;
@@ -132,20 +132,6 @@ public abstract class LongitudinalModel implements Observer {
         return modelCategory;
     }
 
-    /**
-     * Gets the required update time.
-     * 
-     * @return the required update time
-     */
-    public abstract double getRequiredUpdateTime();
-
-    /**
-     * Parameter V0.
-     * 
-     * @return the double
-     */
-    public abstract double parameterV0();
-    
     public double getScalingLength() {
         return scalingLength;
     }
@@ -161,6 +147,14 @@ public abstract class LongitudinalModel implements Observer {
         logger.debug("observer notified");
     }
 
+    public void setRelativeRandomizationV0(double relRandomizationFactor) {
+        final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
+        final double newV0 = getDesiredSpeedParameterV0() * (1 + relRandomizationFactor * equalRandom);
+        logger.info("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeedParameterV0(), newV0);
+        setDesiredSpeedV0(newV0);
+    }   
     
+    public abstract double getDesiredSpeedParameterV0();
+    protected abstract void setDesiredSpeedV0(double v0);
     
 }

@@ -283,16 +283,16 @@ public class OnrampImpl implements RoadSection {
         if (mainVehSize == 0) {
             logger.debug("empty road: merge anyway. mainVeh.size() = {}", mainVehSize);
             final double xEnter = xCenter;
-            final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no
-                                                                                       // leader
+            // no leader
+            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0()); 
             addVehicleFromRamp(vehToEnter, xEnter, vEnter);
             return true;
         } else if (mainVehContainer.getMostDownstream().getPosition() <= xCenter) {
             // most downstream mainroad vehicle is upstream of onramp
             final Vehicle mainVehDown = mainVehContainer.getMostDownstream();
             final double xEnter = Math.max(xCenter, mainVehDown.getPosition() + 0.5 * length);
-            final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter()); // no
-                                                                                       // leader
+            // no leader
+            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0()); 
             logger.debug("most downstream veh is still upstream of ramp center. mainVeh.size() = {}. posMostDown = {}",
                     mainVehSize, mainVehDown.getPosition());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter);
@@ -327,7 +327,7 @@ public class OnrampImpl implements RoadSection {
                 }
                 // enter in center
                 final double xEnter = xCenter;
-                final double vEnter = speedToEnter(vehToEnter.getDesiredSpeedParameter());
+                final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
                 addVehicleFromRamp(vehToEnter, xEnter, vEnter);
                 return true;
             }
@@ -357,8 +357,7 @@ public class OnrampImpl implements RoadSection {
                     // new !!
                     minGap = netGap;
                     xEnter = xEnterTest;
-                    vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).getSpeed()) : speedToEnter(vehToEnter
-                            .getDesiredSpeedParameter());
+                    vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).getSpeed()) : speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
                 }
             }
             // check between indexUp+1 and indexUp

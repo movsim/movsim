@@ -45,8 +45,8 @@
         <ROAD id="0" length="3000" lanes="3">
             <TRAFFIC_COMPOSITION write_fund_diagrams="false">
                 <!-- <VEHICLE_TYPE label="IDM1" fraction="0" /> -->
-                <VEHICLE_TYPE label="ACC1" fraction="0.8" />
-                <VEHICLE_TYPE label="ACC2" fraction="0.2" />
+                <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2"/>
+                <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2"/>
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="600" rho_per_km="2" v="30" />

@@ -461,7 +461,7 @@ public class VehicleImpl implements Vehicle {
         // Referenz-V0 nehmen
         // und NICHT das dynamische, durch Speedlimits beeinflusste v0
         if (memory != null) {
-            final double v0 = accelerationModel.parameterV0();
+            final double v0 = accelerationModel.getDesiredSpeedParameterV0();
             memory.update(dt, speed, v0);
             alphaTLocal *= memory.alphaT();
             alphaV0Local *= memory.alphaV0();
@@ -545,11 +545,11 @@ public class VehicleImpl implements Vehicle {
      * 
      * @see org.movsim.simulator.vehicles.Vehicle#getDesiredSpeedParameter()
      */
-    @Override
-    public double getDesiredSpeedParameter() {
-        return accelerationModel.parameterV0();
-
-    }
+//    @Override
+//    public double getDesiredSpeedParameter() {
+//        return accelerationModel.getDesiredSpeedParameterV0();
+//
+//    }
 
     /*
      * (non-Javadoc)

@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
-public class IDM extends LongitudinalModel implements AccelerationModel {
+public class IDM extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
@@ -254,7 +254,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -267,6 +267,11 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
     @Override
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
+    }
+
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
     }
 
 }

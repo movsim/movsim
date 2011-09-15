@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class KKW.
  */
-public class KKW extends LongitudinalModel implements AccelerationModel {
+public class KKW extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(KKW.class);
@@ -223,7 +223,7 @@ public class KKW extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -299,6 +299,10 @@ public class KKW extends LongitudinalModel implements AccelerationModel {
      */
     public double getVp() {
         return vp;
+    }
+
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = (int)v0;
     }
 
 }

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OVM_VDIFF.
  */
-public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
+public class OVM_VDIFF extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);
@@ -296,7 +296,7 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -318,6 +318,11 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
     @Override
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
+    }
+
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
     }
 
 }
