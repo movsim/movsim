@@ -30,6 +30,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.movsim.utilities.Observer;
+import org.movsim.utilities.impl.ScalingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +45,9 @@ public abstract class LongitudinalModel implements Observer {
 
     /** The model name. */
     private final String modelName;
+    
+    
+    private final double scalingLength;
 
     /** The model category. */
     private final int modelCategory;
@@ -74,6 +78,7 @@ public abstract class LongitudinalModel implements Observer {
         this.modelCategory = modelCategory;
         this.parameters = parameters;
         this.id = MyRandom.nextInt();
+        this.scalingLength = ScalingHelper.getScalingLength(modelName);
         parameters.registerObserver(this);
     }
 
@@ -140,6 +145,10 @@ public abstract class LongitudinalModel implements Observer {
      * @return the double
      */
     public abstract double parameterV0();
+    
+    public double getScalingLength() {
+        return scalingLength;
+    }
 
     /*
      * (non-Javadoc)
@@ -152,4 +161,6 @@ public abstract class LongitudinalModel implements Observer {
         logger.debug("observer notified");
     }
 
+    
+    
 }

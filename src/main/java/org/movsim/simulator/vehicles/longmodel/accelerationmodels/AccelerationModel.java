@@ -90,4 +90,6 @@ public interface AccelerationModel {
      */
     void removeObserver();
 
+    double getScalingLength();
+
 }

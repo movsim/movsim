@@ -50,7 +50,7 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
     // unit time for CA:
     /** The Constant dtCA. */
     private static final double dtCA = 1; // update timestep for CA !!
-
+    
     /** The v0. */
     private double v0;
 
@@ -60,6 +60,9 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
     /** The p slow to start. */
     private double pSlowToStart; // slow-to-start rule for Barlovic model
 
+    
+    
+    
     /**
      * Instantiates a new nSM.
      * 

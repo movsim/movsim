@@ -33,6 +33,7 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Noise;
+import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
@@ -128,6 +129,8 @@ public class VehicleImpl implements Vehicle {
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
     private boolean isBrakeLightOn;
+    
+    private PhysicalQuantities physQuantities;
 
     /**
      * Instantiates a new vehicle impl.
@@ -154,6 +157,7 @@ public class VehicleImpl implements Vehicle {
 
         // longitudinal ("car-following") model
         this.accelerationModel = longModel;
+        physQuantities = new PhysicalQuantities(this); 
 
         // lane-changing model
         this.lcModel = lcModel;
@@ -671,6 +675,16 @@ public class VehicleImpl implements Vehicle {
         } else if (accOld > -THRESHOLD_BRAKELIGHT_ON && acc < -THRESHOLD_BRAKELIGHT_ON) {
             isBrakeLightOn = true;
         }
+    }
+
+    
+    // ---------------------------------------------------------------------------------
+    // converter for scaled quantities in cellular automata
+    // ---------------------------------------------------------------------------------
+    
+    @Override
+    public PhysicalQuantities physicalQuantities() {
+        return physQuantities;
     }
 
    

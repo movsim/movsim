@@ -150,4 +150,7 @@ public interface Moveable {
     double getDistanceToTrafficlight();
 
     boolean isBrakeLightOn();
+    
+    PhysicalQuantities physicalQuantities();
+    
 }
