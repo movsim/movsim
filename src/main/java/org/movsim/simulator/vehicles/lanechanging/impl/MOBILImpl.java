@@ -69,11 +69,14 @@ public class MOBILImpl {
     }
 
     
-    public double calcAccelerationBalanceInNewLane(final VehicleContainer ownLane,
-            final VehicleContainer newLane) {
+    public double calcAccelerationBalanceInNewLane(final int direction, final List<VehicleContainer> lanes) {
         
-//        final VehicleContainer ownLane = ,
-//        final VehicleContainer newLane = 
+        final int currentLane = me.getLane();
+        
+        final VehicleContainer ownLane = lanes.get(currentLane);
+        final VehicleContainer newLane = lanes.get(currentLane + direction);
+        
+        
 
         double prospectiveBalance = -Double.MAX_VALUE;
 
