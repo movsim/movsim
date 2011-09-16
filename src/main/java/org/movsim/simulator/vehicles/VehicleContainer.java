@@ -111,8 +111,6 @@ public interface VehicleContainer extends MoveableContainer {
 
     void addFromToRamp(Vehicle veh, double xInit, double vInit, int oldLane);
     
-    VehicleContainer getEnvironment(final Vehicle veh);
-    
     void addTestwise(final Vehicle veh);
     
 

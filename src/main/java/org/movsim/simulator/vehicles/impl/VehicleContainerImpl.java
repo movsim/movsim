@@ -331,17 +331,10 @@ public class VehicleContainerImpl implements VehicleContainer {
         }
         return null;
     }
+  
     
-    @Override
-    public VehicleContainer getEnvironment(final Vehicle veh){
-        final VehicleContainer newEnvironment = new VehicleContainerImpl(laneIndex);
-        if(veh!=null){
-            newEnvironment.add(veh);
-        }
-        return newEnvironment;
-        
-    }
     
+    // TODO better control flow for changing vehicle's state variables
     @Override
     public void addTestwise(final Vehicle veh){
         if(veh!=null){
