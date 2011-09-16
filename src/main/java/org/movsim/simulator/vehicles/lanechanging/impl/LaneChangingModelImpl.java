@@ -66,7 +66,6 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     public LaneChangingModelImpl(LaneChangingInputData lcInputData) {
 
         this.lcInputData = lcInputData;
-        // logger.debug("init model parameters");
         this.withEuropeanRules = lcInputData.isWithEuropeanRules();
         this.vCritEur = lcInputData.getCritSpeedEuroRules();
 
