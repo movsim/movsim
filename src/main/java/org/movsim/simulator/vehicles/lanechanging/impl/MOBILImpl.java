@@ -84,12 +84,12 @@ public class MOBILImpl {
         final Vehicle oldFront = ownLane.getLeader(me);
         final Vehicle newBack = newLane.getFollower(me);
         
-        // check first if other vehicles are lane-changing
+        // check if other vehicles are lane-changing
         if( neigborsInProcessOfLaneChanging(oldFront, newFront, newBack) ){
             return prospectiveBalance;
         }
         
-        // safety: first check distances
+        // safety: check distances
         final double gapFront = me.getNetDistance(newFront);
         final double gapBack = (newBack == null) ? Constants.GAP_INFINITY : newBack.getNetDistance(me);
         
@@ -97,12 +97,15 @@ public class MOBILImpl {
             return prospectiveBalance;
         }
 
-        
+        // new situation: newBack with me as leader
+        // and following left lane cases
+        // TO_LEFT --> just the actual situation
+        // TO_RIGHT --> consideration of left-lane (with me's leader) has no effect 
         final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
         newSituationNewBack.addTestwise(newBack);
         newSituationNewBack.addTestwise(me);
-        final VehicleContainer leftLaneNew = (currentLane + direction + Constants.TO_LEFT)>=lanes.size() ? null : lanes.get(currentLane + direction + Constants.TO_LEFT); 
-        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNew);
+        final VehicleContainer leftLaneNewBack = ( direction==Constants.TO_RIGHT || currentLane + direction + Constants.TO_LEFT  >= lanes.size()) ? null : lanes.get(currentLane + direction + Constants.TO_LEFT); 
+        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNewBack);
 
         if (DEBUG) {
             // safety: check (MOBIL) safety constraint for new follower
@@ -136,6 +139,7 @@ public class MOBILImpl {
         // old situation for old back 
         final Vehicle oldBack = ownLane.getFollower(me);
 
+        // in old situation same left lane as me 
         final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, leftLaneMeOld) : 0;
         
         if (DEBUG) {
@@ -146,8 +150,9 @@ public class MOBILImpl {
             }
         }
         
-        // old situation for new back
-        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNew) : 0;
+        // old situation for new back: just provides the actual left-lane situation
+        final VehicleContainer leftLaneNewBackOldAcc = ( currentLane + direction + Constants.TO_LEFT  >= lanes.size()) ? null : lanes.get(currentLane + direction + Constants.TO_LEFT);
+        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNewBackOldAcc) : 0;
         
         if (DEBUG) {
             final double newBackOldAccTest = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack,
@@ -160,12 +165,21 @@ public class MOBILImpl {
         
         // new traffic situation: set subject virtually into new lane under consideration
         
-        
-        
         final VehicleContainer newSituationMe = new VehicleContainerImpl(0); 
         newSituationMe.addTestwise(me);
         newSituationMe.addTestwise(newFront);
-        final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNew);
+        // if TO_LEFT: actual situation of newBack's left lane
+        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left lane
+        final VehicleContainer leftLaneNewMe;
+        if(direction == Constants.TO_LEFT){
+            leftLaneNewMe = leftLaneNewBack;
+        }
+        else{
+            leftLaneNewMe = new VehicleContainerImpl(0);
+            leftLaneNewMe.addTestwise(oldFront);
+        }
+       
+        final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNewBack);
         
 
         if (DEBUG) {
@@ -176,11 +190,23 @@ public class MOBILImpl {
         }        
         
         
+        
+        
         final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0); 
         newSituationOldBack.addTestwise(oldFront);
         newSituationOldBack.addTestwise(oldBack);
-        // TODO: if TO_LEFT: new situation also on leftLane (me)
-        // if TO_RIGHT: no new situation (just take leftLane)
+        
+        // if TO_LEFT: oldBack considers subject (me) as leader in left lane --> new container
+        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left lane
+        final VehicleContainer leftLaneNewSituationOldBack;
+        if(direction == Constants.TO_LEFT){
+            leftLaneNewSituationOldBack = new VehicleContainerImpl(0);
+            leftLaneNewSituationOldBack.addTestwise(me);
+        }
+        else{
+            leftLaneNewSituationOldBack = leftLaneMeOld;
+        }
+        
         
         final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null) : 0;
         
