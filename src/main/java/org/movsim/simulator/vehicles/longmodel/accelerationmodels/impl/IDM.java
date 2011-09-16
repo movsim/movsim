@@ -12,6 +12,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -185,9 +186,8 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
 
     }
     
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
-     */
+    
+    
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
         // Local dynamical variables
@@ -279,5 +279,8 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
+
+    
+
 
 }

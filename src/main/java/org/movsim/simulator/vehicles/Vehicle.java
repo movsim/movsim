@@ -86,7 +86,7 @@ public interface Vehicle extends Moveable {
      * @param alphaV0
      *            the alpha v0
      */
-    void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0);
+    void calcAcceleration(double dt, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0);
 
     /**
      * Update traffic light.
@@ -153,4 +153,8 @@ public interface Vehicle extends Moveable {
      * @param oldLane the old lane
      */
     void initLaneChangeFromRamp(int oldLane);
+    
+    
+    // for lane-changing decision
+    double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane);
 }

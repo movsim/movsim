@@ -91,5 +91,7 @@ public interface Constants {
 
     final double VEHICLE_WIDTH = 4.4;
 
+    final double CRITICAL_GAP = 2;
+
 
 }

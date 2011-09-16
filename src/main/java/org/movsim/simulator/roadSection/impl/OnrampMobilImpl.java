@@ -57,7 +57,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     /**
      * The lane for entering the mainroad only MOST_RIGHT_LANE possible to enter
      */
-    private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE;
+    //private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE;
 
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR

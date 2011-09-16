@@ -145,5 +145,8 @@ public interface VehicleContainer extends MoveableContainer {
      * @param oldLane the old lane
      */
     void addFromToRamp(Vehicle veh, double xInit, double vInit, int oldLane);
+    
+    void addTestwise(final Vehicle veh);
+    
 
 }

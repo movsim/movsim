@@ -146,7 +146,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     
     @Override
     public void add(final Vehicle veh, double xInit, double vInit) {
-        add(veh, xInit, vInit, laneIndex);
+        add(veh, xInit, vInit, laneIndex, false);
     }
 
     
@@ -155,7 +155,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public void add(final Vehicle veh){
-        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex);
+        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, false);
     }
     
     /* (non-Javadoc)
@@ -163,8 +163,8 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public void addFromToRamp(final Vehicle veh, double xInit, double vInit, int oldLane){
-        add(veh, xInit, vInit, laneIndex);
-        veh.initLaneChangeFromRamp(oldLane);  // TODO quick hack for continous lane change (special case treatment) 
+        add(veh, xInit, vInit, laneIndex, false);
+        veh.initLaneChangeFromRamp(oldLane);  // TODO quick hack for continuous lane change (special case treatment) 
     }
     
 
@@ -176,12 +176,15 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @param vInit the v init
      * @param laneInit the lane init
      */
-    private void add(final Vehicle veh, double xInit, double vInit, int laneInit) {
-        vehCounter++;
-        veh.setVehNumber(vehCounter);
-
-        veh.init(xInit, vInit, laneInit); // sets new lane index after lane change
-
+    private void add(final Vehicle veh, double xInit, double vInit, int laneInit, boolean isTestwise) {
+        
+        if (!isTestwise) {
+            vehCounter++;
+            veh.setVehNumber(vehCounter);
+            veh.init(xInit, vInit, laneInit); // sets new lane index after lane
+                                              // change
+        }
+        
         if (vehicles.isEmpty()) {
             vehicles.add(veh);
         } else if (veh.getPosition() < getMostUpstream().getPosition()) {
@@ -355,6 +358,17 @@ public class VehicleContainerImpl implements VehicleContainer {
         }
         return null;
     }
+  
+    
+    
+    // TODO better control flow for changing vehicle's state variables
+    @Override
+    public void addTestwise(final Vehicle veh){
+        if(veh!=null){
+            add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, true);
+        }
+    }
+    
 
     
     

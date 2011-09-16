@@ -57,7 +57,8 @@ public class VehicleImpl implements Vehicle {
 
     private final static double THRESHOLD_BRAKELIGHT_OFF = 0.1; // in m/s^2
 
-    private final static double FINITE_LANE_CHANGE_TIME_S = 5;  // needs to be > 0
+    private final static double FINITE_LANE_CHANGE_TIME_S = 5; // needs to be >
+                                                               // 0
 
     /** The label. */
     private final String label;
@@ -127,7 +128,7 @@ public class VehicleImpl implements Vehicle {
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
     private boolean isBrakeLightOn;
-    
+
     private PhysicalQuantities physQuantities;
 
     /**
@@ -151,7 +152,7 @@ public class VehicleImpl implements Vehicle {
 
         // longitudinal ("car-following") model
         this.accelerationModel = longModel;
-        physQuantities = new PhysicalQuantities(this); 
+        physQuantities = new PhysicalQuantities(this);
 
         // lane-changing model
         this.lcModel = lcModel;
@@ -180,11 +181,10 @@ public class VehicleImpl implements Vehicle {
 
         trafficLightApproaching = new TrafficLightApproachingImpl();
 
-        
-        // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
+        // needs to be > 0 to avoid lane-changing over 2 lanes in one update
+        // step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
-        
-        
+
     }
 
     /*
@@ -192,14 +192,17 @@ public class VehicleImpl implements Vehicle {
      * 
      * @see org.movsim.simulator.vehicles.Vehicle#init(double, double, int)
      */
+
     // central book-keeping of lanes (lane and laneOld)
+
     @Override
     public void init(double pos, double v, int lane) {
         this.laneOld = this.lane; // remember previous lane
         this.position = pos;
         this.positionOld = pos;
         this.speed = v;
-        // targetlane not needed anymore for book-keeping, vehicle is in new lane
+        // targetlane not needed anymore for book-keeping, vehicle is in new
+        // lane
         this.targetLane = this.lane = lane;
     }
 
@@ -223,13 +226,9 @@ public class VehicleImpl implements Vehicle {
         return length;
     }
 
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.Moveable#getWidth()
-     */
     @Override
     public double getWidth() {
-        return Constants.VEHICLE_WIDTH; //TODO get width from xml
+        return Constants.VEHICLE_WIDTH;
     }
 
     /*
@@ -434,7 +433,8 @@ public class VehicleImpl implements Vehicle {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double)
      */
     @Override
-    public void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0) {
+    public void calcAcceleration(double dt, final VehicleContainer vehContainer,
+            final VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0) {
 
         accOld = acc;
         // acceleration noise:
@@ -443,7 +443,7 @@ public class VehicleImpl implements Vehicle {
             noise.update(dt);
             accError = noise.getAccError();
             final Moveable vehFront = vehContainer.getLeader(this);
-            if (getNetDistance(vehFront) < 2.0) {
+            if (getNetDistance(vehFront) < Constants.CRITICAL_GAP) {
                 accError = Math.min(accError, 0.); // !!!
             }
             // logger.debug("accError = {}", accError);
@@ -454,9 +454,8 @@ public class VehicleImpl implements Vehicle {
         double alphaV0Local = alphaV0;
         double alphaALocal = 1;
 
-        // TODO check concept here: kombination mit alphaV0: man sollte das
-        // Referenz-V0 nehmen
-        // und NICHT das dynamische, durch Speedlimits beeinflusste v0
+        // TODO check concept here: combination with alphaV0 (consideration of
+        // reference v0 instead of dynamic v0 which depends on speedlimits)
         if (memory != null) {
             final double v0 = accelerationModel.getDesiredSpeedParameterV0();
             memory.update(dt, speed, v0);
@@ -465,8 +464,7 @@ public class VehicleImpl implements Vehicle {
             alphaALocal *= memory.alphaA();
         }
 
-        // TODO gekapseltere Aufruf
-        accModel = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+        accModel = calcAccModel(vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
 
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching.considerTrafficLight()) {
@@ -482,6 +480,30 @@ public class VehicleImpl implements Vehicle {
         // logger.debug("acc = {}", acc );
     }
 
+    // TODO this acceleration is the base for MOBIL decision: could consider
+    // also noise (for transfering stochasticity to lane-changing) and other
+    // relevant traffic situations!
+    //
+    @Override
+    public double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane) {
+        return calcAccModel(vehContainer, vehContainerLeftLane, 1, 1, 1);
+    }
+
+    private double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
+            double alphaTLocal, double alphaV0Local, double alphaALocal) {
+
+        double acc;
+
+        if (lcModel.isInitialized() && lcModel.withEuropeanRules()) {
+            acc = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane,
+                    alphaTLocal, alphaV0Local, alphaALocal);
+        } else {
+            acc = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+        }
+
+        return acc;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -491,8 +513,8 @@ public class VehicleImpl implements Vehicle {
     public void updatePostionAndSpeed(double dt) {
 
         // logger.debug("dt = {}", dt);
-        // increment first s; then increment s with NEW v (2th order: -0.5 a
-        // dt^2)
+        // first increment postion, 
+        // then increment s with *new* v (second order: -0.5 a dt^2)
 
         positionOld = position;
 
@@ -501,7 +523,7 @@ public class VehicleImpl implements Vehicle {
             position = (int) (position + dt * speed + 0.5);
 
         } else {
-            // continuous micro models and iterated maps
+            // continuous microscopic models and iterated maps
             if (speed < 0) {
                 speed = 0;
             }
@@ -540,17 +562,6 @@ public class VehicleImpl implements Vehicle {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#getDesiredSpeedParameter()
-     */
-//    @Override
-//    public double getDesiredSpeedParameter() {
-//        return accelerationModel.getDesiredSpeedParameterV0();
-//
-//    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see org.movsim.simulator.vehicles.Vehicle#updateTrafficLight(double,
      * org.movsim.simulator.roadSection.TrafficLight)
      */
@@ -570,9 +581,6 @@ public class VehicleImpl implements Vehicle {
         accelerationModel.removeObserver();
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.Vehicle#getLaneChangingModel()
-     */
     @Override
     public LaneChangingModelImpl getLaneChangingModel() {
         return lcModel;
@@ -604,15 +612,22 @@ public class VehicleImpl implements Vehicle {
             updateLaneChangingDelay(dt);
             return false;
         }
-        
+
         // no lane-changing decision necessary for one-lane road
-        if(vehContainers.size() < 2){
+        if (vehContainers.size() < 2) {
             return false;
         }
 
+        final int saveLane = lane;
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
         final int laneChangingDirection = lcModel.determineLaneChangingDirection(vehContainers);
+
+        // do cross check TODO remove syserr output
+        assert saveLane != lane;
+        if (saveLane != lane) {
+            System.err.println("vehicle's lane changed: saveLane=" + saveLane + ", lane=" + lane);
+        }
 
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
@@ -623,21 +638,21 @@ public class VehicleImpl implements Vehicle {
             logger.info("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
             return true;
         }
+
         return false;
     }
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.Vehicle#initLaneChangeFromRamp(int)
-     */
+
     @Override
     public void initLaneChangeFromRamp(int oldLane) {
-        laneOld = oldLane; //Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT;  // virtual lane index from onramp
+        laneOld = oldLane; // Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT; //
+                           // virtual lane index from onramp
         resetDelay();
-        final double delayInit = 0.2;  // needs only to be > 0;
+        final double delayInit = 0.2; // needs only to be > 0;
         updateLaneChangingDelay(delayInit);
         logger.info("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
-        if(oldLane==Constants.TO_LEFT){
-            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane, getContinousLane());
+        if (oldLane == Constants.TO_LEFT) {
+            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane,
+                    getContinousLane());
         }
     }
 
@@ -720,20 +735,13 @@ public class VehicleImpl implements Vehicle {
         }
     }
 
-    
     // ---------------------------------------------------------------------------------
     // converter for scaled quantities in cellular automata
     // ---------------------------------------------------------------------------------
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.Moveable#physicalQuantities()
-     */
+
     @Override
     public PhysicalQuantities physicalQuantities() {
         return physQuantities;
     }
-
-
-   
 
 }

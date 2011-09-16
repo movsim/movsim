@@ -293,4 +293,5 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
         this.v0 = v0;
     }
 
+
 }

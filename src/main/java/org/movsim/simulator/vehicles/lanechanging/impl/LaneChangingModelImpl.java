@@ -36,7 +36,6 @@ import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LaneChangingModelImpl.
  */
@@ -45,34 +44,16 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LaneChangingModelImpl.class);
 
-    private static final int MOST_RIGHT = Constants.MOST_RIGHT_LANE;
-
-    private static final int TO_LEFT = Constants.TO_LEFT;
-
-    private static final int TO_RIGHT = -Constants.TO_RIGHT;
-
-    private static final int NO_CHANGE = 0;
-
     // to avoid flips:
     public static double LANECHANGE_TDELAY_S = 3.0; // delay nach Spurwechsel
     public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay nach
 
     private final boolean withEuropeanRules;
 
-    // crit. velocity where Europ rules kick in (in m/s):
+    // critical speed for kicking in European rules (in m/s)
     private final double vCritEur;
 
-    private int mandatoryChange = NO_CHANGE; // init
-
-    // double alpha_s = LANE_INVERSION_ALPHA;
-
-    // double lane = 0; // fractional values during lane changes
-
-    // int targetLane = 0;
-    //
-    // int startLane = 0;
-
-    // protected double tdelay = 0;
+    private int mandatoryChange = Constants.NO_CHANGE; 
 
     private Vehicle me;
 
@@ -90,7 +71,6 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     public LaneChangingModelImpl(LaneChangingInputData lcInputData) {
 
         this.lcInputData = lcInputData;
-        // logger.debug("init model parameters");
         this.withEuropeanRules = lcInputData.isWithEuropeanRules();
         this.vCritEur = lcInputData.getCritSpeedEuroRules();
 
@@ -118,94 +98,17 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return isInitialized;
     }
 
-    // public final int targetLane() {
-    // return (targetLane);
-    // }
-    //
-    // public final int startLane() {
-    // return startLane;
-    // }
-
-    // public boolean laneChanging() {
-    // return (laneChangeStatus() != NO_CHANGE);
-    // }
-    //
-    // public final int laneChangeStatus() {
-    // double dir = targetLane - startLane;
-    // if (dir > 0)
-    // return (TO_RIGHT);
-    // else
-    // if (dir < 0) return (TO_LEFT);
-    // return (NO_CHANGE);
-    // }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.lanechanging.LaneChangingModel#isMandatoryLaneChangeSafe(double, org.movsim.simulator.vehicles.VehicleContainer)
-     */
     @Override
     public boolean isMandatoryLaneChangeSafe(double dt, final VehicleContainer vehContainerTargetLane) {
-        // final boolean otherVehsChangeSufficientlyLongAgo = true;
-        final Vehicle frontMain = vehContainerTargetLane.getLeader(me); // works
-                                                                        // also
-                                                                        // for
-                                                                        // the
-                                                                        // "virtual"
-                                                                        // leader
-                                                                        // of me
-                                                                        // in
-                                                                        // considered
-                                                                        // lane
+        // works also for the "virtual" leader of me in considered lane
+        final Vehicle frontMain = vehContainerTargetLane.getLeader(me); 
+
         final Vehicle backMain = vehContainerTargetLane.getFollower(me);
 
         final boolean changeSafe = mandatoryWeavingChange(frontMain, backMain); // TODO
-        // if (otherVehsChangeSufficientlyLongAgo && changeSafe) {
-        // lane = startLane = MOST_RIGHT + TO_RIGHT; // count
-        // targetLane = MOST_RIGHT;
-        // resetDelay();
-        // // System.out.println("updateLaneChangeStatusOnRamp: safety OK:"
-        // // + " Starting lanechange ..." + " laneChangeStatus=" +
-        // laneChangeStatus()
-        // // + " targetLane=" + targetLane + " startLane=" + startLane);
-        // }
-        // }
-        // else {
-        // testLaneChangeFinish();
-        // }
         return changeSafe;
     }
 
-    // Flips unterbinden durch Karenzzeit LANECHANGE_TDELAY_S nach erfolgtem
-    // Spurwechsel
-    //
-    // private void resetDelay() {
-    // tdelay = 0;
-    // }
-    //
-    // protected boolean delayOK() {
-    // return (tdelay >= LANECHANGE_TDELAY_S);
-    // }
-    //
-    // // auch karenzzeit bezueglich Wecsel des Vorderfahrzeugs noetig ...
-    // public boolean delayFrontVehOK() {
-    // return (tdelay >= LANECHANGE_TDELAY_FRONT_S);
-    // }
-    //
-    // protected void updateDelay(double dt) {
-    // tdelay += dt;
-    // }
-
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // Lane Change from OnRamp to Mainroad
-    // and from Mainroad to OffRamp
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    /**
-     * Mandatory weaving change.
-     *
-     * @param frontVeh the front veh
-     * @param backVeh the back veh
-     * @return true, if successful
-     */
     private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
         // safety incentive (in two steps)
@@ -213,7 +116,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         final double gapBack = (backVeh == null) ? Constants.GAP_INFINITY : backVeh.getNetDistance(me);
 
         // (i) first check distances
-        // negative netto distances possible because of different veh lengths!
+        // negative net distances possible because of different veh lengths!
         if (gapFront < lcModelMOBIL.getMinimumGap() || gapBack < lcModelMOBIL.getMinimumGap()) {
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
             return false;
@@ -255,12 +158,12 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= Constants.MOST_RIGHT_LANE) {
-            accToRight = calcAccelerationInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane - 1));
+            accToRight = lcModelMOBIL.calcAccelerationBalance(Constants.TO_RIGHT, vehContainers);
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < vehContainers.size()) {
-            accToLeft = calcAccelerationInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane + 1));
+            accToLeft = lcModelMOBIL.calcAccelerationBalance(Constants.TO_LEFT, vehContainers);
         }
 
         // decision
@@ -277,16 +180,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return Constants.NO_CHANGE;
     }
 
-    /**
-     * Calc acceleration in new lane.
-     *
-     * @param ownLane the own lane
-     * @param newLane the new lane
-     * @return the double
-     */
-    private double calcAccelerationInNewLane(final VehicleContainer ownLane, final VehicleContainer newLane) {
-        return lcModelMOBIL.calcAccelerationBalanceInNewLaneSymmetric(ownLane, newLane);
-    }
+
 
     /**
      * Sets the mandatory change.
@@ -294,12 +188,21 @@ public class LaneChangingModelImpl implements LaneChangingModel {
      * @param incentive the new mandatory change
      */
     public void setMandatoryChange(int incentive) {
-        if (incentive == NO_CHANGE || incentive == TO_RIGHT || incentive == TO_LEFT) {
+        if (incentive == Constants.NO_CHANGE || incentive == Constants.TO_RIGHT || incentive == Constants.TO_LEFT) {
             mandatoryChange = incentive;
             System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
         } else {
             System.exit(-1); // debugging
         }
     }
+
+    public boolean withEuropeanRules() {
+        return withEuropeanRules;
+    }
+
+    public double vCritEurRules() {
+        return vCritEur;
+    }
+
 
 }

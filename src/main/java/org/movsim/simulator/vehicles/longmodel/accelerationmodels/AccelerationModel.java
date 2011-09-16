@@ -96,14 +96,11 @@ public interface AccelerationModel {
      */
     double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
     
-    /**
-     * Calc acc.
-     *
-     * @param me the me
-     * @param vehFront the veh front
-     * @return the double
-     */
+    double calcAccEur(double vCritEur, Vehicle me, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0, double alphaA);
+    
     double calcAcc(final Vehicle me, final Vehicle vehFront);
+    
+    //double calcAccEur(final Vehicle me, final Vehicle vehFront, final Vehicle vehFrontLeft);
 
     /**
      * Calc acc simple.

@@ -138,6 +138,10 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         return acc(s, v, dv, aLead, Tloc, v0Loc, aLoc);
 
     }
+
+    
+    
+  
     
     /* (non-Javadoc)
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
@@ -326,9 +330,8 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         this.v0 = v0;
     }
 
-   
 
-  
+   
 
    
 

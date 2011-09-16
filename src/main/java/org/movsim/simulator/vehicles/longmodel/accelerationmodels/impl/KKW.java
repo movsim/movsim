@@ -311,4 +311,5 @@ public class KKW extends AccelerationModelAbstract implements AccelerationModel 
         this.v0 = (int)v0;
     }
 
+
 }

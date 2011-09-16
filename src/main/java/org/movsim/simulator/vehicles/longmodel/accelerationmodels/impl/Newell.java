@@ -195,4 +195,5 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
         this.v0 = v0;
     }
 
+
 }

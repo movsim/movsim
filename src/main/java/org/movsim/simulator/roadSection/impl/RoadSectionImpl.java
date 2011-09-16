@@ -241,7 +241,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         
         // TODO extract as parameter to xml configuration
         // TODO treat each offramp separately for correct book-keeping
-        final double fractionToOfframp = 0.3; 
+        final double fractionToOfframp = 0.1; 
 
         for (final RoadSection rmp : ramps) {
             // quick hack
@@ -253,8 +253,11 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                                                                                                        // lane
                 for (final Vehicle veh : vehContainerRightLane.getVehicles()) {
                     final double pos = veh.getPosition();
+                    // TODO quick hack: no planning horizon for merging to off-ramp
+                    // allow merging only in first half !!!
+                    final double mergingZone=0.4;
                     if (pos > rmp.getRampPositionToMainroad()
-                            && pos < rmp.getRampPositionToMainroad() + rmp.getRampMergingLength()) {
+                            && pos < rmp.getRampPositionToMainroad() + mergingZone*rmp.getRampMergingLength()) {
                         //logger.debug("in merging to offramp: veh pos={}", veh.getPosition());
                         // check if lane change is possible
                         final double oldPos = veh.getPosition();
@@ -269,6 +272,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                         logger.debug("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles, upstreamBoundary.getEnteringVehCounter());
                         if (isSafeChange && isDesired) {
                             stagedVehicles.add(veh);
+                            countVehiclesToOfframp++;
                         }
                     }
                 }
@@ -280,7 +284,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     rmpContainer.addFromToRamp(veh, xInit, vInit, Constants.TO_LEFT);
                     //System.exit(-1);
                     //rmpContainer.add(veh, xInit, vInit);
-                    countVehiclesToOfframp++;
                 }
             }
         }
@@ -289,30 +292,30 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     }
 
-    /**
-     * Accelerate.
-     * 
-     * @param iterationCount
-     *            the i time
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
-     */
-    public void accelerate(int iterationCount, double dt, double time) {
-        for (VehicleContainer vehContainerLane : vehContainers) {
-            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-                final Vehicle veh = vehiclesOnLane.get(i);
-                final double x = veh.getPosition();
-                final double alphaT = flowConsBottlenecks.alphaT(x);
-                final double alphaV0 = flowConsBottlenecks.alphaV0(x);
-                // logger.debug("i={}, x_pos={}", i, x);
-                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                veh.calcAcceleration(dt, vehContainerLane, alphaT, alphaV0);
-            }
-        }
-    }
+//    /**
+//     * Accelerate.
+//     * 
+//     * @param iterationCount
+//     *            the i time
+//     * @param dt
+//     *            the dt
+//     * @param time
+//     *            the time
+//     */
+//    public void accelerate(int iterationCount, double dt, double time) {
+//        for (VehicleContainer vehContainerLane : vehContainers) {
+//            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+//            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+//                final Vehicle veh = vehiclesOnLane.get(i);
+//                final double x = veh.getPosition();
+//                final double alphaT = flowConsBottlenecks.alphaT(x);
+//                final double alphaV0 = flowConsBottlenecks.alphaV0(x);
+//                // logger.debug("i={}, x_pos={}", i, x);
+//                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
+//                veh.calcAcceleration(dt, vehContainerLane, alphaT, alphaV0);
+//            }
+//        }
+//    }
 
     /**
      * Update position and speed.
