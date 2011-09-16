@@ -211,7 +211,6 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
             final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(mainVehContainerMostRightLane);
 
-            // if (veh.getLaneChangingModel().laneChanging()) {
             if (isSafeChange) {
                 logger.debug("safeChange --> pos = {}, positionOnMainraod = {}", pos, newPos);
                 return true;

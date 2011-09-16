@@ -117,7 +117,6 @@ public interface Vehicle extends Moveable {
 
     void initLaneChangeFromRamp(int oldLane);
     
-    
     // for lane-changing decision
     double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane);
 }
