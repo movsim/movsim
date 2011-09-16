@@ -35,7 +35,7 @@ import org.movsim.output.LoopDetector;
 /**
  * The Interface RoadSection.
  */
-public interface RoadSection extends AbstractRoadSection {
+public interface RoadSection extends BasicRoadSection {
 
    
     /**

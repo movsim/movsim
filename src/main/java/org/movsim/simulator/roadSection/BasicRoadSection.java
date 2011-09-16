@@ -36,7 +36,7 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 /**
  * The Interface AbstractRoadSection.
  */
-public interface AbstractRoadSection {
+public interface BasicRoadSection {
         /**
          * Road length.
          * 
