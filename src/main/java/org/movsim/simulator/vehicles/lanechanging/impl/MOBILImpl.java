@@ -98,8 +98,14 @@ public class MOBILImpl {
             
         // check now incentive criterion
 
-        final double meNewAcc = me.getAccelerationModel().calcAcc(me, newFront);
+        // old situation
+        //final double meOldAcc = me.getAccelerationModel().calcAcc(me, oldFront);
         final double meOldAcc = me.getAccelerationModel().calcAcc(me, oldFront);
+        
+        
+        // new situation
+        final double meNewAcc = me.getAccelerationModel().calcAcc(me, newFront);
+        
         final Vehicle oldBack = ownLane.getFollower(me);
 
         final double oldBackOldAcc = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me) : 0;

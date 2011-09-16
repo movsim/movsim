@@ -446,7 +446,7 @@ public class VehicleImpl implements Vehicle {
             noise.update(dt);
             accError = noise.getAccError();
             final Moveable vehFront = vehContainer.getLeader(this);
-            if (getNetDistance(vehFront) < 2.0) {
+            if (getNetDistance(vehFront) < Constants.CRITICAL_GAP) {
                 accError = Math.min(accError, 0.); // !!!
             }
             // logger.debug("accError = {}", accError);
@@ -469,13 +469,7 @@ public class VehicleImpl implements Vehicle {
         }
 
         
-        // TODO European rules 
-        if ( lcModel.isInitialized() && lcModel.withEuropeanRules()  ) {
-            accModel = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
-        }
-        else{
-            accModel = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
-        }
+        accModel = calcAccModel(vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
 
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching.considerTrafficLight()) {
@@ -489,6 +483,19 @@ public class VehicleImpl implements Vehicle {
         acc = Math.max(acc + accError, -maxDecel); // limited to maximum
                                                    // deceleration
         // logger.debug("acc = {}", acc );
+    }
+
+    private double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
+            double alphaTLocal, double alphaV0Local, double alphaALocal) {
+
+        double acc;
+        if ( lcModel.isInitialized() && lcModel.withEuropeanRules()  ) {
+            acc = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
+        }
+        else{
+            acc = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+        }
+        return acc;
     }
 
     /*
