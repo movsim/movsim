@@ -64,17 +64,13 @@ public class VehiclePrototype {
 
     /**
      * Instantiates a new vehicle prototype.
-     * 
-     * @param label
-     *            the label
-     * @param fraction
-     *            the fraction
-     * @param longModel
-     *            the long model
-     * @param equilProperties
-     *            the equil properties
-     * @param vehicleInput
-     *            the vehicle input
+     *
+     * @param label the label
+     * @param fraction the fraction
+     * @param longModel the long model
+     * @param equilProperties the equil properties
+     * @param vehicleInput the vehicle input
+     * @param relativeRandomizationV0 the relative randomization v0
      */
     public VehiclePrototype(String label, double fraction, AccelerationModel longModel,
             EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0) {
@@ -192,6 +188,11 @@ public class VehiclePrototype {
     }
 
     
+    /**
+     * Gets the relative randomization v0.
+     *
+     * @return the relative randomization v0
+     */
     public double getRelativeRandomizationV0() {
         return relativeRandomizationV0;
     }

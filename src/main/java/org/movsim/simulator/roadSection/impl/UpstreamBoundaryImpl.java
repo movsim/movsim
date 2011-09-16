@@ -86,15 +86,11 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     /**
      * Instantiates a new upstream boundary impl.
-     * 
-     * @param vehGenerator
-     *            the vehicle generator
-     * @param vehContainer
-     *            the vehicle container
-     * @param upstreamBoundaryData
-     *            the upstream boundary data
-     * @param projectName
-     *            the project name
+     *
+     * @param vehGenerator the vehicle generator
+     * @param vehContainers the veh containers
+     * @param upstreamBoundaryData the upstream boundary data
+     * @param projectName the project name
      */
     public UpstreamBoundaryImpl(VehicleGenerator vehGenerator, List<VehicleContainer> vehContainers,
             UpstreamBoundaryData upstreamBoundaryData, String projectName) {
@@ -113,15 +109,30 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.UpstreamBoundary#getEnteringVehCounter()
+     */
     @Override
     public int getEnteringVehCounter() {
         return enteringVehCounter;
     }
 
+    /**
+     * Gets the new cyclic lane index for entering.
+     *
+     * @param iLane the i lane
+     * @return the new cyclic lane index for entering
+     */
     private int getNewCyclicLaneIndexForEntering(int iLane) {
         return (iLane == vehContainers.size() - 1 ? 0 : iLane + 1);
     }
 
+    /**
+     * Gets the total inflow.
+     *
+     * @param time the time
+     * @return the total inflow
+     */
     private double getTotalInflow(double time) {
         // inflow over all lanes
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
@@ -164,11 +175,10 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     /**
      * Try entering new vehicle.
-     * 
-     * @param time
-     *            the time
-     * @param qBC
-     *            the q bc
+     *
+     * @param vehContainer the veh container
+     * @param time the time
+     * @param qBC the q bc
      * @return true, if successful
      */
     private boolean tryEnteringNewVehicle(final VehicleContainer vehContainer, double time, double qBC) {
@@ -207,11 +217,10 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     /**
      * Enter vehicle on empty road.
-     * 
-     * @param time
-     *            the time
-     * @param vehPrototype
-     *            the veh prototype
+     *
+     * @param vehContainer the veh container
+     * @param time the time
+     * @param vehPrototype the veh prototype
      */
     private void enterVehicleOnEmptyRoad(final VehicleContainer vehContainer, double time, VehiclePrototype vehPrototype) {
         final double xEnter = 0;
@@ -222,15 +231,12 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     /**
      * Enter vehicle.
-     * 
-     * @param time
-     *            the time
-     * @param sFreeMin
-     *            the s free min
-     * @param vehPrototype
-     *            the veh prototype
-     * @param leader
-     *            the leader
+     *
+     * @param vehContainer the veh container
+     * @param time the time
+     * @param sFreeMin the s free min
+     * @param vehPrototype the veh prototype
+     * @param leader the leader
      */
     private void enterVehicle(final VehicleContainer vehContainer, double time, double sFreeMin,
             VehiclePrototype vehPrototype, Vehicle leader) {
@@ -266,15 +272,11 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
     /**
      * Adds the vehicle.
-     * 
-     * @param vehPrototype
-     *            the veh prototype
-     * @param xEnter
-     *            the x enter
-     * @param vEnter
-     *            the v enter
-     * @param laneEnter
-     *            the lane enter
+     *
+     * @param vehContainer the veh container
+     * @param vehPrototype the veh prototype
+     * @param xEnter the x enter
+     * @param vEnter the v enter
      */
     private void addVehicle(final VehicleContainer vehContainer, final VehiclePrototype vehPrototype, double xEnter,
             double vEnter) {

@@ -70,10 +70,30 @@ public interface AccelerationModel {
      */
     double getRequiredUpdateTime();
 
+    /**
+     * Gets the desired speed parameter v0.
+     *
+     * @return the desired speed parameter v0
+     */
     double getDesiredSpeedParameterV0();
     
+    /**
+     * Sets the relative randomization v0.
+     *
+     * @param relRandomizationFactor the new relative randomization v0
+     */
     void setRelativeRandomizationV0(double relRandomizationFactor);
 
+    /**
+     * Calc acc.
+     *
+     * @param me the me
+     * @param vehContainer the veh container
+     * @param alphaT the alpha t
+     * @param alphaV0 the alpha v0
+     * @param alphaA the alpha a
+     * @return the double
+     */
     double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
     
     double calcAccEur(double vCritEur, Vehicle me, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0, double alphaA);
@@ -82,6 +102,14 @@ public interface AccelerationModel {
     
     //double calcAccEur(final Vehicle me, final Vehicle vehFront, final Vehicle vehFrontLeft);
 
+    /**
+     * Calc acc simple.
+     *
+     * @param s the s
+     * @param v the v
+     * @param dv the dv
+     * @return the double
+     */
     double calcAccSimple(double s, double v, double dv);
 
     /**
@@ -89,6 +117,11 @@ public interface AccelerationModel {
      */
     void removeObserver();
 
+    /**
+     * Gets the scaling length.
+     *
+     * @return the scaling length
+     */
     double getScalingLength();
 
 }

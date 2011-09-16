@@ -46,6 +46,11 @@ public interface HeterogeneityInputData {
      */
     double getFraction();
     
+    /**
+     * Gets the relative randomization desired speed.
+     *
+     * @return the relative randomization desired speed
+     */
     double getRelativeRandomizationDesiredSpeed();
 
 }

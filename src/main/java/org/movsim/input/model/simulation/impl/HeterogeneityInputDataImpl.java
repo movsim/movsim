@@ -83,6 +83,9 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
     }
     
     
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.HeterogeneityInputData#getRelativeRandomizationDesiredSpeed()
+     */
     @Override
     public double getRelativeRandomizationDesiredSpeed() {
         return relativeRandomizationDesiredSpeed;

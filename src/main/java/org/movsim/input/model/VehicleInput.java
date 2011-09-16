@@ -73,6 +73,11 @@ public interface VehicleInput {
     AccelerationModelInputData getAccelerationModelInputData();
     
     
+    /**
+     * Gets the lane changing input data.
+     *
+     * @return the lane changing input data
+     */
     LaneChangingInputData getLaneChangingInputData();
 
     /**

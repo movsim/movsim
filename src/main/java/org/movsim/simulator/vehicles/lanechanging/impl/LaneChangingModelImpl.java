@@ -63,6 +63,11 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
     private final LaneChangingInputData lcInputData;
 
+    /**
+     * Instantiates a new lane changing model impl.
+     *
+     * @param lcInputData the lc input data
+     */
     public LaneChangingModelImpl(LaneChangingInputData lcInputData) {
 
         this.lcInputData = lcInputData;
@@ -74,11 +79,21 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
     }
 
+    /**
+     * Initialize.
+     *
+     * @param vehicle the vehicle
+     */
     public void initialize(final Vehicle vehicle) {
         this.me = vehicle;
         lcModelMOBIL = (isInitialized) ? new MOBILImpl(me, lcInputData.getLcMobilData()) : new MOBILImpl(me);
     }
 
+    /**
+     * Checks if is initialized.
+     *
+     * @return true, if is initialized
+     */
     public boolean isInitialized() {
         return isInitialized;
     }

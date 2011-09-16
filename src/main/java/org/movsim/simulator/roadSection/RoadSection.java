@@ -54,13 +54,34 @@ public interface RoadSection extends AbstractRoadSection {
     
     //void updateOnramps(long iterationCount, double dt, double time);
 
+    /**
+     * Update detectors.
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param simulationTime the simulation time
+     */
     void updateDetectors(long iterationCount, double dt, double simulationTime);
     
 //    // hack for debugging/testing
 //   RoadSection getMobilRampHack();
     
-    List<RoadSection> rampFactory(final InputData inputData);
+    /**
+ * Ramp factory.
+ *
+ * @param inputData the input data
+ * @return the list
+ */
+List<RoadSection> rampFactory(final InputData inputData);
     
+    /**
+     * Lane changing to offramps.
+     *
+     * @param ramps the ramps
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
+     */
     void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time);    
 }
 

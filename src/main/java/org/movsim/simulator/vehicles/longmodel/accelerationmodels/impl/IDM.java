@@ -272,6 +272,9 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
         return 0; // continuous model requires no specific timestep
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
     @Override
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;

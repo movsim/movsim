@@ -194,6 +194,9 @@ public class VehicleInputImpl implements VehicleInput {
         return modelInputData;
     }
     
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.VehicleInput#getLaneChangingInputData()
+     */
     @Override
     public LaneChangingInputData getLaneChangingInputData() {
         return laneChangingInputData;

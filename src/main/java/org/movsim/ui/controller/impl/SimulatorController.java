@@ -6,6 +6,7 @@ package org.movsim.ui.controller.impl;
 import org.movsim.simulator.Simulator;
 import org.movsim.ui.controller.Controller;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SimulatorController.
  */

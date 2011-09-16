@@ -126,6 +126,9 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     }
 
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+     */
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
         // Local dynamical variables
@@ -320,6 +323,9 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
         return 0; // continuous model requires no specific timestep
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
     @Override
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;

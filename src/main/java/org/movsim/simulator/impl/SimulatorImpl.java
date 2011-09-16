@@ -148,11 +148,17 @@ public class SimulatorImpl implements Simulator, Runnable {
     }
 
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.Simulator#getRoadSections()
+     */
     @Override
     public List<RoadSection> getRoadSections() {
         return roadSections;
     }
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.Simulator#findRoadById(long)
+     */
     public RoadSection findRoadById(long id) {
         for (final RoadSection roadSection : roadSections) {
             if (roadSection.getId() == id) {
@@ -183,9 +189,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     /**
      * Stop this run.
-     * 
-     * @param time
-     *            the time
+     *
      * @return true, if successful
      */
     public boolean isSimulationRunFinished() {

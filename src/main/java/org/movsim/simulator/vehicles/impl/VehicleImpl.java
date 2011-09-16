@@ -45,7 +45,6 @@ import org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class VehicleImpl.
  */
@@ -76,10 +75,10 @@ public class VehicleImpl implements Vehicle {
     /** The speed. */
     private double speed;
 
-    /** The acc model. */
+    /** The acceleration model. */
     private double accModel;
 
-    /** The acc. */
+    /** The acceleration. */
     private double acc;
 
     private double accOld;
@@ -87,13 +86,13 @@ public class VehicleImpl implements Vehicle {
     /** The reaction time. */
     private final double reactionTime;
 
-    /** The max decel. */
+    /** The max deceleration . */
     private final double maxDecel;
 
     /** The id. */
     private final int id;
 
-    /** The veh number. */
+    /** The vehicle number. */
     private int vehNumber;
 
     /** The lane. */
@@ -101,11 +100,10 @@ public class VehicleImpl implements Vehicle {
 
     private int laneOld;
 
-    // variable for remembering new target lane when assigning to new
-    // vehContainerLane
+    /** variable for remembering new target lane when assigning to new vehContainerLane */
     private int targetLane;
 
-    // finite lane-changing duration
+    /** finite lane-changing duration */
     private double tLaneChangingDelay;
 
     /** The speed limit. */
@@ -135,17 +133,13 @@ public class VehicleImpl implements Vehicle {
 
     /**
      * Instantiates a new vehicle impl.
-     * 
-     * @param label
-     *            the label
-     * @param id
-     *            the id
-     * @param accelerationModel
-     *            the long model
-     * @param vehInput
-     *            the veh input
-     * @param cyclicBuffer
-     *            the cyclic buffer
+     *
+     * @param label the label
+     * @param id the id
+     * @param longModel the acceleration model. longitudinal ("car-following") model.
+     * @param vehInput the veh input
+     * @param cyclicBuffer the cyclic buffer
+     * @param lcModel the lanechange model
      */
     public VehicleImpl(String label, int id, final AccelerationModel longModel, final VehicleInput vehInput,
             final CyclicBufferImpl cyclicBuffer, final LaneChangingModelImpl lcModel) {
@@ -592,6 +586,9 @@ public class VehicleImpl implements Vehicle {
         return lcModel;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Vehicle#getAccelerationModel()
+     */
     @Override
     public AccelerationModel getAccelerationModel() {
         return accelerationModel;
@@ -601,6 +598,9 @@ public class VehicleImpl implements Vehicle {
     // lane-changing related methods
     // ---------------------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Vehicle#considerLaneChanging(double, java.util.List)
+     */
     @Override
     public boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers) {
         // no lane changing when not configured in xml.
@@ -654,28 +654,50 @@ public class VehicleImpl implements Vehicle {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Vehicle#getTargetLane()
+     */
     @Override
     public int getTargetLane() {
         return targetLane;
     }
 
+    /**
+     * Sets the target lane.
+     *
+     * @param targetLane the new target lane
+     */
     private void setTargetLane(int targetLane) {
         assert targetLane >= 0;
         this.targetLane = targetLane;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Vehicle#inProcessOfLaneChanging()
+     */
     public boolean inProcessOfLaneChanging() {
         return (tLaneChangingDelay > 0 && tLaneChangingDelay < FINITE_LANE_CHANGE_TIME_S);
     }
 
+    /**
+     * Reset delay.
+     */
     private void resetDelay() {
         tLaneChangingDelay = 0;
     }
 
+    /**
+     * Update lane changing delay.
+     *
+     * @param dt the dt
+     */
     public void updateLaneChangingDelay(double dt) {
         tLaneChangingDelay += dt;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Moveable#getContinousLane()
+     */
     @Override
     public double getContinousLane() {
         if (inProcessOfLaneChanging()) {
@@ -689,12 +711,18 @@ public class VehicleImpl implements Vehicle {
     // braking lights for neat viewers
     // ---------------------------------------------------------------------------------
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.Moveable#isBrakeLightOn()
+     */
     @Override
     public boolean isBrakeLightOn() {
         updateBrakeLightStatus();
         return isBrakeLightOn;
     }
 
+    /**
+     * Update brake light status.
+     */
     private void updateBrakeLightStatus() {
         if (isBrakeLightOn) {
             if (acc > -THRESHOLD_BRAKELIGHT_OFF || speed <= 0.0001) {

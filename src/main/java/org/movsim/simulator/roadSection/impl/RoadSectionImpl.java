@@ -76,9 +76,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     /**
      * Instantiates a new road section impl.
-     * 
-     * @param inputData
-     *            the input data
+     *
+     * @param inputData the input data
+     * @param vehGenerator the veh generator
      */
     public RoadSectionImpl(final InputData inputData, final VehicleGenerator vehGenerator) {
         super(inputData, vehGenerator);
@@ -183,6 +183,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     // just hack for "pulling out" the onramps contructed in the mainroad
     // roadsection
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#rampFactory(org.movsim.input.InputData)
+     */
     public List<RoadSection> rampFactory(final InputData inputData) {
 
         List<RoadSection> ramps = new ArrayList<RoadSection>();
@@ -231,6 +234,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
    
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#laneChangingToOfframps(java.util.List, long, double, double)
+     */
     public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
         
         // TODO extract as parameter to xml configuration
@@ -312,12 +318,10 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     /**
      * Update position and speed.
-     * 
-     * @param iterationCount
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
      */
     public void updatePositionAndSpeed(int iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
@@ -330,10 +334,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     // traffic lights haben eigene Phasen-Dynamik !
     /**
      * Update road conditions.
-     * 
-     * @param iterationCount
-     * @param time
-     *            the time
+     *
+     * @param iterationCount the iteration count
+     * @param time the time
      */
     public void updateRoadConditions(long iterationCount, double time) {
 
@@ -344,9 +347,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     /**
      * Update speed limits.
-     * 
-     * @param vehicles
-     *            the vehicles
+     *
+     * @param vehContainers the veh containers
      */
     private void updateSpeedLimits(List<VehicleContainer> vehContainers) {
         if (!speedlimits.isEmpty()) {
@@ -361,12 +363,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     /**
      * Update onramps.
-     * 
-     * @param iterationCount
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
+     *
+     * @return the traffic lights
      */
 
     // public void updateOnramps(long iterationCount, double dt, double time) {
@@ -397,17 +395,26 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         return detectors.getDetectors();
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#updateDetectors(long, double, double)
+     */
     @Override
     public void updateDetectors(long iterationCount, double dt, double time) {
         detectors.update(iterationCount, time, dt, vehContainers);
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampMergingLength()
+     */
     @Override
     public double getRampMergingLength() {
         // TODO Auto-generated method stub
         return 0;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampPositionToMainroad()
+     */
     @Override
     public double getRampPositionToMainroad() {
         // TODO Auto-generated method stub

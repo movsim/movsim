@@ -26,16 +26,25 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Interface AccelerationModelInputDataKrauss.
+ *
  * @author ralph
- * 
  */
 public interface AccelerationModelInputDataKrauss extends AccelerationModelInputDataGipps {
 
+    /**
+     * Gets the epsilon.
+     *
+     * @return the epsilon
+     */
     double getEpsilon();
 
     /**
-     * @param bChangeValue
+     * Sets the epsilon.
+     *
+     * @param bChangeValue the new epsilon
      */
     void setEpsilon(double bChangeValue);
 }

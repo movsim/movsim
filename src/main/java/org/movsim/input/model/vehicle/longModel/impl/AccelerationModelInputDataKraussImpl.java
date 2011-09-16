@@ -30,9 +30,11 @@ import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class AccelerationModelInputDataKraussImpl.
+ *
  * @author ralph
- * 
  */
 public class AccelerationModelInputDataKraussImpl extends AccelerationModelInputDataGippsImpl implements
         AccelerationModelInputDataKrauss {
@@ -42,8 +44,10 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     private final double epsilonDefault;
 
     /**
-     * @param modelName
-     * @param map
+     * Instantiates a new acceleration model input data krauss impl.
+     *
+     * @param modelName the model name
+     * @param map the map
      */
     public AccelerationModelInputDataKraussImpl(String modelName, Map<String, String> map) {
         super(modelName, map);
@@ -51,24 +55,36 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         checkParameters();
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl#checkParameters()
+     */
     @Override
     protected void checkParameters() {
         super.checkParameters();
         // TODO epsilon
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl#resetParametersToDefault()
+     */
     @Override
     public void resetParametersToDefault() {
         super.resetParametersToDefault();
         epsilon = epsilonDefault;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss#setEpsilon(double)
+     */
     @Override
     public void setEpsilon(double epsilon) {
         this.epsilon = epsilon;
         parametersUpdated();
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss#getEpsilon()
+     */
     @Override
     public double getEpsilon() {
         return epsilon;
