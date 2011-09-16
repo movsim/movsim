@@ -223,12 +223,12 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= Constants.MOST_RIGHT_LANE) {
-            accToRight = calcAccelerationInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane - 1));
+            accToRight = lcModelMOBIL.calcAccelerationBalanceInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane - 1));
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < vehContainers.size()) {
-            accToLeft = calcAccelerationInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane + 1));
+            accToLeft = lcModelMOBIL.calcAccelerationBalanceInNewLane(vehContainers.get(currentLane), vehContainers.get(currentLane + 1));
         }
 
         // decision
@@ -245,9 +245,6 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return Constants.NO_CHANGE;
     }
 
-    private double calcAccelerationInNewLane(final VehicleContainer ownLane, final VehicleContainer newLane) {
-        return lcModelMOBIL.calcAccelerationBalanceInNewLaneSymmetric(ownLane, newLane);
-    }
 
     public void setMandatoryChange(int incentive) {
         if (incentive == NO_CHANGE || incentive == TO_RIGHT || incentive == TO_LEFT) {

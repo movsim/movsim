@@ -52,7 +52,7 @@ public class MOBILImpl {
     }
     
     private boolean neigborsInProcessOfLaneChanging(final Vehicle v1, final Vehicle v2, final Vehicle v3 ){
-        // finite delay criterion also for neigboring vehicles 
+        // finite delay criterion also for neighboring vehicles 
         final boolean oldFrontVehIsLaneChanging = (v1 == null) ? false : v1.inProcessOfLaneChanging();
         final boolean newFrontVehIsLaneChanging = (v2 == null) ? false : v2.inProcessOfLaneChanging();
         final boolean newBackVehIsLaneChanging  = (v3 == null) ? false : v3.inProcessOfLaneChanging();
@@ -69,7 +69,7 @@ public class MOBILImpl {
     }
 
     
-    public double calcAccelerationBalanceInNewLaneSymmetric(final VehicleContainer ownLane,
+    public double calcAccelerationBalanceInNewLane(final VehicleContainer ownLane,
             final VehicleContainer newLane) {
 
         double prospectiveBalance = -Double.MAX_VALUE;
@@ -96,14 +96,13 @@ public class MOBILImpl {
         final double newBackNewAccTest = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
         
         //newLane.addTestwise(me);  // without calling init.
-        //final VehicleContainer newSituationNewBack = newLane.getEnvironment(newBack);
         final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
         newSituationNewBack.addTestwise(newBack);
         newSituationNewBack.addTestwise(me);
-        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, null, 1,1,1);
+        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, null);
         // compare
         if( Math.abs(newBackNewAccTest-newBackNewAcc)> 0.0001 ){
-            System.err.printf("deviation in new newBackNewAcc!!!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+            System.err.printf("deviation in new newBackNewAcc!!!\n");
           }
         
         if( safetyCheckAcceleration(newBackNewAcc)){
@@ -114,7 +113,7 @@ public class MOBILImpl {
         // consider three vehicles: me, oldBack, newBack
 
         // old situation for me
-        final double meOldAcc = me.calcAccModel(ownLane, null, 1, 1, 1); //, vehContainer, vehContainerLeftLane, alphaT, alphaV0)getAccelerationModel().calcAcc(me, oldFront);
+        final double meOldAcc = me.calcAccModel(ownLane, null); 
         final double meOldAccTest = me.getAccelerationModel().calcAcc(me, oldFront);        
         if(Math.abs(meOldAccTest-meOldAcc)> 0.0001){
             System.err.printf("meOldAccTest=%.4f, meOldAcc=%.4f\n", meOldAccTest, meOldAcc);
@@ -123,14 +122,14 @@ public class MOBILImpl {
         // old situation for old back 
         final Vehicle oldBack = ownLane.getFollower(me);
 
-        final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, null, 1, 1, 1) : 0;
+        final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, null) : 0;
         final double oldBackOldAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me) : 0;
         if(Math.abs(oldBackOldAccTest-oldBackOldAcc)> 0.0001){
           System.err.printf("oldBackAccTest=%.4f, oldBackAcc=%.4f\n", oldBackOldAccTest, oldBackOldAcc);
         }
         
         // old situation for new back
-        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, null, 1,1,1) : 0;
+        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, null) : 0;
         final double newBackOldAccTest = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack, newFront) : 0;
         if(Math.abs(newBackOldAccTest-newBackOldAcc)> 0.0001){
             System.err.printf("newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
@@ -141,29 +140,29 @@ public class MOBILImpl {
         final double meNewAccTest = me.getAccelerationModel().calcAcc(me, newFront);
         
         
-        final VehicleContainer newSituationMe = new VehicleContainerImpl(0); //newLane.getEnvironment(me);
+        final VehicleContainer newSituationMe = new VehicleContainerImpl(0); 
         newSituationMe.addTestwise(me);
         newSituationMe.addTestwise(newFront);
-        final double meNewAcc = me.calcAccModel(newSituationMe, null, 1, 1, 1);
+        final double meNewAcc = me.calcAccModel(newSituationMe, null);
         
 
         // compare
         if( Math.abs(meNewAccTest-meNewAcc)> 0.0001 ){
-            System.err.printf("deviation in meNewAccTest!!!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+            System.err.printf("deviation in meNewAccTest!!!\n");
           }
         
         
         final double oldBackNewAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, oldFront) : 0;
-        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0); //ownLane.getEnvironment(oldBack);
+        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0); 
         newSituationOldBack.addTestwise(oldFront);
         newSituationOldBack.addTestwise(oldBack);
-        final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null, 1, 1, 1) : 0;
+        final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null) : 0;
         
 
         // compare
         if( Math.abs(oldBackNewAccTest-oldBackNewAcc)> 0.0001 ){
-            System.err.printf("deviation in oldBackNewAccTest !!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
-          }
+            System.err.printf("deviation in oldBackNewAccTest !!\n");
+        }
         
         
         // MOBIL trade-off for driver and neighborhood
@@ -189,130 +188,5 @@ public class MOBILImpl {
     public double getSafeDeceleration() {
         return bSafe;
     }
-
-//    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//    // Asymmetric MOBIL criterion for europeanRules
-//    // (consider that obstacles have no vicinity (return -2)!)
-//    // calc balance:
-//    // deltaMe+p*(deltaLeftHandVehicle)-threshold-bias
-//    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-//    private double calcAccelerationBalanceInNewLaneAsymmetric(final VehicleContainer ownLane, final VehicleContainer newLane){
-//    
-//    double prospectiveBalance = -Double.MAX_VALUE;
-//
-//    final Vehicle newFront = newLane.getLeader(me);
-//    final Vehicle oldFront = ownLane.getLeader(me);
-//    final Vehicle newBack = newLane.getFollower(me);
-//    
-//    
-//    // check first if other vehicles are lane-changing
-//    if( neigborsInProcessOfLaneChanging(oldFront, newFront, newBack) ){
-//        return prospectiveBalance;
-//    }
-//    
-//    
-//    // safety: first check distances
-//    final double gapFront = me.getNetDistance(newFront);
-//    final double gapBack = (newBack == null) ? Constants.GAP_INFINITY : newBack.getNetDistance(me);
-//    
-//    if( safetyCheckGaps(gapFront, gapBack) ){
-//        return prospectiveBalance;
-//    }
-//    
-//    // safety: check (MOBIL) safety constraint for new follower
-//    final double newBackNewAcc = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
-//   
-//    if( safetyCheckAcceleration(newBackNewAcc)){
-//        return prospectiveBalance;
-//    }
-//    
     
-    
-        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        // (3)check now incentive criterion
-        // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-        // calculate accelerations only for vehicle TO_LEFT
-        // since back vehicle cannot improve its situation in fact!
-        // so choose either new or old back vehicle depending on changeTo dir
-        // newBackNewAcc already calculated above!
-
-//        int iLeftHandBack = (changeTo == SimConstants.TO_LEFT) ? me.iBackLeft() : me.iBack();
-//        IMoveableExt leftHandBack = (iLeftHandBack == -1) ? null : (IMoveableExt) microstreet.vehContainer().get(iLeftHandBack);
-//
-//        // IMoveableExt leftHandBack = (changeTo == SimConstants.TO_LEFT) ? me.vehBackLeft() : me.vehBack();
-//
-//        // int iLeftHandBackFront = (leftHandBack == null) ? -1 : leftHandBack.iFront();
-//        // IMoveableExt leftHandBackFront = (iLeftHandBackFront < 0) ? null
-//        // : (IMoveableExt) microstreet.vehContainer().get(iLeftHandBackFront);
-//        IMoveableExt leftHandBackFront = (leftHandBack == null) ? null : leftHandBack.vehFront();
-//
-//        // int iLeftHandBackFrontLeft = (leftHandBack == null) ? -1 : leftHandBack.iFrontLeft();
-//        // IMoveableExt leftHandBackFrontLeft = (iLeftHandBackFrontLeft < 0) ? null
-//        // : (IMoveableExt) microstreet.vehContainer().get(iLeftHandBackFrontLeft);
-//
-//        IMoveableExt leftHandBackFrontLeft = (leftHandBack == null) ? null : leftHandBack.vehFrontLeft();
-//
-//        double accWithMe =
-//                (changeTo == SimConstants.TO_LEFT) ? newBackNewAcc : calcMobilAcceleration(changeTo, alpha_T, 1, leftHandBack,
-//                        me, leftHandBackFrontLeft);
-//        double accWithoutMe =
-//                calcMobilAcceleration(changeTo, alpha_T, 1, leftHandBack, leftHandBackFront, leftHandBackFrontLeft);
-//
-//        double deltaAccLeftHandBack =
-//                (changeTo == SimConstants.TO_LEFT) ? (accWithMe - accWithoutMe) : (accWithoutMe - accWithMe);
-//
-//        // calculate the actual and prospective acc for subject "me"
-//        // actual acceleration:
-//
-//        // int iFront = me.iFront();
-//        // IMoveableExt front = (iFront == -1) ? null : microstreet.vehContainer().get(iFront);
-//        IMoveableExt front = me.vehFront();
-//        // int iFrontLeft = me.iFrontLeft();
-//        // IMoveableExt frontLeft = (iFrontLeft == -1) ? null : microstreet.vehContainer().get(iFrontLeft);
-//
-//        IMoveableExt frontLeft = me.vehFront();
-//
-//        double meAcc = calcMobilAcceleration(changeTo, alpha_T, 1, me, front, frontLeft);
-//
-//        // int iFront = (changeTo == SimConstants.TO_LEFT) ? me.iFrontLeft() : me.iFrontRight();
-//        // front = (iFront == -1) ? null : microstreet.vehContainer().get(iFront);
-//        front = (changeTo == SimConstants.TO_LEFT) ? me.vehFrontLeft() : me.vehFrontRight();
-//
-//        // treat special case when left neigbour for NEW situation after
-//        // change TO_LEFT is needed for europeanAcc ...
-//        // iFrontLeft = (changeTo == SimConstants.TO_LEFT) ? me.iNextFrontLeft() : me.iFront();
-//        // Logger.log("LaneChange.Asymmetric: nextFrontLeft = "+iFrontLeft);
-//        // frontLeft = (iFrontLeft == -1) ? null : microstreet.vehContainer().get(iFrontLeft);
-//        frontLeft = (changeTo == SimConstants.TO_LEFT) ? me.vehNextFrontLeft() : me.vehFront();
-//
-//        // arne 24-11-04: test for change to right rescaling of new distance
-//        double myVel = me.vel();
-//        double alpha_sLoc = ((changeTo == SimConstants.TO_RIGHT) && (!me.isTruck()) && (myVel > vCritEur)) ? alpha_s : 1;
-//
-//        double meNewAcc = calcMobilAcceleration(changeTo, alpha_T, alpha_sLoc, me, front, frontLeft);
-//        double deltaAccMe = meNewAcc - meAcc;
-//
-//        // check for mandatory change
-//        if (mandatoryLaneChange(changeTo, meNewAcc, me, newBack, microstreet.mostRightLane()))
-//            return (ModelConstants.BMAX);
-//
-//        // (ii) MOBIL trade-off for driver and neigbourhood
-//        // (gleichmaessiges Auffuellen der Spur:)
-//        // vehicles already on the correct lane want to change
-//        // if other lane is empty
-//
-//        // bias sign applies for euro as symmetric rules!!!
-//        // but in case of mandatory lc the sign is modified!
-//        double biasSign = (changeTo == SimConstants.TO_LEFT) ? 1 : -1;
-//
-//        // finally: all in one MOBIL's incentive formula:
-//        prospectiveBalance = deltaAccMe + p * deltaAccLeftHandBack - threshold - biasSign * biasRight;
-//// if(false && changeTo==SimConstants.TO_RIGHT)Logger.log(String.format("LC: id=%d, prospectiveBalance: changeTo=%2d " +
-//// "  biasSign=%3.1f biasRight=%4.1f, deltaAccMe=%4.1f, pros.Balance=%4.1f %n",me.id(), changeTo, biasSign, biasRight,
-//        // deltaAccMe, prospectiveBalance));
-//        return (prospectiveBalance);
-//    }
-
 }

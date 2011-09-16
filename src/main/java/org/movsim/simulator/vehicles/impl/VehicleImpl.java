@@ -485,7 +485,13 @@ public class VehicleImpl implements Vehicle {
         // logger.debug("acc = {}", acc );
     }
 
-    public double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
+    @Override
+    public double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane) {
+        return calcAccModel(vehContainer, vehContainerLeftLane, 1, 1, 1);
+    }
+    
+    
+    private double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
 
         double acc;
@@ -623,9 +629,13 @@ public class VehicleImpl implements Vehicle {
         // attractive and lane change is possible
         final int laneChangingDirection = lcModel.determineLaneChangingDirection(vehContainers);
 
-        if(saveLane != lane){
+        // do cross check TODO remove syserr output
+        assert saveLane != lane;
+        if( saveLane != lane){
             System.err.println("vehicle's lane changed: saveLane="+saveLane+", lane="+lane);
         }
+        
+        
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
         if (laneChangingDirection != Constants.NO_CHANGE) {
