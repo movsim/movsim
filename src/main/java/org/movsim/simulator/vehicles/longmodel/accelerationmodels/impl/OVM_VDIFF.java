@@ -131,13 +131,13 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
      */
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
-        // Local dynamical variables
+        // Local dynamic variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         
         final double alphaT = 1;
-        final double v0Local =  Math.min(v0, me.getSpeedlimit());
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
 
         return acc(s, v, dv, alphaT, v0Local);
     }
@@ -152,7 +152,6 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         final double alphaT = 1;
-        // final double alphaV0 = 1;
         return acc(s, v, dv, alphaT, v0);
     }
 
@@ -167,19 +166,11 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
      *            the dv
      * @param alphaT
      *            the alpha t
-     * @param v0loc
+     * @param v0Local
      *            the v0loc
      * @return the double
      */
-    private double acc(double s, double v, double dv, double alphaT, double v0loc) {
-
-        // logger.debug("alphaT = {}", alphaT);
-        // logger.info("v0loc = {}", v0loc);
-
-        // if(alphaT!=1){
-        // logger.error("alphaT={}", alphaT);
-        // System.exit(-1);
-        // }
+    private double acc(double s, double v, double dv, double alphaT, double v0Local) {
 
         final double lenInteractionLoc = Math.max(1e-6, lenInteraction * alphaT);
 
@@ -190,41 +181,34 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
 
         if (choiceOptFuncVariant == 0 || choiceOptFuncVariant == 3) {
             // standard OVM function (Bando model)
-            // vopt = max( 0.5*v0*( tanh((s-s0)/l_intLoc-betaLoc) -
-            // tanh(-betaLoc)), 0.);
-            // OVM/VDIFF nun so skaliert, dass v0 tatsaechlicih
-            // Wunschgeschwindigkeit
-            final double v0Prev = v0loc / (1. + Math.tanh(betaLoc));
+            // scale OVM/VDIFF so that v0 represents actual desired speed 
+            final double v0Prev = v0Local / (1. + Math.tanh(betaLoc));
             vOpt = Math.max(v0Prev * (Math.tanh((s - s0) / lenInteractionLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // Triangular OVM function
-            final double T = beta; // "time headway" // TODO muss alles noch
-                                   // dokumentiert werden!!!
-            vOpt = Math.max(Math.min((s - s0) / T, v0loc), 0.);
+            final double T = beta; // "time headway" 
+            vOpt = Math.max(Math.min((s - s0) / T, v0Local), 0.);
         } else if (choiceOptFuncVariant == 2) {
             // "Three-phase" OVM function
-            final double diffT = 0. * Math.pow(Math.max(1 - v / v0loc, 0.0001), 0.5);
-            final double Tmin = lenInteractionLoc + diffT; // min time headway
-            final double Tmax = betaLoc + diffT; // max time headway
+            final double diffT = 0. * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
+            final double Tmin = lenInteractionLoc + diffT; // minimum time headway
+            final double Tmax = betaLoc + diffT; // maximum time headway
             final double Tdyn = (s - s0) / Math.max(v, Constants.SMALL_VALUE);
-            vOpt = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0loc) : (Tdyn > Tmin) ? Math.min(v + 0., v0loc)
-                    : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0loc) : 0;
+            vOpt = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v + 0., v0Local)
+                    : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0Local) : 0;
         } else {
-            // logger.error("optimal velocity variant = {} not implemented. exit.",
-            // choiceOptFuncVariant);
+            logger.error("optimal velocity variant = {} not implemented. exit.", choiceOptFuncVariant);
             System.exit(-1);
         }
 
         // calc acceleration
         double aWanted = 0; // return value
         if (choiceOptFuncVariant <= 1) {
-            // original VDIFF model
-            // OVM: lambda == 0
+            // original VDIFF model, OVM: lambda == 0
             aWanted = (vOpt - v) / tau - lambda * dv;
         } else if (choiceOptFuncVariant == 2) {
             aWanted = (vOpt - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, Constants.SMALL_VALUE);
-            // aWanted = Math.min(aWanted, 5.); // limit max acceleration
         } else if (choiceOptFuncVariant == 3) {
             aWanted = (vOpt - v) / tau - lambda * ((dv > 0) ? dv : 0);
         }

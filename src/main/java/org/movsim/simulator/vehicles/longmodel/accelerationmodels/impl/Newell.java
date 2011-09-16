@@ -101,14 +101,13 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
 
+        // TODO check modeling of parameter dt=T (dt is the constant update time and cannot be changed)
+        final double dtLocal = alphaT * dt;
         // consider external speedlimit
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
-
-        // TODO check modelling of parameter dt=T (dt is the constant update time and cannot be changed)
-        final double tLocal = alphaT * dt;   
         
         // actual Newell formula
-        return acc(s, v, dv, v0Local, tLocal);
+        return acc(s, v, dv, dtLocal, v0Local);
     }
     
     
@@ -117,15 +116,16 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
      */
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
-        // Local dynamical variables
+        // Local dynamic variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         
-        final double v0Local = Math.min(v0, me.getSpeedlimit());
+        
         final double dtLocal = dt;
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
 
-        return acc(s, v, dv, v0Local, dtLocal);
+        return acc(s, v, dv, dtLocal, v0Local);
     }
 
 
@@ -138,7 +138,7 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, v0, dt);
+        return acc(s, v, dv, dt, v0);
     }
     
     /**
@@ -151,7 +151,7 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
      * @param dtLocal the dt local
      * @return the double
      */
-    private double acc(double s, double v, double dv, double v0Local, double dtLocal) {
+    private double acc(double s, double v, double dv, double dtLocal, double v0Local) {
         
         final double vNew = Math.min(Math.max((s-s0)/dtLocal, 0), v0Local);
         

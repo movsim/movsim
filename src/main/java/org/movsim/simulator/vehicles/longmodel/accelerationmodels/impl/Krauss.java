@@ -27,6 +27,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
+import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -171,10 +172,10 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
 
-        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
         final double localT = alphaT * T;
+        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
 
-        return acc(s, v, dv, localV0, localT);
+        return acc(s, v, dv, localT, localV0);
     }
     
     
@@ -188,10 +189,10 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         
-        final double localV0 = Math.min(v0, me.getSpeedlimit());
         final double localT = T;
+        final double localV0 = Math.min(v0, me.getSpeedlimit());
 
-        return acc(s, v, dv, localV0, localT);
+        return acc(s, v, dv, localT, localV0);
     }
 
     /*
@@ -203,7 +204,7 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, v0, T);
+        return acc(s, v, dv, T, v0);
     }
 
     /**
@@ -215,25 +216,25 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
      *            the v
      * @param dv
      *            the dv
-     * @param v0Local
-     *            the v0 local
      * @param TLocal
      *            the local time gap. Notice that inconsistencies may arise for
      *            nontrivial values since then no longer dt=T=tau_relax making
      *            the vSafe formula possibly inconsistent
+     * @param v0Local
+     *            the v0 local
+
      * @return the double
      */
-    private double acc(double s, double v, double dv, double v0Local, double TLocal) {
+    private double acc(double s, double v, double dv, double TLocal, double v0Local) {
         final double vp = v - dv;
         /**
-         * safe speed; I checked that the complicated formula in PRE 55, 5601
-         * (1997) is essentially my vSafe formula for the simple Gipps model.
+         * safe speed; complicated formula in PRE 55, 5601
+         * (1997) is essentially the vSafe formula for the simple Gipps model.
          * The complicated formula considers effects of finite dt; this is
          * treated uniformly for all models in our update routine, so it is not
-         * necessary here. Therefore, I chose the simple Gipps vSafe formula see
-         * cmp_vsafe_GippsKrauss.gnu for details
+         * necessary here. Therefore the simple Gipps vSafe formula is chosen
          */
-        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.));
+        final double vSafe = -b * TLocal + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - s0, 0.));
 
         /**
          * vUpper =upper limit of new speed (denoted v1 in PRE) corresponds to
@@ -241,23 +242,18 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
          */
         final double vUpper = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
 
-        // ===============================================
         // The Krauss model is essentially the Gipps model with the following
-        // three additional code lines!
-        // ===============================================
+        // three additional code lines
 
         /**
-         * vLower =lower limit of new speed (denoted v0 in PRE) some
+         * vLower = lower limit of new speed (denoted v0 in PRE) some
          * modifications due to dimensional units were applied. Notice that
          * vLower may be > vUpper in some cut-in situations: these
          * inconsistencies were not recognized/treated in the PRE publication
          */
         double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
-        final double r = Math.random(); // should be an instance of a
-                                        // uniform(0,1) distributed pseudorandom
-                                        // number
+        final double r = MyRandom.nextDouble(); // instance of  uniform(0,1) distribution
         final double vNew = vLower + r * (vUpper - vLower);
-        // ===============================================
         final double aWanted = (vNew - v) / TLocal;
 
         return aWanted;

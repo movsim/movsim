@@ -218,9 +218,9 @@ public class Gipps extends AccelerationModelAbstract implements AccelerationMode
     private double acc(double s, double v, double dv, double v0Local, double TLocal) {
         final double vp = v - dv;
         // safe speed
-        final double vSafe = -b * T + Math.sqrt(b * b * T * T + vp * vp + 2 * b * Math.max(s - s0, 0.));
+        final double vSafe = -b * TLocal + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - s0, 0.));
         final double vNew = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
-        final double aWanted = (vNew - v) / T;
+        final double aWanted = (vNew - v) / TLocal;
         return aWanted;
     }
 

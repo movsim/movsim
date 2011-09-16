@@ -191,8 +191,8 @@ public abstract class AccelerationModelAbstract implements Observer {
 
         // check left-vehicle's speed
 
-        final Vehicle newFront = vehContainerLeftLane.getLeader(me);
-        double speedFront = (newFront != null) ? newFront.getSpeed() : -1;
+        final Vehicle newFrontLeft = vehContainerLeftLane.getLeader(me);
+        double speedFront = (newFrontLeft != null) ? newFrontLeft.getSpeed() : -1;
 
         // condition me.getSpeed() > speedFront will be evaluated by softer tanh
         // condition below

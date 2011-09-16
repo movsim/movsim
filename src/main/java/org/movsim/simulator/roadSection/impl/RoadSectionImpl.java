@@ -352,29 +352,17 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      */
     private void updateSpeedLimits(List<VehicleContainer> vehContainers) {
         if (!speedlimits.isEmpty()) {
-            for (VehicleContainer vehContainerLane : vehContainers) {
+            for (final VehicleContainer vehContainerLane : vehContainers) {
                 for (final Vehicle veh : vehContainerLane.getVehicles()) {
                     final double pos = veh.getPosition();
                     veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
+                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6*speedlimits.calcSpeedLimit(pos));
                 }
             }
         }
     }
 
-    /**
-     * Update onramps.
-     *
-     * @return the traffic lights
-     */
-
-    // public void updateOnramps(long iterationCount, double dt, double time) {
-    // if (onramps.isEmpty())
-    // return;
-    // for (final Onramp onramp : onramps) {
-    // onramp.update(iterationCount, dt, time);
-    // }
-    // }
-
+   
     /*
      * (non-Javadoc)
      * 

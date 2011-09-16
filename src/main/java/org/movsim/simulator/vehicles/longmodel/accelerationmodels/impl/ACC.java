@@ -130,12 +130,12 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double Tloc = alphaT * T;
+        final double Tlocal = alphaT * T;
         // consider external speedlimit
-        final double v0Loc = Math.min(alphaV0 * v0, me.getSpeedlimit());
-        final double aLoc = alphaA * a;
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double aLocal = alphaA * a;
 
-        return acc(s, v, dv, aLead, Tloc, v0Loc, aLoc);
+        return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);
 
     }
 
@@ -148,14 +148,14 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
      */
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
-        // Local dynamical variables
+        // Local dynamic variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
         
-        final double TLocal = T;;
-        final double v0Local =  Math.min(v0, me.getSpeedlimit());
+        final double TLocal = T;
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
         final double aLocal = a;
 
         return acc(s, v, dv, aLead, TLocal, v0Local, aLocal);
@@ -201,18 +201,18 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         // IIDM
 
         final double sstar = s0
-                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(a * b), 0.);
+                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(aLocal * b), 0.);
         final double z = sstar / Math.max(s, 0.01);
-        final double accEmpty = (v <= v0) ? a * (1 - Math.pow((v / v0), delta)) : -b
-                * (1 - Math.pow((v0 / v), a * delta / b));
-        final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * a / accEmpty, 100.)));
-        final double accInt = a * (1 - z * z);
+        final double accEmpty = (v <= v0Local) ? aLocal * (1 - Math.pow((v / v0Local), delta)) : -b
+                * (1 - Math.pow((v0Local / v), aLocal * delta / b));
+        final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * aLocal / accEmpty, 100.)));
+        final double accInt = aLocal * (1 - z * z);
 
-        final double accIIDM = (v < v0) ? (z < 1) ? accPos : accInt : (z < 1) ? accEmpty : accInt + accEmpty;
+        final double accIIDM = (v < v0Local) ? (z < 1) ? accPos : accInt : (z < 1) ? accEmpty : accInt + accEmpty;
 
-        // constant-acceleration heurstic (CAH)
+        // constant-acceleration heuristic (CAH)
 
-        final double aLeadRestricted = Math.min(aLead, a);
+        final double aLeadRestricted = Math.min(aLead, aLocal);
         final double dvp = Math.max(dv, 0.0);
         final double vLead = v - dvp;
         final double denomCAH = vLead * vLead - 2 * s * aLeadRestricted;
