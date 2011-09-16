@@ -617,10 +617,15 @@ public class VehicleImpl implements Vehicle {
             return false;
         }
 
+        
+        final int saveLane = lane;
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
         final int laneChangingDirection = lcModel.determineLaneChangingDirection(vehContainers);
 
+        if(saveLane != lane){
+            System.err.println("vehicle's lane changed: saveLane="+saveLane+", lane="+lane);
+        }
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
         if (laneChangingDirection != Constants.NO_CHANGE) {
@@ -630,6 +635,7 @@ public class VehicleImpl implements Vehicle {
             logger.info("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
             return true;
         }
+        
         return false;
     }
     

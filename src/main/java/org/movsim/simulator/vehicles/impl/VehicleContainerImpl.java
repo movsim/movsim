@@ -172,13 +172,13 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     private void add(final Vehicle veh, double xInit, double vInit, int laneInit, boolean isTestwise) {
         
-        if(!isTestwise){
-        vehCounter++;
-        veh.setVehNumber(vehCounter);
-
-        veh.init(xInit, vInit, laneInit); // sets new lane index after lane change
-
+        if (!isTestwise) {
+            vehCounter++;
+            veh.setVehNumber(vehCounter);
+            veh.init(xInit, vInit, laneInit); // sets new lane index after lane
+                                              // change
         }
+        
         if (vehicles.isEmpty()) {
             vehicles.add(veh);
         } else if (veh.getPosition() < getMostUpstream().getPosition()) {
@@ -344,7 +344,9 @@ public class VehicleContainerImpl implements VehicleContainer {
     
     @Override
     public void addTestwise(final Vehicle veh){
-        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, true);
+        if(veh!=null){
+            add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, true);
+        }
     }
     
 

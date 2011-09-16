@@ -6,6 +6,7 @@ import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 
 
 public class MOBILImpl {
@@ -95,9 +96,15 @@ public class MOBILImpl {
         final double newBackNewAccTest = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
         
         //newLane.addTestwise(me);  // without calling init.
-        final VehicleContainer newSituationBackNew = newLane.getEnvironment(newBack);
-        newSituationBackNew.add(me);
-        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationBackNew, null, 1,1,1);
+        //final VehicleContainer newSituationNewBack = newLane.getEnvironment(newBack);
+        final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
+        newSituationNewBack.addTestwise(newBack);
+        newSituationNewBack.addTestwise(me);
+        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, null, 1,1,1);
+        // compare
+        if( Math.abs(newBackNewAccTest-newBackNewAcc)> 0.0001 ){
+            System.err.printf("deviation in new newBackNewAcc!!!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+          }
         
         if( safetyCheckAcceleration(newBackNewAcc)){
             return prospectiveBalance;
@@ -132,23 +139,30 @@ public class MOBILImpl {
         
         // new traffic situation: set subject virtually into new lane under consideration
         final double meNewAccTest = me.getAccelerationModel().calcAcc(me, newFront);
-        final double oldBackNewAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, newFront) : 0;
         
-        final VehicleContainer newSituationMe = newLane.getEnvironment(newFront);
+        
+        final VehicleContainer newSituationMe = new VehicleContainerImpl(0); //newLane.getEnvironment(me);
         newSituationMe.addTestwise(me);
+        newSituationMe.addTestwise(newFront);
         final double meNewAcc = me.calcAccModel(newSituationMe, null, 1, 1, 1);
         
+
+        // compare
+        if( Math.abs(meNewAccTest-meNewAcc)> 0.0001 ){
+            System.err.printf("deviation in meNewAccTest!!!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+          }
         
-        final VehicleContainer newSituationOldBack = ownLane.getEnvironment(oldBack);
-        newSituationOldBack.removeVehicle(me);
+        
+        final double oldBackNewAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, oldFront) : 0;
+        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0); //ownLane.getEnvironment(oldBack);
+        newSituationOldBack.addTestwise(oldFront);
+        newSituationOldBack.addTestwise(oldBack);
         final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null, 1, 1, 1) : 0;
         
 
         // compare
-        if( Math.abs(newBackNewAccTest-newBackNewAcc)> 0.0001
-         || Math.abs(oldBackNewAccTest-oldBackNewAcc)> 0.0001
-         || Math.abs(meNewAccTest-meNewAcc)> 0.0001 ){
-            System.err.printf("deviation in new acc!!!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+        if( Math.abs(oldBackNewAccTest-oldBackNewAcc)> 0.0001 ){
+            System.err.printf("deviation in oldBackNewAccTest !!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
           }
         
         
