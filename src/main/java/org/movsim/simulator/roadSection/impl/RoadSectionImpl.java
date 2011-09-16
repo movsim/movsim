@@ -247,8 +247,11 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                                                                                                        // lane
                 for (final Vehicle veh : vehContainerRightLane.getVehicles()) {
                     final double pos = veh.getPosition();
+                    // TODO quick hack: no planning horizon for merging to off-ramp
+                    // allow merging only in first half !!!
+                    final double mergingZone=0.4;
                     if (pos > rmp.getRampPositionToMainroad()
-                            && pos < rmp.getRampPositionToMainroad() + rmp.getRampMergingLength()) {
+                            && pos < rmp.getRampPositionToMainroad() + mergingZone*rmp.getRampMergingLength()) {
                         //logger.debug("in merging to offramp: veh pos={}", veh.getPosition());
                         // check if lane change is possible
                         final double oldPos = veh.getPosition();
