@@ -110,15 +110,16 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         final double backNewAcc = (backVeh == null) ? 0 : backVeh.getAccelerationModel().calcAcc(backVeh, me);
 
         // (ii) check security constraint for new follower
-        // normal acceleration generally admitted here
-        if (backNewAcc <= -lcModelMOBIL.getSafeDeceleration()) {
+        // enforce mandatory lane change by increasing the safe deceleration for normal situations
+        final double increaseFactorMandatory = 2.0;
+        if (backNewAcc <= -increaseFactorMandatory*lcModelMOBIL.getSafeDeceleration()) {
             logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
             logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
             return (false);
         }
 
         final double meNewAcc = me.getAccelerationModel().calcAcc(me, frontVeh);
-        if (meNewAcc >= -lcModelMOBIL.getSafeDeceleration()) {
+        if (meNewAcc >= -increaseFactorMandatory*lcModelMOBIL.getSafeDeceleration()) {
             logger.debug("meNewAcc={}, bSafe={}", meNewAcc, lcModelMOBIL.getSafeDeceleration());
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
             logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
