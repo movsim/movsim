@@ -99,19 +99,40 @@ public class MOBILImpl {
         // check now incentive criterion
 
         // old situation
-        //final double meOldAcc = me.getAccelerationModel().calcAcc(me, oldFront);
-        final double meOldAcc = me.getAccelerationModel().calcAcc(me, oldFront);
-        
+        final double meOldAcc = me.calcAccModel(ownLane, null, 1, 1, 1); //, vehContainer, vehContainerLeftLane, alphaT, alphaV0)getAccelerationModel().calcAcc(me, oldFront);
+        //final double meOldAccTest = me.getAccelerationModel().calcAcc(me, oldFront);        
+//        if(Math.abs(meOldAccTest-meOldAcc)> 0.0001){
+//            System.err.printf("meOldAccTest=%.4f, meOldAcc=%.4f\n", meOldAccTest, meOldAcc);
+//        }
+//        
         
         // new situation
         final double meNewAcc = me.getAccelerationModel().calcAcc(me, newFront);
         
+        
+        
         final Vehicle oldBack = ownLane.getFollower(me);
 
-        final double oldBackOldAcc = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me) : 0;
+        // old situation
+        final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, null, 1, 1, 1) : 0;
+        final double oldBackOldAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me) : 0;
+        if(Math.abs(oldBackOldAccTest-oldBackOldAcc)> 0.0001){
+          System.err.printf("oldBackAccTest=%.4f, oldBackAcc=%.4f\n", oldBackOldAccTest, oldBackOldAcc);
+        }
+        
+        // new situation
         final double oldBackNewAcc = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, newFront) : 0;
-        final double newBackOldAcc = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack, newFront) : 0;
-
+        
+        
+        // old situation
+        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, null, 1,1,1) : 0;
+        
+        final double newBackOldAccTest = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack, newFront) : 0;
+        if(Math.abs(newBackOldAccTest-newBackOldAcc)> 0.0001){
+            System.err.printf("newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+          }
+        
+        
         // MOBIL trade-off for driver and neighborhood
         final double oldBackDiffAcc = oldBackNewAcc - oldBackOldAcc;
         final double newBackDiffAcc = newBackNewAcc - newBackOldAcc;
@@ -136,43 +157,43 @@ public class MOBILImpl {
         return bSafe;
     }
 
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // Asymmetric MOBIL criterion for europeanRules
-    // (consider that obstacles have no vicinity (return -2)!)
-    // calc balance:
-    // deltaMe+p*(deltaLeftHandVehicle)-threshold-bias
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    private double calcAccelerationBalanceInNewLaneAsymmetric(final VehicleContainer ownLane, final VehicleContainer newLane){
-    
-    double prospectiveBalance = -Double.MAX_VALUE;
-
-    final Vehicle newFront = newLane.getLeader(me);
-    final Vehicle oldFront = ownLane.getLeader(me);
-    final Vehicle newBack = newLane.getFollower(me);
-    
-    
-    // check first if other vehicles are lane-changing
-    if( neigborsInProcessOfLaneChanging(oldFront, newFront, newBack) ){
-        return prospectiveBalance;
-    }
-    
-    
-    // safety: first check distances
-    final double gapFront = me.getNetDistance(newFront);
-    final double gapBack = (newBack == null) ? Constants.GAP_INFINITY : newBack.getNetDistance(me);
-    
-    if( safetyCheckGaps(gapFront, gapBack) ){
-        return prospectiveBalance;
-    }
-    
-    // safety: check (MOBIL) safety constraint for new follower
-    final double newBackNewAcc = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
-   
-    if( safetyCheckAcceleration(newBackNewAcc)){
-        return prospectiveBalance;
-    }
-    
+//    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//    // Asymmetric MOBIL criterion for europeanRules
+//    // (consider that obstacles have no vicinity (return -2)!)
+//    // calc balance:
+//    // deltaMe+p*(deltaLeftHandVehicle)-threshold-bias
+//    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//
+//    private double calcAccelerationBalanceInNewLaneAsymmetric(final VehicleContainer ownLane, final VehicleContainer newLane){
+//    
+//    double prospectiveBalance = -Double.MAX_VALUE;
+//
+//    final Vehicle newFront = newLane.getLeader(me);
+//    final Vehicle oldFront = ownLane.getLeader(me);
+//    final Vehicle newBack = newLane.getFollower(me);
+//    
+//    
+//    // check first if other vehicles are lane-changing
+//    if( neigborsInProcessOfLaneChanging(oldFront, newFront, newBack) ){
+//        return prospectiveBalance;
+//    }
+//    
+//    
+//    // safety: first check distances
+//    final double gapFront = me.getNetDistance(newFront);
+//    final double gapBack = (newBack == null) ? Constants.GAP_INFINITY : newBack.getNetDistance(me);
+//    
+//    if( safetyCheckGaps(gapFront, gapBack) ){
+//        return prospectiveBalance;
+//    }
+//    
+//    // safety: check (MOBIL) safety constraint for new follower
+//    final double newBackNewAcc = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
+//   
+//    if( safetyCheckAcceleration(newBackNewAcc)){
+//        return prospectiveBalance;
+//    }
+//    
     
     
         // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -258,7 +279,7 @@ public class MOBILImpl {
 //// if(false && changeTo==SimConstants.TO_RIGHT)Logger.log(String.format("LC: id=%d, prospectiveBalance: changeTo=%2d " +
 //// "  biasSign=%3.1f biasRight=%4.1f, deltaAccMe=%4.1f, pros.Balance=%4.1f %n",me.id(), changeTo, biasSign, biasRight,
 //        // deltaAccMe, prospectiveBalance));
-        return (prospectiveBalance);
-    }
+//        return (prospectiveBalance);
+//    }
 
 }

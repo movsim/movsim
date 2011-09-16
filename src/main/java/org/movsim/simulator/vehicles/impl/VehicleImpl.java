@@ -485,7 +485,7 @@ public class VehicleImpl implements Vehicle {
         // logger.debug("acc = {}", acc );
     }
 
-    private double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
+    public double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
 
         double acc;
