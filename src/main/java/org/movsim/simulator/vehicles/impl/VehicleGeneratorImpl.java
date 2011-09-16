@@ -197,6 +197,11 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     
     // add Obstacle as permanent Vehicle_Type
     // first check if Obstacle is already part of user defined heterogeneity input 
+    /**
+     * Adds the obstacle system vehicle type.
+     *
+     * @param heterogenInputData the heterogen input data
+     */
     private void addObstacleSystemVehicleType(List<HeterogeneityInputData> heterogenInputData) {
         boolean obstacleEntryIsContained = false;
         for (HeterogeneityInputData het : heterogenInputData) {

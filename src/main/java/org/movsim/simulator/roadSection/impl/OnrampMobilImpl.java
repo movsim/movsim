@@ -45,6 +45,7 @@ import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class OnrampImpl.
  */
@@ -177,6 +178,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     }
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.impl.AbstractRoadSection#laneChanging(long, double, double)
+     */
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
 
@@ -202,6 +206,12 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     }
 
+    /**
+     * Try to merge to mainroad.
+     *
+     * @param veh the veh
+     * @return true, if successful
+     */
     private boolean tryToMergeToMainroad(final Vehicle veh) {
         final double pos = veh.getPosition();
         if (pos > xUpRamp) {
@@ -224,6 +234,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         return false;
     }
 
+    /**
+     * Sets the obstacle at end of lane.
+     */
     private void setObstacleAtEndOfLane() {
         final Vehicle obstacle = vehGenerator.createVehicle(Constants.OBSTACLE_KEY_NAME);
         final double posInit = roadLength;
@@ -240,28 +253,43 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 //        //logger.debug("remove obstacle from end of onramp after acceleration calculation");
 //    }
 
-    @Override
+    /* (non-Javadoc)
+ * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateRoadConditions(long, double)
+ */
+@Override
     public void updateRoadConditions(long iterationCount, double time) {
         // TODO Auto-generated method stub
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateDownstreamBoundary()
+     */
     @Override
     public void updateDownstreamBoundary() {
         // TODO Auto-generated method stub
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
+     */
     @Override
     public List<TrafficLight> getTrafficLights() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()
+     */
     @Override
     public List<LoopDetector> getLoopDetectors() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#updateDetectors(long, double, double)
+     */
     @Override
     public void updateDetectors(long iterationCount, double dt, double simulationTime) {
         // TODO Auto-generated method stub
@@ -269,22 +297,34 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     }
 
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampMergingLength()
+     */
     @Override
     public double getRampMergingLength() {
         return mergeLength;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampPositionToMainroad()
+     */
     @Override
     public double getRampPositionToMainroad() {
         return xToMain;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#rampFactory(org.movsim.input.InputData)
+     */
     @Override
     public List<RoadSection> rampFactory(InputData inputData) {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.roadSection.RoadSection#laneChangingToOfframps(java.util.List, long, double, double)
+     */
     @Override
     public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
         // TODO Auto-generated method stub

@@ -55,11 +55,9 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
 
     /**
      * Instantiates a new floating cars impl.
-     * 
-     * @param vehContainer
-     *            the veh container
-     * @param input
-     *            the input
+     *
+     * @param vehContainers the veh containers
+     * @param input the input
      */
     public FloatingCarsImpl(final List<VehicleContainer> vehContainers, final FloatingCarInput input) {
         logger.debug("Cstr. FloatingCars");
@@ -108,6 +106,9 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
         return vehContainers;
     }
     
+    /* (non-Javadoc)
+     * @see org.movsim.output.FloatingCars#getMoveableContainer()
+     */
     public MoveableContainer getMoveableContainer(){
         return vehContainers.get(Constants.MOST_RIGHT_LANE);
     }

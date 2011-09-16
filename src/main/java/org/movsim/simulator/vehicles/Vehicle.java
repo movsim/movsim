@@ -103,17 +103,54 @@ public interface Vehicle extends Moveable {
      */
     void removeObservers();
 
+    /**
+     * Gets the lane changing model.
+     *
+     * @return the lane changing model
+     */
     LaneChangingModelImpl getLaneChangingModel();
 
+    /**
+     * Gets the acceleration model.
+     *
+     * @return the acceleration model
+     */
     AccelerationModel getAccelerationModel();
 
+    /**
+     * Sets the position.
+     *
+     * @param newPos the new position
+     */
     void setPosition(double newPos);
 
+    /**
+     * Consider lane changing.
+     *
+     * @param dt the dt
+     * @param vehContainers the veh containers
+     * @return true, if successful
+     */
     boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers);
 
+    /**
+     * Gets the target lane.
+     *
+     * @return the target lane
+     */
     int getTargetLane();
 
+    /**
+     * In process of lane changing.
+     *
+     * @return true, if successful
+     */
     boolean inProcessOfLaneChanging();
 
+    /**
+     * Inits the lane change from ramp.
+     *
+     * @param oldLane the old lane
+     */
     void initLaneChangeFromRamp(int oldLane);
 }

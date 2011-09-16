@@ -195,11 +195,9 @@ public class FileTrajectories {
 
     /**
      * Write trajectories.
-     * 
-     * @param fstr
-     *            the fstr
-     * @param vehicles
-     *            the vehicles
+     *
+     * @param fstr the fstr
+     * @param vehContainers the veh containers
      */
     private void writeTrajectories(PrintWriter fstr, List<VehicleContainer> vehContainers) {
         for (VehicleContainer vehContainerLane : vehContainers) {
@@ -216,13 +214,11 @@ public class FileTrajectories {
 
     /**
      * Write car data.
-     * 
-     * @param fstr
-     *            the fstr
-     * @param index
-     *            the index
-     * @param me
-     *            the me
+     *
+     * @param fstr the fstr
+     * @param index the index
+     * @param me the me
+     * @param frontVeh the front veh
      */
     private void writeCarData(PrintWriter fstr, int index, final Moveable me, final Moveable frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);

@@ -10,9 +10,11 @@ import java.io.PrintWriter;
 import org.movsim.simulator.Constants;
 import org.movsim.utilities.impl.FileUtils;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class FileUpstreamBoundaryData.
+ *
  * @author ralph
- * 
  */
 public class FileUpstreamBoundaryData {
 
@@ -24,7 +26,9 @@ public class FileUpstreamBoundaryData {
     private PrintWriter fstrLogging;
 
     /**
-     * @param projectName
+     * Instantiates a new file upstream boundary data.
+     *
+     * @param projectName the project name
      */
     public FileUpstreamBoundaryData(String projectName) {
 
@@ -36,13 +40,15 @@ public class FileUpstreamBoundaryData {
     }
 
     /**
-     * @param time
-     * @param laneEnterLast
-     * @param xEnterLast
-     * @param d
-     * @param e
-     * @param enteringVehCounter2
-     * @param nWait
+     * Update.
+     *
+     * @param time the time
+     * @param laneEnterLast the lane enter last
+     * @param xEnterLast the x enter last
+     * @param vEnterLast the v enter last
+     * @param q the q
+     * @param enteringVehCounter the entering veh counter
+     * @param nWait the n wait
      */
     public void update(double time, int laneEnterLast, double xEnterLast, double vEnterLast, double q, int enteringVehCounter,
             double nWait) {

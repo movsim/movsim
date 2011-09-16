@@ -65,10 +65,15 @@ public interface Simulator {
     void run();
 
     /**
-     * Calls the update for the Roadsection and SimulationOutput
+     * Calls the update for the Roadsection and SimulationOutput.
      */
     void update();
     
+    /**
+     * Checks if is simulation run finished.
+     *
+     * @return true, if is simulation run finished
+     */
     boolean isSimulationRunFinished();
 
     /**
@@ -95,8 +100,19 @@ public interface Simulator {
      */
     void initialize();
     
+    /**
+     * Gets the road sections.
+     *
+     * @return the road sections
+     */
     List<RoadSection> getRoadSections();
     
+    /**
+     * Find road by id.
+     *
+     * @param id the id
+     * @return the road section
+     */
     public RoadSection findRoadById(long id);
     
 }

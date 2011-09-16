@@ -132,6 +132,11 @@ public abstract class AccelerationModelAbstract implements Observer {
         return modelCategory;
     }
 
+    /**
+     * Gets the scaling length.
+     *
+     * @return the scaling length
+     */
     public double getScalingLength() {
         return scalingLength;
     }
@@ -147,6 +152,11 @@ public abstract class AccelerationModelAbstract implements Observer {
         logger.debug("observer notified");
     }
 
+    /**
+     * Sets the relative randomization v0.
+     *
+     * @param relRandomizationFactor the new relative randomization v0
+     */
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
         final double newV0 = getDesiredSpeedParameterV0() * (1 + relRandomizationFactor * equalRandom);
@@ -154,7 +164,18 @@ public abstract class AccelerationModelAbstract implements Observer {
         setDesiredSpeedV0(newV0);
     }   
     
+    /**
+     * Gets the desired speed parameter v0.
+     *
+     * @return the desired speed parameter v0
+     */
     public abstract double getDesiredSpeedParameterV0();
+    
+    /**
+     * Sets the desired speed v0.
+     *
+     * @param v0 the new desired speed v0
+     */
     protected abstract void setDesiredSpeedV0(double v0);
     
 }

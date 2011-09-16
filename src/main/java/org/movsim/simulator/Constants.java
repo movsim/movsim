@@ -89,7 +89,7 @@ public interface Constants {
     /** The invalid gap */
     final double INVALID_GAP = -1;
 
-    final double VEHICLE_WIDTH = 2.1;
+    final double VEHICLE_WIDTH = 4.4;
 
 
 }

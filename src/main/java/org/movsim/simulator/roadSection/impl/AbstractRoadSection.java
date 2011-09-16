@@ -1,3 +1,29 @@
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
+ * ----------------------------------------------------------------------
+ * 
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *
+ *  MovSim is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  MovSim is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
+ *  
+ * ----------------------------------------------------------------------
+ */
 package org.movsim.simulator.roadSection.impl;
 
 import java.util.LinkedList;
@@ -15,6 +41,10 @@ import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AbstractRoadSection.
+ */
 public abstract class AbstractRoadSection {
 
     /** The Constant logger. */
@@ -53,6 +83,12 @@ public abstract class AbstractRoadSection {
     
     
     // TODO same constructor for onramp and mainroad (and offramp) 
+    /**
+     * Instantiates a new abstract road section.
+     *
+     * @param inputData the input data
+     * @param vehGenerator the veh generator
+     */
     public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){
         this.vehGenerator = vehGenerator;
         final SimulationInput simInput = inputData.getSimulationInput();
@@ -67,6 +103,12 @@ public abstract class AbstractRoadSection {
 
     
     // onramp
+    /**
+     * Instantiates a new abstract road section.
+     *
+     * @param rampData the ramp data
+     * @param vehGenerator the veh generator
+     */
     public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
@@ -79,6 +121,11 @@ public abstract class AbstractRoadSection {
     
     
     // offramp
+    /**
+     * Instantiates a new abstract road section.
+     *
+     * @param rampData the ramp data
+     */
     public AbstractRoadSection(final RampData rampData){
         this.vehGenerator = null;
         this.roadLength = rampData.getRoadLength();
@@ -91,6 +138,9 @@ public abstract class AbstractRoadSection {
     
     
     
+    /**
+     * Inits the.
+     */
     private void init(){
         stagedVehicles = new LinkedList<Vehicle>();
     }
@@ -102,6 +152,11 @@ public abstract class AbstractRoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#roadLength()
      */
   
+    /**
+     * Gets the road length.
+     *
+     * @return the road length
+     */
     public double getRoadLength() {
         return roadLength;
     }
@@ -110,6 +165,11 @@ public abstract class AbstractRoadSection {
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.roadSection.RoadSection#id()
+     */
+    /**
+     * Gets the id.
+     *
+     * @return the id
      */
     public long getId() {
         return id;
@@ -120,6 +180,11 @@ public abstract class AbstractRoadSection {
      * 
      * @see org.movsim.simulator.roadSection.RoadSection#getTimestep()
      */
+    /**
+     * Gets the timestep.
+     *
+     * @return the timestep
+     */
     public double getTimestep() {
         return dt;
     }
@@ -129,14 +194,30 @@ public abstract class AbstractRoadSection {
      * 
      * @see org.movsim.simulator.roadSection.RoadSection#nLanes()
      */
+    /**
+     * Gets the number of lanes.
+     *
+     * @return the number of lanes
+     */
     public int getNumberOfLanes() {
         return nLanes;
     }
     
+    /**
+     * Gets the veh containers.
+     *
+     * @return the veh containers
+     */
     public List<VehicleContainer> getVehContainers() {
         return vehContainers;
     }
 
+    /**
+     * Gets the veh container.
+     *
+     * @param laneIndex the lane index
+     * @return the veh container
+     */
     public VehicleContainer getVehContainer(int laneIndex) {
         return vehContainers.get(laneIndex);
     }
@@ -172,12 +253,10 @@ public abstract class AbstractRoadSection {
 
     /**
      * Update position and speed.
-     * 
-     * @param iterationCount
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
      */
     public void updatePositionAndSpeed(long iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
@@ -189,6 +268,13 @@ public abstract class AbstractRoadSection {
     
     
     // general lane-changing update also for one-lane roads for updating vehicle's lane-changing process 
+    /**
+     * Lane changing.
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
+     */
     public void laneChanging(long iterationCount, double dt, double time) {
         for (final VehicleContainer vehContainerLane : vehContainers) {
 
@@ -214,12 +300,10 @@ public abstract class AbstractRoadSection {
 
     /**
      * Update upstream boundary.
-     * 
-     * @param iterationCount
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
      */
     public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
         upstreamBoundary.update(iterationCount, dt, time);
@@ -227,10 +311,10 @@ public abstract class AbstractRoadSection {
     
     /**
      * Check for inconsistencies.
-     * 
-     * @param iterationCount
-     * @param time
-     *            the time
+     *
+     * @param iterationCount the iteration count
+     * @param time the time
+     * @param isWithCrashExit the is with crash exit
      */
     public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
         // crash test, iterate over all lanes separately

@@ -112,6 +112,9 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
     }
     
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+     */
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
         // Local dynamical variables
@@ -138,6 +141,16 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
         return acc(s, v, dv, v0, dt);
     }
     
+    /**
+     * Acc.
+     *
+     * @param s the s
+     * @param v the v
+     * @param dv the dv
+     * @param v0Local the v0 local
+     * @param dtLocal the dt local
+     * @return the double
+     */
     private double acc(double s, double v, double dv, double v0Local, double dtLocal) {
         
         final double vNew = Math.min(Math.max((s-s0)/dtLocal, 0), v0Local);
@@ -174,6 +187,9 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
         return dt;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
     @Override
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;

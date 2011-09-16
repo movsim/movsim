@@ -34,6 +34,11 @@ import java.util.List;
  */
 public interface VehicleContainer extends MoveableContainer {
 
+    /**
+     * Gets the lane index.
+     *
+     * @return the lane index
+     */
     int getLaneIndex();
 
     /**
@@ -86,6 +91,11 @@ public interface VehicleContainer extends MoveableContainer {
      */
     void add(final Vehicle veh, double xInit, double vInit);
 
+    /**
+     * Adds the.
+     *
+     * @param veh the veh
+     */
     void add(Vehicle veh);
 
     /**
@@ -101,14 +111,39 @@ public interface VehicleContainer extends MoveableContainer {
      */
     void removeVehicleMostDownstream();
 
+    /**
+     * Removes the vehicle.
+     *
+     * @param veh the veh
+     */
     void removeVehicle(final Vehicle veh);
 
     // returns also "virtual" leaders when veh is not located in considered lane
+    /**
+     * Gets the leader.
+     *
+     * @param veh the veh
+     * @return the leader
+     */
     Vehicle getLeader(final Moveable veh);
 
     // returns also "virtual" leaders when veh is not located in considered lane
+    /**
+     * Gets the follower.
+     *
+     * @param veh the veh
+     * @return the follower
+     */
     Vehicle getFollower(final Moveable veh);
 
+    /**
+     * Adds the from to ramp.
+     *
+     * @param veh the veh
+     * @param xInit the x init
+     * @param vInit the v init
+     * @param oldLane the old lane
+     */
     void addFromToRamp(Vehicle veh, double xInit, double vInit, int oldLane);
 
 }

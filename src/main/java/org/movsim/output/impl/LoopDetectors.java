@@ -79,15 +79,11 @@ public class LoopDetectors {
 
     /**
      * Update.
-     * 
-     * @param itime
-     *            the itime
-     * @param time
-     *            the time
-     * @param timestep
-     *            the timestep
-     * @param vehContainer
-     *            the veh container
+     *
+     * @param itime the itime
+     * @param time the time
+     * @param timestep the timestep
+     * @param vehContainers the veh containers
      */
     public void update(long itime, double time, double timestep, List<VehicleContainer> vehContainers) {
         for (final LoopDetectorImpl det : detectors) {

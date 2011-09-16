@@ -26,8 +26,8 @@ public interface Moveable {
     double getLength();
     
     /**
-     * Width
-     * 
+     * Width.
+     *
      * @return the double
      */
     double getWidth();
@@ -124,6 +124,11 @@ public interface Moveable {
      */
     int getLane();
     
+    /**
+     * Gets the continous lane.
+     *
+     * @return the continous lane
+     */
     double getContinousLane();
     
 
@@ -152,8 +157,18 @@ public interface Moveable {
      */
     double getDistanceToTrafficlight();
 
+    /**
+     * Checks if is brake light on. Braking lights for neat viewers.
+     *
+     * @return true, if is brake light on
+     */
     boolean isBrakeLightOn();
     
+    /**
+     * Physical quantities.
+     *
+     * @return the physical quantities
+     */
     PhysicalQuantities physicalQuantities();
     
 }

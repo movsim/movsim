@@ -57,8 +57,11 @@ public class VehicleContainerImpl implements VehicleContainer {
 
     
     private final int laneIndex;  // TODO laneInit not necessary anymore ?!
+    
     /**
      * Instantiates a new vehicle container impl.
+     *
+     * @param laneIndex the lane index
      */
     public VehicleContainerImpl(int laneIndex) {
         this.laneIndex = laneIndex;
@@ -68,6 +71,9 @@ public class VehicleContainerImpl implements VehicleContainer {
 
     
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getLaneIndex()
+     */
     @Override
     public int getLaneIndex(){
         return laneIndex;
@@ -144,11 +150,17 @@ public class VehicleContainerImpl implements VehicleContainer {
     }
 
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#add(org.movsim.simulator.vehicles.Vehicle)
+     */
     @Override
     public void add(final Vehicle veh){
         add(veh, veh.getPosition(), veh.getSpeed(), laneIndex);
     }
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#addFromToRamp(org.movsim.simulator.vehicles.Vehicle, double, double, int)
+     */
     @Override
     public void addFromToRamp(final Vehicle veh, double xInit, double vInit, int oldLane){
         add(veh, xInit, vInit, laneIndex);
@@ -158,17 +170,11 @@ public class VehicleContainerImpl implements VehicleContainer {
 
     /**
      * Adds the.
-     * 
-     * @param vehNumber
-     *            the veh number
-     * @param veh
-     *            the veh
-     * @param xInit
-     *            the x init
-     * @param vInit
-     *            the v init
-     * @param laneInit
-     *            the lane init
+     *
+     * @param veh the veh
+     * @param xInit the x init
+     * @param vInit the v init
+     * @param laneInit the lane init
      */
     private void add(final Vehicle veh, double xInit, double vInit, int laneInit) {
         vehCounter++;
@@ -222,6 +228,9 @@ public class VehicleContainerImpl implements VehicleContainer {
         }
     }
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#removeVehicle(org.movsim.simulator.vehicles.Vehicle)
+     */
     @Override
     public void removeVehicle(final Vehicle veh){
         if (!vehicles.isEmpty()) {
@@ -231,6 +240,9 @@ public class VehicleContainerImpl implements VehicleContainer {
 
   
    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getLeader(org.movsim.simulator.vehicles.Moveable)
+     */
     @Override
     public Vehicle getLeader(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
@@ -246,6 +258,9 @@ public class VehicleContainerImpl implements VehicleContainer {
     }
     
     
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getFollower(org.movsim.simulator.vehicles.Moveable)
+     */
     @Override
     public Vehicle getFollower(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
@@ -301,6 +316,12 @@ public class VehicleContainerImpl implements VehicleContainer {
     }
 
     
+    /**
+     * Find virtual leader.
+     *
+     * @param veh the veh
+     * @return the vehicle
+     */
     private Vehicle findVirtualLeader(final Moveable veh) {
         // TODO efficient implementation with interval intersection
         final double position = veh.getPosition();
@@ -315,6 +336,12 @@ public class VehicleContainerImpl implements VehicleContainer {
         return null;
     }
 
+    /**
+     * Find virtual follower.
+     *
+     * @param veh the veh
+     * @return the vehicle
+     */
     private Vehicle findVirtualFollower(final Moveable veh) {
      // TODO efficient implementation 
         final double position = veh.getPosition();

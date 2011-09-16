@@ -28,14 +28,17 @@ package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EquilibriumKrauss.
+ */
 public class EquilibriumKrauss extends EquilibriumPropertiesImpl{
+    
     /**
      * Instantiates a new equilibrium gipps.
-     * 
-     * @param length
-     *            the length
-     * @param gippsModel
-     *            the gipps model
+     *
+     * @param length the length
+     * @param model the model
      */
     public EquilibriumKrauss(double length, Krauss model) {
         super(length);

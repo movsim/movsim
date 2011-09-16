@@ -57,6 +57,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class XmlReaderSimInput.
  * 
@@ -141,11 +142,9 @@ public class XmlReaderSimInput {
 
     /**
      * Writes the internal xml after validation to file.
-     * 
-     * @param doc2
-     *            the doc2
-     * @param outFilename
-     *            the output file name
+     *
+     * @param localDoc the local doc
+     * @param outFilename the output file name
      */
     private void writeInternalXmlToFile(final Document localDoc, String outFilename) {
         PrintWriter writer = FileUtils.getWriter(outFilename);

@@ -36,6 +36,7 @@ import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class LaneChangingModelImpl.
  */
@@ -81,6 +82,11 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
     private final LaneChangingInputData lcInputData;
 
+    /**
+     * Instantiates a new lane changing model impl.
+     *
+     * @param lcInputData the lc input data
+     */
     public LaneChangingModelImpl(LaneChangingInputData lcInputData) {
 
         this.lcInputData = lcInputData;
@@ -93,11 +99,21 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
     }
 
+    /**
+     * Initialize.
+     *
+     * @param vehicle the vehicle
+     */
     public void initialize(final Vehicle vehicle) {
         this.me = vehicle;
         lcModelMOBIL = (isInitialized) ? new MOBILImpl(me, lcInputData.getLcMobilData()) : new MOBILImpl(me);
     }
 
+    /**
+     * Checks if is initialized.
+     *
+     * @return true, if is initialized
+     */
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -123,6 +139,9 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     // return (NO_CHANGE);
     // }
 
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.lanechanging.LaneChangingModel#isMandatoryLaneChangeSafe(double, org.movsim.simulator.vehicles.VehicleContainer)
+     */
     @Override
     public boolean isMandatoryLaneChangeSafe(double dt, final VehicleContainer vehContainerTargetLane) {
         // final boolean otherVehsChangeSufficientlyLongAgo = true;
@@ -180,6 +199,13 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     // and from Mainroad to OffRamp
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    /**
+     * Mandatory weaving change.
+     *
+     * @param frontVeh the front veh
+     * @param backVeh the back veh
+     * @return true, if successful
+     */
     private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
         // safety incentive (in two steps)
@@ -214,6 +240,12 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     }
 
     
+    /**
+     * Determine lane changing direction.
+     *
+     * @param vehContainers the veh containers
+     * @return the int
+     */
     public int determineLaneChangingDirection(final List<VehicleContainer> vehContainers) {
         final int currentLane = me.getLane();
 
@@ -245,10 +277,22 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return Constants.NO_CHANGE;
     }
 
+    /**
+     * Calc acceleration in new lane.
+     *
+     * @param ownLane the own lane
+     * @param newLane the new lane
+     * @return the double
+     */
     private double calcAccelerationInNewLane(final VehicleContainer ownLane, final VehicleContainer newLane) {
         return lcModelMOBIL.calcAccelerationBalanceInNewLaneSymmetric(ownLane, newLane);
     }
 
+    /**
+     * Sets the mandatory change.
+     *
+     * @param incentive the new mandatory change
+     */
     public void setMandatoryChange(int incentive) {
         if (incentive == NO_CHANGE || incentive == TO_RIGHT || incentive == TO_LEFT) {
             mandatoryChange = incentive;

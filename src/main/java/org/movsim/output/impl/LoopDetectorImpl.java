@@ -123,11 +123,9 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
 
     /**
      * Update.
-     * 
-     * @param time
-     *            the time
-     * @param vehicleContainer
-     *            the vehicle container
+     *
+     * @param time the time
+     * @param vehicleContainers the vehicle containers
      */
     public void update(double time, List<VehicleContainer> vehicleContainers) {
 

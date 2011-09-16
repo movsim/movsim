@@ -46,12 +46,16 @@ public interface FloatingCars extends ObservableInTime {
     List<Integer> getFcdList();
 
     
+    /**
+     * Gets the vehicle containers.
+     *
+     * @return the vehicle containers
+     */
     List<VehicleContainer> getVehicleContainers();
     
     /**
-     * Gets the moveable container of the MOST_RIGHT_LANE 
-     * 
-     * 
+     * Gets the moveable container of the MOST_RIGHT_LANE.
+     *
      * @return the moveable container
      */
     MoveableContainer getMoveableContainer(); // TODO: compatibility for movsim applet, returns only most right lane container!!!

@@ -70,13 +70,10 @@ public class TrafficLightsImpl implements TrafficLights {
 
     /**
      * Update.
-     * 
-     * @param iterationCount
-     *            the itime
-     * @param time
-     *            the time
-     * @param vehicles
-     *            the vehicles
+     *
+     * @param iterationCount the itime
+     * @param time the time
+     * @param vehContainers the veh containers
      */
     public void update(long iterationCount, double time, List<VehicleContainer> vehContainers) {
 

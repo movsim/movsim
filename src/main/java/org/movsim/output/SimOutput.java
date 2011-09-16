@@ -74,22 +74,16 @@ public class SimOutput implements SimObservables {
 
     /**
      * Instantiates a new sim output.
-     * 
-     * @param simInput
-     *            the sim input
-     * @param roadSection
-     *            the road section
+     *
+     * @param simInput the sim input
+     * @param roadSections the road sections
      */
     public SimOutput(InputData simInput, List<RoadSection> roadSections) {
         projectName = simInput.getProjectMetaData().getProjectName();
         this.roadSection = roadSections.get(0); // TODO here only for *one* roadsection
 
         // more restrictive than in other output classes TODO
-        writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput(); // no
-                                                                                 // file
-                                                                                 // output
-                                                                                 // from
-                                                                                 // GUI
+        writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
 
@@ -123,24 +117,24 @@ public class SimOutput implements SimObservables {
     /**
      * Update.
      * 
-     * @param itime
+     * @param iterationCount
      *            the itime
      * @param time
      *            the time
      * @param timestep
      *            the timestep
      */
-    public void update(long itime, double time, double timestep) {
+    public void update(long iterationCount, double time, double timestep) {
 
         if (floatingCars != null) {
-            floatingCars.update(itime, time, timestep);
+            floatingCars.update(iterationCount, time, timestep);
         }
         if (spatioTemporal != null) {
-            spatioTemporal.update(itime, time, roadSection);
+            spatioTemporal.update(iterationCount, time, roadSection);
         }
 
         if (trajectories != null) {
-            trajectories.update(itime, time);
+            trajectories.update(iterationCount, time);
         }
 
     }

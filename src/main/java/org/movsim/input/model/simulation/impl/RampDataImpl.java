@@ -76,11 +76,17 @@ public class RampDataImpl implements RampData {
 
  
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.RampData#getRampStartPosition()
+     */
     @Override
     public double getRampStartPosition() {
         return rampStartPosition;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.RampData#getRampMergingLength()
+     */
     @Override
     public double getRampMergingLength() {
         return rampMergingLength;
@@ -106,6 +112,9 @@ public class RampDataImpl implements RampData {
         return withLogging;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.RampData#getUpstreamBoundaryData()
+     */
     @Override
     public UpstreamBoundaryData getUpstreamBoundaryData() {
         return upstreamData;
