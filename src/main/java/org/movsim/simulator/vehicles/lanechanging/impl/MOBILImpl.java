@@ -71,6 +71,9 @@ public class MOBILImpl {
     
     public double calcAccelerationBalanceInNewLane(final VehicleContainer ownLane,
             final VehicleContainer newLane) {
+        
+//        final VehicleContainer ownLane = ,
+//        final VehicleContainer newLane = 
 
         double prospectiveBalance = -Double.MAX_VALUE;
 
@@ -99,7 +102,7 @@ public class MOBILImpl {
         final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
         newSituationNewBack.addTestwise(newBack);
         newSituationNewBack.addTestwise(me);
-        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, null);
+        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, null);  
         // compare
         if( Math.abs(newBackNewAccTest-newBackNewAcc)> 0.0001 ){
             System.err.printf("deviation in new newBackNewAcc!!!\n");
