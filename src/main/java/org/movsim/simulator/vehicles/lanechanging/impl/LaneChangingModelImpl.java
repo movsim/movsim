@@ -53,7 +53,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     // critical speed for kicking in European rules (in m/s)
     private final double vCritEur;
 
-    private int mandatoryChange = Constants.NO_CHANGE; 
+    private int mandatoryChange = Constants.NO_CHANGE;
 
     private Vehicle me;
 
@@ -84,9 +84,9 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     }
 
     @Override
-    public boolean isMandatoryLaneChangeSafe(double dt, final VehicleContainer vehContainerTargetLane) {
+    public boolean isMandatoryLaneChangeSafe(final VehicleContainer vehContainerTargetLane) {
         // works also for the "virtual" leader of me in considered lane
-        final Vehicle frontMain = vehContainerTargetLane.getLeader(me); 
+        final Vehicle frontMain = vehContainerTargetLane.getLeader(me);
 
         final Vehicle backMain = vehContainerTargetLane.getFollower(me);
 
@@ -109,17 +109,18 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
         final double backNewAcc = (backVeh == null) ? 0 : backVeh.getAccelerationModel().calcAcc(backVeh, me);
 
-        // (ii) check security constraint for new follower
-        // enforce mandatory lane change by increasing the safe deceleration for normal situations
+        // check security constraint for new follower
+        // enforce mandatory lane change by increasing the safe deceleration for
+        // normal situations
         final double increaseFactorMandatory = 2.0;
-        if (backNewAcc <= -increaseFactorMandatory*lcModelMOBIL.getSafeDeceleration()) {
+        if (backNewAcc <= -increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration()) {
             logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
             logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
             return (false);
         }
 
         final double meNewAcc = me.getAccelerationModel().calcAcc(me, frontVeh);
-        if (meNewAcc >= -increaseFactorMandatory*lcModelMOBIL.getSafeDeceleration()) {
+        if (meNewAcc >= -increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration()) {
             logger.debug("meNewAcc={}, bSafe={}", meNewAcc, lcModelMOBIL.getSafeDeceleration());
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
             logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
@@ -128,20 +129,22 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return (false);
     }
 
-    
     public int determineLaneChangingDirection(final List<VehicleContainer> vehContainers) {
+
         final int currentLane = me.getLane();
 
         // initialize with largest possible deceleration
         double accToLeft = -Double.MAX_VALUE;
         double accToRight = -Double.MAX_VALUE;
 
-        // consider lane-changing to right-hand side lane (decreasing lane index)
+        // consider lane-changing to right-hand side lane (decreasing lane
+        // index)
         if (currentLane - 1 >= Constants.MOST_RIGHT_LANE) {
             accToRight = lcModelMOBIL.calcAccelerationBalance(Constants.TO_RIGHT, vehContainers);
         }
 
-        // consider lane-changing to left-hand side lane (increasing the lane index)
+        // consider lane-changing to left-hand side lane (increasing the lane
+        // index)
         if (currentLane + 1 < vehContainers.size()) {
             accToLeft = lcModelMOBIL.calcAccelerationBalance(Constants.TO_LEFT, vehContainers);
         }
@@ -160,7 +163,6 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return Constants.NO_CHANGE;
     }
 
-
     public void setMandatoryChange(int incentive) {
         if (incentive == Constants.NO_CHANGE || incentive == Constants.TO_RIGHT || incentive == Constants.TO_LEFT) {
             mandatoryChange = incentive;
@@ -177,6 +179,5 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     public double vCritEurRules() {
         return vCritEur;
     }
-
 
 }

@@ -257,8 +257,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                         final double oldPos = veh.getPosition();
                         final double newPos = veh.getPosition() - rmp.getRampPositionToMainroad();
                         veh.setPosition(newPos); // mapping to coordinate system of offramp
-                        final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(dt,
-                                rmpContainer);
+                        final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(rmpContainer);
                         veh.setPosition(oldPos);
                         // local decision to change to offramp
                         final double fractionOfLeavingVehicles = upstreamBoundary.getEnteringVehCounter()==0 ? 0 : countVehiclesToOfframp/(double)upstreamBoundary.getEnteringVehCounter();
