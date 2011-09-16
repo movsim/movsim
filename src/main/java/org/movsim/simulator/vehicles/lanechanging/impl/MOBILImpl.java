@@ -66,8 +66,6 @@ public class MOBILImpl {
 
     public double calcAccelerationBalance(final int direction, final List<VehicleContainer> lanes) {
 
-        final boolean DEBUG = false;
-
         final int currentLane = me.getLane();
 
         final VehicleContainer ownLane = lanes.get(currentLane);
@@ -104,16 +102,6 @@ public class MOBILImpl {
                 + Constants.TO_LEFT >= lanes.size()) ? null : lanes.get(currentLane + direction + Constants.TO_LEFT);
         final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNewBack);
 
-        if (DEBUG) {
-            // safety: check (MOBIL) safety constraint for new follower
-            final double newBackNewAccTest = (newBack == null) ? 0 : newBack.getAccelerationModel()
-                    .calcAcc(newBack, me);
-
-            if (Math.abs(newBackNewAccTest - newBackNewAcc) > 0.0001) {
-                System.err.printf("deviation in new newBackNewAcc!!!\n");
-            }
-        }
-
         if (safetyCheckAcceleration(newBackNewAcc)) {
             return prospectiveBalance;
         }
@@ -126,40 +114,17 @@ public class MOBILImpl {
                 .get(currentLane + Constants.TO_LEFT);
         final double meOldAcc = me.calcAccModel(ownLane, leftLaneMeOld);
 
-        if (DEBUG) {
-            final double meOldAccTest = me.getAccelerationModel().calcAcc(me, oldFront);
-            if (Math.abs(meOldAccTest - meOldAcc) > 0.0001) {
-                System.err.printf("meOldAccTest=%.4f, meOldAcc=%.4f\n", meOldAccTest, meOldAcc);
-            }
-        }
-
         // old situation for old back
         final Vehicle oldBack = ownLane.getFollower(me);
 
         // in old situation same left lane as me
         final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, leftLaneMeOld) : 0;
 
-        if (DEBUG) {
-            final double oldBackOldAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me)
-                    : 0;
-            if (Math.abs(oldBackOldAccTest - oldBackOldAcc) > 0.0001) {
-                System.err.printf("oldBackAccTest=%.4f, oldBackAcc=%.4f\n", oldBackOldAccTest, oldBackOldAcc);
-            }
-        }
-
         // old situation for new back: just provides the actual left-lane
         // situation
         final VehicleContainer leftLaneNewBackOldAcc = (currentLane + direction + Constants.TO_LEFT >= lanes.size()) ? null
                 : lanes.get(currentLane + direction + Constants.TO_LEFT);
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNewBackOldAcc) : 0;
-
-        if (DEBUG) {
-            final double newBackOldAccTest = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack,
-                    newFront) : 0;
-            if (Math.abs(newBackOldAccTest - newBackOldAcc) > 0.0001) {
-                System.err.printf("newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
-            }
-        }
 
         // new traffic situation: set subject virtually into new lane under
         // consideration
@@ -181,13 +146,6 @@ public class MOBILImpl {
 
         final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNewBack);
 
-        if (DEBUG) {
-            final double meNewAccTest = me.getAccelerationModel().calcAcc(me, newFront);
-            if (Math.abs(meNewAccTest - meNewAcc) > 0.0001) {
-                System.err.printf("deviation in meNewAccTest!!!\n");
-            }
-        }
-
         final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0);
         newSituationOldBack.addTestwise(oldFront);
         newSituationOldBack.addTestwise(oldBack);
@@ -205,15 +163,6 @@ public class MOBILImpl {
         }
 
         final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null) : 0;
-
-        // compare
-        if (DEBUG) {
-            final double oldBackNewAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack,
-                    oldFront) : 0;
-            if (Math.abs(oldBackNewAccTest - oldBackNewAcc) > 0.0001) {
-                System.err.printf("deviation in oldBackNewAccTest !!\n");
-            }
-        }
 
         // MOBIL trade-off for driver and neighborhood
         final double oldBackDiffAcc = oldBackNewAcc - oldBackOldAcc;

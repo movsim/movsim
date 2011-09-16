@@ -100,7 +100,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         final double gapFront = me.getNetDistance(frontVeh);
         final double gapBack = (backVeh == null) ? Constants.GAP_INFINITY : backVeh.getNetDistance(me);
 
-        // (i) first check distances
+        // check distances
         // negative net distances possible because of different veh lengths!
         if (gapFront < lcModelMOBIL.getMinimumGap() || gapBack < lcModelMOBIL.getMinimumGap()) {
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);

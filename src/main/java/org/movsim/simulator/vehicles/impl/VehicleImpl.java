@@ -618,16 +618,14 @@ public class VehicleImpl implements Vehicle {
             return false;
         }
 
+        
         final int saveLane = lane;
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
         final int laneChangingDirection = lcModel.determineLaneChangingDirection(vehContainers);
 
-        // do cross check TODO remove syserr output
+        // TODO do cross check, not necessary anymore?! 
         assert saveLane != lane;
-        if (saveLane != lane) {
-            System.err.println("vehicle's lane changed: saveLane=" + saveLane + ", lane=" + lane);
-        }
 
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
