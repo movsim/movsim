@@ -258,4 +258,13 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         }
     }
 
+    public boolean withEuropeanRules() {
+        return withEuropeanRules;
+    }
+
+    public double vCritEurRules() {
+        return vCritEur;
+    }
+
+
 }

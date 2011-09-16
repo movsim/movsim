@@ -86,7 +86,7 @@ public interface Vehicle extends Moveable {
      * @param alphaV0
      *            the alpha v0
      */
-    void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0);
+    void calcAcceleration(double dt, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0);
 
     /**
      * Update traffic light.

@@ -148,7 +148,7 @@ alpha_a  NMTOKEN "1"
 <!ELEMENT LANE_CHANGE_MODEL (MOBIL?)>
 <!ATTLIST LANE_CHANGE_MODEL 
 eur_rules  (true|false) "false"
-crit_speed_eur_kmh  NMTOKEN "90"
+crit_speed_eur  NMTOKEN "25"
 >
 
 

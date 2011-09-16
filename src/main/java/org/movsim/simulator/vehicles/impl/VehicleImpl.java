@@ -437,7 +437,7 @@ public class VehicleImpl implements Vehicle {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double)
      */
     @Override
-    public void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0) {
+    public void calcAcceleration(double dt, final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0) {
 
         accOld = acc;
         // acceleration noise:
@@ -468,8 +468,14 @@ public class VehicleImpl implements Vehicle {
             alphaALocal *= memory.alphaA();
         }
 
-        // TODO gekapseltere Aufruf
-        accModel = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+        
+        // TODO European rules 
+        if ( lcModel.isInitialized() && lcModel.withEuropeanRules()  ) {
+            accModel = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
+        }
+        else{
+            accModel = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+        }
 
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching.considerTrafficLight()) {

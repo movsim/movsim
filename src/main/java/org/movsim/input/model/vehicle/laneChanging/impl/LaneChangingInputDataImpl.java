@@ -26,7 +26,7 @@ public class LaneChangingInputDataImpl implements LaneChangingInputData {
     public LaneChangingInputDataImpl(final Element elem) {
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         isWithEuropeanRules = Boolean.parseBoolean(map.get("eur_rules"));
-        critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur_kmh"))/3.6; // convert to SI
+        critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur")); 
 
         lcMobilData = new LaneChangingMobilModelDataImpl();
 	    

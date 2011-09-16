@@ -76,7 +76,11 @@ public interface AccelerationModel {
 
     double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
     
+    double calcAccEur(double vCritEur, Vehicle me, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0, double alphaA);
+    
     double calcAcc(final Vehicle me, final Vehicle vehFront);
+    
+    //double calcAccEur(final Vehicle me, final Vehicle vehFront, final Vehicle vehFrontLeft);
 
     double calcAccSimple(double s, double v, double dv);
 

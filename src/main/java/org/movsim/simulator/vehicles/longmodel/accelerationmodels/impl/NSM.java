@@ -221,4 +221,5 @@ public class NSM extends AccelerationModelAbstract implements AccelerationModel 
         this.v0 = (int)v0;
     }
 
+
 }

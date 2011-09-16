@@ -138,6 +138,10 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         return acc(s, v, dv, aLead, Tloc, v0Loc, aLoc);
 
     }
+
+    
+    
+  
     
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront){
@@ -320,9 +324,8 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         this.v0 = v0;
     }
 
-   
 
-  
+   
 
    
 

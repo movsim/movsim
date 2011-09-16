@@ -6,6 +6,7 @@ import java.util.List;
 import org.movsim.input.InputData;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Moveable;
@@ -155,17 +156,21 @@ public abstract class AbstractRoadSection {
      *            the time
      */
     public void accelerate(long iterationCount, double dt, double time) {
+        
         for (VehicleContainer vehContainerLane : vehContainers) {
+            final int leftLaneIndex = vehContainerLane.getLaneIndex()+Constants.TO_LEFT;
+            final VehicleContainer vehContainerLeftLane = ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
             final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-                final Vehicle veh = vehiclesOnLane.get(i);
+            //for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+            for(final Vehicle veh : vehiclesOnLane){
+                //final Vehicle veh = vehiclesOnLane.get(i);
                 final double x = veh.getPosition();
-                // TODO treat null case
+                // TODO treat null case 
                 final double alphaT = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                veh.calcAcceleration(dt, vehContainerLane, alphaT, alphaV0);
+                veh.calcAcceleration(dt, vehContainerLane, vehContainerLeftLane, alphaT, alphaV0);
             }
         }
     }
