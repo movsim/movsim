@@ -44,14 +44,6 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LaneChangingModelImpl.class);
 
-    private static final int MOST_RIGHT = Constants.MOST_RIGHT_LANE;
-
-    private static final int TO_LEFT = Constants.TO_LEFT;
-
-    private static final int TO_RIGHT = -Constants.TO_RIGHT;
-
-    private static final int NO_CHANGE = 0;
-
     // to avoid flips:
     public static double LANECHANGE_TDELAY_S = 3.0; // delay nach Spurwechsel
     public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay nach
@@ -61,17 +53,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     // crit. velocity where Europ rules kick in (in m/s):
     private final double vCritEur;
 
-    private int mandatoryChange = NO_CHANGE; // init
-
-    // double alpha_s = LANE_INVERSION_ALPHA;
-
-    // double lane = 0; // fractional values during lane changes
-
-    // int targetLane = 0;
-    //
-    // int startLane = 0;
-
-    // protected double tdelay = 0;
+    private int mandatoryChange = Constants.NO_CHANGE; // init
 
     private Vehicle me;
 
@@ -102,83 +84,16 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         return isInitialized;
     }
 
-    // public final int targetLane() {
-    // return (targetLane);
-    // }
-    //
-    // public final int startLane() {
-    // return startLane;
-    // }
-
-    // public boolean laneChanging() {
-    // return (laneChangeStatus() != NO_CHANGE);
-    // }
-    //
-    // public final int laneChangeStatus() {
-    // double dir = targetLane - startLane;
-    // if (dir > 0)
-    // return (TO_RIGHT);
-    // else
-    // if (dir < 0) return (TO_LEFT);
-    // return (NO_CHANGE);
-    // }
-
     @Override
     public boolean isMandatoryLaneChangeSafe(double dt, final VehicleContainer vehContainerTargetLane) {
-        // final boolean otherVehsChangeSufficientlyLongAgo = true;
-        final Vehicle frontMain = vehContainerTargetLane.getLeader(me); // works
-                                                                        // also
-                                                                        // for
-                                                                        // the
-                                                                        // "virtual"
-                                                                        // leader
-                                                                        // of me
-                                                                        // in
-                                                                        // considered
-                                                                        // lane
+        // works also for the "virtual" leader of me in considered lane
+        final Vehicle frontMain = vehContainerTargetLane.getLeader(me); 
+
         final Vehicle backMain = vehContainerTargetLane.getFollower(me);
 
         final boolean changeSafe = mandatoryWeavingChange(frontMain, backMain); // TODO
-        // if (otherVehsChangeSufficientlyLongAgo && changeSafe) {
-        // lane = startLane = MOST_RIGHT + TO_RIGHT; // count
-        // targetLane = MOST_RIGHT;
-        // resetDelay();
-        // // System.out.println("updateLaneChangeStatusOnRamp: safety OK:"
-        // // + " Starting lanechange ..." + " laneChangeStatus=" +
-        // laneChangeStatus()
-        // // + " targetLane=" + targetLane + " startLane=" + startLane);
-        // }
-        // }
-        // else {
-        // testLaneChangeFinish();
-        // }
         return changeSafe;
     }
-
-    // Flips unterbinden durch Karenzzeit LANECHANGE_TDELAY_S nach erfolgtem
-    // Spurwechsel
-    //
-    // private void resetDelay() {
-    // tdelay = 0;
-    // }
-    //
-    // protected boolean delayOK() {
-    // return (tdelay >= LANECHANGE_TDELAY_S);
-    // }
-    //
-    // // auch karenzzeit bezueglich Wecsel des Vorderfahrzeugs noetig ...
-    // public boolean delayFrontVehOK() {
-    // return (tdelay >= LANECHANGE_TDELAY_FRONT_S);
-    // }
-    //
-    // protected void updateDelay(double dt) {
-    // tdelay += dt;
-    // }
-
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    // Lane Change from OnRamp to Mainroad
-    // and from Mainroad to OffRamp
-    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
@@ -187,7 +102,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
         final double gapBack = (backVeh == null) ? Constants.GAP_INFINITY : backVeh.getNetDistance(me);
 
         // (i) first check distances
-        // negative netto distances possible because of different veh lengths!
+        // negative net distances possible because of different veh lengths!
         if (gapFront < lcModelMOBIL.getMinimumGap() || gapBack < lcModelMOBIL.getMinimumGap()) {
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
             return false;
@@ -247,7 +162,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
 
     public void setMandatoryChange(int incentive) {
-        if (incentive == NO_CHANGE || incentive == TO_RIGHT || incentive == TO_LEFT) {
+        if (incentive == Constants.NO_CHANGE || incentive == Constants.TO_RIGHT || incentive == Constants.TO_LEFT) {
             mandatoryChange = incentive;
             System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
         } else {
