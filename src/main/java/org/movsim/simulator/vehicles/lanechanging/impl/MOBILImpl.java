@@ -1,5 +1,7 @@
 package org.movsim.simulator.vehicles.lanechanging.impl;
 
+import java.util.List;
+
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -90,46 +92,63 @@ public class MOBILImpl {
         }
 
         // safety: check (MOBIL) safety constraint for new follower
-        final double newBackNewAcc = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
-       
+        final double newBackNewAccTest = (newBack == null) ? 0 : newBack.getAccelerationModel().calcAcc(newBack, me);
+        
+        //newLane.addTestwise(me);  // without calling init.
+        final VehicleContainer newSituationBackNew = newLane.getEnvironment(newBack);
+        newSituationBackNew.add(me);
+        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationBackNew, null, 1,1,1);
+        
         if( safetyCheckAcceleration(newBackNewAcc)){
             return prospectiveBalance;
         }
             
         // check now incentive criterion
+        // consider three vehicles: me, oldBack, newBack
 
-        // old situation
+        // old situation for me
         final double meOldAcc = me.calcAccModel(ownLane, null, 1, 1, 1); //, vehContainer, vehContainerLeftLane, alphaT, alphaV0)getAccelerationModel().calcAcc(me, oldFront);
-        //final double meOldAccTest = me.getAccelerationModel().calcAcc(me, oldFront);        
-//        if(Math.abs(meOldAccTest-meOldAcc)> 0.0001){
-//            System.err.printf("meOldAccTest=%.4f, meOldAcc=%.4f\n", meOldAccTest, meOldAcc);
-//        }
-//        
-        
-        // new situation
-        final double meNewAcc = me.getAccelerationModel().calcAcc(me, newFront);
-        
-        
-        
+        final double meOldAccTest = me.getAccelerationModel().calcAcc(me, oldFront);        
+        if(Math.abs(meOldAccTest-meOldAcc)> 0.0001){
+            System.err.printf("meOldAccTest=%.4f, meOldAcc=%.4f\n", meOldAccTest, meOldAcc);
+        }
+
+        // old situation for old back 
         final Vehicle oldBack = ownLane.getFollower(me);
 
-        // old situation
         final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, null, 1, 1, 1) : 0;
         final double oldBackOldAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, me) : 0;
         if(Math.abs(oldBackOldAccTest-oldBackOldAcc)> 0.0001){
           System.err.printf("oldBackAccTest=%.4f, oldBackAcc=%.4f\n", oldBackOldAccTest, oldBackOldAcc);
         }
         
-        // new situation
-        final double oldBackNewAcc = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, newFront) : 0;
-        
-        
-        // old situation
+        // old situation for new back
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, null, 1,1,1) : 0;
-        
         final double newBackOldAccTest = (newBack != null) ? newBack.getAccelerationModel().calcAcc(newBack, newFront) : 0;
         if(Math.abs(newBackOldAccTest-newBackOldAcc)> 0.0001){
             System.err.printf("newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
+          }
+       
+        
+        // new traffic situation: set subject virtually into new lane under consideration
+        final double meNewAccTest = me.getAccelerationModel().calcAcc(me, newFront);
+        final double oldBackNewAccTest = (oldBack != null) ? oldBack.getAccelerationModel().calcAcc(oldBack, newFront) : 0;
+        
+        final VehicleContainer newSituationMe = newLane.getEnvironment(newFront);
+        newSituationMe.addTestwise(me);
+        final double meNewAcc = me.calcAccModel(newSituationMe, null, 1, 1, 1);
+        
+        
+        final VehicleContainer newSituationOldBack = ownLane.getEnvironment(oldBack);
+        newSituationOldBack.removeVehicle(me);
+        final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null, 1, 1, 1) : 0;
+        
+
+        // compare
+        if( Math.abs(newBackNewAccTest-newBackNewAcc)> 0.0001
+         || Math.abs(oldBackNewAccTest-oldBackNewAcc)> 0.0001
+         || Math.abs(meNewAccTest-meNewAcc)> 0.0001 ){
+            System.err.printf("deviation in new acc!!!\n");// newBackOldAccTest=%.4f, newBackOldAcc=%.4f\n", newBackOldAccTest, newBackOldAcc);
           }
         
         
