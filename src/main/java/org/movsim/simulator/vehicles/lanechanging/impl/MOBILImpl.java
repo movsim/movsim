@@ -69,7 +69,7 @@ public class MOBILImpl {
     }
 
     
-    public double calcAccelerationBalanceInNewLane(final int direction, final List<VehicleContainer> lanes) {
+    public double calcAccelerationBalance(final int direction, final List<VehicleContainer> lanes) {
         
         final boolean DEBUG = false;
         
@@ -83,7 +83,6 @@ public class MOBILImpl {
         final Vehicle newFront = newLane.getLeader(me);
         final Vehicle oldFront = ownLane.getLeader(me);
         final Vehicle newBack = newLane.getFollower(me);
-        
         
         // check first if other vehicles are lane-changing
         if( neigborsInProcessOfLaneChanging(oldFront, newFront, newBack) ){

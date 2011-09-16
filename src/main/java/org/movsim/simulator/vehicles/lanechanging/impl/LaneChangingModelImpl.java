@@ -138,12 +138,12 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= Constants.MOST_RIGHT_LANE) {
-            accToRight = lcModelMOBIL.calcAccelerationBalanceInNewLane(Constants.TO_RIGHT, vehContainers);
+            accToRight = lcModelMOBIL.calcAccelerationBalance(Constants.TO_RIGHT, vehContainers);
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < vehContainers.size()) {
-            accToLeft = lcModelMOBIL.calcAccelerationBalanceInNewLane(Constants.TO_LEFT, vehContainers);
+            accToLeft = lcModelMOBIL.calcAccelerationBalance(Constants.TO_LEFT, vehContainers);
         }
 
         // decision
