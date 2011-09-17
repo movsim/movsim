@@ -132,7 +132,6 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types
-
         heterogeneityInputData = new ArrayList<HeterogeneityInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.RoadTrafficComposition);
         isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true

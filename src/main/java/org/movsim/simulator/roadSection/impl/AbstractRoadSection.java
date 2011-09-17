@@ -30,6 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.InputData;
+import org.movsim.input.impl.InputDataImpl;
+import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.simulator.Constants;
@@ -42,7 +44,6 @@ import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AbstractRoadSection.
  */
@@ -90,7 +91,7 @@ public abstract class AbstractRoadSection {
      * @param inputData the input data
      * @param vehGenerator the veh generator
      */
-    public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){
+    public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){ //TODO get rid of it
         this.vehGenerator = vehGenerator;
         final SimulationInput simInput = inputData.getSimulationInput();
         this.dt = simInput.getTimestep();
@@ -119,8 +120,6 @@ public abstract class AbstractRoadSection {
         init();
     }
     
-    
-    
     // offramp
     /**
      * Instantiates a new abstract road section.
@@ -136,16 +135,27 @@ public abstract class AbstractRoadSection {
         init();
     }
 
-    
-    
-    
+    /**
+     * @param inputData 
+     * @param roadinput
+     * @param vehGenerator2
+     */
+    public AbstractRoadSection(InputDataImpl inputData, RoadInput roadinput, VehicleGenerator vehGenerator) {
+        this.vehGenerator = vehGenerator;
+        this.dt = inputData.getSimulationInput().getTimestep();
+        this.roadLength = roadinput.getRoadLength();
+        this.nLanes = roadinput.getLanes();
+        this.id = roadinput.getId();
+        this.instantaneousFileOutput = false; // TODO instantfileouput
+        init();
+    }
+
     /**
      * Inits the.
      */
     private void init(){
         stagedVehicles = new LinkedList<Vehicle>();
     }
-    
     
     /*
      * (non-Javadoc)
@@ -222,9 +232,6 @@ public abstract class AbstractRoadSection {
     public VehicleContainer getVehContainer(int laneIndex) {
         return vehContainers.get(laneIndex);
     }
-
-    
-    
 
     /**
      * Accelerate.

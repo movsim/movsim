@@ -72,7 +72,6 @@ import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_V
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class VehicleGeneratorImpl.
  */

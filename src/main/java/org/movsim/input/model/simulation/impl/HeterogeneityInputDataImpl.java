@@ -54,7 +54,7 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
     public HeterogeneityInputDataImpl(Map<String, String> map) {
         this.keyName = map.get("label");
         this.fraction = Double.parseDouble(map.get("fraction"));
-        System.out.println("rand="+map.get("relative_v0_randomization"));
+        System.out.println("rand="+map.get("relative_v0_randomization")+ "     key:"+keyName);
         this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
     }
 

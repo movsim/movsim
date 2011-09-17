@@ -32,6 +32,7 @@ import java.util.List;
 import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
+import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
@@ -44,7 +45,6 @@ import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SimulatorImpl.
  */
@@ -53,19 +53,16 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);
 
-    /** The time. */
     private double time;
 
-    /** The iterationCount. */
     private long iterationCount;
 
-    /** The timestep. */
     private double timestep;
 
     /** The duration of the simulation. */
     private double tMax;
 
-    /** The road section. */
+    /** The road sections. */
     private List<RoadSection> roadSections;
 
     /** The sim output. */
@@ -74,12 +71,11 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The sim input. */
     private InputDataImpl inputData;
     
-    /** The veh generator. */
+    /** The vehicle generator. */
     private VehicleGenerator vehGenerator;
     
     private boolean isWithCrashExit;
 
-    
     private String projectName;
     
     /**
@@ -99,7 +95,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
         
         // parse xmlFile and set values
-        
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = simInput.getTimestep(); // can be modified by certain
@@ -108,27 +103,29 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
         
-        
         roadSections = new ArrayList<RoadSection>();
         vehGenerator = new VehicleGeneratorImpl(inputData);
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
-        reset(); // former name: restart
+        reset();
     }
 
    
     
     /**
-     * Restart.
+     * Reset.
      */
     @Override
     public void reset() {
         time = 0;
         iterationCount = 0;
         roadSections.clear();
-        roadSections.add(new RoadSectionImpl(inputData, vehGenerator));
+        System.out.println("roadsections: "+inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt Roadinput/RoadSection
+        for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput()) {
+            roadSections.add(new RoadSectionImpl(inputData, roadinput, vehGenerator));
+        }
         
-        // quick hack for pulling out onramps from mainroads
+        // TODO quick hack for pulling out onramps from mainroads
         final List<RoadSection> onramps = roadSections.get(0).rampFactory(inputData);
         for(RoadSection onramp : onramps){
             roadSections.add(onramp);
