@@ -33,7 +33,6 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.utilities.impl.Tables;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class InitialConditionsMacroImpl.
  */

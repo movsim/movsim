@@ -50,7 +50,7 @@ public class LaneChangingModelImpl implements LaneChangingModel {
 
     private final boolean withEuropeanRules;
 
-    // critical speed for kicking in European rules (in m/s)
+    /** critical speed for kicking in European rules (in m/s) */
     private final double vCritEur;
 
     private int mandatoryChange = Constants.NO_CHANGE;

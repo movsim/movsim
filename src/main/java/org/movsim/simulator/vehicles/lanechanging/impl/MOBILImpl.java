@@ -34,21 +34,24 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MOBILImpl.
  */
 public class MOBILImpl {
 
-    private double politeness; // politeness factor
-
-    private double threshold; // changing threshold
-
-    private double bSafe; // maximum safe braking decel
-
-    private double gapMin; // minimum safe (net) distance
-
-    private double biasRight; // bias (m/s^2) to drive
+    private double politeness;
+    
+    /** changing threshold */
+    private double threshold;
+    
+    /** maximum safe braking decel */
+    private double bSafe;
+    
+    /** minimum safe (net) distance */
+    private double gapMin;
+    
+    /** bias (m/s^2) to drive */
+    private double biasRight;
 
     private double thresholdRef;
 

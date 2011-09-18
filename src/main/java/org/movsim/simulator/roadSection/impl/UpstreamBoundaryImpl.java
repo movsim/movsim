@@ -67,15 +67,13 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
 
-    // logging
     /** The fstr logging. */
     private PrintWriter fstrLogging;
 
     /** The entering veh counter. */
     private int enteringVehCounter;
 
-    // status of last merging vehicle for logging to file
-    /** The x enter last. */
+    /** The x enter last. status of last merging vehicle for logging to file */
     private double xEnterLast;
 
     /** The v enter last. */

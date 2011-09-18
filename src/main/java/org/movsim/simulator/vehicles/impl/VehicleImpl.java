@@ -52,13 +52,15 @@ public class VehicleImpl implements Vehicle {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleImpl.class);
-
-    private final static double THRESHOLD_BRAKELIGHT_ON = 0.2; // in m/s^2
-
-    private final static double THRESHOLD_BRAKELIGHT_OFF = 0.1; // in m/s^2
-
-    private final static double FINITE_LANE_CHANGE_TIME_S = 5; // needs to be >
-                                                               // 0
+    
+    /** in m/s^2 */
+    private final static double THRESHOLD_BRAKELIGHT_ON = 0.2;
+    
+    /** in m/s^2 */
+    private final static double THRESHOLD_BRAKELIGHT_OFF = 0.1;
+    
+    /** needs to be > 0 */
+    private final static double FINITE_LANE_CHANGE_TIME_S = 5;
 
     /** The label. */
     private final String label;

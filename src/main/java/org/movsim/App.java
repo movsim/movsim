@@ -32,7 +32,6 @@ import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
 import org.movsim.ui.controller.impl.SimulatorController;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class App.
  */

@@ -8,7 +8,10 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl;
 import org.movsim.utilities.impl.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -17,6 +20,8 @@ import org.movsim.utilities.impl.FileUtils;
  * @author ralph
  */
 public class FileUpstreamBoundaryData {
+
+    final static Logger logger = LoggerFactory.getLogger(FileUpstreamBoundaryData.class);
 
     private static final String extensionFormat = ".S%d_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
@@ -32,7 +37,7 @@ public class FileUpstreamBoundaryData {
      */
     public FileUpstreamBoundaryData(String projectName) {
 
-        final int roadId = 1; // road id hard coded as 1 for the moment
+        final int roadId = 1; // TODO road id hard coded as 1 for the moment
         final String filename = projectName + String.format(extensionFormat, roadId);
         fstrLogging = FileUtils.getWriter(filename);
         fstrLogging.printf(outputHeading);

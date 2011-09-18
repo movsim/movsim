@@ -28,7 +28,6 @@ package org.movsim.simulator.vehicles.lanechanging;
 
 import org.movsim.simulator.vehicles.VehicleContainer;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface LaneChangingModel.
  */
