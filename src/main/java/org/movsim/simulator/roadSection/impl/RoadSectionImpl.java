@@ -106,7 +106,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(roadLength, laneIndex));
+            vehContainers.add(new VehicleContainerImpl(laneIndex));
         }
 
 
@@ -139,7 +139,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(roadLength, laneIndex));
+            vehContainers.add(new VehicleContainerImpl(laneIndex));
         }
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();

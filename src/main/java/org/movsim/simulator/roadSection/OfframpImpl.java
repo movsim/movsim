@@ -77,7 +77,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
-        vehContainers.add(new VehicleContainerImpl(roadLength, Constants.MOST_RIGHT_LANE));
+        vehContainers.add(new VehicleContainerImpl(Constants.MOST_RIGHT_LANE));
     }
     
     

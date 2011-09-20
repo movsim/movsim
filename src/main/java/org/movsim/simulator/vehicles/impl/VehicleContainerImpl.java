@@ -58,20 +58,17 @@ public class VehicleContainerImpl implements VehicleContainer {
     /** The veh counter. */
     private int vehCounter;
 
-    private final double roadLength;
-    
     private final int laneIndex;  // TODO laneInit not necessary anymore ?!
     
-    private BoundaryVehicleImpl boundaryVehicleDownstream = null;
-    private BoundaryVehicleImpl boundaryVehicleUpstream = null;
+    private Vehicle boundaryVehicleDownstream = null;
+    private Vehicle boundaryVehicleUpstream = null;
     
     /**
      * Instantiates a new vehicle container impl.
      *
      * @param laneIndex the lane index
      */
-    public VehicleContainerImpl(double roadLength, int laneIndex) {
-        this.roadLength = roadLength;
+    public VehicleContainerImpl(int laneIndex) {
         this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
         vehCounter = 0;
@@ -384,15 +381,15 @@ public class VehicleContainerImpl implements VehicleContainer {
     public void updateBoundaryVehicles(){
         
         if(vehicles.isEmpty()){
-            boundaryVehicleDownstream = new BoundaryVehicleImpl(roadLength+Constants.CRITICAL_GAP, Constants.MAX_VEHICLE_SPEED, laneIndex); 
-            boundaryVehicleUpstream =  new BoundaryVehicleImpl(-roadLength-Constants.CRITICAL_GAP, Constants.MAX_VEHICLE_SPEED, laneIndex);
+            boundaryVehicleDownstream =  null;
+            boundaryVehicleUpstream =  null;
         }
         else{
             final Vehicle vehDown = getMostDownstream();
-            boundaryVehicleDownstream = new BoundaryVehicleImpl(vehDown, laneIndex);
+            //boundaryVehicleDownstream;
         
             final Vehicle vehUp = getMostUpstream();
-            boundaryVehicleUpstream = new BoundaryVehicleImpl(vehUp, laneIndex);
+            //boundaryVehicleUpstream;
         }
     }
     

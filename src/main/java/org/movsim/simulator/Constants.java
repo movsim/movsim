@@ -93,7 +93,5 @@ public interface Constants {
 
     final double CRITICAL_GAP = 2;
 
-    final double DUMMY_ROADLENGTH = 100000;
-
 
 }
