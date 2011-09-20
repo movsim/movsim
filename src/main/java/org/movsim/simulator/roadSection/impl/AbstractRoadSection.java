@@ -66,6 +66,10 @@ public abstract class AbstractRoadSection {
     /** The id. */
     protected final long id;
     
+    protected final long fromId;
+    protected final long toId;
+    
+    
    // protected final boolean withCrashExit;
     
     protected final boolean instantaneousFileOutput;
@@ -93,17 +97,19 @@ public abstract class AbstractRoadSection {
      * @param inputData the input data
      * @param vehGenerator the veh generator
      */
-    public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){ //TODO get rid of it
-        this.vehGenerator = vehGenerator;
-        final SimulationInput simInput = inputData.getSimulationInput();
-        this.dt = simInput.getTimestep();
-       // this.withCrashExit = simInput.isWithCrashExit();
-        this.roadLength = simInput.getSingleRoadInput().getRoadLength();
-        this.nLanes = simInput.getSingleRoadInput().getLanes();
-        this.id = simInput.getSingleRoadInput().getId();
-        this.instantaneousFileOutput = inputData.getProjectMetaData().isInstantaneousFileOutput();
-        init();
-    }
+//    public AbstractRoadSection(final InputData inputData, final VehicleGenerator vehGenerator){ //TODO get rid of it
+//        this.vehGenerator = vehGenerator;
+//        final SimulationInput simInput = inputData.getSimulationInput();
+//        this.dt = simInput.getTimestep();
+//       // this.withCrashExit = simInput.isWithCrashExit();
+//        this.roadLength = simInput.getSingleRoadInput().getRoadLength();
+//        this.nLanes = simInput.getSingleRoadInput().getLanes();
+//        this.id = simInput.getSingleRoadInput().getId();
+//        this.fromId = simInput.getSingleRoadInput().getTrafficSourceData().getSourceId();
+//        this.toId = simInput.getSingleRoadInput().getTrafficSinkData().getSinkId();
+//        this.instantaneousFileOutput = inputData.getProjectMetaData().isInstantaneousFileOutput();
+//        init();
+//    }
 
     
     // onramp
@@ -115,6 +121,8 @@ public abstract class AbstractRoadSection {
      */
     public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
         // TODO also ramp can have an individual vehicle generator
+        this.fromId = rampData.getTrafficSourceData().getSourceId();
+        this.toId = rampData.getDownstreamData().getSinkId();
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -130,6 +138,8 @@ public abstract class AbstractRoadSection {
      * @param rampData the ramp data
      */
     public AbstractRoadSection(final RampData rampData){
+        this.fromId = rampData.getTrafficSourceData().getSourceId();
+        this.toId = rampData.getDownstreamData().getSinkId();
         this.vehGenerator = null;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -140,10 +150,10 @@ public abstract class AbstractRoadSection {
 
     /**
      * @param inputData 
-     * @param roadinput
+     * @param roadInput
      * @param vehGenerator2
      */
-    public AbstractRoadSection(InputDataImpl inputData, RoadInput roadinput, VehicleGenerator vehGenerator) {
+    public AbstractRoadSection(InputDataImpl inputData, RoadInput roadInput, VehicleGenerator vehGenerator) {
         // generate individual vehicle generator for specific road
         final List<TrafficCompositionInputData> heterogenInputData = inputData.getSimulationInput().getSingleRoadInput().getTrafficCompositionInputData();
         if(heterogenInputData.size()>0){
@@ -154,9 +164,11 @@ public abstract class AbstractRoadSection {
         }
         
         this.dt = inputData.getSimulationInput().getTimestep();
-        this.roadLength = roadinput.getRoadLength();
-        this.nLanes = roadinput.getLanes();
-        this.id = roadinput.getId();
+        this.roadLength = roadInput.getRoadLength();
+        this.nLanes = roadInput.getLanes();
+        this.id = roadInput.getId();
+        this.fromId = roadInput.getTrafficSourceData().getSourceId();
+        this.toId = roadInput.getTrafficSinkData().getSinkId();
         this.instantaneousFileOutput = false; // TODO instantfileouput
         init();
     }
@@ -382,5 +394,16 @@ public abstract class AbstractRoadSection {
             vehContainerLane.updateBoundaryVehicles();
         }
     }
+    
+    
+    public long getFromId() {
+        return fromId;
+    }
+    
+    
+    public long getToId() {
+        return toId;
+    }
+
     
 }

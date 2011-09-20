@@ -110,7 +110,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         }
 
 
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getUpstreamBoundaryData(),
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
                 inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
@@ -144,7 +144,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
 
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getUpstreamBoundaryData(),
+        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
                 inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
@@ -468,5 +468,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         // TODO Auto-generated method stub
         return 0;
     }
+
 
 }

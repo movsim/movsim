@@ -29,6 +29,7 @@ package org.movsim.input.model.simulation.impl;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 
 // TODO: Auto-generated Javadoc
@@ -53,6 +54,11 @@ public class RampDataImpl implements RampData {
     private final boolean withLogging;
     
     private final TrafficSourceData upstreamData;
+    
+    private final TrafficSinkData downstreamData;
+
+
+
 
     /**
      * Instantiates a new ramp data impl.
@@ -70,6 +76,9 @@ public class RampDataImpl implements RampData {
 
         final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
         upstreamData = new TrafficSourceDataImpl(upInflowElem);
+        
+        final Element downInflowElem = elem.getChild(XmlElementNames.RoadTrafficSink);
+        downstreamData = new TrafficSinkDataImpl(downInflowElem);
     }
 
     
@@ -116,7 +125,7 @@ public class RampDataImpl implements RampData {
      * @see org.movsim.input.model.simulation.RampData#getUpstreamBoundaryData()
      */
     @Override
-    public TrafficSourceData getUpstreamBoundaryData() {
+    public TrafficSourceData getTrafficSourceData() {
         return upstreamData;
     }
 
@@ -127,5 +136,11 @@ public class RampDataImpl implements RampData {
     public long getId() {
         return id;
     }
+
+    @Override
+    public TrafficSinkData getDownstreamData() {
+        return downstreamData;
+    }
+
 
 }

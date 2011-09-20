@@ -37,6 +37,7 @@ import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightsInput;
+import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 
 // TODO: Auto-generated Javadoc
@@ -99,7 +100,11 @@ public interface RoadInput {
      * 
      * @return the upstream boundary data
      */
-    TrafficSourceData getUpstreamBoundaryData();
+    TrafficSourceData getTrafficSourceData();
+    
+    
+    TrafficSinkData getTrafficSinkData();
+    
 
     /**
      * Gets the flow cons bottleneck input data.

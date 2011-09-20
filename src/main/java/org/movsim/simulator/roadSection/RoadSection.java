@@ -84,6 +84,10 @@ List<RoadSection> rampFactory(final InputData inputData);
      */
     void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time);
 
-    void updateBoundaryVehicles(long iterationCount, double time);    
+    void updateBoundaryVehicles(long iterationCount, double time);
+
+    long getFromId();
+
+    long getToId();    
 }
 

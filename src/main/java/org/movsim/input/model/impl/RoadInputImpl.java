@@ -348,8 +348,13 @@ public class RoadInputImpl implements RoadInput {
      * @see org.movsim.input.model.RoadInput#getUpstreamBoundaryData()
      */
     @Override
-    public TrafficSourceData getUpstreamBoundaryData() {
+    public TrafficSourceData getTrafficSourceData() {
         return trafficSourceData;
+    }
+    
+    @Override
+    public TrafficSinkData getTrafficSinkData() {
+        return trafficSinkData;
     }
 
     /*
@@ -443,5 +448,7 @@ public class RoadInputImpl implements RoadInput {
     public TrafficLightsInput getTrafficLightsInput() {
         return trafficLightsInput;
     }
+
+    
 
 }

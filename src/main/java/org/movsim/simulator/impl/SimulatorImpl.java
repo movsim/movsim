@@ -79,6 +79,9 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private String projectName;
     
+    private RoadNetwork roadNetwork;
+     
+    
     /**
      * Instantiates a new simulator impl.
      */
@@ -139,6 +142,16 @@ public class SimulatorImpl implements Simulator, Runnable {
         for(RoadSection onramp : onramps){
             roadSections.add(onramp);
         }
+        
+        
+        
+        roadNetwork = new RoadNetwork();
+        for (RoadSection roadSection : roadSections) {
+            roadNetwork.add(roadSection);
+        }
+        
+        
+        
         
         // TODO quick hack for connecting offramp with onramp
         final long idOfframp = -1;

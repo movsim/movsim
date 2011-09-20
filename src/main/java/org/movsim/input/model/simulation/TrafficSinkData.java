@@ -2,7 +2,7 @@ package org.movsim.input.model.simulation;
 
 public interface TrafficSinkData {
 
-    int getSourceId(); 
+    int getSinkId(); 
     
     boolean withLogging();
     

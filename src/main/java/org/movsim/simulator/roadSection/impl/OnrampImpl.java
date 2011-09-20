@@ -560,4 +560,16 @@ public class OnrampImpl implements RoadSection {
         
     }
 
+    @Override
+    public long getFromId() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public long getToId() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }
