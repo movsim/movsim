@@ -151,5 +151,6 @@ public interface VehicleContainer extends MoveableContainer {
     
     void updateBoundaryVehicles();
     
+    void setDownstreamConnection(VehicleContainer connectedLaneDownstream);    
 
 }

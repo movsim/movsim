@@ -131,6 +131,16 @@ public class SimulatorImpl implements Simulator, Runnable {
             roadSections.add(onramp);
         }
         
+        // TODO quick hack for connecting offramp with onramp
+        final long idOfframp = -1;
+        final long idOnramp = 1;
+        if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
+            final RoadSection onramp = findRoadById(idOnramp);
+            findRoadById(idOfframp).getVehContainer(Constants.MOST_RIGHT_LANE).setDownstreamConnection(
+                    onramp.getVehContainer(Constants.MOST_RIGHT_LANE));
+            logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
+        }
+        
         projectName = inputData.getProjectMetaData().getProjectName();
 
         // model requires specific update time depending on its category !!

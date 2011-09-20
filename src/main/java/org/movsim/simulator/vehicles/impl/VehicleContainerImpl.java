@@ -61,7 +61,8 @@ public class VehicleContainerImpl implements VehicleContainer {
     private final int laneIndex;  // TODO laneInit not necessary anymore ?!
     
     private Vehicle boundaryVehicleDownstream = null;
-    private Vehicle boundaryVehicleUpstream = null;
+    
+    private VehicleContainer connectedLaneDownstream;
     
     /**
      * Instantiates a new vehicle container impl.
@@ -72,6 +73,13 @@ public class VehicleContainerImpl implements VehicleContainer {
         this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
         vehCounter = 0;
+        connectedLaneDownstream = null; // no connection
+    }
+
+    
+    @Override
+    public void setDownstreamConnection(VehicleContainer connectedLaneDownstream){
+        this.connectedLaneDownstream = connectedLaneDownstream;
     }
 
     
@@ -215,10 +223,25 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public void removeVehiclesDownstream(double roadLength) {
         while (!vehicles.isEmpty() && getMostDownstream().getPosition() > roadLength) {
-            vehicles.get(0).removeObservers(); // delete references when leaving
-                                               // the simulation
-            vehicles.remove(0);
-            logger.debug(" remove veh ... size = {}", vehicles.size());
+
+            if (connectedLaneDownstream == null) {
+
+                vehicles.get(0).removeObservers(); // delete references when
+                                                   // leaving
+                                                   // the simulation
+                vehicles.remove(0);
+                logger.debug(" remove veh ... size = {}", vehicles.size());
+            } else {
+                final Vehicle vehicleToTransfer = getMostDownstream(); 
+                vehicles.remove(vehicleToTransfer);
+                final double xInit = vehicleToTransfer.getPosition()-roadLength;  
+                final double vInit = vehicleToTransfer.getSpeed();
+                
+                // TODO old position also reset!!!
+                connectedLaneDownstream.add(vehicleToTransfer, xInit, vInit);
+                
+                logger.debug(" shift veh to connected lane: newPosition={}", xInit);
+            }
         }
     }
 
@@ -253,15 +276,17 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getLeader(final Moveable veh) {
+        if( !vehicles.contains(veh) ){
+            // return virtual leader for vehicle veh which is not in considered lane
+            return findVirtualLeader(veh); 
+        }
+        
         final int index = vehicles.indexOf(veh);
         if ( index == 0 ){
             // no leader downstream 
             return boundaryVehicleDownstream;  // TODO    
         }
-        else if (index == -1 ){
-            // return virtual leader for vehicle veh which is not in considered lane
-            return findVirtualLeader(veh); 
-        }
+        
         return vehicles.get(index - 1);
     }
     
@@ -273,7 +298,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     public Vehicle getFollower(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
         if ( index == vehicles.size()-1 ){
-            return boundaryVehicleUpstream;  // TODO
+            return null; //boundaryVehicleUpstream;  // TODO
         }
         else if (index == -1){
             // veh is not contained in this lane
@@ -362,7 +387,7 @@ public class VehicleContainerImpl implements VehicleContainer {
                 return vehOnLane;
             }
         }
-        return boundaryVehicleUpstream;
+        return null; //boundaryVehicleUpstream; TODO
     }
   
     
@@ -379,17 +404,12 @@ public class VehicleContainerImpl implements VehicleContainer {
     
     @Override
     public void updateBoundaryVehicles(){
-        
-        if(vehicles.isEmpty()){
-            boundaryVehicleDownstream =  null;
-            boundaryVehicleUpstream =  null;
-        }
-        else{
-            final Vehicle vehDown = getMostDownstream();
-            //boundaryVehicleDownstream;
-        
-            final Vehicle vehUp = getMostUpstream();
-            //boundaryVehicleUpstream;
+        boundaryVehicleDownstream =  null;
+        if(connectedLaneDownstream!=null ){
+            final Vehicle vehDown = connectedLaneDownstream.getMostUpstream();
+            if( !vehDown.getLabel().equals(Constants.OBSTACLE_KEY_NAME) ){
+                boundaryVehicleDownstream = vehDown;
+            }
         }
     }
     
