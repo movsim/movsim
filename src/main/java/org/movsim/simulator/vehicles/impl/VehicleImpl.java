@@ -667,7 +667,7 @@ public class VehicleImpl implements Vehicle {
             setTargetLane(lane + laneChangingDirection);
             resetDelay();
             updateLaneChangingDelay(dt);
-            logger.info("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
+            logger.debug("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
             return true;
         }
 

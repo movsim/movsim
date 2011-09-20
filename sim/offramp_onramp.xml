@@ -74,8 +74,14 @@
                     <TRAFFIC_SOURCE id="0" />
                     <TRAFFIC_SINK id="1" />
                 </RAMP>
-
-               <RAMP id="1" x="3000" length="600" merge_length="400"
+        	<RAMP id="2" x="3000" length="600" merge_length="400"
+                    logging="false">
+                    <TRAFFIC_SOURCE logging="false"> 
+  		  <INFLOW t="0" q_per_hour="550" /> 
+                   </TRAFFIC_SOURCE>    
+                  <TRAFFIC_SINK id="0" />            
+                  </RAMP>
+               <RAMP id="1" x="4000" length="600" merge_length="400"
                     logging="false">
                     <TRAFFIC_SOURCE id="-1" />
                     <TRAFFIC_SINK id="0" />
