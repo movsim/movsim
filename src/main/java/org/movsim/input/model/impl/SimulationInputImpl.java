@@ -28,12 +28,16 @@ package org.movsim.input.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
+import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +63,13 @@ public class SimulationInputImpl implements SimulationInput {
 
     /** The random seed. */
     private final int randomSeed;
+    
+    
+    /** The heterogeneity input data. */
+    private List<TrafficCompositionInputData> trafficCompositionInputData;
+    
+    /** The is with write fundamental diagrams. */
+    private boolean isWithWriteFundamentalDiagrams;
 
     /** The road input. */
     ArrayList<RoadInput> roadInput;
@@ -88,6 +99,25 @@ public class SimulationInputImpl implements SimulationInput {
             withCrashExit = false;
         }
 
+        
+        // heterogeneity element with vehicle types
+        trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
+        final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
+        
+        // optional for specific road
+        if (heterogenElem != null) {
+            isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
+                    : false;
+            final List<Element> vehTypeElems = elem.getChild(XmlElementNames.TrafficComposition).getChildren(
+                    XmlElementNames.RoadVehicleType);
+            for (final Element vehTypeElem : vehTypeElems) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
+                trafficCompositionInputData.add(new TrafficCompositionDataImpl(map));
+            }
+        }
+        // -----------------------------------------------------------
+        
+        
         final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         roadInput = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
@@ -179,5 +209,27 @@ public class SimulationInputImpl implements SimulationInput {
     @Override
     public boolean isWithCrashExit() {
         return withCrashExit;
+    }
+    
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
+     */
+    @Override
+    public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
+        return trafficCompositionInputData;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.RoadInput#isWithWriteFundamentalDiagrams()
+     */
+    @Override
+    public boolean isWithWriteFundamentalDiagrams() {
+        return isWithWriteFundamentalDiagrams;
     }
 }

@@ -34,6 +34,7 @@ import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
@@ -41,6 +42,7 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,6 +114,7 @@ public abstract class AbstractRoadSection {
      * @param vehGenerator the veh generator
      */
     public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
+        // TODO also ramp can have an individual vehicle generator
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -141,7 +144,15 @@ public abstract class AbstractRoadSection {
      * @param vehGenerator2
      */
     public AbstractRoadSection(InputDataImpl inputData, RoadInput roadinput, VehicleGenerator vehGenerator) {
-        this.vehGenerator = vehGenerator;
+        // generate individual vehicle generator for specific road
+        final List<TrafficCompositionInputData> heterogenInputData = inputData.getSimulationInput().getSingleRoadInput().getTrafficCompositionInputData();
+        if(heterogenInputData.size()>0){
+            this.vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
+        }
+        else{
+            this.vehGenerator = vehGenerator;
+        }
+        
         this.dt = inputData.getSimulationInput().getTimestep();
         this.roadLength = roadinput.getRoadLength();
         this.nLanes = roadinput.getLanes();

@@ -29,10 +29,10 @@ public interface XmlElementNames {
     
     
     public final String Simulation = "SIMULATION";
+    public final String TrafficComposition = "TRAFFIC_COMPOSITION";
     public final String Road = "ROAD";
     public final String RoadTrafficLight = "TRAFFIC_LIGHT";
     public final String RoadTrafficLights = "TRAFFIC_LIGHTS";
-    public final String RoadTrafficComposition = "TRAFFIC_COMPOSITION";
     public final String RoadVehicleType = "VEHICLE_TYPE";
     public final String RoadInitialConditions = "INITIAL_CONDITIONS";
     public final String RoadInitialConditionsIcMicro = "IC_MICRO";

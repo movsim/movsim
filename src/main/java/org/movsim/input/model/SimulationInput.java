@@ -27,6 +27,9 @@
 package org.movsim.input.model;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -68,6 +71,22 @@ public interface SimulationInput {
      * @return the random seed
      */
     int getRandomSeed();
+    
+    
+    /**
+     * Checks if is with write fundamental diagrams.
+     * 
+     * @return true, if is with write fundamental diagrams
+     */
+    boolean isWithWriteFundamentalDiagrams();
+
+    /**
+     * Gets the heterogeneity input data.
+     * 
+     * @return the heterogeneity input data
+     */
+    List<TrafficCompositionInputData> getTrafficCompositionInputData();
+
 
     /**
      * Gets the road input.

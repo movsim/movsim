@@ -108,15 +108,17 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(final InputData simInput) {
+    public VehicleGeneratorImpl(final InputData simInput, final List<TrafficCompositionInputData> heterogenInputData) {
 
+        
+        // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road 
         this.projectName = simInput.getProjectMetaData().getProjectName();
         this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         // create vehicle prototyps according to traffic composition
         // (heterogeneity)
         prototypes = new HashMap<String, VehiclePrototype>();
-        final double sumFraction = createPrototypes(simInput);
+        final double sumFraction = createPrototypes(simInput, heterogenInputData);
 
         // normalize heterogeneity fractions
         normalizeFractions(sumFraction);
@@ -139,16 +141,13 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      *            the sim input
      * @return the double
      */
-    private double createPrototypes(final InputData simInput) {
+    private double createPrototypes(final InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
 
         // default for continuous micro models
         requiredTimestep = simInput.getSimulationInput().getTimestep();
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
 
-        final List<TrafficCompositionInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput()
-                .getTrafficCompositionInputData();
-        
         
         addObstacleSystemVehicleType(heterogenInputData);
         

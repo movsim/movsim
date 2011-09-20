@@ -34,6 +34,7 @@ import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
@@ -104,7 +105,15 @@ public class SimulatorImpl implements Simulator, Runnable {
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
         
         roadSections = new ArrayList<RoadSection>();
-        vehGenerator = new VehicleGeneratorImpl(inputData);
+        
+        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
+                
+//                simInput.getSimulationInput().getSingleRoadInput()
+//                .getTrafficCompositionInputData();
+        
+        // this is the default vehGenerator for *all* roadsections
+        // if an individual vehicle composition is defined for a specific road
+        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
         reset();

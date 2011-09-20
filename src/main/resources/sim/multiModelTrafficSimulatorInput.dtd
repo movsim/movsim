@@ -177,21 +177,13 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (ROAD*, OUTPUT)>
+<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION*, ROAD*, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration         NMTOKEN #REQUIRED
   fixed_seed       (true|false) "true" 
   seed             NMTOKEN "42"
   crash_exit       (true|false) "true"
-> 
-
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
-
-<!ATTLIST ROAD
-  id               NMTOKEN #REQUIRED
-  length           NMTOKEN #REQUIRED
-  lanes            NMTOKEN "1"
 > 
 
 
@@ -206,6 +198,16 @@ fluct_strength   NMTOKEN #REQUIRED
   fraction  NMTOKEN  #REQUIRED
   relative_v0_randomization NMTOKEN "0.0"
 >
+
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
+
+<!ATTLIST ROAD
+  id               NMTOKEN #REQUIRED
+  length           NMTOKEN #REQUIRED
+  lanes            NMTOKEN "1"
+> 
+
+
 
 <!-- initial conditions (IC) -->
 
