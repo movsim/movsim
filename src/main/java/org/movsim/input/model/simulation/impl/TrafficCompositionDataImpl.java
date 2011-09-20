@@ -28,13 +28,13 @@ package org.movsim.input.model.simulation.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.simulation.HeterogeneityInputData;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class HeterogeneityInputDataImpl.
  */
-public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
+public class TrafficCompositionDataImpl implements TrafficCompositionInputData {
 
     /** The key name. */
     private final String keyName;
@@ -51,7 +51,7 @@ public class HeterogeneityInputDataImpl implements HeterogeneityInputData {
      * @param map
      *            the map
      */
-    public HeterogeneityInputDataImpl(Map<String, String> map) {
+    public TrafficCompositionDataImpl(Map<String, String> map) {
         this.keyName = map.get("label");
         this.fraction = Double.parseDouble(map.get("fraction"));
         System.out.println("rand="+map.get("relative_v0_randomization")+ "     key:"+keyName);

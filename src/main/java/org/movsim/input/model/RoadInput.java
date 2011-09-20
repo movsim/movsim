@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
-import org.movsim.input.model.simulation.HeterogeneityInputData;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
@@ -78,7 +78,7 @@ public interface RoadInput {
      * 
      * @return the heterogeneity input data
      */
-    List<HeterogeneityInputData> getHeterogeneityInputData();
+    List<TrafficCompositionInputData> getTrafficCompositionInputData();
 
     /**
      * Gets the ic macro data.

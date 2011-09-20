@@ -30,7 +30,7 @@ package org.movsim.input.model.simulation;
 /**
  * The Interface HeterogeneityInputData.
  */
-public interface HeterogeneityInputData {
+public interface TrafficCompositionInputData {
 
     /**
      * Gets the key name.

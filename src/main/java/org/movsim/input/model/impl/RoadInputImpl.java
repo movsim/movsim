@@ -38,7 +38,7 @@ import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
-import org.movsim.input.model.simulation.HeterogeneityInputData;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.RampData;
@@ -48,7 +48,7 @@ import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.UpstreamBoundaryData;
 import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 import org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl;
-import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
+import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.movsim.input.model.simulation.impl.ICMacroDataImpl;
 import org.movsim.input.model.simulation.impl.ICMicroDataImpl;
 import org.movsim.input.model.simulation.impl.RampDataImpl;
@@ -78,7 +78,7 @@ public class RoadInputImpl implements RoadInput {
     private boolean isWithWriteFundamentalDiagrams;
 
     /** The heterogeneity input data. */
-    private List<HeterogeneityInputData> heterogeneityInputData;
+    private List<TrafficCompositionInputData> trafficCompositionInputData;
 
     /** The ic macro data. */
     private List<ICMacroData> icMacroData;
@@ -132,7 +132,7 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types
-        heterogeneityInputData = new ArrayList<HeterogeneityInputData>();
+        trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.RoadTrafficComposition);
         isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
                 : false;
@@ -140,7 +140,7 @@ public class RoadInputImpl implements RoadInput {
                 XmlElementNames.RoadVehicleType);
         for (final Element vehTypeElem : vehTypeElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
-            heterogeneityInputData.add(new HeterogeneityInputDataImpl(map));
+            trafficCompositionInputData.add(new TrafficCompositionDataImpl(map));
         }
 
         // -----------------------------------------------------------
@@ -312,8 +312,8 @@ public class RoadInputImpl implements RoadInput {
      * org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
      */
     @Override
-    public List<HeterogeneityInputData> getHeterogeneityInputData() {
-        return heterogeneityInputData;
+    public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
+        return trafficCompositionInputData;
     }
 
     /*

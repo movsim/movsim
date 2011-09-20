@@ -33,8 +33,8 @@ import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.VehicleInput;
-import org.movsim.input.model.simulation.HeterogeneityInputData;
-import org.movsim.input.model.simulation.impl.HeterogeneityInputDataImpl;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
@@ -146,14 +146,14 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
 
-        final List<HeterogeneityInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput()
-                .getHeterogeneityInputData();
+        final List<TrafficCompositionInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput()
+                .getTrafficCompositionInputData();
         
         
         addObstacleSystemVehicleType(heterogenInputData);
         
         double sumFraction = 0;
-        for (final HeterogeneityInputData heterogen : heterogenInputData) {
+        for (final TrafficCompositionInputData heterogen : heterogenInputData) {
             final String keyName = heterogen.getKeyName();
             logger.debug("key name={}", keyName);
             if (!vehInputMap.containsKey(keyName)) {
@@ -201,9 +201,9 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      *
      * @param heterogenInputData the heterogen input data
      */
-    private void addObstacleSystemVehicleType(List<HeterogeneityInputData> heterogenInputData) {
+    private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
         boolean obstacleEntryIsContained = false;
-        for (HeterogeneityInputData het : heterogenInputData) {
+        for (TrafficCompositionInputData het : heterogenInputData) {
             if (het.getKeyName().equals(Constants.OBSTACLE_KEY_NAME)) {
                 obstacleEntryIsContained = true;
             }
@@ -218,7 +218,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
             mapEntryObstacle.put("fraction", "0");
             mapEntryObstacle.put("relative_v0_randomization", "0");
-            heterogenInputData.add(new HeterogeneityInputDataImpl(mapEntryObstacle));
+            heterogenInputData.add(new TrafficCompositionDataImpl(mapEntryObstacle));
         } 
     }
     
