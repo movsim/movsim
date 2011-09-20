@@ -143,17 +143,14 @@ public class SimulatorImpl implements Simulator, Runnable {
             roadSections.add(onramp);
         }
         
-        
-        
-        roadNetwork = new RoadNetwork();
         for (RoadSection roadSection : roadSections) {
-            roadNetwork.add(roadSection);
+            roadNetwork.getInstance().add(roadSection);
         }
         
-        
-        
+        logger.info(roadNetwork.getInstance().toString());
         
         // TODO quick hack for connecting offramp with onramp
+        // more general concept here !!!
         final long idOfframp = -1;
         final long idOnramp = 1;
         if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {

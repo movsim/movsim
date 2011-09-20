@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.impl.RoadNetwork;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Noise;
@@ -425,12 +426,13 @@ public class VehicleImpl implements Vehicle {
             return Constants.GAP_INFINITY;
         }
         // hack testwise
-        final double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
-        if(vehFront.getRoadId()==1 && roadId==-1){
-            logger.info("net distance with respect to leader from new roadId. addRoadlength={}", 1800); // TODO
-            return netGap+1800;
+        double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
+        if(vehFront.getRoadId() != roadId){
+            final double roadLength = RoadNetwork.getInstance().getRoadLength(roadId);
+            logger.info("net distance with respect to leader from new roadId. addRoadlength={}",roadLength);
+            netGap += roadLength;
         }            
-        return (vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength()));
+        return netGap;
     }
 
     /*

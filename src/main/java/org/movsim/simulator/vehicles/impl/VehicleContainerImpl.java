@@ -90,8 +90,6 @@ public class VehicleContainerImpl implements VehicleContainer {
     }
     
     
-
-    
     @Override
     public void setDownstreamConnection(VehicleContainer connectedLaneDownstream){
         this.connectedLaneDownstream = connectedLaneDownstream;
