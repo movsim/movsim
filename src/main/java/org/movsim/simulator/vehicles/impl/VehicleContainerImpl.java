@@ -32,6 +32,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -64,17 +65,31 @@ public class VehicleContainerImpl implements VehicleContainer {
     
     private VehicleContainer connectedLaneDownstream;
     
+    private long roadID;
+    
+    
     /**
      * Instantiates a new vehicle container impl.
      *
      * @param laneIndex the lane index
      */
-    public VehicleContainerImpl(int laneIndex) {
+    public VehicleContainerImpl(long roadID, int laneIndex) {
+        this.roadID = roadID;
         this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
         vehCounter = 0;
         connectedLaneDownstream = null; // no connection
     }
+    
+    public VehicleContainerImpl(int laneIndex) {
+        this.roadID = MyRandom.nextInt();
+        this.laneIndex = laneIndex;
+        vehicles = new ArrayList<Vehicle>();
+        vehCounter = 0;
+        connectedLaneDownstream = null; // no connection
+    }
+    
+    
 
     
     @Override
@@ -131,8 +146,9 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getMostDownstream() {
-        if (vehicles.isEmpty())
+        if (vehicles.isEmpty()){
             return null;
+        }
         return vehicles.get(0);
     }
 
@@ -144,8 +160,9 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getMostUpstream() {
-        if (vehicles.isEmpty())
+        if (vehicles.isEmpty()){
             return null;
+        }
         return vehicles.get(vehicles.size() - 1);
     }
     
@@ -194,7 +211,7 @@ public class VehicleContainerImpl implements VehicleContainer {
         if (!isTestwise) {
             vehCounter++;
             veh.setVehNumber(vehCounter);
-            veh.init(xInit, vInit, laneInit); // sets new lane index after lane
+            veh.init(xInit, vInit, laneInit, roadID); // sets new lane index after lane
                                               // change
         }
         

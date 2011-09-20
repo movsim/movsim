@@ -106,7 +106,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(laneIndex));
+            vehContainers.add(new VehicleContainerImpl(id, laneIndex));
         }
 
 
@@ -139,7 +139,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(laneIndex));
+            vehContainers.add(new VehicleContainerImpl(id, laneIndex));
         }
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
@@ -281,7 +281,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         // TODO extract as parameter to xml configuration
         // TODO treat each offramp separately for correct book-keeping
-        final double fractionToOfframp = 0.1;
+        final double fractionToOfframp = 0.5;
 
         for (final RoadSection rmp : ramps) {
             // TODO quick hack -> identify offramp by class name

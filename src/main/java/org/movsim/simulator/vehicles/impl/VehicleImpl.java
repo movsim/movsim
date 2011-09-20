@@ -92,7 +92,7 @@ public class VehicleImpl implements Vehicle {
     private final double maxDecel;
 
     /** The id. */
-    private final int id;
+    int id;
 
     /** The vehicle number. */
     private int vehNumber;
@@ -132,6 +132,9 @@ public class VehicleImpl implements Vehicle {
     private boolean isBrakeLightOn;
 
     private PhysicalQuantities physQuantities;
+    
+    
+    private long roadId;
 
     /**
      * Instantiates a new vehicle impl.
@@ -152,6 +155,7 @@ public class VehicleImpl implements Vehicle {
         reactionTime = vehInput.getReactionTime();
         maxDecel = vehInput.getMaxDeceleration();
 
+        initialize();
         // longitudinal ("car-following") model
         this.accelerationModel = longModel;
         physQuantities = new PhysicalQuantities(this);
@@ -160,18 +164,9 @@ public class VehicleImpl implements Vehicle {
         this.lcModel = lcModel;
         lcModel.initialize(this);
 
-        // transDynamicsModel = new TransveralDynamicsImpl(this); // TODO
-
         this.cyclicBuffer = cyclicBuffer;
 
-        positionOld = 0;
-        position = 0;
-        speed = 0;
-        acc = 0;
-        isBrakeLightOn = false;
-
-        speedlimit = Constants.MAX_VEHICLE_SPEED;
-
+        
         // no effect if model is not configured with memory effect
         if (vehInput.isWithMemory()) {
             memory = new MemoryImpl(vehInput.getMemoryInputData());
@@ -188,6 +183,17 @@ public class VehicleImpl implements Vehicle {
         assert FINITE_LANE_CHANGE_TIME_S > 0;
 
     }
+    
+    private void initialize(){
+        positionOld = 0;
+        position = 0;
+        speed = 0;
+        acc = 0;
+        isBrakeLightOn = false;
+
+        speedlimit = Constants.MAX_VEHICLE_SPEED;
+    }
+    
 
     /*
      * (non-Javadoc)
@@ -198,8 +204,9 @@ public class VehicleImpl implements Vehicle {
     // central book-keeping of lanes (lane and laneOld)
 
     @Override
-    public void init(double pos, double v, int lane) {
+    public void init(double pos, double v, int lane, long roadId) {
         this.laneOld = this.lane; // remember previous lane
+        this.roadId = roadId;
         this.position = pos;
         this.positionOld = pos;
         this.speed = v;
@@ -366,6 +373,12 @@ public class VehicleImpl implements Vehicle {
     public int getId() {
         return id;
     }
+    
+    
+    @Override
+    public long getRoadId(){
+        return roadId;
+    }
 
     /*
      * (non-Javadoc)
@@ -411,6 +424,12 @@ public class VehicleImpl implements Vehicle {
         if (vehFront == null) {
             return Constants.GAP_INFINITY;
         }
+        // hack testwise
+        final double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
+        if(vehFront.getRoadId()==1 && roadId==-1){
+            logger.info("net distance with respect to leader from new roadId. addRoadlength={}", 1800); // TODO
+            return netGap+1800;
+        }            
         return (vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength()));
     }
 

@@ -170,5 +170,6 @@ public interface Moveable {
      * @return the physical quantities
      */
     PhysicalQuantities physicalQuantities();
-    
+
+    long getRoadId();
 }

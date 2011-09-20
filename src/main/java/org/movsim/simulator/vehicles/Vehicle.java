@@ -64,7 +64,7 @@ public interface Vehicle extends Moveable {
      * @param lane
      *            the lane
      */
-    void init(double pos, double v, int lane);
+    void init(double pos, double v, int lane, long roadId);
 
     /**
      * Update postion and speed.
@@ -156,4 +156,6 @@ public interface Vehicle extends Moveable {
     
     // for lane-changing decision
     double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane);
+    
+    
 }
