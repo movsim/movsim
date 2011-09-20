@@ -224,6 +224,10 @@ public class SimulatorImpl implements Simulator, Runnable {
             roadSection.updateRoadConditions(iterationCount, time);
         }
 
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateBoundaryVehicles(iterationCount, time);
+        }
+
         
         // lane changes and merges from onramps/ to offramps
         for (RoadSection roadSection : roadSections) {

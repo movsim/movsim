@@ -363,4 +363,13 @@ public abstract class AbstractRoadSection {
             }
         }
     }
+    
+    
+    
+    public void updateBoundaryVehicles(long iterationCount, double time){
+        for (final VehicleContainer vehContainerLane : vehContainers) {
+            vehContainerLane.updateBoundaryVehicles();
+        }
+    }
+    
 }

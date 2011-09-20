@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -57,15 +58,20 @@ public class VehicleContainerImpl implements VehicleContainer {
     /** The veh counter. */
     private int vehCounter;
 
+    private final double roadLength;
     
     private final int laneIndex;  // TODO laneInit not necessary anymore ?!
+    
+    private BoundaryVehicleImpl boundaryVehicleDownstream = null;
+    private BoundaryVehicleImpl boundaryVehicleUpstream = null;
     
     /**
      * Instantiates a new vehicle container impl.
      *
      * @param laneIndex the lane index
      */
-    public VehicleContainerImpl(int laneIndex) {
+    public VehicleContainerImpl(double roadLength, int laneIndex) {
+        this.roadLength = roadLength;
         this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
         vehCounter = 0;
@@ -251,12 +257,12 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public Vehicle getLeader(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
-        if ( index == 0){
-            // no leader downstream
-            return null;    
+        if ( index == 0 ){
+            // no leader downstream 
+            return boundaryVehicleDownstream;  // TODO    
         }
         else if (index == -1 ){
-            // return virtual leader for vehicle veh which is not not considered lane
+            // return virtual leader for vehicle veh which is not in considered lane
             return findVirtualLeader(veh); 
         }
         return vehicles.get(index - 1);
@@ -270,7 +276,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     public Vehicle getFollower(final Moveable veh) {
         final int index = vehicles.indexOf(veh);
         if ( index == vehicles.size()-1 ){
-            return null;
+            return boundaryVehicleUpstream;  // TODO
         }
         else if (index == -1){
             // veh is not contained in this lane
@@ -296,29 +302,29 @@ public class VehicleContainerImpl implements VehicleContainer {
         });
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveables()
-     */
-    @Override
-    public List<Moveable> getMoveables() {
-        List<Moveable> moveables = new ArrayList<Moveable>();
-        for (final Vehicle veh : vehicles) {
-            moveables.add(veh);
-        }
-        return moveables;
-    }
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveables()
+//     */
+//    @Override
+//    public List<Moveable> getMoveables() {
+//        List<Moveable> moveables = new ArrayList<Moveable>();
+//        for (final Vehicle veh : vehicles) {
+//            moveables.add(veh);
+//        }
+//        return moveables;
+//    }
 
     /*
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveable(int)
      */
-    @Override
-    public Moveable getMoveable(int index) {
-        return vehicles.get(index);
-    }
+//    @Override
+//    public Moveable getMoveable(int index) {
+//        return vehicles.get(index);
+//    }
 
     
     /**
@@ -338,7 +344,8 @@ public class VehicleContainerImpl implements VehicleContainer {
                 return vehOnLane;
             }
         }
-        return null;
+        // TODO new boundary vehicle creation if no leader exists
+        return boundaryVehicleDownstream;
     }
 
     /**
@@ -358,7 +365,7 @@ public class VehicleContainerImpl implements VehicleContainer {
                 return vehOnLane;
             }
         }
-        return null;
+        return boundaryVehicleUpstream;
     }
   
     
@@ -368,6 +375,24 @@ public class VehicleContainerImpl implements VehicleContainer {
     public void addTestwise(final Vehicle veh){
         if(veh!=null){
             add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, true);
+        }
+    }
+    
+    
+    
+    @Override
+    public void updateBoundaryVehicles(){
+        
+        if(vehicles.isEmpty()){
+            boundaryVehicleDownstream = new BoundaryVehicleImpl(roadLength+Constants.CRITICAL_GAP, Constants.MAX_VEHICLE_SPEED, laneIndex); 
+            boundaryVehicleUpstream =  new BoundaryVehicleImpl(-roadLength-Constants.CRITICAL_GAP, Constants.MAX_VEHICLE_SPEED, laneIndex);
+        }
+        else{
+            final Vehicle vehDown = getMostDownstream();
+            boundaryVehicleDownstream = new BoundaryVehicleImpl(vehDown, laneIndex);
+        
+            final Vehicle vehUp = getMostUpstream();
+            boundaryVehicleUpstream = new BoundaryVehicleImpl(vehUp, laneIndex);
         }
     }
     

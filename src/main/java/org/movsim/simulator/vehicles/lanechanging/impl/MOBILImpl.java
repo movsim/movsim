@@ -139,7 +139,7 @@ public class MOBILImpl {
         // TO_LEFT --> just the actual situation
         // TO_RIGHT --> consideration of left-lane (with me's leader) has no
         // effect
-        final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
+        final VehicleContainer newSituationNewBack = new VehicleContainerImpl(Constants.DUMMY_ROADLENGTH, 0);
         newSituationNewBack.addTestwise(newBack);
         newSituationNewBack.addTestwise(me);
         final VehicleContainer leftLaneNewBack = (direction == Constants.TO_RIGHT || currentLane + direction
@@ -173,7 +173,7 @@ public class MOBILImpl {
         // new traffic situation: set subject virtually into new lane under
         // consideration
 
-        final VehicleContainer newSituationMe = new VehicleContainerImpl(0);
+        final VehicleContainer newSituationMe = new VehicleContainerImpl(Constants.DUMMY_ROADLENGTH, 0);
         newSituationMe.addTestwise(me);
         newSituationMe.addTestwise(newFront);
 
@@ -184,13 +184,13 @@ public class MOBILImpl {
         if (direction == Constants.TO_LEFT) {
             leftLaneNewMe = leftLaneNewBack;
         } else {
-            leftLaneNewMe = new VehicleContainerImpl(0);
+            leftLaneNewMe = new VehicleContainerImpl(Constants.DUMMY_ROADLENGTH, 0);
             leftLaneNewMe.addTestwise(oldFront);
         }
 
         final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNewBack);
 
-        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0);
+        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(Constants.DUMMY_ROADLENGTH, 0);
         newSituationOldBack.addTestwise(oldFront);
         newSituationOldBack.addTestwise(oldBack);
 
@@ -200,7 +200,7 @@ public class MOBILImpl {
         // lane
         final VehicleContainer leftLaneNewSituationOldBack;
         if (direction == Constants.TO_LEFT) {
-            leftLaneNewSituationOldBack = new VehicleContainerImpl(0);
+            leftLaneNewSituationOldBack = new VehicleContainerImpl(Constants.DUMMY_ROADLENGTH, 0);
             leftLaneNewSituationOldBack.addTestwise(me);
         } else {
             leftLaneNewSituationOldBack = leftLaneMeOld;

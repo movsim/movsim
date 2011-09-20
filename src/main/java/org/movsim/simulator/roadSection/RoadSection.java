@@ -82,6 +82,8 @@ List<RoadSection> rampFactory(final InputData inputData);
      * @param dt the dt
      * @param time the time
      */
-    void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time);    
+    void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time);
+
+    void updateBoundaryVehicles(long iterationCount, double time);    
 }
 

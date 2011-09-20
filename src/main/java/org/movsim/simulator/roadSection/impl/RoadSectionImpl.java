@@ -106,7 +106,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(laneIndex));
+            vehContainers.add(new VehicleContainerImpl(roadLength, laneIndex));
         }
 
 
@@ -139,7 +139,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         vehContainers = new ArrayList<VehicleContainer>();
         for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(laneIndex));
+            vehContainers.add(new VehicleContainerImpl(roadLength, laneIndex));
         }
 
         final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
@@ -284,7 +284,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         final double fractionToOfframp = 0.1;
 
         for (final RoadSection rmp : ramps) {
-            // quick hack
+            // TODO quick hack -> identify offramp by class name
             if (rmp instanceof OfframpImpl) {
                 stagedVehicles.clear();
                 final VehicleContainer vehContainerRightLane = vehContainers.get(Constants.MOST_RIGHT_LANE);
@@ -296,7 +296,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     // TODO quick hack: no planning horizon for merging to
                     // off-ramp
                     // allow merging only in first half !!!
-                    final double mergingZone = 0.4;
+                    final double mergingZone = 0.5;
                     if (pos > rmp.getRampPositionToMainroad()
                             && pos < rmp.getRampPositionToMainroad() + mergingZone * rmp.getRampMergingLength()) {
                         // logger.debug("in merging to offramp: veh pos={}",
@@ -312,7 +312,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                         final double fractionOfLeavingVehicles = upstreamBoundary.getEnteringVehCounter() == 0 ? 0
                                 : countVehiclesToOfframp / (double) upstreamBoundary.getEnteringVehCounter();
                         final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframp;
-                        logger.debug("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles,
+                        logger.info("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles,
                                 upstreamBoundary.getEnteringVehCounter());
                         if (isSafeChange && isDesired) {
                             stagedVehicles.add(veh);

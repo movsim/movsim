@@ -162,7 +162,7 @@ public abstract class AccelerationModelAbstract implements Observer {
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
         final double newV0 = getDesiredSpeedParameterV0() * (1 + relRandomizationFactor * equalRandom);
-        logger.info("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeedParameterV0(), newV0);
+        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeedParameterV0(), newV0);
         setDesiredSpeedV0(newV0);
     }   
 

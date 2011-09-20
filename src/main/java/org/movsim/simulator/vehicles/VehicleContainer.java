@@ -40,6 +40,13 @@ public interface VehicleContainer extends MoveableContainer {
      * @return the lane index
      */
     int getLaneIndex();
+    
+    /**
+     * Size.
+     * 
+     * @return the int
+     */
+    int size();
 
     /**
      * Gets the vehicles.
@@ -48,13 +55,6 @@ public interface VehicleContainer extends MoveableContainer {
      */
     List<Vehicle> getVehicles();
 
-    /**
-     * Size.
-     * 
-     * @return the int
-     */
-    @Override
-    int size();
 
     /**
      * Gets the.
@@ -147,6 +147,9 @@ public interface VehicleContainer extends MoveableContainer {
     void addFromToRamp(Vehicle veh, double xInit, double vInit, int oldLane);
     
     void addTestwise(final Vehicle veh);
+    
+    
+    void updateBoundaryVehicles();
     
 
 }

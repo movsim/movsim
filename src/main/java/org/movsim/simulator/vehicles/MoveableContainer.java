@@ -11,28 +11,22 @@ import java.util.List;
  */
 public interface MoveableContainer {
 
-    /**
-     * Gets the moveables.
-     * 
-     * @return the moveables
-     */
-    List<Moveable> getMoveables();
+//    /**
+//     * Gets the moveables.
+//     * 
+//     * @return the moveables
+//     */
+//    List<Moveable> getMoveables();
 
-    /**
-     * Gets the moveable.
-     * 
-     * @param index
-     *            the index
-     * @return the moveable
-     */
-    Moveable getMoveable(int index);
+//    /**
+//     * Gets the moveable.
+//     * 
+//     * @param index
+//     *            the index
+//     * @return the moveable
+//     */
+//    Moveable getMoveable(int index);
 
-    /**
-     * Size.
-     * 
-     * @return the int
-     */
-    int size();
 
     /**
      * Gets the leader.

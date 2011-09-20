@@ -554,4 +554,10 @@ public class OnrampImpl implements RoadSection {
         
     }
 
+    @Override
+    public void updateBoundaryVehicles(long iterationCount, double time) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
