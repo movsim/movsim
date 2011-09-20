@@ -33,21 +33,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.InflowDataPoint;
-import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.TrafficSourceData;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class UpstreamBoundaryDataImpl.
  */
-public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
+public class TrafficSourceDataImpl implements TrafficSourceData {
 
     /** The inflow time series. */
     private List<InflowDataPoint> inflowTimeSeries;
 
     /** The with logging. */
     private final boolean withLogging;
+    
+    
+    
+
+    private final int sourceId;
 
     /**
      * Instantiates a new upstream boundary data impl.
@@ -56,16 +62,17 @@ public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
      *            the elem
      */
     @SuppressWarnings("unchecked")
-    public UpstreamBoundaryDataImpl(Element elem) {
+    public TrafficSourceDataImpl(Element elem) {
         inflowTimeSeries = new ArrayList<InflowDataPoint>();
-        if (elem == null) {
-            withLogging = false;
-        } else {
-            withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+//        if (elem == null) {
+//            withLogging = false;
+//        } else {
+        sourceId = Integer.parseInt(elem.getAttributeValue("id"));
+        withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
-            final List<Element> upInflowElems = elem.getChildren("INFLOW");
-            parseAndSortInflowElements(upInflowElems);
-        }
+        final List<Element> upInflowElems = elem.getChildren(XmlElementNames.RoadInflow);
+        parseAndSortInflowElements(upInflowElems);
+//        }
     }
 
     /**
@@ -109,5 +116,10 @@ public class UpstreamBoundaryDataImpl implements UpstreamBoundaryData {
     @Override
     public boolean withLogging() {
         return withLogging;
+    }
+    
+    @Override
+    public int getSourceId() {
+        return sourceId;
     }
 }

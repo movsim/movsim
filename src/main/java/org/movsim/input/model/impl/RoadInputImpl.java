@@ -45,7 +45,8 @@ import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficLightsInput;
-import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.TrafficSinkData;
+import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 import org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl;
 import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
@@ -55,7 +56,8 @@ import org.movsim.input.model.simulation.impl.RampDataImpl;
 import org.movsim.input.model.simulation.impl.SimpleRampDataImpl;
 import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
 import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
-import org.movsim.input.model.simulation.impl.UpstreamBoundaryDataImpl;
+import org.movsim.input.model.simulation.impl.TrafficSinkDataImpl;
+import org.movsim.input.model.simulation.impl.TrafficSourceDataImpl;
 
 // TODO: Auto-generated Javadoc
 // TODO: extract element names into XmlElementNames Interface to make them symbolic.
@@ -87,7 +89,9 @@ public class RoadInputImpl implements RoadInput {
     private List<ICMicroData> icMicroData;
 
     /** The upstream boundary data. */
-    private UpstreamBoundaryData upstreamBoundaryData;
+    private TrafficSourceData trafficSourceData;
+    
+    private TrafficSinkData trafficSinkData;
 
     /** The flow cons bottleneck input data. */
     private List<FlowConservingBottleneckDataPoint> flowConsBottleneckInputData;
@@ -134,7 +138,6 @@ public class RoadInputImpl implements RoadInput {
         // heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
-        
         // optional for specific road
         if (heterogenElem != null) {
             isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
@@ -190,14 +193,14 @@ public class RoadInputImpl implements RoadInput {
         // -----------------------------------------------------------
 
         // TRAFFIC_SOURCE
-        final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
-        upstreamBoundaryData = new UpstreamBoundaryDataImpl(upInflowElem);
+        final Element roadSourceElem = elem.getChild(XmlElementNames.RoadTrafficSource);
+        trafficSourceData = new TrafficSourceDataImpl(roadSourceElem);
 
         // -----------------------------------------------------------
 
         // TRAFFIC_SINK
-        final Element downInflowElem = elem.getChild(XmlElementNames.RoadTrafficSink);
-        // nothing to do (not yet implementend)
+        final Element roadSinkElem = elem.getChild(XmlElementNames.RoadTrafficSink);
+        trafficSinkData = new TrafficSinkDataImpl(roadSinkElem);
 
         // -----------------------------------------------------------
 
@@ -345,8 +348,8 @@ public class RoadInputImpl implements RoadInput {
      * @see org.movsim.input.model.RoadInput#getUpstreamBoundaryData()
      */
     @Override
-    public UpstreamBoundaryData getUpstreamBoundaryData() {
-        return upstreamBoundaryData;
+    public TrafficSourceData getUpstreamBoundaryData() {
+        return trafficSourceData;
     }
 
     /*

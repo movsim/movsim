@@ -32,8 +32,10 @@ import java.util.List;
 /**
  * The Interface UpstreamBoundaryData.
  */
-public interface UpstreamBoundaryData {
+public interface TrafficSourceData {
 
+    int getSourceId(); 
+    
     /**
      * With logging.
      * 

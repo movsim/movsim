@@ -52,7 +52,7 @@ long getId();
      *
      * @return the upstream boundary data
      */
-    UpstreamBoundaryData getUpstreamBoundaryData();
+    TrafficSourceData getUpstreamBoundaryData();
 
     /**
      * Gets the center position.

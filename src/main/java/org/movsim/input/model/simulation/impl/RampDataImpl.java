@@ -29,7 +29,7 @@ package org.movsim.input.model.simulation.impl;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.simulation.RampData;
-import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.TrafficSourceData;
 
 // TODO: Auto-generated Javadoc
 // TODO: concept of real onramp with lane changes not yet implemented
@@ -52,7 +52,7 @@ public class RampDataImpl implements RampData {
     /** The with logging. */
     private final boolean withLogging;
     
-    private final UpstreamBoundaryData upstreamData;
+    private final TrafficSourceData upstreamData;
 
     /**
      * Instantiates a new ramp data impl.
@@ -69,7 +69,7 @@ public class RampDataImpl implements RampData {
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final Element upInflowElem = elem.getChild(XmlElementNames.RoadTrafficSource);
-        upstreamData = new UpstreamBoundaryDataImpl(upInflowElem);
+        upstreamData = new TrafficSourceDataImpl(upInflowElem);
     }
 
     
@@ -116,7 +116,7 @@ public class RampDataImpl implements RampData {
      * @see org.movsim.input.model.simulation.RampData#getUpstreamBoundaryData()
      */
     @Override
-    public UpstreamBoundaryData getUpstreamBoundaryData() {
+    public TrafficSourceData getUpstreamBoundaryData() {
         return upstreamData;
     }
 

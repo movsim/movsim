@@ -29,7 +29,7 @@ package org.movsim.simulator.roadSection.impl;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.movsim.input.model.simulation.UpstreamBoundaryData;
+import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
@@ -91,7 +91,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param projectName the project name
      */
     public UpstreamBoundaryImpl(VehicleGenerator vehGenerator, List<VehicleContainer> vehContainers,
-            UpstreamBoundaryData upstreamBoundaryData, String projectName) {
+            TrafficSourceData upstreamBoundaryData, String projectName) {
         this.vehGenerator = vehGenerator;
         this.vehContainers = vehContainers;
         nWait = 0;

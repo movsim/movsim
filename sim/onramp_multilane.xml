@@ -79,6 +79,7 @@
                     <TRAFFIC_SOURCE logging="false">
                         <INFLOW t="0" q_per_hour="500" />
                     </TRAFFIC_SOURCE>
+                   <TRAFFIC_SINK id="0" />
                 </RAMP>
             </RAMPS>
             <TRAFFIC_LIGHTS>
