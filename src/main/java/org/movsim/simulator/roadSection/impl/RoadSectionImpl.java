@@ -281,7 +281,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         // TODO extract as parameter to xml configuration
         // TODO treat each offramp separately for correct book-keeping
-        final double fractionToOfframp = 0.3;
+        final double fractionToOfframp = 0.1;
 
         for (final RoadSection rmp : ramps) {
             // TODO quick hack -> identify offramp by class name
