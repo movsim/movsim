@@ -281,7 +281,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         // TODO extract as parameter to xml configuration
         // TODO treat each offramp separately for correct book-keeping
-        final double fractionToOfframp = 0.5;
+        final double fractionToOfframp = 0.3;
 
         for (final RoadSection rmp : ramps) {
             // TODO quick hack -> identify offramp by class name
@@ -297,7 +297,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     // off-ramp
                     // allow merging only in first half !!!
                     final double mergingZone = 0.5;
-                    if (pos > rmp.getRampPositionToMainroad()
+                    if (veh.getLane()==Constants.MOST_RIGHT_LANE 
+                            && !veh.inProcessOfLaneChanging() 
+                            && pos > rmp.getRampPositionToMainroad()
                             && pos < rmp.getRampPositionToMainroad() + mergingZone * rmp.getRampMergingLength()) {
                         // logger.debug("in merging to offramp: veh pos={}",
                         // veh.getPosition());
@@ -312,7 +314,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                         final double fractionOfLeavingVehicles = upstreamBoundary.getEnteringVehCounter() == 0 ? 0
                                 : countVehiclesToOfframp / (double) upstreamBoundary.getEnteringVehCounter();
                         final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframp;
-                        logger.info("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles,
+                        logger.debug("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles,
                                 upstreamBoundary.getEnteringVehCounter());
                         if (isSafeChange && isDesired) {
                             stagedVehicles.add(veh);

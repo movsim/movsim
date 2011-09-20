@@ -41,6 +41,7 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
+import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
@@ -143,11 +144,25 @@ public class SimulatorImpl implements Simulator, Runnable {
             roadSections.add(onramp);
         }
         
+        
+        final RoadNetwork roadNetwork = RoadNetwork.getInstance();
         for (RoadSection roadSection : roadSections) {
-            roadNetwork.getInstance().add(roadSection);
+            roadNetwork.add(roadSection);
         }
         
-        logger.info(roadNetwork.getInstance().toString());
+        logger.info(roadNetwork.toString());
+        
+//        for (RoadSection roadSection : roadSections) {
+//            final long toId = roadSection.getToId();
+//            final RoadSection roadSectionDown = findRoadById(toId);
+//            if( roadSectionDown !=null ){
+//                final List<VehicleContainer> lanes = roadSection.getVehContainers();
+//                for(int laneIndex=0, N=lanes.size(); laneIndex<N; laneIndex++){
+//                    lanes.get(laneIndex).setDownstreamConnection(roadSectionDown.getVehContainers().get(laneIndex));
+//                }
+//            }
+//        }
+        
         
         // TODO quick hack for connecting offramp with onramp
         // more general concept here !!!
@@ -159,9 +174,11 @@ public class SimulatorImpl implements Simulator, Runnable {
                     onramp.getVehContainer(Constants.MOST_RIGHT_LANE));
             logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
         }
+
         
         projectName = inputData.getProjectMetaData().getProjectName();
 
+        
         // model requires specific update time depending on its category !!
 
         // TODO: check functionality
@@ -244,11 +261,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         
         final double dt = this.timestep;   // TODO
         
-        // check for crashes
-        for (RoadSection roadSection : roadSections) {
-            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-        }
-
+      
         for (RoadSection roadSection : roadSections) {
             roadSection.updateRoadConditions(iterationCount, time);
         }
@@ -256,6 +269,12 @@ public class SimulatorImpl implements Simulator, Runnable {
         for (RoadSection roadSection : roadSections) {
             roadSection.updateBoundaryVehicles(iterationCount, time);
         }
+        
+        // check for crashes
+        for (RoadSection roadSection : roadSections) {
+            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
+        }
+
 
         
         // lane changes and merges from onramps/ to offramps

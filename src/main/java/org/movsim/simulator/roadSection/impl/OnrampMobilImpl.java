@@ -186,7 +186,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
         stagedVehicles.clear();
 
-        assert vehContainers.size() == 1;
+        assert vehContainers.size() == 1;  // onramp with only one lane
         final VehicleContainer vehContainer = vehContainers.get(0);
 
         // TODO consider redesign here? better book-keeping outside vehicle container?

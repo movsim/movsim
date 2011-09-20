@@ -101,16 +101,22 @@ public class LaneChangingModelImpl implements LaneChangingModel {
     @Override
     public boolean isMandatoryLaneChangeSafe(final VehicleContainer vehContainerTargetLane) {
         // works also for the "virtual" leader of me in considered lane
-        final Vehicle frontMain = vehContainerTargetLane.getLeader(me);
+        final Vehicle front = vehContainerTargetLane.getLeader(me);
 
-        final Vehicle backMain = vehContainerTargetLane.getFollower(me);
+        final Vehicle back = vehContainerTargetLane.getFollower(me);
 
-        final boolean changeSafe = mandatoryWeavingChange(frontMain, backMain); // TODO
+        final boolean changeSafe = mandatoryWeavingChange(front, back); // TODO
         return changeSafe;
     }
 
     private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
+//        final boolean isLaneChangingFront = (frontVeh==null) ? false : frontVeh.inProcessOfLaneChanging();
+//        final boolean isLaneChangingBack = (backVeh==null) ? false : backVeh.inProcessOfLaneChanging();
+//        if(isLaneChangingBack || isLaneChangingFront){
+//            return false;
+//        }
+        
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);
         final double gapBack = (backVeh == null) ? Constants.GAP_INFINITY : backVeh.getNetDistance(me);

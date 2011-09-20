@@ -422,14 +422,25 @@ public class VehicleImpl implements Vehicle {
      */
     @Override
     public double getNetDistance(final Moveable vehFront) {
+        
+        final RoadNetwork roadNetwork = RoadNetwork.getInstance();
+        final boolean isRingroad = roadNetwork.isPeriodBoundary(roadId);
+        final double roadLength = roadNetwork.getRoadLength(roadId); 
+        
         if (vehFront == null) {
+            if(isRingroad){
+                return (roadLength - length); 
+            }
             return Constants.GAP_INFINITY;
         }
-        // hack testwise
+        
+        // TODO general concept for treating offsets needed here
+        // so far use hard-coded solution
         double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
-        if(vehFront.getRoadId() != roadId){
-            final double roadLength = RoadNetwork.getInstance().getRoadLength(roadId);
-            logger.info("net distance with respect to leader from new roadId. addRoadlength={}",roadLength);
+        final long idOfframp=-1;
+        final long idOnramp=1;
+        if( /*roadId  != vehFront.getRoadId()*/ roadId==idOfframp && vehFront.getRoadId()==idOnramp || ( isRingroad && netGap <= -0.5 * (length + vehFront.getLength()) )){
+            logger.debug("net distance with respect to leader from new roadId. addRoadlength={}", roadLength);
             netGap += roadLength;
         }            
         return netGap;
