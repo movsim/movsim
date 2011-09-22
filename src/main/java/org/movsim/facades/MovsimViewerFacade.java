@@ -47,6 +47,8 @@ public class MovsimViewerFacade {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MovsimViewerFacade.class);
 
+    private static MovsimViewerFacade instance = null;
+    
     /**
      * Inits the localization and logger.
      */
@@ -63,8 +65,10 @@ public class MovsimViewerFacade {
 
     /**
      * Instantiates a new movsim viewer facade.
+     * Singleton pattern
      */
-    public MovsimViewerFacade() {
+    
+    private MovsimViewerFacade() {
 
         model = new SimulatorImpl();
 
@@ -80,6 +84,13 @@ public class MovsimViewerFacade {
 
     }
 
+    
+    public static MovsimViewerFacade getInstance(){
+        if(instance == null){
+            instance = new MovsimViewerFacade();
+        }
+        return instance;
+    }
     /*
      * (non-Javadoc)
      * 

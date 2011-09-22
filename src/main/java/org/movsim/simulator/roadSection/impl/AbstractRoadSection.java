@@ -405,5 +405,8 @@ public abstract class AbstractRoadSection {
         return toId;
     }
 
+    public UpstreamBoundary getUpstreamBoundary(){
+        return upstreamBoundary;
+    }
     
 }

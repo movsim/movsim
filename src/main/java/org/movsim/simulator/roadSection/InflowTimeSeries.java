@@ -49,5 +49,8 @@ public interface InflowTimeSeries {
      * @return the speed
      */
     double getSpeed(double time);
-
+    
+    
+    void setConstantFlowPerLane(double newFlowPerLane);
+    
 }

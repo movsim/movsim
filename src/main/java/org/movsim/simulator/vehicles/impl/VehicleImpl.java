@@ -681,9 +681,11 @@ public class VehicleImpl implements Vehicle {
         resetDelay();
         final double delayInit = 0.2; // needs only to be > 0;
         updateLaneChangingDelay(delayInit);
-        logger.info("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
+        logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
         if (oldLane == Constants.TO_LEFT) {
-            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane,
+//            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane,
+//                    getContinousLane());
+            logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane,
                     getContinousLane());
         }
     }

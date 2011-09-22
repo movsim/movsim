@@ -37,6 +37,7 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -570,6 +571,12 @@ public class OnrampImpl implements RoadSection {
     public long getToId() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public UpstreamBoundary getUpstreamBoundary() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

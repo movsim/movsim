@@ -88,6 +88,9 @@ List<RoadSection> rampFactory(final InputData inputData);
 
     long getFromId();
 
-    long getToId();    
+    long getToId();
+    
+    UpstreamBoundary getUpstreamBoundary();
+    
 }
 

@@ -47,5 +47,10 @@ public interface UpstreamBoundary {
      * @return the entering veh counter
      */
     int getEnteringVehCounter();
+    
+    
+    void setFlowPerLane(double newInflowValue);
+    
+    double getFlowPerLane(double time);
 
 }

@@ -286,4 +286,16 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         vEnterLast = vEnter;
         laneEnterLast = vehContainer.getLaneIndex();
     }
+
+    @Override
+    public void setFlowPerLane(double newFlowPerLane) {
+        logger.info("set new flow per lane={} per second and reset queue of waiting vehicles={}", newFlowPerLane,nWait);
+        inflowTimeSeries.setConstantFlowPerLane(newFlowPerLane);
+        nWait = 0;
+    }
+
+    @Override
+    public double getFlowPerLane(double time) {
+        return inflowTimeSeries.getFlowPerLane(time);
+    }
 }
