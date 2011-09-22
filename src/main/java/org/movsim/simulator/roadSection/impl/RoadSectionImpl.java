@@ -123,40 +123,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         initialConditions(inputData.getSimulationInput(), roadInput);
     }
 
-    /**
-     * Initialize.
-     * 
-     * @param inputData
-     *            the input data
-     */
-    private void initialize(InputData inputData) { //TODO delete
-
-        countVehiclesToOfframp = 0;
-
-        vehContainers = new ArrayList<VehicleContainer>();
-        for (int laneIndex = 0; laneIndex < nLanes; laneIndex++) {
-            vehContainers.add(new VehicleContainerImpl(id, laneIndex));
-        }
-
-        final RoadInput roadInput = inputData.getSimulationInput().getSingleRoadInput();
-
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
-                inputData.getProjectMetaData().getProjectName());
-
-        flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
-        speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
-
-        trafficLights = new TrafficLightsImpl(inputData.getProjectMetaData().getProjectName(),
-                roadInput.getTrafficLightsInput());
-
-        final DetectorInput detInput = roadInput.getDetectorInput();
-        if (detInput.isWithDetectors()) {
-            detectors = new LoopDetectors(inputData.getProjectMetaData().getProjectName(), detInput);
-        }
-
-//        initialConditions(inputData.getSimulationInput());
-
-    }
+   
 
     /**
      * Initial conditions.
@@ -266,8 +233,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         }
     }
 
-    
-   
     /*
      * (non-Javadoc)
      * 
@@ -291,7 +256,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     // TODO quick hack: no planning horizon for merging to
                     // off-ramp
                     // allow merging only in first half !!!
-                    final double mergingZone = 1.0;
+                    final double mergingZone = 0.7;
                     if (veh.getLane()==Constants.MOST_RIGHT_LANE 
                             && !veh.inProcessOfLaneChanging() 
                             && pos > rmp.getRampPositionToMainroad()
@@ -316,6 +281,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                                 countVehiclesToOfframp++;
                             }
                         }
+                    }
+                    if(stagedVehicles.size()>0){
+                        break; // allow only one vehicle to leave to offramp per update step
                     }
                 }
                 // assign staged vehicles to offrmp
