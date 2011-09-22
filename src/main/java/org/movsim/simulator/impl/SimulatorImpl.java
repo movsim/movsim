@@ -41,7 +41,6 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
@@ -55,6 +54,9 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);
 
+    // singleton pattern
+    private static SimulatorImpl instance = null; 
+    
     private double time;
 
     private long iterationCount;
@@ -86,10 +88,17 @@ public class SimulatorImpl implements Simulator, Runnable {
     /**
      * Instantiates a new simulator impl.
      */
-    public SimulatorImpl() {
+    private SimulatorImpl() {
         inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
     }
 
+    public static SimulatorImpl getInstance(){
+        if(instance == null){
+            instance = new SimulatorImpl();
+        }
+        return instance;
+    }
+    
     /*
      * (non-Javadoc)
      * 

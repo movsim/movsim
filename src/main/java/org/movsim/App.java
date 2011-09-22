@@ -49,7 +49,7 @@ public class App {
         // Results are set in ProjectMetaDataImpl
         final SimCommandLine cmdline = new SimCommandLine(args);
 
-        final Simulator simulator = new SimulatorImpl();
+        final Simulator simulator = SimulatorImpl.getInstance();
 
         final Controller controller = new SimulatorController(simulator);
     }
