@@ -42,13 +42,15 @@ public class TrafficLightsImpl implements TrafficLights {
      * @param trafficLightsInput
      *            the traffic lights input
      */
+    
+    
     public TrafficLightsImpl(String projectName, TrafficLightsInput trafficLightsInput) {
 
         initTrafficLights(trafficLightsInput);
 
         nDt = trafficLightsInput.getnDtSample();
 
-        if (trafficLightsInput.isWithLogging()) {
+        if (projectName!=null && trafficLightsInput.isWithLogging()) {
             fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, nDt, trafficLights);
         }
 

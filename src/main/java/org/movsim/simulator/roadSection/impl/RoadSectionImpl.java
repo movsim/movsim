@@ -43,7 +43,6 @@ import org.movsim.output.impl.LoopDetectors;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
-import org.movsim.simulator.roadSection.OfframpImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
@@ -52,7 +51,6 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
-import org.omg.CORBA.FREE_MEM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,10 +63,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(RoadSectionImpl.class);
 
-    private TrafficLightsImpl trafficLights;
-
-    /** The speedlimits. */
-    private SpeedLimits speedlimits;
+   
 
     /** The detectors. */
     private LoopDetectors detectors = null;
@@ -344,7 +339,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     private double calcFractionOfLeavingVehicles(){
         double vehiclesFromUpstream = upstreamBoundary.getEnteringVehCounter()-offsetVehicleUpstreamCounter; 
         final double frac = ( vehiclesFromUpstream == 0 ) ? 0 : countVehiclesToOfframp / vehiclesFromUpstream;
-        logger.info("fraction of leaving vehicles={}, upstreamCounter={}", frac, vehiclesFromUpstream);
+        logger.debug("fraction of leaving vehicles={}, upstreamCounter={}", frac, vehiclesFromUpstream);
         return frac;
     }
 
@@ -358,49 +353,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
     
 
-    // traffic lights haben eigene Phasen-Dynamik !
-    /**
-     * Update road conditions.
-     * 
-     * @param iterationCount
-     *            the iteration count
-     * @param time
-     *            the time
-     */
-    public void updateRoadConditions(long iterationCount, double time) {
 
-        trafficLights.update(iterationCount, time, vehContainers);
-
-        updateSpeedLimits(vehContainers);
-    }
-
-    /**
-     * Update speed limits.
-     * 
-     * @param vehContainers
-     *            the veh containers
-     */
-    private void updateSpeedLimits(List<VehicleContainer> vehContainers) {
-        if (!speedlimits.isEmpty()) {
-            for (final VehicleContainer vehContainerLane : vehContainers) {
-                for (final Vehicle veh : vehContainerLane.getVehicles()) {
-                    final double pos = veh.getPosition();
-                    veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
-                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimits.calcSpeedLimit(pos));
-                }
-            }
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
-     */
-    @Override
-    public List<TrafficLight> getTrafficLights() {
-        return trafficLights.getTrafficLights();
-    }
+  
 
     /*
      * (non-Javadoc)

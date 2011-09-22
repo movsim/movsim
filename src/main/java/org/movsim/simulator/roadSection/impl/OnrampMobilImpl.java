@@ -268,14 +268,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // TODO Auto-generated method stub
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
-     */
-    @Override
-    public List<TrafficLight> getTrafficLights() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+  
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()

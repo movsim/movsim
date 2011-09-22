@@ -26,9 +26,18 @@
  */
 package org.movsim.input.model.simulation.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
+import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.simulation.SpeedLimitDataPoint;
+import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 
@@ -57,8 +66,9 @@ public class RampDataImpl implements RampData {
     
     private final TrafficSinkData downstreamData;
 
-
-
+    private TrafficLightsInput trafficLightsInput;
+    
+    private List<SpeedLimitDataPoint> speedLimitInputData;
 
     /**
      * Instantiates a new ramp data impl.
@@ -79,6 +89,33 @@ public class RampDataImpl implements RampData {
         
         final Element downInflowElem = elem.getChild(XmlElementNames.RoadTrafficSink);
         downstreamData = new TrafficSinkDataImpl(downInflowElem);
+        
+        // Trafficlights
+
+        final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
+        trafficLightsInput = new TrafficLightsInputImpl(trafficLightsElement);
+        
+        
+        
+        // speed limits
+        speedLimitInputData = new ArrayList<SpeedLimitDataPoint>();
+        final Element speedLimitsElement = elem.getChild(XmlElementNames.RoadSpeedLimits);
+        if (speedLimitsElement != null) {
+            final List<Element> speedLimitElems = speedLimitsElement.getChildren(XmlElementNames.RoadSpeedLimit);
+            for (final Element speedLimitElem : speedLimitElems) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(speedLimitElem);
+                speedLimitInputData.add(new SpeedLimitDataPointImpl(map));
+            }
+
+            Collections.sort(speedLimitInputData, new Comparator<SpeedLimitDataPoint>() {
+                @Override
+                public int compare(SpeedLimitDataPoint o1, SpeedLimitDataPoint o2) {
+                    final Double pos1 = new Double((o1).getPosition());
+                    final Double pos2 = new Double((o2).getPosition());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+        }
     }
 
     
@@ -140,6 +177,18 @@ public class RampDataImpl implements RampData {
     @Override
     public TrafficSinkData getDownstreamData() {
         return downstreamData;
+    }
+
+
+    @Override
+    public TrafficLightsInput getTrafficLightsInput() {
+        return trafficLightsInput;
+    }
+
+
+    @Override
+    public List<SpeedLimitDataPoint> getSpeedLimitInputData() {
+        return speedLimitInputData;
     }
 
 

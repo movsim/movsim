@@ -26,10 +26,12 @@
  */
 package org.movsim.simulator.roadSection.impl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.simulator.Constants;
+import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.utilities.impl.Tables;
 
@@ -46,6 +48,9 @@ public class SpeedLimitsImpl implements SpeedLimits {
 
     /** The speed values. */
     private double[] speedValues;
+    
+   
+    private List<SpeedLimit> speedLimits;
 
     /**
      * Instantiates a new speed limits impl.
@@ -54,6 +59,7 @@ public class SpeedLimitsImpl implements SpeedLimits {
      *            the speed limit input data points
      */
     public SpeedLimitsImpl(List<SpeedLimitDataPoint> speedLimitInputDataPoints) {
+        speedLimits = new LinkedList<SpeedLimit>();
         generateSpaceSeriesData(speedLimitInputDataPoints);
     }
 
@@ -71,8 +77,11 @@ public class SpeedLimitsImpl implements SpeedLimits {
         posValues[0] = 0;
         speedValues[0] = Constants.MAX_VEHICLE_SPEED;
         for (int i = 1; i < size; i++) {
-            posValues[i] = data.get(i - 1).getPosition();
-            speedValues[i] = data.get(i - 1).getSpeedlimit();
+            final double pos = data.get(i - 1).getPosition();
+            posValues[i] = pos;
+            final double speed = data.get(i - 1).getSpeedlimit();
+            speedValues[i] = speed; 
+            speedLimits.add(new SpeedLimitImpl(pos, speed));
         }
     }
 
@@ -95,6 +104,11 @@ public class SpeedLimitsImpl implements SpeedLimits {
     public double calcSpeedLimit(double x) {
         return (speedValues.length == 0) ? Constants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(posValues,
                 speedValues, x);
+    }
+
+    @Override
+    public List<SpeedLimit> getSpeedLimits() {
+        return speedLimits;
     }
 
 }

@@ -36,6 +36,7 @@ import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -491,14 +492,7 @@ public class OnrampImpl implements RoadSection {
 
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
-     */
-    @Override
-    public List<TrafficLight> getTrafficLights() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+   
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()
@@ -583,6 +577,18 @@ public class OnrampImpl implements RoadSection {
     public void setFractionOfLeavingVehicles(double newFraction) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public List<TrafficLight> getTrafficLights() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<SpeedLimit> getSpeedLimits() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

@@ -94,5 +94,7 @@ List<RoadSection> rampFactory(final InputData inputData);
     
     void setFractionOfLeavingVehicles(double newFraction);
     
+    List<SpeedLimit> getSpeedLimits();    
+    
 }
 

@@ -37,6 +37,9 @@ import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
+import org.movsim.simulator.roadSection.SpeedLimit;
+import org.movsim.simulator.roadSection.SpeedLimits;
+import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -89,6 +92,10 @@ public abstract class AbstractRoadSection {
     /** The flow cons bottlenecks. */
     protected FlowConservingBottlenecks flowConsBottlenecks;
     
+    /** The speedlimits. */
+    protected SpeedLimits speedlimits;
+    
+    protected TrafficLightsImpl trafficLights;
     
     // TODO same constructor for onramp and mainroad (and offramp) 
     /**
@@ -332,6 +339,40 @@ public abstract class AbstractRoadSection {
 
         }
     }
+    
+
+    /**
+     * Update road conditions.
+     * 
+     * @param iterationCount
+     *            the iteration count
+     * @param time
+     *            the time
+     */
+    public void updateRoadConditions(long iterationCount, double time) {
+
+        trafficLights.update(iterationCount, time, vehContainers);
+
+        updateSpeedLimits(vehContainers);
+    }
+
+    /**
+     * Update speed limits.
+     * 
+     * @param vehContainers
+     *            the veh containers
+     */
+    private void updateSpeedLimits(List<VehicleContainer> vehContainers) {
+        if (!speedlimits.isEmpty()) {
+            for (final VehicleContainer vehContainerLane : vehContainers) {
+                for (final Vehicle veh : vehContainerLane.getVehicles()) {
+                    final double pos = veh.getPosition();
+                    veh.setSpeedlimit(speedlimits.calcSpeedLimit(pos));
+                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimits.calcSpeedLimit(pos));
+                }
+            }
+        }
+    }
 
     /**
      * Update upstream boundary.
@@ -408,5 +449,24 @@ public abstract class AbstractRoadSection {
     public UpstreamBoundary getUpstreamBoundary(){
         return upstreamBoundary;
     }
+
     
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
+     */
+    public List<TrafficLight> getTrafficLights() {
+        if(trafficLights==null){
+            return new LinkedList<TrafficLight>();
+        }
+        return trafficLights.getTrafficLights();
+    }
+    
+    public List<SpeedLimit> getSpeedLimits(){
+        if(speedlimits== null){
+            return new LinkedList<SpeedLimit>();
+        }
+        return speedlimits.getSpeedLimits();
+    }
 }

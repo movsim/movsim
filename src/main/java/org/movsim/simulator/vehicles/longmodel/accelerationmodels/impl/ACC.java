@@ -131,6 +131,10 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         // space dependencies modeled by speedlimits, alpha's
 
         final double Tlocal = alphaT * T;
+//        if(alphaT!=1){
+//        System.out.printf("calcAcc: pos=%.2f, speed=%.2f, alphaT=%.3f, alphaV0=%.3f, T=%.3f, Tlocal=%.3f \n", 
+//                me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
+//        }
         // consider external speedlimit
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
         final double aLocal = alphaA * a;

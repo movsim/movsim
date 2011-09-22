@@ -26,6 +26,8 @@
  */
 package org.movsim.input.model.simulation;
 
+import java.util.List;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -80,8 +82,12 @@ long getId();
      * 
      * @return true, if successful
      */
-    boolean withLogging();
+    boolean withLogging(); 
 
     TrafficSinkData getDownstreamData();
+
+    TrafficLightsInput getTrafficLightsInput();
+    
+    List<SpeedLimitDataPoint> getSpeedLimitInputData();
 
 }

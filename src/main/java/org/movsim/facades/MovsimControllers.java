@@ -3,9 +3,9 @@ package org.movsim.facades;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.simulator.roadSection.OfframpImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
+import org.movsim.simulator.roadSection.impl.OfframpImpl;
 
 public class MovsimControllers {
 

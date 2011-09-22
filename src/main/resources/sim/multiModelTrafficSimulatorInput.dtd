@@ -292,7 +292,7 @@ logging  (true|false)  "false"
 
 
 <!-- real physical ramp with merging area (length) and total length of x_max --> 
-<!ELEMENT RAMP (TRAFFIC_SOURCE,TRAFFIC_SINK)>
+<!ELEMENT RAMP (TRAFFIC_SOURCE,TRAFFIC_SINK,SPEED_LIMITS,TRAFFIC_LIGHTS)>
 <!ATTLIST RAMP
 id            NMTOKEN #REQUIRED
 x             NMTOKEN #REQUIRED

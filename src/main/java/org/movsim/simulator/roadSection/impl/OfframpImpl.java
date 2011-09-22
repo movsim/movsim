@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.roadSection;
+package org.movsim.simulator.roadSection.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,9 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.simulation.RampData;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.roadSection.impl.AbstractRoadSection;
-import org.movsim.simulator.roadSection.impl.OnrampImpl;
+import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,18 +77,15 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(id, Constants.MOST_RIGHT_LANE));
-    }
-    
-    
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateRoadConditions(long, double)
-     */
-    @Override
-    public void updateRoadConditions(long iterationCount, double time) {
-        // TODO Auto-generated method stub
         
+        speedlimits = new SpeedLimitsImpl(rampData.getSpeedLimitInputData());
+        
+        System.out.println("speed limit at offramp: x=1400 = "+speedlimits.calcSpeedLimit(1400));
+        
+        trafficLights = new TrafficLightsImpl(null, rampData.getTrafficLightsInput());
     }
+    
+    
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateDownstreamBoundary()
@@ -118,14 +114,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
         return xToMain;
     }
 
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
-     */
-    @Override
-    public List<TrafficLight> getTrafficLights() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+   
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()
