@@ -579,4 +579,10 @@ public class OnrampImpl implements RoadSection {
         return null;
     }
 
+    @Override
+    public void setFractionOfLeavingVehicles(double newFraction) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

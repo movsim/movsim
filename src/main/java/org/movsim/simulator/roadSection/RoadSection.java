@@ -92,5 +92,7 @@ List<RoadSection> rampFactory(final InputData inputData);
     
     UpstreamBoundary getUpstreamBoundary();
     
+    void setFractionOfLeavingVehicles(double newFraction);
+    
 }
 

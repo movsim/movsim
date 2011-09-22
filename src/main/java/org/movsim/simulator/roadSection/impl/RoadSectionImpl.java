@@ -52,6 +52,7 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
+import org.omg.CORBA.FREE_MEM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -270,6 +271,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         }
     }
 
+    
+   
     /*
      * (non-Javadoc)
      * 
@@ -279,12 +282,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      */
     public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
 
-        // TODO extract as parameter to xml configuration
         // TODO treat each offramp separately for correct book-keeping
-        final double fractionToOfframp = 0.1;
-
         for (final RoadSection rmp : ramps) {
-            // TODO quick hack -> identify offramp by class name
+            // TODO quick hack -> identify offramp by better book-keeping
             if (rmp instanceof OfframpImpl) {
                 stagedVehicles.clear();
                 final VehicleContainer vehContainerRightLane = vehContainers.get(Constants.MOST_RIGHT_LANE);
@@ -296,7 +296,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     // TODO quick hack: no planning horizon for merging to
                     // off-ramp
                     // allow merging only in first half !!!
-                    final double mergingZone = 0.5;
+                    final double mergingZone = 1.0;
                     if (veh.getLane()==Constants.MOST_RIGHT_LANE 
                             && !veh.inProcessOfLaneChanging() 
                             && pos > rmp.getRampPositionToMainroad()
@@ -310,15 +310,16 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                                                  // of offramp
                         final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(rmpContainer);
                         veh.setPosition(oldPos);
-                        // local decision to change to offramp
-                        final double fractionOfLeavingVehicles = upstreamBoundary.getEnteringVehCounter() == 0 ? 0
-                                : countVehiclesToOfframp / (double) upstreamBoundary.getEnteringVehCounter();
-                        final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframp;
-                        logger.debug("fraction of leaving vehicles={}, upstreamCounter={}", fractionOfLeavingVehicles,
-                                upstreamBoundary.getEnteringVehCounter());
-                        if (isSafeChange && isDesired) {
-                            stagedVehicles.add(veh);
-                            countVehiclesToOfframp++;
+                        // two steps
+                        if (isSafeChange) {
+                            // local decision to change to offramp
+                            final double fractionOfLeavingVehicles = calcFractionOfLeavingVehicles();
+                            final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframpParameter;
+
+                            if (isDesired) {
+                                stagedVehicles.add(veh);
+                                countVehiclesToOfframp++;
+                            }
                         }
                     }
                 }
@@ -337,49 +338,25 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         stagedVehicles.clear();
 
     }
-
-    // /**
-    // * Accelerate.
-    // *
-    // * @param iterationCount
-    // * the i time
-    // * @param dt
-    // * the dt
-    // * @param time
-    // * the time
-    // */
-    // public void accelerate(int iterationCount, double dt, double time) {
-    // for (VehicleContainer vehContainerLane : vehContainers) {
-    // final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-    // for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-    // final Vehicle veh = vehiclesOnLane.get(i);
-    // final double x = veh.getPosition();
-    // final double alphaT = flowConsBottlenecks.alphaT(x);
-    // final double alphaV0 = flowConsBottlenecks.alphaV0(x);
-    // // logger.debug("i={}, x_pos={}", i, x);
-    // // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-    // veh.calcAcceleration(dt, vehContainerLane, alphaT, alphaV0);
-    // }
-    // }
-    // }
-
-    /**
-     * Update position and speed.
-     * 
-     * @param iterationCount
-     *            the iteration count
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
-     */
-    public void updatePositionAndSpeed(int iterationCount, double dt, double time) {
-        for (VehicleContainer vehContainerLane : vehContainers) {
-            for (final Vehicle veh : vehContainerLane.getVehicles()) {
-                veh.updatePostionAndSpeed(dt);
-            }
-        }
+    
+    private double fractionToOfframpParameter = 0.1;
+    private int offsetVehicleUpstreamCounter = 0;
+    private double calcFractionOfLeavingVehicles(){
+        double vehiclesFromUpstream = upstreamBoundary.getEnteringVehCounter()-offsetVehicleUpstreamCounter; 
+        final double frac = ( vehiclesFromUpstream == 0 ) ? 0 : countVehiclesToOfframp / vehiclesFromUpstream;
+        logger.info("fraction of leaving vehicles={}, upstreamCounter={}", frac, vehiclesFromUpstream);
+        return frac;
     }
+
+    @Override
+    public void setFractionOfLeavingVehicles(double newFraction) {
+        this.fractionToOfframpParameter = newFraction;
+        offsetVehicleUpstreamCounter = upstreamBoundary.getEnteringVehCounter();
+        countVehiclesToOfframp = 0;
+        logger.info("set new fractionToOfframpParameter={}. Reset counter and new upstream vehicle offset={}", fractionToOfframpParameter, offsetVehicleUpstreamCounter);
+    }
+
+    
 
     // traffic lights haben eigene Phasen-Dynamik !
     /**
@@ -471,5 +448,6 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         return 0;
     }
 
+   
 
 }

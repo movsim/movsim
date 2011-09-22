@@ -172,6 +172,14 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
         // TODO Auto-generated method stub
         
     }
+
+
+
+    @Override
+    public void setFractionOfLeavingVehicles(double newFraction) {
+        // TODO Auto-generated method stub
+        
+    }
     
     
     

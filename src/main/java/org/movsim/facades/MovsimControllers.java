@@ -3,6 +3,7 @@ package org.movsim.facades;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.simulator.roadSection.OfframpImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 
@@ -10,13 +11,16 @@ public class MovsimControllers {
 
     private static MovsimControllers instance = null;
     
+    private final MovsimViewerFacade movsimViewerFacade;
+    
     private List<Long> inflowControlMainroads;
     private double initFlowPerLaneMainroads;
     
     private List<Long> inflowControlOnramps;
     private double initFlowPerLaneOnramps;
     
-    private MovsimViewerFacade movsimViewerFacade;
+    private List<Long> outflowControlMainroads;
+    
     
     private MovsimControllers(){
         // singleton 
@@ -60,6 +64,17 @@ public class MovsimControllers {
     }
     
     
+    public void registerOutflowControl(List<Long> ids){
+        outflowControlMainroads = new LinkedList<Long>();
+        for(Long id : ids){
+            final RoadSection road = movsimViewerFacade.findRoadById(id);
+            if(road!=null){
+                outflowControlMainroads.add(new Long(id));  
+            }
+        }
+    }
+    
+    
     
     public void setInflowControlMainroads(double newFlowPerLane){
         setInflow(newFlowPerLane, inflowControlMainroads);
@@ -85,4 +100,15 @@ public class MovsimControllers {
         return initFlowPerLaneOnramps;
     }
     
+    public double getInitFractionToOfframp(){
+        return 0; // init. parameter (not in xml input)
+    }
+    
+    
+    public void setOutflowFractionMainroads(double newFraction){
+        for(Long id : outflowControlMainroads){
+            final RoadSection road = movsimViewerFacade.findRoadById(id);
+            road.setFractionOfLeavingVehicles(newFraction);
+        }
+    }
 }

@@ -47,6 +47,7 @@ public class MovsimViewerFacade {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MovsimViewerFacade.class);
 
+    // singleton pattern
     private static MovsimViewerFacade instance = null;
     
     /**

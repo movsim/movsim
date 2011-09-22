@@ -330,4 +330,10 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         
     }
 
+    @Override
+    public void setFractionOfLeavingVehicles(double newFraction) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
