@@ -121,9 +121,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
                 
-//                simInput.getSimulationInput().getSingleRoadInput()
-//                .getTrafficCompositionInputData();
-        
         // this is the default vehGenerator for *all* roadsections
         // if an individual vehicle composition is defined for a specific road
         vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
@@ -174,7 +171,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         
         
         // TODO quick hack for connecting offramp with onramp
-        // more general concept here !!!
+        // more general concept needed here
         final long idOfframp = -1;
         final long idOnramp = 1;
         if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
