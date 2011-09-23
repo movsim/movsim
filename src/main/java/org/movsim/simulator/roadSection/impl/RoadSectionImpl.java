@@ -28,6 +28,7 @@ package org.movsim.simulator.roadSection.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
@@ -251,7 +252,13 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 final VehicleContainer rmpContainer = rmp.getVehContainer(rmp.getNumberOfLanes() - 1); // most
                                                                                                        // left
                                                                                                        // lane
-                for (final Vehicle veh : vehContainerRightLane.getVehicles()) {
+                
+                // tricky here: change iteration order to ensure that 
+                // vehicles take the offramp *most upstream* as possible!
+                List<Vehicle> vehicles = vehContainerRightLane.getVehicles();
+                ListIterator<Vehicle> myIter = vehicles.listIterator(vehicles.size()); 
+                while(myIter.hasPrevious()){
+                    final Vehicle veh = myIter.previous();
                     final double pos = veh.getPosition();
                     // TODO quick hack: no planning horizon for merging to
                     // off-ramp
