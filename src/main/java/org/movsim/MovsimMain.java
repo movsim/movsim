@@ -33,9 +33,9 @@ import org.movsim.ui.controller.Controller;
 import org.movsim.ui.controller.impl.SimulatorController;
 
 /**
- * The Class App.
+ * The Class MovsimMain.
  */
-public class App {
+public class MovsimMain {
 
     /**
      * The main method.

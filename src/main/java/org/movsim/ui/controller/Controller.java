@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Locale;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.movsim.App;
+import org.movsim.MovsimMain;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -26,7 +26,7 @@ public abstract class Controller {
         if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
         } else {
-            final URL log4jConfig = App.class.getResource("/sim/log4j.properties"); //TODO check for Windows
+            final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties"); //TODO check for Windows
             PropertyConfigurator.configure(log4jConfig);
         }
 

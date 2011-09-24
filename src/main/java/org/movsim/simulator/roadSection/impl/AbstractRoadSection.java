@@ -171,7 +171,8 @@ public abstract class AbstractRoadSection {
         final List<TrafficCompositionInputData> heterogenInputData = roadInput.getTrafficCompositionInputData();
         if(heterogenInputData.size()>0){
             logger.info("create *individual* vehicle generator for road with id={}", id);
-            this.vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
+            final boolean isWithFundamentalDiagramOutput = roadInput.isWithWriteFundamentalDiagrams();
+            this.vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundamentalDiagramOutput);
         }
         else{
             logger.info("use *default* vehicle generator for road with id={}", id);

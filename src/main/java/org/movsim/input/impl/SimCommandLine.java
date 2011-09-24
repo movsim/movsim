@@ -39,7 +39,7 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.PropertyConfigurator;
-import org.movsim.App;
+import org.movsim.MovsimMain;
 import org.movsim.simulator.Constants;
 import org.movsim.utilities.impl.FileUtils;
 
@@ -263,7 +263,7 @@ public class SimCommandLine {
         if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
         } else {
-            final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+            final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);
         }
 

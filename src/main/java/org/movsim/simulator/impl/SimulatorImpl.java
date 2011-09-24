@@ -124,13 +124,11 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
         
-        
-        
-        
         // this is the default vehGenerator for *all* roadsections
         // if an individual vehicle composition is defined for a specific road
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
+        final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
+        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
         reset();
