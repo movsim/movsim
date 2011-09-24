@@ -26,8 +26,10 @@
  */
 package org.movsim.simulator.impl;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
@@ -40,6 +42,9 @@ import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.impl.OfframpImpl;
+import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
+import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
@@ -68,6 +73,8 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     /** The road sections. */
     private List<RoadSection> roadSections;
+    
+    private Map<Long, RoadSection> roadSectionsMap; 
 
     /** The sim output. */
     private SimOutput simOutput;
@@ -117,13 +124,11 @@ public class SimulatorImpl implements Simulator, Runnable {
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
         
-        roadSections = new ArrayList<RoadSection>();
-        
-        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-                
         // this is the default vehGenerator for *all* roadsections
         // if an individual vehicle composition is defined for a specific road
-        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
+        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
+        final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
+        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
         reset();
@@ -138,36 +143,25 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void reset() {
         time = 0;
         iterationCount = 0;
-        roadSections.clear();
+        
         System.out.println("roadsections: "+inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt Roadinput/RoadSection
+   
+        roadSections = new LinkedList<RoadSection>();
         for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput()) {
-            roadSections.add(new RoadSectionImpl(inputData, roadinput, vehGenerator));
+            final RoadSection roadSection = RoadSectionFactory.create(inputData, roadinput, vehGenerator);  
+            roadSections.add(roadSection);
         }
         
-        // TODO quick hack for pulling out onramps from mainroads
-        final List<RoadSection> onramps = roadSections.get(0).rampFactory(inputData);
-        for(RoadSection onramp : onramps){
-            roadSections.add(onramp);
-        }
+        createMap();
         
         
+        // TODO work in progress, not yet sufficiently worked-out concept
         final RoadNetwork roadNetwork = RoadNetwork.getInstance();
         for (RoadSection roadSection : roadSections) {
             roadNetwork.add(roadSection);
         }
-        
         logger.info(roadNetwork.toString());
-        
-//        for (RoadSection roadSection : roadSections) {
-//            final long toId = roadSection.getToId();
-//            final RoadSection roadSectionDown = findRoadById(toId);
-//            if( roadSectionDown !=null ){
-//                final List<VehicleContainer> lanes = roadSection.getVehContainers();
-//                for(int laneIndex=0, N=lanes.size(); laneIndex<N; laneIndex++){
-//                    lanes.get(laneIndex).setDownstreamConnection(roadSectionDown.getVehContainers().get(laneIndex));
-//                }
-//            }
-//        }
+      
         
         
         // TODO quick hack for connecting offramp with onramp
@@ -184,7 +178,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         
         projectName = inputData.getProjectMetaData().getProjectName();
 
-        
         // model requires specific update time depending on its category !!
 
         // TODO: check functionality
@@ -196,6 +189,8 @@ public class SimulatorImpl implements Simulator, Runnable {
         simOutput = new SimOutput(inputData, roadSections);
     }
 
+    
+  
     
     /* (non-Javadoc)
      * @see org.movsim.simulator.Simulator#getRoadSections()
@@ -209,14 +204,31 @@ public class SimulatorImpl implements Simulator, Runnable {
      * @see org.movsim.simulator.Simulator#findRoadById(long)
      */
     public RoadSection findRoadById(long id) {
+        if(roadSectionsMap.containsKey(id)){
+            return roadSectionsMap.get(id);
+        }
+        return null;
+    }
+    
+    // helper function
+    private void createMap(){
+        roadSectionsMap  = new HashMap<Long, RoadSection>();
         for (final RoadSection roadSection : roadSections) {
-            if (roadSection.getId() == id) {
-                return roadSection;
+            roadSectionsMap.put(roadSection.getId(), roadSection);
+        }
+    }
+
+    
+    // TODO just hack 
+    private RoadSection findFirstOfframp(){
+        for (final RoadSection roadSection : roadSections) {
+            if( roadSection instanceof OfframpImpl){
+                return roadSection; 
             }
         }
         return null;
     }
-
+    
     /*
      * (non-Javadoc)
      * 
@@ -282,22 +294,34 @@ public class SimulatorImpl implements Simulator, Runnable {
         }
 
 
-        
-        // lane changes and merges from onramps/ to offramps
+        // lane changes 
         for (RoadSection roadSection : roadSections) {
             roadSection.laneChanging(iterationCount, dt, time);
         }
 
-        // lane changes and merges from onramps/ to offramps
+        // merges from onramps/ to offramps (and also simpleRamp)
         for (RoadSection roadSection : roadSections) {
-            roadSection.laneChangingToOfframps(roadSections, iterationCount, dt, time);
+            // TODO: network information 
+            RoadSection connectedRoadSection = null;
+            if(roadSection instanceof RoadSectionImpl){
+                // mainroad gets reference to first offramp (or null)
+                // TODO allow more than one offramp !!!
+                connectedRoadSection = findFirstOfframp(); 
+            }
+            if(roadSection instanceof OnrampMobilImpl){
+                connectedRoadSection = findRoadById(roadSection.getToId());  
+            }
+            
+            roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
         }
+       
         
         // vehicle accelerations
         for (RoadSection roadSection : roadSections) {
             roadSection.accelerate(iterationCount, dt, time);
         }
 
+        
         // vehicle pos/speed
         for (RoadSection roadSection : roadSections) {
             roadSection.updatePositionAndSpeed(iterationCount, dt, time);

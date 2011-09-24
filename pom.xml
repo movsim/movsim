@@ -72,7 +72,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.movsim.App</mainClass>
+                            <mainClass>org.movsim.MovsimMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

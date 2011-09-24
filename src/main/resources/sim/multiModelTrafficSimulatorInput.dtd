@@ -177,7 +177,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION*, ROAD*, OUTPUT)>
+<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration         NMTOKEN #REQUIRED
@@ -199,13 +199,18 @@ fluct_strength   NMTOKEN #REQUIRED
   relative_v0_randomization NMTOKEN "0.0"
 >
 
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, SIMPLE_RAMPS*, TRAFFIC_LIGHTS, DETECTORS)>
 
+<!-- for RAMP x and merge_length needed; not necessary for modeling a MAINROAD-->
 <!ATTLIST ROAD
   id               NMTOKEN #REQUIRED
   length           NMTOKEN #REQUIRED
   lanes            NMTOKEN "1"
+  x                NMTOKEN "0"   
+  merge_length     NMTOKEN "300"  
+  logging          (false|true) "false" 
 > 
+
 
 
 
@@ -279,8 +284,8 @@ speedlimit_kmh NMTOKEN #REQUIRED
 
   
 <!-- ramps (onramps only) -->
-<!ELEMENT RAMPS (SIMPLE_RAMP*, RAMP*)>
-<!ATTLIST RAMPS
+<!ELEMENT SIMPLE_RAMPS (SIMPLE_RAMP*)>
+<!ATTLIST SIMPLE_RAMPS
 > 
 
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
@@ -292,14 +297,14 @@ logging  (true|false)  "false"
 
 
 <!-- real physical ramp with merging area (length) and total length of x_max --> 
-<!ELEMENT RAMP (TRAFFIC_SOURCE,TRAFFIC_SINK,SPEED_LIMITS,TRAFFIC_LIGHTS)>
-<!ATTLIST RAMP
-id            NMTOKEN #REQUIRED
-x             NMTOKEN #REQUIRED
-length        NMTOKEN "1000"
-merge_length  NMTOKEN "300"
-logging       (true|false)  "false" 
-> 
+<!-- <!ELEMENT RAMP (TRAFFIC_SOURCE,TRAFFIC_SINK,SPEED_LIMITS,TRAFFIC_LIGHTS)> -->
+<!--<!ATTLIST RAMP-->
+<!--id            NMTOKEN #REQUIRED-->
+<!--x             NMTOKEN #REQUIRED-->
+<!--length        NMTOKEN "1000"-->
+<!--merge_length  NMTOKEN "300"-->
+<!--logging       (true|false)  "false" -->
+<!-->  -->
   
 <!-- traffic lights -->
   

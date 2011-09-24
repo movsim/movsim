@@ -30,15 +30,9 @@ import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.input.InputData;
 import org.movsim.input.model.simulation.SimpleRampData;
-import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
-import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.roadSection.SpeedLimit;
-import org.movsim.simulator.roadSection.TrafficLight;
-import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -48,22 +42,22 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class OnrampImpl.
+ * The Class SimpleOnrampImpl.
  */
-public class OnrampImpl implements RoadSection {
+public class SimpleOnrampImpl {
 
     /**
      * The lane for entering the mainroad only MOST_RIGHT_LANE possible to enter
      */
     private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE;
 
-    private static final String extensionFormat = ".S%d_log.csv";
+    private static final String extensionFormat = ".id%d_sramp%d_source_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(OnrampImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(SimpleOnrampImpl.class);
 
     /** The Constant MINSPACE_MERGE_M. */
     final static double MINSPACE_MERGE_M = 2.0;
@@ -124,7 +118,7 @@ public class OnrampImpl implements RoadSection {
      * @param rampIndex
      *            the ramp index
      */
-    public OnrampImpl(SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
+    public SimpleOnrampImpl(long roadId, SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
             String projectName, int rampIndex) {
 
         this.vehGenerator = vehGenerator;
@@ -136,7 +130,7 @@ public class OnrampImpl implements RoadSection {
         if (rampData.withLogging()) {
             final int roadCount = 1; // assuming only one road in the scenario
                                      // for the moment
-            final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
+            final String filename = projectName + String.format(extensionFormat, roadId, rampIndex);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
             fstrLogging.flush();
@@ -155,8 +149,7 @@ public class OnrampImpl implements RoadSection {
     /* (non-Javadoc)
      * @see org.movsim.simulator.roadSection.AbstractRoadSection#laneChanging(long, double, double)
      */
-    @Override
-    public void laneChanging(long iterationCount, double dt, double time) {
+    public void mergeToMainroad(long iterationCount, double dt, double time) {
         // public void update(long itime, double dt, double time) {
 
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
@@ -382,213 +375,6 @@ public class OnrampImpl implements RoadSection {
             }
         }
         return false;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRoadLength()
-     */
-    @Override
-    public double getRoadLength() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getNumberOfLanes()
-     */
-    @Override
-    public int getNumberOfLanes() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getId()
-     */
-    @Override
-    public long getId() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getVehContainer(int)
-     */
-    @Override
-    public VehicleContainer getVehContainer(int laneIndex) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getVehContainers()
-     */
-    @Override
-    public List<VehicleContainer> getVehContainers() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getTimestep()
-     */
-    @Override
-    public double getTimestep() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#checkForInconsistencies(long, double, boolean)
-     */
-    @Override
-    public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#accelerate(long, double, double)
-     */
-    @Override
-    public void accelerate(long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateRoadConditions(long, double)
-     */
-    @Override
-    public void updateRoadConditions(long iterationCount, double time) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updatePositionAndSpeed(long, double, double)
-     */
-    @Override
-    public void updatePositionAndSpeed(long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateDownstreamBoundary()
-     */
-    @Override
-    public void updateDownstreamBoundary() {
-        // TODO Auto-generated method stub
-
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateUpstreamBoundary(long, double, double)
-     */
-    @Override
-    public void updateUpstreamBoundary(long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-
-    }
-
-   
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()
-     */
-    @Override
-    public List<LoopDetector> getLoopDetectors() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#updateDetectors(long, double, double)
-     */
-    @Override
-    public void updateDetectors(long iterationCount, double dt, double simulationTime) {
-        // TODO Auto-generated method stub
-
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampMergingLength()
-     */
-    @Override
-    public double getRampMergingLength() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampPositionToMainroad()
-     */
-    @Override
-    public double getRampPositionToMainroad() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#rampFactory(org.movsim.input.InputData)
-     */
-    @Override
-    public List<RoadSection> rampFactory(InputData inputData) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#laneChangingToOfframps(java.util.List, long, double, double)
-     */
-    @Override
-    public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void updateBoundaryVehicles(long iterationCount, double time) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public long getFromId() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public long getToId() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public UpstreamBoundary getUpstreamBoundary() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setFractionOfLeavingVehicles(double newFraction) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public List<TrafficLight> getTrafficLights() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public List<SpeedLimit> getSpeedLimits() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

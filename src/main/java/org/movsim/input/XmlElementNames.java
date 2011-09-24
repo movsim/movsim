@@ -43,8 +43,8 @@ public interface XmlElementNames {
     public final String RoadInhomogeneity = "INHOMOGENEITY";
     public final String RoadSpeedLimits = "SPEED_LIMITS";
     public final String RoadSpeedLimit = "SPEED_LIMIT";
-    public final String RoadRamps = "RAMPS";
-    public final String RoadRamp = "RAMP";
+    public final String RoadRamps = "SIMPLE_RAMPS";
+   // public final String RoadRamp = "RAMP";
     public final String RoadSimpleRamp = "SIMPLE_RAMP";
     public final String RoadInflow = "INFLOW";
     public final String RoadOutput = "OUTPUT";

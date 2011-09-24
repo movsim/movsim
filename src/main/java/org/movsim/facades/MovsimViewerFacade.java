@@ -30,7 +30,7 @@ import java.net.URL;
 import java.util.List;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.movsim.App;
+import org.movsim.MovsimMain;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.simulator.Simulator;
@@ -54,7 +54,7 @@ public class MovsimViewerFacade {
      * Inits the localization and logger.
      */
     public void initLocalizationAndLogger() {
-        final URL log4jConfig = App.class.getResource("/sim/log4j.properties");
+        final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
         PropertyConfigurator.configure(log4jConfig);
     }
 

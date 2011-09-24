@@ -108,9 +108,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(final InputData simInput, final List<TrafficCompositionInputData> heterogenInputData) {
+    public VehicleGeneratorImpl(final InputData simInput, final List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
 
-        
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road 
         this.projectName = simInput.getProjectMetaData().getProjectName();
         this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
@@ -124,8 +123,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         normalizeFractions(sumFraction);
 
         // output fundamental diagrams
-        if (instantaneousFileOutput
-                && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
+        if (instantaneousFileOutput && isWithWriteFundamentalDiagrams) {
             FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
 
         }
@@ -147,7 +145,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         requiredTimestep = simInput.getSimulationInput().getTimestep();
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
-
         
         addObstacleSystemVehicleType(heterogenInputData);
         

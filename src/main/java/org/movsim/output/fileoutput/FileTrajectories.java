@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileTrajectories {
 
-    private static final String extensionFormat = ".R%d_traj.csv";
+    private static final String extensionFormat = ".id%d_traj.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";

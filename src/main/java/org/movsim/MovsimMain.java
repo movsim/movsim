@@ -24,70 +24,34 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.simulation;
+package org.movsim;
 
-import java.util.List;
+import org.movsim.input.impl.SimCommandLine;
+import org.movsim.simulator.Simulator;
+import org.movsim.simulator.impl.SimulatorImpl;
+import org.movsim.ui.controller.Controller;
+import org.movsim.ui.controller.impl.SimulatorController;
 
-
-// TODO: Auto-generated Javadoc
 /**
- * The Interface RampData.
+ * The Class MovsimMain.
  */
-public interface RampData {
-
-//    /**
-//     * Gets the inflow time series.
-//     * 
-//     * @return the inflow time series
-//     */
-//    List<InflowDataPoint> getInflowTimeSeries();
-    
-    /**
- * Gets the id.
- *
- * @return the id
- */
-long getId();
-    
-    /**
-     * Gets the upstream boundary data.
-     *
-     * @return the upstream boundary data
-     */
-    TrafficSourceData getTrafficSourceData();
+public class MovsimMain {
 
     /**
-     * Gets the center position.
+     * The main method.
      * 
-     * @return the center position
+     * @param args
+     *            the arguments
      */
-    double getRampStartPosition();
+    public static void main(String[] args) {
 
-    /**
-     * Gets the ramp length.
-     * 
-     * @return the ramp length
-     */
-    double getRampMergingLength();
+        // CommandLine args options Parser
+        // Results are set in ProjectMetaDataImpl
+        final SimCommandLine cmdline = new SimCommandLine(args);
 
-    /**
-     * Gets the road length.
-     * 
-     * @return the road length
-     */
-    double getRoadLength();
+        final Simulator simulator = SimulatorImpl.getInstance();
 
-    /**
-     * With logging.
-     * 
-     * @return true, if successful
-     */
-    boolean withLogging(); 
-
-    TrafficSinkData getDownstreamData();
-
-    TrafficLightsInput getTrafficLightsInput();
-    
-    List<SpeedLimitDataPoint> getSpeedLimitInputData();
+        final Controller controller = new SimulatorController(simulator);
+    }
 
 }

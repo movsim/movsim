@@ -56,7 +56,7 @@ public class LoopDetectors {
      * @param input
      *            the input
      */
-    public LoopDetectors(String projectName, DetectorInput input) {
+    public LoopDetectors(long roadId, String projectName, DetectorInput input) {
 
         detectors = new ArrayList<LoopDetectorImpl>();
 
@@ -71,7 +71,7 @@ public class LoopDetectors {
         if (input.isWithLogging()) {
             fileDetectors = new ArrayList<FileDetector>();
             for (final LoopDetector det : detectors) {
-                fileDetectors.add(new FileDetector(projectName, det));
+                fileDetectors.add(new FileDetector(roadId, projectName, det));
             }
         }
 

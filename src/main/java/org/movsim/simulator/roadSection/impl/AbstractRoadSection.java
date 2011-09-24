@@ -29,11 +29,8 @@ package org.movsim.simulator.roadSection.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.model.RoadInput;
-import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
@@ -126,10 +123,10 @@ public abstract class AbstractRoadSection {
      * @param rampData the ramp data
      * @param vehGenerator the veh generator
      */
-    public AbstractRoadSection(final RampData rampData, final VehicleGenerator vehGenerator){
+    public AbstractRoadSection(final RoadInput rampData, final VehicleGenerator vehGenerator){
         // TODO also ramp can have an individual vehicle generator
         this.fromId = rampData.getTrafficSourceData().getSourceId();
-        this.toId = rampData.getDownstreamData().getSinkId();
+        this.toId = rampData.getTrafficSinkData().getSinkId();
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -144,9 +141,9 @@ public abstract class AbstractRoadSection {
      *
      * @param rampData the ramp data
      */
-    public AbstractRoadSection(final RampData rampData){
+    public AbstractRoadSection(final RoadInput rampData){
         this.fromId = rampData.getTrafficSourceData().getSourceId();
-        this.toId = rampData.getDownstreamData().getSinkId();
+        this.toId = rampData.getTrafficSinkData().getSinkId();
         this.vehGenerator = null;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -161,14 +158,6 @@ public abstract class AbstractRoadSection {
      * @param vehGenerator2
      */
     public AbstractRoadSection(InputDataImpl inputData, RoadInput roadInput, VehicleGenerator vehGenerator) {
-        // generate individual vehicle generator for specific road
-        final List<TrafficCompositionInputData> heterogenInputData = inputData.getSimulationInput().getSingleRoadInput().getTrafficCompositionInputData();
-        if(heterogenInputData.size()>0){
-            this.vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData);
-        }
-        else{
-            this.vehGenerator = vehGenerator;
-        }
         
         this.dt = inputData.getSimulationInput().getTimestep();
         this.roadLength = roadInput.getRoadLength();
@@ -177,6 +166,19 @@ public abstract class AbstractRoadSection {
         this.fromId = roadInput.getTrafficSourceData().getSourceId();
         this.toId = roadInput.getTrafficSinkData().getSinkId();
         this.instantaneousFileOutput = false; // TODO instantfileouput
+        
+        // generate individual vehicle generator for specific road
+        final List<TrafficCompositionInputData> heterogenInputData = roadInput.getTrafficCompositionInputData();
+        if(heterogenInputData.size()>0){
+            logger.info("create *individual* vehicle generator for road with id={}", id);
+            final boolean isWithFundamentalDiagramOutput = roadInput.isWithWriteFundamentalDiagrams();
+            this.vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundamentalDiagramOutput);
+        }
+        else{
+            logger.info("use *default* vehicle generator for road with id={}", id);
+            this.vehGenerator = vehGenerator;
+        }
+        
         init();
     }
 
@@ -317,6 +319,7 @@ public abstract class AbstractRoadSection {
      * @param dt the dt
      * @param time the time
      */
+    
     public void laneChanging(long iterationCount, double dt, double time) {
         for (final VehicleContainer vehContainerLane : vehContainers) {
 

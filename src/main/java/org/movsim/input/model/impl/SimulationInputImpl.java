@@ -83,7 +83,7 @@ public class SimulationInputImpl implements SimulationInput {
      * @param elem
      *            the elem
      */
-    public SimulationInputImpl(Element elem) {
+    public SimulationInputImpl(final Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
         
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
@@ -100,7 +100,7 @@ public class SimulationInputImpl implements SimulationInput {
         }
 
         
-        // heterogeneity element with vehicle types
+        // default heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         
