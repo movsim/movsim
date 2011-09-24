@@ -16,7 +16,7 @@ import org.movsim.utilities.impl.FileUtils;
  */
 public class FileSpatioTemporal implements ObserverInTime {
 
-    private static final String extensionFormat = ".R%d_st.csv";
+    private static final String extensionFormat = ".id%d_st.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";

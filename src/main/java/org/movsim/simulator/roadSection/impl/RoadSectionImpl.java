@@ -105,7 +105,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         initSimpleOnramps(inputData);
 
-        upstreamBoundary = new UpstreamBoundaryImpl(vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
+        upstreamBoundary = new UpstreamBoundaryImpl(id, vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
                 inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
@@ -116,7 +116,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         final DetectorInput detInput = roadInput.getDetectorInput();
         if (detInput.isWithDetectors()) {
-            detectors = new LoopDetectors(inputData.getProjectMetaData().getProjectName(), detInput);
+            detectors = new LoopDetectors(roadInput.getId(), inputData.getProjectMetaData().getProjectName(), detInput);
         }
 
         initialConditions(inputData.getSimulationInput(), roadInput);
@@ -133,7 +133,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         int rampIndex = 1;
         for (final SimpleRampData rmpSimpl : simpleOnrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            simpleOnramps.add(new SimpleOnrampImpl(rmpSimpl, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName,
+            simpleOnramps.add(new SimpleOnrampImpl(id, rmpSimpl, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName,
                     rampIndex));
             rampIndex++;
         }

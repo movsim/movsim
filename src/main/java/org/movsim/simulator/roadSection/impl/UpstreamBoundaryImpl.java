@@ -47,7 +47,9 @@ import org.slf4j.LoggerFactory;
  */
 public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
-    private static final String extensionFormat = ".S%d_log.csv";
+    // TODO the same output format is used in SimpleOnrampImpl. Consolidate. 
+
+    private static final String extensionFormat = ".id%d_source_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
@@ -90,7 +92,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
      * @param upstreamBoundaryData the upstream boundary data
      * @param projectName the project name
      */
-    public UpstreamBoundaryImpl(VehicleGenerator vehGenerator, List<VehicleContainer> vehContainers,
+    public UpstreamBoundaryImpl(long roadId, VehicleGenerator vehGenerator, List<VehicleContainer> vehContainers,
             TrafficSourceData upstreamBoundaryData, String projectName) {
         this.vehGenerator = vehGenerator;
         this.vehContainers = vehContainers;
@@ -100,7 +102,6 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
 
         if (upstreamBoundaryData.withLogging()) {
             enteringVehCounter = 1;
-            final int roadId = 1; // road id hard coded as 1 for the moment
             final String filename = projectName + String.format(extensionFormat, roadId);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);

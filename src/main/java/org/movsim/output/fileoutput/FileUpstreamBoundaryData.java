@@ -22,7 +22,7 @@ public class FileUpstreamBoundaryData {
 
     final static Logger logger = LoggerFactory.getLogger(FileUpstreamBoundaryData.class);
 
-    private static final String extensionFormat = ".S%d_log.csv";
+    private static final String extensionFormat = ".id%d_source_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";

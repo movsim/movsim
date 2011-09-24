@@ -60,7 +60,7 @@ public class FileTrafficLightRecorder {
         this.nDt = nDt;
 
         // road id hard coded as 1 for the moment
-        final String filename = projectName + ".R1_tl_log.csv";
+        final String filename = projectName + ".id%d_tl_log.csv";
         fstr = FileUtils.getWriter(filename);
         writeHeader(trafficLights);
 

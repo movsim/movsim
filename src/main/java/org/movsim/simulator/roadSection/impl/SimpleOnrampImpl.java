@@ -51,7 +51,7 @@ public class SimpleOnrampImpl {
      */
     private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE;
 
-    private static final String extensionFormat = ".S%d_log.csv";
+    private static final String extensionFormat = ".id%d_sramp%d_source_log.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
@@ -118,7 +118,7 @@ public class SimpleOnrampImpl {
      * @param rampIndex
      *            the ramp index
      */
-    public SimpleOnrampImpl(SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
+    public SimpleOnrampImpl(long roadId, SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
             String projectName, int rampIndex) {
 
         this.vehGenerator = vehGenerator;
@@ -130,7 +130,7 @@ public class SimpleOnrampImpl {
         if (rampData.withLogging()) {
             final int roadCount = 1; // assuming only one road in the scenario
                                      // for the moment
-            final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
+            final String filename = projectName + String.format(extensionFormat, roadId, rampIndex);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
             fstrLogging.flush();
