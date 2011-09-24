@@ -8,7 +8,6 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

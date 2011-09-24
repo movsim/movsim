@@ -19,11 +19,12 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
-        <ROAD id="1" length="20000" lanes="1">
-            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+     <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="ACC1" fraction="1" />
                 <VEHICLE_TYPE label="Obstacle" fraction="0" />
-            </TRAFFIC_COMPOSITION>
+        </TRAFFIC_COMPOSITION>
+		 <!-- road id 0 indicates mainroad -->    
+        <ROAD id="0" length="20000" lanes="1">
             <INITIAL_CONDITIONS>
                 <IC_MICRO x="10" v="0" />
                 <IC_MICRO x="20" v="0" />
@@ -54,15 +55,11 @@
                 <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="1000" v="0" label="Obstacle" /> 
             </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE>
-            </TRAFFIC_SOURCE>
+            <TRAFFIC_SOURCE />
             <TRAFFIC_SINK />
-            <FLOW_CONSERVING_INHOMOGENEITIES>
-            </FLOW_CONSERVING_INHOMOGENEITIES>
-            <SPEED_LIMITS>
-            </SPEED_LIMITS>
-            <RAMPS>
-            </RAMPS>
+            <FLOW_CONSERVING_INHOMOGENEITIES />
+            <SPEED_LIMITS />
+            <SIMPLE_RAMPS />
             <TRAFFIC_LIGHTS />
             <DETECTORS />
         </ROAD>

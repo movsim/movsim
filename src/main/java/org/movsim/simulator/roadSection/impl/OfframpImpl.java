@@ -29,12 +29,10 @@ package org.movsim.simulator.roadSection.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.movsim.input.InputData;
-import org.movsim.input.model.simulation.RampData;
+import org.movsim.input.model.RoadInput;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 import org.slf4j.Logger;
@@ -63,26 +61,25 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     /**
      * Instantiates a new offramp impl.
      *
-     * @param rampData the ramp data
+     * @param roadData the ramp data
      */
-    public OfframpImpl(final RampData rampData){
-        super(rampData);
-        
+    public OfframpImpl(final RoadInput roadData){
+        super(roadData);
 
         // vehicles start at initial position
-        mergeLength = rampData.getRampMergingLength();
-        xToMain = rampData.getRampStartPosition();
+        mergeLength = roadData.getRampMergingLength();
+        xToMain = roadData.getRampStartPosition();
         xDownRamp = roadLength - mergeLength; // rampData.getRampStartPosition();
 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(id, Constants.MOST_RIGHT_LANE));
         
-        speedlimits = new SpeedLimitsImpl(rampData.getSpeedLimitInputData());
+        speedlimits = new SpeedLimitsImpl(roadData.getSpeedLimitInputData());
         
         System.out.println("speed limit at offramp: x=1400 = "+speedlimits.calcSpeedLimit(1400));
         
-        trafficLights = new TrafficLightsImpl(null, rampData.getTrafficLightsInput());
+        trafficLights = new TrafficLightsImpl(null, roadData.getTrafficLightsInput());
     }
     
     
@@ -135,15 +132,6 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
     }
 
     /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#rampFactory(org.movsim.input.InputData)
-     */
-    @Override
-    public List<RoadSection> rampFactory(InputData inputData) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
-    /* (non-Javadoc)
      * @see org.movsim.simulator.roadSection.impl.AbstractRoadSection#updateUpstreamBoundary(long, double, double)
      */
     @Override 
@@ -153,11 +141,8 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
 
 
 
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.roadSection.RoadSection#laneChangingToOfframps(java.util.List, long, double, double)
-     */
     @Override
-    public void laneChangingToOfframps(List<RoadSection> ramps, long iterationCount, double dt, double time) {
+    public void setFractionOfLeavingVehicles(double newFraction) {
         // TODO Auto-generated method stub
         
     }
@@ -165,7 +150,8 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
 
 
     @Override
-    public void setFractionOfLeavingVehicles(double newFraction) {
+    public void laneChangingToOfframpsAndFromOnramps(RoadSection connectedRoadSection, long iterationCount, double dt,
+            double time) {
         // TODO Auto-generated method stub
         
     }

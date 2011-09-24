@@ -38,23 +38,21 @@ import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
-import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
-import org.movsim.input.model.simulation.RampData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.input.model.simulation.impl.DetectorInputImpl;
 import org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl;
-import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.movsim.input.model.simulation.impl.ICMacroDataImpl;
 import org.movsim.input.model.simulation.impl.ICMicroDataImpl;
-import org.movsim.input.model.simulation.impl.RampDataImpl;
 import org.movsim.input.model.simulation.impl.SimpleRampDataImpl;
 import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
+import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 import org.movsim.input.model.simulation.impl.TrafficSinkDataImpl;
 import org.movsim.input.model.simulation.impl.TrafficSourceDataImpl;
@@ -75,6 +73,14 @@ public class RoadInputImpl implements RoadInput {
 
     /** The lanes. */
     private int lanes;
+    
+    /** The ramp length. */
+    // TODO this is a property of an onramp/offramp and not of an mainroad 
+    private double rampMergingLength;
+  
+    /** The center position. */
+    // TODO this is a property of an onramp/offramp and not of an mainroad
+    private double rampStartPosition;
 
     /** The is with write fundamental diagrams. */
     private boolean isWithWriteFundamentalDiagrams;
@@ -101,9 +107,6 @@ public class RoadInputImpl implements RoadInput {
 
     /** The simple ramps. */
     private List<SimpleRampData> simpleRamps;
-
-    /** The ramps. */
-    private List<RampData> ramps;
 
     private TrafficLightsInput trafficLightsInput;
 
@@ -133,10 +136,13 @@ public class RoadInputImpl implements RoadInput {
         roadLength = Double.parseDouble(elem.getAttributeValue("length"));
         lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
 
+        rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
+        rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
         // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
+        
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         // optional for specific road
         if (heterogenElem != null) {
@@ -149,6 +155,8 @@ public class RoadInputImpl implements RoadInput {
                 trafficCompositionInputData.add(new TrafficCompositionDataImpl(map));
             }
         }
+        
+        
         // -----------------------------------------------------------
 
         // Initial Conditions Micro
@@ -252,7 +260,7 @@ public class RoadInputImpl implements RoadInput {
         // non-physical ramps implementing a drop-down mechanism without
         // lane-changing decisions
         simpleRamps = new ArrayList<SimpleRampData>();
-        ramps = new ArrayList<RampData>();
+       
         final Element rampsElement = elem.getChild(XmlElementNames.RoadRamps);
         if (rampsElement != null) {
             final List<Element> simpleRampElems = rampsElement.getChildren(XmlElementNames.RoadSimpleRamp);
@@ -271,19 +279,20 @@ public class RoadInputImpl implements RoadInput {
 
             // -----------------------------------------------------------
             // physical ramps
-            final List<Element> rampElems = rampsElement.getChildren(XmlElementNames.RoadRamp);
-            for (final Element rampElem : rampElems) {
-                ramps.add(new RampDataImpl(rampElem));
-            }
-
-            Collections.sort(ramps, new Comparator<RampData>() {
-                @Override
-                public int compare(RampData o1, RampData o2) {
-                    final Double pos1 = new Double((o1).getRampStartPosition());
-                    final Double pos2 = new Double((o2).getRampStartPosition());
-                    return pos1.compareTo(pos2); // sort with increasing x
-                }
-            });
+            //ramps = new ArrayList<RampData>();
+//            final List<Element> rampElems = rampsElement.getChildren(XmlElementNames.RoadRamp);
+//            for (final Element rampElem : rampElems) {
+//                ramps.add(new RampDataImpl(rampElem));
+//            }
+//
+//            Collections.sort(ramps, new Comparator<RampData>() {
+//                @Override
+//                public int compare(RampData o1, RampData o2) {
+//                    final Double pos1 = new Double((o1).getRampStartPosition());
+//                    final Double pos2 = new Double((o2).getRampStartPosition());
+//                    return pos1.compareTo(pos2); // sort with increasing x
+//                }
+//            });
         }
 
         // -----------------------------------------------------------
@@ -382,16 +391,6 @@ public class RoadInputImpl implements RoadInput {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.model.impl.SimulationInput#getRamps()
-     */
-    @Override
-    public List<RampData> getRamps() {
-        return ramps;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
      * @see org.movsim.input.model.impl.SimulationInput#getLanes()
      */
     @Override
@@ -447,6 +446,16 @@ public class RoadInputImpl implements RoadInput {
     @Override
     public TrafficLightsInput getTrafficLightsInput() {
         return trafficLightsInput;
+    }
+
+    @Override
+    public double getRampMergingLength() {
+        return rampMergingLength;
+    }
+
+    @Override
+    public double getRampStartPosition() {
+        return rampStartPosition;
     }
 
     

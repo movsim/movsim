@@ -3,7 +3,7 @@
   <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.UpstreamBoundaryImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/UpstreamBoundaryImpl.java" 
     binary="false">    
-    <position x="2494" y="1059" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2494" y="1059"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -12,7 +12,7 @@
   <class id="2" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.RoadSectionImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/RoadSectionImpl.java" 
     binary="false">    
-    <position x="2926" y="37" width="263" height="497"/>    
+    <position height="497" width="263" x="2926" y="37"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -21,7 +21,7 @@
   <class id="3" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.InflowTimeSeriesImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/InflowTimeSeriesImpl.java" 
     binary="false">    
-    <position x="2629" y="1503" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2629" y="1503"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -29,7 +29,7 @@
   </class>  
   <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.impl.SimulatorImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false">    
-    <position x="3045" y="-396" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3045" y="-396"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -38,7 +38,7 @@
   <class id="5" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.TrafficLightsImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/TrafficLightsImpl.java" 
     binary="false">    
-    <position x="4012" y="1033" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="4012" y="1033"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -47,7 +47,7 @@
   <class id="8" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.roadSection.impl.FlowConservingBottlenecksImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/FlowConservingBottlenecksImpl.java" binary="false">    
-    <position x="3770" y="1139" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3770" y="1139"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -56,7 +56,7 @@
   <class id="9" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.TrafficLightImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/TrafficLightImpl.java" 
     binary="false">    
-    <position x="4009" y="1751" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="4009" y="1751"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -65,15 +65,16 @@
   <class id="10" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.SpeedLimitsImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/SpeedLimitsImpl.java" 
     binary="false">    
-    <position x="3517" y="1119" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3517" y="1119"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="11" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.OnrampImpl" 
-    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/OnrampImpl.java" binary="false">    
-    <position x="2732" y="1072" width="-1" height="-1"/>    
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.impl.SimpleOnrampImpl" 
+    project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/impl/SimpleOnrampImpl.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2732" y="1072"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -81,7 +82,7 @@
   </class>  
   <class id="12" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.NoiseImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/NoiseImpl.java" binary="false">    
-    <position x="3555" y="3272" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3555" y="3272"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -90,7 +91,7 @@
   <interface id="13" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.roadSection.FlowConservingBottlenecks" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/roadSection/FlowConservingBottlenecks.java" binary="false">    
-    <position x="3659" y="814" width="184" height="81"/>    
+    <position height="81" width="184" x="3659" y="814"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -99,7 +100,7 @@
   <class id="14" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleGeneratorImpl.java" 
     binary="false">    
-    <position x="1923" y="1113" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1923" y="1113"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -108,7 +109,7 @@
   <class id="15" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.CyclicBufferImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/CyclicBufferImpl.java" 
     binary="false">    
-    <position x="3804" y="2922" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3804" y="2922"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -116,7 +117,7 @@
   </class>  
   <interface id="16" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.Onramp" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/Onramp.java" binary="false">    
-    <position x="2655" y="814" width="170" height="65"/>    
+    <position height="65" width="170" x="2655" y="814"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -124,7 +125,7 @@
   </interface>  
   <interface id="17" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.SpeedLimits" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/SpeedLimits.java" binary="false">    
-    <position x="3447" y="814" width="172" height="81"/>    
+    <position height="81" width="172" x="3447" y="814"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -132,7 +133,7 @@
   </interface>  
   <interface id="18" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.TrafficLight" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/TrafficLight.java" binary="false">    
-    <position x="4017" y="1301" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="4017" y="1301"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -140,7 +141,7 @@
   </interface>  
   <interface id="19" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.TrafficLights" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/TrafficLights.java" binary="false">    
-    <position x="4000" y="850" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="4000" y="850"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -149,7 +150,7 @@
   <class id="20" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleContainerImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleContainerImpl.java" 
     binary="false">    
-    <position x="3274" y="1213" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3274" y="1213"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -157,7 +158,7 @@
   </class>  
   <interface id="21" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.RoadSection" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/RoadSection.java" binary="false">    
-    <position x="3046" y="-82" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3046" y="-82"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -165,7 +166,7 @@
   </interface>  
   <interface id="22" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.UpstreamBoundary" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/UpstreamBoundary.java" binary="false">    
-    <position x="2533" y="836" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2533" y="836"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -173,7 +174,7 @@
   </interface>  
   <interface id="23" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.roadSection.InflowTimeSeries" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/roadSection/InflowTimeSeries.java" binary="false">    
-    <position x="2623" y="1291" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2623" y="1291"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -181,7 +182,7 @@
   </interface>  
   <class id="24" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.impl.VehicleImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/impl/VehicleImpl.java" binary="false">    
-    <position x="2967" y="2409" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2967" y="2409"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -191,7 +192,7 @@
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/AccelerationModel.java" 
     binary="false">    
-    <position x="2313" y="1985" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2313" y="1985"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -200,7 +201,7 @@
   <interface id="27" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/TrafficLightApproaching.java" binary="false">    
-    <position x="3307" y="2947" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3307" y="2947"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -210,7 +211,7 @@
     name="org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/impl/TrafficLightApproachingImpl.java" 
     binary="false">    
-    <position x="3312" y="3286" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3312" y="3286"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -218,7 +219,7 @@
   </class>  
   <interface id="29" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.longmodel.Memory" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/Memory.java" binary="false">    
-    <position x="3019" y="2947" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3019" y="2947"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -227,7 +228,7 @@
   <class id="33" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/impl/MemoryImpl.java" 
     binary="false">    
-    <position x="3018" y="3277" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3018" y="3277"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -237,7 +238,7 @@
     name="org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/equilibrium/EquilibriumProperties.java" 
     binary="false">    
-    <position x="1772" y="1768" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1772" y="1768"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -245,7 +246,7 @@
   </interface>  
   <interface id="35" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.Simulator" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/Simulator.java" binary="false">    
-    <position x="3050" y="-660" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3050" y="-660"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -253,7 +254,7 @@
   </interface>  
   <interface id="37" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleContainer" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleContainer.java" binary="false">    
-    <position x="3160" y="814" width="247" height="193"/>    
+    <position height="193" width="247" x="3160" y="814"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -261,7 +262,7 @@
   </interface>  
   <interface id="38" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Moveable" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/Moveable.java" binary="false">    
-    <position x="3145" y="1829" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3145" y="1829"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -269,7 +270,7 @@
   </interface>  
   <interface id="39" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehicleGenerator" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehicleGenerator.java" binary="false">    
-    <position x="1926" y="850" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1926" y="850"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -277,7 +278,7 @@
   </interface>  
   <interface id="40" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Vehicle" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/Vehicle.java" binary="false">    
-    <position x="2919" y="1838" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2919" y="1838"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -285,7 +286,7 @@
   </interface>  
   <class id="41" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.VehiclePrototype" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/VehiclePrototype.java" binary="false">    
-    <position x="1922" y="1500" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1922" y="1500"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -293,7 +294,7 @@
   </class>  
   <interface id="42" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.Noise" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/Noise.java" binary="false">    
-    <position x="3547" y="2927" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3547" y="2927"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -301,7 +302,7 @@
   </interface>  
   <interface id="43" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.vehicles.MoveableContainer" 
     project="movsim" file="/movsim/src/main/java/org/movsim/simulator/vehicles/MoveableContainer.java" binary="false">    
-    <position x="3287" y="687" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="3287" y="687"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -311,7 +312,7 @@
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Gipps.java" 
     binary="false">    
-    <position x="715" y="2588" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="715" y="2588"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -321,7 +322,7 @@
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/OVM_VDIFF.java" 
     binary="false">    
-    <position x="1069" y="2620" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1069" y="2620"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -330,7 +331,7 @@
   <class id="46" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/ACC.java" binary="false">    
-    <position x="1432" y="2636" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1432" y="2636"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -340,7 +341,7 @@
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Newell.java" 
     binary="false">    
-    <position x="1778" y="2534" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1778" y="2534"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -349,7 +350,7 @@
   <class id="48" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/NSM.java" binary="false">    
-    <position x="2138" y="2564" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2138" y="2564"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -358,7 +359,7 @@
   <class id="49" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/KKW.java" binary="false">    
-    <position x="2486" y="2636" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="2486" y="2636"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -367,7 +368,7 @@
   <class id="50" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/IDM.java" binary="false">    
-    <position x="377" y="2620" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="377" y="2620"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -377,7 +378,7 @@
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.LongitudinalModel" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/LongitudinalModel.java" 
     binary="false">    
-    <position x="1770" y="3158" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="1770" y="3158"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
@@ -387,7 +388,7 @@
     name="org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/vehicles/longmodel/accelerationmodels/impl/Krauss.java" 
     binary="false">    
-    <position x="36" y="2611" width="-1" height="-1"/>    
+    <position height="-1" width="-1" x="36" y="2611"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    

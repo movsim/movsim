@@ -147,7 +147,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         requiredTimestep = simInput.getSimulationInput().getTimestep();
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
-
         
         addObstacleSystemVehicleType(heterogenInputData);
         

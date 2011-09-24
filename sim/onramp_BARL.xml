@@ -21,11 +21,13 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false" >
-         <!-- scaled units for time and space -->
-        <ROAD id="1" length="4000" lanes="1">
-            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+	 <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="BARL1" fraction="1" />
             </TRAFFIC_COMPOSITION>
+         <!-- scaled units for time and space -->
+		  <!-- road id 0 indicates mainroad -->    
+        <ROAD id="0" length="4000" lanes="1">
+           
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="2000" rho_per_km="2" v="3" />
             </INITIAL_CONDITIONS>
@@ -37,11 +39,11 @@
             <!-- improve vehicle performance at inflow -->
             <FLOW_CONSERVING_INHOMOGENEITIES />
             <SPEED_LIMITS/>
-            <RAMPS>
+            <SIMPLE_RAMPS>
                 <SIMPLE_RAMP x="2000" merge_length="100" logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
-            </RAMPS>
+            </SIMPLE_RAMPS>
             <TRAFFIC_LIGHTS>
             </TRAFFIC_LIGHTS>
             <DETECTORS dt="60" logging="true">

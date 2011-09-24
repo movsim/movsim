@@ -3,7 +3,6 @@
  */
 package org.movsim.simulator.vehicles;
 
-import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
