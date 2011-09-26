@@ -186,7 +186,7 @@ public class SimulatorImpl implements Simulator, Runnable {
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(inputData, roadSections);
+        simOutput = new SimOutput(inputData, roadSections, this.roadSectionsMap);
     }
 
     

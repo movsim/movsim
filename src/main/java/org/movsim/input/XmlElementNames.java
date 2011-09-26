@@ -53,5 +53,7 @@ public interface XmlElementNames {
     public final String OutputDetectors = "DETECTORS";
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
+    public final String OutputTravelTimes = "TRAVELTIMES";
+    
 
 }
