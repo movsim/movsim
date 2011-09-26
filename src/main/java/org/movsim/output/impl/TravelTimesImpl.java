@@ -18,7 +18,9 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
 
     private final Map<Long,RoadSection> roadSectionsMap;
     
-    private double tauEMA = 90; 
+    // configure update interval
+    private long updateIntervalCount = 100;   // init
+    
     
     public TravelTimesImpl(final TravelTimesInput travelTimesInput, final Map<Long,RoadSection> roadSectionsMap){
         this.roadSectionsMap = roadSectionsMap;
@@ -34,9 +36,9 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
             route.update(iterationCount, time, timestep, roadSectionsMap);
         }
         
-        if(iterationCount%100 == 0){
+        if(iterationCount%updateIntervalCount == 0){
             notifyObservers(time);
-            System.out.println("n observers registered = "+ getObserversInTimeSize()+ " ... and notify them now: time="+time);
+            //System.out.println("n observers registered = "+ getObserversInTimeSize()+ " ... and notify them now: time="+time);
         }
     }
     
@@ -51,17 +53,15 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
     
     
     
-    
-    // TODO, konfiguierbar !
-    public List<Double> getTravelTimesEMA(double time){
-//        List<Double> ttEMAs = new LinkedList<Double>();
-//        for(TravelTimeRoute route : routes){
-//          //System.out.println("calc ema with size()="+route.getDataPoints().size());
-//          ttEMAs.add( route.getTravelTimeEMA());
-//      }
+    public void setUpdateInterval(long updateIntervalCount){
+        this.updateIntervalCount = updateIntervalCount;
         
+    }
+    
+    public List<Double> getTravelTimesEMA(double time, double tauEMA){
+        final int N_DATA = 10;  // cut-off parameter 
         final ExponentialMovingAverage ema = new ExponentialMovingAverage(tauEMA);
-        final int N_DATA = 15;
+        
         List<Double> ttEMAs = new LinkedList<Double>();
         for(TravelTimeRoute route : routes){
             //System.out.println("calc ema with size()="+route.getDataPoints().size());
