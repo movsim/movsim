@@ -152,4 +152,8 @@ public interface TrafficLight {
      */
     void update(double time);
 
+    void setRelativeRedPhase(double initRelativeRedPhase);
+
+    double getRelativeRedPhase();
+
 }

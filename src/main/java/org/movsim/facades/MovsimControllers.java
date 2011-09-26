@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 
 public class MovsimControllers {
@@ -108,6 +109,21 @@ public class MovsimControllers {
         for(Long id : outflowControlMainroads){
             final RoadSection road = movsimViewerFacade.findRoadById(id);
             road.setFractionOfLeavingVehicles(newFraction);
+        }
+    }
+
+    public double getInitRelRedPhaseOfTrafficLight() {
+        final RoadSection road = movsimViewerFacade.findRoadById(-1); //TODO quick hack
+        for(TrafficLight tl : road.getTrafficLights()){
+            return tl.getRelativeRedPhase();
+        }
+        return 0;  // error
+    }
+
+    public void setRelativeRedPhaseOfTrafficLight(double initRelativeRedPhase) {
+        final RoadSection road = movsimViewerFacade.findRoadById(-1); //TODO quick hack
+        for(TrafficLight tl : road.getTrafficLights()){
+            tl.setRelativeRedPhase(initRelativeRedPhase);
         }
     }
 }

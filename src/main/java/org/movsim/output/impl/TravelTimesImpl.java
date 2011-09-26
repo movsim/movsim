@@ -28,20 +28,35 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
         for(final TravelTimeRouteInput routeInput : travelTimesInput.getRoutes()){
             routes.add(new TravelTimeRoute(routeInput));
         }
+        
     }
     
     
     public void update(long iterationCount, double time, double timestep){
+        
+        final boolean doNotificationUpdate = (iterationCount%updateIntervalCount == 0);
         for(TravelTimeRoute route : routes){
             route.update(iterationCount, time, timestep, roadSectionsMap);
+            if(doNotificationUpdate){
+                route.calcEMA(time);
+            }
         }
         
-        if(iterationCount%updateIntervalCount == 0){
+        if(doNotificationUpdate){
             notifyObservers(time);
             //System.out.println("n observers registered = "+ getObserversInTimeSize()+ " ... and notify them now: time="+time);
         }
     }
     
+    
+    
+    public List<List<XYDataPoint>> getTravelTimeEmas(){
+        List<List<XYDataPoint>> listOfEmas = new LinkedList<List<XYDataPoint>>();
+        for(TravelTimeRoute route : routes){
+            listOfEmas.add(route.getEmaPoints());
+        }
+        return listOfEmas;
+    }
     
     public List<List<XYDataPoint>> getTravelTimeDataRoutes(){
         List<List<XYDataPoint>> listOfRoutes = new LinkedList<List<XYDataPoint>>();
@@ -57,6 +72,8 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
         this.updateIntervalCount = updateIntervalCount;
         
     }
+    
+    
     
     public List<Double> getTravelTimesEMA(double time, double tauEMA){
         final int N_DATA = 10;  // cut-off parameter 

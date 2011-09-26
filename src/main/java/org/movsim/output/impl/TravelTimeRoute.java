@@ -10,6 +10,7 @@ import org.movsim.input.model.output.impl.TravelTimeRouteInput;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.utilities.impl.ExponentialMovingAverage;
 import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,18 @@ public class TravelTimeRoute {
     private double travelTimeEMA = 0;
     
     
+    private List<XYDataPoint> emaPoints;
+    final int N_DATA = 30;  // cut-off parameter  TODO inconsistent with tauEMA
+    final ExponentialMovingAverage ema = new ExponentialMovingAverage(tauEMA);
+    
+    
+    public void calcEMA(double time){
+        //System.out.println("calc ema with size()="+route.getDataPoints().size());
+        final int size = dataPoints.size();
+        final double emaValue = ema.calcEMA(time, dataPoints.subList(Math.max(0, size-N_DATA), size));
+        emaPoints.add(new XYDataPoint(time,  emaValue));
+    }
+    
     public TravelTimeRoute(TravelTimeRouteInput travelTimeRouteInput){
         this.startId = travelTimeRouteInput.getStartId();
         this.endId = travelTimeRouteInput.getEndId();
@@ -41,12 +54,17 @@ public class TravelTimeRoute {
         
         vehiclesOnRoute = new HashMap<Vehicle,Double>();
         dataPoints = new LinkedList<XYDataPoint>();
+        emaPoints = new LinkedList<XYDataPoint>();
         
         logger.info("consider travel times on route with startId={}, endId={}", startId, endId);
         logger.info("with startPos={}, endPos={}", startPosition, endPosition);
         
     }
     
+    public List<XYDataPoint> getEmaPoints() {
+        return emaPoints;
+    }
+
     public void update(long iterationCount, double time, double timestep, final Map<Long,RoadSection> roadSectionsMap){
         
         //dataPoints.clear();
@@ -96,9 +114,7 @@ public class TravelTimeRoute {
             if( veh.getRoadId() == endId && veh.getPosition() > endPosition){
                 final double travelTimeOnRoute = timeEndOfRoute - startTime;
                 dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
-                if(endId==1){
-                    System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime, timeEndOfRoute,travelTimeOnRoute);
-                }
+                // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime, timeEndOfRoute,travelTimeOnRoute);
                 stagedVehicles.add(veh);
                 ttAverage += travelTimeOnRoute;
             }

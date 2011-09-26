@@ -56,10 +56,14 @@ public class TrafficLightImpl implements TrafficLight {
     private double totalCycleTime;
 
     /** The green time period. */
-    private final double greenTimePeriod;
+    private double greenTimePeriod;
+    
+    private final double greenTimePeriodInit;
 
     /** The red time period. */
-    private final double redTimePeriod;
+    private double redTimePeriod;
+    
+    private final double redTimePeriodInit;
 
     /** The green red time period. */
     private final double greenRedTimePeriod;
@@ -84,8 +88,8 @@ public class TrafficLightImpl implements TrafficLight {
      */
     public TrafficLightImpl(TrafficLightData inputData) {
         position = inputData.getX();
-        greenTimePeriod = inputData.getGreenTime();
-        redTimePeriod = inputData.getRedTime();
+        greenTimePeriodInit = greenTimePeriod = inputData.getGreenTime();
+        redTimePeriodInit = redTimePeriod = inputData.getRedTime();
         greenRedTimePeriod = inputData.getGreenRedTimePeriod();
         redGreenTimePeriod = inputData.getRedGreenTimePeriod();
         phaseShift = inputData.getPhaseShift();
@@ -314,6 +318,17 @@ public class TrafficLightImpl implements TrafficLight {
             return "red_green";
         }
         return "error: not defined!";
+    }
+
+    @Override
+    public void setRelativeRedPhase(double initRelativeRedPhase) {
+        redTimePeriod = initRelativeRedPhase*redTimePeriodInit;
+        greenTimePeriod = (1-initRelativeRedPhase)*greenTimePeriodInit;
+    }
+
+    @Override
+    public double getRelativeRedPhase() {
+        return redTimePeriod/(redTimePeriod + greenTimePeriod);
     }
 
 }
