@@ -100,7 +100,7 @@ public class MovsimControllers {
     }
     
     public double getInitFractionToOfframp(){
-        return 0; // init. parameter (not in xml input)
+        return 0.01; // init. parameter (not in xml input)
     }
     
     

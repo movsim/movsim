@@ -27,17 +27,20 @@
 package org.movsim.output;
 
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.impl.FloatingCarsImpl;
 import org.movsim.output.impl.SpatioTemporalImpl;
+import org.movsim.output.impl.TravelTimesImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,25 +73,42 @@ public class SimOutput implements SimObservables {
     /** The project name. */
     private final String projectName;
 
-    private final RoadSection roadSection;
+    private final List<RoadSection> roadSections;
+    final RoadSection roadSection; // TODO hack only one roadsection
 
+    
+    private final TravelTimesImpl travelTimes;
     /**
      * Instantiates a new sim output.
      *
      * @param simInput the sim input
      * @param roadSections the road sections
      */
-    public SimOutput(InputData simInput, List<RoadSection> roadSections) {
+    public SimOutput(InputData simInput, final List<RoadSection> roadSections, final Map<Long, RoadSection> roadSectionsMap) {
         projectName = simInput.getProjectMetaData().getProjectName();
-        this.roadSection = roadSections.get(0); // TODO here only for *one* roadsection
+        
+        
+        this.roadSections = roadSections; //roadSections.get(0)
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
 
+        
+        
         // SingleRoad quickhack! TODO
         final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
+
+        // travel times 
+        final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
+        travelTimes = new TravelTimesImpl(travelTimesInput, roadSectionsMap);
+        
+        
+        // TODO hack: just *one* roadsection
+        // access not robust to fetch mainroad
+        roadSection = roadSections.get(0);  
+        // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCarsImpl(roadSection.getVehContainers(), floatingCarInput);
@@ -136,6 +156,10 @@ public class SimOutput implements SimObservables {
         if (trajectories != null) {
             trajectories.update(iterationCount, time);
         }
+        
+        if(travelTimes != null){
+            travelTimes.update(iterationCount, time, timestep);
+        }
 
     }
 
@@ -167,6 +191,11 @@ public class SimOutput implements SimObservables {
     @Override
     public List<LoopDetector> getLoopDetectors() {
         return roadSection.getLoopDetectors();
+    }
+
+    @Override
+    public TravelTimesImpl getTravelTimes() {
+        return travelTimes;
     }
 
 }

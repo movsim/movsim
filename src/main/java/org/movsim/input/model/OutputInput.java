@@ -29,6 +29,7 @@ package org.movsim.input.model;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.input.model.output.TravelTimesInput;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -56,5 +57,7 @@ public interface OutputInput {
      * @return the trajectories input
      */
     TrajectoriesInput getTrajectoriesInput();
+
+    TravelTimesInput getTravelTimesInput();
 
 }
