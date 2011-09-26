@@ -193,4 +193,9 @@ public class SimOutput implements SimObservables {
         return roadSection.getLoopDetectors();
     }
 
+    @Override
+    public TravelTimesImpl getTravelTimes() {
+        return travelTimes;
+    }
+
 }

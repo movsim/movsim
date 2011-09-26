@@ -1,15 +1,16 @@
 package org.movsim.output.impl;
 
 import java.util.HashMap;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.model.output.impl.TravelTimeRouteInput;
-import org.movsim.output.SimOutput;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,13 +19,19 @@ public class TravelTimeRoute {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TravelTimeRoute.class);
     
-
     private final long startId;
     private final long endId;
     private final double startPosition;
     private final double endPosition;
     
     private Map<Vehicle,Double> vehiclesOnRoute;
+    
+    private List<XYDataPoint> dataPoints;
+    
+    private final double tauEMA = 60;
+    private final double betaEMA = Math.exp(-1. / tauEMA); 
+    private double travelTimeEMA = 0;
+    
     
     public TravelTimeRoute(TravelTimeRouteInput travelTimeRouteInput){
         this.startId = travelTimeRouteInput.getStartId();
@@ -33,12 +40,16 @@ public class TravelTimeRoute {
         this.endPosition = travelTimeRouteInput.getEndPosition();
         
         vehiclesOnRoute = new HashMap<Vehicle,Double>();
+        dataPoints = new LinkedList<XYDataPoint>();
         
         logger.info("consider travel times on route with startId={}, endId={}", startId, endId);
         logger.info("with startPos={}, endPos={}", startPosition, endPosition);
+        
     }
     
     public void update(long iterationCount, double time, double timestep, final Map<Long,RoadSection> roadSectionsMap){
+        
+        //dataPoints.clear();
         // check first start_position
         // TODO catch error if road id not available
         
@@ -46,9 +57,20 @@ public class TravelTimeRoute {
         
         
         // check end_position
-        checkPassedVehicles(time);
+        final double averageNewTT  = checkPassedVehicles(time);
+        
+       travelTimeEMA = betaEMA * travelTimeEMA + (1 - betaEMA) * averageNewTT;
+        
     }
     
+    public double getTravelTimeEMA() {
+        return travelTimeEMA;
+    }
+
+    public List<XYDataPoint> getDataPoints() {
+        return dataPoints;
+    }
+
     private void checkNewVehicles(final double timeStartOfRoute, final RoadSection roadSection){
         for(final VehicleContainer lane : roadSection.getVehContainers()){
             for(final Vehicle veh : lane.getVehicles()){
@@ -64,7 +86,8 @@ public class TravelTimeRoute {
     }
     
     
-    private void checkPassedVehicles(final double timeEndOfRoute){
+    private double checkPassedVehicles(final double timeEndOfRoute){
+        double ttAverage = 0;
         final List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
         for (Map.Entry<Vehicle, Double> entry : vehiclesOnRoute.entrySet()) {
             final Vehicle veh = entry.getKey();
@@ -72,16 +95,20 @@ public class TravelTimeRoute {
             //System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
             if( veh.getRoadId() == endId && veh.getPosition() > endPosition){
                 final double travelTimeOnRoute = timeEndOfRoute - startTime;
+                dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
                 if(endId==1){
                     System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime, timeEndOfRoute,travelTimeOnRoute);
                 }
-                stagedVehicles.add(veh); 
+                stagedVehicles.add(veh);
+                ttAverage += travelTimeOnRoute;
             }
         }
         for(final Vehicle veh : stagedVehicles){
             vehiclesOnRoute.remove(veh);
             //System.out.printf("remove vehicle at x=%.2f from route map", veh.getPosition());
         }
-
+        
+        return (stagedVehicles.size()==0) ? 0 : ttAverage/stagedVehicles.size(); 
     }
+    
 }

@@ -25,6 +25,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
     private List<Observer> observers = new ArrayList<Observer>();
     private List<ObserverInTime> observersInTime = new ArrayList<ObserverInTime>();
 
+  
     /*
      * (non-Javadoc)
      * 
@@ -117,4 +118,12 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
         // logger.debug(" n = {} observers notified", observers.size());
     }
 
+    
+    public int getObserversSize(){
+        return observers.size();
+    }
+    
+    public int getObserversInTimeSize(){
+        return observersInTime.size();
+    }
 }

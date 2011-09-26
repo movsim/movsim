@@ -33,9 +33,11 @@ import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.ProjectMetaDataImpl;
+import org.movsim.output.SimObservables;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.impl.SimulatorImpl;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,5 +205,17 @@ public class MovsimViewerFacade {
     // // TODO Auto-generated method stub
     // return 0;
     // }
+    
+    public List<List<XYDataPoint>> getTravelTimeDataRoutes(){
+        return model.getSimObservables().getTravelTimes().getTravelTimeDataRoutes();
+    }
+    
+    public List<Double> getTravelTimeDataEMAs(double time){
+        return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time);
+    }
+    public SimObservables getSimObservables(){
+        return model.getSimObservables();
+    }
+    
 
 }
