@@ -205,13 +205,12 @@ public class MovsimViewerFacade {
     // // TODO Auto-generated method stub
     // return 0;
     // }
-    
-//    public List<List<XYDataPoint>> getTravelTimeDataRoutes(){
-//        return model.getSimObservables().getTravelTimes().getTravelTimeDataRoutes();
-//    }
+    public List<List<XYDataPoint>> getTravelTimeEmas(){
+      return model.getSimObservables().getTravelTimes().getTravelTimeEmas();
+  }
     
     public List<Double> getTravelTimeDataEMAs(double time){
-        final double tauEMA = 60;
+        final double tauEMA = 40;
         return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
     

@@ -51,21 +51,28 @@ public class TrafficLightImpl implements TrafficLight {
     /** The old status. */
     private int oldStatus;
 
-    // parameter: cycle times
     /** The total cycle time. */
     private double totalCycleTime;
 
     /** The green time period. */
-    private final double greenTimePeriod;
+    private double greenTimePeriod;
+    
+    private final double greenTimePeriodInit;
 
     /** The red time period. */
-    private final double redTimePeriod;
+    private double redTimePeriod;
+    
+    private final double redTimePeriodInit;
 
     /** The green red time period. */
-    private final double greenRedTimePeriod;
+    private double greenRedTimePeriod;
+    
+    private double greenRedTimePeriodInit;
 
     /** The red green time period. */
-    private final double redGreenTimePeriod;
+    private double redGreenTimePeriod;
+    
+    private final double redGreenTimePeriodInit;
 
     /** The phase shift. */
     private final double phaseShift;
@@ -84,10 +91,10 @@ public class TrafficLightImpl implements TrafficLight {
      */
     public TrafficLightImpl(TrafficLightData inputData) {
         position = inputData.getX();
-        greenTimePeriod = inputData.getGreenTime();
-        redTimePeriod = inputData.getRedTime();
-        greenRedTimePeriod = inputData.getGreenRedTimePeriod();
-        redGreenTimePeriod = inputData.getRedGreenTimePeriod();
+        greenTimePeriodInit = greenTimePeriod = inputData.getGreenTime();
+        redTimePeriodInit = redTimePeriod = inputData.getRedTime();
+        greenRedTimePeriodInit = greenRedTimePeriod = inputData.getGreenRedTimePeriod();
+        redGreenTimePeriodInit = redGreenTimePeriod = inputData.getRedGreenTimePeriod();
         phaseShift = inputData.getPhaseShift();
 
         initialize();
@@ -113,10 +120,10 @@ public class TrafficLightImpl implements TrafficLight {
         oldStatus = status;
         currentCycleTime += time - lastUpdateTime;
 
-        // logger.debug("update at time = {}, status = {}", time, status);
-        // logger.debug("   actualCycleTime = {}, lastUpdateTime={}",
-        // currentCycleTime, lastUpdateTime);
+//        logger.debug("update at time = {}, status = {}", time, status);
+//        logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
 
+        
         if (currentCycleTime > greenTimePeriod) {
             status = GREEN_RED_LIGHT;
         }
@@ -126,7 +133,7 @@ public class TrafficLightImpl implements TrafficLight {
         if (currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
             status = RED_GREEN_LIGHT;
         }
-        if (currentCycleTime >= totalCycleTime) {
+        if(currentCycleTime >= totalCycleTime) {
             status = GREEN_LIGHT;
             currentCycleTime -= totalCycleTime;
         }
@@ -314,6 +321,34 @@ public class TrafficLightImpl implements TrafficLight {
             return "red_green";
         }
         return "error: not defined!";
+    }
+
+    @Override
+    public void setRelativeRedPhase(double initRelativeRedPhase) {
+        redTimePeriod = initRelativeRedPhase*redTimePeriodInit;
+        greenTimePeriod = (1-initRelativeRedPhase)*greenTimePeriodInit;
+        
+        int oldStatus = status;
+        if(initRelativeRedPhase>=1 || initRelativeRedPhase<=0){
+            greenRedTimePeriod = 0;
+            //redGreenTimePeriod = 0;
+            System.out.println("++++ initRel "+ initRelativeRedPhase+ " and set to zero");
+            oldStatus = (initRelativeRedPhase>=1) ? RED_LIGHT : GREEN_LIGHT;
+        }
+        else{
+            greenRedTimePeriod = greenRedTimePeriodInit;
+            //redGreenTimePeriod = redGreenTimePeriodInit;
+        }
+
+        
+        initialize();
+        status = oldStatus;
+        
+    }
+
+    @Override
+    public double getRelativeRedPhase() {
+        return redTimePeriod/(redTimePeriod + greenTimePeriod);
     }
 
 }
