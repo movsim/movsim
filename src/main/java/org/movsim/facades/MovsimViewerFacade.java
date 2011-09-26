@@ -211,7 +211,7 @@ public class MovsimViewerFacade {
 //    }
     
     public List<Double> getTravelTimeDataEMAs(double time){
-        final double tauEMA = 60;
+        final double tauEMA = 40;
         return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
     
