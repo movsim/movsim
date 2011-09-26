@@ -120,8 +120,8 @@ public class TrafficLightImpl implements TrafficLight {
         oldStatus = status;
         currentCycleTime += time - lastUpdateTime;
 
-        logger.info("update at time = {}, status = {}", time, status);
-        logger.info("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
+//        logger.debug("update at time = {}, status = {}", time, status);
+//        logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
 
         
         if (currentCycleTime > greenTimePeriod) {
