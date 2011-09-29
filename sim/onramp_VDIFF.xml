@@ -41,14 +41,13 @@
             </FLOW_CONSERVING_INHOMOGENEITIES>
             <SPEED_LIMITS>
             </SPEED_LIMITS>
-            <RAMPS>
+            <SIMPLE_RAMPS>
                 <SIMPLE_RAMP x="15000" merge_length="1000"
                     logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
-            </RAMPS>
-            <TRAFFIC_LIGHTS>
-            </TRAFFIC_LIGHTS>
+            </SIMPLE_RAMPS>
+            <TRAFFIC_LIGHTS />
             <DETECTORS dt="60" logging="true">
                <CROSS_SECTION x="1000" />
                <CROSS_SECTION x="6000" />
