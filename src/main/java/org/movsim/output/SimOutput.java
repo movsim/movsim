@@ -77,7 +77,7 @@ public class SimOutput implements SimObservables {
     final RoadSection roadSection; // TODO hack only one roadsection
 
     
-    private final TravelTimesImpl travelTimes;
+    private TravelTimesImpl travelTimes;
     /**
      * Instantiates a new sim output.
      *
@@ -100,9 +100,13 @@ public class SimOutput implements SimObservables {
         // SingleRoad quickhack! TODO
         final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
 
+        
+        // TODO quick hack null treatment
         // travel times 
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
-        travelTimes = new TravelTimesImpl(travelTimesInput, roadSectionsMap);
+        if(travelTimesInput!=null){
+            travelTimes = new TravelTimesImpl(travelTimesInput, roadSectionsMap);
+        }
         
         
         // TODO hack: just *one* roadsection

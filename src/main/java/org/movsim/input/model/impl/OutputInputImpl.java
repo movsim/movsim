@@ -80,7 +80,11 @@ public class OutputInputImpl implements OutputInput {
 
         trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));
 
-        travelTimesInput = new TravelTimesInputImpl(elem.getChild(XmlElementNames.OutputTravelTimes));
+        
+        // TODO treat all elements similarly
+        if(elem.getChild(XmlElementNames.OutputTravelTimes)!=null){
+            travelTimesInput = new TravelTimesInputImpl(elem.getChild(XmlElementNames.OutputTravelTimes));
+        }
     }
 
     /*
