@@ -27,7 +27,7 @@ public class MovsimControllers {
         movsimViewerFacade = MovsimViewerFacade.getInstance();
     }
     
-    public static MovsimControllers getInstance(){
+    public static synchronized MovsimControllers getInstance(){
         if(instance == null){
             instance = new MovsimControllers();
         }

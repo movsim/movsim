@@ -88,7 +88,7 @@ public class MovsimViewerFacade {
     }
 
     
-    public static MovsimViewerFacade getInstance(){
+    public static synchronized MovsimViewerFacade getInstance(){
         if(instance == null){
             instance = new MovsimViewerFacade();
         }

@@ -99,7 +99,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
     }
 
-    public static SimulatorImpl getInstance(){
+    public static synchronized SimulatorImpl getInstance(){
         if(instance == null){
             instance = new SimulatorImpl();
         }
