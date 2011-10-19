@@ -1,5 +1,28 @@
-/*
- * Copyright by Ralph Germ (http://www.ralphgerm.de)
+/**
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
+ *                             Ralph Germ, Martin Budden
+ *                             <info@movsim.org>
+ * ----------------------------------------------------------------------
+ * 
+ *  This file is part of 
+ *  
+ *  MovSim - the multi-model open-source vehicular-traffic simulator 
+ *
+ *  MovSim is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  MovSim is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
+ *  <http://www.movsim.org>.
+ *  
+ * ----------------------------------------------------------------------
  */
 package org.movsim.utilities.impl;
 
@@ -13,7 +36,6 @@ import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ObservableImpl.
  */
@@ -104,8 +126,8 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
         for (final ObserverInTime o : observersInTime) {
             o.notifyObserver(time);
         }
-        // logger.debug(" n = {} observers notified at time = {}",
-        // observersInTime.size(), time);
+         logger.debug(" n = {} observers notified at time = {}",
+         observersInTime.size(), time);
     }
 
     /**

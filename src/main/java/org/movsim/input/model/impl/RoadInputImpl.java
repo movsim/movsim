@@ -57,7 +57,6 @@ import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
 import org.movsim.input.model.simulation.impl.TrafficSinkDataImpl;
 import org.movsim.input.model.simulation.impl.TrafficSourceDataImpl;
 
-// TODO: Auto-generated Javadoc
 // TODO: extract element names into XmlElementNames Interface to make them symbolic.
 
 /**

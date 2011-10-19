@@ -58,5 +58,6 @@ public interface FloatingCars extends ObservableInTime {
      *
      * @return the moveable container
      */
+    @Deprecated
     MoveableContainer getMoveableContainer(); // TODO: compatibility for movsim applet, returns only most right lane container!!!
 }

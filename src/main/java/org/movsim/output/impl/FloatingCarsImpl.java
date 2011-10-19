@@ -109,6 +109,7 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
     /* (non-Javadoc)
      * @see org.movsim.output.FloatingCars#getMoveableContainer()
      */
+    @Deprecated
     public MoveableContainer getMoveableContainer(){
         return vehContainers.get(Constants.MOST_RIGHT_LANE);
     }
