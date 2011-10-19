@@ -28,6 +28,7 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelCategory;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -61,7 +62,7 @@ public interface AccelerationModel {
      * 
      * @return the model category
      */
-    int getModelCategory();
+    ModelCategory getModelCategory();
 
     /**
      * Gets the required update time.

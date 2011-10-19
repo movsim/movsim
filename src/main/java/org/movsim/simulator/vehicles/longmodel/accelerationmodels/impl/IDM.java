@@ -16,7 +16,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
      *            the parameters: v0, T, s0, s1, a, b, delta
      */
     public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
+        super(modelName, ModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
 

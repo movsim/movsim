@@ -32,7 +32,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class NSM extends AccelerationModelAbstract implements AccelerationModel 
      *            the parameters
      */
     public NSM(String modelName, AccelerationModelInputDataNSM parameters) {
-        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON, parameters);
+        super(modelName, ModelCategory.CELLULAR_AUTOMATON, parameters);
         initParameters();
     }
 

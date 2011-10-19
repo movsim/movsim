@@ -16,7 +16,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.movsim.utilities.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +85,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
      *            the parameters
      */
     public ACC(String modelName, AccelerationModelInputDataACC parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
+        super(modelName, ModelCategory.CONTINUOUS_MODEL, parameters);
         initParameters();
     }
 

@@ -30,7 +30,6 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.movsim.utilities.Observer;
 import org.movsim.utilities.impl.ScalingHelper;
 import org.slf4j.Logger;
@@ -42,6 +41,19 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AccelerationModelAbstract implements Observer {
 
+    public enum ModelCategory {
+        CONTINUOUS_MODEL, INTERATED_MAP_MODEL, CELLULAR_AUTOMATON;
+        
+        public boolean isCA() {
+            return (this == CELLULAR_AUTOMATON);
+        }
+
+        public boolean isIteratedMap() {
+            return (this == INTERATED_MAP_MODEL);
+        }
+    }
+    
+    
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelAbstract.class);
 
@@ -52,7 +64,7 @@ public abstract class AccelerationModelAbstract implements Observer {
     private final double scalingLength;
 
     /** The model category. */
-    private final int modelCategory;
+    private final ModelCategory modelCategory;
 
     /** The parameters. */
     public AccelerationModelInputData parameters;
@@ -75,7 +87,7 @@ public abstract class AccelerationModelAbstract implements Observer {
      * @param parameters
      *            the parameters
      */
-    public AccelerationModelAbstract(String modelName, int modelCategory, AccelerationModelInputData parameters) {
+    public AccelerationModelAbstract(String modelName, ModelCategory modelCategory, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.modelCategory = modelCategory;
         this.parameters = parameters;
@@ -83,11 +95,6 @@ public abstract class AccelerationModelAbstract implements Observer {
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
         parameters.registerObserver(this);
     }
-
-    // public LongitudinalModel(String modelName, int modelCategory) {
-    // this.modelName = modelName;
-    // this.modelCategory = modelCategory;
-    // }
 
     /**
      * Removes the observer.
@@ -107,13 +114,24 @@ public abstract class AccelerationModelAbstract implements Observer {
         return modelName;
     }
 
+  
+
+    /**
+     * Gets the model category.
+     * 
+     * @return the model category
+     */
+    public ModelCategory getModelCategory() {
+        return modelCategory;
+    }
+    
     /**
      * Checks if is cellular automaton.
      * 
      * @return true, if is cA
      */
     public boolean isCA() {
-        return (modelCategory == AccelerationModelCategory.CELLULAR_AUTOMATON);
+        return modelCategory.isCA();
     }
 
     /**
@@ -122,16 +140,7 @@ public abstract class AccelerationModelAbstract implements Observer {
      * @return true, if is iterated map
      */
     public boolean isIteratedMap() {
-        return (modelCategory == AccelerationModelCategory.INTERATED_MAP_MODEL);
-    }
-
-    /**
-     * Gets the model category.
-     * 
-     * @return the model category
-     */
-    public int getModelCategory() {
-        return modelCategory;
+        return modelCategory.isIteratedMap();
     }
 
     /**
