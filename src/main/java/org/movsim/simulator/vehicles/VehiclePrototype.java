@@ -58,7 +58,6 @@ public class VehiclePrototype {
     /** The vehicle input. */
     private final VehicleInput vehicleInput;
     
-    
     private final double relativeRandomizationV0;
 
 

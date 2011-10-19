@@ -52,15 +52,15 @@ public class RoadNetwork {
            str.append(", roadLength="+getRoadLength(key));
            str.append(", fromId="+getFromId(key));
            str.append(", toId="+getToId(key));
-           str.append(", isPeriodBoundaryConditions="+isPeriodBoundary(key));
+           //str.append(", isPeriodBoundaryConditions="+isPeriodBoundary(key));
            str.append("\n");
        }
        return str.toString();
     }
 
     public boolean isPeriodBoundary(long roadId) {
-        return (getInstance().getToId(roadId) == getInstance().getFromId(roadId));
+        return false; // TODO
+        //return (getInstance().getToId(roadId) == getInstance().getFromId(roadId));
     }
-    
     
 }

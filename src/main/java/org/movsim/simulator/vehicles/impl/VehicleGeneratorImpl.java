@@ -182,7 +182,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
                 } else {
                     requiredTimestep = requiredTimestepLocal;
                     logger.info("set simulation timestep to dt={} for model = {}", requiredTimestep,
-                            longModel.modelName());
+                            longModel.modelName().name());
                 }
             }
             logger.debug("simulation timestep: dt={}. ", requiredTimestep);
@@ -246,7 +246,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         else if (longModel.modelName() == ModelName.KKW)
             return new EquilibriumKKW(vehLength, (KKW) longModel);
         else {
-            logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName());
+            logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName().name());
             System.exit(0);
         }
         return null; // should not be reached after exit
