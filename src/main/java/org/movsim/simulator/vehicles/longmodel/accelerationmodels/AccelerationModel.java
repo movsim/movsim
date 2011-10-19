@@ -29,6 +29,7 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelCategory;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,7 +42,7 @@ public interface AccelerationModel {
      * 
      * @return the string
      */
-    String modelName();
+    ModelName modelName();
 
     /**
      * Checks if is cellular automaton.

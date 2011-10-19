@@ -78,8 +78,8 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
      * @param parameters
      *            the parameters
      */
-    public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameters) {
-        super(modelName, ModelCategory.CONTINUOUS_MODEL, parameters);
+    public OVM_VDIFF(AccelerationModelInputDataOVM_VDIFF parameters) {
+        super(ModelName.OVM_VDIFF, parameters);
         initParameters();
     }
 

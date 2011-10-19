@@ -19,10 +19,11 @@ public interface XmlElementNames {
     public final String VehicleLongModelACC = "ACC";
     public final String VehicleLongModelOVM_VDIFF = "OVM_VDIFF";
     public final String VehicleLongModelGIPPS = "GIPPS";
+    public final String VehicleLongModelKRAUSS = "KRAUSS";
     public final String VehicleLongModelNEWELL = "NEWELL";
     public final String VehicleLongModelNSM = "NSM";
-    public final String VehicleLongModelKCA = "KKW";
-    public final String VehicleLongModelKRAUSS = "KRAUSS";
+    public final String VehicleLongModelKKW = "KKW";
+    
 
     public final String VehicleLaneChangeModel = "LANE_CHANGE_MODEL";
     public final String VehicleLaneChangeModelMobil = "MOBIL";

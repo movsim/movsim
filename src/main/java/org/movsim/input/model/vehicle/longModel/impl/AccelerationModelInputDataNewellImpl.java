@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,8 +63,8 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataNewellImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataNewellImpl(Map<String, String> map) {
+        super(ModelName.NEWELL);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));
         dt = Double.parseDouble(map.get("dt"));
@@ -83,13 +84,13 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
         // TODO Auto-generated method stub
         if (v0 < 0 || s0 < 0 || dt < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
 
         if (dt == 0) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
 

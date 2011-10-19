@@ -80,8 +80,8 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
      * @param parameters
      *            the parameters
      */
-    public Krauss(String modelName, AccelerationModelInputDataKrauss parameters) {
-        super(modelName, ModelCategory.INTERATED_MAP_MODEL, parameters);
+    public Krauss(AccelerationModelInputDataKrauss parameters) {
+        super(ModelName.KRAUSS, parameters);
         initParameters();
     }
 

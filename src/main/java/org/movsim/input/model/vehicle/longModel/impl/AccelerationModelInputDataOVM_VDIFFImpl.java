@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,8 +79,8 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataOVM_VDIFFImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataOVM_VDIFFImpl(Map<String, String> map) {
+        super(ModelName.OVM_VDIFF);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         tauDefault = tau = Double.parseDouble(map.get("tau"));
         lenInteractionDefault = lenInteraction = Double.parseDouble(map.get("l_int"));
@@ -103,7 +104,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     protected void checkParameters() {
         if (s0 < 0 || v0 < 0 || tau < 0 || lenInteraction < 0 || beta < 0 || lambda < 0 || variant < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
 

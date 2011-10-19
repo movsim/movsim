@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,8 +83,8 @@ public class AccelerationModelInputDataACCImpl extends AccelerationModelInputDat
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataACCImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataACCImpl(Map<String, String> map) {
+        super(ModelName.ACC);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         TDefault = T = Double.parseDouble(map.get("T"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));
@@ -110,12 +111,12 @@ public class AccelerationModelInputDataACCImpl extends AccelerationModelInputDat
         }
         if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
         if (T == 0 || a == 0 || b == 0) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
     }

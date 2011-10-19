@@ -70,8 +70,8 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
      * @param parameters
      *            the parameters: v0, T, s0, s1, a, b, delta
      */
-    public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
-        super(modelName, ModelCategory.CONTINUOUS_MODEL, parameters);
+    public IDM(AccelerationModelInputDataIDM parameters) {
+        super(ModelName.IDM, parameters);
         initParameters();
     }
 

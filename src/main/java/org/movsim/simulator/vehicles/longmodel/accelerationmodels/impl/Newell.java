@@ -63,8 +63,8 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
      * @param parameters
      *            the parameters
      */
-    public Newell(String modelName, AccelerationModelInputDataNewell parameters) {
-        super(modelName, ModelCategory.INTERATED_MAP_MODEL, parameters);
+    public Newell(AccelerationModelInputDataNewell parameters) {
+        super(ModelName.NEWELL, parameters);
         initParameters();
     }
 

@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,8 +91,8 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataKKWImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataKKWImpl(Map<String, String> map) {
+        super(ModelName.KKW);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         kDefault = k = Double.parseDouble(map.get("k"));
         pb0Default = pb0 = Double.parseDouble(map.get("pb0"));
@@ -113,7 +114,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     protected void checkParameters() {
         if (v0 < 0 || k < 0 || pb0 < 0 || pb1 < 0 || pa1 < 0 || pa2 < 0 || vp < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
     }

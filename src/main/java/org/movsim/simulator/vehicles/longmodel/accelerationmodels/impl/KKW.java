@@ -96,8 +96,8 @@ public class KKW extends AccelerationModelAbstract implements AccelerationModel 
      * @param length
      *            the length
      */
-    public KKW(String modelName, AccelerationModelInputDataKKW parameters, double length) {
-        super(modelName, ModelCategory.CELLULAR_AUTOMATON, parameters);
+    public KKW(AccelerationModelInputDataKKW parameters, double length) {
+        super(ModelName.KKW, parameters);
         this.length = length; // model parameter!
         initParameters();
     }

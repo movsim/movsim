@@ -70,8 +70,8 @@ public class NSM extends AccelerationModelAbstract implements AccelerationModel 
      * @param parameters
      *            the parameters
      */
-    public NSM(String modelName, AccelerationModelInputDataNSM parameters) {
-        super(modelName, ModelCategory.CELLULAR_AUTOMATON, parameters);
+    public NSM(AccelerationModelInputDataNSM parameters) {
+        super(ModelName.NSM, parameters);
         initParameters();
     }
 

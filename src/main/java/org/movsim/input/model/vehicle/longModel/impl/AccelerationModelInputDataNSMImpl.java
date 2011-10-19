@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,8 +69,8 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataNSMImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataNSMImpl(Map<String, String> map) {
+        super(ModelName.NSM);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         pSlowToStartDefault = pSlowToStart = Double.parseDouble(map.get("p_slow_start"));
         pSlowdownDefault = pSlowdown = Double.parseDouble(map.get("p_slowdown"));
@@ -88,13 +89,13 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
         if (pSlowToStart < pSlowdown) {
             logger.error("slow to start logic requires pSlowToStart > pSlowdown, but input {} < {} ", pSlowToStart,
                     pSlowdown);
-            logger.error("please check parameters. exit", getModelName());
+            logger.error("please check parameters. exit", getModelName().name());
             System.exit(-1);
         }
 
         if (v0 < 0 || pSlowdown < 0 || pSlowToStart < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
     }

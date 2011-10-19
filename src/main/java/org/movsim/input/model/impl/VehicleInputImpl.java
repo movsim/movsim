@@ -131,22 +131,22 @@ public class VehicleInputImpl implements VehicleInput {
     private AccelerationModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelIDM))
-            return new AccelerationModelInputDataIDMImpl(XmlElementNames.VehicleLongModelIDM, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelACC))
-            return new AccelerationModelInputDataACCImpl(XmlElementNames.VehicleLongModelACC, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelOVM_VDIFF))
-            return new AccelerationModelInputDataOVM_VDIFFImpl(XmlElementNames.VehicleLongModelOVM_VDIFF, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelGIPPS))
-            return new AccelerationModelInputDataGippsImpl(XmlElementNames.VehicleLongModelGIPPS, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKRAUSS))
-            return new AccelerationModelInputDataKraussImpl(XmlElementNames.VehicleLongModelKRAUSS, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNEWELL))
-            return new AccelerationModelInputDataNewellImpl(XmlElementNames.VehicleLongModelNEWELL, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNSM))
-            return new AccelerationModelInputDataNSMImpl(XmlElementNames.VehicleLongModelNSM, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKCA))
-            return new AccelerationModelInputDataKKWImpl(XmlElementNames.VehicleLongModelKCA, map);
+        if (modelName.equals(XmlElementNames.VehicleLongModelIDM))
+            return new AccelerationModelInputDataIDMImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelACC))
+            return new AccelerationModelInputDataACCImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelOVM_VDIFF))
+            return new AccelerationModelInputDataOVM_VDIFFImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelGIPPS))
+            return new AccelerationModelInputDataGippsImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelKRAUSS))
+            return new AccelerationModelInputDataKraussImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelNEWELL))
+            return new AccelerationModelInputDataNewellImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelNSM))
+            return new AccelerationModelInputDataNSMImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelKKW))
+            return new AccelerationModelInputDataKKWImpl(map);
         else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);

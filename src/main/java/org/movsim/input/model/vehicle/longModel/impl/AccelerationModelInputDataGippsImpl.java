@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,8 +74,8 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataGippsImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataGippsImpl(Map<String, String> map) {
+        super(ModelName.GIPPS);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         aDefault = a = Double.parseDouble(map.get("a"));
         bDefault = b = Double.parseDouble(map.get("b"));
@@ -96,13 +97,13 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
     protected void checkParameters() {
         if (v0 < 0 || a < 0 || b < 0 || s0 < 0 || dt < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
 
         if (a == 0 || b == 0 || dt == 0) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName());
+                    getModelName().name());
             System.exit(-1);
         }
 

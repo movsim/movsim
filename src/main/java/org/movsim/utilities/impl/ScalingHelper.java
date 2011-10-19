@@ -26,7 +26,7 @@
  */
 package org.movsim.utilities.impl;
 
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 
 /**
  * The Class ScalingHelper.
@@ -46,11 +46,11 @@ public class ScalingHelper {
      * @param modelName the model name
      * @return the scaling length
      */
-    public static double getScalingLength(final String modelName) {
+    public static double getScalingLength(final ModelName modelName) {
         double scaleCA  = 1;
-        if (modelName.equals(Constants.MODEL_NAME_NSM) || modelName.equals(Constants.MODEL_NAME_BARL)) {
+        if ( modelName == ModelName.NSM ) {
             scaleCA = 7.5;
-        } else if (modelName.equals(Constants.MODEL_NAME_KKW)) {
+        } else if (modelName == ModelName.KKW ) {
             scaleCA = 0.5;
         }
         return scaleCA;

@@ -60,6 +60,7 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumACC;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumGipps;
@@ -228,21 +229,21 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @return the equilibrium properties
      */
     private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModel longModel) {
-        if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_IDM))
+        if (longModel.modelName() == ModelName.IDM)
             return new EquilibriumIDM(vehLength, (IDM) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_ACC))
+        else if (longModel.modelName() == ModelName.ACC)
             return new EquilibriumACC(vehLength, (ACC) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF))
+        else if (longModel.modelName() == ModelName.OVM_VDIFF)
             return new EquilibriumOVM_VDIFF(vehLength, (OVM_VDIFF) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_GIPPS))
+        else if (longModel.modelName() == ModelName.GIPPS)
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_KRAUSS))
+        else if (longModel.modelName() == ModelName.KRAUSS)
             return new EquilibriumKrauss(vehLength, (Krauss) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NEWELL))
+        else if (longModel.modelName() == ModelName.NEWELL)
             return new EquilibriumNewell(vehLength, (Newell) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NSM))
+        else if (longModel.modelName() == ModelName.NSM)
             return new EquilibriumNSM(vehLength, (NSM) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_KKW))
+        else if (longModel.modelName() == ModelName.KKW)
             return new EquilibriumKKW(vehLength, (KKW) longModel);
         else {
             logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName());
@@ -263,25 +264,25 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @return the acceleration model
      */
     private AccelerationModel longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
-        final String modelName = modelInputData.getModelName();
+        final ModelName modelName = modelInputData.getModelName();
         AccelerationModel longModel = null;
         // logger.debug("modelName = {}", modelName);
-        if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-            longModel = new IDM(modelName, (AccelerationModelInputDataIDM) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
-            longModel = new ACC(modelName, (AccelerationModelInputDataACC) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
-            longModel = new OVM_VDIFF(modelName, (AccelerationModelInputDataOVM_VDIFF) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
-            longModel = new Gipps(modelName, (AccelerationModelInputDataGipps) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KRAUSS)) {
-            longModel = new Krauss(modelName, (AccelerationModelInputDataKrauss) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NEWELL)) {
-            return new Newell(modelName, (AccelerationModelInputDataNewell) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
-            longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KKW)) {
-            longModel = new KKW(modelName, (AccelerationModelInputDataKKW) modelInputData, vehLength);
+        if (modelName == ModelName.IDM) {
+            longModel = new IDM( (AccelerationModelInputDataIDM) modelInputData);
+        } else if (modelName == ModelName.ACC) {
+            longModel = new ACC((AccelerationModelInputDataACC) modelInputData);
+        } else if (modelName == ModelName.OVM_VDIFF) {
+            longModel = new OVM_VDIFF((AccelerationModelInputDataOVM_VDIFF) modelInputData);
+        } else if (modelName == ModelName.GIPPS) {
+            longModel = new Gipps((AccelerationModelInputDataGipps) modelInputData);
+        } else if (modelName == ModelName.KRAUSS) {
+            longModel = new Krauss((AccelerationModelInputDataKrauss) modelInputData);
+        } else if (modelName == ModelName.NEWELL) {
+            return new Newell((AccelerationModelInputDataNewell) modelInputData);
+        } else if (modelName == ModelName.NSM) {
+            longModel = new NSM((AccelerationModelInputDataNSM) modelInputData);
+        } else if (modelName == ModelName.KKW) {
+            longModel = new KKW((AccelerationModelInputDataKKW) modelInputData, vehLength);
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0);

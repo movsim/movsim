@@ -195,10 +195,15 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         // origin of road section is assumed to be zero
         final double netGapToLeader = leader.getPosition() - leader.getLength();
         double gapAtQMax = 1. / vehPrototype.getRhoQMax();
-        if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
-            final double tau = 1;
-            gapAtQMax = leader.getSpeed() * tau;
-        }
+        
+        
+        // TODO what mechanism is called here?
+//        if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
+//            final double tau = 1;
+//            gapAtQMax = leader.getSpeed() * tau;
+//        }
+        
+        
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental
         // diagram
         double minRequiredGap = 0.8 * gapAtQMax;

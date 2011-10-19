@@ -54,33 +54,7 @@ public interface Constants {
     final int TO_RIGHT = -1;
      
     final int NO_CHANGE = 0;
-    
-
-    /** The MODE l_ nam e_ idm. */
-    final String MODEL_NAME_IDM = "IDM";
-
-    /** The MODE l_ nam e_ acc. */
-    final String MODEL_NAME_ACC = "ACC";
-
-    /** The MODE l_ nam e_ ov m_ vdiff. */
-    final String MODEL_NAME_OVM_VDIFF = "OVM_VDIFF";
-
-    /** The MODE l_ nam e_ gipps. */
-    final String MODEL_NAME_GIPPS = "GIPPS";
-
-    /** The MODE l_ nam e_ newell. */
-    final String MODEL_NAME_NEWELL = "NEWELL";
-
-    /** The MODE l_ nam e_ nsm. */
-    final String MODEL_NAME_NSM = "NSM";
-    
-    final String MODEL_NAME_BARL = "BARL";
-
-    /** The MODE l_ nam e_ kca. */
-    final String MODEL_NAME_KKW = "KKW";
-
-    final String MODEL_NAME_KRAUSS = "KRAUSS";
-    
+        
     final String OBSTACLE_KEY_NAME = "Obstacle";
 
     /** The gap infinity. */

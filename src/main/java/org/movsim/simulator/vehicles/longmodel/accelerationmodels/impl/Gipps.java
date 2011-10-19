@@ -70,8 +70,8 @@ public class Gipps extends AccelerationModelAbstract implements AccelerationMode
      * @param parameters
      *            the parameters
      */
-    public Gipps(String modelName, AccelerationModelInputDataGipps parameters) {
-        super(modelName, ModelCategory.INTERATED_MAP_MODEL, parameters);
+    public Gipps(AccelerationModelInputDataGipps parameters) {
+        super(ModelName.GIPPS, parameters);
         initParameters();
     }
 

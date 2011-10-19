@@ -84,8 +84,8 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
      * @param parameters
      *            the parameters
      */
-    public ACC(String modelName, AccelerationModelInputDataACC parameters) {
-        super(modelName, ModelCategory.CONTINUOUS_MODEL, parameters);
+    public ACC(AccelerationModelInputDataACC parameters) {
+        super(ModelName.ACC, parameters);
         initParameters();
     }
 
