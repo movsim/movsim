@@ -1,0 +1,5 @@
+# gnuplot command file
+
+ldm = "NEWELL"
+lang = "en"
+load "startStop.gpl"

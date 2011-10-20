@@ -96,4 +96,5 @@ public interface LoopDetector extends ObservableInTime {
      * @return the dt sample
      */
     double getDtSample();
+    
 }

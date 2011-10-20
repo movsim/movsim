@@ -51,7 +51,7 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, NSM?, KCA?, MEMORY?)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, KRAUSS?, NSM?, KKW?, MEMORY?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -100,9 +100,21 @@
   dt           NMTOKEN #REQUIRED
 >
 
-<!-- TODO !! -->
+<!ELEMENT KRAUSS EMPTY>
+<!ATTLIST KRAUSS
+  v0           NMTOKEN #REQUIRED
+  s0           NMTOKEN #REQUIRED
+  a            NMTOKEN #REQUIRED
+  b            NMTOKEN #REQUIRED
+  dt           NMTOKEN #REQUIRED
+  epsilon      NMTOKEN #REQUIRED
+>
+
 <!ELEMENT NEWELL EMPTY>
 <!ATTLIST NEWELL
+  v0           NMTOKEN #REQUIRED
+  s0           NMTOKEN #REQUIRED
+  dt           NMTOKEN #REQUIRED
 >
 
 <!ELEMENT NSM EMPTY>
@@ -112,8 +124,8 @@ p_slowdown   NMTOKEN #REQUIRED
 p_slow_start NMTOKEN #REQUIRED
 >
 
-<!ELEMENT KCA EMPTY>
-<!ATTLIST KCA
+<!ELEMENT KKW EMPTY>
+<!ATTLIST KKW
 v0      NMTOKEN #REQUIRED
 k       NMTOKEN #REQUIRED
 pb0     NMTOKEN #REQUIRED
@@ -133,11 +145,22 @@ alpha_a  NMTOKEN "1"
 >
 
 
-<!-- no lane changing implemented so far (single lane simulator) -->
-<!ELEMENT LANE_CHANGE_MODEL EMPTY>
+<!ELEMENT LANE_CHANGE_MODEL (MOBIL?)>
 <!ATTLIST LANE_CHANGE_MODEL 
+eur_rules  (true|false) "false"
+crit_speed_eur  NMTOKEN "25"
 >
 
+
+<!-- MOBIL as concrete lane-changing model -->
+<!ELEMENT MOBIL EMPTY>
+<!ATTLIST MOBIL 
+b_safe          NMTOKEN "4.0"
+s_min           NMTOKEN "2.0"
+threshold       NMTOKEN "0.2"
+bias_right      NMTOKEN "0.25"
+politeness      NMTOKEN "0.1"
+>
 
 <!-- Fluctuations:  -->
 <!-- Wiener process (tau!=0) or delta-correlated white noise as alternatives -->
@@ -154,21 +177,13 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (ROAD*, OUTPUT)>
+<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration         NMTOKEN #REQUIRED
   fixed_seed       (true|false) "true" 
   seed             NMTOKEN "42"
   crash_exit       (true|false) "true"
-> 
-
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, RAMPS, TRAFFIC_LIGHTS, DETECTORS)>
-
-<!ATTLIST ROAD
-  id               NMTOKEN #REQUIRED
-  length           NMTOKEN #REQUIRED
-  lanes            NMTOKEN "1"
 > 
 
 
@@ -181,7 +196,23 @@ fluct_strength   NMTOKEN #REQUIRED
 <!ATTLIST VEHICLE_TYPE
   label     CDATA    #REQUIRED
   fraction  NMTOKEN  #REQUIRED
+  relative_v0_randomization NMTOKEN "0.0"
 >
+
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS, TRAFFIC_SOURCE, TRAFFIC_SINK, FLOW_CONSERVING_INHOMOGENEITIES, SPEED_LIMITS, SIMPLE_RAMPS*, TRAFFIC_LIGHTS, DETECTORS)>
+
+<!-- for RAMP x and merge_length needed; not necessary for modeling a MAINROAD-->
+<!ATTLIST ROAD
+  id               NMTOKEN #REQUIRED
+  length           NMTOKEN #REQUIRED
+  lanes            NMTOKEN "1"
+  x                NMTOKEN "0"   
+  merge_length     NMTOKEN "300"  
+  logging          (false|true) "false" 
+> 
+
+
+
 
 <!-- initial conditions (IC) -->
 
@@ -208,12 +239,14 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- upstream boundary conditions -->
 <!ELEMENT TRAFFIC_SOURCE (INFLOW*)>
 <!ATTLIST TRAFFIC_SOURCE
+id       NMTOKEN "-99999"
 logging  (true|false)  "false" 
 >          
 
 <!-- downstream boundary conditions (not yet implemented) -->
 <!ELEMENT TRAFFIC_SINK EMPTY>
 <!ATTLIST TRAFFIC_SINK
+id       NMTOKEN "-99999"
 logging  (true|false) "false" 
 >          
 
@@ -251,26 +284,27 @@ speedlimit_kmh NMTOKEN #REQUIRED
 
   
 <!-- ramps (onramps only) -->
-<!ELEMENT RAMPS (SIMPLE_RAMP*, RAMP*)>
-<!ATTLIST RAMPS
+<!ELEMENT SIMPLE_RAMPS (SIMPLE_RAMP*)>
+<!ATTLIST SIMPLE_RAMPS
 > 
 
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
 <!ATTLIST SIMPLE_RAMP
-x       NMTOKEN #REQUIRED
-length         NMTOKEN "1000"
+x        NMTOKEN #REQUIRED
+merge_length   NMTOKEN #REQUIRED
 logging  (true|false)  "false" 
 > 
 
 
 <!-- real physical ramp with merging area (length) and total length of x_max --> 
-<!ELEMENT RAMP (INFLOW*)>
-<!ATTLIST RAMP
-x       NMTOKEN #REQUIRED
-length         NMTOKEN "300"
-x_max          NMTOKEN "1000"
-logging  (true|false)  "false" 
-> 
+<!-- <!ELEMENT RAMP (TRAFFIC_SOURCE,TRAFFIC_SINK,SPEED_LIMITS,TRAFFIC_LIGHTS)> -->
+<!--<!ATTLIST RAMP-->
+<!--id            NMTOKEN #REQUIRED-->
+<!--x             NMTOKEN #REQUIRED-->
+<!--length        NMTOKEN "1000"-->
+<!--merge_length  NMTOKEN "300"-->
+<!--logging       (true|false)  "false" -->
+<!-->  -->
   
 <!-- traffic lights -->
   
@@ -310,7 +344,7 @@ phase_shift      NMTOKEN "0"
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?) >
+<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?, TRAVELTIMES?) >
 
 <!ATTLIST OUTPUT
 >
@@ -346,5 +380,15 @@ number  NMTOKEN #REQUIRED
 >
 
 
+<!ELEMENT TRAVELTIMES (ROUTE*)>
+<!ATTLIST TRAVELTIMES
+>
 
+<!ELEMENT ROUTE EMPTY>
+<!ATTLIST ROUTE
+start_id  NMTOKEN #REQUIRED 
+start_pos NMTOKEN #REQUIRED 
+end_id    NMTOKEN #REQUIRED 
+end_pos   NMTOKEN #REQUIRED 
+>
 

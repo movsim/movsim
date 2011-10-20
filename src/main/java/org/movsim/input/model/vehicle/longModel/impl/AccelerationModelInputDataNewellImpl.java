@@ -29,6 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,17 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataNewellImpl.class);
 
-    // TODO implementation
+
+    /** The v0. */
+    private double v0;
+    private final double v0Default;
+    
+    /** The s0. */
+    private double s0;
+    private final double s0Default;
+    
+    /** The dt. */
+    private double dt;
 
     /**
      * Instantiates a new model input data newell impl.
@@ -52,8 +63,11 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
      * @param map
      *            the map
      */
-    public AccelerationModelInputDataNewellImpl(String modelName, Map<String, String> map) {
-        super(modelName);
+    public AccelerationModelInputDataNewellImpl(Map<String, String> map) {
+        super(ModelName.NEWELL);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        dt = Double.parseDouble(map.get("dt"));
 
         checkParameters();
     }
@@ -68,6 +82,17 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     @Override
     protected void checkParameters() {
         // TODO Auto-generated method stub
+        if (v0 < 0 || s0 < 0 || dt < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
+
+        if (dt == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
 
     }
 
@@ -80,8 +105,56 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
      */
     @Override
     public void resetParametersToDefault() {
-        // TODO Auto-generated method stub
-
+        v0 = v0Default;
+        s0 = s0Default;
     }
 
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getV0()
+     */
+    public double getV0() {
+        return v0;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#setV0(double)
+     */
+    public void setV0(double v0) {
+        this.v0 = v0;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getS0()
+     */
+    public double getS0() {
+        return s0;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#setS0(double)
+     */
+    public void setS0(double s0) {
+        this.s0 = s0;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getV0Default()
+     */
+    public double getV0Default() {
+        return v0Default;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getS0Default()
+     */
+    public double getS0Default() {
+        return s0Default;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getDt()
+     */
+    public double getDt() {
+        return dt;
+    }
 }

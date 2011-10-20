@@ -32,7 +32,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class NSM.
  */
-public class NSM extends LongitudinalModel implements AccelerationModel {
+public class NSM extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
@@ -50,7 +49,7 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
     // unit time for CA:
     /** The Constant dtCA. */
     private static final double dtCA = 1; // update timestep for CA !!
-
+    
     /** The v0. */
     private double v0;
 
@@ -60,6 +59,9 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
     /** The p slow to start. */
     private double pSlowToStart; // slow-to-start rule for Barlovic model
 
+    
+    
+    
     /**
      * Instantiates a new nSM.
      * 
@@ -68,8 +70,8 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public NSM(String modelName, AccelerationModelInputDataNSM parameters) {
-        super(modelName, AccelerationModelCategory.CELLULAR_AUTOMATON, parameters);
+    public NSM(AccelerationModelInputDataNSM parameters) {
+        super(ModelName.NSM, parameters);
         initParameters();
     }
 
@@ -96,15 +98,33 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront);
-        return accSimple(s, v, dv, alphaT, alphaV0);
+        final double dv = me.getRelSpeed(vehFront);
+        return acc(s, v, dv, alphaT, alphaV0);
     }
 
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+     */
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double alphaT = 1;
+        final double alphaV0 = 1;
+
+        return acc(s, v, dv, alphaT, alphaV0);
+    }
+
+    
     /*
      * (non-Javadoc)
      * 
@@ -113,8 +133,8 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
-        return accSimple(s, v, dv, 1, 1);
+    public double calcAccSimple(double s, double v, double dv) {
+        return acc(s, v, dv, 1, 1);
     }
 
     /**
@@ -132,7 +152,7 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      *            the alpha v0
      * @return the double
      */
-    private double accSimple(double s, double v, double dv, double alphaT, double alphaV0) {
+    private double acc(double s, double v, double dv, double alphaT, double alphaV0) {
         final int v0Loc = (int) (alphaV0 * v0 + 0.5); // adapt v0 spatially
         final int vLoc = (int) (v + 0.5);
         int vNew = 0;
@@ -156,7 +176,7 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -197,5 +217,14 @@ public class NSM extends LongitudinalModel implements AccelerationModel {
     public double getSlowToStart() {
         return pSlowToStart;
     }
+
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = (int)v0;
+    }
+
 
 }

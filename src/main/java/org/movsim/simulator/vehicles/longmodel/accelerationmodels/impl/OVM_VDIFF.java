@@ -32,7 +32,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OVM_VDIFF.
  */
-public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
+public class OVM_VDIFF extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);
@@ -79,8 +78,8 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public OVM_VDIFF(String modelName, AccelerationModelInputDataOVM_VDIFF parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
+    public OVM_VDIFF(AccelerationModelInputDataOVM_VDIFF parameters) {
+        super(ModelName.OVM_VDIFF, parameters);
         initParameters();
     }
 
@@ -111,27 +110,37 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
-
-        // TODO: reaction time ?!
-        // final double T_react_local = T_react;
-        // final double s=cyclicBuf->get_s(iveh,it,T_react_local);
-        // final double v=cyclicBuf->get_v(iveh,it,T_react_local);
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamic variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront); // only needed for VDIFF
+        final double dv = me.getRelSpeed(vehFront); // only needed for VDIFF
 
-        // speed limit --> OVM causes accidents due to immediate braking
-        // reaction
-        // consider external speedlimit
-        final double v0loc = Math.min(alphaV0 * v0, me.speedlimit());
+        // speed limit: OVM causes accidents due to immediate braking reaction
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
         // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
-        return acc(s, v, dv, alphaT, v0loc);
+        return acc(s, v, dv, alphaT, v0Local);
     }
 
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+     */
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamic variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double alphaT = 1;
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
+
+        return acc(s, v, dv, alphaT, v0Local);
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -140,9 +149,8 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         final double alphaT = 1;
-        // final double alphaV0 = 1;
         return acc(s, v, dv, alphaT, v0);
     }
 
@@ -157,19 +165,11 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      *            the dv
      * @param alphaT
      *            the alpha t
-     * @param v0loc
+     * @param v0Local
      *            the v0loc
      * @return the double
      */
-    private double acc(double s, double v, double dv, double alphaT, double v0loc) {
-
-        // logger.debug("alphaT = {}", alphaT);
-        // logger.info("v0loc = {}", v0loc);
-
-        // if(alphaT!=1){
-        // logger.error("alphaT={}", alphaT);
-        // System.exit(-1);
-        // }
+    private double acc(double s, double v, double dv, double alphaT, double v0Local) {
 
         final double lenInteractionLoc = Math.max(1e-6, lenInteraction * alphaT);
 
@@ -180,41 +180,34 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
 
         if (choiceOptFuncVariant == 0 || choiceOptFuncVariant == 3) {
             // standard OVM function (Bando model)
-            // vopt = max( 0.5*v0*( tanh((s-s0)/l_intLoc-betaLoc) -
-            // tanh(-betaLoc)), 0.);
-            // OVM/VDIFF nun so skaliert, dass v0 tatsaechlicih
-            // Wunschgeschwindigkeit
-            final double v0Prev = v0loc / (1. + Math.tanh(betaLoc));
+            // scale OVM/VDIFF so that v0 represents actual desired speed 
+            final double v0Prev = v0Local / (1. + Math.tanh(betaLoc));
             vOpt = Math.max(v0Prev * (Math.tanh((s - s0) / lenInteractionLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // Triangular OVM function
-            final double T = beta; // "time headway" // TODO muss alles noch
-                                   // dokumentiert werden!!!
-            vOpt = Math.max(Math.min((s - s0) / T, v0loc), 0.);
+            final double T = beta; // "time headway" 
+            vOpt = Math.max(Math.min((s - s0) / T, v0Local), 0.);
         } else if (choiceOptFuncVariant == 2) {
             // "Three-phase" OVM function
-            final double diffT = 0. * Math.pow(Math.max(1 - v / v0loc, 0.0001), 0.5);
-            final double Tmin = lenInteractionLoc + diffT; // min time headway
-            final double Tmax = betaLoc + diffT; // max time headway
+            final double diffT = 0. * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
+            final double Tmin = lenInteractionLoc + diffT; // minimum time headway
+            final double Tmax = betaLoc + diffT; // maximum time headway
             final double Tdyn = (s - s0) / Math.max(v, Constants.SMALL_VALUE);
-            vOpt = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0loc) : (Tdyn > Tmin) ? Math.min(v + 0., v0loc)
-                    : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0loc) : 0;
+            vOpt = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v + 0., v0Local)
+                    : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0Local) : 0;
         } else {
-            // logger.error("optimal velocity variant = {} not implemented. exit.",
-            // choiceOptFuncVariant);
+            logger.error("optimal velocity variant = {} not implemented. exit.", choiceOptFuncVariant);
             System.exit(-1);
         }
 
         // calc acceleration
         double aWanted = 0; // return value
         if (choiceOptFuncVariant <= 1) {
-            // original VDIFF model
-            // OVM: lambda == 0
+            // original VDIFF model, OVM: lambda == 0
             aWanted = (vOpt - v) / tau - lambda * dv;
         } else if (choiceOptFuncVariant == 2) {
             aWanted = (vOpt - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, Constants.SMALL_VALUE);
-            // aWanted = Math.min(aWanted, 5.); // limit max acceleration
         } else if (choiceOptFuncVariant == 3) {
             aWanted = (vOpt - v) / tau - lambda * ((dv > 0) ? dv : 0);
         }
@@ -289,7 +282,7 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -311,6 +304,14 @@ public class OVM_VDIFF extends LongitudinalModel implements AccelerationModel {
     @Override
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
     }
 
 }

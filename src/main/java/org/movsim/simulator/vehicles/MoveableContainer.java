@@ -3,7 +3,6 @@
  */
 package org.movsim.simulator.vehicles;
 
-import java.util.List;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -11,28 +10,22 @@ import java.util.List;
  */
 public interface MoveableContainer {
 
-    /**
-     * Gets the moveables.
-     * 
-     * @return the moveables
-     */
-    List<Moveable> getMoveables();
+//    /**
+//     * Gets the moveables.
+//     * 
+//     * @return the moveables
+//     */
+//    List<Moveable> getMoveables();
 
-    /**
-     * Gets the moveable.
-     * 
-     * @param index
-     *            the index
-     * @return the moveable
-     */
-    Moveable getMoveable(int index);
+//    /**
+//     * Gets the moveable.
+//     * 
+//     * @param index
+//     *            the index
+//     * @return the moveable
+//     */
+//    Moveable getMoveable(int index);
 
-    /**
-     * Size.
-     * 
-     * @return the int
-     */
-    int size();
 
     /**
      * Gets the leader.
@@ -41,6 +34,6 @@ public interface MoveableContainer {
      *            the veh
      * @return the leader
      */
-    Moveable getLeader(Moveable veh);
+    //Moveable getLeader(Moveable veh);
 
 }

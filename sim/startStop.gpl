@@ -88,7 +88,7 @@ set nogrid
 #######  Scaling  ########################################
 
 xscale=1.0
-if (ldm eq "KCA")  xscale = 0.5
+if (ldm eq "KKW")  xscale = 0.5
 if (ldm eq "BARL") xscale = 7.5
 if (ldm eq "NSM")  xscale = 7.5
 tscale=1.0
@@ -123,7 +123,7 @@ set title ldm
 tmin=0
 tmax=158
 if (ldm eq "BARL") tmax=120
-if (ldm eq "KCA") tmax=150
+if (ldm eq "KKW") tmax=150
 if (ldm eq "NSM") tmax=120
 if (ldm eq "VDIFF") tmax=360
 
@@ -140,7 +140,7 @@ set key right
 set ylabel distanceLabel
 set yrange [0:35]
 if (ldm eq "BARL") set yrange [0:55]
-if (ldm eq "KCA") set yrange [0:55]
+if (ldm eq "KKW") set yrange [0:55]
 if (ldm eq "NSM") set yrange [0:55]
 set ytics 10
 # first car is obstacle, shift by 1 for physical count 
@@ -174,7 +174,7 @@ set auto y
 set ytics 1
 if (ldm eq "BARL") set ytics 5
 if (ldm eq "GIPPS") set yrange [-1.5:2]
-if (ldm eq "KCA") set ytics 2; set yrange [-14:2]
+if (ldm eq "KKW") set ytics 2; set yrange [-14:2]
 if (ldm eq "NSM") set ytics 5
 if (ldm eq "OVM") set ytics 5
 set out accelerationOutput

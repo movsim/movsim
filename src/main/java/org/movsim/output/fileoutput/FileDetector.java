@@ -16,7 +16,7 @@ import org.movsim.utilities.impl.FileUtils;
  */
 public class FileDetector implements ObserverInTime {
 
-    private static final String extensionFormat = "_det.csv";
+    private static final String extensionFormat = ".id%dx%d_det.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
             + "   t[s],  v[km/h], rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)";
 
@@ -37,13 +37,14 @@ public class FileDetector implements ObserverInTime {
      * @param detector
      *            the detector
      */
-    public FileDetector(String projectName, LoopDetector detector) {
+    public FileDetector(long roadId, String projectName, LoopDetector detector) {
 
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
 
         // road id hard coded as 1 for the moment
-        final String filename = projectName + ".R1x" + xDetectorInt + extensionFormat;
+        final String filename = projectName + String.format(extensionFormat, roadId, xDetectorInt);
+        //final String filename = projectName + ".id%dx" + xDetectorInt + extensionFormat;
         printWriter = initFile(filename);
 
         detector.registerObserver(this);

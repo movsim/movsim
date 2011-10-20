@@ -33,12 +33,14 @@ import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.VehicleInput;
-import org.movsim.input.model.simulation.HeterogeneityInputData;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKCA;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
+import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
@@ -48,26 +50,29 @@ import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KCA;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumACC;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumGipps;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumIDM;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKCA;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKKW;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKrauss;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNSM;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNewell;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_VDIFF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class VehicleGeneratorImpl.
  */
@@ -104,22 +109,22 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGeneratorImpl(InputData simInput) {
+    public VehicleGeneratorImpl(final InputData simInput, final List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
 
+        // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road 
         this.projectName = simInput.getProjectMetaData().getProjectName();
         this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         // create vehicle prototyps according to traffic composition
         // (heterogeneity)
         prototypes = new HashMap<String, VehiclePrototype>();
-        final double sumFraction = createPrototypes(simInput);
+        final double sumFraction = createPrototypes(simInput, heterogenInputData);
 
         // normalize heterogeneity fractions
         normalizeFractions(sumFraction);
 
         // output fundamental diagrams
-        if (instantaneousFileOutput
-                && simInput.getSimulationInput().getSingleRoadInput().isWithWriteFundamentalDiagrams()) {
+        if (instantaneousFileOutput && isWithWriteFundamentalDiagrams) {
             FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
 
         }
@@ -135,18 +140,17 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      *            the sim input
      * @return the double
      */
-    private double createPrototypes(InputData simInput) {
+    private double createPrototypes(final InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
 
         // default for continuous micro models
         requiredTimestep = simInput.getSimulationInput().getTimestep();
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
-
-        final List<HeterogeneityInputData> heterogenInputData = simInput.getSimulationInput().getSingleRoadInput()
-                .getHeterogeneityInputData();
-
+        
+        addObstacleSystemVehicleType(heterogenInputData);
+        
         double sumFraction = 0;
-        for (final HeterogeneityInputData heterogen : heterogenInputData) {
+        for (final TrafficCompositionInputData heterogen : heterogenInputData) {
             final String keyName = heterogen.getKeyName();
             logger.debug("key name={}", keyName);
             if (!vehInputMap.containsKey(keyName)) {
@@ -163,7 +167,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             logger.debug("fraction = {}", fraction);
 
             sumFraction += fraction;
-            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput);
+            final double relRandomizationV0 = heterogen.getRelativeRandomizationDesiredSpeed();
+            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput, relRandomizationV0);
             prototypes.put(keyName, vehProto);
 
             // set simulation update time here from model classes:
@@ -177,14 +182,43 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
                 } else {
                     requiredTimestep = requiredTimestepLocal;
                     logger.info("set simulation timestep to dt={} for model = {}", requiredTimestep,
-                            longModel.modelName());
+                            longModel.modelName().name());
                 }
             }
             logger.debug("simulation timestep: dt={}. ", requiredTimestep);
         }
         return sumFraction;
     }
-
+    
+    
+    // add Obstacle as permanent Vehicle_Type
+    // first check if Obstacle is already part of user defined heterogeneity input 
+    /**
+     * Adds the obstacle system vehicle type.
+     *
+     * @param heterogenInputData the heterogen input data
+     */
+    private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
+        boolean obstacleEntryIsContained = false;
+        for (TrafficCompositionInputData het : heterogenInputData) {
+            if (het.getKeyName().equals(Constants.OBSTACLE_KEY_NAME)) {
+                obstacleEntryIsContained = true;
+            }
+        }
+        
+        if (obstacleEntryIsContained) {
+            logger.info("vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite", Constants.OBSTACLE_KEY_NAME);
+        }
+        else{
+            logger.info("vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity", Constants.OBSTACLE_KEY_NAME);
+            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
+            mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
+            mapEntryObstacle.put("fraction", "0");
+            mapEntryObstacle.put("relative_v0_randomization", "0");
+            heterogenInputData.add(new TrafficCompositionDataImpl(mapEntryObstacle));
+        } 
+    }
+    
     /**
      * Fund diagram factory.
      * 
@@ -195,31 +229,33 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @return the equilibrium properties
      */
     private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModel longModel) {
-        if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_IDM))
+        if (longModel.modelName() == ModelName.IDM)
             return new EquilibriumIDM(vehLength, (IDM) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_ACC))
+        else if (longModel.modelName() == ModelName.ACC)
             return new EquilibriumACC(vehLength, (ACC) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF))
+        else if (longModel.modelName() == ModelName.OVM_VDIFF)
             return new EquilibriumOVM_VDIFF(vehLength, (OVM_VDIFF) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_GIPPS))
+        else if (longModel.modelName() == ModelName.GIPPS)
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NEWELL))
+        else if (longModel.modelName() == ModelName.KRAUSS)
+            return new EquilibriumKrauss(vehLength, (Krauss) longModel);
+        else if (longModel.modelName() == ModelName.NEWELL)
             return new EquilibriumNewell(vehLength, (Newell) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_NSM))
+        else if (longModel.modelName() == ModelName.NSM)
             return new EquilibriumNSM(vehLength, (NSM) longModel);
-        else if (longModel.modelName().equalsIgnoreCase(Constants.MODEL_NAME_KCA))
-            return new EquilibriumKCA(vehLength, (KCA) longModel);
+        else if (longModel.modelName() == ModelName.KKW)
+            return new EquilibriumKKW(vehLength, (KKW) longModel);
         else {
-            logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName());
+            logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName().name());
             System.exit(0);
         }
-        return null; // not reached after exit !
+        return null; // should not be reached after exit
 
     }
 
     /**
      * Long model factory with vehicle length vehicle length is only needed for
-     * KCA (explicit model parameter).
+     * KKW (explicit model parameter).
      * 
      * @param modelInputData
      *            the model input data
@@ -228,23 +264,25 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
      * @return the acceleration model
      */
     private AccelerationModel longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
-        final String modelName = modelInputData.getModelName();
+        final ModelName modelName = modelInputData.getModelName();
         AccelerationModel longModel = null;
         // logger.debug("modelName = {}", modelName);
-        if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_IDM)) {
-            longModel = new IDM(modelName, (AccelerationModelInputDataIDM) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_ACC)) {
-            longModel = new ACC(modelName, (AccelerationModelInputDataACC) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_OVM_VDIFF)) {
-            longModel = new OVM_VDIFF(modelName, (AccelerationModelInputDataOVM_VDIFF) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_GIPPS)) {
-            longModel = new Gipps(modelName, (AccelerationModelInputDataGipps) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NEWELL))
-            return new Newell(modelName, (AccelerationModelInputDataNewell) modelInputData);
-        else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_NSM)) {
-            longModel = new NSM(modelName, (AccelerationModelInputDataNSM) modelInputData);
-        } else if (modelName.equalsIgnoreCase(Constants.MODEL_NAME_KCA)) {
-            longModel = new KCA(modelName, (AccelerationModelInputDataKCA) modelInputData, vehLength);
+        if (modelName == ModelName.IDM) {
+            longModel = new IDM( (AccelerationModelInputDataIDM) modelInputData);
+        } else if (modelName == ModelName.ACC) {
+            longModel = new ACC((AccelerationModelInputDataACC) modelInputData);
+        } else if (modelName == ModelName.OVM_VDIFF) {
+            longModel = new OVM_VDIFF((AccelerationModelInputDataOVM_VDIFF) modelInputData);
+        } else if (modelName == ModelName.GIPPS) {
+            longModel = new Gipps((AccelerationModelInputDataGipps) modelInputData);
+        } else if (modelName == ModelName.KRAUSS) {
+            longModel = new Krauss((AccelerationModelInputDataKrauss) modelInputData);
+        } else if (modelName == ModelName.NEWELL) {
+            return new Newell((AccelerationModelInputDataNewell) modelInputData);
+        } else if (modelName == ModelName.NSM) {
+            longModel = new NSM((AccelerationModelInputDataNSM) modelInputData);
+        } else if (modelName == ModelName.KKW) {
+            longModel = new KKW((AccelerationModelInputDataKKW) modelInputData, vehLength);
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0);
@@ -331,8 +369,15 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         final VehicleInput vehInput = prototype.getVehicleInput();
         final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
+        
+        
+        longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
+        
+        // TODO lane-changing model impl
+        final LaneChangingModelImpl lcModel = new LaneChangingModelImpl(vehInput.getLaneChangingInputData());
+        
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
-        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer);
+        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel);
         return veh;
     }
 

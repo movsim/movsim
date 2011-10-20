@@ -1,9 +1,10 @@
 #!/bin/bash
 # first test script for running/updating all simulations
 
-run="runapp"
-onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF IDM_w_noise"
-startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF BARL NSM KCA"
+run=". runapp"
+onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL KKW NEWELL NSM"
+
+startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL NSM KKW NEWELL"
 
 #######################################################
 function deleteSimOutput(){
@@ -16,7 +17,7 @@ function deleteSimOutput(){
     cd ..
 }
 #######################################################
-for m in ${onramp}
+for m in ${startStop}
 do
   proj="startStop_$m"
   echo "project = $proj"
@@ -25,7 +26,7 @@ do
   read -p pressKey
 done;
 
-#exit
+
 
 
 for m in ${onramp}
@@ -36,6 +37,4 @@ do
   $run $proj
   read -p pressKey
 done;
-
-exit
 

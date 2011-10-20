@@ -16,12 +16,22 @@ public interface Moveable {
      */
     String getLabel();
 
+    
+    
     /**
      * Length.
      * 
      * @return the double
      */
-    double length();
+    double getLength();
+    
+    /**
+     * Width.
+     *
+     * @return the double
+     */
+    double getWidth();
+
 
     /**
      * Gets the position of the floating car.
@@ -42,14 +52,14 @@ public interface Moveable {
      * 
      * @return the double
      */
-    double posReadBumper();
+    double posRearBumper();
 
     /**
      * Old position.
      * 
      * @return the double
      */
-    double oldPosition();
+    double getPositionOld();
 
     /**
      * Checks for reaction time.
@@ -57,13 +67,6 @@ public interface Moveable {
      * @return true, if successful
      */
     boolean hasReactionTime();
-
-    /**
-     * Gets the desired speed parameter.
-     * 
-     * @return the desired speed parameter
-     */
-    double getDesiredSpeedParameter();
 
     /**
      * GetS the speed of the floating car.
@@ -91,14 +94,14 @@ public interface Moveable {
      * 
      * @return the double
      */
-    double speedlimit();
+    double getSpeedlimit();
 
     /**
      * Id.
      * 
      * @return the int
      */
-    int id();
+    int getId();
 
     /**
      * Gets the veh number.
@@ -120,6 +123,14 @@ public interface Moveable {
      * @return the lane
      */
     int getLane();
+    
+    /**
+     * Gets the continous lane.
+     *
+     * @return the continous lane
+     */
+    double getContinousLane();
+    
 
     /**
      * Net distance.
@@ -128,7 +139,7 @@ public interface Moveable {
      *            the veh front
      * @return the double
      */
-    double netDistance(Moveable vehFront);
+    double getNetDistance(Moveable vehFront);
 
     /**
      * Rel speed.
@@ -137,13 +148,28 @@ public interface Moveable {
      *            the veh front
      * @return the double
      */
-    double relSpeed(Moveable vehFront);
+    double getRelSpeed(Moveable vehFront);
 
     /**
      * Distance to trafficlight.
      * 
      * @return the double
      */
-    double distanceToTrafficlight();
+    double getDistanceToTrafficlight();
 
+    /**
+     * Checks if is brake light on. Braking lights for neat viewers.
+     *
+     * @return true, if is brake light on
+     */
+    boolean isBrakeLightOn();
+    
+    /**
+     * Physical quantities.
+     *
+     * @return the physical quantities
+     */
+    PhysicalQuantities physicalQuantities();
+
+    long getRoadId();
 }

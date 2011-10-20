@@ -56,7 +56,7 @@ public class LoopDetectors {
      * @param input
      *            the input
      */
-    public LoopDetectors(String projectName, DetectorInput input) {
+    public LoopDetectors(long roadId, String projectName, DetectorInput input) {
 
         detectors = new ArrayList<LoopDetectorImpl>();
 
@@ -71,7 +71,7 @@ public class LoopDetectors {
         if (input.isWithLogging()) {
             fileDetectors = new ArrayList<FileDetector>();
             for (final LoopDetector det : detectors) {
-                fileDetectors.add(new FileDetector(projectName, det));
+                fileDetectors.add(new FileDetector(roadId, projectName, det));
             }
         }
 
@@ -79,19 +79,15 @@ public class LoopDetectors {
 
     /**
      * Update.
-     * 
-     * @param itime
-     *            the itime
-     * @param time
-     *            the time
-     * @param timestep
-     *            the timestep
-     * @param vehContainer
-     *            the veh container
+     *
+     * @param itime the itime
+     * @param time the time
+     * @param timestep the timestep
+     * @param vehContainers the veh containers
      */
-    public void update(int itime, double time, double timestep, VehicleContainer vehContainer) {
+    public void update(long itime, double time, double timestep, List<VehicleContainer> vehContainers) {
         for (final LoopDetectorImpl det : detectors) {
-            det.update(time, vehContainer);
+            det.update(time, vehContainers);
         }
     }
 

@@ -37,11 +37,14 @@ import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl;
 import org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl;
+import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
+import org.movsim.input.model.vehicle.laneChanging.impl.LaneChangingInputDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataIDMImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKCAImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKKWImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKraussImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
@@ -72,6 +75,8 @@ public class VehicleInputImpl implements VehicleInput {
 
     /** The model input data. */
     private AccelerationModelInputData modelInputData;
+    
+    private LaneChangingInputData laneChangingInputData;
 
     /** The memory input data. */
     private MemoryInputData memoryInputData = null;
@@ -104,6 +109,10 @@ public class VehicleInputImpl implements VehicleInput {
                 System.exit(-1);
             }
         }
+        
+        
+        final Element lcModelElem = elem.getChild(XmlElementNames.VehicleLaneChangeModel);
+        laneChangingInputData = new LaneChangingInputDataImpl(lcModelElem);
 
         final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {
@@ -122,20 +131,22 @@ public class VehicleInputImpl implements VehicleInput {
     private AccelerationModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelIDM))
-            return new AccelerationModelInputDataIDMImpl(XmlElementNames.VehicleLongModelIDM, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelACC))
-            return new AccelerationModelInputDataACCImpl(XmlElementNames.VehicleLongModelACC, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelOVM_VDIFF))
-            return new AccelerationModelInputDataOVM_VDIFFImpl(XmlElementNames.VehicleLongModelOVM_VDIFF, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelGIPPS))
-            return new AccelerationModelInputDataGippsImpl(XmlElementNames.VehicleLongModelGIPPS, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNEWELL))
-            return new AccelerationModelInputDataNewellImpl(XmlElementNames.VehicleLongModelNEWELL, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelNSM))
-            return new AccelerationModelInputDataNSMImpl(XmlElementNames.VehicleLongModelNSM, map);
-        else if (modelName.equalsIgnoreCase(XmlElementNames.VehicleLongModelKCA))
-            return new AccelerationModelInputDataKCAImpl(XmlElementNames.VehicleLongModelKCA, map);
+        if (modelName.equals(XmlElementNames.VehicleLongModelIDM))
+            return new AccelerationModelInputDataIDMImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelACC))
+            return new AccelerationModelInputDataACCImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelOVM_VDIFF))
+            return new AccelerationModelInputDataOVM_VDIFFImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelGIPPS))
+            return new AccelerationModelInputDataGippsImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelKRAUSS))
+            return new AccelerationModelInputDataKraussImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelNEWELL))
+            return new AccelerationModelInputDataNewellImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelNSM))
+            return new AccelerationModelInputDataNSMImpl(map);
+        else if (modelName.equals(XmlElementNames.VehicleLongModelKKW))
+            return new AccelerationModelInputDataKKWImpl(map);
         else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);
@@ -181,6 +192,14 @@ public class VehicleInputImpl implements VehicleInput {
     @Override
     public AccelerationModelInputData getAccelerationModelInputData() {
         return modelInputData;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.VehicleInput#getLaneChangingInputData()
+     */
+    @Override
+    public LaneChangingInputData getLaneChangingInputData() {
+        return laneChangingInputData;
     }
 
     /*
@@ -232,5 +251,7 @@ public class VehicleInputImpl implements VehicleInput {
     public double getReactionTime() {
         return reactionTime;
     }
+
+   
 
 }

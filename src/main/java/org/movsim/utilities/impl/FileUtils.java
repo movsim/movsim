@@ -41,12 +41,11 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.movsim.App;
+import org.movsim.MovsimMain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileUtils.
  */
@@ -359,7 +358,7 @@ public class FileUtils {
      */
     public static void resourceToFile(String res, String filename) {
         try {
-            InputStream resourceAsStream = App.class.getResourceAsStream(res);
+            InputStream resourceAsStream = MovsimMain.class.getResourceAsStream(res);
 
             if (resourceAsStream == null) {
                 logger.debug("resource {} not included!", res);

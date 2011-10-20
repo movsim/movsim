@@ -36,44 +36,41 @@ import org.movsim.simulator.vehicles.VehicleContainer;
  * The Interface RoadSection.
  */
 public interface RoadSection {
-
     /**
      * Road length.
      * 
      * @return the double
      */
-    double roadLength();
+    double getRoadLength();
 
     /**
      * N lanes.
      * 
      * @return the int
      */
-    int nLanes();
+    int getNumberOfLanes();
 
     /**
      * Id.
      * 
      * @return the long
      */
-    long id();
-
+    long getId();
+    
     /**
-     * Update.
-     * 
-     * @param itime
-     *            the itime
-     * @param time
-     *            the time
+     * Gets the veh container.
+     *
+     * @param laneIndex the lane index
+     * @return the veh container
      */
-    void update(int itime, double time);
-
+    VehicleContainer getVehContainer(int laneIndex);
+    
     /**
-     * Veh container.
-     * 
-     * @return the vehicle container
+     * Gets the veh containers.
+     *
+     * @return the veh containers
      */
-    VehicleContainer vehContainer();
+    List<VehicleContainer> getVehContainers();
 
     /**
      * Gets the timestep.
@@ -82,6 +79,73 @@ public interface RoadSection {
      */
     double getTimestep();
 
+    /**
+     * Check for inconsistencies.
+     *
+     * @param iterationCount the iteration count
+     * @param time the time
+     * @param isWithCrashExit the is with crash exit
+     */
+    void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit);
+    
+
+    void laneChanging(long iterationCount, double dt, double time);
+    
+    /**
+     * Accelerate.
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
+     */
+    void accelerate(long iterationCount, double dt, double time);
+    
+    /**
+     * Update road conditions.
+     *
+     * @param iterationCount the iteration count
+     * @param time the time
+     */
+    void updateRoadConditions(long iterationCount, double time);
+    
+    /**
+     * Update position and speed.
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
+     */
+    void updatePositionAndSpeed(long iterationCount, double dt, double time);
+    
+    /**
+     * Update downstream boundary.
+     */
+    void updateDownstreamBoundary();
+    
+    /**
+     * Update upstream boundary.
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
+     */
+    void updateUpstreamBoundary(long iterationCount, double dt, double time);
+    
+
+    /**
+     * Gets the ramp merging length.
+     *
+     * @return the ramp merging length
+     */
+    double getRampMergingLength();  // TODO redesign for network view
+    
+    /**
+     * Gets the ramp position to mainroad.
+     *
+     * @return the ramp position to mainroad
+     */
+    double getRampPositionToMainroad(); // TODO redesign for network view
+   
     /**
      * Gets the traffic lights.
      * 
@@ -95,5 +159,35 @@ public interface RoadSection {
      * @return the loop detectors
      */
     List<LoopDetector> getLoopDetectors();
+    
+    //void updateOnramps(long iterationCount, double dt, double time);
 
+    /**
+     * Update detectors.
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param simulationTime the simulation time
+     */
+    void updateDetectors(long iterationCount, double dt, double simulationTime);
+    
+    
+    
+    // TODO hack here: 
+    // connected road section is mainroad when called for onramp and offramp when called from mainroad 
+    void laneChangingToOfframpsAndFromOnramps(RoadSection connectedRoadSection, long iterationCount, double dt, double time);
+
+    void updateBoundaryVehicles(long iterationCount, double time);
+
+    long getFromId();
+
+    long getToId();
+    
+    UpstreamBoundary getUpstreamBoundary();
+    
+    void setFractionOfLeavingVehicles(double newFraction);
+    
+    List<SpeedLimit> getSpeedLimits();    
+    
 }
+

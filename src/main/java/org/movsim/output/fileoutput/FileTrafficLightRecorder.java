@@ -60,7 +60,7 @@ public class FileTrafficLightRecorder {
         this.nDt = nDt;
 
         // road id hard coded as 1 for the moment
-        final String filename = projectName + ".R1_tl_log.csv";
+        final String filename = projectName + ".id%d_tl_log.csv";
         fstr = FileUtils.getWriter(filename);
         writeHeader(trafficLights);
 
@@ -69,16 +69,16 @@ public class FileTrafficLightRecorder {
     /**
      * Update.
      * 
-     * @param itime
+     * @param iterationCount
      *            the itime
      * @param time
      *            the time
      * @param trafficLights
      *            the traffic lights
      */
-    public void update(int itime, double time, List<TrafficLight> trafficLights) {
+    public void update(long iterationCount, double time, List<TrafficLight> trafficLights) {
 
-        if (itime % nDt != 0)
+        if (iterationCount % nDt != 0)
             // no update; nothing to do
             return;
 

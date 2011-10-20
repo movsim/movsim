@@ -28,6 +28,8 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelCategory;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -40,7 +42,7 @@ public interface AccelerationModel {
      * 
      * @return the string
      */
-    String modelName();
+    ModelName modelName();
 
     /**
      * Checks if is cellular automaton.
@@ -61,7 +63,7 @@ public interface AccelerationModel {
      * 
      * @return the model category
      */
-    int getModelCategory();
+    ModelCategory getModelCategory();
 
     /**
      * Gets the required update time.
@@ -71,45 +73,57 @@ public interface AccelerationModel {
     double getRequiredUpdateTime();
 
     /**
-     * Parameter v0. The desired velocity (m/s).
-     * 
-     * @return the double
+     * Gets the desired speed parameter v0.
+     *
+     * @return the desired speed parameter v0
      */
-    double parameterV0();
+    double getDesiredSpeedParameterV0();
+    
+    /**
+     * Sets the relative randomization v0.
+     *
+     * @param relRandomizationFactor the new relative randomization v0
+     */
+    void setRelativeRandomizationV0(double relRandomizationFactor);
 
     /**
-     * Acc. Calculates the acceleration.
-     * 
-     * @param me
-     *            the subject vehicle
-     * @param vehContainer
-     *            the vehicle container
-     * @param alphaT
-     *            the alpha t
-     * @param alphaV0
-     *            the alpha v0
-     * @param alphaA
-     *            the alpha a
-     * @return the double. The acceleration of the subject vehicle.
-     */
-    double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
-
-    /**
-     * Acc simple.
-     * 
-     * @param s
-     *            the s
-     * @param v
-     *            the v
-     * @param dv
-     *            the dv
+     * Calc acc.
+     *
+     * @param me the me
+     * @param vehContainer the veh container
+     * @param alphaT the alpha t
+     * @param alphaV0 the alpha v0
+     * @param alphaA the alpha a
      * @return the double
      */
-    double accSimple(double s, double v, double dv);
+    double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
+    
+    double calcAccEur(double vCritEur, Vehicle me, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0, double alphaA);
+    
+    double calcAcc(final Vehicle me, final Vehicle vehFront);
+    
+    //double calcAccEur(final Vehicle me, final Vehicle vehFront, final Vehicle vehFrontLeft);
+
+    /**
+     * Calc acc simple.
+     *
+     * @param s the s
+     * @param v the v
+     * @param dv the dv
+     * @return the double
+     */
+    double calcAccSimple(double s, double v, double dv);
 
     /**
      * Removes the observer.
      */
     void removeObserver();
+
+    /**
+     * Gets the scaling length.
+     *
+     * @return the scaling length
+     */
+    double getScalingLength();
 
 }

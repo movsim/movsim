@@ -26,7 +26,11 @@
  */
 package org.movsim.simulator.vehicles;
 
+import java.util.List;
+
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -60,7 +64,7 @@ public interface Vehicle extends Moveable {
      * @param lane
      *            the lane
      */
-    void init(double pos, double v, int lane);
+    void init(double pos, double v, int lane, long roadId);
 
     /**
      * Update postion and speed.
@@ -82,7 +86,7 @@ public interface Vehicle extends Moveable {
      * @param alphaV0
      *            the alpha v0
      */
-    void calcAcceleration(double dt, VehicleContainer vehContainer, double alphaT, double alphaV0);
+    void calcAcceleration(double dt, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0);
 
     /**
      * Update traffic light.
@@ -99,4 +103,59 @@ public interface Vehicle extends Moveable {
      */
     void removeObservers();
 
+    /**
+     * Gets the lane changing model.
+     *
+     * @return the lane changing model
+     */
+    LaneChangingModelImpl getLaneChangingModel();
+
+    /**
+     * Gets the acceleration model.
+     *
+     * @return the acceleration model
+     */
+    AccelerationModel getAccelerationModel();
+
+    /**
+     * Sets the position.
+     *
+     * @param newPos the new position
+     */
+    void setPosition(double newPos);
+
+    /**
+     * Consider lane changing.
+     *
+     * @param dt the dt
+     * @param vehContainers the veh containers
+     * @return true, if successful
+     */
+    boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers);
+
+    /**
+     * Gets the target lane.
+     *
+     * @return the target lane
+     */
+    int getTargetLane();
+
+    /**
+     * In process of lane changing.
+     *
+     * @return true, if successful
+     */
+    boolean inProcessOfLaneChanging();
+
+    /**
+     * Inits the lane change from ramp.
+     *
+     * @param oldLane the old lane
+     */
+    void initLaneChangeFromRamp(int oldLane);
+    
+    // for lane-changing decision
+    double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane);
+    
+    
 }

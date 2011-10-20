@@ -32,9 +32,11 @@ import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.input.model.output.impl.FloatingCarInputImpl;
 import org.movsim.input.model.output.impl.SpatioTemporalInputImpl;
 import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
+import org.movsim.input.model.output.impl.TravelTimesInputImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -50,6 +52,9 @@ public class OutputInputImpl implements OutputInput {
 
     /** The trajectories input. */
     private TrajectoriesInput trajectoriesInput;
+    
+    
+    private TravelTimesInput travelTimesInput;
 
     /**
      * Instantiates a new output input impl.
@@ -75,6 +80,11 @@ public class OutputInputImpl implements OutputInput {
 
         trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));
 
+        
+        // TODO treat all elements similarly
+        if(elem.getChild(XmlElementNames.OutputTravelTimes)!=null){
+            travelTimesInput = new TravelTimesInputImpl(elem.getChild(XmlElementNames.OutputTravelTimes));
+        }
     }
 
     /*
@@ -105,6 +115,11 @@ public class OutputInputImpl implements OutputInput {
     @Override
     public TrajectoriesInput getTrajectoriesInput() {
         return trajectoriesInput;
+    }
+
+    @Override
+    public TravelTimesInput getTravelTimesInput() {
+        return travelTimesInput;
     }
 
 }

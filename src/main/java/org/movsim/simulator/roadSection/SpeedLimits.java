@@ -26,6 +26,8 @@
  */
 package org.movsim.simulator.roadSection;
 
+import java.util.List;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Interface SpeedLimits.
@@ -47,5 +49,7 @@ public interface SpeedLimits {
      * @return the double
      */
     double calcSpeedLimit(double x);
+    
+    List<SpeedLimit> getSpeedLimits();
 
 }

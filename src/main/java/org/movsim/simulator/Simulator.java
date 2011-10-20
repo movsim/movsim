@@ -26,8 +26,11 @@
  */
 package org.movsim.simulator;
 
+import java.util.List;
+
 import org.movsim.input.InputData;
 import org.movsim.output.SimObservables;
+import org.movsim.simulator.roadSection.RoadSection;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -36,11 +39,11 @@ import org.movsim.output.SimObservables;
 public interface Simulator {
 
     /**
-     * I time.
+     * The total number of updates.
      * 
-     * @return the int
+     * @return the long
      */
-    int iTime();
+    long iterationCount();
 
     /**
      * Time.
@@ -52,7 +55,7 @@ public interface Simulator {
     /**
      * Timestep.
      * 
-     * @return the double
+     * @return the double which represents the timestep of the next update.
      */
     double timestep();
 
@@ -62,32 +65,54 @@ public interface Simulator {
     void run();
 
     /**
-     * Update.
+     * Calls the update for the Roadsection and SimulationOutput.
      */
     void update();
+    
+    /**
+     * Checks if is simulation run finished.
+     *
+     * @return true, if is simulation run finished
+     */
+    boolean isSimulationRunFinished();
 
     /**
      * Restart.
      */
-    void restart();
+    void reset();
 
     /**
-     * Gets the sim input.
+     * Gets the sim input. All simulation input data.
      * 
      * @return the sim input
      */
     InputData getSimInput();
 
     /**
-     * Gets the sim observables.
+     * Gets the sim observables. Floating cars, Virtual Detectors, SpatioTemporal. 
      * 
      * @return the sim observables
      */
     SimObservables getSimObservables();
 
     /**
-     * Initialize.
+     * Initializes from xml. Calls restart.
      */
     void initialize();
-
+    
+    /**
+     * Gets the road sections.
+     *
+     * @return the road sections
+     */
+    List<RoadSection> getRoadSections();
+    
+    /**
+     * Find road by id.
+     *
+     * @param id the id
+     * @return the road section
+     */
+    public RoadSection findRoadById(long id);
+    
 }

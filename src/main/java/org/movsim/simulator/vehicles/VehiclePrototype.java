@@ -57,23 +57,22 @@ public class VehiclePrototype {
 
     /** The vehicle input. */
     private final VehicleInput vehicleInput;
+    
+    private final double relativeRandomizationV0;
+
 
     /**
      * Instantiates a new vehicle prototype.
-     * 
-     * @param label
-     *            the label
-     * @param fraction
-     *            the fraction
-     * @param longModel
-     *            the long model
-     * @param equilProperties
-     *            the equil properties
-     * @param vehicleInput
-     *            the vehicle input
+     *
+     * @param label the label
+     * @param fraction the fraction
+     * @param longModel the long model
+     * @param equilProperties the equil properties
+     * @param vehicleInput the vehicle input
+     * @param relativeRandomizationV0 the relative randomization v0
      */
     public VehiclePrototype(String label, double fraction, AccelerationModel longModel,
-            EquilibriumProperties equilProperties, VehicleInput vehicleInput) {
+            EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0) {
         this.label = label;
         this.length = vehicleInput.getLength();
         this.reactionTime = vehicleInput.getReactionTime();
@@ -81,6 +80,7 @@ public class VehiclePrototype {
         this.longModel = longModel;
         this.equiProperties = equilProperties;
         this.vehicleInput = vehicleInput;
+        this.relativeRandomizationV0 = relativeRandomizationV0;
     }
 
     /**
@@ -186,4 +186,13 @@ public class VehiclePrototype {
         return vehicleInput;
     }
 
+    
+    /**
+     * Gets the relative randomization v0.
+     *
+     * @return the relative randomization v0
+     */
+    public double getRelativeRandomizationV0() {
+        return relativeRandomizationV0;
+    }
 }

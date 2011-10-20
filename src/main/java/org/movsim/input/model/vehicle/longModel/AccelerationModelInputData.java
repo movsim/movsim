@@ -26,6 +26,7 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 import org.movsim.utilities.Observable;
 
 // TODO: Auto-generated Javadoc
@@ -39,7 +40,7 @@ public interface AccelerationModelInputData extends Observable {
      * 
      * @return the model name
      */
-    String getModelName();
+    ModelName getModelName();
 
     /**
      * Reset parameters to default.

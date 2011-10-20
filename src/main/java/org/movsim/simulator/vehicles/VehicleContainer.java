@@ -35,19 +35,26 @@ import java.util.List;
 public interface VehicleContainer extends MoveableContainer {
 
     /**
+     * Gets the lane index.
+     *
+     * @return the lane index
+     */
+    int getLaneIndex();
+    
+    /**
+     * Size.
+     * 
+     * @return the int
+     */
+    int size();
+
+    /**
      * Gets the vehicles.
      * 
      * @return the vehicles
      */
     List<Vehicle> getVehicles();
 
-    /**
-     * Size.
-     * 
-     * @return the int
-     */
-    @Override
-    int size();
 
     /**
      * Gets the.
@@ -81,24 +88,15 @@ public interface VehicleContainer extends MoveableContainer {
      *            the x init
      * @param vInit
      *            the v init
-     * @param laneInit
-     *            the lane init
      */
-    void add(Vehicle veh, double xInit, double vInit, int laneInit);
+    void add(final Vehicle veh, double xInit, double vInit);
 
     /**
-     * Adds the from ramp.
-     * 
-     * @param veh
-     *            the veh
-     * @param xInit
-     *            the x init
-     * @param vInit
-     *            the v init
-     * @param laneInit
-     *            the lane init
+     * Adds the.
+     *
+     * @param veh the veh
      */
-    void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit);
+    void add(Vehicle veh);
 
     /**
      * Removes the vehicles downstream.
@@ -112,5 +110,47 @@ public interface VehicleContainer extends MoveableContainer {
      * Removes the vehicle most downstream.
      */
     void removeVehicleMostDownstream();
+
+    /**
+     * Removes the vehicle.
+     *
+     * @param veh the veh
+     */
+    void removeVehicle(final Vehicle veh);
+
+    // returns also "virtual" leaders when veh is not located in considered lane
+    /**
+     * Gets the leader.
+     *
+     * @param veh the veh
+     * @return the leader
+     */
+    Vehicle getLeader(final Moveable veh);
+
+    // returns also "virtual" leaders when veh is not located in considered lane
+    /**
+     * Gets the follower.
+     *
+     * @param veh the veh
+     * @return the follower
+     */
+    Vehicle getFollower(final Moveable veh);
+
+    /**
+     * Adds the from to ramp.
+     *
+     * @param veh the veh
+     * @param xInit the x init
+     * @param vInit the v init
+     * @param oldLane the old lane
+     */
+    void addFromToRamp(Vehicle veh, double xInit, double vInit, int oldLane);
+    
+    void addTestwise(final Vehicle veh);
+    
+    
+    void updateBoundaryVehicles();
+    
+    void setDownstreamConnection(VehicleContainer connectedLaneDownstream);    
 
 }

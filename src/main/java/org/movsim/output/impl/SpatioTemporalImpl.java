@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.output.SpatioTemporal;
+import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -78,7 +79,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         dtOut = input.getDt();
         dxOut = input.getDx();
 
-        roadlength = roadSection.roadLength();
+        roadlength = roadSection.getRoadLength();
 
         initialize();
 
@@ -105,10 +106,11 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
      * @param roadSection
      *            the road section
      */
-    public void update(int it, double time, RoadSection roadSection) {
+    public void update(long it, double time, RoadSection roadSection) {
         if ((time - timeOffset) >= dtOut) {
             timeOffset = time;
-            calcData(time, roadSection.vehContainer());
+            // TODO quick hack for multi-lane compatibility
+            calcData(time, roadSection.getVehContainer(Constants.MOST_RIGHT_LANE));
             notifyObservers(time);
         }
     }
@@ -137,7 +139,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         localDensity[0] = 0;
         for (int i = 1; i < size; i++) {
             final double dist = xMicro[i - 1] - xMicro[i];
-            final double length = vehicles.get(i - 1).length();
+            final double length = vehicles.get(i - 1).getLength();
             localDensity[i] = (dist > length) ? 1 / dist : 1 / length;
         }
 

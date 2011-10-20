@@ -34,14 +34,23 @@ public interface UpstreamBoundary {
 
     /**
      * Update.
-     * 
-     * @param itime
-     *            the itime
-     * @param dt
-     *            the dt
-     * @param time
-     *            the time
+     *
+     * @param iterationCount the iteration count
+     * @param dt the dt
+     * @param time the time
      */
-    void update(int itime, double dt, double time);
+    void update(long iterationCount, double dt, double time);
+    
+    /**
+     * Gets the entering veh counter.
+     *
+     * @return the entering veh counter
+     */
+    int getEnteringVehCounter();
+    
+    
+    void setFlowPerLane(double newInflowValue);
+    
+    double getFlowPerLane(double time);
 
 }

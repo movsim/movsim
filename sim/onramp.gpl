@@ -18,12 +18,12 @@ if (!exists("lang")) lang = "en"
 baseFile = "onramp_".ldm
 vehicle = ldm."1"
 
-# input files
+# input files for road id=0
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-stFile = inputPath.baseFile.".R1_st.csv"
-detFile(n) = sprintf(inputPath.baseFile.".R1x%d_det.csv",n)
-roadSourceFile = inputPath.baseFile.".S1_log.csv"
-rampSourceFile = inputPath.baseFile.".S2_log.csv"
+stFile = inputPath.baseFile.".id0_st.csv"
+detFile(n) = sprintf(inputPath.baseFile.".id0x%d_det.csv",n)
+roadSourceFile = inputPath.baseFile.".id0_source_log.csv"
+rampSourceFile = inputPath.baseFile.".id0_sramp1_source_log.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"

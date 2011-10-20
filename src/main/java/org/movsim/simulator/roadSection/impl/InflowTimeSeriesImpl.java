@@ -34,7 +34,6 @@ import org.movsim.utilities.impl.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class InflowTimeSeriesImpl.
  */
@@ -51,6 +50,11 @@ public class InflowTimeSeriesImpl implements InflowTimeSeries {
 
     /** The speed values. */
     private double[] speedValues;
+    
+    
+    private double constantFlowPerLane = -1;
+    
+    private final double constantInitSpeed = 80/3.6;
 
     /**
      * Instantiates a new inflow time series impl.
@@ -89,7 +93,10 @@ public class InflowTimeSeriesImpl implements InflowTimeSeries {
      * @see org.movsim.simulator.roadSection.InflowTimeSeries#getFlow(double)
      */
     @Override
-    public double getFlow(double time) {
+    public double getFlowPerLane(double time) {
+        if(constantFlowPerLane>=0){
+            return constantFlowPerLane;
+        }
         return Tables.intpextp(timeValues, flowValues, time);
     }
 
@@ -100,7 +107,17 @@ public class InflowTimeSeriesImpl implements InflowTimeSeries {
      */
     @Override
     public double getSpeed(double time) {
+        if(constantFlowPerLane>=0){
+            return constantInitSpeed;
+        }
         return Tables.intpextp(timeValues, speedValues, time);
+    }
+
+    @Override
+    public void setConstantFlowPerLane(double newFlowPerLane) {
+        logger.debug("set new flow per lane value={} per second", newFlowPerLane);
+        assert newFlowPerLane >=0;
+        this.constantFlowPerLane = newFlowPerLane;
     }
 
 }

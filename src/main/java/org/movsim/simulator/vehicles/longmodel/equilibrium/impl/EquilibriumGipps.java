@@ -83,7 +83,7 @@ public class EquilibriumGipps extends EquilibriumPropertiesImpl {
             v_it = vEqTab[ir - 1];
 
             for (int it = 1; it <= itmax; it++) {
-                final double acc = gippsModel.accSimple(s, v_it, 0.);
+                final double acc = gippsModel.calcAccSimple(s, v_it, 0.);
                 // iteration step in [dtmin,dtmax]
                 final double dtloc = dtmax * v_it / gippsModel.getV0() + dtmin;
 

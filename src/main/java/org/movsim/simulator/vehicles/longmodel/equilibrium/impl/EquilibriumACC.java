@@ -88,7 +88,7 @@ public class EquilibriumACC extends EquilibriumPropertiesImpl {
             // density
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
-                final double acc = accModel.accSimple(s, vIter, 0.);
+                final double acc = accModel.calcAccSimple(s, vIter, 0.);
                 final double dtloc = dtMax * vIter / accModel.getV0() + dtMin; // it.
                                                                                // step
                                                                                // in

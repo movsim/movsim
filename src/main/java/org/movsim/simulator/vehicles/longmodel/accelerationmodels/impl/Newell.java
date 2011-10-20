@@ -27,26 +27,33 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
+import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // TODO paper reference ...
-// TODO implementation
 /**
  * The Class Newell.
  */
-public class Newell extends LongitudinalModel implements AccelerationModel {
+public class Newell extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
 
     /** The dt. */
-    private final double dt;
+    private double dt;
+    
+//    private double T;
+
+    /** The v0. */
+    private double v0;
+
+    /** The s0. */
+    private double s0;
 
     /**
      * Instantiates a new newell.
@@ -56,9 +63,8 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      * @param parameters
      *            the parameters
      */
-    public Newell(String modelName, AccelerationModelInputDataNewell parameters) {
-        super(modelName, AccelerationModelCategory.INTERATED_MAP_MODEL, parameters);
-        this.dt = 1; // model parameter
+    public Newell(AccelerationModelInputDataNewell parameters) {
+        super(ModelName.NEWELL, parameters);
         initParameters();
     }
 
@@ -71,8 +77,10 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        // this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
-
+         this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
+         this.dt = ((AccelerationModelInputDataNewell) parameters).getDt();
+         this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
+         this.s0 = ((AccelerationModelInputDataNewell) parameters).getS0();
     }
 
     /*
@@ -84,17 +92,41 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
-        // TODO Auto-generated method stub
-        // // space dependencies modeled by speedlimits, alpha's
-        //
-        // final double Tloc = alphaT*T;
-        // final double v0loc = Math.min(alphaV0*v0, me.speedlimit()); //
-        // consider external speedlimit
-        // final double aloc = alphaA*a;
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+        
+        // Local dynamical variables
+        final Moveable vehFront = vehContainer.getLeader(me);
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
 
-        return 0;
+        // TODO check modeling of parameter dt=T (dt is the constant update time and cannot be changed)
+        final double dtLocal = alphaT * dt;
+        // consider external speedlimit
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        
+        // actual Newell formula
+        return acc(s, v, dv, dtLocal, v0Local);
     }
+    
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+     */
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamic variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        
+        final double dtLocal = dt;
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
+
+        return acc(s, v, dv, dtLocal, v0Local);
+    }
+
 
     /*
      * (non-Javadoc)
@@ -104,9 +136,32 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
-        // TODO Auto-generated method stub
-        return 0;
+    public double calcAccSimple(double s, double v, double dv) {
+        return acc(s, v, dv, dt, v0);
+    }
+    
+    /**
+     * Acc.
+     *
+     * @param s the s
+     * @param v the v
+     * @param dv the dv
+     * @param v0Local the v0 local
+     * @param dtLocal the dt local
+     * @return the double
+     */
+    private double acc(double s, double v, double dv, double dtLocal, double v0Local) {
+        
+        final double vNew = Math.min(Math.max((s-s0)/dtLocal, 0), v0Local);
+        
+        double aWanted = (vNew - v) / dtLocal;
+        
+        // workaround to avoid crash
+        if (s / v < dt) {
+            aWanted = -10000000; 
+        }
+        
+        return aWanted;
     }
 
     /*
@@ -116,9 +171,8 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
-        // TODO Auto-generated method stub
-        return 0;
+    public double getDesiredSpeedParameterV0() {
+        return v0;
     }
 
     /*
@@ -129,7 +183,16 @@ public class Newell extends LongitudinalModel implements AccelerationModel {
      */
     @Override
     public double getRequiredUpdateTime() {
-        return dt; // cellular automaton requires specific dt
+        return dt;
     }
+
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
+    }
+
 
 }

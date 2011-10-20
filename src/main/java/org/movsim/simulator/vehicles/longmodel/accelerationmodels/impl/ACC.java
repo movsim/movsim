@@ -16,7 +16,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.movsim.utilities.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class ACC.
  */
-public class ACC extends LongitudinalModel implements AccelerationModel, Observer {
+public class ACC extends AccelerationModelAbstract implements AccelerationModel, Observer {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ACC.class);
@@ -85,8 +84,8 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * @param parameters
      *            the parameters
      */
-    public ACC(String modelName, AccelerationModelInputDataACC parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
+    public ACC(AccelerationModelInputDataACC parameters) {
+        super(ModelName.ACC, parameters);
         initParameters();
     }
 
@@ -118,25 +117,51 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront);
+        final double dv = me.getRelSpeed(vehFront);
 
         final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double Tloc = alphaT * T;
+        final double Tlocal = alphaT * T;
+//        if(alphaT!=1){
+//        System.out.printf("calcAcc: pos=%.2f, speed=%.2f, alphaT=%.3f, alphaV0=%.3f, T=%.3f, Tlocal=%.3f \n", 
+//                me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
+//        }
         // consider external speedlimit
-        final double v0Loc = Math.min(alphaV0 * v0, me.speedlimit());
-        final double aLoc = alphaA * a;
+        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double aLocal = alphaA * a;
 
-        return acc(s, v, dv, aLead, Tloc, v0Loc, aLoc);
+        return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);
 
+    }
+
+    
+    
+  
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+     */
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamic variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
+        
+        final double TLocal = T;
+        final double v0Local = Math.min(v0, me.getSpeedlimit());
+        final double aLocal = a;
+
+        return acc(s, v, dv, aLead, TLocal, v0Local, aLocal);
     }
 
     /*
@@ -147,7 +172,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, 0, T, v0, a);
     }
 
@@ -179,18 +204,18 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
         // IIDM
 
         final double sstar = s0
-                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(a * b), 0.);
+                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(aLocal * b), 0.);
         final double z = sstar / Math.max(s, 0.01);
-        final double accEmpty = (v <= v0) ? a * (1 - Math.pow((v / v0), delta)) : -b
-                * (1 - Math.pow((v0 / v), a * delta / b));
-        final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * a / accEmpty, 100.)));
-        final double accInt = a * (1 - z * z);
+        final double accEmpty = (v <= v0Local) ? aLocal * (1 - Math.pow((v / v0Local), delta)) : -b
+                * (1 - Math.pow((v0Local / v), aLocal * delta / b));
+        final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * aLocal / accEmpty, 100.)));
+        final double accInt = aLocal * (1 - z * z);
 
-        final double accIIDM = (v < v0) ? (z < 1) ? accPos : accInt : (z < 1) ? accEmpty : accInt + accEmpty;
+        final double accIIDM = (v < v0Local) ? (z < 1) ? accPos : accInt : (z < 1) ? accEmpty : accInt + accEmpty;
 
-        // constant-acceleration heurstic (CAH)
+        // constant-acceleration heuristic (CAH)
 
-        final double aLeadRestricted = Math.min(aLead, a);
+        final double aLeadRestricted = Math.min(aLead, aLocal);
         final double dvp = Math.max(dv, 0.0);
         final double vLead = v - dvp;
         final double denomCAH = vLead * vLead - 2 * s * aLeadRestricted;
@@ -276,7 +301,7 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -299,5 +324,18 @@ public class ACC extends LongitudinalModel implements AccelerationModel, Observe
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
     }
+
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
+    }
+
+
+   
+
+   
 
 }

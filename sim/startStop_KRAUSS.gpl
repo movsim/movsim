@@ -1,0 +1,5 @@
+# gnuplot command file
+
+ldm = "KRAUSS"
+lang = "en"
+load "startStop.gpl"

@@ -44,35 +44,28 @@ public interface Constants {
     /** The MA x_ vehicl e_ speed. */
     final double MAX_VEHICLE_SPEED = 200 / 3.6;
 
-    /** The MOS t_ righ t_ lane. */
-    final int MOST_RIGHT_LANE = 1; // increment lane index for further lanes to
+    /** The most right lane (related to list index) */
+    final int MOST_RIGHT_LANE = 0; // increment lane index for further lanes to
                                    // the left
-
-    /** The MODE l_ nam e_ idm. */
-    final String MODEL_NAME_IDM = "IDM";
-
-    /** The MODE l_ nam e_ acc. */
-    final String MODEL_NAME_ACC = "ACC";
-
-    /** The MODE l_ nam e_ ov m_ vdiff. */
-    final String MODEL_NAME_OVM_VDIFF = "OVM_VDIFF";
-
-    /** The MODE l_ nam e_ gipps. */
-    final String MODEL_NAME_GIPPS = "GIPPS";
-
-    /** The MODE l_ nam e_ newell. */
-    final String MODEL_NAME_NEWELL = "NEWELL";
-
-    /** The MODE l_ nam e_ nsm. */
-    final String MODEL_NAME_NSM = "NSM";
-
-    /** The MODE l_ nam e_ kca. */
-    final String MODEL_NAME_KCA = "KCA";
+    
+    // TODO
+    final int TO_LEFT = 1;
+    
+    final int TO_RIGHT = -1;
+     
+    final int NO_CHANGE = 0;
+        
+    final String OBSTACLE_KEY_NAME = "Obstacle";
 
     /** The gap infinity. */
     final double GAP_INFINITY = 10000;
 
     /** The invalid gap */
     final double INVALID_GAP = -1;
+
+    final double VEHICLE_WIDTH = 4.4;
+
+    final double CRITICAL_GAP = 2;
+
 
 }

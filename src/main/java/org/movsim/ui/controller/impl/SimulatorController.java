@@ -6,6 +6,7 @@ package org.movsim.ui.controller.impl;
 import org.movsim.simulator.Simulator;
 import org.movsim.ui.controller.Controller;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SimulatorController.
  */
@@ -27,6 +28,7 @@ public class SimulatorController extends Controller {
         initializeModel();
 
         simThread = new Thread((Runnable) model);
+        simThread.setName("movsim-thread");
         start();
 
     }

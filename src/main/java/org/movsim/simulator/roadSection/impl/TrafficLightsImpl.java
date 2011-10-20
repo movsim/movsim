@@ -12,6 +12,7 @@ import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.TrafficLights;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +42,15 @@ public class TrafficLightsImpl implements TrafficLights {
      * @param trafficLightsInput
      *            the traffic lights input
      */
+    
+    
     public TrafficLightsImpl(String projectName, TrafficLightsInput trafficLightsInput) {
 
         initTrafficLights(trafficLightsInput);
 
         nDt = trafficLightsInput.getnDtSample();
 
-        if (trafficLightsInput.isWithLogging()) {
+        if (projectName!=null && trafficLightsInput.isWithLogging()) {
             fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, nDt, trafficLights);
         }
 
@@ -69,15 +72,12 @@ public class TrafficLightsImpl implements TrafficLights {
 
     /**
      * Update.
-     * 
-     * @param itime
-     *            the itime
-     * @param time
-     *            the time
-     * @param vehicles
-     *            the vehicles
+     *
+     * @param iterationCount the itime
+     * @param time the time
+     * @param vehContainers the veh containers
      */
-    public void update(int itime, double time, List<Vehicle> vehicles) {
+    public void update(long iterationCount, double time, List<VehicleContainer> vehContainers) {
 
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
@@ -85,15 +85,17 @@ public class TrafficLightsImpl implements TrafficLights {
                 trafficLight.update(time);
             }
             // second update vehicle status approaching traffic lights
-            for (final Vehicle veh : vehicles) {
-                for (final TrafficLight trafficLight : trafficLights) {
-                    veh.updateTrafficLight(time, trafficLight);
+            for (VehicleContainer vehContainerLane : vehContainers) {
+                for (final Vehicle veh : vehContainerLane.getVehicles()) {
+                    for (final TrafficLight trafficLight : trafficLights) {
+                        veh.updateTrafficLight(time, trafficLight);
+                    }
                 }
             }
         }
 
         if (fileTrafficLightRecorder != null) {
-            fileTrafficLightRecorder.update(itime, time, trafficLights);
+            fileTrafficLightRecorder.update(iterationCount, time, trafficLights);
         }
     }
 

@@ -1,5 +1,0 @@
-# gnuplot command file
-
-ldm = "KCA"
-lang = "en"
-load "startStop.gpl"

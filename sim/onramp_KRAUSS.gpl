@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "KRAUSS"
+lang = "en"
+load "onramp.gpl"
+

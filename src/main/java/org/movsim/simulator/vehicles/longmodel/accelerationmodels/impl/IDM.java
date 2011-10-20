@@ -16,7 +16,6 @@ import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
-public class IDM extends LongitudinalModel implements AccelerationModel {
+public class IDM extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
@@ -71,8 +70,8 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * @param parameters
      *            the parameters: v0, T, s0, s1, a, b, delta
      */
-    public IDM(String modelName, AccelerationModelInputDataIDM parameters) {
-        super(modelName, AccelerationModelCategory.CONTINUOUS_MODEL, parameters);
+    public IDM(AccelerationModelInputDataIDM parameters) {
+        super(ModelName.IDM, parameters);
         initParameters();
     }
 
@@ -166,23 +165,39 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double acc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
         final Moveable vehFront = vehContainer.getLeader(me);
-        final double s = me.netDistance(vehFront);
+        final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
-        final double dv = me.relSpeed(vehFront);
+        final double dv = me.getRelSpeed(vehFront);
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double TLocal = alphaT * T;
+        final double localT = alphaT * T;
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.speedlimit());
-        final double aLocal = alphaA * a;
+        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double localA = alphaA * a;
 
-        return acc(s, v, dv, TLocal, v0Local, aLocal);
+        return acc(s, v, dv, localT, localV0, localA);
 
+    }
+    
+    
+    
+    @Override
+    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+        // Local dynamical variables
+        final double s = me.getNetDistance(vehFront);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(vehFront);
+        
+        final double localT = T;;
+        final double localV0 = Math.min(v0, me.getSpeedlimit());
+        final double localA = a;
+
+        return acc(s, v, dv, localT, localV0, localA);
     }
 
     /*
@@ -193,7 +208,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * #accSimple(double, double, double)
      */
     @Override
-    public double accSimple(double s, double v, double dv) {
+    public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, T, v0, a);
     }
 
@@ -240,7 +255,7 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
      * LongitudinalModel#parameterV0()
      */
     @Override
-    public double parameterV0() {
+    public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
@@ -254,5 +269,16 @@ public class IDM extends LongitudinalModel implements AccelerationModel {
     public double getRequiredUpdateTime() {
         return 0; // continuous model requires no specific timestep
     }
+
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
+     */
+    @Override
+    protected void setDesiredSpeedV0(double v0) {
+        this.v0 = v0;
+    }
+
+    
+
 
 }

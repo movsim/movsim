@@ -31,6 +31,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.movsim.simulator.Constants;
+import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -38,6 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
+
+
 /**
  * The Class VehicleContainerImpl.
  */
@@ -52,22 +56,56 @@ public class VehicleContainerImpl implements VehicleContainer {
     /** The vehicles. */
     private final List<Vehicle> vehicles;
 
-    /** The veh mainroad counter. */
-    private int vehMainroadCounter;
+    /** The veh counter. */
+    private int vehCounter;
 
-    /** The veh ramp counter. */
-    private int vehRampCounter;
-
+    private final int laneIndex;  // TODO laneInit not necessary anymore ?!
+    
+    private Vehicle boundaryVehicleDownstream = null;
+    
+    private VehicleContainer connectedLaneDownstream;
+    
+    private long roadID;
+    
+    
     /**
      * Instantiates a new vehicle container impl.
+     *
+     * @param laneIndex the lane index
      */
-    public VehicleContainerImpl() {
+    public VehicleContainerImpl(long roadID, int laneIndex) {
+        this.roadID = roadID;
+        this.laneIndex = laneIndex;
         vehicles = new ArrayList<Vehicle>();
-        vehMainroadCounter = 0;
-        vehRampCounter = -1; // count negative to distinguish from vehicle
-                             // entered from mainroad
+        vehCounter = 0;
+        connectedLaneDownstream = null; // no connection
+    }
+    
+    public VehicleContainerImpl(int laneIndex) {
+        this.roadID = MyRandom.nextInt();
+        this.laneIndex = laneIndex;
+        vehicles = new ArrayList<Vehicle>();
+        vehCounter = 0;
+        connectedLaneDownstream = null; // no connection
+    }
+    
+    
+    @Override
+    public void setDownstreamConnection(VehicleContainer connectedLaneDownstream){
+        this.connectedLaneDownstream = connectedLaneDownstream;
     }
 
+    
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getLaneIndex()
+     */
+    @Override
+    public int getLaneIndex(){
+        return laneIndex;
+    }
+    
+    
     /*
      * (non-Javadoc)
      * 
@@ -106,8 +144,9 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getMostDownstream() {
-        if (vehicles.isEmpty())
+        if (vehicles.isEmpty()){
             return null;
+        }
         return vehicles.get(0);
     }
 
@@ -119,12 +158,12 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getMostUpstream() {
-        if (vehicles.isEmpty())
+        if (vehicles.isEmpty()){
             return null;
+        }
         return vehicles.get(vehicles.size() - 1);
     }
-
-    // sollte damit immer aufsteigend in pos sortiert sein
+    
     /*
      * (non-Javadoc)
      * 
@@ -132,44 +171,48 @@ public class VehicleContainerImpl implements VehicleContainer {
      * org.movsim.simulator.vehicles.VehicleContainer#add(org.movsim.simulator
      * .vehicles.Vehicle, double, double, int)
      */
+    
     @Override
-    public void add(Vehicle veh, double xInit, double vInit, int laneInit) {
-        vehMainroadCounter++;
-        add(vehMainroadCounter, veh, xInit, vInit, laneInit);
+    public void add(final Vehicle veh, double xInit, double vInit) {
+        add(veh, xInit, vInit, laneIndex, false);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.vehicles.VehicleContainer#addFromRamp(org.movsim
-     * .simulator.vehicles.Vehicle, double, double, int)
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#add(org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public void addFromRamp(Vehicle veh, double xInit, double vInit, int laneInit) {
-        vehRampCounter--; // count negative
-        add(vehRampCounter, veh, xInit, vInit, laneInit);
+    public void add(final Vehicle veh){
+        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, false);
     }
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#addFromToRamp(org.movsim.simulator.vehicles.Vehicle, double, double, int)
+     */
+    @Override
+    public void addFromToRamp(final Vehicle veh, double xInit, double vInit, int oldLane){
+        add(veh, xInit, vInit, laneIndex, false);
+        veh.initLaneChangeFromRamp(oldLane);  // TODO quick hack for continuous lane change (special case treatment) 
+    }
+    
 
     /**
      * Adds the.
-     * 
-     * @param vehNumber
-     *            the veh number
-     * @param veh
-     *            the veh
-     * @param xInit
-     *            the x init
-     * @param vInit
-     *            the v init
-     * @param laneInit
-     *            the lane init
+     *
+     * @param veh the veh
+     * @param xInit the x init
+     * @param vInit the v init
+     * @param laneInit the lane init
      */
-    private void add(int vehNumber, Vehicle veh, double xInit, double vInit, int laneInit) {
-        veh.setVehNumber(vehNumber);
-
-        veh.init(xInit, vInit, laneInit);
-
+    private void add(final Vehicle veh, double xInit, double vInit, int laneInit, boolean isTestwise) {
+        
+        if (!isTestwise) {
+            vehCounter++;
+            veh.setVehNumber(vehCounter);
+            veh.init(xInit, vInit, laneInit, roadID); // sets new lane index after lane
+                                              // change
+        }
+        
         if (vehicles.isEmpty()) {
             vehicles.add(veh);
         } else if (veh.getPosition() < getMostUpstream().getPosition()) {
@@ -195,10 +238,25 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public void removeVehiclesDownstream(double roadLength) {
         while (!vehicles.isEmpty() && getMostDownstream().getPosition() > roadLength) {
-            vehicles.get(0).removeObservers(); // delete references when leaving
-                                               // the simulation
-            vehicles.remove(0);
-            logger.debug(" remove veh ... size = {}", vehicles.size());
+
+            if (connectedLaneDownstream == null) {
+
+                vehicles.get(0).removeObservers(); // delete references when
+                                                   // leaving
+                                                   // the simulation
+                vehicles.remove(0);
+                logger.debug(" remove veh ... size = {}", vehicles.size());
+            } else {
+                final Vehicle vehicleToTransfer = getMostDownstream(); 
+                vehicles.remove(vehicleToTransfer);
+                final double xInit = vehicleToTransfer.getPosition()-roadLength;  
+                final double vInit = vehicleToTransfer.getSpeed();
+                
+                // TODO old position also reset!!!
+                connectedLaneDownstream.add(vehicleToTransfer, xInit, vInit);
+                
+                logger.debug(" shift veh to connected lane: newPosition={}", xInit);
+            }
         }
     }
 
@@ -215,21 +273,56 @@ public class VehicleContainerImpl implements VehicleContainer {
             vehicles.remove(0);
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.simulator.vehicles.VehicleContainer#getLeader(org.movsim.simulator
-     * .vehicles.Vehicle)
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#removeVehicle(org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public Moveable getLeader(Moveable veh) {
+    public void removeVehicle(final Vehicle veh){
+        if (!vehicles.isEmpty()) {
+            vehicles.remove(veh);
+        }
+    }
+
+  
+   
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getLeader(org.movsim.simulator.vehicles.Moveable)
+     */
+    @Override
+    public Vehicle getLeader(final Moveable veh) {
+        if( !vehicles.contains(veh) ){
+            // return virtual leader for vehicle veh which is not in considered lane
+            return findVirtualLeader(veh); 
+        }
+        
         final int index = vehicles.indexOf(veh);
-        if (index == -1 || index == 0)
-            return null;
+        if ( index == 0 ){
+            // no leader downstream 
+            return boundaryVehicleDownstream;  // TODO    
+        }
+        
         return vehicles.get(index - 1);
     }
+    
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.vehicles.VehicleContainer#getFollower(org.movsim.simulator.vehicles.Moveable)
+     */
+    @Override
+    public Vehicle getFollower(final Moveable veh) {
+        final int index = vehicles.indexOf(veh);
+        if ( index == vehicles.size()-1 ){
+            return null; //boundaryVehicleUpstream;  // TODO
+        }
+        else if (index == -1){
+            // veh is not contained in this lane
+            // return virtual leader for vehicle veh which is not not considered lane
+            return findVirtualFollower(veh); 
+        }
+        return vehicles.get(index + 1);
+    }
+    
 
     /**
      * Sort.
@@ -246,28 +339,96 @@ public class VehicleContainerImpl implements VehicleContainer {
         });
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveables()
-     */
-    @Override
-    public List<Moveable> getMoveables() {
-        List<Moveable> moveables = new ArrayList<Moveable>();
-        for (final Vehicle veh : vehicles) {
-            moveables.add(veh);
-        }
-        return moveables;
-    }
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveables()
+//     */
+//    @Override
+//    public List<Moveable> getMoveables() {
+//        List<Moveable> moveables = new ArrayList<Moveable>();
+//        for (final Vehicle veh : vehicles) {
+//            moveables.add(veh);
+//        }
+//        return moveables;
+//    }
 
     /*
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.MoveableContainer#getMoveable(int)
      */
-    @Override
-    public Moveable getMoveable(int index) {
-        return vehicles.get(index);
+//    @Override
+//    public Moveable getMoveable(int index) {
+//        return vehicles.get(index);
+//    }
+
+    
+    /**
+     * Find virtual leader.
+     *
+     * @param veh the veh
+     * @return the vehicle
+     */
+    private Vehicle findVirtualLeader(final Moveable veh) {
+        // TODO efficient implementation with interval intersection
+        final double position = veh.getPosition();
+        // decrease index for traversing in downstream direction
+        // return first vehicle on lane with *higher* position than veh
+        for (int i = vehicles.size()-1; i>=0; i--) {
+            final Vehicle vehOnLane = vehicles.get(i);
+            if(vehOnLane.getPosition() >= position){
+                return vehOnLane;
+            }
+        }
+        // TODO new boundary vehicle creation if no leader exists
+        return boundaryVehicleDownstream;
     }
 
+    /**
+     * Find virtual follower.
+     *
+     * @param veh the veh
+     * @return the vehicle
+     */
+    private Vehicle findVirtualFollower(final Moveable veh) {
+     // TODO efficient implementation 
+        final double position = veh.getPosition();
+        // increase index for traversing in downstream direction
+        // return first vehicle on lane with *lower* position than veh
+        for (int i = 0, N = vehicles.size(); i < N; i++) {
+            final Vehicle vehOnLane = vehicles.get(i);
+            if(vehOnLane.getPosition() <= position){
+                return vehOnLane;
+            }
+        }
+        return null; //boundaryVehicleUpstream; TODO
+    }
+  
+    
+    
+    // TODO better control flow for changing vehicle's state variables
+    @Override
+    public void addTestwise(final Vehicle veh){
+        if(veh!=null){
+            add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, true);
+        }
+    }
+    
+    
+    
+    @Override
+    public void updateBoundaryVehicles(){
+        boundaryVehicleDownstream =  null;
+        if(connectedLaneDownstream!=null ){
+            final Vehicle vehDown = connectedLaneDownstream.getMostUpstream();
+            if( vehDown!=null && !vehDown.getLabel().equals(Constants.OBSTACLE_KEY_NAME) ){
+                boundaryVehicleDownstream = vehDown;
+            }
+        }
+    }
+    
+
+    
+    
 }

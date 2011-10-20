@@ -26,20 +26,31 @@
  */
 package org.movsim.simulator.impl;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.movsim.input.InputData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.XmlReaderSimInput;
+import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.impl.OfframpImpl;
+import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
+import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
+import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SimulatorImpl.
  */
@@ -48,54 +59,176 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulatorImpl.class);
 
-    /** The time. */
+    // singleton pattern
+    private static SimulatorImpl instance = null; 
+    
     private double time;
 
-    /** The itime. */
-    private int itime;
+    private long iterationCount;
 
-    /** The timestep. */
     private double timestep;
 
     /** The duration of the simulation. */
     private double tMax;
 
-    /** The road section. */
-    private RoadSection roadSection;
+    /** The road sections. */
+    private List<RoadSection> roadSections;
+    
+    private Map<Long, RoadSection> roadSectionsMap; 
 
     /** The sim output. */
     private SimOutput simOutput;
 
     /** The sim input. */
     private InputDataImpl inputData;
+    
+    /** The vehicle generator. */
+    private VehicleGenerator vehGenerator;
+    
+    private boolean isWithCrashExit;
 
+    private String projectName;
+    
+    private RoadNetwork roadNetwork;
+     
+    
     /**
      * Instantiates a new simulator impl.
      */
-    public SimulatorImpl() {
-        this.inputData = new InputDataImpl();
+    private SimulatorImpl() {
+        inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
     }
 
-    /**
-     * Restart.
+    public static synchronized SimulatorImpl getInstance(){
+        if(instance == null){
+            instance = new SimulatorImpl();
+        }
+        return instance;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.Simulator#initialize()
      */
     @Override
-    public void restart() {
+    public void initialize() {
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
+        
+        // parse xmlFile and set values
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+        final SimulationInput simInput = inputData.getSimulationInput();
+        this.timestep = simInput.getTimestep(); // can be modified by certain
+                                                // models
+        this.tMax = simInput.getMaxSimTime();
+
+        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
+        
+        // this is the default vehGenerator for *all* roadsections
+        // if an individual vehicle composition is defined for a specific road
+        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
+        final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
+        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
+        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
+
+        reset();
+    }
+
+   
+    
+    /**
+     * Reset.
+     */
+    @Override
+    public void reset() {
         time = 0;
-        itime = 0;
-        roadSection = new RoadSectionImpl(inputData);
+        iterationCount = 0;
+        
+        System.out.println("roadsections: "+inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt Roadinput/RoadSection
+   
+        roadSections = new LinkedList<RoadSection>();
+        for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput()) {
+            final RoadSection roadSection = RoadSectionFactory.create(inputData, roadinput, vehGenerator);  
+            roadSections.add(roadSection);
+        }
+        
+        createMap();
+        
+        
+        // TODO work in progress, not yet sufficiently worked-out concept
+        final RoadNetwork roadNetwork = RoadNetwork.getInstance();
+        for (RoadSection roadSection : roadSections) {
+            roadNetwork.add(roadSection);
+        }
+        logger.info(roadNetwork.toString());
+      
+        
+        
+        // TODO quick hack for connecting offramp with onramp
+        // more general concept needed here
+        final long idOfframp = -1;
+        final long idOnramp = 1;
+        if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
+            final RoadSection onramp = findRoadById(idOnramp);
+            findRoadById(idOfframp).getVehContainer(Constants.MOST_RIGHT_LANE).setDownstreamConnection(
+                    onramp.getVehContainer(Constants.MOST_RIGHT_LANE));
+            logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
+        }
+
+        
+        projectName = inputData.getProjectMetaData().getProjectName();
 
         // model requires specific update time depending on its category !!
 
         // TODO: check functionality
-        if (roadSection.getTimestep() > Constants.SMALL_VALUE) {
-            this.timestep = roadSection.getTimestep();
+        if (roadSections.get(0).getTimestep() > Constants.SMALL_VALUE) {
+            this.timestep = roadSections.get(0).getTimestep();
             logger.info("model sets simulation integration timestep to dt={}", timestep);
         }
 
-        simOutput = new SimOutput(inputData, roadSection);
+        simOutput = new SimOutput(inputData, roadSections, this.roadSectionsMap);
     }
 
+    
+  
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.Simulator#getRoadSections()
+     */
+    @Override
+    public List<RoadSection> getRoadSections() {
+        return roadSections;
+    }
+    
+    /* (non-Javadoc)
+     * @see org.movsim.simulator.Simulator#findRoadById(long)
+     */
+    public RoadSection findRoadById(long id) {
+        if(roadSectionsMap.containsKey(id)){
+            return roadSectionsMap.get(id);
+        }
+        return null;
+    }
+    
+    // helper function
+    private void createMap(){
+        roadSectionsMap  = new HashMap<Long, RoadSection>();
+        for (final RoadSection roadSection : roadSections) {
+            roadSectionsMap.put(roadSection.getId(), roadSection);
+        }
+    }
+
+    
+    // TODO just hack 
+    private RoadSection findFirstOfframp(){
+        for (final RoadSection roadSection : roadSections) {
+            if( roadSection instanceof OfframpImpl){
+                return roadSection; 
+            }
+        }
+        return null;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -103,27 +236,24 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void run() {
-        logger.info("Simulator.run: start simulation at {} seconds", time);
+        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", time, projectName);
 
-        simOutput.update(itime, time, timestep);
+        // TODO check if first output update has to be called in update for external call!!
+        simOutput.update(iterationCount, time, timestep);
 
-        while (!stopThisRun(time)) {
-            time += timestep;
-            itime++;
+        while (!isSimulationRunFinished()) {
             update();
         }
 
-        logger.info("Simulator.run: stop after time = {} seconds", time);
+        logger.info("Simulator.run: stop after time = {} seconds of simulation project={}", time, projectName);
     }
 
     /**
      * Stop this run.
-     * 
-     * @param time
-     *            the time
+     *
      * @return true, if successful
      */
-    private boolean stopThisRun(double time) {
+    public boolean isSimulationRunFinished() {
         return (time > tMax);
     }
 
@@ -134,11 +264,83 @@ public class SimulatorImpl implements Simulator, Runnable {
      */
     @Override
     public void update() {
-        if (itime % 100 == 0) {
-            logger.info("Simulator.update: time={} seconds, dt={}", time, timestep);
+
+        time += timestep;
+        iterationCount++;
+
+        if (iterationCount % 100 == 0) {
+            logger.info("Simulator.update : time={} seconds, dt={}", time, timestep);
         }
-        roadSection.update(itime, time);
-        simOutput.update(itime, time, timestep);
+        
+        // parallel update of all roadSections 
+        
+        // TODO book-keeping all *all* roadSections in one Collection for iteration
+        // onramps are part of mainroad section in current implementation  
+        
+        final double dt = this.timestep;   // TODO
+        
+      
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateRoadConditions(iterationCount, time);
+        }
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateBoundaryVehicles(iterationCount, time);
+        }
+        
+        // check for crashes
+        for (RoadSection roadSection : roadSections) {
+            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
+        }
+
+
+        // lane changes 
+        for (RoadSection roadSection : roadSections) {
+            roadSection.laneChanging(iterationCount, dt, time);
+        }
+
+        // merges from onramps/ to offramps (and also simpleRamp)
+        for (RoadSection roadSection : roadSections) {
+            // TODO: network information 
+            RoadSection connectedRoadSection = null;
+            if(roadSection instanceof RoadSectionImpl){
+                // mainroad gets reference to first offramp (or null)
+                // TODO allow more than one offramp !!!
+                connectedRoadSection = findFirstOfframp(); 
+            }
+            if(roadSection instanceof OnrampMobilImpl){
+                connectedRoadSection = findRoadById(roadSection.getToId());  
+            }
+            
+            roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
+        }
+       
+        
+        // vehicle accelerations
+        for (RoadSection roadSection : roadSections) {
+            roadSection.accelerate(iterationCount, dt, time);
+        }
+
+        
+        // vehicle pos/speed
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
+        }
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateDownstreamBoundary();
+        }
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
+        }
+
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateDetectors(iterationCount, dt, time);
+        }
+
+        simOutput.update(iterationCount, time, timestep);
     }
 
     /*
@@ -147,8 +349,8 @@ public class SimulatorImpl implements Simulator, Runnable {
      * @see org.movsim.simulator.Simulator#iTime()
      */
     @Override
-    public int iTime() {
-        return itime;
+    public long iterationCount() {
+        return iterationCount;
     }
 
     /*
@@ -191,27 +393,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         return simOutput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#initialize()
-     */
-    @Override
-    public void initialize() {
-
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and  Martin Budden (2011)");
-
-        // parse xmlFile and set values
-
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
-        final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain
-                                                // models
-        this.tMax = simInput.getMaxSimTime();
-
-        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-
-        restart();
-    }
+   
 
 }

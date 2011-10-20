@@ -65,7 +65,7 @@ public class SimpleRampDataImpl implements SimpleRampData {
     @SuppressWarnings("unchecked")
     public SimpleRampDataImpl(Element elem) {
         this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-        this.rampLength = Double.parseDouble(elem.getAttributeValue("length"));
+        this.rampLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
