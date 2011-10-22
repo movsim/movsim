@@ -51,7 +51,7 @@ public class MovsimViewerFacade {
 
     // singleton pattern
     private static MovsimViewerFacade instance = null;
-    
+
     /**
      * Inits the localization and logger.
      */
@@ -67,15 +67,13 @@ public class MovsimViewerFacade {
     private ProjectMetaDataImpl projectMetaDataImpl;
 
     /**
-     * Instantiates a new movsim viewer facade.
-     * Singleton pattern
+     * Instantiates a new movsim viewer facade. Singleton pattern
      */
-    
+
     private MovsimViewerFacade() {
 
         model = SimulatorImpl.getInstance();
 
-        // init Logger
         initLocalizationAndLogger();
 
         inputData = (InputDataImpl) model.getSimInput();
@@ -87,18 +85,13 @@ public class MovsimViewerFacade {
 
     }
 
-    
-    public static synchronized MovsimViewerFacade getInstance(){
-        if(instance == null){
+    public static synchronized MovsimViewerFacade getInstance() {
+        if (instance == null) {
             instance = new MovsimViewerFacade();
         }
         return instance;
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.ui.controller.Controller#initializeModel()
-     */
+
     /**
      * Initialize model.
      */
@@ -108,8 +101,9 @@ public class MovsimViewerFacade {
 
     /**
      * Load scenario from xml.
-     *
-     * @param scenario the scenario
+     * 
+     * @param scenario
+     *            the scenario
      */
     public void loadScenarioFromXml(String scenario) {
         String xmlFileName = "/sim/" + scenario + ".xml";
@@ -130,20 +124,21 @@ public class MovsimViewerFacade {
     public void update() {
         model.update();
     }
-    
+
     /**
      * Checks if is simulation run finished.
-     *
+     * 
      * @return true, if is simulation run finished
      */
-    public boolean isSimulationRunFinished(){
+    public boolean isSimulationRunFinished() {
         return model.isSimulationRunFinished();
     }
-    
+
     /**
      * Find road by id.
-     *
-     * @param id the id
+     * 
+     * @param id
+     *            the id
      * @return the road section
      */
     public RoadSection findRoadById(long id) {
@@ -152,7 +147,7 @@ public class MovsimViewerFacade {
 
     /**
      * Gets the road sections.
-     *
+     * 
      * @return the road sections
      */
     public List<RoadSection> getRoadSections() {
@@ -161,7 +156,7 @@ public class MovsimViewerFacade {
 
     /**
      * Gets the timestep.
-     *
+     * 
      * @return the timestep
      */
     public double getTimestep() {
@@ -170,7 +165,7 @@ public class MovsimViewerFacade {
 
     /**
      * Gets the iteration count.
-     *
+     * 
      * @return the iteration count
      */
     public long getIterationCount() {
@@ -179,7 +174,7 @@ public class MovsimViewerFacade {
 
     /**
      * Gets the simulation time.
-     *
+     * 
      * @return the simulation time
      */
     public double getSimulationTime() {
@@ -188,35 +183,24 @@ public class MovsimViewerFacade {
 
     /**
      * Gets the max sim time.
-     *
+     * 
      * @return the max sim time
      */
     public double getMaxSimTime() {
         return inputData.getSimulationInput().getMaxSimTime();
     }
 
-    // public double getMainroadInflow() {
-    // // TODO Auto-generated method stub
-    // return 0;
-    // }
-    //
-    //
-    // public double getRampInflow() {
-    // // TODO Auto-generated method stub
-    // return 0;
-    // }
-    public List<List<XYDataPoint>> getTravelTimeEmas(){
-      return model.getSimObservables().getTravelTimes().getTravelTimeEmas();
-  }
-    
-    public List<Double> getTravelTimeDataEMAs(double time){
+    public List<List<XYDataPoint>> getTravelTimeEmas() {
+        return model.getSimObservables().getTravelTimes().getTravelTimeEmas();
+    }
+
+    public List<Double> getTravelTimeDataEMAs(double time) {
         final double tauEMA = 40;
         return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
-    
-    public SimObservables getSimObservables(){
+
+    public SimObservables getSimObservables() {
         return model.getSimObservables();
     }
-    
 
 }
