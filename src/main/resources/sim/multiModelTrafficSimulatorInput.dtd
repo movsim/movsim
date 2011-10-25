@@ -29,12 +29,63 @@
 <!-- general remarks: -->
 <!-- all parameter values are expected in SI units. Otherwise the attribute's name is indicating the unit explicitely -->
 
-<!ELEMENT SCENARIO (VEHICLES, SIMULATION) >
+<!ELEMENT SCENARIO (FUEL_CONSUMPTION?, VEHICLES, SIMULATION) >
 
 <!-- todo Ralph for configuring output path -->
 <!ATTLIST SCENARIO
   path  CDATA  "."
 >
+
+
+<!-- ##################################################################### -->
+<!-- Fuel Consumption Model                                                -->
+<!-- ##################################################################### -->
+
+<!ELEMENT FUEL_CONSUMPTION (CONSUMPTION_MODEL+) >
+
+<!ATTLIST FUEL_CONSUMPTION
+>
+
+<!ELEMENT CONSUMPTION_MODEL (CAR,ENGINE) >
+
+
+<!ATTLIST CONSUMPTION_MODEL
+  label   CDATA   #REQUIRED
+>
+
+<!ELEMENT CAR EMPTY >
+<!ATTLIST CAR
+  mass                    NMTOKEN "1500"
+  cross_section_surface   NMTOKEN "2.2"
+  cw_value                NMTOKEN "0.32"
+  electric_power          NMTOKEN "2000"
+  const_friction          NMTOKEN "0.0145"
+  v_friction              NMTOKEN "0"
+  dynamic_tyre_radius     NMTOKEN "0.3113"
+>
+
+<!ELEMENT ENGINE (GEAR_RATIOS?) >
+<!ATTLIST ENGINE
+  max_power_kW  NMTOKEN "90"
+  cylinder_vol  NMTOKEN "0.0014"
+  idle_cons_rate_linvh NMTOKEN "0.6"
+  pe_min_bar NMTOKEN "1"
+  pe_max_bar NMTOKEN "19" 
+  idle_rotation_rate NMTOKEN "16.667"
+  max_rotation_rate NMTOKEN "100"
+>
+
+<!ELEMENT GEAR_RATIOS (GEAR_RATIO+) >
+<!ATTLIST GEAR_RATIOS
+>
+
+<!ELEMENT GEAR_RATIO EMPTY >
+<!ATTLIST GEAR_RATIO
+  phi   NMTOKEN  #REQUIRED
+>
+
+     
+
 <!-- ##################################################################### -->
 <!-- Vehicle-Driver-Units / Models                                         -->
 <!-- ##################################################################### -->

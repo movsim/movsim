@@ -44,6 +44,7 @@ import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.consumption.FuelConsumptionInput;
 import org.movsim.input.model.impl.SimulationInputImpl;
 import org.movsim.input.model.impl.VehicleInputImpl;
 import org.movsim.utilities.impl.FileUtils;
@@ -170,6 +171,8 @@ public class XmlReaderSimInput {
 
         final SimulationInput simInput = new SimulationInputImpl(root.getChild(XmlElementNames.Simulation));
         
+        inputData.setSimulationInput(simInput);
+        
         // -------------------------------------------------------
 
         final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
@@ -183,8 +186,12 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
+        System.out.println("parse fuelConsumptionInput");
+        final FuelConsumptionInput fuelConsumptionInput = new FuelConsumptionInput(root.getChild(XmlElementNames.Consumption));
         
-        inputData.setSimulationInput(simInput);
+        inputData.setFuelConsumptionInput(fuelConsumptionInput);
+        
+       
 
     }
 

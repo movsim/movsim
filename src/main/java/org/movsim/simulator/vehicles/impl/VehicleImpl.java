@@ -659,7 +659,7 @@ public class VehicleImpl implements Vehicle {
         final int laneChangingDirection = lcModel.determineLaneChangingDirection(vehContainers);
 
         // TODO do cross check, not necessary anymore?! 
-        assert saveLane != lane;
+        //assert saveLane != lane;
 
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!

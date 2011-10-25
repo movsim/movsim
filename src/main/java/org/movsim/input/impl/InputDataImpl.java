@@ -34,6 +34,7 @@ import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.consumption.FuelConsumptionInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,9 +54,13 @@ public class InputDataImpl implements InputData {
 
     /** The simulation input. */
     private SimulationInput simulationInput;
+    
+    /** The fuel consumption input. */
+    private FuelConsumptionInput fuelConsumptionInput;
 
     private ProjectMetaDataImpl projectMetaDataImpl;
 
+    
     /**
      * Gets the project meta data impl.
      * 
@@ -92,22 +97,11 @@ public class InputDataImpl implements InputData {
         this.vehicleInputData = vehicleInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.InputData#getVehicleInputData()
-     */
     @Override
     public List<VehicleInput> getVehicleInputData() {
         return vehicleInputData;
     }
 
-    // testweise hier
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.InputData#createVehicleInputDataMap()
-     */
     @Override
     public Map<String, VehicleInput> createVehicleInputDataMap() {
         final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
@@ -118,11 +112,6 @@ public class InputDataImpl implements InputData {
         return map;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.InputData#getSimulationInput()
-     */
     @Override
     public SimulationInput getSimulationInput() {
         return simulationInput;
@@ -138,14 +127,18 @@ public class InputDataImpl implements InputData {
         this.simulationInput = simulationInput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.InputData#getProjectMetaData()
-     */
     @Override
     public ProjectMetaData getProjectMetaData() {
         return projectMetaDataImpl;
+    }
+
+    public void setFuelConsumptionInput(FuelConsumptionInput fuelConsumptionInput) {
+        this.fuelConsumptionInput = fuelConsumptionInput;
+    }
+
+    @Override
+    public FuelConsumptionInput getFuelConsumptionInput() {
+        return fuelConsumptionInput;
     }
 
 }

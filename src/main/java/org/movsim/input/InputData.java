@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.consumption.FuelConsumptionInput;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -66,4 +67,7 @@ public interface InputData {
      */
     Map<String, VehicleInput> createVehicleInputDataMap();
 
+    
+    FuelConsumptionInput getFuelConsumptionInput();
+    
 }
