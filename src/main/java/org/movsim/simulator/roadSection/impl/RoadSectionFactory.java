@@ -14,7 +14,7 @@ public class RoadSectionFactory {
     public static RoadSection create(InputDataImpl inputData, final RoadInput roadInput,
             final VehicleGenerator vehGenerator) {
         final long roadId = roadInput.getId();
-        if (roadId % 100 == 0) {
+        if (roadId % 10 == 0) {
             logger.info("create MAINROAD for road id={}", roadId);
             return new RoadSectionImpl(inputData, roadInput, vehGenerator);
         } else if (roadId > 0) {
