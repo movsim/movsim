@@ -26,13 +26,17 @@ public class ConsumptionModelingImpl {
 
         fuelModelsMap = new HashMap<String, FuelConsumption>();
 
-        for (Map.Entry<String, ConsumptionModelInput> entries : input.getConsumptionModelInput().entrySet()) {
-            final String key = entries.getKey();
-            final ConsumptionModelInput consModelInput = entries.getValue();
-            logger.info("create fuel consumption model with key={}", key);
-            fuelModelsMap.put(key, new FuelConsumptionImpl(consModelInput));
+        if(input.getConsumptionModelInput()==null){
+            logger.info("no fuel consumption models defined.");
         }
-
+        else{
+            for (Map.Entry<String, ConsumptionModelInput> entries : input.getConsumptionModelInput().entrySet()) {
+                final String key = entries.getKey();
+                final ConsumptionModelInput consModelInput = entries.getValue();
+                logger.info("create fuel consumption model with key={}", key);
+                fuelModelsMap.put(key, new FuelConsumptionImpl(consModelInput));
+            }
+        }
     }
 
     public FuelConsumption getFuelConsumptionModel(String key) {
