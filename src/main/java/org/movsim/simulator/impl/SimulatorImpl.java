@@ -47,6 +47,7 @@ import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.impl.FuelConsumptionModelsImpl;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +85,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     
     /** The vehicle generator. */
     private VehicleGenerator vehGenerator;
+    
     
     private boolean isWithCrashExit;
 
@@ -129,6 +131,8 @@ public class SimulatorImpl implements Simulator, Runnable {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
         vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
+        
+        
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
         reset();

@@ -4,10 +4,10 @@
 <SCENARIO path=".">
 
   <FUEL_CONSUMPTION > <!-- with_jante="true" t_sample="0.1" write_file="true"  with_jante_out="false" with_theo_out="false"   > -->
-     <CONSUMPTION_MODEL label="car" >
+     <CONSUMPTION_MODEL label="carConsumption" >
      <CAR mass="1500" cross_section_surface="2.2" cw_value="0.32" electric_power="0" const_friction="0.0145" v_friction="0" dynamic_tyre_radius="0.3113" /> 
-     <ENGINE max_power_kW="90" cylinder_vol="0.0014" idle_cons_rate_linvh="0.6" pe_min_bar="1" pe_max_bar="19" 
-             idle_rotation_rate="16.667" max_rotation_rate="100" >                   
+     <ENGINE max_power_kW="90" cylinder_vol_cm3="1.4" idle_cons_rate_linvh="0.6" cspec_min_g_per_kwh="212" pe_min_bar="1" pe_max_bar="19" 
+             idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000" >                   
        <GEAR_RATIOS>
          <GEAR_RATIO phi="16.7" />
          <GEAR_RATIO phi="10.1" />
@@ -21,14 +21,15 @@
    </CONSUMPTION_MODEL>
   </FUEL_CONSUMPTION>
 
-  <VEHICLES>
-    <VEHICLE label="ACC1" length="6" b_max="9">
+  <VEHICLES> 
+    <VEHICLE label="ACC1" length="6" b_max="9" consumption_model="carConsumption">
       <LONGITUDINAL_MODEL>
         <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1"/>
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
         <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1"/>
       </LANE_CHANGE_MODEL>
+
     </VEHICLE>
     <!-- trucks -->
     <VEHICLE label="ACC2" length="16" b_max="9">

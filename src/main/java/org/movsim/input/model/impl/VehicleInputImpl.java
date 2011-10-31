@@ -48,6 +48,7 @@ import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataK
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,6 +73,9 @@ public class VehicleInputImpl implements VehicleInput {
 
     /** The reaction time. cannot be changed while simulating */
     private final double reactionTime;
+    
+    /** Label for the fuel consumption model. Default is "none"*/
+    private final String fuelConsumptionLabel;
 
     /** The model input data. */
     private AccelerationModelInputData modelInputData;
@@ -96,6 +100,7 @@ public class VehicleInputImpl implements VehicleInput {
         this.length = Double.parseDouble(elem.getAttributeValue("length"));
         this.maxDeceleration = Double.parseDouble(elem.getAttributeValue("b_max"));
         this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
+        this.fuelConsumptionLabel = elem.getAttributeValue("consumption_model");
 
         final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
         for (final Element longModelElem : longModelElems) {
@@ -109,7 +114,6 @@ public class VehicleInputImpl implements VehicleInput {
                 System.exit(-1);
             }
         }
-        
         
         final Element lcModelElem = elem.getChild(XmlElementNames.VehicleLaneChangeModel);
         laneChangingInputData = new LaneChangingInputDataImpl(lcModelElem);
@@ -131,21 +135,21 @@ public class VehicleInputImpl implements VehicleInput {
     private AccelerationModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equals(XmlElementNames.VehicleLongModelIDM))
+        if (modelName.equals(AccelerationModelAbstract.ModelName.IDM.name()))
             return new AccelerationModelInputDataIDMImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelACC))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.ACC.name()))
             return new AccelerationModelInputDataACCImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelOVM_VDIFF))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.OVM_VDIFF.name()))
             return new AccelerationModelInputDataOVM_VDIFFImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelGIPPS))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.GIPPS.name()))
             return new AccelerationModelInputDataGippsImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelKRAUSS))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.KRAUSS.name()))
             return new AccelerationModelInputDataKraussImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelNEWELL))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.NEWELL.name()))
             return new AccelerationModelInputDataNewellImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelNSM))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.NSM.name()))
             return new AccelerationModelInputDataNSMImpl(map);
-        else if (modelName.equals(XmlElementNames.VehicleLongModelKKW))
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.KKW.name()))
             return new AccelerationModelInputDataKKWImpl(map);
         else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
@@ -250,6 +254,11 @@ public class VehicleInputImpl implements VehicleInput {
     @Override
     public double getReactionTime() {
         return reactionTime;
+    }
+
+    @Override
+    public String getFuelConsumptionLabel() {
+        return fuelConsumptionLabel;
     }
 
    

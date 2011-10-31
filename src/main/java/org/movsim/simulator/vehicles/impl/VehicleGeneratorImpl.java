@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.InputData;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
@@ -101,6 +102,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private final boolean isWithReactionTimes;
 
     private boolean instantaneousFileOutput;
+    
+    private FuelConsumptionModelsImpl fuelConsumptionModels;
 
     /**
      * Instantiates a new vehicle generator impl. And writes fundamental diagram
@@ -126,11 +129,11 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         // output fundamental diagrams
         if (instantaneousFileOutput && isWithWriteFundamentalDiagrams) {
             FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
-
         }
 
         isWithReactionTimes = checkForReactionTimes();
 
+        fuelConsumptionModels = new FuelConsumptionModelsImpl(simInput.getFuelConsumptionInput());
     }
 
     /**
@@ -370,14 +373,13 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
         
-        
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
         
         // TODO lane-changing model impl
         final LaneChangingModelImpl lcModel = new LaneChangingModelImpl(vehInput.getLaneChangingInputData());
-        
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
-        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel);
+        final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput.getFuelConsumptionLabel());
+        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel, fuelModel);
         return veh;
     }
 

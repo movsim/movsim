@@ -6,10 +6,10 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CarConsumptionModelInput {
+public class ConsumptionCarModelInput {
     
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(CarConsumptionModelInput.class);
+    final static Logger logger = LoggerFactory.getLogger(ConsumptionCarModelInput.class);
     
     private double vehicleMass; // in kg
     private double crossSectionSurface;  // in m^2
@@ -20,7 +20,7 @@ public class CarConsumptionModelInput {
     private double dynamicTyreRadius;  // in m
     
     
-    public CarConsumptionModelInput(Map<String, String> map){
+    public ConsumptionCarModelInput(Map<String, String> map){
         this.vehicleMass = Double.parseDouble(map.get("mass"));
         this.crossSectionSurface = Double.parseDouble(map.get("cross_section_surface"));
         this.cwValue = Double.parseDouble(map.get("cw_value"));

@@ -107,5 +107,7 @@ public interface VehicleInput {
      * @return the noise input data
      */
     NoiseInputData getNoiseInputData();
+    
+    String getFuelConsumptionLabel();
 
 }

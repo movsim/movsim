@@ -28,6 +28,7 @@ package org.movsim.simulator.vehicles.impl;
 
 import java.util.List;
 
+import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.RoadNetwork;
@@ -130,6 +131,8 @@ public class VehicleImpl implements Vehicle {
     /** The cyclic buffer. */
     private final CyclicBufferImpl cyclicBuffer; // TODO
 
+    private final FuelConsumption fuelModel; // can be null
+    
     private boolean isBrakeLightOn;
 
     private PhysicalQuantities physQuantities;
@@ -148,9 +151,10 @@ public class VehicleImpl implements Vehicle {
      * @param lcModel the lanechange model
      */
     public VehicleImpl(String label, int id, final AccelerationModel longModel, final VehicleInput vehInput,
-            final CyclicBufferImpl cyclicBuffer, final LaneChangingModelImpl lcModel) {
+            final CyclicBufferImpl cyclicBuffer, final LaneChangingModelImpl lcModel, final FuelConsumption fuelModel) {
         this.label = label;
         this.id = id;
+        this.fuelModel = fuelModel;  
 
         length = vehInput.getLength();
         reactionTime = vehInput.getReactionTime();
@@ -166,7 +170,6 @@ public class VehicleImpl implements Vehicle {
         lcModel.initialize(this);
 
         this.cyclicBuffer = cyclicBuffer;
-
         
         // no effect if model is not configured with memory effect
         if (vehInput.isWithMemory()) {

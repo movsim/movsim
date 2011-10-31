@@ -9,41 +9,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConsumptionModelInput {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionModelInput.class);
-    
-    
-    
-    private CarConsumptionModelInput carData;
-    
-    private EngineModelInput engineData;
-    
-    private String label;
-    
-    
-    public ConsumptionModelInput(Element elem){
-        
-        this.label = elem.getAttributeValue("label");
-        
-        final Map<String, String> carDataMap = XmlUtils.putAttributesInHash(elem.getChild(XmlElementNames.ConsumptionCarData));
-        carData = new CarConsumptionModelInput(carDataMap);
 
-        
-        engineData = new EngineModelInput(elem.getChild(XmlElementNames.ConsumptionEngineData));
-        
+    private ConsumptionCarModelInput carData;
+
+    private ConsumptionEngineModelInput engineData;
+
+    private String label;
+
+    public ConsumptionModelInput(Element elem) {
+
+        this.label = elem.getAttributeValue("label");
+
+        final Map<String, String> carDataMap = XmlUtils.putAttributesInHash(elem.getChild(XmlElementNames.ConsumptionCarData));
+        carData = new ConsumptionCarModelInput(carDataMap);
+
+        engineData = new ConsumptionEngineModelInput(elem.getChild(XmlElementNames.ConsumptionEngineData));
+
     }
 
-
-    public CarConsumptionModelInput getCarData() {
+    public ConsumptionCarModelInput getCarData() {
         return carData;
     }
 
-
-    public EngineModelInput getEngineData() {
+    public ConsumptionEngineModelInput getEngineData() {
         return engineData;
     }
-
 
     public String getLabel() {
         return label;

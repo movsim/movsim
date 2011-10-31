@@ -67,12 +67,13 @@
 <!ELEMENT ENGINE (GEAR_RATIOS?) >
 <!ATTLIST ENGINE
   max_power_kW  NMTOKEN "90"
-  cylinder_vol  NMTOKEN "0.0014"
+  cylinder_vol_cm3  NMTOKEN "1.4"
   idle_cons_rate_linvh NMTOKEN "0.6"
+  cspec_min_g_per_kwh NMTOKEN "212"
   pe_min_bar NMTOKEN "1"
   pe_max_bar NMTOKEN "19" 
-  idle_rotation_rate NMTOKEN "16.667"
-  max_rotation_rate NMTOKEN "100"
+  idle_rotation_rate_invmin NMTOKEN "1000"
+  max_rotation_rate_invmin NMTOKEN "6000"
 >
 
 <!ELEMENT GEAR_RATIOS (GEAR_RATIO+) >
@@ -99,6 +100,7 @@
   length          NMTOKEN #REQUIRED
   b_max           NMTOKEN "10000"
   reaction_time   NMTOKEN "0"
+  consumption_model NMTOKEN "none"
 >
 
 <!-- Longitudinal model elements -->

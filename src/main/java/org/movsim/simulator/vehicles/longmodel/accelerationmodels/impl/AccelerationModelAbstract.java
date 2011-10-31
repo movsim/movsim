@@ -62,6 +62,11 @@ public abstract class AccelerationModelAbstract implements Observer {
         final String getDetailedName() {
             return detailedName;
         }
+        
+        @Override public String toString(){
+            return name();
+        }
+
 
     }
 
