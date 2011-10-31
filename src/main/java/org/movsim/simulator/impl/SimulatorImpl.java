@@ -66,7 +66,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private long iterationCount;
 
-    private final double timestep; // fix for one simulation !!
+    private double timestep; // fix for one simulation !!
 
     /** The duration of the simulation. */
     private double tMax;
@@ -94,16 +94,12 @@ public class SimulatorImpl implements Simulator, Runnable {
     
     private long startTimeMillis;
     
-     
-    
     /**
      * Instantiates a new simulator impl.
      */
     private SimulatorImpl() {
         inputData = new InputDataImpl();  // accesses static reference ProjectMetaData
-        // parse xmlFile and set values
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
-        this.timestep = inputData.getSimulationInput().getTimestep();   // final !!
+        
     }
 
     public static synchronized SimulatorImpl getInstance(){
@@ -121,7 +117,10 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
+     // parse xmlFile and set values
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
+        this.timestep = inputData.getSimulationInput().getTimestep();   // fix
         
         this.tMax = simInput.getMaxSimTime();
 

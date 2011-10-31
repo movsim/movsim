@@ -72,7 +72,7 @@ public class MovsimViewerFacade {
      */
 
     private MovsimViewerFacade() {
-
+        
         model = SimulatorImpl.getInstance();
 
         initLocalizationAndLogger();

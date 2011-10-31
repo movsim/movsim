@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
-<!-- (c) Martin Treiber, Arne Kesting 2011 -->
+<!-- (c) Arne Kesting 2011 -->
 <SCENARIO path=".">
 
-  <FUEL_CONSUMPTION > <!-- with_jante="true" t_sample="0.1" write_file="true"  with_jante_out="false" with_theo_out="false"   > -->
+  <FUEL_CONSUMPTION> 
      <CONSUMPTION_MODEL label="carConsumption" >
      <CAR mass="1500" cross_section_surface="2.2" cw_value="0.32" electric_power="0" const_friction="0.0145" v_friction="0" dynamic_tyre_radius="0.3113" /> 
      <ENGINE max_power_kW="90" cylinder_vol_cm3="1.4" idle_cons_rate_linvh="0.6" cspec_min_g_per_kwh="212" pe_min_bar="1" pe_max_bar="19" 
@@ -53,6 +53,8 @@
       <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2"/>
       <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2"/>
     </TRAFFIC_COMPOSITION>
+    
+    
     <ROAD id="0" length="3800" lanes="2">
       <INITIAL_CONDITIONS>
         <IC_MACRO x="600" rho_per_km="2" v="30"/>
@@ -106,6 +108,8 @@
       <TRAFFIC_LIGHTS/>
       <DETECTORS/>
     </ROAD>
+    
+    
     <ROAD id="1" x="3100" merge_length="400" length="700" >
       <INITIAL_CONDITIONS/>
       <TRAFFIC_SOURCE id="-1"/>
