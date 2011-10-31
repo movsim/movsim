@@ -47,7 +47,6 @@ import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.impl.ConsumptionModelingImpl;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +66,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private long iterationCount;
 
-    private double timestep;
+    private final double timestep; // fix for one simulation !!
 
     /** The duration of the simulation. */
     private double tMax;
@@ -91,14 +90,20 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private String projectName;
     
-    private RoadNetwork roadNetwork;
+    private RoadNetwork roadNetwork;  // TODO
+    
+    private long startTimeMillis;
+    
      
     
     /**
      * Instantiates a new simulator impl.
      */
     private SimulatorImpl() {
-        inputData = new InputDataImpl();  // accesses static reference ProjectMetaData 
+        inputData = new InputDataImpl();  // accesses static reference ProjectMetaData
+        // parse xmlFile and set values
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+        this.timestep = inputData.getSimulationInput().getTimestep();   // final !!
     }
 
     public static synchronized SimulatorImpl getInstance(){
@@ -116,12 +121,8 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
-        
-        // parse xmlFile and set values
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
-        this.timestep = simInput.getTimestep(); // can be modified by certain
-                                                // models
+        
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
@@ -131,7 +132,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
         vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
-        
         
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
@@ -183,12 +183,6 @@ public class SimulatorImpl implements Simulator, Runnable {
         projectName = inputData.getProjectMetaData().getProjectName();
 
         // model requires specific update time depending on its category !!
-
-        // TODO: check functionality
-        if (roadSections.get(0).getTimestep() > Constants.SMALL_VALUE) {
-            this.timestep = roadSections.get(0).getTimestep();
-            logger.info("model sets simulation integration timestep to dt={}", timestep);
-        }
 
         simOutput = new SimOutput(inputData, roadSections, this.roadSectionsMap);
     }
@@ -242,6 +236,7 @@ public class SimulatorImpl implements Simulator, Runnable {
     public void run() {
         logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", time, projectName);
 
+        startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
         simOutput.update(iterationCount, time, timestep);
 
@@ -249,7 +244,9 @@ public class SimulatorImpl implements Simulator, Runnable {
             update();
         }
 
-        logger.info("Simulator.run: stop after time = {} seconds of simulation project={}", time, projectName);
+        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", time, time/3600, projectName));
+        final double elapsedTime = 0.001*(System.currentTimeMillis()-startTimeMillis);
+        logger.info(String.format("time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime, time/elapsedTime, 1000*elapsedTime/iterationCount));
     }
 
     /**
@@ -273,7 +270,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         iterationCount++;
 
         if (iterationCount % 100 == 0) {
-            logger.info("Simulator.update : time={} seconds, dt={}", time, timestep);
+            logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time, time/3600, timestep, projectName));
         }
         
         // parallel update of all roadSections 

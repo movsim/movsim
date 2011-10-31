@@ -70,11 +70,17 @@ public class Gipps extends AccelerationModelAbstract implements AccelerationMode
      * @param parameters
      *            the parameters
      */
-    public Gipps(AccelerationModelInputDataGipps parameters) {
+    public Gipps(double dt, AccelerationModelInputDataGipps parameters) {
         super(ModelName.GIPPS, parameters);
-        initParameters();
+        initParameters(dt);
     }
 
+    
+    private void initParameters(double dt){
+        this.T = dt;
+        initParameters();
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -84,7 +90,6 @@ public class Gipps extends AccelerationModelAbstract implements AccelerationMode
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        this.T = ((AccelerationModelInputDataGipps) parameters).getDt();
         this.v0 = ((AccelerationModelInputDataGipps) parameters).getV0();
         this.a = ((AccelerationModelInputDataGipps) parameters).getA();
         this.b = ((AccelerationModelInputDataGipps) parameters).getB();
@@ -234,16 +239,6 @@ public class Gipps extends AccelerationModelAbstract implements AccelerationMode
         return v0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#getRequiredUpdateTime()
-     */
-    @Override
-    public double getRequiredUpdateTime() {
-        return this.T; // iterated map requires specific timestep!!
-    }
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)

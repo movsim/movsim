@@ -59,12 +59,6 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
     private double s0;
     private final double s0Default;
 
-    /**
-     * The dt. cannot change update time step interactively, therefore no
-     * default nor set method
-     */
-
-    private final double dt;
 
     /**
      * Instantiates a new model input data gipps impl.
@@ -80,10 +74,7 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
         aDefault = a = Double.parseDouble(map.get("a"));
         bDefault = b = Double.parseDouble(map.get("b"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));
-        dt = Double.parseDouble(map.get("dt"));
-
         checkParameters();
-
     }
 
     /*
@@ -95,13 +86,13 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
      */
     @Override
     protected void checkParameters() {
-        if (v0 < 0 || a < 0 || b < 0 || s0 < 0 || dt < 0) {
+        if (v0 < 0 || a < 0 || b < 0 || s0 < 0 ) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
         }
 
-        if (a == 0 || b == 0 || dt == 0) {
+        if (a == 0 || b == 0 ) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
@@ -172,18 +163,7 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
         return s0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getDt()
-     */
-    @Override
-    public double getDt() {
-        return dt;
-    }
-
+    
     /*
      * (non-Javadoc)
      * 
@@ -284,14 +264,4 @@ public class AccelerationModelInputDataGippsImpl extends AccelerationModelInputD
         parametersUpdated();
     }
 
-    /**
-     * Sets the dt.
-     * 
-     * @param s0
-     *            the new dt
-     */
-    public void setDt(double s0) {
-        this.s0 = s0;
-        parametersUpdated();
-    }
 }

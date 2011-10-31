@@ -259,16 +259,7 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
         return v0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#getRequiredUpdateTime()
-     */
-    @Override
-    public double getRequiredUpdateTime() {
-        return 0; // continuous model requires no specific timestep
-    }
+   
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)

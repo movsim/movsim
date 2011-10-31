@@ -66,12 +66,6 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     private double epsilon;
     private final double epsilonDefault;
     
-    /**
-     * The dt. cannot change update time step interactively, therefore no
-     * default nor set method
-     */
-
-    private final double dt;
 
     /**
      * Instantiates a new acceleration model input data krauss impl.
@@ -86,19 +80,18 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         bDefault = b = Double.parseDouble(map.get("b"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));
         epsilon = epsilonDefault = Double.parseDouble(map.get("epsilon"));
-        dt = Double.parseDouble(map.get("dt"));
         checkParameters();
     }
 
     @Override
     protected void checkParameters() {
-        if (v0 < 0 || a < 0 || b < 0 || s0 < 0 || dt < 0) {
+        if (v0 < 0 || a < 0 || b < 0 || s0 < 0 ) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
         }
 
-        if (a == 0 || b == 0 || dt == 0) {
+        if (a == 0 || b == 0 ) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
@@ -167,17 +160,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         return s0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getDt()
-     */
-    @Override
-    public double getDt() {
-        return dt;
-    }
+    
 
     /*
      * (non-Javadoc)
@@ -279,17 +262,6 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         parametersUpdated();
     }
 
-    /**
-     * Sets the dt.
-     * 
-     * @param s0
-     *            the new dt
-     */
-    public void setDt(double s0) {
-        this.s0 = s0;
-        parametersUpdated();
-    }
-    
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss#setEpsilon(double)
      */

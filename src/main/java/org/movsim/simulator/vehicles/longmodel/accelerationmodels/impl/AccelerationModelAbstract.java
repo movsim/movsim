@@ -79,12 +79,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /** The parameters. */
     public AccelerationModelInputData parameters;
-
-    /**
-     * Inits the parameters.
-     */
-    protected abstract void initParameters();
-
+    
     /** The id. */
     protected long id;
 
@@ -102,6 +97,9 @@ public abstract class AccelerationModelAbstract implements Observer {
         parameters.registerObserver(this);
     }
 
+    
+    protected abstract void initParameters();
+    
     /**
      * Removes the observer.
      */

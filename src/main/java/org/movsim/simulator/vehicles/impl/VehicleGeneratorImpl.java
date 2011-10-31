@@ -95,8 +95,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     /** The prototypes. */
     private final HashMap<String, VehiclePrototype> prototypes;
 
-    /** The required timestep. */
-    private double requiredTimestep;
+    /** The simulation timestep. */
+    private double simulationTimestep;
 
     /** The is with reaction times. */
     private final boolean isWithReactionTimes;
@@ -146,7 +146,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private double createPrototypes(final InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
 
         // default for continuous micro models
-        requiredTimestep = simInput.getSimulationInput().getTimestep();
+        simulationTimestep = simInput.getSimulationInput().getTimestep();
 
         final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
         
@@ -174,21 +174,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput, relRandomizationV0);
             prototypes.put(keyName, vehProto);
 
-            // set simulation update time here from model classes:
-            final double requiredTimestepLocal = longModel.getRequiredUpdateTime();
-            if (requiredTimestepLocal > Constants.SMALL_VALUE) {
-                if (Math.abs(requiredTimestepLocal - requiredTimestep) > Constants.SMALL_VALUE) {
-                    logger.error(
-                            "inconsistent model input: cannot simulate these models with incompatible update times dtModel={} and dtSim={}",
-                            requiredTimestepLocal, requiredTimestep);
-                    System.exit(-1);
-                } else {
-                    requiredTimestep = requiredTimestepLocal;
-                    logger.info("set simulation timestep to dt={} for model = {}", requiredTimestep,
-                            longModel.modelName().name());
-                }
-            }
-            logger.debug("simulation timestep: dt={}. ", requiredTimestep);
         }
         return sumFraction;
     }
@@ -277,11 +262,11 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         } else if (modelName == ModelName.OVM_VDIFF) {
             longModel = new OVM_VDIFF((AccelerationModelInputDataOVM_VDIFF) modelInputData);
         } else if (modelName == ModelName.GIPPS) {
-            longModel = new Gipps((AccelerationModelInputDataGipps) modelInputData);
+            longModel = new Gipps(simulationTimestep, (AccelerationModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {
-            longModel = new Krauss((AccelerationModelInputDataKrauss) modelInputData);
+            longModel = new Krauss(simulationTimestep, (AccelerationModelInputDataKrauss) modelInputData);
         } else if (modelName == ModelName.NEWELL) {
-            return new Newell((AccelerationModelInputDataNewell) modelInputData);
+            return new Newell(simulationTimestep, (AccelerationModelInputDataNewell) modelInputData);
         } else if (modelName == ModelName.NSM) {
             longModel = new NSM((AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {
@@ -412,14 +397,6 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return createVehicle(prototype);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.VehicleGenerator#requiredTimestep()
-     */
-    @Override
-    public double requiredTimestep() {
-        return requiredTimestep;
-    }
+    
 
 }

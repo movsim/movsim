@@ -180,17 +180,7 @@ public class NSM extends AccelerationModelAbstract implements AccelerationModel 
         return v0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#getRequiredUpdateTime()
-     */
-    @Override
-    public double getRequiredUpdateTime() {
-        return dtCA; // cellular automaton requires specific dt
-    }
-
+  
     /**
      * Gets the v0.
      * 

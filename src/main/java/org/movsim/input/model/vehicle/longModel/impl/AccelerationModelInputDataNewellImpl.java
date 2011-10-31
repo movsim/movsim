@@ -52,9 +52,6 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     private double s0;
     private final double s0Default;
     
-    /** The dt. */
-    private double dt;
-
     /**
      * Instantiates a new model input data newell impl.
      * 
@@ -67,8 +64,6 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
         super(ModelName.NEWELL);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));
-        dt = Double.parseDouble(map.get("dt"));
-
         checkParameters();
     }
 
@@ -82,14 +77,8 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     @Override
     protected void checkParameters() {
         // TODO Auto-generated method stub
-        if (v0 < 0 || s0 < 0 || dt < 0) {
+        if (v0 < 0 || s0 < 0 ) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    getModelName().name());
-            System.exit(-1);
-        }
-
-        if (dt == 0) {
-            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
         }
@@ -149,12 +138,5 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
      */
     public double getS0Default() {
         return s0Default;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getDt()
-     */
-    public double getDt() {
-        return dt;
     }
 }

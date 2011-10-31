@@ -83,12 +83,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         initialize(inputData, roadinput);
 
-        // TODO cross-check --> testing for correct dt setup .... concept
-        // between Simulator, VehGenerator and this roadSection
-        if (Math.abs(dt - vehGenerator.requiredTimestep()) > Constants.SMALL_VALUE) {
-            this.dt = vehGenerator.requiredTimestep();
-            logger.info("model requires specific integration timestep. sets to dt={}", dt);
-        }
+       
 
     }
 

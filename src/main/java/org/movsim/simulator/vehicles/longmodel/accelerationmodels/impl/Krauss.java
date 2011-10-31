@@ -52,7 +52,7 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
      * The parameter T is given by the update timestep dt: dt = T = Tr =
      * tau_relax
      */
-    private double T, dt;
+    private double T;
 
     /** The v0. */
     private double v0;
@@ -80,8 +80,14 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
      * @param parameters
      *            the parameters
      */
-    public Krauss(AccelerationModelInputDataKrauss parameters) {
+    public Krauss(double dt, AccelerationModelInputDataKrauss parameters) {
         super(ModelName.KRAUSS, parameters);
+        initParameters(dt);
+    }
+    
+    
+    private void initParameters(double dt){
+        this.T = dt;
         initParameters();
     }
 
@@ -94,7 +100,6 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        this.T = this.dt = ((AccelerationModelInputDataKrauss) parameters).getDt();
         this.v0 = ((AccelerationModelInputDataKrauss) parameters).getV0();
         this.a = ((AccelerationModelInputDataKrauss) parameters).getA();
         this.b = ((AccelerationModelInputDataKrauss) parameters).getB();
@@ -269,16 +274,6 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
         return v0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#getRequiredUpdateTime()
-     */
-    @Override
-    public double getRequiredUpdateTime() {
-        return this.T; // iterated map requires specific timestep!!
-    }
 
     /* (non-Javadoc)
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)

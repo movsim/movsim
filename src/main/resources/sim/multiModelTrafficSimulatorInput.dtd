@@ -150,7 +150,6 @@
   s0           NMTOKEN #REQUIRED
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
-  dt           NMTOKEN #REQUIRED
 >
 
 <!ELEMENT KRAUSS EMPTY>
@@ -159,7 +158,6 @@
   s0           NMTOKEN #REQUIRED
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
-  dt           NMTOKEN #REQUIRED
   epsilon      NMTOKEN #REQUIRED
 >
 
@@ -167,7 +165,6 @@
 <!ATTLIST NEWELL
   v0           NMTOKEN #REQUIRED
   s0           NMTOKEN #REQUIRED
-  dt           NMTOKEN #REQUIRED
 >
 
 <!ELEMENT NSM EMPTY>

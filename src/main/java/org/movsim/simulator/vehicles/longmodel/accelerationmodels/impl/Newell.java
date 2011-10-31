@@ -46,8 +46,6 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
 
     /** The dt. */
     private double dt;
-    
-//    private double T;
 
     /** The v0. */
     private double v0;
@@ -63,11 +61,15 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
      * @param parameters
      *            the parameters
      */
-    public Newell(AccelerationModelInputDataNewell parameters) {
+    public Newell(double dt, AccelerationModelInputDataNewell parameters) {
         super(ModelName.NEWELL, parameters);
-        initParameters();
+        initParameters(dt);
     }
 
+    
+    private void initParameters(double dt){
+        this.dt = dt;
+    }
     /*
      * (non-Javadoc)
      * 
@@ -78,7 +80,6 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
     protected void initParameters() {
         logger.debug("init model parameters");
          this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
-         this.dt = ((AccelerationModelInputDataNewell) parameters).getDt();
          this.v0 = ((AccelerationModelInputDataNewell) parameters).getV0();
          this.s0 = ((AccelerationModelInputDataNewell) parameters).getS0();
     }
@@ -173,17 +174,6 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
     @Override
     public double getDesiredSpeedParameterV0() {
         return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#getRequiredUpdateTime()
-     */
-    @Override
-    public double getRequiredUpdateTime() {
-        return dt;
     }
 
     /* (non-Javadoc)

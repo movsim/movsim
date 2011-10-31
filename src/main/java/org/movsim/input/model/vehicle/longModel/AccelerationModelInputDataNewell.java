@@ -45,12 +45,7 @@ public interface AccelerationModelInputDataNewell extends AccelerationModelInput
      */
     double getS0();
 
-    /**
-     * Gets the dt.
-     * 
-     * @return the dt
-     */
-    double getDt();
+   
 
     /**
      * Gets the v0 default.

@@ -64,11 +64,6 @@ public interface VehicleGenerator {
      */
     Vehicle createVehicle(String type);
 
-    /**
-     * Required timestep.
-     * 
-     * @return the double
-     */
-    double requiredTimestep();
+    
 
 }

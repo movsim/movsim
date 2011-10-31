@@ -65,12 +65,6 @@ public interface AccelerationModel {
      */
     ModelCategory getModelCategory();
 
-    /**
-     * Gets the required update time.
-     * 
-     * @return the required update time
-     */
-    double getRequiredUpdateTime();
 
     /**
      * Gets the desired speed parameter v0.

@@ -5,7 +5,7 @@
     <VEHICLES>
         <VEHICLE label="GIPPS1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <GIPPS v0="33.33" a="1.5" b="1.0" s0="3" dt="1.1" />
+                <GIPPS v0="33.33" a="1.5" b="1.0" s0="3" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>

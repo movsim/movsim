@@ -72,13 +72,7 @@ public interface RoadSection {
      */
     List<VehicleContainer> getVehContainers();
 
-    /**
-     * Gets the timestep.
-     * 
-     * @return the timestep
-     */
-    double getTimestep();
-
+    
     /**
      * Check for inconsistencies.
      *

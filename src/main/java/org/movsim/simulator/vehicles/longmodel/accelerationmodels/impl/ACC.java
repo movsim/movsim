@@ -89,15 +89,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         initParameters();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#initParameters()
-     */
-    @Override
     protected void initParameters() {
-        logger.debug("init model parameters");
         this.v0 = ((AccelerationModelInputDataACC) parameters).getV0();
         this.T = ((AccelerationModelInputDataACC) parameters).getT();
         this.s0 = ((AccelerationModelInputDataACC) parameters).getS0();
@@ -312,17 +304,6 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
      */
     public double getCoolness() {
         return coolness;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#getRequiredUpdateTime()
-     */
-    @Override
-    public double getRequiredUpdateTime() {
-        return 0; // continuous model requires no specific timestep
     }
 
     /* (non-Javadoc)

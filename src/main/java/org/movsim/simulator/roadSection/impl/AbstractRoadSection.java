@@ -218,19 +218,6 @@ public abstract class AbstractRoadSection {
         return id;
     }
     
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.roadSection.RoadSection#getTimestep()
-     */
-    /**
-     * Gets the timestep.
-     *
-     * @return the timestep
-     */
-    public double getTimestep() {
-        return dt;
-    }
     
     /*
      * (non-Javadoc)

@@ -5,7 +5,7 @@
     <VEHICLES>
         <VEHICLE label="NEWELL1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <NEWELL v0="33.33" s0="10" dt="1.0" />
+                <NEWELL v0="33.33" s0="10" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
