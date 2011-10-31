@@ -77,7 +77,7 @@ public class FuelConsumptionImpl implements FuelConsumption {
         if (withJante && (fMot > engineModel.getMaxFrequency())) {
             if (logger.isDebugEnabled()) {
                 logger.debug(String.format(
-                        "v_kmh=%f, acc=%f, gear=%d, motor frequency=%d/min too high -- > return fuelErrorConsumpption: %.2f",
+                        "v_kmh=%f, acc=%f, gear=%d, motor frequency=%d/min too high -- > return fuelErrorConsumption: %.2f",
                         (3.6 * v), acc, gearIndex + 1, (int) (fMot * 60), FUELFLOW_ERROR));
             }
             fuelFlow = FUELFLOW_ERROR;

@@ -103,7 +103,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
     private boolean instantaneousFileOutput;
     
-    private FuelConsumptionModelsImpl fuelConsumptionModels;
+    private ConsumptionModelingImpl fuelConsumptionModels;
 
     /**
      * Instantiates a new vehicle generator impl. And writes fundamental diagram
@@ -133,7 +133,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
         isWithReactionTimes = checkForReactionTimes();
 
-        fuelConsumptionModels = new FuelConsumptionModelsImpl(simInput.getFuelConsumptionInput());
+        fuelConsumptionModels = new ConsumptionModelingImpl(simInput.getFuelConsumptionInput());
     }
 
     /**

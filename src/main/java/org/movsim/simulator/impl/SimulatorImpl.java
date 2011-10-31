@@ -47,7 +47,7 @@ import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadSection.impl.RoadSectionImpl;
 import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.impl.FuelConsumptionModelsImpl;
+import org.movsim.simulator.vehicles.impl.ConsumptionModelingImpl;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
