@@ -1,8 +1,8 @@
 package org.movsim.consumption.impl;
 
-import gnu.trove.list.TDoubleList;
 
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Locale;
 
 import org.movsim.consumption.CarModel;
@@ -36,7 +36,7 @@ public class EngineModelImpl implements EngineModel{
 
     private double idleMoment;
 
-    private TDoubleList gears;
+    private List<Double> gears;
 
     private double maxMoment;
 

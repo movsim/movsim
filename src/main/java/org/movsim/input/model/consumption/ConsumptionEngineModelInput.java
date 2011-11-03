@@ -1,8 +1,5 @@
 package org.movsim.input.model.consumption;
 
-import gnu.trove.list.TDoubleList;
-import gnu.trove.list.array.TDoubleArrayList;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,7 +27,7 @@ public class ConsumptionEngineModelInput {
     private double idleRotationRate;  // per second
     private double maxRotationRate; // per second
     
-    private TDoubleList gearRatios;
+    private List<Double> gearRatios;
     
     @SuppressWarnings("unchecked")
     public ConsumptionEngineModelInput(Element elem){
@@ -58,7 +55,7 @@ public class ConsumptionEngineModelInput {
     
     // default gear box with 5 gears
     private void setDefaultGears() {
-        gearRatios = new TDoubleArrayList();
+        gearRatios = new ArrayList<Double>();
         gearRatios.add(13.9);
         gearRatios.add(7.8);
         gearRatios.add(5.26);
@@ -84,7 +81,7 @@ public class ConsumptionEngineModelInput {
         });
         
         // put double values in dedicated collection
-        gearRatios = new TDoubleArrayList();
+        gearRatios = new ArrayList<Double>();
         for(Double phiGear : localGears ){
             gearRatios.add(phiGear.doubleValue());
         }
@@ -134,7 +131,7 @@ public class ConsumptionEngineModelInput {
 
 
 
-    public TDoubleList getGearRatios() {
+    public List<Double> getGearRatios() {
         return gearRatios;
     }
 
