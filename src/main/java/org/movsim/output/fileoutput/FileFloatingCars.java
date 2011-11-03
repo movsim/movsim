@@ -48,11 +48,11 @@ public class FileFloatingCars implements ObserverInTime {
 
     private static final String extensionFormat = ".V%06d.csv";
     private static final String outputHeading = Constants.COMMENT_CHAR
-            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s], distToTrafficlight[m]";
+            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s],  distToTrafficlight[m],  fuelFlow[ml/s]";
 
     // note: number before decimal point is total width of field, not width of
     // integer part
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.3f, %10.3f, %10.5f, %10.2f%n";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.3f, %10.3f, %10.5f, %10.2f, %f%n";
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
@@ -165,7 +165,7 @@ public class FileFloatingCars implements ObserverInTime {
         // note: number before decimal point is total width of field, not width
         // of integer part
         fstr.printf(outputFormat, time, veh.getLane(), veh.getPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
-                veh.getNetDistance(frontVeh), veh.getRelSpeed(frontVeh), veh.getDistanceToTrafficlight());
+                veh.getNetDistance(frontVeh), veh.getRelSpeed(frontVeh), veh.getDistanceToTrafficlight(), 1000*veh.getActualFuelFlowLiterPerS());
         fstr.flush();
     }
 

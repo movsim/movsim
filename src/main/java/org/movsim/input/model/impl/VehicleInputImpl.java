@@ -100,7 +100,7 @@ public class VehicleInputImpl implements VehicleInput {
         this.length = Double.parseDouble(elem.getAttributeValue("length"));
         this.maxDeceleration = Double.parseDouble(elem.getAttributeValue("b_max"));
         this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
-        this.fuelConsumptionLabel = elem.getAttributeValue("consumption_model");
+        this.fuelConsumptionLabel = elem.getAttributeValue("consumption");
 
         final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
         for (final Element longModelElem : longModelElems) {

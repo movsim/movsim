@@ -172,4 +172,6 @@ public interface Moveable {
     PhysicalQuantities physicalQuantities();
 
     long getRoadId();
+    
+    double getActualFuelFlowLiterPerS();    
 }

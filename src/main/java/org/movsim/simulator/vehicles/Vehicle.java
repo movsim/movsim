@@ -158,4 +158,5 @@ public interface Vehicle extends Moveable {
     double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane);
     
     
+    public double getActualFuelFlowLiterPerS();    
 }

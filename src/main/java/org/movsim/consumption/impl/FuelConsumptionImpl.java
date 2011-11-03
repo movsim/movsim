@@ -102,7 +102,7 @@ public class FuelConsumptionImpl implements FuelConsumption {
     // optimum fuel consumption flow in m^3/s
     // gives also reference to fuel-optimized gear
 
-    public double[] getMinFuelFlow(double v, double acc, boolean withJante) {
+    private double[] getMinFuelFlow(double v, double acc, boolean withJante) {
         int gear = 1;
         double fuelFlow = FUELFLOW_ERROR;
         for (int testGearIndex = engineModel.getMaxGearIndex(); testGearIndex >= 0; testGearIndex--) {
@@ -114,6 +114,11 @@ public class FuelConsumptionImpl implements FuelConsumption {
         }
         final double[] retValue = { fuelFlow, gear };
         return retValue;
+    }
+    
+    @Override 
+    public double getFuelFlowInLiterPerS(double v, double acc){
+        return 1000*getMinFuelFlow(v, acc, true)[0]; // convert from m^3/s --> liter/s
     }
 
     // Output methods

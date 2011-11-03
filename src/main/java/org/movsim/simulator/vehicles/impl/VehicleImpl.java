@@ -780,5 +780,14 @@ public class VehicleImpl implements Vehicle {
     public PhysicalQuantities physicalQuantities() {
         return physQuantities;
     }
+    
+    
+    @Override
+    public double getActualFuelFlowLiterPerS(){
+        if(fuelModel==null){
+            return 0;
+        }
+        return fuelModel.getFuelFlowInLiterPerS(speed, acc);
+    }
 
 }

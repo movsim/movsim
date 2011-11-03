@@ -100,7 +100,7 @@
   length          NMTOKEN #REQUIRED
   b_max           NMTOKEN "10000"
   reaction_time   NMTOKEN "0"
-  consumption_model NMTOKEN "none"
+  consumption     NMTOKEN "none"
 >
 
 <!-- Longitudinal model elements -->
