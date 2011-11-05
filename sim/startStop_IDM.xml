@@ -4,10 +4,10 @@
 <SCENARIO>
 
 <FUEL_CONSUMPTION> 
-     <CONSUMPTION_MODEL label="carConsumption" >
-     <CAR mass="1500" cross_section_surface="2.2" cw_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" /> 
-     <ENGINE max_power_kW="90" cylinder_vol_cm3="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="250" pe_min_bar="1" pe_max_bar="19" 
-             idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000" >                   
+      <CONSUMPTION_MODEL label="carConsumption" >
+     <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" /> 
+     <ENGINE max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="280" pe_min_bar="1" pe_max_bar="19" 
+             idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000" >             
        <GEAR_RATIOS>
          <GEAR_RATIO phi="16.7" />
          <GEAR_RATIO phi="10.1" />
