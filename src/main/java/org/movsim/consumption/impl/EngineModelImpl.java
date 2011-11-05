@@ -49,10 +49,10 @@ public class EngineModelImpl implements EngineModel{
         this.carModel = carModel;
         initialize(engineInput);
 
-        // TODO
-//        final String label = "carConsumption";
-//        final String filename = "sim/test." + label + ".specCons";
-//        writeOutput(filename);
+        // TODO 
+        final String label = "carConsumption";
+        final String filename = "sim/startStop_ACC." + label + ".specCons";
+        writeOutput(filename);
     }
 
     private void initialize(ConsumptionEngineModelInput engineInput) {
@@ -105,11 +105,6 @@ public class EngineModelImpl implements EngineModel{
 
     }
 
-    
-//    public double effectivePressure(double power, double frequency) {
-//        return 2 * power / (frequency * cylinderVolume);
-//    }
-    
     // --------------------------------------------------------
 
     private double getGearRatio(int gearIndex) {
@@ -126,7 +121,7 @@ public class EngineModelImpl implements EngineModel{
     }
     
     @Override
-    public boolean isfMotPossible(double v, int gearIndex) {
+    public boolean isFrequencyPossible(double v, int gearIndex) {
         if (gearIndex < 0 || gearIndex > getMaxGearIndex()) {
             logger.error("gear out of range !  g={}", gearIndex);
         }
@@ -157,11 +152,10 @@ public class EngineModelImpl implements EngineModel{
     }
 
     public double getModelLossMoment(double frequency) {
-        // heuristic parameters, assume constant coefficient for all gears
+        // heuristic parameters, assume constant coefficient for *all* gears
         final double a = 0.003;
         final double b = 0.03;
         final double c = 12;
-        // TODO add powEl/(2*Math.PI*fMot) !?
         return a * frequency * frequency + b * frequency + c;
     }
 
@@ -245,6 +239,7 @@ public class EngineModelImpl implements EngineModel{
     // -------------------------------------------------------------
     
     
+    // TODO 
     private void writeOutput(String filename) {
         PrintWriter fstr = FileUtils.getWriter(filename);
         logger.info("write to file = {}", filename);
@@ -267,16 +262,12 @@ public class EngineModelImpl implements EngineModel{
                 final double indMoment = getMoment(pow, f); // + getModelLossMoment(f);
                 final double cSpec = cSpecific0ForMechMoment(f, indMoment);
                 // factor 3.6e6 for converting from m^3/s to liter/h
-                fstr.printf(Locale.US, "%.1f  %.3f  %.9f %.9f  %.9f %n", f * 60, pow / 1000., 3.6e6 * dotC, indMoment,
-                        cSpec * 3.6e9);
+                fstr.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", 
+                        f * 60, pow / 1000., 3.6e6 * dotC, indMoment, cSpec * 3.6e9);
             }
             fstr.println(); // gnuplot block
         }
         fstr.close();
-    }
-
-    class AnalyticModel {
-
     }
 
 }

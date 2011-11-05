@@ -16,5 +16,5 @@ public interface EngineModel {
 
     double getEngineFrequency(double v, int gearIndex);
 
-    boolean isfMotPossible(double v, int gearIndex);
+    boolean isFrequencyPossible(double v, int gearIndex);
 }

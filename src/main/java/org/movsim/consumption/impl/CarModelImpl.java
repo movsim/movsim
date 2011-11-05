@@ -40,7 +40,7 @@ public class CarModelImpl implements CarModel{
     public double getFreeWheelingDecel(double v) {
         return -(gravConstant * consFrictionCoefficient + gravConstant * vFrictionCoefficient * v + cwValue * rhoAir * crossSectionSurface * v * v / (2 * mass));
     }
-
+    
     @Override
     public double getForceMech(double v, double acc) {
         final double c = mass * gravConstant * consFrictionCoefficient;

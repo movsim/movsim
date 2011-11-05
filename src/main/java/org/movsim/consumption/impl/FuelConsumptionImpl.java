@@ -36,9 +36,9 @@ public class FuelConsumptionImpl implements FuelConsumption {
         engineModel = new EngineModelImpl(input.getEngineData(), carModel);
 
         // TODO
-//        final String label = "carConsumption";
-//        final String project = "sim/test."+label;
-//        writeOutput(true, project);
+        final String label = "carConsumption";
+        final String project = "sim/startStop_ACC."+label;
+        writeOutput(true, project);
     }
 
     public double fuelflowError() {
@@ -58,11 +58,17 @@ public class FuelConsumptionImpl implements FuelConsumption {
         // final double forceMech=getForceMech(v,acc); // can be <0
         final double powMech = v * carModel.getForceMech(v, acc); // can be <0
 
-        final double powMechEl = powMech + carModel.getElectricPower();// can be <0
+        // electric  generator is not active near or at in standstill (v<1*3.6km/h)
+        // resulting in idle fuel consumption from engine specification
+        // modeling assumption becomes invalid if lot of standstills are considered
+        // electric consumption is active and no electric energy is provided by generator
+        final double elecPower = (v<1) ? 0 : carModel.getElectricPower();
+        
+        final double powMechEl = powMech + elecPower;// can be <0
 
         double fuelFlow = FUELFLOW_ERROR;
 
-        if (engineModel.isfMotPossible(v, gearIndex) || gearIndex == 0) {
+        if (engineModel.isFrequencyPossible(v, gearIndex) || gearIndex == 0) {
             fuelFlow = engineModel.getFuelFlow(fMot, powMechEl);
         }
 
@@ -122,22 +128,21 @@ public class FuelConsumptionImpl implements FuelConsumption {
     }
 
     // Output methods
-
+    // TODO
     public void writeOutput(boolean withJante, String projectName) {
 
         final String filenameConstAccel = projectName + ".carConstAccel";
         writeZeroAccelTest(filenameConstAccel);
 
-        // write Jante data
         if (withJante) {
             final String filenameJanteOpt = projectName + ".JanteOpt";
             writeJanteDataFieldsOptGear(filenameJanteOpt);
-            for (int gearIndex = 0; gearIndex < engineModel.getMaxGearIndex(); gearIndex++) {
-                final int gear = gearIndex + 1;
-                final String strGear = new Integer(gear).toString();
-                final String filename = projectName + ".Jante" + strGear;
-                writeJanteDataFields(gear, filename);
-            }
+//            for (int gearIndex = 0; gearIndex < engineModel.getMaxGearIndex(); gearIndex++) {
+//                final int gear = gearIndex + 1;
+//                final String strGear = new Integer(gear).toString();
+//                final String filename = projectName + ".Jante" + strGear;
+//                writeJanteDataFields(gear, filename);
+//            }
         }
     }
 
@@ -145,7 +150,7 @@ public class FuelConsumptionImpl implements FuelConsumption {
         PrintWriter fstr = FileUtils.getWriter(filename);
         fstr.printf("# veh mass = %.1f%n", carModel.getMass());
         fstr.printf("# number of gears = %d%n", engineModel.getNumberOfGears());
-        fstr.printf("# v[m/s]  accFreeWheeling[m/s^2]  fuelFlow[l/h]  gear  c100[l/100km]%n");
+        fstr.printf("# v[m/s], accFreeWheeling[m/s^2], fuelFlow[l/h], gear, c100[l/100km]%n");
         final double vMax = 200 / 3.6;
         final double dv = 0.2;
         double v = dv;
@@ -155,7 +160,7 @@ public class FuelConsumptionImpl implements FuelConsumption {
             final double[] fuelFlow = getMinFuelFlow(v, acc, true);
             final int optGear = (int) fuelFlow[1]; // !! kein gearIndex
             final double c100 = getInstConsumption100km(v, 0, optGear, true);
-            fstr.printf("%.3f  %.8f  %.8f  %d  %.8f%n", v, accFreeWheeling, 3.6e6 * fuelFlow[0], optGear, c100);
+            fstr.printf("%.3f, %.8f,  %.8f,  %d,  %.8f%n", v, accFreeWheeling, 3.6e6 * fuelFlow[0], optGear, c100);
             fstr.flush();
             v += dv;
         }
@@ -166,11 +171,12 @@ public class FuelConsumptionImpl implements FuelConsumption {
         writeJanteDataFields(0, filename);
     }
 
+    // TODO
     private void writeJanteDataFields(int gearTest, String filename) {
         final boolean determineOptimalGear = (gearTest == 0) ? true : false;
         PrintWriter fstr = FileUtils.getWriter(filename);
         fstr.println("#Jante Fuel consumption:");
-        fstr.println("# v(km/h)  acc(m/s^2) \tforceMech(N)\tpowMech(kW)\tfuelFlow(l/h)\t" + "consump(liters/100km)\tGear");
+        fstr.println("# v(km/h), acc(m/s^2), forceMech(N), powMech(kW), fuelFlow(l/h), consump(liters/100km), Gear");
 
         double accmin = -1;
         double accmax = 3;
@@ -201,7 +207,7 @@ public class FuelConsumptionImpl implements FuelConsumption {
                 }
                 double consump_100km = 1e8 * fuelFlow / Math.max(v, 0.001);
                 double fuelFlow_lh = 3.6e6 * fuelFlow;
-                fstr.printf(Locale.US, "%.2f  %.2f  %.2f  %.6f  %.5f  %.5f %d%n", v_kmh, acc, forceMech,
+                fstr.printf(Locale.US, "%.2f, %.2f, %.2f, %.6f, %.5f, %.5f, %d%n", v_kmh, acc, forceMech,
                         (0.001 * powMechEl), fuelFlow_lh, consump_100km, gear);
             }
             fstr.println();

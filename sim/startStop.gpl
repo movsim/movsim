@@ -36,6 +36,7 @@ distanceOutput = outputPath.baseFile.".s.eps"
 velocityOutput = outputPath.baseFile.".v.eps"
 accelerationOutput = outputPath.baseFile.".a.eps"
 fuelOutput = outputPath.baseFile.".fuel.eps"
+fuelOutput100 = outputPath.baseFile.".fuel100.eps"
 
 print "fundOutput =",fundOutput
 print "please make sure that directory figs/ already exists"
@@ -55,6 +56,7 @@ distanceLabel = "Distance (m)"
 velocityLabel = "Speed (km/h)"
 accelerationLabel = "Acceleration (m/s^2)"
 fuelLabel = "Consumption rate (l/h)"
+fuelLabel100 = "Consumption (l/100km)"
 car(n) = sprintf("Car %d",n)
 
 # Deutsch
@@ -188,7 +190,7 @@ plot\
   carFile(20) using 1:(ascale*$5) title car(20) with lines linestyle 5
 
 
-########  Fuel Plot I #################################
+########  Fuel Plot #################################
 
 set ytics 2
 set ylabel fuelLabel
@@ -200,5 +202,22 @@ plot\
   carFile(10) using 1:(3.6*$10) title car(10) with lines linestyle 3,\
   carFile(15) using 1:(3.6*$10) title car(15) with lines linestyle 4,\
   carFile(20) using 1:(3.6*$10) title car(20) with lines linestyle 5
+  
+  
+  
+min(x,y) = (x<y)? x : y
+max(x,y) = (x>y)? x : y
+fuelFlowPer100km(v,fuelFlow) = min(50, fuelFlow*100./v)
+set yrange [0:]
+set ytics 10
+set ylabel fuelLabel100
+#set auto y
+set out fuelOutput100
+plot\
+  carFile(1)  using 1:(fuelFlowPer100km($4,$10)) title car(1)  with lines linestyle 1,\
+  carFile(5)  using 1:(fuelFlowPer100km($4,$10)) title car(5)  with lines linestyle 2,\
+  carFile(10) using 1:(fuelFlowPer100km($4,$10)) title car(10) with lines linestyle 3,\
+  carFile(15) using 1:(fuelFlowPer100km($4,$10)) title car(15) with lines linestyle 4,\
+  carFile(20) using 1:(fuelFlowPer100km($4,$10)) title car(20) with lines linestyle 5
 
 
