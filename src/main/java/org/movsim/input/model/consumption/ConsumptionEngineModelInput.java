@@ -34,7 +34,7 @@ public class ConsumptionEngineModelInput {
         
         final Map<String, String> engineDataMap = XmlUtils.putAttributesInHash(elem);
         this.maxPower = 1000*Double.parseDouble(engineDataMap.get("max_power_kW"));
-        this.cylinderVolume = 0.001*Double.parseDouble(engineDataMap.get("cylinder_vol_cm3"));  // in liter
+        this.cylinderVolume = 0.001*Double.parseDouble(engineDataMap.get("cylinder_vol_l"));  // in liter
         this.idleConsumptionRateLiterPerSecond = Double.parseDouble(engineDataMap.get("idle_cons_rate_linvh"))/3600.;
         this.minSpecificConsumption = Double.parseDouble(engineDataMap.get("cspec_min_g_per_kwh"))/3.6e9;
         this.effectivePressureMinimum = FuelConstants.CONVERSION_BAR_TO_PASCAL*Double.parseDouble(engineDataMap.get("pe_min_bar"));

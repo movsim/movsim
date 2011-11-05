@@ -13,7 +13,7 @@ public class ConsumptionCarModelInput {
     
     private double vehicleMass; // in kg
     private double crossSectionSurface;  // in m^2
-    private double cwValue; // unitless
+    private double cdValue; // unitless
     private double electricPower; // in Watt
     private double consFrictionCoefficient; // unitless
     private double vFrictionCoefficient;
@@ -23,7 +23,7 @@ public class ConsumptionCarModelInput {
     public ConsumptionCarModelInput(Map<String, String> map){
         this.vehicleMass = Double.parseDouble(map.get("mass"));
         this.crossSectionSurface = Double.parseDouble(map.get("cross_section_surface"));
-        this.cwValue = Double.parseDouble(map.get("cw_value"));
+        this.cdValue = Double.parseDouble(map.get("cd_value"));
         this.electricPower = Double.parseDouble(map.get("electric_power"));
         this.consFrictionCoefficient = Double.parseDouble(map.get("const_friction"));
         this.vFrictionCoefficient = Double.parseDouble(map.get("v_friction"));
@@ -42,7 +42,7 @@ public class ConsumptionCarModelInput {
 
 
     public double getCwValue() {
-        return cwValue;
+        return cdValue;
     }
 
 

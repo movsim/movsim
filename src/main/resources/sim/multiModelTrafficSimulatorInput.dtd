@@ -57,7 +57,7 @@
 <!ATTLIST CAR
   mass                    NMTOKEN "1500"
   cross_section_surface   NMTOKEN "2.2"
-  cw_value                NMTOKEN "0.32"
+  cd_value                NMTOKEN "0.32"
   electric_power          NMTOKEN "2000"
   const_friction          NMTOKEN "0.0145"
   v_friction              NMTOKEN "0"
@@ -67,7 +67,7 @@
 <!ELEMENT ENGINE (GEAR_RATIOS?) >
 <!ATTLIST ENGINE
   max_power_kW  NMTOKEN "90"
-  cylinder_vol_cm3  NMTOKEN "1.4"
+  cylinder_vol_l  NMTOKEN "1.4"
   idle_cons_rate_linvh NMTOKEN "0.6"
   cspec_min_g_per_kwh NMTOKEN "212"
   pe_min_bar NMTOKEN "1"
