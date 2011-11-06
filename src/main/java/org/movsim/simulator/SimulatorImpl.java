@@ -277,8 +277,6 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void update() {
 
-        System.out.println("we are updating our roadSegments...");
-        
         time += timestep;
         iterationCount++;
 
@@ -294,25 +292,24 @@ public class SimulatorImpl implements Simulator, Runnable {
         final double dt = this.timestep;   // TODO
         
       
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateRoadConditions(iterationCount, time);
-//        }
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateRoadConditions(iterationCount, time);
+        }
 
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateBoundaryVehicles(iterationCount, time);
-//        }
-//        
-//        // check for crashes
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-//        }
-//
-//
-//        // lane changes 
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.laneChanging(iterationCount, dt, time);
-//        }
-//
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateBoundaryVehicles(iterationCount, time);
+        }
+        // check for crashes
+        for (RoadSection roadSection : roadSections) {
+            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
+        }
+
+
+        // lane changes 
+        for (RoadSection roadSection : roadSections) {
+            roadSection.laneChanging(iterationCount, dt, time);
+        }
+
 //        // merges from onramps/ to offramps (and also simpleRamp)
 //        for (RoadSection roadSection : roadSections) {
 //            // TODO: network information 
@@ -329,32 +326,32 @@ public class SimulatorImpl implements Simulator, Runnable {
 //            roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
 //        }
 //       
-//        
-//        // vehicle accelerations
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.accelerate(iterationCount, dt, time);
-//        }
-//
-//        
-//        // vehicle pos/speed
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
-//        }
-//
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateDownstreamBoundary();
-//        }
-//
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
-//        }
-//
-//
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateDetectors(iterationCount, dt, time);
-//        }
-//
-//        simOutput.update(iterationCount, time, timestep);
+        
+        // vehicle accelerations
+        for (RoadSection roadSection : roadSections) {
+            roadSection.accelerate(iterationCount, dt, time);
+        }
+
+        
+        // vehicle pos/speed
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
+        }
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateDownstreamBoundary();
+        }
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
+        }
+
+
+        for (RoadSection roadSection : roadSections) {
+            roadSection.updateDetectors(iterationCount, dt, time);
+        }
+
+        simOutput.update(iterationCount, time, timestep);
     }
 
     /*
