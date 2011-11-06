@@ -309,8 +309,11 @@ public class XmlReaderSimInput {
                     myXMLReader.parse(inputSource);
                 } catch (final SAXException e) {
                     isValid = false;
-                } catch (final IOException e) {
+                    System.out.println(e.getMessage());
+                }
+                    catch (final Exception e) {
                     isValid = false;
+                    System.out.println(e.getMessage());
                 }
 
                 if (!isValid) {

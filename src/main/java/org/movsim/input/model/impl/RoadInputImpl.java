@@ -132,11 +132,11 @@ public class RoadInputImpl implements RoadInput {
     private void parseRoadElement(Element elem) {
 
         id = Long.parseLong(elem.getAttributeValue("id"));
-        roadLength = Double.parseDouble(elem.getAttributeValue("length"));
-        lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
+//        roadLength = Double.parseDouble(elem.getAttributeValue("length"));
+//        lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
 
-        rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-        rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
+//        rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
+//        rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
         // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types

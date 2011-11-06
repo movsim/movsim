@@ -254,10 +254,6 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- for RAMP x and merge_length needed; not necessary for modeling a MAINROAD-->
 <!ATTLIST ROAD
   id               NMTOKEN #REQUIRED
-  length           NMTOKEN #REQUIRED
-  lanes            NMTOKEN "1"
-  x                NMTOKEN "0"   
-  merge_length     NMTOKEN "300"  
   logging          (false|true) "false" 
 > 
 

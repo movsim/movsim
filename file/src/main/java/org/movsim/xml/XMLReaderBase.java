@@ -39,8 +39,10 @@ public class XMLReaderBase {
      * @return true if file parsed without error, false otherwise
      */
     protected static boolean parse(String fullFilename, DefaultHandler handler) {
+        System.out.println("parsing file: " + fullFilename);
         final File file = new File(fullFilename);
         if (file.exists() == false) {
+            System.out.println("file does not exist");
             return false;
         }
         try {

@@ -37,6 +37,7 @@ import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.opendrive.OpenDriveReader;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.impl.MyRandom;
@@ -90,9 +91,9 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private String projectName;
     
-    private RoadNetworkDeprecated roadNetwork;  // TODO
-    
     private long startTimeMillis;
+    
+    RoadNetwork roadNetwork;
     
     /**
      * Instantiates a new simulator impl.
@@ -117,7 +118,20 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
-     // parse xmlFile and set values
+
+        roadNetwork = new RoadNetwork();
+        
+        String scenario = "onramp";
+        String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr";
+        System.out.println("try to load "+ xmlFileName);
+        OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
+        
+        
+        System.out.println("done with road network parsing");
+        //System.exit(0);
+        
+        // parse xmlFile and set values
+        
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = inputData.getSimulationInput().getTimestep();   // fix
@@ -265,6 +279,8 @@ public class SimulatorImpl implements Simulator, Runnable {
     @Override
     public void update() {
 
+        System.out.println("we are updating our roadSegments...");
+        
         time += timestep;
         iterationCount++;
 
@@ -280,67 +296,67 @@ public class SimulatorImpl implements Simulator, Runnable {
         final double dt = this.timestep;   // TODO
         
       
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateRoadConditions(iterationCount, time);
-        }
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateRoadConditions(iterationCount, time);
+//        }
 
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateBoundaryVehicles(iterationCount, time);
-        }
-        
-        // check for crashes
-        for (RoadSection roadSection : roadSections) {
-            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-        }
-
-
-        // lane changes 
-        for (RoadSection roadSection : roadSections) {
-            roadSection.laneChanging(iterationCount, dt, time);
-        }
-
-        // merges from onramps/ to offramps (and also simpleRamp)
-        for (RoadSection roadSection : roadSections) {
-            // TODO: network information 
-            RoadSection connectedRoadSection = null;
-            if(roadSection instanceof RoadSectionImpl){
-                // mainroad gets reference to first offramp (or null)
-                // TODO allow more than one offramp !!!
-                connectedRoadSection = findFirstOfframp(); 
-            }
-            if(roadSection instanceof OnrampMobilImpl){
-                connectedRoadSection = findRoadById(roadSection.getToId());  
-            }
-            
-            roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
-        }
-       
-        
-        // vehicle accelerations
-        for (RoadSection roadSection : roadSections) {
-            roadSection.accelerate(iterationCount, dt, time);
-        }
-
-        
-        // vehicle pos/speed
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
-        }
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateDownstreamBoundary();
-        }
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
-        }
-
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateDetectors(iterationCount, dt, time);
-        }
-
-        simOutput.update(iterationCount, time, timestep);
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateBoundaryVehicles(iterationCount, time);
+//        }
+//        
+//        // check for crashes
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
+//        }
+//
+//
+//        // lane changes 
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.laneChanging(iterationCount, dt, time);
+//        }
+//
+//        // merges from onramps/ to offramps (and also simpleRamp)
+//        for (RoadSection roadSection : roadSections) {
+//            // TODO: network information 
+//            RoadSection connectedRoadSection = null;
+//            if(roadSection instanceof RoadSectionImpl){
+//                // mainroad gets reference to first offramp (or null)
+//                // TODO allow more than one offramp !!!
+//                connectedRoadSection = findFirstOfframp(); 
+//            }
+//            if(roadSection instanceof OnrampMobilImpl){
+//                connectedRoadSection = findRoadById(roadSection.getToId());  
+//            }
+//            
+//            roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
+//        }
+//       
+//        
+//        // vehicle accelerations
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.accelerate(iterationCount, dt, time);
+//        }
+//
+//        
+//        // vehicle pos/speed
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
+//        }
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateDownstreamBoundary();
+//        }
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
+//        }
+//
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateDetectors(iterationCount, dt, time);
+//        }
+//
+//        simOutput.update(iterationCount, time, timestep);
     }
 
     /*
@@ -393,6 +409,8 @@ public class SimulatorImpl implements Simulator, Runnable {
         return simOutput;
     }
 
-   
+    public RoadNetwork getRoadNetwork(){
+        return roadNetwork;
+    }
 
 }

@@ -174,7 +174,7 @@ public class OpenDriveHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        // System.out.println("startElement: " + qName);
+        System.out.println("startElement: " + qName);
         ++elementIndex;
         if (elementIndex > limit && limit > 0) {
             throw new SAXException("Reached limit count"); // stop parsing
@@ -296,7 +296,7 @@ public class OpenDriveHandler extends DefaultHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        // System.out.println("endElement: " + qName);
+        System.out.println("endElement: " + qName);
         stack.remove(stack.size() - 1); // pop element
         final String element = qName.toLowerCase();
         if (element.equals("road")) {

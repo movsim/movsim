@@ -114,5 +114,7 @@ public interface Simulator {
      * @return the road section
      */
     public RoadSection findRoadById(long id);
+
+    RoadNetwork getRoadNetwork();
     
 }

@@ -35,6 +35,7 @@ import org.movsim.input.ProjectMetaData;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.output.SimObservables;
+import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.SimulatorImpl;
 import org.movsim.simulator.roadSection.RoadSection;
@@ -72,18 +73,30 @@ public class MovsimViewerFacade {
      */
 
     private MovsimViewerFacade() {
-        
+        System.out.println("create movsim viewer facade");
         model = SimulatorImpl.getInstance();
 
         initLocalizationAndLogger();
 
         inputData = (InputDataImpl) model.getSimInput();
+        
+        System.out.println("inputData is"+inputData);
+//        System.exit(0);
+        
+        
         projectMetaDataImpl = inputData.getProjectMetaDataImpl();
 
         // TODO set project config
+//        String projectName;
+//        projectMetaDataImpl.setProjectName(projectName)
         projectMetaDataImpl.setInstantaneousFileOutput(false);
         projectMetaDataImpl.setXmlFromResources(true);
 
+    }
+    
+    
+    public RoadNetwork getRoadNetwork(){
+        return model.getRoadNetwork();
     }
 
     public static synchronized MovsimViewerFacade getInstance() {
@@ -107,8 +120,11 @@ public class MovsimViewerFacade {
      *            the scenario
      */
     public void loadScenarioFromXml(String scenario) {
-        String xmlFileName = "/sim/" + scenario + ".xml";
-        inputData.setProjectName(xmlFileName);
+        //String xmlFileName = "/sim/" + scenario + ".xml";
+        //String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".odr";
+        String projectName = /*"/home/kesting/workspace/movsim/file/src/test/resources/" + */"/sim/onramp_IDM" + ".xml";
+        inputData.setProjectName(projectName);
+        System.out.println("project name in loadS: "+ProjectMetaDataImpl.getInstanceImpl().getProjectName());
         initializeModel();
     }
 

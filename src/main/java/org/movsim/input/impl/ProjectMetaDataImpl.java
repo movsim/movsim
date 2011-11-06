@@ -34,7 +34,7 @@ public class ProjectMetaDataImpl implements ProjectMetaData {
 
     private static ProjectMetaDataImpl singleton = new ProjectMetaDataImpl();
 
-    private String projectName = "";
+    private String projectName = ""; //"/file/src/test/resources/" + "onramp_IDM" + ".xml";
     private String pathToProjectXmlFile;
     private String outputPath;
     private boolean instantaneousFileOutput = true;
@@ -57,7 +57,7 @@ public class ProjectMetaDataImpl implements ProjectMetaData {
      * 
      * @return the instance impl
      */
-    static ProjectMetaDataImpl getInstanceImpl() {
+    public static ProjectMetaDataImpl getInstanceImpl() {
         return singleton;
     }
 
