@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.impl;
+package org.movsim.simulator;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -39,8 +39,8 @@ import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
-import org.movsim.simulator.Constants;
-import org.movsim.simulator.Simulator;
+import org.movsim.simulator.impl.MyRandom;
+import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.OfframpImpl;
 import org.movsim.simulator.roadSection.impl.OnrampMobilImpl;
@@ -90,7 +90,7 @@ public class SimulatorImpl implements Simulator, Runnable {
 
     private String projectName;
     
-    private RoadNetwork roadNetwork;  // TODO
+    private RoadNetworkDeprecated roadNetwork;  // TODO
     
     private long startTimeMillis;
     
@@ -159,7 +159,7 @@ public class SimulatorImpl implements Simulator, Runnable {
         
         
         // TODO work in progress, not yet sufficiently worked-out concept
-        final RoadNetwork roadNetwork = RoadNetwork.getInstance();
+        final RoadNetworkDeprecated roadNetwork = RoadNetworkDeprecated.getInstance();
         for (RoadSection roadSection : roadSections) {
             roadNetwork.add(roadSection);
         }

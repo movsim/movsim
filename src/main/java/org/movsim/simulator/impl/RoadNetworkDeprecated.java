@@ -5,22 +5,22 @@ import java.util.Map;
 
 import org.movsim.simulator.roadSection.RoadSection;
 
-public class RoadNetwork {
+public class RoadNetworkDeprecated {
     
     // singleton pattern
     
-    private static RoadNetwork instance = null;
+    private static RoadNetworkDeprecated instance = null;
 
     private Map<Long, RoadSection> roadNetwork;
     
-    private RoadNetwork(){
+    private RoadNetworkDeprecated(){
         // Exists only to defeat instantiation.
         roadNetwork = new HashMap<Long, RoadSection>();
     }
     
-    public static RoadNetwork getInstance() {
+    public static RoadNetworkDeprecated getInstance() {
         if(instance == null) {
-           instance = new RoadNetwork();
+           instance = new RoadNetworkDeprecated();
         }
         return instance;
      }

@@ -31,7 +31,7 @@ import java.util.List;
 import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.impl.RoadNetwork;
+import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Noise;
@@ -426,7 +426,7 @@ public class VehicleImpl implements Vehicle {
     @Override
     public double getNetDistance(final Moveable vehFront) {
         
-        final RoadNetwork roadNetwork = RoadNetwork.getInstance();
+        final RoadNetworkDeprecated roadNetwork = RoadNetworkDeprecated.getInstance();
         final boolean isRingroad = roadNetwork.isPeriodBoundary(roadId);
         final double roadLength = roadNetwork.getRoadLength(roadId); 
         

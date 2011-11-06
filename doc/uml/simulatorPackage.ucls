@@ -27,7 +27,7 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.impl.SimulatorImpl" project="movsim" 
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="org.movsim.simulator.SimulatorImpl" project="movsim" 
     file="/movsim/src/main/java/org/movsim/simulator/impl/SimulatorImpl.java" binary="false">    
     <position height="-1" width="-1" x="3045" y="-396"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      

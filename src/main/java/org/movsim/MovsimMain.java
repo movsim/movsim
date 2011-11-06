@@ -28,7 +28,7 @@ package org.movsim;
 
 import org.movsim.input.impl.SimCommandLine;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.impl.SimulatorImpl;
+import org.movsim.simulator.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
 import org.movsim.ui.controller.impl.SimulatorController;
 
