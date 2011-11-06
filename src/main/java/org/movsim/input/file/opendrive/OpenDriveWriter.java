@@ -17,10 +17,11 @@
  * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.movsim.opendrive;
+package org.movsim.input.file.opendrive;
 
 import java.util.ArrayList;
 
+import org.movsim.input.file.xml.XMLWriterBase;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
@@ -34,7 +35,6 @@ import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.RoadSegment;
 import org.movsim.simulator.RoadMapping.PosTheta;
-import org.movsim.xml.XMLWriterBase;
 
 /**
  * <p>

@@ -17,7 +17,7 @@
  * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.movsim.xml;
+package org.movsim.input.file.xml;
 
 @SuppressWarnings({ "nls" })
 public class XMLWriterBase {

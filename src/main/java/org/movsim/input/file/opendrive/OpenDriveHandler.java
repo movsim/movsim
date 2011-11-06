@@ -17,7 +17,7 @@
  * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.movsim.opendrive;
+package org.movsim.input.file.opendrive;
 
 import java.util.ArrayList;
 
