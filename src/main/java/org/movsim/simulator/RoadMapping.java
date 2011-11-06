@@ -21,6 +21,8 @@ package org.movsim.simulator;
 
 import java.util.ArrayList;
 
+import org.movsim.simulator.vehicles.Vehicle;
+
 /**
  * A RoadMapping maps a logical road position (given by a lane and a position on a road segment)
  * onto a physical position, that is an x,y coordinate (given in meters).
@@ -477,8 +479,8 @@ public abstract class RoadMapping {
      * @return polygon representing vehicle
      */
     public RoadMapping.PolygonFloat mapFloat(Vehicle vehicle, double time) {
-        final RoadMapping.PosTheta posTheta = map(vehicle.midPosition(),
-                laneOffset(vehicle.lane(time)));
-        return mapFloat(posTheta, vehicle.length(), vehicle.width());
+        final RoadMapping.PosTheta posTheta = map(vehicle.getPosition(),
+                laneOffset(vehicle.getLane()));
+        return mapFloat(posTheta, vehicle.getLength(), vehicle.getWidth());
     }
 }

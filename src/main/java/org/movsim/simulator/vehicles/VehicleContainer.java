@@ -125,7 +125,7 @@ public interface VehicleContainer extends MoveableContainer {
      * @param veh the veh
      * @return the leader
      */
-    Vehicle getLeader(final Moveable veh);
+    Vehicle getLeader(final Vehicle veh);
 
     // returns also "virtual" leaders when veh is not located in considered lane
     /**
@@ -134,7 +134,7 @@ public interface VehicleContainer extends MoveableContainer {
      * @param veh the veh
      * @return the follower
      */
-    Vehicle getFollower(final Moveable veh);
+    Vehicle getFollower(final Vehicle veh);
 
     /**
      * Adds the from to ramp.

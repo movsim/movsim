@@ -364,7 +364,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         final LaneChangingModelImpl lcModel = new LaneChangingModelImpl(vehInput.getLaneChangingInputData());
         final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
         final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput.getFuelConsumptionLabel());
-        final Vehicle veh = new VehicleImpl(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel, fuelModel);
+        final Vehicle veh = new Vehicle(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel, fuelModel);
         return veh;
     }
 

@@ -141,7 +141,7 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
                     occTime += veh.getLength() / speedVeh;
                     sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
                     // calculate brut timegap not from local detector data:
-                    final Moveable vehFront = vehContainerLane.getLeader(veh);
+                    final Vehicle vehFront = vehContainerLane.getLeader(veh);
                     final double brutTimegap =
                             (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition()) / vehFront.getSpeed();
                     sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0; // microscopic

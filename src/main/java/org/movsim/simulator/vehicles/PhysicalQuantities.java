@@ -137,7 +137,7 @@ public class PhysicalQuantities {
      *            the veh front
      * @return the net distance
      */
-    public double getNetDistance(final Moveable vehFront) {
+    public double getNetDistance(final Vehicle vehFront) {
         return xScale * me.getNetDistance(vehFront);
     }
 
@@ -148,7 +148,7 @@ public class PhysicalQuantities {
      *            the veh front
      * @return the rel speed
      */
-    public double getRelSpeed(final Moveable vehFront) {
+    public double getRelSpeed(final Vehicle vehFront) {
         return vScale * me.getRelSpeed(vehFront);
     }
 

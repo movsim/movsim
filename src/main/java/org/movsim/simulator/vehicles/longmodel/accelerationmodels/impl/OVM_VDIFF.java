@@ -113,7 +113,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamic variables
-        final Moveable vehFront = vehContainer.getLeader(me);
+        final Vehicle vehFront = vehContainer.getLeader(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront); // only needed for VDIFF

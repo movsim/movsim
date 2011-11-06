@@ -122,12 +122,12 @@ public class FileFloatingCars implements ObserverInTime {
         for (VehicleContainer vehContainerOnLane : floatingCars.getVehicleContainers()) {
 
             final List<Vehicle> vehicles = vehContainerOnLane.getVehicles();
-            for (final Moveable vehOnLane : vehicles) {
+            for (final Vehicle vehOnLane : vehicles) {
                 if (!vehOnLane.isFromOnramp()) {
                     // only mainroad vehicles
                     final int vehNumber = vehOnLane.getVehNumber();
                     if (hashMap.containsKey(vehNumber)) {
-                        final Moveable frontVeh = vehContainerOnLane.getLeader(vehOnLane);
+                        final Vehicle frontVeh = vehContainerOnLane.getLeader(vehOnLane);
                         writeData(updateTime, vehOnLane, frontVeh, hashMap.get(vehNumber));
                     }
                 }
@@ -161,7 +161,7 @@ public class FileFloatingCars implements ObserverInTime {
      * @param fstr
      *            the fstr
      */
-    private void writeData(double time, Moveable veh, Moveable frontVeh, PrintWriter fstr) {
+    private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
         // note: number before decimal point is total width of field, not width
         // of integer part
         fstr.printf(outputFormat, time, veh.getLane(), veh.getPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),

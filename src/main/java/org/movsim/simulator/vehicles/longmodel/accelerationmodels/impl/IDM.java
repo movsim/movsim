@@ -168,7 +168,7 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
     public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Moveable vehFront = vehContainer.getLeader(me);
+        final Vehicle vehFront = vehContainer.getLeader(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);

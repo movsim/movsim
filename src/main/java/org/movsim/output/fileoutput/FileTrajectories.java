@@ -203,9 +203,9 @@ public class FileTrajectories {
         for (VehicleContainer vehContainerLane : vehContainers) {
             final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
             for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-                final Moveable me = vehiclesOnLane.get(i);
+                final Vehicle me = vehiclesOnLane.get(i);
                 if ((me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval)) {
-                    final Moveable frontVeh = vehContainerLane.getLeader(me);
+                    final Vehicle frontVeh = vehContainerLane.getLeader(me);
                     writeCarData(fstr, i, me, frontVeh);
                 }
             }
@@ -220,7 +220,7 @@ public class FileTrajectories {
      * @param me the me
      * @param frontVeh the front veh
      */
-    private void writeCarData(PrintWriter fstr, int index, final Moveable me, final Moveable frontVeh) {
+    private void writeCarData(PrintWriter fstr, int index, final Vehicle me, final Vehicle frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
         fstr.printf(outputFormat, time, me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s, dv,

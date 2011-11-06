@@ -290,7 +290,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @see org.movsim.simulator.vehicles.VehicleContainer#getLeader(org.movsim.simulator.vehicles.Moveable)
      */
     @Override
-    public Vehicle getLeader(final Moveable veh) {
+    public Vehicle getLeader(final Vehicle veh) {
         if( !vehicles.contains(veh) ){
             // return virtual leader for vehicle veh which is not in considered lane
             return findVirtualLeader(veh); 
@@ -310,7 +310,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @see org.movsim.simulator.vehicles.VehicleContainer#getFollower(org.movsim.simulator.vehicles.Moveable)
      */
     @Override
-    public Vehicle getFollower(final Moveable veh) {
+    public Vehicle getFollower(final Vehicle veh) {
         final int index = vehicles.indexOf(veh);
         if ( index == vehicles.size()-1 ){
             return null; //boundaryVehicleUpstream;  // TODO
@@ -370,7 +370,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @param veh the veh
      * @return the vehicle
      */
-    private Vehicle findVirtualLeader(final Moveable veh) {
+    private Vehicle findVirtualLeader(final Vehicle veh) {
         // TODO efficient implementation with interval intersection
         final double position = veh.getPosition();
         // decrease index for traversing in downstream direction
@@ -391,7 +391,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      * @param veh the veh
      * @return the vehicle
      */
-    private Vehicle findVirtualFollower(final Moveable veh) {
+    private Vehicle findVirtualFollower(final Vehicle veh) {
      // TODO efficient implementation 
         final double position = veh.getPosition();
         // increase index for traversing in downstream direction
