@@ -37,7 +37,6 @@ import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.SimulatorImpl;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
@@ -74,7 +73,7 @@ public class MovsimViewerFacade {
 
     private MovsimViewerFacade() {
         System.out.println("create movsim viewer facade");
-        model = SimulatorImpl.getInstance();
+        model = Simulator.getInstance();
 
         initLocalizationAndLogger();
 

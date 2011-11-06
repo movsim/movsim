@@ -28,7 +28,6 @@ package org.movsim;
 
 import org.movsim.input.impl.SimCommandLine;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.SimulatorImpl;
 import org.movsim.ui.controller.Controller;
 import org.movsim.ui.controller.impl.SimulatorController;
 
@@ -49,7 +48,7 @@ public class MovsimMain {
         // Results are set in ProjectMetaDataImpl
         final SimCommandLine cmdline = new SimCommandLine(args);
 
-        final Simulator simulator = SimulatorImpl.getInstance();
+        final Simulator simulator = Simulator.getInstance();
 
         final Controller controller = new SimulatorController(simulator);
     }
