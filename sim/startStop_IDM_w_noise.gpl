@@ -1,5 +1,0 @@
-# gnuplot command file
-
-ldm = "IDM_w_noise"
-lang = "en"
-load "startStop.gpl"

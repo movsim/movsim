@@ -1,6 +1,0 @@
-# gnuplot command file
-
-ldm = "VDIFF"
-lang = "en"
-load "onramp.gpl"
-

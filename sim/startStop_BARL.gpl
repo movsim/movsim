@@ -1,5 +1,0 @@
-# gnuplot command file
-
-ldm = "BARL"
-lang = "en"
-load "startStop.gpl"

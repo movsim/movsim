@@ -1,6 +1,0 @@
-# gnuplot command file
-
-ldm = "IDMM"
-lang = "en"
-load "onramp.gpl"
-

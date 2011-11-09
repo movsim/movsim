@@ -1,5 +1,0 @@
-# gnuplot command file
-
-ldm = "IDM"
-lang = "en"
-load "startStop.gpl"

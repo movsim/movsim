@@ -1,5 +1,0 @@
-# gnuplot command file
-
-ldm = "ACC"
-lang = "en"
-load "startStop.gpl"
