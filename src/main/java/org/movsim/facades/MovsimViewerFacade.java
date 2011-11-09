@@ -120,11 +120,9 @@ public class MovsimViewerFacade {
      *            the scenario
      */
     public void loadScenarioFromXml(String scenario) {
-        //String xmlFileName = "/sim/" + scenario + ".xml";
-        //String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".odr";
-        String projectName = /*"/home/kesting/workspace/movsim/file/src/test/resources/" + */"/sim/onramp_IDM" + ".xml";
+        //TODO not hardcoded
+        String projectName = "/sim/onramp_IDM" + ".xml";
         inputData.setProjectName(projectName);
-        System.out.println("project name in loadS: "+ProjectMetaDataImpl.getInstanceImpl().getProjectName());
         initializeModel();
     }
 

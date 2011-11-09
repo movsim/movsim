@@ -84,7 +84,6 @@ public class SimulatorImpl implements Simulator, Runnable {
     /** The vehicle generator. */
     private VehicleGenerator vehGenerator;
     
-    
     private boolean isWithCrashExit;
 
     private String projectName;
@@ -120,16 +119,15 @@ public class SimulatorImpl implements Simulator, Runnable {
         roadNetwork = new RoadNetwork();
         
         String scenario = "onramp";
-        String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr";
+//        String xmlFileName = "/home/ralph/workspace/movsim/file/src/test/resources/" + scenario + ".xodr";
+
+        String xmlFileName = "/roadnetwork/" + scenario + ".xodr";
         System.out.println("try to load "+ xmlFileName);
         OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
         
-        
         System.out.println("done with road network parsing");
-        //System.exit(0);
         
         // parse xmlFile and set values
-        
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = inputData.getSimulationInput().getTimestep();   // fix

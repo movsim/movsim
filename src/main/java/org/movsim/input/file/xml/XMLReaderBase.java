@@ -20,20 +20,26 @@
 package org.movsim.input.file.xml;
 
 import java.io.File;
+import java.io.InputStream;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.helpers.DefaultHandler;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Base class for XML file readers. Checks if the file exists and then invokes the SAX parser.
+ * 
  * @author martinbudden
- *
+ * 
  */
 public class XMLReaderBase {
+    private static InputStream inputstream;
+
     /**
-     * Parses the XML format file. Checks if the file exists and then invokes the SAX parser with
-     * the given handler.
+     * Parses the XML format file. Checks if the file exists and then invokes the SAX parser with the given handler.
+     * 
      * @param fullFilename
      * @param handler
      * @return true if file parsed without error, false otherwise
@@ -42,13 +48,16 @@ public class XMLReaderBase {
         System.out.println("parsing file: " + fullFilename);
         final File file = new File(fullFilename);
         if (file.exists() == false) {
-            System.out.println("file does not exist");
-            return false;
+            // System.out.println("file does not exist"); // TODO allow parsing from resources and file
+            // return false;
+            inputstream = XMLReaderBase.class.getResourceAsStream(fullFilename);
+            InputSource resource = new InputSource(inputstream);
         }
         try {
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             final SAXParser saxParser = factory.newSAXParser();
-            saxParser.parse(fullFilename, handler);
+            // saxParser.parse(fullFilename, handler);
+            saxParser.parse(inputstream, handler);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
