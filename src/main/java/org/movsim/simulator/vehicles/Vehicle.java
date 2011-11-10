@@ -51,6 +51,17 @@ public class Vehicle {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Vehicle.class);
+    // constants
+    protected static final int INITIAL_ID = 1;
+    protected static final int INITIAL_TEMPLATE_ID = -1;
+    /**
+     * 'Not Set' vehicle id value, guaranteed not to be used by any vehicles.
+     */
+    public static final int ID_NOT_SET = -1;
+    /**
+     * 'Not Set' road segment id value, guaranteed not to be used by any vehicles.
+     */
+    public static final int ROAD_SEGMENT_ID_NOT_SET = -1;
     
     /** in m/s^2 */
     private final static double THRESHOLD_BRAKELIGHT_ON = 0.2;
@@ -66,6 +77,7 @@ public class Vehicle {
 
     /** The length. */
     private final double length;
+    private final double width;
 
     /** The position. */
     private double position;
@@ -121,6 +133,9 @@ public class Vehicle {
 
     /** The noise. */
     private Noise noise = null;
+    // Color
+    private int color;
+    private Object colorObject; // color object cache
 
     /** The traffic light approaching. */
     private final TrafficLightApproaching trafficLightApproaching;
@@ -136,6 +151,54 @@ public class Vehicle {
     
     
     private long roadId;
+    private static int nextId = INITIAL_ID;
+    private static int nextTemplateId = INITIAL_TEMPLATE_ID;
+    /**
+     * The type of numerical integration.
+     */
+    public static enum IntegrationType {
+        /**
+         * Euler (first order) numerical integration.
+         */
+        EULER,
+        /**
+         * Kinematic (second order) numerical integration.
+         */
+        KINEMATIC,
+        /**
+         * Runge-Kutta (fourth order) numerical integration.
+         */
+        RUNGE_KUTTA
+    }
+
+    private static IntegrationType integrationType = IntegrationType.KINEMATIC;
+
+    /**
+     * Resets the next id.
+     */
+    public static void resetNextId() {
+        nextId = INITIAL_ID;
+        nextTemplateId = INITIAL_TEMPLATE_ID;
+    }
+
+    /**
+     * Returns the id of the last vehicle created.
+     * 
+     * @return the id of the last vehicle created
+     */
+    public static int lastIdSet() {
+        return nextId - 1;
+    }
+
+    /**
+     * Returns the number of vehicles that have been created. Used for instrumentation.
+     * 
+     * @return the number of vehicles that have been created
+     */
+    public static int count() {
+        return nextId - INITIAL_ID;
+    }
+
 
     /**
      * Instantiates a new vehicle impl.
@@ -154,6 +217,7 @@ public class Vehicle {
         this.fuelModel = fuelModel;  
 
         length = vehInput.getLength();
+        width = Constants.VEHICLE_WIDTH;
         reactionTime = vehInput.getReactionTime();
         maxDecel = vehInput.getMaxDeceleration();
 
@@ -184,7 +248,55 @@ public class Vehicle {
         assert FINITE_LANE_CHANGE_TIME_S > 0;
 
     }
+
+    /**
+     * Constructor.
+     */
+    public Vehicle(double rearPosition, double speed, int lane, double length, double width) {
+        assert rearPosition >= 0.0;
+        assert speed >= 0.0;
+        // assert lane >= Lane.LANE1;
+        id = nextId++;
+        this.length = length;
+        setRearPosition(rearPosition);
+        this.speed = speed;
+        this.lane = lane;
+        this.width = width;
+        this.color = 0;
+        fuelModel = null;
+        trafficLightApproaching = null;
+        reactionTime = 0.0;
+        maxDecel = 0.0;
+        lcModel = null;
+        accelerationModel = null;
+        label = "";
+        cyclicBuffer = null;
+    }
     
+    /**
+     * Copy constructor.
+     * 
+     * @param source
+     */
+    public Vehicle(Vehicle source) {
+        id = source.id;
+        type = source.type;
+        position = source.position;
+        speed = source.speed;
+        lane = source.lane;
+        length = source.length;
+        width = source.width;
+        color = source.color;
+        fuelModel = source.fuelModel;
+        trafficLightApproaching = source.trafficLightApproaching;
+        reactionTime = source.reactionTime;
+        maxDecel = source.maxDecel;
+        lcModel = source.lcModel;
+        accelerationModel = source.accelerationModel;
+        label = source.label;
+        cyclicBuffer = source.cyclicBuffer;
+    }
+
     private void initialize(){
         positionOld = 0;
         position = 0;
@@ -224,17 +336,61 @@ public class Vehicle {
         return label;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Sets this vehicle's color.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#length()
+     * @param color
+     *            RGB integer color value
+     */
+    public final void setColor(int color) {
+        this.color = color;
+    }
+
+    /**
+     * Returns this vehicle's color.
+     * 
+     * @return vehicle's color, as an RGB integer
+     */
+    public final int color() {
+        return color;
+    }
+
+    /**
+     * Sets this vehicle's color object cache value. Primarily of use by AWT which rather
+     * inefficiently uses objects rather than integers to represent color values. Note that
+     * an object is cached so Vehicle.java has no dependency on AWT.
+     * 
+     * @param colorObject
+     */
+    public final void setColorObject(Object colorObject) {
+        this.colorObject = colorObject;
+    }
+
+    /**
+     * Returns the previously cached object associated with this vehicle's color.
+     * 
+     * @return vehicle's previously cached color object
+     */
+    public final Object colorObject() {
+        return colorObject;
+    }
+
+    /**
+     * Returns this vehicle's length.
+     * 
+     * @return vehicle's length, in meters
      */
     public double getLength() {
         return length;
     }
 
+    /**
+     * Returns this vehicle's width.
+     * 
+     * @return vehicle's width, in meters
+     */
     public double getWidth() {
-        return Constants.VEHICLE_WIDTH;
+        return width;
     }
 
     /*
@@ -269,6 +425,16 @@ public class Vehicle {
         return position - 0.5 * length;
     }
 
+    /**
+     * Sets the position of the rear of this vehicle.
+     * 
+     * @param rearPosition
+     *            new rear position
+     */
+    public final void setRearPosition(double rearPosition) {
+        this.position = rearPosition + 0.5 * length;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -290,12 +456,11 @@ public class Vehicle {
         this.position = position;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns this vehicle's speed.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#speed()
+     * @return this vehicle's speed, in m/s
      */
-    
     public double getSpeed() {
         return speed;
     }
@@ -356,17 +521,16 @@ public class Vehicle {
      * 
      * @see org.movsim.simulator.vehicles.Vehicle#distanceToTrafficlight()
      */
-    
     public double getDistanceToTrafficlight() {
         return trafficLightApproaching.getDistanceToTrafficlight();
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns this vehicle's id.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#id()
+     * @return vehicle's id
+     * 
      */
-    
     public int getId() {
         return id;
     }

@@ -860,13 +860,13 @@ public class RoadSegment implements Iterable<Vehicle> {
                 // find the front vehicle in the source lane on the source road segment
                 final int sLane = sourceLane[lane];
                 final Vehicle sourceFrontVehicle = sourceRoad.frontVehicleOnLane(sLane);
-//                if (sourceFrontVehicle != null) {
-//                    // return a copy of the front vehicle on the source road segment, with its
-//                    // position set relative to the current road segment
-//                    final Vehicle rearVehicle = new Vehicle(sourceFrontVehicle);
-//                    rearVehicle.setPosition(rearVehicle.posRearBumper() - sourceRoad.roadLength());
-//                    return rearVehicle;
-//                }
+                if (sourceFrontVehicle != null) {
+                    // return a copy of the front vehicle on the source road segment, with its
+                    // position set relative to the current road segment
+                    final Vehicle rearVehicle = new Vehicle(sourceFrontVehicle);
+                    rearVehicle.setPosition(rearVehicle.getPosition() - sourceRoad.roadLength());
+                    return rearVehicle;
+                }
             }
         }
         return null;
@@ -893,9 +893,9 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         // return a copy of the rear vehicle on the sink road segment, with its position
         // set relative to the current road segment
-//        final Vehicle ret = new Vehicle(sinkRearVehicle);
-//        ret.setPosition(ret.posRearBumper() + roadLength);
-        return null; // ret;
+        final Vehicle ret = new Vehicle(sinkRearVehicle);
+        ret.setPosition(ret.getPosition() + roadLength);
+        return ret;
     }
 
     Vehicle secondLastVehicleOnSinkLanePosAdjusted(int lane) {
@@ -922,10 +922,9 @@ public class RoadSegment implements Iterable<Vehicle> {
         final Vehicle vehicle = sinkRoad.getVehicle(sLane, sinkLaneVehicleCount - 2);
         // return a copy of the rear vehicle on the sink road segment, with its position
         // set relative to the current road segment
-//        final Vehicle ret = new Vehicle(vehicle);
-//        ret.setPosition(ret.posRearBumper() + roadLength);
-//        return ret;
-        return null;
+        final Vehicle ret = new Vehicle(vehicle);
+        ret.setPosition(ret.getPosition() + roadLength);
+        return ret;
     }
 
     /**
@@ -979,10 +978,9 @@ public class RoadSegment implements Iterable<Vehicle> {
                 if (sinkRearVehicle != null) {
                     // return a copy of the rear vehicle on the sink road segment, with its position
                     // set relative to the current road segment
-//                    final Vehicle frontVehicle = new Vehicle(sinkRearVehicle);
-//                    frontVehicle.setPosition(frontVehicle.posRearBumper() + roadLength);
-//                    return frontVehicle;
-                    return null;
+                    final Vehicle frontVehicle = new Vehicle(sinkRearVehicle);
+                    frontVehicle.setPosition(frontVehicle.getPosition() + roadLength);
+                    return frontVehicle;
                 }
             }
         }
