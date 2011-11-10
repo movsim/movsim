@@ -22,12 +22,11 @@ package org.movsim.input.file.xml;
 import java.io.File;
 import java.io.InputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -38,6 +37,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class XMLReaderBase {
 
+    final static Logger logger = LoggerFactory.getLogger(XMLReaderBase.class);
+
     /**
      * Parses the XML format file. Checks if the file exists and then invokes the SAX parser with the given handler.
      * 
@@ -46,12 +47,11 @@ public class XMLReaderBase {
      * @return true if file parsed without error, false otherwise
      */
     protected static boolean parse(String fullFilename, DefaultHandler handler) {
-        System.out.println("parsing file: " + fullFilename);
+        logger.info("parsing file: " + fullFilename);
         final File file = new File(fullFilename);
         if (file.exists() == false) {
-            System.out.println("file does not exist. Try parsing from resources."); // TODO allow parsing from resources and file
+            logger.warn("file does not exist. Try parsing from resources.");
             InputStream inputstream = XMLReaderBase.class.getResourceAsStream(fullFilename);
-            InputSource resource = new InputSource(inputstream);
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser;
             try {
@@ -59,16 +59,19 @@ public class XMLReaderBase {
                 saxParser.parse(inputstream, handler);
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.error("parsing failed");
+                logger.error(e.getLocalizedMessage());
                 return false;
             }
         } else {
             try {
                 final SAXParserFactory factory = SAXParserFactory.newInstance();
                 final SAXParser saxParser = factory.newSAXParser();
-                // TODO ake inputstream does not work on my system!
                 saxParser.parse(fullFilename, handler);
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.error("parsing failed");
+                logger.error(e.getLocalizedMessage());
                 return false;
             }
         }
