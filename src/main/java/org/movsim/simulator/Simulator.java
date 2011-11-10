@@ -35,7 +35,6 @@ import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface Simulator.
  */
@@ -46,7 +45,7 @@ public class Simulator implements Runnable {
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
     // singleton pattern
-    private static Simulator instance = null;
+    private static Simulator instance = new Simulator();
 
     private double time;
 
@@ -87,10 +86,7 @@ public class Simulator implements Runnable {
 
     }
 
-    public static synchronized Simulator getInstance() {
-        if (instance == null) {
-            instance = new Simulator();
-        }
+    public static Simulator getInstance() {
         return instance;
     }
 
