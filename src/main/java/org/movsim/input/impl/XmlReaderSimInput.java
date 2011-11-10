@@ -68,19 +68,14 @@ public class XmlReaderSimInput {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(XmlReaderSimInput.class);
 
-    /** The is valid. */
     private boolean isValid;
 
-    /** The input data. */
     private final InputDataImpl inputData;
 
-    /** The xml filename. */
     private final String xmlFilename;
 
-    /** The xml filename. */
     private final String filenameEnding = ".xml";
 
-    /** The doc. */
     private Document doc;
 
     // dtd from resources. do *not* use the File.separator character

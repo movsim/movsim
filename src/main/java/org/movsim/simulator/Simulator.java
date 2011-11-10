@@ -35,7 +35,6 @@ import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface Simulator.
  */
@@ -46,7 +45,7 @@ public class Simulator implements Runnable {
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
     // singleton pattern
-    private static Simulator instance = null;
+    private static Simulator instance = new Simulator();
 
     private double time;
 
@@ -87,15 +86,13 @@ public class Simulator implements Runnable {
 
     }
 
-    public static synchronized Simulator getInstance() {
-        if (instance == null) {
-            instance = new Simulator();
-        }
+    public static Simulator getInstance() {
         return instance;
     }
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#initialize()
      */
     public void initialize() {
@@ -103,16 +100,15 @@ public class Simulator implements Runnable {
 
         roadNetwork = new RoadNetwork();
 
-        String scenario = "onramp";
-        String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr";
-        System.out.println("try to load " + xmlFileName);
-        OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
+        String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
+        // String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr"; //TODO remove
 
-        System.out.println("done with road network parsing");
-        // System.exit(0);
+        String xmlFileName = "/roadnetwork/" + scenario + ".xodr";
+        logger.info("try to load ", xmlFileName);
+        OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
+        logger.info("done with road network parsing");
 
         // parse xmlFile and set values
-
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = inputData.getSimulationInput().getTimestep(); // fix
@@ -140,7 +136,7 @@ public class Simulator implements Runnable {
         iterationCount = 0;
 
         System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
-// Roadinput/RoadSection
+        // Roadinput/RoadSection
 
         roadSections = new LinkedList<RoadSection>();
         for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput()) {
@@ -177,6 +173,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#getRoadSections()
      */
     public List<RoadSection> getRoadSections() {
@@ -185,6 +182,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#findRoadById(long)
      */
     public RoadSection findRoadById(long id) {
@@ -214,6 +212,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#run()
      */
     @Override
@@ -228,15 +227,17 @@ public class Simulator implements Runnable {
             update();
         }
 
-        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", time, time / 3600,
-                projectName));
+        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", time,
+                time / 3600, projectName));
         final double elapsedTime = 0.001 * (System.currentTimeMillis() - startTimeMillis);
-        logger.info(String.format("time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs",
-                elapsedTime, time / elapsedTime, 1000 * elapsedTime / iterationCount));
+        logger.info(String.format(
+                "time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime,
+                time / elapsedTime, 1000 * elapsedTime / iterationCount));
     }
 
     /**
      * Stop this run.
+     * 
      * @return true, if successful
      */
     public boolean isSimulationRunFinished() {
@@ -245,6 +246,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#update()
      */
     public void update() {
@@ -253,8 +255,8 @@ public class Simulator implements Runnable {
         iterationCount++;
 
         if (iterationCount % 100 == 0) {
-            logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time, time / 3600,
-                    timestep, projectName));
+            logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
+                    time / 3600, timestep, projectName));
         }
 
         // parallel update of all roadSections
@@ -281,22 +283,22 @@ public class Simulator implements Runnable {
             roadSection.laneChanging(iterationCount, dt, time);
         }
 
-// // merges from onramps/ to offramps (and also simpleRamp)
-// for (RoadSection roadSection : roadSections) {
-// // TODO: network information
-// RoadSection connectedRoadSection = null;
-// if(roadSection instanceof RoadSectionImpl){
-// // mainroad gets reference to first offramp (or null)
-// // TODO allow more than one offramp !!!
-// connectedRoadSection = findFirstOfframp();
-// }
-// if(roadSection instanceof OnrampMobilImpl){
-// connectedRoadSection = findRoadById(roadSection.getToId());
-// }
-//
-// roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
-// }
-//
+        // // merges from onramps/ to offramps (and also simpleRamp)
+        // for (RoadSection roadSection : roadSections) {
+        // // TODO: network information
+        // RoadSection connectedRoadSection = null;
+        // if(roadSection instanceof RoadSectionImpl){
+        // // mainroad gets reference to first offramp (or null)
+        // // TODO allow more than one offramp !!!
+        // connectedRoadSection = findFirstOfframp();
+        // }
+        // if(roadSection instanceof OnrampMobilImpl){
+        // connectedRoadSection = findRoadById(roadSection.getToId());
+        // }
+        //
+        // roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
+        // }
+        //
 
         // vehicle accelerations
         for (RoadSection roadSection : roadSections) {
@@ -325,6 +327,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#iTime()
      */
     public long iterationCount() {
@@ -333,6 +336,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#time()
      */
     public double time() {
@@ -341,6 +345,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#timestep()
      */
     public double timestep() {
@@ -349,6 +354,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#getSiminput()
      */
     public InputData getSimInput() {
@@ -357,6 +363,7 @@ public class Simulator implements Runnable {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.Simulator#getSimObservables()
      */
     public SimObservables getSimObservables() {
