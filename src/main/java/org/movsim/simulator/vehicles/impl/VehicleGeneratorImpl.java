@@ -309,19 +309,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         return false;
     }
 
-    /**
-     * Cyclic buffer factory.
-     * 
-     * @return the cyclic buffer impl
-     */
-
-    private CyclicBufferImpl cyclicBufferFactory() {
-        if (isWithReactionTimes)
-            return new CyclicBufferImpl();
-        return null;
-    }
-
-    /*
+     /*
      * (non-Javadoc)
      * 
      * @see org.movsim.simulator.vehicles.VehicleGenerator#getVehiclePrototype()
@@ -362,9 +350,8 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         
         // TODO lane-changing model impl
         final LaneChangingModelImpl lcModel = new LaneChangingModelImpl(vehInput.getLaneChangingInputData());
-        final CyclicBufferImpl cyclicBuffer = cyclicBufferFactory();
         final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput.getFuelConsumptionLabel());
-        final Vehicle veh = new Vehicle(prototype.getLabel(), vehID, longModel, vehInput, cyclicBuffer, lcModel, fuelModel);
+        final Vehicle veh = new Vehicle(prototype.getLabel(), vehID, longModel, vehInput, null, lcModel, fuelModel);
         return veh;
     }
 

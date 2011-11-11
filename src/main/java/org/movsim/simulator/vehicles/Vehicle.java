@@ -33,7 +33,6 @@ import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.TrafficLight;
-import org.movsim.simulator.vehicles.impl.CyclicBufferImpl;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
 import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
 import org.movsim.simulator.vehicles.longmodel.Memory;
@@ -140,9 +139,6 @@ public class Vehicle {
     /** The traffic light approaching. */
     private final TrafficLightApproaching trafficLightApproaching;
 
-    /** The cyclic buffer. */
-    private final CyclicBufferImpl cyclicBuffer; // TODO
-
     private final FuelConsumption fuelModel; // can be null
     
     private boolean isBrakeLightOn;
@@ -211,7 +207,7 @@ public class Vehicle {
      * @param lcModel the lanechange model
      */
     public Vehicle(String label, int id, final AccelerationModel longModel, final VehicleInput vehInput,
-            final CyclicBufferImpl cyclicBuffer, final LaneChangingModelImpl lcModel, final FuelConsumption fuelModel) {
+            final Object cyclicBuffer, final LaneChangingModelImpl lcModel, final FuelConsumption fuelModel) {
         this.label = label;
         this.id = id;
         this.fuelModel = fuelModel;  
@@ -230,8 +226,6 @@ public class Vehicle {
         this.lcModel = lcModel;
         lcModel.initialize(this);
 
-        this.cyclicBuffer = cyclicBuffer;
-        
         // no effect if model is not configured with memory effect
         if (vehInput.isWithMemory()) {
             memory = new MemoryImpl(vehInput.getMemoryInputData());
@@ -270,7 +264,6 @@ public class Vehicle {
         lcModel = null;
         accelerationModel = null;
         label = "";
-        cyclicBuffer = null;
     }
     
     /**
@@ -294,7 +287,6 @@ public class Vehicle {
         lcModel = source.lcModel;
         accelerationModel = source.accelerationModel;
         label = source.label;
-        cyclicBuffer = source.cyclicBuffer;
     }
 
     private void initialize(){
