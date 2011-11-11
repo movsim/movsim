@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.lanechanging.impl;
+package org.movsim.simulator.vehicles.lanechanging;
 
 import java.util.List;
 
@@ -35,9 +35,9 @@ import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 
 /**
- * The Class MOBILImpl.
+ * The Class MOBIL.
  */
-public class MOBILImpl {
+public class MOBIL {
 
     private double politeness;
     
@@ -68,7 +68,7 @@ public class MOBILImpl {
      *
      * @param vehicle the vehicle
      */
-    public MOBILImpl(final Vehicle vehicle) {
+    public MOBIL(final Vehicle vehicle) {
         this.me = vehicle;
         // TODO handle this case with *no* <MOBIL> xml element
 
@@ -80,7 +80,7 @@ public class MOBILImpl {
      * @param vehicle the vehicle
      * @param lcMobilData the lc mobil data
      */
-    public MOBILImpl(final Vehicle vehicle, LaneChangingMobilData lcMobilData) {
+    public MOBIL(final Vehicle vehicle, LaneChangingMobilData lcMobilData) {
         this.me = vehicle;
         // TODO Auto-generated constructor stub
 

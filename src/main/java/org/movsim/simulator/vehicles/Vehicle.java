@@ -34,7 +34,7 @@ import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
-import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
+import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -125,7 +125,7 @@ public class Vehicle {
     private final AccelerationModel accelerationModel;
 
     /** The lane-changing model. */
-    private final LaneChangingModelImpl lcModel;
+    private final LaneChangingModel lcModel;
 
     /** The memory. */
     private Memory memory = null;
@@ -207,7 +207,7 @@ public class Vehicle {
      * @param lcModel the lanechange model
      */
     public Vehicle(String label, int id, final AccelerationModel longModel, final VehicleInput vehInput,
-            final Object cyclicBuffer, final LaneChangingModelImpl lcModel, final FuelConsumption fuelModel) {
+            final Object cyclicBuffer, final LaneChangingModel lcModel, final FuelConsumption fuelModel) {
         this.label = label;
         this.id = id;
         this.fuelModel = fuelModel;  
@@ -768,7 +768,7 @@ public class Vehicle {
     }
 
     
-    public LaneChangingModelImpl getLaneChangingModel() {
+    public LaneChangingModel getLaneChangingModel() {
         return lcModel;
     }
 

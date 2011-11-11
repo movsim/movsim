@@ -51,7 +51,7 @@ import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
-import org.movsim.simulator.vehicles.lanechanging.impl.LaneChangingModelImpl;
+import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
@@ -349,7 +349,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
         
         // TODO lane-changing model impl
-        final LaneChangingModelImpl lcModel = new LaneChangingModelImpl(vehInput.getLaneChangingInputData());
+        final LaneChangingModel lcModel = new LaneChangingModel(vehInput.getLaneChangingInputData());
         final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput.getFuelConsumptionLabel());
         final Vehicle veh = new Vehicle(prototype.getLabel(), vehID, longModel, vehInput, null, lcModel, fuelModel);
         return veh;
