@@ -35,8 +35,6 @@ import org.movsim.input.impl.XmlUtils;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
-import org.movsim.input.model.vehicle.behavior.impl.MemoryInputDataImpl;
-import org.movsim.input.model.vehicle.behavior.impl.NoiseInputDataImpl;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
 import org.movsim.input.model.vehicle.laneChanging.impl.LaneChangingInputDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
@@ -106,7 +104,7 @@ public class VehicleInputImpl implements VehicleInput {
         for (final Element longModelElem : longModelElems) {
             if (longModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleMemory)) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(longModelElem);
-                memoryInputData = new MemoryInputDataImpl(map);
+                memoryInputData = new MemoryInputData(map);
             } else if (modelInputData == null) {
                 modelInputData = modelInputDataFactory(longModelElems.get(0));
             } else {
@@ -121,7 +119,7 @@ public class VehicleInputImpl implements VehicleInput {
         final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(noiseElem);
-            noiseInputData = new NoiseInputDataImpl(map);
+            noiseInputData = new NoiseInputData(map);
         }
     }
 

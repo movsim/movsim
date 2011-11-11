@@ -26,24 +26,49 @@
  */
 package org.movsim.input.model.vehicle.behavior;
 
+import java.util.Map;
+
+import org.movsim.input.model.vehicle.behavior.NoiseInputData;
+
 // TODO: Auto-generated Javadoc
 /**
- * The Interface NoiseInputData.
+ * The Class NoiseInputData.
  */
-public interface NoiseInputData {
+public class NoiseInputData {
+
+    /** The fluct strength. */
+    private final double fluctStrength;
+
+    /** The tau. */
+    private final double tau;
+
+    /**
+     * Instantiates a new noise input data impl.
+     * 
+     * @param map
+     *            the map
+     */
+    public NoiseInputData(Map<String, String> map) {
+        fluctStrength = Double.parseDouble(map.get("fluct_strength"));
+        tau = Double.parseDouble(map.get("tau"));
+    }
 
     /**
      * Gets the fluct strength.
      * 
      * @return the fluct strength
      */
-    public abstract double getFluctStrength();
+   public double getFluctStrength() {
+        return fluctStrength;
+    }
 
-    /**
-     * Gets the tau.
-     * 
-     * @return the tau
-     */
-    public abstract double getTau();
+   /**
+    * Gets the tau.
+    * 
+    * @return the tau
+    */
+   public double getTau() {
+        return tau;
+    }
 
 }
