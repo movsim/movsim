@@ -988,4 +988,28 @@ public class Vehicle {
         this.type = type;
     }
 
+    /**
+     * <p>
+     * Called when vehicle changes road segments (and possibly also lanes) at a link or junction.
+     * </p>
+     * <p>
+     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and
+     * <code>timeAtWhichLastChangedLanes</code> are used to interpolate this vehicle's lateral
+     * position and so give the appearance of a smooth lane change.
+     * </p>
+     * 
+     * @param newLane
+     * @param newPos
+     * @param exitPos
+     */
+    public void moveToNewRoadSegment(int newLane, double newRearPos, double exitPos) {
+//        distanceTravelledToStartOfRoadSegment += rearPosition - newRearPos;
+        final int delta = laneOld - lane;
+        lane = newLane;
+        laneOld = lane + delta;
+        setRearPosition(newRearPos);
+//        this.exitEndPos = exitPos;
+//        trafficLight = null;
+//        speedLimit = 0.0;
+    }
 }

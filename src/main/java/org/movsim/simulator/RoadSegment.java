@@ -711,11 +711,11 @@ public class RoadSegment implements Iterable<Vehicle> {
                     } else {
                         // the front vehicle is the rear vehicle on the sink lane
                         frontVehicle = rearVehicleOnSinkLanePosAdjusted(lane);
-                        // if (frontVehicle == null) {
-                        // // no vehicle in the sink lane, so must recursively follow the lanes
-                        // // to the end of the road
-                        // frontVehicle = frontVehicle(lane, vehicle.position());
-                        // }
+                         if (frontVehicle == null) {
+                             // no vehicle in the sink lane, so must recursively follow the lanes
+                             // to the end of the road
+                             frontVehicle = frontVehicle(lane, vehicle.getPosition());
+                         }
                     }
                 }
            }
@@ -782,7 +782,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                             }
                         }
                     }
-//                    vehicle.moveToNewRoadSegment(laneOnNewRoadSegment, positionOnNewRoadSegment, exitEndPos);
+                    vehicle.moveToNewRoadSegment(laneOnNewRoadSegment, positionOnNewRoadSegment, exitEndPos);
                     // remove vehicle from this road segment
                     vehicles.remove(0);
                     --count;
