@@ -33,7 +33,6 @@ import java.util.List;
 
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.impl.MyRandom;
-import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;

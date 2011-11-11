@@ -21,7 +21,6 @@ package org.movsim.simulator;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.junit.Test;

@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.ObserverInTime;

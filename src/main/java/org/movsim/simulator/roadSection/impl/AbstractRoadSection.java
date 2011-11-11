@@ -38,7 +38,6 @@ import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
-import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;

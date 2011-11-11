@@ -34,7 +34,6 @@ import java.util.List;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.Constants;
 import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.vehicles.Moveable;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.FileUtils;

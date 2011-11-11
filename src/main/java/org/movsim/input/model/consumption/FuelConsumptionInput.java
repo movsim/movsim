@@ -1,10 +1,8 @@
 package org.movsim.input.model.consumption;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
