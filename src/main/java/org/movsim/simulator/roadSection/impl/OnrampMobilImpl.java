@@ -55,10 +55,10 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
      * The lane for entering the mainroad only MOST_RIGHT_LANE possible to enter
      */
 
-    private static final String extensionFormat = ".S%d_log.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
-            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
-    private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
+    // private static final String extensionFormat = ".S%d_log.csv";
+    // private static final String outputHeading = Constants.COMMENT_CHAR
+    //        + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
+    // private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
     /** The Constant MINSPACE_MERGE_M. */
     final static double MINSPACE_MERGE_M = 2.0;
@@ -88,15 +88,15 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     PrintWriter fstrLogging;
 
     /** The x enter last merge. status of last merging vehicle */
-    private double xEnterLastMerge;
+    // private double xEnterLastMerge;
 
     /** The v enter last merge. */
-    private double vEnterLastMerge;
+    // private double vEnterLastMerge;
 
     /** The merge count. */
     private int mergeCount;
 
-    private final boolean isWithCrashExit = true;
+    // private final boolean isWithCrashExit = true;
 
     /**
      * Instantiates a new onramp impl.
