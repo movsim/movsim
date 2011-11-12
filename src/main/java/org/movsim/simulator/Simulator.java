@@ -27,7 +27,6 @@ import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.roadSection.impl.OfframpImpl;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;

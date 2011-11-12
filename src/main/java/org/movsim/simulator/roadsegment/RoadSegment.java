@@ -25,7 +25,6 @@ import java.util.Random;
 
 import org.movsim.input.model.RoadInput;
 import org.movsim.simulator.RoadMapping;
-import org.movsim.simulator.roadsegment.Lane.Type;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**

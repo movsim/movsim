@@ -37,7 +37,6 @@ import org.movsim.input.impl.ProjectMetaDataImpl;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

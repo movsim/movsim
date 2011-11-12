@@ -19,10 +19,9 @@
 
 package org.movsim.simulator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.roadsegment.Link;
 import org.movsim.simulator.roadsegment.RoadSegment;

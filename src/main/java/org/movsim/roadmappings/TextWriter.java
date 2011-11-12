@@ -22,8 +22,8 @@ package org.movsim.roadmappings;
 import java.util.Iterator;
 
 import org.movsim.simulator.RoadMapping;
-import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.RoadMapping.PosTheta;
+import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.roadsegment.TrafficFlowBase;
 import org.movsim.simulator.roadsegment.TrafficSource;

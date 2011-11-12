@@ -28,8 +28,6 @@ package org.movsim.input.model.vehicle.behavior;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.behavior.NoiseInputData;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class NoiseInputData.

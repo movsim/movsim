@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingLine;
 import org.movsim.roadmappings.RoadMappingPoly;
-//import org.movsim.traffic.Obstacle;
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.roadsegment.Lane;
