@@ -137,7 +137,12 @@ public class Simulator implements Runnable {
         time = 0;
         iterationCount = 0;
 
-        System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
+        
+        // TODO general remark from ake: the construction of the road network takes place in the initialize() but
+        // adding xml input from the movsim configuration happens here in reset(). Why not putting all input related 
+        // set-up processes in the initialize() body?
+        
+        //System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
         // Roadinput/RoadSection
 
         // TODO roadsections
