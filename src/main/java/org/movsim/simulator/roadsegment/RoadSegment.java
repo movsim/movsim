@@ -21,11 +21,11 @@ package org.movsim.simulator.roadsegment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 import org.movsim.input.model.RoadInput;
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.MyRandom;
 
 /**
  * <p>
@@ -537,18 +537,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         if (totalVehicleCount() < 1) {
             return;
         }
-        final long seed = 987654321L;
-        final Random random = new Random(seed);
-        int lane = random.nextInt(laneCount);
+        
+        int lane = MyRandom.nextInt(laneCount);
         ArrayList<Vehicle> vehicles = laneVehicles[lane];
         int vehicleCount = vehicles.size();
         while (vehicleCount == 0) {
             // make sure we didn't choose an empty lane
-            lane = random.nextInt(laneCount);
+            lane = MyRandom.nextInt(laneCount);
             vehicles = laneVehicles[lane];
             vehicleCount = vehicles.size();
         }
-        int indexToRemove = random.nextInt(vehicleCount);
+        int indexToRemove = MyRandom.nextInt(vehicleCount);
         if (vehicles.get(indexToRemove).type() == Vehicle.Type.TEST_CAR && vehicleCount > 1) {
             // only remove the test car if it is the last car remaining
             indexToRemove = (indexToRemove + 1) % vehicleCount;
@@ -565,13 +564,11 @@ public class RoadSegment implements Iterable<Vehicle> {
         if (totalVehicleCount() < 1) {
             return null;
         }
-        final long seed = 987654321L;
-        final Random random = new Random(seed);
-        int lane = random.nextInt(laneCount);
+        int lane = MyRandom.nextInt(laneCount);
         ArrayList<Vehicle> vehicles = laneVehicles[lane];
         while (vehicles.size() == 0) {
             // make sure we didn't choose an empty lane
-            lane = random.nextInt(laneCount);
+            lane = MyRandom.nextInt(laneCount);
             vehicles = laneVehicles[lane];
         }
         final int vehicleCount = vehicles.size();
