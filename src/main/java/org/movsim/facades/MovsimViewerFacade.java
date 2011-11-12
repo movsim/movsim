@@ -148,25 +148,25 @@ public class MovsimViewerFacade {
         return model.isSimulationRunFinished();
     }
 
-    /**
-     * Find road by id.
-     * 
-     * @param id
-     *            the id
-     * @return the road section
-     */
-    public RoadSection findRoadById(long id) {
-        return model.findRoadById(id);
-    }
+//    /**
+//     * Find road by id.
+//     * 
+//     * @param id
+//     *            the id
+//     * @return the road section
+//     */
+//    public RoadSection findRoadById(long id) {
+//        return model.findRoadById(id);
+//    }
 
-    /**
-     * Gets the road sections.
-     * 
-     * @return the road sections
-     */
-    public List<RoadSection> getRoadSections() {
-        return model.getRoadSections();
-    }
+//    /**
+//     * Gets the road sections.
+//     * 
+//     * @return the road sections
+//     */
+//    public List<RoadSection> getRoadSections() {
+//        return model.getRoadSections();
+//    }
 
     /**
      * Gets the timestep.

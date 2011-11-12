@@ -125,6 +125,7 @@ public class Simulator implements Runnable {
 
         isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
 
+        
         reset();
     }
 
@@ -138,12 +139,16 @@ public class Simulator implements Runnable {
         System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
         // Roadinput/RoadSection
 
+        
+        
+        
         roadSections = new LinkedList<RoadSection>();
         for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput()) {
             final RoadSection roadSection = RoadSectionFactory.create(inputData, roadinput, vehGenerator);
             roadSections.add(roadSection);
         }
 
+        
         createMap();
 
         // TODO work in progress, not yet sufficiently worked-out concept
@@ -180,6 +185,15 @@ public class Simulator implements Runnable {
         return roadSections;
     }
 
+    
+    // helper function
+    private void createMap() {
+        roadSectionsMap = new HashMap<Long, RoadSection>();
+        for (final RoadSection roadSection : roadSections) {
+            roadSectionsMap.put(roadSection.getId(), roadSection);
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -192,23 +206,16 @@ public class Simulator implements Runnable {
         return null;
     }
 
-    // helper function
-    private void createMap() {
-        roadSectionsMap = new HashMap<Long, RoadSection>();
-        for (final RoadSection roadSection : roadSections) {
-            roadSectionsMap.put(roadSection.getId(), roadSection);
-        }
-    }
 
-    // TODO just hack
-    private RoadSection findFirstOfframp() {
-        for (final RoadSection roadSection : roadSections) {
-            if (roadSection instanceof OfframpImpl) {
-                return roadSection;
-            }
-        }
-        return null;
-    }
+//    // TODO just hack
+//    private RoadSection findFirstOfframp() {
+//        for (final RoadSection roadSection : roadSections) {
+//            if (roadSection instanceof OfframpImpl) {
+//                return roadSection;
+//            }
+//        }
+//        return null;
+//    }
 
     /*
      * (non-Javadoc)
