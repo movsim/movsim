@@ -23,12 +23,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.simulator.roadsegment.RoadSegment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Iterable collection of the road segments in the road network.
  */
 public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(RoadNetwork.class);
+    
     private final ArrayList<RoadSegment> roadSegments = new ArrayList<RoadSegment>();
     private String name;
 
@@ -164,6 +169,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // being updated twice (for example when a vehicle moves of the end of a road segment
         // onto the next road segment.
         
+        logger.info("called timeStep: time={}", simulationTime);
         
         // TODO update traffic lights, speed limits etc.
 //        for (RoadSection roadSection : roadSections) {

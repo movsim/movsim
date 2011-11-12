@@ -288,12 +288,15 @@ public class Simulator implements Runnable {
                     time / 3600, timestep, projectName));
         }
 
+        
+        
+        // TODO new update of roadSegments 
+        roadNetwork.timeStep(timestep, time, iterationCount);
+        
+        
+        
         // parallel update of all roadSections
-
-        // TODO book-keeping all *all* roadSections in one Collection for iteration
-        // onramps are part of mainroad section in current implementation
-
-        final double dt = this.timestep; // TODO
+        //final double dt = this.timestep; // TODO
 
         for (RoadSection roadSection : roadSections) {
             roadSection.updateRoadConditions(iterationCount, time);
@@ -309,34 +312,17 @@ public class Simulator implements Runnable {
 
         // lane changes
         for (RoadSection roadSection : roadSections) {
-            roadSection.laneChanging(iterationCount, dt, time);
+            roadSection.laneChanging(iterationCount, timestep, time);
         }
-
-        // // merges from onramps/ to offramps (and also simpleRamp)
-        // for (RoadSection roadSection : roadSections) {
-        // // TODO: network information
-        // RoadSection connectedRoadSection = null;
-        // if(roadSection instanceof RoadSectionImpl){
-        // // mainroad gets reference to first offramp (or null)
-        // // TODO allow more than one offramp !!!
-        // connectedRoadSection = findFirstOfframp();
-        // }
-        // if(roadSection instanceof OnrampMobilImpl){
-        // connectedRoadSection = findRoadById(roadSection.getToId());
-        // }
-        //
-        // roadSection.laneChangingToOfframpsAndFromOnramps(connectedRoadSection, iterationCount, dt, time);
-        // }
-        //
 
         // vehicle accelerations
         for (RoadSection roadSection : roadSections) {
-            roadSection.accelerate(iterationCount, dt, time);
+            roadSection.accelerate(iterationCount, timestep, time);
         }
 
         // vehicle pos/speed
         for (RoadSection roadSection : roadSections) {
-            roadSection.updatePositionAndSpeed(iterationCount, dt, time);
+            roadSection.updatePositionAndSpeed(iterationCount, timestep, time);
         }
 
         for (RoadSection roadSection : roadSections) {
@@ -344,11 +330,11 @@ public class Simulator implements Runnable {
         }
 
         for (RoadSection roadSection : roadSections) {
-            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
+            roadSection.updateUpstreamBoundary(iterationCount, timestep, time);
         }
 
         for (RoadSection roadSection : roadSections) {
-            roadSection.updateDetectors(iterationCount, dt, time);
+            roadSection.updateDetectors(iterationCount, timestep, time);
         }
 
         simOutput.update(iterationCount, time, timestep);
