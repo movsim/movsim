@@ -417,6 +417,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     
     
     @Override
+    // this is a hack for getting the leader from a connected lane 
     public void updateBoundaryVehicles(){
         boundaryVehicleDownstream =  null;
         if(connectedLaneDownstream!=null ){

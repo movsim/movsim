@@ -22,6 +22,8 @@ package org.movsim.simulator;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.movsim.simulator.roadSection.RoadSection;
+
 /**
  * Iterable collection of the road segments in the road network.
  */
@@ -140,7 +142,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * Iterate over every roadSegment in the road network, calling that roadSegment's timestep.
      * </p>
      * <p>
-     * Each timestep all the vehicles' lanes, positions and velocities and are updated. Then the
+     * Each timestep all the vehicles' lanes, positions and velocities are updated in sequential (not parallel!) order. Then the
      * outflow is performed for each road segment, moving vehicles onto the next road segment (or
      * removing them entirely from the road network) when required. Then the inflow is performed for
      * each road segment, adding any new vehicles supplied by any traffic sources. Finally the
@@ -148,27 +150,71 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * </p>
      * 
      * @param dt
-     *            simulation time interval, seconds. Typically 0.25 seconds or less.
+     *            simulation time interval, seconds. 
      * @param simulationTime
      *            the current logical time in the simulation
+     * @param iterationCount
+     *            the counter of performed update steps            
      */
+    
+    
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         // Make each type of update for each road segment, this avoids problems with vehicles
         // being updated twice (for example when a vehicle moves of the end of a road segment
         // onto the next road segment.
+        
+        
+        // TODO update traffic lights, speed limits etc.
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateRoadConditions(iterationCount, simulationTime);
+//        }
+
+        
+        // This was a hack for defining a leader in the movsim lane container. Probably not needed anymore.
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateBoundaryVehicles(iterationCount, simulationTime);
+//        }
+        
+        
+        // TODO check for crashes is necessary and desired. boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
+        // see AbstractRoadSection.java
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.checkForInconsistencies(iterationCount, simulationTime, isWithCrashExit);
+//        }
+                
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.makeLaneChanges(dt, simulationTime, iterationCount);
+            // this has a corresponding method in the "old" road section class
+            //roadSection.laneChanging(iterationCount, dt, time);
         }
+        
+        // TODO explicit parallel update of accelerations, see AbstractRoadSection.java
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.accelerate(iterationCount, dt, simulationTime);
+//        }
+        
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
+            //roadSection.updatePositionAndSpeed(iterationCount, dt, time);
         }
+        
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.outFlow(dt, simulationTime, iterationCount);
+            // direct correspondence in roadSection 
+//            roadSection.updateDownstreamBoundary();
         }
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.inFlow(dt, simulationTime, iterationCount);
+            // direct correspondence in roadSection
+//            roadSection.updateUpstreamBoundary(iterationCount, dt, time);
         }
+        
+        // for output quantities ... 
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateDetectors(iterationCount, dt, time);
+//        }
+
     }
 
 
