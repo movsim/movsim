@@ -21,6 +21,7 @@ package org.movsim.simulator;
 
 import java.util.ArrayList;
 
+import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -216,7 +217,7 @@ public abstract class RoadMapping {
      * 
      * @param trafficLaneMin
      */
-    protected final void setTrafficLaneMin(int trafficLaneMin) {
+    public final void setTrafficLaneMin(int trafficLaneMin) {
         this.trafficLaneMin = trafficLaneMin;
     }
 
@@ -235,7 +236,7 @@ public abstract class RoadMapping {
      * 
      * @param trafficLaneMax
      */
-    protected final void setTrafficLaneMax(int trafficLaneMax) {
+    public final void setTrafficLaneMax(int trafficLaneMax) {
         this.trafficLaneMax = trafficLaneMax;
     }
 

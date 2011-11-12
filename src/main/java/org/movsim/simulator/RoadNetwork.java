@@ -22,7 +22,7 @@ package org.movsim.simulator;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadsegment.RoadSegment;
 
 /**
  * Iterable collection of the road segments in the road network.

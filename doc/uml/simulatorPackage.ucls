@@ -90,7 +90,7 @@
   </class>  
   <interface id="13" corner="BOTTOM_RIGHT" language="java" 
     name="org.movsim.simulator.roadSection.FlowConservingBottlenecks" project="movsim" 
-    file="/movsim/src/main/java/org/movsim/simulator/roadSection/FlowConservingBottlenecks.java" binary="false">    
+    file="/movsim/src/main/java/org/movsim/simulator/roadsegment/FlowConservingBottlenecks.java" binary="false">    
     <position height="81" width="184" x="3659" y="814"/>    
     <display autosize="true" package="true" initial-value="false" signature="false" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false"/>      

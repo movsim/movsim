@@ -22,8 +22,8 @@ package org.movsim.simulator;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.movsim.simulator.Lane;
 import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadsegment.Lane;
 
 /**
  * Test module for the RoadMapping class.

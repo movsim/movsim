@@ -17,7 +17,9 @@
  * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.movsim.simulator;
+package org.movsim.simulator.roadsegment;
+
+import org.movsim.simulator.SimulationTimeStep;
 
 /**
  * Abstract base class for all traffic sources (inflows) and sinks (outflows).

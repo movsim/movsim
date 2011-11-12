@@ -17,13 +17,15 @@
  * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.movsim.simulator;
+package org.movsim.simulator.roadsegment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 import org.movsim.input.model.RoadInput;
+import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadsegment.Lane.Type;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -581,7 +583,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Removes any vehicles that have moved past the end of this road segment.
      */
-    protected void removeVehiclesPastEnd() {
+    public void removeVehiclesPastEnd() {
         for (final ArrayList<Vehicle> vehicles : laneVehicles) {
             int vehicleCount = vehicles.size();
             // remove any vehicles that have gone past the end of this road segment
@@ -663,7 +665,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            simulation time interval
      * @param simulationTime
      */
-    protected void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
+    public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
 
         assert eachLaneIsSorted();
     }
@@ -746,7 +748,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            simulation time interval
      * @param simulationTime
      */
-    protected void outFlow(double dt, double simulationTime, long iterationCount) {
+    public void outFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
         // in each lane, remove any vehicles that have gone past the end of this road segment
         for (int lane = 0; lane < laneCount; ++lane) {
@@ -807,7 +809,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            simulation time interval
      * @param simulationTime
      */
-    protected void inFlow(double dt, double simulationTime, long iterationCount) {
+    public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
 //        if (source != null) {
 //            source.timeStep(dt, simulationTime, iterationCount);
@@ -820,7 +822,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param lane
      * @return the rear vehicle on the given lane
      */
-    protected Vehicle rearVehicleOnLane(int lane) {
+    public Vehicle rearVehicleOnLane(int lane) {
         final int count = laneVehicles[lane].size();
         if (count > 0) {
             return laneVehicles[lane].get(count - 1);
@@ -835,7 +837,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            lane in which to search
      * @return reference to the rear vehicle
      */
-    Vehicle rearVehicle(int lane, double vehiclePos) {
+    public Vehicle rearVehicle(int lane, double vehiclePos) {
 
         final ArrayList<Vehicle> vehicles = laneVehicles[lane];
         final int index = positionBinarySearch(lane, vehiclePos);
@@ -953,7 +955,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            index of subject vehicle
      * @return reference to the front vehicle
      */
-    Vehicle frontVehicle(int lane, double vehiclePos) {
+    public Vehicle frontVehicle(int lane, double vehiclePos) {
 
         final ArrayList<Vehicle> vehicles = laneVehicles[lane];
         // index = Collections.binarySearch(vehicles, subjectVehicle, vehiclePositionComparator);

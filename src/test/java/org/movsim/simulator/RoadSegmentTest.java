@@ -24,6 +24,9 @@ import static org.junit.Assert.*;
 import java.util.Iterator;
 
 import org.junit.Test;
+import org.movsim.simulator.roadsegment.Lane;
+import org.movsim.simulator.roadsegment.Link;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -65,7 +68,7 @@ public class RoadSegmentTest {
 //    }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#resetNextId()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#resetNextId()}
      */
     @Test
     public final void testResetNextId() {
@@ -82,7 +85,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#RoadSegment(double, int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#RoadSegment(double, int)}
      */
     @Test
     public final void testRoadSegmentDoubleInt() {
@@ -98,7 +101,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#RoadSegment(org.movsim.traffic.RoadMapping)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#RoadSegment(org.movsim.traffic.RoadMapping)}
      */
     @Test
     public final void testRoadSegmentRoadMapping() {
@@ -114,7 +117,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#RoadSegment(org.movsim.traffic.RoadMapping, org.movsim.traffic.TrafficSource)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#RoadSegment(org.movsim.traffic.RoadMapping, org.movsim.traffic.TrafficSource)}
      */
     @Test
     public final void testRoadSegmentRoadMappingTrafficSource() {
@@ -122,7 +125,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#addDefaultSink()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addDefaultSink()}
      */
     @Test
     public final void testSetDefaultSink() {
@@ -130,7 +133,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#id()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#id()}
      */
     @Test
     public final void testId() {
@@ -138,7 +141,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#roadMapping()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#roadMapping()}
      */
     @Test
     public final void testRoadMapping() {
@@ -146,7 +149,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#source()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#source()}
      */
     @Test
     public final void testSource() {
@@ -155,7 +158,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#setSource(org.movsim.traffic.TrafficSource)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSource(org.movsim.traffic.TrafficSource)}
      */
     @Test
     public final void testSetSource() {
@@ -163,7 +166,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#sink()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#sink()}
      */
     @Test
     public final void testSink() {
@@ -172,7 +175,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#setSink(org.movsim.traffic.TrafficFlowBase)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSink(org.movsim.traffic.TrafficFlowBase)}
      */
     @Test
     public final void testSetSink() {
@@ -180,7 +183,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#trafficLaneMin()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#trafficLaneMin()}
      */
     @Test
     public final void testTrafficLaneMin() {
@@ -188,7 +191,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#trafficLaneMax()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#trafficLaneMax()}
      */
     @Test
     public final void testTrafficLaneMax() {
@@ -197,7 +200,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#setSourceRoadSegmentForLane(org.movsim.traffic.RoadSegment, int)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSourceRoadSegmentForLane(org.movsim.simulator.roadsegment.traffic.RoadSegment, int)}
      */
     @Test
     public final void testSetSourceRoadSegmentForLane() {
@@ -205,7 +208,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#sourceRoadSegment(int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#sourceRoadSegment(int)}
      */
     @Test
     public final void testSourceRoadSegment() {
@@ -213,7 +216,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#setSourceLaneForLane(int, int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSourceLaneForLane(int, int)}
      */
     @Test
     public final void testSetSourceLaneForLane() {
@@ -221,7 +224,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#sourceLane(int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#sourceLane(int)}
      */
     @Test
     public final void testSourceLane() {
@@ -230,7 +233,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#setSinkRoadSegmentForLane(org.movsim.traffic.RoadSegment, int)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSinkRoadSegmentForLane(org.movsim.simulator.roadsegment.traffic.RoadSegment, int)}
      */
     @Test
     public final void testSetSinkRoadSegmentForLane() {
@@ -238,7 +241,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#sinkRoadSegment(int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#sinkRoadSegment(int)}
      */
     @Test
     public final void testSinkRoadSegment() {
@@ -246,7 +249,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#setSinkLaneForLane(int, int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSinkLaneForLane(int, int)}
      */
     @Test
     public final void testSetSinkLaneForLane() {
@@ -254,7 +257,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#sinkLane(int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#sinkLane(int)}
      */
     @Test
     public final void testSinkLane() {
@@ -263,7 +266,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#addInhomogeneity(org.movsim.traffic.Inhomogeneity)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addInhomogeneity(org.movsim.traffic.Inhomogeneity)}
      */
     @Test
     public final void testAddInhomogeneity() {
@@ -271,7 +274,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#inhomogeneities()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#inhomogeneities()}
      */
     @Test
     public final void testInhomogeneities() {
@@ -280,7 +283,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#setGradientProfile(org.movsim.traffic.GradientProfile)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setGradientProfile(org.movsim.traffic.GradientProfile)}
      */
     @Test
     public final void testSetGradientProfile() {
@@ -288,7 +291,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#roadLength()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#roadLength()}
      */
     @Test
     public final void testRoadLength() {
@@ -300,7 +303,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#laneCount()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#laneCount()}
      */
     @Test
     public final void testLaneCount() {
@@ -316,7 +319,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#testCar()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#testCar()}
      */
     @Test
     public final void testTestCar() {
@@ -324,7 +327,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#clearVehicles()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#clearVehicles()}
      */
     @Test
     public final void testClearVehicles() {
@@ -348,7 +351,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#totalVehicleCount()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#totalVehicleCount()}
      */
     @Test
     public final void testVehicleCount() {
@@ -366,7 +369,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#getVehicle(int, int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#getVehicle(int, int)}
      */
     @Test
     public final void testGetVehicle() {
@@ -375,7 +378,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#addObstacle(org.movsim.traffic.Obstacle)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addObstacle(org.movsim.traffic.Obstacle)}
      */
     @Test
     public final void testAddObstacle() {
@@ -384,7 +387,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#addVehicle(org.movsim.traffic.Vehicle)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addVehicle(org.movsim.traffic.Vehicle)}
      */
     @Test
     public final void testAddVehicleVehicle() {
@@ -635,7 +638,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#frontVehicleOnLane(int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#frontVehicleOnLane(int)}
      * Vehicles are sorted in order of decreasing position:
      * start end
      * V(n+1).pos < V(n).pos < V(n-1).pos ... < V(1).pos < V(0).pos
@@ -831,7 +834,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#makeLaneChanges(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#makeLaneChanges(double, double, long)}
      */
     @Test
     public final void testMakeLaneChanges() {
@@ -862,7 +865,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
      */
     @Test
     public final void testUpdateVehiclePositionsAndVelocities() {
@@ -889,7 +892,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
      */
     @Test
     public final void testUpdateVehiclePositionsAndVelocitiesJoin() {
@@ -935,7 +938,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
@@ -978,7 +981,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
@@ -1058,7 +1061,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
@@ -1120,7 +1123,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#inFlow(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#inFlow(double, double, long)}
      */
     @Test
     public final void testInFlow() {
@@ -1128,7 +1131,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#outFlow(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#outFlow(double, double, long)}
      */
     @Test
     public final void testOutFlow() {
@@ -1196,7 +1199,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#eachLaneIsSorted()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#eachLaneIsSorted()}
      */
     @Test
     public final void testEachLaneIsSorted() {
@@ -1204,7 +1207,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#addTimeBasedDetector(double)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addTimeBasedDetector(double)}
      */
     @Test
     public final void testAddTimeBasedDetector() {
@@ -1212,7 +1215,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#addSpaceBasedDetector(double)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addSpaceBasedDetector(double)}
      */
     @Test
     public final void testAddSpaceBasedDetector() {
@@ -1220,7 +1223,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#timeBasedDetector(int, int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#timeBasedDetector(int, int)}
      */
     @Test
     public final void testTimeBasedDetector() {
@@ -1228,7 +1231,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#spaceBasedDetector(int, int)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#spaceBasedDetector(int, int)}
      */
     @Test
     public final void testSpaceBasedDetector() {
@@ -1236,7 +1239,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#clearTimeBasedDetectors()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#clearTimeBasedDetectors()}
      */
     @Test
     public final void testClearTimeBasedDetectors() {
@@ -1244,7 +1247,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#clearSpaceBasedDetectors()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#clearSpaceBasedDetectors()}
      */
     @Test
     public final void testClearSpaceBasedDetectors() {
@@ -1252,7 +1255,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#timeBasedDetectorCount()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#timeBasedDetectorCount()}
      */
     @Test
     public final void testTimeBasedDetectorCount() {
@@ -1260,7 +1263,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#spaceBasedDetectorCount()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#spaceBasedDetectorCount()}
      */
     @Test
     public final void testSpaceBasedDetectorCount() {
@@ -1269,7 +1272,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.RoadSegment#updatePositionsCacheForSpaceDetectors()}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updatePositionsCacheForSpaceDetectors()}
      */
     @Test
     public final void testUpdatePositionsCacheForSpaceDetectors() {
@@ -1277,7 +1280,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#updateDetectors(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateDetectors(double, double, long)}
      */
     @Test
     public final void testUpdateDetectors() {
@@ -1285,7 +1288,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.traffic.RoadSegment#iterator()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#iterator()}
      */
     @SuppressWarnings("boxing")
     @Test

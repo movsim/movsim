@@ -19,13 +19,13 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.Lane;
-import org.movsim.simulator.Link;
 //import org.movsim.traffic.Obstacle;
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.RoadNetwork;
-import org.movsim.simulator.RoadSegment;
-import org.movsim.simulator.TrafficSource;
+import org.movsim.simulator.roadsegment.Lane;
+import org.movsim.simulator.roadsegment.Link;
+import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadsegment.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**

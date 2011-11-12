@@ -22,10 +22,10 @@ package org.movsim.simulator;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.movsim.simulator.Lane;
-import org.movsim.simulator.Link;
 import org.movsim.simulator.RoadMapping;
-import org.movsim.simulator.RoadSegment;
+import org.movsim.simulator.roadsegment.Lane;
+import org.movsim.simulator.roadsegment.Link;
+import org.movsim.simulator.roadsegment.RoadSegment;
 
 /**
  * Test module for the Link class.
@@ -50,7 +50,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.Link#addLanePair(int, org.movsim.traffic.RoadSegment, int, org.movsim.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadsegment.traffic.Link#addLanePair(int, org.movsim.simulator.roadsegment.traffic.RoadSegment, int, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
      */
     @Test
     public final void testAddLanePair() {
@@ -70,7 +70,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.Link#addJoin(org.movsim.traffic.RoadSegment, org.movsim.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadsegment.traffic.Link#addJoin(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
      */
     @Test
     public final void testAddJoin() {
@@ -92,7 +92,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.Link#addOffsetJoin(int, org.movsim.traffic.RoadSegment, org.movsim.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadsegment.traffic.Link#addOffsetJoin(int, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
      */
     @Test
     public final void testAddOffsetJoin() {
@@ -127,7 +127,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.Link#addMerge(org.movsim.traffic.RoadSegment, org.movsim.traffic.RoadSegment, org.movsim.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadsegment.traffic.Link#addMerge(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
      */
     @Test
     public final void testAddMerge() {
@@ -136,7 +136,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.traffic.Link#addFork(org.movsim.traffic.RoadSegment, org.movsim.traffic.RoadSegment, org.movsim.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadsegment.traffic.Link#addFork(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
      */
     @Test
     public final void testAddFork() {

@@ -17,7 +17,8 @@
  * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.movsim.simulator;
+package org.movsim.simulator.roadsegment;
+
 
 /**
  * Default sink: just removes vehicles that have reached the end of a road segment.

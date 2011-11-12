@@ -23,10 +23,10 @@ import java.util.Iterator;
 
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.RoadNetwork;
-import org.movsim.simulator.RoadSegment;
-import org.movsim.simulator.TrafficFlowBase;
-import org.movsim.simulator.TrafficSource;
 import org.movsim.simulator.RoadMapping.PosTheta;
+import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadsegment.TrafficFlowBase;
+import org.movsim.simulator.roadsegment.TrafficSource;
 
 /**
  * Externalizes the road network to a text format. Mainly a debug utility.
