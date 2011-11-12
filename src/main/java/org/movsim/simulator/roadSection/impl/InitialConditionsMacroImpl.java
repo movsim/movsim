@@ -29,7 +29,7 @@ package org.movsim.simulator.roadSection.impl;
 import java.util.List;
 
 import org.movsim.input.model.simulation.ICMacroData;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.utilities.impl.Tables;
 
@@ -69,11 +69,11 @@ public class InitialConditionsMacroImpl implements InitialConditionsMacro {
 
         for (int i = 0; i < size; i++) {
             final double rhoLocal = icData.get(i).getRho();
-            if (rhoLocal > Constants.SMALL_VALUE) {
+            if (rhoLocal > MovsimConstants.SMALL_VALUE) {
                 pos[i] = icData.get(i).getX();
                 rho[i] = rhoLocal;
                 final double speedLocal = icData.get(i).getSpeed();
-                speed[i] = (speedLocal <= Constants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
+                speed[i] = (speedLocal <= MovsimConstants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
             }
         }
     }

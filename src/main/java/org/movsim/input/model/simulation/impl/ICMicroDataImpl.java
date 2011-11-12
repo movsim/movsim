@@ -43,7 +43,7 @@ public class ICMicroDataImpl implements ICMicroData {
     private final double initSpeed;
 
     /** The init lane. */
-    private final int initLane; // most right lane: Constants.MOST_RIGHT_LANE
+    private final int initLane; // most right lane: MovsimConstants.MOST_RIGHT_LANE
 
     /** The type label. */
     private final String typeLabel; // empty string if no type

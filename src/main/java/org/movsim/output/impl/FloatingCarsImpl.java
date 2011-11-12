@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.output.FloatingCars;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.MoveableContainer;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.ObservableImpl;
@@ -111,6 +111,6 @@ public class FloatingCarsImpl extends ObservableImpl implements FloatingCars {
      */
     @Deprecated
     public MoveableContainer getMoveableContainer(){
-        return vehContainers.get(Constants.MOST_RIGHT_LANE);
+        return vehContainers.get(MovsimConstants.MOST_RIGHT_LANE);
     }
 }

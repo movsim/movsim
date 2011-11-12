@@ -29,7 +29,7 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.utilities.impl.FileUtils;
 
@@ -101,19 +101,19 @@ public class FileTrafficLightRecorder {
      */
     private void writeHeader(List<TrafficLight> trafficLights) {
         // write header:
-        fstr.printf(Constants.COMMENT_CHAR + " number codes for traffic lights status: %n");
-        fstr.printf(Constants.COMMENT_CHAR + " green         %d %n", TrafficLight.GREEN_LIGHT);
-        fstr.printf(Constants.COMMENT_CHAR + " green --> red %d %n", TrafficLight.GREEN_RED_LIGHT);
-        fstr.printf(Constants.COMMENT_CHAR + " red           %d %n", TrafficLight.RED_LIGHT);
-        fstr.printf(Constants.COMMENT_CHAR + " red --> green %d %n", TrafficLight.RED_GREEN_LIGHT);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " number codes for traffic lights status: %n");
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " green         %d %n", TrafficLight.GREEN_LIGHT);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " green --> red %d %n", TrafficLight.GREEN_RED_LIGHT);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " red           %d %n", TrafficLight.RED_LIGHT);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " red --> green %d %n", TrafficLight.RED_GREEN_LIGHT);
 
         int counter = 1;
         for (final TrafficLight trafficLight : trafficLights) {
-            fstr.printf(Constants.COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", counter,
+            fstr.printf(MovsimConstants.COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", counter,
                     trafficLight.position());
             counter++;
         }
-        fstr.printf(Constants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1",
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1",
                 "status[1]_TL1", " etc. ");
         fstr.flush();
     }

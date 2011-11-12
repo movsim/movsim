@@ -46,7 +46,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
@@ -189,18 +189,18 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
     private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
         boolean obstacleEntryIsContained = false;
         for (TrafficCompositionInputData het : heterogenInputData) {
-            if (het.getKeyName().equals(Constants.OBSTACLE_KEY_NAME)) {
+            if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
                 obstacleEntryIsContained = true;
             }
         }
         
         if (obstacleEntryIsContained) {
-            logger.info("vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite", Constants.OBSTACLE_KEY_NAME);
+            logger.info("vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite", MovsimConstants.OBSTACLE_KEY_NAME);
         }
         else{
-            logger.info("vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity", Constants.OBSTACLE_KEY_NAME);
+            logger.info("vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity", MovsimConstants.OBSTACLE_KEY_NAME);
             final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
-            mapEntryObstacle.put("label", Constants.OBSTACLE_KEY_NAME);
+            mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
             mapEntryObstacle.put("fraction", "0");
             mapEntryObstacle.put("relative_v0_randomization", "0");
             heterogenInputData.add(new TrafficCompositionDataImpl(mapEntryObstacle));

@@ -27,7 +27,7 @@
 package org.movsim.simulator.vehicles;
 
 import org.movsim.input.model.VehicleInput;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
@@ -116,7 +116,7 @@ public class VehiclePrototype {
      * @return true, if successful
      */
     public boolean hasReactionTime() {
-        return (reactionTime + Constants.SMALL_VALUE > 0);
+        return (reactionTime + MovsimConstants.SMALL_VALUE > 0);
     }
 
     /**

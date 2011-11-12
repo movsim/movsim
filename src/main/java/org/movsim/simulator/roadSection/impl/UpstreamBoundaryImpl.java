@@ -30,7 +30,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.movsim.input.model.simulation.TrafficSourceData;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -50,7 +50,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
     // TODO the same output format is used in SimpleOnrampImpl. Consolidate. 
 
     private static final String extensionFormat = ".id%d_source_log.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
+    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
 
@@ -263,7 +263,7 @@ public class UpstreamBoundaryImpl implements UpstreamBoundary {
         final double bEff = Math.max(0.1, bMax + aLast);
         final double vMaxKin = vLast + Math.sqrt(2 * sFree * bEff);
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
-        // final int laneEnter = Constants.MOST_RIGHT_LANE;
+        // final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
 
         addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
         // logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",

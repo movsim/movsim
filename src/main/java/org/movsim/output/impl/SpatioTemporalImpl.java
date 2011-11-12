@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.output.SpatioTemporal;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -110,7 +110,7 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
         if ((time - timeOffset) >= dtOut) {
             timeOffset = time;
             // TODO quick hack for multi-lane compatibility
-            calcData(time, roadSection.getVehContainer(Constants.MOST_RIGHT_LANE));
+            calcData(time, roadSection.getVehContainer(MovsimConstants.MOST_RIGHT_LANE));
             notifyObservers(time);
         }
     }

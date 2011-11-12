@@ -40,7 +40,7 @@ import org.xml.sax.helpers.DefaultHandler;
 // Sets the obstacle at end of lane.
 //
 //private void setObstacleAtEndOfLane() {
-//   final Vehicle obstacle = vehGenerator.createVehicle(Constants.OBSTACLE_KEY_NAME);
+//   final Vehicle obstacle = vehGenerator.createVehicle(MovsimConstants.OBSTACLE_KEY_NAME);
 //   final double posInit = roadLength;
 //   final double speedInit = 0;
 //   vehContainers.get(0).add(obstacle, posInit, speedInit);

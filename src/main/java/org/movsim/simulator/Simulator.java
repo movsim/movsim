@@ -185,8 +185,8 @@ public class Simulator implements Runnable {
         final long idOnramp = 1;
         if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
             final RoadSection onramp = findRoadById(idOnramp);
-            findRoadById(idOfframp).getVehContainer(Constants.MOST_RIGHT_LANE).setDownstreamConnection(
-                    onramp.getVehContainer(Constants.MOST_RIGHT_LANE));
+            findRoadById(idOfframp).getVehContainer(MovsimConstants.MOST_RIGHT_LANE).setDownstreamConnection(
+                    onramp.getVehContainer(MovsimConstants.MOST_RIGHT_LANE));
             logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
         }
         // ---------------------------------------------

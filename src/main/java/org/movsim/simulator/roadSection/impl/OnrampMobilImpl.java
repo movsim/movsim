@@ -33,7 +33,7 @@ import java.util.List;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.output.LoopDetector;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -56,7 +56,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
      */
 
     // private static final String extensionFormat = ".S%d_log.csv";
-    // private static final String outputHeading = Constants.COMMENT_CHAR
+    // private static final String outputHeading = MovsimConstants.COMMENT_CHAR
     //        + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
     // private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
@@ -144,7 +144,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
-        vehContainers.add(new VehicleContainerImpl(id, Constants.MOST_RIGHT_LANE));
+        vehContainers.add(new VehicleContainerImpl(id, MovsimConstants.MOST_RIGHT_LANE));
         setObstacleAtEndOfLane();
 
         // TODO only dummy here for RoadSection interface
@@ -196,8 +196,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // loop over on-ramp veh (i=0 is obstacle !!! )
         // ignore Obstacle as first vehicle !!!
         for (Vehicle veh : vehContainer.getVehicles()) {
-            if (!veh.getLabel().equals(Constants.OBSTACLE_KEY_NAME) 
-                    && tryToMergeToMainroad(veh, mainroad.getVehContainer(Constants.MOST_RIGHT_LANE))) {
+            if (!veh.getLabel().equals(MovsimConstants.OBSTACLE_KEY_NAME) 
+                    && tryToMergeToMainroad(veh, mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE))) {
                 stagedVehicles.add(veh);
             }
         }
@@ -205,7 +205,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // assign staged vehicles to new lanes
         for (final Vehicle veh : stagedVehicles) {
             vehContainer.removeVehicle(veh);
-            mainroad.getVehContainer(Constants.MOST_RIGHT_LANE).addFromToRamp(veh, veh.getPosition(), veh.getSpeed(), Constants.TO_RIGHT);
+            mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE).addFromToRamp(veh, veh.getPosition(), veh.getSpeed(), MovsimConstants.TO_RIGHT);
         }
         
     }
@@ -241,7 +241,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
      * Sets the obstacle at end of lane.
      */
     private void setObstacleAtEndOfLane() {
-        final Vehicle obstacle = vehGenerator.createVehicle(Constants.OBSTACLE_KEY_NAME);
+        final Vehicle obstacle = vehGenerator.createVehicle(MovsimConstants.OBSTACLE_KEY_NAME);
         final double posInit = roadLength;
         final double speedInit = 0;
         vehContainers.get(0).add(obstacle, posInit, speedInit);

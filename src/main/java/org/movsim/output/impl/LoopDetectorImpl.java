@@ -29,7 +29,7 @@ package org.movsim.output.impl;
 import java.util.List;
 
 import org.movsim.output.LoopDetector;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.ObservableImpl;
@@ -149,7 +149,7 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
             }
         }
 
-        if ((time - timeOffset + Constants.SMALL_VALUE) >= dtSample) {
+        if ((time - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
             calculateAverages();
             notifyObservers(time);
             timeOffset = time;

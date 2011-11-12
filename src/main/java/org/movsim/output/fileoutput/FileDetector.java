@@ -6,7 +6,7 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 
 import org.movsim.output.LoopDetector;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.ObserverInTime;
 import org.movsim.utilities.impl.FileUtils;
 
@@ -17,7 +17,7 @@ import org.movsim.utilities.impl.FileUtils;
 public class FileDetector implements ObserverInTime {
 
     private static final String extensionFormat = ".id%dx%d_det.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
+    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "   t[s],  v[km/h], rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)";
 
     // note: number before decimal point is total width of field, not width of
@@ -60,9 +60,9 @@ public class FileDetector implements ObserverInTime {
      */
     private PrintWriter initFile(String filename) {
         printWriter = FileUtils.getWriter(filename);
-        printWriter.printf(Constants.COMMENT_CHAR + " dtSample in s = %-8.4f%n", detector.getDtSample());
-        printWriter.printf(Constants.COMMENT_CHAR + " position xDet = %-8.4f%n", detector.getDetPosition());
-        printWriter.printf(Constants.COMMENT_CHAR + " arithmetic average for density rho%n");
+        printWriter.printf(MovsimConstants.COMMENT_CHAR + " dtSample in s = %-8.4f%n", detector.getDtSample());
+        printWriter.printf(MovsimConstants.COMMENT_CHAR + " position xDet = %-8.4f%n", detector.getDetPosition());
+        printWriter.printf(MovsimConstants.COMMENT_CHAR + " arithmetic average for density rho%n");
         printWriter.printf(outputHeading + "%n");
         printWriter.flush();
         return printWriter;

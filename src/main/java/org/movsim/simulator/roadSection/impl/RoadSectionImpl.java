@@ -41,7 +41,7 @@ import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.impl.LoopDetectors;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -128,7 +128,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         int rampIndex = 1;
         for (final SimpleRampData rmpSimpl : simpleOnrampData) {
             // merging from onramp only to most-right lane (shoulder lane)
-            simpleOnramps.add(new SimpleOnrampImpl(id, rmpSimpl, vehGenerator, vehContainers.get(Constants.MOST_RIGHT_LANE), projectName,
+            simpleOnramps.add(new SimpleOnrampImpl(id, rmpSimpl, vehGenerator, vehContainers.get(MovsimConstants.MOST_RIGHT_LANE), projectName,
                     rampIndex));
             rampIndex++;
         }
@@ -164,9 +164,9 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal); // equil
                                                                             // speed
                 }
-                final int laneEnter = Constants.MOST_RIGHT_LANE;
+                final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
+                vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
 
                 xLocal -= 1 / rhoLocal;
@@ -184,7 +184,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 final Vehicle veh = (vehTypeFromFile.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
                         .createVehicle(vehTypeFromFile);
                 // TODO: consider multi-lane case, distribute over all lanes
-                vehContainers.get(Constants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
+                vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
                 logger.info("set vehicle with label = {}", veh.getLabel());
             }
         }
@@ -223,7 +223,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
             assert offramp instanceof OfframpImpl;
 
             stagedVehicles.clear();
-            final VehicleContainer vehContainerRightLane = vehContainers.get(Constants.MOST_RIGHT_LANE);
+            final VehicleContainer vehContainerRightLane = vehContainers.get(MovsimConstants.MOST_RIGHT_LANE);
             // most left lane
             final VehicleContainer rmpContainer = offramp.getVehContainer(offramp.getNumberOfLanes() - 1);
 
@@ -238,7 +238,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                 // off-ramp
                 // allow merging only in first half !!!
                 final double mergingZone = 0.7;
-                if (veh.getLane() == Constants.MOST_RIGHT_LANE && !veh.inProcessOfLaneChanging() &&
+                if (veh.getLane() == MovsimConstants.MOST_RIGHT_LANE && !veh.inProcessOfLaneChanging() &&
                         pos > offramp.getRampPositionToMainroad() &&
                         pos < offramp.getRampPositionToMainroad() + mergingZone * offramp.getRampMergingLength()) {
                     // logger.debug("in merging to offramp: veh pos={}",
@@ -270,8 +270,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
             for (final Vehicle veh : stagedVehicles) {
                 final double xInit = veh.getPosition() - offramp.getRampPositionToMainroad();
                 final double vInit = veh.getSpeed();
-                vehContainers.get(Constants.MOST_RIGHT_LANE).removeVehicle(veh);
-                rmpContainer.addFromToRamp(veh, xInit, vInit, Constants.TO_LEFT);
+                vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).removeVehicle(veh);
+                rmpContainer.addFromToRamp(veh, xInit, vInit, MovsimConstants.TO_LEFT);
                 // System.exit(-1);
                 // rmpContainer.add(veh, xInit, vInit);
             }

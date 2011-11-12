@@ -30,7 +30,7 @@
 //
 //import org.movsim.consumption.FuelConsumption;
 //import org.movsim.input.model.VehicleInput;
-//import org.movsim.simulator.Constants;
+//import org.movsim.simulator.MovsimConstants;
 //import org.movsim.simulator.impl.RoadNetworkDeprecated;
 //import org.movsim.simulator.roadSection.TrafficLight;
 //import org.movsim.simulator.vehicles.Moveable;
@@ -195,7 +195,7 @@
 //        acc = 0;
 //        isBrakeLightOn = false;
 //
-//        speedlimit = Constants.MAX_VEHICLE_SPEED;
+//        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
 //    }
 //    
 //
@@ -241,7 +241,7 @@
 //
 //    @Override
 //    public double getWidth() {
-//        return Constants.VEHICLE_WIDTH;
+//        return MovsimConstants.VEHICLE_WIDTH;
 //    }
 //
 //    /*
@@ -434,7 +434,7 @@
 //            if(isRingroad){
 //                return (roadLength - length); 
 //            }
-//            return Constants.GAP_INFINITY;
+//            return MovsimConstants.GAP_INFINITY;
 //        }
 //        
 //        // TODO general concept for treating offsets needed here
@@ -480,7 +480,7 @@
 //            noise.update(dt);
 //            accError = noise.getAccError();
 //            final Moveable vehFront = vehContainer.getLeader(this);
-//            if (getNetDistance(vehFront) < Constants.CRITICAL_GAP) {
+//            if (getNetDistance(vehFront) < MovsimConstants.CRITICAL_GAP) {
 //                accError = Math.min(accError, 0.); // !!!
 //            }
 //            // logger.debug("accError = {}", accError);
@@ -593,7 +593,7 @@
 //     */
 //    @Override
 //    public boolean hasReactionTime() {
-//        return (reactionTime + Constants.SMALL_VALUE > 0);
+//        return (reactionTime + MovsimConstants.SMALL_VALUE > 0);
 //    }
 //
 //    /*
@@ -666,7 +666,7 @@
 //
 //        // initiates a lane change: set targetLane to new value
 //        // the lane will be assigned by the vehicle container !!
-//        if (laneChangingDirection != Constants.NO_CHANGE) {
+//        if (laneChangingDirection != MovsimConstants.NO_CHANGE) {
 //            setTargetLane(lane + laneChangingDirection);
 //            resetDelay();
 //            updateLaneChangingDelay(dt);
@@ -679,13 +679,13 @@
 //
 //    @Override
 //    public void initLaneChangeFromRamp(int oldLane) {
-//        laneOld = oldLane; // Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT; //
+//        laneOld = oldLane; // MovsimConstants.MOST_RIGHT_LANE + MovsimConstants.TO_RIGHT; //
 //                           // virtual lane index from onramp
 //        resetDelay();
 //        final double delayInit = 0.2; // needs only to be > 0;
 //        updateLaneChangingDelay(delayInit);
 //        logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
-//        if (oldLane == Constants.TO_LEFT) {
+//        if (oldLane == MovsimConstants.TO_LEFT) {
 ////            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane,
 ////                    getContinousLane());
 //            logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane,

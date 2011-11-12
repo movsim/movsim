@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.movsim.output.FloatingCars;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.ObserverInTime;
@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public class FileFloatingCars implements ObserverInTime {
 
     private static final String extensionFormat = ".V%06d.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
+    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     aModel,     gap[m],    dv[m/s],  distToTrafficlight[m],  fuelFlow[ml/s]";
 
     // note: number before decimal point is total width of field, not width of

@@ -29,7 +29,7 @@ package org.movsim.simulator.vehicles.lanechanging;
 import java.util.List;
 
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
@@ -53,7 +53,7 @@ public class LaneChangingModel {
     /** critical speed for kicking in European rules (in m/s) */
     private final double vCritEur;
 
-    private int mandatoryChange = Constants.NO_CHANGE;
+    private int mandatoryChange = MovsimConstants.NO_CHANGE;
 
     private Vehicle me;
 
@@ -118,7 +118,7 @@ public class LaneChangingModel {
         
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);
-        final double gapBack = (backVeh == null) ? Constants.GAP_INFINITY : backVeh.getNetDistance(me);
+        final double gapBack = (backVeh == null) ? MovsimConstants.GAP_INFINITY : backVeh.getNetDistance(me);
 
         // check distances
         // negative net distances possible because of different veh lengths!
@@ -159,14 +159,14 @@ public class LaneChangingModel {
 
         // consider lane-changing to right-hand side lane (decreasing lane
         // index)
-        if (currentLane - 1 >= Constants.MOST_RIGHT_LANE) {
-            accToRight = lcModelMOBIL.calcAccelerationBalance(Constants.TO_RIGHT, vehContainers);
+        if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
+            accToRight = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_RIGHT, vehContainers);
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane
         // index)
         if (currentLane + 1 < vehContainers.size()) {
-            accToLeft = lcModelMOBIL.calcAccelerationBalance(Constants.TO_LEFT, vehContainers);
+            accToLeft = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_LEFT, vehContainers);
         }
 
         // decision
@@ -174,17 +174,17 @@ public class LaneChangingModel {
             logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
             logger.debug("currentLane={}", currentLane);
             if (accToRight > accToLeft) {
-                return Constants.TO_RIGHT;
+                return MovsimConstants.TO_RIGHT;
             } else {
-                return Constants.TO_LEFT;
+                return MovsimConstants.TO_LEFT;
             }
         }
 
-        return Constants.NO_CHANGE;
+        return MovsimConstants.NO_CHANGE;
     }
 
     public void setMandatoryChange(int incentive) {
-        if (incentive == Constants.NO_CHANGE || incentive == Constants.TO_RIGHT || incentive == Constants.TO_LEFT) {
+        if (incentive == MovsimConstants.NO_CHANGE || incentive == MovsimConstants.TO_RIGHT || incentive == MovsimConstants.TO_LEFT) {
             mandatoryChange = incentive;
             System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
         } else {

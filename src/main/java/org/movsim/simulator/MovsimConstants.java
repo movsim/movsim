@@ -28,9 +28,9 @@ package org.movsim.simulator;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface Constants.
+ * The Interface MovsimConstants.
  */
-public interface Constants {
+public interface MovsimConstants {
 
     // TODO: connection with maven version number
     final String RELEASE_VERSION = "1.1";

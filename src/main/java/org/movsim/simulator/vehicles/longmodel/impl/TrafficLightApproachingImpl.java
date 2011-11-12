@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.impl;
 
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
@@ -56,7 +56,7 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
      */
     public TrafficLightApproachingImpl() {
         considerTrafficLight = false;
-        distanceToTrafficlight = Constants.INVALID_GAP;
+        distanceToTrafficlight = MovsimConstants.INVALID_GAP;
     }
 
     /*
@@ -77,9 +77,9 @@ public class TrafficLightApproachingImpl implements TrafficLightApproaching {
         distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.getLength();
 
         if (distanceToTrafficlight <= 0) {
-            distanceToTrafficlight = Constants.INVALID_GAP; // not relevant
+            distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
         } else if (!trafficLight.isGreen()) {
-            final double maxRangeOfSight = Constants.GAP_INFINITY; // TODO
+            final double maxRangeOfSight = MovsimConstants.GAP_INFINITY; // TODO
                                                                    // define it
                                                                    // as
                                                                    // parameter

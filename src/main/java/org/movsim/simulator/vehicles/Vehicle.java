@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.model.VehicleInput;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
@@ -213,7 +213,7 @@ public class Vehicle {
         this.fuelModel = fuelModel;  
 
         length = vehInput.getLength();
-        width = Constants.VEHICLE_WIDTH;
+        width = MovsimConstants.VEHICLE_WIDTH;
         reactionTime = vehInput.getReactionTime();
         maxDecel = vehInput.getMaxDeceleration();
 
@@ -296,7 +296,7 @@ public class Vehicle {
         acc = 0;
         isBrakeLightOn = false;
 
-        speedlimit = Constants.MAX_VEHICLE_SPEED;
+        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
     }
     
 
@@ -583,7 +583,7 @@ public class Vehicle {
             if(isRingroad){
                 return (roadLength - length); 
             }
-            return Constants.GAP_INFINITY;
+            return MovsimConstants.GAP_INFINITY;
         }
         
         // TODO general concept for treating offsets needed here
@@ -629,7 +629,7 @@ public class Vehicle {
             noise.update(dt);
             accError = noise.getAccError();
             final Vehicle vehFront = vehContainer.getLeader(this);
-            if (getNetDistance(vehFront) < Constants.CRITICAL_GAP) {
+            if (getNetDistance(vehFront) < MovsimConstants.CRITICAL_GAP) {
                 accError = Math.min(accError, 0.); // !!!
             }
             // logger.debug("accError = {}", accError);
@@ -742,7 +742,7 @@ public class Vehicle {
      */
     
     public boolean hasReactionTime() {
-        return (reactionTime + Constants.SMALL_VALUE > 0);
+        return (reactionTime + MovsimConstants.SMALL_VALUE > 0);
     }
 
     /*
@@ -815,7 +815,7 @@ public class Vehicle {
 
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
-        if (laneChangingDirection != Constants.NO_CHANGE) {
+        if (laneChangingDirection != MovsimConstants.NO_CHANGE) {
             setTargetLane(lane + laneChangingDirection);
             resetDelay();
             updateLaneChangingDelay(dt);
@@ -828,13 +828,13 @@ public class Vehicle {
 
     
     public void initLaneChangeFromRamp(int oldLane) {
-        laneOld = oldLane; // Constants.MOST_RIGHT_LANE + Constants.TO_RIGHT; //
+        laneOld = oldLane; // MovsimConstants.MOST_RIGHT_LANE + MovsimConstants.TO_RIGHT; //
                            // virtual lane index from onramp
         resetDelay();
         final double delayInit = 0.2; // needs only to be > 0;
         updateLaneChangingDelay(delayInit);
         logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
-        if (oldLane == Constants.TO_LEFT) {
+        if (oldLane == MovsimConstants.TO_LEFT) {
 //            System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane,
 //                    getContinousLane());
             logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane,

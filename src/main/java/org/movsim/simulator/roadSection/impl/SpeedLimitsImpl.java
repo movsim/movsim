@@ -30,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.utilities.impl.Tables;
@@ -75,7 +75,7 @@ public class SpeedLimitsImpl implements SpeedLimits {
         speedValues = new double[size];
         // add constant maximum speed at origin x=0 for correct extrapolation
         posValues[0] = 0;
-        speedValues[0] = Constants.MAX_VEHICLE_SPEED;
+        speedValues[0] = MovsimConstants.MAX_VEHICLE_SPEED;
         for (int i = 1; i < size; i++) {
             final double pos = data.get(i - 1).getPosition();
             posValues[i] = pos;
@@ -102,7 +102,7 @@ public class SpeedLimitsImpl implements SpeedLimits {
      */
     @Override
     public double calcSpeedLimit(double x) {
-        return (speedValues.length == 0) ? Constants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(posValues,
+        return (speedValues.length == 0) ? MovsimConstants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(posValues,
                 speedValues, x);
     }
 

@@ -27,7 +27,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
@@ -192,7 +192,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
             final double diffT = 0. * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
             final double Tmin = lenInteractionLoc + diffT; // minimum time headway
             final double Tmax = betaLoc + diffT; // maximum time headway
-            final double Tdyn = (s - s0) / Math.max(v, Constants.SMALL_VALUE);
+            final double Tdyn = (s - s0) / Math.max(v, MovsimConstants.SMALL_VALUE);
             vOpt = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v + 0., v0Local)
                     : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0Local) : 0;
         } else {
@@ -206,7 +206,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
             // original VDIFF model, OVM: lambda == 0
             aWanted = (vOpt - v) / tau - lambda * dv;
         } else if (choiceOptFuncVariant == 2) {
-            aWanted = (vOpt - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, Constants.SMALL_VALUE);
+            aWanted = (vOpt - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, MovsimConstants.SMALL_VALUE);
         } else if (choiceOptFuncVariant == 3) {
             aWanted = (vOpt - v) / tau - lambda * ((dv > 0) ? dv : 0);
         }

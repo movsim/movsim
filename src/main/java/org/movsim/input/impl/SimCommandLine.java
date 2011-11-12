@@ -40,7 +40,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.impl.FileUtils;
 
 // TODO: Auto-generated Javadoc
@@ -156,7 +156,7 @@ public class SimCommandLine {
      * Option: prints the version number of this Movsim release.
      */
     private void optPrintVersion() {
-        System.out.println("movsim release version: " + Constants.RELEASE_VERSION);
+        System.out.println("movsim release version: " + MovsimConstants.RELEASE_VERSION);
 
         System.exit(0);
     }

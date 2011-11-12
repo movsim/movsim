@@ -32,7 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public class FileTrajectories {
 
     private static final String extensionFormat = ".id%d_traj.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
+    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
 
@@ -175,7 +175,7 @@ public class FileTrajectories {
                 logger.info("time = {}, timestep= {}", time);
             }
 
-            if ((time - lastUpdateTime + Constants.SMALL_VALUE) >= dtOut) {
+            if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= dtOut) {
 
                 lastUpdateTime = time;
 

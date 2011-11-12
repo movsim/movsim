@@ -31,7 +31,7 @@ import java.util.List;
 
 import org.movsim.input.model.RoadInput;
 import org.movsim.output.LoopDetector;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
@@ -73,7 +73,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
 
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
-        vehContainers.add(new VehicleContainerImpl(id, Constants.MOST_RIGHT_LANE));
+        vehContainers.add(new VehicleContainerImpl(id, MovsimConstants.MOST_RIGHT_LANE));
         
         speedlimits = new SpeedLimitsImpl(roadData.getSpeedLimitInputData());
         

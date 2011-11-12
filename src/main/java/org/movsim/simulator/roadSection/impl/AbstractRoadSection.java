@@ -32,7 +32,7 @@ import java.util.List;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.SpeedLimits;
@@ -264,7 +264,7 @@ public abstract class AbstractRoadSection {
     public void accelerate(long iterationCount, double dt, double time) {
         
         for (VehicleContainer vehContainerLane : vehContainers) {
-            final int leftLaneIndex = vehContainerLane.getLaneIndex()+Constants.TO_LEFT;
+            final int leftLaneIndex = vehContainerLane.getLaneIndex()+MovsimConstants.TO_LEFT;
             final VehicleContainer vehContainerLeftLane = ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
             final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
             //for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {

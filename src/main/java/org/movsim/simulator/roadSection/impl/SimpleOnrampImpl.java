@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.model.simulation.SimpleRampData;
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -49,10 +49,10 @@ public class SimpleOnrampImpl {
     /**
      * The lane for entering the mainroad only MOST_RIGHT_LANE possible to enter
      */
-    private final static int LANE_TO_MERGE_ON_MAINROAD = Constants.MOST_RIGHT_LANE;
+    private final static int LANE_TO_MERGE_ON_MAINROAD = MovsimConstants.MOST_RIGHT_LANE;
 
     private static final String extensionFormat = ".id%d_sramp%d_source_log.csv";
-    private static final String outputHeading = Constants.COMMENT_CHAR
+    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
@@ -269,7 +269,7 @@ public class SimpleOnrampImpl {
 
         final List<Vehicle> mainVehicles = mainVehContainer.getVehicles();
 
-        final int laneEnter = Constants.MOST_RIGHT_LANE; // single-lane
+        final int laneEnter = MovsimConstants.MOST_RIGHT_LANE; // single-lane
                                                          // simulation
 
         final int mainVehSize = mainVehicles.size();

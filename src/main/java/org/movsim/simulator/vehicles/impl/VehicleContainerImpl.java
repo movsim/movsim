@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.movsim.simulator.Constants;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.MyRandom;
@@ -422,7 +422,7 @@ public class VehicleContainerImpl implements VehicleContainer {
         boundaryVehicleDownstream =  null;
         if(connectedLaneDownstream!=null ){
             final Vehicle vehDown = connectedLaneDownstream.getMostUpstream();
-            if( vehDown!=null && !vehDown.getLabel().equals(Constants.OBSTACLE_KEY_NAME) ){
+            if( vehDown!=null && !vehDown.getLabel().equals(MovsimConstants.OBSTACLE_KEY_NAME) ){
                 boundaryVehicleDownstream = vehDown;
             }
         }
