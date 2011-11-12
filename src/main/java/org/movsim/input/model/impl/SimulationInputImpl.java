@@ -27,6 +27,7 @@
 package org.movsim.input.model.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +73,7 @@ public class SimulationInputImpl implements SimulationInput {
     private boolean isWithWriteFundamentalDiagrams;
 
     /** The road input. */
-    ArrayList<RoadInput> roadInput;
+    Map<Long,RoadInput> roadInputMap;
 
     /** The output input. */
     private OutputInput outputInput;
@@ -117,11 +118,16 @@ public class SimulationInputImpl implements SimulationInput {
         }
         // -----------------------------------------------------------
         
-        
+        // quick hack: for road segment a mapping to ids is needed
         final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
-        roadInput = new ArrayList<RoadInput>();
+        List<RoadInput> roadInputList = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
-            roadInput.add(new RoadInputImpl(roadElem));
+            roadInputList.add(new RoadInputImpl(roadElem));
+        }
+        
+        roadInputMap = new HashMap<Long,RoadInput>();
+        for (final RoadInput roadInputData : roadInputList) {
+            roadInputMap.put(roadInputData.getId(), roadInputData);
         }
 
         // -------------------------------------------------------
@@ -176,8 +182,8 @@ public class SimulationInputImpl implements SimulationInput {
      * @see org.movsim.input.model.SimulationInput#getRoadInput()
      */
     @Override
-    public ArrayList<RoadInput> getRoadInput() {
-        return roadInput;
+    public Map<Long,RoadInput> getRoadInput() {
+        return roadInputMap;
     }
 
     /*
@@ -188,7 +194,7 @@ public class SimulationInputImpl implements SimulationInput {
     @Override
     public RoadInput getSingleRoadInput() {
         // Quick hack: assume only one single main road !!!
-        return roadInput.get(0);
+        return roadInputMap.get(0);
     }
 
     /*

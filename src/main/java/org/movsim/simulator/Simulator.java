@@ -139,11 +139,22 @@ public class Simulator implements Runnable {
         System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
         // Roadinput/RoadSection
 
-        
+        // TODO roadsections
+        // connect physical roads from network input to input from movsim 
+        for(RoadSegment roadSegment : roadNetwork){
+            long roadSegmentId = roadSegment.id();
+            final RoadInput roadInput = inputData.getSimulationInput().getRoadInput().get(roadSegmentId);
+            if(roadInput!=null){
+                roadSegment.addInput(roadInput);
+            }
+            else{
+                logger.debug("no additional input for road id={} provided in movsim configuration file.");
+            }
+        }
         
         
         roadSections = new LinkedList<RoadSection>();
-        for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput()) {
+        for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
             final RoadSection roadSection = RoadSectionFactory.create(inputData, roadinput, vehGenerator);
             roadSections.add(roadSection);
         }
@@ -151,12 +162,16 @@ public class Simulator implements Runnable {
         
         createMap();
 
-        // TODO work in progress, not yet sufficiently worked-out concept
-        final RoadNetworkDeprecated roadNetwork = RoadNetworkDeprecated.getInstance();
+        // ---------------------------------------------
+        // TODO work in progress, 
+        // only needed in vehicle for calculating net distance but this concept not yet sufficiently worked-out 
+        final RoadNetworkDeprecated roadNetworkDeprecated = RoadNetworkDeprecated.getInstance();
         for (RoadSection roadSection : roadSections) {
-            roadNetwork.add(roadSection);
+            roadNetworkDeprecated.add(roadSection);
         }
-        logger.info(roadNetwork.toString());
+        logger.info(roadNetworkDeprecated.toString());
+        // ---------------------------------------------
+        
 
         // TODO quick hack for connecting offramp with onramp
         // more general concept needed here
@@ -168,7 +183,9 @@ public class Simulator implements Runnable {
                     onramp.getVehContainer(Constants.MOST_RIGHT_LANE));
             logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
         }
-
+        // ---------------------------------------------
+        
+        
         projectName = inputData.getProjectMetaData().getProjectName();
 
         // model requires specific update time depending on its category !!

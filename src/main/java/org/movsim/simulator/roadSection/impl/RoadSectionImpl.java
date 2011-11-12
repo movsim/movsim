@@ -142,7 +142,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * 
      * @param simInput
      *            the sim input
-     * @param roadInput 
+     * @param roadInputMap 
      */
     private void initialConditions(SimulationInput simInput, RoadInput roadInput) {
 

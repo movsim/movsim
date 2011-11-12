@@ -153,7 +153,7 @@ public abstract class AbstractRoadSection {
 
     /**
      * @param inputData 
-     * @param roadInput
+     * @param roadInputMap
      * @param vehGenerator2
      */
     public AbstractRoadSection(InputDataImpl inputData, RoadInput roadInput, VehicleGenerator vehGenerator) {

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import org.movsim.input.model.RoadInput;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -1123,5 +1124,11 @@ public class RoadSegment implements Iterable<Vehicle> {
     @Override
     public final Iterator<Vehicle> iterator() {
         return new VehicleIterator();
+    }
+
+    
+    // TODO roadsections: process roadInput from movsim xml here !!! 
+    public void addInput(RoadInput roadInput) {
+        // TODO Auto-generated method stub
     }
 }

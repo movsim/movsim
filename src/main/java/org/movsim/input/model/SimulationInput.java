@@ -26,8 +26,8 @@
  */
 package org.movsim.input.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 
@@ -88,12 +88,9 @@ public interface SimulationInput {
     List<TrafficCompositionInputData> getTrafficCompositionInputData();
 
 
-    /**
-     * Gets the road input.
-     * 
-     * @return the road input
-     */
-    ArrayList<RoadInput> getRoadInput();
+    //ArrayList<RoadInput> getRoadInput();
+    Map<Long, RoadInput> getRoadInput();
+    
 
     /**
      * Gets the single road input. Quick hack: only one single main road
