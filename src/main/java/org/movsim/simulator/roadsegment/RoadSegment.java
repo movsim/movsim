@@ -530,9 +530,13 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
     }
 
+    
+    
+    
     /**
      * Removes one vehicle at random.
      */
+    //TODO ake not needed in the current feature set of movsim --> remove 
     public void removeRandomVehicle() {
         if (totalVehicleCount() < 1) {
             return;
@@ -560,6 +564,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return a random vehicle near the start of the road segment
      */
+    //TODO ake not needed in the current feature set of movsim --> remove 
     public Vehicle getVehicleForPerturbation() {
         if (totalVehicleCount() < 1) {
             return null;
@@ -579,6 +584,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Removes any vehicles that have moved past the end of this road segment.
      */
+    // TODO ake this is a property of/task for the downstream boundary condition --> remove here 
     public void removeVehiclesPastEnd() {
         for (final ArrayList<Vehicle> vehicles : laneVehicles) {
             int vehicleCount = vehicles.size();
@@ -596,6 +602,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param obstacle
      */
+    
+    // TODO ake adding an obstacle is also used in the OnrampMobilImpl --> setObstacleAtEndOfLane()  
     public void addObstacle(Vehicle obstacle) {
         assert obstacle.type() == Vehicle.Type.OBSTACLE;
         addVehicle(obstacle);
@@ -606,6 +614,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param vehicle
      */
+    
+    // TODO ake movsim has the sophisticated vehicleGenerator for this
     public void addVehicle(Vehicle vehicle) {
         assert vehicle.posRearBumper() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
@@ -629,6 +639,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param vehicle
      */
+    
+    // TODO ake not needed?!
     public void appendVehicle(Vehicle vehicle) {
         assert vehicle.posRearBumper() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
@@ -685,6 +697,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param simulationTime
      * @param iterationCount 
      */
+    
+    // TODO ake method in AbstractRoadSection is leaner and some functionality has been moved to the vehicle 
     public void updateVehiclePositionsAndVelocities(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
         // this function may change vehicle ordering in this or another road segment
@@ -728,14 +742,15 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
 
-    protected void updateVehiclePositionsAndVelocities(int lane, double[] outputPos, double[] outputVel, int count) {
-        final ArrayList<Vehicle> vehicles = laneVehicles[lane];
-        for (int i = 0; i < count; ++i) {
-            final Vehicle v = vehicles.get(i);
-            v.setPosition(outputPos[i]);
-            v.setSpeed(outputVel[i]);
-        }
-    }
+    
+//    protected void updateVehiclePositionsAndVelocities(int lane, double[] outputPos, double[] outputVel, int count) {
+//        final ArrayList<Vehicle> vehicles = laneVehicles[lane];
+//        for (int i = 0; i < count; ++i) {
+//            final Vehicle v = vehicles.get(i);
+//            v.setPosition(outputPos[i]);
+//            v.setSpeed(outputVel[i]);
+//        }
+//    }
 
   /**
      * If there is a traffic sink, use it to perform any traffic outflow.
@@ -744,6 +759,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            simulation time interval
      * @param simulationTime
      */
+    
+    // TODO ake properties of the downstream boundary condition should be encapsulated in own class ...
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
         // in each lane, remove any vehicles that have gone past the end of this road segment
@@ -805,6 +822,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            simulation time interval
      * @param simulationTime
      */
+    // TODO upstream boundary condition is encapsulated in own class 
     public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
 //        if (source != null) {
@@ -1125,7 +1143,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     
-    // TODO roadsections: process roadInput from movsim xml here !!! 
+    // TODO ake roadsections: process roadInput from movsim xml here !!! 
     public void addInput(RoadInput roadInput) {
         // TODO Auto-generated method stub
     }
