@@ -12,9 +12,9 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
-import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Observer;
 import org.movsim.utilities.impl.ScalingHelper;
 import org.slf4j.Logger;

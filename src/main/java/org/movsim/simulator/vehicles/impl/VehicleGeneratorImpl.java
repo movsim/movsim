@@ -47,7 +47,6 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.Constants;
-import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
@@ -71,6 +70,7 @@ import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumKraus
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNSM;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumNewell;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.impl.EquilibriumOVM_VDIFF;
+import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

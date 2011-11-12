@@ -27,8 +27,8 @@
 package org.movsim.simulator.vehicles.impl;
 
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
-import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.vehicles.Noise;
+import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

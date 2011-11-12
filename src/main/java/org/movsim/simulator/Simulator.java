@@ -25,13 +25,13 @@ import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
-import org.movsim.simulator.impl.MyRandom;
 import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.OfframpImpl;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
+import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

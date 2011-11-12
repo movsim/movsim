@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.impl;
+package org.movsim.utilities;
 
 import java.util.Random;
 
