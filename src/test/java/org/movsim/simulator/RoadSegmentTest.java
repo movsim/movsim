@@ -346,8 +346,8 @@ public class RoadSegmentTest {
         assertEquals(4, roadSegment.totalVehicleCount());
         roadSegment.clearVehicles();
         assertEquals(0, roadSegment.totalVehicleCount());
-        assertEquals(0, roadSegment.vehicleCount(Lane.LANE1));
-        assertEquals(0, roadSegment.vehicleCount(Lane.LANE2));
+        assertEquals(0, roadSegment.getVehicleCount(Lane.LANE1));
+        assertEquals(0, roadSegment.getVehicleCount(Lane.LANE2));
     }
 
     /**

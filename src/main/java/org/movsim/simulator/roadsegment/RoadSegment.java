@@ -470,7 +470,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the number of vehicles in the given lane on this road segment
      */
-    public int vehicleCount(int lane) {
+    public int getVehicleCount(int lane) {
         assert lane >= Lane.LANE1;
         assert lane < laneCount;
         return laneVehicles[lane].size();
@@ -499,15 +499,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the number of vehicles in the given lane.
-     * @param lane
-     * @return the number of vehicles in the given lane
-     */
-    public int getVehicleCount(int lane) {
-        return laneVehicles[lane].size();
-    }
-
-    /**
      * Removes the vehicle at the given index in the given lane.
      * 
      * @param lane
@@ -529,9 +520,6 @@ public class RoadSegment implements Iterable<Vehicle> {
             laneVehicles[lane].remove(0);
         }
     }
-
-    
-    
     
     /**
      * Removes one vehicle at random.
@@ -930,7 +918,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             return null;
         }
         // find the rear vehicle in the sink lane on the sink road segment
-        final int sinkLaneVehicleCount = sinkRoad.vehicleCount(sLane);
+        final int sinkLaneVehicleCount = sinkRoad.getVehicleCount(sLane);
         if (sinkLaneVehicleCount < 2) {
             // should actually check sinkLane of sinkLane, but as long as sinkLane not
             // outrageously short, the assumption that there is no vehicle is reasonable

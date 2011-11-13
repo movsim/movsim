@@ -109,7 +109,6 @@ public class Vehicle {
 
     /** The lane. */
     private int lane;
-
     private int laneOld;
 
     /** variable for remembering new target lane when assigning to new vehContainerLane */
@@ -144,6 +143,9 @@ public class Vehicle {
     private boolean isBrakeLightOn;
 
     private PhysicalQuantities physQuantities;
+    // Exit Handling
+    private int roadSegmentId;
+    private double roadSegmentLength;
     
     
     private long roadId;
@@ -1012,4 +1014,26 @@ public class Vehicle {
 //        trafficLight = null;
 //        speedLimit = 0.0;
     }
+    /**
+     * Sets the road segment properties for this vehicle. Invoked after a vehicle has moved onto a
+     * new road segment.
+     * 
+     * @param roadSegmentId
+     * @param roadSegmentLength
+     * 
+     */
+    public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
+        this.roadSegmentId = roadSegmentId;
+        this.roadSegmentLength = roadSegmentLength;
+    }
+
+    /**
+     * Returns the id of the road segment currently occupied by this vehicle.
+     * 
+     * @return id of the road segment currently occupied by this vehicle
+     */
+    public final int roadSegmentId() {
+        return roadSegmentId;
+    }
+
 }
