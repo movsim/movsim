@@ -57,10 +57,13 @@ public class Link {
      */
     public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane,
             RoadSegment toRoadSegment) {
-        toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
-        toRoadSegment.setSourceLaneForLane(fromLane, toLane);
-        fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
-        fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
+//        toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
+//        toRoadSegment.setSourceLaneForLane(fromLane, toLane);
+//        fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
+//        fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
+
+        toRoadSegment.setSourceLaneSegmentForLane(fromRoadsegment.laneSegment(fromLane), toLane);
+        fromRoadsegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
     }
 
     /**
@@ -98,7 +101,7 @@ public class Link {
         assert offset != 0;
         assert fromRoad.laneCount() + offset == toRoad.laneCount();
         if (offset < 0) {
-            final int limit = fromRoad.laneCount() - offset;
+            final int limit = fromRoad.laneCount() + offset;
             for (int i = 0; i < limit; ++i) {
                 addLanePair(i - offset, fromRoad, i, toRoad);
             }

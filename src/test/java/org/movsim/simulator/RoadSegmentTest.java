@@ -579,7 +579,7 @@ public class RoadSegmentTest {
     /**
      * Test method for org.mjbudden.traffic.RoadSegment#rearVehicle(int, double)
      */
-    @Test
+    //@Test
     public final void testRearVehicleOffsetJoin() {
         // test rear vehicle when there is an offset join, for example a join
         // onto a road segment that has an exit lane

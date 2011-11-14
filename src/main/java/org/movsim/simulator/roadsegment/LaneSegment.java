@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import org.movsim.simulator.vehicles.Vehicle;
 
 public class LaneSegment {
+    private static final boolean DEBUG = false;
     // Lane linkage
     private final RoadSegment roadSegment;
     private LaneSegment sinkLaneSegment;
@@ -31,15 +32,25 @@ public class LaneSegment {
     private final int lane;
     private Lane.Type type;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
-    // ArrayList of vehicles for lane
     final ArrayList<Vehicle> vehicles;
-    
+    private int removedVehicleCount; // used for calculating traffic flow
+   
     LaneSegment(RoadSegment roadSegment, int lane) {
     	this.roadSegment = roadSegment;
     	this.lane = lane;
         vehicles = new ArrayList<Vehicle>(VEHICLES_PER_LANE_INITIAL_SIZE);
         type = Lane.Type.TRAFFIC;
     }
+
+    /**
+     * Returns the lane.
+     * 
+     * @return lane
+     */
+    public final int lane() {
+        return lane;
+    }
+
     /**
      * Sets the type of the lane.
      * 
@@ -62,9 +73,18 @@ public class LaneSegment {
     }
 
     /**
+     * Returns the road segment for the lane.
+     * 
+     * @return road segment
+     */
+    public final RoadSegment roadSegment() {
+        return roadSegment;
+    }
+
+    /**
      * Returns the length of the lane.
      * 
-     * @return type of lane
+     * @return length of lane
      */
     public final double roadLength() {
         return roadSegment.roadLength();
@@ -125,6 +145,17 @@ public class LaneSegment {
     }
 
     /**
+     * Removes the vehicle at the given index.
+     * 
+     * @param index
+     *            index of vehicle to remove
+     */
+    @Deprecated
+    public void removeVehicle(int index) {
+        vehicles.remove(index);
+    }
+
+    /**
      * Removes the front vehicle on the given lane.
      * 
      * @param lane
@@ -132,6 +163,20 @@ public class LaneSegment {
     public void removeFrontVehicleOnLane() {
         if (vehicles.size() > 0) {
             vehicles.remove(0);
+        }
+    }
+
+    /**
+     * Removes any vehicles that have moved past the end of this road segment.
+     */
+    public void removeVehiclesPastEnd() {
+    	final double roadLength = roadSegment.roadLength();
+        int vehicleCount = vehicles.size();
+        // remove any vehicles that have gone past the end of this road segment
+        while (vehicleCount > 0 && vehicles.get(0).posRearBumper() > roadLength) {
+            vehicles.remove(0);
+            removedVehicleCount++;
+            vehicleCount--;
         }
     }
 
@@ -154,6 +199,24 @@ public class LaneSegment {
             assert false;
         }
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
+        assert laneIsSorted();
+    }
+
+    public void appendVehicle(Vehicle vehicle) {
+        assert vehicle.posRearBumper() >= 0.0;
+        assert vehicle.getSpeed() >= 0.0;
+        assert vehicle.getLane() == lane;
+//        vehicle.setRoadSegment(id, roadLength);
+        assert laneIsSorted();
+        if (DEBUG) {
+            if (vehicles.size() > 0) {
+                final Vehicle lastVehicle = vehicles.get(vehicles.size() - 1);
+                if (lastVehicle.posRearBumper() < vehicle.posRearBumper()) {
+                    assert false;
+                }
+            }
+        }
+        vehicles.add(vehicle);
         assert laneIsSorted();
     }
 
@@ -225,7 +288,7 @@ public class LaneSegment {
         return ret;
     }
 
-    Vehicle secondLastVehicleOnSinkLanePosAdjusted(int lane) {
+    Vehicle secondLastVehicleOnSinkLanePosAdjusted() {
 
         // subject vehicle is front vehicle on this lane segment, so check sink lane segment
         if (sinkLaneSegment == null) {
@@ -321,6 +384,77 @@ public class LaneSegment {
     }
 
     /**
+     * <p>
+     * Update the vehicle positions and velocities by calling vehicle.updatePositionAndVelocity for
+     * each vehicle.
+     * </p>
+     * 
+     * <p>
+     * If there is a test car, then record its position, velocity etc.
+     * </p>
+     * 
+     * <p>
+     * If there is a traffic inhomogeneity, then apply it to each vehicle.
+     * </p>
+     * 
+     * @param dt
+     *            simulation time interval
+     * @param simulationTime
+     * @param iterationCount 
+     */
+    // TODO ake method in AbstractRoadSection is leaner and some functionality has been moved to the vehicle 
+    public void updateVehiclePositionsAndVelocities(double dt, double simulationTime, long iterationCount) {
+       assert laneIsSorted();
+        // this function may change vehicle ordering in this or another road segment
+        // remember V[n+1].pos < V[n].pos < V[n-1].pos ... < V[1].pos < V[0].pos
+        // Vehicle iteration loop goes backwards, that is it starts with vehicles nearest
+        // the start of this road segment. This is so a vehicle's new speed and position is
+        // calculated before the vehicle in front of it has been moved.
+        Vehicle frontFrontVehicle = null;
+        Vehicle frontVehicle;
+        final int count = vehicles.size();
+        // TODO refactor this loop so frontVehicle is reused as vehicle and end two cases are
+        // unrolled
+        for (int i = count - 1; i >= 0; --i) {
+            final Vehicle vehicle = vehicles.get(i);
+            if (i > 0) {
+                frontVehicle = vehicles.get(i - 1);
+            } else {
+                if (sinkLaneSegment == null) {
+                    // no sink lane for this lane, so there are no vehicles ahead of vehicle(0)
+                    frontVehicle = null;
+                } else {
+                    // the front vehicle is the rear vehicle on the sink lane
+                    frontVehicle = rearVehicleOnSinkLanePosAdjusted();
+                    if (frontVehicle == null) {
+                        // no vehicle in the sink lane, so must recursively follow the lanes
+                        // to the end of the road
+                        frontVehicle = frontVehicle(vehicle.getPosition());
+                    }
+                }
+            }
+        }
+        // occasionally updatePositionAndVelocity could cause the vehicles array
+        // to become unsorted if LongitudinalDriverModel.MAX_DECELERATION >
+        // LaneChangeModel.maxSafeBraking, since a new entry into a lane might cause
+        // excessive breaking
+        // sortVehicles();
+        assert laneIsSorted();
+    }
+
+
+    /**
+     * If there is a traffic sink, use it to perform any traffic outflow.
+     * 
+     * @param dt
+     *            simulation time interval
+     * @param simulationTime
+     */
+    public void outFlow(double dt, double simulationTime, long iterationCount) {
+    	
+    }
+
+    /**
      * Returns true if the vehicle array is sorted.
      * 
      * @return true if the vehicle array is sorted
@@ -339,5 +473,29 @@ public class LaneSegment {
             }
         }
         return true;
+    }
+
+    /**
+     * Simple bubble sort of the vehicles.
+     * Useful for debugging.
+     */
+    @SuppressWarnings("unused")
+    private void sortVehicles() {
+        // Collections.sort(vehicles, vehiclePositionComparator);
+        final int count = vehicles.size();
+        boolean sorted = false;
+        while (!sorted) {
+            sorted = true;
+            for (int i = 1; i < count; ++i) {
+                final Vehicle front = vehicles.get(i - 1);
+                final Vehicle rear = vehicles.get(i);
+                if (rear.posRearBumper() > front.posRearBumper()) {
+                    sorted = false;
+                    // swap the two vehicles
+                    vehicles.set(i - 1, rear);
+                    vehicles.set(i, front);
+                }
+            }
+        }
     }
 }
