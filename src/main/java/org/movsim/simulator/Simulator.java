@@ -83,7 +83,6 @@ public class Simulator implements Runnable {
      */
     private Simulator() {
         inputData = new InputDataImpl(); // accesses static reference ProjectMetaData
-
     }
 
     public static Simulator getInstance() {

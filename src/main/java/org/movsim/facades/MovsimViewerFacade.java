@@ -45,12 +45,16 @@ import org.slf4j.LoggerFactory;
  * The Class MovsimViewerFacade.
  */
 public class MovsimViewerFacade {
+    
+    /**
+     * Initializaton on demand holder idiom. Lazy loaded singleton.
+     */
+    private static class Holder {
+        private static final MovsimViewerFacade INSTANCE = new MovsimViewerFacade();
+    }
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MovsimViewerFacade.class);
-
-    // singleton pattern
-    private static MovsimViewerFacade instance = null;
 
     /**
      * Inits the localization and logger.
@@ -97,11 +101,8 @@ public class MovsimViewerFacade {
         return model.getRoadNetwork();
     }
 
-    public static synchronized MovsimViewerFacade getInstance() {
-        if (instance == null) {
-            instance = new MovsimViewerFacade();
-        }
-        return instance;
+    public static MovsimViewerFacade getInstance() {
+        return Holder.INSTANCE;
     }
 
     /**
