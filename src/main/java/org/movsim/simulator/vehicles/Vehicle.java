@@ -33,6 +33,8 @@ import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.roadsegment.Lane;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
@@ -291,7 +293,29 @@ public class Vehicle {
         label = source.label;
     }
 
-    private void initialize(){
+    /**
+     * Constructor.
+     */
+    public Vehicle(org.movsim.simulator.vehicles.Vehicle.Type car,
+			AccelerationModel ldm, Object lcm, double length,
+			double width, int i) {
+        id = nextId++;
+        this.length = length;
+        setRearPosition(0.0);
+        this.speed = 0.0;
+        this.lane = Lane.NONE;
+        this.width = width;
+        this.color = 0;
+        fuelModel = null;
+        trafficLightApproaching = null;
+        reactionTime = 0.0;
+        maxDecel = 0.0;
+        lcModel = null;
+        accelerationModel = ldm;
+        label = "";
+	}
+
+	private void initialize(){
         positionOld = 0;
         position = 0;
         speed = 0;
@@ -445,8 +469,17 @@ public class Vehicle {
      * @param position
      *            the new position
      */
-    
     public void setPosition(double position) {
+        this.position = position;
+    }
+
+    /**
+     * Sets the position of the middle of the vehicle.
+     * 
+     * @param position
+     *            the position of the middle of the vehicle
+     */
+    public void setMidPosition(double position) {
         this.position = position;
     }
 
@@ -621,8 +654,8 @@ public class Vehicle {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double)
      */
     
-    public void calcAcceleration(double dt, final VehicleContainer vehContainer,
-            final VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0) {
+    public void calcAcceleration(double dt, final LaneSegment vehContainer,
+            final LaneSegment vehContainerLeftLane, double alphaT, double alphaV0) {
 
         accOld = acc;
         // acceleration noise:
@@ -630,7 +663,7 @@ public class Vehicle {
         if (noise != null) {
             noise.update(dt);
             accError = noise.getAccError();
-            final Vehicle vehFront = vehContainer.getLeader(this);
+            final Vehicle vehFront = vehContainer.frontVehicle(this);
             if (getNetDistance(vehFront) < MovsimConstants.CRITICAL_GAP) {
                 accError = Math.min(accError, 0.); // !!!
             }
@@ -673,11 +706,11 @@ public class Vehicle {
     // relevant traffic situations!
     //
     
-    public double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane) {
+    public double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane) {
         return calcAccModel(vehContainer, vehContainerLeftLane, 1, 1, 1);
     }
 
-    private double calcAccModel(final VehicleContainer vehContainer, final VehicleContainer vehContainerLeftLane,
+    private double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
 
         double acc;

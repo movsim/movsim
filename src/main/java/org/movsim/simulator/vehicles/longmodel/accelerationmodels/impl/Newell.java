@@ -27,8 +27,8 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,10 +92,10 @@ public class Newell extends AccelerationModelAbstract implements AccelerationMod
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
         
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.getLeader(me);
+        final Vehicle vehFront = vehContainer.frontVehicle(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);

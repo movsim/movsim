@@ -12,8 +12,8 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +73,36 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
         super(ModelName.IDM, parameters);
         initParameters();
     }
+
+    /**
+     * Constructor.
+     * 
+     * @param v0
+     *            desired velocity, m/s
+     * @param a
+     *            maximum acceleration, m/s^2
+     * @param b
+     *            desired deceleration (comfortable braking), m/s^2
+     * @param T
+     *            safe time headway, seconds
+     * @param s0
+     *            bumper to bumper vehicle distance in stationary traffic, meters
+     * @param s1
+     *            gap parameter, meters
+     */
+    public IDM(double v0, double a, double b, double T, double s0, double s1) {
+        super(ModelName.IDM, null);
+        //super(Type.CONTINUOUS);
+        this.v0 = v0;
+        this.a = a;
+        this.b = b;
+        this.T = T;
+        this.s0 = s0;
+        this.s1 = s1;
+        //twoSqrtAb = 2.0 * Math.sqrt(a * b);
+        this.delta = 4.0;
+    }
+
 
     /*
      * (non-Javadoc)
@@ -164,10 +194,10 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.getLeader(me);
+        final Vehicle vehFront = vehContainer.frontVehicle(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
@@ -267,8 +297,4 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
-    
-
-
 }

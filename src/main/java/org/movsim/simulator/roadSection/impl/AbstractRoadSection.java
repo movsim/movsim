@@ -32,7 +32,6 @@ import java.util.List;
 import org.movsim.input.impl.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.SpeedLimits;
@@ -263,22 +262,22 @@ public abstract class AbstractRoadSection {
      */
     public void accelerate(long iterationCount, double dt, double time) {
         
-        for (VehicleContainer vehContainerLane : vehContainers) {
-            final int leftLaneIndex = vehContainerLane.getLaneIndex()+MovsimConstants.TO_LEFT;
-            final VehicleContainer vehContainerLeftLane = ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
-            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-            //for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-            for(final Vehicle veh : vehiclesOnLane){
-                //final Vehicle veh = vehiclesOnLane.get(i);
-                final double x = veh.getPosition();
-                // TODO treat null case 
-                final double alphaT = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaT(x);
-                final double alphaV0 = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaV0(x);
-                // logger.debug("i={}, x_pos={}", i, x);
-                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                veh.calcAcceleration(dt, vehContainerLane, vehContainerLeftLane, alphaT, alphaV0);
-            }
-        }
+//        for (VehicleContainer vehContainerLane : vehContainers) {
+//            final int leftLaneIndex = vehContainerLane.getLaneIndex()+MovsimConstants.TO_LEFT;
+//            final VehicleContainer vehContainerLeftLane = ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
+//            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
+//            //for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+//            for(final Vehicle veh : vehiclesOnLane){
+//                //final Vehicle veh = vehiclesOnLane.get(i);
+//                final double x = veh.getPosition();
+//                // TODO treat null case 
+//                final double alphaT = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaT(x);
+//                final double alphaV0 = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaV0(x);
+//                // logger.debug("i={}, x_pos={}", i, x);
+//                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
+//                veh.calcAcceleration(dt, vehContainerLane, vehContainerLeftLane, alphaT, alphaV0);
+//            }
+//        }
     }
 
     /**

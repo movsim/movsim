@@ -26,8 +26,8 @@
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelCategory;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
 
@@ -90,9 +90,9 @@ public interface AccelerationModel {
      * @param alphaA the alpha a
      * @return the double
      */
-    double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
+    double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA);
     
-    double calcAccEur(double vCritEur, Vehicle me, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane, double alphaT, double alphaV0, double alphaA);
+    double calcAccEur(double vCritEur, Vehicle me, LaneSegment vehContainer, LaneSegment vehContainerLeftLane, double alphaT, double alphaV0, double alphaA);
     
     double calcAcc(final Vehicle me, final Vehicle vehFront);
     

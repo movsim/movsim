@@ -12,8 +12,8 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Observer;
 import org.movsim.utilities.impl.ScalingHelper;
@@ -179,9 +179,9 @@ public abstract class AccelerationModelAbstract implements Observer {
         return x;
     }
 
-    public abstract double calcAcc(Vehicle me, VehicleContainer vehContainer, double alphaT, double alphaV0, double alphaA);
+    public abstract double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA);
 
-    public double calcAccEur(double vCritEur, Vehicle me, VehicleContainer vehContainer, VehicleContainer vehContainerLeftLane,
+    public double calcAccEur(double vCritEur, Vehicle me, LaneSegment vehContainer, LaneSegment vehContainerLeftLane,
             double alphaT, double alphaV0, double alphaA) {
 
         // calculate normal acceleration in own lane
@@ -194,7 +194,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
         // check left-vehicle's speed
 
-        final Vehicle newFrontLeft = vehContainerLeftLane.getLeader(me);
+        final Vehicle newFrontLeft = vehContainerLeftLane.frontVehicle(me);
         double speedFront = (newFrontLeft != null) ? newFrontLeft.getSpeed() : -1;
 
         // condition me.getSpeed() > speedFront will be evaluated by softer tanh

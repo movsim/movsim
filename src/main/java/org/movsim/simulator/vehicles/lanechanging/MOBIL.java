@@ -110,117 +110,118 @@ public class MOBIL {
 
     public double calcAccelerationBalance(final int direction, final List<VehicleContainer> lanes) {
 
-        final int currentLane = me.getLane();
-
-        final VehicleContainer ownLane = lanes.get(currentLane);
-        final VehicleContainer newLane = lanes.get(currentLane + direction);
-
-        double prospectiveBalance = -Double.MAX_VALUE;
-
-        final Vehicle newFront = newLane.getLeader(me);
-        final Vehicle oldFront = ownLane.getLeader(me);
-        final Vehicle newBack = newLane.getFollower(me);
-
-        // check if other vehicles are lane-changing
-        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack)) {
-            return prospectiveBalance;
-        }
-
-        // safety: check distances
-        final double gapFront = me.getNetDistance(newFront);
-        final double gapBack = (newBack == null) ? MovsimConstants.GAP_INFINITY : newBack.getNetDistance(me);
-
-        if (safetyCheckGaps(gapFront, gapBack)) {
-            return prospectiveBalance;
-        }
-
-        // new situation: newBack with me as leader
-        // and following left lane cases
-        // TO_LEFT --> just the actual situation
-        // TO_RIGHT --> consideration of left-lane (with me's leader) has no
-        // effect
-        final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
-        newSituationNewBack.addTestwise(newBack);
-        newSituationNewBack.addTestwise(me);
-        final VehicleContainer leftLaneNewBack = (direction == MovsimConstants.TO_RIGHT || currentLane + direction
-                + MovsimConstants.TO_LEFT >= lanes.size()) ? null : lanes.get(currentLane + direction + MovsimConstants.TO_LEFT);
-        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNewBack);
-
-        if (safetyCheckAcceleration(newBackNewAcc)) {
-            return prospectiveBalance;
-        }
-
-        // check now incentive criterion
-        // consider three vehicles: me, oldBack, newBack
-
-        // old situation for me
-        final VehicleContainer leftLaneMeOld = (currentLane + MovsimConstants.TO_LEFT) >= lanes.size() ? null : lanes
-                .get(currentLane + MovsimConstants.TO_LEFT);
-        final double meOldAcc = me.calcAccModel(ownLane, leftLaneMeOld);
-
-        // old situation for old back
-        final Vehicle oldBack = ownLane.getFollower(me);
-
-        // in old situation same left lane as me
-        final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, leftLaneMeOld) : 0;
-
-        // old situation for new back: just provides the actual left-lane
-        // situation
-        final VehicleContainer leftLaneNewBackOldAcc = (currentLane + direction + MovsimConstants.TO_LEFT >= lanes.size()) ? null
-                : lanes.get(currentLane + direction + MovsimConstants.TO_LEFT);
-        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNewBackOldAcc) : 0;
-
-        // new traffic situation: set subject virtually into new lane under
-        // consideration
-
-        final VehicleContainer newSituationMe = new VehicleContainerImpl(0);
-        newSituationMe.addTestwise(me);
-        newSituationMe.addTestwise(newFront);
-
-        // if TO_LEFT: actual situation of newBack's left lane
-        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left
-        // lane
-        final VehicleContainer leftLaneNewMe;
-        if (direction == MovsimConstants.TO_LEFT) {
-            leftLaneNewMe = leftLaneNewBack;
-        } else {
-            leftLaneNewMe = new VehicleContainerImpl(0);
-            leftLaneNewMe.addTestwise(oldFront);
-        }
-
-        final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNewBack);
-
-        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0);
-        newSituationOldBack.addTestwise(oldFront);
-        newSituationOldBack.addTestwise(oldBack);
-
-        // if TO_LEFT: oldBack considers subject (me) as leader in left lane -->
-        // new container
-        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left
-        // lane
-        final VehicleContainer leftLaneNewSituationOldBack;
-        if (direction == MovsimConstants.TO_LEFT) {
-            leftLaneNewSituationOldBack = new VehicleContainerImpl(0);
-            leftLaneNewSituationOldBack.addTestwise(me);
-        } else {
-            leftLaneNewSituationOldBack = leftLaneMeOld;
-        }
-
-        final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null) : 0;
-
-        // MOBIL trade-off for driver and neighborhood
-        final double oldBackDiffAcc = oldBackNewAcc - oldBackOldAcc;
-        final double newBackDiffAcc = newBackNewAcc - newBackOldAcc;
-        final double meDiffAcc = meNewAcc - meOldAcc;
-
-        // MOBIL's incentive formula
-        final int changeTo = newLane.getLaneIndex() - ownLane.getLaneIndex();
-        final double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
-
-        prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
-                * biasRight;
-
-        return prospectiveBalance;
+//        final int currentLane = me.getLane();
+//
+//        final VehicleContainer ownLane = lanes.get(currentLane);
+//        final VehicleContainer newLane = lanes.get(currentLane + direction);
+//
+//        double prospectiveBalance = -Double.MAX_VALUE;
+//
+//        final Vehicle newFront = newLane.getLeader(me);
+//        final Vehicle oldFront = ownLane.getLeader(me);
+//        final Vehicle newBack = newLane.getFollower(me);
+//
+//        // check if other vehicles are lane-changing
+//        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack)) {
+//            return prospectiveBalance;
+//        }
+//
+//        // safety: check distances
+//        final double gapFront = me.getNetDistance(newFront);
+//        final double gapBack = (newBack == null) ? MovsimConstants.GAP_INFINITY : newBack.getNetDistance(me);
+//
+//        if (safetyCheckGaps(gapFront, gapBack)) {
+//            return prospectiveBalance;
+//        }
+//
+//        // new situation: newBack with me as leader
+//        // and following left lane cases
+//        // TO_LEFT --> just the actual situation
+//        // TO_RIGHT --> consideration of left-lane (with me's leader) has no
+//        // effect
+//        final VehicleContainer newSituationNewBack = new VehicleContainerImpl(0);
+//        newSituationNewBack.addTestwise(newBack);
+//        newSituationNewBack.addTestwise(me);
+//        final VehicleContainer leftLaneNewBack = (direction == MovsimConstants.TO_RIGHT || currentLane + direction
+//                + MovsimConstants.TO_LEFT >= lanes.size()) ? null : lanes.get(currentLane + direction + MovsimConstants.TO_LEFT);
+//        final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNewBack);
+//
+//        if (safetyCheckAcceleration(newBackNewAcc)) {
+//            return prospectiveBalance;
+//        }
+//
+//        // check now incentive criterion
+//        // consider three vehicles: me, oldBack, newBack
+//
+//        // old situation for me
+//        final VehicleContainer leftLaneMeOld = (currentLane + MovsimConstants.TO_LEFT) >= lanes.size() ? null : lanes
+//                .get(currentLane + MovsimConstants.TO_LEFT);
+//        final double meOldAcc = me.calcAccModel(ownLane, leftLaneMeOld);
+//
+//        // old situation for old back
+//        final Vehicle oldBack = ownLane.getFollower(me);
+//
+//        // in old situation same left lane as me
+//        final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, leftLaneMeOld) : 0;
+//
+//        // old situation for new back: just provides the actual left-lane
+//        // situation
+//        final VehicleContainer leftLaneNewBackOldAcc = (currentLane + direction + MovsimConstants.TO_LEFT >= lanes.size()) ? null
+//                : lanes.get(currentLane + direction + MovsimConstants.TO_LEFT);
+//        final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNewBackOldAcc) : 0;
+//
+//        // new traffic situation: set subject virtually into new lane under
+//        // consideration
+//
+//        final VehicleContainer newSituationMe = new VehicleContainerImpl(0);
+//        newSituationMe.addTestwise(me);
+//        newSituationMe.addTestwise(newFront);
+//
+//        // if TO_LEFT: actual situation of newBack's left lane
+//        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left
+//        // lane
+//        final VehicleContainer leftLaneNewMe;
+//        if (direction == MovsimConstants.TO_LEFT) {
+//            leftLaneNewMe = leftLaneNewBack;
+//        } else {
+//            leftLaneNewMe = new VehicleContainerImpl(0);
+//            leftLaneNewMe.addTestwise(oldFront);
+//        }
+//
+//        final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNewBack);
+//
+//        final VehicleContainer newSituationOldBack = new VehicleContainerImpl(0);
+//        newSituationOldBack.addTestwise(oldFront);
+//        newSituationOldBack.addTestwise(oldBack);
+//
+//        // if TO_LEFT: oldBack considers subject (me) as leader in left lane -->
+//        // new container
+//        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left
+//        // lane
+//        final VehicleContainer leftLaneNewSituationOldBack;
+//        if (direction == MovsimConstants.TO_LEFT) {
+//            leftLaneNewSituationOldBack = new VehicleContainerImpl(0);
+//            leftLaneNewSituationOldBack.addTestwise(me);
+//        } else {
+//            leftLaneNewSituationOldBack = leftLaneMeOld;
+//        }
+//
+//        final double oldBackNewAcc = (oldBack != null) ? oldBack.calcAccModel(newSituationOldBack, null) : 0;
+//
+//        // MOBIL trade-off for driver and neighborhood
+//        final double oldBackDiffAcc = oldBackNewAcc - oldBackOldAcc;
+//        final double newBackDiffAcc = newBackNewAcc - newBackOldAcc;
+//        final double meDiffAcc = meNewAcc - meOldAcc;
+//
+//        // MOBIL's incentive formula
+//        final int changeTo = newLane.getLaneIndex() - ownLane.getLaneIndex();
+//        final double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
+//
+//        prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
+//                * biasRight;
+//
+//        return prospectiveBalance;
+    	return 0.0;
     }
 
 
