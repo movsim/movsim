@@ -579,7 +579,7 @@ public class RoadSegmentTest {
     /**
      * Test method for org.mjbudden.traffic.RoadSegment#rearVehicle(int, double)
      */
-    //@Test
+    @Test
     public final void testRearVehicleOffsetJoin() {
         // test rear vehicle when there is an offset join, for example a join
         // onto a road segment that has an exit lane
@@ -596,9 +596,9 @@ public class RoadSegmentTest {
         // lane1 of r0 joins to lane2 of r1
         // lane1 of r1 has no predecessor
         Link.addJoin(r0, r1);
-        assert r1.sourceRoadSegment(Lane.LANE3).id() == r0.id();
-        assert r1.sourceRoadSegment(Lane.LANE2).id() == r0.id();
-        assert r1.sourceRoadSegment(Lane.LANE1) == null;
+        assertEquals(r0.id(), r1.sourceRoadSegment(Lane.LANE3).id());
+        assertEquals(r0.id(), r1.sourceRoadSegment(Lane.LANE2).id());
+        assertEquals(null, r1.sourceRoadSegment(Lane.LANE1));
 
         // vehicles suffixed 0 are on r0, vehicles suffixed 1 are on r1
         final Vehicle z1 = newVehicle(5.0, 1.0, Lane.LANE3);

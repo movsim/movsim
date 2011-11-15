@@ -344,13 +344,20 @@ public class RoadSegment implements Iterable<Vehicle> {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
         return laneSegments[lane].sourceLaneSegment();
     }
+
     public final RoadSegment sourceRoadSegment(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        if (laneSegments[lane].sourceLaneSegment() == null) {
+        	return null;
+        }
         return laneSegments[lane].sourceLaneSegment().roadSegment();
     }
 
     public final int sourceLane(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        if (laneSegments[lane].sourceLaneSegment() == null) {
+        	return Lane.NONE;
+        }
         return laneSegments[lane].sourceLaneSegment().lane();
     }
 
@@ -366,11 +373,17 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final RoadSegment sinkRoadSegment(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
+        if (laneSegments[lane].sinkLaneSegment() == null) {
+        	return null;
+        }
         return laneSegments[lane].sinkLaneSegment().roadSegment();
     }
 
     public final int sinkLane(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
+        if (laneSegments[lane].sinkLaneSegment() == null) {
+        	return Lane.NONE;
+        }
         return laneSegments[lane].sinkLaneSegment().lane();
     }
 

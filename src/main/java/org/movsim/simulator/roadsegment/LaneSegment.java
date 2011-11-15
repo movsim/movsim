@@ -327,9 +327,6 @@ public class LaneSegment {
      * That is a vehicle such that vehicle.positon() > vehicePos (strictly greater than).
      * The vehicle whose position equals vehiclePos is deemed to be in the rear.
      * 
-     * @param subjectVehicle
-     * @param index
-     *            index of subject vehicle
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(double vehiclePos) {
@@ -360,6 +357,10 @@ public class LaneSegment {
             }
         }
         return null;
+    }
+
+    public final Vehicle frontVehicle(Vehicle vehicle) {
+    	return frontVehicle(vehicle.posRearBumper());
     }
 
     private int positionBinarySearch(double vehiclePos) {
