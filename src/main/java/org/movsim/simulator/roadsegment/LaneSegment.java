@@ -20,10 +20,11 @@
 package org.movsim.simulator.roadsegment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.movsim.simulator.vehicles.Vehicle;
 
-public class LaneSegment {
+public class LaneSegment implements Iterable<Vehicle> {
     private static final boolean DEBUG = false;
     // Lane linkage
     private final RoadSegment roadSegment;
@@ -452,7 +453,52 @@ public class LaneSegment {
      * @param simulationTime
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
-    	
+        assert laneIsSorted();
+        final double roadLength = roadSegment.roadLength();
+
+        // remove any vehicles that have gone past the end of this lane segment
+        if (sinkLaneSegment != null) {
+            int count = vehicles.size();
+            // remove any vehicles that have gone past the end of this road segment
+            while (count > 0) {
+                final Vehicle vehicle = vehicles.get(0);
+                if (vehicle.posRearBumper() < roadLength) {
+                    break;
+                }
+                // if the vehicle is past the end of this road segment then move it onto the
+                // sink lane for its lane
+                // TODO - check previous lane correct (used for drawing vehicle when changing lanes)
+                // final int prevLaneOnNewRoadSegment = lane;
+                // final int prevLaneOnNewRoadSegment = sinkLane[vehicle.previousLane()];
+                final double positionOnNewRoadSegment = vehicle.posRearBumper() - roadLength;
+                double exitEndPos = Vehicle.EXIT_POSITION_NOT_SET;
+                if (sinkLaneSegment.type() == Lane.Type.TRAFFIC) {
+                    final int exitRoadSegmentId = vehicle.exitRoadSegmentId();
+                    if (exitRoadSegmentId == sinkLaneSegment.roadSegment.id()) {
+                        // vehicle is on exit exit road segment, so exit end pos is end of this
+                        // road segment
+                        exitEndPos = sinkLaneSegment.roadLength();
+                    } else {
+                        // check if next segment is exit segment
+                        final RoadSegment sinkSinkRoad = sinkLaneSegment.roadSegment();
+                        if (sinkSinkRoad != null && sinkSinkRoad.id() == exitRoadSegmentId) {
+                            // next road segment is exit road segment
+                            exitEndPos = sinkLaneSegment.roadLength() + sinkSinkRoad.roadLength();
+                        }
+                    }
+                }
+                final int laneOnNewRoadSegment = sinkLaneSegment.lane();
+                vehicle.moveToNewRoadSegment(laneOnNewRoadSegment, positionOnNewRoadSegment, exitEndPos);
+                // remove vehicle from this road segment
+                vehicles.remove(0);
+                --count;
+                ++removedVehicleCount;
+                // put the vehicle onto the new road segment (note that even when a road segment
+                // is joined to itself (eg for a traffic circle) the vehicle needs to be added
+                // and removed - this ensures vehicles remain sorted)
+                sinkLaneSegment.appendVehicle(vehicle);
+            }
+        }
     }
 
     /**
@@ -498,5 +544,15 @@ public class LaneSegment {
                 }
             }
         }
+    }
+
+    /**
+     * Returns an iterator over all the vehicles in this lane segment.
+     * 
+     * @return an iterator over all the vehicles in this lane segment
+     */
+    @Override
+    public final Iterator<Vehicle> iterator() {
+        return vehicles.iterator();
     }
 }

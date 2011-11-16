@@ -21,8 +21,8 @@ package org.movsim.simulator.roadsegment;
 
 import java.util.Iterator;
 
-import org.movsim.input.model.RoadInput;
 import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 
@@ -86,6 +86,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private double cumulativeRoadLength = -1.0; // total length of road up to start of segment
     final int laneCount;
     private LaneSegment laneSegments[];
+    private FlowConservingBottlenecks flowConsBottlenecks;
 
     
     // Sources and Sinks
@@ -579,6 +580,48 @@ public class RoadSegment implements Iterable<Vehicle> {
     		laneSegment.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
     	}
     }
+    /**
+     * Accelerate.
+     * 
+     * @param dt
+     *            simulation time interval
+     * @param simulationTime
+     * @param iterationCount 
+     */
+    public void accelerate(double dt, double simulationTime, long iterationCount) {
+    	for (final LaneSegment laneSegment : laneSegments) {
+            //final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
+            final LaneSegment leftLaneSegment = null; // TODO get left lane ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
+            //for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
+            for(final Vehicle vehicle : laneSegment){
+                //final Vehicle veh = vehiclesOnLane.get(i);
+                final double x = vehicle.getPosition();
+                // TODO treat null case 
+                final double alphaT = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaT(x);
+                final double alphaV0 = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaV0(x);
+                // logger.debug("i={}, x_pos={}", i, x);
+                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
+                vehicle.calcAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
+            }
+        }
+    }
+
+    /**
+     * Update position and speed.
+     * 
+     * @param dt
+     *            simulation time interval
+     * @param simulationTime
+     * @param iterationCount 
+     */
+    public void updatePositionAndSpeed(double dt, double simulationTime, long iterationCount) {
+    	for (final LaneSegment laneSegment : laneSegments) {
+            for (final Vehicle vehicle : laneSegment) {
+                vehicle.updatePostionAndSpeed(dt);
+            }
+        }
+    }
+    
 
   /**
      * If there is a traffic sink, use it to perform any traffic outflow.
@@ -592,6 +635,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     	for (final LaneSegment laneSegment : laneSegments) {
     		laneSegment.outFlow(dt, simulationTime, iterationCount);
     	}
+        if (sink != null) {
+            sink.timeStep(dt, simulationTime, iterationCount);
+        }
     }
 
     /**

@@ -27,7 +27,6 @@
 package org.movsim.simulator.roadSection;
 
 import java.io.PrintWriter;
-import java.util.List;
 
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.simulator.MovsimConstants;
@@ -290,6 +289,7 @@ public class UpstreamBoundary {
         final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
         vehicle.setMidPosition(xEnter);
         vehicle.setSpeed(vEnter);
+        vehicle.setLane(laneSegment.lane());
         laneSegment.addVehicle(vehicle);
         // status variables of entering vehicle for logging
         enteringVehCounter++;

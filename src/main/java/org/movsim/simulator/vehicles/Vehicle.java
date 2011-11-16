@@ -31,7 +31,6 @@ import java.util.List;
 import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.roadsegment.LaneSegment;
@@ -148,6 +147,7 @@ public class Vehicle {
     // Exit Handling
     private int roadSegmentId;
     private double roadSegmentLength;
+    private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     
     
     private long roadId;
@@ -610,26 +610,26 @@ public class Vehicle {
     
     public double getNetDistance(final Vehicle vehFront) {
         
-        final RoadNetworkDeprecated roadNetwork = RoadNetworkDeprecated.getInstance();
-        final boolean isRingroad = roadNetwork.isPeriodBoundary(roadId);
-        final double roadLength = roadNetwork.getRoadLength(roadId); 
         
         if (vehFront == null) {
-            if(isRingroad){
-                return (roadLength - length); 
-            }
+//            final RoadNetworkDeprecated roadNetwork = RoadNetworkDeprecated.getInstance();
+//            final boolean isRingroad = roadNetwork.isPeriodBoundary(roadId);
+//            if(isRingroad){
+//                final double roadLength = roadNetwork.getRoadLength(roadId); 
+//                return (roadLength - length); 
+//            }
             return MovsimConstants.GAP_INFINITY;
         }
         
         // TODO general concept for treating offsets needed here
         // so far use hard-coded solution
         double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
-        final long idOfframp=-1;
-        final long idOnramp=1;
-        if( /*roadId  != vehFront.getRoadId()*/ roadId==idOfframp && vehFront.getRoadId()==idOnramp || ( isRingroad && netGap <= -0.5 * (length + vehFront.getLength()) )){
-            logger.debug("net distance with respect to leader from new roadId. addRoadlength={}", roadLength);
-            netGap += roadLength;
-        }            
+//        final long idOfframp=-1;
+//        final long idOnramp=1;
+//        if( /*roadId  != vehFront.getRoadId()*/ roadId==idOfframp && vehFront.getRoadId()==idOnramp || ( isRingroad && netGap <= -0.5 * (length + vehFront.getLength()) )){
+//            logger.debug("net distance with respect to leader from new roadId. addRoadlength={}", roadLength);
+//            netGap += roadLength;
+//        }            
         return netGap;
     }
 
@@ -768,6 +768,10 @@ public class Vehicle {
     
     public int getLane() {
         return lane;
+    }
+
+    public void setLane(int lane) {
+        this.lane = lane;
     }
 
     /*
@@ -1068,5 +1072,15 @@ public class Vehicle {
     public final int roadSegmentId() {
         return roadSegmentId;
     }
+
+    /**
+     * Returns the id of the road segment in which this vehicle wishes to exit.
+     * 
+     * @return id of exit road segment
+     */
+    public final int exitRoadSegmentId() {
+        return exitRoadSegmentId;
+    }
+
 
 }
