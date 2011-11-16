@@ -35,7 +35,6 @@ import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;

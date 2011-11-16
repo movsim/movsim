@@ -23,7 +23,6 @@ import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;

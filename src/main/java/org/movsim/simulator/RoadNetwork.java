@@ -183,10 +183,10 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 //        for (RoadSection roadSection : roadSections) {
 //            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
 //        }
-//
-//        // lane changes
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.laneChanging(iterationCount, timestep, time);
+
+        // lane changes
+//        for (final RoadSegment roadSegment : roadSegments) {
+//        	roadSegment.laneChanging(dt, simulationTime, iterationCount);
 //        }
 
         // vehicle accelerations

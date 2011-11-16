@@ -36,7 +36,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     final ArrayList<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
    
-    LaneSegment(RoadSegment roadSegment, int lane) {
+    public LaneSegment(RoadSegment roadSegment, int lane) {
     	this.roadSegment = roadSegment;
     	this.lane = lane;
         vehicles = new ArrayList<Vehicle>(VEHICLES_PER_LANE_INITIAL_SIZE);
@@ -157,6 +157,23 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Removes the given vehicle.
+     * 
+     * @param index
+     */
+    public void removeVehicle(Vehicle vehicle) {
+    	// TODO improve primitive implementation
+        final int count = vehicles.size();
+        for (int i = 0; i < count; ++i) {
+            final Vehicle veh = vehicles.get(i);
+            if (veh.getId() == vehicle.getId()) {
+                vehicles.remove(i);
+                return;
+            }
+        }
+    }
+
+    /**
      * Removes the front vehicle on the given lane.
      * 
      * @param lane
@@ -201,6 +218,11 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
+    }
+
+    // TODO testwise add vehicle
+    public void addVehicleTestwise(Vehicle vehicle) {
+    	addVehicle(vehicle);
     }
 
     public void appendVehicle(Vehicle vehicle) {
@@ -270,6 +292,11 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         return null;
     }
+
+    public final Vehicle rearVehicle(Vehicle vehicle) {
+    	return rearVehicle(vehicle.posRearBumper());
+    }
+
 
     public Vehicle rearVehicleOnSinkLanePosAdjusted() {
 

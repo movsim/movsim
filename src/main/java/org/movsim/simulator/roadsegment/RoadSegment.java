@@ -20,6 +20,8 @@
 package org.movsim.simulator.roadsegment;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
@@ -84,8 +86,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     private String userId;
     private final double roadLength;
     private double cumulativeRoadLength = -1.0; // total length of road up to start of segment
-    final int laneCount;
-    private LaneSegment laneSegments[];
+    private final int laneCount;
+    private final LaneSegment laneSegments[];
+    private List<Vehicle> stagedVehicles;
     private FlowConservingBottlenecks flowConsBottlenecks;
 
     
@@ -138,6 +141,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         id = nextId++;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
+        stagedVehicles = new LinkedList<Vehicle>();
     }
 
     /**
@@ -539,21 +543,38 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Lane changing.
      * <p>
      * For each vehicle check if a lane change is desired and safe and, if so, make the lane change.
      * </p>
      * <p>
-     * <code>makeLaneChanges</code> preserves the vehicle sort order, since only lateral movements
+     * <code>laneChanging</code> preserves the vehicle sort order, since only lateral movements
      * of vehicles are made.
      * </p>
-     * 
+     *
      * @param dt
      *            simulation time interval
      * @param simulationTime
+     * @param iterationCount 
      */
-    public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
-        assert eachLaneIsSorted();
+    public void laneChanging(double dt, double simulationTime, long iterationCount) {
+    	for (final LaneSegment laneSegment : laneSegments) {
+            stagedVehicles.clear();
+            for (final Vehicle vehicle : laneSegment) {
+                if (vehicle.considerLaneChanging(dt, this)) {
+                    stagedVehicles.add(vehicle);
+                }
+            }
+
+            // assign staged vehicles to new lanes
+            // necessary update of new situation *after* lane-changing decisions
+            for (final Vehicle vehicle : stagedVehicles) {
+            	laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+            	laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
+            }
+        }
     }
+    
 
     /**
      * <p>

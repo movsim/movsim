@@ -26,10 +26,9 @@
  */
 package org.movsim.simulator.vehicles.lanechanging;
 
-import java.util.List;
-
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
@@ -63,7 +62,7 @@ public class LaneChangingModel {
     private final LaneChangingInputData lcInputData;
 
     /**
-     * Instantiates a new lane changing model impl.
+     * Instantiates a new lane changing model.
      *
      * @param lcInputData the lc input data
      */
@@ -148,7 +147,7 @@ public class LaneChangingModel {
         return (false);
     }
 
-    public int determineLaneChangingDirection(final List<VehicleContainer> vehContainers) {
+    public int determineLaneChangingDirection(RoadSegment roadSegment) {
 
         final int currentLane = me.getLane();
 
@@ -159,13 +158,13 @@ public class LaneChangingModel {
         // consider lane-changing to right-hand side lane (decreasing lane
         // index)
         if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
-            accToRight = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_RIGHT, vehContainers);
+            accToRight = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_RIGHT, roadSegment);
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane
         // index)
-        if (currentLane + 1 < vehContainers.size()) {
-            accToLeft = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_LEFT, vehContainers);
+        if (currentLane + 1 < roadSegment.laneCount()) {
+            accToLeft = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_LEFT, roadSegment);
         }
 
         // decision

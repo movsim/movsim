@@ -118,7 +118,7 @@ public class SimulationInput {
         // -----------------------------------------------------------
         
         // quick hack: for road segment a mapping to ids is needed
-        final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
+		final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         List<RoadInput> roadInputList = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
             roadInputList.add(new RoadInputImpl(roadElem));

@@ -26,14 +26,13 @@
  */
 package org.movsim.simulator.vehicles;
 
-import java.util.List;
-
 import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.impl.NoiseImpl;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
@@ -827,7 +826,7 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#considerLaneChanging(double, java.util.List)
      */
     
-    public boolean considerLaneChanging(double dt, final List<VehicleContainer> vehContainers) {
+    public boolean considerLaneChanging(double dt, RoadSegment roadSegment) {
         // no lane changing when not configured in xml.
         if (!lcModel.isInitialized()) {
             return false;
@@ -839,7 +838,7 @@ public class Vehicle {
         }
 
         // no lane-changing decision necessary for one-lane road
-        if (vehContainers.size() < 2) {
+        if (roadSegment.laneCount() < 2) {
             return false;
         }
 
@@ -847,7 +846,7 @@ public class Vehicle {
         final int saveLane = lane;
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
-        final int laneChangingDirection = lcModel.determineLaneChangingDirection(vehContainers);
+        final int laneChangingDirection = lcModel.determineLaneChangingDirection(roadSegment);
 
         // TODO do cross check, not necessary anymore?! 
         //assert saveLane != lane;
