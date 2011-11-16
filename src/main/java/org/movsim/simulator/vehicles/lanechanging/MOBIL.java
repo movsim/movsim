@@ -37,9 +37,10 @@ import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 /**
  * The Class MOBIL.
  */
+@SuppressWarnings("unused")
 public class MOBIL {
 
-    private double politeness;
+	private double politeness;
     
     /** changing threshold */
     private double threshold;
