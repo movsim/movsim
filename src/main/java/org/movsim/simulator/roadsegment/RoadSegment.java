@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 import org.movsim.input.model.RoadInput;
 import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -88,6 +89,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     
     // Sources and Sinks
+    private UpstreamBoundary upstreamBoundary;
     private TrafficSource source;
     // sink is of type TrafficFlowBase to allow the sink to be a TrafficFlowOnRamp
     private TrafficFlowBase sink;
@@ -231,6 +233,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         assert source != null;
         this.source = source;
         source.setRoadSegment(this);
+    }
+
+    /**
+     * Sets the upstream boundary (traffic source) for this road segment.
+     * 
+     * @param source
+     *            the traffic source
+     */
+    public final void setUpstreamBoundary(UpstreamBoundary upstreamBoundary) {
+        assert upstreamBoundary != null;
+        this.upstreamBoundary = upstreamBoundary;
     }
 
     /**
@@ -587,13 +600,13 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param dt
      *            simulation time interval
      * @param simulationTime
+     * @param iterationCount 
      */
-    // TODO upstream boundary condition is encapsulated in own class 
     public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
-//        if (source != null) {
-//            source.timeStep(dt, simulationTime, iterationCount);
-//        }
+        if (upstreamBoundary != null) {
+            upstreamBoundary.update(iterationCount, dt, simulationTime);
+        }
     }
 
      /**

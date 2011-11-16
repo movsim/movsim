@@ -101,8 +101,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 
         initSimpleOnramps(inputData);
 
-        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
-                inputData.getProjectMetaData().getProjectName());
+//        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
+//                inputData.getProjectMetaData().getProjectName());
 
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());

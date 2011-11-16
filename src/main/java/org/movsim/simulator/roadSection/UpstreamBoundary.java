@@ -32,8 +32,9 @@ import java.util.List;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
+import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.utilities.impl.FileUtils;
@@ -62,8 +63,9 @@ public class UpstreamBoundary {
     /** The veh generator. */
     private final VehicleGenerator vehGenerator;
 
-    /** The veh container. */
-    private final List<VehicleContainer> vehContainers;
+    /** The veh container. The road segment contains the lane sections which contain the vehicles */
+    //private final List<VehicleContainer> vehContainers;
+    private final RoadSegment roadSegment;
 
     /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
@@ -71,7 +73,7 @@ public class UpstreamBoundary {
     /** The fstr logging. */
     private PrintWriter fstrLogging;
 
-    /** The entering veh counter. */
+    /** The entering vehicle counter. */
     private int enteringVehCounter;
 
     /** The x enter last. status of last merging vehicle for logging to file */
@@ -91,10 +93,10 @@ public class UpstreamBoundary {
      * @param upstreamBoundaryData the upstream boundary data
      * @param projectName the project name
      */
-    public UpstreamBoundary(long roadId, VehicleGenerator vehGenerator, List<VehicleContainer> vehContainers,
+    public UpstreamBoundary(long roadId, VehicleGenerator vehGenerator, RoadSegment roadSegment,
             TrafficSourceData upstreamBoundaryData, String projectName) {
         this.vehGenerator = vehGenerator;
-        this.vehContainers = vehContainers;
+        this.roadSegment = roadSegment;
         nWait = 0;
 
         inflowTimeSeries = new InflowTimeSeries(upstreamBoundaryData.getInflowTimeSeries());
@@ -123,7 +125,7 @@ public class UpstreamBoundary {
      * @return the new cyclic lane index for entering
      */
     private int getNewCyclicLaneIndexForEntering(int iLane) {
-        return (iLane == vehContainers.size() - 1 ? 0 : iLane + 1);
+        return (iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1);
     }
 
     /**
@@ -135,7 +137,7 @@ public class UpstreamBoundary {
     private double getTotalInflow(double time) {
         // inflow over all lanes
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
-        final int nLanes = vehContainers.size();
+        final int nLanes = roadSegment.laneCount();
         return nLanes * qBC;
     }
 
@@ -154,11 +156,12 @@ public class UpstreamBoundary {
             // try to insert new vehicle at inflow
             // iterate periodically over n lanes
             int iLane = laneEnterLast;
-            for (int i = 0, N = vehContainers.size(); i < N; i++) {
+            for (int i = 0, N = roadSegment.laneCount(); i < N; i++) {
                 iLane = getNewCyclicLaneIndexForEntering(iLane);
-                final VehicleContainer vehContainerLane = vehContainers.get(iLane);
+                //final VehicleContainer vehContainerLane = vehContainers.get(iLane);
+                final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
                 // lane index is identical to vehicle's lane number
-                final boolean isEntered = tryEnteringNewVehicle(vehContainerLane, time, totalInflow);
+                final boolean isEntered = tryEnteringNewVehicle(laneSegment, time, totalInflow);
                 if (isEntered) {
                     nWait--;
                     if (fstrLogging != null) {
@@ -175,20 +178,20 @@ public class UpstreamBoundary {
     /**
      * Try entering new vehicle.
      *
-     * @param vehContainer the veh container
+     * @param laneSegment
      * @param time the time
      * @param qBC the q bc
      * @return true, if successful
      */
-    private boolean tryEnteringNewVehicle(final VehicleContainer vehContainer, double time, double qBC) {
+    private boolean tryEnteringNewVehicle(final LaneSegment laneSegment, double time, double qBC) {
 
         // type of new vehicle
         final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
-        final Vehicle leader = vehContainer.getMostUpstream();
+        final Vehicle leader = laneSegment.rearVehicle();
 
         // (1) empty road
         if (leader == null) {
-            enterVehicleOnEmptyRoad(vehContainer, time, vehPrototype);
+            enterVehicleOnEmptyRoad(laneSegment, time, vehPrototype);
             return true;
         }
         // (2) check if gap to leader is sufficiently large
@@ -212,7 +215,7 @@ public class UpstreamBoundary {
             minRequiredGap = leader.getSpeed() * tau;
         }
         if (netGapToLeader > minRequiredGap) {
-            enterVehicle(vehContainer, time, minRequiredGap, vehPrototype, leader);
+            enterVehicle(laneSegment, time, minRequiredGap, vehPrototype, leader);
             return true;
         }
         // no entering possible
@@ -222,27 +225,27 @@ public class UpstreamBoundary {
     /**
      * Enter vehicle on empty road.
      *
-     * @param vehContainer the veh container
+     * @param laneSegment
      * @param time the time
-     * @param vehPrototype the veh prototype
+     * @param vehPrototype the vehicle prototype
      */
-    private void enterVehicleOnEmptyRoad(final VehicleContainer vehContainer, double time, VehiclePrototype vehPrototype) {
+    private void enterVehicleOnEmptyRoad(LaneSegment laneSegment, double time, VehiclePrototype vehPrototype) {
         final double xEnter = 0;
         final double vEnter = inflowTimeSeries.getSpeed(time);
-        addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
+        addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
         logger.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
     /**
      * Enter vehicle.
      *
-     * @param vehContainer the veh container
+     * @param laneSegment
      * @param time the time
      * @param sFreeMin the s free min
      * @param vehPrototype the veh prototype
      * @param leader the leader
      */
-    private void enterVehicle(final VehicleContainer vehContainer, double time, double sFreeMin,
+    private void enterVehicle(LaneSegment laneSegment, double time, double sFreeMin,
             VehiclePrototype vehPrototype, Vehicle leader) {
 
         final double speedDefault = inflowTimeSeries.getSpeed(time);
@@ -265,7 +268,7 @@ public class UpstreamBoundary {
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
         // final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
 
-        addVehicle(vehContainer, vehPrototype, xEnter, vEnter);
+        addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
         // logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",
         // xEnter, vEnter);
 
@@ -282,15 +285,17 @@ public class UpstreamBoundary {
      * @param xEnter the x enter
      * @param vEnter the v enter
      */
-    private void addVehicle(final VehicleContainer vehContainer, final VehiclePrototype vehPrototype, double xEnter,
+    private void addVehicle(LaneSegment laneSegment, final VehiclePrototype vehPrototype, double xEnter,
             double vEnter) {
-        final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-        vehContainer.add(veh, xEnter, vEnter);
+        final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
+        vehicle.setMidPosition(xEnter);
+        vehicle.setSpeed(vEnter);
+        laneSegment.addVehicle(vehicle);
         // status variables of entering vehicle for logging
         enteringVehCounter++;
         xEnterLast = xEnter;
         vEnterLast = vEnter;
-        laneEnterLast = vehContainer.getLaneIndex();
+        laneEnterLast = laneSegment.lane();
     }
 
     public void setFlowPerLane(double newFlowPerLane) {

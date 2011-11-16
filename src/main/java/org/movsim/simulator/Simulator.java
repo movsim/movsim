@@ -28,6 +28,7 @@ import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -227,8 +228,10 @@ public class Simulator implements Runnable {
 		// for now this is a minimal implementation, just the traffic source and traffic sink
 		// need to add further data, eg initial conditions, detectors, bottlenecks etc
 	    final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
-
-	    final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
+        final UpstreamBoundary upstreamBoundary = new UpstreamBoundary(roadSegment.id(), vehGenerator, roadSegment, trafficSourceData,
+                inputData.getProjectMetaData().getProjectName());
+        roadSegment.setUpstreamBoundary(upstreamBoundary);
+	    //final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
 	}
 
 

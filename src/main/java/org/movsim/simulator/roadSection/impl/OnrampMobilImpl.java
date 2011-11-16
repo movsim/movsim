@@ -151,8 +151,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
 
-        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
-                projectName);
+//        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
+//                projectName);
 
         mergeCount = 0;
         
