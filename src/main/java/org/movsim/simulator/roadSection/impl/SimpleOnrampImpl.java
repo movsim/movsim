@@ -137,7 +137,7 @@ public class SimpleOnrampImpl {
         }
 
         nWait = 0;
-        inflowTimeSeries = new InflowTimeSeriesImpl(rampData.getInflowTimeSeries());
+        inflowTimeSeries = new InflowTimeSeries(rampData.getInflowTimeSeries());
 
         this.length = rampData.getRampLength();
         this.xCenter = rampData.getRampStartPosition() + 0.5 * length;

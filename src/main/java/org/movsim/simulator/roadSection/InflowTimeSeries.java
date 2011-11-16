@@ -26,11 +26,65 @@
  */
 package org.movsim.simulator.roadSection;
 
-// TODO: Auto-generated Javadoc
+import java.util.List;
+
+import org.movsim.input.model.simulation.InflowDataPoint;
+import org.movsim.utilities.impl.Tables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The Interface InflowTimeSeries.
+ * The Class InflowTimeSeries.
  */
-public interface InflowTimeSeries {
+public class InflowTimeSeries  {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(InflowTimeSeries.class);
+
+    /** The time values. */
+    private double[] timeValues;
+
+    /** The flow values. */
+    private double[] flowValues;
+
+    /** The speed values. */
+    private double[] speedValues;
+    
+    
+    private double constantFlowPerLane = -1;
+    
+    private final double constantInitSpeed = 80/3.6; // 80 km/h
+
+    /**
+     * Instantiates a new inflow time series.
+     * 
+     * @param inflowTimeSeries
+     *            the inflow time series
+     */
+    public InflowTimeSeries(List<InflowDataPoint> inflowTimeSeries) {
+        generateTimeSeriesData(inflowTimeSeries);
+    }
+
+    /**
+     * Generate time series data.
+     * 
+     * @param inflowTimeSeries
+     *            the inflow time series
+     */
+    private void generateTimeSeriesData(List<InflowDataPoint> inflowTimeSeries) {
+        final int size = inflowTimeSeries.size();
+
+        logger.info(" inflowDataPoint.size = {} (if ==0. no inflow)", size);
+        timeValues = new double[size];
+        flowValues = new double[size];
+        speedValues = new double[size];
+        for (int i = 0; i < size; i++) {
+            timeValues[i] = inflowTimeSeries.get(i).getTime();
+            flowValues[i] = inflowTimeSeries.get(i).getFlow();
+            speedValues[i] = inflowTimeSeries.get(i).getSpeed();
+            logger.debug("add data: flow={}, speed={}", flowValues[i], speedValues[i]);
+        }
+    }
 
     /**
      * Gets the flow.
@@ -39,7 +93,12 @@ public interface InflowTimeSeries {
      *            the time
      * @return the flow
      */
-    double getFlowPerLane(double time);
+    public double getFlowPerLane(double time) {
+        if(constantFlowPerLane>=0){
+            return constantFlowPerLane;
+        }
+        return Tables.intpextp(timeValues, flowValues, time);
+    }
 
     /**
      * Gets the speed.
@@ -48,9 +107,16 @@ public interface InflowTimeSeries {
      *            the time
      * @return the speed
      */
-    double getSpeed(double time);
-    
-    
-    void setConstantFlowPerLane(double newFlowPerLane);
-    
+    public double getSpeed(double time) {
+        if(constantFlowPerLane>=0){
+            return constantInitSpeed;
+        }
+        return Tables.intpextp(timeValues, speedValues, time);
+    }
+
+    public void setConstantFlowPerLane(double newFlowPerLane) {
+        logger.debug("set new flow per lane value={} per second", newFlowPerLane);
+        assert newFlowPerLane >=0;
+        this.constantFlowPerLane = newFlowPerLane;
+    }
 }

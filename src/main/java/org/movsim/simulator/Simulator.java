@@ -23,9 +23,10 @@ import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.TrafficSinkData;
+import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
-import org.movsim.simulator.impl.RoadNetworkDeprecated;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadsegment.RoadSegment;
@@ -102,12 +103,17 @@ public class Simulator implements Runnable {
         String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
         // String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr"; //TODO remove
 
+        // First parse the OpenDrive (.xodr) to load the network topology and road layout
         String xmlFileName = "/roadnetwork/" + scenario + ".xodr";
         logger.info("try to load ", xmlFileName);
-        OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
+        final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
+        if (loaded == false) {
+            logger.info("failed to load ", xmlFileName);
+        }
         logger.info("done with road network parsing");
 
-        // parse xmlFile and set values
+        // Now parse the MovSim XML file to add the simulation components
+        // eg vehicles and vehicle models, traffic composition, traffic sources etc
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         this.timestep = inputData.getSimulationInput().getTimestep(); // fix
@@ -145,48 +151,59 @@ public class Simulator implements Runnable {
 
         // TODO roadsections
         // connect physical roads from network input to input from movsim 
-        for(RoadSegment roadSegment : roadNetwork){
-            long roadSegmentId = roadSegment.id();
-            final RoadInput roadInput = inputData.getSimulationInput().getRoadInput().get(roadSegmentId);
-            if(roadInput!=null){
-                roadSegment.addInput(roadInput);
-            }
-            else{
-                logger.debug("no additional input for road id={} provided in movsim configuration file.");
-            }
+//        for(RoadSegment roadSegment : roadNetwork){
+//            long roadSegmentId = roadSegment.id();
+//            final RoadInput roadInput = inputData.getSimulationInput().getRoadInput().get(roadSegmentId);
+//            if(roadInput!=null){
+//                roadSegment.addInput(roadInput);
+//            }
+//            else{
+//                logger.debug("no additional input for road id={} provided in movsim configuration file.");
+//            }
+//        }
+        // For each road in the MovSim XML input data, find the corresponding roadSegment and
+        // set its input data accordingly
+        for (final RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
+        	final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+        	if (roadSegment != null) {
+        		addInputToRoadSegment(roadSegment, roadinput);
+        	}
         }
         
-        
+        // TODO roadSections and roadSectionsMap need to be removed
         roadSections = new LinkedList<RoadSection>();
-        for (RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
+        roadSectionsMap = new HashMap<Long, RoadSection>();
+        for (final RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
+        	final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+        	if (roadSegment != null) {
+        		addInputToRoadSegment(roadSegment, roadinput);
+        	}
             final RoadSection roadSection = RoadSectionFactory.create(inputData, roadinput, vehGenerator);
             roadSections.add(roadSection);
+            roadSectionsMap.put(roadSection.getId(), roadSection);
         }
-
-        
-        createMap();
 
         // ---------------------------------------------
         // TODO work in progress, 
         // only needed in vehicle for calculating net distance but this concept not yet sufficiently worked-out 
-        final RoadNetworkDeprecated roadNetworkDeprecated = RoadNetworkDeprecated.getInstance();
-        for (RoadSection roadSection : roadSections) {
-            roadNetworkDeprecated.add(roadSection);
-        }
-        logger.info(roadNetworkDeprecated.toString());
+//        final RoadNetworkDeprecated roadNetworkDeprecated = RoadNetworkDeprecated.getInstance();
+//        for (RoadSection roadSection : roadSections) {
+//            roadNetworkDeprecated.add(roadSection);
+//        }
+//        logger.info(roadNetworkDeprecated.toString());
         // ---------------------------------------------
         
 
         // TODO quick hack for connecting offramp with onramp
         // more general concept needed here
-        final long idOfframp = -1;
-        final long idOnramp = 1;
-        if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
-            final RoadSection onramp = findRoadById(idOnramp);
-            findRoadById(idOfframp).getVehContainer(MovsimConstants.MOST_RIGHT_LANE).setDownstreamConnection(
-                    onramp.getVehContainer(MovsimConstants.MOST_RIGHT_LANE));
-            logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
-        }
+//        final long idOfframp = -1;
+//        final long idOnramp = 1;
+//        if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
+//            final RoadSection onramp = findRoadById(idOnramp);
+//            findRoadById(idOfframp).getVehContainer(MovsimConstants.MOST_RIGHT_LANE).setDownstreamConnection(
+//                    onramp.getVehContainer(MovsimConstants.MOST_RIGHT_LANE));
+//            logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
+//        }
         // ---------------------------------------------
         
         
@@ -194,38 +211,25 @@ public class Simulator implements Runnable {
 
         // model requires specific update time depending on its category !!
 
+        // TODO SimOutput needs to use road segments, not road sections
         simOutput = new SimOutput(inputData, roadSections, this.roadSectionsMap);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Add input data to road segment.
      * 
-     * @see org.movsim.simulator.Simulator#getRoadSections()
+     * Note by rules of encapsulation this function is NOT a member of RoadSegment, since RoadSegment
+     * should not be aware of form of XML file or RoadInput data structure.
+     * @param roadSegment
+     * @param roadinput
      */
-    public List<RoadSection> getRoadSections() {
-        return roadSections;
-    }
+	private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
+		// for now this is a minimal implementation, just the traffic source and traffic sink
+		// need to add further data, eg initial conditions, detectors, bottlenecks etc
+	    final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
 
-    
-    // helper function
-    private void createMap() {
-        roadSectionsMap = new HashMap<Long, RoadSection>();
-        for (final RoadSection roadSection : roadSections) {
-            roadSectionsMap.put(roadSection.getId(), roadSection);
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#findRoadById(long)
-     */
-    public RoadSection findRoadById(long id) {
-        if (roadSectionsMap.containsKey(id)) {
-            return roadSectionsMap.get(id);
-        }
-        return null;
-    }
+	    final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
+	}
 
 
 //    // TODO just hack
@@ -286,55 +290,10 @@ public class Simulator implements Runnable {
             logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
                     time / 3600, timestep, projectName));
         }
-
-        
-        
         // TODO new update of roadSegments 
         roadNetwork.timeStep(timestep, time, iterationCount);
-        
-        
-        
         // parallel update of all roadSections
         //final double dt = this.timestep; // TODO
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateRoadConditions(iterationCount, time);
-        }
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateBoundaryVehicles(iterationCount, time);
-        }
-        // check for crashes
-        for (RoadSection roadSection : roadSections) {
-            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-        }
-
-        // lane changes
-        for (RoadSection roadSection : roadSections) {
-            roadSection.laneChanging(iterationCount, timestep, time);
-        }
-
-        // vehicle accelerations
-        for (RoadSection roadSection : roadSections) {
-            roadSection.accelerate(iterationCount, timestep, time);
-        }
-
-        // vehicle pos/speed
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updatePositionAndSpeed(iterationCount, timestep, time);
-        }
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateDownstreamBoundary();
-        }
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateUpstreamBoundary(iterationCount, timestep, time);
-        }
-
-        for (RoadSection roadSection : roadSections) {
-            roadSection.updateDetectors(iterationCount, timestep, time);
-        }
 
         simOutput.update(iterationCount, time, timestep);
     }

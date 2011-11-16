@@ -729,10 +729,4 @@ public class RoadSegment implements Iterable<Vehicle> {
     public final Iterator<Vehicle> iterator() {
         return new VehicleIterator();
     }
-
-    
-    // TODO ake roadsections: process roadInput from movsim xml here !!! 
-    public void addInput(RoadInput roadInput) {
-        // TODO Auto-generated method stub
-    }
 }

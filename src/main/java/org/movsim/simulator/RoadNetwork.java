@@ -161,8 +161,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * @param iterationCount
      *            the counter of performed update steps            
      */
-    
-    
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         // Make each type of update for each road segment, this avoids problems with vehicles
@@ -170,6 +168,46 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // onto the next road segment.
         
         logger.info("called timeStep: time={}", simulationTime);
+        // TODO road segments have replaced road sections, so need to replicate below for correct parallel update
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateRoadConditions(iterationCount, time);
+//        }
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateBoundaryVehicles(iterationCount, time);
+//        }
+//        // check for crashes
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
+//        }
+//
+//        // lane changes
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.laneChanging(iterationCount, timestep, time);
+//        }
+//
+//        // vehicle accelerations
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.accelerate(iterationCount, timestep, time);
+//        }
+//
+//        // vehicle pos/speed
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updatePositionAndSpeed(iterationCount, timestep, time);
+//        }
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateDownstreamBoundary();
+//        }
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateUpstreamBoundary(iterationCount, timestep, time);
+//        }
+//
+//        for (RoadSection roadSection : roadSections) {
+//            roadSection.updateDetectors(iterationCount, timestep, time);
+//        }
+
         
         // TODO update traffic lights, speed limits etc.
 //        for (RoadSection roadSection : roadSections) {
