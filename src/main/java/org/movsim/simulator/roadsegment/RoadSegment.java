@@ -678,7 +678,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
         if (upstreamBoundary != null) {
-            upstreamBoundary.update(iterationCount, dt, simulationTime);
+            upstreamBoundary.timeStep(dt, simulationTime, iterationCount);
         }
     }
 

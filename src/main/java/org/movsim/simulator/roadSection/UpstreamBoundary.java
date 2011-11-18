@@ -30,6 +30,7 @@ import java.io.PrintWriter;
 
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadSection.InflowTimeSeries;
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.RoadSegment;
@@ -44,7 +45,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class UpstreamBoundaryImpl.
  */
-public class UpstreamBoundary {
+public class UpstreamBoundary implements SimulationTimeStep {
 
     // TODO the same output format is used in SimpleOnrampImpl. Consolidate. 
 
@@ -140,16 +141,22 @@ public class UpstreamBoundary {
         return nLanes * qBC;
     }
 
+    public void update(long iterationCount, double dt, double simulationTime) {
+        timeStep(dt, simulationTime, iterationCount);
+    }
+    
     /**
      * Update.
      *
      * @param iterationCount the iteration count
      * @param dt the dt
-     * @param time the time
+     * @param simulationTime the time
      */
-    public void update(long itime, double dt, double time) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+     //public void update(long iterationCount, double dt, double simulationTime) {
         // integrate inflow demand
-        final double totalInflow = getTotalInflow(time);
+        final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
         if (nWait >= 1) {
             // try to insert new vehicle at inflow
@@ -160,11 +167,11 @@ public class UpstreamBoundary {
                 //final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
                 // lane index is identical to vehicle's lane number
-                final boolean isEntered = tryEnteringNewVehicle(laneSegment, time, totalInflow);
+                final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
                     if (fstrLogging != null) {
-                        fstrLogging.printf(outputFormat, time, laneEnterLast, xEnterLast, 3.6 * vEnterLast,
+                        fstrLogging.printf(outputFormat, simulationTime, laneEnterLast, xEnterLast, 3.6 * vEnterLast,
                                 3600 * totalInflow, enteringVehCounter, nWait);
                         fstrLogging.flush();
                     }
@@ -321,4 +328,6 @@ public class UpstreamBoundary {
     public double getFlowPerLane(double time) {
         return inflowTimeSeries.getFlowPerLane(time);
     }
+
+   
 }
