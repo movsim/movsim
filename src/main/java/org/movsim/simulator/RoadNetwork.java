@@ -151,10 +151,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * </p>
      * 
      * <p>
-     * 
-     * </p>
-     * 
-     * <p>
      * The steps themselves are grouped into two main blocks and an auxillary block:
      * <ol type="a">
      * <li>Longitudinal update:</li>
@@ -171,6 +167,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * 
      * <li>Do the related bookkeeping (update of inflow and outflow at boundaries) and update virtual detectors</li> </ol>
      * </p>
+     * 
      * <p>
      * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order
      * (i),(ii),(iii).  
@@ -201,7 +198,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         	roadSegment.updatePositionAndSpeed(dt, simulationTime, iterationCount);
         }
         
-        // lane changes
+        // TODO 
 //      for (final RoadSegment roadSegment : roadSegments) {
 //        roadSegment.laneChanging(dt, simulationTime, iterationCount);
 //      }
@@ -220,6 +217,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             roadSegment.inFlow(dt, simulationTime, iterationCount);
         }
 
+        //TODO
 //        for (RoadSection roadSection : roadSections) {
 //            roadSection.updateDetectors(iterationCount, timestep, time);
 //        }

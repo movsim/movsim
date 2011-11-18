@@ -182,33 +182,7 @@ public class Simulator implements Runnable {
             roadSectionsMap.put(roadSection.getId(), roadSection);
         }
 
-        // ---------------------------------------------
-        // TODO work in progress, 
-        // only needed in vehicle for calculating net distance but this concept not yet sufficiently worked-out 
-//        final RoadNetworkDeprecated roadNetworkDeprecated = RoadNetworkDeprecated.getInstance();
-//        for (RoadSection roadSection : roadSections) {
-//            roadNetworkDeprecated.add(roadSection);
-//        }
-//        logger.info(roadNetworkDeprecated.toString());
-        // ---------------------------------------------
-        
-
-        // TODO quick hack for connecting offramp with onramp
-        // more general concept needed here
-//        final long idOfframp = -1;
-//        final long idOnramp = 1;
-//        if (findRoadById(idOfframp) != null && findRoadById(idOnramp) != null) {
-//            final RoadSection onramp = findRoadById(idOnramp);
-//            findRoadById(idOfframp).getVehContainer(MovsimConstants.MOST_RIGHT_LANE).setDownstreamConnection(
-//                    onramp.getVehContainer(MovsimConstants.MOST_RIGHT_LANE));
-//            logger.info("connect offramp with id={} to onramp with id={}", idOfframp, idOnramp);
-//        }
-        // ---------------------------------------------
-        
-        
         projectName = inputData.getProjectMetaData().getProjectName();
-
-        // model requires specific update time depending on its category !!
 
         // TODO SimOutput needs to use road segments, not road sections
         simOutput = new SimOutput(inputData, roadSections, this.roadSectionsMap);
@@ -232,17 +206,6 @@ public class Simulator implements Runnable {
 	    //final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
 	}
 
-
-//    // TODO just hack
-//    private RoadSection findFirstOfframp() {
-//        for (final RoadSection roadSection : roadSections) {
-//            if (roadSection instanceof OfframpImpl) {
-//                return roadSection;
-//            }
-//        }
-//        return null;
-//    }
-
     /*
      * (non-Javadoc)
      * 
@@ -257,7 +220,7 @@ public class Simulator implements Runnable {
         simOutput.update(iterationCount, time, timestep);
 
         while (!isSimulationRunFinished()) {
-            update();
+            updateTimestep();
         }
 
         logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", time,
@@ -282,7 +245,7 @@ public class Simulator implements Runnable {
      * 
      * @see org.movsim.simulator.Simulator#update()
      */
-    public void update() {
+    public void updateTimestep() {
 
         time += timestep;
         iterationCount++;

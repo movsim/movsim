@@ -136,7 +136,7 @@ public class MovsimViewerFacade {
      * Update.
      */
     public void update() {
-        model.update();
+        model.updateTimestep();
     }
 
     /**
