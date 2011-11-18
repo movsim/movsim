@@ -213,7 +213,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
         // see AbstractRoadSection.java
         for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.checkForInconsistencies(iterationCount, simulationTime, isWithCrashExit);
+            roadSegment.checkForInconsistencies(simulationTime, iterationCount, isWithCrashExit);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {

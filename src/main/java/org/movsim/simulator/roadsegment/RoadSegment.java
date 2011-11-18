@@ -824,7 +824,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param time the time
      * @param isWithCrashExit the is with crash exit
      */
-    public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
+    public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
             // for(final Vehicle vehicle : laneSegment){
             for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
