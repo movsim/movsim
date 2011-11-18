@@ -26,7 +26,11 @@ import java.util.List;
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
+import org.movsim.simulator.roadSection.impl.AbstractRoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.VehicleContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -74,6 +78,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 
 public class RoadSegment implements Iterable<Vehicle> {
 
+    final static Logger logger = LoggerFactory.getLogger(RoadSegment.class);
+    
     public static final int ID_NOT_SET = -1;
     public static final int INITIAL_ID = 1;
     private static final boolean DEBUG = false;
@@ -809,4 +815,51 @@ public class RoadSegment implements Iterable<Vehicle> {
     public final Iterator<Vehicle> iterator() {
         return new VehicleIterator();
     }
+    
+    
+    /**
+     * Check for inconsistencies.
+     *
+     * @param iterationCount the iteration count
+     * @param time the time
+     * @param isWithCrashExit the is with crash exit
+     */
+    public void checkForInconsistencies(long iterationCount, double time, boolean isWithCrashExit) {
+        for (final LaneSegment laneSegment : laneSegments) {
+            // for(final Vehicle vehicle : laneSegment){
+            for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
+                final Vehicle vehicle = laneSegment.getVehicle(index);
+                final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
+                final double netDistance = vehicle.getNetDistance(vehFront);
+                if (netDistance < 0) {
+                    logger.error("#########################################################");
+                    logger.error("Crash of Vehicle i = {} at x = {}m", index, vehicle.getPosition());
+                    if (vehFront != null) {
+                        logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), vehicle.getLane());
+                    }
+                    logger.error("roadID = {}", id);
+                    logger.error("net distance  = {}", netDistance);
+                    logger.error("lane index    = {}", laneSegment.lane());
+                    logger.error("container.size = {}", laneSegment.vehicleCount());
+                    final StringBuilder sb = new StringBuilder("\n");
+                    for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math.min(index + 8, M - 1); j++) {
+                        final Vehicle veh = laneSegment.getVehicle(j);
+                        sb.append(String.format(
+                                "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
+                                veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
+                    }
+                    logger.error(sb.toString());
+                    if (isWithCrashExit) {
+                        logger.error(" !!! exit after crash !!! ");
+                        System.exit(-99);
+                    }
+
+                }
+            }
+        }
+    }     
+        
+        
+        
+    
 }

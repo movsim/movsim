@@ -71,8 +71,6 @@ public class Simulator implements Runnable {
     /** The vehicle generator. */
     private VehicleGenerator vehGenerator;
 
-    private boolean isWithCrashExit;
-
     private String projectName;
 
     private long startTimeMillis;
@@ -128,7 +126,8 @@ public class Simulator implements Runnable {
         final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
         vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
 
-        isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
+        final boolean isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
+        roadNetwork.setWithCrashExit(isWithCrashExit);
 
         
         reset();

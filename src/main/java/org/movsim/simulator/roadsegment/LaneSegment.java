@@ -26,13 +26,13 @@ import org.movsim.simulator.vehicles.Vehicle;
 
 public class LaneSegment implements Iterable<Vehicle> {
     private static final boolean DEBUG = false;
+    private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
     // Lane linkage
     private final RoadSegment roadSegment;
     private LaneSegment sinkLaneSegment;
     private LaneSegment sourceLaneSegment;
     private final int lane;
     private Lane.Type type;
-    private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
     final ArrayList<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
    

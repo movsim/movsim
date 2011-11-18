@@ -36,6 +36,8 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     
     private final ArrayList<RoadSegment> roadSegments = new ArrayList<RoadSegment>();
     private String name;
+    
+    private boolean isWithCrashExit;
 
     /**
      * Set the name of the road network.
@@ -207,13 +209,13 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.outFlow(dt, simulationTime, iterationCount);
         }
-        // TODO check for crashes. 
+
         // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
         // see AbstractRoadSection.java
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
-//        }
-//
+        for (final RoadSegment roadSegment : roadSegments) {
+            roadSegment.checkForInconsistencies(iterationCount, simulationTime, isWithCrashExit);
+        }
+
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.inFlow(dt, simulationTime, iterationCount);
         }
@@ -237,5 +239,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
                 assert Math.abs(roadMapping.roadLength() - roadSegment.roadLength()) < 0.1;
             }
         }
+    }
+
+    public void setWithCrashExit(boolean isWithCrashExit) {
+        this.isWithCrashExit = isWithCrashExit;
     }
 }
