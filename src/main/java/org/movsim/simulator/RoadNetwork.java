@@ -140,26 +140,43 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     /**
      * <p>
-     * The main timestep of the simulation.
+     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane changing decisions. 
+     * Each update step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In
+     * particular, the complete old state (positions, lanes, speeds ...) is made available during the complete update step of one
+     * timestep. Then the outflow is performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from
+     * the road network) when required. Then the inflow is performed for each road segment, adding any new vehicles supplied by
+     * any traffic sources. Finally the vehicle detectors are updated.
      * </p>
      * 
      * <p>
-     * Iterate over every roadSegment in the road network, calling that roadSegment's timestep.
-     * </p>
-     * <p>
-     * Each timestep all the vehicles' lanes, positions and velocities are updated in sequential (not parallel!) order. Then the
-     * outflow is performed for each road segment, moving vehicles onto the next road segment (or
-     * removing them entirely from the road network) when required. Then the inflow is performed for
-     * each road segment, adding any new vehicles supplied by any traffic sources. Finally the
-     * vehicle detectors are updated.
+     * 
      * </p>
      * 
-     * @param dt
-     *            simulation time interval, seconds. 
-     * @param simulationTime
-     *            the current logical time in the simulation
-     * @param iterationCount
-     *            the counter of performed update steps            
+     * <p>
+     * The steps themselves are grouped into two main blocks and an auxillary block:
+     * <ol type="a">
+     * <li>Longitudinal update:</li>
+     * <ol type="i">
+     * <li>Calculate accelerations</li>
+     * <li>update speeds
+     * <li>update positions
+     * </ol>
+     * <li>Discrete Decision update:</li>
+     * <ol type="i">
+     * <li>Determine decisions (whether to change lanes, decide to cruise/stop at a traffic light, etc.)</li>
+     * <li>perform decisions (do the lane changes, cruising/stopping at traffic light, etc.)</li>
+     * </ol>
+     * 
+     * <li>Do the related bookkeeping (update of inflow and outflow at boundaries) and update virtual detectors</li> </ol>
+     * </p>
+     * <p>
+     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order
+     * (i),(ii),(iii).  
+     * </p>
+     *
+     * @param dt simulation time interval, seconds.
+     * @param simulationTime the current logical time in the simulation
+     * @param iterationCount the counter of performed update steps
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
@@ -173,47 +190,34 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 //            roadSection.updateRoadConditions(iterationCount, time);
 //        }
 //
-        // This was a hack for defining a leader in the movsim lane container. Probably not needed anymore.
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateBoundaryVehicles(iterationCount, time);
-//        }
+
+        for (final RoadSegment roadSegment : roadSegments) {
+        	roadSegment.accelerate(dt, simulationTime, iterationCount);
+        }
+
+        for (final RoadSegment roadSegment : roadSegments) {
+        	roadSegment.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        }
+        
+        // lane changes
+//      for (final RoadSegment roadSegment : roadSegments) {
+//        roadSegment.laneChanging(dt, simulationTime, iterationCount);
+//      }
+
+        for (final RoadSegment roadSegment : roadSegments) {
+            roadSegment.outFlow(dt, simulationTime, iterationCount);
+        }
         // TODO check for crashes. 
         // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
         // see AbstractRoadSection.java
 //        for (RoadSection roadSection : roadSections) {
 //            roadSection.checkForInconsistencies(iterationCount, time, isWithCrashExit);
 //        }
-
-        // lane changes
-//        for (final RoadSegment roadSegment : roadSegments) {
-//        	roadSegment.laneChanging(dt, simulationTime, iterationCount);
-//        }
-
-        // vehicle accelerations
-        for (final RoadSegment roadSegment : roadSegments) {
-        	roadSegment.accelerate(dt, simulationTime, iterationCount);
-        }
-
-        // vehicle pos/speed
-        for (final RoadSegment roadSegment : roadSegments) {
-        	roadSegment.updatePositionAndSpeed(dt, simulationTime, iterationCount);
-        }
-
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateDownstreamBoundary();
-//        }
-        for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.outFlow(dt, simulationTime, iterationCount);
-        }
 //
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateUpstreamBoundary(iterationCount, timestep, time);
-//        }
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.inFlow(dt, simulationTime, iterationCount);
         }
-//
-        // for output quantities ... 
+
 //        for (RoadSection roadSection : roadSections) {
 //            roadSection.updateDetectors(iterationCount, timestep, time);
 //        }

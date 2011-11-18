@@ -175,8 +175,22 @@ public class UpstreamBoundary {
     }
 
     /**
-     * Try entering new vehicle.
-     *
+     * <p>Try entering new vehicle.
+     * </p> 
+     * 
+     * <p>
+     * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as
+     * possible. Otherwise, one would activate an "inflow bottleneck", and less vehicles can be entered as one would like to.
+     * The crux is that vehicles can be introduced only at times given by the simulation time step which is generalaly
+     * incommensurate with the inverse of the inflow. For example, if the simulation time step is 0.4s, capacity is 2400 veh/h,
+     * and the prescribed inflow is 2260 veh/h or one vehicle every 1.59s, you insert one vehicle every 1.6s, most of the
+     * time. However, at some instances, two vehicles are inserted at time headway of 1.2s corresponding macroscopically to
+     * 3000 veh/h, far above capacity. Typical time gaps for this situation are 1.2s most of the time but 0.8s occasionally.
+     * This introduces a perturbation which may "activate" the "inflow bottleneck", unless a flow of 2260 veh/h is absolutely
+     * stable which is not always the case. Since the time of insertion cannot be changed, one can homogenize the inflow by
+     * allowing the insertion point to vary by a maximum of one vehicle-vehicle distance.
+     * </p>
+     * 
      * @param laneSegment
      * @param time the time
      * @param qBC the q bc
