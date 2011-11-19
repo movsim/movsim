@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.KKW;
 
 // TODO: Auto-generated Javadoc
 /**

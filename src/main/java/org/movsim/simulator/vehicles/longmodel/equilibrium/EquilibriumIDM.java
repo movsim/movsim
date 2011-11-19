@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
 
 // TODO: Auto-generated Javadoc
 /**

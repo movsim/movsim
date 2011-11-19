@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Krauss;
 
 // TODO: Auto-generated Javadoc
 /**

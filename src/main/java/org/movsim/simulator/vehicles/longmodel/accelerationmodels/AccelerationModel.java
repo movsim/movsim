@@ -28,8 +28,8 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelCategory;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelCategory;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
 
 // TODO: Auto-generated Javadoc
 /**

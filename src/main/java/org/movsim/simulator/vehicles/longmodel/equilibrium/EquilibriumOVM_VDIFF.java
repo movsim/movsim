@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.OVM_VDIFF;
 
 // TODO: Auto-generated Javadoc
 /**

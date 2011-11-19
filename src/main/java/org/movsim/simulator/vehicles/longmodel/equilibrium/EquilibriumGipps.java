@@ -11,7 +11,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Gipps;
 
 // TODO: Auto-generated Javadoc
 /**

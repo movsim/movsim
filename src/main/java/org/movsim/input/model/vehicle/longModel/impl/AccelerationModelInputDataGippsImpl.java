@@ -29,7 +29,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract.ModelName;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

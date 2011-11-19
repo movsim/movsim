@@ -46,7 +46,7 @@ import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataK
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

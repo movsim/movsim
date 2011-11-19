@@ -26,7 +26,7 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.NSM;
 
 // TODO: Auto-generated Javadoc
 /**
