@@ -29,13 +29,12 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +77,8 @@ public class FileTrajectories {
     /** The last update time. */
     private double lastUpdateTime = 0;
 
-    /** The road section. */
-    private RoadSection roadSection;
+    /** The road segment. */
+    private RoadSegment roadSegment;
 
     /** The project name. */
     private String projectName;
@@ -97,7 +96,7 @@ public class FileTrajectories {
      * @param roadSection
      *            the road section
      */
-    public FileTrajectories(String projectName, TrajectoriesInput trajectoriesInput, RoadSection roadSection) {
+    public FileTrajectories(String projectName, TrajectoriesInput trajectoriesInput, RoadSegment roadSegment) {
         logger.info("Constructor");
 
         this.projectName = projectName;
@@ -108,7 +107,7 @@ public class FileTrajectories {
         x_start_interval = trajectoriesInput.getStartPosition();
         x_end_interval = trajectoriesInput.getEndPosition();
 
-        this.roadSection = roadSection;
+        this.roadSegment = roadSegment;
 
         fileHandles = new HashMap<Long, PrintWriter>();
         logger.info("path = {}", path);
@@ -120,9 +119,9 @@ public class FileTrajectories {
      */
     private void createFileHandles() {
 
-        final String filenameMainroad = projectName + String.format(extensionFormat, roadSection.getId());
-        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSection.getId());
-        fileHandles.put(roadSection.getId(), FileUtils.getWriter(filenameMainroad));
+        final String filenameMainroad = projectName + String.format(extensionFormat, roadSegment.id());
+        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
+        fileHandles.put((long) roadSegment.id(), FileUtils.getWriter(filenameMainroad));
 
         /*
          * // onramps int counter = 1; for(IOnRamp rmp : mainroad.onramps()){
@@ -179,7 +178,7 @@ public class FileTrajectories {
 
                 lastUpdateTime = time;
 
-                writeTrajectories(fileHandles.get(roadSection.getId()), roadSection.getVehContainers());
+                writeTrajectories(fileHandles.get(roadSegment.id()), roadSegment);
                 /*
                  * // onramps for(IOnRamp rmp : mainroad.onramps()){
                  * writeTrajectories(fileHandles.get(rmp.roadIndex()),
@@ -196,15 +195,17 @@ public class FileTrajectories {
      * Write trajectories.
      *
      * @param fstr the fstr
-     * @param vehContainers the veh containers
+     * @param roadSegment
      */
-    private void writeTrajectories(PrintWriter fstr, List<VehicleContainer> vehContainers) {
-        for (VehicleContainer vehContainerLane : vehContainers) {
-            final List<Vehicle> vehiclesOnLane = vehContainerLane.getVehicles();
-            for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
-                final Vehicle me = vehiclesOnLane.get(i);
+    private void writeTrajectories(PrintWriter fstr, RoadSegment roadSegment) {
+    	final int laneCount = roadSegment.laneCount();
+        for (int lane = 0; lane < laneCount; ++lane) {
+        	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            final int N = laneSegment.vehicleCount();
+            for (int i = 0; i < N; i++) {
+                final Vehicle me = laneSegment.getVehicle(i);
                 if ((me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval)) {
-                    final Vehicle frontVeh = vehContainerLane.getLeader(me);
+                    final Vehicle frontVeh = laneSegment.frontVehicle(me);
                     writeCarData(fstr, i, me, frontVeh);
                 }
             }

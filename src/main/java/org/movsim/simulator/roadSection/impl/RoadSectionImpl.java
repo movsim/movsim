@@ -151,7 +151,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
 
-            final InitialConditionsMacro icMacro = new InitialConditionsMacroImpl(icMacroData);
+            final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
             final double xLocalMin = 0; // if ringroad: set xLocalMin e.g.
                                         // -SMALL_VAL
 
@@ -248,19 +248,19 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
                     final double newPos = veh.getPosition() - offramp.getRampPositionToMainroad();
                     veh.setPosition(newPos); // mapping to coordinate system
                                              // of offramp
-                    final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(rmpContainer);
-                    veh.setPosition(oldPos);
-                    // two steps
-                    if (isSafeChange) {
-                        // local decision to change to offramp
-                        final double fractionOfLeavingVehicles = calcFractionOfLeavingVehicles();
-                        final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframpParameter;
-
-                        if (isDesired) {
-                            stagedVehicles.add(veh);
-                            countVehiclesToOfframp++;
-                        }
-                    }
+//                    final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(rmpContainer);
+//                    veh.setPosition(oldPos);
+//                    // two steps
+//                    if (isSafeChange) {
+//                        // local decision to change to offramp
+//                        final double fractionOfLeavingVehicles = calcFractionOfLeavingVehicles();
+//                        final boolean isDesired = fractionOfLeavingVehicles < fractionToOfframpParameter;
+//
+//                        if (isDesired) {
+//                            stagedVehicles.add(veh);
+//                            countVehiclesToOfframp++;
+//                        }
+//                    }
                 }
                 if (stagedVehicles.size() > 0) {
                     break; // allow only one vehicle to leave to offramp per update step
@@ -321,7 +321,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      */
     @Override
     public void updateDetectors(long iterationCount, double dt, double time) {
-        detectors.update(iterationCount, time, dt, vehContainers);
+        //detectors.update(iterationCount, time, dt, vehContainers);
     }
 
     /*

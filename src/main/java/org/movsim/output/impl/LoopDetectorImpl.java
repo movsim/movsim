@@ -26,12 +26,11 @@
  */
 package org.movsim.output.impl;
 
-import java.util.List;
-
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,14 +123,16 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
      * Update.
      *
      * @param time the time
-     * @param vehicleContainers the vehicle containers
+     * @param roadSegment
      */
-    public void update(double time, List<VehicleContainer> vehicleContainers) {
+    public void update(double time, RoadSegment roadSegment) {
 
         // brute force search: iterate over all lanes
 
-        for (VehicleContainer vehContainerLane : vehicleContainers) {
-            for (final Vehicle veh : vehContainerLane.getVehicles()) {
+    	final int laneCount = roadSegment.laneCount();
+        for (int lane = 0; lane < laneCount; ++lane) {
+        	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            for (final Vehicle veh : laneSegment) {
                 if ((veh.getPositionOld() < detPosition) && (veh.getPosition() >= detPosition)) {
                     // new vehicle crossed detector
                     vehCount++;
@@ -140,7 +141,7 @@ public class LoopDetectorImpl extends ObservableImpl implements LoopDetector {
                     occTime += veh.getLength() / speedVeh;
                     sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
                     // calculate brut timegap not from local detector data:
-                    final Vehicle vehFront = vehContainerLane.getLeader(veh);
+                    final Vehicle vehFront = laneSegment.frontVehicle(veh);
                     final double brutTimegap =
                             (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition()) / vehFront.getSpeed();
                     sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0; // microscopic

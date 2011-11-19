@@ -35,6 +35,7 @@ import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -195,12 +196,12 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // TODO consider redesign here? better book-keeping outside vehicle container?
         // loop over on-ramp veh (i=0 is obstacle !!! )
         // ignore Obstacle as first vehicle !!!
-        for (Vehicle veh : vehContainer.getVehicles()) {
-            if (!veh.getLabel().equals(MovsimConstants.OBSTACLE_KEY_NAME) 
-                    && tryToMergeToMainroad(veh, mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE))) {
-                stagedVehicles.add(veh);
-            }
-        }
+//        for (Vehicle veh : vehContainer.getVehicles()) {
+//            if (!veh.getLabel().equals(MovsimConstants.OBSTACLE_KEY_NAME) 
+//                    && tryToMergeToMainroad(veh, mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE))) {
+//                stagedVehicles.add(veh);
+//            }
+//        }
 
         // assign staged vehicles to new lanes
         for (final Vehicle veh : stagedVehicles) {
@@ -216,7 +217,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
      * @param veh the veh
      * @return true, if successful
      */
-    private boolean tryToMergeToMainroad(final Vehicle veh, final VehicleContainer mainVehContainerMostRightLane) {
+    private boolean tryToMergeToMainroad(final Vehicle veh, LaneSegment mainVehContainerMostRightLane) {
         final double pos = veh.getPosition();
         if (pos > xUpRamp) {
             final double newPos = pos + xOffsetMain; // position on main road

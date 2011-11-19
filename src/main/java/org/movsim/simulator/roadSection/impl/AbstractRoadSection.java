@@ -339,7 +339,7 @@ public abstract class AbstractRoadSection {
      */
     public void updateRoadConditions(long iterationCount, double time) {
 
-        trafficLights.update(iterationCount, time, vehContainers);
+        //trafficLights.update(iterationCount, time, vehContainers);
 
         updateSpeedLimits(vehContainers);
     }

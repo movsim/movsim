@@ -11,10 +11,7 @@
  */
 package org.movsim.simulator;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.file.opendrive.OpenDriveReader;
@@ -26,9 +23,7 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
-import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
-import org.movsim.simulator.roadSection.impl.RoadSectionFactory;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.impl.VehicleGeneratorImpl;
@@ -56,11 +51,6 @@ public class Simulator implements Runnable {
 
     /** The duration of the simulation. */
     private double tMax;
-
-    /** The road sections. */
-    private List<RoadSection> roadSections;
-
-    private Map<Long, RoadSection> roadSectionsMap;
 
     /** The sim output. */
     private SimOutput simOutput;
@@ -148,18 +138,6 @@ public class Simulator implements Runnable {
         //System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
         // Roadinput/RoadSection
 
-        // TODO roadsections
-        // connect physical roads from network input to input from movsim 
-//        for(RoadSegment roadSegment : roadNetwork){
-//            long roadSegmentId = roadSegment.id();
-//            final RoadInput roadInput = inputData.getSimulationInput().getRoadInput().get(roadSegmentId);
-//            if(roadInput!=null){
-//                roadSegment.addInput(roadInput);
-//            }
-//            else{
-//                logger.debug("no additional input for road id={} provided in movsim configuration file.");
-//            }
-//        }
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
         for (final RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
@@ -168,24 +146,11 @@ public class Simulator implements Runnable {
         		addInputToRoadSegment(roadSegment, roadinput);
         	}
         }
-        
-        // TODO roadSections and roadSectionsMap need to be removed
-        roadSections = new LinkedList<RoadSection>();
-        roadSectionsMap = new HashMap<Long, RoadSection>();
-        for (final RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
-        	final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
-        	if (roadSegment != null) {
-        		addInputToRoadSegment(roadSegment, roadinput);
-        	}
-            final RoadSection roadSection = RoadSectionFactory.create(inputData, roadinput, vehGenerator);
-            roadSections.add(roadSection);
-            roadSectionsMap.put(roadSection.getId(), roadSection);
-        }
 
         projectName = inputData.getProjectMetaData().getProjectName();
 
         // TODO SimOutput needs to use road segments, not road sections
-        simOutput = new SimOutput(inputData, roadSections, this.roadSectionsMap);
+        simOutput = new SimOutput(inputData, roadNetwork);
     }
 
     /**

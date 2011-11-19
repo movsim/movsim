@@ -28,9 +28,9 @@ package org.movsim.simulator.vehicles.lanechanging;
 
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,11 +96,11 @@ public class LaneChangingModel {
         return isInitialized;
     }
 
-    public boolean isMandatoryLaneChangeSafe(final VehicleContainer vehContainerTargetLane) {
+    public boolean isMandatoryLaneChangeSafe(LaneSegment laneSegment) {
         // works also for the "virtual" leader of me in considered lane
-        final Vehicle front = vehContainerTargetLane.getLeader(me);
+        final Vehicle front = laneSegment.frontVehicle(me);
 
-        final Vehicle back = vehContainerTargetLane.getFollower(me);
+        final Vehicle back = laneSegment.rearVehicle(me);
 
         final boolean changeSafe = mandatoryWeavingChange(front, back); // TODO
         return changeSafe;

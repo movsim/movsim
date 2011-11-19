@@ -26,14 +26,12 @@
  */
 package org.movsim.output.impl;
 
-import java.util.List;
 
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadSection.RoadSection;
-import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.utilities.impl.ObservableImpl;
 import org.movsim.utilities.impl.Tables;
 import org.slf4j.Logger;
@@ -74,12 +72,12 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
      * @param roadSection
      *            the road section
      */
-    public SpatioTemporalImpl(SpatioTemporalInput input, RoadSection roadSection) {
+    public SpatioTemporalImpl(SpatioTemporalInput input, RoadSegment roadSegment) {
 
         dtOut = input.getDt();
         dxOut = input.getDx();
 
-        roadlength = roadSection.getRoadLength();
+        roadlength = roadSegment.roadLength();
 
         initialize();
 
@@ -106,11 +104,11 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
      * @param roadSection
      *            the road section
      */
-    public void update(long it, double time, RoadSection roadSection) {
+    public void update(long it, double time, RoadSegment roadSegment) {
         if ((time - timeOffset) >= dtOut) {
             timeOffset = time;
             // TODO quick hack for multi-lane compatibility
-            calcData(time, roadSection.getVehContainer(MovsimConstants.MOST_RIGHT_LANE));
+            calcData(time, roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE));
             notifyObservers(time);
         }
     }
@@ -123,23 +121,22 @@ public class SpatioTemporalImpl extends ObservableImpl implements SpatioTemporal
      * @param vehContainer
      *            the vehicle container
      */
-    private void calcData(double time, VehicleContainer vehContainer) {
-        final List<Vehicle> vehicles = vehContainer.getVehicles();
-        final int size = vehicles.size();
+    private void calcData(double time, LaneSegment laneSegment) {
+        final int size = laneSegment.vehicleCount();
         final double[] localDensity = new double[size];
         final double[] vMicro = new double[size];
         final double[] xMicro = new double[size];
 
         for (int i = 0; i < size; i++) {
-            vMicro[i] = vehicles.get(i).getSpeed();
-            xMicro[i] = vehicles.get(i).getPosition();
+            vMicro[i] = laneSegment.getVehicle(i).getSpeed();
+            xMicro[i] = laneSegment.getVehicle(i).getPosition();
         }
 
         // calculate density
         localDensity[0] = 0;
         for (int i = 1; i < size; i++) {
             final double dist = xMicro[i - 1] - xMicro[i];
-            final double length = vehicles.get(i - 1).getLength();
+            final double length = laneSegment.getVehicle(i - 1).getLength();
             localDensity[i] = (dist > length) ? 1 / dist : 1 / length;
         }
 

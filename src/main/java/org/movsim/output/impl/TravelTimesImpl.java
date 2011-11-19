@@ -2,12 +2,11 @@ package org.movsim.output.impl;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.input.model.output.impl.TravelTimeRouteInput;
 import org.movsim.output.TravelTimes;
-import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.RoadNetwork;
 import org.movsim.utilities.impl.ExponentialMovingAverage;
 import org.movsim.utilities.impl.ObservableImpl;
 import org.movsim.utilities.impl.XYDataPoint;
@@ -16,13 +15,13 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
 
     private List<TravelTimeRoute> routes;
 
-    private final Map<Long, RoadSection> roadSectionsMap;
+    private final RoadNetwork roadNetwork;
 
     // configure update interval
     private long updateIntervalCount = 100; // init
 
-    public TravelTimesImpl(final TravelTimesInput travelTimesInput, final Map<Long, RoadSection> roadSectionsMap) {
-        this.roadSectionsMap = roadSectionsMap;
+    public TravelTimesImpl(final TravelTimesInput travelTimesInput, RoadNetwork roadNetwork) {
+        this.roadNetwork = roadNetwork;
         routes = new LinkedList<TravelTimeRoute>();
         for (final TravelTimeRouteInput routeInput : travelTimesInput.getRoutes()) {
             routes.add(new TravelTimeRoute(routeInput));
@@ -34,7 +33,7 @@ public class TravelTimesImpl extends ObservableImpl implements TravelTimes {
 
         final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
         for (TravelTimeRoute route : routes) {
-            route.update(iterationCount, time, timestep, roadSectionsMap);
+            route.update(iterationCount, time, timestep, roadNetwork);
             if (doNotificationUpdate) {
                 route.calcEMA(time);
             }

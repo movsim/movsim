@@ -27,7 +27,6 @@
 package org.movsim.output;
 
 import java.util.List;
-import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
@@ -41,7 +40,8 @@ import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.impl.FloatingCarsImpl;
 import org.movsim.output.impl.SpatioTemporalImpl;
 import org.movsim.output.impl.TravelTimesImpl;
-import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.RoadNetwork;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,8 +73,10 @@ public class SimOutput implements SimObservables {
     /** The project name. */
     private final String projectName;
 
-    private final List<RoadSection> roadSections;
-    final RoadSection roadSection; // TODO hack only one roadsection
+    //private final List<RoadSection> roadSections;
+    //final RoadSection roadSection; // TODO hack only one roadsection
+    private final RoadNetwork roadNetwork;
+    private final RoadSegment roadSegment;
 
     
     private TravelTimesImpl travelTimes;
@@ -84,11 +86,13 @@ public class SimOutput implements SimObservables {
      * @param simInput the sim input
      * @param roadSections the road sections
      */
-    public SimOutput(InputData simInput, final List<RoadSection> roadSections, final Map<Long, RoadSection> roadSectionsMap) {
+    public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
+    	this.roadNetwork = roadNetwork;
+    	roadSegment = roadNetwork.iterator().next();
         projectName = simInput.getProjectMetaData().getProjectName();
         
         
-        this.roadSections = roadSections; //roadSections.get(0)
+        //this.roadSections = roadSections; //roadSections.get(0)
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
@@ -105,17 +109,17 @@ public class SimOutput implements SimObservables {
         // travel times 
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
         if(travelTimesInput!=null){
-            travelTimes = new TravelTimesImpl(travelTimesInput, roadSectionsMap);
+            travelTimes = new TravelTimesImpl(travelTimesInput, roadNetwork);
         }
         
         
         // TODO hack: just *one* roadsection
         // access not robust to fetch mainroad
-        roadSection = roadSections.get(0);  
+        //roadSection = roadSections.get(0);  
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
-            floatingCars = new FloatingCarsImpl(roadSection.getVehContainers(), floatingCarInput);
+            floatingCars = new FloatingCarsImpl(roadSegment, floatingCarInput);
             if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
             }
@@ -123,16 +127,16 @@ public class SimOutput implements SimObservables {
 
         final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInput.isWithMacro()) {
-            spatioTemporal = new SpatioTemporalImpl(spatioTemporalInput, roadSection);
+            spatioTemporal = new SpatioTemporalImpl(spatioTemporalInput, roadSegment);
             if (writeOutput) {
-                fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSection.getId(), spatioTemporal);
+                fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSegment.id(), spatioTemporal);
             }
         }
 
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
             if (writeOutput) {
-                trajectories = new FileTrajectories(projectName, trajInput, roadSection);
+                trajectories = new FileTrajectories(projectName, trajInput, roadSegment);
             }
         }
 
@@ -154,7 +158,7 @@ public class SimOutput implements SimObservables {
             floatingCars.update(iterationCount, time, timestep);
         }
         if (spatioTemporal != null) {
-            spatioTemporal.update(iterationCount, time, roadSection);
+            spatioTemporal.update(iterationCount, time, roadSegment);
         }
 
         if (trajectories != null) {
@@ -194,7 +198,7 @@ public class SimOutput implements SimObservables {
      */
     @Override
     public List<LoopDetector> getLoopDetectors() {
-        return roadSection.getLoopDetectors();
+        return roadSegment.getLoopDetectors();
     }
 
     @Override

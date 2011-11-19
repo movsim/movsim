@@ -11,8 +11,9 @@ import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadSection.TrafficLights;
+import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,9 +76,9 @@ public class TrafficLightsImpl implements TrafficLights {
      *
      * @param iterationCount the itime
      * @param time the time
-     * @param vehContainers the veh containers
+     * @param roadSegment
      */
-    public void update(long iterationCount, double time, List<VehicleContainer> vehContainers) {
+    public void update(long iterationCount, double time, RoadSegment roadSegment) {
 
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
@@ -85,10 +86,12 @@ public class TrafficLightsImpl implements TrafficLights {
                 trafficLight.update(time);
             }
             // second update vehicle status approaching traffic lights
-            for (VehicleContainer vehContainerLane : vehContainers) {
-                for (final Vehicle veh : vehContainerLane.getVehicles()) {
+        	final int laneCount = roadSegment.laneCount();
+            for (int lane = 0; lane < laneCount; ++lane) {
+            	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+                for (final Vehicle vehicle : laneSegment) {
                     for (final TrafficLight trafficLight : trafficLights) {
-                        veh.updateTrafficLight(time, trafficLight);
+                        vehicle.updateTrafficLight(time, trafficLight);
                     }
                 }
             }

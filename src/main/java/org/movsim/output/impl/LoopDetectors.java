@@ -32,7 +32,7 @@ import java.util.List;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.fileoutput.FileDetector;
-import org.movsim.simulator.vehicles.VehicleContainer;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,11 +83,11 @@ public class LoopDetectors {
      * @param itime the itime
      * @param time the time
      * @param timestep the timestep
-     * @param vehContainers the veh containers
+     * @param roadSegment
      */
-    public void update(long itime, double time, double timestep, List<VehicleContainer> vehContainers) {
+    public void update(long itime, double time, double timestep, RoadSegment roadSegment) {
         for (final LoopDetectorImpl det : detectors) {
-            det.update(time, vehContainers);
+            det.update(time, roadSegment);
         }
     }
 

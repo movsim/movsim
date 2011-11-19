@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.model.output.impl.TravelTimeRouteInput;
-import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.RoadNetwork;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.impl.ExponentialMovingAverage;
 import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
@@ -64,13 +64,13 @@ public class TravelTimeRoute {
         return emaPoints;
     }
 
-    public void update(long iterationCount, double time, double timestep, final Map<Long,RoadSection> roadSectionsMap){
+    public void update(long iterationCount, double time, double timestep, RoadNetwork roadNetwork){
         
         //dataPoints.clear();
         // check first start_position
         // TODO catch error if road id not available
         
-        checkNewVehicles(time, roadSectionsMap.get(startId));  
+        checkNewVehicles(time, roadNetwork.findById((int)startId));  
         
         
         // check end_position
@@ -88,9 +88,9 @@ public class TravelTimeRoute {
         return dataPoints;
     }
 
-    private void checkNewVehicles(final double timeStartOfRoute, final RoadSection roadSection){
-        for(final VehicleContainer lane : roadSection.getVehContainers()){
-            for(final Vehicle veh : lane.getVehicles()){
+    private void checkNewVehicles(final double timeStartOfRoute, final RoadSegment roadSegment){
+        //for(final LaneSegment laneSegment : roadSegment){
+            for(final Vehicle veh : roadSegment){
 //                if(veh.getPosition() > 100 && veh.getPosition()<1000){
 //                System.out.printf("veh: pos=%.4f, posOld=%.4f\n", veh.getPosition(), veh.getPositionOld());
 //                }
@@ -99,7 +99,7 @@ public class TravelTimeRoute {
                     //System.out.printf("veh at x=%.2f put to travel time route, roadId=%d\n", veh.getPosition(), veh.getRoadId());
                 }
             }
-        }
+        //}
     }
     
     

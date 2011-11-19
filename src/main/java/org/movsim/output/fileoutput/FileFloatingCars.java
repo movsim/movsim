@@ -32,8 +32,9 @@ import java.util.List;
 
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.utilities.ObserverInTime;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
@@ -118,15 +119,16 @@ public class FileFloatingCars implements ObserverInTime {
      */
     public void writeOutput(double updateTime) {
 
-        for (VehicleContainer vehContainerOnLane : floatingCars.getVehicleContainers()) {
-
-            final List<Vehicle> vehicles = vehContainerOnLane.getVehicles();
-            for (final Vehicle vehOnLane : vehicles) {
+    	final RoadSegment roadSegment = floatingCars.getRoadSegment();
+    	final int laneCount = roadSegment.laneCount();
+        for (int lane = 0; lane < laneCount; ++lane) {
+        	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            for (final Vehicle vehOnLane : laneSegment) {
                 if (!vehOnLane.isFromOnramp()) {
                     // only mainroad vehicles
                     final int vehNumber = vehOnLane.getVehNumber();
                     if (hashMap.containsKey(vehNumber)) {
-                        final Vehicle frontVeh = vehContainerOnLane.getLeader(vehOnLane);
+                        final Vehicle frontVeh = laneSegment.frontVehicle(vehOnLane);
                         writeData(updateTime, vehOnLane, frontVeh, hashMap.get(vehNumber));
                     }
                 }
