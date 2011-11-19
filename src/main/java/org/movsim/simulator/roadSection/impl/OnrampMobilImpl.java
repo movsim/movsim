@@ -34,6 +34,7 @@ import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -149,7 +150,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         setObstacleAtEndOfLane();
 
         // TODO only dummy here for RoadSection interface
-        flowConsBottlenecks = new FlowConservingBottlenecksImpl(new ArrayList<FlowConservingBottleneckDataPoint>());
+        flowConsBottlenecks = new FlowConservingBottlenecks(new ArrayList<FlowConservingBottleneckDataPoint>());
 
 //        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
 //                projectName);

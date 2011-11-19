@@ -42,6 +42,7 @@ import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.impl.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -103,7 +104,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
 //        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
 //                inputData.getProjectMetaData().getProjectName());
 
-        flowConsBottlenecks = new FlowConservingBottlenecksImpl(roadInput.getFlowConsBottleneckInputData());
+        flowConsBottlenecks = new FlowConservingBottlenecks(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimitsImpl(roadInput.getSpeedLimitInputData());
 
         trafficLights = new TrafficLightsImpl(inputData.getProjectMetaData().getProjectName(),
