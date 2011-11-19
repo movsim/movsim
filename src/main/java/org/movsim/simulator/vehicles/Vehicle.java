@@ -37,7 +37,6 @@ import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.impl.MemoryImpl;
 import org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -230,7 +229,7 @@ public class Vehicle {
 
         // no effect if model is not configured with memory effect
         if (vehInput.isWithMemory()) {
-            memory = new MemoryImpl(vehInput.getMemoryInputData());
+            memory = new Memory(vehInput.getMemoryInputData());
         }
 
         if (vehInput.isWithNoise()) {
