@@ -26,15 +26,11 @@
  */
 package org.movsim.simulator.vehicles.lanechanging;
 
-import java.util.List;
-
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
-import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 
 /**
  * The Class MOBIL.
