@@ -46,6 +46,7 @@ import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.InitialConditionsMacro;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.SpeedLimits;
+import org.movsim.simulator.roadSection.TrafficLights;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -108,7 +109,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         flowConsBottlenecks = new FlowConservingBottlenecks(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimits(roadInput.getSpeedLimitInputData());
 
-        trafficLights = new TrafficLightsImpl(inputData.getProjectMetaData().getProjectName(),
+        trafficLights = new TrafficLights(inputData.getProjectMetaData().getProjectName(),
                 roadInput.getTrafficLightsInput());
 
         final DetectorInput detInput = roadInput.getDetectorInput();

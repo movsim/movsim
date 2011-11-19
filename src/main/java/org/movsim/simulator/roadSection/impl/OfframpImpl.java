@@ -34,6 +34,7 @@ import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.roadSection.SpeedLimits;
+import org.movsim.simulator.roadSection.TrafficLights;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 import org.slf4j.Logger;
@@ -80,7 +81,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
         
         System.out.println("speed limit at offramp: x=1400 = "+speedlimits.calcSpeedLimit(1400));
         
-        trafficLights = new TrafficLightsImpl(null, roadData.getTrafficLightsInput());
+        trafficLights = new TrafficLights(null, roadData.getTrafficLightsInput());
     }
     
     

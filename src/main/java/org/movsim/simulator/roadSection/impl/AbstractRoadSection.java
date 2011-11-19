@@ -36,6 +36,7 @@ import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.SpeedLimit;
 import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.roadSection.TrafficLights;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleContainer;
@@ -90,7 +91,7 @@ public abstract class AbstractRoadSection {
     /** The speedlimits. */
     protected SpeedLimits speedlimits;
     
-    protected TrafficLightsImpl trafficLights;
+    protected TrafficLights trafficLights;
     
     // TODO same constructor for onramp and mainroad (and offramp) 
     /**
