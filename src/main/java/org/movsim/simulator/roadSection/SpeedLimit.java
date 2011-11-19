@@ -1,8 +1,22 @@
 package org.movsim.simulator.roadSection;
 
-public interface SpeedLimit {
 
-    double getPosition();
+public class SpeedLimit {
+
+    private double position;
     
-    double getSpeedLimitKmh();
+    private double speed;
+    
+    public SpeedLimit(double pos, double speed){
+        this.position = pos;
+        this.speed = speed;
+    }
+    
+    public double getPosition() {
+        return position;
+    }
+
+    public double getSpeedLimitKmh() {
+        return speed*3.6;
+    }
 }

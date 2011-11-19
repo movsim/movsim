@@ -81,7 +81,7 @@ public class SpeedLimitsImpl implements SpeedLimits {
             posValues[i] = pos;
             final double speed = data.get(i - 1).getSpeedlimit();
             speedValues[i] = speed; 
-            speedLimits.add(new SpeedLimitImpl(pos, speed));
+            speedLimits.add(new SpeedLimit(pos, speed));
         }
     }
 
