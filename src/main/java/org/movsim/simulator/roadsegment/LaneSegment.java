@@ -23,7 +23,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.simulator.vehicles.Vehicle;
-
+/**
+ * <p>
+ * A LaneSegment represents a lane within a RoadSegment.
+ * </p>
+ * <p>
+ * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is
+ * kept sorted so that the vehicles in front of and behind a given vehicle can be found efficiently.
+ * </p>
+ */
 public class LaneSegment implements Iterable<Vehicle> {
     private static final boolean DEBUG = false;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
@@ -174,9 +182,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Removes the front vehicle on the given lane.
-     * 
-     * @param lane
+     * Removes the front vehicle on this lane segment.
      */
     public void removeFrontVehicleOnLane() {
         if (vehicles.size() > 0) {
