@@ -96,7 +96,6 @@ public class SimCommandLine {
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
         options.addOption("v", "version", false, "prints version number of this movsim release");
-        ;
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");

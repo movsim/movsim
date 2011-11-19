@@ -49,7 +49,6 @@ public class Tables {
      * Instantiates a new tables.
      */
     private Tables() {
-        ;
     }
 
     /**

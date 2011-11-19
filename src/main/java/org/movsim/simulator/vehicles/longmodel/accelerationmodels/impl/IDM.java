@@ -222,7 +222,7 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         
-        final double localT = T;;
+        final double localT = T;
         final double localV0 = Math.min(v0, me.getSpeedlimit());
         final double localA = a;
 
