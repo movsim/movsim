@@ -48,7 +48,7 @@ public class SimulatorController extends Controller {
 
         initializeModel();
 
-        simThread = new Thread((Runnable) model);
+        simThread = new Thread(model);
         simThread.setName("movsim-thread");
         start();
 
