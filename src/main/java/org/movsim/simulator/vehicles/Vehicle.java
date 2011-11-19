@@ -37,7 +37,6 @@ import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.simulator.vehicles.longmodel.impl.TrafficLightApproachingImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -236,7 +235,7 @@ public class Vehicle {
             noise = new Noise(vehInput.getNoiseInputData());
         }
 
-        trafficLightApproaching = new TrafficLightApproachingImpl();
+        trafficLightApproaching = new TrafficLightApproaching();
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update
         // step

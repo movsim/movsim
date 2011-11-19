@@ -26,36 +26,37 @@
  */
 package org.movsim.simulator.vehicles.longmodel;
 
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface TrafficLightApproaching.
+ * The Class TrafficLightApproachingImpl.
  */
-public interface TrafficLightApproaching {
+public class TrafficLightApproaching {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(TrafficLightApproaching.class);
+
+    /** The consider traffic light. */
+    private boolean considerTrafficLight;
+
+    /** The acc traffic light. */
+    private double accTrafficLight;
+
+    private double distanceToTrafficlight;
 
     /**
-     * Consider traffic light.
-     * 
-     * @return true, if successful
+     * Instantiates a new traffic light approaching.
      */
-    boolean considerTrafficLight();
-
-    /**
-     * Acc approaching.
-     * 
-     * @return the double
-     */
-    double accApproaching();
-
-    /**
-     * Gets the distance to trafficlight.
-     * 
-     * @return the distance to trafficlight
-     */
-    double getDistanceToTrafficlight();
+    public TrafficLightApproaching() {
+        considerTrafficLight = false;
+        distanceToTrafficlight = MovsimConstants.INVALID_GAP;
+    }
 
     /**
      * Update.
@@ -69,6 +70,72 @@ public interface TrafficLightApproaching {
      * @param longModel
      *            the long model
      */
-    void update(Vehicle me, double time, TrafficLight trafficLight, AccelerationModel longModel);
+    public void update(Vehicle me, double time, TrafficLight trafficLight, AccelerationModel longModel) {
+        accTrafficLight = 0;
+        considerTrafficLight = false;
+
+        distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.getLength();
+
+        if (distanceToTrafficlight <= 0) {
+            distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
+        } else if (!trafficLight.isGreen()) {
+            // TODO define it as parameter ("range of sight" or so) ?!
+            final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
+            if (distanceToTrafficlight < maxRangeOfSight) {
+                final double speed = me.getSpeed();
+                accTrafficLight = Math.min(0, longModel.calcAccSimple(distanceToTrafficlight, speed, speed));
+
+                if (accTrafficLight < 0) {
+                    considerTrafficLight = true;
+                    logger.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
+                }
+
+                // TODO: decision logic while approaching yellow traffic light
+                // ignore traffic light if accTL exceeds two times comfortable
+                // deceleration or if kinematic braking is not possible anymore
+                final double bKinMax = 6; // typical value: bIDM <
+                                          // comfortBrakeDecel < bKinMax < bMax
+                final double comfortBrakeDecel = 4;
+                final double brakeDist = (speed * speed) / (2 * bKinMax);
+                if (trafficLight.isGreenRed()
+                        && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
+                                - me.getPosition()))) {
+                    // ignore traffic light
+                    considerTrafficLight = false;
+                }
+                // if(me.getVehNumber()==1){
+                // logger.debug("considerTrafficLight=true: distToTrafficlight={}, accTrafficLight={}",
+                // distanceToTrafficlight, accTrafficLight);
+                // }
+            }
+        }
+    }
+
+    /**
+     * Consider traffic light.
+     * 
+     * @return true, if successful
+     */
+    public boolean considerTrafficLight() {
+        return considerTrafficLight;
+    }
+
+    /**
+     * Acc approaching.
+     * 
+     * @return the double
+     */
+    public double accApproaching() {
+        return accTrafficLight;
+    }
+
+    /**
+     * Gets the distance to trafficlight.
+     * 
+     * @return the distance to trafficlight
+     */
+    public double getDistanceToTrafficlight() {
+        return distanceToTrafficlight;
+    }
 
 }
