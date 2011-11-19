@@ -26,20 +26,56 @@
  */
 package org.movsim.simulator.roadSection;
 
-// TODO: Auto-generated Javadoc
+import java.util.List;
+
+import org.movsim.input.model.simulation.ICMacroData;
+import org.movsim.simulator.MovsimConstants;
+import org.movsim.utilities.impl.Tables;
+
 /**
- * The Interface InitialConditionsMacro.
+ * The Class InitialConditionsMacro.
  */
-public interface InitialConditionsMacro {
+public class InitialConditionsMacro {
+
+    // final static double SMALL_VAL = 1e-7;
+
+    /** The pos. */
+    double[] pos;
+
+    /** The rho. */
+    double[] rho;
+
+    /** The speed. */
+    double[] speed;
 
     /**
-     * Rho.
+     * Instantiates a new initial conditions macro impl.
      * 
-     * @param x
-     *            the x
-     * @return the double
+     * @param icData
+     *            the ic data
      */
-    double rho(double x);
+    public InitialConditionsMacro(List<ICMacroData> icData) {
+
+        final int size = icData.size();
+
+        pos = new double[size];
+        rho = new double[size];
+        speed = new double[size];
+
+        // case speed = 0 --> set vehicle ast equilibrium speed
+
+        // generateMacroFields: rho guaranteed to be > RHOMIN, v to be < VMAX
+
+        for (int i = 0; i < size; i++) {
+            final double rhoLocal = icData.get(i).getRho();
+            if (rhoLocal > MovsimConstants.SMALL_VALUE) {
+                pos[i] = icData.get(i).getX();
+                rho[i] = rhoLocal;
+                final double speedLocal = icData.get(i).getSpeed();
+                speed[i] = (speedLocal <= MovsimConstants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
+            }
+        }
+    }
 
     /**
      * V init.
@@ -48,6 +84,18 @@ public interface InitialConditionsMacro {
      *            the x
      * @return the double
      */
-    double vInit(double x);
+    public double vInit(double x) {
+        return Tables.intpextp(pos, speed, x);
+    }
 
+    /**
+     * Rho.
+     * 
+     * @param x
+     *            the x
+     * @return the double
+     */
+    public double rho(double x) {
+        return Tables.intpextp(pos, rho, x);
+    }
 }
