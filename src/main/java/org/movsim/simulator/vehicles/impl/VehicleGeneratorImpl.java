@@ -47,6 +47,7 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.vehicles.ConsumptionModeling;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
@@ -103,7 +104,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
     private boolean instantaneousFileOutput;
     
-    private ConsumptionModelingImpl fuelConsumptionModels;
+    private ConsumptionModeling fuelConsumptionModels;
 
     /**
      * Instantiates a new vehicle generator impl. And writes fundamental diagram
@@ -133,7 +134,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
 
         isWithReactionTimes = checkForReactionTimes();
 
-        fuelConsumptionModels = new ConsumptionModelingImpl(simInput.getFuelConsumptionInput());
+        fuelConsumptionModels = new ConsumptionModeling(simInput.getFuelConsumptionInput());
     }
 
     /**
