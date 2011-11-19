@@ -26,18 +26,105 @@
  */
 package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
+import java.io.PrintWriter;
+
+import org.movsim.simulator.MovsimConstants;
+import org.movsim.utilities.impl.FileUtils;
+import org.movsim.utilities.impl.Tables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // TODO: Auto-generated Javadoc
 /**
- * The Interface EquilibriumProperties.
+ * The Class EquilibriumPropertiesImpl.
  */
-public interface EquilibriumProperties {
+public class EquilibriumProperties {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(EquilibriumProperties.class);
+
+    /** The Constant NRHO. */
+    final static int NRHO = 51; // time critical
+
+    /** The rho max. */
+    protected final double rhoMax;
+
+    /** The length. */
+    final double length;
+
+    /** The q max. */
+    double qMax;
+
+    /** The rho q max. */
+    double rhoQMax;
+
+    /** The v eq tab. */
+    protected double[] vEqTab;
+
+    /**
+     * Instantiates a new equilibrium properties impl.
+     * 
+     * @param length
+     *            the length
+     */
+    public EquilibriumProperties(double length) {
+        this.length = length;
+        vEqTab = new double[NRHO];
+        rhoMax = 1. / length;
+    }
+
+    /**
+     * Gets the q max.
+     * 
+     * @return the q max
+     */
+    public double getQMax() {
+        return qMax;
+    }
+
+    /**
+     * Gets the rho max.
+     * 
+     * @return the rho max
+     */
+    public double getRhoMax() {
+        return rhoMax;
+    }
 
     /**
      * Gets the rho q max.
      * 
      * @return the rho q max
      */
-    double getRhoQMax();
+    public double getRhoQMax() {
+        return rhoQMax;
+    }
+
+    /**
+     * Gets the net distance.
+     * 
+     * @param rho
+     *            the rho
+     * @return the net distance
+     */
+    protected double getNetDistance(double rho) {
+        return rho != 0 ? (1. / rho - 1. / rhoMax) : 0;
+    }
+
+    // calculate Qmax, and abszissa rhoQmax from veqtab (necessary for BC)
+    /**
+     * Calc rho q max.
+     */
+    protected void calcRhoQMax() {
+        int ir = 1;
+        qMax = -1.;
+        while (vEqTab[ir] * rhoMax * ir / vEqTab.length > qMax) {
+            qMax = vEqTab[ir] * rhoMax * ir / vEqTab.length;
+            ir++;
+        }
+        rhoQMax = rhoMax * ir / vEqTab.length;
+        logger.debug("rhoQMax = {} = {}/km", rhoQMax, rhoQMax * 1000);
+    }
 
     /**
      * Gets the v eq.
@@ -46,7 +133,20 @@ public interface EquilibriumProperties {
      *            the rho
      * @return the v eq
      */
-    double getVEq(double rho);
+    public double getVEq(double rho) {
+        return Tables.intp(vEqTab, rho, 0, rhoMax);
+    }
+
+    /**
+     * Gets the rho.
+     * 
+     * @param i
+     *            the i
+     * @return the rho
+     */
+    protected double getRho(int i) {
+        return rhoMax * i / (vEqTab.length - 1);
+    }
 
     /**
      * Write output.
@@ -54,6 +154,17 @@ public interface EquilibriumProperties {
      * @param filename
      *            the filename
      */
-    void writeOutput(String filename);
+    public void writeOutput(String filename) {
+        final PrintWriter fstr = FileUtils.getWriter(filename);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * rhoQMax);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * qMax);
+        fstr.printf(MovsimConstants.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n");
+        for (int i = 0; i < vEqTab.length; i++) {
+            final double rho = getRho(i);
+            final double s = getNetDistance(rho);
+            fstr.printf("%8.2f, %8.2f, %8.2f, %8.2f%n", 1000 * rho, s, 3.6 * vEqTab[i], 3600 * rho * vEqTab[i]);
+        }
+        fstr.close();
+    }
 
 }

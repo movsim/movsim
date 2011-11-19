@@ -27,12 +27,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumOVM_VDIFF.
  */
-public class EquilibriumOVM_VDIFF extends EquilibriumPropertiesImpl {
+public class EquilibriumOVM_VDIFF extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium ov m_ vdiff.

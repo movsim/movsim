@@ -27,12 +27,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumIDM.
  */
-public class EquilibriumIDM extends EquilibriumPropertiesImpl {
+public class EquilibriumIDM extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium idm.

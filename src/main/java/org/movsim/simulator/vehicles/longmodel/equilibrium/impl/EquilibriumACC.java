@@ -27,12 +27,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.ACC;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumACC.
  */
-public class EquilibriumACC extends EquilibriumPropertiesImpl {
+public class EquilibriumACC extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium acc.

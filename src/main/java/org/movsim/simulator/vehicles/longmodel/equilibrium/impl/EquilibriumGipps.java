@@ -12,12 +12,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumGipps.
  */
-public class EquilibriumGipps extends EquilibriumPropertiesImpl {
+public class EquilibriumGipps extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium gipps.

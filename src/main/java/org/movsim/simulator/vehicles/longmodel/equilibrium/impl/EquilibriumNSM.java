@@ -27,12 +27,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.NSM;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumNSM.
  */
-public class EquilibriumNSM extends EquilibriumPropertiesImpl {
+public class EquilibriumNSM extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium nsm.

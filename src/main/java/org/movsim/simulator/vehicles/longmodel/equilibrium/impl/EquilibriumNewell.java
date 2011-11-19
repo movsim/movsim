@@ -27,12 +27,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumNewell.
  */
-public class EquilibriumNewell extends EquilibriumPropertiesImpl {
+public class EquilibriumNewell extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium newell.

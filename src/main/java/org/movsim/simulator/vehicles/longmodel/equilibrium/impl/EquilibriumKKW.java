@@ -27,12 +27,13 @@
 package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
+import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumKKW.
  */
-public class EquilibriumKKW extends EquilibriumPropertiesImpl {
+public class EquilibriumKKW extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium kca.
