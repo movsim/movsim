@@ -23,19 +23,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.output.LoopDetector;
 import org.movsim.simulator.RoadMapping;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
 import org.movsim.simulator.roadSection.UpstreamBoundary;
-import org.movsim.simulator.roadSection.impl.AbstractRoadSection;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * A RoadSegment is a unidirectional stretch of road that contains vehicles. A bidirectional stretch
- * of road may be created by combining two road segments running in opposite directions.
+ * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments.
+ * A bidirectional stretch of road may be created by combining two road segments running in opposite
+ * directions.
  * </p>
  * <p>
  * RoadSegments may be combined to form a road network.
@@ -95,6 +95,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final int laneCount;
     private final LaneSegment laneSegments[];
     private List<Vehicle> stagedVehicles;
+    private List<LoopDetector> loopDetectors;
     private FlowConservingBottlenecks flowConsBottlenecks;
 
     
@@ -752,7 +753,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     	return true;
     }
 
-    private class VehicleIterator implements Iterator<Vehicle> {
+    private class VehicleIterator implements Iterator<Vehicle>, Iterable<Vehicle> {
         int lane;
         int index;
         int count;
@@ -804,6 +805,12 @@ public class RoadSegment implements Iterable<Vehicle> {
             // not supported
             assert false;
         }
+
+        @Override
+		public Iterator<Vehicle> iterator() {
+			// TODO Auto-generated method stub
+			return new VehicleIterator();
+		}
     }
 
     /**
@@ -812,10 +819,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return an iterator over all the vehicles in this road segment
      */
     @Override
-    public final Iterator<Vehicle> iterator() {
+	public final Iterator<Vehicle> iterator() {
         return new VehicleIterator();
     }
-    
     
     /**
      * Check for inconsistencies.
@@ -858,8 +864,47 @@ public class RoadSegment implements Iterable<Vehicle> {
             }
         }
     }     
-        
-        
-        
-    
+
+    private class LaneSegmentIterator implements Iterator<LaneSegment> {
+        int index;
+
+        public LaneSegmentIterator() {
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (index < laneCount) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public LaneSegment next() {
+            if (index < laneCount) {
+                // get the next lane segment
+                return laneSegments[index++];
+            }
+            return null;
+        }
+
+        @Override
+        public void remove() {
+            // not supported
+            assert false;
+        }
+    }
+
+    /**
+     * Returns an iterator over all the lane segments in this road segment.
+     * 
+     * @return an iterator over all the lane segments in this road segment
+     */
+	public final Iterator<LaneSegment> laneSegmentIterator() {
+        return new LaneSegmentIterator();
+    }
+
+    public final List<LoopDetector> getLoopDetectors() {
+        return loopDetectors;
+    }
 }

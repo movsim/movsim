@@ -25,6 +25,7 @@ import java.util.Iterator;
 
 import org.junit.Test;
 import org.movsim.simulator.roadsegment.Lane;
+import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.Link;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -1340,5 +1341,32 @@ public class RoadSegmentTest {
         assertEquals(true, iterator.hasNext());
         assertEquals(v2, iterator.next());
         assertEquals(false, iterator.hasNext());
+    }
+    
+    @Test
+    public final void testLaneSegmentIterator() {
+        // fail("Not yet implemented");
+        RoadSegment.resetNextId();
+        Vehicle.resetNextId();
+
+        final int laneCount = 3;
+        final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
+
+        Iterator<LaneSegment> iterator = r0.laneSegmentIterator();
+
+        assertEquals(true, iterator.hasNext());
+        LaneSegment laneSegment = r0.laneSegment(0);
+        LaneSegment next = iterator.next();
+        assertEquals(laneSegment.lane(), next.lane());
+
+        assertEquals(true, iterator.hasNext());
+        laneSegment = r0.laneSegment(1);
+        next = iterator.next();
+        assertEquals(laneSegment.lane(), next.lane());
+
+        assertEquals(true, iterator.hasNext());
+        laneSegment = r0.laneSegment(2);
+        next = iterator.next();
+        assertEquals(laneSegment.lane(), next.lane());
     }
 }
