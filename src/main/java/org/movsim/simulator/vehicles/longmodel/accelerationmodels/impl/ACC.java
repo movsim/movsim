@@ -88,7 +88,8 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel,
         initParameters();
     }
 
-    protected void initParameters() {
+    @Override
+	protected void initParameters() {
         this.v0 = ((AccelerationModelInputDataACC) parameters).getV0();
         this.T = ((AccelerationModelInputDataACC) parameters).getT();
         this.s0 = ((AccelerationModelInputDataACC) parameters).getS0();

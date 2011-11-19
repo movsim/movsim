@@ -295,7 +295,8 @@ public class KKW extends AccelerationModelAbstract implements AccelerationModel 
     /* (non-Javadoc)
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
      */
-    protected void setDesiredSpeedV0(double v0) {
+    @Override
+	protected void setDesiredSpeedV0(double v0) {
         this.v0 = (int)v0;
     }
 

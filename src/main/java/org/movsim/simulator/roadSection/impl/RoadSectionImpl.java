@@ -195,7 +195,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     /**
      * Update downstream boundary.
      */
-    public void updateDownstreamBoundary() {
+    @Override
+	public void updateDownstreamBoundary() {
         for (VehicleContainer vehContainerLane : vehContainers) {
             vehContainerLane.removeVehiclesDownstream(roadLength);
         }
@@ -208,7 +209,8 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * org.movsim.simulator.roadSection.RoadSection#laneChangingToOfframps(java
      * .util.List, long, double, double)
      */
-    public void laneChangingToOfframpsAndFromOnramps(RoadSection offramp, long iterationCount, double dt, double time) {
+    @Override
+	public void laneChangingToOfframpsAndFromOnramps(RoadSection offramp, long iterationCount, double dt, double time) {
 
         // in this case the connection is to the offramp (or null if no offramp)
         // lane changes and merges from *simple* onramps

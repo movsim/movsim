@@ -101,42 +101,48 @@ public class AccelerationModelInputDataNewellImpl extends AccelerationModelInput
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getV0()
      */
-    public double getV0() {
+    @Override
+	public double getV0() {
         return v0;
     }
 
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#setV0(double)
      */
-    public void setV0(double v0) {
+    @Override
+	public void setV0(double v0) {
         this.v0 = v0;
     }
 
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getS0()
      */
-    public double getS0() {
+    @Override
+	public double getS0() {
         return s0;
     }
 
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#setS0(double)
      */
-    public void setS0(double s0) {
+    @Override
+	public void setS0(double s0) {
         this.s0 = s0;
     }
 
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getV0Default()
      */
-    public double getV0Default() {
+    @Override
+	public double getV0Default() {
         return v0Default;
     }
 
     /* (non-Javadoc)
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell#getS0Default()
      */
-    public double getS0Default() {
+    @Override
+	public double getS0Default() {
         return s0Default;
     }
 }

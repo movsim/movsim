@@ -59,6 +59,7 @@ public class LaneChangingMobilModelDataImpl implements LaneChangingMobilData {
     /* (non-Javadoc)
  * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#init(java.util.Map)
  */
+@Override
 public void init(final Map<String, String> map){
 	safeDeceleration = Double.parseDouble(map.get("b_safe"));
         minimumGap = Double.parseDouble(map.get("s_min"));
