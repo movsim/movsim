@@ -15,7 +15,6 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
-import org.movsim.utilities.Observer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class ACC.
  */
-public class ACC extends AccelerationModelAbstract implements AccelerationModel, Observer {
+public class ACC extends AccelerationModelAbstract implements AccelerationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ACC.class);
