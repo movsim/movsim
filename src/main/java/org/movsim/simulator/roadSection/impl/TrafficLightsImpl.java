@@ -67,7 +67,7 @@ public class TrafficLightsImpl implements TrafficLights {
         trafficLights = new ArrayList<TrafficLight>();
         final List<TrafficLightData> trafficLightData = trafficLightsInput.getTrafficLightData();
         for (final TrafficLightData tlData : trafficLightData) {
-            trafficLights.add(new TrafficLightImpl(tlData));
+            trafficLights.add(new TrafficLight(tlData));
         }
     }
 
