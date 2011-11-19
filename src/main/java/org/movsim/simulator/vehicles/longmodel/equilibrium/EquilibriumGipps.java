@@ -9,10 +9,9 @@
  * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Gipps;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**

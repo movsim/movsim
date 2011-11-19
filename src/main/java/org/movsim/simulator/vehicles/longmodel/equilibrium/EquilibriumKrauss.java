@@ -24,48 +24,54 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Newell;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.Krauss;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class EquilibriumNewell.
+ * The Class EquilibriumKrauss.
  */
-public class EquilibriumNewell extends EquilibriumProperties {
-
+public class EquilibriumKrauss extends EquilibriumProperties {
+    
     /**
-     * Instantiates a new equilibrium newell.
-     * 
-     * @param length
-     *            the length
-     * @param newellModel
-     *            the newell model
+     * Instantiates a new equilibrium gipps.
+     *
+     * @param length the length
+     * @param model the model
      */
-    public EquilibriumNewell(double length, Newell newellModel) {
+    public EquilibriumKrauss(double length, Krauss model) {
         super(length);
 
-        calcEquilibrium(newellModel);
+        calcEquilibrium(model);
         calcRhoQMax();
 
     }
 
+    // Calculates equilibrium velocity of Gipps and Gipps with finite s0
+    // and free-acc exponent delta
+    // uses numeric iteration procedure
+
     /**
      * Calc equilibrium.
      * 
-     * @param newellModel
-     *            the newell model
+     * @param model
+     *            the gipps model
      */
-    private void calcEquilibrium(Newell newellModel) {
+    private void calcEquilibrium(Krauss model) {
 
-        double v_it = newellModel.getDesiredSpeedParameterV0(); // variable of the relaxation equation
+        // Find equilibrium velocities veqtab[ir] with simple relaxation
+        // method: Just model for homogeneous traffic solved for
+        // the velocity v_it of one arbitrary vehicle
+        // (no brain, but stable and simple method...)
+
+        double v_it = model.getV0(); // variable of the relaxation equation
         final int itmax = 100; // number of iteration steps in each relaxation
         final double dtmax = 2; // iteration time step (in s) changes from
         final double dtmin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
         // start with rho=0
-        vEqTab[0] = newellModel.getDesiredSpeedParameterV0();
+        vEqTab[0] = model.getV0();
 
         for (int ir = 1; ir < vEqTab.length; ir++) {
             final double rho = rhoMax * ir / vEqTab.length;
@@ -75,9 +81,9 @@ public class EquilibriumNewell extends EquilibriumProperties {
             v_it = vEqTab[ir - 1];
 
             for (int it = 1; it <= itmax; it++) {
-                final double acc = newellModel.calcAccSimple(s, v_it, 0.);
+                final double acc = model.calcAccSimple(s, v_it, 0.);
                 // iteration step in [dtmin,dtmax]
-                final double dtloc = dtmax * v_it / newellModel.getDesiredSpeedParameterV0() + dtmin;
+                final double dtloc = dtmax * v_it / model.getV0() + dtmin;
 
                 // actual relaxation
                 v_it += dtloc * acc;
@@ -89,6 +95,5 @@ public class EquilibriumNewell extends EquilibriumProperties {
             vEqTab[ir] = v_it;
 
         }
-
     }
 }

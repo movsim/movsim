@@ -24,29 +24,28 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.IDM;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class EquilibriumIDM.
+ * The Class EquilibriumKKW.
  */
-public class EquilibriumIDM extends EquilibriumProperties {
+public class EquilibriumKKW extends EquilibriumProperties {
 
     /**
-     * Instantiates a new equilibrium idm.
+     * Instantiates a new equilibrium kca.
      * 
      * @param length
      *            the length
-     * @param idmModel
-     *            the idm model
+     * @param kcaModel
+     *            the kca model
      */
-    public EquilibriumIDM(double length, IDM idmModel) {
+    public EquilibriumKKW(double length, KKW kcaModel) {
         super(length);
 
-        calcEquilibrium(idmModel);
+        calcEquilibrium(kcaModel);
         calcRhoQMax();
 
     }
@@ -57,12 +56,7 @@ public class EquilibriumIDM extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(IDM model) {
-        // Find equilibrium velocities veqtab[ir] with simple relaxation
-        // method: Just model for homogeneous traffic solved for
-        // the velocity v_it of one arbitrary vehicle
-        // (no brain, but stable and simple method...)
-
+    private void calcEquilibrium(KKW model) {
         double vIter = model.getV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
@@ -70,7 +64,6 @@ public class EquilibriumIDM extends EquilibriumProperties {
 
         vEqTab[0] = model.getV0(); // start with rho=0
         final int length = vEqTab.length;
-
         for (int ir = 1; ir < length; ir++) {
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
@@ -85,12 +78,13 @@ public class EquilibriumIDM extends EquilibriumProperties {
                                                                             // [dtmin,dtmax]
                 // actual relaxation
                 vIter += dtloc * acc;
-                if ((vIter < 0) || (s < model.getS0())) {
+                if (vIter < 0) {
                     vIter = 0;
                 }
             }
             vEqTab[ir] = vIter;
         }
+
     }
 
 }

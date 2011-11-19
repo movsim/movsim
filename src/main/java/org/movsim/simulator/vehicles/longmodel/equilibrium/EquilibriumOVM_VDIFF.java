@@ -24,31 +24,28 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longmodel.equilibrium.impl;
+package org.movsim.simulator.vehicles.longmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.KKW;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.OVM_VDIFF;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class EquilibriumKKW.
+ * The Class EquilibriumOVM_VDIFF.
  */
-public class EquilibriumKKW extends EquilibriumProperties {
+public class EquilibriumOVM_VDIFF extends EquilibriumProperties {
 
     /**
-     * Instantiates a new equilibrium kca.
+     * Instantiates a new equilibrium ov m_ vdiff.
      * 
      * @param length
      *            the length
-     * @param kcaModel
-     *            the kca model
+     * @param vDiffModel
+     *            the v diff model
      */
-    public EquilibriumKKW(double length, KKW kcaModel) {
+    public EquilibriumOVM_VDIFF(double length, OVM_VDIFF vDiffModel) {
         super(length);
-
-        calcEquilibrium(kcaModel);
+        calcEquilibrium(vDiffModel);
         calcRhoQMax();
-
     }
 
     /**
@@ -57,35 +54,43 @@ public class EquilibriumKKW extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(KKW model) {
-        double vIter = model.getV0(); // variable of the relaxation equation
-        final int itMax = 100; // number of iteration steps in each relaxation
-        final double dtMax = 2; // iteration time step (in s) changes from
-        final double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
+    private void calcEquilibrium(OVM_VDIFF model) {
+
+        double vIterate = model.getV0(); // variable of the relaxation equation
+        final int iterMax = 100; // number of iteration steps in each relaxation
+        final double dtMax = 0.3 * model.getTau(); // iteration time step (in s)
+                                                   // changes from
+        final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to
+                                                   // dtMax (rho=0)
 
         vEqTab[0] = model.getV0(); // start with rho=0
+
         final int length = vEqTab.length;
         for (int ir = 1; ir < length; ir++) {
+
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
+
             // start iteration with equilibrium velocity for the previous
             // density
-            vIter = vEqTab[ir - 1];
-            for (int it = 1; it <= itMax; it++) {
-                final double acc = model.calcAccSimple(s, vIter, 0.);
-                final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it.
-                                                                            // step
-                                                                            // in
-                                                                            // [dtmin,dtmax]
-                // actual relaxation
-                vIter += dtloc * acc;
-                if (vIter < 0) {
-                    vIter = 0;
-                }
-            }
-            vEqTab[ir] = vIter;
-        }
+            vIterate = vEqTab[ir - 1];
 
+            for (int it = 1; it <= iterMax; it++) {
+                final double acc = model.calcAccSimple(s, vIterate, 0);
+                final double dtLoc = dtMax * vIterate / model.getV0() + dtMin; // it.
+                                                                               // step
+                                                                               // in
+                                                                               // [dtmin,dtmax]
+
+                // actual relaxation
+                vIterate += dtLoc * acc;
+                if ((vIterate < 0) || (s < model.getS0())) {
+                    vIterate = 0;
+                }
+
+            }
+            vEqTab[ir] = vIterate;
+        }
     }
 
 }
