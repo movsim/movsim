@@ -33,7 +33,6 @@ import org.movsim.simulator.roadSection.TrafficLight;
 import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.RoadSegment;
-import org.movsim.simulator.vehicles.impl.NoiseImpl;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
@@ -235,7 +234,7 @@ public class Vehicle {
         }
 
         if (vehInput.isWithNoise()) {
-            noise = new NoiseImpl(vehInput.getNoiseInputData());
+            noise = new Noise(vehInput.getNoiseInputData());
         }
 
         trafficLightApproaching = new TrafficLightApproachingImpl();
