@@ -33,6 +33,7 @@ import org.movsim.input.model.RoadInput;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadSection.RoadSection;
+import org.movsim.simulator.roadSection.SpeedLimits;
 import org.movsim.simulator.vehicles.VehicleContainer;
 import org.movsim.simulator.vehicles.impl.VehicleContainerImpl;
 import org.slf4j.Logger;
@@ -75,7 +76,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(id, MovsimConstants.MOST_RIGHT_LANE));
         
-        speedlimits = new SpeedLimitsImpl(roadData.getSpeedLimitInputData());
+        speedlimits = new SpeedLimits(roadData.getSpeedLimitInputData());
         
         System.out.println("speed limit at offramp: x=1400 = "+speedlimits.calcSpeedLimit(1400));
         
