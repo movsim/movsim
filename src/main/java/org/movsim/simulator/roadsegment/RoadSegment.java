@@ -838,16 +838,18 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
                 final double netDistance = vehicle.getNetDistance(vehFront);
                 if (netDistance < 0) {
-                    logger.error("#########################################################");
-                    logger.error("Crash of Vehicle i = {} at x = {}m", index, vehicle.getPosition());
-                    if (vehFront != null) {
-                        logger.error("with veh in front at x = {} on lane = {}", vehFront.getPosition(), vehicle.getLane());
-                    }
-                    logger.error("roadID = {}", id);
-                    logger.error("net distance  = {}", netDistance);
-                    logger.error("lane index    = {}", laneSegment.lane());
-                    logger.error("container.size = {}", laneSegment.vehicleCount());
+                    logger.error("Crash happened!");
                     final StringBuilder sb = new StringBuilder("\n");
+                    sb.append("#########################################################");
+                    sb.append(String.format("Crash of Vehicle i = %d at x = %.4fm", index, vehicle.getPosition()));
+                    if (vehFront != null) {
+                        sb.append(String.format("with veh in front at x = %.4f on lane = %d", vehFront.getPosition(), vehicle.getLane()));
+                    }
+                    sb.append("roadID = {}"+id);
+                    sb.append("net distance  = "+netDistance);
+                    sb.append("lane index    = "+laneSegment.lane());
+                    sb.append("container.size = "+laneSegment.vehicleCount());
+                    
                     for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math.min(index + 8, M - 1); j++) {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String.format(
