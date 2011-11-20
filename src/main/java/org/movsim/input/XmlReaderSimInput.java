@@ -67,7 +67,7 @@ public class XmlReaderSimInput {
 
     private boolean isValid;
 
-    private final InputDataImpl inputData;
+    private final InputData inputData;
 
     private final String xmlFilename;
 
@@ -90,7 +90,7 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(final InputDataImpl inputData) {
+    public XmlReaderSimInput(final InputData inputData) {
         projectMetaData = inputData.getProjectMetaData(); 
         this.inputData = inputData;
 
@@ -190,8 +190,8 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        validate(FileUtils.getInputSourceFromFilename(xmlFilename)); // TODO
-                                                                     // path
+        // TODO path also from xml 
+        validate(FileUtils.getInputSourceFromFilename(xmlFilename));
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
 

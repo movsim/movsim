@@ -29,7 +29,7 @@ package org.movsim.simulator.roadSection.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.input.InputDataImpl;
+import org.movsim.input.InputData;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;
@@ -156,7 +156,7 @@ public abstract class AbstractRoadSection {
      * @param roadInputMap
      * @param vehGenerator2
      */
-    public AbstractRoadSection(InputDataImpl inputData, RoadInput roadInput, VehicleGenerator vehGenerator) {
+    public AbstractRoadSection(InputData inputData, RoadInput roadInput, VehicleGenerator vehGenerator) {
         
         this.dt = inputData.getSimulationInput().getTimestep();
         this.roadLength = roadInput.getRoadLength();

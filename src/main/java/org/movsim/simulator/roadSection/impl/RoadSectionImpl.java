@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.movsim.input.InputData;
-import org.movsim.input.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.DetectorInput;
@@ -80,7 +79,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
      * @param vehGenerator
      *            the veh generator
      */
-    public RoadSectionImpl(InputDataImpl inputData, final RoadInput roadinput, final VehicleGenerator vehGenerator) {
+    public RoadSectionImpl(InputData inputData, final RoadInput roadinput, final VehicleGenerator vehGenerator) {
         super(inputData, roadinput, vehGenerator);
         logger.info("Cstr. RoadSectionImpl");
 
@@ -93,7 +92,7 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
     /**
      * @param roadinput
      */
-    private void initialize(InputDataImpl inputData, RoadInput roadInput) {
+    private void initialize(InputData inputData, RoadInput roadInput) {
         countVehiclesToOfframp = 0;
 
         vehContainers = new ArrayList<VehicleContainer>();

@@ -31,9 +31,8 @@ import java.util.List;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
-import org.movsim.input.InputDataImpl;
+import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.input.ProjectMetaDataImpl;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.Simulator;
@@ -66,9 +65,9 @@ public class MovsimViewerFacade {
 
     private final Simulator model;
 
-    private InputDataImpl inputData;
+    private InputData inputData;
 
-    private ProjectMetaDataImpl projectMetaDataImpl;
+    private ProjectMetaData projectMetaData;
 
     /**
      * Instantiates a new movsim viewer facade. Singleton pattern
@@ -80,19 +79,19 @@ public class MovsimViewerFacade {
 
         initLocalizationAndLogger();
 
-        inputData = (InputDataImpl) model.getSimInput();
+        inputData = model.getSimInput();
         
         System.out.println("inputData is"+inputData);
 //        System.exit(0);
         
         
-        projectMetaDataImpl = inputData.getProjectMetaDataImpl();
+        projectMetaData = inputData.getProjectMetaData();
 
         // TODO set project config
 //        String projectName;
-//        projectMetaDataImpl.setProjectName(projectName)
-        projectMetaDataImpl.setInstantaneousFileOutput(false);
-        projectMetaDataImpl.setXmlFromResources(true);
+//        projectMetaData.setProjectName(projectName)
+        projectMetaData.setInstantaneousFileOutput(false);
+        projectMetaData.setXmlFromResources(true);
 
     }
     
@@ -218,7 +217,7 @@ public class MovsimViewerFacade {
     }
 
     public ProjectMetaData getProjectMetaDataImpl() {
-        return projectMetaDataImpl;
+        return projectMetaData;
     }
 
 }

@@ -3,58 +3,178 @@
  */
 package org.movsim.input;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface ProjectMetaData.
- */
-public interface ProjectMetaData {
+
+public class ProjectMetaData{
+
+    private static ProjectMetaData singleton = new ProjectMetaData();
+
+    private String projectName = ""; //"/file/src/test/resources/" + "onramp_IDM" + ".xml";
+    private String pathToProjectXmlFile;
+    private String outputPath;
+    private boolean instantaneousFileOutput = true;
+    private boolean onlyValidation = false;
+    private boolean writeInternalXml = false;
+
+    /** Needed for Applet */
+    private boolean xmlFromResources = false;
 
     /**
-     * Gets the project name.
-     * 
-     * @return the project name
+     * private constructor: singleton pattern.
      */
-    String getProjectName();
+    private ProjectMetaData() {
+
+    }
+
+    // package restricted access
+    /**
+     * Gets the instance impl.
+     * 
+     * @return the instance impl
+     */
+    public static ProjectMetaData getInstanceImpl() {
+        return singleton;
+    }
 
     /**
-     * Gets the path to project xml file.
+     * Gets the single instance of ProjectMetaDataImpl.
      * 
-     * @return the path to project xml file
+     * @return single instance of ProjectMetaDataImpl
      */
-    String getPathToProjectXmlFile();
+    static ProjectMetaData getInstance() {
+        return singleton;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#getProjectName()
+     */
+    public String getProjectName() {
+        return projectName;
+    }
 
     /**
-     * Gets the output path.
+     * Sets the project name.
      * 
-     * @return the output path
+     * @param projectName
+     *            the new project name
      */
-    String getOutputPath();
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#getPathToProjectXmlFile()
+     */
+    public String getPathToProjectXmlFile() {
+        return pathToProjectXmlFile;
+    }
 
     /**
-     * Checks if is instantaneous file output.
+     * Sets the path to project xml file.
      * 
-     * @return true, if is instantaneous file output
+     * @param pathToProjectXmlFile
+     *            the new path to project xml file
      */
-    boolean isInstantaneousFileOutput();
+    public void setPathToProjectXmlFile(String pathToProjectXmlFile) {
+        this.pathToProjectXmlFile = pathToProjectXmlFile;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#getOutputPath()
+     */
+    public String getOutputPath() {
+        return outputPath;
+    }
 
     /**
-     * Checks if is only validation.
+     * Sets the output path.
      * 
-     * @return true, if is only validation
+     * @param outputPath
+     *            the new output path
      */
-    boolean isOnlyValidation();
+    public void setOutputPath(String outputPath) {
+        this.outputPath = outputPath;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#isInstantaneousFileOutput()
+     */
+    public boolean isInstantaneousFileOutput() {
+        return instantaneousFileOutput;
+    }
 
     /**
-     * Checks if is write internal xml.
+     * Sets the instantaneous file output.
      * 
-     * @return true, if is write internal xml
+     * @param instantaneousFileOutput
+     *            the new instantaneous file output
      */
-    boolean isWriteInternalXml();
+    public void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
+        this.instantaneousFileOutput = instantaneousFileOutput;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#isOnlyValidation()
+     */
+    public boolean isOnlyValidation() {
+        return onlyValidation;
+    }
 
     /**
-     * Checks if is xml from resources.
+     * Sets the only validation.
      * 
-     * @return true, if is xml from resources
+     * @param onlyValidation
+     *            the new only validation
      */
-    boolean isXmlFromResources();
+    public void setOnlyValidation(boolean onlyValidation) {
+        this.onlyValidation = onlyValidation;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#isWriteInternalXml()
+     */
+    public boolean isWriteInternalXml() {
+        return writeInternalXml;
+    }
+
+    /**
+     * Sets the write internal xml.
+     * 
+     * @param writeInternalXml
+     *            the new write internal xml
+     */
+    public void setWriteInternalXml(boolean writeInternalXml) {
+        this.writeInternalXml = writeInternalXml;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.ProjectMetaData#isXmlFromResources()
+     */
+    public boolean isXmlFromResources() {
+        return xmlFromResources;
+    }
+
+    /**
+     * Sets the xml from resources.
+     * 
+     * @param xmlFromResources
+     *            the new xml from resources
+     */
+    public void setXmlFromResources(boolean xmlFromResources) {
+        this.xmlFromResources = xmlFromResources;
+    }
+
 }

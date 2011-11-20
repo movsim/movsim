@@ -53,7 +53,7 @@ public class SimCommandLine {
     /** The options. */
     private Options options;
 
-    private ProjectMetaDataImpl projectMetaData;
+    private ProjectMetaData projectMetaData;
 
     /**
      * Instantiates a new sim command line impl.
@@ -65,7 +65,7 @@ public class SimCommandLine {
 
         initLocalizationAndLogger();
 
-        projectMetaData = ProjectMetaDataImpl.getInstanceImpl();
+        projectMetaData = ProjectMetaData.getInstanceImpl();
 
         createOptions();
         createParserAndParse(args);
