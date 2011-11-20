@@ -34,8 +34,6 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
-import org.movsim.input.model.impl.OutputInputImpl;
-import org.movsim.input.model.impl.RoadInputImpl;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.slf4j.Logger;
@@ -121,7 +119,7 @@ public class SimulationInput {
 		final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         List<RoadInput> roadInputList = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
-            roadInputList.add(new RoadInputImpl(roadElem));
+            roadInputList.add(new RoadInput(roadElem));
         }
         
         roadInputMap = new HashMap<Long,RoadInput>();
@@ -131,7 +129,7 @@ public class SimulationInput {
 
         // -------------------------------------------------------
         // Output
-        outputInput = new OutputInputImpl(elem.getChild(XmlElementNames.RoadOutput));
+        outputInput = new OutputInput(elem.getChild(XmlElementNames.RoadOutput));
 
     }
 

@@ -26,38 +26,91 @@
  */
 package org.movsim.input.model;
 
+import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
+import org.movsim.input.model.output.impl.FloatingCarInputImpl;
+import org.movsim.input.model.output.impl.SpatioTemporalInputImpl;
+import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
+import org.movsim.input.model.output.impl.TravelTimesInputImpl;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface OutputInput.
- */
-public interface OutputInput {
+public class OutputInput {
 
-    /**
-     * Gets the floating car input.
-     * 
-     * @return the floating car input
-     */
-    FloatingCarInput getFloatingCarInput();
+    /** The floating car input. */
+    private FloatingCarInput floatingCarInput;
 
-    /**
-     * Gets the macro input.
-     * 
-     * @return the macro input
-     */
-    SpatioTemporalInput getSpatioTemporalInput();
+    /** The macro input. */
+    private SpatioTemporalInput spatioTemporalInput;
+
+    /** The trajectories input. */
+    private TrajectoriesInput trajectoriesInput;
+    
+    
+    private TravelTimesInput travelTimesInput;
 
     /**
-     * Gets the trajectories input.
+     * Instantiates a new output input impl.
      * 
-     * @return the trajectories input
+     * @param elem
+     *            the elem
      */
-    TrajectoriesInput getTrajectoriesInput();
+    public OutputInput(Element elem) {
+        parseElement(elem);
+    }
 
-    TravelTimesInput getTravelTimesInput();
+    /**
+     * Parses the element.
+     * 
+     * @param elem
+     *            the elem
+     */
+    private void parseElement(Element elem) {
+
+        floatingCarInput = new FloatingCarInputImpl(elem.getChild(XmlElementNames.OutputFloatingCarData));
+
+        spatioTemporalInput = new SpatioTemporalInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
+
+        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));
+
+        
+        // TODO treat all elements similarly
+        if(elem.getChild(XmlElementNames.OutputTravelTimes)!=null){
+            travelTimesInput = new TravelTimesInputImpl(elem.getChild(XmlElementNames.OutputTravelTimes));
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.OutputInput#getFloatingCarInput()
+     */
+    public FloatingCarInput getFloatingCarInput() {
+        return floatingCarInput;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.OutputInput#getMacroInput()
+     */
+    public SpatioTemporalInput getSpatioTemporalInput() {
+        return spatioTemporalInput;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.OutputInput#getTrajectoriesInput()
+     */
+    public TrajectoriesInput getTrajectoriesInput() {
+        return trajectoriesInput;
+    }
+
+    public TravelTimesInput getTravelTimesInput() {
+        return travelTimesInput;
+    }
 
 }

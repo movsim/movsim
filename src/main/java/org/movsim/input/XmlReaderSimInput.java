@@ -43,7 +43,6 @@ import org.jdom.output.XMLOutputter;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.consumption.FuelConsumptionInput;
-import org.movsim.input.model.impl.VehicleInputImpl;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,8 +56,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * The Class XmlReaderSimInput.
- * 
- * @author Arne Kesting, Ralph Germ
  */
 public class XmlReaderSimInput {
 
@@ -171,7 +168,7 @@ public class XmlReaderSimInput {
         final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
         
         for (final Element vehElem : vehicleElements) {
-            vehicleInputData.add(new VehicleInputImpl(vehElem));
+            vehicleInputData.add(new VehicleInput(vehElem));
         }
         inputData.setVehicleInputData(vehicleInputData);
 

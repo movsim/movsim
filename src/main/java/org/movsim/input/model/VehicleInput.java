@@ -26,88 +26,220 @@
  */
 package org.movsim.input.model;
 
+import java.util.List;
+import java.util.Map;
+
+import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
+import org.movsim.input.XmlUtils;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
+import org.movsim.input.model.vehicle.laneChanging.impl.LaneChangingInputDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataIDMImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKKWImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKraussImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
+import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface VehicleInput.
- */
-public interface VehicleInput {
+public class VehicleInput{
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(VehicleInput.class);
+
+    /** The label. cannot be changed while simulating */
+    private final String label;
+
+    /** The length. cannot be changed while simulating */
+    private final double length;
+
+    /** The max deceleration. in m/s^2, positive (default: Infinity) */
+    private final double maxDeceleration;
+
+    /** The reaction time. cannot be changed while simulating */
+    private final double reactionTime;
+    
+    /** Label for the fuel consumption model. Default is "none"*/
+    private final String fuelConsumptionLabel;
+
+    /** The model input data. */
+    private AccelerationModelInputData modelInputData;
+    
+    private LaneChangingInputData laneChangingInputData;
+
+    /** The memory input data. */
+    private MemoryInputData memoryInputData = null;
+
+    /** The noise input data. */
+    private NoiseInputData noiseInputData = null;
 
     /**
-     * Gets the label.
+     * Instantiates a new vehicle input impl.
      * 
-     * @return the label
+     * @param elem
+     *            the elem
      */
-    String getLabel();
+    @SuppressWarnings("unchecked")
+    public VehicleInput(Element elem) {
+        this.label = elem.getAttributeValue("label");
+        this.length = Double.parseDouble(elem.getAttributeValue("length"));
+        this.maxDeceleration = Double.parseDouble(elem.getAttributeValue("b_max"));
+        this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
+        this.fuelConsumptionLabel = elem.getAttributeValue("consumption");
+
+        final List<Element> longModelElems = elem.getChild(XmlElementNames.VehicleLongitudinalModel).getChildren();
+        for (final Element longModelElem : longModelElems) {
+            if (longModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleMemory)) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(longModelElem);
+                memoryInputData = new MemoryInputData(map);
+            } else if (modelInputData == null) {
+                modelInputData = modelInputDataFactory(longModelElems.get(0));
+            } else {
+                logger.error("more than one acceleration model is specified for a vehicle!");
+                System.exit(-1);
+            }
+        }
+        
+        final Element lcModelElem = elem.getChild(XmlElementNames.VehicleLaneChangeModel);
+        laneChangingInputData = new LaneChangingInputDataImpl(lcModelElem);
+
+        final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
+        if (noiseElem != null) {
+            final Map<String, String> map = XmlUtils.putAttributesInHash(noiseElem);
+            noiseInputData = new NoiseInputData(map);
+        }
+    }
 
     /**
-     * Gets the length.
+     * Model input data factory.
      * 
-     * @return the length
-     */
-    double getLength();
-
-    /**
-     * Gets the max deceleration.
-     * 
-     * @return the max deceleration
-     */
-    double getMaxDeceleration();
-
-    /**
-     * Gets the reaction time.
-     * 
-     * @return the reaction time
-     */
-    double getReactionTime();
-
-    /**
-     * Gets the model input data.
-     * 
+     * @param elem
+     *            the elem
      * @return the model input data
      */
-    AccelerationModelInputData getAccelerationModelInputData();
+    private AccelerationModelInputData modelInputDataFactory(Element elem) {
+        final String modelName = elem.getName();
+        final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
+        if (modelName.equals(AccelerationModelAbstract.ModelName.IDM.name()))
+            return new AccelerationModelInputDataIDMImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.ACC.name()))
+            return new AccelerationModelInputDataACCImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.OVM_VDIFF.name()))
+            return new AccelerationModelInputDataOVM_VDIFFImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.GIPPS.name()))
+            return new AccelerationModelInputDataGippsImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.KRAUSS.name()))
+            return new AccelerationModelInputDataKraussImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.NEWELL.name()))
+            return new AccelerationModelInputDataNewellImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.NSM.name()))
+            return new AccelerationModelInputDataNSMImpl(map);
+        else if (modelName.equals(AccelerationModelAbstract.ModelName.KKW.name()))
+            return new AccelerationModelInputDataKKWImpl(map);
+        else {
+            logger.error("model with name {} not yet implemented. exit.", modelName);
+            System.exit(-1);
+        }
+        return null; // not reached, instead exit
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.VehicleInput#getLabel()
+     */
+    public String getLabel() {
+        return label;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.VehicleInput#getLength()
+     */
+    public double getLength() {
+        return length;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.VehicleInput#getMaxDeceleration()
+     */
+    public double getMaxDeceleration() {
+        return maxDeceleration;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
+     */
+    public AccelerationModelInputData getAccelerationModelInputData() {
+        return modelInputData;
+    }
     
-    
-    /**
-     * Gets the lane changing input data.
-     *
-     * @return the lane changing input data
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.VehicleInput#getLaneChangingInputData()
      */
-    LaneChangingInputData getLaneChangingInputData();
+    public LaneChangingInputData getLaneChangingInputData() {
+        return laneChangingInputData;
+    }
 
-    /**
-     * Checks if is with memory.
+    /*
+     * (non-Javadoc)
      * 
-     * @return true, if is with memory
+     * @see org.movsim.input.model.impl.VehicleInput#isWithMemory()
      */
-    boolean isWithMemory();
+    public boolean isWithMemory() {
+        return (memoryInputData != null);
+    }
 
-    /**
-     * Gets the memory input data.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the memory input data
+     * @see org.movsim.input.model.impl.VehicleInput#getMemoryInputData()
      */
-    MemoryInputData getMemoryInputData();
+    public MemoryInputData getMemoryInputData() {
+        return memoryInputData;
+    }
 
-    /**
-     * Checks if is with noise.
+    /*
+     * (non-Javadoc)
      * 
-     * @return true, if is with noise
+     * @see org.movsim.input.model.impl.VehicleInput#isWithNoise()
      */
-    boolean isWithNoise();
+    public boolean isWithNoise() {
+        return (noiseInputData != null);
+    }
 
-    /**
-     * Gets the noise input data.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the noise input data
+     * @see org.movsim.input.model.impl.VehicleInput#getNoiseInputData()
      */
-    NoiseInputData getNoiseInputData();
-    
-    String getFuelConsumptionLabel();
+    public NoiseInputData getNoiseInputData() {
+        return noiseInputData;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.VehicleInput#getReactionTime()
+     */
+    public double getReactionTime() {
+        return reactionTime;
+    }
+
+    public String getFuelConsumptionLabel() {
+        return fuelConsumptionLabel;
+    }
 
 }
