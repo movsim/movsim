@@ -79,7 +79,7 @@ public class Simulator implements Runnable {
 
     private long startTimeMillis;
 
-    RoadNetwork roadNetwork;
+    private RoadNetwork roadNetwork;
 
     /**
      * Instantiates a new simulator impl.
