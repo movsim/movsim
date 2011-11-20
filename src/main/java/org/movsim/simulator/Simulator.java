@@ -14,9 +14,9 @@ package org.movsim.simulator;
 import java.util.List;
 
 import org.movsim.input.InputData;
+import org.movsim.input.InputDataImpl;
+import org.movsim.input.XmlReaderSimInput;
 import org.movsim.input.file.opendrive.OpenDriveReader;
-import org.movsim.input.impl.InputDataImpl;
-import org.movsim.input.impl.XmlReaderSimInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.impl.XmlUtils;
+import org.movsim.input.XmlUtils;
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 

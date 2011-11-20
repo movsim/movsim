@@ -24,14 +24,12 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.impl;
+package org.movsim.input;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.input.InputData;
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.consumption.FuelConsumptionInput;

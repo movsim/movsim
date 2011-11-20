@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.impl;
+package org.movsim.input;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,8 +40,6 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.movsim.input.ProjectMetaData;
-import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.consumption.FuelConsumptionInput;

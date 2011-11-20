@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.impl.XmlUtils;
+import org.movsim.input.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

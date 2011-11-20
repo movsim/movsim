@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.movsim.input.InputData;
-import org.movsim.input.impl.InputDataImpl;
+import org.movsim.input.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.DetectorInput;

@@ -24,9 +24,8 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.impl;
+package org.movsim.input;
 
-import org.movsim.input.ProjectMetaData;
 /**
  * The Class ProjectMetaDataImpl.
  */

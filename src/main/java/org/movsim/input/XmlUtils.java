@@ -24,7 +24,7 @@
  *  
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.impl;
+package org.movsim.input;
 
 import java.util.HashMap;
 import java.util.List;

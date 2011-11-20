@@ -31,9 +31,9 @@ import java.util.List;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
+import org.movsim.input.InputDataImpl;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.input.impl.InputDataImpl;
-import org.movsim.input.impl.ProjectMetaDataImpl;
+import org.movsim.input.ProjectMetaDataImpl;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.Simulator;

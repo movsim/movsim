@@ -1,6 +1,6 @@
 package org.movsim.simulator.roadSection.impl;
 
-import org.movsim.input.impl.InputDataImpl;
+import org.movsim.input.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.simulator.roadSection.RoadSection;
 import org.movsim.simulator.vehicles.VehicleGenerator;

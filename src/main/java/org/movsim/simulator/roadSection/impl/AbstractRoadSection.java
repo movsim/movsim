@@ -29,7 +29,7 @@ package org.movsim.simulator.roadSection.impl;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.input.impl.InputDataImpl;
+import org.movsim.input.InputDataImpl;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.simulator.roadSection.FlowConservingBottlenecks;

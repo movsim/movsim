@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.impl.XmlUtils;
+import org.movsim.input.XmlUtils;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.slf4j.Logger;
