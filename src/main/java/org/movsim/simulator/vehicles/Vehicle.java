@@ -825,12 +825,7 @@ public class Vehicle {
     
     public boolean considerLaneChanging(double dt, RoadSegment roadSegment) {
         // no lane changing when not configured in xml.
-        if (!lcModel.isInitialized()) {
-            return false;
-        }
-
-        if (inProcessOfLaneChanging()) {
-            updateLaneChangingDelay(dt);
+        if (lcModel==null  || !lcModel.isInitialized()) {
             return false;
         }
 
@@ -839,14 +834,14 @@ public class Vehicle {
             return false;
         }
 
+        if (inProcessOfLaneChanging()) {
+            updateLaneChangingDelay(dt);
+            return false;
+        }
         
-        final int saveLane = lane;
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
         final int laneChangingDirection = lcModel.determineLaneChangingDirection(roadSegment);
-
-        // TODO do cross check, not necessary anymore?! 
-        //assert saveLane != lane;
 
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
@@ -914,7 +909,7 @@ public class Vehicle {
      *
      * @param dt the dt
      */
-    public void updateLaneChangingDelay(double dt) {
+    private void updateLaneChangingDelay(double dt) {
         tLaneChangingDelay += dt;
     }
 

@@ -554,6 +554,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * <p>
      * For each vehicle check if a lane change is desired and safe and, if so, make the lane change.
      * </p>
+     * 
      * <p>
      * <code>laneChanging</code> preserves the vehicle sort order, since only lateral movements
      * of vehicles are made.
