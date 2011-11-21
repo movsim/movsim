@@ -26,40 +26,113 @@
  */
 package org.movsim.input.model.simulation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface DetectorInput.
- */
-public interface DetectorInput {
+import org.jdom.Element;
+
+public class DetectorInput {
+
+    /** The positions. */
+    private List<Double> positions;
+
+    /** The dt sample. */
+    private double dtSample;
+
+    /** The with logging. */
+    private boolean withLogging;
+
+    /** The is initialized. */
+    private final boolean isInitialized;
 
     /**
-     * Checks if is with logging.
+     * Instantiates a new detector input impl.
      * 
-     * @return true, if is with logging
+     * @param elem
+     *            the elem
      */
-    boolean isWithLogging();
+    public DetectorInput(Element elem) {
+
+        if (elem == null) {
+            isInitialized = false;
+            return;
+        }
+
+        parseElement(elem);
+        isInitialized = true;
+
+    }
 
     /**
-     * Gets the positions.
+     * Parses the element.
      * 
-     * @return the positions
+     * @param elem
+     *            the elem
      */
-    List<Double> getPositions();
+    @SuppressWarnings("unchecked")
+    private void parseElement(Element elem) {
 
-    /**
-     * Gets the sample interval.
-     * 
-     * @return the sample interval
-     */
-    double getSampleInterval();
+        this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
+        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
-    /**
-     * Checks if is with detectors.
+        // Detector
+        positions = new ArrayList<Double>();
+
+        final List<Element> crossElems = elem.getChildren("CROSS_SECTION");
+        if (crossElems != null) {
+            for (final Element crossElem : crossElems) {
+                positions.add(Double.parseDouble(crossElem.getAttributeValue("x")));
+            }
+        }
+
+        Collections.sort(positions, new Comparator<Double>() {
+            @Override
+            public int compare(Double o1, Double o2) {
+                final Double pos1 = new Double((o1).doubleValue());
+                final Double pos2 = new Double((o2).doubleValue());
+                return pos1.compareTo(pos2); // sort with increasing x
+            }
+        });
+
+        // -----------------------------------------------------------
+    }
+
+    /*
+     * (non-Javadoc)
      * 
-     * @return true, if is with detectors
+     * @see org.movsim.input.model.output.impl.DetectorInput#getPositions()
      */
-    boolean isWithDetectors();
+    public List<Double> getPositions() {
+        return positions;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.impl.DetectorInput#getSampleInterval()
+     */
+    public double getSampleInterval() {
+        return dtSample;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.impl.DetectorInput#isWithDetectors()
+     */
+    public boolean isWithDetectors() {
+        return isInitialized;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.DetectorInput#isWithLogging()
+     */
+    public boolean isWithLogging() {
+        return withLogging;
+    }
 
 }

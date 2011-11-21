@@ -1,9 +1,26 @@
 package org.movsim.input.model.simulation;
 
-public interface TrafficSinkData {
+import org.jdom.Element;
 
-    int getSinkId(); 
+public class TrafficSinkData {
+
+    /** The with logging. */
+    private final boolean withLogging;
+
+    private final int sinkId;
     
-    boolean withLogging();
+    public TrafficSinkData(Element elem){
+        sinkId = Integer.parseInt(elem.getAttributeValue("id"));
+        withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+    }
+    
+    public boolean withLogging() {
+        return withLogging;
+    }
+    
+   
+    public int getSinkId() {
+        return sinkId;
+    }
     
 }

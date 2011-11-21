@@ -26,28 +26,84 @@
  */
 package org.movsim.input.model.simulation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface UpstreamBoundaryData.
- */
-public interface TrafficSourceData {
+import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
+import org.movsim.input.XmlUtils;
 
-    int getSourceId(); 
+public class TrafficSourceData {
+
+    /** The inflow time series. */
+    private List<InflowDataPoint> inflowTimeSeries;
+
+    /** The with logging. */
+    private final boolean withLogging;
     
-    /**
-     * With logging.
-     * 
-     * @return true, if successful
-     */
-    boolean withLogging();
+    private final int sourceId;
 
     /**
-     * Gets the inflow time series.
+     * Instantiates a new upstream boundary data impl.
      * 
-     * @return the inflow time series
+     * @param elem
+     *            the elem
      */
-    List<InflowDataPoint> getInflowTimeSeries();
+    @SuppressWarnings("unchecked")
+    public TrafficSourceData(Element elem) {
+        inflowTimeSeries = new ArrayList<InflowDataPoint>();
+        sourceId = Integer.parseInt(elem.getAttributeValue("id"));
+        withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
+        final List<Element> upInflowElems = elem.getChildren(XmlElementNames.RoadInflow);
+        parseAndSortInflowElements(upInflowElems);
+    }
+
+    /**
+     * Parses the and sort inflow elements.
+     * 
+     * @param upInflowElems
+     *            the up inflow elems
+     */
+    private void parseAndSortInflowElements(List<Element> upInflowElems) {
+        for (final Element upInflowElem : upInflowElems) {
+            final Map<String, String> inflowMap = XmlUtils.putAttributesInHash(upInflowElem);
+            inflowTimeSeries.add(new InflowDataPoint(inflowMap));
+        }
+        Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
+            @Override
+            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
+                final Double pos1 = new Double((o1).getTime());
+                final Double pos2 = new Double((o2).getTime());
+                return pos1.compareTo(pos2); // sort with increasing t
+            }
+        });
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.UpstreamBoundaryData#getInflowTimeSeries
+     * ()
+     */
+    public List<InflowDataPoint> getInflowTimeSeries() {
+        return inflowTimeSeries;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.UpstreamBoundaryData#withLogging()
+     */
+    public boolean withLogging() {
+        return withLogging;
+    }
+    
+    public int getSourceId() {
+        return sourceId;
+    }
 }

@@ -34,106 +34,106 @@ import org.movsim.input.model.simulation.TrafficLightData;
 /**
  * The Class TrafficLightDataImpl.
  */
-public class TrafficLightDataImpl implements TrafficLightData {
-
-    // XML : <TRAFFICLIGHT x="1000" green_time="100" green_red_time="3"
-    // red_time="20" red_green_time="2" />
-
-    /** The x. */
-    private final double x;
-
-    /** The green time. */
-    private final double greenTime;
-
-    /** The red time. */
-    private final double redTime;
-
-    /** The green red time period. */
-    private final double greenRedTimePeriod;
-
-    /** The red green time period. */
-    private final double redGreenTimePeriod;
-
-    /** The phase shift. */
-    private final double phaseShift;
-
-    /**
-     * Instantiates a new traffic light data impl.
-     * 
-     * @param map
-     *            the map
-     */
-    public TrafficLightDataImpl(Map<String, String> map) {
-        this.x = Double.parseDouble(map.get("x"));
-        this.greenTime = Double.parseDouble(map.get("green_time"));
-        this.redTime = Double.parseDouble(map.get("red_time"));
-        this.greenRedTimePeriod = Double.parseDouble(map.get("green_red_time"));
-        this.redGreenTimePeriod = Double.parseDouble(map.get("red_green_time"));
-        this.phaseShift = Double.parseDouble(map.get("phase_shift"));
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.TrafficLightData#getX()
-     */
-    @Override
-    public double getX() {
-        return x;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.TrafficLightData#getGreenTime()
-     */
-    @Override
-    public double getGreenTime() {
-        return greenTime;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.TrafficLightData#getRedTime()
-     */
-    @Override
-    public double getRedTime() {
-        return redTime;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.TrafficLightData#getGreenRedTimePeriod
-     * ()
-     */
-    @Override
-    public double getGreenRedTimePeriod() {
-        return greenRedTimePeriod;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.TrafficLightData#getRedGreenTimePeriod
-     * ()
-     */
-    @Override
-    public double getRedGreenTimePeriod() {
-        return redGreenTimePeriod;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.TrafficLightData#getPhaseShift()
-     */
-    @Override
-    public double getPhaseShift() {
-        return phaseShift;
-    }
-}
+//public class TrafficLightDataImpl implements TrafficLightData {
+//
+//    // XML : <TRAFFICLIGHT x="1000" green_time="100" green_red_time="3"
+//    // red_time="20" red_green_time="2" />
+//
+//    /** The x. */
+//    private final double x;
+//
+//    /** The green time. */
+//    private final double greenTime;
+//
+//    /** The red time. */
+//    private final double redTime;
+//
+//    /** The green red time period. */
+//    private final double greenRedTimePeriod;
+//
+//    /** The red green time period. */
+//    private final double redGreenTimePeriod;
+//
+//    /** The phase shift. */
+//    private final double phaseShift;
+//
+//    /**
+//     * Instantiates a new traffic light data impl.
+//     * 
+//     * @param map
+//     *            the map
+//     */
+//    public TrafficLightDataImpl(Map<String, String> map) {
+//        this.x = Double.parseDouble(map.get("x"));
+//        this.greenTime = Double.parseDouble(map.get("green_time"));
+//        this.redTime = Double.parseDouble(map.get("red_time"));
+//        this.greenRedTimePeriod = Double.parseDouble(map.get("green_red_time"));
+//        this.redGreenTimePeriod = Double.parseDouble(map.get("red_green_time"));
+//        this.phaseShift = Double.parseDouble(map.get("phase_shift"));
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.impl.TrafficLightData#getX()
+//     */
+//    @Override
+//    public double getX() {
+//        return x;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.impl.TrafficLightData#getGreenTime()
+//     */
+//    @Override
+//    public double getGreenTime() {
+//        return greenTime;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.impl.TrafficLightData#getRedTime()
+//     */
+//    @Override
+//    public double getRedTime() {
+//        return redTime;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.impl.TrafficLightData#getGreenRedTimePeriod
+//     * ()
+//     */
+//    @Override
+//    public double getGreenRedTimePeriod() {
+//        return greenRedTimePeriod;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.impl.TrafficLightData#getRedGreenTimePeriod
+//     * ()
+//     */
+//    @Override
+//    public double getRedGreenTimePeriod() {
+//        return redGreenTimePeriod;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.TrafficLightData#getPhaseShift()
+//     */
+//    @Override
+//    public double getPhaseShift() {
+//        return phaseShift;
+//    }
+//}

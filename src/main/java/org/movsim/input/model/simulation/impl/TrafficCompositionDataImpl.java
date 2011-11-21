@@ -34,60 +34,60 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 /**
  * The Class HeterogeneityInputDataImpl.
  */
-public class TrafficCompositionDataImpl implements TrafficCompositionInputData {
-
-    /** The key name. */
-    private final String keyName;
-
-    /** The fraction. */
-    private final double fraction;
-
-    
-    private final double relativeRandomizationDesiredSpeed;
-    
-    /**
-     * Instantiates a new heterogeneity input data impl.
-     * 
-     * @param map
-     *            the map
-     */
-    public TrafficCompositionDataImpl(Map<String, String> map) {
-        this.keyName = map.get("label");
-        this.fraction = Double.parseDouble(map.get("fraction"));
-        System.out.println("rand="+map.get("relative_v0_randomization")+ "     key:"+keyName);
-        this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getKeyName
-     * ()
-     */
-    @Override
-    public String getKeyName() {
-        return keyName;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getFraction
-     * ()
-     */
-    @Override
-    public double getFraction() {
-        return fraction;
-    }
-    
-    
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.simulation.HeterogeneityInputData#getRelativeRandomizationDesiredSpeed()
-     */
-    @Override
-    public double getRelativeRandomizationDesiredSpeed() {
-        return relativeRandomizationDesiredSpeed;
-    }
-}
+//public class TrafficCompositionDataImpl implements TrafficCompositionInputData {
+//
+//    /** The key name. */
+//    private final String keyName;
+//
+//    /** The fraction. */
+//    private final double fraction;
+//
+//    
+//    private final double relativeRandomizationDesiredSpeed;
+//    
+//    /**
+//     * Instantiates a new heterogeneity input data impl.
+//     * 
+//     * @param map
+//     *            the map
+//     */
+//    public TrafficCompositionDataImpl(Map<String, String> map) {
+//        this.keyName = map.get("label");
+//        this.fraction = Double.parseDouble(map.get("fraction"));
+//        System.out.println("rand="+map.get("relative_v0_randomization")+ "     key:"+keyName);
+//        this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getKeyName
+//     * ()
+//     */
+//    @Override
+//    public String getKeyName() {
+//        return keyName;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getFraction
+//     * ()
+//     */
+//    @Override
+//    public double getFraction() {
+//        return fraction;
+//    }
+//    
+//    
+//    /* (non-Javadoc)
+//     * @see org.movsim.input.model.simulation.HeterogeneityInputData#getRelativeRandomizationDesiredSpeed()
+//     */
+//    @Override
+//    public double getRelativeRandomizationDesiredSpeed() {
+//        return relativeRandomizationDesiredSpeed;
+//    }
+//}

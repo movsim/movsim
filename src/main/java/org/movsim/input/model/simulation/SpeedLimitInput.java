@@ -26,24 +26,44 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface SpeedLimitInput.
- */
-public interface SpeedLimitInput {
+import java.util.Map;
+
+public class SpeedLimitInput{
+
+    /** The x. */
+    private final double x; // in m
+
+    /** The speedlimit. */
+    private final double speedlimit; // in m/s (SI units)
 
     /**
-     * Gets the position.
+     * Instantiates a new speed limit input impl.
      * 
-     * @return the position
+     * @param map
+     *            the map
      */
-    double getPosition();
+    public SpeedLimitInput(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x"));
+        this.speedlimit = Double.parseDouble(map.get("vlimit_kmh")) / 3.6;
+    }
 
-    /**
-     * Gets the speedlimit.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the speedlimit
+     * @see org.movsim.input.model.simulation.impl.SpeedLimitInput#getPosition()
      */
-    double getSpeedlimit();
+    public double getPosition() {
+        return x;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.SpeedLimitInput#getSpeedlimit()
+     */
+    public double getSpeedlimit() {
+        return speedlimit;
+    }
 
 }

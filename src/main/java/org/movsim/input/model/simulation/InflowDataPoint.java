@@ -26,31 +26,57 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface InflowDataPoint.
- */
-public interface InflowDataPoint {
+import java.util.Map;
+
+public class InflowDataPoint{
+
+    /** The time. */
+    private final double time; // in s (seconds)
+
+    /** The flow. */
+    private final double flow; // in 1/s
+
+    /** The speed. */
+    private final double speed; // in m/s
 
     /**
-     * Gets the time.
+     * Instantiates a new inflow data point impl.
      * 
-     * @return the time
+     * @param map
+     *            the map
      */
-    double getTime();
+    public InflowDataPoint(Map<String, String> map) {
+        this.time = Double.parseDouble(map.get("t"));
+        this.flow = Double.parseDouble(map.get("q_per_hour")) / 3600.0; // convert
+                                                                        // to SI
+        this.speed = Double.parseDouble(map.get("v"));
+    }
 
-    /**
-     * Gets the flow.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the flow
+     * @see org.movsim.input.model.simulation.impl.InflowDataPoint#getTime()
      */
-    double getFlow();
+    public double getTime() {
+        return time;
+    }
 
-    /**
-     * Gets the speed.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the speed
+     * @see org.movsim.input.model.simulation.impl.InflowDataPoint#getFlow()
      */
-    double getSpeed();
+    public double getFlow() {
+        return flow;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.impl.InflowDataPoint#getSpeed()
+     */
+    public double getSpeed() {
+        return speed;
+    }
 
 }

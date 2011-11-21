@@ -26,24 +26,44 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface SpeedLimitDataPoint.
- */
-public interface SpeedLimitDataPoint {
+import java.util.Map;
+
+public class SpeedLimitDataPoint{
+
+    /** The x in m. */
+    private final double x;
+
+    /** The speedlimit in m/s. */
+    private final double speedlimit;
 
     /**
-     * Gets the position.
+     * Instantiates a new speed limit data point impl.
      * 
-     * @return the position
+     * @param map
+     *            the map
      */
-    double getPosition();
+    public SpeedLimitDataPoint(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x"));
+        this.speedlimit = Double.parseDouble(map.get("speedlimit_kmh")) / 3.6;
+    }
 
-    /**
-     * Gets the speedlimit.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the speedlimit
+     * @see org.movsim.input.model.simulation.SpeedLimitDataPoint#getPosition()
      */
-    double getSpeedlimit();
+    public double getPosition() {
+        return x;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.SpeedLimitDataPoint#getSpeedlimit()
+     */
+    public double getSpeedlimit() {
+        return speedlimit;
+    }
 
 }

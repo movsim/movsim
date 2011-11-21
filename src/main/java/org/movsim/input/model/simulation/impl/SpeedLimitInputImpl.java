@@ -34,44 +34,44 @@ import org.movsim.input.model.simulation.SpeedLimitInput;
 /**
  * The Class SpeedLimitInputImpl.
  */
-public class SpeedLimitInputImpl implements SpeedLimitInput {
-
-    /** The x. */
-    private final double x; // in m
-
-    /** The speedlimit. */
-    private final double speedlimit; // in m/s (SI units)
-
-    /**
-     * Instantiates a new speed limit input impl.
-     * 
-     * @param map
-     *            the map
-     */
-    public SpeedLimitInputImpl(Map<String, String> map) {
-        this.x = Double.parseDouble(map.get("x"));
-        this.speedlimit = Double.parseDouble(map.get("vlimit_kmh")) / 3.6;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.SpeedLimitInput#getPosition()
-     */
-    @Override
-    public double getPosition() {
-        return x;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.impl.SpeedLimitInput#getSpeedlimit()
-     */
-    @Override
-    public double getSpeedlimit() {
-        return speedlimit;
-    }
-
-}
+//public class SpeedLimitInputImpl implements SpeedLimitInput {
+//
+//    /** The x. */
+//    private final double x; // in m
+//
+//    /** The speedlimit. */
+//    private final double speedlimit; // in m/s (SI units)
+//
+//    /**
+//     * Instantiates a new speed limit input impl.
+//     * 
+//     * @param map
+//     *            the map
+//     */
+//    public SpeedLimitInputImpl(Map<String, String> map) {
+//        this.x = Double.parseDouble(map.get("x"));
+//        this.speedlimit = Double.parseDouble(map.get("vlimit_kmh")) / 3.6;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.impl.SpeedLimitInput#getPosition()
+//     */
+//    @Override
+//    public double getPosition() {
+//        return x;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.impl.SpeedLimitInput#getSpeedlimit()
+//     */
+//    @Override
+//    public double getSpeedlimit() {
+//        return speedlimit;
+//    }
+//
+//}

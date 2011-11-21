@@ -38,110 +38,110 @@ import org.movsim.input.model.simulation.DetectorInput;
 /**
  * The Class DetectorInputImpl.
  */
-public class DetectorInputImpl implements DetectorInput {
-
-    /** The positions. */
-    private List<Double> positions;
-
-    /** The dt sample. */
-    private double dtSample;
-
-    /** The with logging. */
-    private boolean withLogging;
-
-    /** The is initialized. */
-    private final boolean isInitialized;
-
-    /**
-     * Instantiates a new detector input impl.
-     * 
-     * @param elem
-     *            the elem
-     */
-    public DetectorInputImpl(Element elem) {
-
-        if (elem == null) {
-            isInitialized = false;
-            return;
-        }
-
-        parseElement(elem);
-        isInitialized = true;
-
-    }
-
-    /**
-     * Parses the element.
-     * 
-     * @param elem
-     *            the elem
-     */
-    @SuppressWarnings("unchecked")
-    private void parseElement(Element elem) {
-
-        this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
-        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
-
-        // Detector
-        positions = new ArrayList<Double>();
-
-        final List<Element> crossElems = elem.getChildren("CROSS_SECTION");
-        if (crossElems != null) {
-            for (final Element crossElem : crossElems) {
-                positions.add(Double.parseDouble(crossElem.getAttributeValue("x")));
-            }
-        }
-
-        Collections.sort(positions, new Comparator<Double>() {
-            @Override
-            public int compare(Double o1, Double o2) {
-                final Double pos1 = new Double((o1).doubleValue());
-                final Double pos2 = new Double((o2).doubleValue());
-                return pos1.compareTo(pos2); // sort with increasing x
-            }
-        });
-
-        // -----------------------------------------------------------
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.DetectorInput#getPositions()
-     */
-    @Override
-    public List<Double> getPositions() {
-        return positions;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.DetectorInput#getSampleInterval()
-     */
-    @Override
-    public double getSampleInterval() {
-        return dtSample;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.DetectorInput#isWithDetectors()
-     */
-    @Override
-    public boolean isWithDetectors() {
-        return isInitialized;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.DetectorInput#isWithLogging()
-     */
-    @Override
-    public boolean isWithLogging() {
-        return withLogging;
-    }
-
-}
+//public class DetectorInputImpl implements DetectorInput {
+//
+//    /** The positions. */
+//    private List<Double> positions;
+//
+//    /** The dt sample. */
+//    private double dtSample;
+//
+//    /** The with logging. */
+//    private boolean withLogging;
+//
+//    /** The is initialized. */
+//    private final boolean isInitialized;
+//
+//    /**
+//     * Instantiates a new detector input impl.
+//     * 
+//     * @param elem
+//     *            the elem
+//     */
+//    public DetectorInputImpl(Element elem) {
+//
+//        if (elem == null) {
+//            isInitialized = false;
+//            return;
+//        }
+//
+//        parseElement(elem);
+//        isInitialized = true;
+//
+//    }
+//
+//    /**
+//     * Parses the element.
+//     * 
+//     * @param elem
+//     *            the elem
+//     */
+//    @SuppressWarnings("unchecked")
+//    private void parseElement(Element elem) {
+//
+//        this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
+//        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+//
+//        // Detector
+//        positions = new ArrayList<Double>();
+//
+//        final List<Element> crossElems = elem.getChildren("CROSS_SECTION");
+//        if (crossElems != null) {
+//            for (final Element crossElem : crossElems) {
+//                positions.add(Double.parseDouble(crossElem.getAttributeValue("x")));
+//            }
+//        }
+//
+//        Collections.sort(positions, new Comparator<Double>() {
+//            @Override
+//            public int compare(Double o1, Double o2) {
+//                final Double pos1 = new Double((o1).doubleValue());
+//                final Double pos2 = new Double((o2).doubleValue());
+//                return pos1.compareTo(pos2); // sort with increasing x
+//            }
+//        });
+//
+//        // -----------------------------------------------------------
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.output.impl.DetectorInput#getPositions()
+//     */
+//    @Override
+//    public List<Double> getPositions() {
+//        return positions;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.output.impl.DetectorInput#getSampleInterval()
+//     */
+//    @Override
+//    public double getSampleInterval() {
+//        return dtSample;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.output.impl.DetectorInput#isWithDetectors()
+//     */
+//    @Override
+//    public boolean isWithDetectors() {
+//        return isInitialized;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.DetectorInput#isWithLogging()
+//     */
+//    @Override
+//    public boolean isWithLogging() {
+//        return withLogging;
+//    }
+//
+//}

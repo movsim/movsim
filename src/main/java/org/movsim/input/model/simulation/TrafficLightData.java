@@ -26,52 +26,100 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface TrafficLightData.
- */
-public interface TrafficLightData {
+import java.util.Map;
+
+
+public class TrafficLightData{
+
+    /** The x. */
+    private final double x;
+
+    /** The green time. */
+    private final double greenTime;
+
+    /** The red time. */
+    private final double redTime;
+
+    /** The green red time period. */
+    private final double greenRedTimePeriod;
+
+    /** The red green time period. */
+    private final double redGreenTimePeriod;
+
+    /** The phase shift. */
+    private final double phaseShift;
 
     /**
-     * Gets the x.
+     * Instantiates a new traffic light data impl.
      * 
-     * @return the x
+     * @param map
+     *            the map
      */
-    double getX();
+    public TrafficLightData(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x"));
+        this.greenTime = Double.parseDouble(map.get("green_time"));
+        this.redTime = Double.parseDouble(map.get("red_time"));
+        this.greenRedTimePeriod = Double.parseDouble(map.get("green_red_time"));
+        this.redGreenTimePeriod = Double.parseDouble(map.get("red_green_time"));
+        this.phaseShift = Double.parseDouble(map.get("phase_shift"));
+    }
 
-    /**
-     * Gets the green time.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the green time
+     * @see org.movsim.input.model.simulation.impl.TrafficLightData#getX()
      */
-    double getGreenTime();
+    public double getX() {
+        return x;
+    }
 
-    /**
-     * Gets the red time.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the red time
+     * @see
+     * org.movsim.input.model.simulation.impl.TrafficLightData#getGreenTime()
      */
-    double getRedTime();
+    public double getGreenTime() {
+        return greenTime;
+    }
 
-    /**
-     * Gets the green red time period.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the green red time period
+     * @see org.movsim.input.model.simulation.impl.TrafficLightData#getRedTime()
      */
-    double getGreenRedTimePeriod();
+    public double getRedTime() {
+        return redTime;
+    }
 
-    /**
-     * Gets the red green time period.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the red green time period
+     * @see
+     * org.movsim.input.model.simulation.impl.TrafficLightData#getGreenRedTimePeriod
+     * ()
      */
-    double getRedGreenTimePeriod();
+    public double getGreenRedTimePeriod() {
+        return greenRedTimePeriod;
+    }
 
-    /**
-     * Gets the phase shift.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the phase shift
+     * @see
+     * org.movsim.input.model.simulation.impl.TrafficLightData#getRedGreenTimePeriod
+     * ()
      */
-    double getPhaseShift();
+    public double getRedGreenTimePeriod() {
+        return redGreenTimePeriod;
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.TrafficLightData#getPhaseShift()
+     */
+    public double getPhaseShift() {
+        return phaseShift;
+    }
 }

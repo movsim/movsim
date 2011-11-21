@@ -26,38 +26,70 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface ICMicroData.
- */
-public interface ICMicroData {
+import java.util.Map;
+
+public class ICMicroData {
+
+    /** The init position. */
+    private final double initPosition;
+
+    /** The init speed. */
+    private final double initSpeed;
+
+    /** The init lane. */
+    private final int initLane; // most right lane: MovsimConstants.MOST_RIGHT_LANE
+
+    /** The type label. */
+    private final String typeLabel; // empty string if no type
 
     /**
-     * Gets the x.
+     * Instantiates a new iC micro data impl.
      * 
-     * @return the x
+     * @param map
+     *            the map
      */
-    double getX();
+    public ICMicroData(Map<String, String> map) {
+        this.initPosition = Double.parseDouble(map.get("x"));
+        this.initSpeed = Double.parseDouble(map.get("v"));
+        this.initLane = Integer.parseInt(map.get("lane")) - 1; // internal MovSim 
+        this.typeLabel = map.get("label");
+        System.out.println("label: "+typeLabel);
+    }
 
-    /**
-     * Gets the speed.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the speed
+     * @see org.movsim.input.model.simulation.impl.ICMicroData#getX()
      */
-    double getSpeed();
+    public double getX() {
+        return initPosition;
+    }
 
-    /**
-     * Gets the inits the lane.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the inits the lane
+     * @see org.movsim.input.model.simulation.impl.ICMicroData#getSpeed()
      */
-    int getInitLane();
+    public double getSpeed() {
+        return initSpeed;
+    }
 
-    /**
-     * Gets the label.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the label
+     * @see org.movsim.input.model.simulation.ICMicroData#getInitLane()
      */
-    String getLabel();
+    public int getInitLane() {
+        return initLane;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.impl.ICMicroData#getType()
+     */
+    public String getLabel() {
+        return typeLabel;
+    }
 
 }

@@ -26,31 +26,57 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface ICMacroData.
- */
-public interface ICMacroData {
+import java.util.Map;
+
+public class ICMacroData{
+
+    /** The x. */
+    private final double x;
+
+    /** The rho. */
+    private final double rho; // in 1/m
+
+    /** The speed. */
+    private final double speed; // in m/s, (default value)
 
     /**
-     * Gets the x.
+     * Instantiates a new iC macro data impl.
      * 
-     * @return the x
+     * @param map
+     *            the map
      */
-    double getX();
+    public ICMacroData(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x"));
+        this.rho = Double.parseDouble(map.get("rho_per_km")) / 1000.0; // convert
+                                                                       // to SI
+        this.speed = Double.parseDouble(map.get("v"));
+    }
 
-    /**
-     * Gets the rho.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the rho
+     * @see org.movsim.input.model.simulation.impl.ICMacroData#getX()
      */
-    double getRho();
+    public double getX() {
+        return x;
+    }
 
-    /**
-     * Gets the speed.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the speed
+     * @see org.movsim.input.model.simulation.impl.ICMacroData#getRho()
      */
-    double getSpeed();
+    public double getRho() {
+        return rho;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.simulation.impl.ICMacroData#getSpeed()
+     */
+    public double getSpeed() {
+        return speed;
+    }
 
 }

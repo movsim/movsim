@@ -42,98 +42,98 @@ import org.movsim.input.model.simulation.SimpleRampData;
 /**
  * The Class SimpleRampDataImpl.
  */
-public class SimpleRampDataImpl implements SimpleRampData {
-
-    /** The inflow time series. */
-    private List<InflowDataPoint> inflowTimeSeries;
-
-    /** The center position. */
-    private final double rampStartPosition;
-
-    /** The ramp length. */
-    private final double rampLength;
-
-    /** The with logging. */
-    private final boolean withLogging;
-
-    /**
-     * Instantiates a new simple ramp data impl.
-     * 
-     * @param elem
-     *            the elem
-     */
-    @SuppressWarnings("unchecked")
-    public SimpleRampDataImpl(Element elem) {
-        this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-        this.rampLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
-        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
-
-        final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
-        parseAndSortInflowElements(inflowElems);
-
-    }
-
-    /**
-     * Parses the and sort inflow elements.
-     * 
-     * @param inflowElems
-     *            the inflow elems
-     */
-    private void parseAndSortInflowElements(List<Element> inflowElems) {
-        inflowTimeSeries = new ArrayList<InflowDataPoint>();
-        for (final Element inflowElem : inflowElems) {
-            final Map<String, String> map = XmlUtils.putAttributesInHash(inflowElem);
-            inflowTimeSeries.add(new InflowDataPointImpl(map));
-        }
-        Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
-            @Override
-            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
-                final Double pos1 = new Double((o1).getTime());
-                final Double pos2 = new Double((o2).getTime());
-                return pos1.compareTo(pos2); // sort with increasing t
-            }
-        });
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.movsim.input.model.simulation.SimpleRampData#getInflowTimeSeries()
-     */
-    @Override
-    public List<InflowDataPoint> getInflowTimeSeries() {
-        return inflowTimeSeries;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#getCenterPosition()
-     */
-    @Override
-    public double getRampStartPosition() {
-        return rampStartPosition;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#getRampLength()
-     */
-    @Override
-    public double getRampLength() {
-        return rampLength;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#withLogging()
-     */
-    @Override
-    public boolean withLogging() {
-        return withLogging;
-    }
-
-}
+//public class SimpleRampDataImpl implements SimpleRampData {
+//
+//    /** The inflow time series. */
+//    private List<InflowDataPoint> inflowTimeSeries;
+//
+//    /** The center position. */
+//    private final double rampStartPosition;
+//
+//    /** The ramp length. */
+//    private final double rampLength;
+//
+//    /** The with logging. */
+//    private final boolean withLogging;
+//
+//    /**
+//     * Instantiates a new simple ramp data impl.
+//     * 
+//     * @param elem
+//     *            the elem
+//     */
+//    @SuppressWarnings("unchecked")
+//    public SimpleRampDataImpl(Element elem) {
+//        this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
+//        this.rampLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
+//        this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+//
+//        final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
+//        parseAndSortInflowElements(inflowElems);
+//
+//    }
+//
+//    /**
+//     * Parses the and sort inflow elements.
+//     * 
+//     * @param inflowElems
+//     *            the inflow elems
+//     */
+//    private void parseAndSortInflowElements(List<Element> inflowElems) {
+//        inflowTimeSeries = new ArrayList<InflowDataPoint>();
+//        for (final Element inflowElem : inflowElems) {
+//            final Map<String, String> map = XmlUtils.putAttributesInHash(inflowElem);
+//            inflowTimeSeries.add(new InflowDataPoint(map));
+//        }
+//        Collections.sort(inflowTimeSeries, new Comparator<InflowDataPoint>() {
+//            @Override
+//            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
+//                final Double pos1 = new Double((o1).getTime());
+//                final Double pos2 = new Double((o2).getTime());
+//                return pos1.compareTo(pos2); // sort with increasing t
+//            }
+//        });
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see
+//     * org.movsim.input.model.simulation.SimpleRampData#getInflowTimeSeries()
+//     */
+//    @Override
+//    public List<InflowDataPoint> getInflowTimeSeries() {
+//        return inflowTimeSeries;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.SimpleRampData#getCenterPosition()
+//     */
+//    @Override
+//    public double getRampStartPosition() {
+//        return rampStartPosition;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.SimpleRampData#getRampLength()
+//     */
+//    @Override
+//    public double getRampLength() {
+//        return rampLength;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.SimpleRampData#withLogging()
+//     */
+//    @Override
+//    public boolean withLogging() {
+//        return withLogging;
+//    }
+//
+//}

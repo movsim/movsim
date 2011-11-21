@@ -26,31 +26,62 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface FlowConservingBottleneckDataPoint.
- */
-public interface FlowConservingBottleneckDataPoint {
+import java.util.Map;
+
+public class FlowConservingBottleneckDataPoint{
+
+    /** The x. */
+    private final double x; // in m
+
+    /** The alpha t. */
+    private final double alphaT;
+
+    /** The alpha v0. */
+    private final double alphaV0;
 
     /**
-     * Gets the position.
+     * Instantiates a new flow conserving bottleneck data point impl.
      * 
-     * @return the position
+     * @param map
+     *            the map
      */
-    double getPosition();
+    public FlowConservingBottleneckDataPoint(Map<String, String> map) {
+        this.x = Double.parseDouble(map.get("x"));
+        this.alphaT = Double.parseDouble(map.get("alpha_T"));
+        this.alphaV0 = Double.parseDouble(map.get("alpha_v0"));
+    }
 
-    /**
-     * Gets the alpha t.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the alpha t
+     * @see
+     * org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPoint
+     * #getPosition()
      */
-    double getAlphaT();
+    public double getPosition() {
+        return x;
+    }
 
-    /**
-     * Gets the alpha v0.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the alpha v0
+     * @see
+     * org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPoint
+     * #getAlphaT()
      */
-    double getAlphaV0();
+    public double getAlphaT() {
+        return alphaT;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPoint
+     * #getAlphaV0()
+     */
+    public double getAlphaV0() {
+        return alphaV0;
+    }
 
 }

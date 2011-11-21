@@ -30,16 +30,6 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
-import org.movsim.input.model.simulation.impl.DetectorInputImpl;
-import org.movsim.input.model.simulation.impl.FlowConservingBottleneckDataPointImpl;
-import org.movsim.input.model.simulation.impl.ICMacroDataImpl;
-import org.movsim.input.model.simulation.impl.ICMicroDataImpl;
-import org.movsim.input.model.simulation.impl.SimpleRampDataImpl;
-import org.movsim.input.model.simulation.impl.SpeedLimitDataPointImpl;
-import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
-import org.movsim.input.model.simulation.impl.TrafficLightsInputImpl;
-import org.movsim.input.model.simulation.impl.TrafficSinkDataImpl;
-import org.movsim.input.model.simulation.impl.TrafficSourceDataImpl;
 
 public class RoadInput {
 
@@ -130,7 +120,7 @@ public class RoadInput {
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
-                trafficCompositionInputData.add(new TrafficCompositionDataImpl(map));
+                trafficCompositionInputData.add(new TrafficCompositionInputData(map));
             }
         }
         
@@ -143,7 +133,7 @@ public class RoadInput {
         icMicroData = new ArrayList<ICMicroData>();
         for (final Element icMicroElem : icMicroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMicroElem);
-            icMicroData.add(new ICMicroDataImpl(map));
+            icMicroData.add(new ICMicroData(map));
         }
 
         Collections.sort(icMicroData, new Comparator<ICMicroData>() {
@@ -164,7 +154,7 @@ public class RoadInput {
         icMacroData = new ArrayList<ICMacroData>();
         for (final Element icMacroElem : icMacroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMacroElem);
-            icMacroData.add(new ICMacroDataImpl(map));
+            icMacroData.add(new ICMacroData(map));
         }
 
         Collections.sort(icMacroData, new Comparator<ICMacroData>() {
@@ -180,13 +170,13 @@ public class RoadInput {
 
         // TRAFFIC_SOURCE
         final Element roadSourceElem = elem.getChild(XmlElementNames.RoadTrafficSource);
-        trafficSourceData = new TrafficSourceDataImpl(roadSourceElem);
+        trafficSourceData = new TrafficSourceData(roadSourceElem);
 
         // -----------------------------------------------------------
 
         // TRAFFIC_SINK
         final Element roadSinkElem = elem.getChild(XmlElementNames.RoadTrafficSink);
-        trafficSinkData = new TrafficSinkDataImpl(roadSinkElem);
+        trafficSinkData = new TrafficSinkData(roadSinkElem);
 
         // -----------------------------------------------------------
 
@@ -198,7 +188,7 @@ public class RoadInput {
                     .getChildren(XmlElementNames.RoadInhomogeneity);
             for (final Element flowConsElem : flowConsElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(flowConsElem);
-                flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPointImpl(map));
+                flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPoint(map));
             }
 
             Collections.sort(flowConsBottleneckInputData, new Comparator<FlowConservingBottleneckDataPoint>() {
@@ -220,7 +210,7 @@ public class RoadInput {
             final List<Element> speedLimitElems = speedLimitsElement.getChildren(XmlElementNames.RoadSpeedLimit);
             for (final Element speedLimitElem : speedLimitElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(speedLimitElem);
-                speedLimitInputData.add(new SpeedLimitDataPointImpl(map));
+                speedLimitInputData.add(new SpeedLimitDataPoint(map));
             }
 
             Collections.sort(speedLimitInputData, new Comparator<SpeedLimitDataPoint>() {
@@ -243,7 +233,7 @@ public class RoadInput {
         if (rampsElement != null) {
             final List<Element> simpleRampElems = rampsElement.getChildren(XmlElementNames.RoadSimpleRamp);
             for (final Element simpleRampElem : simpleRampElems) {
-                simpleRamps.add(new SimpleRampDataImpl(simpleRampElem));
+                simpleRamps.add(new SimpleRampData(simpleRampElem));
             }
 
             Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
@@ -278,11 +268,11 @@ public class RoadInput {
         // Trafficlights
 
         final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
-        trafficLightsInput = new TrafficLightsInputImpl(trafficLightsElement);
+        trafficLightsInput = new TrafficLightsInput(trafficLightsElement);
 
         // -----------------------------------------------------------
 
-        detectorInput = new DetectorInputImpl(elem.getChild(XmlElementNames.OutputDetectors));
+        detectorInput = new DetectorInput(elem.getChild(XmlElementNames.OutputDetectors));
 
         // -----------------------------------------------------------
 

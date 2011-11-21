@@ -35,7 +35,6 @@ import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +109,7 @@ public class SimulationInput {
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
-                trafficCompositionInputData.add(new TrafficCompositionDataImpl(map));
+                trafficCompositionInputData.add(new TrafficCompositionInputData(map));
             }
         }
         // -----------------------------------------------------------

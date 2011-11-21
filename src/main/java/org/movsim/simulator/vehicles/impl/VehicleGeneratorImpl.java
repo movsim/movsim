@@ -35,7 +35,6 @@ import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.InputData;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.input.model.simulation.impl.TrafficCompositionDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
@@ -204,7 +203,7 @@ public class VehicleGeneratorImpl implements VehicleGenerator {
             mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
             mapEntryObstacle.put("fraction", "0");
             mapEntryObstacle.put("relative_v0_randomization", "0");
-            heterogenInputData.add(new TrafficCompositionDataImpl(mapEntryObstacle));
+            heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
         } 
     }
     

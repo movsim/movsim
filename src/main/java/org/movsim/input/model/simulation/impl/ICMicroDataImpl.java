@@ -34,72 +34,72 @@ import org.movsim.input.model.simulation.ICMicroData;
 /**
  * The Class ICMicroDataImpl.
  */
-public class ICMicroDataImpl implements ICMicroData {
-
-    /** The init position. */
-    private final double initPosition;
-
-    /** The init speed. */
-    private final double initSpeed;
-
-    /** The init lane. */
-    private final int initLane; // most right lane: MovsimConstants.MOST_RIGHT_LANE
-
-    /** The type label. */
-    private final String typeLabel; // empty string if no type
-
-    /**
-     * Instantiates a new iC micro data impl.
-     * 
-     * @param map
-     *            the map
-     */
-    public ICMicroDataImpl(Map<String, String> map) {
-        this.initPosition = Double.parseDouble(map.get("x"));
-        this.initSpeed = Double.parseDouble(map.get("v"));
-        this.initLane = Integer.parseInt(map.get("lane")) - 1; // internal MovSim 
-        this.typeLabel = map.get("label");
-        System.out.println("label: "+typeLabel);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMicroData#getX()
-     */
-    @Override
-    public double getX() {
-        return initPosition;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMicroData#getSpeed()
-     */
-    @Override
-    public double getSpeed() {
-        return initSpeed;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.ICMicroData#getInitLane()
-     */
-    @Override
-    public int getInitLane() {
-        return initLane;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMicroData#getType()
-     */
-    @Override
-    public String getLabel() {
-        return typeLabel;
-    }
-
-}
+//public class ICMicroDataImpl implements ICMicroData {
+//
+//    /** The init position. */
+//    private final double initPosition;
+//
+//    /** The init speed. */
+//    private final double initSpeed;
+//
+//    /** The init lane. */
+//    private final int initLane; // most right lane: MovsimConstants.MOST_RIGHT_LANE
+//
+//    /** The type label. */
+//    private final String typeLabel; // empty string if no type
+//
+//    /**
+//     * Instantiates a new iC micro data impl.
+//     * 
+//     * @param map
+//     *            the map
+//     */
+//    public ICMicroDataImpl(Map<String, String> map) {
+//        this.initPosition = Double.parseDouble(map.get("x"));
+//        this.initSpeed = Double.parseDouble(map.get("v"));
+//        this.initLane = Integer.parseInt(map.get("lane")) - 1; // internal MovSim 
+//        this.typeLabel = map.get("label");
+//        System.out.println("label: "+typeLabel);
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.impl.ICMicroData#getX()
+//     */
+//    @Override
+//    public double getX() {
+//        return initPosition;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.impl.ICMicroData#getSpeed()
+//     */
+//    @Override
+//    public double getSpeed() {
+//        return initSpeed;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.ICMicroData#getInitLane()
+//     */
+//    @Override
+//    public int getInitLane() {
+//        return initLane;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.simulation.impl.ICMicroData#getType()
+//     */
+//    @Override
+//    public String getLabel() {
+//        return typeLabel;
+//    }
+//
+//}

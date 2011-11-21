@@ -26,31 +26,59 @@
  */
 package org.movsim.input.model.simulation;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface HeterogeneityInputData.
- */
-public interface TrafficCompositionInputData {
+import java.util.Map;
 
-    /**
-     * Gets the key name.
-     * 
-     * @return the key name
-     */
-    String getKeyName();
+public class TrafficCompositionInputData {
 
-    /**
-     * Gets the fraction.
-     * 
-     * @return the fraction
-     */
-    double getFraction();
+    /** The key name. */
+    private final String keyName;
+
+    /** The fraction. */
+    private final double fraction;
+
+    
+    private final double relativeRandomizationDesiredSpeed;
     
     /**
-     * Gets the relative randomization desired speed.
-     *
-     * @return the relative randomization desired speed
+     * Instantiates a new heterogeneity input data impl.
+     * 
+     * @param map
+     *            the map
      */
-    double getRelativeRandomizationDesiredSpeed();
+    public TrafficCompositionInputData(Map<String, String> map) {
+        this.keyName = map.get("label");
+        this.fraction = Double.parseDouble(map.get("fraction"));
+        System.out.println("rand="+map.get("relative_v0_randomization")+ "     key:"+keyName);
+        this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getKeyName
+     * ()
+     */
+    public String getKeyName() {
+        return keyName;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.movsim.input.model.simulation.impl.HeterogeneityInputData#getFraction
+     * ()
+     */
+    public double getFraction() {
+        return fraction;
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.simulation.HeterogeneityInputData#getRelativeRandomizationDesiredSpeed()
+     */
+    public double getRelativeRandomizationDesiredSpeed() {
+        return relativeRandomizationDesiredSpeed;
+    }
 }
