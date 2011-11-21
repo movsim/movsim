@@ -585,31 +585,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     
 
     /**
-     * <p>
-     * Update the vehicle positions and velocities by calling vehicle.updatePositionAndVelocity for
-     * each vehicle.
-     * </p>
-     * 
-     * <p>
-     * If there is a test car, then record its position, velocity etc.
-     * </p>
-     * 
-     * <p>
-     * If there is a traffic inhomogeneity, then apply it to each vehicle.
-     * </p>
-     * 
-     * @param dt
-     *            simulation time interval
-     * @param simulationTime
-     * @param iterationCount 
-     */
-    // TODO ake method in AbstractRoadSection is leaner and some functionality has been moved to the vehicle 
-    public void updateVehiclePositionsAndVelocities(double dt, double simulationTime, long iterationCount) {
-    	for (final LaneSegment laneSegment : laneSegments) {
-    		laneSegment.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
-    	}
-    }
-    /**
      * Accelerate.
      * 
      * @param dt
@@ -636,7 +611,10 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Update position and speed.
+     * <p>
+     * Update the vehicle positions and velocities by calling vehicle.updatePositionAndSpeed for
+     * each vehicle.
+     * </p>
      * 
      * @param dt
      *            simulation time interval
@@ -646,7 +624,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void updatePositionAndSpeed(double dt, double simulationTime, long iterationCount) {
     	for (final LaneSegment laneSegment : laneSegments) {
             for (final Vehicle vehicle : laneSegment) {
-                vehicle.updatePostionAndSpeed(dt);
+                vehicle.updatePositionAndSpeed(dt);
             }
         }
     }

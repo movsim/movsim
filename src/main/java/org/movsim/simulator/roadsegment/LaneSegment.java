@@ -418,64 +418,63 @@ public class LaneSegment implements Iterable<Vehicle> {
         return -(low + 1); // key not found
     }
 
-    /**
-     * <p>
-     * Update the vehicle positions and velocities by calling vehicle.updatePositionAndVelocity for
-     * each vehicle.
-     * </p>
-     * 
-     * <p>
-     * If there is a test car, then record its position, velocity etc.
-     * </p>
-     * 
-     * <p>
-     * If there is a traffic inhomogeneity, then apply it to each vehicle.
-     * </p>
-     * 
-     * @param dt
-     *            simulation time interval
-     * @param simulationTime
-     * @param iterationCount 
-     */
-    // TODO ake method in AbstractRoadSection is leaner and some functionality has been moved to the vehicle 
-    public void updateVehiclePositionsAndVelocities(double dt, double simulationTime, long iterationCount) {
-       assert laneIsSorted();
-        // this function may change vehicle ordering in this or another road segment
-        // remember V[n+1].pos < V[n].pos < V[n-1].pos ... < V[1].pos < V[0].pos
-        // Vehicle iteration loop goes backwards, that is it starts with vehicles nearest
-        // the start of this road segment. This is so a vehicle's new speed and position is
-        // calculated before the vehicle in front of it has been moved.
-        Vehicle frontFrontVehicle = null;
-        Vehicle frontVehicle;
-        final int count = vehicles.size();
-        // TODO refactor this loop so frontVehicle is reused as vehicle and end two cases are
-        // unrolled
-        for (int i = count - 1; i >= 0; --i) {
-            final Vehicle vehicle = vehicles.get(i);
-            if (i > 0) {
-                frontVehicle = vehicles.get(i - 1);
-            } else {
-                if (sinkLaneSegment == null) {
-                    // no sink lane for this lane, so there are no vehicles ahead of vehicle(0)
-                    frontVehicle = null;
-                } else {
-                    // the front vehicle is the rear vehicle on the sink lane
-                    frontVehicle = rearVehicleOnSinkLanePosAdjusted();
-                    if (frontVehicle == null) {
-                        // no vehicle in the sink lane, so must recursively follow the lanes
-                        // to the end of the road
-                        frontVehicle = frontVehicle(vehicle.getPosition());
-                    }
-                }
-            }
-        }
-        // occasionally updatePositionAndVelocity could cause the vehicles array
-        // to become unsorted if LongitudinalDriverModel.MAX_DECELERATION >
-        // LaneChangeModel.maxSafeBraking, since a new entry into a lane might cause
-        // excessive breaking
-        // sortVehicles();
-        assert laneIsSorted();
-    }
+//    /**
+//     * <p>
+//     * Update the vehicle positions and velocities by calling vehicle.updatePositionAndVelocity for
+//     * each vehicle.
+//     * </p>
+//     * 
+//     * <p>
+//     * If there is a test car, then record its position, velocity etc.
+//     * </p>
+//     * 
+//     * <p>
+//     * If there is a traffic inhomogeneity, then apply it to each vehicle.
+//     * </p>
+//     * 
+//     * @param dt
+//     *            simulation time interval
+//     * @param simulationTime
+//     * @param iterationCount 
+//     */
+//    public void updateVehiclePositionsAndSpeeds(double dt, double simulationTime, long iterationCount) {
+//       assert laneIsSorted();
+//        // this function may change vehicle ordering in this or another road segment
+//        // remember V[n+1].pos < V[n].pos < V[n-1].pos ... < V[1].pos < V[0].pos
+//        // Vehicle iteration loop goes backwards, that is it starts with vehicles nearest
+//        // the start of this road segment. This is so a vehicle's new speed and position is
+//        // calculated before the vehicle in front of it has been moved.
+//        Vehicle frontFrontVehicle = null;
+//        Vehicle frontVehicle;
+//        final int count = vehicles.size();
+//        // TODO refactor this loop so frontVehicle is reused as vehicle and end two cases are
+//        // unrolled
+//        for (int i = count - 1; i >= 0; --i) {
+//            final Vehicle vehicle = vehicles.get(i);
+//            if (i > 0) {
+//                frontVehicle = vehicles.get(i - 1);
+//            } else {
+//                if (sinkLaneSegment == null) {
+//                    // no sink lane for this lane, so there are no vehicles ahead of vehicle(0)
+//                    frontVehicle = null;
+//                } else {
+//                    // the front vehicle is the rear vehicle on the sink lane
+//                    frontVehicle = rearVehicleOnSinkLanePosAdjusted();
+//                    if (frontVehicle == null) {
+//                        // no vehicle in the sink lane, so must recursively follow the lanes
+//                        // to the end of the road
+//                        frontVehicle = frontVehicle(vehicle.getPosition());
+//                    }
+//                }
+//            }
+//        }
+//        // occasionally updatePositionAndVelocity could cause the vehicles array
+//        // to become unsorted if LongitudinalDriverModel.MAX_DECELERATION >
+//        // LaneChangeModel.maxSafeBraking, since a new entry into a lane might cause
+//        // excessive breaking
+//        // sortVehicles();
+//        assert laneIsSorted();
+//    }
 
 
     /**

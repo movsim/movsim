@@ -866,7 +866,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @Test
     public final void testUpdateVehiclePositionsAndVelocities() {
@@ -893,7 +893,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @Test
     public final void testUpdateVehiclePositionsAndVelocitiesJoin() {
@@ -939,7 +939,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
@@ -982,7 +982,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
@@ -1062,7 +1062,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndVelocities(double, double, long)}
+     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
@@ -1150,7 +1150,8 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
+        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount); 
+        //.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
 //        assertEquals(1009.0, v0.getPosition(), delta);
 //        r0.outFlow(dt, simulationTime, iterationCount);
 //        assertEquals(0, r0.totalVehicleCount());
@@ -1181,7 +1182,8 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
+        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        //r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
 //        assertEquals(1009.0, v1.getPosition(), delta);
 //        assertEquals(1008.0, v2.getPosition(), delta);
 //        assertEquals(1007.0, v3.getPosition(), delta);

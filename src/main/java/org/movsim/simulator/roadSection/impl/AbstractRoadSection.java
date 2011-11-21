@@ -291,7 +291,7 @@ public abstract class AbstractRoadSection {
     public void updatePositionAndSpeed(long iterationCount, double dt, double time) {
         for (VehicleContainer vehContainerLane : vehContainers) {
             for (final Vehicle veh : vehContainerLane.getVehicles()) {
-                veh.updatePostionAndSpeed(dt);
+                veh.updatePositionAndSpeed(dt);
             }
         }
     }

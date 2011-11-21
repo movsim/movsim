@@ -727,7 +727,7 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#updatePostionAndSpeed(double)
      */
     
-    public void updatePostionAndSpeed(double dt) {
+    public void updatePositionAndSpeed(double dt) {
 
         // logger.debug("dt = {}", dt);
         // first increment postion, 
