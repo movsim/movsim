@@ -28,53 +28,73 @@ package org.movsim.input.model.vehicle.laneChanging;
 
 import java.util.Map;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface LaneChangingMobilData.
- */
-public interface LaneChangingMobilData {
+public class LaneChangingMobilData {
 
+    private double safeDeceleration;
+    private double minimumGap;
+    private double thresholdAcceleration;
+    private double rightBiasAcceleration;
+    private double politeness;
 
-    /**
-     * Inits the.
-     *
-     * @param map the map
+    public LaneChangingMobilData() {
+
+    }
+
+    public void init(final Map<String, String> map) {
+        safeDeceleration = Double.parseDouble(map.get("b_safe"));
+        minimumGap = Double.parseDouble(map.get("s_min"));
+        thresholdAcceleration = Double.parseDouble(map.get("threshold"));
+        rightBiasAcceleration = Double.parseDouble(map.get("bias_right"));
+        politeness = Double.parseDouble(map.get("politeness"));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#
+     * getSafeDeceleration()
      */
-    void init(final Map<String, String> map);
-    
-    /**
-     * Gets the safe deceleration.
-     *
-     * @return the safe deceleration
-     */
-    double getSafeDeceleration();
+    public double getSafeDeceleration() {
+        return safeDeceleration;
+    }
 
-    /**
-     * Gets the minimum gap.
-     *
-     * @return the minimum gap
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#
+     * getMinimumGap()
      */
-    double getMinimumGap();
+    public double getMinimumGap() {
+        return minimumGap;
+    }
 
-    /**
-     * Gets the threshold acceleration.
-     *
-     * @return the threshold acceleration
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#
+     * getThresholdAcceleration()
      */
-    double getThresholdAcceleration();
+    public double getThresholdAcceleration() {
+        return thresholdAcceleration;
+    }
 
-    /**
-     * Gets the right bias acceleration.
-     *
-     * @return the right bias acceleration
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#
+     * getRightBiasAcceleration()
      */
-    double getRightBiasAcceleration();
+    public double getRightBiasAcceleration() {
+        return rightBiasAcceleration;
+    }
 
-    /**
-     * Gets the politeness.
-     *
-     * @return the politeness
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#
+     * getPoliteness()
      */
-    double getPoliteness();
-
+    public double getPoliteness() {
+        return politeness;
+    }
 }

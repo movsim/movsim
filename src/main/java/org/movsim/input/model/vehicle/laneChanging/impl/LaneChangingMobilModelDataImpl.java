@@ -34,77 +34,77 @@ import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 /**
  * The Class LaneChangingMobilModelDataImpl.
  */
-public class LaneChangingMobilModelDataImpl implements LaneChangingMobilData {
-    
-    private double safeDeceleration;
-    private double minimumGap;
-    private double thresholdAcceleration;
-    private double rightBiasAcceleration; 
-    private double politeness; 
-     
-
-
-    /**
-     * Instantiates a new lane changing mobil model data impl.
-     */
-    public LaneChangingMobilModelDataImpl(){
-	
-    }
-    
-//    public LaneChangingMobilModelDataImpl(Map<String, String> map){
-//        init(map);
+//public class LaneChangingMobilModelDataImpl implements LaneChangingMobilData {
+//    
+//    private double safeDeceleration;
+//    private double minimumGap;
+//    private double thresholdAcceleration;
+//    private double rightBiasAcceleration; 
+//    private double politeness; 
+//     
+//
+//
+//    /**
+//     * Instantiates a new lane changing mobil model data impl.
+//     */
+//    public LaneChangingMobilModelDataImpl(){
+//	
 //    }
-    
-    
-    /* (non-Javadoc)
- * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#init(java.util.Map)
- */
-@Override
-public void init(final Map<String, String> map){
-	safeDeceleration = Double.parseDouble(map.get("b_safe"));
-        minimumGap = Double.parseDouble(map.get("s_min"));
-        thresholdAcceleration = Double.parseDouble(map.get("threshold"));
-        rightBiasAcceleration = Double.parseDouble(map.get("bias_right"));
-        politeness = Double.parseDouble(map.get("politeness"));
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getSafeDeceleration()
-     */
-    @Override
-    public double getSafeDeceleration() {
-        return safeDeceleration;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getMinimumGap()
-     */
-    @Override
-    public double getMinimumGap() {
-        return minimumGap;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getThresholdAcceleration()
-     */
-    @Override
-    public double getThresholdAcceleration() {
-        return thresholdAcceleration;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getRightBiasAcceleration()
-     */
-    @Override
-    public double getRightBiasAcceleration() {
-        return rightBiasAcceleration;
-    }
-
-    /* (non-Javadoc)
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getPoliteness()
-     */
-    @Override
-    public double getPoliteness() {
-        return politeness;
-    }
-}
+//    
+////    public LaneChangingMobilModelDataImpl(Map<String, String> map){
+////        init(map);
+////    }
+//    
+//    
+//    /* (non-Javadoc)
+// * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#init(java.util.Map)
+// */
+//@Override
+//public void init(final Map<String, String> map){
+//	safeDeceleration = Double.parseDouble(map.get("b_safe"));
+//        minimumGap = Double.parseDouble(map.get("s_min"));
+//        thresholdAcceleration = Double.parseDouble(map.get("threshold"));
+//        rightBiasAcceleration = Double.parseDouble(map.get("bias_right"));
+//        politeness = Double.parseDouble(map.get("politeness"));
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getSafeDeceleration()
+//     */
+//    @Override
+//    public double getSafeDeceleration() {
+//        return safeDeceleration;
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getMinimumGap()
+//     */
+//    @Override
+//    public double getMinimumGap() {
+//        return minimumGap;
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getThresholdAcceleration()
+//     */
+//    @Override
+//    public double getThresholdAcceleration() {
+//        return thresholdAcceleration;
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getRightBiasAcceleration()
+//     */
+//    @Override
+//    public double getRightBiasAcceleration() {
+//        return rightBiasAcceleration;
+//    }
+//
+//    /* (non-Javadoc)
+//     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData#getPoliteness()
+//     */
+//    @Override
+//    public double getPoliteness() {
+//        return politeness;
+//    }
+//}

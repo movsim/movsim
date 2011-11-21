@@ -35,7 +35,6 @@ import org.movsim.input.XmlUtils;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
-import org.movsim.input.model.vehicle.laneChanging.impl.LaneChangingInputDataImpl;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
@@ -108,7 +107,7 @@ public class VehicleInput{
         }
         
         final Element lcModelElem = elem.getChild(XmlElementNames.VehicleLaneChangeModel);
-        laneChangingInputData = new LaneChangingInputDataImpl(lcModelElem);
+        laneChangingInputData = new LaneChangingInputData(lcModelElem);
 
         final Element noiseElem = elem.getChild(XmlElementNames.VehicleNoise);
         if (noiseElem != null) {

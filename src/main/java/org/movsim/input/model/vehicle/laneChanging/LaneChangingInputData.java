@@ -26,38 +26,75 @@
  */
 package org.movsim.input.model.vehicle.laneChanging;
 
+import java.util.List;
+import java.util.Map;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface LaneChangingInputData.
- */
-public interface LaneChangingInputData{
+import org.jdom.Element;
+import org.movsim.input.XmlElementNames;
+import org.movsim.input.XmlUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    /**
-     * Checks if is with european rules.
-     *
-     * @return true, if is with european rules
-     */
-    boolean isWithEuropeanRules();
+public class LaneChangingInputData{
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LaneChangingInputData.class);
+
+    private boolean isWithEuropeanRules;
+
+    private double critSpeedEuroRules; // in SI (m/s)
+
+    private LaneChangingMobilData lcMobilData;
     
-    /**
-     * Gets the crit speed euro rules.
-     *
-     * @return the crit speed euro rules
+    private boolean isInitializedMobilData = false;
+
+    public LaneChangingInputData(final Element elem) {
+        final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
+        isWithEuropeanRules = Boolean.parseBoolean(map.get("eur_rules"));
+        critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur")); 
+
+        lcMobilData = new LaneChangingMobilData();
+        
+      
+        final List<Element> lcModelElems = elem.getChildren();
+        for (final Element lcModelElem : lcModelElems) {
+            if (lcModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleLaneChangeModelMobil)) {
+                final Map<String, String> mapModel = XmlUtils.putAttributesInHash(lcModelElem);
+                lcMobilData.init(mapModel);
+                isInitializedMobilData = true;
+            } else {
+                logger.error("lane-changing model with name {} not yet implemented!", lcModelElem.getName());
+                // logger.error("more than one lane-changing model is specified for a vehicle!");
+                System.exit(-1);
+            }
+        }
+
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#isInitializedMobilData()
      */
-    double getCritSpeedEuroRules();
-    
-    /**
-     * Checks if is initialized mobil data.
-     *
-     * @return true, if is initialized mobil data
+    public boolean isInitializedMobilData() {
+        return isInitializedMobilData;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#isWithEuropeanRules()
      */
-    boolean isInitializedMobilData();
-    
-    /**
-     * Gets the lc mobil data.
-     *
-     * @return the lc mobil data
+    public boolean isWithEuropeanRules() {
+        return isWithEuropeanRules;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getCritSpeedEuroRules()
      */
-    LaneChangingMobilData getLcMobilData();
+    public double getCritSpeedEuroRules() {
+        return critSpeedEuroRules;
+    }
+
+    /* (non-Javadoc)
+     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getLcMobilData()
+     */
+    public LaneChangingMobilData getLcMobilData() {
+        return lcMobilData;
+    }
 }
