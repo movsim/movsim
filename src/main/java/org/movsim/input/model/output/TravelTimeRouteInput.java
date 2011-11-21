@@ -1,4 +1,4 @@
-package org.movsim.input.model.output.impl;
+package org.movsim.input.model.output;
 
 import org.jdom.Element;
 

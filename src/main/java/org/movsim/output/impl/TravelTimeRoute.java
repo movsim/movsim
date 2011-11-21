@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.input.model.output.impl.TravelTimeRouteInput;
+import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;

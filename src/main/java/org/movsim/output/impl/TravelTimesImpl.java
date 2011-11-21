@@ -3,8 +3,8 @@ package org.movsim.output.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.input.model.output.TravelTimesInput;
-import org.movsim.input.model.output.impl.TravelTimeRouteInput;
 import org.movsim.output.TravelTimes;
 import org.movsim.simulator.RoadNetwork;
 import org.movsim.utilities.impl.ExponentialMovingAverage;

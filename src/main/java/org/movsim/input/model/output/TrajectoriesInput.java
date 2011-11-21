@@ -26,52 +26,100 @@
  */
 package org.movsim.input.model.output;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface TrajectoriesInput.
- */
-public interface TrajectoriesInput {
+import org.jdom.Element;
+
+public class TrajectoriesInput {
+
+    /** The dt. */
+    private double dt;
+
+    /** The start time. */
+    private double startTime;
+
+    /** The end time. */
+    private double endTime;
+
+    /** The start position. */
+    private double startPosition;
+
+    /** The end position. */
+    private double endPosition;
+
+    /** The is initialized. */
+    private boolean isInitialized;
+
+    /**
+     * Instantiates a new trajectories input impl.
+     * 
+     * @param elem
+     *            the elem
+     */
+    public TrajectoriesInput(Element elem) {
+        if (elem == null) {
+            isInitialized = false;
+            return;
+        }
+
+        dt = Double.parseDouble(elem.getAttributeValue("dt"));
+        startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
+        endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
+        startPosition = Double.parseDouble(elem.getAttributeValue("start_x"));
+        endPosition = Double.parseDouble(elem.getAttributeValue("end_x"));
+        isInitialized = true;
+    }
 
     /**
      * Gets the dt.
      * 
      * @return the dt
      */
-    double getDt();
+    public double getDt() {
+        return dt;
+    }
 
     /**
      * Gets the start time.
      * 
-     * @return the start time
+     * @return the startTime
      */
-    double getStartTime();
+    public double getStartTime() {
+        return startTime;
+    }
 
     /**
      * Gets the end time.
      * 
-     * @return the end time
+     * @return the endTime
      */
-    double getEndTime();
+    public double getEndTime() {
+        return endTime;
+    }
 
     /**
      * Gets the start position.
      * 
-     * @return the start position
+     * @return the startPosition
      */
-    double getStartPosition();
+    public double getStartPosition() {
+        return startPosition;
+    }
 
     /**
      * Gets the end position.
      * 
-     * @return the end position
+     * @return the endPosition
      */
-    double getEndPosition();
+    public double getEndPosition() {
+        return endPosition;
+    }
 
     /**
      * Checks if is initialized.
      * 
-     * @return true, if is initialized
+     * @return the isInitialized
      */
-    boolean isInitialized();
+    public boolean isInitialized() {
+        return isInitialized;
+    }
 
 }

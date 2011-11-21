@@ -33,62 +33,62 @@ import org.movsim.input.model.output.SpatioTemporalInput;
 /**
  * The Class SpatioTemporalInputImpl.
  */
-public class SpatioTemporalInputImpl implements SpatioTemporalInput {
-
-    /** The dt. */
-    private double dt;
-
-    /** The dx. */
-    private double dx;
-
-    /** The is initialized. */
-    private final boolean isInitialized;
-
-    /**
-     * Instantiates a new macro input impl.
-     * 
-     * @param elem
-     *            the elem
-     */
-    public SpatioTemporalInputImpl(Element elem) {
-        if (elem == null) {
-            isInitialized = false;
-            return;
-        }
-        this.dt = Double.parseDouble(elem.getAttributeValue("dt"));
-        this.dx = Double.parseDouble(elem.getAttributeValue("dx"));
-        isInitialized = true;
-
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.MacroInput#getDt()
-     */
-    @Override
-    public double getDt() {
-        return dt;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.MacroInput#getDx()
-     */
-    @Override
-    public double getDx() {
-        return dx;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.MacroInput#isWithMacro()
-     */
-    @Override
-    public boolean isWithMacro() {
-        return isInitialized;
-    }
-
-}
+//public class SpatioTemporalInputImpl implements SpatioTemporalInput {
+//
+//    /** The dt. */
+//    private double dt;
+//
+//    /** The dx. */
+//    private double dx;
+//
+//    /** The is initialized. */
+//    private final boolean isInitialized;
+//
+//    /**
+//     * Instantiates a new macro input impl.
+//     * 
+//     * @param elem
+//     *            the elem
+//     */
+//    public SpatioTemporalInputImpl(Element elem) {
+//        if (elem == null) {
+//            isInitialized = false;
+//            return;
+//        }
+//        this.dt = Double.parseDouble(elem.getAttributeValue("dt"));
+//        this.dx = Double.parseDouble(elem.getAttributeValue("dx"));
+//        isInitialized = true;
+//
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.output.impl.MacroInput#getDt()
+//     */
+//    @Override
+//    public double getDt() {
+//        return dt;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.output.impl.MacroInput#getDx()
+//     */
+//    @Override
+//    public double getDx() {
+//        return dx;
+//    }
+//
+//    /*
+//     * (non-Javadoc)
+//     * 
+//     * @see org.movsim.input.model.output.impl.MacroInput#isWithMacro()
+//     */
+//    @Override
+//    public boolean isWithMacro() {
+//        return isInitialized;
+//    }
+//
+//}

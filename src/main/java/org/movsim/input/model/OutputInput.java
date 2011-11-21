@@ -32,10 +32,6 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
-import org.movsim.input.model.output.impl.FloatingCarInputImpl;
-import org.movsim.input.model.output.impl.SpatioTemporalInputImpl;
-import org.movsim.input.model.output.impl.TrajectoriesInputImpl;
-import org.movsim.input.model.output.impl.TravelTimesInputImpl;
 
 public class OutputInput {
 
@@ -69,16 +65,16 @@ public class OutputInput {
      */
     private void parseElement(Element elem) {
 
-        floatingCarInput = new FloatingCarInputImpl(elem.getChild(XmlElementNames.OutputFloatingCarData));
+        floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData));
 
-        spatioTemporalInput = new SpatioTemporalInputImpl(elem.getChild(XmlElementNames.OutputSpatioTemporal));
+        spatioTemporalInput = new SpatioTemporalInput(elem.getChild(XmlElementNames.OutputSpatioTemporal));
 
-        trajectoriesInput = new TrajectoriesInputImpl(elem.getChild(XmlElementNames.OutputTrajectories));
+        trajectoriesInput = new TrajectoriesInput(elem.getChild(XmlElementNames.OutputTrajectories));
 
         
         // TODO treat all elements similarly
         if(elem.getChild(XmlElementNames.OutputTravelTimes)!=null){
-            travelTimesInput = new TravelTimesInputImpl(elem.getChild(XmlElementNames.OutputTravelTimes));
+            travelTimesInput = new TravelTimesInput(elem.getChild(XmlElementNames.OutputTravelTimes));
         }
     }
 

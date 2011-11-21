@@ -26,31 +26,62 @@
  */
 package org.movsim.input.model.output;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Interface SpatioTemporalInput.
- */
-public interface SpatioTemporalInput {
+import org.jdom.Element;
+
+
+public class SpatioTemporalInput {
+
+    /** The dt. */
+    private double dt;
+
+    /** The dx. */
+    private double dx;
+
+    /** The is initialized. */
+    private final boolean isInitialized;
 
     /**
-     * Gets the dt.
+     * Instantiates a new macro input impl.
      * 
-     * @return the dt
+     * @param elem
+     *            the elem
      */
-    double getDt();
+    public SpatioTemporalInput(Element elem) {
+        if (elem == null) {
+            isInitialized = false;
+            return;
+        }
+        this.dt = Double.parseDouble(elem.getAttributeValue("dt"));
+        this.dx = Double.parseDouble(elem.getAttributeValue("dx"));
+        isInitialized = true;
 
-    /**
-     * Gets the dx.
-     * 
-     * @return the dx
-     */
-    double getDx();
+    }
 
-    /**
-     * Checks if is with macro.
+    /*
+     * (non-Javadoc)
      * 
-     * @return true, if is with macro
+     * @see org.movsim.input.model.output.impl.MacroInput#getDt()
      */
-    boolean isWithMacro();
+    public double getDt() {
+        return dt;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.impl.MacroInput#getDx()
+     */
+    public double getDx() {
+        return dx;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.input.model.output.impl.MacroInput#isWithMacro()
+     */
+    public boolean isWithMacro() {
+        return isInitialized;
+    }
 
 }
