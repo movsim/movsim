@@ -735,7 +735,7 @@ public class Vehicle {
 
         positionOld = position;
 
-        if (accelerationModel.isCA()) {
+        if (accelerationModel != null && accelerationModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             position = (int) (position + dt * speed + 0.5);
 
