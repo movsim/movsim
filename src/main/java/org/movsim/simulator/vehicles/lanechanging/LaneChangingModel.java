@@ -77,12 +77,21 @@ public class LaneChangingModel {
 
     }
 
+    public LaneChangingModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
+    	this.lcModelMOBIL = lcModelMOBIL;
+    	this.me = vehicle;
+        this.withEuropeanRules = true;
+        this.vCritEur = 5.0;
+        this.lcInputData = null;
+        isInitialized = true;
+    }
+
     /**
      * Initialize.
      *
      * @param vehicle the vehicle
      */
-    public void initialize(final Vehicle vehicle) {
+    public void initialize(Vehicle vehicle) {
         this.me = vehicle;
         lcModelMOBIL = (isInitialized) ? new MOBIL(me, lcInputData.getLcMobilData()) : new MOBIL(me);
     }

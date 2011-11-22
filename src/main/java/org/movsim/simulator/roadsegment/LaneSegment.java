@@ -228,7 +228,9 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     // TODO testwise add vehicle
     public void addVehicleTestwise(Vehicle vehicle) {
-    	addVehicle(vehicle);
+    	if (vehicle != null) {
+    		addVehicle(vehicle);
+    	}
     }
 
     public void appendVehicle(Vehicle vehicle) {

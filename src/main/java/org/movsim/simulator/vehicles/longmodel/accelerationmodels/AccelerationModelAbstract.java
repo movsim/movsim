@@ -92,9 +92,11 @@ public abstract class AccelerationModelAbstract implements Observer {
     public AccelerationModelAbstract(ModelName modelName, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.parameters = parameters;
-        this.id = MyRandom.nextInt();
+//        this.id = MyRandom.nextInt();
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
-        parameters.registerObserver(this);
+        if (parameters != null) {
+        	parameters.registerObserver(this);
+        }
     }
 
     

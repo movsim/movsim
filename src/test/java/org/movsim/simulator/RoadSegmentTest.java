@@ -29,6 +29,10 @@ import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.Link;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.lanechanging.ConstantsLaneChange;
+import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
+import org.movsim.simulator.vehicles.lanechanging.MOBIL;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
 
 /**
  * Test module for the RoadSegment class.
@@ -58,15 +62,23 @@ public class RoadSegmentTest {
     private Vehicle newVehicle(double rearPosition, double speed, int lane) {
         // Vehicle(type, pos, vel, lane, ldm, lcm, length, width, color);
         //return new Vehicle(Vehicle.Type.NONE, pos, vel, lane, idm, null, 5.0, 2.5, 3);
-        return new Vehicle(rearPosition, speed, lane, 5.0, 2.5);
+        final IDM idm = new IDM(33.0, 0.5, 3.0, 1.5, 2.0, 5.0);
+        final Vehicle vehicle = new Vehicle(rearPosition, speed, lane, 5.0, 2.5);
+        vehicle.setAccelerationModel(idm);
+        return vehicle;
     }
 
-//    private LaneChangeModel newLaneChangeModel() {
-//        return new LcmMOBIL(ConstantsLaneChange.GAP_MIN_FRONT_CAR,
-//                ConstantsLaneChange.GAP_MIN_REAR_CAR, ConstantsLaneChange.MAX_SAFE_BRAKING_CAR,
-//                ConstantsLaneChange.POLITENESS_CAR, ConstantsLaneChange.THRESHOLD_CAR,
-//                ConstantsLaneChange.BIAS_INSIDE_LANE_CAR);
-//    }
+    private Vehicle newObstacle(double rearPosition, int lane) {
+        return new Vehicle(rearPosition, 0.0, lane, 5.0, 2.5);
+    }
+
+    private LaneChangingModel newLaneChangeModel(Vehicle vehicle) {
+        final MOBIL mobil = new MOBIL(vehicle, ConstantsLaneChange.GAP_MIN_FRONT_CAR,
+                ConstantsLaneChange.MAX_SAFE_BRAKING_CAR,
+                ConstantsLaneChange.POLITENESS_CAR, ConstantsLaneChange.THRESHOLD_CAR,
+                ConstantsLaneChange.BIAS_INSIDE_LANE_CAR);
+        return new LaneChangingModel(vehicle, mobil);
+    }
 
     /**
      * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#resetNextId()}
@@ -839,28 +851,28 @@ public class RoadSegmentTest {
      */
     @Test
     public final void testMakeLaneChanges() {
-//        RoadSegment.resetNextId();
-//        Vehicle.resetNextId();
-//
-//        final int laneCount = 2;
-//        final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
-//
-//        // set up an obstacle directly in front of a vehicle, so the vehicle will change lanes
-//        // Obstacle(pos, lane, length, width, color) {
-//        final Obstacle obstacle = new Obstacle(600.0, Lane.LANE1, 1.0, 1.0, 0);
-//        r0.addVehicle(obstacle);
-//        final Vehicle v0 = newVehicle(593.0, 5.0, Lane.LANE1);
-//        final LaneChangeModel lcm = newLaneChangeModel();
-//        v0.setLaneChangeModel(lcm);
-//        r0.addVehicle(v0);
-//        final double dt = 0.25;
-//        final double simulationTime = 0.0;
-//        final long iterationCount = 0;
-//        r0.makeLaneChanges(dt, simulationTime, iterationCount);
-//        assertEquals(Lane.LANE1, obstacle.getLane());
+        RoadSegment.resetNextId();
+        Vehicle.resetNextId();
+
+        final int laneCount = 2;
+        final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
+
+        // set up an obstacle directly in front of a vehicle, so the vehicle will change lanes
+        // Obstacle(pos, lane, length, width, color) {
+        final Vehicle obstacle = newObstacle(600.0, Lane.LANE1);
+        r0.addVehicle(obstacle);
+        final Vehicle v0 = newVehicle(593.0, 5.0, Lane.LANE1);
+        final LaneChangingModel lcm = newLaneChangeModel(v0);
+        v0.setLaneChangingModel(lcm);
+        r0.addVehicle(v0);
+        final double dt = 0.25;
+        final double simulationTime = 0.0;
+        final long iterationCount = 0;
+        r0.laneChanging(dt, simulationTime, iterationCount);
+        assertEquals(Lane.LANE1, obstacle.getLane());
 //        assertEquals(Lane.LANE2, v0.getLane());
-//        assertEquals(1, r0.vehicleCount(Lane.LANE1));
-//        assertEquals(1, r0.vehicleCount(Lane.LANE2));
+//        assertEquals(1, r0.laneSegment(Lane.LANE1).vehicleCount());
+//        assertEquals(1, r0.laneSegment(Lane.LANE2).vehicleCount());
     }
 
     /**

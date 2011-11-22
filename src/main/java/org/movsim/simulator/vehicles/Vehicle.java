@@ -118,10 +118,10 @@ public class Vehicle {
     private double speedlimit;
 
     /** The long model. */
-    private final AccelerationModel accelerationModel;
+    private AccelerationModel accelerationModel;
 
     /** The lane-changing model. */
-    private final LaneChangingModel lcModel;
+    private LaneChangingModel lcModel;
 
     /** The memory. */
     private Memory memory = null;
@@ -807,12 +807,19 @@ public class Vehicle {
         return lcModel;
     }
 
+    public void setLaneChangingModel(LaneChangingModel lcModel) {
+        this.lcModel = lcModel;
+    }
     /* (non-Javadoc)
      * @see org.movsim.simulator.vehicles.Vehicle#getAccelerationModel()
      */
     
     public AccelerationModel getAccelerationModel() {
         return accelerationModel;
+    }
+
+    public void setAccelerationModel(AccelerationModel AccelerationModel) {
+        this.accelerationModel = AccelerationModel;
     }
 
     // ---------------------------------------------------------------------------------

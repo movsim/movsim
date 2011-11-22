@@ -74,7 +74,7 @@ public class MOBIL {
     }
 
     /**
-     * Instantiates a new mOBIL impl.
+     * Instantiates a new MOBIL impl.
      *
      * @param vehicle the vehicle
      * @param lcMobilData the lc mobil data
@@ -88,7 +88,16 @@ public class MOBIL {
         gapMin = lcMobilData.getMinimumGap();
         thresholdRef = threshold = lcMobilData.getThresholdAcceleration();
         pRef = politeness = lcMobilData.getPoliteness();
+    }
 
+    public MOBIL(final Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness, 
+    		double thresholdAcceleration, double rightBiasAcceleration) {
+        this.me = vehicle;
+        bSafeRef = bSafe = safeDeceleration;
+        biasRightRef = biasRight = rightBiasAcceleration;
+        gapMin = minimumGap;
+        thresholdRef = threshold = thresholdAcceleration;
+        pRef = this.politeness = politeness;
     }
 
     private boolean neigborsInProcessOfLaneChanging(final Vehicle v1, final Vehicle v2, final Vehicle v3) {
