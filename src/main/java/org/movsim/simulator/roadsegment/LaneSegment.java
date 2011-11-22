@@ -235,7 +235,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         assert vehicle.posRearBumper() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
-//        vehicle.setRoadSegment(id, roadLength);
+        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
         if (DEBUG) {
             if (vehicles.size() > 0) {
