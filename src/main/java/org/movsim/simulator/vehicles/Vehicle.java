@@ -264,6 +264,7 @@ public class Vehicle {
         lcModel = null;
         accelerationModel = null;
         label = "";
+        physQuantities = new PhysicalQuantities(this);
     }
     
     /**
@@ -684,7 +685,7 @@ public class Vehicle {
         accModel = calcAccModel(vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
 
         // consider red or amber/yellow traffic light:
-        if (trafficLightApproaching.considerTrafficLight()) {
+        if (trafficLightApproaching != null && trafficLightApproaching.considerTrafficLight()) {
             acc = Math.min(accModel, trafficLightApproaching.accApproaching());
             // logger.debug("accModel = {}, accTrafficLight = {}", accModel,
             // accTrafficLight );
@@ -708,10 +709,13 @@ public class Vehicle {
 
     private double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
+    	if (accelerationModel == null) {
+    		return 0.0;
+    	}
 
         final double acc;
 
-        if (lcModel.isInitialized() && lcModel.withEuropeanRules()) {
+        if (lcModel != null && lcModel.isInitialized() && lcModel.withEuropeanRules()) {
             acc = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane,
                     alphaTLocal, alphaV0Local, alphaALocal);
         } else {

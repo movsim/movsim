@@ -30,6 +30,7 @@ import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.roadsegment.Link;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.roadsegment.TrafficSink;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -352,7 +353,7 @@ public class OpenDriveHandler extends DefaultHandler {
                     roadSegment.setLaneType(laneIndex, Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
                     roadSegment.setLaneType(laneIndex, Lane.Type.ENTRANCE);
-//                    roadSegment.addObstacle(new Obstacle(roadSegment.roadLength(), laneIndex, 1.0, 1.0));
+                    roadSegment.addObstacle(new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0));
                 } else if (lane.type.equals("mwyExit")) {
                     roadSegment.setLaneType(laneIndex, Lane.Type.EXIT);
                 } else if (lane.type.equals("shoulder")) {
@@ -365,7 +366,7 @@ public class OpenDriveHandler extends DefaultHandler {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.ENTRANCE);
-//                    roadSegment.addObstacle(new Obstacle(roadSegment.roadLength(), laneIndex, 1.0, 1.0));
+                    roadSegment.addObstacle(new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0));
                 } else if (lane.type.equals("mwyExit")) {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.EXIT);
                 } else if (lane.type.equals("shoulder")) {
