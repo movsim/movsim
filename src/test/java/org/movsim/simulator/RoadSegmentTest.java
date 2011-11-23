@@ -29,7 +29,6 @@ import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.Link;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.lanechanging.ConstantsLaneChange;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.lanechanging.MOBIL;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
@@ -39,6 +38,23 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
  */
 public class RoadSegmentTest {
     private double delta = 0.00001;
+
+    // max safe braking decelerations
+    private static final double MAX_SAFE_BRAKING_CAR = 5.0;
+    private static final double MAX_SAFE_SELF_BRAKING = 8.0;
+
+    // minimum distances
+    private static final double GAP_MIN_FRONT_CAR = 4.0;
+    private static final double GAP_MIN_REAR_CAR = 8.0;
+
+    // inside-lane bias
+    private static final double BIAS_INSIDE_LANE_CAR = 0.1;
+
+    // politeness when changing lanes
+    private static final double POLITENESS_CAR = 0.2;
+
+    // lane changing thresholds (m/s^2)
+    static final double THRESHOLD_CAR = 0.3;
 
     protected static class RoadMappingConcrete extends RoadMapping {
         public RoadMappingConcrete(int laneCount) {
@@ -73,10 +89,8 @@ public class RoadSegmentTest {
     }
 
     private LaneChangingModel newLaneChangeModel(Vehicle vehicle) {
-        final MOBIL mobil = new MOBIL(vehicle, ConstantsLaneChange.GAP_MIN_FRONT_CAR,
-                ConstantsLaneChange.MAX_SAFE_BRAKING_CAR,
-                ConstantsLaneChange.POLITENESS_CAR, ConstantsLaneChange.THRESHOLD_CAR,
-                ConstantsLaneChange.BIAS_INSIDE_LANE_CAR);
+        final MOBIL mobil = new MOBIL(vehicle, GAP_MIN_FRONT_CAR, MAX_SAFE_BRAKING_CAR,
+                POLITENESS_CAR, THRESHOLD_CAR, BIAS_INSIDE_LANE_CAR);
         return new LaneChangingModel(vehicle, mobil);
     }
 
