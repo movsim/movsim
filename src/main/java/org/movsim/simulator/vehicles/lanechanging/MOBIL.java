@@ -28,6 +28,7 @@ package org.movsim.simulator.vehicles.lanechanging;
 
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadsegment.Lane;
 import org.movsim.simulator.roadsegment.LaneSegment;
 import org.movsim.simulator.roadsegment.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -118,16 +119,19 @@ public class MOBIL {
 
     public double calcAccelerationBalance(final int direction, RoadSegment roadSegment) {
 
-        final int currentLane = me.getLane();
-
-        final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
-        final LaneSegment newLane = roadSegment.laneSegment(currentLane + direction);
-
         double prospectiveBalance = -Double.MAX_VALUE;
+        final int currentLane = me.getLane();
+        final LaneSegment newLane = roadSegment.laneSegment(currentLane + direction);
+        if (newLane.type() == Lane.Type.ENTRANCE) {
+        	// never change lane into an entrance lane
+            return prospectiveBalance;
+        }
+        final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
 
         final Vehicle newFront = newLane.frontVehicle(me);
         final Vehicle oldFront = ownLane.frontVehicle(me);
         final Vehicle newBack = newLane.rearVehicle(me);
+
 
         // check if other vehicles are lane-changing
         if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack)) {
@@ -142,11 +146,9 @@ public class MOBIL {
             return prospectiveBalance;
         }
 
-        // new situation: newBack with me as leader
-        // and following left lane cases
+        // new situation: newBack with me as leader and following left lane cases
         // TO_LEFT --> just the actual situation
-        // TO_RIGHT --> consideration of left-lane (with me's leader) has no
-        // effect
+        // TO_RIGHT --> consideration of left-lane (with me's leader) has no effect
         final LaneSegment newSituationNewBack = new LaneSegment(roadSegment, me.getLane());
         newSituationNewBack.addVehicleTestwise(newBack);
         newSituationNewBack.addVehicleTestwise(me);
@@ -172,40 +174,36 @@ public class MOBIL {
         // in old situation same left lane as me
         final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, leftLaneMeOld) : 0;
 
-        // old situation for new back: just provides the actual left-lane
-        // situation
+        // old situation for new back: just provides the actual left-lane situation
         final LaneSegment leftLaneNewBackOldAcc = (currentLane + direction + MovsimConstants.TO_LEFT >= roadSegment.laneCount()) ?
         		null : roadSegment.laneSegment(currentLane + direction + MovsimConstants.TO_LEFT);
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNewBackOldAcc) : 0;
 
-        // new traffic situation: set subject virtually into new lane under
-        // consideration
-
+        // new traffic situation: set subject virtually into new lane under consideration
         final LaneSegment newSituationMe = new LaneSegment(roadSegment, me.getLane());
         newSituationMe.addVehicleTestwise(me);
         newSituationMe.addVehicleTestwise(newFront);
 
         // if TO_LEFT: actual situation of newBack's left lane
-        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left
-        // lane
+        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left lane
         final LaneSegment leftLaneNewMe;
         if (direction == MovsimConstants.TO_LEFT) {
             leftLaneNewMe = leftLaneNewBack;
         } else {
-            leftLaneNewMe = new LaneSegment(roadSegment, oldFront.getLane());
+            // leftLaneNewMe = new LaneSegment(roadSegment, oldFront.getLane());
+            leftLaneNewMe = new LaneSegment(roadSegment, currentLane);
             leftLaneNewMe.addVehicleTestwise(oldFront);
         }
 
         final double meNewAcc = me.calcAccModel(newSituationMe, leftLaneNewBack);
 
-        final LaneSegment newSituationOldBack = new LaneSegment(roadSegment, oldFront.getLane());
+        // final LaneSegment newSituationOldBack = new LaneSegment(roadSegment, oldFront.getLane());
+        final LaneSegment newSituationOldBack = new LaneSegment(roadSegment, currentLane);
         newSituationOldBack.addVehicleTestwise(oldFront);
         newSituationOldBack.addVehicleTestwise(oldBack);
 
-        // if TO_LEFT: oldBack considers subject (me) as leader in left lane -->
-        // new container
-        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left
-        // lane
+        // if TO_LEFT: oldBack considers subject (me) as leader in left lane --> new container
+        // if TO_RIGHT: subject (me) still considers oldFront vehicle in left lane
         final LaneSegment leftLaneNewSituationOldBack;
         if (direction == MovsimConstants.TO_LEFT) {
             leftLaneNewSituationOldBack = new LaneSegment(roadSegment, me.getLane());
