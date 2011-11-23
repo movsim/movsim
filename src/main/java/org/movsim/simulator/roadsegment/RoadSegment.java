@@ -357,9 +357,6 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final LaneSegment laneSegment(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
-        if (lane < Lane.LANE1 || lane >= laneCount) {
-            logger.debug("laneSegment lane={}", lane);
-        }
         return laneSegments[lane];
     }
 
