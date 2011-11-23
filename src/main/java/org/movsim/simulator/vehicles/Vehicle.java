@@ -709,7 +709,7 @@ public class Vehicle {
     private double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
 
-        double acc;
+        final double acc;
 
         if (lcModel.isInitialized() && lcModel.withEuropeanRules()) {
             acc = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane,

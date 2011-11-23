@@ -566,6 +566,10 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount 
      */
     public void laneChanging(double dt, double simulationTime, long iterationCount) {
+    	if (laneCount < 2) {
+    		// need at least 2 lanes for lane changing
+    		return;
+    	}
     	for (final LaneSegment laneSegment : laneSegments) {
             stagedVehicles.clear();
             for (final Vehicle vehicle : laneSegment) {
@@ -578,6 +582,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
             	laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+            	vehicle.setLane(vehicle.getTargetLane());
             	laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
             }
         }

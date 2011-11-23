@@ -72,15 +72,13 @@ public class RoadSegmentTest {
         }
     }
 
-    // private LaneChangeModel laneChangeModel = TrafficSource.newLaneChangeModel(Vehicle.Type.CAR);
-//    private static final IDM idm = new IDM(33.0, 0.5, 3.0, 1.5, 2.0, 5.0);
-
     private Vehicle newVehicle(double rearPosition, double speed, int lane) {
         // Vehicle(type, pos, vel, lane, ldm, lcm, length, width, color);
         //return new Vehicle(Vehicle.Type.NONE, pos, vel, lane, idm, null, 5.0, 2.5, 3);
         final IDM idm = new IDM(33.0, 0.5, 3.0, 1.5, 2.0, 5.0);
         final Vehicle vehicle = new Vehicle(rearPosition, speed, lane, 5.0, 2.5);
         vehicle.setAccelerationModel(idm);
+        vehicle.setSpeedlimit(80.0 / 3.6); // 80 km/h
         return vehicle;
     }
 
@@ -884,9 +882,9 @@ public class RoadSegmentTest {
         final long iterationCount = 0;
         r0.laneChanging(dt, simulationTime, iterationCount);
         assertEquals(Lane.LANE1, obstacle.getLane());
-//        assertEquals(Lane.LANE2, v0.getLane());
-//        assertEquals(1, r0.laneSegment(Lane.LANE1).vehicleCount());
-//        assertEquals(1, r0.laneSegment(Lane.LANE2).vehicleCount());
+        assertEquals(Lane.LANE2, v0.getLane());
+        assertEquals(1, r0.laneSegment(Lane.LANE1).vehicleCount());
+        assertEquals(1, r0.laneSegment(Lane.LANE2).vehicleCount());
     }
 
     /**
