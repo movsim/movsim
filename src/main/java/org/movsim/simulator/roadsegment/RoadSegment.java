@@ -357,6 +357,9 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final LaneSegment laneSegment(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        if (lane < Lane.LANE1 || lane >= laneCount) {
+            logger.debug("laneSegment lane={}", lane);
+        }
         return laneSegments[lane];
     }
 
@@ -582,7 +585,11 @@ public class RoadSegment implements Iterable<Vehicle> {
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
             	laneSegments[vehicle.getLane()].removeVehicle(vehicle);
-            	vehicle.setLane(vehicle.getTargetLane());
+            	if (laneSegments[vehicle.getTargetLane()].type() == Lane.Type.ENTRANCE) {
+                	vehicle.setLane(vehicle.getTargetLane());
+            	}
+            	assert laneSegments[vehicle.getTargetLane()].type() != Lane.Type.ENTRANCE;
+                vehicle.setLane(vehicle.getTargetLane());
             	laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
             }
         }
