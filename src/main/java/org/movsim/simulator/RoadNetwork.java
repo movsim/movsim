@@ -228,16 +228,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     /**
      * Asserts the road network's class invariant. Used for debugging.
      */
-    public void assertInvariant() {
+    public boolean assertInvariant() {
         for (final RoadSegment roadSegment : roadSegments) {
-            final RoadMapping roadMapping = roadSegment.roadMapping();
-            if (roadMapping != null) {
-                assert roadMapping.laneCount() == roadSegment.laneCount();
-                assert roadMapping.trafficLaneMax() == roadSegment.trafficLaneMax();
-                assert roadMapping.trafficLaneMin() == roadSegment.trafficLaneMin();
-                assert Math.abs(roadMapping.roadLength() - roadSegment.roadLength()) < 0.1;
-            }
+        	assert roadSegment.assertInvariant();
         }
+        return true;
     }
 
     public void setWithCrashExit(boolean isWithCrashExit) {
