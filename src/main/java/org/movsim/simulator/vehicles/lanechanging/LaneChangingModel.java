@@ -164,14 +164,12 @@ public class LaneChangingModel {
         double accToLeft = -Double.MAX_VALUE;
         double accToRight = -Double.MAX_VALUE;
 
-        // consider lane-changing to right-hand side lane (decreasing lane
-        // index)
+        // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
             accToRight = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_RIGHT, roadSegment);
         }
 
-        // consider lane-changing to left-hand side lane (increasing the lane
-        // index)
+        // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < roadSegment.laneCount()) {
             accToLeft = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_LEFT, roadSegment);
         }
