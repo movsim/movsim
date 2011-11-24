@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.simulator.vehicles.Vehicle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * <p>
  * A LaneSegment represents a lane within a RoadSegment.
@@ -33,7 +35,10 @@ import org.movsim.simulator.vehicles.Vehicle;
  * </p>
  */
 public class LaneSegment implements Iterable<Vehicle> {
-    private static final boolean DEBUG = false;
+
+	final static Logger logger = LoggerFactory.getLogger(LaneSegment.class);
+
+	private static final boolean DEBUG = false;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
     // Lane linkage
     private final RoadSegment roadSegment;
@@ -114,6 +119,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public final LaneSegment sinkLaneSegment() {
         return sinkLaneSegment;
     }
+
     /**
      * Clears this road segment of any vehicles.
      */
@@ -210,9 +216,10 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
-        assert vehicle.posRearBumper() >= 0.0;
+        assert vehicle.getPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
+        assert assertInvariant();
         final int index = positionBinarySearch(vehicle.posRearBumper());
         if (index < 0) {
             vehicles.add(-index - 1, vehicle);
@@ -224,10 +231,12 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
+        assert assertInvariant();
     }
 
     // TODO testwise add vehicle
     public void addVehicleTestwise(Vehicle vehicle) {
+        assert assertInvariant();
     	if (vehicle != null) {
     		vehicle.setLane(lane);
     		addVehicle(vehicle);
@@ -235,11 +244,12 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     public void appendVehicle(Vehicle vehicle) {
-        assert vehicle.posRearBumper() >= 0.0;
+        assert vehicle.getPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
+        assert assertInvariant();
         if (DEBUG) {
             if (vehicles.size() > 0) {
                 final Vehicle lastVehicle = vehicles.get(vehicles.size() - 1);
@@ -250,6 +260,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         vehicles.add(vehicle);
         assert laneIsSorted();
+        assert assertInvariant();
     }
 
     /**
@@ -489,6 +500,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         assert laneIsSorted();
+        assert assertInvariant();
         final double roadLength = roadSegment.roadLength();
 
         // remove any vehicles that have gone past the end of this lane segment
@@ -534,6 +546,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 sinkLaneSegment.appendVehicle(vehicle);
             }
         }
+        assert assertInvariant();
     }
 
     /**
@@ -589,5 +602,20 @@ public class LaneSegment implements Iterable<Vehicle> {
     @Override
     public final Iterator<Vehicle> iterator() {
         return vehicles.iterator();
+    }
+
+    /**
+     * Asserts the lane segment's class invariant. Used for debugging.
+     */
+    public boolean assertInvariant() {
+    	final int roadSegmentId = roadSegment.id();
+        for (final Vehicle vehicle : vehicles) {
+        	assert vehicle.roadSegmentId() == roadSegmentId;
+        	if (vehicle.getLane() != lane) {
+                logger.info("vehicle lane={}, lane={}", vehicle.getLane(), lane);
+        	}
+        	assert vehicle.getLane() == lane;
+        }
+        return true;
     }
 }
