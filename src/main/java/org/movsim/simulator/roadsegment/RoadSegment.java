@@ -524,7 +524,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     // TODO ake adding an obstacle is also used in the OnrampMobilImpl --> setObstacleAtEndOfLane()  
     public void addObstacle(Vehicle obstacle) {
-        assert obstacle.type() == Vehicle.Type.OBSTACLE;
+        //assert obstacle.type() == Vehicle.Type.OBSTACLE;
         addVehicle(obstacle);
     }
 
@@ -571,8 +571,10 @@ public class RoadSegment implements Iterable<Vehicle> {
     		return;
     	}
     	for (final LaneSegment laneSegment : laneSegments) {
+    		assert laneSegment.assertInvariant();
             stagedVehicles.clear();
             for (final Vehicle vehicle : laneSegment) {
+            	assert vehicle.roadSegmentId() == id;
                 if (vehicle.considerLaneChanging(dt, this)) {
                     stagedVehicles.add(vehicle);
                 }
@@ -582,9 +584,6 @@ public class RoadSegment implements Iterable<Vehicle> {
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
             	laneSegments[vehicle.getLane()].removeVehicle(vehicle);
-            	if (laneSegments[vehicle.getTargetLane()].type() == Lane.Type.ENTRANCE) {
-                	vehicle.setLane(vehicle.getTargetLane());
-            	}
             	assert laneSegments[vehicle.getTargetLane()].type() != Lane.Type.ENTRANCE;
                 vehicle.setLane(vehicle.getTargetLane());
             	laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
@@ -603,6 +602,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void accelerate(double dt, double simulationTime, long iterationCount) {
     	for (final LaneSegment laneSegment : laneSegments) {
+    		assert laneSegment.assertInvariant();
             //final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
             final LaneSegment leftLaneSegment = null; // TODO get left lane ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
             //for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
@@ -650,6 +650,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void outFlow(double dt, double simulationTime, long iterationCount) {
     	for (final LaneSegment laneSegment : laneSegments) {
     		laneSegment.outFlow(dt, simulationTime, iterationCount);
+    		assert laneSegment.assertInvariant();
     	}
         if (sink != null) {
             sink.timeStep(dt, simulationTime, iterationCount);
@@ -668,6 +669,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         assert eachLaneIsSorted();
         if (upstreamBoundary != null) {
             upstreamBoundary.timeStep(dt, simulationTime, iterationCount);
+    		assert assertInvariant();
         }
     }
 
@@ -896,5 +898,22 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final List<LoopDetector> getLoopDetectors() {
         return loopDetectors;
+    }
+
+    /**
+     * Asserts the road segment's class invariant. Used for debugging.
+     */
+    public boolean assertInvariant() {
+        final RoadMapping roadMapping = roadMapping();
+        if (roadMapping != null) {
+            assert roadMapping.laneCount() == laneCount();
+            assert roadMapping.trafficLaneMax() == trafficLaneMax();
+            assert roadMapping.trafficLaneMin() == trafficLaneMin();
+            assert Math.abs(roadMapping.roadLength() - roadLength()) < 0.1;
+        }
+        for (final LaneSegment laneSegment : laneSegments) {
+        	laneSegment.assertInvariant();
+        }
+        return true;
     }
 }
