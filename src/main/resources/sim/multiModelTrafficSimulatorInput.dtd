@@ -301,7 +301,7 @@ logging  (true|false) "false"
 <!ATTLIST INFLOW
   t           NMTOKEN #REQUIRED
   q_per_hour  NMTOKEN #REQUIRED
-  v           NMTOKEN "100"
+  v           NMTOKEN "20"
 > 
 
 <!-- Flow-conserving inhomogeneities -->
