@@ -41,7 +41,6 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.UpstreamBoundary;
 import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.VehicleGeneratorImpl;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,7 +128,7 @@ public class Simulator implements Runnable {
         // if an individual vehicle composition is defined for a specific road
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
-        vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundDiagramOutput);
+        vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundDiagramOutput);
 
         final boolean isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
         roadNetwork.setWithCrashExit(isWithCrashExit);

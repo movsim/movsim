@@ -40,7 +40,6 @@ import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.UpstreamBoundary;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.VehicleGeneratorImpl;
 import org.movsim.simulator.vehicles.obsolete.VehicleContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +170,7 @@ public abstract class AbstractRoadSection {
         if(heterogenInputData.size()>0){
             logger.info("create *individual* vehicle generator for road with id={}", id);
             final boolean isWithFundamentalDiagramOutput = roadInput.isWithWriteFundamentalDiagrams();
-            this.vehGenerator = new VehicleGeneratorImpl(inputData, heterogenInputData, isWithFundamentalDiagramOutput);
+            this.vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundamentalDiagramOutput);
         }
         else{
             logger.info("use *default* vehicle generator for road with id={}", id);
