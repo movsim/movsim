@@ -36,7 +36,6 @@ import org.movsim.simulator.vehicles.Vehicle;
 /**
  * The Class MOBIL.
  */
-@SuppressWarnings("unused")
 public class MOBIL {
 
 	private double politeness;
