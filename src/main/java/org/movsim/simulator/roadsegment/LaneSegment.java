@@ -236,10 +236,18 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     // TODO testwise add vehicle
     public void addVehicleTestwise(Vehicle vehicle) {
-        assert assertInvariant();
     	if (vehicle != null) {
-    		vehicle.setLane(lane);
-    		addVehicle(vehicle);
+	        //assert vehicle.getPosition() >= 0.0;
+	        assert vehicle.getSpeed() >= 0.0;
+	        final int index = positionBinarySearch(vehicle.posRearBumper());
+	        if (index < 0) {
+	            vehicles.add(-index - 1, vehicle);
+	        } else if (index == 0) {
+	            vehicles.add(0, vehicle);
+	        } else {
+	            // vehicle is in the same position as an existing vehicle - this should not happen
+	            assert false;
+	        }
     	}
     }
 
@@ -574,8 +582,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * Simple bubble sort of the vehicles.
      * Useful for debugging.
      */
-    @SuppressWarnings("unused")
-    private void sortVehicles() {
+    void sortVehicles() {
         // Collections.sort(vehicles, vehiclePositionComparator);
         final int count = vehicles.size();
         boolean sorted = false;
