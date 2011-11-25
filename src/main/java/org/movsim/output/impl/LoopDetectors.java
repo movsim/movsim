@@ -32,7 +32,7 @@ import java.util.List;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.LoopDetector;
 import org.movsim.output.fileoutput.FileDetector;
-import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

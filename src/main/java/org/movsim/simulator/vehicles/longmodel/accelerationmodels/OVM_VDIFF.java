@@ -28,7 +28,7 @@ package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

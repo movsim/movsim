@@ -12,7 +12,7 @@
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
-import org.movsim.simulator.roadsegment.LaneSegment;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Observer;

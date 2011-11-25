@@ -28,7 +28,7 @@ package org.movsim.output;
 
 import java.util.List;
 
-import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.utilities.ObservableInTime;
 
 // TODO: Auto-generated Javadoc

@@ -22,7 +22,7 @@ package org.movsim.roadmappings;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.

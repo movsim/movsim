@@ -40,8 +40,8 @@ import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.impl.FloatingCarsImpl;
 import org.movsim.output.impl.SpatioTemporalImpl;
 import org.movsim.output.impl.TravelTimesImpl;
-import org.movsim.simulator.RoadNetwork;
-import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

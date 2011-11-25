@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingLine;
 import org.movsim.roadmappings.RoadMappingPoly;
-import org.movsim.simulator.RoadMapping;
-import org.movsim.simulator.RoadNetwork;
-import org.movsim.simulator.roadsegment.Lane;
-import org.movsim.simulator.roadsegment.Link;
-import org.movsim.simulator.roadsegment.RoadSegment;
-import org.movsim.simulator.roadsegment.TrafficSink;
+import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Link;
+import org.movsim.simulator.roadnetwork.RoadMapping;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -357,20 +357,20 @@ public class OpenDriveHandler extends DefaultHandler {
                 } else if (lane.type.equals("mwyExit")) {
                     roadSegment.setLaneType(laneIndex, Lane.Type.EXIT);
                 } else if (lane.type.equals("shoulder")) {
-                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.SHOULDER);
+                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
                 }
             }
             for (Road.Lanes.Lane lane : road.lanes.laneSection.right) {
                 final int laneIndex = rightLaneIdToLaneIndex(roadSegment, lane.id);
                 if (lane.type.equals("driving")) {
-                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.TRAFFIC);
+                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
-                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.ENTRANCE);
+                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.ENTRANCE);
                     roadSegment.addObstacle(new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0));
                 } else if (lane.type.equals("mwyExit")) {
-                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.EXIT);
+                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.EXIT);
                 } else if (lane.type.equals("shoulder")) {
-                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadsegment.Lane.Type.SHOULDER);
+                    roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
                 }
             }
             if (road.objects != null) {
@@ -556,14 +556,14 @@ public class OpenDriveHandler extends DefaultHandler {
     static int rightLaneIdToLaneIndex(RoadSegment roadSegment, int rightLaneId) {
         assert rightLaneId < 0;
         final int lane = roadSegment.laneCount() + rightLaneId;
-        assert lane >= org.movsim.simulator.roadsegment.Lane.LANE1;
+        assert lane >= org.movsim.simulator.roadnetwork.Lane.LANE1;
         return lane;
     }
 
     static int leftLaneIdToLaneIndex(RoadSegment roadSegment, int leftLaneId) {
         assert leftLaneId >= 0;
         final int lane = leftLaneId;
-        assert lane >= org.movsim.simulator.roadsegment.Lane.LANE1;
+        assert lane >= org.movsim.simulator.roadnetwork.Lane.LANE1;
         return lane;
     }
 

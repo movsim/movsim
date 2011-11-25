@@ -21,7 +21,7 @@ package org.movsim.roadmappings;
 
 import java.util.Arrays;
 
-import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * Road mapping defined by a quadratic Bezier curve.

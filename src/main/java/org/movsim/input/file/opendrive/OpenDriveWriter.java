@@ -30,11 +30,11 @@ import org.movsim.roadmappings.RoadMappingPoly;
 import org.movsim.roadmappings.RoadMappingPolyBezier;
 import org.movsim.roadmappings.RoadMappingPolyLine;
 import org.movsim.roadmappings.RoadMappingSpiral;
-import org.movsim.simulator.RoadMapping;
-import org.movsim.simulator.RoadMapping.PosTheta;
-import org.movsim.simulator.RoadNetwork;
-import org.movsim.simulator.roadsegment.Lane;
-import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.RoadMapping;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadMapping.PosTheta;
 
 /**
  * <p>

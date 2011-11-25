@@ -32,8 +32,8 @@ import java.util.Iterator;
 
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadsegment.LaneSegment;
-import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;

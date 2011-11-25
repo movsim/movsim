@@ -19,7 +19,7 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * Maps a road segment onto straight line.

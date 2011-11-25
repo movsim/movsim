@@ -30,7 +30,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.utilities.impl.FileUtils;
 
 // TODO: Auto-generated Javadoc

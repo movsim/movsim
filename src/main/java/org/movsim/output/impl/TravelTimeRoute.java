@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.model.output.TravelTimeRouteInput;
-import org.movsim.simulator.RoadNetwork;
-import org.movsim.simulator.roadsegment.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.impl.ExponentialMovingAverage;
 import org.movsim.utilities.impl.XYDataPoint;

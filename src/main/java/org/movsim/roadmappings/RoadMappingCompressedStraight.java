@@ -19,7 +19,7 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.RoadMapping;
+import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * This is a WORK IN PROGRESS and not yet ready for use.

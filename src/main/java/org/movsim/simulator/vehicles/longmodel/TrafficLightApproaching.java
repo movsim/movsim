@@ -27,7 +27,7 @@
 package org.movsim.simulator.vehicles.longmodel;
 
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadSection.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
 import org.slf4j.Logger;

@@ -20,7 +20,7 @@
 package org.movsim.input.file.opendrive;
 
 import org.movsim.input.file.xml.XMLReaderBase;
-import org.movsim.simulator.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 
 /**
  * Reads an OpenDRIVE format file and uses it to create a road network, see:
