@@ -74,10 +74,10 @@ public class TrafficSink extends TrafficFlowBase {
             measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL;
             sourceRoad.clearVehicleRemovedCount();
             measuredTime = 0.0;
-            dQ = 0.0;
-            if (sourceRoad.source() != null) {
-                dQ = (measuredOutflow - sourceRoad.source().inflow());
-            }
+//            dQ = 0.0;
+//            if (sourceRoad.source() != null) {
+//                dQ = (measuredOutflow - sourceRoad.source().inflow());
+//            }
 
             //            System.out.println("Sink (R" + roadSegment.roadId() +",S" + id + ") outflow: " + (int)(measuredOutflow * 3600));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             //            System.out.println("Sink R" + roadSegment.roadId() + " outflow: " + (int)(measuredOutflow * 3600));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$

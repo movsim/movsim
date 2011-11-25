@@ -101,7 +101,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     
     // Sources and Sinks
     private UpstreamBoundary upstreamBoundary;
-    private TrafficSource source;
     // sink is of type TrafficFlowBase to allow the sink to be a TrafficFlowOnRamp
     private TrafficFlowBase sink;
     private int removedVehicleCount; // used for calculating traffic flow
@@ -164,17 +163,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Convenience constructor which also sets this road segment's source.
-     * 
-     * @param roadMapping
-     * @param source
-     */
-    public RoadSegment(RoadMapping roadMapping, TrafficSource source) {
-        this(roadMapping);
-        setSource(source);
-    }
-
-    /**
      * Sets a default sink for this road segment.
      */
     public final void addDefaultSink() {
@@ -227,31 +215,19 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the traffic source for this road segment.
+     * Returns the upstream boundary (traffic source) for this road segment.
      * 
-     * @return the traffic source
+     * @return the upstream boundary
      */
-    public final TrafficSource source() {
-        return source;
-    }
-
-    /**
-     * Sets the traffic source for this road segment.
-     * 
-     * @param source
-     *            the traffic source
-     */
-    public final void setSource(TrafficSource source) {
-        assert source != null;
-        this.source = source;
-        source.setRoadSegment(this);
+    public final UpstreamBoundary getUpstreamBoundary() {
+        return upstreamBoundary;
     }
 
     /**
      * Sets the upstream boundary (traffic source) for this road segment.
      * 
-     * @param source
-     *            the traffic source
+     * @param upstreamBoundary
+     *            the upstream boundary
      */
     public final void setUpstreamBoundary(UpstreamBoundary upstreamBoundary) {
         assert upstreamBoundary != null;
@@ -602,6 +578,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void accelerate(double dt, double simulationTime, long iterationCount) {
     	for (final LaneSegment laneSegment : laneSegments) {
+            assert laneSegment.laneIsSorted();
     		assert laneSegment.assertInvariant();
             //final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
             final LaneSegment leftLaneSegment = null; // TODO get left lane ( leftLaneIndex < vehContainers.size() ) ? vehContainers.get(leftLaneIndex) : null;
@@ -632,6 +609,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void updatePositionAndSpeed(double dt, double simulationTime, long iterationCount) {
     	for (final LaneSegment laneSegment : laneSegments) {
+            assert laneSegment.laneIsSorted();
             for (final Vehicle vehicle : laneSegment) {
                 vehicle.updatePositionAndSpeed(dt);
             }

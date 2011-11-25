@@ -134,7 +134,7 @@ public abstract class TrafficFlowBase implements SimulationTimeStep {
         // in its setSource method
         assert this.roadSegment == null;
         assert roadSegment != null;
-        assert roadSegment.source() == this || type != Type.SOURCE;
+        //assert roadSegment.source() == this || type != Type.SOURCE;
 
         this.roadSegment = roadSegment;
     }

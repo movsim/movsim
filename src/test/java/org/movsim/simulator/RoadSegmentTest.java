@@ -120,7 +120,7 @@ public class RoadSegmentTest {
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
         assertEquals(roadLength, roadSegment.roadLength(), delta);
         assertEquals(laneCount, roadSegment.laneCount());
-        assertEquals(null, roadSegment.source());
+        assertEquals(null, roadSegment.getUpstreamBoundary());
         assertEquals(null, roadSegment.sink());
     }
 
@@ -136,7 +136,7 @@ public class RoadSegmentTest {
         final RoadSegment r = new RoadSegment(m);
         assertEquals(roadLength, r.roadLength(), delta);
         assertEquals(laneCount, r.laneCount());
-        assertEquals(null, r.source());
+        assertEquals(null, r.getUpstreamBoundary());
         assertEquals(null, r.sink());
     }
 
