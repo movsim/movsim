@@ -92,7 +92,8 @@ public class XmlReaderSimInput {
         this.inputData = inputData;
 
         this.xmlFilename = projectMetaData.getProjectName(); // TODO Path + File
-        
+//        this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
+//                + filenameEnding;        
         // TODO Remove AccessController: Is not needed anymore
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
