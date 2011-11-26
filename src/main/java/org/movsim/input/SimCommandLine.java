@@ -89,7 +89,7 @@ public class SimCommandLine {
 
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
-        options.addOption("v", "validate", false, "parses xml input file for validation (without simulation)");
+        options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
         options.addOption("i", "internal_xml", false,
                 "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
         options.addOption("w", "write dtd", false, "writes dtd file to file");
@@ -129,12 +129,11 @@ public class SimCommandLine {
      * @param cmdline
      *            the cmdline
      */
-    // TODO option v duplicated
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
             optHelp();
         }
-        if (cmdline.hasOption("v")) {
+        if (cmdline.hasOption("d")) {
             optValidation();
         }
         if (cmdline.hasOption("i")) {
