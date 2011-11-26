@@ -118,8 +118,12 @@ public class MovsimViewerFacade {
      *            the scenario
      */
     public void loadScenarioFromXml(String scenario) {
-        //TODO not hardcoded
+//    public void loadScenarioFromXml(String scenario, String path) {
+//    	inputData.setProjectName(scenario);
+//    	inputData.getProjectMetaData().setPathToProjectXmlFile(path);
+    	//TODO not hardcoded
         String projectName = "/sim/onramp_IDM" + ".xml";
+        //String projectName = "/sim/test_speedlimits" + ".xml";
         inputData.setProjectName(projectName);
         initializeModel();
     }
@@ -219,5 +223,4 @@ public class MovsimViewerFacade {
     public ProjectMetaData getProjectMetaDataImpl() {
         return projectMetaData;
     }
-
 }
