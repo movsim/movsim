@@ -27,6 +27,7 @@
 package org.movsim.simulator;
 
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.XmlReaderSimInput;
@@ -37,6 +38,8 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
+import org.movsim.roadmappings.RoadMappingPolyS;
+import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.UpstreamBoundary;
@@ -86,6 +89,7 @@ public class Simulator implements Runnable {
      */
     private Simulator() {
         inputData = new InputData(); // accesses static reference ProjectMetaData
+        roadNetwork = new RoadNetwork();
     }
 
     public static Simulator getInstance() {
@@ -99,8 +103,8 @@ public class Simulator implements Runnable {
      */
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
-
-        roadNetwork = new RoadNetwork();
+        projectName = inputData.getProjectMetaData().getProjectName();
+        final String path = inputData.getProjectMetaData().getPathToProjectXmlFile();
 
         String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
         // String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr"; //TODO remove
@@ -118,6 +122,7 @@ public class Simulator implements Runnable {
         // eg vehicles and vehicle models, traffic composition, traffic sources etc
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
+
         this.timestep = inputData.getSimulationInput().getTimestep(); // fix
 
         this.tMax = simInput.getMaxSimTime();
@@ -134,6 +139,30 @@ public class Simulator implements Runnable {
         roadNetwork.setWithCrashExit(isWithCrashExit);
 
         
+        // For each road in the MovSim XML input data, find the corresponding roadSegment and
+        // set its input data accordingly
+        final Map<Long,RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
+        if (loaded == false && roadInputMap.size() == 1) {
+        	// there was no xodr file and there is only one road segment in the MovSimXML file
+        	// so set up a default s-shaped road mapping
+        	final RoadInput roadinput = roadInputMap.values().iterator().next();
+            final int laneCount = 1;//roadinput.getLanes();
+            final double roadLength = 1500;//roadinput.getRoadLength();
+            // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
+            final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
+            final RoadSegment roadSegment = new RoadSegment(roadMapping);
+    		addInputToRoadSegment(roadSegment, roadinput);
+            roadSegment.setUserId("1");
+            roadSegment.addDefaultSink();
+            roadNetwork.add(roadSegment);
+        } else {
+	        for (final RoadInput roadinput : roadInputMap.values()) {
+	        	RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+	        	if (roadSegment != null) {
+	        		addInputToRoadSegment(roadSegment, roadinput);
+	        	}
+	        }
+        }
         reset();
     }
 
@@ -143,27 +172,6 @@ public class Simulator implements Runnable {
     public void reset() {
         time = 0;
         iterationCount = 0;
-
-        
-        // TODO general remark from ake: the construction of the road network takes place in the initialize() but
-        // adding xml input from the movsim configuration happens here in reset(). Why not putting all input related 
-        // set-up processes in the initialize() body?
-        
-        //System.out.println("roadsections: " + inputData.getSimulationInput().getRoadInput().size()); // TODO Adapt
-        // Roadinput/RoadSection
-
-        // For each road in the MovSim XML input data, find the corresponding roadSegment and
-        // set its input data accordingly
-        for (final RoadInput roadinput : inputData.getSimulationInput().getRoadInput().values()) {
-        	final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
-        	if (roadSegment != null) {
-        		addInputToRoadSegment(roadSegment, roadinput);
-        	}
-        }
-
-        projectName = inputData.getProjectMetaData().getProjectName();
-
-        // TODO SimOutput needs to use road segments, not road sections
         simOutput = new SimOutput(inputData, roadNetwork);
     }
 
