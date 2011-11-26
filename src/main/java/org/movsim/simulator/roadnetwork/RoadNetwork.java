@@ -183,7 +183,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // being updated twice (for example when a vehicle moves of the end of a road segment
         // onto the next road segment.
         
-        logger.info("called timeStep: time={}", simulationTime);
+        logger.debug("called timeStep: time={}", simulationTime);
         // TODO road segments have replaced road sections, so need to replicate below for correct parallel update
 //        for (RoadSection roadSection : roadSections) {
 //            roadSection.updateRoadConditions(iterationCount, time);
