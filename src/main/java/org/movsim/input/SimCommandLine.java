@@ -129,6 +129,7 @@ public class SimCommandLine {
      * @param cmdline
      *            the cmdline
      */
+    // TODO option v duplicated
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
             optHelp();
