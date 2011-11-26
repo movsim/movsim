@@ -604,29 +604,11 @@ public class Vehicle {
      * org.movsim.simulator.vehicles.Vehicle#netDistance(org.movsim.simulator
      * .vehicles.Vehicle)
      */
-    
     public double getNetDistance(final Vehicle vehFront) {
-        
-        
         if (vehFront == null) {
-//            final RoadNetworkDeprecated roadNetwork = RoadNetworkDeprecated.getInstance();
-//            final boolean isRingroad = roadNetwork.isPeriodBoundary(roadId);
-//            if(isRingroad){
-//                final double roadLength = roadNetwork.getRoadLength(roadId); 
-//                return (roadLength - length); 
-//            }
             return MovsimConstants.GAP_INFINITY;
         }
-        
-        // TODO general concept for treating offsets needed here
-        // so far use hard-coded solution
-        double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
-//        final long idOfframp=-1;
-//        final long idOnramp=1;
-//        if( /*roadId  != vehFront.getRoadId()*/ roadId==idOfframp && vehFront.getRoadId()==idOnramp || ( isRingroad && netGap <= -0.5 * (length + vehFront.getLength()) )){
-//            logger.debug("net distance with respect to leader from new roadId. addRoadlength={}", roadLength);
-//            netGap += roadLength;
-//        }            
+        final double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
         return netGap;
     }
 
@@ -835,6 +817,7 @@ public class Vehicle {
      */
     
     public boolean considerLaneChanging(double dt, RoadSegment roadSegment) {
+        
         // no lane changing when not configured in xml.
         if (lcModel==null  || !lcModel.isInitialized()) {
             return false;
@@ -860,7 +843,9 @@ public class Vehicle {
             setTargetLane(lane + laneChangingDirection);
             resetDelay();
             updateLaneChangingDelay(dt);
+            logger.info("veh id={}", id);
             logger.debug("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
+            logger.info("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
             return true;
         }
 
