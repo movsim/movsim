@@ -19,6 +19,7 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,6 +95,8 @@ public class RoadSegment implements Iterable<Vehicle> {
     private List<Vehicle> stagedVehicles;
     private List<LoopDetector> loopDetectors;
     private FlowConservingBottlenecks flowConsBottlenecks;
+    private ArrayList<TrafficLight> trafficLights;
+    private ArrayList<SpeedLimit> speedLimits;
 
     
     // Sources and Sinks
@@ -703,6 +706,80 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     	return laneSegments[lane].frontVehicle(vehiclePos);
     }
+
+    /**
+     * Adds a speed limit to this road segment.
+     * @param position 
+     * @param speedLimit speed limit in m/s
+     */
+    public void addSpeedLimit(double position, double speedLimit) {
+        if (speedLimits == null) {
+            speedLimits = new ArrayList<SpeedLimit>();
+        }
+        speedLimits.add(new SpeedLimit(position, speedLimit));
+    }
+
+    /**
+     * Convenience function, adds a speed limit (in km/h) to this road segment.
+     * @param position 
+     * @param speedLimitKmh speed limit in km/h
+     * 
+     */
+    public final void addSpeedLimitKmh(double position, double speedLimitKmh) {
+        addSpeedLimit(position, speedLimitKmh / 3.6);
+    }
+
+    /**
+     * Returns an iterable over all the speed limits in the road segment.
+     * 
+     * @return an iterable over all the speed limits in the road segment
+     */
+    public Iterable<SpeedLimit> speedLimits() {
+        return speedLimits;
+    }
+
+    /**
+     * Adds a traffic light to this road segment.
+     * 
+     * @param trafficLight
+     */
+    public void addTrafficLight(TrafficLight trafficLight) {
+        // TODO - ensure traffic lights are sorted by position
+        if (trafficLights == null) {
+            trafficLights = new ArrayList<TrafficLight>();
+        }
+        trafficLights.add(trafficLight);
+    }
+
+    /**
+     * Returns the traffic light of the given index.
+     * 
+     * @param index
+     * @return the traffic light of the given index
+     */
+    public TrafficLight trafficLight(int index) {
+        assert trafficLights != null;
+        return trafficLights.get(index);
+    }
+
+    /**
+     * Returns the number of traffic lights in this road segment.
+     * 
+     * @return number of traffic lights in this road segment
+     */
+    public int trafficLightCount() {
+        return trafficLights == null ? 0 : trafficLights.size();
+    }
+
+    /**
+     * Returns an iterable over all the traffic lights in the road segment.
+     * 
+     * @return an iterable over all the traffic lights in the road segment
+     */
+    public Iterable<TrafficLight> trafficLights() {
+        return trafficLights;
+    }
+
 
     /**
      * Returns true if each lane in the vehicle array is sorted.
