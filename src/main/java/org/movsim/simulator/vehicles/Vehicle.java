@@ -843,7 +843,9 @@ public class Vehicle {
             setTargetLane(lane + laneChangingDirection);
             resetDelay();
             updateLaneChangingDelay(dt);
+            logger.info("veh id={}", id);
             logger.debug("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
+            logger.info("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
             return true;
         }
 
