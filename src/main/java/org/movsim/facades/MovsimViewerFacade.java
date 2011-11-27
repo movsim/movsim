@@ -105,27 +105,15 @@ public class MovsimViewerFacade {
     }
 
     /**
-     * Initialize model.
-     */
-    public void initializeModel() {
-        model.initialize();
-    }
-
-    /**
      * Load scenario from xml.
      * 
      * @param scenario
      *            the scenario
      */
-    public void loadScenarioFromXml(String scenario) {
-//    public void loadScenarioFromXml(String scenario, String path) {
-//    	inputData.setProjectName(scenario);
-//    	inputData.getProjectMetaData().setPathToProjectXmlFile(path);
-    	//TODO not hardcoded
-        String projectName = "/sim/onramp_IDM" + ".xml";
-        //String projectName = "/sim/test_speedlimits" + ".xml";
-        inputData.setProjectName(projectName);
-        initializeModel();
+    public void loadScenarioFromXml(String scenario, String path, String xodrFilename, String xodrPath) {
+    	inputData.setProjectName(path + scenario + ".xml");
+    	model.setXodrFileAndPath(xodrFilename, xodrPath);
+        model.initialize();
     }
 
     /**

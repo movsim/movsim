@@ -46,7 +46,7 @@ public class SimulatorController extends Controller {
     public SimulatorController(Simulator model) {
         this.model = model;
 
-        initializeModel();
+        model.initialize();
 
         simThread = new Thread(model);
         simThread.setName("movsim-thread");
@@ -83,15 +83,4 @@ public class SimulatorController extends Controller {
     public void pause() {
 
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.ui.controller.Controller#initializeModel()
-     */
-    @Override
-    public void initializeModel() {
-        model.initialize();
-    }
-
 }

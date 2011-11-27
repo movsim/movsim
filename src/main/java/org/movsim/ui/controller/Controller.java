@@ -34,11 +34,6 @@ public abstract class Controller {
     }
 
     /**
-     * Initialize model.
-     */
-    public abstract void initializeModel();
-
-    /**
      * Start.
      */
     public abstract void start();

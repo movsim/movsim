@@ -85,6 +85,8 @@ public class Simulator implements Runnable {
     private long startTimeMillis;
 
     private RoadNetwork roadNetwork;
+    private String xodrFileName;
+    private String xodrPath;
 
     /**
      * Instantiates a new simulator impl.
@@ -98,6 +100,11 @@ public class Simulator implements Runnable {
         return instance;
     }
 
+    public void setXodrFileAndPath(String xodrFilename, String xodrPath) {
+    	this.xodrFileName = xodrFilename;
+    	this.xodrPath = xodrPath;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -108,11 +115,12 @@ public class Simulator implements Runnable {
         projectName = inputData.getProjectMetaData().getProjectName();
         final String path = inputData.getProjectMetaData().getPathToProjectXmlFile();
 
-        String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
+        // String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
         // String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr"; //TODO remove
 
-        // First parse the OpenDrive (.xodr) to load the network topology and road layout
-        String xmlFileName = "/roadnetwork/" + scenario + ".xodr";
+        // First parse the OpenDrive (.xodr) file to load the network topology and road layout
+        // final String xmlFileName = "/roadnetwork/" + scenario + ".xodr";
+        final String xmlFileName = xodrPath + xodrFileName;
         logger.info("try to load ", xmlFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
         if (loaded == false) {
