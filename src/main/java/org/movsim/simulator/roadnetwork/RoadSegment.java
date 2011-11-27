@@ -879,30 +879,29 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
                 final double netDistance = vehicle.getNetDistance(vehFront);
                 if (netDistance < 0) {
-                    logger.error("Crash happened!");
+                    logger.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append("#########################################################");
-                    sb.append(String.format("Crash of Vehicle i = %d at x = %.4fm", index, vehicle.getPosition()));
+                    sb.append(String.format("Crash of Vehicle i=%d at x=%.4f ", index, vehicle.getPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh in front at x = %.4f on lane = %d", vehFront.getPosition(), vehicle.getLane()));
+                        sb.append(String.format("with veh in front at x=%.4f on lane=%d\n", vehFront.getPosition(), vehicle.getLane()));
                     }
-                    sb.append("roadID = {}"+id);
-                    sb.append("net distance  = "+netDistance);
-                    sb.append("lane index    = "+laneSegment.lane());
-                    sb.append("container.size = "+laneSegment.vehicleCount());
+                    sb.append("roadID="+id);
+                    sb.append(", net distance="+netDistance);
+                    sb.append(", lane index="+laneSegment.lane());
+                    sb.append(", container.size="+laneSegment.vehicleCount());
+                    sb.append("\n");
                     
                     for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math.min(index + 8, M - 1); j++) {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String.format(
-                                "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
-                                veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getLength(), veh.getLane(), veh.getId()));
+                                "veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, id=%d%n", j,
+                                veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(), veh.getLength(), veh.getLane(), veh.getId()));
                     }
                     logger.error(sb.toString());
                     if (isWithCrashExit) {
                         logger.error(" !!! exit after crash !!! ");
                         System.exit(-99);
                     }
-
                 }
             }
         }
