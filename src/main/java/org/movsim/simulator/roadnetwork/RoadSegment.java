@@ -19,7 +19,6 @@
 
 package org.movsim.simulator.roadnetwork;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,8 +94,8 @@ public class RoadSegment implements Iterable<Vehicle> {
     private List<Vehicle> stagedVehicles;
     private List<LoopDetector> loopDetectors;
     private FlowConservingBottlenecks flowConsBottlenecks;
-    private ArrayList<TrafficLight> trafficLights;
-    private ArrayList<SpeedLimit> speedLimits;
+    private TrafficLights trafficLights;
+    private SpeedLimits speedLimits;
 
     
     // Sources and Sinks
@@ -708,26 +707,32 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Adds a speed limit to this road segment.
-     * @param position 
-     * @param speedLimit speed limit in m/s
+     * Sets the speed limits for this road segment.
+     * 
+     * @param trafficLights
      */
-    public void addSpeedLimit(double position, double speedLimit) {
-        if (speedLimits == null) {
-            speedLimits = new ArrayList<SpeedLimit>();
-        }
-        speedLimits.add(new SpeedLimit(position, speedLimit));
+    public void setSpeedLimits(SpeedLimits speedLimits) {
+        this.speedLimits = speedLimits;
     }
 
     /**
-     * Convenience function, adds a speed limit (in km/h) to this road segment.
-     * @param position 
-     * @param speedLimitKmh speed limit in km/h
+     * Gets the speed limits for this road segment.
      * 
+     * @return the speed limits
      */
-    public final void addSpeedLimitKmh(double position, double speedLimitKmh) {
-        addSpeedLimit(position, speedLimitKmh / 3.6);
+    public List<SpeedLimit> getSpeedLimits() {
+        return speedLimits == null ? null : speedLimits.getSpeedLimits();
     }
+
+    /**
+     * Returns the number of speed limits in this road segment.
+     * 
+     * @return number of speedLimits in this road segment
+     */
+    public int speedLimitCount() {
+        return speedLimits == null ? 0 : getSpeedLimits().size();
+    }
+
 
     /**
      * Returns an iterable over all the speed limits in the road segment.
@@ -735,31 +740,25 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return an iterable over all the speed limits in the road segment
      */
     public Iterable<SpeedLimit> speedLimits() {
-        return speedLimits;
+        return getSpeedLimits();
     }
 
     /**
-     * Adds a traffic light to this road segment.
+     * Sets the traffic lights for this road segment.
      * 
-     * @param trafficLight
+     * @param trafficLights
      */
-    public void addTrafficLight(TrafficLight trafficLight) {
-        // TODO - ensure traffic lights are sorted by position
-        if (trafficLights == null) {
-            trafficLights = new ArrayList<TrafficLight>();
-        }
-        trafficLights.add(trafficLight);
+    public void setTrafficLights(TrafficLights trafficLights) {
+        this.trafficLights = trafficLights;
     }
 
     /**
-     * Returns the traffic light of the given index.
+     * Gets the traffic lights.
      * 
-     * @param index
-     * @return the traffic light of the given index
+     * @return the traffic lights
      */
-    public TrafficLight trafficLight(int index) {
-        assert trafficLights != null;
-        return trafficLights.get(index);
+    public List<TrafficLight> getTrafficLights() {
+        return trafficLights.getTrafficLights();
     }
 
     /**
@@ -768,7 +767,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return number of traffic lights in this road segment
      */
     public int trafficLightCount() {
-        return trafficLights == null ? 0 : trafficLights.size();
+        return trafficLights == null ? 0 : getTrafficLights().size();
     }
 
     /**
@@ -777,7 +776,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return an iterable over all the traffic lights in the road segment
      */
     public Iterable<TrafficLight> trafficLights() {
-        return trafficLights;
+        return getTrafficLights();
     }
 
 

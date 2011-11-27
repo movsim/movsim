@@ -42,6 +42,8 @@ import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.SpeedLimits;
+import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.UpstreamBoundary;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.utilities.MyRandom;
@@ -190,6 +192,12 @@ public class Simulator implements Runnable {
         final UpstreamBoundary upstreamBoundary = new UpstreamBoundary(roadSegment.id(), vehGenerator, roadSegment, trafficSourceData,
                 inputData.getProjectMetaData().getProjectName());
         roadSegment.setUpstreamBoundary(upstreamBoundary);
+        final TrafficLights trafficLights = new TrafficLights(inputData.getProjectMetaData().getProjectName(),
+                roadinput.getTrafficLightsInput());
+        roadSegment.setTrafficLights(trafficLights);
+        final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
+        roadSegment.setSpeedLimits(speedLimits);
+
 	    //final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
 	}
 
