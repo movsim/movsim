@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
+import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
@@ -87,7 +88,7 @@ public class SimOutput implements SimObservables {
      */
     public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
     	this.roadNetwork = roadNetwork;
-    	roadSegment = roadNetwork.iterator().next();
+    	roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
         projectName = simInput.getProjectMetaData().getProjectName();
         
         
@@ -101,7 +102,11 @@ public class SimOutput implements SimObservables {
         
         
         // SingleRoad quickhack! TODO
-        final OutputInput outputInput = simInput.getSimulationInput().getOutputInput();
+        final SimulationInput simulationInput = simInput.getSimulationInput();
+        if (simulationInput == null) {
+        	return;
+        }
+        final OutputInput outputInput = simulationInput.getOutputInput();
 
         
         // TODO quick hack null treatment

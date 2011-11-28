@@ -167,7 +167,7 @@ public class VehicleGenerator {
 
         }
         // normalize heterogeneity fractions
-        normalizeFractions(sumFraction);
+        normalizeFractions(sumFraction, prototypes);
         return prototypes;
     }
     
@@ -277,7 +277,7 @@ public class VehicleGenerator {
      * @param sumFraction
      *            the sum fraction
      */
-    private void normalizeFractions(double sumFraction) {
+    private void normalizeFractions(double sumFraction, HashMap<String, VehiclePrototype> prototypes) {
         final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
             final String key = it.next();
