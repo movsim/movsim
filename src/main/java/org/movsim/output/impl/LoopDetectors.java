@@ -44,7 +44,7 @@ public class LoopDetectors {
     final static Logger logger = LoggerFactory.getLogger(LoopDetectors.class);
 
     /** The detectors. */
-    private List<LoopDetectorImpl> detectors;
+    private List<LoopDetector> detectors;
 
     private List<FileDetector> fileDetectors;
 
@@ -58,14 +58,14 @@ public class LoopDetectors {
      */
     public LoopDetectors(long roadId, String projectName, DetectorInput input) {
 
-        detectors = new ArrayList<LoopDetectorImpl>();
+        detectors = new ArrayList<LoopDetector>();
 
         final double dtSample = input.getSampleInterval();
 
         final List<Double> positions = input.getPositions();
 
         for (final Double detPosition : positions) {
-            detectors.add(new LoopDetectorImpl(projectName, detPosition, dtSample));
+            detectors.add(new LoopDetector(projectName, detPosition, dtSample));
         }
 
         if (input.isWithLogging()) {
@@ -86,7 +86,7 @@ public class LoopDetectors {
      * @param roadSegment
      */
     public void update(long itime, double time, double timestep, RoadSegment roadSegment) {
-        for (final LoopDetectorImpl det : detectors) {
+        for (final LoopDetector det : detectors) {
             det.update(time, roadSegment);
         }
     }
