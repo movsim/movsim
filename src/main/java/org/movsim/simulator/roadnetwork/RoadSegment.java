@@ -93,7 +93,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final LaneSegment laneSegments[];
     private List<Vehicle> stagedVehicles;
     private LoopDetectors loopDetectors;
-    private FlowConservingBottlenecks flowConsBottlenecks;
+    private FlowConservingBottlenecks flowConservingBottlenecks;
     private TrafficLights trafficLights;
     private SpeedLimits speedLimits;
 
@@ -525,7 +525,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        //trafficLights.update(iterationCount, time, vehContainers);
+    	if (trafficLights != null) {
+    		trafficLights.update(dt, simulationTime, iterationCount, this);
+    	}
         updateSpeedLimits();
     }
 
@@ -607,8 +609,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                 //final Vehicle veh = vehiclesOnLane.get(i);
                 final double x = vehicle.getPosition();
                 // TODO treat null case 
-                final double alphaT = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaT(x);
-                final double alphaV0 = (flowConsBottlenecks==null) ? 1 : flowConsBottlenecks.alphaV0(x);
+                final double alphaT = (flowConservingBottlenecks==null) ? 1 : flowConservingBottlenecks.alphaT(x);
+                final double alphaV0 = (flowConservingBottlenecks==null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
                 vehicle.calcAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
@@ -672,7 +674,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public void updateDetectors(double dt, double simulationTime, long iterationCount) {
-        //detectors.update(iterationCount, time, dt, vehContainers);
+    	if (this.loopDetectors != null) {
+    		loopDetectors.update(dt, simulationTime, iterationCount, this);
+    	}
     }
 
      /**
@@ -977,6 +981,10 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public void setLoopDetectors(LoopDetectors loopDetectors) {
         this.loopDetectors = loopDetectors;
+    }
+
+    public void setFlowConservingBottlenecks(FlowConservingBottlenecks flowConservingBottlenecks) {
+    	this.flowConservingBottlenecks = flowConservingBottlenecks;
     }
 
     /**

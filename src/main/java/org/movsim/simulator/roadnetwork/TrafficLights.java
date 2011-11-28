@@ -31,25 +31,17 @@ public class TrafficLights {
     private FileTrafficLightRecorder fileTrafficLightRecorder = null;
 
     /**
-     * Instantiates a new traffic lights impl.
-     * 
+     * Constructor.
      * @param projectName
-     *            the project name
      * @param trafficLightsInput
-     *            the traffic lights input
      */
-    
-    
     public TrafficLights(String projectName, TrafficLightsInput trafficLightsInput) {
 
         initTrafficLights(trafficLightsInput);
-
         nDt = trafficLightsInput.getnDtSample();
-
         if (projectName!=null && trafficLightsInput.isWithLogging()) {
             fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, nDt, trafficLights);
         }
-
     }
 
     /**
@@ -73,27 +65,27 @@ public class TrafficLights {
      * @param time the time
      * @param roadSegment
      */
-    public void update(long iterationCount, double time, RoadSegment roadSegment) {
+    public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {
 
         if (!trafficLights.isEmpty()) {
             // first update traffic light status
             for (final TrafficLight trafficLight : trafficLights) {
-                trafficLight.update(time);
+                trafficLight.update(simulationTime);
             }
-            // second update vehicle status approaching traffic lights
+            // then update vehicle status approaching traffic lights
         	final int laneCount = roadSegment.laneCount();
             for (int lane = 0; lane < laneCount; ++lane) {
             	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
                 for (final Vehicle vehicle : laneSegment) {
                     for (final TrafficLight trafficLight : trafficLights) {
-                        vehicle.updateTrafficLight(time, trafficLight);
+                        vehicle.updateTrafficLight(simulationTime, trafficLight);
                     }
                 }
             }
         }
 
         if (fileTrafficLightRecorder != null) {
-            fileTrafficLightRecorder.update(iterationCount, time, trafficLights);
+            fileTrafficLightRecorder.update(iterationCount, simulationTime, trafficLights);
         }
     }
 

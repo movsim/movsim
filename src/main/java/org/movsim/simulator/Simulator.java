@@ -41,6 +41,7 @@ import org.movsim.output.LoopDetectors;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.roadmappings.RoadMappingPolyS;
+import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -194,6 +195,10 @@ public class Simulator implements Runnable {
 
         final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), projectName, roadinput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
+        
+        final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(roadinput.getFlowConsBottleneckInputData());
+        roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
+
 
 	    //final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
 	}

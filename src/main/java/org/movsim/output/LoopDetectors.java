@@ -79,14 +79,15 @@ public class LoopDetectors {
     /**
      * Update.
      *
-     * @param itime the itime
-     * @param time the time
-     * @param timestep the timestep
+     * @param dt
+     *            simulation time interval
+     * @param simulationTime
+     * @param iterationCount 
      * @param roadSegment
      */
-    public void update(long itime, double time, double timestep, RoadSegment roadSegment) {
-        for (final LoopDetector det : detectors) {
-            det.update(time, roadSegment);
+    public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {
+        for (final LoopDetector detector : detectors) {
+        	detector.update(simulationTime, roadSegment);
         }
     }
 
@@ -103,5 +104,4 @@ public class LoopDetectors {
         }
         return loopDetectors;
     }
-
 }

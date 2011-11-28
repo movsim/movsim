@@ -124,10 +124,9 @@ public class LoopDetector extends ObservableImpl  {
      * @param time the time
      * @param roadSegment
      */
-    public void update(double time, RoadSegment roadSegment) {
+    public void update(double simulationTime, RoadSegment roadSegment) {
 
         // brute force search: iterate over all lanes
-
     	final int laneCount = roadSegment.laneCount();
         for (int lane = 0; lane < laneCount; ++lane) {
         	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
@@ -143,16 +142,16 @@ public class LoopDetector extends ObservableImpl  {
                     final Vehicle vehFront = laneSegment.frontVehicle(veh);
                     final double brutTimegap =
                             (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition()) / vehFront.getSpeed();
-                    sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0; // microscopic
-                                                                         // flow
+                    // microscopic flow
+                    sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0;
                 }
             }
         }
 
-        if ((time - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
+        if ((simulationTime - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
             calculateAverages();
-            notifyObservers(time);
-            timeOffset = time;
+            notifyObservers(simulationTime);
+            timeOffset = simulationTime;
         }
     }
 
