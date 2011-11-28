@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.output.LoopDetector;
+import org.movsim.output.LoopDetectors;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,7 +92,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final int laneCount;
     private final LaneSegment laneSegments[];
     private List<Vehicle> stagedVehicles;
-    private List<LoopDetector> loopDetectors;
+    private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConsBottlenecks;
     private TrafficLights trafficLights;
     private SpeedLimits speedLimits;
@@ -524,6 +524,27 @@ public class RoadSegment implements Iterable<Vehicle> {
     	laneSegments[vehicle.getLane()].appendVehicle(vehicle);
     }
 
+    public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
+        //trafficLights.update(iterationCount, time, vehContainers);
+        updateSpeedLimits();
+    }
+
+    /**
+     * Update speed limits.
+     */
+    private void updateSpeedLimits() {
+        if (!speedLimits.isEmpty()) {
+	    	for (final LaneSegment laneSegment : laneSegments) {
+	            for (final Vehicle vehicle : laneSegment) {
+	            	assert vehicle.roadSegmentId() == id;
+	                final double pos = vehicle.getPosition();
+	                vehicle.setSpeedlimit(speedLimits.calcSpeedLimit(pos));
+	                logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedLimits.calcSpeedLimit(pos));
+	            }
+	    	}
+        }
+   }
+
     /**
      * Lane changing.
      * <p>
@@ -648,6 +669,10 @@ public class RoadSegment implements Iterable<Vehicle> {
             upstreamBoundary.timeStep(dt, simulationTime, iterationCount);
     		assert assertInvariant();
         }
+    }
+
+    public void updateDetectors(double dt, double simulationTime, long iterationCount) {
+        //detectors.update(iterationCount, time, dt, vehContainers);
     }
 
      /**
@@ -946,8 +971,12 @@ public class RoadSegment implements Iterable<Vehicle> {
         return new LaneSegmentIterator();
     }
 
-    public final List<LoopDetector> getLoopDetectors() {
+    public final LoopDetectors getLoopDetectors() {
         return loopDetectors;
+    }
+
+    public void setLoopDetectors(LoopDetectors loopDetectors) {
+        this.loopDetectors = loopDetectors;
     }
 
     /**

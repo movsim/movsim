@@ -202,7 +202,7 @@ public class SimOutput implements SimObservables {
      */
     @Override
     public List<LoopDetector> getLoopDetectors() {
-        return roadSegment.getLoopDetectors();
+        return roadSegment.getLoopDetectors().getDetectors();
     }
 
     @Override

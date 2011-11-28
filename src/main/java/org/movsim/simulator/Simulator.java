@@ -37,6 +37,7 @@ import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficSourceData;
+import org.movsim.output.LoopDetectors;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.roadmappings.RoadMappingPolyS;
@@ -188,16 +189,20 @@ public class Simulator implements Runnable {
      */
 	private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
 		// for now this is a minimal implementation, just the traffic source and traffic sink
-		// need to add further data, eg initial conditions, detectors, bottlenecks etc
+		// need to add further data, eg initial conditions, bottlenecks etc
 	    final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final UpstreamBoundary upstreamBoundary = new UpstreamBoundary(roadSegment.id(), vehGenerator, roadSegment, trafficSourceData,
                 inputData.getProjectMetaData().getProjectName());
         roadSegment.setUpstreamBoundary(upstreamBoundary);
-        final TrafficLights trafficLights = new TrafficLights(inputData.getProjectMetaData().getProjectName(),
-                roadinput.getTrafficLightsInput());
+
+        final TrafficLights trafficLights = new TrafficLights(projectName, roadinput.getTrafficLightsInput());
         roadSegment.setTrafficLights(trafficLights);
+
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
+
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), projectName, roadinput.getDetectorInput());
+        roadSegment.setLoopDetectors(loopDetectors);
 
 	    //final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
 	}

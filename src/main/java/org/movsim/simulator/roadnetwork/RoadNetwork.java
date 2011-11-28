@@ -185,10 +185,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         
         logger.debug("called timeStep: time={}", simulationTime);
         // TODO road segments have replaced road sections, so need to replicate below for correct parallel update
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateRoadConditions(iterationCount, time);
-//        }
-//
+        for (final RoadSegment roadSegment : roadSegments) {
+            roadSegment.updateRoadConditions(dt, simulationTime, iterationCount);
+        }
 
         // Note: must do lane changes before vehicle positions are updated (or after outFlow) to ensure
         // the vehicle's roadSegmentId is correctly set
@@ -205,7 +204,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         
         // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
-        // see AbstractRoadSection.java
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.checkForInconsistencies(simulationTime, iterationCount, isWithCrashExit);
         }
@@ -218,10 +216,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             roadSegment.inFlow(dt, simulationTime, iterationCount);
         }
 
-        //TODO
-//        for (RoadSection roadSection : roadSections) {
-//            roadSection.updateDetectors(iterationCount, timestep, time);
-//        }
+        for (final RoadSegment roadSegment : roadSegments) {
+            roadSegment.updateDetectors(dt, simulationTime, iterationCount);
+        }
     }
 
 
