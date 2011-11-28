@@ -52,16 +52,13 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * The Interface Simulator.
- */
 
 public class Simulator implements Runnable {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
-    // singleton pattern
+    /** singleton pattern with eager initilization */
     private static Simulator instance = new Simulator();
 
     private double time;
@@ -73,13 +70,10 @@ public class Simulator implements Runnable {
     /** The duration of the simulation. */
     private double tMax;
 
-    /** The sim output. */
     private SimOutput simOutput;
 
-    /** The sim input. */
     private InputData inputData;
 
-    /** The vehicle generator. */
     private VehicleGenerator vehGenerator;
 
     private String projectName;
@@ -89,7 +83,7 @@ public class Simulator implements Runnable {
     private RoadNetwork roadNetwork;
 
     /**
-     * Instantiates a new simulator impl.
+     * Instantiates a new simulator.
      */
     private Simulator() {
         inputData = new InputData(); // accesses static reference ProjectMetaData
@@ -118,7 +112,7 @@ public class Simulator implements Runnable {
         logger.info("try to load ", xmlFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
         if (loaded == false) {
-            logger.info("failed to load ", xmlFileName);
+            logger.error("failed to load ", xmlFileName);
         }
         logger.info("done with road network parsing");
 
@@ -170,9 +164,6 @@ public class Simulator implements Runnable {
         reset();
     }
 
-    /**
-     * Reset.
-     */
     public void reset() {
         time = 0;
         iterationCount = 0;
@@ -241,11 +232,6 @@ public class Simulator implements Runnable {
         return (time > tMax);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#update()
-     */
     public void updateTimestep() {
 
         time += timestep;
@@ -263,47 +249,22 @@ public class Simulator implements Runnable {
         simOutput.update(iterationCount, time, timestep);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#iTime()
-     */
     public long iterationCount() {
         return iterationCount;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#time()
-     */
     public double time() {
         return time;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#timestep()
-     */
     public double timestep() {
         return timestep;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#getSiminput()
-     */
     public InputData getSimInput() {
         return inputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#getSimObservables()
-     */
     public SimObservables getSimObservables() {
         return simOutput;
     }
@@ -311,5 +272,4 @@ public class Simulator implements Runnable {
     public RoadNetwork getRoadNetwork() {
         return roadNetwork;
     }
-
 }
