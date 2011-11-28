@@ -39,7 +39,7 @@ import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.SpatioTemporal;
-import org.movsim.output.impl.TravelTimesImpl;
+import org.movsim.output.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
@@ -79,7 +79,7 @@ public class SimOutput implements SimObservables {
     private final RoadSegment roadSegment;
 
     
-    private TravelTimesImpl travelTimes;
+    private TravelTimes travelTimes;
     /**
      * Instantiates a new sim output.
      *
@@ -113,7 +113,7 @@ public class SimOutput implements SimObservables {
         // travel times 
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
         if(travelTimesInput!=null){
-            travelTimes = new TravelTimesImpl(travelTimesInput, roadNetwork);
+            travelTimes = new TravelTimes(travelTimesInput, roadNetwork);
         }
         
         
@@ -206,7 +206,7 @@ public class SimOutput implements SimObservables {
     }
 
     @Override
-    public TravelTimesImpl getTravelTimes() {
+    public TravelTimes getTravelTimes() {
         return travelTimes;
     }
 

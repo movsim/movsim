@@ -1,4 +1,4 @@
-package org.movsim.output.impl;
+package org.movsim.output;
 
 import java.util.HashMap;
 import java.util.LinkedList;

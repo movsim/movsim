@@ -5,7 +5,6 @@ package org.movsim.output;
 
 import java.util.List;
 
-import org.movsim.output.impl.TravelTimesImpl;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -34,7 +33,5 @@ public interface SimObservables {
      */
     List<LoopDetector> getLoopDetectors();
     
-    
-    TravelTimesImpl getTravelTimes();
-
+    TravelTimes getTravelTimes();
 }

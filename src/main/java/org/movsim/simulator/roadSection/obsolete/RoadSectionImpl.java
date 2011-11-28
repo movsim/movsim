@@ -39,7 +39,7 @@ import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.output.LoopDetector;
-import org.movsim.output.impl.LoopDetectors;
+import org.movsim.output.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
