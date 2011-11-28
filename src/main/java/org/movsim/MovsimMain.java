@@ -26,10 +26,9 @@
  */
 package org.movsim;
 
+import org.movsim.controller.SimulatorController;
 import org.movsim.input.SimCommandLine;
 import org.movsim.simulator.Simulator;
-import org.movsim.ui.controller.Controller;
-import org.movsim.ui.controller.impl.SimulatorController;
 
 /**
  * The Class MovsimMain.
@@ -50,7 +49,7 @@ public class MovsimMain {
 
         final Simulator simulator = Simulator.getInstance();
 
-        final Controller controller = new SimulatorController(simulator);
+        final SimulatorController controller = new SimulatorController(simulator);
     }
 
 }
