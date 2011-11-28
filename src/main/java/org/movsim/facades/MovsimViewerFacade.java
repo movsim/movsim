@@ -96,7 +96,7 @@ public class MovsimViewerFacade {
     }
     
     
-    public RoadNetwork getRoadNetwork(){
+    public RoadNetwork getRoadNetwork() {
         return model.getRoadNetwork();
     }
 
@@ -111,8 +111,9 @@ public class MovsimViewerFacade {
      *            the scenario
      */
     public void loadScenarioFromXml(String scenario, String path, String xodrFilename, String xodrPath) {
-    	inputData.setProjectName(path + scenario + ".xml");
-    	model.setXodrFileAndPath(xodrFilename, xodrPath);
+    	projectMetaData.setProjectName(path + scenario + ".xml");
+    	projectMetaData.setXodrFilename(xodrFilename);
+    	projectMetaData.setXodrPath(xodrPath);
         model.initialize();
     }
 

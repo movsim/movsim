@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.InputData;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlReaderSimInput;
 import org.movsim.input.file.opendrive.OpenDriveReader;
 import org.movsim.input.model.RoadInput;
@@ -85,8 +86,6 @@ public class Simulator implements Runnable {
     private long startTimeMillis;
 
     private RoadNetwork roadNetwork;
-    private String xodrFileName;
-    private String xodrPath;
 
     /**
      * Instantiates a new simulator impl.
@@ -100,20 +99,14 @@ public class Simulator implements Runnable {
         return instance;
     }
 
-    public void setXodrFileAndPath(String xodrFilename, String xodrPath) {
-    	this.xodrFileName = xodrFilename;
-    	this.xodrPath = xodrPath;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#initialize()
-     */
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
-        projectName = inputData.getProjectMetaData().getProjectName();
-        final String path = inputData.getProjectMetaData().getPathToProjectXmlFile();
+
+        final ProjectMetaData projectMetaData = inputData.getProjectMetaData();
+        projectName = projectMetaData.getProjectName();
+        final String path = projectMetaData.getPathToProjectXmlFile();
+        final String xodrFileName = projectMetaData.getXodrFilename();
+        final String xodrPath = projectMetaData.getXodrPath();
 
         // String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
         // String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr"; //TODO remove

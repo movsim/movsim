@@ -55,10 +55,10 @@ public class InputData {
 
     
     /**
-     * Instantiates a new input data impl.
+     * Instantiates a new input data.
      */
     public InputData() {
-        projectMetaData = ProjectMetaData.getInstanceImpl();
+        projectMetaData = ProjectMetaData.getInstance();
     }
 
     /**

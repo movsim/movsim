@@ -46,7 +46,7 @@ import org.movsim.utilities.impl.FileUtils;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SimCommandLine. MovSim console command line parser. Sets the
- * ProjectMetaDataImpl.
+ * ProjectMetaData.
  */
 public class SimCommandLine {
 
@@ -65,7 +65,7 @@ public class SimCommandLine {
 
         initLocalizationAndLogger();
 
-        projectMetaData = ProjectMetaData.getInstanceImpl();
+        projectMetaData = ProjectMetaData.getInstance();
 
         createOptions();
         createParserAndParse(args);

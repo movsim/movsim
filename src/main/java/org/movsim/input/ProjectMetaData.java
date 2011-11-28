@@ -11,6 +11,8 @@ public class ProjectMetaData{
     private String projectName = ""; //"/file/src/test/resources/" + "onramp_IDM" + ".xml";
     private String pathToProjectXmlFile;
     private String outputPath;
+    private String xodrFileName;
+    private String xodrPath;
     private boolean instantaneousFileOutput = true;
     private boolean onlyValidation = false;
     private boolean writeInternalXml = false;
@@ -23,16 +25,6 @@ public class ProjectMetaData{
      */
     private ProjectMetaData() {
 
-    }
-
-    // package restricted access
-    /**
-     * Gets the instance impl.
-     * 
-     * @return the instance impl
-     */
-    public static ProjectMetaData getInstanceImpl() {
-        return singleton;
     }
 
     /**
@@ -99,6 +91,21 @@ public class ProjectMetaData{
      */
     public void setOutputPath(String outputPath) {
         this.outputPath = outputPath;
+    }
+
+    public void setXodrFilename(String xodrFilename) {
+    	this.xodrFileName = xodrFilename;
+    }
+
+    public String getXodrFilename() {
+        return xodrFileName;
+    }
+    
+    public void setXodrPath(String xodrPath) {
+    	this.xodrPath = xodrPath;
+    }
+    public String getXodrPath() {
+        return xodrPath;
     }
 
     /*

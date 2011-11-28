@@ -154,7 +154,7 @@ public class XmlReaderSimInput {
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
 
-        inputData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
+    	projectMetaData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
 
         final Element root = doc.getRootElement();
 
