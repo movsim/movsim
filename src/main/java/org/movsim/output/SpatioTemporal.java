@@ -26,53 +26,180 @@
  */
 package org.movsim.output;
 
-import org.movsim.utilities.ObservableInTime;
+
+import org.movsim.input.model.output.SpatioTemporalInput;
+import org.movsim.output.SpatioTemporal;
+import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.utilities.impl.ObservableImpl;
+import org.movsim.utilities.impl.Tables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface SpatioTemporal.
+ * The Class SpatioTemporalImpl.
  */
-public interface SpatioTemporal extends ObservableInTime {
+public class SpatioTemporal extends ObservableImpl {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
+
+    /** The dt out. */
+    private final double dtOut;
+
+    /** The dx out. */
+    private final double dxOut;
+
+    private double[] density;
+
+    private double[] averageSpeed;
+
+    private double[] flow;
+
+    /** The roadlength. */
+    private final double roadlength;
+
+    /** The time offset. */
+    private double timeOffset;
+
+    /**
+     * Instantiates a new spatio temporal impl.
+     * 
+     * @param input
+     *            the input
+     * @param roadSection
+     *            the road section
+     */
+    public SpatioTemporal(SpatioTemporalInput input, RoadSegment roadSegment) {
+
+        dtOut = input.getDt();
+        dxOut = input.getDx();
+
+        roadlength = roadSegment.roadLength();
+
+        initialize();
+
+    }
+
+    /**
+     * Initialize.
+     */
+    private void initialize() {
+        timeOffset = 0;
+        final int nxOut = (int) (roadlength / dxOut);
+        density = new double[nxOut + 1];
+        averageSpeed = new double[nxOut + 1];
+        flow = new double[nxOut + 1];
+    }
+
+    /**
+     * Update.
+     * 
+     * @param it
+     *            the it
+     * @param time
+     *            the time
+     * @param roadSection
+     *            the road section
+     */
+    public void update(long it, double time, RoadSegment roadSegment) {
+        if ((time - timeOffset) >= dtOut) {
+            timeOffset = time;
+            // TODO quick hack for multi-lane compatibility
+            calcData(time, roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE));
+            notifyObservers(time);
+        }
+    }
+
+    /**
+     * Calculate data.
+     * 
+     * @param time
+     *            the time
+     * @param vehContainer
+     *            the vehicle container
+     */
+    private void calcData(double time, LaneSegment laneSegment) {
+        final int size = laneSegment.vehicleCount();
+        final double[] localDensity = new double[size];
+        final double[] vMicro = new double[size];
+        final double[] xMicro = new double[size];
+
+        for (int i = 0; i < size; i++) {
+            vMicro[i] = laneSegment.getVehicle(i).getSpeed();
+            xMicro[i] = laneSegment.getVehicle(i).getPosition();
+        }
+
+        // calculate density
+        localDensity[0] = 0;
+        for (int i = 1; i < size; i++) {
+            final double dist = xMicro[i - 1] - xMicro[i];
+            final double length = laneSegment.getVehicle(i - 1).getLength();
+            localDensity[i] = (dist > length) ? 1 / dist : 1 / length;
+        }
+
+        for (int j = 0; j < density.length; j++) {
+            final double x = j * dxOut;
+            density[j] = Tables.intpextp(xMicro, localDensity, x, true);
+            averageSpeed[j] = Tables.intpextp(xMicro, vMicro, x, true);
+            flow[j] = density[j] * averageSpeed[j];
+        }
+    }
 
     /**
      * Gets the dt out.
      * 
      * @return the dt out
      */
-    double getDtOut();
+   public double getDtOut() {
+        return dtOut;
+    }
 
-    /**
-     * Gets the dx out.
-     * 
-     * @return the dx out
-     */
-    double getDxOut();
+   /**
+    * Gets the dx out.
+    * 
+    * @return the dx out
+    */
+    public double getDxOut() {
+        return dxOut;
+    }
 
     /**
      * Gets the density.
      * 
      * @return the density
      */
-    double[] getDensity();
+     public double[] getDensity() {
+        return density;
+    }
 
-    /**
-     * Gets the average speed.
-     * 
-     * @return the average speed
-     */
-    double[] getAverageSpeed();
+     /**
+      * Gets the average speed.
+      * 
+      * @return the average speed
+      */
+   public double[] getAverageSpeed() {
+        return averageSpeed;
+    }
 
-    /**
-     * Gets the flow.
-     * 
-     * @return the flow
-     */
-    double[] getFlow();
+   /**
+    * Gets the flow.
+    * 
+    * @return the flow
+    */
+    public double[] getFlow() {
+        return flow;
+    }
 
     /**
      * Gets the time offset.
      * 
      * @return the time offset
      */
-    double getTimeOffset();
+    public double getTimeOffset() {
+        return timeOffset;
+    }
+
 }

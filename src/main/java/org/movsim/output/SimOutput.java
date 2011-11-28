@@ -38,7 +38,7 @@ import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
-import org.movsim.output.impl.SpatioTemporalImpl;
+import org.movsim.output.SpatioTemporal;
 import org.movsim.output.impl.TravelTimesImpl;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -54,7 +54,7 @@ public class SimOutput implements SimObservables {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
-    private SpatioTemporalImpl spatioTemporal = null;
+    private SpatioTemporal spatioTemporal = null;
 
     /** The file spatio temporal. */
     private FileSpatioTemporal fileSpatioTemporal;
@@ -131,7 +131,7 @@ public class SimOutput implements SimObservables {
 
         final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInput.isWithMacro()) {
-            spatioTemporal = new SpatioTemporalImpl(spatioTemporalInput, roadSegment);
+            spatioTemporal = new SpatioTemporal(spatioTemporalInput, roadSegment);
             if (writeOutput) {
                 fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSegment.id(), spatioTemporal);
             }
