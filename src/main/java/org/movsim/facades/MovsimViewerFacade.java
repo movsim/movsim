@@ -35,7 +35,6 @@ import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.utilities.impl.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,11 +93,6 @@ public class MovsimViewerFacade {
         projectMetaData.setXmlFromResources(true);
 
     }
-    
-    
-    public RoadNetwork getRoadNetwork() {
-        return model.getRoadNetwork();
-    }
 
     public static MovsimViewerFacade getInstance() {
         return Holder.INSTANCE;
@@ -115,76 +109,6 @@ public class MovsimViewerFacade {
     	projectMetaData.setXodrFilename(xodrFilename);
     	projectMetaData.setXodrPath(xodrPath);
         model.initialize();
-    }
-
-    /**
-     * Reset.
-     */
-    public void reset() {
-        model.reset();
-    }
-
-    /**
-     * Update.
-     */
-    public void update() {
-        model.updateTimestep();
-    }
-
-    /**
-     * Checks if is simulation run finished.
-     * 
-     * @return true, if is simulation run finished
-     */
-    public boolean isSimulationRunFinished() {
-        return model.isSimulationRunFinished();
-    }
-
-//    /**
-//     * Find road by id.
-//     * 
-//     * @param id
-//     *            the id
-//     * @return the road section
-//     */
-//    public RoadSection findRoadById(long id) {
-//        return model.findRoadById(id);
-//    }
-
-//    /**
-//     * Gets the road sections.
-//     * 
-//     * @return the road sections
-//     */
-//    public List<RoadSection> getRoadSections() {
-//        return model.getRoadSections();
-//    }
-
-    /**
-     * Gets the timestep.
-     * 
-     * @return the timestep
-     */
-    public double getTimestep() {
-        return model.timestep();
-    }
-
-    /**
-     * Gets the iteration count.
-     * 
-     * @return the iteration count
-     */
-    public long getIterationCount() {
-        return model.iterationCount();
-    }
-
-    /**
-     * Gets the simulation time.
-     * 
-     * @return the simulation time
-     */
-    public double getSimulationTime() {
-        return model.time();
     }
 
     /**
@@ -213,7 +137,7 @@ public class MovsimViewerFacade {
         return model.getSimObservables();
     }
 
-    public ProjectMetaData getProjectMetaDataImpl() {
+    public ProjectMetaData getProjectMetaData() {
         return projectMetaData;
     }
 }
