@@ -42,41 +42,26 @@ public class InputData {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InputData.class);
 
-    /** The vehicle input data. */
     private List<VehicleInput> vehicleInputData;
 
-    /** The simulation input. */
     private SimulationInput simulationInput;
     
-    /** The fuel consumption input. */
     private FuelConsumptionInput fuelConsumptionInput;
 
     private ProjectMetaData projectMetaData;
 
     
     /**
-     * Instantiates a new input data impl.
+     * Instantiates a new inputdata.
      */
     public InputData() {
         projectMetaData = ProjectMetaData.getInstance();
     }
 
-    /**
-     * Sets the project name.
-     * 
-     * @param projectname
-     *            the new project name
-     */
     public void setProjectName(String projectname) {
         this.projectMetaData.setProjectName(projectname);
     }
 
-    /**
-     * Sets the vehicle input data.
-     * 
-     * @param vehicleInputData
-     *            the new vehicle input data
-     */
     public void setVehicleInputData(List<VehicleInput> vehicleInputData) {
         this.vehicleInputData = vehicleInputData;
     }
@@ -98,12 +83,6 @@ public class InputData {
         return simulationInput;
     }
 
-    /**
-     * Sets the simulation input.
-     * 
-     * @param simulationInput
-     *            the new simulation input
-     */
     public void setSimulationInput(SimulationInput simulationInput) {
         this.simulationInput = simulationInput;
     }

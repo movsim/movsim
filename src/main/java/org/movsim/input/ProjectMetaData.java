@@ -31,14 +31,14 @@ public class ProjectMetaData{
 
     private static ProjectMetaData singleton = new ProjectMetaData();
 
-    private String projectName = ""; //"/file/src/test/resources/" + "onramp_IDM" + ".xml";
+    private String projectName = "";
     private String pathToProjectXmlFile;
     private String outputPath;
     private boolean instantaneousFileOutput = true;
     private boolean onlyValidation = false;
     private boolean writeInternalXml = false;
 
-    /** Needed for Applet */
+    /** Needed for Applet. Change to true, if you cannot acces the filesystem. Allows to read the config files from resources instead.*/
     private boolean xmlFromResources = false;
 
     /**
@@ -77,11 +77,6 @@ public class ProjectMetaData{
         this.projectName = projectName;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#getPathToProjectXmlFile()
-     */
     public String getPathToProjectXmlFile() {
         return pathToProjectXmlFile;
     }
@@ -96,11 +91,6 @@ public class ProjectMetaData{
         this.pathToProjectXmlFile = pathToProjectXmlFile;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#getOutputPath()
-     */
     public String getOutputPath() {
         return outputPath;
     }
@@ -115,11 +105,6 @@ public class ProjectMetaData{
         this.outputPath = outputPath;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#isInstantaneousFileOutput()
-     */
     public boolean isInstantaneousFileOutput() {
         return instantaneousFileOutput;
     }
@@ -133,18 +118,17 @@ public class ProjectMetaData{
     public void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
         this.instantaneousFileOutput = instantaneousFileOutput;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#isOnlyValidation()
+    
+    /**
+     * Commandline option 'only validation' of input xml file against dtd.
+     * @return
      */
     public boolean isOnlyValidation() {
         return onlyValidation;
     }
 
     /**
-     * Sets the only validation.
+     * Sets the only validation. Commandline option 'only validation' of input xml file against dtd.
      * 
      * @param onlyValidation
      *            the new only validation
@@ -153,11 +137,6 @@ public class ProjectMetaData{
         this.onlyValidation = onlyValidation;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#isWriteInternalXml()
-     */
     public boolean isWriteInternalXml() {
         return writeInternalXml;
     }
@@ -172,17 +151,12 @@ public class ProjectMetaData{
         this.writeInternalXml = writeInternalXml;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#isXmlFromResources()
-     */
     public boolean isXmlFromResources() {
         return xmlFromResources;
     }
 
     /**
-     * Sets the xml from resources.
+     * Sets the xml from resources. Xml config files are read from resources.
      * 
      * @param xmlFromResources
      *            the new xml from resources
