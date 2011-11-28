@@ -205,6 +205,10 @@ public class MovsimViewerFacade {
         return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
 
+    public Simulator getSimulator() {
+        return model;
+    }
+
     public SimObservables getSimObservables() {
         return model.getSimObservables();
     }
