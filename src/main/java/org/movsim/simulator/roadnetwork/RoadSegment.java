@@ -533,7 +533,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Update speed limits.
      */
     private void updateSpeedLimits() {
-        if (!speedLimits.isEmpty()) {
+        if (speedLimits != null && speedLimits.isEmpty() == false) {
 	    	for (final LaneSegment laneSegment : laneSegments) {
 	            for (final Vehicle vehicle : laneSegment) {
 	            	assert vehicle.roadSegmentId() == id;
