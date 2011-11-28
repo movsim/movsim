@@ -37,7 +37,6 @@ import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
-import org.movsim.output.impl.FloatingCarsImpl;
 import org.movsim.output.impl.SpatioTemporalImpl;
 import org.movsim.output.impl.TravelTimesImpl;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -60,7 +59,7 @@ public class SimOutput implements SimObservables {
     private FileSpatioTemporal fileSpatioTemporal;
 
     /** The floating cars. */
-    private FloatingCarsImpl floatingCars = null;
+    private FloatingCars floatingCars = null;
 
     private FileFloatingCars fileFloatingCars;
 
@@ -119,7 +118,7 @@ public class SimOutput implements SimObservables {
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
-            floatingCars = new FloatingCarsImpl(roadSegment, floatingCarInput);
+            floatingCars = new FloatingCars(roadSegment, floatingCarInput);
             if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
             }

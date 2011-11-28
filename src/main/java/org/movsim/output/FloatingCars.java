@@ -28,35 +28,78 @@ package org.movsim.output;
 
 import java.util.List;
 
+import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.output.FloatingCars;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.utilities.ObservableInTime;
+import org.movsim.utilities.impl.ObservableImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface FloatingCars.
+ * The Class FloatingCarsImpl.
  */
-public interface FloatingCars extends ObservableInTime {
+public class FloatingCars extends ObservableImpl {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
+
+    private List<Integer> fcdList;
+
+    /** The n dt out. */
+    private final int nDtOut;
+
+    private RoadSegment roadSegment;
+
+    /**
+     * Instantiates a new floating cars.
+     *
+     * @param roadSegment the road segment
+     * @param input the input
+     */
+    public FloatingCars(RoadSegment roadSegment, final FloatingCarInput input) {
+        logger.debug("Cstr. FloatingCars");
+
+        this.roadSegment = roadSegment;
+        this.nDtOut = input.getNDt();
+
+        this.fcdList = input.getFloatingCars();
+
+    }
+
+    /**
+     * Update.
+     * 
+     * @param iterationCount
+     *            the itime
+     * @param time
+     *            the time
+     * @param timestep
+     *            the timestep
+     */
+    public void update(long iterationCount, double time, double timestep) {
+
+        if (iterationCount % nDtOut == 0) {
+            notifyObservers(time);
+            logger.debug("update FloatingCars: iterationCount={}", iterationCount);
+        }
+    }
 
     /**
      * Gets the fcd list.
      * 
      * @return the fcd list
      */
-    List<Integer> getFcdList();
+    public List<Integer> getFcdList() {
+        return fcdList;
+    }
 
-    
     /**
-     * Gets the vehicle containers.
+     * Gets the road segment.
      *
-     * @return the vehicle containers
+     * @return the road segment
      */
-    RoadSegment getRoadSegment();
-    
-    /**
-     * Gets the moveable container of the MOST_RIGHT_LANE.
-     *
-     * @return the moveable container
-     */
-//    @Deprecated
-//    MoveableContainer getMoveableContainer(); // TODO: compatibility for movsim applet, returns only most right lane container!!!
+    public RoadSegment getRoadSegment(){
+        return roadSegment;
+    }
 }
