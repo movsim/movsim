@@ -58,7 +58,7 @@ public class InputData {
      * Instantiates a new input data impl.
      */
     public InputData() {
-        projectMetaData = ProjectMetaData.getInstanceImpl();
+        projectMetaData = ProjectMetaData.getInstance();
     }
 
     /**
