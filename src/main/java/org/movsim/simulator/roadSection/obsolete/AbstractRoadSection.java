@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.InputData;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
@@ -170,7 +171,8 @@ public abstract class AbstractRoadSection {
         if(heterogenInputData.size()>0){
             logger.info("create *individual* vehicle generator for road with id={}", id);
             final boolean isWithFundamentalDiagramOutput = roadInput.isWithWriteFundamentalDiagrams();
-            this.vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundamentalDiagramOutput);
+            final ProjectMetaData projectMetaData = inputData.getProjectMetaData();
+            this.vehGenerator = null;//new VehicleGenerator(projectMetaData, inputData, heterogenInputData, isWithFundamentalDiagramOutput);
         }
         else{
             logger.info("use *default* vehicle generator for road with id={}", id);

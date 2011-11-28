@@ -85,7 +85,7 @@ public class InputData {
         return vehicleInputData;
     }
 
-    public Map<String, VehicleInput> createVehicleInputDataMap() {
+    public static Map<String, VehicleInput> createVehicleInputDataMap(List<VehicleInput> vehicleInputData) {
         final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
         for (final VehicleInput vehInput : vehicleInputData) {
             final String keyName = vehInput.getLabel();

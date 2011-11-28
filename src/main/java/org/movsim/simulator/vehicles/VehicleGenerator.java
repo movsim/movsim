@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.InputData;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
@@ -108,19 +109,19 @@ public class VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(final InputData simInput, final List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
+    public VehicleGenerator(ProjectMetaData projectMetaData, InputData simInput, List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
 
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road 
-        this.projectName = simInput.getProjectMetaData().getProjectName();
-        this.instantaneousFileOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
+        this.projectName = projectMetaData.getProjectName();
+        this.instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
 
+        // default for continuous micro models
+        simulationTimestep = simInput.getSimulationInput().getTimestep();
         // create vehicle prototyps according to traffic composition
         // (heterogeneity)
-        prototypes = new HashMap<String, VehiclePrototype>();
-        final double sumFraction = createPrototypes(simInput, heterogenInputData);
-
-        // normalize heterogeneity fractions
-        normalizeFractions(sumFraction);
+        List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
+        final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehicleInputData);
+        prototypes = createPrototypes(vehInputMap, heterogenInputData);
 
         // output fundamental diagrams
         if (instantaneousFileOutput && isWithWriteFundamentalDiagrams) {
@@ -135,17 +136,11 @@ public class VehicleGenerator {
     /**
      * Creates the prototypes.
      * 
-     * @param simInput
-     *            the sim input
      * @return the double
      */
-    private double createPrototypes(final InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
+    private HashMap<String, VehiclePrototype> createPrototypes(Map<String, VehicleInput> vehInputMap, List<TrafficCompositionInputData> heterogenInputData) {
+        final HashMap<String, VehiclePrototype> prototypes = new HashMap<String, VehiclePrototype>();
 
-        // default for continuous micro models
-        simulationTimestep = simInput.getSimulationInput().getTimestep();
-
-        final Map<String, VehicleInput> vehInputMap = simInput.createVehicleInputDataMap();
-        
         addObstacleSystemVehicleType(heterogenInputData);
         
         double sumFraction = 0;
@@ -171,7 +166,9 @@ public class VehicleGenerator {
             prototypes.put(keyName, vehProto);
 
         }
-        return sumFraction;
+        // normalize heterogeneity fractions
+        normalizeFractions(sumFraction);
+        return prototypes;
     }
     
     

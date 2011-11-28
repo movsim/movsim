@@ -126,7 +126,7 @@ public class Simulator implements Runnable {
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
 
-        this.timestep = inputData.getSimulationInput().getTimestep(); // fix
+        this.timestep = simInput.getTimestep(); // fix
 
         this.tMax = simInput.getMaxSimTime();
 
@@ -135,10 +135,10 @@ public class Simulator implements Runnable {
         // this is the default vehGenerator for *all* roadsections
         // if an individual vehicle composition is defined for a specific road
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        final boolean isWithFundDiagramOutput = inputData.getSimulationInput().isWithWriteFundamentalDiagrams();
-        vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundDiagramOutput);
+        final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
+        vehGenerator = new VehicleGenerator(projectMetaData, inputData, heterogenInputData, isWithFundDiagramOutput);
 
-        final boolean isWithCrashExit = inputData.getSimulationInput().isWithCrashExit();
+        final boolean isWithCrashExit = simInput.isWithCrashExit();
         roadNetwork.setWithCrashExit(isWithCrashExit);
 
         
