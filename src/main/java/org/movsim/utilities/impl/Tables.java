@@ -112,10 +112,11 @@ public class Tables {
         if (nx != ny) {
             logger.debug("Warning: arrays of not equal length = {}, {} ", nx, ny);
         }
-        if (nx == 0 || ny == 0)
+        if (nx == 0 || ny == 0) {
             // logger.debug("cannot interpolate from arrays with zero length(s) = {}, {}. return 0 ",
             // nx, ny);
             return 0;
+        }
 
         int i = 0;
         double intp_value = 0;

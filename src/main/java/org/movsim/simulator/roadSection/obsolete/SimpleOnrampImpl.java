@@ -222,8 +222,9 @@ public class SimpleOnrampImpl {
         }
         for (int i = 0, N = mainVehicles.size(); i < N; i++) {
             final double pos = mainVehicles.get(i).getPosition();
-            if (pos <= xDownRamp && pos >= xUpRamp)
+            if (pos <= xDownRamp && pos >= xUpRamp) {
                 return i; // first vehicle in down direction
+            }
         }
         return -1;
     }
@@ -244,8 +245,9 @@ public class SimpleOnrampImpl {
         final int N = mainVehicles.size();
         for (int i = N - 1; i > -0; i--) {
             final double pos = mainVehicles.get(i).getPosition();
-            if (pos <= xDownRamp && pos >= xUpRamp)
+            if (pos <= xDownRamp && pos >= xUpRamp) {
                 return i; // first vehicle in down direction
+            }
         }
         return -1;
     }

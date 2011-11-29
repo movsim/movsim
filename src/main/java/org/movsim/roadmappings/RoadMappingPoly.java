@@ -89,8 +89,9 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
         double pos = roadPos;
         for (final RoadMapping roadMapping : roadMappings) {
-            if (pos <= roadMapping.roadLength())
+            if (pos <= roadMapping.roadLength()) {
                 return roadMapping.map(pos, lateralOffset);
+            }
             pos -= roadMapping.roadLength();
         }
         // have gone past end of last road mapping in road segment

@@ -173,10 +173,11 @@ public class LaneChangingModel {
         if ((accToRight > 0) || (accToLeft > 0)) {
             logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
             logger.debug("currentLane={}", currentLane);
-            if (accToRight > accToLeft)
+            if (accToRight > accToLeft) {
                 return MovsimConstants.TO_RIGHT;
-            else
+            } else {
                 return MovsimConstants.TO_LEFT;
+            }
         }
 
         return MovsimConstants.NO_CHANGE;

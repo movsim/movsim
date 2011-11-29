@@ -201,8 +201,9 @@ public abstract class AccelerationModelAbstract implements Observer {
         final double accInOwnLane = calcAcc(me, vehContainer, alphaT, alphaV0, alphaA);
 
         // no lane on left-hand side
-        if (vehContainerLeftLane == null)
+        if (vehContainerLeftLane == null) {
             return accInOwnLane;
+        }
 
         // check left-vehicle's speed
 

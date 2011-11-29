@@ -20,8 +20,9 @@ public class ConsumptionModeling {
     private Map<String, FuelConsumption> fuelModelsMap;
 
     public ConsumptionModeling(FuelConsumptionInput input) {
-        if (input == null)
+        if (input == null) {
             return;
+        }
 
         fuelModelsMap = new HashMap<String, FuelConsumption>();
 

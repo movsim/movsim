@@ -24,8 +24,9 @@ public class XMLWriterBase {
     }
 
     static String padLeft(String s, int n) {
-        if (n <= 0)
+        if (n <= 0) {
             return s;
+        }
         n += s.length();
         final String ret = String.format("%1$#" + n + "s", s);
         return ret;

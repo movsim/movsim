@@ -78,8 +78,9 @@ public class SimOutput implements SimObservables {
 
         // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();
-        if (simulationInput == null)
+        if (simulationInput == null) {
             return;
+        }
         final OutputInput outputInput = simulationInput.getOutputInput();
 
         // TODO quick hack null treatment

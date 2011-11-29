@@ -117,9 +117,10 @@ public class MOBIL {
         double prospectiveBalance = -Double.MAX_VALUE;
         final int currentLane = me.getLane();
         final LaneSegment newLane = roadSegment.laneSegment(currentLane + direction);
-        if (newLane.type() == Lane.Type.ENTRANCE)
+        if (newLane.type() == Lane.Type.ENTRANCE) {
             // never change lane into an entrance lane
             return prospectiveBalance;
+        }
         final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
 
         final Vehicle newFront = newLane.frontVehicle(me);
@@ -127,15 +128,17 @@ public class MOBIL {
         final Vehicle newBack = newLane.rearVehicle(me);
 
         // check if other vehicles are lane-changing
-        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack))
+        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack)) {
             return prospectiveBalance;
+        }
 
         // safety: check distances
         final double gapFront = me.getNetDistance(newFront);
         final double gapBack = (newBack == null) ? MovsimConstants.GAP_INFINITY : newBack.getNetDistance(me);
 
-        if (safetyCheckGaps(gapFront, gapBack))
+        if (safetyCheckGaps(gapFront, gapBack)) {
             return prospectiveBalance;
+        }
 
         // new situation: newBack with me as leader and following left lane cases
         // TO_LEFT --> just the actual situation
@@ -148,8 +151,9 @@ public class MOBIL {
                 + direction + MovsimConstants.TO_LEFT);
         final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNewBack);
 
-        if (safetyCheckAcceleration(newBackNewAcc))
+        if (safetyCheckAcceleration(newBackNewAcc)) {
             return prospectiveBalance;
+        }
 
         // check now incentive criterion
         // consider three vehicles: me, oldBack, newBack

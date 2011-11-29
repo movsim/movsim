@@ -122,9 +122,10 @@ public class FileUtils {
      */
     public static boolean fileExists(String filename, String msg) {
         final File file = new File(filename);
-        if (file.exists() && file.isFile())
+        if (file.exists() && file.isFile()) {
             // Logger.log(msg + ": \"" + file.getName() + "\" exists!");
             return (true);
+        }
         return (false);
     }
 
@@ -173,8 +174,9 @@ public class FileUtils {
      */
     public static void createDir(String path, String msg) {
         final File file = new File(path);
-        if (dirExists(path, msg))
+        if (dirExists(path, msg)) {
             return;
+        }
         final boolean success = file.mkdir();
         if (!success) {
             logger.error("createDir: cannot create directory {}. Exit.", path);
@@ -222,8 +224,9 @@ public class FileUtils {
             final String[] children = dir.list();
             for (int i = 0; i < children.length; i++) {
                 final boolean success = deleteDir(new File(dir, children[i]));
-                if (!success)
+                if (!success) {
                     return false;
+                }
             }
         }
         // The directory is now empty so delete it
@@ -237,8 +240,9 @@ public class FileUtils {
      *            the dir name
      */
     public static void deleteDir(String dirName) {
-        if (!dirExists(dirName, "FileUtils...deleteDir..."))
+        if (!dirExists(dirName, "FileUtils...deleteDir...")) {
             return;
+        }
         final File dir = new File(dirName);
         final boolean success = deleteDir(dir);
         if (!success) {

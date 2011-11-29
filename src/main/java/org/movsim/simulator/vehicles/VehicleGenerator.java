@@ -201,23 +201,23 @@ public class VehicleGenerator {
      * @return the equilibrium properties
      */
     private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModel longModel) {
-        if (longModel.modelName() == ModelName.IDM)
+        if (longModel.modelName() == ModelName.IDM) {
             return new EquilibriumIDM(vehLength, (IDM) longModel);
-        else if (longModel.modelName() == ModelName.ACC)
+        } else if (longModel.modelName() == ModelName.ACC) {
             return new EquilibriumACC(vehLength, (ACC) longModel);
-        else if (longModel.modelName() == ModelName.OVM_VDIFF)
+        } else if (longModel.modelName() == ModelName.OVM_VDIFF) {
             return new EquilibriumOVM_VDIFF(vehLength, (OVM_VDIFF) longModel);
-        else if (longModel.modelName() == ModelName.GIPPS)
+        } else if (longModel.modelName() == ModelName.GIPPS) {
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
-        else if (longModel.modelName() == ModelName.KRAUSS)
+        } else if (longModel.modelName() == ModelName.KRAUSS) {
             return new EquilibriumKrauss(vehLength, (Krauss) longModel);
-        else if (longModel.modelName() == ModelName.NEWELL)
+        } else if (longModel.modelName() == ModelName.NEWELL) {
             return new EquilibriumNewell(vehLength, (Newell) longModel);
-        else if (longModel.modelName() == ModelName.NSM)
+        } else if (longModel.modelName() == ModelName.NSM) {
             return new EquilibriumNSM(vehLength, (NSM) longModel);
-        else if (longModel.modelName() == ModelName.KKW)
+        } else if (longModel.modelName() == ModelName.KKW) {
             return new EquilibriumKKW(vehLength, (KKW) longModel);
-        else {
+        } else {
             logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName().name());
             System.exit(0);
         }
@@ -248,9 +248,9 @@ public class VehicleGenerator {
             longModel = new Gipps(simulationTimestep, (AccelerationModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {
             longModel = new Krauss(simulationTimestep, (AccelerationModelInputDataKrauss) modelInputData);
-        } else if (modelName == ModelName.NEWELL)
+        } else if (modelName == ModelName.NEWELL) {
             return new Newell(simulationTimestep, (AccelerationModelInputDataNewell) modelInputData);
-        else if (modelName == ModelName.NSM) {
+        } else if (modelName == ModelName.NSM) {
             longModel = new NSM((AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {
             longModel = new KKW((AccelerationModelInputDataKKW) modelInputData, vehLength);
@@ -286,8 +286,9 @@ public class VehicleGenerator {
         while (it.hasNext()) {
             final String key = it.next();
             final VehiclePrototype prototype = prototypes.get(key);
-            if (prototype.hasReactionTime())
+            if (prototype.hasReactionTime()) {
                 return true;
+            }
         }
         return false;
     }
@@ -304,8 +305,9 @@ public class VehicleGenerator {
         while (it.hasNext()) {
             final String key = it.next();
             sumFraction += prototypes.get(key).fraction();
-            if (sumFraction >= randomNumber)
+            if (sumFraction >= randomNumber) {
                 return prototypes.get(key);
+            }
         }
         logger.error("no vehicle prototype found for randomNumber= {}", randomNumber);
         System.exit(-1);

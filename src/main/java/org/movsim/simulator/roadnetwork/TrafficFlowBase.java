@@ -113,8 +113,9 @@ public abstract class TrafficFlowBase implements SimulationTimeStep {
      * @return this traffic source's id as a string suitable for display
      */
     public final String idString() {
-        if (type == Type.SOURCE || type == Type.SINK)
+        if (type == Type.SOURCE || type == Type.SINK) {
             return "S" + id; //$NON-NLS-1$
+        }
         return "J" + id; //$NON-NLS-1$
     }
 

@@ -215,13 +215,15 @@ public class RoadMappingBezier extends RoadMapping {
         // see http://www.planetclegg.com/projects/WarpingTextToSplines.html
         // and http://www.algorithmist.net/arclengthparam.html
         int index = Arrays.binarySearch(sValues, roadPos);
-        if (index >= 0)
+        if (index >= 0) {
             // exact match found
             return ((double) index) / (S_COUNT - 1);
+        }
         // index == -(insertion point) - 1
         index = -index - 1;
-        if (index >= S_COUNT)
+        if (index >= S_COUNT) {
             return 1.0;
+        }
         final double p0 = sValues[index - 1];
         final double p1 = sValues[index];
         final double prop = (roadPos - p0) / (p1 - p0);

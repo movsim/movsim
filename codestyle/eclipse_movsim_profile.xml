@@ -41,7 +41,7 @@
 <setting id="cleanup.organize_imports" value="true"/>
 <setting id="cleanup.remove_trailing_whitespaces" value="false"/>
 <setting id="cleanup.sort_members_all" value="false"/>
-<setting id="cleanup.use_blocks_only_for_return_and_throw" value="true"/>
+<setting id="cleanup.use_blocks_only_for_return_and_throw" value="false"/>
 <setting id="cleanup.add_missing_annotations" value="true"/>
 <setting id="cleanup.use_parentheses_in_expressions" value="false"/>
 <setting id="cleanup.qualify_static_field_accesses_with_declaring_class" value="false"/>
@@ -51,6 +51,6 @@
 <setting id="cleanup.add_serial_version_id" value="false"/>
 <setting id="cleanup.format_source_code_changes_only" value="false"/>
 <setting id="cleanup.qualify_static_member_accesses_with_declaring_class" value="true"/>
-<setting id="cleanup.always_use_blocks" value="false"/>
+<setting id="cleanup.always_use_blocks" value="true"/>
 </profile>
 </profiles>

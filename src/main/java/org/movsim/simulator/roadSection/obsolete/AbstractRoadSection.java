@@ -449,14 +449,16 @@ public abstract class AbstractRoadSection {
      * @see org.movsim.simulator.roadSection.RoadSection#getTrafficLights()
      */
     public List<TrafficLight> getTrafficLights() {
-        if (trafficLights == null)
+        if (trafficLights == null) {
             return new LinkedList<TrafficLight>();
+        }
         return trafficLights.getTrafficLights();
     }
 
     public List<SpeedLimit> getSpeedLimits() {
-        if (speedlimits == null)
+        if (speedlimits == null) {
             return new LinkedList<SpeedLimit>();
+        }
         return speedlimits.getSpeedLimits();
     }
 }

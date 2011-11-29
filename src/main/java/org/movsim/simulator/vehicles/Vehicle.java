@@ -596,8 +596,9 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#netDistance(org.movsim.simulator .vehicles.Vehicle)
      */
     public double getNetDistance(final Vehicle vehFront) {
-        if (vehFront == null)
+        if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
+        }
         final double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
         return netGap;
     }
@@ -609,8 +610,9 @@ public class Vehicle {
      */
 
     public double getRelSpeed(Vehicle vehFront) {
-        if (vehFront == null)
+        if (vehFront == null) {
             return 0;
+        }
         return (speed - vehFront.getSpeed());
     }
 
@@ -678,8 +680,9 @@ public class Vehicle {
 
     private double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
-        if (accelerationModel == null)
+        if (accelerationModel == null) {
             return 0.0;
+        }
 
         final double acc;
 
@@ -808,12 +811,14 @@ public class Vehicle {
     public boolean considerLaneChanging(double dt, RoadSegment roadSegment) {
 
         // no lane changing when not configured in xml.
-        if (lcModel == null || !lcModel.isInitialized())
+        if (lcModel == null || !lcModel.isInitialized()) {
             return false;
+        }
 
         // no lane-changing decision necessary for one-lane road
-        if (roadSegment.laneCount() < 2)
+        if (roadSegment.laneCount() < 2) {
             return false;
+        }
 
         if (inProcessOfLaneChanging()) {
             updateLaneChangingDelay(dt);
@@ -950,8 +955,9 @@ public class Vehicle {
     }
 
     public double getActualFuelFlowLiterPerS() {
-        if (fuelModel == null)
+        if (fuelModel == null) {
             return 0;
+        }
         return fuelModel.getFuelFlowInLiterPerS(speed, acc);
     }
 

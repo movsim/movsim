@@ -119,23 +119,23 @@ public class VehicleInput {
     private AccelerationModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equals(AccelerationModelAbstract.ModelName.IDM.name()))
+        if (modelName.equals(AccelerationModelAbstract.ModelName.IDM.name())) {
             return new AccelerationModelInputDataIDMImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.ACC.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.ACC.name())) {
             return new AccelerationModelInputDataACCImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.OVM_VDIFF.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.OVM_VDIFF.name())) {
             return new AccelerationModelInputDataOVM_VDIFFImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.GIPPS.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.GIPPS.name())) {
             return new AccelerationModelInputDataGippsImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.KRAUSS.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.KRAUSS.name())) {
             return new AccelerationModelInputDataKraussImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.NEWELL.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.NEWELL.name())) {
             return new AccelerationModelInputDataNewellImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.NSM.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.NSM.name())) {
             return new AccelerationModelInputDataNSMImpl(map);
-        else if (modelName.equals(AccelerationModelAbstract.ModelName.KKW.name()))
+        } else if (modelName.equals(AccelerationModelAbstract.ModelName.KKW.name())) {
             return new AccelerationModelInputDataKKWImpl(map);
-        else {
+        } else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);
         }

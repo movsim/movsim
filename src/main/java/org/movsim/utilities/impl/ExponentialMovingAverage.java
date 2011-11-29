@@ -30,8 +30,9 @@ public class ExponentialMovingAverage {
     }
 
     public double calcEMA(double time, final List<XYDataPoint> timeSeries) {
-        if (timeSeries.isEmpty())
+        if (timeSeries.isEmpty()) {
             return 0;
+        }
         double norm = 0;
         double result = 0;
         for (final XYDataPoint dp : timeSeries) {

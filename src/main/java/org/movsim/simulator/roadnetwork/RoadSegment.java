@@ -252,8 +252,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final double cumulativeRoadLength() {
-        if (cumulativeRoadLength >= 0.0)
+        if (cumulativeRoadLength >= 0.0) {
             return cumulativeRoadLength;
+        }
         // final RoadSegment sourceRoadSegment = sourceRoadSegment(trafficLaneMax() - 1);
         // cumulativeRoadLength = sourceRoadSegment == null ? 0.0 : sourceRoadSegment.cumulativeRoadLength() +
         // sourceRoadSegment.roadLength();
@@ -337,15 +338,17 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final RoadSegment sourceRoadSegment(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
-        if (laneSegments[lane].sourceLaneSegment() == null)
+        if (laneSegments[lane].sourceLaneSegment() == null) {
             return null;
+        }
         return laneSegments[lane].sourceLaneSegment().roadSegment();
     }
 
     public final int sourceLane(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
-        if (laneSegments[lane].sourceLaneSegment() == null)
+        if (laneSegments[lane].sourceLaneSegment() == null) {
             return Lane.NONE;
+        }
         return laneSegments[lane].sourceLaneSegment().lane();
     }
 
@@ -361,15 +364,17 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final RoadSegment sinkRoadSegment(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
-        if (laneSegments[lane].sinkLaneSegment() == null)
+        if (laneSegments[lane].sinkLaneSegment() == null) {
             return null;
+        }
         return laneSegments[lane].sinkLaneSegment().roadSegment();
     }
 
     public final int sinkLane(int lane) {
         assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
-        if (laneSegments[lane].sinkLaneSegment() == null)
+        if (laneSegments[lane].sinkLaneSegment() == null) {
             return Lane.NONE;
+        }
         return laneSegments[lane].sinkLaneSegment().lane();
     }
 
@@ -548,9 +553,10 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      */
     public void laneChanging(double dt, double simulationTime, long iterationCount) {
-        if (laneCount < 2)
+        if (laneCount < 2) {
             // need at least 2 lanes for lane changing
             return;
+        }
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
             stagedVehicles.clear();
@@ -794,8 +800,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public boolean eachLaneIsSorted() {
         for (final LaneSegment laneSegment : laneSegments) {
-            if (laneSegment.laneIsSorted() == false)
+            if (laneSegment.laneIsSorted() == false) {
                 return false;
+            }
         }
         return true;
     }
@@ -810,12 +817,14 @@ public class RoadSegment implements Iterable<Vehicle> {
 
         @Override
         public boolean hasNext() {
-            if (index < laneSegments[lane].vehicleCount())
+            if (index < laneSegments[lane].vehicleCount()) {
                 return true;
+            }
             int nextLane = lane + 1;
             while (nextLane < laneCount) {
-                if (laneSegments[nextLane].vehicleCount() > 0)
+                if (laneSegments[nextLane].vehicleCount() > 0) {
                     return true;
+                }
                 ++nextLane;
             }
             final int vc = totalVehicleCount();
@@ -925,16 +934,18 @@ public class RoadSegment implements Iterable<Vehicle> {
 
         @Override
         public boolean hasNext() {
-            if (index < laneCount)
+            if (index < laneCount) {
                 return true;
+            }
             return false;
         }
 
         @Override
         public LaneSegment next() {
-            if (index < laneCount)
+            if (index < laneCount) {
                 // get the next lane segment
                 return laneSegments[index++];
+            }
             return null;
         }
 

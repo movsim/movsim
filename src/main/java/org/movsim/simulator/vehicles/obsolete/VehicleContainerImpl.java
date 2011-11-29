@@ -132,8 +132,9 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getMostDownstream() {
-        if (vehicles.isEmpty())
+        if (vehicles.isEmpty()) {
             return null;
+        }
         return vehicles.get(0);
     }
 
@@ -145,8 +146,9 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getMostUpstream() {
-        if (vehicles.isEmpty())
+        if (vehicles.isEmpty()) {
             return null;
+        }
         return vehicles.get(vehicles.size() - 1);
     }
 
@@ -279,14 +281,16 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public Vehicle getLeader(final Vehicle veh) {
-        if (!vehicles.contains(veh))
+        if (!vehicles.contains(veh)) {
             // return virtual leader for vehicle veh which is not in considered lane
             return findVirtualLeader(veh);
+        }
 
         final int index = vehicles.indexOf(veh);
-        if (index == 0)
+        if (index == 0) {
             // no leader downstream
             return boundaryVehicleDownstream; // TODO
+        }
 
         return vehicles.get(index - 1);
     }
@@ -299,12 +303,13 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public Vehicle getFollower(final Vehicle veh) {
         final int index = vehicles.indexOf(veh);
-        if (index == vehicles.size() - 1)
+        if (index == vehicles.size() - 1) {
             return null; // boundaryVehicleUpstream; // TODO
-        else if (index == -1)
+        } else if (index == -1) {
             // veh is not contained in this lane
             // return virtual leader for vehicle veh which is not not considered lane
             return findVirtualFollower(veh);
+        }
         return vehicles.get(index + 1);
     }
 
@@ -361,8 +366,9 @@ public class VehicleContainerImpl implements VehicleContainer {
         // return first vehicle on lane with *higher* position than veh
         for (int i = vehicles.size() - 1; i >= 0; i--) {
             final Vehicle vehOnLane = vehicles.get(i);
-            if (vehOnLane.getPosition() >= position)
+            if (vehOnLane.getPosition() >= position) {
                 return vehOnLane;
+            }
         }
         // TODO new boundary vehicle creation if no leader exists
         return boundaryVehicleDownstream;
@@ -382,8 +388,9 @@ public class VehicleContainerImpl implements VehicleContainer {
         // return first vehicle on lane with *lower* position than veh
         for (int i = 0, N = vehicles.size(); i < N; i++) {
             final Vehicle vehOnLane = vehicles.get(i);
-            if (vehOnLane.getPosition() <= position)
+            if (vehOnLane.getPosition() <= position) {
                 return vehOnLane;
+            }
         }
         return null; // boundaryVehicleUpstream; TODO
     }

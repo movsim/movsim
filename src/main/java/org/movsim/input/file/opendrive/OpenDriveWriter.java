@@ -76,8 +76,9 @@ public class OpenDriveWriter extends XMLWriterBase {
 
         Connection getConnection(int incommingRoadId, int connectingRoadId) {
             for (final Connection connection : connections) {
-                if (connection.incomingRoadId == incommingRoadId && connection.connectingRoadId == connectingRoadId)
+                if (connection.incomingRoadId == incommingRoadId && connection.connectingRoadId == connectingRoadId) {
                     return connection;
+                }
             }
             final Connection ret = new Connection();
             ret.incomingRoadId = incommingRoadId;
@@ -167,8 +168,9 @@ public class OpenDriveWriter extends XMLWriterBase {
     }
 
     private void externalize(ArrayList<Junction> junctions) {
-        if (junctions.size() == 0)
+        if (junctions.size() == 0) {
             return;
+        }
         final String junctionFormat = "id=\"%s\" name=\"\"";
         final String connectionFormat = "id=\"%s\" incomingRoad=\"%d\" connectingRoad=\"%d\" contactPoint=\"%s\"";
         final String laneLinkFormat = "from=\"%d\" to=\"%d\"";
@@ -390,8 +392,9 @@ public class OpenDriveWriter extends XMLWriterBase {
         final int laneCount = roadSegment.laneCount();
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
-            if (sourceRoadSegment != null)
+            if (sourceRoadSegment != null) {
                 return sourceRoadSegment;
+            }
         }
         return null;
     }
@@ -400,8 +403,9 @@ public class OpenDriveWriter extends XMLWriterBase {
         final int laneCount = roadSegment.laneCount();
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
-            if (sinkRoadSegment != null)
+            if (sinkRoadSegment != null) {
                 return sinkRoadSegment;
+            }
         }
         return null;
     }
@@ -411,8 +415,9 @@ public class OpenDriveWriter extends XMLWriterBase {
         final int prevId = RoadSegment.ID_NOT_SET;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
-            if (sourceRoadSegment != null)
+            if (sourceRoadSegment != null) {
                 return sourceRoadSegment.id();
+            }
         }
         return prevId;
     }
@@ -423,8 +428,9 @@ public class OpenDriveWriter extends XMLWriterBase {
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
             final int id = sourceRoadSegment == null ? RoadSegment.ID_NOT_SET : sourceRoadSegment.id();
-            if (prevId != RoadSegment.ID_NOT_SET && id != RoadSegment.ID_NOT_SET && prevId != id)
+            if (prevId != RoadSegment.ID_NOT_SET && id != RoadSegment.ID_NOT_SET && prevId != id) {
                 return RoadSegment.ID_NOT_SET;
+            }
             if (id != RoadSegment.ID_NOT_SET) {
                 prevId = id;
             }
@@ -437,8 +443,9 @@ public class OpenDriveWriter extends XMLWriterBase {
         final int prevId = RoadSegment.ID_NOT_SET;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
-            if (sinkRoadSegment != null)
+            if (sinkRoadSegment != null) {
                 return sinkRoadSegment.id();
+            }
         }
         return prevId;
     }
@@ -449,8 +456,9 @@ public class OpenDriveWriter extends XMLWriterBase {
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
             final int id = sinkRoadSegment == null ? RoadSegment.ID_NOT_SET : sinkRoadSegment.id();
-            if (prevId != RoadSegment.ID_NOT_SET && id != RoadSegment.ID_NOT_SET && prevId != id)
+            if (prevId != RoadSegment.ID_NOT_SET && id != RoadSegment.ID_NOT_SET && prevId != id) {
                 return RoadSegment.ID_NOT_SET;
+            }
             if (id != RoadSegment.ID_NOT_SET) {
                 prevId = id;
             }
@@ -461,8 +469,9 @@ public class OpenDriveWriter extends XMLWriterBase {
     private int findJunctionByIncomingRoadId(int incomingRoadId) {
         for (final Junction junction : junctions) {
             for (final Junction.Connection connection : junction.connections) {
-                if (connection.incomingRoadId == incomingRoadId)
+                if (connection.incomingRoadId == incomingRoadId) {
                     return junction.id;
+                }
             }
         }
         return Junction.NOT_JUNCTION;
@@ -471,8 +480,9 @@ public class OpenDriveWriter extends XMLWriterBase {
     private int findJunctionByConnectingRoadId(int connectingRoadId) {
         for (final Junction junction : junctions) {
             for (final Junction.Connection connection : junction.connections) {
-                if (connection.connectingRoadId == connectingRoadId)
+                if (connection.connectingRoadId == connectingRoadId) {
                     return junction.id;
+                }
             }
         }
         return Junction.NOT_JUNCTION;

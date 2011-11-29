@@ -181,8 +181,9 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
      */
     private double acc(double s, double v, double dv, double aLead, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0)
+        if (v0Local == 0) {
             return 0;
+        }
 
         final double sstar = s0
                 + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(aLocal * b),

@@ -128,10 +128,11 @@ public class EngineModelImpl implements EngineModel {
             logger.error("gear out of range !  g={}", gearIndex);
         }
         final double frequencyTest = getGearRatio(gearIndex) * v / carModel.getDynamicWheelCircumfence();
-        if (frequencyTest > maxFrequency || frequencyTest < minFrequency)
+        if (frequencyTest > maxFrequency || frequencyTest < minFrequency) {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
     // --------------------------------------------------------

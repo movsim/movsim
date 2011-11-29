@@ -248,8 +248,9 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
      */
     private double acc(double s, double v, double dv, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0)
+        if (v0Local == 0) {
             return 0;
+        }
 
         double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
                 / Math.sqrt(aLocal * b);

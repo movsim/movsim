@@ -172,8 +172,9 @@ public class OpenDriveHandler extends DefaultHandler {
 
     private Road findByUserId(ArrayList<Road> roads, String id) {
         for (final Road road : roads) {
-            if (road.id.equals(id))
+            if (road.id.equals(id)) {
                 return road;
+            }
         }
         return null;
     }
@@ -192,8 +193,9 @@ public class OpenDriveHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         System.out.println("startElement: " + qName);
         ++elementIndex;
-        if (elementIndex > limit && limit > 0)
+        if (elementIndex > limit && limit > 0) {
             throw new SAXException("Reached limit count"); // stop parsing
+        }
         inElement = qName.toLowerCase();
         stack.add(inElement);
         if (inElement.equals("opendrive")) {
@@ -434,8 +436,9 @@ public class OpenDriveHandler extends DefaultHandler {
                 } else {
                     if (road.link.predecessorType != null && road.link.predecessorType.equals("road")) {
                         final RoadSegment sourceRoadSegment = roadNetwork.findByUserId(road.link.predecessorId);
-                        if (sourceRoadSegment == null)
+                        if (sourceRoadSegment == null) {
                             throw new SAXException("Cannot find predecessor link:" + road.link.predecessorId); // stop parsing
+                        }
                         for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
                             if (lane.link != null) {
                                 final int fromLane = laneIdToLaneIndex(sourceRoadSegment, lane.link.predecessorId);
@@ -475,11 +478,13 @@ public class OpenDriveHandler extends DefaultHandler {
                 for (final Junction.Connection connection : junction.connections) {
                     // System.out.println("Junction id:" + junction.id);
                     final RoadSegment incomingRoadSegment = roadNetwork.findByUserId(connection.incomingRoad);
-                    if (incomingRoadSegment == null)
+                    if (incomingRoadSegment == null) {
                         throw new SAXException("Cannot find incoming road: " + connection.incomingRoad);
+                    }
                     final RoadSegment connenctingRoadSegment = roadNetwork.findByUserId(connection.connectingRoad);
-                    if (connenctingRoadSegment == null)
+                    if (connenctingRoadSegment == null) {
                         throw new SAXException("Cannot find connecting road: " + connection.connectingRoad);
+                    }
                     final Road road = findByUserId(roads, connection.connectingRoad);
                     if (road.link.predecessorType.equals("junction") && road.link.predecessorId.equals(junction.id)) {
                         for (final Junction.Connection.LaneLink laneLink : connection.laneLinks) {
@@ -495,8 +500,9 @@ public class OpenDriveHandler extends DefaultHandler {
                             // System.out.println("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
                             Link.addLanePair(fromLane, connenctingRoadSegment, toLane, incomingRoadSegment);
                         }
-                    } else
+                    } else {
                         throw new SAXException("Incorrect junction:" + junction.id); // stop parsing
+                    }
                 }
             }
             // finally iterate through all the road segments assigning a default sink to
@@ -525,8 +531,9 @@ public class OpenDriveHandler extends DefaultHandler {
 
     private double getDouble(Attributes attributes, String qName) throws SAXException {
         final String value = attributes.getValue(qName);
-        if (value == null)
+        if (value == null) {
             throw new SAXException("No value for attribute " + qName);
+        }
         return Double.parseDouble(value);
     }
 
@@ -537,8 +544,9 @@ public class OpenDriveHandler extends DefaultHandler {
 
     private int getInt(Attributes attributes, String qName) throws SAXException {
         final String value = attributes.getValue(qName);
-        if (value == null)
+        if (value == null) {
             throw new SAXException("No value for attribute " + qName);
+        }
         return Integer.parseInt(value);
     }
 
@@ -575,8 +583,9 @@ public class OpenDriveHandler extends DefaultHandler {
     }
 
     static int laneIdToLaneIndex(RoadSegment roadSegment, int laneId) {
-        if (laneId >= 0)
+        if (laneId >= 0) {
             return laneId;
+        }
         return roadSegment.laneCount() + laneId;
     }
 }

@@ -60,8 +60,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public RoadSegment findById(int id) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.id() == id)
+            if (roadSegment.id() == id) {
                 return roadSegment;
+            }
         }
         return null;
     }
@@ -74,8 +75,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public RoadSegment findByUserId(String userId) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.userId() != null && roadSegment.userId().equals(userId))
+            if (roadSegment.userId() != null && roadSegment.userId().equals(userId)) {
                 return roadSegment;
+            }
         }
         return null;
     }

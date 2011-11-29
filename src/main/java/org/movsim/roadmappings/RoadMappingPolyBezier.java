@@ -139,8 +139,9 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
 
         double pos = roadPos;
         for (final RoadMappingBezier roadMapping : roadMappings) {
-            if (pos <= roadMapping.roadLength())
+            if (pos <= roadMapping.roadLength()) {
                 return roadMapping.map(pos, lateralOffset);
+            }
             pos -= roadMapping.roadLength();
         }
         // have gone past end of last road mapping in road segment

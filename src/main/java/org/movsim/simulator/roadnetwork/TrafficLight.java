@@ -170,10 +170,12 @@ public class TrafficLight {
         // Zeit bis zum naechsten rot bzw. gruen
         // periode startet bei gruen
         // restliche period time + alpha*yellowPhase
-        if (status == GREEN_LIGHT || status == GREEN_RED_LIGHT)
+        if (status == GREEN_LIGHT || status == GREEN_RED_LIGHT) {
             return (greenTimePeriod + alpha * greenRedTimePeriod - currentCycleTime);
-        if (status == RED_LIGHT || status == RED_GREEN_LIGHT)
+        }
+        if (status == RED_LIGHT || status == RED_GREEN_LIGHT) {
             return (greenTimePeriod + greenRedTimePeriod + redTimePeriod + alpha * redGreenTimePeriod - currentCycleTime);
+        }
         return 0;
     }
 

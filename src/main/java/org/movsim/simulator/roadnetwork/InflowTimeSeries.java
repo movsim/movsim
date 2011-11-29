@@ -86,8 +86,9 @@ public class InflowTimeSeries {
      * @return the flow
      */
     public double getFlowPerLane(double time) {
-        if (constantFlowPerLane >= 0)
+        if (constantFlowPerLane >= 0) {
             return constantFlowPerLane;
+        }
         return Tables.intpextp(timeValues, flowValues, time);
     }
 
@@ -99,8 +100,9 @@ public class InflowTimeSeries {
      * @return the speed
      */
     public double getSpeed(double time) {
-        if (constantFlowPerLane >= 0)
+        if (constantFlowPerLane >= 0) {
             return constantInitSpeed;
+        }
         return Tables.intpextp(timeValues, speedValues, time);
     }
 

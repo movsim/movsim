@@ -20,8 +20,9 @@ public class FuelConsumptionInput {
     public FuelConsumptionInput(Element elem) {
 
         // fuel consumption element is optional
-        if (elem == null)
+        if (elem == null) {
             return;
+        }
 
         consumptionModelInput = new HashMap<String, ConsumptionModelInput>();
 

@@ -274,8 +274,9 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     public Vehicle rearVehicle() {
         final int count = vehicles.size();
-        if (count > 0)
+        if (count > 0) {
             return vehicles.get(count - 1);
+        }
         return null;
     }
 
@@ -290,12 +291,14 @@ public class LaneSegment implements Iterable<Vehicle> {
         final int insertionPoint = -index - 1;
         if (index >= 0) {
             // exact match found, so return the matched vehicle
-            if (index < vehicles.size())
+            if (index < vehicles.size()) {
                 return vehicles.get(index);
+            }
         } else {
             // get next vehicle if not past end
-            if (insertionPoint < vehicles.size())
+            if (insertionPoint < vehicles.size()) {
                 return vehicles.get(insertionPoint);
+            }
         }
         // index == laneVehicles[lane].size() - 1 || insertionPoint == laneVehicles[lane].size()
         // subject vehicle is rear vehicle on this road segment, so check source road segment
@@ -321,12 +324,14 @@ public class LaneSegment implements Iterable<Vehicle> {
     public Vehicle rearVehicleOnSinkLanePosAdjusted() {
 
         // subject vehicle is front vehicle on this road segment, so check sink road segment
-        if (sinkLaneSegment == null)
+        if (sinkLaneSegment == null) {
             return null;
+        }
         // find the rear vehicle in the sink lane on the sink lane segment
         final Vehicle sinkRearVehicle = sinkLaneSegment.rearVehicle();
-        if (sinkRearVehicle == null)
+        if (sinkRearVehicle == null) {
             return null;
+        }
         // return a copy of the rear vehicle on the sink road segment, with its position
         // set relative to the current road segment
         final Vehicle ret = new Vehicle(sinkRearVehicle);
@@ -337,14 +342,16 @@ public class LaneSegment implements Iterable<Vehicle> {
     Vehicle secondLastVehicleOnSinkLanePosAdjusted() {
 
         // subject vehicle is front vehicle on this lane segment, so check sink lane segment
-        if (sinkLaneSegment == null)
+        if (sinkLaneSegment == null) {
             return null;
+        }
         // find the rear vehicle in the sink lane segment
         final int sinkLaneVehicleCount = sinkLaneSegment.vehicleCount();
-        if (sinkLaneVehicleCount < 2)
+        if (sinkLaneVehicleCount < 2) {
             // should actually check sinkLane of sinkLane, but as long as sinkLane not
             // outrageously short, the assumption that there is no vehicle is reasonable
             return null;
+        }
         final Vehicle vehicle = sinkLaneSegment.getVehicle(sinkLaneVehicleCount - 2);
         // return a copy of the rear vehicle on the sink lane segment, with its position
         // set relative to the current road segment
@@ -360,8 +367,9 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the front vehicle
      */
     public Vehicle frontVehicle() {
-        if (vehicles.size() > 0)
+        if (vehicles.size() > 0) {
             return vehicles.get(0);
+        }
         return null;
     }
 
@@ -376,11 +384,12 @@ public class LaneSegment implements Iterable<Vehicle> {
         // index = Collections.binarySearch(vehicles, subjectVehicle, vehiclePositionComparator);
         final int index = positionBinarySearch(vehiclePos);
         final int insertionPoint = -index - 1;
-        if (index > 0)
+        if (index > 0) {
             // exact match found
             return vehicles.get(index - 1);
-        else if (insertionPoint > 0)
+        } else if (insertionPoint > 0) {
             return vehicles.get(insertionPoint - 1);
+        }
         // index == 0 or insertionPoint == 0
         // subject vehicle is front vehicle on this road segment, so check for vehicles
         // on sink lane segment
@@ -418,8 +427,9 @@ public class LaneSegment implements Iterable<Vehicle> {
                 low = mid + 1;
             } else if (compare > 0) {
                 high = mid - 1;
-            } else
+            } else {
                 return mid; // key found
+            }
         }
         return -(low + 1); // key not found
     }
@@ -551,8 +561,9 @@ public class LaneSegment implements Iterable<Vehicle> {
             Vehicle frontVehicle = vehicles.get(0);
             for (int i = 1; i < count; ++i) {
                 final Vehicle vehicle = vehicles.get(i);
-                if (frontVehicle.posRearBumper() < vehicle.posRearBumper())
+                if (frontVehicle.posRearBumper() < vehicle.posRearBumper()) {
                     return false;
+                }
                 // current vehicle is front vehicle next time around
                 frontVehicle = vehicle;
             }
