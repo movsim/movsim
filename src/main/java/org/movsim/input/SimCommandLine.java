@@ -1,32 +1,26 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
@@ -44,8 +38,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.impl.FileUtils;
 
 /**
- * The Class SimCommandLine. MovSim console command line parser. Sets the
- * ProjectMetaData.
+ * The Class SimCommandLine. MovSim console command line parser. Sets the ProjectMetaData.
  */
 public class SimCommandLine {
 
@@ -99,6 +92,12 @@ public class SimCommandLine {
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
+        OptionBuilder.withArgName("file");
+        OptionBuilder.hasArg();
+        OptionBuilder
+                .withDescription("argument has to be an OpenDRIVE (.xodr) file to load the network topology and road layout");
+        final Option xodrSimFile = OptionBuilder.create("n");
+        options.addOption(xodrSimFile);
     }
 
     /**
@@ -147,6 +146,39 @@ public class SimCommandLine {
             optPrintVersion();
         }
         optSimulation(cmdline);
+        optNetworkTopology(cmdline);
+    }
+
+    /**
+     * @param cmdline
+     */
+    private void optNetworkTopology(CommandLine cmdline) {
+        final String xodrFilename = cmdline.getOptionValue('n');
+        if (xodrFilename == null || !FileUtils.fileExists(xodrFilename)) {
+            System.err.println("No xodr configuration file! Please specify one via the option -n.");
+            System.exit(-1);
+        } else {
+            final boolean isXodr = validateOpenDriveFileName(xodrFilename);
+            if (isXodr) {
+                projectMetaData.setXodrFilename(xodrFilename);
+                projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(xodrFilename));
+            } else {
+                System.exit(-1);
+            }
+        }
+    }
+
+    /**
+     * @param xodrFilename
+     * @return
+     */
+    private boolean validateOpenDriveFileName(String xodrFilename) {
+        final int i = xodrFilename.lastIndexOf(".xodr");
+        if (i < 0) {
+            System.out.println("Please provide OpenDRIVE file with ending \".xodr\" as argument with option -n, exit. ");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -154,7 +186,7 @@ public class SimCommandLine {
      */
     private void optPrintVersion() {
         System.out.println("movsim release version: " + MovsimConstants.RELEASE_VERSION);
-
+        
         System.exit(0);
     }
 
@@ -177,7 +209,6 @@ public class SimCommandLine {
         String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
         String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
-
         System.out.println("dtd file written to " + filename);
 
         System.exit(0);
@@ -204,19 +235,19 @@ public class SimCommandLine {
      *            the cmdline
      */
     private void optSimulation(CommandLine cmdline) {
-        final String simulationFilename = cmdline.getOptionValue('f');
-        // TODO separate path
-        if (simulationFilename == null) {
+        final String filename = cmdline.getOptionValue('f');
+        if (filename == null  || !FileUtils.fileExists(filename)) {
             System.err.println("No xml configuration file! Please specify via the option -f.");
             System.exit(-1);
         } else {
-            final boolean isXml = validateSimulationFileName(simulationFilename);
+            final boolean isXml = validateSimulationFileName(filename);
             if (isXml) {
-                // workaround //TODO
-                projectMetaData.setProjectName(simulationFilename);
+                projectMetaData.setProjectName(filename);
+                projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
+            } else {
+                System.exit(-1);
             }
         }
-
     }
 
     /**
@@ -244,7 +275,7 @@ public class SimCommandLine {
         if (i < 0) {
             System.out
                     .println("Please provide simulation file with ending \".xml\" as argument with option -f, exit. ");
-            System.exit(1);
+            return false;
         }
         return true;
 

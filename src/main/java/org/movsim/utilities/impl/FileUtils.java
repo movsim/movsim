@@ -400,4 +400,15 @@ public class FileUtils {
         }
         return inputSource;
     }
+    
+    public static String getCanonicalPathWithoutFilename (String filename) {
+        final File file = new File(filename);
+        String string = null;
+        try {
+            string = file.getCanonicalPath().substring(0, file.getCanonicalPath().indexOf(file.getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
 }

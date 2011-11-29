@@ -104,11 +104,8 @@ public class Simulator implements Runnable {
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
 
-        // String scenario = "onramp"; //TODO cmdline parser and ProjectmetaData
-        // String xmlFileName = "/home/kesting/workspace/movsim/file/src/test/resources/" + scenario + ".xodr"; //TODO remove
 
         // First parse the OpenDrive (.xodr) file to load the network topology and road layout
-        // final String xmlFileName = "/roadnetwork/" + scenario + ".xodr";
         final String xmlFileName = xodrPath + xodrFileName;
         logger.info("try to load ", xmlFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
