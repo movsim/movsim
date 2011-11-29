@@ -154,7 +154,7 @@ public class SimCommandLine {
         } else {
             final boolean isXodr = validateOpenDriveFileName(xodrFilename);
             if (isXodr) {
-                projectMetaData.setXodrFilename(xodrFilename);
+                projectMetaData.setXodrFilename(FileUtils.getName(xodrFilename));
                 projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(xodrFilename));
             } else {
                 System.exit(-1);

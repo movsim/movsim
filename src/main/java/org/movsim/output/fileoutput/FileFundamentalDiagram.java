@@ -6,6 +6,7 @@ package org.movsim.output.fileoutput;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.vehicles.VehiclePrototype;
 
 // TODO: Auto-generated Javadoc
@@ -32,7 +33,10 @@ public class FileFundamentalDiagram {
         final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
             final String key = it.next();
+
+            final String outputPath = ProjectMetaData.getInstance().getOutputPath();
             final String filename = projectName + ".fund_" + key + ".csv";
+            System.out.println("projectName: "+ projectName);
             final VehiclePrototype proto = prototypes.get(key);
             if (proto.fraction() > 0) {
                 // avoid writing fundDia of "obstacles"

@@ -54,7 +54,7 @@ public class ProjectMetaData{
      * 
      * @return single instance of ProjectMetaData
      */
-    static ProjectMetaData getInstance() {
+    public static ProjectMetaData getInstance() {
         return singleton;
     }
 

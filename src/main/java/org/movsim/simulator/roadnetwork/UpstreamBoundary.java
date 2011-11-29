@@ -28,6 +28,7 @@ package org.movsim.simulator.roadnetwork;
 
 import java.io.PrintWriter;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
@@ -38,9 +39,8 @@ import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class UpstreamBoundaryImpl.
+ * The Class UpstreamBoundary.
  */
 public class UpstreamBoundary implements SimulationTimeStep {
 
@@ -54,36 +54,27 @@ public class UpstreamBoundary implements SimulationTimeStep {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(UpstreamBoundary.class);
 
-    /** The n wait. */
     private double nWait;
 
-    /** The veh generator. */
     private final VehicleGenerator vehGenerator;
 
-    /** The veh container. The road segment contains the lane sections which contain the vehicles */
-    //private final List<VehicleContainer> vehContainers;
     private final RoadSegment roadSegment;
 
-    /** The inflow time series. */
     private final InflowTimeSeries inflowTimeSeries;
 
-    /** The fstr logging. */
     private PrintWriter fstrLogging;
 
-    /** The entering vehicle counter. */
     private int enteringVehCounter;
 
     /** The x enter last. status of last merging vehicle for logging to file */
     private double xEnterLast;
 
-    /** The v enter last. */
     private double vEnterLast;
 
-    /** The lane enter last. */
     private int laneEnterLast;
 
     /**
-     * Instantiates a new upstream boundary impl.
+     * Instantiates a new upstream boundary .
      *
      * @param vehGenerator the vehicle generator
      * @param vehContainers the veh containers

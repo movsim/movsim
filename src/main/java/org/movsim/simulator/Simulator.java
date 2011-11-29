@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator;
@@ -52,7 +45,6 @@ import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 public class Simulator implements Runnable {
 
@@ -104,13 +96,12 @@ public class Simulator implements Runnable {
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
 
-
         // First parse the OpenDrive (.xodr) file to load the network topology and road layout
         final String xmlFileName = xodrPath + xodrFileName;
-        logger.info("try to load ", xmlFileName);
+        logger.info("try to load {}", xmlFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
         if (loaded == false) {
-            logger.error("failed to load ", xmlFileName);
+            logger.error("failed to load {}", xmlFileName);
         }
         logger.info("done with road network parsing");
 
@@ -134,30 +125,29 @@ public class Simulator implements Runnable {
         final boolean isWithCrashExit = simInput.isWithCrashExit();
         roadNetwork.setWithCrashExit(isWithCrashExit);
 
-        
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
-        final Map<Long,RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
+        final Map<Long, RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
         if (loaded == false && roadInputMap.size() == 1) {
-        	// there was no xodr file and there is only one road segment in the MovSimXML file
-        	// so set up a default s-shaped road mapping
-        	final RoadInput roadinput = roadInputMap.values().iterator().next();
-            final int laneCount = 1;//roadinput.getLanes();
-            final double roadLength = 1500;//roadinput.getRoadLength();
+            // there was no xodr file and there is only one road segment in the MovSimXML file
+            // so set up a default s-shaped road mapping
+            final RoadInput roadinput = roadInputMap.values().iterator().next();
+            final int laneCount = 1;// roadinput.getLanes();
+            final double roadLength = 1500;// roadinput.getRoadLength();
             // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
             final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
             final RoadSegment roadSegment = new RoadSegment(roadMapping);
-    		addInputToRoadSegment(roadSegment, roadinput);
+            addInputToRoadSegment(roadSegment, roadinput);
             roadSegment.setUserId("1");
             roadSegment.addDefaultSink();
             roadNetwork.add(roadSegment);
         } else {
-	        for (final RoadInput roadinput : roadInputMap.values()) {
-	        	RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
-	        	if (roadSegment != null) {
-	        		addInputToRoadSegment(roadSegment, roadinput);
-	        	}
-	        }
+            for (final RoadInput roadinput : roadInputMap.values()) {
+                RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+                if (roadSegment != null) {
+                    addInputToRoadSegment(roadSegment, roadinput);
+                }
+            }
         }
         reset();
     }
@@ -171,17 +161,18 @@ public class Simulator implements Runnable {
     /**
      * Add input data to road segment.
      * 
-     * Note by rules of encapsulation this function is NOT a member of RoadSegment, since RoadSegment
-     * should not be aware of form of XML file or RoadInput data structure.
+     * Note by rules of encapsulation this function is NOT a member of RoadSegment, since RoadSegment should not be aware of form of XML
+     * file or RoadInput data structure.
+     * 
      * @param roadSegment
      * @param roadinput
      */
-	private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
-		// for now this is a minimal implementation, just the traffic source and traffic sink
-		// need to add further data, eg initial conditions, bottlenecks etc
-	    final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
-        final UpstreamBoundary upstreamBoundary = new UpstreamBoundary(roadSegment.id(), vehGenerator, roadSegment, trafficSourceData,
-                inputData.getProjectMetaData().getProjectName());
+    private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
+        // for now this is a minimal implementation, just the traffic source and traffic sink
+        // need to add further data, eg initial conditions, bottlenecks etc
+        final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
+        final UpstreamBoundary upstreamBoundary = new UpstreamBoundary(roadSegment.id(), vehGenerator, roadSegment,
+                trafficSourceData, projectName);
         roadSegment.setUpstreamBoundary(upstreamBoundary);
 
         final TrafficLights trafficLights = new TrafficLights(projectName, roadinput.getTrafficLightsInput());
@@ -190,15 +181,16 @@ public class Simulator implements Runnable {
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), projectName, roadinput.getDetectorInput());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), projectName,
+                roadinput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
-        
-        final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(roadinput.getFlowConsBottleneckInputData());
+
+        final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
+                roadinput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
 
-
-	    //final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
-	}
+        // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
+    }
 
     /*
      * (non-Javadoc)
@@ -243,10 +235,10 @@ public class Simulator implements Runnable {
             logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
                     time / 3600, timestep, projectName));
         }
-        // TODO new update of roadSegments 
+        // TODO new update of roadSegments
         roadNetwork.timeStep(timestep, time, iterationCount);
         // parallel update of all roadSections
-        //final double dt = this.timestep; // TODO
+        // final double dt = this.timestep; // TODO
 
         simOutput.update(iterationCount, time, timestep);
     }
