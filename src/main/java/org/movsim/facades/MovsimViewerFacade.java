@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  * The Class MovsimViewerFacade.
  */
 public class MovsimViewerFacade {
-    
+
     /**
      * Initializaton on demand holder idiom. Lazy loaded singleton.
      */
@@ -71,7 +71,6 @@ public class MovsimViewerFacade {
     /**
      * Instantiates a new movsim viewer facade. Singleton pattern
      */
-
     private MovsimViewerFacade() {
         System.out.println("create movsim viewer facade");
         model = Simulator.getInstance();
@@ -79,16 +78,8 @@ public class MovsimViewerFacade {
         initLocalizationAndLogger();
 
         inputData = model.getSimInput();
-        
-        System.out.println("inputData is"+inputData);
-//        System.exit(0);
-        
-        
         projectMetaData = inputData.getProjectMetaData();
 
-        // TODO set project config
-//        String projectName;
-//        projectMetaData.setProjectName(projectName)
         projectMetaData.setInstantaneousFileOutput(false);
         projectMetaData.setXmlFromResources(true);
 
@@ -105,14 +96,14 @@ public class MovsimViewerFacade {
      *            the scenario
      */
     public void loadScenarioFromXml(String scenario, String path, String xodrFilename, String xodrPath) {
-    	projectMetaData.setProjectName(path + scenario + ".xml");
-    	projectMetaData.setXodrFilename(xodrFilename);
-    	projectMetaData.setXodrPath(xodrPath);
+        projectMetaData.setProjectName(path + scenario + ".xml");
+        projectMetaData.setXodrFilename(xodrFilename);
+        projectMetaData.setXodrPath(xodrPath);
         model.initialize();
     }
 
     /**
-     * Gets the max sim time.
+     * Gets the duration of the simulation
      * 
      * @return the max sim time
      */

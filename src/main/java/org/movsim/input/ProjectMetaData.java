@@ -47,7 +47,6 @@ public class ProjectMetaData{
      * private constructor: singleton pattern.
      */
     private ProjectMetaData() {
-
     }
 
     /**
@@ -59,11 +58,6 @@ public class ProjectMetaData{
         return singleton;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#getProjectName()
-     */
     public String getProjectName() {
         return projectName;
     }
@@ -121,11 +115,6 @@ public class ProjectMetaData{
         return xodrPath;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.ProjectMetaData#isInstantaneousFileOutput()
-     */
     public boolean isInstantaneousFileOutput() {
         return instantaneousFileOutput;
     }
