@@ -26,10 +26,12 @@
  */
 package org.movsim.output.fileoutput;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -39,7 +41,6 @@ import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileTrajectories.
  */
@@ -53,53 +54,26 @@ public class FileTrajectories {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 
-    /** The dt out. */
     private double dtOut;
-
-    /** The t_start_interval. */
     private double t_start_interval;
-
-    /** The t_end_interval. */
     private double t_end_interval;
-
-    /** The x_start_interval. */
     private double x_start_interval;
-
-    /** The x_end_interval. */
     private double x_end_interval;
-
-    /** The file handles. */
     private HashMap<Long, PrintWriter> fileHandles;
-
-    /** The time. */
     private double time = 0;
-
-    /** The last update time. */
     private double lastUpdateTime = 0;
-
-    /** The road segment. */
     private RoadSegment roadSegment;
 
-    /** The project name. */
-    private String projectName;
-
-    /** The path. */
-    private String path;
-
     /**
-     * Instantiates a new trajectories impl.
+     * Instantiates a new trajectories.
      * 
-     * @param projectName
-     *            the project name
      * @param trajectoriesInput
      *            the trajectories input
      * @param roadSection
      *            the road section
      */
-    public FileTrajectories(String projectName, TrajectoriesInput trajectoriesInput, RoadSegment roadSegment) {
+    public FileTrajectories(TrajectoriesInput trajectoriesInput, RoadSegment roadSegment) {
         logger.info("Constructor");
-
-        this.projectName = projectName;
 
         dtOut = trajectoriesInput.getDt();
         t_start_interval = trajectoriesInput.getStartTime();
@@ -110,7 +84,6 @@ public class FileTrajectories {
         this.roadSegment = roadSegment;
 
         fileHandles = new HashMap<Long, PrintWriter>();
-        logger.info("path = {}", path);
         logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
     }
 
@@ -118,8 +91,9 @@ public class FileTrajectories {
      * Creates the file handles.
      */
     private void createFileHandles() {
-
-        final String filenameMainroad = projectName + String.format(extensionFormat, roadSegment.id());
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final String outputPath = projectMetaData.getOutputPath();
+        final String filenameMainroad = outputPath + File.separator + projectMetaData.getProjectName() + String.format(extensionFormat, roadSegment.id());
         logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
         fileHandles.put((long) roadSegment.id(), FileUtils.getWriter(filenameMainroad));
 

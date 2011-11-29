@@ -237,7 +237,8 @@ public class SimCommandLine {
         } else {
             final boolean isXml = validateSimulationFileName(filename);
             if (isXml) {
-                projectMetaData.setProjectName(filename);
+                String name = FileUtils.getName(filename);
+                projectMetaData.setProjectName(name.substring(0, name.indexOf(".xml")));
                 projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
             } else {
                 System.exit(-1);

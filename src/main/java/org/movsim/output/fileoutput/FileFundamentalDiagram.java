@@ -1,15 +1,12 @@
-/*
- * Copyright by Ralph Germ (http://www.ralphgerm.de)
- */
 package org.movsim.output.fileoutput;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.vehicles.VehiclePrototype;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileFundamentalDiagram.
  */
@@ -24,19 +21,17 @@ public class FileFundamentalDiagram {
     /**
      * Write fundamental diagrams.
      * 
-     * @param projectName
-     *            the project name
      * @param prototypes
      *            the prototypes
      */
-    public static void writeFundamentalDiagrams(String projectName, HashMap<String, VehiclePrototype> prototypes) {
+    public static void writeFundamentalDiagrams(HashMap<String, VehiclePrototype> prototypes) {
         final Iterator<String> it = prototypes.keySet().iterator();
         while (it.hasNext()) {
             final String key = it.next();
 
-            final String outputPath = ProjectMetaData.getInstance().getOutputPath();
-            final String filename = projectName + ".fund_" + key + ".csv";
-            System.out.println("projectName: "+ projectName);
+            ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+            final String outputPath = projectMetaData.getOutputPath();
+            final String filename = outputPath + File.separator + projectMetaData.getProjectName() + ".fund_" + key + ".csv";
             final VehiclePrototype proto = prototypes.get(key);
             if (proto.fraction() > 0) {
                 // avoid writing fundDia of "obstacles"

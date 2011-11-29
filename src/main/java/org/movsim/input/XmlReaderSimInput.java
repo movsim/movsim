@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input;
@@ -88,12 +81,10 @@ public class XmlReaderSimInput {
      *            the input data
      */
     public XmlReaderSimInput(final InputData inputData) {
-        projectMetaData = inputData.getProjectMetaData(); 
+        projectMetaData = inputData.getProjectMetaData();
         this.inputData = inputData;
-
-        this.xmlFilename = projectMetaData.getProjectName(); // TODO Path + File
-//        this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
-//                + filenameEnding;        
+        this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName() + filenameEnding;
+        
         // TODO Remove AccessController: Is not needed anymore
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
@@ -101,7 +92,7 @@ public class XmlReaderSimInput {
             public Object run() {
 
                 if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
-                    logger.error("XML File does not exist. Exit Simulation.");
+                    logger.error("XML file {} does not exist. Exit Simulation.", xmlFilename);
                     System.exit(1);
                 }
 
@@ -132,9 +123,11 @@ public class XmlReaderSimInput {
 
     /**
      * Writes the internal xml after validation to file.
-     *
-     * @param localDoc the local doc
-     * @param outFilename the output file name
+     * 
+     * @param localDoc
+     *            the local doc
+     * @param outFilename
+     *            the output file name
      */
     private void writeInternalXmlToFile(final Document localDoc, String outFilename) {
         PrintWriter writer = FileUtils.getWriter(outFilename);
@@ -153,21 +146,29 @@ public class XmlReaderSimInput {
      */
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
-
-    	projectMetaData.setProjectName(xmlFilename.substring(0, xmlFilename.indexOf(filenameEnding)));
-
         final Element root = doc.getRootElement();
+        
+        String outputPath = root.getAttribute("path").getValue();
+        if (outputPath.equals("") || outputPath.isEmpty() || outputPath.equals(".")) {
+            outputPath = "sim";
+        }
+        System.out.println(outputPath);
+        boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
+        if (!outputPathExits) { 
+            FileUtils.createDir(outputPath, "");
+        }
+        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
 
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
-        
+
         inputData.setSimulationInput(simInput);
-        
+
         // -------------------------------------------------------
 
         final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
 
         final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
-        
+
         for (final Element vehElem : vehicleElements) {
             vehicleInputData.add(new VehicleInput(vehElem));
         }
@@ -176,11 +177,10 @@ public class XmlReaderSimInput {
         // -------------------------------------------------------
 
         System.out.println("parse fuelConsumptionInput");
-        final FuelConsumptionInput fuelConsumptionInput = new FuelConsumptionInput(root.getChild(XmlElementNames.Consumption));
-        
+        final FuelConsumptionInput fuelConsumptionInput = new FuelConsumptionInput(
+                root.getChild(XmlElementNames.Consumption));
+
         inputData.setFuelConsumptionInput(fuelConsumptionInput);
-        
-       
 
     }
 
@@ -188,7 +188,7 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        // TODO path also from xml 
+        // TODO path also from xml
         validate(FileUtils.getInputSourceFromFilename(xmlFilename));
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
@@ -299,8 +299,7 @@ public class XmlReaderSimInput {
                 } catch (final SAXException e) {
                     isValid = false;
                     System.out.println(e.getMessage());
-                }
-                    catch (final Exception e) {
+                } catch (final Exception e) {
                     isValid = false;
                     System.out.println(e.getMessage());
                 }
@@ -328,9 +327,7 @@ public class XmlReaderSimInput {
         /*
          * (non-Javadoc)
          * 
-         * @see
-         * org.xml.sax.helpers.DefaultHandler#warning(org.xml.sax.SAXParseException
-         * )
+         * @see org.xml.sax.helpers.DefaultHandler#warning(org.xml.sax.SAXParseException )
          */
         @Override
         public void warning(SAXParseException e) throws SAXException {
@@ -340,9 +337,7 @@ public class XmlReaderSimInput {
         /*
          * (non-Javadoc)
          * 
-         * @see
-         * org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException
-         * )
+         * @see org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException )
          */
         @Override
         public void error(SAXParseException e) throws SAXException {
@@ -353,8 +348,7 @@ public class XmlReaderSimInput {
         /*
          * (non-Javadoc)
          * 
-         * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax.
-         * SAXParseException)
+         * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax. SAXParseException)
          */
         @Override
         public void fatalError(SAXParseException e) throws SAXException {

@@ -50,6 +50,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.ACC;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Gipps;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.KKW;
@@ -57,7 +58,6 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Krauss;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.NSM;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Newell;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.OVM_VDIFF;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumACC;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumGipps;
 import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumIDM;
@@ -82,20 +82,15 @@ public class VehicleGenerator {
     // Aufwand mit prototypes wg. einmaliger berechnung des FD
     // Und ggf. einmaliger Neuberechnung FD nach Parameteraenderung !!
 
-    /** The project name. */
-    private final String projectName;
 
     // enthaelt die Menge der definierte Models ... notwendig fuer GUI
     // private HashMap<String, AccelerationModel> longModels;
 
     // enthaelt die Heterogenitaet der tatsaechlich simulierten Fahrzeuge
-    /** The prototypes. */
     private final HashMap<String, VehiclePrototype> prototypes;
 
-    /** The simulation timestep. */
     private double simulationTimestep;
 
-    /** The is with reaction times. */
     private final boolean isWithReactionTimes;
 
     private boolean instantaneousFileOutput;
@@ -109,10 +104,9 @@ public class VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(ProjectMetaData projectMetaData, InputData simInput, List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
-
+    public VehicleGenerator(InputData simInput, List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road 
-        this.projectName = projectMetaData.getProjectName();
         this.instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
 
         // default for continuous micro models
@@ -125,7 +119,7 @@ public class VehicleGenerator {
 
         // output fundamental diagrams
         if (instantaneousFileOutput && isWithWriteFundamentalDiagrams) {
-            FileFundamentalDiagram.writeFundamentalDiagrams(projectName, prototypes);
+            FileFundamentalDiagram.writeFundamentalDiagrams(prototypes);
         }
 
         isWithReactionTimes = checkForReactionTimes();

@@ -34,7 +34,6 @@ import org.movsim.utilities.impl.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LoopDetectorImpl.
  */
@@ -42,62 +41,31 @@ public class LoopDetector extends ObservableImpl  {
 
     final static Logger logger = LoggerFactory.getLogger(LoopDetector.class);
 
-    /** The dt sample. */
     private final double dtSample;
-
-    /** The det position. */
     private final double detPosition;
-
-    /** The time offset. */
     private double timeOffset;
-
-    // internal state variables
-    /** The veh count. */
     private int vehCount;
-
-    /** The v sum. */
     private double vSum;
-
-    /** The occ time. */
     private double occTime;
-
-    /** The sum inv v. */
     private double sumInvV;
-
-    /** The sum inv q. */
     private double sumInvQ;
-
-    /** The mean speed. */
     private double meanSpeed;
-
     private double densityArithmetic;
-
-    /** The flow. */
     private double flow;
-
-    /** The occupancy. */
     private double occupancy;
-
-    /** The veh count output. */
     private int vehCountOutput;
-
-    /** The mean harmonic speed. */
     private double meanSpeedHarmonic;
-
-    /** The harmonic mean timegap. */
     private double meanTimegapHarmonic;
 
     /**
-     * Instantiates a new loop detector impl.
+     * Instantiates a new loop detector.
      * 
-     * @param projectName
-     *            the project name
      * @param detPosition
      *            the det position
      * @param dtSample
      *            the dt sample
      */
-    public LoopDetector(String projectName, double detPosition, double dtSample) {
+    public LoopDetector(double detPosition, double dtSample) {
         this.detPosition = detPosition;
         this.dtSample = dtSample;
 

@@ -50,12 +50,10 @@ public class LoopDetectors {
     /**
      * Instantiates a new loop detectors.
      * 
-     * @param projectName
-     *            the project name
      * @param input
      *            the input
      */
-    public LoopDetectors(long roadId, String projectName, DetectorInput input) {
+    public LoopDetectors(long roadId, DetectorInput input) {
 
         detectors = new ArrayList<LoopDetector>();
 
@@ -64,13 +62,13 @@ public class LoopDetectors {
         final List<Double> positions = input.getPositions();
 
         for (final Double detPosition : positions) {
-            detectors.add(new LoopDetector(projectName, detPosition, dtSample));
+            detectors.add(new LoopDetector(detPosition, dtSample));
         }
 
         if (input.isWithLogging()) {
             fileDetectors = new ArrayList<FileDetector>();
             for (final LoopDetector det : detectors) {
-                fileDetectors.add(new FileDetector(roadId, projectName, det));
+                fileDetectors.add(new FileDetector(roadId, det));
             }
         }
 

@@ -120,7 +120,7 @@ public class Simulator implements Runnable {
         // if an individual vehicle composition is defined for a specific road
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
-        vehGenerator = new VehicleGenerator(projectMetaData, inputData, heterogenInputData, isWithFundDiagramOutput);
+        vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundDiagramOutput);
 
         final boolean isWithCrashExit = simInput.isWithCrashExit();
         roadNetwork.setWithCrashExit(isWithCrashExit);
@@ -172,17 +172,16 @@ public class Simulator implements Runnable {
         // need to add further data, eg initial conditions, bottlenecks etc
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final UpstreamBoundary upstreamBoundary = new UpstreamBoundary(roadSegment.id(), vehGenerator, roadSegment,
-                trafficSourceData, projectName);
+                trafficSourceData);
         roadSegment.setUpstreamBoundary(upstreamBoundary);
 
-        final TrafficLights trafficLights = new TrafficLights(projectName, roadinput.getTrafficLightsInput());
+        final TrafficLights trafficLights = new TrafficLights(roadinput.getTrafficLightsInput());
         roadSegment.setTrafficLights(trafficLights);
 
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), projectName,
-                roadinput.getDetectorInput());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
 
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(

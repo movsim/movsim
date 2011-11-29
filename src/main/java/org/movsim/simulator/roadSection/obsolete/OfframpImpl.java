@@ -80,7 +80,7 @@ public class OfframpImpl extends AbstractRoadSection implements RoadSection {
         
         System.out.println("speed limit at offramp: x=1400 = "+speedlimits.calcSpeedLimit(1400));
         
-        trafficLights = new TrafficLights(null, roadData.getTrafficLightsInput());
+        trafficLights = new TrafficLights(roadData.getTrafficLightsInput());
     }
     
     

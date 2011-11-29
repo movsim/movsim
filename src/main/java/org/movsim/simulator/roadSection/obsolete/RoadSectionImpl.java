@@ -107,12 +107,11 @@ public class RoadSectionImpl extends AbstractRoadSection implements RoadSection 
         flowConsBottlenecks = new FlowConservingBottlenecks(roadInput.getFlowConsBottleneckInputData());
         speedlimits = new SpeedLimits(roadInput.getSpeedLimitInputData());
 
-        trafficLights = new TrafficLights(inputData.getProjectMetaData().getProjectName(),
-                roadInput.getTrafficLightsInput());
+        trafficLights = new TrafficLights(roadInput.getTrafficLightsInput());
 
         final DetectorInput detInput = roadInput.getDetectorInput();
         if (detInput.isWithDetectors()) {
-            detectors = new LoopDetectors(roadInput.getId(), inputData.getProjectMetaData().getProjectName(), detInput);
+            detectors = new LoopDetectors(roadInput.getId(), detInput);
         }
 
         initialConditions(inputData.getSimulationInput(), roadInput);

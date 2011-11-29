@@ -183,12 +183,9 @@ public class FileUtils {
         final File file = new File(path);
         if (dirExists(path, msg))
             return;
-        // Logger.log(msg + ": create directory \"" + path + "\"");
         final boolean success = file.mkdir();
         if (!success) {
-            // Logger.err("createDir: cannot create directory " + path);
-            // Logger.err("msg from calling class" + msg);
-            // Logger.err("exit now!!!");
+            logger.error("createDir: cannot create directory {}. Exit.",  path);
             System.exit(-5);
         }
     }
@@ -419,5 +416,20 @@ public class FileUtils {
     public static String getName(String xodrFilename) {
         final File file = new File(xodrFilename);
         return file.getName();
+    }
+
+    /**
+     * @param outputPath
+     * @return
+     */
+    public static String getCanonicalPath(String outputPath) {
+        final File file = new File(outputPath);
+        String path = null;
+        try {
+            path = file.getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path;
     }
 }

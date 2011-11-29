@@ -1,16 +1,14 @@
-/*
- * Copyright by Ralph Germ (http://www.ralphgerm.de)
- */
 package org.movsim.output.fileoutput;
 
+import java.io.File;
 import java.io.PrintWriter;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.ObserverInTime;
 import org.movsim.utilities.impl.FileUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileSpatioTemporal.
  */
@@ -21,27 +19,24 @@ public class FileSpatioTemporal implements ObserverInTime {
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
 
-    /** The writer. */
     private PrintWriter writer;
-
     private SpatioTemporal spatioTemporal;
 
     /**
      * Instantiates a new file spatio temporal.
      * 
-     * @param projectName
-     *            the project name
      * @param roadSectionID
      *            the road section id
      * @param spatioTemporal
      *            the spatio temporal
      */
-    public FileSpatioTemporal(String projectName, long roadSectionID, SpatioTemporal spatioTemporal) {
+    public FileSpatioTemporal(long roadSectionID, SpatioTemporal spatioTemporal) {
 
         this.spatioTemporal = spatioTemporal;
         spatioTemporal.registerObserver(this);
-
-        final String filename = projectName + String.format(extensionFormat, roadSectionID);
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final String outputPath = projectMetaData.getOutputPath();
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName()+ String.format(extensionFormat, roadSectionID);
         writer = FileUtils.getWriter(filename);
         writer.printf(outputHeading);
         writer.flush();

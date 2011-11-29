@@ -1,16 +1,14 @@
-/*
- * Copyright by Ralph Germ (http://www.ralphgerm.de)
- */
 package org.movsim.output.fileoutput;
 
+import java.io.File;
 import java.io.PrintWriter;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.ObserverInTime;
 import org.movsim.utilities.impl.FileUtils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FileDetector.
  */
@@ -24,27 +22,26 @@ public class FileDetector implements ObserverInTime {
     // integer part
     private static final String outputFormat = "%8.1f, %8.3f, %8.3f, %8.1f, %5d, %8.7f, %8.3f, %8.5f%n";
 
-    /** The print writer. */
     private PrintWriter printWriter = null;
-
     private LoopDetector detector;
 
     /**
      * Instantiates a new file detector.
      * 
-     * @param projectName
-     *            the project name
      * @param detector
      *            the detector
      */
-    public FileDetector(long roadId, String projectName, LoopDetector detector) {
+    public FileDetector(long roadId, LoopDetector detector) {
 
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
 
         // road id hard coded as 1 for the moment
-        final String filename = projectName + String.format(extensionFormat, roadId, xDetectorInt);
-        //final String filename = projectName + ".id%dx" + xDetectorInt + extensionFormat;
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final String outputPath = projectMetaData.getOutputPath();
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+                + String.format(extensionFormat, roadId, xDetectorInt);
+
         printWriter = initFile(filename);
 
         detector.registerObserver(this);

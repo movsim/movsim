@@ -26,10 +26,12 @@
  */
 package org.movsim.output.fileoutput;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -40,9 +42,8 @@ import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class FloatingCarsImpl.
+ * The Class FloatingCars.
  */
 public class FileFloatingCars implements ObserverInTime {
 
@@ -57,18 +58,8 @@ public class FileFloatingCars implements ObserverInTime {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
-    /** The path. */
-    private final String path = "./";
-
-    /** The project name. */
-    private final String projectName;
-
-    /** The ending file. */
     private final String endingFile = ".csv";
-
-    /** The hash map. */
     private final HashMap<Integer, PrintWriter> hashMap;
-
     private FloatingCars floatingCars;
 
     /**
@@ -79,15 +70,14 @@ public class FileFloatingCars implements ObserverInTime {
      * @param floatingCars
      *            the floating cars
      */
-    public FileFloatingCars(String projectName, FloatingCars floatingCars) {
+    public FileFloatingCars(FloatingCars floatingCars) {
         logger.debug("Cstr. FloatingCars");
-        this.projectName = projectName;
-
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
 
-        final String regex = projectName + "[.]V\\d+" + endingFile;
-        FileUtils.deleteFileList(path, regex);
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final String regex = projectMetaData.getProjectName() + "[.]V\\d+" + endingFile;
+        FileUtils.deleteFileList(projectMetaData.getOutputPath(), regex);
 
         hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
 
@@ -146,7 +136,9 @@ public class FileFloatingCars implements ObserverInTime {
      * @return the string
      */
     private String createFileName(int i, String ending) {
-        final String filename = path + projectName + String.format(extensionFormat, i);
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final String outputPath = projectMetaData.getOutputPath();
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName() + String.format(extensionFormat, i);
         return (filename);
     }
 

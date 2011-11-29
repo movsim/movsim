@@ -1,6 +1,3 @@
-/*
- * Copyright by Ralph Germ (http://www.ralphgerm.de)
- */
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
@@ -21,13 +18,8 @@ public class TrafficLights {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
-    /** The n dt. */
     private final int nDt;
-
-    /** The traffic lights. */
     private List<TrafficLight> trafficLights;
-
-    /** The traffic light recorder. */
     private FileTrafficLightRecorder fileTrafficLightRecorder = null;
 
     /**
@@ -35,12 +27,12 @@ public class TrafficLights {
      * @param projectName
      * @param trafficLightsInput
      */
-    public TrafficLights(String projectName, TrafficLightsInput trafficLightsInput) {
+    public TrafficLights(TrafficLightsInput trafficLightsInput) {
 
         initTrafficLights(trafficLightsInput);
         nDt = trafficLightsInput.getnDtSample();
-        if (projectName!=null && trafficLightsInput.isWithLogging()) {
-            fileTrafficLightRecorder = new FileTrafficLightRecorder(projectName, nDt, trafficLights);
+        if (trafficLightsInput.isWithLogging()) {
+            fileTrafficLightRecorder = new FileTrafficLightRecorder(nDt, trafficLights);
         }
     }
 

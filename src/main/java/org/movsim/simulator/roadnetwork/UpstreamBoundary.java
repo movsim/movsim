@@ -26,6 +26,7 @@
  */
 package org.movsim.simulator.roadnetwork;
 
+import java.io.File;
 import java.io.PrintWriter;
 
 import org.movsim.input.ProjectMetaData;
@@ -79,10 +80,9 @@ public class UpstreamBoundary implements SimulationTimeStep {
      * @param vehGenerator the vehicle generator
      * @param vehContainers the veh containers
      * @param upstreamBoundaryData the upstream boundary data
-     * @param projectName the project name
      */
     public UpstreamBoundary(long roadId, VehicleGenerator vehGenerator, RoadSegment roadSegment,
-            TrafficSourceData upstreamBoundaryData, String projectName) {
+            TrafficSourceData upstreamBoundaryData) {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
         nWait = 0;
@@ -91,7 +91,9 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
         if (upstreamBoundaryData.withLogging()) {
             enteringVehCounter = 1;
-            final String filename = projectName + String.format(extensionFormat, roadId);
+            ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+            final String outputPath = projectMetaData.getOutputPath();
+            final String filename = outputPath + File.separator + projectMetaData.getProjectName() + String.format(extensionFormat, roadId);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
         }

@@ -45,7 +45,6 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SimOutput.
  */
@@ -56,29 +55,16 @@ public class SimOutput implements SimObservables {
 
     private SpatioTemporal spatioTemporal = null;
 
-    /** The file spatio temporal. */
     private FileSpatioTemporal fileSpatioTemporal;
-
-    /** The floating cars. */
     private FloatingCars floatingCars = null;
-
     private FileFloatingCars fileFloatingCars;
-
-    /** The trajectories. */
     private FileTrajectories trajectories = null;
-
-    /** The write output. */
     private final boolean writeOutput;
-
-    /** The project name. */
     private final String projectName;
 
-    //private final List<RoadSection> roadSections;
     //final RoadSection roadSection; // TODO hack only one roadsection
     private final RoadNetwork roadNetwork;
     private final RoadSegment roadSegment;
-
-    
     private TravelTimes travelTimes;
     /**
      * Instantiates a new sim output.
@@ -90,16 +76,11 @@ public class SimOutput implements SimObservables {
     	this.roadNetwork = roadNetwork;
     	roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
         projectName = simInput.getProjectMetaData().getProjectName();
-        
-        
-        //this.roadSections = roadSections; //roadSections.get(0)
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
-
-        
         
         // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();
@@ -125,7 +106,7 @@ public class SimOutput implements SimObservables {
         if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCars(roadSegment, floatingCarInput);
             if (writeOutput) {
-                fileFloatingCars = new FileFloatingCars(projectName, floatingCars);
+                fileFloatingCars = new FileFloatingCars(floatingCars);
             }
         }
 
@@ -133,14 +114,14 @@ public class SimOutput implements SimObservables {
         if (spatioTemporalInput.isWithMacro()) {
             spatioTemporal = new SpatioTemporal(spatioTemporalInput, roadSegment);
             if (writeOutput) {
-                fileSpatioTemporal = new FileSpatioTemporal(projectName, roadSegment.id(), spatioTemporal);
+                fileSpatioTemporal = new FileSpatioTemporal(roadSegment.id(), spatioTemporal);
             }
         }
 
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
             if (writeOutput) {
-                trajectories = new FileTrajectories(projectName, trajInput, roadSegment);
+                trajectories = new FileTrajectories(trajInput, roadSegment);
             }
         }
 
