@@ -51,7 +51,6 @@ public class SimOutput implements SimObservables {
     private FileFloatingCars fileFloatingCars;
     private FileTrajectories trajectories = null;
     private final boolean writeOutput;
-    private final String projectName;
 
     // final RoadSection roadSection; // TODO hack only one roadsection
     private final RoadNetwork roadNetwork;
@@ -69,12 +68,9 @@ public class SimOutput implements SimObservables {
     public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
         roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
-        projectName = simInput.getProjectMetaData().getProjectName();
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
-
-        logger.info("Cstr. SimOutput. projectName= {}", projectName);
 
         // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();
