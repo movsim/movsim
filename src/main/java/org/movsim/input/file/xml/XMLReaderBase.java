@@ -45,7 +45,7 @@ public class XMLReaderBase {
         logger.info("parsing file: " + fullFilename);
         final File file = new File(fullFilename);
         if (file.exists() == false) {
-            logger.warn("file does not exist. Try parsing from resources.");
+            logger.warn("file {} does not exist. Try parsing from resources.", fullFilename);
             final InputStream inputstream = XMLReaderBase.class.getResourceAsStream(fullFilename);
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser;
@@ -54,7 +54,7 @@ public class XMLReaderBase {
                 saxParser.parse(inputstream, handler);
             } catch (final Exception e) {
                 e.printStackTrace();
-                logger.error("parsing failed");
+                logger.error("parsing from resources failed");
                 logger.error(e.getLocalizedMessage());
                 return false;
             }

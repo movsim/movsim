@@ -97,11 +97,11 @@ public class Simulator implements Runnable {
         final String xodrPath = projectMetaData.getXodrPath();
 
         // First parse the OpenDrive (.xodr) file to load the network topology and road layout
-        final String xmlFileName = xodrPath + xodrFileName;
-        logger.info("try to load {}", xmlFileName);
-        final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, xmlFileName);
+        final String fullXodrFileName = xodrPath + xodrFileName;
+        logger.info("try to load {}", fullXodrFileName);
+        final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
         if (loaded == false) {
-            logger.error("failed to load {}", xmlFileName);
+            logger.error("failed to load {}", fullXodrFileName);
         }
         logger.info("done with road network parsing");
 
