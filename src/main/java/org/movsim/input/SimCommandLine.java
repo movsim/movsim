@@ -20,7 +20,6 @@
 package org.movsim.input;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
@@ -47,7 +46,7 @@ public class SimCommandLine {
     private ProjectMetaData projectMetaData;
 
     /**
-     * Instantiates a new sim command line impl.
+     * Instantiates a new movsim command line parser.
      * 
      * @param args
      *            the args
