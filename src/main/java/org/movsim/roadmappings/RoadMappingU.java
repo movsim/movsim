@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.roadmappings;
@@ -26,8 +21,7 @@ import org.movsim.simulator.roadnetwork.RoadMapping;
  * Maps a road segment onto a U-shaped section of road.
  * </p>
  * <p>
- * NOT PART OF ROADXML SPECIFICATION, so do not use if you wish your simulation to be saved as a
- * ROADXML file.
+ * NOT PART OF ROADXML SPECIFICATION, so do not use if you wish your simulation to be saved as a ROADXML file.
  * </p>
  */
 public class RoadMappingU extends RoadMapping {
@@ -48,8 +42,7 @@ public class RoadMappingU extends RoadMapping {
      * @param straightLength
      *            length of straight part of U
      */
-    public RoadMappingU(int laneCount, double x0, double y0, double radius,
-            double straightLength) {
+    public RoadMappingU(int laneCount, double x0, double y0, double radius, double straightLength) {
         super(laneCount, x0, y0);
         this.radius = radius;
         this.straightLength = straightLength;
@@ -109,7 +102,7 @@ public class RoadMappingU extends RoadMapping {
             final double sa = Math.sin(arcTheta);
             posTheta.x = x0 - straightLength + r * ca;
             posTheta.y = y0 + radius - r * sa;
-            double theta = arcTheta + 0.5 * Math.PI;
+            final double theta = arcTheta + 0.5 * Math.PI;
             posTheta.cosTheta = Math.cos(theta);
             posTheta.sinTheta = Math.sin(theta);
         }

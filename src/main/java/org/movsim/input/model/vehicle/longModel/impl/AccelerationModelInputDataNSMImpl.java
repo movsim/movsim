@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model.vehicle.longModel.impl;
@@ -80,9 +73,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #checkParameters()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #checkParameters()
      */
     @Override
     protected void checkParameters() {
@@ -103,9 +94,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #resetParametersToDefault()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #resetParametersToDefault()
      */
     @Override
     public void resetParametersToDefault() {
@@ -117,8 +106,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getV0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getV0()
      */
     @Override
     public double getV0() {
@@ -128,8 +116,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP()
      */
     @Override
     public double getSlowdown() {
@@ -139,8 +126,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataNSM#getP0()
      */
     @Override
     public double getSlowToStart() {
@@ -150,9 +136,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #getV0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #getV0Default()
      */
     @Override
     public double getV0Default() {
@@ -162,9 +146,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #getpSlowdown()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #getpSlowdown()
      */
     @Override
     public double getpSlowdown() {
@@ -174,9 +156,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #getpSlowdownDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #getpSlowdownDefault()
      */
     @Override
     public double getpSlowdownDefault() {
@@ -186,9 +166,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #getpSlowToStart()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #getpSlowToStart()
      */
     @Override
     public double getpSlowToStart() {
@@ -198,9 +176,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #getpSlowToStartDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #getpSlowToStartDefault()
      */
     @Override
     public double getpSlowToStartDefault() {
@@ -210,9 +186,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #setV0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #setV0(double)
      */
     @Override
     public void setV0(double v0) {
@@ -223,9 +197,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #setpSlowdown(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #setpSlowdown(double)
      */
     @Override
     public void setpSlowdown(double pSlowdown) {
@@ -236,9 +208,7 @@ public class AccelerationModelInputDataNSMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM
-     * #setpSlowToStart(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM #setpSlowToStart(double)
      */
     @Override
     public void setpSlowToStart(double pSlowToStart) {

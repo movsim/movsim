@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.utilities.impl;
@@ -171,8 +164,7 @@ public class FileUtils {
     }
 
     /**
-     * Creates the directory, if it does not exit already. Elsewise, does
-     * nothing.
+     * Creates the directory, if it does not exit already. Elsewise, does nothing.
      * 
      * @param path
      *            the path
@@ -185,7 +177,7 @@ public class FileUtils {
             return;
         final boolean success = file.mkdir();
         if (!success) {
-            logger.error("createDir: cannot create directory {}. Exit.",  path);
+            logger.error("createDir: cannot create directory {}. Exit.", path);
             System.exit(-5);
         }
     }
@@ -355,25 +347,25 @@ public class FileUtils {
      */
     public static void resourceToFile(String res, String filename) {
         try {
-            InputStream resourceAsStream = MovsimMain.class.getResourceAsStream(res);
+            final InputStream resourceAsStream = MovsimMain.class.getResourceAsStream(res);
 
             if (resourceAsStream == null) {
                 logger.debug("resource {} not included!", res);
                 return;
             }
 
-            PrintWriter writer = FileUtils.getWriter(filename);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
+            final PrintWriter writer = FileUtils.getWriter(filename);
+            final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
             for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
                 writer.println(line);
             }
 
             bufferedReader.close();
             writer.close();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -397,13 +389,13 @@ public class FileUtils {
         }
         return inputSource;
     }
-    
-    public static String getCanonicalPathWithoutFilename (String filename) {
+
+    public static String getCanonicalPathWithoutFilename(String filename) {
         final File file = new File(filename);
         String string = null;
         try {
             string = file.getCanonicalPath().substring(0, file.getCanonicalPath().indexOf(file.getName()));
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return string;
@@ -427,7 +419,7 @@ public class FileUtils {
         String path = null;
         try {
             path = file.getCanonicalPath();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return path;

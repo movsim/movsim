@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.output.fileoutput;
@@ -60,7 +53,7 @@ public class FileFloatingCars implements ObserverInTime {
 
     private final String endingFile = ".csv";
     private final HashMap<Integer, PrintWriter> hashMap;
-    private FloatingCars floatingCars;
+    private final FloatingCars floatingCars;
 
     /**
      * Instantiates a new floating cars impl.
@@ -75,7 +68,7 @@ public class FileFloatingCars implements ObserverInTime {
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
 
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String regex = projectMetaData.getProjectName() + "[.]V\\d+" + endingFile;
         FileUtils.deleteFileList(projectMetaData.getOutputPath(), regex);
 
@@ -109,10 +102,10 @@ public class FileFloatingCars implements ObserverInTime {
      */
     public void writeOutput(double updateTime) {
 
-    	final RoadSegment roadSegment = floatingCars.getRoadSegment();
-    	final int laneCount = roadSegment.laneCount();
+        final RoadSegment roadSegment = floatingCars.getRoadSegment();
+        final int laneCount = roadSegment.laneCount();
         for (int lane = 0; lane < laneCount; ++lane) {
-        	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            final LaneSegment laneSegment = roadSegment.laneSegment(lane);
             for (final Vehicle vehOnLane : laneSegment) {
                 if (!vehOnLane.isFromOnramp()) {
                     // only mainroad vehicles
@@ -136,9 +129,10 @@ public class FileFloatingCars implements ObserverInTime {
      * @return the string
      */
     private String createFileName(int i, String ending) {
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName() + String.format(extensionFormat, i);
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+                + String.format(extensionFormat, i);
         return (filename);
     }
 
@@ -158,7 +152,8 @@ public class FileFloatingCars implements ObserverInTime {
         // note: number before decimal point is total width of field, not width
         // of integer part
         fstr.printf(outputFormat, time, veh.getLane(), veh.getPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
-                veh.getNetDistance(frontVeh), veh.getRelSpeed(frontVeh), veh.getDistanceToTrafficlight(), 1000*veh.getActualFuelFlowLiterPerS());
+                veh.getNetDistance(frontVeh), veh.getRelSpeed(frontVeh), veh.getDistanceToTrafficlight(),
+                1000 * veh.getActualFuelFlowLiterPerS());
         fstr.flush();
     }
 

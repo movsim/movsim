@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.lanechanging;
@@ -63,8 +56,9 @@ public class LaneChangingModel {
 
     /**
      * Instantiates a new lane changing model.
-     *
-     * @param lcInputData the lc input data
+     * 
+     * @param lcInputData
+     *            the lc input data
      */
     public LaneChangingModel(LaneChangingInputData lcInputData) {
 
@@ -78,8 +72,8 @@ public class LaneChangingModel {
     }
 
     public LaneChangingModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
-    	this.lcModelMOBIL = lcModelMOBIL;
-    	this.me = vehicle;
+        this.lcModelMOBIL = lcModelMOBIL;
+        this.me = vehicle;
         this.withEuropeanRules = true;
         this.vCritEur = 5.0;
         this.lcInputData = null;
@@ -88,8 +82,9 @@ public class LaneChangingModel {
 
     /**
      * Initialize.
-     *
-     * @param vehicle the vehicle
+     * 
+     * @param vehicle
+     *            the vehicle
      */
     public void initialize(Vehicle vehicle) {
         this.me = vehicle;
@@ -98,7 +93,7 @@ public class LaneChangingModel {
 
     /**
      * Checks if is initialized.
-     *
+     * 
      * @return true, if is initialized
      */
     public boolean isInitialized() {
@@ -117,12 +112,12 @@ public class LaneChangingModel {
 
     private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
-//        final boolean isLaneChangingFront = (frontVeh==null) ? false : frontVeh.inProcessOfLaneChanging();
-//        final boolean isLaneChangingBack = (backVeh==null) ? false : backVeh.inProcessOfLaneChanging();
-//        if(isLaneChangingBack || isLaneChangingFront){
-//            return false;
-//        }
-        
+        // final boolean isLaneChangingFront = (frontVeh==null) ? false : frontVeh.inProcessOfLaneChanging();
+        // final boolean isLaneChangingBack = (backVeh==null) ? false : backVeh.inProcessOfLaneChanging();
+        // if(isLaneChangingBack || isLaneChangingFront){
+        // return false;
+        // }
+
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);
         final double gapBack = (backVeh == null) ? MovsimConstants.GAP_INFINITY : backVeh.getNetDistance(me);
@@ -178,18 +173,18 @@ public class LaneChangingModel {
         if ((accToRight > 0) || (accToLeft > 0)) {
             logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
             logger.debug("currentLane={}", currentLane);
-            if (accToRight > accToLeft) {
+            if (accToRight > accToLeft)
                 return MovsimConstants.TO_RIGHT;
-            } else {
+            else
                 return MovsimConstants.TO_LEFT;
-            }
         }
 
         return MovsimConstants.NO_CHANGE;
     }
 
     public void setMandatoryChange(int incentive) {
-        if (incentive == MovsimConstants.NO_CHANGE || incentive == MovsimConstants.TO_RIGHT || incentive == MovsimConstants.TO_LEFT) {
+        if (incentive == MovsimConstants.NO_CHANGE || incentive == MovsimConstants.TO_RIGHT
+                || incentive == MovsimConstants.TO_LEFT) {
             mandatoryChange = incentive;
             System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
         } else {

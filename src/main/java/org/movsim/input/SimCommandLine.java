@@ -43,7 +43,7 @@ public class SimCommandLine {
 
     private Options options;
 
-    private ProjectMetaData projectMetaData;
+    private final ProjectMetaData projectMetaData;
 
     /**
      * Instantiates a new movsim command line parser.
@@ -189,8 +189,8 @@ public class SimCommandLine {
      * Option: writes log4j.properties to local filesystem
      */
     private void optWriteLoggingProperties() {
-        String resource = File.separator + "sim" + File.separator + "log4j.properties";
-        String filename = "log4j.properties";
+        final String resource = File.separator + "sim" + File.separator + "log4j.properties";
+        final String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("logger properties file written to " + filename);
 
@@ -201,8 +201,8 @@ public class SimCommandLine {
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private void optWriteDtd() {
-        String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
-        String filename = "multiModelTrafficSimulatorInput.dtd";
+        final String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
+        final String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("dtd file written to " + filename);
 
@@ -237,7 +237,7 @@ public class SimCommandLine {
         } else {
             final boolean isXml = validateSimulationFileName(filename);
             if (isXml) {
-                String name = FileUtils.getName(filename);
+                final String name = FileUtils.getName(filename);
                 projectMetaData.setProjectName(name.substring(0, name.indexOf(".xml")));
                 projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
             } else {

@@ -1,6 +1,5 @@
 package org.movsim.consumption.impl;
 
-
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +12,7 @@ import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EngineModelImpl implements EngineModel{
+public class EngineModelImpl implements EngineModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(EngineModelImpl.class);
@@ -49,7 +48,7 @@ public class EngineModelImpl implements EngineModel{
         this.carModel = carModel;
         initialize(engineInput);
 
-        // TODO 
+        // TODO
         final String label = "carConsumption";
         final String filename = "sim/startStop_ACC." + label + ".specCons";
         writeOutput(filename);
@@ -73,8 +72,9 @@ public class EngineModelImpl implements EngineModel{
 
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("maxPower=%.2f Watt, " + "idleConsumptionRate=%.3fl/h, cylinderVolume=%.2fl, "
-                    + "minPressure=%.2fPa, maxPressure=%.2fPa, " + "minFrequency=%.2f/s, maxFrequency=%.2f/s", maxPower,
-                    idleConsumptionRate * 3600, cylinderVolume, minEffPressure, maxEffPressure, minFrequency, maxFrequency));
+                    + "minPressure=%.2fPa, maxPressure=%.2fPa, " + "minFrequency=%.2f/s, maxFrequency=%.2f/s",
+                    maxPower, idleConsumptionRate * 3600, cylinderVolume, minEffPressure, maxEffPressure, minFrequency,
+                    maxFrequency));
         }
 
         maxMoment = getMaxMoment();
@@ -87,12 +87,14 @@ public class EngineModelImpl implements EngineModel{
             logger.debug(String.format("maxMoment=%f Nm", maxMoment));
             logger.debug(String.format("idleMoment=%f Nm", idleMoment));
 
-            logger.debug(String.format("cSpez0Idle=%f kg/kWh=%f l/kWh\n minimumSpecificConsumption=%e kg/Ws=%f kg/kWh \n"
-                    + "cSpez0(fIdle,M=160Nm)=%f g/kWh", 3.6e6 * cSpec0Idle, 3.6e6 * cSpec0Idle /
-                    FuelConstants.RHO_FUEL_PER_LITER, minSpecificConsumption, 3.6e6 * minSpecificConsumption,
+            logger.debug(String.format(
+                    "cSpez0Idle=%f kg/kWh=%f l/kWh\n minimumSpecificConsumption=%e kg/Ws=%f kg/kWh \n"
+                            + "cSpez0(fIdle,M=160Nm)=%f g/kWh", 3.6e6 * cSpec0Idle, 3.6e6 * cSpec0Idle
+                            / FuelConstants.RHO_FUEL_PER_LITER, minSpecificConsumption, 3.6e6 * minSpecificConsumption,
                     cSpecific0(getIdleFrequency(), 160, minSpecificConsumption) * 3.6e9));
 
-            logger.debug(String.format("Test: dotC(f_idle,0)=%f l/h", 3.6e6 * consRateAnalyticModel(getIdleFrequency(), 0)));
+            logger.debug(String.format("Test: dotC(f_idle,0)=%f l/h",
+                    3.6e6 * consRateAnalyticModel(getIdleFrequency(), 0)));
 
             logger.debug(String.format("dotC(0.5*fmax,0.5*Pmax)=%f l/h",
                     3.6e6 * consRateAnalyticModel(0.5 * getMaxFrequency(), 0.5 * getMaxPower())));
@@ -119,21 +121,19 @@ public class EngineModelImpl implements EngineModel{
         final double freq = getGearRatio(gearIndex) * v / carModel.getDynamicWheelCircumfence();
         return Math.max(minFrequency, Math.min(freq, maxFrequency));
     }
-    
+
     @Override
     public boolean isFrequencyPossible(double v, int gearIndex) {
         if (gearIndex < 0 || gearIndex > getMaxGearIndex()) {
             logger.error("gear out of range !  g={}", gearIndex);
         }
         final double frequencyTest = getGearRatio(gearIndex) * v / carModel.getDynamicWheelCircumfence();
-        if (frequencyTest > maxFrequency || frequencyTest < minFrequency) {
+        if (frequencyTest > maxFrequency || frequencyTest < minFrequency)
             return false;
-        } else {
+        else
             return true;
-        }
     }
 
-    
     // --------------------------------------------------------
     // power = 2*pi*f*M
     public double getMoment(double power, double frequency) {
@@ -144,7 +144,6 @@ public class EngineModelImpl implements EngineModel{
         return 2 * Math.PI * frequency * moment;
     }
 
-    
     // --------------------------------------------------------
     // model for loss moment
     public double getLossPower(double frequency) {
@@ -160,8 +159,7 @@ public class EngineModelImpl implements EngineModel{
     }
 
     // --------------------------------------------------------
-    
-    
+
     @Override
     public double getFuelFlow(double frequency, double power) {
         return consRateAnalyticModel(frequency, power); // returns m^3/s !!
@@ -171,29 +169,28 @@ public class EngineModelImpl implements EngineModel{
     private double consRateAnalyticModel(double frequency, double mechPower) {
         final double indMoment = getMoment(mechPower, frequency) + getModelLossMoment(frequency);
         final double totalPower = mechPower + getLossPower(frequency);
-        final double dotCInLiterPerSecond =
-                1. / FuelConstants.RHO_FUEL_PER_LITER * totalPower * cSpecific0(frequency, indMoment, minSpecificConsumption);
+        final double dotCInLiterPerSecond = 1. / FuelConstants.RHO_FUEL_PER_LITER * totalPower
+                * cSpecific0(frequency, indMoment, minSpecificConsumption);
         return Math.max(0, dotCInLiterPerSecond / 1000.);
     }
 
     // model output 1: specific consumption per power as function of moment
     private double cSpecific0ForMechMoment(double frequency, double mechMoment) {
         final double indMoment = mechMoment + getModelLossMoment(frequency);
-        return (mechMoment <= 0 || mechMoment > maxMoment) ? 0 : cSpecific0(frequency, indMoment, minSpecificConsumption) *
-                (indMoment / mechMoment);
+        return (mechMoment <= 0 || mechMoment > maxMoment) ? 0 : cSpecific0(frequency, indMoment,
+                minSpecificConsumption) * (indMoment / mechMoment);
     }
 
     // model output 2: consumption rate (liter/s) as function of power
     private double cSpecific0(double frequency, double indMoment, double minCSpec0) {
-        return minCSpec0 +
-                (cSpec0Idle - minCSpec0) *
-                (Math.exp(1 - indMoment / idleMoment) + Math.exp(1 - (maxMoment + getModelLossMoment(frequency) - indMoment) /
-                        idleMoment));
+        return minCSpec0
+                + (cSpec0Idle - minCSpec0)
+                * (Math.exp(1 - indMoment / idleMoment) + Math.exp(1
+                        - (maxMoment + getModelLossMoment(frequency) - indMoment) / idleMoment));
     }
 
     // --------------------------------------------------------
-    
-    
+
     public double idleConsumptionRateLiter() {
         return idleConsumptionRate;
     }
@@ -235,17 +232,15 @@ public class EngineModelImpl implements EngineModel{
         return cylinderVolume * maxEffPressure / (4 * Math.PI);
     }
 
-    
     // -------------------------------------------------------------
-    
-    
-    // TODO 
+
+    // TODO
     private void writeOutput(String filename) {
-        PrintWriter fstr = FileUtils.getWriter(filename);
+        final PrintWriter fstr = FileUtils.getWriter(filename);
         logger.info("write to file = {}", filename);
         // fstr.printf("# power in idle mode = %f kW%n", 0.001*powIdle);
-        fstr.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", 3.6e6 * cSpec0Idle, 3.6e6 /
-                FuelConstants.RHO_FUEL_PER_LITER * cSpec0Idle);
+        fstr.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", 3.6e6 * cSpec0Idle, 3.6e6
+                / FuelConstants.RHO_FUEL_PER_LITER * cSpec0Idle);
         fstr.println("#f(1/min); powerMech(kW); consRate(l/h); moment(Nm); specCons(g/kWh)");
 
         final int N_FREQ = 40;
@@ -262,8 +257,8 @@ public class EngineModelImpl implements EngineModel{
                 final double indMoment = getMoment(pow, f); // + getModelLossMoment(f);
                 final double cSpec = cSpecific0ForMechMoment(f, indMoment);
                 // factor 3.6e6 for converting from m^3/s to liter/h
-                fstr.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", 
-                        f * 60, pow / 1000., 3.6e6 * dotC, indMoment, cSpec * 3.6e9);
+                fstr.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", f * 60, pow / 1000., 3.6e6 * dotC, indMoment,
+                        cSpec * 3.6e9);
             }
             fstr.println(); // gnuplot block
         }

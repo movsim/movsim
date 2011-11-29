@@ -1,12 +1,11 @@
 /**
  * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
- * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model
- * open-source vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
- * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
+ * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model open-source
+ * vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. MovSim is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public
+ * License along with MovSim. If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
 // Enhanced Intelligent Driver Model to access the impact of driving strategies on traffic capacity
 // Philosophical Transactions of the Royal Society A 368, 4585-4605 (2010)
 
-// Reference for improved intelligent driver extension: book 
+// Reference for improved intelligent driver extension: book
 
 /**
  * The Class ACC.
@@ -68,8 +67,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
     private double delta;
 
     /**
-     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration
-     * heuristic, CAH), coolness=1 CAH factor in range [0, 1]
+     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in range [0, 1]
      */
     private double coolness;
 
@@ -87,7 +85,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
     }
 
     @Override
-	protected void initParameters() {
+    protected void initParameters() {
         this.v0 = ((AccelerationModelInputDataACC) parameters).getV0();
         this.T = ((AccelerationModelInputDataACC) parameters).getT();
         this.s0 = ((AccelerationModelInputDataACC) parameters).getS0();
@@ -101,9 +99,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
@@ -120,10 +116,10 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
         // space dependencies modeled by speedlimits, alpha's
 
         final double Tlocal = alphaT * T;
-//        if(alphaT!=1){
-//        System.out.printf("calcAcc: pos=%.2f, speed=%.2f, alphaT=%.3f, alphaV0=%.3f, T=%.3f, Tlocal=%.3f \n", 
-//                me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
-//        }
+        // if(alphaT!=1){
+        // System.out.printf("calcAcc: pos=%.2f, speed=%.2f, alphaT=%.3f, alphaV0=%.3f, T=%.3f, Tlocal=%.3f \n",
+        // me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
+        // }
         // consider external speedlimit
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
         final double aLocal = alphaA * a;
@@ -132,21 +128,20 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
 
     }
 
-    
-    
-  
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
+     * org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
         // Local dynamic variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
-        
+
         final double TLocal = T;
         final double v0Local = Math.min(v0, me.getSpeedlimit());
         final double aLocal = a;
@@ -157,9 +152,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #accSimple(double, double, double)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
@@ -188,13 +181,12 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
      */
     private double acc(double s, double v, double dv, double aLead, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0) {
+        if (v0Local == 0)
             return 0;
-        }
-        // IIDM
 
         final double sstar = s0
-                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(aLocal * b), 0.);
+                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(aLocal * b),
+                        0.);
         final double z = sstar / Math.max(s, 0.01);
         final double accEmpty = (v <= v0Local) ? aLocal * (1 - Math.pow((v / v0Local), delta)) : -b
                 * (1 - Math.pow((v0Local / v), aLocal * delta / b));
@@ -287,8 +279,7 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#parameterV0()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
      */
     @Override
     public double getDesiredSpeedParameterV0() {
@@ -304,17 +295,14 @@ public class ACC extends AccelerationModelAbstract implements AccelerationModel 
         return coolness;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
      */
     @Override
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
-
-   
-
-   
 
 }

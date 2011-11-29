@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.roadmappings;
@@ -60,9 +55,9 @@ public class RoadMappingLine extends RoadMapping {
      *            x-position of start of line
      * @param y0
      *            y-position of start of line
-     * @param theta 
+     * @param theta
      *            direction of line
-     * @param length 
+     * @param length
      *            length of line
      */
     public RoadMappingLine(int laneCount, double s, double x0, double y0, double theta, double length) {
@@ -86,8 +81,7 @@ public class RoadMappingLine extends RoadMapping {
     }
 
     /**
-     * Constructor to append this road mapping onto a previously existing road mapping,
-     * matching the endpoints.
+     * Constructor to append this road mapping onto a previously existing road mapping, matching the endpoints.
      * 
      * @param roadMapping
      *            the road mapping to append to
@@ -98,7 +92,7 @@ public class RoadMappingLine extends RoadMapping {
      */
     public RoadMappingLine(RoadMapping roadMapping, double x1, double y1) {
         super(roadMapping.laneCount(), 0, 0);
-        RoadMapping.PosTheta posTheta = roadMapping.endPos();
+        final RoadMapping.PosTheta posTheta = roadMapping.endPos();
         x0 = posTheta.x;
         y0 = posTheta.y;
         this.x1 = x1;

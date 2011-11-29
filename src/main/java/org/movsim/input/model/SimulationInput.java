@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model;
@@ -43,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * The Interface SimulationInput.
  */
 public class SimulationInput {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulationInput.class);
 
@@ -51,7 +44,7 @@ public class SimulationInput {
     private final double timestep;
 
     /** The duration of the simulation. */
-    private double maxSimTime;
+    private final double maxSimTime;
 
     /** The with fixed seed. */
     private boolean withFixedSeed;
@@ -60,19 +53,18 @@ public class SimulationInput {
 
     /** The random seed. */
     private final int randomSeed;
-    
-    
+
     /** The heterogeneity input data. */
-    private List<TrafficCompositionInputData> trafficCompositionInputData;
-    
+    private final List<TrafficCompositionInputData> trafficCompositionInputData;
+
     /** The is with write fundamental diagrams. */
     private boolean isWithWriteFundamentalDiagrams;
 
     /** The road input. */
-    Map<Long,RoadInput> roadInputMap;
+    Map<Long, RoadInput> roadInputMap;
 
     /** The output input. */
-    private OutputInput outputInput;
+    private final OutputInput outputInput;
 
     /**
      * Instantiates a new simulation input impl.
@@ -82,7 +74,7 @@ public class SimulationInput {
      */
     public SimulationInput(final Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
-        
+
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
         if (elem.getAttributeValue("fixed_seed").equalsIgnoreCase("true")) {
@@ -96,11 +88,10 @@ public class SimulationInput {
             withCrashExit = false;
         }
 
-        
         // default heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
-        
+
         // optional for specific road
         if (heterogenElem != null) {
             isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
@@ -113,15 +104,15 @@ public class SimulationInput {
             }
         }
         // -----------------------------------------------------------
-        
+
         // quick hack: for road segment a mapping to ids is needed
-		final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
-        List<RoadInput> roadInputList = new ArrayList<RoadInput>();
+        final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
+        final List<RoadInput> roadInputList = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
             roadInputList.add(new RoadInput(roadElem));
         }
-        
-        roadInputMap = new HashMap<Long,RoadInput>();
+
+        roadInputMap = new HashMap<Long, RoadInput>();
         for (final RoadInput roadInputData : roadInputList) {
             roadInputMap.put(roadInputData.getId(), roadInputData);
         }
@@ -173,7 +164,7 @@ public class SimulationInput {
      * 
      * @see org.movsim.input.model.SimulationInput#getRoadInput()
      */
-    public Map<Long,RoadInput> getRoadInput() {
+    public Map<Long, RoadInput> getRoadInput() {
         return roadInputMap;
     }
 
@@ -204,18 +195,16 @@ public class SimulationInput {
     public boolean isWithCrashExit() {
         return withCrashExit;
     }
-    
 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
+     * @see org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
      */
     public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
         return trafficCompositionInputData;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -226,75 +215,75 @@ public class SimulationInput {
     }
 }
 
-//}
+// }
 //
-//    /**
-//     * Gets the timestep.
-//     * 
-//     * @return the timestep
-//     */
-//    double getTimestep();
+// /**
+// * Gets the timestep.
+// *
+// * @return the timestep
+// */
+// double getTimestep();
 //
-//    /**
-//     * Gets the duration of the simulation.
-//     * 
-//     * @return the max simulation time
-//     */
-//    double getMaxSimTime();
+// /**
+// * Gets the duration of the simulation.
+// *
+// * @return the max simulation time
+// */
+// double getMaxSimTime();
 //
-//    /**
-//     * Checks if is with fixed seed.
-//     * 
-//     * @return true, if is with fixed seed
-//     */
-//    boolean isWithFixedSeed();
+// /**
+// * Checks if is with fixed seed.
+// *
+// * @return true, if is with fixed seed
+// */
+// boolean isWithFixedSeed();
 //
-//    /**
-//     * Checks if is with crash exit.
-//     * 
-//     * @return true, if is with crash exit
-//     */
-//    boolean isWithCrashExit();
+// /**
+// * Checks if is with crash exit.
+// *
+// * @return true, if is with crash exit
+// */
+// boolean isWithCrashExit();
 //
-//    /**
-//     * Gets the random seed.
-//     * 
-//     * @return the random seed
-//     */
-//    int getRandomSeed();
-//    
-//    
-//    /**
-//     * Checks if is with write fundamental diagrams.
-//     * 
-//     * @return true, if is with write fundamental diagrams
-//     */
-//    boolean isWithWriteFundamentalDiagrams();
-//
-//    /**
-//     * Gets the heterogeneity input data.
-//     * 
-//     * @return the heterogeneity input data
-//     */
-//    List<TrafficCompositionInputData> getTrafficCompositionInputData();
+// /**
+// * Gets the random seed.
+// *
+// * @return the random seed
+// */
+// int getRandomSeed();
 //
 //
-//    //ArrayList<RoadInput> getRoadInput();
-//    Map<Long, RoadInput> getRoadInput();
-//    
+// /**
+// * Checks if is with write fundamental diagrams.
+// *
+// * @return true, if is with write fundamental diagrams
+// */
+// boolean isWithWriteFundamentalDiagrams();
 //
-//    /**
-//     * Gets the single road input. Quick hack: only one single main road
-//     * 
-//     * @return the single road input
-//     */
-//    RoadInput getSingleRoadInput();
+// /**
+// * Gets the heterogeneity input data.
+// *
+// * @return the heterogeneity input data
+// */
+// List<TrafficCompositionInputData> getTrafficCompositionInputData();
 //
-//    /**
-//     * Gets the output input.
-//     * 
-//     * @return the output input
-//     */
-//    OutputInput getOutputInput();
 //
-//}
+// //ArrayList<RoadInput> getRoadInput();
+// Map<Long, RoadInput> getRoadInput();
+//
+//
+// /**
+// * Gets the single road input. Quick hack: only one single main road
+// *
+// * @return the single road input
+// */
+// RoadInput getSingleRoadInput();
+//
+// /**
+// * Gets the output input.
+// *
+// * @return the output input
+// */
+// OutputInput getOutputInput();
+//
+// }

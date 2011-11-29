@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.roadmappings;
@@ -62,8 +57,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to
-     * try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
      */
     @Override
     protected void onLowMemory() {
@@ -95,9 +89,8 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
         double pos = roadPos;
         for (final RoadMapping roadMapping : roadMappings) {
-            if (pos <= roadMapping.roadLength()) {
+            if (pos <= roadMapping.roadLength())
                 return roadMapping.map(pos, lateralOffset);
-            }
             pos -= roadMapping.roadLength();
         }
         // have gone past end of last road mapping in road segment
@@ -118,8 +111,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     public void addLinePointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx,
-                posTheta.y + dy);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -131,11 +123,11 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     public void addArc(double s, double x0, double y0, double theta, double length, double curvature) {
-        //final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        //final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
-        //<geometry s="3.66" x="-4.64" y="4.34" hdg="5.29" length="9.19">
-        //<arc curvature="-1.2698412698412698e-01"/>
-        //</geometry>
+        // final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
+        // final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
+        // <geometry s="3.66" x="-4.64" y="4.34" hdg="5.29" length="9.19">
+        // <arc curvature="-1.2698412698412698e-01"/>
+        // </geometry>
         // RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature) {
         final RoadMappingArc roadMapping = new RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature);
         roadLength += length;
@@ -150,7 +142,8 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         roadMappings.add(roadMapping);
     }
 
-    public void addPoly3(double s, double x0, double y0, double theta, double length, double a, double b, double c, double d) {
+    public void addPoly3(double s, double x0, double y0, double theta, double length, double a, double b, double c,
+            double d) {
         final RoadMappingBezier roadMapping = new RoadMappingBezier(laneCount, s, x0, y0, theta, length, a, b, c, d);
         roadLength += length;
         roadMappings.add(roadMapping);

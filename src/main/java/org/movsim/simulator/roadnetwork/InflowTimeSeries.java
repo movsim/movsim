@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.roadnetwork;
@@ -36,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class InflowTimeSeries.
  */
-public class InflowTimeSeries  {
+public class InflowTimeSeries {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InflowTimeSeries.class);
@@ -49,11 +42,10 @@ public class InflowTimeSeries  {
 
     /** The speed values. */
     private double[] speedValues;
-    
-    
+
     private double constantFlowPerLane = -1;
-    
-    private final double constantInitSpeed = 80/3.6; // 80 km/h
+
+    private final double constantInitSpeed = 80 / 3.6; // 80 km/h
 
     /**
      * Instantiates a new inflow time series.
@@ -94,9 +86,8 @@ public class InflowTimeSeries  {
      * @return the flow
      */
     public double getFlowPerLane(double time) {
-        if(constantFlowPerLane>=0){
+        if (constantFlowPerLane >= 0)
             return constantFlowPerLane;
-        }
         return Tables.intpextp(timeValues, flowValues, time);
     }
 
@@ -108,15 +99,14 @@ public class InflowTimeSeries  {
      * @return the speed
      */
     public double getSpeed(double time) {
-        if(constantFlowPerLane>=0){
+        if (constantFlowPerLane >= 0)
             return constantInitSpeed;
-        }
         return Tables.intpextp(timeValues, speedValues, time);
     }
 
     public void setConstantFlowPerLane(double newFlowPerLane) {
         logger.debug("set new flow per lane value={} per second", newFlowPerLane);
-        assert newFlowPerLane >=0;
+        assert newFlowPerLane >= 0;
         this.constantFlowPerLane = newFlowPerLane;
     }
 }

@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -24,8 +19,8 @@ import java.util.ArrayList;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
- * A RoadMapping maps a logical road position (given by a lane and a position on a road segment)
- * onto a physical position, that is an x,y coordinate (given in meters).
+ * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical position, that is an x,y
+ * coordinate (given in meters).
  */
 public abstract class RoadMapping {
 
@@ -104,8 +99,8 @@ public abstract class RoadMapping {
      * Class representing a position in space plus a direction.
      * </p>
      * <p>
-     * Angles are interpreted as in the Argand diagram, that is they are measured in a
-     * counter-clockwise direction from the x-axis (3 o'clock position).
+     * Angles are interpreted as in the Argand diagram, that is they are measured in a counter-clockwise direction from the x-axis (3
+     * o'clock position).
      * </p>
      */
     public static class PosTheta {
@@ -185,8 +180,7 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to
-     * try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
      */
     protected void onLowMemory() {
         // By default does nothing. Subclasses may implement memory saving.
@@ -211,8 +205,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not
-     * traffic lanes and may be treated differently, especially for lane changes.
+     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not traffic lanes and may be treated differently,
+     * especially for lane changes.
      * 
      * @param trafficLaneMin
      */
@@ -230,8 +224,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not
-     * traffic lanes and may be treated differently, especially for lane changes.
+     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be treated differently,
+     * especially for lane changes.
      * 
      * @param trafficLaneMax
      */
@@ -259,7 +253,8 @@ public abstract class RoadMapping {
 
     /**
      * Convenience function, returns the start position of the road for a given lateral offset.
-     * @param lateralOffset 
+     * 
+     * @param lateralOffset
      * 
      * @return start position of the road for given lateral offset
      */
@@ -278,7 +273,8 @@ public abstract class RoadMapping {
 
     /**
      * Convenience function, returns the end position of the road for a given lateral offset.
-     * @param lateralOffset 
+     * 
+     * @param lateralOffset
      * 
      * @return end position of the road for given lateral offset
      */
@@ -361,8 +357,9 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Returns the offset of the center of the lane. Fractional lanes are supported
-     * to facilitate the drawing of vehicles in the process of changing lanes.
+     * Returns the offset of the center of the lane. Fractional lanes are supported to facilitate the drawing of vehicles in the process of
+     * changing lanes.
+     * 
      * @param lane
      * @return the offset of the center of the lane
      */
@@ -372,16 +369,17 @@ public abstract class RoadMapping {
 
     /**
      * Returns the offset of the center of the lane.
+     * 
      * @param lane
      * @return the offset of the center of the lane
      */
     public final double laneOffset(int lane) {
-        return lane == Lane.NONE ? 0.0 : (0.5 * (trafficLaneMin + laneCount - 1) - lane)
-                * laneWidth;
+        return lane == Lane.NONE ? 0.0 : (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
     }
 
     /**
      * Returns the offset of the inside edge of the lane.
+     * 
      * @param lane
      * @return the offset of the inside edge of the lane
      */
@@ -390,8 +388,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Set a clipping region based on the road position and length. Simple implementation at the
-     * moment: only one clipping region is supported.
+     * Set a clipping region based on the road position and length. Simple implementation at the moment: only one clipping region is
+     * supported.
      * 
      * @param pos
      *            position of the clipping region on the road
@@ -416,26 +414,27 @@ public abstract class RoadMapping {
             outsideClippingPolygon.xPoints[3] = -LARGE_NUMBER;
             outsideClippingPolygon.yPoints[3] = LARGE_NUMBER;
         }
-        PolygonFloat clippingPolygon = new PolygonFloat(POINT_COUNT);
-        double offset = 1.5 * laneCount * RoadMapping.DEFAULT_LANE_WIDTH;
+        final PolygonFloat clippingPolygon = new PolygonFloat(POINT_COUNT);
+        final double offset = 1.5 * laneCount * RoadMapping.DEFAULT_LANE_WIDTH;
         PosTheta posTheta;
         posTheta = map(pos + length, -offset);
-        clippingPolygon.xPoints[0] = (float)posTheta.x;
-        clippingPolygon.yPoints[0] = (float)posTheta.y;
+        clippingPolygon.xPoints[0] = (float) posTheta.x;
+        clippingPolygon.yPoints[0] = (float) posTheta.y;
         posTheta = map(pos + length, offset);
-        clippingPolygon.xPoints[1] = (float)posTheta.x;
-        clippingPolygon.yPoints[1] = (float)posTheta.y;
+        clippingPolygon.xPoints[1] = (float) posTheta.x;
+        clippingPolygon.yPoints[1] = (float) posTheta.y;
         posTheta = map(pos, offset);
-        clippingPolygon.xPoints[2] = (float)posTheta.x;
-        clippingPolygon.yPoints[2] = (float)posTheta.y;
+        clippingPolygon.xPoints[2] = (float) posTheta.x;
+        clippingPolygon.yPoints[2] = (float) posTheta.y;
         posTheta = map(pos, -offset);
-        clippingPolygon.xPoints[3] = (float)posTheta.x;
-        clippingPolygon.yPoints[3] = (float)posTheta.y;
+        clippingPolygon.xPoints[3] = (float) posTheta.x;
+        clippingPolygon.yPoints[3] = (float) posTheta.y;
         clippingPolygons.add(clippingPolygon);
     }
 
     /**
      * Returns an arraylist of the clipping polygons, or null if no clipping set.
+     * 
      * @return arraylist of the clipping polygons, or null if no clipping set.
      */
     public ArrayList<RoadMapping.PolygonFloat> clippingPolygons() {
@@ -444,6 +443,7 @@ public abstract class RoadMapping {
 
     /**
      * Returns the outside clipping polygon.
+     * 
      * @return the outside clipping polygon
      */
     public RoadMapping.PolygonFloat outsideClippingPolygon() {
@@ -455,18 +455,18 @@ public abstract class RoadMapping {
         final double lca = length * posTheta.cosTheta;
         final double wsa = width * posTheta.sinTheta;
         final double xbr = posTheta.x - 0.5 * (lca - wsa);
-        polygonFloat.xPoints[0] = (float)(xbr + lca); // front right
-        polygonFloat.xPoints[1] = (float)(xbr + lca - wsa); // front left
-        polygonFloat.xPoints[2] = (float)(xbr - wsa); // back left
-        polygonFloat.xPoints[3] = (float)xbr; // back right
+        polygonFloat.xPoints[0] = (float) (xbr + lca); // front right
+        polygonFloat.xPoints[1] = (float) (xbr + lca - wsa); // front left
+        polygonFloat.xPoints[2] = (float) (xbr - wsa); // back left
+        polygonFloat.xPoints[3] = (float) xbr; // back right
 
         final double lsa = length * posTheta.sinTheta;
         final double wca = width * posTheta.cosTheta;
         final double ybr = posTheta.y + 0.5 * (lsa + wca);
-        polygonFloat.yPoints[0] = (float)(ybr - lsa); // front right
-        polygonFloat.yPoints[1] = (float)(ybr - wca - lsa); // front left
-        polygonFloat.yPoints[2] = (float)(ybr - wca); // back left
-        polygonFloat.yPoints[3] = (float)ybr; // back right
+        polygonFloat.yPoints[0] = (float) (ybr - lsa); // front right
+        polygonFloat.yPoints[1] = (float) (ybr - wca - lsa); // front left
+        polygonFloat.yPoints[2] = (float) (ybr - wca); // back left
+        polygonFloat.yPoints[3] = (float) ybr; // back right
         return polygonFloat;
     }
 
@@ -479,8 +479,7 @@ public abstract class RoadMapping {
      * @return polygon representing vehicle
      */
     public RoadMapping.PolygonFloat mapFloat(Vehicle vehicle, double time) {
-        final RoadMapping.PosTheta posTheta = map(vehicle.getPosition(),
-                laneOffset(vehicle.getLane()));
+        final RoadMapping.PosTheta posTheta = map(vehicle.getPosition(), laneOffset(vehicle.getLane()));
         return mapFloat(posTheta, vehicle.getLength(), vehicle.getWidth());
     }
 }

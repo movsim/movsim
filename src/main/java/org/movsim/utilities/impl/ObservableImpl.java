@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.utilities.impl;
@@ -44,16 +37,13 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ObservableImpl.class);
 
-    private List<Observer> observers = new ArrayList<Observer>();
-    private List<ObserverInTime> observersInTime = new ArrayList<ObserverInTime>();
+    private final List<Observer> observers = new ArrayList<Observer>();
+    private final List<ObserverInTime> observersInTime = new ArrayList<ObserverInTime>();
 
-  
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.utilities.ObservableInTime#registerObserver(org.movsim.utilities
-     * .ObserverInTime)
+     * @see org.movsim.utilities.ObservableInTime#registerObserver(org.movsim.utilities .ObserverInTime)
      */
     @Override
     public void registerObserver(ObserverInTime observer) {
@@ -67,9 +57,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.utilities.Observable#registerObserver(org.movsim.utilities
-     * .Observer)
+     * @see org.movsim.utilities.Observable#registerObserver(org.movsim.utilities .Observer)
      */
     @Override
     public void registerObserver(Observer observer) {
@@ -83,9 +71,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.utilities.ObservableInTime#removeObserver(org.movsim.utilities
-     * .ObserverInTime)
+     * @see org.movsim.utilities.ObservableInTime#removeObserver(org.movsim.utilities .ObserverInTime)
      */
     @Override
     public void removeObserver(ObserverInTime observer) {
@@ -101,9 +87,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.utilities.Observable#removeObserver(org.movsim.utilities.Observer
-     * )
+     * @see org.movsim.utilities.Observable#removeObserver(org.movsim.utilities.Observer )
      */
     @Override
     public void removeObserver(Observer observer) {
@@ -126,8 +110,7 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
         for (final ObserverInTime o : observersInTime) {
             o.notifyObserver(time);
         }
-         logger.debug(" n = {} observers notified at time = {}",
-         observersInTime.size(), time);
+        logger.debug(" n = {} observers notified at time = {}", observersInTime.size(), time);
     }
 
     /**
@@ -140,12 +123,11 @@ public abstract class ObservableImpl implements ObservableInTime, Observable {
         // logger.debug(" n = {} observers notified", observers.size());
     }
 
-    
-    public int getObserversSize(){
+    public int getObserversSize() {
         return observers.size();
     }
-    
-    public int getObserversInTimeSize(){
+
+    public int getObserversInTimeSize() {
         return observersInTime.size();
     }
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.input.model.output.TravelTimesInput;
-import org.movsim.output.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.utilities.impl.ExponentialMovingAverage;
 import org.movsim.utilities.impl.ObservableImpl;
@@ -13,7 +12,7 @@ import org.movsim.utilities.impl.XYDataPoint;
 
 public class TravelTimes extends ObservableImpl {
 
-    private List<TravelTimeRoute> routes;
+    private final List<TravelTimeRoute> routes;
 
     private final RoadNetwork roadNetwork;
 
@@ -31,7 +30,7 @@ public class TravelTimes extends ObservableImpl {
     public void update(long iterationCount, double time, double timestep) {
 
         final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
-        for (TravelTimeRoute route : routes) {
+        for (final TravelTimeRoute route : routes) {
             route.update(iterationCount, time, timestep, roadNetwork);
             if (doNotificationUpdate) {
                 route.calcEMA(time);
@@ -47,16 +46,16 @@ public class TravelTimes extends ObservableImpl {
     }
 
     public List<List<XYDataPoint>> getTravelTimeEmas() {
-        List<List<XYDataPoint>> listOfEmas = new LinkedList<List<XYDataPoint>>();
-        for (TravelTimeRoute route : routes) {
+        final List<List<XYDataPoint>> listOfEmas = new LinkedList<List<XYDataPoint>>();
+        for (final TravelTimeRoute route : routes) {
             listOfEmas.add(route.getEmaPoints());
         }
         return listOfEmas;
     }
 
     public List<List<XYDataPoint>> getTravelTimeDataRoutes() {
-        List<List<XYDataPoint>> listOfRoutes = new LinkedList<List<XYDataPoint>>();
-        for (TravelTimeRoute route : routes) {
+        final List<List<XYDataPoint>> listOfRoutes = new LinkedList<List<XYDataPoint>>();
+        for (final TravelTimeRoute route : routes) {
             listOfRoutes.add(route.getDataPoints());
         }
         return listOfRoutes;
@@ -71,10 +70,10 @@ public class TravelTimes extends ObservableImpl {
         final int N_DATA = 10; // cut-off parameter
         final ExponentialMovingAverage ema = new ExponentialMovingAverage(tauEMA);
 
-        List<Double> ttEMAs = new LinkedList<Double>();
-        for (TravelTimeRoute route : routes) {
+        final List<Double> ttEMAs = new LinkedList<Double>();
+        for (final TravelTimeRoute route : routes) {
             // System.out.println("calc ema with size()="+route.getDataPoints().size());
-            List<XYDataPoint> routeTravelTimes = route.getDataPoints();
+            final List<XYDataPoint> routeTravelTimes = route.getDataPoints();
             final int size = routeTravelTimes.size();
             ttEMAs.add(ema.calcEMA(time, routeTravelTimes.subList(Math.max(0, size - N_DATA), size)));
         }

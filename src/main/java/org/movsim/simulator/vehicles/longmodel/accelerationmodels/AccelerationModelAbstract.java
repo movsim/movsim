@@ -1,12 +1,11 @@
 /**
  * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
- * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model
- * open-source vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
- * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
+ * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model open-source
+ * vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. MovSim is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public
+ * License along with MovSim. If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
@@ -41,10 +40,11 @@ public abstract class AccelerationModelAbstract implements Observer {
     public enum ModelName {
         IDM(ModelCategory.CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.CONTINUOUS_MODEL,
                 "Adaptive-Cruise-Control-Model"), OVM_VDIFF(ModelCategory.CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_MAP_MODEL, "Gipps-Model"), NEWELL(
-                ModelCategory.ITERATED_MAP_MODEL, "Newell-Model"), KRAUSS(ModelCategory.ITERATED_MAP_MODEL, "Krauss-Model"), NSM(
-                ModelCategory.CELLULAR_AUTOMATON, "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(
-                ModelCategory.CELLULAR_AUTOMATON, "Kerner-Klenov-Wolf-Model");
+                "Optimal-Velocity-Model / Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_MAP_MODEL,
+                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_MAP_MODEL, "Newell-Model"), KRAUSS(
+                ModelCategory.ITERATED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
+                "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
+                "Kerner-Klenov-Wolf-Model");
 
         private final ModelCategory modelCategory;
 
@@ -62,11 +62,11 @@ public abstract class AccelerationModelAbstract implements Observer {
         final String getDetailedName() {
             return detailedName;
         }
-        
-        @Override public String toString(){
+
+        @Override
+        public String toString() {
             return name();
         }
-
 
     }
 
@@ -79,29 +79,32 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /** The parameters. */
     public AccelerationModelInputData parameters;
-    
+
     /** The id. */
     protected long id;
 
     /**
      * Instantiates a new longitudinal model impl.
-     * @param modelName the model name
-     * @param modelCategory the model category
-     * @param parameters the parameters
+     * 
+     * @param modelName
+     *            the model name
+     * @param modelCategory
+     *            the model category
+     * @param parameters
+     *            the parameters
      */
     public AccelerationModelAbstract(ModelName modelName, AccelerationModelInputData parameters) {
         this.modelName = modelName;
         this.parameters = parameters;
-//        this.id = MyRandom.nextInt();
+        // this.id = MyRandom.nextInt();
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
         if (parameters != null) {
-        	parameters.registerObserver(this);
+            parameters.registerObserver(this);
         }
     }
 
-    
     protected abstract void initParameters();
-    
+
     /**
      * Removes the observer.
      */
@@ -113,6 +116,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /**
      * Model name.
+     * 
      * @return the string
      */
     public ModelName modelName() {
@@ -121,6 +125,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /**
      * Gets the model category.
+     * 
      * @return the model category
      */
     public ModelCategory getModelCategory() {
@@ -129,6 +134,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /**
      * Checks if is cellular automaton.
+     * 
      * @return true, if is cA
      */
     public boolean isCA() {
@@ -137,6 +143,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /**
      * Checks if is iterated map.
+     * 
      * @return true, if is iterated map
      */
     public boolean isIteratedMap() {
@@ -145,6 +152,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /**
      * Gets the scaling length.
+     * 
      * @return the scaling length
      */
     public double getScalingLength() {
@@ -153,6 +161,7 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /*
      * (non-Javadoc)
+     * 
      * @see org.movsim.utilities.Observer#notifyObserver()
      */
     @Override
@@ -163,7 +172,9 @@ public abstract class AccelerationModelAbstract implements Observer {
 
     /**
      * Sets the relative randomization v0.
-     * @param relRandomizationFactor the new relative randomization v0
+     * 
+     * @param relRandomizationFactor
+     *            the new relative randomization v0
      */
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
@@ -190,19 +201,18 @@ public abstract class AccelerationModelAbstract implements Observer {
         final double accInOwnLane = calcAcc(me, vehContainer, alphaT, alphaV0, alphaA);
 
         // no lane on left-hand side
-        if (vehContainerLeftLane == null) {
+        if (vehContainerLeftLane == null)
             return accInOwnLane;
-        }
 
         // check left-vehicle's speed
 
         final Vehicle newFrontLeft = vehContainerLeftLane.frontVehicle(me);
-        double speedFront = (newFrontLeft != null) ? newFrontLeft.getSpeed() : -1;
+        final double speedFront = (newFrontLeft != null) ? newFrontLeft.getSpeed() : -1;
 
         // condition me.getSpeed() > speedFront will be evaluated by softer tanh
         // condition below
-        double accLeft =
-                (speedFront > vCritEur) ? calcAcc(me, vehContainerLeftLane, alphaT, alphaV0, alphaA) : Double.MAX_VALUE;
+        final double accLeft = (speedFront > vCritEur) ? calcAcc(me, vehContainerLeftLane, alphaT, alphaV0, alphaA)
+                : Double.MAX_VALUE;
 
         // avoid hard switching by condition vMe>vLeft needed in European
         // acceleration rule
@@ -210,23 +220,26 @@ public abstract class AccelerationModelAbstract implements Observer {
         final double frac = calcSmoothFraction(me.getSpeed(), speedFront);
         final double accResult = frac * Math.min(accInOwnLane, accLeft) + (1 - frac) * accInOwnLane;
 
-// if (speedFront != -1) {
-// logger.debug(String
-// .format("pos=%.4f, accLeft: frac=%.4f, acc=%.4f, accLeft=%.4f, accResult=%.4f, meSpeed=%.2f, frontLeftSpeed=%.2f\n",
-// me.getPosition(), frac, accInOwnLane, accLeft, accResult, me.getSpeed(), speedFront));
-// }
+        // if (speedFront != -1) {
+        // logger.debug(String
+        // .format("pos=%.4f, accLeft: frac=%.4f, acc=%.4f, accLeft=%.4f, accResult=%.4f, meSpeed=%.2f, frontLeftSpeed=%.2f\n",
+        // me.getPosition(), frac, accInOwnLane, accLeft, accResult, me.getSpeed(), speedFront));
+        // }
         return accResult;
     }
 
     /**
      * Gets the desired speed parameter v0.
+     * 
      * @return the desired speed parameter v0
      */
     public abstract double getDesiredSpeedParameterV0();
 
     /**
      * Sets the desired speed v0.
-     * @param v0 the new desired speed v0
+     * 
+     * @param v0
+     *            the new desired speed v0
      */
     protected abstract void setDesiredSpeedV0(double v0);
 

@@ -12,25 +12,23 @@ import org.slf4j.LoggerFactory;
 
 public class ConsumptionModeling {
 
-    private static final String DEFAULT_DUMMY_LABEL="none";  // default from dtd
-    
+    private static final String DEFAULT_DUMMY_LABEL = "none"; // default from dtd
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionModeling.class);
 
     private Map<String, FuelConsumption> fuelModelsMap;
 
     public ConsumptionModeling(FuelConsumptionInput input) {
-        if (input == null) {
+        if (input == null)
             return;
-        }
 
         fuelModelsMap = new HashMap<String, FuelConsumption>();
 
-        if(input.getConsumptionModelInput()==null){
+        if (input.getConsumptionModelInput() == null) {
             logger.info("no fuel consumption models defined.");
-        }
-        else{
-            for (Map.Entry<String, ConsumptionModelInput> entries : input.getConsumptionModelInput().entrySet()) {
+        } else {
+            for (final Map.Entry<String, ConsumptionModelInput> entries : input.getConsumptionModelInput().entrySet()) {
                 final String key = entries.getKey();
                 final ConsumptionModelInput consModelInput = entries.getValue();
                 logger.info("create fuel consumption model with key={}", key);
@@ -40,7 +38,7 @@ public class ConsumptionModeling {
     }
 
     public FuelConsumption getFuelConsumptionModel(String key) {
-        if(key.equals(DEFAULT_DUMMY_LABEL)){
+        if (key.equals(DEFAULT_DUMMY_LABEL)) {
             logger.debug("no fuel consumption model specified.");
             return null;
         }

@@ -1,34 +1,25 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.output;
 
-
 import org.movsim.input.model.output.SpatioTemporalInput;
-import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -153,15 +144,15 @@ public class SpatioTemporal extends ObservableImpl {
      * 
      * @return the dt out
      */
-   public double getDtOut() {
+    public double getDtOut() {
         return dtOut;
     }
 
-   /**
-    * Gets the dx out.
-    * 
-    * @return the dx out
-    */
+    /**
+     * Gets the dx out.
+     * 
+     * @return the dx out
+     */
     public double getDxOut() {
         return dxOut;
     }
@@ -171,24 +162,24 @@ public class SpatioTemporal extends ObservableImpl {
      * 
      * @return the density
      */
-     public double[] getDensity() {
+    public double[] getDensity() {
         return density;
     }
 
-     /**
-      * Gets the average speed.
-      * 
-      * @return the average speed
-      */
-   public double[] getAverageSpeed() {
+    /**
+     * Gets the average speed.
+     * 
+     * @return the average speed
+     */
+    public double[] getAverageSpeed() {
         return averageSpeed;
     }
 
-   /**
-    * Gets the flow.
-    * 
-    * @return the flow
-    */
+    /**
+     * Gets the flow.
+     * 
+     * @return the flow
+     */
     public double[] getFlow() {
         return flow;
     }

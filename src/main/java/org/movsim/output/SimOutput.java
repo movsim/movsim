@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.output;
@@ -38,8 +31,6 @@ import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
-import org.movsim.output.SpatioTemporal;
-import org.movsim.output.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
@@ -62,45 +53,45 @@ public class SimOutput implements SimObservables {
     private final boolean writeOutput;
     private final String projectName;
 
-    //final RoadSection roadSection; // TODO hack only one roadsection
+    // final RoadSection roadSection; // TODO hack only one roadsection
     private final RoadNetwork roadNetwork;
     private final RoadSegment roadSegment;
     private TravelTimes travelTimes;
+
     /**
      * Instantiates a new sim output.
-     *
-     * @param simInput the sim input
-     * @param roadSections the road sections
+     * 
+     * @param simInput
+     *            the sim input
+     * @param roadSections
+     *            the road sections
      */
     public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
-    	this.roadNetwork = roadNetwork;
-    	roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
+        this.roadNetwork = roadNetwork;
+        roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
         projectName = simInput.getProjectMetaData().getProjectName();
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         logger.info("Cstr. SimOutput. projectName= {}", projectName);
-        
+
         // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();
-        if (simulationInput == null) {
-        	return;
-        }
+        if (simulationInput == null)
+            return;
         final OutputInput outputInput = simulationInput.getOutputInput();
 
-        
         // TODO quick hack null treatment
-        // travel times 
+        // travel times
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
-        if(travelTimesInput!=null){
+        if (travelTimesInput != null) {
             travelTimes = new TravelTimes(travelTimesInput, roadNetwork);
         }
-        
-        
+
         // TODO hack: just *one* roadsection
         // access not robust to fetch mainroad
-        //roadSection = roadSections.get(0);  
+        // roadSection = roadSections.get(0);
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
@@ -149,8 +140,8 @@ public class SimOutput implements SimObservables {
         if (trajectories != null) {
             trajectories.update(iterationCount, time);
         }
-        
-        if(travelTimes != null){
+
+        if (travelTimes != null) {
             travelTimes.update(iterationCount, time, timestep);
         }
 

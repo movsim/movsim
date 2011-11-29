@@ -3,29 +3,27 @@
  */
 package org.movsim.simulator.vehicles.obsolete;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Interface MoveableContainer.
  */
 public interface MoveableContainer {
 
-//    /**
-//     * Gets the moveables.
-//     * 
-//     * @return the moveables
-//     */
-//    List<Moveable> getMoveables();
+    // /**
+    // * Gets the moveables.
+    // *
+    // * @return the moveables
+    // */
+    // List<Moveable> getMoveables();
 
-//    /**
-//     * Gets the moveable.
-//     * 
-//     * @param index
-//     *            the index
-//     * @return the moveable
-//     */
-//    Moveable getMoveable(int index);
-
+    // /**
+    // * Gets the moveable.
+    // *
+    // * @param index
+    // * the index
+    // * @return the moveable
+    // */
+    // Moveable getMoveable(int index);
 
     /**
      * Gets the leader.
@@ -34,6 +32,6 @@ public interface MoveableContainer {
      *            the veh
      * @return the leader
      */
-    //Moveable getLeader(Moveable veh);
+    // Moveable getLeader(Moveable veh);
 
 }

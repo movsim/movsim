@@ -23,7 +23,7 @@ public class FileDetector implements ObserverInTime {
     private static final String outputFormat = "%8.1f, %8.3f, %8.3f, %8.1f, %5d, %8.7f, %8.3f, %8.5f%n";
 
     private PrintWriter printWriter = null;
-    private LoopDetector detector;
+    private final LoopDetector detector;
 
     /**
      * Instantiates a new file detector.
@@ -37,7 +37,7 @@ public class FileDetector implements ObserverInTime {
         this.detector = detector;
 
         // road id hard coded as 1 for the moment
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
         final String filename = outputPath + File.separator + projectMetaData.getProjectName()
                 + String.format(extensionFormat, roadId, xDetectorInt);

@@ -1,24 +1,18 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
-
 
 /**
  * Default sink: just removes vehicles that have reached the end of a road segment.
@@ -33,6 +27,7 @@ public class TrafficSink extends TrafficFlowBase {
 
     /**
      * Constructor.
+     * 
      * @param roadSegment
      */
     public TrafficSink(RoadSegment roadSegment) {
@@ -52,8 +47,8 @@ public class TrafficSink extends TrafficFlowBase {
     }
 
     /**
-     * Returns the difference between the source road's inflow and the outflow measured at this
-     * sink, averaged over <code>MEASURING_INTERVAL</code> seconds.
+     * Returns the difference between the source road's inflow and the outflow measured at this sink, averaged over
+     * <code>MEASURING_INTERVAL</code> seconds.
      * 
      * @return difference in flow
      */
@@ -74,10 +69,10 @@ public class TrafficSink extends TrafficFlowBase {
             measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL;
             sourceRoad.clearVehicleRemovedCount();
             measuredTime = 0.0;
-//            dQ = 0.0;
-//            if (sourceRoad.source() != null) {
-//                dQ = (measuredOutflow - sourceRoad.source().inflow());
-//            }
+            // dQ = 0.0;
+            // if (sourceRoad.source() != null) {
+            // dQ = (measuredOutflow - sourceRoad.source().inflow());
+            // }
 
             //            System.out.println("Sink (R" + roadSegment.roadId() +",S" + id + ") outflow: " + (int)(measuredOutflow * 3600));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             //            System.out.println("Sink R" + roadSegment.roadId() + " outflow: " + (int)(measuredOutflow * 3600));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$

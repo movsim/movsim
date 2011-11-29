@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles;
@@ -57,19 +50,24 @@ public class VehiclePrototype {
 
     /** The vehicle input. */
     private final VehicleInput vehicleInput;
-    
-    private final double relativeRandomizationV0;
 
+    private final double relativeRandomizationV0;
 
     /**
      * Instantiates a new vehicle prototype.
-     *
-     * @param label the label
-     * @param fraction the fraction
-     * @param longModel the long model
-     * @param equilProperties the equil properties
-     * @param vehicleInput the vehicle input
-     * @param relativeRandomizationV0 the relative randomization v0
+     * 
+     * @param label
+     *            the label
+     * @param fraction
+     *            the fraction
+     * @param longModel
+     *            the long model
+     * @param equilProperties
+     *            the equil properties
+     * @param vehicleInput
+     *            the vehicle input
+     * @param relativeRandomizationV0
+     *            the relative randomization v0
      */
     public VehiclePrototype(String label, double fraction, AccelerationModel longModel,
             EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0) {
@@ -186,10 +184,9 @@ public class VehiclePrototype {
         return vehicleInput;
     }
 
-    
     /**
      * Gets the relative randomization v0.
-     *
+     * 
      * @return the relative randomization v0
      */
     public double getRelativeRandomizationV0() {

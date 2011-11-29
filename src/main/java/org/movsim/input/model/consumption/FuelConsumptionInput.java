@@ -20,9 +20,8 @@ public class FuelConsumptionInput {
     public FuelConsumptionInput(Element elem) {
 
         // fuel consumption element is optional
-        if (elem == null) {
+        if (elem == null)
             return;
-        }
 
         consumptionModelInput = new HashMap<String, ConsumptionModelInput>();
 
@@ -34,13 +33,13 @@ public class FuelConsumptionInput {
         }
     }
 
-//    public ConsumptionModelInput getConsumptionModelInput(String label) {
-//        if (!consumptionModelInput.containsKey(label)) {
-//            logger.error("consumption model with label={} is not available from the input. Exit.", label);
-//            System.exit(-1);
-//        }
-//        return consumptionModelInput.get(label);
-//    }
+    // public ConsumptionModelInput getConsumptionModelInput(String label) {
+    // if (!consumptionModelInput.containsKey(label)) {
+    // logger.error("consumption model with label={} is not available from the input. Exit.", label);
+    // System.exit(-1);
+    // }
+    // return consumptionModelInput.get(label);
+    // }
 
     public Map<String, ConsumptionModelInput> getConsumptionModelInput() {
         return consumptionModelInput;

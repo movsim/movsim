@@ -1,40 +1,31 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
 
-
 /**
  * <p>
- * Simple connection between road segments, where each lane has an unambiguous predecessor and
- * successor. Allows merging and forking of road segments.
+ * Simple connection between road segments, where each lane has an unambiguous predecessor and successor. Allows merging and forking of road
+ * segments.
  * </p>
  * <p>
- * There are one or more source road segments and one or more sink road segments. Each lane in a
- * source road segment is normally paired with lane in a sink road segment. It is, however, possible
- * to have unpaired lanes in either the source road segment (for example when the road narrows, or
- * at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at
- * the start of an off-ramp).
+ * There are one or more source road segments and one or more sink road segments. Each lane in a source road segment is normally paired with
+ * lane in a sink road segment. It is, however, possible to have unpaired lanes in either the source road segment (for example when the road
+ * narrows, or at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at the start of an off-ramp).
  * </p>
  * <p>
- * For complex connections between road segments, for example an urban road junction, or a
- * roundabout, use a <code>Junction</code>.
+ * For complex connections between road segments, for example an urban road junction, or a roundabout, use a <code>Junction</code>.
  * </p>
  * 
  */
@@ -47,20 +38,18 @@ public class Link {
     }
 
     /**
-     * Adds a lane pair. Joins a lane in the source road segment to its corresponding
-     * lane in the sink road segment.
+     * Adds a lane pair. Joins a lane in the source road segment to its corresponding lane in the sink road segment.
      * 
      * @param fromLane
      * @param fromRoadsegment
      * @param toLane
      * @param toRoadSegment
      */
-    public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane,
-            RoadSegment toRoadSegment) {
-//        toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
-//        toRoadSegment.setSourceLaneForLane(fromLane, toLane);
-//        fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
-//        fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
+    public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane, RoadSegment toRoadSegment) {
+        // toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
+        // toRoadSegment.setSourceLaneForLane(fromLane, toLane);
+        // fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
+        // fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
 
         toRoadSegment.setSourceLaneSegmentForLane(fromRoadsegment.laneSegment(fromLane), toLane);
         fromRoadsegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);

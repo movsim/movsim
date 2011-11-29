@@ -1,29 +1,22 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.roadmappings;
 
 /**
- * Maps a road segment onto an arc of a circle.
- * Angles are interpreted as in the Argand diagram, that is 0 is at the 3 o'clock position.
- * A positive angle indicates a counter-clockwise rotation while a negative angle indicates
- * a clockwise rotation.
+ * Maps a road segment onto an arc of a circle. Angles are interpreted as in the Argand diagram, that is 0 is at the 3 o'clock position. A
+ * positive angle indicates a counter-clockwise rotation while a negative angle indicates a clockwise rotation.
  */
 public class RoadMappingArc extends RoadMappingCircle {
 
@@ -72,7 +65,8 @@ public class RoadMappingArc extends RoadMappingCircle {
      * @param curvature
      *            curvature of arc
      */
-    public RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length, double curvature) {
+    public RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length,
+            double curvature) {
         super(laneCount, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
         roadLength = length;
         this.startAngle = startAngle;
@@ -89,7 +83,7 @@ public class RoadMappingArc extends RoadMappingCircle {
     public PosTheta map(double roadPos, double lateralOffset) {
         // tangent to arc (road direction)
         final double theta = clockwise ? startAngle - roadPos / radius : startAngle + roadPos / radius;
-        //final double theta = clockwise ? startAngle + roadPos * curvature : startAngle - roadPos * curvature;
+        // final double theta = clockwise ? startAngle + roadPos * curvature : startAngle - roadPos * curvature;
         // angle arc subtends at center
         final double arcTheta = theta - 0.5 * Math.PI;
         posTheta.cosTheta = Math.cos(theta);

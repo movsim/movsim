@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model.vehicle.laneChanging;
@@ -35,26 +28,25 @@ import org.movsim.input.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LaneChangingInputData{
+public class LaneChangingInputData {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LaneChangingInputData.class);
 
-    private boolean isWithEuropeanRules;
+    private final boolean isWithEuropeanRules;
 
-    private double critSpeedEuroRules; // in SI (m/s)
+    private final double critSpeedEuroRules; // in SI (m/s)
 
-    private LaneChangingMobilData lcMobilData;
-    
+    private final LaneChangingMobilData lcMobilData;
+
     private boolean isInitializedMobilData = false;
 
     public LaneChangingInputData(final Element elem) {
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         isWithEuropeanRules = Boolean.parseBoolean(map.get("eur_rules"));
-        critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur")); 
+        critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur"));
 
         lcMobilData = new LaneChangingMobilData();
-        
-      
+
         final List<Element> lcModelElems = elem.getChildren();
         for (final Element lcModelElem : lcModelElems) {
             if (lcModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleLaneChangeModelMobil)) {
@@ -70,28 +62,36 @@ public class LaneChangingInputData{
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#isInitializedMobilData()
      */
     public boolean isInitializedMobilData() {
         return isInitializedMobilData;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#isWithEuropeanRules()
      */
     public boolean isWithEuropeanRules() {
         return isWithEuropeanRules;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getCritSpeedEuroRules()
      */
     public double getCritSpeedEuroRules() {
         return critSpeedEuroRules;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getLcMobilData()
      */
     public LaneChangingMobilData getLcMobilData() {

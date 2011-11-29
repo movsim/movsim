@@ -65,7 +65,7 @@ public class Simulator implements Runnable {
 
     private SimOutput simOutput;
 
-    private InputData inputData;
+    private final InputData inputData;
 
     private VehicleGenerator vehGenerator;
 
@@ -73,7 +73,7 @@ public class Simulator implements Runnable {
 
     private long startTimeMillis;
 
-    private RoadNetwork roadNetwork;
+    private final RoadNetwork roadNetwork;
 
     /**
      * Instantiates a new simulator.
@@ -143,7 +143,7 @@ public class Simulator implements Runnable {
             roadNetwork.add(roadSegment);
         } else {
             for (final RoadInput roadinput : roadInputMap.values()) {
-                RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+                final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
                 if (roadSegment != null) {
                     addInputToRoadSegment(roadSegment, roadinput);
                 }

@@ -19,8 +19,8 @@ public interface CarModel {
     double getDynamicRadius();
 
     double getDynamicWheelCircumfence();
-    
+
     double getForceMech(double v, double acc);
-    
+
     double getFreeWheelingDecel(double v);
 }

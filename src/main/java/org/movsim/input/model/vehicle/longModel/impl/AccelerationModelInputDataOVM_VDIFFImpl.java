@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model.vehicle.longModel.impl;
@@ -96,9 +89,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #checkParameters()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #checkParameters()
      */
     @Override
     protected void checkParameters() {
@@ -114,9 +105,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #resetParametersToDefault()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #resetParametersToDefault()
      */
     @Override
     public void resetParametersToDefault() {
@@ -132,9 +121,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getS0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getS0()
      */
     @Override
     public double getS0() {
@@ -144,9 +131,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getV0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getV0()
      */
     @Override
     public double getV0() {
@@ -156,9 +141,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getTau()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getTau()
      */
     @Override
     public double getTau() {
@@ -168,9 +151,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getLenInteraction()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getLenInteraction()
      */
     @Override
     public double getLenInteraction() {
@@ -180,9 +161,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getBeta()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getBeta()
      */
     @Override
     public double getBeta() {
@@ -192,9 +171,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getLambda()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getLambda()
      */
     @Override
     public double getLambda() {
@@ -204,9 +181,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF
-     * #getVariant()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getVariant()
      */
     @Override
     public int getVariant() {
@@ -216,9 +191,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getV0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getV0Default()
      */
     @Override
     public double getV0Default() {
@@ -228,9 +201,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getTauDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getTauDefault()
      */
     @Override
     public double getTauDefault() {
@@ -240,9 +211,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getLenInteractionDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getLenInteractionDefault()
      */
     @Override
     public double getLenInteractionDefault() {
@@ -252,9 +221,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getBetaDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getBetaDefault()
      */
     @Override
     public double getBetaDefault() {
@@ -264,9 +231,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getLambdaDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getLambdaDefault()
      */
     @Override
     public double getLambdaDefault() {
@@ -276,9 +241,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getS0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getS0Default()
      */
     @Override
     public double getS0Default() {
@@ -288,9 +251,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #getVariantDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getVariantDefault()
      */
     @Override
     public int getVariantDefault() {
@@ -300,9 +261,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setV0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setV0(double)
      */
     @Override
     public void setV0(double v0) {
@@ -313,9 +272,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setTau(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setTau(double)
      */
     @Override
     public void setTau(double tau) {
@@ -326,9 +283,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setLenInteraction(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setLenInteraction(double)
      */
     @Override
     public void setLenInteraction(double lenInteraction) {
@@ -339,9 +294,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setBeta(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setBeta(double)
      */
     @Override
     public void setBeta(double beta) {
@@ -352,9 +305,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setLambda(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setLambda(double)
      */
     @Override
     public void setLambda(double lambda) {
@@ -365,9 +316,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setS0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setS0(double)
      */
     @Override
     public void setS0(double s0) {
@@ -378,9 +327,7 @@ public class AccelerationModelInputDataOVM_VDIFFImpl extends AccelerationModelIn
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF
-     * #setVariant(int)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #setVariant(int)
      */
     @Override
     public void setVariant(int variant) {

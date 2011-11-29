@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -24,11 +19,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Iterator;
 
 import org.junit.Test;
-import org.movsim.simulator.roadnetwork.Lane;
-import org.movsim.simulator.roadnetwork.LaneSegment;
-import org.movsim.simulator.roadnetwork.Link;
-import org.movsim.simulator.roadnetwork.RoadMapping;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.lanechanging.MOBIL;
@@ -38,7 +28,7 @@ import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
  * Test module for the RoadSegment class.
  */
 public class RoadSegmentTest {
-    private double delta = 0.00001;
+    private final double delta = 0.00001;
 
     // max safe braking decelerations
     private static final double MAX_SAFE_BRAKING_CAR = 5.0;
@@ -75,7 +65,7 @@ public class RoadSegmentTest {
 
     private Vehicle newVehicle(double rearPosition, double speed, int lane) {
         // Vehicle(type, pos, vel, lane, ldm, lcm, length, width, color);
-        //return new Vehicle(Vehicle.Type.NONE, pos, vel, lane, idm, null, 5.0, 2.5, 3);
+        // return new Vehicle(Vehicle.Type.NONE, pos, vel, lane, idm, null, 5.0, 2.5, 3);
         final IDM idm = new IDM(33.0, 0.5, 3.0, 1.5, 2.0, 5.0);
         final Vehicle vehicle = new Vehicle(rearPosition, speed, lane, 5.0, 2.5);
         vehicle.setAccelerationModel(idm);
@@ -88,8 +78,8 @@ public class RoadSegmentTest {
     }
 
     private LaneChangingModel newLaneChangeModel(Vehicle vehicle) {
-        final MOBIL mobil = new MOBIL(vehicle, GAP_MIN_FRONT_CAR, MAX_SAFE_BRAKING_CAR,
-                POLITENESS_CAR, THRESHOLD_CAR, BIAS_INSIDE_LANE_CAR);
+        final MOBIL mobil = new MOBIL(vehicle, GAP_MIN_FRONT_CAR, MAX_SAFE_BRAKING_CAR, POLITENESS_CAR, THRESHOLD_CAR,
+                BIAS_INSIDE_LANE_CAR);
         return new LaneChangingModel(vehicle, mobil);
     }
 
@@ -183,8 +173,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSource(org.movsim.traffic.TrafficSource)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSource(org.movsim.traffic.TrafficSource)}
      */
     @Test
     public final void testSetSource() {
@@ -200,8 +189,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSink(org.movsim.traffic.TrafficFlowBase)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSink(org.movsim.traffic.TrafficFlowBase)}
      */
     @Test
     public final void testSetSink() {
@@ -291,8 +279,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addInhomogeneity(org.movsim.traffic.Inhomogeneity)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addInhomogeneity(org.movsim.traffic.Inhomogeneity)}
      */
     @Test
     public final void testAddInhomogeneity() {
@@ -308,8 +295,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setGradientProfile(org.movsim.traffic.GradientProfile)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setGradientProfile(org.movsim.traffic.GradientProfile)}
      */
     @Test
     public final void testSetGradientProfile() {
@@ -403,8 +389,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addObstacle(org.movsim.traffic.Obstacle)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addObstacle(org.movsim.traffic.Obstacle)}
      */
     @Test
     public final void testAddObstacle() {
@@ -412,8 +397,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addVehicle(org.movsim.traffic.Vehicle)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addVehicle(org.movsim.traffic.Vehicle)}
      */
     @Test
     public final void testAddVehicleVehicle() {
@@ -664,10 +648,8 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#frontVehicleOnLane(int)}
-     * Vehicles are sorted in order of decreasing position:
-     * start end
-     * V(n+1).pos < V(n).pos < V(n-1).pos ... < V(1).pos < V(0).pos
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#frontVehicleOnLane(int)} Vehicles are sorted in order of
+     * decreasing position: start end V(n+1).pos < V(n).pos < V(n-1).pos ... < V(1).pos < V(0).pos
      * 
      * The front vehicle is the one nearest the start of the road.
      */
@@ -889,8 +871,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @Test
     public final void testUpdateVehiclePositionsAndVelocities() {
@@ -916,14 +897,13 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @Test
     public final void testUpdateVehiclePositionsAndVelocitiesJoin() {
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
-        //Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
+        // Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
 
         final int laneCount = 1;
         final RoadSegment r0 = new RoadSegment(700.0, laneCount);
@@ -962,15 +942,14 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
     public final void testUpdateVehiclePositionsAndVelocitiesSelfJoin() {
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
-        //Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
+        // Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
 
         final int laneCount = 1;
         final RoadSegment r0 = new RoadSegment(3900.0, laneCount);
@@ -1005,146 +984,144 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
     public final void testUpdateVehiclePositionsAndVelocitiesCalc() {
-//        RoadSegment.resetNextId();
-//        Vehicle.resetNextId();
-//        Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
-//
-//        final int laneCount = 1;
-//        final RoadSegment r0 = new RoadSegment(100000.0, laneCount);
-//        final int vehicleCount = 5;
-//        final ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>(vehicleCount);
-//
-//        final Vehicle v0 = newVehicle(3895.0, 80.0, Lane.LANE1);
-//        r0.addVehicle(v0);
-//        final Vehicle v1 = newVehicle(3700.0, 20.0, Lane.LANE1);
-//        r0.addVehicle(v1);
-//        final Vehicle v2 = newVehicle(3100.0, 30.0, Lane.LANE1);
-//        r0.addVehicle(v2);
-//        final Vehicle v3 = newVehicle(695.0, 40.0, Lane.LANE1);
-//        r0.addVehicle(v3);
-//        final Vehicle v4 = newVehicle(500.0, 50.0, Lane.LANE1);
-//        r0.addVehicle(v4);
-//
-//        final Vehicle w0 = new Vehicle(v0);
-//        vehicles.add(w0);
-//        final Vehicle w1 = new Vehicle(v1);
-//        vehicles.add(w1);
-//        final Vehicle w2 = new Vehicle(v2);
-//        vehicles.add(w2);
-//        final Vehicle w3 = new Vehicle(v3);
-//        vehicles.add(w3);
-//        final Vehicle w4 = new Vehicle(v4);
-//        vehicles.add(w4);
-//        assertEquals(true, r0.eachLaneIsSorted());
-//
-//        final double dt = 0.25;
-//        final double simulationTime = 0.0;
-//        final long iterationCount = 0;
-//        r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
-//        assertEquals(true, r0.eachLaneIsSorted());
-//
-//        assertEquals(v0.getPosition(), 3915.0, delta);
-//        assertEquals(v1.getPosition(), 3705.0, delta);
-//        assertEquals(v2.getPosition(), 3107.5, delta);
-//        assertEquals(v3.getPosition(), 705.0, delta);
-//        assertEquals(v4.getPosition(), 512.5, delta);
-//        final int count = vehicles.size();
-//        for (int i = count - 1; i >= 2; i--) {
-//            final Vehicle vehicle = vehicles.get(i);
-//            final Vehicle frontVehicle = vehicles.get(i - 1);
-//            if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
-//                vehicle.eulerIntegrate(dt, frontVehicle);
-//            } else {
-//                final Vehicle frontFrontVehicle = vehicles.get(i - 2);
-//                vehicle.rungeKuttaIntegrate(dt, frontVehicle, frontFrontVehicle);
-//            }
-//        }
-//        if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
-//            w1.eulerIntegrate(dt, w0);
-//            w0.eulerIntegrate(dt, null);
-//        } else {
-//            w1.rungeKuttaIntegrate(dt, w0, null);
-//            w0.rungeKuttaIntegrate(dt, null, null);
-//        }
-//        assertEquals(w0.getPosition(), v0.getPosition(), delta);
-//        assertEquals(w0.getSpeed(), v0.getSpeed(), delta);
-//        assertEquals(w1.getPosition(), v1.getPosition(), delta);
-//        assertEquals(w1.getSpeed(), v1.getSpeed(), delta);
-//        assertEquals(w2.getPosition(), v2.getPosition(), delta);
-//        assertEquals(w2.getSpeed(), v2.getSpeed(), delta);
-//        assertEquals(w3.getPosition(), v3.getPosition(), delta);
-//        assertEquals(w3.getSpeed(), v3.getSpeed(), delta);
-//        assertEquals(w4.getPosition(), v4.getPosition(), delta);
-//        assertEquals(w4.getSpeed(), v4.getSpeed(), delta);
+        // RoadSegment.resetNextId();
+        // Vehicle.resetNextId();
+        // Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
+        //
+        // final int laneCount = 1;
+        // final RoadSegment r0 = new RoadSegment(100000.0, laneCount);
+        // final int vehicleCount = 5;
+        // final ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>(vehicleCount);
+        //
+        // final Vehicle v0 = newVehicle(3895.0, 80.0, Lane.LANE1);
+        // r0.addVehicle(v0);
+        // final Vehicle v1 = newVehicle(3700.0, 20.0, Lane.LANE1);
+        // r0.addVehicle(v1);
+        // final Vehicle v2 = newVehicle(3100.0, 30.0, Lane.LANE1);
+        // r0.addVehicle(v2);
+        // final Vehicle v3 = newVehicle(695.0, 40.0, Lane.LANE1);
+        // r0.addVehicle(v3);
+        // final Vehicle v4 = newVehicle(500.0, 50.0, Lane.LANE1);
+        // r0.addVehicle(v4);
+        //
+        // final Vehicle w0 = new Vehicle(v0);
+        // vehicles.add(w0);
+        // final Vehicle w1 = new Vehicle(v1);
+        // vehicles.add(w1);
+        // final Vehicle w2 = new Vehicle(v2);
+        // vehicles.add(w2);
+        // final Vehicle w3 = new Vehicle(v3);
+        // vehicles.add(w3);
+        // final Vehicle w4 = new Vehicle(v4);
+        // vehicles.add(w4);
+        // assertEquals(true, r0.eachLaneIsSorted());
+        //
+        // final double dt = 0.25;
+        // final double simulationTime = 0.0;
+        // final long iterationCount = 0;
+        // r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
+        // assertEquals(true, r0.eachLaneIsSorted());
+        //
+        // assertEquals(v0.getPosition(), 3915.0, delta);
+        // assertEquals(v1.getPosition(), 3705.0, delta);
+        // assertEquals(v2.getPosition(), 3107.5, delta);
+        // assertEquals(v3.getPosition(), 705.0, delta);
+        // assertEquals(v4.getPosition(), 512.5, delta);
+        // final int count = vehicles.size();
+        // for (int i = count - 1; i >= 2; i--) {
+        // final Vehicle vehicle = vehicles.get(i);
+        // final Vehicle frontVehicle = vehicles.get(i - 1);
+        // if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
+        // vehicle.eulerIntegrate(dt, frontVehicle);
+        // } else {
+        // final Vehicle frontFrontVehicle = vehicles.get(i - 2);
+        // vehicle.rungeKuttaIntegrate(dt, frontVehicle, frontFrontVehicle);
+        // }
+        // }
+        // if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
+        // w1.eulerIntegrate(dt, w0);
+        // w0.eulerIntegrate(dt, null);
+        // } else {
+        // w1.rungeKuttaIntegrate(dt, w0, null);
+        // w0.rungeKuttaIntegrate(dt, null, null);
+        // }
+        // assertEquals(w0.getPosition(), v0.getPosition(), delta);
+        // assertEquals(w0.getSpeed(), v0.getSpeed(), delta);
+        // assertEquals(w1.getPosition(), v1.getPosition(), delta);
+        // assertEquals(w1.getSpeed(), v1.getSpeed(), delta);
+        // assertEquals(w2.getPosition(), v2.getPosition(), delta);
+        // assertEquals(w2.getSpeed(), v2.getSpeed(), delta);
+        // assertEquals(w3.getPosition(), v3.getPosition(), delta);
+        // assertEquals(w3.getSpeed(), v3.getSpeed(), delta);
+        // assertEquals(w4.getPosition(), v4.getPosition(), delta);
+        // assertEquals(w4.getSpeed(), v4.getSpeed(), delta);
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updateVehiclePositionsAndSpeeds(double, double, long)}
      */
     @SuppressWarnings("boxing")
     @Test
     public final void testUpdateVehiclePositionsAndVelocitiesMany() {
-//        RoadSegment.resetNextId();
-//        Vehicle.resetNextId();
-//        Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
-//
-//        final int laneCount = 1;
-//        final int vehicleCount = 1000;
-//        final ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>(vehicleCount);
-//        final double averageSpacing = 200.0;
-//        final double averageVelocity = 90.0 / 3.6; // 90 km/h
-//        final RoadSegment r0 = new RoadSegment(10 * vehicleCount * averageSpacing, laneCount);
-//
-//        for (int i = vehicleCount - 1; i >= 0; i--) {
-//            // TODO - add random variation to pos and vel
-//            final double pos = i * averageSpacing;
-//            final double vel = averageVelocity;
-//            final Vehicle v = newVehicle(pos, vel, Lane.LANE1);
-//            r0.addVehicle(v);
-//            final Vehicle w = new Vehicle(v);
-//            vehicles.add(w);
-//        }
-//        assertEquals(true, r0.eachLaneIsSorted());
-//
-//        final double dt = 0.25;
-//        final double simulationTime = 0.0;
-//        final long iterationCount = 0;
-//        r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
-//        assertEquals(true, r0.eachLaneIsSorted());
-//
-//        final int count = vehicles.size();
-//        for (int i = count - 1; i >= 2; i--) {
-//            final Vehicle vehicle = vehicles.get(i);
-//            final Vehicle frontVehicle = vehicles.get(i - 1);
-//            if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
-//                vehicle.eulerIntegrate(dt, frontVehicle);
-//            } else {
-//                final Vehicle frontFrontVehicle = vehicles.get(i - 2);
-//                vehicle.rungeKuttaIntegrate(dt, frontVehicle, frontFrontVehicle);
-//            }
-//        }
-//        final Vehicle w1 = vehicles.get(1);
-//        final Vehicle w0 = vehicles.get(0);
-//        if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
-//            w1.eulerIntegrate(dt, w0);
-//            w0.eulerIntegrate(dt, null);
-//        } else {
-//            w1.rungeKuttaIntegrate(dt, w0, null);
-//            w0.rungeKuttaIntegrate(dt, null, null);
-//        }
-//        for (int i = 0; i < vehicleCount; ++i) {
-//            final Vehicle v = r0.getVehicle(Lane.LANE1, i);
-//            final Vehicle w = vehicles.get(i);
-//            assertEquals(w.getPosition(), v.getPosition(), delta);
-//            assertEquals(w.getSpeed(), v.getSpeed(), delta);
-//        }
+        // RoadSegment.resetNextId();
+        // Vehicle.resetNextId();
+        // Vehicle.setIntegrationType(Vehicle.IntegrationType.EULER);
+        //
+        // final int laneCount = 1;
+        // final int vehicleCount = 1000;
+        // final ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>(vehicleCount);
+        // final double averageSpacing = 200.0;
+        // final double averageVelocity = 90.0 / 3.6; // 90 km/h
+        // final RoadSegment r0 = new RoadSegment(10 * vehicleCount * averageSpacing, laneCount);
+        //
+        // for (int i = vehicleCount - 1; i >= 0; i--) {
+        // // TODO - add random variation to pos and vel
+        // final double pos = i * averageSpacing;
+        // final double vel = averageVelocity;
+        // final Vehicle v = newVehicle(pos, vel, Lane.LANE1);
+        // r0.addVehicle(v);
+        // final Vehicle w = new Vehicle(v);
+        // vehicles.add(w);
+        // }
+        // assertEquals(true, r0.eachLaneIsSorted());
+        //
+        // final double dt = 0.25;
+        // final double simulationTime = 0.0;
+        // final long iterationCount = 0;
+        // r0.updateVehiclePositionsAndVelocities(dt, simulationTime, iterationCount);
+        // assertEquals(true, r0.eachLaneIsSorted());
+        //
+        // final int count = vehicles.size();
+        // for (int i = count - 1; i >= 2; i--) {
+        // final Vehicle vehicle = vehicles.get(i);
+        // final Vehicle frontVehicle = vehicles.get(i - 1);
+        // if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
+        // vehicle.eulerIntegrate(dt, frontVehicle);
+        // } else {
+        // final Vehicle frontFrontVehicle = vehicles.get(i - 2);
+        // vehicle.rungeKuttaIntegrate(dt, frontVehicle, frontFrontVehicle);
+        // }
+        // }
+        // final Vehicle w1 = vehicles.get(1);
+        // final Vehicle w0 = vehicles.get(0);
+        // if (Vehicle.integrationType() == Vehicle.IntegrationType.EULER) {
+        // w1.eulerIntegrate(dt, w0);
+        // w0.eulerIntegrate(dt, null);
+        // } else {
+        // w1.rungeKuttaIntegrate(dt, w0, null);
+        // w0.rungeKuttaIntegrate(dt, null, null);
+        // }
+        // for (int i = 0; i < vehicleCount; ++i) {
+        // final Vehicle v = r0.getVehicle(Lane.LANE1, i);
+        // final Vehicle w = vehicles.get(i);
+        // assertEquals(w.getPosition(), v.getPosition(), delta);
+        // assertEquals(w.getSpeed(), v.getSpeed(), delta);
+        // }
     }
 
     /**
@@ -1174,7 +1151,7 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount); 
+        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
         assertEquals(1009.0, v0.posRearBumper(), delta);
         r0.outFlow(dt, simulationTime, iterationCount);
         assertEquals(0, r0.totalVehicleCount());
@@ -1206,21 +1183,21 @@ public class RoadSegmentTest {
         final double simulationTime = 0.0;
         final long iterationCount = 0;
         r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
-//        assertEquals(1009.0, v1.getPosition(), delta);
-//        assertEquals(1008.0, v2.getPosition(), delta);
-//        assertEquals(1007.0, v3.getPosition(), delta);
-//        r0.outFlow(dt, simulationTime, iterationCount);
-//        assertEquals(0, r0.totalVehicleCount());
-//        assertEquals(3, r1.totalVehicleCount());
-//        assertEquals(Lane.LANE2, v1.getLane());
-//        assertEquals(Lane.LANE3, v2.getLane());
-//        assertEquals(Lane.LANE4, v3.getLane());
-//        final Vehicle nv1 = r1.getVehicle(Lane.LANE2, 0);
-//        assertEquals(9.0, nv1.getPosition(), delta);
-//        final Vehicle nv2 = r1.getVehicle(Lane.LANE3, 0);
-//        assertEquals(8.0, nv2.getPosition(), delta);
-//        final Vehicle nv3 = r1.getVehicle(Lane.LANE4, 0);
-//        assertEquals(7.0, nv3.getPosition(), delta);
+        // assertEquals(1009.0, v1.getPosition(), delta);
+        // assertEquals(1008.0, v2.getPosition(), delta);
+        // assertEquals(1007.0, v3.getPosition(), delta);
+        // r0.outFlow(dt, simulationTime, iterationCount);
+        // assertEquals(0, r0.totalVehicleCount());
+        // assertEquals(3, r1.totalVehicleCount());
+        // assertEquals(Lane.LANE2, v1.getLane());
+        // assertEquals(Lane.LANE3, v2.getLane());
+        // assertEquals(Lane.LANE4, v3.getLane());
+        // final Vehicle nv1 = r1.getVehicle(Lane.LANE2, 0);
+        // assertEquals(9.0, nv1.getPosition(), delta);
+        // final Vehicle nv2 = r1.getVehicle(Lane.LANE3, 0);
+        // assertEquals(8.0, nv2.getPosition(), delta);
+        // final Vehicle nv3 = r1.getVehicle(Lane.LANE4, 0);
+        // assertEquals(7.0, nv3.getPosition(), delta);
     }
 
     /**
@@ -1296,8 +1273,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updatePositionsCacheForSpaceDetectors()}
+     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#updatePositionsCacheForSpaceDetectors()}
      */
     @Test
     public final void testUpdatePositionsCacheForSpaceDetectors() {
@@ -1331,7 +1307,7 @@ public class RoadSegmentTest {
         r0.addVehicle(v1);
         final Vehicle v2 = newVehicle(600.0, 1.0, Lane.LANE3);
         r0.addVehicle(v2);
-        Iterator<Vehicle> iterator = r0.iterator();
+        final Iterator<Vehicle> iterator = r0.iterator();
         assertEquals(true, iterator.hasNext());
         assertEquals(v0, iterator.next());
         assertEquals(true, iterator.hasNext());
@@ -1357,7 +1333,7 @@ public class RoadSegmentTest {
         r0.addVehicle(v1);
         final Vehicle v2 = newVehicle(600.0, 1.0, Lane.LANE3);
         r0.addVehicle(v2);
-        Iterator<Vehicle> iterator = r0.iterator();
+        final Iterator<Vehicle> iterator = r0.iterator();
         assertEquals(true, iterator.hasNext());
         assertEquals(v0, iterator.next());
         assertEquals(true, iterator.hasNext());
@@ -1366,7 +1342,7 @@ public class RoadSegmentTest {
         assertEquals(v2, iterator.next());
         assertEquals(false, iterator.hasNext());
     }
-    
+
     @Test
     public final void testLaneSegmentIterator() {
         // fail("Not yet implemented");
@@ -1376,7 +1352,7 @@ public class RoadSegmentTest {
         final int laneCount = 3;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
 
-        Iterator<LaneSegment> iterator = r0.laneSegmentIterator();
+        final Iterator<LaneSegment> iterator = r0.laneSegmentIterator();
 
         assertEquals(true, iterator.hasNext());
         LaneSegment laneSegment = r0.laneSegment(0);

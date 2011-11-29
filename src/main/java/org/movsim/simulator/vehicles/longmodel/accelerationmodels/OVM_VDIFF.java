@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
@@ -63,8 +56,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     private double lambda;
 
     /**
-     * The choice opt func variant. variants: 0=fullVD orig, 1=fullVD,secBased,
-     * 2=threePhase
+     * The choice opt func variant. variants: 0=fullVD orig, 1=fullVD,secBased, 2=threePhase
      */
     private int choiceOptFuncVariant;
 
@@ -84,8 +76,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#initParameters()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
      */
     @Override
     protected void initParameters() {
@@ -102,9 +93,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
@@ -122,29 +111,29 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
         return acc(s, v, dv, alphaT, v0Local);
     }
 
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
+     * org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
         // Local dynamic variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
-        
+
         final double alphaT = 1;
         final double v0Local = Math.min(v0, me.getSpeedlimit());
 
         return acc(s, v, dv, alphaT, v0Local);
     }
-    
+
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #accSimple(double, double, double)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
@@ -178,13 +167,13 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
 
         if (choiceOptFuncVariant == 0 || choiceOptFuncVariant == 3) {
             // standard OVM function (Bando model)
-            // scale OVM/VDIFF so that v0 represents actual desired speed 
+            // scale OVM/VDIFF so that v0 represents actual desired speed
             final double v0Prev = v0Local / (1. + Math.tanh(betaLoc));
             vOpt = Math.max(v0Prev * (Math.tanh((s - s0) / lenInteractionLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // Triangular OVM function
-            final double T = beta; // "time headway" 
+            final double T = beta; // "time headway"
             vOpt = Math.max(Math.min((s - s0) / T, v0Local), 0.);
         } else if (choiceOptFuncVariant == 2) {
             // "Three-phase" OVM function
@@ -276,8 +265,7 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#parameterV0()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
      */
     @Override
     public double getDesiredSpeedParameterV0() {
@@ -293,8 +281,9 @@ public class OVM_VDIFF extends AccelerationModelAbstract implements Acceleration
         return choiceOptFuncVariant;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
      */
     @Override

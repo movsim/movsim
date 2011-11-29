@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.roadmappings;
@@ -56,8 +51,7 @@ public class RoadMappingBezier extends RoadMapping {
      * @param cY
      *            y-position of control point
      */
-    public RoadMappingBezier(int laneCount, double x0, double y0, double x1, double y1,
-            double cX, double cY) {
+    public RoadMappingBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
         super(laneCount, x0, y0);
         p0x = x0;
         p0y = y0;
@@ -83,16 +77,17 @@ public class RoadMappingBezier extends RoadMapping {
      *            x-position of start of curve
      * @param y0
      *            y-position of start of curve
-     * @param theta 
+     * @param theta
      *            direction of curve
-     * @param length 
+     * @param length
      *            length of curve
-     * @param a 
-     * @param b 
-     * @param c 
-     * @param d 
+     * @param a
+     * @param b
+     * @param c
+     * @param d
      */
-    public RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a, double b, double c, double d) {
+    public RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
+            double b, double c, double d) {
         super(laneCount, x0, y0);
         p0x = x0;
         p0y = y0;
@@ -100,15 +95,15 @@ public class RoadMappingBezier extends RoadMapping {
         p2y = b;
         posTheta.sinTheta = Math.sin(theta);
         posTheta.cosTheta = Math.cos(theta);
-        //final double t = length / 2.0;
+        // final double t = length / 2.0;
         p1x = c;
         p1y = d;
         roadLength = bezierLength();
     }
 
     /**
-     * Constructor to append a bezier road mapping onto a previously existing road mapping,
-     * matching the endpoints and tangents at the endpoints.
+     * Constructor to append a bezier road mapping onto a previously existing road mapping, matching the endpoints and tangents at the
+     * endpoints.
      * 
      * @param roadMapping
      *            the road mapping to append to
@@ -210,8 +205,8 @@ public class RoadMappingBezier extends RoadMapping {
     }
 
     /**
-     * Arc length parameterization. Convert from road position (arc length) to natural Bezier
-     * parameter(t) using linear interpolation of pre-computed arc lengths.
+     * Arc length parameterization. Convert from road position (arc length) to natural Bezier parameter(t) using linear interpolation of
+     * pre-computed arc lengths.
      * 
      * @param roadPos
      * @return natural Bezier parameter
@@ -220,15 +215,13 @@ public class RoadMappingBezier extends RoadMapping {
         // see http://www.planetclegg.com/projects/WarpingTextToSplines.html
         // and http://www.algorithmist.net/arclengthparam.html
         int index = Arrays.binarySearch(sValues, roadPos);
-        if (index >= 0) {
+        if (index >= 0)
             // exact match found
-            return ((double)index) / (S_COUNT - 1);
-        }
+            return ((double) index) / (S_COUNT - 1);
         // index == -(insertion point) - 1
         index = -index - 1;
-        if (index >= S_COUNT) {
+        if (index >= S_COUNT)
             return 1.0;
-        }
         final double p0 = sValues[index - 1];
         final double p1 = sValues[index];
         final double prop = (roadPos - p0) / (p1 - p0);

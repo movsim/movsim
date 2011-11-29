@@ -13,17 +13,18 @@ public class ConsumptionModelInput {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionModelInput.class);
 
-    private ConsumptionCarModelInput carData;
+    private final ConsumptionCarModelInput carData;
 
-    private ConsumptionEngineModelInput engineData;
+    private final ConsumptionEngineModelInput engineData;
 
-    private String label;
+    private final String label;
 
     public ConsumptionModelInput(Element elem) {
 
         this.label = elem.getAttributeValue("label");
 
-        final Map<String, String> carDataMap = XmlUtils.putAttributesInHash(elem.getChild(XmlElementNames.ConsumptionCarData));
+        final Map<String, String> carDataMap = XmlUtils.putAttributesInHash(elem
+                .getChild(XmlElementNames.ConsumptionCarData));
         carData = new ConsumptionCarModelInput(carDataMap);
 
         engineData = new ConsumptionEngineModelInput(elem.getChild(XmlElementNames.ConsumptionEngineData));

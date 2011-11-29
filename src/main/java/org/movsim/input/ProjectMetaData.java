@@ -1,33 +1,25 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input;
 
-
-public class ProjectMetaData{
+public class ProjectMetaData {
 
     private static ProjectMetaData singleton = new ProjectMetaData();
 
@@ -40,7 +32,7 @@ public class ProjectMetaData{
     private boolean onlyValidation = false;
     private boolean writeInternalXml = false;
 
-    /** Needed for Applet. Change to true, if you cannot acces the filesystem. Allows to read the config files from resources instead.*/
+    /** Needed for Applet. Change to true, if you cannot acces the filesystem. Allows to read the config files from resources instead. */
     private boolean xmlFromResources = false;
 
     /**
@@ -101,16 +93,17 @@ public class ProjectMetaData{
     }
 
     public void setXodrFilename(String xodrFilename) {
-    	this.xodrFileName = xodrFilename;
+        this.xodrFileName = xodrFilename;
     }
 
     public String getXodrFilename() {
         return xodrFileName;
     }
-    
+
     public void setXodrPath(String xodrPath) {
-    	this.xodrPath = xodrPath;
+        this.xodrPath = xodrPath;
     }
+
     public String getXodrPath() {
         return xodrPath;
     }
@@ -128,9 +121,10 @@ public class ProjectMetaData{
     public void setInstantaneousFileOutput(boolean instantaneousFileOutput) {
         this.instantaneousFileOutput = instantaneousFileOutput;
     }
-    
+
     /**
      * Commandline option 'only validation' of input xml file against dtd.
+     * 
      * @return
      */
     public boolean isOnlyValidation() {

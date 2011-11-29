@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.lanechanging;
@@ -38,17 +31,17 @@ import org.movsim.simulator.vehicles.Vehicle;
  */
 public class MOBIL {
 
-	private double politeness;
-    
+    private double politeness;
+
     /** changing threshold */
     private double threshold;
-    
+
     /** maximum safe braking decel */
     private double bSafe;
-    
+
     /** minimum safe (net) distance */
     private double gapMin;
-    
+
     /** bias (m/s^2) to drive */
     private double biasRight;
 
@@ -64,8 +57,9 @@ public class MOBIL {
 
     /**
      * Instantiates a new mOBIL impl.
-     *
-     * @param vehicle the vehicle
+     * 
+     * @param vehicle
+     *            the vehicle
      */
     public MOBIL(final Vehicle vehicle) {
         this.me = vehicle;
@@ -75,9 +69,11 @@ public class MOBIL {
 
     /**
      * Instantiates a new MOBIL impl.
-     *
-     * @param vehicle the vehicle
-     * @param lcMobilData the lc mobil data
+     * 
+     * @param vehicle
+     *            the vehicle
+     * @param lcMobilData
+     *            the lc mobil data
      */
     public MOBIL(final Vehicle vehicle, LaneChangingMobilData lcMobilData) {
         this.me = vehicle;
@@ -90,8 +86,8 @@ public class MOBIL {
         pRef = politeness = lcMobilData.getPoliteness();
     }
 
-    public MOBIL(final Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness, 
-    		double thresholdAcceleration, double rightBiasAcceleration) {
+    public MOBIL(final Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
+            double thresholdAcceleration, double rightBiasAcceleration) {
         this.me = vehicle;
         bSafeRef = bSafe = safeDeceleration;
         biasRightRef = biasRight = rightBiasAcceleration;
@@ -121,29 +117,25 @@ public class MOBIL {
         double prospectiveBalance = -Double.MAX_VALUE;
         final int currentLane = me.getLane();
         final LaneSegment newLane = roadSegment.laneSegment(currentLane + direction);
-        if (newLane.type() == Lane.Type.ENTRANCE) {
-        	// never change lane into an entrance lane
+        if (newLane.type() == Lane.Type.ENTRANCE)
+            // never change lane into an entrance lane
             return prospectiveBalance;
-        }
         final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
 
         final Vehicle newFront = newLane.frontVehicle(me);
         final Vehicle oldFront = ownLane.frontVehicle(me);
         final Vehicle newBack = newLane.rearVehicle(me);
 
-
         // check if other vehicles are lane-changing
-        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack)) {
+        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack))
             return prospectiveBalance;
-        }
 
         // safety: check distances
         final double gapFront = me.getNetDistance(newFront);
         final double gapBack = (newBack == null) ? MovsimConstants.GAP_INFINITY : newBack.getNetDistance(me);
 
-        if (safetyCheckGaps(gapFront, gapBack)) {
+        if (safetyCheckGaps(gapFront, gapBack))
             return prospectiveBalance;
-        }
 
         // new situation: newBack with me as leader and following left lane cases
         // TO_LEFT --> just the actual situation
@@ -152,19 +144,19 @@ public class MOBIL {
         newSituationNewBack.addVehicleTestwise(newBack);
         newSituationNewBack.addVehicleTestwise(me);
         final LaneSegment leftLaneNewBack = (direction == MovsimConstants.TO_RIGHT || currentLane + direction
-                + MovsimConstants.TO_LEFT >= roadSegment.laneCount()) ? null : roadSegment.laneSegment(currentLane + direction + MovsimConstants.TO_LEFT);
+                + MovsimConstants.TO_LEFT >= roadSegment.laneCount()) ? null : roadSegment.laneSegment(currentLane
+                + direction + MovsimConstants.TO_LEFT);
         final double newBackNewAcc = (newBack == null) ? 0 : newBack.calcAccModel(newSituationNewBack, leftLaneNewBack);
 
-        if (safetyCheckAcceleration(newBackNewAcc)) {
+        if (safetyCheckAcceleration(newBackNewAcc))
             return prospectiveBalance;
-        }
 
         // check now incentive criterion
         // consider three vehicles: me, oldBack, newBack
 
         // old situation for me
-        final LaneSegment leftLaneMeOld = (currentLane + MovsimConstants.TO_LEFT) >= roadSegment.laneCount() ?
-        		null : roadSegment.laneSegment(currentLane + MovsimConstants.TO_LEFT);
+        final LaneSegment leftLaneMeOld = (currentLane + MovsimConstants.TO_LEFT) >= roadSegment.laneCount() ? null
+                : roadSegment.laneSegment(currentLane + MovsimConstants.TO_LEFT);
         final double meOldAcc = me.calcAccModel(ownLane, leftLaneMeOld);
 
         // old situation for old back
@@ -174,8 +166,8 @@ public class MOBIL {
         final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(ownLane, leftLaneMeOld) : 0;
 
         // old situation for new back: just provides the actual left-lane situation
-        final LaneSegment leftLaneNewBackOldAcc = (currentLane + direction + MovsimConstants.TO_LEFT >= roadSegment.laneCount()) ?
-        		null : roadSegment.laneSegment(currentLane + direction + MovsimConstants.TO_LEFT);
+        final LaneSegment leftLaneNewBackOldAcc = (currentLane + direction + MovsimConstants.TO_LEFT >= roadSegment
+                .laneCount()) ? null : roadSegment.laneSegment(currentLane + direction + MovsimConstants.TO_LEFT);
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLane, leftLaneNewBackOldAcc) : 0;
 
         // new traffic situation: set subject virtually into new lane under consideration
@@ -227,7 +219,6 @@ public class MOBIL {
 
         return prospectiveBalance;
     }
-
 
     public double getMinimumGap() {
         return gapMin;

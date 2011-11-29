@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
@@ -47,8 +40,7 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);
 
     /**
-     * The parameter T is given by the update timestep dt: dt = T = Tr =
-     * tau_relax
+     * The parameter T is given by the update timestep dt: dt = T = Tr = tau_relax
      */
     private double T;
 
@@ -63,11 +55,10 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
 
     /** The s0. */
     private double s0;
-    
-    /** The dimensionless epsilon has similar effects as the braking
-        probability of the Nagel-S CA
-        default value 0.4 (PRE) or 1 (EPJB)
-    */
+
+    /**
+     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-S CA default value 0.4 (PRE) or 1 (EPJB)
+     */
     private double epsilon;
 
     /**
@@ -82,9 +73,8 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
         super(ModelName.KRAUSS, parameters);
         initParameters(dt);
     }
-    
-    
-    private void initParameters(double dt){
+
+    private void initParameters(double dt) {
         this.T = dt;
         initParameters();
     }
@@ -92,8 +82,7 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#initParameters()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
      */
     @Override
     protected void initParameters() {
@@ -162,9 +151,7 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
@@ -179,18 +166,20 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
 
         return acc(s, v, dv, localT, localV0);
     }
-    
-    
-    /* (non-Javadoc)
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle, org.movsim.simulator.vehicles.Vehicle)
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
+     * org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
         // Local dynamical variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
-        
+
         final double localT = T;
         final double localV0 = Math.min(v0, me.getSpeedlimit());
 
@@ -200,9 +189,7 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #accSimple(double, double, double)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
@@ -219,28 +206,24 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
      * @param dv
      *            the dv
      * @param TLocal
-     *            the local time gap. Notice that inconsistencies may arise for
-     *            nontrivial values since then no longer dt=T=tau_relax making
+     *            the local time gap. Notice that inconsistencies may arise for nontrivial values since then no longer dt=T=tau_relax making
      *            the vSafe formula possibly inconsistent
      * @param v0Local
      *            the v0 local
-
+     * 
      * @return the double
      */
     private double acc(double s, double v, double dv, double TLocal, double v0Local) {
         final double vp = v - dv;
         /**
-         * safe speed; complicated formula in PRE 55, 5601
-         * (1997) is essentially the vSafe formula for the simple Gipps model.
-         * The complicated formula considers effects of finite dt; this is
-         * treated uniformly for all models in our update routine, so it is not
+         * safe speed; complicated formula in PRE 55, 5601 (1997) is essentially the vSafe formula for the simple Gipps model. The
+         * complicated formula considers effects of finite dt; this is treated uniformly for all models in our update routine, so it is not
          * necessary here. Therefore the simple Gipps vSafe formula is chosen
          */
         final double vSafe = -b * TLocal + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - s0, 0.));
 
         /**
-         * vUpper =upper limit of new speed (denoted v1 in PRE) corresponds to
-         * vNew of the Gipps model
+         * vUpper =upper limit of new speed (denoted v1 in PRE) corresponds to vNew of the Gipps model
          */
         final double vUpper = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
 
@@ -248,13 +231,11 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
         // three additional code lines
 
         /**
-         * vLower = lower limit of new speed (denoted v0 in PRE) some
-         * modifications due to dimensional units were applied. Notice that
-         * vLower may be > vUpper in some cut-in situations: these
-         * inconsistencies were not recognized/treated in the PRE publication
+         * vLower = lower limit of new speed (denoted v0 in PRE) some modifications due to dimensional units were applied. Notice that
+         * vLower may be > vUpper in some cut-in situations: these inconsistencies were not recognized/treated in the PRE publication
          */
-        double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
-        final double r = MyRandom.nextDouble(); // instance of  uniform(0,1) distribution
+        final double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
+        final double r = MyRandom.nextDouble(); // instance of uniform(0,1) distribution
         final double vNew = vLower + r * (vUpper - vLower);
         final double aWanted = (vNew - v) / TLocal;
 
@@ -264,22 +245,21 @@ public class Krauss extends AccelerationModelAbstract implements AccelerationMod
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#parameterV0()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
      */
     @Override
     public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
      */
     @Override
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
 
 }

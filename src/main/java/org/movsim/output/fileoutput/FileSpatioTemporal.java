@@ -19,8 +19,8 @@ public class FileSpatioTemporal implements ObserverInTime {
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
 
-    private PrintWriter writer;
-    private SpatioTemporal spatioTemporal;
+    private final PrintWriter writer;
+    private final SpatioTemporal spatioTemporal;
 
     /**
      * Instantiates a new file spatio temporal.
@@ -34,9 +34,10 @@ public class FileSpatioTemporal implements ObserverInTime {
 
         this.spatioTemporal = spatioTemporal;
         spatioTemporal.registerObserver(this);
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName()+ String.format(extensionFormat, roadSectionID);
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+                + String.format(extensionFormat, roadSectionID);
         writer = FileUtils.getWriter(filename);
         writer.printf(outputHeading);
         writer.flush();

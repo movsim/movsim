@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.roadSection.obsolete;
@@ -118,8 +111,8 @@ public class SimpleOnrampImpl {
      * @param rampIndex
      *            the ramp index
      */
-    public SimpleOnrampImpl(long roadId, SimpleRampData rampData, VehicleGenerator vehGenerator, VehicleContainer mainVehContainer,
-            String projectName, int rampIndex) {
+    public SimpleOnrampImpl(long roadId, SimpleRampData rampData, VehicleGenerator vehGenerator,
+            VehicleContainer mainVehContainer, String projectName, int rampIndex) {
 
         this.vehGenerator = vehGenerator;
         vehicleQueue = new LinkedList<Vehicle>();
@@ -146,7 +139,9 @@ public class SimpleOnrampImpl {
         xDownRamp = xUpRamp + length;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.AbstractRoadSection#laneChanging(long, double, double)
      */
     public void mergeToMainroad(long iterationCount, double dt, double time) {
@@ -183,10 +178,13 @@ public class SimpleOnrampImpl {
 
     /**
      * Adds the vehicle from ramp.
-     *
-     * @param vehToEnter the veh to enter
-     * @param xEnter the x enter
-     * @param vEnter the v enter
+     * 
+     * @param vehToEnter
+     *            the veh to enter
+     * @param xEnter
+     *            the x enter
+     * @param vEnter
+     *            the v enter
      */
     private void addVehicleFromRamp(Vehicle vehToEnter, double xEnter, double vEnter) {
         mainVehContainer.add(vehToEnter, xEnter, vEnter);
@@ -270,14 +268,14 @@ public class SimpleOnrampImpl {
         final List<Vehicle> mainVehicles = mainVehContainer.getVehicles();
 
         final int laneEnter = MovsimConstants.MOST_RIGHT_LANE; // single-lane
-                                                         // simulation
+        // simulation
 
         final int mainVehSize = mainVehicles.size();
         if (mainVehSize == 0) {
             logger.debug("empty road: merge anyway. mainVeh.size() = {}", mainVehSize);
             final double xEnter = xCenter;
             // no leader
-            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0()); 
+            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter);
             return true;
         } else if (mainVehContainer.getMostDownstream().getPosition() <= xCenter) {
@@ -285,7 +283,7 @@ public class SimpleOnrampImpl {
             final Vehicle mainVehDown = mainVehContainer.getMostDownstream();
             final double xEnter = Math.max(xCenter, mainVehDown.getPosition() + 0.5 * length);
             // no leader
-            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0()); 
+            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
             logger.debug("most downstream veh is still upstream of ramp center. mainVeh.size() = {}. posMostDown = {}",
                     mainVehSize, mainVehDown.getPosition());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter);
@@ -350,7 +348,8 @@ public class SimpleOnrampImpl {
                     // new !!
                     minGap = netGap;
                     xEnter = xEnterTest;
-                    vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).getSpeed()) : speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
+                    vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).getSpeed()) : speedToEnter(vehToEnter
+                            .getAccelerationModel().getDesiredSpeedParameterV0());
                 }
             }
             // check between indexUp+1 and indexUp

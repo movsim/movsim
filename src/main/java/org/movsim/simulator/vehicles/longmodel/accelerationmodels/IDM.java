@@ -1,12 +1,11 @@
 /**
  * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
- * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model
- * open-source vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
- * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
+ * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model open-source
+ * vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. MovSim is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public
+ * License along with MovSim. If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.longmodel.accelerationmodels;
@@ -21,17 +20,15 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class IDM.
  * <p>
- * Implementation of the 'intelligent driver model'(IDM). <a
- * href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia
- * article IDM.</a>
+ * Implementation of the 'intelligent driver model'(IDM). <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article
+ * IDM.</a>
  * </p>
  * <p>
  * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
  * </p>
  * <p>
- * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A.
- * Hennecke, and D. Helbing, Congested Traffic States in Empirical Observations
- * and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
+ * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in
+ * Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
 public class IDM extends AccelerationModelAbstract implements AccelerationModel {
@@ -91,23 +88,21 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
      */
     public IDM(double v0, double a, double b, double T, double s0, double s1) {
         super(ModelName.IDM, null);
-        //super(Type.CONTINUOUS);
+        // super(Type.CONTINUOUS);
         this.v0 = v0;
         this.a = a;
         this.b = b;
         this.T = T;
         this.s0 = s0;
         this.s1 = s1;
-        //twoSqrtAb = 2.0 * Math.sqrt(a * b);
+        // twoSqrtAb = 2.0 * Math.sqrt(a * b);
         this.delta = 4.0;
     }
-
 
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#initParameters()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
      */
     @Override
     protected void initParameters() {
@@ -187,9 +182,7 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #acc(org.movsim.simulator.vehicles.Vehicle,
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
@@ -211,16 +204,14 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
         return acc(s, v, dv, localT, localV0, localA);
 
     }
-    
-    
-    
+
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront){
+    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
         // Local dynamical variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
-        
+
         final double localT = T;
         final double localV0 = Math.min(v0, me.getSpeedlimit());
         final double localA = a;
@@ -231,9 +222,7 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel
-     * #accSimple(double, double, double)
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
@@ -259,9 +248,8 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
      */
     private double acc(double s, double v, double dv, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0) {
+        if (v0Local == 0)
             return 0;
-        }
 
         double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
                 / Math.sqrt(aLocal * b);
@@ -279,17 +267,16 @@ public class IDM extends AccelerationModelAbstract implements AccelerationModel 
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.
-     * LongitudinalModel#parameterV0()
+     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
      */
     @Override
     public double getDesiredSpeedParameterV0() {
         return v0;
     }
 
-   
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
      */
     @Override

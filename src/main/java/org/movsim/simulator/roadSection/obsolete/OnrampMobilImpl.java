@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.roadSection.obsolete;
@@ -58,7 +51,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     // private static final String extensionFormat = ".S%d_log.csv";
     // private static final String outputHeading = MovsimConstants.COMMENT_CHAR
-    //        + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
+    // + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],  count,  queue\n";
     // private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %6d, %6d%n";
 
     /** The Constant MINSPACE_MERGE_M. */
@@ -69,7 +62,6 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     final static int N_LANES = 1;
 
-
     private final double mergeLength;
 
     /** The x up ramp marks the start of the ramp. */
@@ -79,11 +71,11 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     // private final double xDownRamp;
 
     private final double xOffsetMain;
-    
+
     private final double xToMain;
 
     /** The n wait. */
-    private double nWait;
+    private final double nWait;
 
     /** The fstr logging. */
     PrintWriter fstrLogging;
@@ -95,7 +87,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     // private double vEnterLastMerge;
 
     /** The merge count. */
-    private int mergeCount;
+    private final int mergeCount;
 
     // private final boolean isWithCrashExit = true;
 
@@ -117,7 +109,7 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
     // TODO assume only *one* lane here !!!
 
     public OnrampMobilImpl(final RoadInput rampData, final VehicleGenerator vehGenerator,
-            /*final VehicleContainer mainVehContainerMostRightLane, */String projectName) {
+    /* final VehicleContainer mainVehContainerMostRightLane, */String projectName) {
 
         super(rampData, vehGenerator);
 
@@ -141,8 +133,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             logger.error("xOffsetMain = {}. negative values not allowed.", xOffsetMain);
         }
 
-        //this.mainVehContainerMostRightLane = mainVehContainerMostRightLane; 
-        
+        // this.mainVehContainerMostRightLane = mainVehContainerMostRightLane;
+
         // create vehicle container for onramp lane
         vehContainers = new ArrayList<VehicleContainer>();
         vehContainers.add(new VehicleContainerImpl(id, MovsimConstants.MOST_RIGHT_LANE));
@@ -151,70 +143,75 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // TODO only dummy here for RoadSection interface
         flowConsBottlenecks = new FlowConservingBottlenecks(new ArrayList<FlowConservingBottleneckDataPoint>());
 
-//        upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
-//                projectName);
+        // upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
+        // projectName);
 
         mergeCount = 0;
-        
-//        if (rampData.withLogging()) {
-//            final int roadCount = 1; // assuming only one road in the scenario
-//                                     // for the moment
-//            final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
-//            fstrLogging = FileUtils.getWriter(filename);
-//            fstrLogging.printf(outputHeading);
-//            fstrLogging.flush();
-//        }
+
+        // if (rampData.withLogging()) {
+        // final int roadCount = 1; // assuming only one road in the scenario
+        // // for the moment
+        // final String filename = projectName + String.format(extensionFormat, rampIndex + roadCount);
+        // fstrLogging = FileUtils.getWriter(filename);
+        // fstrLogging.printf(outputHeading);
+        // fstrLogging.flush();
+        // }
 
         nWait = 0;
 
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.impl.AbstractRoadSection#laneChanging(long, double, double)
      */
     @Override
     public void laneChanging(long iterationCount, double dt, double time) {
 
-
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.RoadSection#laneChangingToOfframps(java.util.List, long, double, double)
      */
     @Override
-    public void laneChangingToOfframpsAndFromOnramps(final RoadSection mainroad, long iterationCount, double dt, double time) {
+    public void laneChangingToOfframpsAndFromOnramps(final RoadSection mainroad, long iterationCount, double dt,
+            double time) {
 
         assert mainroad != null;
-        
+
         // in this case the connection is to the mainroad !!
         stagedVehicles.clear();
 
-        assert vehContainers.size() == 1;  // onramp with only one lane
+        assert vehContainers.size() == 1; // onramp with only one lane
         final VehicleContainer vehContainer = vehContainers.get(0);
 
         // TODO consider redesign here? better book-keeping outside vehicle container?
         // loop over on-ramp veh (i=0 is obstacle !!! )
         // ignore Obstacle as first vehicle !!!
-//        for (Vehicle veh : vehContainer.getVehicles()) {
-//            if (!veh.getLabel().equals(MovsimConstants.OBSTACLE_KEY_NAME) 
-//                    && tryToMergeToMainroad(veh, mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE))) {
-//                stagedVehicles.add(veh);
-//            }
-//        }
+        // for (Vehicle veh : vehContainer.getVehicles()) {
+        // if (!veh.getLabel().equals(MovsimConstants.OBSTACLE_KEY_NAME)
+        // && tryToMergeToMainroad(veh, mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE))) {
+        // stagedVehicles.add(veh);
+        // }
+        // }
 
         // assign staged vehicles to new lanes
         for (final Vehicle veh : stagedVehicles) {
             vehContainer.removeVehicle(veh);
-            mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE).addFromToRamp(veh, veh.getPosition(), veh.getSpeed(), MovsimConstants.TO_RIGHT);
+            mainroad.getVehContainer(MovsimConstants.MOST_RIGHT_LANE).addFromToRamp(veh, veh.getPosition(),
+                    veh.getSpeed(), MovsimConstants.TO_RIGHT);
         }
-        
+
     }
 
     /**
      * Try to merge to mainroad.
-     *
-     * @param veh the veh
+     * 
+     * @param veh
+     *            the veh
      * @return true, if successful
      */
     private boolean tryToMergeToMainroad(final Vehicle veh, LaneSegment mainVehContainerMostRightLane) {
@@ -224,7 +221,8 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
             veh.setPosition(newPos); // important mapping to coordinate system
                                      // of mainroad !!!
             logger.debug("mergeToMainroad: veh in ramp region! pos = {}, positionOnMainraod = {}", pos, newPos);
-            final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(mainVehContainerMostRightLane);
+            final boolean isSafeChange = veh.getLaneChangingModel().isMandatoryLaneChangeSafe(
+                    mainVehContainerMostRightLane);
 
             if (isSafeChange) {
                 logger.debug("safeChange --> pos = {}, positionOnMainraod = {}", pos, newPos);
@@ -248,17 +246,20 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         vehContainers.get(0).add(obstacle, posInit, speedInit);
         logger.debug("set obstacle at pos={} with length={}", posInit, obstacle.getLength());
     }
-    
 
-    /* (non-Javadoc)
- * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateRoadConditions(long, double)
- */
-@Override
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateRoadConditions(long, double)
+     */
+    @Override
     public void updateRoadConditions(long iterationCount, double time) {
         // TODO Auto-generated method stub
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.AbstractRoadSection#updateDownstreamBoundary()
      */
     @Override
@@ -266,9 +267,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         // TODO Auto-generated method stub
     }
 
-  
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.RoadSection#getLoopDetectors()
      */
     @Override
@@ -277,7 +278,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         return null;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.RoadSection#updateDetectors(long, double, double)
      */
     @Override
@@ -286,8 +289,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
 
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampMergingLength()
      */
     @Override
@@ -295,7 +299,9 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         return mergeLength;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.simulator.roadSection.AbstractRoadSection#getRampPositionToMainroad()
      */
     @Override
@@ -303,11 +309,10 @@ public class OnrampMobilImpl extends AbstractRoadSection implements RoadSection 
         return xToMain;
     }
 
-
     @Override
     public void setFractionOfLeavingVehicles(double newFraction) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

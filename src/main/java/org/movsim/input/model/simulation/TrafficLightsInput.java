@@ -55,9 +55,7 @@ public class TrafficLightsInput {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.simulation.TrafficLightsInput#getTrafficLightData
-     * ()
+     * @see org.movsim.input.model.simulation.TrafficLightsInput#getTrafficLightData ()
      */
     public List<TrafficLightData> getTrafficLightData() {
         return trafficLightData;

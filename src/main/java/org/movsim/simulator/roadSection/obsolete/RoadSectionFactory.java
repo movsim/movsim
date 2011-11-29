@@ -10,8 +10,7 @@ public class RoadSectionFactory {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(RoadSectionFactory.class);
 
-    public static RoadSection create(InputData inputData, final RoadInput roadInput,
-            final VehicleGenerator vehGenerator) {
+    public static RoadSection create(InputData inputData, final RoadInput roadInput, final VehicleGenerator vehGenerator) {
         final long roadId = roadInput.getId();
         if (roadId % 10 == 0) {
             logger.info("create MAINROAD for road id={}", roadId);

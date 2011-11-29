@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.output;
@@ -37,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class LoopDetectorImpl.
  */
-public class LoopDetector extends ObservableImpl  {
+public class LoopDetector extends ObservableImpl {
 
     final static Logger logger = LoggerFactory.getLogger(LoopDetector.class);
 
@@ -88,16 +81,17 @@ public class LoopDetector extends ObservableImpl  {
 
     /**
      * Update.
-     *
-     * @param time the time
+     * 
+     * @param time
+     *            the time
      * @param roadSegment
      */
     public void update(double simulationTime, RoadSegment roadSegment) {
 
         // brute force search: iterate over all lanes
-    	final int laneCount = roadSegment.laneCount();
+        final int laneCount = roadSegment.laneCount();
         for (int lane = 0; lane < laneCount; ++lane) {
-        	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            final LaneSegment laneSegment = roadSegment.laneSegment(lane);
             for (final Vehicle veh : laneSegment) {
                 if ((veh.getPositionOld() < detPosition) && (veh.getPosition() >= detPosition)) {
                     // new vehicle crossed detector
@@ -108,8 +102,8 @@ public class LoopDetector extends ObservableImpl  {
                     sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
                     // calculate brut timegap not from local detector data:
                     final Vehicle vehFront = laneSegment.frontVehicle(veh);
-                    final double brutTimegap =
-                            (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition()) / vehFront.getSpeed();
+                    final double brutTimegap = (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition())
+                            / vehFront.getSpeed();
                     // microscopic flow
                     sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0;
                 }

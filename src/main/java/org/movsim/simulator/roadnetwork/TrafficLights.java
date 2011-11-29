@@ -24,6 +24,7 @@ public class TrafficLights {
 
     /**
      * Constructor.
+     * 
      * @param projectName
      * @param trafficLightsInput
      */
@@ -52,9 +53,11 @@ public class TrafficLights {
 
     /**
      * Update.
-     *
-     * @param iterationCount the itime
-     * @param time the time
+     * 
+     * @param iterationCount
+     *            the itime
+     * @param time
+     *            the time
      * @param roadSegment
      */
     public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {
@@ -65,9 +68,9 @@ public class TrafficLights {
                 trafficLight.update(simulationTime);
             }
             // then update vehicle status approaching traffic lights
-        	final int laneCount = roadSegment.laneCount();
+            final int laneCount = roadSegment.laneCount();
             for (int lane = 0; lane < laneCount; ++lane) {
-            	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+                final LaneSegment laneSegment = roadSegment.laneSegment(lane);
                 for (final Vehicle vehicle : laneSegment) {
                     for (final TrafficLight trafficLight : trafficLights) {
                         vehicle.updateTrafficLight(simulationTime, trafficLight);

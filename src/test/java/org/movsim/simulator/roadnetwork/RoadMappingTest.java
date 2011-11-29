@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -22,15 +17,13 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.movsim.simulator.roadnetwork.Lane;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * Test module for the RoadMapping class.
  * 
  */
 public class RoadMappingTest {
-    private double delta = 0.00001;
+    private final double delta = 0.00001;
 
     protected static class RoadMappingConcrete extends RoadMapping {
         public RoadMappingConcrete(int laneCount) {
@@ -51,7 +44,7 @@ public class RoadMappingTest {
     @Test
     public void testRoadMappingBaseInt() {
         final int LANE_COUNT = 3;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
     }
 
@@ -59,7 +52,7 @@ public class RoadMappingTest {
     public void testRoadMappingBaseIntDouble() {
         final int LANE_COUNT = 3;
         final double roadLength = 56.4;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
+        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT, roadLength);
         assertEquals(LANE_COUNT, roadMapping.laneCount());
         assertEquals(roadLength, roadMapping.roadLength(), delta);
     }
@@ -91,8 +84,7 @@ public class RoadMappingTest {
         RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
         assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth, delta);
         roadMapping = new RoadMappingConcrete(LANE_COUNT + 1);
-        assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth,
-                delta);
+        assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth, delta);
     }
 
     /**
@@ -101,7 +93,7 @@ public class RoadMappingTest {
     @Test
     public void testLaneWidth() {
         final int LANE_COUNT = 3;
-        RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
         assertEquals(RoadMapping.DEFAULT_LANE_WIDTH, roadMapping.laneWidth(), delta);
     }
 

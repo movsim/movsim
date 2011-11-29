@@ -66,7 +66,7 @@ public class XmlReaderSimInput {
     private Document doc;
 
     // dtd from resources. do *not* use the File.separator character
-    private String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
+    private final String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
 
@@ -83,8 +83,9 @@ public class XmlReaderSimInput {
     public XmlReaderSimInput(final InputData inputData) {
         projectMetaData = inputData.getProjectMetaData();
         this.inputData = inputData;
-        this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName() + filenameEnding;
-        
+        this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
+                + filenameEnding;
+
         // TODO Remove AccessController: Is not needed anymore
         AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
@@ -130,13 +131,13 @@ public class XmlReaderSimInput {
      *            the output file name
      */
     private void writeInternalXmlToFile(final Document localDoc, String outFilename) {
-        PrintWriter writer = FileUtils.getWriter(outFilename);
-        XMLOutputter outputter = new XMLOutputter();
+        final PrintWriter writer = FileUtils.getWriter(outFilename);
+        final XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());
         try {
             logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
             outputter.output(localDoc, writer);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -147,14 +148,14 @@ public class XmlReaderSimInput {
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
-        
+
         String outputPath = root.getAttribute("path").getValue();
         if (outputPath.equals("") || outputPath.isEmpty() || outputPath.equals(".")) {
             outputPath = "sim";
         }
         System.out.println(outputPath);
-        boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
-        if (!outputPathExits) { 
+        final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
+        if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
         }
         ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
@@ -237,8 +238,8 @@ public class XmlReaderSimInput {
                         @Override
                         public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
                                 IOException {
-                            InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-                            InputSource input = new InputSource(is);
+                            final InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                            final InputSource input = new InputSource(is);
                             return input;
                         }
                     });
@@ -289,8 +290,8 @@ public class XmlReaderSimInput {
                         @Override
                         public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
                                 IOException {
-                            InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-                            InputSource input = new InputSource(is);
+                            final InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                            final InputSource input = new InputSource(is);
                             return input;
                         }
                     });

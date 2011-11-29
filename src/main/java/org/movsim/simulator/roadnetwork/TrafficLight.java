@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.roadnetwork;
@@ -36,7 +29,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TrafficLight {
 
-	// cycle is GREEN --> GREEN_RED --> RED --> RED_GREEN --> GREEN
+    // cycle is GREEN --> GREEN_RED --> RED --> RED_GREEN --> GREEN
     /** The GREE n_ light. */
     public static final int GREEN_LIGHT = 0;
 
@@ -67,22 +60,22 @@ public class TrafficLight {
 
     /** The green time period. */
     private double greenTimePeriod;
-    
+
     private final double greenTimePeriodInit;
 
     /** The red time period. */
     private double redTimePeriod;
-    
+
     private final double redTimePeriodInit;
 
     /** The green red time period. */
     private double greenRedTimePeriod;
-    
-    private double greenRedTimePeriodInit;
+
+    private final double greenRedTimePeriodInit;
 
     /** The red green time period. */
     private double redGreenTimePeriod;
-    
+
     private final double redGreenTimePeriodInit;
 
     /** The phase shift. */
@@ -131,10 +124,9 @@ public class TrafficLight {
         oldStatus = status;
         currentCycleTime += time - lastUpdateTime;
 
-//        logger.debug("update at time = {}, status = {}", time, status);
-//        logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
+        // logger.debug("update at time = {}, status = {}", time, status);
+        // logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
 
-        
         if (currentCycleTime > greenTimePeriod) {
             status = GREEN_RED_LIGHT;
         }
@@ -144,7 +136,7 @@ public class TrafficLight {
         if (currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
             status = RED_GREEN_LIGHT;
         }
-        if(currentCycleTime >= totalCycleTime) {
+        if (currentCycleTime >= totalCycleTime) {
             status = GREEN_LIGHT;
             currentCycleTime -= totalCycleTime;
         }
@@ -324,29 +316,27 @@ public class TrafficLight {
     }
 
     public void setRelativeRedPhase(double initRelativeRedPhase) {
-        redTimePeriod = initRelativeRedPhase*redTimePeriodInit;
-        greenTimePeriod = (1-initRelativeRedPhase)*greenTimePeriodInit;
-        
+        redTimePeriod = initRelativeRedPhase * redTimePeriodInit;
+        greenTimePeriod = (1 - initRelativeRedPhase) * greenTimePeriodInit;
+
         int oldStatus = status;
-        if(initRelativeRedPhase>=1 || initRelativeRedPhase<=0){
+        if (initRelativeRedPhase >= 1 || initRelativeRedPhase <= 0) {
             greenRedTimePeriod = 0;
-            //redGreenTimePeriod = 0;
-            System.out.println("++++ initRel "+ initRelativeRedPhase+ " and set to zero");
-            oldStatus = (initRelativeRedPhase>=1) ? RED_LIGHT : GREEN_LIGHT;
-        }
-        else{
+            // redGreenTimePeriod = 0;
+            System.out.println("++++ initRel " + initRelativeRedPhase + " and set to zero");
+            oldStatus = (initRelativeRedPhase >= 1) ? RED_LIGHT : GREEN_LIGHT;
+        } else {
             greenRedTimePeriod = greenRedTimePeriodInit;
-            //redGreenTimePeriod = redGreenTimePeriodInit;
+            // redGreenTimePeriod = redGreenTimePeriodInit;
         }
 
-        
         initialize();
         status = oldStatus;
-        
+
     }
 
     public double getRelativeRedPhase() {
-        return redTimePeriod/(redTimePeriod + greenTimePeriod);
+        return redTimePeriod / (redTimePeriod + greenTimePeriod);
     }
 
 }

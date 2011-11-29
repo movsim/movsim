@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -45,8 +40,7 @@ public abstract class TrafficFlowBase implements SimulationTimeStep {
          */
         CLOSED_LOOP,
         /**
-         * JUNCTION source/sink is deprecated, junctions are now handled by joining road segments
-         * using Junction class.
+         * JUNCTION source/sink is deprecated, junctions are now handled by joining road segments using Junction class.
          */
         @Deprecated
         JUNCTION
@@ -119,9 +113,8 @@ public abstract class TrafficFlowBase implements SimulationTimeStep {
      * @return this traffic source's id as a string suitable for display
      */
     public final String idString() {
-        if (type == Type.SOURCE || type == Type.SINK) {
+        if (type == Type.SOURCE || type == Type.SINK)
             return "S" + id; //$NON-NLS-1$
-        }
         return "J" + id; //$NON-NLS-1$
     }
 
@@ -134,13 +127,14 @@ public abstract class TrafficFlowBase implements SimulationTimeStep {
         // in its setSource method
         assert this.roadSegment == null;
         assert roadSegment != null;
-        //assert roadSegment.source() == this || type != Type.SOURCE;
+        // assert roadSegment.source() == this || type != Type.SOURCE;
 
         this.roadSegment = roadSegment;
     }
 
     /**
      * Returns this traffic source's source road segment.
+     * 
      * @return this traffic source's source road segment
      */
     public final RoadSegment sourceRoad() {

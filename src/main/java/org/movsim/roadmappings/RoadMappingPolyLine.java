@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.roadmappings;
@@ -59,11 +54,11 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
      * Constructor.
      * 
      * @param laneCount
-     * @param s 
+     * @param s
      * @param x0
      * @param y0
-     * @param theta 
-     * @param length 
+     * @param theta
+     * @param length
      */
     public RoadMappingPolyLine(int laneCount, double s, double x0, double y0, double theta, double length) {
         super(laneCount, x0, y0);
@@ -83,8 +78,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
         super(laneCount, values[0], values[1]);
         assert values.length % 2 == 0;
 
-        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, values[0], values[1],
-                values[2], values[3]);
+        final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, values[0], values[1], values[2], values[3]);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
         if (valuesType == RELATIVE_POINTS) {
@@ -99,8 +93,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to
-     * try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
      */
     @Override
     protected void onLowMemory() {
@@ -132,9 +125,8 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
 
         double pos = roadPos;
         for (final RoadMapping roadMapping : roadMappings) {
-            if (pos <= roadMapping.roadLength()) {
+            if (pos <= roadMapping.roadLength())
                 return roadMapping.map(pos, lateralOffset);
-            }
             pos -= roadMapping.roadLength();
         }
         // have gone past end of last road mapping in road segment
@@ -161,8 +153,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
     public void addPointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
-        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx,
-                posTheta.y + dy);
+        final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }

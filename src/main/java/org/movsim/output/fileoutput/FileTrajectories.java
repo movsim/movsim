@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.output.fileoutput;
@@ -54,15 +47,15 @@ public class FileTrajectories {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 
-    private double dtOut;
-    private double t_start_interval;
-    private double t_end_interval;
-    private double x_start_interval;
-    private double x_end_interval;
-    private HashMap<Long, PrintWriter> fileHandles;
+    private final double dtOut;
+    private final double t_start_interval;
+    private final double t_end_interval;
+    private final double x_start_interval;
+    private final double x_end_interval;
+    private final HashMap<Long, PrintWriter> fileHandles;
     private double time = 0;
     private double lastUpdateTime = 0;
-    private RoadSegment roadSegment;
+    private final RoadSegment roadSegment;
 
     /**
      * Instantiates a new trajectories.
@@ -91,28 +84,25 @@ public class FileTrajectories {
      * Creates the file handles.
      */
     private void createFileHandles() {
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
-        final String filenameMainroad = outputPath + File.separator + projectMetaData.getProjectName() + String.format(extensionFormat, roadSegment.id());
+        final String filenameMainroad = outputPath + File.separator + projectMetaData.getProjectName()
+                + String.format(extensionFormat, roadSegment.id());
         logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
         fileHandles.put((long) roadSegment.id(), FileUtils.getWriter(filenameMainroad));
 
         /*
-         * // onramps int counter = 1; for(IOnRamp rmp : mainroad.onramps()){
-         * final String filename =
-         * projectName+".onr_"+Integer.toString(counter)+endingFile;
-         * fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-         * counter++; } // offramps counter = 1; for(IStreet rmp :
-         * mainroad.offramps()){ final String filename =
-         * projectName+".offr_"+Integer.toString(counter)+endingFile;
-         * fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
+         * // onramps int counter = 1; for(IOnRamp rmp : mainroad.onramps()){ final String filename =
+         * projectName+".onr_"+Integer.toString(counter)+endingFile; fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
+         * counter++; } // offramps counter = 1; for(IStreet rmp : mainroad.offramps()){ final String filename =
+         * projectName+".offr_"+Integer.toString(counter)+endingFile; fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
          * counter++; }
          */
 
         // write headers
-        Iterator<Long> it = fileHandles.keySet().iterator();
+        final Iterator<Long> it = fileHandles.keySet().iterator();
         while (it.hasNext()) {
-            Long id = it.next();
+            final Long id = it.next();
             final PrintWriter fstr = fileHandles.get(id);
             fstr.println(outputHeading);
             fstr.flush();
@@ -154,12 +144,9 @@ public class FileTrajectories {
 
                 writeTrajectories(fileHandles.get(roadSegment.id()), roadSegment);
                 /*
-                 * // onramps for(IOnRamp rmp : mainroad.onramps()){
-                 * writeTrajectories(fileHandles.get(rmp.roadIndex()),
-                 * rmp.vehContainer()); } // offramps for(IStreet rmp :
-                 * mainroad.offramps()){
-                 * writeTrajectories(fileHandles.get(rmp.roadIndex()),
-                 * rmp.vehContainer()); }
+                 * // onramps for(IOnRamp rmp : mainroad.onramps()){ writeTrajectories(fileHandles.get(rmp.roadIndex()),
+                 * rmp.vehContainer()); } // offramps for(IStreet rmp : mainroad.offramps()){
+                 * writeTrajectories(fileHandles.get(rmp.roadIndex()), rmp.vehContainer()); }
                  */
             } // of if
         }
@@ -167,14 +154,15 @@ public class FileTrajectories {
 
     /**
      * Write trajectories.
-     *
-     * @param fstr the fstr
+     * 
+     * @param fstr
+     *            the fstr
      * @param roadSegment
      */
     private void writeTrajectories(PrintWriter fstr, RoadSegment roadSegment) {
-    	final int laneCount = roadSegment.laneCount();
+        final int laneCount = roadSegment.laneCount();
         for (int lane = 0; lane < laneCount; ++lane) {
-        	final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            final LaneSegment laneSegment = roadSegment.laneSegment(lane);
             final int N = laneSegment.vehicleCount();
             for (int i = 0; i < N; i++) {
                 final Vehicle me = laneSegment.getVehicle(i);
@@ -188,11 +176,15 @@ public class FileTrajectories {
 
     /**
      * Write car data.
-     *
-     * @param fstr the fstr
-     * @param index the index
-     * @param me the me
-     * @param frontVeh the front veh
+     * 
+     * @param fstr
+     *            the fstr
+     * @param index
+     *            the index
+     * @param me
+     *            the me
+     * @param frontVeh
+     *            the front veh
      */
     private void writeCarData(PrintWriter fstr, int index, final Vehicle me, final Vehicle frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);

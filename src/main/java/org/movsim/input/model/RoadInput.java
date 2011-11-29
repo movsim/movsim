@@ -1,12 +1,11 @@
 /**
  * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
- * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model
- * open-source vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version. MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
- * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License along with MovSim. If not, see
- * <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
+ * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model open-source
+ * vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. MovSim is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public
+ * License along with MovSim. If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model;
@@ -41,11 +40,11 @@ public class RoadInput {
 
     /** The lanes. */
     private int lanes;
-    
+
     /** The ramp length. */
-    // TODO this is a property of an onramp/offramp and not of an mainroad 
+    // TODO this is a property of an onramp/offramp and not of an mainroad
     private double rampMergingLength;
-  
+
     /** The center position. */
     // TODO this is a property of an onramp/offramp and not of an mainroad
     private double rampStartPosition;
@@ -64,7 +63,7 @@ public class RoadInput {
 
     /** The upstream boundary data. */
     private TrafficSourceData trafficSourceData;
-    
+
     private TrafficSinkData trafficSinkData;
 
     /** The flow cons bottleneck input data. */
@@ -101,16 +100,16 @@ public class RoadInput {
     private void parseRoadElement(Element elem) {
 
         id = Long.parseLong(elem.getAttributeValue("id"));
-//        roadLength = Double.parseDouble(elem.getAttributeValue("length"));
-//        lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
+        // roadLength = Double.parseDouble(elem.getAttributeValue("length"));
+        // lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
 
-//        rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-//        rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
+        // rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
+        // rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
         // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
-        
+
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         // optional for specific road
         if (heterogenElem != null) {
@@ -123,8 +122,7 @@ public class RoadInput {
                 trafficCompositionInputData.add(new TrafficCompositionInputData(map));
             }
         }
-        
-        
+
         // -----------------------------------------------------------
 
         // Initial Conditions Micro
@@ -228,7 +226,7 @@ public class RoadInput {
         // non-physical ramps implementing a drop-down mechanism without
         // lane-changing decisions
         simpleRamps = new ArrayList<SimpleRampData>();
-       
+
         final Element rampsElement = elem.getChild(XmlElementNames.RoadRamps);
         if (rampsElement != null) {
             final List<Element> simpleRampElems = rampsElement.getChildren(XmlElementNames.RoadSimpleRamp);
@@ -247,20 +245,20 @@ public class RoadInput {
 
             // -----------------------------------------------------------
             // physical ramps
-            //ramps = new ArrayList<RampData>();
-//            final List<Element> rampElems = rampsElement.getChildren(XmlElementNames.RoadRamp);
-//            for (final Element rampElem : rampElems) {
-//                ramps.add(new RampDataImpl(rampElem));
-//            }
-//
-//            Collections.sort(ramps, new Comparator<RampData>() {
-//                @Override
-//                public int compare(RampData o1, RampData o2) {
-//                    final Double pos1 = new Double((o1).getRampStartPosition());
-//                    final Double pos2 = new Double((o2).getRampStartPosition());
-//                    return pos1.compareTo(pos2); // sort with increasing x
-//                }
-//            });
+            // ramps = new ArrayList<RampData>();
+            // final List<Element> rampElems = rampsElement.getChildren(XmlElementNames.RoadRamp);
+            // for (final Element rampElem : rampElems) {
+            // ramps.add(new RampDataImpl(rampElem));
+            // }
+            //
+            // Collections.sort(ramps, new Comparator<RampData>() {
+            // @Override
+            // public int compare(RampData o1, RampData o2) {
+            // final Double pos1 = new Double((o1).getRampStartPosition());
+            // final Double pos2 = new Double((o2).getRampStartPosition());
+            // return pos1.compareTo(pos2); // sort with increasing x
+            // }
+            // });
         }
 
         // -----------------------------------------------------------
@@ -290,8 +288,7 @@ public class RoadInput {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
+     * @see org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
      */
     public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
         return trafficCompositionInputData;
@@ -323,7 +320,7 @@ public class RoadInput {
     public TrafficSourceData getTrafficSourceData() {
         return trafficSourceData;
     }
-    
+
     public TrafficSinkData getTrafficSinkData() {
         return trafficSinkData;
     }
@@ -331,9 +328,7 @@ public class RoadInput {
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.impl.SimulationInput#getFlowConsBottleneckInputData
-     * ()
+     * @see org.movsim.input.model.impl.SimulationInput#getFlowConsBottleneckInputData ()
      */
     public List<FlowConservingBottleneckDataPoint> getFlowConsBottleneckInputData() {
         return flowConsBottleneckInputData;
@@ -409,7 +404,5 @@ public class RoadInput {
     public double getRampStartPosition() {
         return rampStartPosition;
     }
-
-    
 
 }

@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model.vehicle.longModel.impl;
@@ -106,9 +99,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #checkParameters()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #checkParameters()
      */
     @Override
     protected void checkParameters() {
@@ -122,9 +113,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #resetParametersToDefault()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #resetParametersToDefault()
      */
     @Override
     public void resetParametersToDefault() {
@@ -140,8 +129,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getV0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getV0()
      */
     @Override
     public double getV0() {
@@ -151,8 +139,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getK()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getK()
      */
     @Override
     public double getK() {
@@ -162,8 +149,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb0()
      */
     @Override
     public double getPb0() {
@@ -173,8 +159,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb1()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPb1()
      */
     @Override
     public double getPb1() {
@@ -184,8 +169,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa1()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa1()
      */
     @Override
     public double getPa1() {
@@ -195,8 +179,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa2()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getPa2()
      */
     @Override
     public double getPa2() {
@@ -206,8 +189,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getVp()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataKCA#getVp()
      */
     @Override
     public double getVp() {
@@ -217,9 +199,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getV0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getV0Default()
      */
     @Override
     public double getV0Default() {
@@ -229,9 +209,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getkDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getkDefault()
      */
     @Override
     public double getkDefault() {
@@ -241,9 +219,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getPb0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getPb0Default()
      */
     @Override
     public double getPb0Default() {
@@ -253,9 +229,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getPb1Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getPb1Default()
      */
     @Override
     public double getPb1Default() {
@@ -265,9 +239,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getPa1Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getPa1Default()
      */
     @Override
     public double getPa1Default() {
@@ -277,9 +249,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getPa2Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getPa2Default()
      */
     @Override
     public double getPa2Default() {
@@ -289,9 +259,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #getVpDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #getVpDefault()
      */
     @Override
     public double getVpDefault() {
@@ -301,9 +269,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setV0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setV0(double)
      */
     @Override
     public void setV0(double v0) {
@@ -314,9 +280,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setK(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setK(double)
      */
     @Override
     public void setK(double k) {
@@ -327,9 +291,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setPb0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setPb0(double)
      */
     @Override
     public void setPb0(double pb0) {
@@ -340,9 +302,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setPb1(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setPb1(double)
      */
     @Override
     public void setPb1(double pb1) {
@@ -353,9 +313,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setPa1(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setPa1(double)
      */
     @Override
     public void setPa1(double pa1) {
@@ -366,9 +324,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setPa2(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setPa2(double)
      */
     @Override
     public void setPa2(double pa2) {
@@ -379,9 +335,7 @@ public class AccelerationModelInputDataKKWImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW
-     * #setVp(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW #setVp(double)
      */
     @Override
     public void setVp(double vp) {

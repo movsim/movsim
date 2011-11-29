@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model.vehicle.longModel.impl;
@@ -96,9 +89,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #checkParameters()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #checkParameters()
      */
     @Override
     protected void checkParameters() {
@@ -118,9 +109,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl
-     * #resetParametersToDefault()
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #resetParametersToDefault()
      */
     @Override
     public void resetParametersToDefault() {
@@ -136,8 +125,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getV0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getV0()
      */
     @Override
     public double getV0() {
@@ -147,8 +135,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getT()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getT()
      */
     @Override
     public double getT() {
@@ -158,8 +145,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getS0()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getS0()
      */
     @Override
     public double getS0() {
@@ -169,8 +155,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getS1()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getS1()
      */
     @Override
     public double getS1() {
@@ -180,9 +165,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getDelta
-     * ()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getDelta ()
      */
     @Override
     public double getDelta() {
@@ -192,8 +175,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getA()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getA()
      */
     @Override
     public double getA() {
@@ -203,8 +185,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getB()
+     * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataIDM#getB()
      */
     @Override
     public double getB() {
@@ -214,9 +195,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getV0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getV0Default()
      */
     @Override
     public double getV0Default() {
@@ -226,9 +205,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getTDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getTDefault()
      */
     @Override
     public double getTDefault() {
@@ -238,9 +215,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getS0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getS0Default()
      */
     @Override
     public double getS0Default() {
@@ -250,9 +225,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getS1Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getS1Default()
      */
     @Override
     public double getS1Default() {
@@ -262,9 +235,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getDeltaDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getDeltaDefault()
      */
     @Override
     public double getDeltaDefault() {
@@ -274,9 +245,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getaDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getaDefault()
      */
     @Override
     public double getaDefault() {
@@ -286,9 +255,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #getbDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #getbDefault()
      */
     @Override
     public double getbDefault() {
@@ -298,9 +265,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setV0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setV0(double)
      */
     @Override
     public void setV0(double v0) {
@@ -311,9 +276,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setT(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setT(double)
      */
     @Override
     public void setT(double timegap) {
@@ -324,9 +287,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setS0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setS0(double)
      */
     @Override
     public void setS0(double s0) {
@@ -337,9 +298,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setS1(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setS1(double)
      */
     @Override
     public void setS1(double s1) {
@@ -350,9 +309,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setDelta(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setDelta(double)
      */
     @Override
     public void setDelta(double delta) {
@@ -363,9 +320,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setA(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setA(double)
      */
     @Override
     public void setA(double a) {
@@ -376,9 +331,7 @@ public class AccelerationModelInputDataIDMImpl extends AccelerationModelInputDat
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM
-     * #setB(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM #setB(double)
      */
     @Override
     public void setB(double b) {

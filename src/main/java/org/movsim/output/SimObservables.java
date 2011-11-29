@@ -1,12 +1,7 @@
-/*
- * Copyright by Ralph Germ (http://www.ralphgerm.de)
- */
 package org.movsim.output;
 
 import java.util.List;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Interface SimObservables.
  */
@@ -32,6 +27,6 @@ public interface SimObservables {
      * @return the loop detectors
      */
     List<LoopDetector> getLoopDetectors();
-    
+
     TravelTimes getTravelTimes();
 }

@@ -1,20 +1,15 @@
 /*
- * Copyright (C) 2010, 2011  Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
- *
+ * Copyright (C) 2010, 2011 Martin Budden, Ralph Germ, Arne Kesting, and Martin Treiber.
+ * 
  * This file is part of MovSim.
- *
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MovSim.  If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -33,10 +28,10 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(RoadNetwork.class);
-    
+
     private final ArrayList<RoadSegment> roadSegments = new ArrayList<RoadSegment>();
     private String name;
-    
+
     private boolean isWithCrashExit;
 
     /**
@@ -65,44 +60,41 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public RoadSegment findById(int id) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.id() == id) {
+            if (roadSegment.id() == id)
                 return roadSegment;
-            }
         }
         return null;
     }
 
     /**
      * Given its userId, find a road segment in the road network.
-     * @param userId 
+     * 
+     * @param userId
      * @return the road segment with the given userId
      */
     public RoadSegment findByUserId(String userId) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.userId() != null && roadSegment.userId().equals(userId)) {
+            if (roadSegment.userId() != null && roadSegment.userId().equals(userId))
                 return roadSegment;
-            }
         }
         return null;
     }
 
     /**
-     * Clear the road network so that it is empty and ready to accept new RoadSegments, Vehicles,
-     * sources, sinks and junctions.
+     * Clear the road network so that it is empty and ready to accept new RoadSegments, Vehicles, sources, sinks and junctions.
      */
     public void clear() {
         name = null;
-//        LaneChangeModel.resetCount();
-//        LongitudinalDriverModel.resetNextId();
+        // LaneChangeModel.resetCount();
+        // LongitudinalDriverModel.resetNextId();
         RoadSegment.resetNextId();
-//        TrafficFlowBase.resetNextId();
-//        Vehicle.resetNextId();
+        // TrafficFlowBase.resetNextId();
+        // Vehicle.resetNextId();
         roadSegments.clear();
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to
-     * try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
      */
     public void onLowMemory() {
         roadSegments.trimToSize();
@@ -142,12 +134,12 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     /**
      * <p>
-     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane changing decisions. 
-     * Each update step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In
-     * particular, the complete old state (positions, lanes, speeds ...) is made available during the complete update step of one
-     * timestep. Then the outflow is performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from
-     * the road network) when required. Then the inflow is performed for each road segment, adding any new vehicles supplied by
-     * any traffic sources. Finally the vehicle detectors are updated.
+     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane changing decisions. Each update
+     * step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In particular, the
+     * complete old state (positions, lanes, speeds ...) is made available during the complete update step of one timestep. Then the outflow
+     * is performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from the road network) when
+     * required. Then the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Finally the
+     * vehicle detectors are updated.
      * </p>
      * 
      * <p>
@@ -169,20 +161,22 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * </p>
      * 
      * <p>
-     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order
-     * (i),(ii),(iii).  
+     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order (i),(ii),(iii).
      * </p>
-     *
-     * @param dt simulation time interval, seconds.
-     * @param simulationTime the current logical time in the simulation
-     * @param iterationCount the counter of performed update steps
+     * 
+     * @param dt
+     *            simulation time interval, seconds.
+     * @param simulationTime
+     *            the current logical time in the simulation
+     * @param iterationCount
+     *            the counter of performed update steps
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         // Make each type of update for each road segment, this avoids problems with vehicles
         // being updated twice (for example when a vehicle moves of the end of a road segment
         // onto the next road segment.
-        
+
         logger.debug("called timeStep: time={}", simulationTime);
         // TODO road segments have replaced road sections, so need to replicate below for correct parallel update
         for (final RoadSegment roadSegment : roadSegments) {
@@ -196,13 +190,13 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
-        	roadSegment.accelerate(dt, simulationTime, iterationCount);
+            roadSegment.accelerate(dt, simulationTime, iterationCount);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
-        	roadSegment.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+            roadSegment.updatePositionAndSpeed(dt, simulationTime, iterationCount);
         }
-        
+
         // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.checkForInconsistencies(simulationTime, iterationCount, isWithCrashExit);
@@ -221,13 +215,12 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
     }
 
-
     /**
      * Asserts the road network's class invariant. Used for debugging.
      */
     public boolean assertInvariant() {
         for (final RoadSegment roadSegment : roadSegments) {
-        	assert roadSegment.assertInvariant();
+            assert roadSegment.assertInvariant();
         }
         return true;
     }

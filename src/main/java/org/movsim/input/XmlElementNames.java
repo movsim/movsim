@@ -16,7 +16,7 @@ public interface XmlElementNames {
     public final String ConsumptionEngineData = "ENGINE";
     public final String ConsumptionEngineGears = "GEAR_RATIOS";
     public final String ConsumptionEngineGear = "GEAR_RATIO";
-    
+
     public final String DriverVehicleUnits = "VEHICLES";
     public final String DriverVehicleUnit = "VEHICLE";
     public final String VehicleMemory = "MEMORY";
@@ -24,7 +24,7 @@ public interface XmlElementNames {
     public final String VehicleLongitudinalModel = "LONGITUDINAL_MODEL";
     public final String VehicleLaneChangeModel = "LANE_CHANGE_MODEL";
     public final String VehicleLaneChangeModelMobil = "MOBIL";
-    
+
     public final String Simulation = "SIMULATION";
     public final String TrafficComposition = "TRAFFIC_COMPOSITION";
     public final String Road = "ROAD";
@@ -50,6 +50,5 @@ public interface XmlElementNames {
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
     public final String OutputTravelTimes = "TRAVELTIMES";
-    
 
 }

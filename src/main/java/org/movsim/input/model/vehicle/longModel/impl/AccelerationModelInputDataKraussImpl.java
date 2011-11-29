@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.input.model.vehicle.longModel.impl;
@@ -36,7 +29,7 @@ import org.slf4j.LoggerFactory;
 // TODO: Auto-generated Javadoc
 /**
  * The Class AccelerationModelInputDataKraussImpl.
- *
+ * 
  * @author ralph
  */
 public class AccelerationModelInputDataKraussImpl extends AccelerationModelInputDataImpl implements
@@ -44,7 +37,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(AccelerationModelInputDataKraussImpl.class);
-    
+
     /** The v0. */
     private double v0;
     private final double v0Default;
@@ -60,18 +53,18 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /** The s0. */
     private double s0;
     private final double s0Default;
-    
 
     /** The epsilon. */
     private double epsilon;
     private final double epsilonDefault;
-    
 
     /**
      * Instantiates a new acceleration model input data krauss impl.
-     *
-     * @param modelName the model name
-     * @param map the map
+     * 
+     * @param modelName
+     *            the model name
+     * @param map
+     *            the map
      */
     public AccelerationModelInputDataKraussImpl(Map<String, String> map) {
         super(ModelName.KRAUSS);
@@ -85,13 +78,13 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
 
     @Override
     protected void checkParameters() {
-        if (v0 < 0 || a < 0 || b < 0 || s0 < 0 ) {
+        if (v0 < 0 || a < 0 || b < 0 || s0 < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
         }
 
-        if (a == 0 || b == 0 ) {
+        if (a == 0 || b == 0) {
             logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
@@ -99,7 +92,9 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
 
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl#resetParametersToDefault()
      */
     @Override
@@ -111,13 +106,10 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         epsilon = epsilonDefault;
     }
 
-
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getV0()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getV0()
      */
     @Override
     public double getV0() {
@@ -127,9 +119,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getA()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getA()
      */
     @Override
     public double getA() {
@@ -139,9 +129,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getB()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getB()
      */
     @Override
     public double getB() {
@@ -151,23 +139,17 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getS0()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getS0()
      */
     @Override
     public double getS0() {
         return s0;
     }
 
-    
-
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getV0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getV0Default()
      */
     @Override
     public double getV0Default() {
@@ -177,9 +159,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getaDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getaDefault()
      */
     @Override
     public double getaDefault() {
@@ -189,9 +169,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getbDefault()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getbDefault()
      */
     @Override
     public double getbDefault() {
@@ -201,9 +179,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #getS0Default()
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #getS0Default()
      */
     @Override
     public double getS0Default() {
@@ -213,9 +189,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #setV0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #setV0(double)
      */
     @Override
     public void setV0(double v0) {
@@ -226,9 +200,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #setA(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #setA(double)
      */
     @Override
     public void setA(double a) {
@@ -239,9 +211,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #setB(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #setB(double)
      */
     @Override
     public void setB(double b) {
@@ -252,9 +222,7 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps
-     * #setS0(double)
+     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps #setS0(double)
      */
     @Override
     public void setS0(double s0) {
@@ -262,7 +230,9 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         parametersUpdated();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss#setEpsilon(double)
      */
     @Override
@@ -271,7 +241,9 @@ public class AccelerationModelInputDataKraussImpl extends AccelerationModelInput
         parametersUpdated();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss#getEpsilon()
      */
     @Override

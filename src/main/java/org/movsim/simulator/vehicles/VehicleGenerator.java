@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles;
@@ -82,38 +75,37 @@ public class VehicleGenerator {
     // Aufwand mit prototypes wg. einmaliger berechnung des FD
     // Und ggf. einmaliger Neuberechnung FD nach Parameteraenderung !!
 
-
     // enthaelt die Menge der definierte Models ... notwendig fuer GUI
     // private HashMap<String, AccelerationModel> longModels;
 
     // enthaelt die Heterogenitaet der tatsaechlich simulierten Fahrzeuge
     private final HashMap<String, VehiclePrototype> prototypes;
 
-    private double simulationTimestep;
+    private final double simulationTimestep;
 
     private final boolean isWithReactionTimes;
 
-    private boolean instantaneousFileOutput;
-    
-    private ConsumptionModeling fuelConsumptionModels;
+    private final boolean instantaneousFileOutput;
+
+    private final ConsumptionModeling fuelConsumptionModels;
 
     /**
-     * Instantiates a new vehicle generator. And writes fundamental diagram
-     * to file system if the param instantaneousFileOutput is true.
+     * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param instantaneousFileOutput is true.
      * 
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(InputData simInput, List<TrafficCompositionInputData> heterogenInputData, boolean isWithWriteFundamentalDiagrams) {
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road 
+    public VehicleGenerator(InputData simInput, List<TrafficCompositionInputData> heterogenInputData,
+            boolean isWithWriteFundamentalDiagrams) {
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
         this.instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
 
         // default for continuous micro models
         simulationTimestep = simInput.getSimulationInput().getTimestep();
         // create vehicle prototyps according to traffic composition
         // (heterogeneity)
-        List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
+        final List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehicleInputData);
         prototypes = createPrototypes(vehInputMap, heterogenInputData);
 
@@ -132,11 +124,12 @@ public class VehicleGenerator {
      * 
      * @return the double
      */
-    private HashMap<String, VehiclePrototype> createPrototypes(Map<String, VehicleInput> vehInputMap, List<TrafficCompositionInputData> heterogenInputData) {
+    private HashMap<String, VehiclePrototype> createPrototypes(Map<String, VehicleInput> vehInputMap,
+            List<TrafficCompositionInputData> heterogenInputData) {
         final HashMap<String, VehiclePrototype> prototypes = new HashMap<String, VehiclePrototype>();
 
         addObstacleSystemVehicleType(heterogenInputData);
-        
+
         double sumFraction = 0;
         for (final TrafficCompositionInputData heterogen : heterogenInputData) {
             final String keyName = heterogen.getKeyName();
@@ -156,7 +149,8 @@ public class VehicleGenerator {
 
             sumFraction += fraction;
             final double relRandomizationV0 = heterogen.getRelativeRandomizationDesiredSpeed();
-            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput, relRandomizationV0);
+            final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput,
+                    relRandomizationV0);
             prototypes.put(keyName, vehProto);
 
         }
@@ -164,36 +158,39 @@ public class VehicleGenerator {
         normalizeFractions(sumFraction, prototypes);
         return prototypes;
     }
-    
-    
+
     // add Obstacle as permanent Vehicle_Type
-    // first check if Obstacle is already part of user defined heterogeneity input 
+    // first check if Obstacle is already part of user defined heterogeneity input
     /**
      * Adds the obstacle system vehicle type.
-     *
-     * @param heterogenInputData the heterogen input data
+     * 
+     * @param heterogenInputData
+     *            the heterogen input data
      */
     private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
         boolean obstacleEntryIsContained = false;
-        for (TrafficCompositionInputData het : heterogenInputData) {
+        for (final TrafficCompositionInputData het : heterogenInputData) {
             if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
                 obstacleEntryIsContained = true;
             }
         }
-        
+
         if (obstacleEntryIsContained) {
-            logger.info("vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite", MovsimConstants.OBSTACLE_KEY_NAME);
-        }
-        else{
-            logger.info("vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity", MovsimConstants.OBSTACLE_KEY_NAME);
+            logger.info(
+                    "vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite",
+                    MovsimConstants.OBSTACLE_KEY_NAME);
+        } else {
+            logger.info(
+                    "vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity",
+                    MovsimConstants.OBSTACLE_KEY_NAME);
             final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
             mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
             mapEntryObstacle.put("fraction", "0");
             mapEntryObstacle.put("relative_v0_randomization", "0");
             heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
-        } 
+        }
     }
-    
+
     /**
      * Fund diagram factory.
      * 
@@ -229,8 +226,7 @@ public class VehicleGenerator {
     }
 
     /**
-     * Long model factory with vehicle length vehicle length is only needed for
-     * KKW (explicit model parameter).
+     * Long model factory with vehicle length vehicle length is only needed for KKW (explicit model parameter).
      * 
      * @param modelInputData
      *            the model input data
@@ -243,7 +239,7 @@ public class VehicleGenerator {
         AccelerationModel longModel = null;
         // logger.debug("modelName = {}", modelName);
         if (modelName == ModelName.IDM) {
-            longModel = new IDM( (AccelerationModelInputDataIDM) modelInputData);
+            longModel = new IDM((AccelerationModelInputDataIDM) modelInputData);
         } else if (modelName == ModelName.ACC) {
             longModel = new ACC((AccelerationModelInputDataACC) modelInputData);
         } else if (modelName == ModelName.OVM_VDIFF) {
@@ -252,9 +248,9 @@ public class VehicleGenerator {
             longModel = new Gipps(simulationTimestep, (AccelerationModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {
             longModel = new Krauss(simulationTimestep, (AccelerationModelInputDataKrauss) modelInputData);
-        } else if (modelName == ModelName.NEWELL) {
+        } else if (modelName == ModelName.NEWELL)
             return new Newell(simulationTimestep, (AccelerationModelInputDataNewell) modelInputData);
-        } else if (modelName == ModelName.NSM) {
+        else if (modelName == ModelName.NSM) {
             longModel = new NSM((AccelerationModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {
             longModel = new KKW((AccelerationModelInputDataKKW) modelInputData, vehLength);
@@ -330,12 +326,13 @@ public class VehicleGenerator {
         final VehicleInput vehInput = prototype.getVehicleInput();
         final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
-        
+
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
-        
+
         // TODO lane-changing model impl
         final LaneChangingModel lcModel = new LaneChangingModel(vehInput.getLaneChangingInputData());
-        final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput.getFuelConsumptionLabel());
+        final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
+                .getFuelConsumptionLabel());
         final Vehicle veh = new Vehicle(prototype.getLabel(), vehID, longModel, vehInput, null, lcModel, fuelModel);
         return veh;
     }

@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <info@movsim.org>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 package org.movsim.simulator.roadnetwork;
@@ -45,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UpstreamBoundary implements SimulationTimeStep {
 
-    // TODO the same output format is used in SimpleOnrampImpl. Consolidate. 
+    // TODO the same output format is used in SimpleOnrampImpl. Consolidate.
 
     private static final String extensionFormat = ".id%d_source_log.csv";
     private static final String outputHeading = MovsimConstants.COMMENT_CHAR
@@ -76,10 +69,13 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Instantiates a new upstream boundary .
-     *
-     * @param vehGenerator the vehicle generator
-     * @param vehContainers the veh containers
-     * @param upstreamBoundaryData the upstream boundary data
+     * 
+     * @param vehGenerator
+     *            the vehicle generator
+     * @param vehContainers
+     *            the veh containers
+     * @param upstreamBoundaryData
+     *            the upstream boundary data
      */
     public UpstreamBoundary(long roadId, VehicleGenerator vehGenerator, RoadSegment roadSegment,
             TrafficSourceData upstreamBoundaryData) {
@@ -91,9 +87,10 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
         if (upstreamBoundaryData.withLogging()) {
             enteringVehCounter = 1;
-            ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+            final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
             final String outputPath = projectMetaData.getOutputPath();
-            final String filename = outputPath + File.separator + projectMetaData.getProjectName() + String.format(extensionFormat, roadId);
+            final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+                    + String.format(extensionFormat, roadId);
             fstrLogging = FileUtils.getWriter(filename);
             fstrLogging.printf(outputHeading);
         }
@@ -101,7 +98,7 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Gets the entering veh counter.
-     *
+     * 
      * @return the entering veh counter
      */
     public int getEnteringVehCounter() {
@@ -110,8 +107,9 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Gets the new cyclic lane index for entering.
-     *
-     * @param iLane the i lane
+     * 
+     * @param iLane
+     *            the i lane
      * @return the new cyclic lane index for entering
      */
     private int getNewCyclicLaneIndexForEntering(int iLane) {
@@ -120,8 +118,9 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Gets the total inflow.
-     *
-     * @param time the time
+     * 
+     * @param time
+     *            the time
      * @return the total inflow
      */
     private double getTotalInflow(double time) {
@@ -134,17 +133,20 @@ public class UpstreamBoundary implements SimulationTimeStep {
     public void update(long iterationCount, double dt, double simulationTime) {
         timeStep(dt, simulationTime, iterationCount);
     }
-    
+
     /**
      * Update.
-     *
-     * @param iterationCount the iteration count
-     * @param dt the dt
-     * @param simulationTime the time
+     * 
+     * @param iterationCount
+     *            the iteration count
+     * @param dt
+     *            the dt
+     * @param simulationTime
+     *            the time
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-     //public void update(long iterationCount, double dt, double simulationTime) {
+        // public void update(long iterationCount, double dt, double simulationTime) {
         // integrate inflow demand
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
@@ -154,7 +156,7 @@ public class UpstreamBoundary implements SimulationTimeStep {
             int iLane = laneEnterLast;
             for (int i = 0, N = roadSegment.laneCount(); i < N; i++) {
                 iLane = getNewCyclicLaneIndexForEntering(iLane);
-                //final VehicleContainer vehContainerLane = vehContainers.get(iLane);
+                // final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
                 // lane index is identical to vehicle's lane number
                 final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
@@ -172,25 +174,27 @@ public class UpstreamBoundary implements SimulationTimeStep {
     }
 
     /**
-     * <p>Try entering new vehicle.
-     * </p> 
+     * <p>
+     * Try entering new vehicle.
+     * </p>
      * 
      * <p>
-     * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as
-     * possible. Otherwise, one would activate an "inflow bottleneck", and less vehicles can be entered as one would like to.
-     * The crux is that vehicles can be introduced only at times given by the simulation time step which is generalaly
-     * incommensurate with the inverse of the inflow. For example, if the simulation time step is 0.4s, capacity is 2400 veh/h,
-     * and the prescribed inflow is 2260 veh/h or one vehicle every 1.59s, you insert one vehicle every 1.6s, most of the
-     * time. However, at some instances, two vehicles are inserted at time headway of 1.2s corresponding macroscopically to
-     * 3000 veh/h, far above capacity. Typical time gaps for this situation are 1.2s most of the time but 0.8s occasionally.
-     * This introduces a perturbation which may "activate" the "inflow bottleneck", unless a flow of 2260 veh/h is absolutely
-     * stable which is not always the case. Since the time of insertion cannot be changed, one can homogenize the inflow by
-     * allowing the insertion point to vary by a maximum of one vehicle-vehicle distance.
+     * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as possible. Otherwise, one would activate an
+     * "inflow bottleneck", and less vehicles can be entered as one would like to. The crux is that vehicles can be introduced only at times
+     * given by the simulation time step which is generalaly incommensurate with the inverse of the inflow. For example, if the simulation
+     * time step is 0.4s, capacity is 2400 veh/h, and the prescribed inflow is 2260 veh/h or one vehicle every 1.59s, you insert one vehicle
+     * every 1.6s, most of the time. However, at some instances, two vehicles are inserted at time headway of 1.2s corresponding
+     * macroscopically to 3000 veh/h, far above capacity. Typical time gaps for this situation are 1.2s most of the time but 0.8s
+     * occasionally. This introduces a perturbation which may "activate" the "inflow bottleneck", unless a flow of 2260 veh/h is absolutely
+     * stable which is not always the case. Since the time of insertion cannot be changed, one can homogenize the inflow by allowing the
+     * insertion point to vary by a maximum of one vehicle-vehicle distance.
      * </p>
      * 
      * @param laneSegment
-     * @param time the time
-     * @param qBC the q bc
+     * @param time
+     *            the time
+     * @param qBC
+     *            the q bc
      * @return true, if successful
      */
     private boolean tryEnteringNewVehicle(final LaneSegment laneSegment, double time, double qBC) {
@@ -207,16 +211,14 @@ public class UpstreamBoundary implements SimulationTimeStep {
         // (2) check if gap to leader is sufficiently large
         // origin of road section is assumed to be zero
         final double netGapToLeader = leader.getPosition() - leader.getLength();
-        double gapAtQMax = 1. / vehPrototype.getRhoQMax();
-        
-        
+        final double gapAtQMax = 1. / vehPrototype.getRhoQMax();
+
         // TODO what mechanism is called here?
-//        if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
-//            final double tau = 1;
-//            gapAtQMax = leader.getSpeed() * tau;
-//        }
-        
-        
+        // if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
+        // final double tau = 1;
+        // gapAtQMax = leader.getSpeed() * tau;
+        // }
+
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental
         // diagram
         double minRequiredGap = 0.8 * gapAtQMax;
@@ -234,10 +236,12 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Enter vehicle on empty road.
-     *
+     * 
      * @param laneSegment
-     * @param time the time
-     * @param vehPrototype the vehicle prototype
+     * @param time
+     *            the time
+     * @param vehPrototype
+     *            the vehicle prototype
      */
     private void enterVehicleOnEmptyRoad(LaneSegment laneSegment, double time, VehiclePrototype vehPrototype) {
         final double xEnter = 0;
@@ -248,15 +252,19 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Enter vehicle.
-     *
+     * 
      * @param laneSegment
-     * @param time the time
-     * @param sFreeMin the s free min
-     * @param vehPrototype the veh prototype
-     * @param leader the leader
+     * @param time
+     *            the time
+     * @param sFreeMin
+     *            the s free min
+     * @param vehPrototype
+     *            the veh prototype
+     * @param leader
+     *            the leader
      */
-    private void enterVehicle(LaneSegment laneSegment, double time, double sFreeMin,
-            VehiclePrototype vehPrototype, Vehicle leader) {
+    private void enterVehicle(LaneSegment laneSegment, double time, double sFreeMin, VehiclePrototype vehPrototype,
+            Vehicle leader) {
 
         final double speedDefault = inflowTimeSeries.getSpeed(time);
 
@@ -289,14 +297,17 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     /**
      * Adds the vehicle.
-     *
-     * @param vehContainer the veh container
-     * @param vehPrototype the veh prototype
-     * @param xEnter the x enter
-     * @param vEnter the v enter
+     * 
+     * @param vehContainer
+     *            the veh container
+     * @param vehPrototype
+     *            the veh prototype
+     * @param xEnter
+     *            the x enter
+     * @param vEnter
+     *            the v enter
      */
-    private void addVehicle(LaneSegment laneSegment, final VehiclePrototype vehPrototype, double xEnter,
-            double vEnter) {
+    private void addVehicle(LaneSegment laneSegment, final VehiclePrototype vehPrototype, double xEnter, double vEnter) {
         final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
         vehicle.setMidPosition(xEnter);
         vehicle.setSpeed(vEnter);
@@ -310,7 +321,7 @@ public class UpstreamBoundary implements SimulationTimeStep {
     }
 
     public void setFlowPerLane(double newFlowPerLane) {
-        logger.info("set new flow per lane={} per second and reset queue of waiting vehicles={}", newFlowPerLane,nWait);
+        logger.info("set new flow per lane={} per second and reset queue of waiting vehicles={}", newFlowPerLane, nWait);
         inflowTimeSeries.setConstantFlowPerLane(newFlowPerLane);
         nWait = 0;
     }
@@ -319,5 +330,4 @@ public class UpstreamBoundary implements SimulationTimeStep {
         return inflowTimeSeries.getFlowPerLane(time);
     }
 
-   
 }
