@@ -66,11 +66,6 @@ public class SimCommandLine {
             System.err.println("no xml file for simulation configuration found!");
             System.exit(-1);
         }
-
-        if (!FileUtils.fileExists(projectName)) {
-            System.err.println("no file \"" + projectName + "\" for simulation configuration found!");
-            System.exit(-1);
-        }
     }
 
     /**
@@ -175,7 +170,8 @@ public class SimCommandLine {
     private boolean validateOpenDriveFileName(String xodrFilename) {
         final int i = xodrFilename.lastIndexOf(".xodr");
         if (i < 0) {
-            System.out.println("Please provide OpenDRIVE file with ending \".xodr\" as argument with option -n, exit. ");
+            System.out
+                    .println("Please provide OpenDRIVE file with ending \".xodr\" as argument with option -n, exit. ");
             return false;
         }
         return true;
@@ -186,7 +182,7 @@ public class SimCommandLine {
      */
     private void optPrintVersion() {
         System.out.println("movsim release version: " + MovsimConstants.RELEASE_VERSION);
-        
+
         System.exit(0);
     }
 
@@ -236,7 +232,7 @@ public class SimCommandLine {
      */
     private void optSimulation(CommandLine cmdline) {
         final String filename = cmdline.getOptionValue('f');
-        if (filename == null  || !FileUtils.fileExists(filename)) {
+        if (filename == null || !FileUtils.fileExists(filename)) {
             System.err.println("No xml configuration file! Please specify via the option -f.");
             System.exit(-1);
         } else {
