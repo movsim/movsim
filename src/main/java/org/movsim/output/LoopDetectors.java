@@ -50,21 +50,22 @@ public class LoopDetectors {
 
         detectors = new ArrayList<LoopDetector>();
 
-        final double dtSample = input.getSampleInterval();
+        if (input.isWithDetectors()) {
+            final double dtSample = input.getSampleInterval();
 
-        final List<Double> positions = input.getPositions();
+            final List<Double> positions = input.getPositions();
 
-        for (final Double detPosition : positions) {
-            detectors.add(new LoopDetector(detPosition, dtSample));
-        }
+            for (final Double detPosition : positions) {
+                detectors.add(new LoopDetector(detPosition, dtSample));
+            }
 
-        if (input.isWithLogging()) {
-            fileDetectors = new ArrayList<FileDetector>();
-            for (final LoopDetector det : detectors) {
-                fileDetectors.add(new FileDetector(roadId, det));
+            if (input.isWithLogging()) {
+                fileDetectors = new ArrayList<FileDetector>();
+                for (final LoopDetector det : detectors) {
+                    fileDetectors.add(new FileDetector(roadId, det));
+                }
             }
         }
-
     }
 
     /**

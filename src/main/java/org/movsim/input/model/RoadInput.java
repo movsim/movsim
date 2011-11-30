@@ -126,7 +126,8 @@ public class RoadInput {
         // -----------------------------------------------------------
 
         // Initial Conditions Micro
-        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? 
+                new ArrayList<Element>() : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
                 XmlElementNames.RoadInitialConditionsIcMicro);
         icMicroData = new ArrayList<ICMicroData>();
         for (final Element icMicroElem : icMicroElems) {
@@ -147,8 +148,8 @@ public class RoadInput {
         // -----------------------------------------------------------
 
         // Initial Conditions Macro
-        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
-                XmlElementNames.RoadInitialConditionsIcMacro);
+        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions)== null ?
+                new ArrayList<Element>() :  elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(XmlElementNames.RoadInitialConditionsIcMacro);
         icMacroData = new ArrayList<ICMacroData>();
         for (final Element icMacroElem : icMacroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMacroElem);

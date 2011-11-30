@@ -25,9 +25,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +67,8 @@ public class SimulationInput {
 
     /** The output input. */
     private final OutputInput outputInput;
+    
+    private String xodrFilename;
 
     /**
      * Instantiates a new simulation input impl.
@@ -87,7 +91,7 @@ public class SimulationInput {
         } else {
             withCrashExit = false;
         }
-
+        
         // default heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
@@ -103,8 +107,9 @@ public class SimulationInput {
                 trafficCompositionInputData.add(new TrafficCompositionInputData(map));
             }
         }
+        
         // -----------------------------------------------------------
-
+        
         // quick hack: for road segment a mapping to ids is needed
         final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         final List<RoadInput> roadInputList = new ArrayList<RoadInput>();
@@ -123,6 +128,21 @@ public class SimulationInput {
 
     }
 
+    
+    /**
+     * @param xodrFilename
+     * @return
+     */
+    private boolean validateOpenDriveFileName(String xodrFilename) {
+        final int i = xodrFilename.lastIndexOf(".xodr");
+        if (i < 0) {
+            System.out
+                    .println("Please provide OpenDRIVE file with ending \".xodr\" as argument with option -n, exit. ");
+            return false;
+        }
+        return true;
+    }
+    
     /*
      * (non-Javadoc)
      * 
@@ -212,6 +232,10 @@ public class SimulationInput {
      */
     public boolean isWithWriteFundamentalDiagrams() {
         return isWithWriteFundamentalDiagrams;
+    }
+
+    public String getNetworkFilename() {
+        return xodrFilename;
     }
 }
 
