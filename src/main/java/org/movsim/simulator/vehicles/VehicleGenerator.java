@@ -42,7 +42,7 @@ import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.ACC;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Gipps;
 import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
@@ -140,7 +140,7 @@ public class VehicleGenerator {
             }
             final VehicleInput vehInput = vehInputMap.get(keyName);
             final double vehLength = vehInput.getLength();
-            final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(), vehLength);
+            final AccelerationModelAbstract longModel = longModelFactory(vehInput.getAccelerationModelInputData(), vehLength);
 
             final EquilibriumProperties fundDia = fundDiagramFactory(vehLength, longModel);
 
@@ -200,7 +200,7 @@ public class VehicleGenerator {
      *            the long model
      * @return the equilibrium properties
      */
-    private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModel longModel) {
+    private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModelAbstract longModel) {
         if (longModel.modelName() == ModelName.IDM) {
             return new EquilibriumIDM(vehLength, (IDM) longModel);
         } else if (longModel.modelName() == ModelName.ACC) {
@@ -234,9 +234,9 @@ public class VehicleGenerator {
      *            the veh length
      * @return the acceleration model
      */
-    private AccelerationModel longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
+    private AccelerationModelAbstract longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
         final ModelName modelName = modelInputData.getModelName();
-        AccelerationModel longModel = null;
+        AccelerationModelAbstract longModel = null;
         // logger.debug("modelName = {}", modelName);
         if (modelName == ModelName.IDM) {
             longModel = new IDM((AccelerationModelInputDataIDM) modelInputData);
@@ -326,7 +326,7 @@ public class VehicleGenerator {
         // final double length = prototype.length();
         // final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
-        final AccelerationModel longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
+        final AccelerationModelAbstract longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
 
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());

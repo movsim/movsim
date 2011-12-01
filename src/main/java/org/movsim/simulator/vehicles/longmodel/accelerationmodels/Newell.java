@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Newell.
  */
-public class Newell extends AccelerationModelAbstract implements AccelerationModel {
+public class Newell extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);

@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Gipps.
  */
-public class Gipps extends AccelerationModelAbstract implements AccelerationModel {
+public class Gipps extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Gipps.class);

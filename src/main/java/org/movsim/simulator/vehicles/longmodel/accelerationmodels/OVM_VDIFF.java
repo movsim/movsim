@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class OVM_VDIFF.
  */
-public class OVM_VDIFF extends AccelerationModelAbstract implements AccelerationModel {
+public class OVM_VDIFF extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_VDIFF.class);

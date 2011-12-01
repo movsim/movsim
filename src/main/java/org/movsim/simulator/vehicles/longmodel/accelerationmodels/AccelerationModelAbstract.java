@@ -229,6 +229,21 @@ public abstract class AccelerationModelAbstract implements Observer {
         return accResult;
     }
 
+    public abstract double calcAcc(final Vehicle me, final Vehicle vehFront);
+
+    /**
+     * Calc acc simple.
+     * 
+     * @param s
+     *            the s
+     * @param v
+     *            the v
+     * @param dv
+     *            the dv
+     * @return the double
+     */
+    public abstract double calcAccSimple(double s, double v, double dv);
+
     /**
      * Gets the desired speed parameter v0.
      * 

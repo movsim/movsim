@@ -29,7 +29,7 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longmodel.Memory;
 import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,10 +77,12 @@ public class Vehicle {
     /** The speed. */
     private double speed;
 
-    /** The acceleration model. */
+    /** The acceleration as calculated by the longitudinal driver model. */
     private double accModel;
 
-    /** The acceleration. */
+    /** The actual acceleration. This is the acceleration calculated by the LDM moderated by other
+     * factors, such as traffic lights
+     **/
     private double acc;
 
     private double accOld;
@@ -111,7 +113,7 @@ public class Vehicle {
     private double speedlimit;
 
     /** The long model. */
-    private AccelerationModel accelerationModel;
+    private AccelerationModelAbstract accelerationModel;
 
     /** The lane-changing model. */
     private LaneChangingModel lcModel;
@@ -204,7 +206,7 @@ public class Vehicle {
      * @param lcModel
      *            the lanechange model
      */
-    public Vehicle(String label, int id, final AccelerationModel longModel, final VehicleInput vehInput,
+    public Vehicle(String label, int id, final AccelerationModelAbstract longModel, final VehicleInput vehInput,
             final Object cyclicBuffer, final LaneChangingModel lcModel, final FuelConsumption fuelModel) {
         this.label = label;
         this.id = id;
@@ -291,7 +293,7 @@ public class Vehicle {
     /**
      * Constructor.
      */
-    public Vehicle(org.movsim.simulator.vehicles.Vehicle.Type car, AccelerationModel ldm, Object lcm, double length,
+    public Vehicle(org.movsim.simulator.vehicles.Vehicle.Type car, AccelerationModelAbstract ldm, Object lcm, double length,
             double width, int i) {
         id = nextId++;
         this.length = length;
@@ -790,11 +792,11 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#getAccelerationModel()
      */
 
-    public AccelerationModel getAccelerationModel() {
+    public AccelerationModelAbstract getAccelerationModel() {
         return accelerationModel;
     }
 
-    public void setAccelerationModel(AccelerationModel AccelerationModel) {
+    public void setAccelerationModel(AccelerationModelAbstract AccelerationModel) {
         this.accelerationModel = AccelerationModel;
     }
 

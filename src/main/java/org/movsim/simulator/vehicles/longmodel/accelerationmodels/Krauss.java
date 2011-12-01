@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Martin Treiber, Ralph Germ
  */
-public class Krauss extends AccelerationModelAbstract implements AccelerationModel {
+public class Krauss extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);

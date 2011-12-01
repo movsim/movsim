@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class KKW.
  */
-public class KKW extends AccelerationModelAbstract implements AccelerationModel {
+public class KKW extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(KKW.class);

@@ -22,7 +22,7 @@ package org.movsim.simulator.vehicles.longmodel;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel;
+import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,7 @@ public class TrafficLightApproaching {
      * @param longModel
      *            the long model
      */
-    public void update(Vehicle me, double time, TrafficLight trafficLight, AccelerationModel longModel) {
+    public void update(Vehicle me, double time, TrafficLight trafficLight, AccelerationModelAbstract longModel) {
         accTrafficLight = 0;
         considerTrafficLight = false;
 

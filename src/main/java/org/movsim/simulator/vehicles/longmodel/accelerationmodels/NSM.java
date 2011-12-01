@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class NSM.
  */
-public class NSM extends AccelerationModelAbstract implements AccelerationModel {
+public class NSM extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);

@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class ACC.
  */
-public class ACC extends AccelerationModelAbstract implements AccelerationModel {
+public class ACC extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ACC.class);

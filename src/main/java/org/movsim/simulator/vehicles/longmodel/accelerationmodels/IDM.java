@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
-public class IDM extends AccelerationModelAbstract implements AccelerationModel {
+public class IDM extends AccelerationModelAbstract {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
