@@ -21,8 +21,8 @@ package org.movsim.simulator.vehicles;
 
 import org.movsim.input.model.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -43,7 +43,7 @@ public class VehiclePrototype {
     private final double reactionTime;
 
     /** The long model. */
-    private final AccelerationModelAbstract longModel;
+    private final LongitudinalModelBase longModel;
 
     /** The equi properties. */
     private final EquilibriumProperties equiProperties;
@@ -69,7 +69,7 @@ public class VehiclePrototype {
      * @param relativeRandomizationV0
      *            the relative randomization v0
      */
-    public VehiclePrototype(String label, double fraction, AccelerationModelAbstract longModel,
+    public VehiclePrototype(String label, double fraction, LongitudinalModelBase longModel,
             EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0) {
         this.label = label;
         this.length = vehicleInput.getLength();
@@ -141,7 +141,7 @@ public class VehiclePrototype {
      * 
      * @return the long model
      */
-    public AccelerationModelAbstract getLongModel() {
+    public LongitudinalModelBase getLongModel() {
         return longModel;
     }
 

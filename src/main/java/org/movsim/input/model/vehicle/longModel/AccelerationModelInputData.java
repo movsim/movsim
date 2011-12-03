@@ -19,7 +19,7 @@
  */
 package org.movsim.input.model.vehicle.longModel;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.utilities.Observable;
 
 // TODO: Auto-generated Javadoc

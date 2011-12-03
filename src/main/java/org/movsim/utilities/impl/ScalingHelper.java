@@ -19,7 +19,7 @@
  */
 package org.movsim.utilities.impl;
 
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 
 /**
  * The Class ScalingHelper.

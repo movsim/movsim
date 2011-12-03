@@ -129,7 +129,7 @@ public class LaneChangingModel {
             return false;
         }
 
-        final double backNewAcc = (backVeh == null) ? 0 : backVeh.getAccelerationModel().calcAcc(backVeh, me);
+        final double backNewAcc = (backVeh == null) ? 0 : backVeh.getLongitudinalModel().calcAcc(backVeh, me);
 
         // check security constraint for new follower
         // enforce mandatory lane change by increasing the safe deceleration for
@@ -141,7 +141,7 @@ public class LaneChangingModel {
             return (false);
         }
 
-        final double meNewAcc = me.getAccelerationModel().calcAcc(me, frontVeh);
+        final double meNewAcc = me.getLongitudinalModel().calcAcc(me, frontVeh);
         if (meNewAcc >= -increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration()) {
             logger.debug("meNewAcc={}, bSafe={}", meNewAcc, lcModelMOBIL.getSafeDeceleration());
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);

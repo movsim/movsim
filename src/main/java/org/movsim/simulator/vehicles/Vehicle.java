@@ -27,9 +27,9 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
-import org.movsim.simulator.vehicles.longmodel.Memory;
-import org.movsim.simulator.vehicles.longmodel.TrafficLightApproaching;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
+import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,8 +112,8 @@ public class Vehicle {
     /** The speed limit. */
     private double speedlimit;
 
-    /** The long model. */
-    private AccelerationModelAbstract accelerationModel;
+    /** The longitudinal model. */
+    private LongitudinalModelBase longitudinalModel;
 
     /** The lane-changing model. */
     private LaneChangingModel lcModel;
@@ -197,8 +197,8 @@ public class Vehicle {
      *            the label
      * @param id
      *            the id
-     * @param longModel
-     *            the acceleration model. longitudinal ("car-following") model.
+     * @param longitudinalModel
+     *            the longitudinal ("car-following") model.
      * @param vehInput
      *            the veh input
      * @param cyclicBuffer
@@ -206,7 +206,7 @@ public class Vehicle {
      * @param lcModel
      *            the lanechange model
      */
-    public Vehicle(String label, int id, final AccelerationModelAbstract longModel, final VehicleInput vehInput,
+    public Vehicle(String label, int id, final LongitudinalModelBase longitudinalModel, final VehicleInput vehInput,
             final Object cyclicBuffer, final LaneChangingModel lcModel, final FuelConsumption fuelModel) {
         this.label = label;
         this.id = id;
@@ -219,7 +219,7 @@ public class Vehicle {
 
         initialize();
         // longitudinal ("car-following") model
-        this.accelerationModel = longModel;
+        this.longitudinalModel = longitudinalModel;
         physQuantities = new PhysicalQuantities(this);
 
         // lane-changing model
@@ -262,7 +262,7 @@ public class Vehicle {
         reactionTime = 0.0;
         maxDecel = 0.0;
         lcModel = null;
-        accelerationModel = null;
+        longitudinalModel = null;
         label = "";
         physQuantities = new PhysicalQuantities(this);
     }
@@ -286,14 +286,14 @@ public class Vehicle {
         reactionTime = source.reactionTime;
         maxDecel = source.maxDecel;
         lcModel = source.lcModel;
-        accelerationModel = source.accelerationModel;
+        longitudinalModel = source.longitudinalModel;
         label = source.label;
     }
 
     /**
      * Constructor.
      */
-    public Vehicle(org.movsim.simulator.vehicles.Vehicle.Type car, AccelerationModelAbstract ldm, Object lcm, double length,
+    public Vehicle(org.movsim.simulator.vehicles.Vehicle.Type car, LongitudinalModelBase ldm, Object lcm, double length,
             double width, int i) {
         id = nextId++;
         this.length = length;
@@ -307,7 +307,7 @@ public class Vehicle {
         reactionTime = 0.0;
         maxDecel = 0.0;
         lcModel = null;
-        accelerationModel = ldm;
+        longitudinalModel = ldm;
         label = "";
     }
 
@@ -648,7 +648,7 @@ public class Vehicle {
         // TODO check concept here: combination with alphaV0 (consideration of
         // reference v0 instead of dynamic v0 which depends on speedlimits)
         if (memory != null) {
-            final double v0 = accelerationModel.getDesiredSpeedParameterV0();
+            final double v0 = longitudinalModel.getDesiredSpeedParameterV0();
             memory.update(dt, speed, v0);
             alphaTLocal *= memory.alphaT();
             alphaV0Local *= memory.alphaV0();
@@ -682,17 +682,17 @@ public class Vehicle {
 
     private double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
-        if (accelerationModel == null) {
+        if (longitudinalModel == null) {
             return 0.0;
         }
 
         final double acc;
 
         if (lcModel != null && lcModel.isInitialized() && lcModel.withEuropeanRules()) {
-            acc = accelerationModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane,
+            acc = longitudinalModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane,
                     alphaTLocal, alphaV0Local, alphaALocal);
         } else {
-            acc = accelerationModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+            acc = longitudinalModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
         }
 
         return acc;
@@ -712,7 +712,7 @@ public class Vehicle {
 
         positionOld = position;
 
-        if (accelerationModel != null && accelerationModel.isCA()) {
+        if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             position = (int) (position + dt * speed + 0.5);
 
@@ -764,7 +764,7 @@ public class Vehicle {
      */
 
     public void updateTrafficLight(double time, TrafficLight trafficLight) {
-        trafficLightApproaching.update(this, time, trafficLight, accelerationModel);
+        trafficLightApproaching.update(this, time, trafficLight, longitudinalModel);
 
     }
 
@@ -775,7 +775,7 @@ public class Vehicle {
      */
 
     public void removeObservers() {
-        accelerationModel.removeObserver();
+        longitudinalModel.removeObserver();
     }
 
     public LaneChangingModel getLaneChangingModel() {
@@ -792,12 +792,12 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#getAccelerationModel()
      */
 
-    public AccelerationModelAbstract getAccelerationModel() {
-        return accelerationModel;
+    public LongitudinalModelBase getLongitudinalModel() {
+        return longitudinalModel;
     }
 
-    public void setAccelerationModel(AccelerationModelAbstract AccelerationModel) {
-        this.accelerationModel = AccelerationModel;
+    public void setLongitudinalModel(LongitudinalModelBase longitudinalModel) {
+        this.longitudinalModel = longitudinalModel;
     }
 
     // ---------------------------------------------------------------------------------

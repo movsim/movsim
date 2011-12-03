@@ -37,7 +37,7 @@ import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataK
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,21 +119,21 @@ public class VehicleInput {
     private AccelerationModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
-        if (modelName.equals(AccelerationModelAbstract.ModelName.IDM.name())) {
+        if (modelName.equals(LongitudinalModelBase.ModelName.IDM.name())) {
             return new AccelerationModelInputDataIDMImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.ACC.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.ACC.name())) {
             return new AccelerationModelInputDataACCImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.OVM_VDIFF.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.OVM_VDIFF.name())) {
             return new AccelerationModelInputDataOVM_VDIFFImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.GIPPS.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.GIPPS.name())) {
             return new AccelerationModelInputDataGippsImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.KRAUSS.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.KRAUSS.name())) {
             return new AccelerationModelInputDataKraussImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.NEWELL.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.NEWELL.name())) {
             return new AccelerationModelInputDataNewellImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.NSM.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.NSM.name())) {
             return new AccelerationModelInputDataNSMImpl(map);
-        } else if (modelName.equals(AccelerationModelAbstract.ModelName.KKW.name())) {
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.KKW.name())) {
             return new AccelerationModelInputDataKKWImpl(map);
         } else {
             logger.error("model with name {} not yet implemented. exit.", modelName);

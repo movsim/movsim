@@ -43,7 +43,7 @@ public class PhysicalQuantities {
     public PhysicalQuantities(final Vehicle veh) {
         this.me = veh;
 
-        xScale = veh.getAccelerationModel() == null ? 1.0 : veh.getAccelerationModel().getScalingLength();
+        xScale = veh.getLongitudinalModel() == null ? 1.0 : veh.getLongitudinalModel().getScalingLength();
 
         vScale = xScale / tscale;
         accScale = Math.pow(xScale / tscale, 2);

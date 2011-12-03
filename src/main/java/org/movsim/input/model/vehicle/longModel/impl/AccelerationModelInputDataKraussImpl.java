@@ -22,7 +22,7 @@ package org.movsim.input.model.vehicle.longModel.impl;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

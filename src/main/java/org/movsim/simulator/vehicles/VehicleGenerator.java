@@ -41,25 +41,25 @@ import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VD
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.ACC;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModelAbstract.ModelName;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Gipps;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.KKW;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Krauss;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.NSM;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.Newell;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.OVM_VDIFF;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumACC;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumGipps;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumIDM;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumKKW;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumKrauss;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumNSM;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumNewell;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumOVM_VDIFF;
-import org.movsim.simulator.vehicles.longmodel.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.Newell;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ACC;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Gipps;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.KKW;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Krauss;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.NSM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumACC;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumGipps;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumIDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKKW;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKrauss;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNSM;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNewell;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_VDIFF;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,7 +140,7 @@ public class VehicleGenerator {
             }
             final VehicleInput vehInput = vehInputMap.get(keyName);
             final double vehLength = vehInput.getLength();
-            final AccelerationModelAbstract longModel = longModelFactory(vehInput.getAccelerationModelInputData(), vehLength);
+            final LongitudinalModelBase longModel = longitudinalModelFactory(vehInput.getAccelerationModelInputData(), vehLength);
 
             final EquilibriumProperties fundDia = fundDiagramFactory(vehLength, longModel);
 
@@ -200,7 +200,7 @@ public class VehicleGenerator {
      *            the long model
      * @return the equilibrium properties
      */
-    private EquilibriumProperties fundDiagramFactory(double vehLength, AccelerationModelAbstract longModel) {
+    private EquilibriumProperties fundDiagramFactory(double vehLength, LongitudinalModelBase longModel) {
         if (longModel.modelName() == ModelName.IDM) {
             return new EquilibriumIDM(vehLength, (IDM) longModel);
         } else if (longModel.modelName() == ModelName.ACC) {
@@ -231,12 +231,12 @@ public class VehicleGenerator {
      * @param modelInputData
      *            the model input data
      * @param vehLength
-     *            the veh length
-     * @return the acceleration model
+     *            the vehicle length
+     * @return the longitudinal model
      */
-    private AccelerationModelAbstract longModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
+    private LongitudinalModelBase longitudinalModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
         final ModelName modelName = modelInputData.getModelName();
-        AccelerationModelAbstract longModel = null;
+        LongitudinalModelBase longModel = null;
         // logger.debug("modelName = {}", modelName);
         if (modelName == ModelName.IDM) {
             longModel = new IDM((AccelerationModelInputDataIDM) modelInputData);
@@ -326,7 +326,7 @@ public class VehicleGenerator {
         // final double length = prototype.length();
         // final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
-        final AccelerationModelAbstract longModel = longModelFactory(vehInput.getAccelerationModelInputData(),
+        final LongitudinalModelBase longModel = longitudinalModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
 
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());

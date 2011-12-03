@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.lanechanging.MOBIL;
-import org.movsim.simulator.vehicles.longmodel.accelerationmodels.IDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 
 /**
  * Test module for the RoadSegment class.

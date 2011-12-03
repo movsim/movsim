@@ -277,7 +277,7 @@ public class SimpleOnrampImpl {
             logger.debug("empty road: merge anyway. mainVeh.size() = {}", mainVehSize);
             final double xEnter = xCenter;
             // no leader
-            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
+            final double vEnter = speedToEnter(vehToEnter.getLongitudinalModel().getDesiredSpeedParameterV0());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter);
             return true;
         } else if (mainVehContainer.getMostDownstream().getPosition() <= xCenter) {
@@ -285,7 +285,7 @@ public class SimpleOnrampImpl {
             final Vehicle mainVehDown = mainVehContainer.getMostDownstream();
             final double xEnter = Math.max(xCenter, mainVehDown.getPosition() + 0.5 * length);
             // no leader
-            final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
+            final double vEnter = speedToEnter(vehToEnter.getLongitudinalModel().getDesiredSpeedParameterV0());
             logger.debug("most downstream veh is still upstream of ramp center. mainVeh.size() = {}. posMostDown = {}",
                     mainVehSize, mainVehDown.getPosition());
             addVehicleFromRamp(vehToEnter, xEnter, vEnter);
@@ -320,7 +320,7 @@ public class SimpleOnrampImpl {
                 }
                 // enter in center
                 final double xEnter = xCenter;
-                final double vEnter = speedToEnter(vehToEnter.getAccelerationModel().getDesiredSpeedParameterV0());
+                final double vEnter = speedToEnter(vehToEnter.getLongitudinalModel().getDesiredSpeedParameterV0());
                 addVehicleFromRamp(vehToEnter, xEnter, vEnter);
                 return true;
             }
@@ -351,7 +351,7 @@ public class SimpleOnrampImpl {
                     minGap = netGap;
                     xEnter = xEnterTest;
                     vEnter = (i > 0) ? speedToEnter(mainVehicles.get(i - 1).getSpeed()) : speedToEnter(vehToEnter
-                            .getAccelerationModel().getDesiredSpeedParameterV0());
+                            .getLongitudinalModel().getDesiredSpeedParameterV0());
                 }
             }
             // check between indexUp+1 and indexUp
