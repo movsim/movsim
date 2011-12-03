@@ -28,15 +28,15 @@ import org.movsim.input.XmlUtils;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataACCImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataGippsImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataIDMImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKKWImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataKraussImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNSMImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataNewellImpl;
-import org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataOVM_VDIFFImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataACCImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataGippsImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataIDMImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKKWImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKraussImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNSMImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataOVM_VDIFFImpl;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +62,7 @@ public class VehicleInput {
     private final String fuelConsumptionLabel;
 
     /** The model input data. */
-    private AccelerationModelInputData modelInputData;
+    private LongitudinalModelInputData modelInputData;
 
     private final LaneChangingInputData laneChangingInputData;
 
@@ -116,25 +116,25 @@ public class VehicleInput {
      *            the elem
      * @return the model input data
      */
-    private AccelerationModelInputData modelInputDataFactory(Element elem) {
+    private LongitudinalModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         if (modelName.equals(LongitudinalModelBase.ModelName.IDM.name())) {
-            return new AccelerationModelInputDataIDMImpl(map);
+            return new LongitudinalModelInputDataIDMImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.ACC.name())) {
-            return new AccelerationModelInputDataACCImpl(map);
+            return new LongitudinalModelInputDataACCImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.OVM_VDIFF.name())) {
-            return new AccelerationModelInputDataOVM_VDIFFImpl(map);
+            return new LongitudinalModelInputDataOVM_VDIFFImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.GIPPS.name())) {
-            return new AccelerationModelInputDataGippsImpl(map);
+            return new LongitudinalModelInputDataGippsImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KRAUSS.name())) {
-            return new AccelerationModelInputDataKraussImpl(map);
+            return new LongitudinalModelInputDataKraussImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.NEWELL.name())) {
-            return new AccelerationModelInputDataNewellImpl(map);
+            return new LongitudinalModelInputDataNewellImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.NSM.name())) {
-            return new AccelerationModelInputDataNSMImpl(map);
+            return new LongitudinalModelInputDataNSMImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KKW.name())) {
-            return new AccelerationModelInputDataKKWImpl(map);
+            return new LongitudinalModelInputDataKKWImpl(map);
         } else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);
@@ -174,7 +174,7 @@ public class VehicleInput {
      * 
      * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
      */
-    public AccelerationModelInputData getAccelerationModelInputData() {
+    public LongitudinalModelInputData getAccelerationModelInputData() {
         return modelInputData;
     }
 

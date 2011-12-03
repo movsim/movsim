@@ -29,15 +29,15 @@ import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputData;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataACC;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataGipps;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataIDM;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKKW;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataKrauss;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNSM;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataNewell;
-import org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_VDIFF;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
@@ -234,26 +234,26 @@ public class VehicleGenerator {
      *            the vehicle length
      * @return the longitudinal model
      */
-    private LongitudinalModelBase longitudinalModelFactory(AccelerationModelInputData modelInputData, double vehLength) {
+    private LongitudinalModelBase longitudinalModelFactory(LongitudinalModelInputData modelInputData, double vehLength) {
         final ModelName modelName = modelInputData.getModelName();
         LongitudinalModelBase longModel = null;
         // logger.debug("modelName = {}", modelName);
         if (modelName == ModelName.IDM) {
-            longModel = new IDM((AccelerationModelInputDataIDM) modelInputData);
+            longModel = new IDM((LongitudinalModelInputDataIDM) modelInputData);
         } else if (modelName == ModelName.ACC) {
-            longModel = new ACC((AccelerationModelInputDataACC) modelInputData);
+            longModel = new ACC((LongitudinalModelInputDataACC) modelInputData);
         } else if (modelName == ModelName.OVM_VDIFF) {
-            longModel = new OVM_VDIFF((AccelerationModelInputDataOVM_VDIFF) modelInputData);
+            longModel = new OVM_VDIFF((LongitudinalModelInputDataOVM_VDIFF) modelInputData);
         } else if (modelName == ModelName.GIPPS) {
-            longModel = new Gipps(simulationTimestep, (AccelerationModelInputDataGipps) modelInputData);
+            longModel = new Gipps(simulationTimestep, (LongitudinalModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {
-            longModel = new Krauss(simulationTimestep, (AccelerationModelInputDataKrauss) modelInputData);
+            longModel = new Krauss(simulationTimestep, (LongitudinalModelInputDataKrauss) modelInputData);
         } else if (modelName == ModelName.NEWELL) {
-            return new Newell(simulationTimestep, (AccelerationModelInputDataNewell) modelInputData);
+            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewell) modelInputData);
         } else if (modelName == ModelName.NSM) {
-            longModel = new NSM((AccelerationModelInputDataNSM) modelInputData);
+            longModel = new NSM((LongitudinalModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {
-            longModel = new KKW((AccelerationModelInputDataKKW) modelInputData, vehLength);
+            longModel = new KKW((LongitudinalModelInputDataKKW) modelInputData, vehLength);
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0);
