@@ -68,7 +68,7 @@ public class RoadSegmentTest {
         // return new Vehicle(Vehicle.Type.NONE, pos, vel, lane, idm, null, 5.0, 2.5, 3);
         final IDM idm = new IDM(33.0, 0.5, 3.0, 1.5, 2.0, 5.0);
         final Vehicle vehicle = new Vehicle(rearPosition, speed, lane, 5.0, 2.5);
-        vehicle.setAccelerationModel(idm);
+        vehicle.setLongitudinalModel(idm);
         vehicle.setSpeedlimit(80.0 / 3.6); // 80 km/h
         return vehicle;
     }
