@@ -181,7 +181,7 @@ public class Simulator implements Runnable {
                 trafficSourceData);
         roadSegment.setUpstreamBoundary(upstreamBoundary);
 
-        final TrafficLights trafficLights = new TrafficLights(roadinput.getTrafficLightsInput());
+        final TrafficLights trafficLights = new TrafficLights(roadinput.getTrafficLightsInput(), roadSegment);
         roadSegment.setTrafficLights(trafficLights);
 
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());

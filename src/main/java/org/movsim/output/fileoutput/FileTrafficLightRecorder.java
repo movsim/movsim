@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.utilities.impl.FileUtils;
 
@@ -33,6 +34,7 @@ import org.movsim.utilities.impl.FileUtils;
  */
 public class FileTrafficLightRecorder {
 
+    private static final String extensionFormat = ".R%d_tl_log.csv";
     private PrintWriter fstr = null;
     private final int nDt;
 
@@ -44,17 +46,17 @@ public class FileTrafficLightRecorder {
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightRecorder(int nDt, List<TrafficLight> trafficLights) {
+    public FileTrafficLightRecorder(int nDt, List<TrafficLight> trafficLights, RoadSegment roadSegment) {
 
         this.nDt = nDt;
 
         // road id hard coded as 1 for the moment
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName() + ".id%d_tl_log.csv";
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName() + 
+        		String.format(extensionFormat, roadSegment.id());;
         fstr = FileUtils.getWriter(filename);
         writeHeader(trafficLights);
-
     }
 
     /**

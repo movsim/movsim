@@ -28,12 +28,12 @@ public class TrafficLights {
      * @param projectName
      * @param trafficLightsInput
      */
-    public TrafficLights(TrafficLightsInput trafficLightsInput) {
+    public TrafficLights(TrafficLightsInput trafficLightsInput, RoadSegment roadSegment) {
 
         initTrafficLights(trafficLightsInput);
         nDt = trafficLightsInput.getnDtSample();
         if (trafficLightsInput.isWithLogging()) {
-            fileTrafficLightRecorder = new FileTrafficLightRecorder(nDt, trafficLights);
+            fileTrafficLightRecorder = new FileTrafficLightRecorder(nDt, trafficLights, roadSegment);
         }
     }
 
