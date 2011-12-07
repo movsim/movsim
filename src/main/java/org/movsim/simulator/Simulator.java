@@ -28,6 +28,8 @@ import org.movsim.input.XmlReaderSimInput;
 import org.movsim.input.file.opendrive.OpenDriveReader;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.simulation.ICMacroData;
+import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
@@ -35,13 +37,17 @@ import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
+import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
+import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.UpstreamBoundary;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -187,9 +193,60 @@ public class Simulator implements Runnable {
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
                 roadinput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
+        initialConditions(roadSegment, inputData.getSimulationInput(), roadinput);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
+    private void initialConditions(RoadSegment roadSegment, SimulationInput simInput, RoadInput roadInput) {
+
+        // TODO: consider multi-lane case !!!
+        final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
+        if (!icMacroData.isEmpty()) {
+            logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
+            final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
+            // if ringroad: set xLocalMin e.g. -SMALL_VAL
+            final double xLocalMin = 0;
+            double xLocal = roadSegment.roadLength(); // start from behind
+            while (xLocal > xLocalMin) {
+                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+                final double rhoLocal = icMacro.rho(xLocal);
+                double speedInit = icMacro.vInit(xLocal);
+                if (speedInit == 0) {
+                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
+                }
+                final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
+                final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
+                veh.setPosition(xLocal);
+                veh.setSpeed(speedInit);
+                veh.setLane(Lane.LANE1);
+                roadSegment.addVehicle(veh);
+                //vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
+                logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
+                xLocal -= 1 / rhoLocal;
+            }
+        } else {
+            logger.debug(("choose micro initial conditions"));
+            final List<ICMicroData> icSingle = roadInput.getIcMicroData();
+            int vehicleNumber = 0;
+            for (final ICMicroData ic : icSingle) {
+                // TODO counter
+                final String vehTypeFromFile = ic.getLabel();
+                final Vehicle veh = (vehTypeFromFile.isEmpty()) ? vehGenerator.createVehicle() : vehGenerator
+                        .createVehicle(vehTypeFromFile);
+                // TODO: consider multi-lane case, distribute over all lanes
+                veh.setVehNumber(vehicleNumber);
+                ++vehicleNumber;
+                veh.setPosition(ic.getX());
+                veh.setSpeed(ic.getSpeed());
+                final int lane = ic.getInitLane();
+                veh.setLane(Lane.LANE1);
+                roadSegment.addVehicle(veh);
+                //vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
+                logger.info("set vehicle with label = {}", veh.getLabel());
+            }
+        }
+    }
+
 
     /*
      * (non-Javadoc)
