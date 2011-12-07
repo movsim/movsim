@@ -227,7 +227,7 @@ public class Simulator implements Runnable {
         } else {
             logger.debug(("choose micro initial conditions"));
             final List<ICMicroData> icSingle = roadInput.getIcMicroData();
-            int vehicleNumber = 0;
+            int vehicleNumber = 1;
             for (final ICMicroData ic : icSingle) {
                 // TODO counter
                 final String vehTypeFromFile = ic.getLabel();
