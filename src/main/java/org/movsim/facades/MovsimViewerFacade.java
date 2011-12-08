@@ -88,12 +88,10 @@ public class MovsimViewerFacade {
      * @param scenario
      *            the scenario
      */
-    public void loadScenarioFromXml(String scenario, String path, String xodrFilename, String xodrPath) {
+    public void loadScenarioFromXml(String scenario, String path) {
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
         projectMetaData.setOutputPath(path);
-        projectMetaData.setXodrFilename(xodrFilename);
-        projectMetaData.setXodrPath(xodrPath);
         model.initialize();
     }
 

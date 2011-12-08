@@ -72,11 +72,11 @@ public class SimulationInput {
         System.out.println("network file exits: " + FileUtils.fileExists(networkFileName));
         if (!FileUtils.fileExists(networkFileName)) {
             logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
-            System.exit(-1);
+            // System.exit(-1); //TODO check from resources delete sysos
         }
         System.out.println("canp ohne filename: " + FileUtils.getCanonicalPathWithoutFilename(networkFileName));
         System.out.println(FileUtils.getName(networkFileName));
-        
+
         // set network file in projectMetaData
         ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
