@@ -99,10 +99,15 @@ public class Simulator implements Runnable {
         final ProjectMetaData projectMetaData = inputData.getProjectMetaData();
         projectName = projectMetaData.getProjectName();
         final String path = projectMetaData.getPathToProjectXmlFile();
+    
+        // Now parse the MovSim XML file to add the simulation components
+        // eg network filename, vehicles and vehicle models, traffic composition, traffic sources etc
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+        final SimulationInput simInput = inputData.getSimulationInput();
+
+        // Parse the OpenDrive (.xodr) file to load the network topology and road layout
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
-
-        // First parse the OpenDrive (.xodr) file to load the network topology and road layout
         final String fullXodrFileName = xodrPath + xodrFileName;
         logger.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
@@ -110,11 +115,6 @@ public class Simulator implements Runnable {
             logger.error("failed to load {}", fullXodrFileName);
         }
         logger.info("done with road network parsing");
-
-        // Now parse the MovSim XML file to add the simulation components
-        // eg vehicles and vehicle models, traffic composition, traffic sources etc
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
-        final SimulationInput simInput = inputData.getSimulationInput();
 
         this.timestep = simInput.getTimestep(); // fix
 
@@ -197,6 +197,7 @@ public class Simulator implements Runnable {
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
+
     private void initialConditions(RoadSegment roadSegment, SimulationInput simInput, RoadInput roadInput) {
 
         // TODO: consider multi-lane case !!!
@@ -220,7 +221,7 @@ public class Simulator implements Runnable {
                 veh.setSpeed(speedInit);
                 veh.setLane(Lane.LANE1);
                 roadSegment.addVehicle(veh);
-                //vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
+                // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
                 xLocal -= 1 / rhoLocal;
             }
@@ -241,12 +242,11 @@ public class Simulator implements Runnable {
                 final int lane = ic.getInitLane();
                 veh.setLane(Lane.LANE1);
                 roadSegment.addVehicle(veh);
-                //vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
+                // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
                 logger.info("set vehicle with label = {}", veh.getLabel());
             }
         }
     }
-
 
     /*
      * (non-Javadoc)
@@ -288,8 +288,10 @@ public class Simulator implements Runnable {
         iterationCount++;
 
         if (iterationCount % 100 == 0) {
-            logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
-                    time / 3600, timestep, projectName));
+            if (logger.isInfoEnabled()) {
+                logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
+                        time / 3600, timestep, projectName));
+            }
         }
         // TODO new update of roadSegments
         roadNetwork.timeStep(timestep, time, iterationCount);

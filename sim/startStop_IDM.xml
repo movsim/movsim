@@ -16,7 +16,7 @@
             <LANE_CHANGE_MODEL/>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION network_filename="startStop.xodr" dt="0.2" duration="360" seed="42">
+    <SIMULATION network_filename="sim/startStop.xodr" dt="0.2" duration="360" seed="42">
         <TRAFFIC_COMPOSITION write_fund_diagrams="true">
             <VEHICLE_TYPE label="IDM1" fraction="1" />
         </TRAFFIC_COMPOSITION>

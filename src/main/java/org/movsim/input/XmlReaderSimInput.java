@@ -148,20 +148,21 @@ public class XmlReaderSimInput {
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
-
+        
+        // output path
         String outputPath = root.getAttribute("path").getValue();
         if (outputPath.equals("") || outputPath.isEmpty() || outputPath.equals(".")) {
             outputPath = "sim";
         }
-        System.out.println(outputPath);
+        logger.info("outputpath: {}", outputPath);
         final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
         }
         ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
-
+        
+        // -------------------------------------------------------
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
-
         inputData.setSimulationInput(simInput);
 
         // -------------------------------------------------------
@@ -177,7 +178,6 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        System.out.println("parse fuelConsumptionInput");
         final FuelConsumptionInput fuelConsumptionInput = new FuelConsumptionInput(
                 root.getChild(XmlElementNames.Consumption));
 

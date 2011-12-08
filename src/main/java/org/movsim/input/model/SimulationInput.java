@@ -25,48 +25,40 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface SimulationInput.
+ * The SimulationInput.
  */
 public class SimulationInput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulationInput.class);
 
-    /** The timestep. */
     private final double timestep;
 
     /** The duration of the simulation. */
     private final double maxSimTime;
 
-    /** The with fixed seed. */
     private boolean withFixedSeed;
 
     private boolean withCrashExit;
 
-    /** The random seed. */
     private final int randomSeed;
 
-    /** The heterogeneity input data. */
     private final List<TrafficCompositionInputData> trafficCompositionInputData;
 
-    /** The is with write fundamental diagrams. */
     private boolean isWithWriteFundamentalDiagrams;
 
-    /** The road input. */
     Map<Long, RoadInput> roadInputMap;
 
-    /** The output input. */
     private final OutputInput outputInput;
-    
-    private String xodrFilename;
 
     /**
      * Instantiates a new simulation input impl.
@@ -75,8 +67,22 @@ public class SimulationInput {
      *            the elem
      */
     public SimulationInput(final Element elem) {
-        timestep = Double.parseDouble(elem.getAttributeValue("dt"));
+        String networkFileName = elem.getAttributeValue("network_filename");
+        System.out.println("filename: " + networkFileName);
+        System.out.println("network file exits: " + FileUtils.fileExists(networkFileName));
+        if (!FileUtils.fileExists(networkFileName)) {
+            logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
+            System.exit(-1);
+        }
+        System.out.println("canp ohne filename: " + FileUtils.getCanonicalPathWithoutFilename(networkFileName));
+        System.out.println(FileUtils.getName(networkFileName));
+        
+        // set network file in projectMetaData
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
+        projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
 
+        timestep = Double.parseDouble(elem.getAttributeValue("dt"));
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
         if (elem.getAttributeValue("fixed_seed").equalsIgnoreCase("true")) {
@@ -89,7 +95,7 @@ public class SimulationInput {
         } else {
             withCrashExit = false;
         }
-        
+
         // default heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
@@ -105,9 +111,9 @@ public class SimulationInput {
                 trafficCompositionInputData.add(new TrafficCompositionInputData(map));
             }
         }
-        
+
         // -----------------------------------------------------------
-        
+
         // quick hack: for road segment a mapping to ids is needed
         final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         final List<RoadInput> roadInputList = new ArrayList<RoadInput>();
@@ -126,7 +132,6 @@ public class SimulationInput {
 
     }
 
-    
     /**
      * @param xodrFilename
      * @return
@@ -140,7 +145,7 @@ public class SimulationInput {
         }
         return true;
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -232,9 +237,6 @@ public class SimulationInput {
         return isWithWriteFundamentalDiagrams;
     }
 
-    public String getNetworkFilename() {
-        return xodrFilename;
-    }
 }
 
 // }

@@ -86,12 +86,12 @@ public class SimCommandLine {
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
-        OptionBuilder.withArgName("file");
-        OptionBuilder.hasArg();
-        OptionBuilder
-                .withDescription("argument has to be an OpenDRIVE (.xodr) file to load the network topology and road layout");
-        final Option xodrSimFile = OptionBuilder.create("n");
-        options.addOption(xodrSimFile);
+//        OptionBuilder.withArgName("file");
+//        OptionBuilder.hasArg();
+//        OptionBuilder
+//                .withDescription("argument has to be an OpenDRIVE (.xodr) file to load the network topology and road layout");
+//        final Option xodrSimFile = OptionBuilder.create("n");
+//        options.addOption(xodrSimFile);
     }
 
     /**
@@ -140,7 +140,7 @@ public class SimCommandLine {
             optPrintVersion();
         }
         optSimulation(cmdline);
-        optNetworkTopology(cmdline);
+//        optNetworkTopology(cmdline);
     }
 
     /**
