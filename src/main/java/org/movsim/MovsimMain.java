@@ -19,7 +19,6 @@
  */
 package org.movsim;
 
-import org.movsim.controller.SimulatorController;
 import org.movsim.input.SimCommandLine;
 import org.movsim.simulator.Simulator;
 
@@ -41,8 +40,12 @@ public class MovsimMain {
         final SimCommandLine cmdline = new SimCommandLine(args);
 
         final Simulator simulator = Simulator.getInstance();
+        
+        simulator.initialize();
+        
+        Thread simThread = new Thread(simulator);
+        simThread.setName("movsim-thread");
+        simThread.start();
 
-        final SimulatorController controller = new SimulatorController(simulator);
     }
-
 }
