@@ -57,7 +57,7 @@ public class Simulator implements Runnable {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
-    /** singleton pattern with eager initilization */
+    /** singleton pattern with eager initialization */
     private static Simulator instance = new Simulator();
 
     private double time;
