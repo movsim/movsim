@@ -9,4 +9,3 @@ log4j.properties
 multiModel*.dtd
 *.log
 *.log.*
-/runapp
