@@ -98,35 +98,17 @@ public class Simulator implements Runnable {
 
         final ProjectMetaData projectMetaData = inputData.getProjectMetaData();
         projectName = projectMetaData.getProjectName();
-        final String path = projectMetaData.getPathToProjectXmlFile();
-    
-        // Now parse the MovSim XML file to add the simulation components
-        // eg network filename, vehicles and vehicle models, traffic composition, traffic sources etc
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
-        final SimulationInput simInput = inputData.getSimulationInput();
 
-        // Parse the OpenDrive (.xodr) file to load the network topology and road layout
-        final String xodrFileName = projectMetaData.getXodrFilename();
-        final String xodrPath = projectMetaData.getXodrPath();
-        final String fullXodrFileName = xodrPath + xodrFileName;
-        logger.info("try to load {}", fullXodrFileName);
-        final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
-        if (loaded == false) {
-            logger.error("failed to load {}", fullXodrFileName);
-        }
-        logger.info("done with road network parsing");
+        final SimulationInput simInput = parseMovSimXm();
+
+        final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
 
         this.timestep = simInput.getTimestep(); // fix
-
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
-        // this is the default vehGenerator for *all* roadsections
-        // if an individual vehicle composition is defined for a specific road
-        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
-        vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundDiagramOutput);
+        createVehicleGenerator(simInput);
 
         final boolean isWithCrashExit = simInput.isWithCrashExit();
         roadNetwork.setWithCrashExit(isWithCrashExit);
@@ -134,28 +116,80 @@ public class Simulator implements Runnable {
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
         final Map<Long, RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
-        if (loaded == false && roadInputMap.size() == 1) {
-            // there was no xodr file and there is only one road segment in the MovSimXML file
-            // so set up a default s-shaped road mapping
-            final RoadInput roadinput = roadInputMap.values().iterator().next();
-            final int laneCount = 1;// roadinput.getLanes();
-            final double roadLength = 1500;// roadinput.getRoadLength();
-            // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
-            final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
-            final RoadSegment roadSegment = new RoadSegment(roadMapping);
-            addInputToRoadSegment(roadSegment, roadinput);
-            roadSegment.setUserId("1");
-            roadSegment.addDefaultSink();
-            roadNetwork.add(roadSegment);
+        if (loadedRoadNetwork == false && roadInputMap.size() == 1) {
+            defaultTestingRoadMapping(roadInputMap); // TODO rg: This has to be corrected/deleted at some point
         } else {
-            for (final RoadInput roadinput : roadInputMap.values()) {
-                final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
-                if (roadSegment != null) {
-                    addInputToRoadSegment(roadSegment, roadinput);
-                }
+            matchRoadSegmentsAndRoadInput(roadInputMap);
+        }
+
+        reset();
+    }
+
+    /**
+     * @param roadInputMap
+     */
+    private void matchRoadSegmentsAndRoadInput(final Map<Long, RoadInput> roadInputMap) {
+        for (final RoadInput roadinput : roadInputMap.values()) {
+            final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+            if (roadSegment != null) {
+                addInputToRoadSegment(roadSegment, roadinput);
             }
         }
-        reset();
+    }
+
+    /**
+     * this is the default vehGenerator for *all* roadsections if an individual vehicle composition is defined for a specific road
+     * 
+     * @param simInput
+     */
+    private void createVehicleGenerator(final SimulationInput simInput) {
+        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
+        final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
+        vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundDiagramOutput);
+    }
+
+    /**
+     * there was no xodr file and there is only one road segment in the MovSimXML file so set up a default s-shaped road mapping
+     * 
+     * @param roadInputMap
+     */
+    private void defaultTestingRoadMapping(final Map<Long, RoadInput> roadInputMap) {
+        final RoadInput roadinput = roadInputMap.values().iterator().next();
+        final int laneCount = 1;// roadinput.getLanes();
+        final double roadLength = 1500;// roadinput.getRoadLength();
+        // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
+        final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
+        final RoadSegment roadSegment = new RoadSegment(roadMapping);
+        addInputToRoadSegment(roadSegment, roadinput);
+        roadSegment.setUserId("1");
+        roadSegment.addDefaultSink();
+        roadNetwork.add(roadSegment);
+    }
+
+    /**
+     * @param projectMetaData
+     * @return
+     */
+    private boolean parseOpenDriveXml(final ProjectMetaData projectMetaData) {
+        // Parse the OpenDrive (.xodr) file to load the network topology and road layout
+        final String xodrFileName = projectMetaData.getXodrFilename();
+        final String xodrPath = projectMetaData.getXodrPath();
+        final String fullXodrFileName = xodrPath + xodrFileName;
+        logger.info("try to load {}", fullXodrFileName);
+        final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
+        logger.info("done with parsing road network {}. Success: {}", fullXodrFileName, loaded);
+        return loaded;
+    }
+
+    /**
+     * @return
+     */
+    private SimulationInput parseMovSimXm() {
+        // Now parse the MovSim XML file to add the simulation components
+        // eg network filename, vehicles and vehicle models, traffic composition, traffic sources etc
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+        final SimulationInput simInput = inputData.getSimulationInput();
+        return simInput;
     }
 
     public void reset() {
