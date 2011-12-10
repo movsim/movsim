@@ -118,8 +118,8 @@ public abstract class AbstractRoadSection {
      */
     public AbstractRoadSection(final RoadInput rampData, final VehicleGenerator vehGenerator) {
         // TODO also ramp can have an individual vehicle generator
-        this.fromId = rampData.getTrafficSourceData().getSourceId();
-        this.toId = rampData.getTrafficSinkData().getSinkId();
+        this.fromId = -1;//rampData.getTrafficSourceData().getSourceId();
+        this.toId = -1;//rampData.getTrafficSinkData().getSinkId();
         this.vehGenerator = vehGenerator;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -136,8 +136,8 @@ public abstract class AbstractRoadSection {
      *            the ramp data
      */
     public AbstractRoadSection(final RoadInput rampData) {
-        this.fromId = rampData.getTrafficSourceData().getSourceId();
-        this.toId = rampData.getTrafficSinkData().getSinkId();
+        this.fromId = -1;//rampData.getTrafficSourceData().getSourceId();
+        this.toId = -1;//rampData.getTrafficSinkData().getSinkId();
         this.vehGenerator = null;
         this.roadLength = rampData.getRoadLength();
         this.nLanes = 1;
@@ -157,8 +157,8 @@ public abstract class AbstractRoadSection {
         this.roadLength = roadInput.getRoadLength();
         this.nLanes = roadInput.getLanes();
         this.id = roadInput.getId();
-        this.fromId = roadInput.getTrafficSourceData().getSourceId();
-        this.toId = roadInput.getTrafficSinkData().getSinkId();
+        this.fromId = -1;// roadInput.getTrafficSourceData().getSourceId();
+        this.toId = -1;//roadInput.getTrafficSinkData().getSinkId();
         this.instantaneousFileOutput = false; // TODO instantfileouput
 
         // generate individual vehicle generator for specific road

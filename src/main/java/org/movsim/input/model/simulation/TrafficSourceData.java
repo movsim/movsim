@@ -32,12 +32,10 @@ import org.movsim.input.XmlUtils;
 public class TrafficSourceData {
 
     /** The inflow time series. */
-    private final List<InflowDataPoint> inflowTimeSeries;
+    private final List<InflowDataPoint> inflowTimeSeries = new ArrayList<InflowDataPoint>();
 
     /** The with logging. */
     private final boolean withLogging;
-
-    private final int sourceId;
 
     /**
      * Instantiates a new upstream boundary data impl.
@@ -47,12 +45,14 @@ public class TrafficSourceData {
      */
     @SuppressWarnings("unchecked")
     public TrafficSourceData(Element elem) {
-        inflowTimeSeries = new ArrayList<InflowDataPoint>();
-        sourceId = Integer.parseInt(elem.getAttributeValue("id"));
-        withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
-
-        final List<Element> upInflowElems = elem.getChildren(XmlElementNames.RoadInflow);
-        parseAndSortInflowElements(upInflowElems);
+        if (elem == null) {
+            withLogging = false;
+        }
+        else{
+            withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+            final List<Element> upInflowElems = elem.getChildren(XmlElementNames.RoadInflow);
+            parseAndSortInflowElements(upInflowElems);
+        }
     }
 
     /**
@@ -92,9 +92,5 @@ public class TrafficSourceData {
      */
     public boolean withLogging() {
         return withLogging;
-    }
-
-    public int getSourceId() {
-        return sourceId;
     }
 }

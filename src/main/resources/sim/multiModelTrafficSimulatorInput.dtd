@@ -287,14 +287,12 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- upstream boundary conditions -->
 <!ELEMENT TRAFFIC_SOURCE (INFLOW*)>
 <!ATTLIST TRAFFIC_SOURCE
-id       NMTOKEN "-99999"
 logging  (true|false)  "false" 
 >          
 
 <!-- downstream boundary conditions (not yet implemented) -->
 <!ELEMENT TRAFFIC_SINK EMPTY>
 <!ATTLIST TRAFFIC_SINK
-id       NMTOKEN "-99999"
 logging  (true|false) "false" 
 >          
 
