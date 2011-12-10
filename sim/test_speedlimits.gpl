@@ -31,6 +31,7 @@ trajectoryOutput = outputPath.baseFile.".trajectories.eps"
 # English
 positionLabel = "Position (km)"
 speedLabel = "Speed (km/h)"
+accelerationLabel = "Acceleration (m/s^2)"
 car(n) = sprintf("Car %d",n)
 
 # Deutsch
@@ -43,15 +44,27 @@ if (lang eq "de")\
 ########  Line Styles  ###################################
 
 set style line 1 linetype 7 linewidth 3 pointtype 7 pointsize 1.5
+set style line 1 linetype 1 linewidth 3 pointtype 5 pointsize 1.5
 
 
 ########  Plot  ##########################################
 
+set yrange [0:160]
 set xlabel positionLabel
 set ylabel speedLabel
-unset key
-set pm3d map
+#unset key
 
-set out trajectoryOutput
-splot\
-  carFile(1) using ($3/1000):(3.6*$4):(1) title car(1) with lines linestyle 1
+set out outputPath.baseFile.".trajectories_speed.eps"
+plot\
+  carFile(1) using ($3/1000):(3.6*$4) title "car(1)" with lines linestyle 1
+  
+
+set autoscale y
+set ylabel speedLabel
+
+unset key
+set out outputPath.baseFile.".trajectories_acc.eps"
+plot\
+  carFile(1) using ($3/1000):5 title "car(1)" with lines linestyle 1
+  
+  
