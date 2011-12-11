@@ -182,17 +182,11 @@ public class XmlReaderSimInput {
      */
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
-        System.out.println("filename: " + networkFileName);
-        System.out.println("network file exits: " + FileUtils.fileExists(networkFileName));
-        if (!FileUtils.fileExists(networkFileName)) {
+        if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(networkFileName)) {
             logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
-            // System.exit(-1); //TODO check from resources delete sysos
+             System.exit(-1); //TODO check from resources
         }
-        System.out.println("canp ohne filename: " + FileUtils.getCanonicalPathWithoutFilename(networkFileName));
-        System.out.println(FileUtils.getName(networkFileName));
 
-        // set network file in projectMetaData
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
         projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
     }

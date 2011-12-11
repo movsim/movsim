@@ -25,11 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
-import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +59,7 @@ public class SimulationInput {
     private final OutputInput outputInput;
 
     /**
-     * Instantiates a new simulation input impl.
+     * Instantiates a new simulation input.
      * 
      * @param elem
      *            the elem
