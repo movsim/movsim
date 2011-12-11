@@ -73,6 +73,9 @@ public class Vehicle {
 
     /** The old position. */
     private double positionOld;
+    
+    /** The total distance travelled */
+    private double totalTraveledDistance;
 
     /** The speed. */
     private double speed;
@@ -474,7 +477,7 @@ public class Vehicle {
      *            the position of the middle of the vehicle
      */
     public void setMidPosition(double position) {
-        this.position = position;
+        setPosition(position);
     }
 
     /**
@@ -558,18 +561,6 @@ public class Vehicle {
 
     public long getRoadId() {
         return roadId;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#isFromOnramp()
-     */
-
-    public boolean isFromOnramp() {
-        // TODO not working anymore, new concept needed for determining origin
-        // of vehicle
-        return (vehNumber < 0);
     }
 
     /*
@@ -714,7 +705,9 @@ public class Vehicle {
 
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
-            position = (int) (position + dt * speed + 0.5);
+            final int advance = (int) (position + dt * speed + 0.5); 
+            position = advance;
+            totalTraveledDistance += advance;
 
         } else {
             // continuous microscopic models and iterated maps
@@ -722,8 +715,8 @@ public class Vehicle {
                 speed = 0;
             }
             final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
-
             position += advance;
+            totalTraveledDistance += advance;
             speed += dt * acc;
             if (speed < 0) {
                 speed = 0;
@@ -1069,6 +1062,11 @@ public class Vehicle {
      */
     public final int exitRoadSegmentId() {
         return exitRoadSegmentId;
+    }
+    
+    
+    public final double totalTraveledDistance(){
+        return totalTraveledDistance;
     }
 
 }

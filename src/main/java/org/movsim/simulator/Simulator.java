@@ -64,7 +64,7 @@ public class Simulator implements Runnable {
 
     private long iterationCount;
 
-    private double timestep; // fix for one simulation !!
+    private double timestep; // constant for one simulation run
 
     /** The duration of the simulation. */
     private double tMax;
@@ -145,7 +145,7 @@ public class Simulator implements Runnable {
     private void createVehicleGenerator(final SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
-        vehGenerator = new VehicleGenerator(inputData, heterogenInputData, isWithFundDiagramOutput);
+        vehGenerator = new VehicleGenerator(timestep, inputData, heterogenInputData, isWithFundDiagramOutput);
     }
 
     /**

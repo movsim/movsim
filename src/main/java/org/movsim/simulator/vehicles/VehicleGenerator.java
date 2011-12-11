@@ -72,13 +72,6 @@ public class VehicleGenerator {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleGenerator.class);
 
-    // Aufwand mit prototypes wg. einmaliger berechnung des FD
-    // Und ggf. einmaliger Neuberechnung FD nach Parameteraenderung !!
-
-    // enthaelt die Menge der definierte Models ... notwendig fuer GUI
-    // private HashMap<String, AccelerationModel> longModels;
-
-    // enthaelt die Heterogenitaet der tatsaechlich simulierten Fahrzeuge
     private final HashMap<String, VehiclePrototype> prototypes;
 
     private final double simulationTimestep;
@@ -95,14 +88,14 @@ public class VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(InputData simInput, List<TrafficCompositionInputData> heterogenInputData,
+    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData,
             boolean isWithWriteFundamentalDiagrams) {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
         this.instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
 
         // default for continuous micro models
-        simulationTimestep = simInput.getSimulationInput().getTimestep();
+        this.simulationTimestep = simulationTimestep;
         // create vehicle prototyps according to traffic composition
         // (heterogeneity)
         final List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
