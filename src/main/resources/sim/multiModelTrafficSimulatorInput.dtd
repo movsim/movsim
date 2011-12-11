@@ -31,9 +31,9 @@
 
 <!ELEMENT SCENARIO (FUEL_CONSUMPTION?, VEHICLES, SIMULATION) >
 
-<!-- todo Ralph for configuring output path -->
 <!ATTLIST SCENARIO
-  path  CDATA  "."
+  output_path  CDATA  "."
+  network_filename CDATA  #REQUIRED
 >
 
 
@@ -234,7 +234,6 @@ fluct_strength   NMTOKEN #REQUIRED
   fixed_seed       (true|false) "true" 
   seed             NMTOKEN "42"
   crash_exit       (true|false) "true"
-  network_filename CDATA  #REQUIRED
 > 
 
 

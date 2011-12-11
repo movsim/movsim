@@ -64,7 +64,11 @@ public class Simulator implements Runnable {
 
     private long iterationCount;
 
-    private double timestep; // constant for one simulation run
+    /**
+     * The timestep is a constant for one simulation run. It cannot be changed during a simulation. But of course you can run another
+     * simulation with a different timestep
+     */
+    private double timestep;
 
     /** The duration of the simulation. */
     private double tMax;
@@ -103,7 +107,7 @@ public class Simulator implements Runnable {
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
 
-        this.timestep = simInput.getTimestep(); // fix
+        this.timestep = simInput.getTimestep();
         this.tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
@@ -154,6 +158,7 @@ public class Simulator implements Runnable {
      * @param roadInputMap
      */
     private void defaultTestingRoadMapping(final Map<Long, RoadInput> roadInputMap) {
+        logger.warn("Simulation with test network");
         final RoadInput roadinput = roadInputMap.values().iterator().next();
         final int laneCount = 1;// roadinput.getLanes();
         final double roadLength = 1500;// roadinput.getRoadLength();

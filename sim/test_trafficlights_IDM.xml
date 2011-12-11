@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
-<SCENARIO>
+<SCENARIO network_filename="test_trafficlights.xodr" output_path="sim">
     <VEHICLES>
         <VEHICLE label="IDM1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
@@ -16,7 +16,7 @@
             <LANE_CHANGE_MODEL/>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION network_filename="test_trafficlights.xodr" dt="0.2" duration="400" seed="42">
+    <SIMULATION dt="0.2" duration="400" seed="42">
         <TRAFFIC_COMPOSITION write_fund_diagrams="true">
             <VEHICLE_TYPE label="IDM1" fraction="1"/>
         </TRAFFIC_COMPOSITION>

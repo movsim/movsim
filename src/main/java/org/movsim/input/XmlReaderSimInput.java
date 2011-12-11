@@ -149,17 +149,9 @@ public class XmlReaderSimInput {
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
         
-        // output path
-        String outputPath = root.getAttribute("path").getValue();
-        if (outputPath.equals("") || outputPath.isEmpty() || outputPath.equals(".")) {
-            outputPath = "sim";
-        }
-        logger.info("outputpath: {}", outputPath);
-        final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
-        if (!outputPathExits) {
-            FileUtils.createDir(outputPath, "");
-        }
-        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
+        parseOutputPathAttribute(root);
+        
+        parseNetworkFilename(root);
         
         // -------------------------------------------------------
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
@@ -183,6 +175,43 @@ public class XmlReaderSimInput {
 
         inputData.setFuelConsumptionInput(fuelConsumptionInput);
 
+    }
+
+    /**
+     * @param root
+     */
+    private void parseNetworkFilename(Element root) {
+        String networkFileName = root.getAttributeValue("network_filename");
+        System.out.println("filename: " + networkFileName);
+        System.out.println("network file exits: " + FileUtils.fileExists(networkFileName));
+        if (!FileUtils.fileExists(networkFileName)) {
+            logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
+            // System.exit(-1); //TODO check from resources delete sysos
+        }
+        System.out.println("canp ohne filename: " + FileUtils.getCanonicalPathWithoutFilename(networkFileName));
+        System.out.println(FileUtils.getName(networkFileName));
+
+        // set network file in projectMetaData
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
+        projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
+    }
+
+    /**
+     * @param root
+     */
+    private void parseOutputPathAttribute(final Element root) {
+        // output path
+        String outputPath = root.getAttribute("output_path").getValue();
+        if (outputPath.equals("") || outputPath.isEmpty() || outputPath.equals(".")) {
+            outputPath = "sim";
+        }
+        logger.info("outputpath: {}", outputPath);
+        final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
+        if (!outputPathExits) {
+            FileUtils.createDir(outputPath, "");
+        }
+        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
     }
 
     /**

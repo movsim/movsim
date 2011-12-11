@@ -67,21 +67,6 @@ public class SimulationInput {
      *            the elem
      */
     public SimulationInput(final Element elem) {
-        String networkFileName = elem.getAttributeValue("network_filename");
-        System.out.println("filename: " + networkFileName);
-        System.out.println("network file exits: " + FileUtils.fileExists(networkFileName));
-        if (!FileUtils.fileExists(networkFileName)) {
-            logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
-            // System.exit(-1); //TODO check from resources delete sysos
-        }
-        System.out.println("canp ohne filename: " + FileUtils.getCanonicalPathWithoutFilename(networkFileName));
-        System.out.println(FileUtils.getName(networkFileName));
-
-        // set network file in projectMetaData
-        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
-        projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
-
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
