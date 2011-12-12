@@ -86,12 +86,11 @@ public class SimCommandLine {
         OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
-//        OptionBuilder.withArgName("file");
-//        OptionBuilder.hasArg();
-//        OptionBuilder
-//                .withDescription("argument has to be an OpenDRIVE (.xodr) file to load the network topology and road layout");
-//        final Option xodrSimFile = OptionBuilder.create("n");
-//        options.addOption(xodrSimFile);
+        OptionBuilder.withArgName("directory");
+        OptionBuilder.hasArg();
+        OptionBuilder.withDescription("argument is the output path relative to calling directory");
+        final Option outputPathOption = OptionBuilder.create("o");
+        options.addOption(outputPathOption);
     }
 
     /**
@@ -139,41 +138,26 @@ public class SimCommandLine {
         if (cmdline.hasOption("v")) {
             optPrintVersion();
         }
+        optOutputPath(cmdline);
         optSimulation(cmdline);
-//        optNetworkTopology(cmdline);
     }
 
     /**
      * @param cmdline
      */
-    private void optNetworkTopology(CommandLine cmdline) {
-        final String xodrFilename = cmdline.getOptionValue('n');
-        if (xodrFilename == null || !FileUtils.fileExists(xodrFilename)) {
-            System.err.println("No xodr configuration file! Please specify one via the option -n.");
-            System.exit(-1);
-        } else {
-            final boolean isXodr = validateOpenDriveFileName(xodrFilename);
-            if (isXodr) {
-                projectMetaData.setXodrFilename(FileUtils.getName(xodrFilename));
-                projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(xodrFilename));
-            } else {
-                System.exit(-1);
-            }
-        }
-    }
+    private void optOutputPath(CommandLine cmdline) {
+        String outputPath = cmdline.getOptionValue('o');
 
-    /**
-     * @param xodrFilename
-     * @return
-     */
-    private boolean validateOpenDriveFileName(String xodrFilename) {
-        final int i = xodrFilename.lastIndexOf(".xodr");
-        if (i < 0) {
-            System.out
-                    .println("Please provide OpenDRIVE file with ending \".xodr\" as argument with option -n, exit. ");
-            return false;
+        if (outputPath == null || outputPath.equals("") || outputPath.isEmpty()) {
+            outputPath = ".";
+            System.out.println("No output path provided via option. Set output path to current directory!");
         }
-        return true;
+        System.out.println("outputpath: " + outputPath);
+        final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
+        if (!outputPathExits) {
+            FileUtils.createDir(outputPath, "");
+        }
+        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
     }
 
     /**

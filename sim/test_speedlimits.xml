@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
-<SCENARIO network_filename="test_speedlimits.xodr" output_path="sim">
+<SCENARIO network_filename="test_speedlimits.xodr">
     <VEHICLES>
         <VEHICLE label="IDM1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>

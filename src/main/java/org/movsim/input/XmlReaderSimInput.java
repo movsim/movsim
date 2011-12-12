@@ -148,11 +148,11 @@ public class XmlReaderSimInput {
     @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
-        
-        parseOutputPathAttribute(root);
-        
+
+        // parseOutputPathAttribute(root);
+
         parseNetworkFilename(root);
-        
+
         // -------------------------------------------------------
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
         inputData.setSimulationInput(simInput);
@@ -177,36 +177,29 @@ public class XmlReaderSimInput {
 
     }
 
-    /**
-     * @param root
-     */
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
         if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(networkFileName)) {
             logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
-             System.exit(-1); //TODO check from resources
+            System.exit(-1); // TODO check from resources
         }
 
         projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
         projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
     }
 
-    /**
-     * @param root
-     */
-    private void parseOutputPathAttribute(final Element root) {
-        // output path
-        String outputPath = root.getAttribute("output_path").getValue();
-        if (outputPath.equals("") || outputPath.isEmpty() || outputPath.equals(".")) {
-            outputPath = "sim";
-        }
-        logger.info("outputpath: {}", outputPath);
-        final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
-        if (!outputPathExits) {
-            FileUtils.createDir(outputPath, "");
-        }
-        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
-    }
+    // private void parseOutputPathAttribute(final Element root) {
+    // String outputPath = root.getAttribute("output_path").getValue();
+    // if (outputPath.equals("") || outputPath.isEmpty()) {
+    // return; // output path is taken from cmdline
+    // }
+    // logger.info("outputpath: {}", outputPath);
+    // final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
+    // if (!outputPathExits) {
+    // FileUtils.createDir(outputPath, "");
+    // }
+    // ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
+    // }
 
     /**
      * Read and validate xml.
