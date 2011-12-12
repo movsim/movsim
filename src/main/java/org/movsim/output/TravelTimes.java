@@ -16,8 +16,8 @@ public class TravelTimes extends ObservableImpl {
 
     private final RoadNetwork roadNetwork;
 
-    // configure update interval
-    private long updateIntervalCount = 100; // init
+    /** configures update interval. Initial value = 100 */
+    private long updateIntervalCount = 100;
 
     public TravelTimes(final TravelTimesInput travelTimesInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
@@ -27,11 +27,11 @@ public class TravelTimes extends ObservableImpl {
         }
     }
 
-    public void update(long iterationCount, double time, double timestep) {
+    public void update(long iterationCount, double time) {
 
         final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
         for (final TravelTimeRoute route : routes) {
-            route.update(iterationCount, time, timestep, roadNetwork);
+            route.update(iterationCount, time, roadNetwork);
             if (doNotificationUpdate) {
                 route.calcEMA(time);
             }

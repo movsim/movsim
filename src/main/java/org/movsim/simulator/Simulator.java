@@ -100,11 +100,10 @@ public class Simulator implements Runnable {
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
 
-        final ProjectMetaData projectMetaData = inputData.getProjectMetaData();
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectName = projectMetaData.getProjectName();
 
         final SimulationInput simInput = parseMovSimXm();
-
         final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
 
         this.timestep = simInput.getTimestep();
@@ -172,11 +171,12 @@ public class Simulator implements Runnable {
     }
 
     /**
+     * Parse the OpenDrive (.xodr) file to load the network topology and road layout
+     * 
      * @param projectMetaData
      * @return
      */
     private boolean parseOpenDriveXml(final ProjectMetaData projectMetaData) {
-        // Parse the OpenDrive (.xodr) file to load the network topology and road layout
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
         final String fullXodrFileName = xodrPath + xodrFileName;
@@ -187,11 +187,12 @@ public class Simulator implements Runnable {
     }
 
     /**
+     * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models, traffic composition,
+     * traffic sources etc
+     * 
      * @return
      */
     private SimulationInput parseMovSimXm() {
-        // Now parse the MovSim XML file to add the simulation components
-        // eg network filename, vehicles and vehicle models, traffic composition, traffic sources etc
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
@@ -298,7 +299,7 @@ public class Simulator implements Runnable {
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.update(iterationCount, time, timestep);
+        simOutput.update(iterationCount, time);
 
         while (!isSimulationRunFinished()) {
             updateTimestep();
@@ -322,7 +323,6 @@ public class Simulator implements Runnable {
     }
 
     public void updateTimestep() {
-
         time += timestep;
         iterationCount++;
 
@@ -332,12 +332,9 @@ public class Simulator implements Runnable {
                         time / 3600, timestep, projectName));
             }
         }
-        // TODO new update of roadSegments
+        
         roadNetwork.timeStep(timestep, time, iterationCount);
-        // parallel update of all roadSections
-        // final double dt = this.timestep; // TODO
-
-        simOutput.update(iterationCount, time, timestep);
+        simOutput.update(iterationCount, time);
     }
 
     public long iterationCount() {

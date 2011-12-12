@@ -117,18 +117,16 @@ public class SimOutput implements SimObservables {
 
     /**
      * Update.
-     * 
+     *
      * @param iterationCount
      *            the itime
      * @param time
      *            the time
-     * @param timestep
-     *            the timestep
      */
-    public void update(long iterationCount, double time, double timestep) {
+    public void update(long iterationCount, double time) {
 
         if (floatingCars != null) {
-            floatingCars.update(iterationCount, time, timestep);
+            floatingCars.update(iterationCount, time);
         }
         if (spatioTemporal != null) {
             spatioTemporal.update(iterationCount, time, roadSegment);
@@ -139,7 +137,7 @@ public class SimOutput implements SimObservables {
         }
 
         if (travelTimes != null) {
-            travelTimes.update(iterationCount, time, timestep);
+            travelTimes.update(iterationCount, time);
         }
 
     }

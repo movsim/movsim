@@ -68,10 +68,8 @@ public class FloatingCars extends ObservableImpl {
      *            the itime
      * @param time
      *            the time
-     * @param timestep
-     *            the timestep
      */
-    public void update(long iterationCount, double time, double timestep) {
+    public void update(long iterationCount, double time) {
 
         if (iterationCount % nDtOut == 0) {
             notifyObservers(time);

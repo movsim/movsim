@@ -62,7 +62,7 @@ public class TravelTimeRoute {
         return emaPoints;
     }
 
-    public void update(long iterationCount, double time, double timestep, RoadNetwork roadNetwork) {
+    public void update(long iterationCount, double time, RoadNetwork roadNetwork) {
 
         // dataPoints.clear();
         // check first start_position

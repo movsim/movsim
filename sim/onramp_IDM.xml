@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
-<SCENARIO path="sim">
+<SCENARIO network_filename="onramp.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
@@ -26,7 +26,7 @@
             <LANE_CHANGE_MODEL/>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION network_filename="onramp.xodr" dt="0.2" duration="2000" fixed_seed="true" seed="42" crash_exit="false">
+    <SIMULATION dt="0.2" duration="2000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION write_fund_diagrams="true">
             <!-- <VEHICLE_TYPE label="IDM1" fraction="0" /> -->
             <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2"/>
