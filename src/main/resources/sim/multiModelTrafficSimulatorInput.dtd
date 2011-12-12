@@ -32,7 +32,7 @@
 <!ELEMENT SCENARIO (FUEL_CONSUMPTION?, VEHICLES, SIMULATION) >
 
 <!ATTLIST SCENARIO
-  network_filename CDATA  #REQUIRED
+  network_filename CDATA ""
 >
 
 

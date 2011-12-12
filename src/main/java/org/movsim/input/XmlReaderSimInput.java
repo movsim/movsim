@@ -19,6 +19,7 @@
  */
 package org.movsim.input;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -179,13 +180,55 @@ public class XmlReaderSimInput {
 
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
-        if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(networkFileName)) {
+        String relativePath;
+        relativePath = checkIfAttributeHasPath(networkFileName);
+
+        if (relativePath.equals("")) {
+            networkFileName = checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(networkFileName);
+        }
+
+        final boolean networkFileExits = FileUtils.fileExists(networkFileName);
+
+        if (!projectMetaData.isXmlFromResources() && !networkFileExits) {
             logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
             System.exit(-1); // TODO check from resources
         }
 
         projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
         projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
+    }
+
+    /**
+     * @param networkFileName
+     * @return networkFileName
+     */
+    private String checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(String networkFileName) {
+        System.out.println("check path :" + projectMetaData.getPathToProjectXmlFile() + networkFileName);
+        boolean exits = FileUtils.fileExists(projectMetaData.getPathToProjectXmlFile() + networkFileName);
+        if (exits) {
+            System.out.println("network file exists!");
+            networkFileName = projectMetaData.getPathToProjectXmlFile() + networkFileName;
+
+        } else {
+            logger.error("Please provide the corresponding road network file. Either in the same directory as the movsim xml or provide the path and file name in the attribute 'network_filename' in the root tag. If you have done that, check the spelling!");
+            System.exit(-1);
+        }
+        return networkFileName;
+    }
+
+    /**
+     * @param networkFileName
+     * @return relativePath
+     */
+    private String checkIfAttributeHasPath(String networkFileName) {
+        String relativePath;
+        if (networkFileName.lastIndexOf(File.separator) == -1) {
+            relativePath = "";
+        } else {
+            relativePath = networkFileName.substring(0, networkFileName.lastIndexOf(File.separator));
+            System.out.println("relative path: " + relativePath);
+        }
+        return relativePath;
     }
 
     // private void parseOutputPathAttribute(final Element root) {

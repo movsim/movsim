@@ -46,7 +46,6 @@ public class ICMicroData {
         this.initSpeed = Double.parseDouble(map.get("v"));
         this.initLane = Integer.parseInt(map.get("lane")) - 1; // internal MovSim
         this.typeLabel = map.get("label");
-        System.out.println("label: " + typeLabel);
     }
 
     /*

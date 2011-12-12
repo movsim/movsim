@@ -32,33 +32,25 @@ import org.movsim.input.model.simulation.TrafficSourceData;
 
 public class RoadInput {
 
-    /** The id. */
     private long id;
 
-    /** The road length. */
     private double roadLength;
 
-    /** The lanes. */
     private int lanes;
 
-    /** The ramp length. */
     // TODO this is a property of an onramp/offramp and not of an mainroad
     private double rampMergingLength;
 
-    /** The center position. */
     // TODO this is a property of an onramp/offramp and not of an mainroad
     private double rampStartPosition;
 
-    /** The is with write fundamental diagrams. */
     private boolean isWithWriteFundamentalDiagrams;
 
     /** The heterogeneity input data. */
     private List<TrafficCompositionInputData> trafficCompositionInputData;
 
-    /** The ic macro data. */
     private List<ICMacroData> icMacroData;
 
-    /** The ic micro data. */
     private List<ICMicroData> icMicroData;
 
     /** The upstream boundary data. */
@@ -66,22 +58,19 @@ public class RoadInput {
 
     private TrafficSinkData trafficSinkData;
 
-    /** The flow cons bottleneck input data. */
+    /** The flow conserving bottleneck input data. */
     private List<FlowConservingBottleneckDataPoint> flowConsBottleneckInputData;
 
-    /** The speed limit input data. */
     private List<SpeedLimitDataPoint> speedLimitInputData;
 
-    /** The simple ramps. */
     private List<SimpleRampData> simpleRamps;
 
     private TrafficLightsInput trafficLightsInput;
 
-    /** The detector input. */
     private DetectorInput detectorInput;
 
     /**
-     * Instantiates a new road input impl.
+     * Instantiates a new road input.
      * 
      * @param elem
      *            the elem

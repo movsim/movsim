@@ -71,7 +71,6 @@ public class SimCommandLine {
      * Creates the options.
      */
     private void createOptions() {
-
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
         options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
@@ -152,7 +151,7 @@ public class SimCommandLine {
             outputPath = ".";
             System.out.println("No output path provided via option. Set output path to current directory!");
         }
-        System.out.println("outputpath: " + outputPath);
+        System.out.println("output path: " + outputPath);
         final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
