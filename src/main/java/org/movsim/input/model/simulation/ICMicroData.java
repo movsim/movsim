@@ -23,20 +23,17 @@ import java.util.Map;
 
 public class ICMicroData {
 
-    /** The init position. */
     private final double initPosition;
 
-    /** The init speed. */
     private final double initSpeed;
 
-    /** The init lane. */
     private final int initLane; // most right lane: MovsimConstants.MOST_RIGHT_LANE
 
-    /** The type label. */
-    private final String typeLabel; // empty string if no type
+    /** The type label. Empty string if no type */
+    private final String typeLabel;
 
     /**
-     * Instantiates a new iC micro data impl.
+     * Instantiates a new iC micro data.
      * 
      * @param map
      *            the map
@@ -48,38 +45,18 @@ public class ICMicroData {
         this.typeLabel = map.get("label");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMicroData#getX()
-     */
     public double getX() {
         return initPosition;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMicroData#getSpeed()
-     */
     public double getSpeed() {
         return initSpeed;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.ICMicroData#getInitLane()
-     */
     public int getInitLane() {
         return initLane;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMicroData#getType()
-     */
     public String getLabel() {
         return typeLabel;
     }
