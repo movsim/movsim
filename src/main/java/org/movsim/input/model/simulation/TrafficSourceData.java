@@ -31,14 +31,12 @@ import org.movsim.input.XmlUtils;
 
 public class TrafficSourceData {
 
-    /** The inflow time series. */
     private final List<InflowDataPoint> inflowTimeSeries = new ArrayList<InflowDataPoint>();
 
-    /** The with logging. */
     private final boolean withLogging;
 
     /**
-     * Instantiates a new upstream boundary data impl.
+     * Instantiates a new TrafficSourceData.
      * 
      * @param elem
      *            the elem
@@ -76,20 +74,10 @@ public class TrafficSourceData {
         });
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.UpstreamBoundaryData#getInflowTimeSeries ()
-     */
     public List<InflowDataPoint> getInflowTimeSeries() {
         return inflowTimeSeries;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.UpstreamBoundaryData#withLogging()
-     */
     public boolean withLogging() {
         return withLogging;
     }

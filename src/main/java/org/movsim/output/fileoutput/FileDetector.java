@@ -14,7 +14,8 @@ import org.movsim.utilities.impl.FileUtils;
  */
 public class FileDetector implements ObserverInTime {
 
-    private static final String extensionFormat = ".id%dx%d_det.csv";
+//    private static final String extensionFormat = ".id%dx%d_det.csv";
+    private static final String extensionFormat = ".det.road_%d.x_%d.csv";
     private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "   t[s],  v[km/h], rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)";
 

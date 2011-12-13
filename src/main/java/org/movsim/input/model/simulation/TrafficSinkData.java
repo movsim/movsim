@@ -4,7 +4,6 @@ import org.jdom.Element;
 
 public class TrafficSinkData {
 
-    /** The with logging. */
     private boolean withLogging = false;
 
     public TrafficSinkData(Element elem) {
