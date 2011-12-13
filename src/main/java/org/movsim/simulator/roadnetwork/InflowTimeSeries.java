@@ -34,18 +34,16 @@ public class InflowTimeSeries {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InflowTimeSeries.class);
 
-    /** The time values. */
     private double[] timeValues;
 
-    /** The flow values. */
     private double[] flowValues;
 
-    /** The speed values. */
     private double[] speedValues;
 
     private double constantFlowPerLane = -1;
 
-    private final double constantInitSpeed = 80 / 3.6; // 80 km/h
+    /** constant init speed = 80 km/h*/
+    private final double constantInitSpeed = 80 / 3.6;
 
     /**
      * Instantiates a new inflow time series.

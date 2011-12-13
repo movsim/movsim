@@ -61,7 +61,6 @@ import org.slf4j.LoggerFactory;
  * front of and behind a given vehicle can be found efficiently.
  * </p>
  */
-
 public class RoadSegment implements Iterable<Vehicle> {
 
     final static Logger logger = LoggerFactory.getLogger(RoadSegment.class);

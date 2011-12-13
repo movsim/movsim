@@ -22,20 +22,14 @@ package org.movsim.utilities.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-// Various static table-related methods like interpolation, extrapolation
-
-// TODO: ueberarbeiten ... aufrufe nur aus Macro3D
-
 /**
- * The Class Tables.
+ * The Class Tables. Various static table-related methods like interpolation, extrapolation
  */
 public class Tables {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Tables.class);
 
-    /** The Constant TINY_VALUE. */
     private static final double TINY_VALUE = 1.e-10;
 
     /**
