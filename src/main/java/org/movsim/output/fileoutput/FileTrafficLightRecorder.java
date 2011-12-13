@@ -47,14 +47,13 @@ public class FileTrafficLightRecorder {
      *            the traffic lights
      */
     public FileTrafficLightRecorder(int nDt, List<TrafficLight> trafficLights, RoadSegment roadSegment) {
-
         this.nDt = nDt;
 
-        // road id hard coded as 1 for the moment
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName() + 
-        		String.format(extensionFormat, roadSegment.id());;
+        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+                + String.format(extensionFormat, roadSegment.id());
+        ;
         fstr = FileUtils.getWriter(filename);
         writeHeader(trafficLights);
     }

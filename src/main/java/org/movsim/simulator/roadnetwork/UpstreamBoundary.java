@@ -19,17 +19,12 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import java.io.File;
-import java.io.PrintWriter;
-
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.simulation.TrafficSourceData;
-import org.movsim.simulator.MovsimConstants;
+import org.movsim.output.fileoutput.FileUpstreamBoundaryData;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
-import org.movsim.utilities.impl.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,13 +32,6 @@ import org.slf4j.LoggerFactory;
  * The Class UpstreamBoundary.
  */
 public class UpstreamBoundary implements SimulationTimeStep {
-
-    // TODO the same output format is used in SimpleOnrampImpl. Consolidate.
-
-    private static final String extensionFormat = ".id%d_source_log.csv";
-    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
-            + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
-    private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(UpstreamBoundary.class);
@@ -56,8 +44,6 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     private final InflowTimeSeries inflowTimeSeries;
 
-    private PrintWriter fstrLogging;
-
     private int enteringVehCounter;
 
     /** The x enter last. status of last merging vehicle for logging to file */
@@ -66,6 +52,8 @@ public class UpstreamBoundary implements SimulationTimeStep {
     private double vEnterLast;
 
     private int laneEnterLast;
+
+    private FileUpstreamBoundaryData fileUpstreamBoundaryData;
 
     /**
      * Instantiates a new upstream boundary .
@@ -87,12 +75,7 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
         if (upstreamBoundaryData.withLogging()) {
             enteringVehCounter = 1;
-            final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-            final String outputPath = projectMetaData.getOutputPath();
-            final String filename = outputPath + File.separator + projectMetaData.getProjectName()
-                    + String.format(extensionFormat, roadId);
-            fstrLogging = FileUtils.getWriter(filename);
-            fstrLogging.printf(outputHeading);
+            fileUpstreamBoundaryData = new FileUpstreamBoundaryData(roadSegment.id());
         }
     }
 
@@ -162,10 +145,9 @@ public class UpstreamBoundary implements SimulationTimeStep {
                 final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
-                    if (fstrLogging != null) {
-                        fstrLogging.printf(outputFormat, simulationTime, laneEnterLast, xEnterLast, 3.6 * vEnterLast,
-                                3600 * totalInflow, enteringVehCounter, nWait);
-                        fstrLogging.flush();
+                    if (fileUpstreamBoundaryData != null) {
+                        fileUpstreamBoundaryData.update(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
+                                totalInflow, enteringVehCounter, nWait);
                     }
                     return; // only one insert per simulation update
                 }

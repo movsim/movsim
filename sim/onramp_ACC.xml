@@ -42,7 +42,7 @@
 		<ROAD id="1">
 			<INITIAL_CONDITIONS>
 			</INITIAL_CONDITIONS>
-			<TRAFFIC_SOURCE logging="false">
+			<TRAFFIC_SOURCE logging="true">
 				<INFLOW t="0" q_per_hour="300" v="24" />
 			</TRAFFIC_SOURCE>
 			<TRAFFIC_SINK />
