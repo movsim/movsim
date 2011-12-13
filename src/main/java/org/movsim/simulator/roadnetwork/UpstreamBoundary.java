@@ -113,23 +113,8 @@ public class UpstreamBoundary implements SimulationTimeStep {
         return nLanes * qBC;
     }
 
-    public void update(long iterationCount, double dt, double simulationTime) {
-        timeStep(dt, simulationTime, iterationCount);
-    }
-
-    /**
-     * Update.
-     * 
-     * @param iterationCount
-     *            the iteration count
-     * @param dt
-     *            the dt
-     * @param simulationTime
-     *            the time
-     */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        // public void update(long iterationCount, double dt, double simulationTime) {
         // integrate inflow demand
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
