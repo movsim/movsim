@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class LoopDetectorImpl.
+ * The Class LoopDetector.
  */
 public class LoopDetector extends ObservableImpl {
 
@@ -37,18 +37,19 @@ public class LoopDetector extends ObservableImpl {
     private final double dtSample;
     private final double detPosition;
     private double timeOffset;
-    private int vehCount;
-    private double vSum;
-    private double occTime;
-    private double sumInvV;
-    private double sumInvQ;
-    private double meanSpeed;
-    private double densityArithmetic;
-    private double flow;
-    private double occupancy;
-    private int vehCountOutput;
-    private double meanSpeedHarmonic;
-    private double meanTimegapHarmonic;
+    private int[] vehCount;
+    private double[] vSum;
+    private double[] occTime;
+    private double[] sumInvV;
+    private double[] sumInvQ;
+    private double[] meanSpeed;
+    private double[] densityArithmetic;
+    private double[] flow;
+    private double[] occupancy;
+    private int[] vehCountOutput;
+    private double[] meanSpeedHarmonic;
+    private double[] meanTimegapHarmonic;
+    private int laneCount;
 
     /**
      * Instantiates a new loop detector.
@@ -57,10 +58,26 @@ public class LoopDetector extends ObservableImpl {
      *            the det position
      * @param dtSample
      *            the dt sample
+     * @param laneCount
      */
-    public LoopDetector(double detPosition, double dtSample) {
+    public LoopDetector(double detPosition, double dtSample, int laneCount) {
         this.detPosition = detPosition;
         this.dtSample = dtSample;
+        this.laneCount = laneCount;
+
+        vehCount = new int[laneCount];
+        vSum = new double[laneCount];
+        occTime = new double[laneCount];
+        sumInvQ = new double[laneCount];
+        sumInvV = new double[laneCount];
+
+        meanSpeed = new double[laneCount];
+        densityArithmetic = new double[laneCount];
+        flow = new double[laneCount];
+        occupancy = new double[laneCount];
+        vehCountOutput = new int[laneCount];
+        meanSpeedHarmonic = new double[laneCount];
+        meanTimegapHarmonic = new double[laneCount];
 
         timeOffset = 0;
         reset();
@@ -72,11 +89,22 @@ public class LoopDetector extends ObservableImpl {
      * Reset.
      */
     private void reset() {
-        vehCount = 0;
-        vSum = 0;
-        occTime = 0;
-        sumInvQ = 0;
-        sumInvV = 0;
+        for (int i = 0; i < laneCount; i++) {
+            vehCount[i] = 0;
+            vSum[i] = 0;
+            occTime[i] = 0;
+            sumInvQ[i] = 0;
+            sumInvV[i] = 0;
+        }
+
+    }
+
+    private void reset(int lane) {
+        vehCount[lane] = 0;
+        vSum[lane] = 0;
+        occTime[lane] = 0;
+        sumInvQ[lane] = 0;
+        sumInvV[lane] = 0;
     }
 
     /**
@@ -94,123 +122,91 @@ public class LoopDetector extends ObservableImpl {
             final LaneSegment laneSegment = roadSegment.laneSegment(lane);
             for (final Vehicle veh : laneSegment) {
                 if ((veh.getPositionOld() < detPosition) && (veh.getPosition() >= detPosition)) {
-                    // new vehicle crossed detector
-                    vehCount++;
-                    final double speedVeh = veh.getSpeed();
-                    vSum += speedVeh;
-                    occTime += veh.getLength() / speedVeh;
-                    sumInvV += (speedVeh > 0) ? 1. / speedVeh : 0;
-                    // calculate brut timegap not from local detector data:
-                    final Vehicle vehFront = laneSegment.frontVehicle(veh);
-                    final double brutTimegap = (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition())
-                            / vehFront.getSpeed();
-                    // microscopic flow
-                    sumInvQ += (brutTimegap > 0) ? 1. / brutTimegap : 0;
+                    countVehiclesAndDataForLane(laneSegment, lane, veh);
                 }
             }
         }
 
         if ((simulationTime - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
-            calculateAverages();
+            for (int lane = 0; lane < laneCount; ++lane) {
+                calculateAveragesForLane(lane);
+            }
             notifyObservers(simulationTime);
             timeOffset = simulationTime;
         }
+    }
+
+    /**
+     * @param laneSegment
+     * @param lane
+     * @param veh
+     */
+    private void countVehiclesAndDataForLane(final LaneSegment laneSegment, int lane, final Vehicle veh) {
+        // new vehicle crossed detector
+        vehCount[lane]++;
+        final double speedVeh = veh.getSpeed();
+        vSum[lane] += speedVeh;
+        occTime[lane] += veh.getLength() / speedVeh;
+        sumInvV[lane] += (speedVeh > 0) ? 1. / speedVeh : 0;
+        // calculate brut timegap not from local detector data:
+        final Vehicle vehFront = laneSegment.frontVehicle(veh);
+        final double brutTimegap = (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition())
+                / vehFront.getSpeed();
+        // microscopic flow
+        sumInvQ[lane] += (brutTimegap > 0) ? 1. / brutTimegap : 0;
     }
 
     // ############################################
 
     /**
      * Calculate averages.
+     * 
+     * @param lane
      */
-    private void calculateAverages() {
-        flow = vehCount / dtSample;
-        meanSpeed = (vehCount == 0) ? 0 : vSum / vehCount;
-        densityArithmetic = (vehCount == 0) ? 0 : flow / meanSpeed;
-        occupancy = occTime / dtSample;
-        vehCountOutput = vehCount;
-        meanSpeedHarmonic = (vehCount == 0) ? 0 : 1. / (sumInvV / vehCount);
-        meanTimegapHarmonic = (vehCount == 0) ? 0 : sumInvQ / vehCount;
-        reset();
+    private void calculateAveragesForLane(int lane) {
+        flow[lane] = vehCount[lane] / dtSample;
+        meanSpeed[lane] = (vehCount[lane] == 0) ? 0 : vSum[lane] / vehCount[lane];
+        densityArithmetic[lane] = (vehCount[lane] == 0) ? 0 : flow[lane] / meanSpeed[lane];
+        occupancy[lane] = occTime[lane] / dtSample;
+        vehCountOutput[lane] = vehCount[lane];
+        meanSpeedHarmonic[lane] = (vehCount[lane] == 0) ? 0 : 1. / (sumInvV[lane] / vehCount[lane]);
+        meanTimegapHarmonic[lane] = (vehCount[lane] == 0) ? 0 : sumInvQ[lane] / vehCount[lane];
+        reset(lane);
     }
 
-    /**
-     * Gets the dt sample.
-     * 
-     * @return the dtSample
-     */
     public double getDtSample() {
         return dtSample;
     }
 
-    /**
-     * Gets the det position.
-     * 
-     * @return the detPosition
-     */
     public double getDetPosition() {
         return detPosition;
     }
 
-    /**
-     * Gets the mean speed.
-     * 
-     * @return the meanSpeed
-     */
-    public double getMeanSpeed() {
-        return meanSpeed;
+    public double getMeanSpeed(int i) {
+        return meanSpeed[i];
     }
 
-    /**
-     * Gets the density arithmetic.
-     * 
-     * @return the densityArithmetic
-     */
-    public double getDensityArithmetic() {
-        return densityArithmetic;
+    public double getDensityArithmetic(int i) {
+        return densityArithmetic[i];
     }
 
-    /**
-     * Gets the flow.
-     * 
-     * @return the flow
-     */
-    public double getFlow() {
-        return flow;
+    public double getFlow(int i) {
+        return flow[i];
     }
 
-    /**
-     * Gets the occupancy.
-     * 
-     * @return the occupancy
-     */
-    public double getOccupancy() {
-        return occupancy;
+    public double getOccupancy(int i) {
+        return occupancy[i];
     }
 
-    /**
-     * Gets the veh count output.
-     * 
-     * @return the vehCountOutput
-     */
-    public int getVehCountOutput() {
-        return vehCountOutput;
+    public int getVehCountOutput(int i) {
+        return vehCountOutput[i];
     }
 
-    /**
-     * Gets the mean speed harmonic.
-     * 
-     * @return the meanSpeedHarmonic
-     */
-    public double getMeanSpeedHarmonic() {
-        return meanSpeedHarmonic;
+    public double getMeanSpeedHarmonic(int i) {
+        return meanSpeedHarmonic[i];
     }
 
-    /**
-     * Gets the mean timegap harmonic.
-     * 
-     * @return the meanTimegapHarmonic
-     */
-    public double getMeanTimegapHarmonic() {
-        return meanTimegapHarmonic;
+    public double getMeanTimegapHarmonic(int i) {
+        return meanTimegapHarmonic[i];
     }
 }

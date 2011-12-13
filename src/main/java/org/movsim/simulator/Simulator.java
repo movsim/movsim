@@ -227,7 +227,7 @@ public class Simulator implements Runnable {
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput(), roadSegment.laneCount());
         roadSegment.setLoopDetectors(loopDetectors);
 
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(

@@ -44,8 +44,9 @@ public class LoopDetectors {
      * 
      * @param input
      *            the input
+     * @param lanes 
      */
-    public LoopDetectors(long roadId, DetectorInput input) {
+    public LoopDetectors(long roadId, DetectorInput input, int laneCount) {
 
         detectors = new ArrayList<LoopDetector>();
 
@@ -55,13 +56,13 @@ public class LoopDetectors {
             final List<Double> positions = input.getPositions();
 
             for (final Double detPosition : positions) {
-                detectors.add(new LoopDetector(detPosition, dtSample));
+                detectors.add(new LoopDetector(detPosition, dtSample, laneCount));
             }
 
             if (input.isWithLogging()) {
                 fileDetectors = new ArrayList<FileDetector>();
                 for (final LoopDetector det : detectors) {
-                    fileDetectors.add(new FileDetector(roadId, det));
+                    fileDetectors.add(new FileDetector(roadId, det, laneCount));
                 }
             }
         }

@@ -14,7 +14,6 @@ import org.movsim.utilities.impl.FileUtils;
  */
 public class FileDetector implements ObserverInTime {
 
-//    private static final String extensionFormat = ".id%dx%d_det.csv";
     private static final String extensionFormat = ".det.road_%d.x_%d.csv";
     private static final String outputHeading = MovsimConstants.COMMENT_CHAR
             + "   t[s],  v[km/h], rho[1/km],   Q[1/h],  nVeh,  Occup[1],1/<1/v>(km/h),<1/Tbrutto>(1/s)";
@@ -25,17 +24,19 @@ public class FileDetector implements ObserverInTime {
 
     private PrintWriter printWriter = null;
     private final LoopDetector detector;
+    private int laneCount;
 
     /**
      * Instantiates a new file detector.
      * 
      * @param detector
      *            the detector
+     * @param laneCount 
      */
-    public FileDetector(long roadId, LoopDetector detector) {
-
+    public FileDetector(long roadId, LoopDetector detector, int laneCount) {
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
+        this.laneCount = laneCount;
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
@@ -72,10 +73,12 @@ public class FileDetector implements ObserverInTime {
      *            the time
      */
     private void writeAggregatedData(double time) {
-        printWriter.printf(outputFormat, time, 3.6 * detector.getMeanSpeed(), 1000 * detector.getDensityArithmetic(),
-                3600 * detector.getFlow(), detector.getVehCountOutput(), detector.getOccupancy(),
-                3.6 * detector.getMeanSpeedHarmonic(), detector.getMeanTimegapHarmonic());
-        printWriter.flush();
+        for (int i = 0; i <laneCount; i++) {
+            printWriter.printf(outputFormat, time, 3.6 * detector.getMeanSpeed(i), 1000 * detector.getDensityArithmetic(i),
+                    3600 * detector.getFlow(i), detector.getVehCountOutput(i), detector.getOccupancy(i),
+                    3.6 * detector.getMeanSpeedHarmonic(i), detector.getMeanTimegapHarmonic(i));
+            printWriter.flush();
+        }
     }
 
     /*
