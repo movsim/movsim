@@ -59,6 +59,13 @@
 			</DETECTORS>
 
 		</ROAD>
+		
+		<ROAD id="3">
+		<DETECTORS dt="60" logging="true">
+                <CROSS_SECTION x="200" />
+                <CROSS_SECTION x="400" />
+            </DETECTORS>
+		</ROAD>
 
 		<!-- merge_length="400" x="3200" length="500" -->
 		<ROAD id="4">
@@ -66,8 +73,7 @@
 				<INFLOW t="0" q_per_hour="300" />
 			</TRAFFIC_SOURCE>
 			<DETECTORS dt="60" logging="true">
-                <CROSS_SECTION x="150" />
-                <CROSS_SECTION x="450" />
+                <CROSS_SECTION x="200" />
             </DETECTORS>
 		</ROAD>
 		<OUTPUT>

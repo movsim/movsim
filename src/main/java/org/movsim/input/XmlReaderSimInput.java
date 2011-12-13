@@ -106,9 +106,9 @@ public class XmlReaderSimInput {
                     readAndValidateXmlFromFileName();
                 }
 
-                // write internal xml file:
+                // write internal xml file to $pwd:
                 if (projectMetaData.isWriteInternalXml()) {
-                    final String outFilename = xmlFilename + ".internal_xml";
+                    final String outFilename = projectMetaData.getProjectName() + ".internal_xml";
                     writeInternalXmlToFile(doc, outFilename);
                     logger.info("internal xml output written to file {}. Exit.", outFilename);
                     System.exit(0);

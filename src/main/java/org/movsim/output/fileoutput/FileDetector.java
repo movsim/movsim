@@ -20,7 +20,7 @@ public class FileDetector implements ObserverInTime {
 
     // note: number before decimal point is total width of field, not width of
     // integer part
-    private static final String outputFormat = "%8.1f, %8.3f, %8.3f, %8.1f, %5d, %8.7f, %8.3f, %8.5f%n";
+    private static final String outputFormat = "%8.1f, %8.3f, %8.3f, %8.1f, %8d, %8.7f, %8.3f, %8.5f%n";
 
     private PrintWriter printWriter = null;
     private final LoopDetector detector;
@@ -36,7 +36,6 @@ public class FileDetector implements ObserverInTime {
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
 
-        // road id hard coded as 1 for the moment
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
         final String filename = outputPath + File.separator + projectMetaData.getProjectName()
