@@ -28,20 +28,17 @@ import org.jdom.Element;
 
 public class DetectorInput {
 
-    /** The positions. */
+    /** The positions of detectors. */
     private List<Double> positions;
 
-    /** The dt sample. */
     private double dtSample;
 
-    /** The with logging. */
     private boolean withLogging;
 
-    /** The is initialized. */
     private final boolean isInitialized;
 
     /**
-     * Instantiates a new detector input impl.
+     * Instantiates a new detector input.
      * 
      * @param elem
      *            the elem
@@ -92,38 +89,18 @@ public class DetectorInput {
         // -----------------------------------------------------------
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.DetectorInput#getPositions()
-     */
     public List<Double> getPositions() {
         return positions;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.DetectorInput#getSampleInterval()
-     */
     public double getSampleInterval() {
         return dtSample;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.DetectorInput#isWithDetectors()
-     */
     public boolean isWithDetectors() {
         return isInitialized;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.DetectorInput#isWithLogging()
-     */
     public boolean isWithLogging() {
         return withLogging;
     }
