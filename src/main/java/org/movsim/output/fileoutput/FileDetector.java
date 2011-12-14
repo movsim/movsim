@@ -58,7 +58,7 @@ public class FileDetector implements ObserverInTime {
      */
     private PrintWriter initFile(String filename) {
         printWriter = FileUtils.getWriter(filename);
-        printWriter.printf(MovsimConstants.COMMENT_CHAR + " number of lanes %d%n", laneCount);
+        printWriter.printf(MovsimConstants.COMMENT_CHAR + " number of lanes =  %d. (Numbering starts from the most left lane 1.)%n", laneCount);
         printWriter.printf(MovsimConstants.COMMENT_CHAR + " dtSample in s = %-8.4f%n", detector.getDtSample());
         printWriter.printf(MovsimConstants.COMMENT_CHAR + " position xDet in m = %-8.4f%n", detector.getDetPosition());
         printWriter.printf(MovsimConstants.COMMENT_CHAR + " arithmetic average for density rho%n");
@@ -73,6 +73,9 @@ public class FileDetector implements ObserverInTime {
             if (i != laneCount) {
                 printWriter.printf(", lane: %d", i + 1);
             }
+            if (laneCount == 1) {
+                break;
+            }
         }
         printWriter.printf("%n");
         printWriter.flush();
@@ -86,7 +89,9 @@ public class FileDetector implements ObserverInTime {
      */
     private void writeAggregatedData(double time) {
         allLanesTogether(time);
-        perLane(time);
+        if (laneCount > 1) {
+            perLane(time);
+        }
         printWriter.printf("%n");
         printWriter.flush();
     }
