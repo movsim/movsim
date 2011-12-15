@@ -66,7 +66,7 @@ public class Simulator implements Runnable {
 
     /**
      * The timestep is a constant for one simulation run. It cannot be changed during a simulation. But of course you can run another
-     * simulation with a different timestep
+     * simulation with a different timestep.
      */
     private double timestep;
 
@@ -106,15 +106,14 @@ public class Simulator implements Runnable {
         final SimulationInput simInput = parseMovSimXm();
         final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
 
-        this.timestep = simInput.getTimestep();
-        this.tMax = simInput.getMaxSimTime();
+        roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
+
+        timestep = simInput.getTimestep();
+        tMax = simInput.getMaxSimTime();
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
         createVehicleGenerator(simInput);
-
-        final boolean isWithCrashExit = simInput.isWithCrashExit();
-        roadNetwork.setWithCrashExit(isWithCrashExit);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -227,7 +226,8 @@ public class Simulator implements Runnable {
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput(), roadSegment.laneCount());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput(),
+                roadSegment.laneCount());
         roadSegment.setLoopDetectors(loopDetectors);
 
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
@@ -332,7 +332,7 @@ public class Simulator implements Runnable {
                         time / 3600, timestep, projectName));
             }
         }
-        
+
         roadNetwork.timeStep(timestep, time, iterationCount);
         simOutput.update(iterationCount, time);
     }
