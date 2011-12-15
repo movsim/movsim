@@ -163,8 +163,6 @@ public class LoopDetector extends ObservableImpl {
         sumInvQ[lane] += (brutTimegap > 0) ? 1. / brutTimegap : 0;
     }
 
-    // ############################################
-
     /**
      * Calculate averages.
      * 
