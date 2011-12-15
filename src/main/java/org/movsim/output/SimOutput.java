@@ -45,14 +45,11 @@ public class SimOutput implements SimObservables {
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
     private SpatioTemporal spatioTemporal = null;
-
     private FileSpatioTemporal fileSpatioTemporal;
     private FloatingCars floatingCars = null;
     private FileFloatingCars fileFloatingCars;
     private FileTrajectories trajectories = null;
     private final boolean writeOutput;
-
-    // final RoadSection roadSection; // TODO hack only one roadsection
     private final RoadNetwork roadNetwork;
     private final RoadSegment roadSegment;
     private TravelTimes travelTimes;

@@ -50,6 +50,13 @@ public class LoopDetector extends ObservableImpl {
     private double[] meanSpeedHarmonic;
     private double[] meanTimegapHarmonic;
     private int laneCount;
+    private double meanSpeedAllLanes;
+    private double densityArithmeticAllLanes;
+    private double flowAllLanes;
+    private int vehCountOutputAllLanes;
+    private double occupancyAllLanes;
+    private double meanSpeedHarmonicAllLanes;
+    private double meanTimegapHarmonicAllLanes;
 
     /**
      * Instantiates a new loop detector.
@@ -80,23 +87,22 @@ public class LoopDetector extends ObservableImpl {
         meanTimegapHarmonic = new double[laneCount];
 
         timeOffset = 0;
-        reset();
 
+        for (int i = 0; i < laneCount; i++) {
+            reset(i);
+        }
+        reset();
         notifyObservers(0);
     }
 
-    /**
-     * Reset.
-     */
     private void reset() {
-        for (int i = 0; i < laneCount; i++) {
-            vehCount[i] = 0;
-            vSum[i] = 0;
-            occTime[i] = 0;
-            sumInvQ[i] = 0;
-            sumInvV[i] = 0;
-        }
-
+        meanSpeedAllLanes = 0;
+        densityArithmeticAllLanes = 0;
+        flowAllLanes = 0;
+        vehCountOutputAllLanes = 0;
+        occupancyAllLanes = 0;
+        meanSpeedHarmonicAllLanes = 0;
+        meanTimegapHarmonicAllLanes = 0;
     }
 
     private void reset(int lane) {
@@ -131,6 +137,7 @@ public class LoopDetector extends ObservableImpl {
             for (int lane = 0; lane < laneCount; ++lane) {
                 calculateAveragesForLane(lane);
             }
+            calculateAveragesOverAllLanes();
             notifyObservers(simulationTime);
             timeOffset = simulationTime;
         }
@@ -174,6 +181,22 @@ public class LoopDetector extends ObservableImpl {
         reset(lane);
     }
 
+    private void calculateAveragesOverAllLanes() { // TODO rg 12/15/2011: Arne please check
+        reset();
+        for (int i = 0; i < laneCount; i++) {
+            vehCountOutputAllLanes += getVehCountOutput(i);
+            meanSpeedAllLanes += getMeanSpeed(i);
+
+            occupancyAllLanes += getOccupancy(i);
+            meanSpeedHarmonicAllLanes += getMeanSpeedHarmonic(i);
+            meanTimegapHarmonicAllLanes += getMeanTimegapHarmonic(i);
+        }
+
+        meanSpeedAllLanes = meanSpeedAllLanes / laneCount;
+        flowAllLanes = vehCountOutputAllLanes / (dtSample * laneCount);
+        densityArithmeticAllLanes = flowAllLanes / meanSpeedAllLanes;
+    }
+
     public double getDtSample() {
         return dtSample;
     }
@@ -208,5 +231,33 @@ public class LoopDetector extends ObservableImpl {
 
     public double getMeanTimegapHarmonic(int i) {
         return meanTimegapHarmonic[i];
+    }
+
+    public double getMeanSpeedAllLanes() {
+        return meanSpeedAllLanes;
+    }
+
+    public double getDensityArithmeticAllLanes() {
+        return densityArithmeticAllLanes;
+    }
+
+    public double getFlowAllLanes() {
+        return flowAllLanes;
+    }
+
+    public int getVehCountOutputAllLanes() {
+        return vehCountOutputAllLanes;
+    }
+
+    public double getOccupancyAllLanes() {
+        return occupancyAllLanes;
+    }
+
+    public double getMeanSpeedHarmonicAllLanes() {
+        return meanSpeedHarmonicAllLanes;
+    }
+
+    public double getMeanTimegapHarmonicAllLanes() {
+        return meanTimegapHarmonicAllLanes;
     }
 }

@@ -27,9 +27,8 @@ import org.movsim.utilities.impl.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class FloatingCarsImpl.
+ * The Class FloatingCars.
  */
 public class FloatingCars extends ObservableImpl {
 
@@ -37,10 +36,7 @@ public class FloatingCars extends ObservableImpl {
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
 
     private final List<Integer> fcdList;
-
-    /** The n dt out. */
     private final int nDtOut;
-
     private final RoadSegment roadSegment;
 
     /**
@@ -56,9 +52,7 @@ public class FloatingCars extends ObservableImpl {
 
         this.roadSegment = roadSegment;
         this.nDtOut = input.getNDt();
-
         this.fcdList = input.getFloatingCars();
-
     }
 
     /**
@@ -70,27 +64,16 @@ public class FloatingCars extends ObservableImpl {
      *            the time
      */
     public void update(long iterationCount, double time) {
-
         if (iterationCount % nDtOut == 0) {
             notifyObservers(time);
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
         }
     }
 
-    /**
-     * Gets the fcd list.
-     * 
-     * @return the fcd list
-     */
     public List<Integer> getFcdList() {
         return fcdList;
     }
 
-    /**
-     * Gets the road segment.
-     * 
-     * @return the road segment
-     */
     public RoadSegment getRoadSegment() {
         return roadSegment;
     }

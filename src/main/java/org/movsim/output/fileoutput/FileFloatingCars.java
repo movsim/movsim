@@ -55,15 +55,12 @@ public class FileFloatingCars implements ObserverInTime {
     private final FloatingCars floatingCars;
 
     /**
-     * Instantiates a new floating cars impl.
+     * Instantiates a new FileFloatingCars.
      * 
-     * @param projectName
-     *            the project name
      * @param floatingCars
      *            the floating cars
      */
     public FileFloatingCars(FloatingCars floatingCars) {
-        logger.debug("Cstr. FloatingCars");
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
 
