@@ -32,7 +32,7 @@ public class MovSimLogFileAppender {
      * 
      * View log4j.properties for defining logging levels for packages or to initialize other appenders like a rolling file appender.
      * 
-     * Logs to to file "projectname.log".
+     * Logs to to file "<output path>projectname.log".
      */
     public MovSimLogFileAppender() {
         Layout layout = new PatternLayout("%r [%t] %-5p (%F:%M:%L) - %m%n");
