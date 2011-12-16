@@ -22,7 +22,7 @@ import org.movsim.simulator.Simulator;
  * @author Ralph Germ
  * 
  */
-public class MovSimFileAppender {
+public class MovSimLogFileAppender {
 
     final static Logger logger = Logger.getLogger(Simulator.class);
     private FileAppender fileAppender;
@@ -30,11 +30,11 @@ public class MovSimFileAppender {
     /**
      * Initializes a FileAppender and adds the appender.
      * 
-     * View log4j.properties for defining logging levels for packages.
+     * View log4j.properties for defining logging levels for packages or to initialize other appenders like a rolling file appender.
      * 
      * Logs to to file "projectname.log".
      */
-    public MovSimFileAppender() {
+    public MovSimLogFileAppender() {
         Layout layout = new PatternLayout("%r [%t] %-5p (%F:%M:%L) - %m%n");
 
         try {

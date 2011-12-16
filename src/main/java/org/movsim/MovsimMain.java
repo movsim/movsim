@@ -21,10 +21,13 @@ package org.movsim;
 
 import org.movsim.input.SimCommandLine;
 import org.movsim.simulator.Simulator;
-import org.movsim.utilities.MovSimFileAppender;
+import org.movsim.utilities.MovSimLogFileAppender;
 
 /**
  * The Class MovsimMain.
+ * 
+ * MovSim command line tool.
+ * 
  */
 public class MovsimMain {
 
@@ -38,9 +41,9 @@ public class MovsimMain {
 
         // CommandLine args options parser
         // Results are set in ProjectMetaData
-        final SimCommandLine cmdline = new SimCommandLine(args);
+        new SimCommandLine(args);
         
-        new MovSimFileAppender();
+        new MovSimLogFileAppender();
 
         final Simulator simulator = Simulator.getInstance();
         
