@@ -9,8 +9,8 @@ import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.impl.ExponentialMovingAverage;
-import org.movsim.utilities.impl.XYDataPoint;
+import org.movsim.utilities.ExponentialMovingAverage;
+import org.movsim.utilities.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

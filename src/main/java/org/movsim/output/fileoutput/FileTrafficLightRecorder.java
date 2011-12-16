@@ -27,7 +27,7 @@ import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.utilities.impl.FileUtils;
+import org.movsim.utilities.FileUtils;
 
 /**
  * The Class FileTrafficLightRecorder.

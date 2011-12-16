@@ -22,8 +22,8 @@ package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
 import java.io.PrintWriter;
 
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.utilities.impl.FileUtils;
-import org.movsim.utilities.impl.Tables;
+import org.movsim.utilities.FileUtils;
+import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

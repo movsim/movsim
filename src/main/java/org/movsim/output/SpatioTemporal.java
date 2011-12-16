@@ -23,8 +23,8 @@ import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.utilities.impl.ObservableImpl;
-import org.movsim.utilities.impl.Tables;
+import org.movsim.utilities.ObservableImpl;
+import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

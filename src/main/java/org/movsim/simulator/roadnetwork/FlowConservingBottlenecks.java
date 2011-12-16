@@ -22,7 +22,7 @@ package org.movsim.simulator.roadnetwork;
 import java.util.List;
 
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
-import org.movsim.utilities.impl.Tables;
+import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

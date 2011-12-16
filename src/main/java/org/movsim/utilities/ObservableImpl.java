@@ -17,15 +17,11 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.utilities.impl;
+package org.movsim.utilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.movsim.utilities.Observable;
-import org.movsim.utilities.ObservableInTime;
-import org.movsim.utilities.Observer;
-import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

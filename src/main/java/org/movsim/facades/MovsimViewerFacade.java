@@ -28,7 +28,7 @@ import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.SimObservables;
 import org.movsim.simulator.Simulator;
-import org.movsim.utilities.impl.XYDataPoint;
+import org.movsim.utilities.XYDataPoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

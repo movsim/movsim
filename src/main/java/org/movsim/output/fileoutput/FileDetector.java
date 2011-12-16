@@ -6,8 +6,8 @@ import java.io.PrintWriter;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.LoopDetector;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.ObserverInTime;
-import org.movsim.utilities.impl.FileUtils;
 
 /**
  * The Class FileDetector.
@@ -67,7 +67,7 @@ public class FileDetector implements ObserverInTime {
         printWriter.printf(MovsimConstants.COMMENT_CHAR
                 + " All lanes                                                               ");
 
-        for (int i = 1; i <= laneCount; i++) {
+        for (int i = 1; (i <= laneCount) && (laneCount > 1); i++) {
             printWriter.printf(",,,,,,,lane %d", i);
         }
         printWriter.printf("%n");
@@ -77,7 +77,7 @@ public class FileDetector implements ObserverInTime {
 
     private void printUnitsHeaderForAllLanes() {
         printWriter.printf(outputHeading);
-        for (int i = 1; i <= laneCount; i++) {
+        for (int i = 1; (i <= laneCount)  && (laneCount > 1); i++) {
             printWriter.printf(outputHeadingLanes);
         }
         printWriter.printf("%n");

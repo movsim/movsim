@@ -6,8 +6,8 @@ import java.io.PrintWriter;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.SpatioTemporal;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.ObserverInTime;
-import org.movsim.utilities.impl.FileUtils;
 
 /**
  * The Class FileSpatioTemporal.

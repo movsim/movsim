@@ -6,9 +6,9 @@ import java.util.List;
 import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.utilities.impl.ExponentialMovingAverage;
-import org.movsim.utilities.impl.ObservableImpl;
-import org.movsim.utilities.impl.XYDataPoint;
+import org.movsim.utilities.ExponentialMovingAverage;
+import org.movsim.utilities.ObservableImpl;
+import org.movsim.utilities.XYDataPoint;
 
 public class TravelTimes extends ObservableImpl {
 

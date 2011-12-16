@@ -23,7 +23,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.impl.ObservableImpl;
+import org.movsim.utilities.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,9 +185,9 @@ public class LoopDetector extends ObservableImpl {
             vehCountOutputAllLanes += getVehCountOutput(i);
             meanSpeedAllLanes += getMeanSpeed(i);
 
-            occupancyAllLanes += getOccupancy(i);
-            meanSpeedHarmonicAllLanes += getMeanSpeedHarmonic(i);
-            meanTimegapHarmonicAllLanes += getMeanTimegapHarmonic(i);
+            occupancyAllLanes += getOccupancy(i);// TODO rg 12/15/2011: Arne please check
+            meanSpeedHarmonicAllLanes += getMeanSpeedHarmonic(i);// TODO rg 12/15/2011: Arne please check
+            meanTimegapHarmonicAllLanes += getMeanTimegapHarmonic(i);// TODO rg 12/15/2011: Arne please check
         }
 
         meanSpeedAllLanes = meanSpeedAllLanes / laneCount;

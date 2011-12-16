@@ -17,7 +17,7 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.utilities.impl;
+package org.movsim.utilities;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;

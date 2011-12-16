@@ -17,24 +17,36 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.utilities.impl;
+package org.movsim.utilities;
 
-public class XYDataPoint {
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 
-    private final double x;
-    private final double y;
+/**
+ * The Class ScalingHelper.
+ */
+public class ScalingHelper {
 
-    public XYDataPoint(double x, double y) {
-        this.x = x;
-        this.y = y;
+    /**
+     * Instantiates a new scaling helper.
+     */
+    private ScalingHelper() {
+
     }
 
-    public double getX() {
-        return x;
+    /**
+     * Gets the scaling length. Which differs in the cellular automata.
+     * 
+     * @param modelName
+     *            the model name
+     * @return the scaling length
+     */
+    public static double getScalingLength(final ModelName modelName) {
+        double scaleCA = 1;
+        if (modelName == ModelName.NSM) {
+            scaleCA = 7.5;
+        } else if (modelName == ModelName.KKW) {
+            scaleCA = 0.5;
+        }
+        return scaleCA;
     }
-
-    public double getY() {
-        return y;
-    }
-
 }

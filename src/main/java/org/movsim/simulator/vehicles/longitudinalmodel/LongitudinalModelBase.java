@@ -15,7 +15,7 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Observer;
-import org.movsim.utilities.impl.ScalingHelper;
+import org.movsim.utilities.ScalingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

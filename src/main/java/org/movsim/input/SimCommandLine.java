@@ -34,10 +34,10 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.utilities.impl.FileUtils;
+import org.movsim.utilities.FileUtils;
 
 /**
- * The Class SimCommandLine. MovSim console command line parser. Sets the ProjectMetaData.
+ * The Class SimCommandLine. MovSim console command line parser. Sets the ProjectMetaData. Initializes the logger.
  */
 public class SimCommandLine {
 
@@ -266,6 +266,7 @@ public class SimCommandLine {
     private void initLocalizationAndLogger() {
         Locale.setDefault(Locale.US);
 
+        // Log Levels: DEBUG < INFO < WARN < ERROR;
         final File file = new File("log4j.properties");
         if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
@@ -273,7 +274,5 @@ public class SimCommandLine {
             final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);
         }
-
-        // Log Levels: DEBUG < INFO < WARN < ERROR;
     }
 }

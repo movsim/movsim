@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.utilities.impl.Tables;
+import org.movsim.utilities.Tables;
 
 /**
  * The Class InitialConditionsMacro.

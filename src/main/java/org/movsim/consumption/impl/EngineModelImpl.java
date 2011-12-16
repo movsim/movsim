@@ -8,7 +8,7 @@ import org.movsim.consumption.CarModel;
 import org.movsim.consumption.EngineModel;
 import org.movsim.consumption.FuelConstants;
 import org.movsim.input.model.consumption.ConsumptionEngineModelInput;
-import org.movsim.utilities.impl.FileUtils;
+import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

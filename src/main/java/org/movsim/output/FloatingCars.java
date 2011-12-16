@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.utilities.impl.ObservableImpl;
+import org.movsim.utilities.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

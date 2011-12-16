@@ -30,7 +30,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.impl.FileUtils;
+import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
