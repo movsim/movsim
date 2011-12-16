@@ -2,9 +2,9 @@
 /.classpath
 /target
 /bin
-/sim/figs/*
-/sim/*.csv
-/sim/*.internal_xml
+*/figs/*
+*.csv
+*.internal_xml
 log4j.properties
 multiModel*.dtd
 *.log
