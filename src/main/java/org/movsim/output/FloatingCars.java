@@ -20,6 +20,7 @@
 package org.movsim.output;
 
 import java.util.List;
+import java.util.Set;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -35,7 +36,7 @@ public class FloatingCars extends ObservableImpl {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
 
-    private final List<Integer> fcdList;
+    private final Set<Integer> fcdList;
     private final int nDtOut;
     private final RoadSegment roadSegment;
 
@@ -70,7 +71,7 @@ public class FloatingCars extends ObservableImpl {
         }
     }
 
-    public List<Integer> getFcdList() {
+    public Set<Integer> getFcdList() {
         return fcdList;
     }
 

@@ -10,9 +10,11 @@ set datafile separator ","
 set terminal postscript eps enhanced color solid font "Helvetica" 26
 set size 1,1
 
+## test_speedlimits.car.origin_1.000004.csv
+
 # parameters
 if (!exists("inputPath")) inputPath = ""
-if (!exists("outputPath")) outputPath = "./" #"figs/"
+if (!exists("outputPath")) outputPath = "./" # old: "figs/"
 if (!exists("lang")) lang = "en"
 #print "lang=".lang
 
@@ -20,25 +22,18 @@ if (!exists("lang")) lang = "en"
 baseFile = "test_speedlimits"
 
 # input files
-carFile(n) = sprintf(inputPath.baseFile.".V%06d.csv",n)
+carFile(origin, n) = sprintf(inputPath.baseFile.".car.origin_%d.%06d.csv",origin,n)
 
 # output files
 trajectoryOutput = outputPath.baseFile.".trajectories.eps"
 
 
-########  Languages  #####################################
+########  Labels etc   #####################################
 
-# English
 positionLabel = "Position (km)"
 speedLabel = "Speed (km/h)"
 accelerationLabel = "Acceleration (m/s^2)"
 car(n) = sprintf("Car %d",n)
-
-# Deutsch
-if (lang eq "de")\
-  positionLabel = "Ort (km)";\
-  speedLabel = "Geschwindigkeit (km/h)";\
-  car(n) = sprintf("Kfz %d",n)
 
 
 ########  Line Styles  ###################################
@@ -61,12 +56,13 @@ set ylabel speedLabel
 #unset key
 
 
+origin=1
 set out outputPath.baseFile.".trajectories_speed.eps"
 plot\
- carFile(1) using ($3/1000):(3.6*$4) title "car(1). IDM" with lines linestyle 1,\
-  carFile(2) using ($3/1000):(3.6*$4) title "car(2). ACC" with lines linestyle 2,\
-  carFile(3) using ($3/1000):(3.6*$4) title "car(3). IIDM" with lines linestyle 3,\
-  carFile(4) using ($3/1000):(3.6*$4) title "car(4). IDMM" with lines linestyle 4
+ carFile(origin, 1) using ($3/1000):(3.6*$4) title "car(1). IDM" with lines linestyle 1,\
+  carFile(origin, 2) using ($3/1000):(3.6*$4) title "car(2). ACC" with lines linestyle 2,\
+  carFile(origin, 3) using ($3/1000):(3.6*$4) title "car(3). IIDM" with lines linestyle 3,\
+  carFile(origin, 4) using ($3/1000):(3.6*$4) title "car(4). IDMM" with lines linestyle 4
   
   
 set key bottom right
@@ -75,10 +71,10 @@ set ylabel accelerationLabel
 
 set out outputPath.baseFile.".trajectories_acc.eps"
 plot\
-  carFile(1) using ($3/1000):5 title "car(1). IDM" with lines linestyle 1,\
-  carFile(2) using ($3/1000):5 title "car(2). ACC" with lines linestyle 2,\
-  carFile(3) using ($3/1000):5 title "car(3). IIDM" with lines linestyle 3,\
-  carFile(4) using ($3/1000):5 title "car(4). IDMM" with lines linestyle 4
+  carFile(origin, 1) using ($3/1000):5 title "car(1). IDM" with lines linestyle 1,\
+  carFile(origin, 2) using ($3/1000):5 title "car(2). ACC" with lines linestyle 2,\
+  carFile(origin, 3) using ($3/1000):5 title "car(3). IIDM" with lines linestyle 3,\
+  carFile(origin, 4) using ($3/1000):5 title "car(4). IDMM" with lines linestyle 4
   
   
   

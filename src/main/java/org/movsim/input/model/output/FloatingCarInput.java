@@ -19,8 +19,9 @@
  */
 package org.movsim.input.model.output;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jdom.Element;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class FloatingCarInput {
     private double percOut;
 
     /** The floating cars. */
-    private List<Integer> floatingCars;
+    private Set<Integer> floatingCars;
 
     /** The is with fc. */
     private final boolean isWithFC;
@@ -72,7 +73,7 @@ public class FloatingCarInput {
             System.exit(-1);
         }
 
-        floatingCars = new ArrayList<Integer>();
+        floatingCars = new HashSet<Integer>();
         final List<Element> fcElems = elem.getChildren("FC");
         if (fcElems != null) {
             for (final Element fcElem : fcElems) {
@@ -125,7 +126,7 @@ public class FloatingCarInput {
      * 
      * @see org.movsim.input.model.output.FloatingCarInput#getFloatingCars()
      */
-    public List<Integer> getFloatingCars() {
+    public Set<Integer> getFloatingCars() {
         return floatingCars;
     }
 

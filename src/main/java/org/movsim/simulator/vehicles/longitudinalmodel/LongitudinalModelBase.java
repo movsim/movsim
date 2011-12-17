@@ -35,6 +35,11 @@ public abstract class LongitudinalModelBase implements Observer {
         public boolean isIteratedMap() {
             return (this == ITERATED_MAP_MODEL);
         }
+        
+        @Override
+        public String toString() {
+            return name();
+        }
     }
 
     public enum ModelName {
@@ -55,12 +60,16 @@ public abstract class LongitudinalModelBase implements Observer {
             this.detailedName = detailedName;
         }
 
-        final ModelCategory getCategory() {
+        public final ModelCategory getCategory() {
             return modelCategory;
         }
 
-        final String getDetailedName() {
+        public final String getDetailedName() {
             return detailedName;
+        }
+        
+        public final String getShortName() {
+            return name();
         }
 
         @Override
@@ -131,7 +140,7 @@ public abstract class LongitudinalModelBase implements Observer {
     public ModelCategory getModelCategory() {
         return modelName.getCategory();
     }
-
+    
     /**
      * Checks if is cellular automaton.
      * 
