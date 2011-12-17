@@ -157,7 +157,7 @@ public class LoopDetector extends ObservableImpl {
         occTime[lane] += (speedVeh > 0) ? veh.getLength() / speedVeh : 0;
         sumInvV[lane] += (speedVeh > 0) ? 1. / speedVeh : 0;
         // brut timegap not calculate from local detector data:
-        final Vehicle vehFront = laneSegment.frontVehicle(veh);  // FIXME returns always null!
+        final Vehicle vehFront = laneSegment.frontVehicle(veh);  
         final double brutTimegap = (vehFront == null) ? 0 : veh.getBrutDistance(vehFront) / vehFront.getSpeed();
         // "microscopic flow"
         sumInvQ[lane] += (brutTimegap > 0) ? 1. / brutTimegap : 0;
