@@ -595,6 +595,13 @@ public class Vehicle {
         final double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
         return netGap;
     }
+    
+    public double getBrutDistance(final Vehicle vehFront) {
+        if (vehFront == null) {
+            return MovsimConstants.GAP_INFINITY;
+        }
+        return vehFront.getPosition() - position;
+    }
 
     /*
      * (non-Javadoc)

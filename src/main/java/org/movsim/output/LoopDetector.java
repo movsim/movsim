@@ -1,20 +1,11 @@
 /**
  * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <info@movsim.org>
- * ----------------------------------------------------------------------
- * 
- * This file is part of
- * 
- * MovSim - the multi-model open-source vehicular-traffic simulator
- * 
- * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- * 
- * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
- * <http://www.movsim.org>.
- * 
+ * ---------------------------------------------------------------------- This file is part of MovSim - the multi-model open-source
+ * vehicular-traffic simulator MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. MovSim is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public
+ * License along with MovSim. If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
  * ----------------------------------------------------------------------
  */
 package org.movsim.output;
@@ -35,27 +26,41 @@ public class LoopDetector extends ObservableImpl {
     final static Logger logger = LoggerFactory.getLogger(LoopDetector.class);
 
     private final double dtSample;
+
     private final double detPosition;
+
     private double timeOffset;
+
     private int[] vehCount;
+
     private double[] vSum;
+
     private double[] occTime;
+
     private double[] sumInvV;
+
     private double[] sumInvQ;
+
     private double[] meanSpeed;
-    private double[] densityArithmetic;
-    private double[] flow;
+
     private double[] occupancy;
+
     private int[] vehCountOutput;
+
     private double[] meanSpeedHarmonic;
+
     private double[] meanTimegapHarmonic;
+
     private int laneCount;
+
     private double meanSpeedAllLanes;
-    private double densityArithmeticAllLanes;
-    private double flowAllLanes;
+
     private int vehCountOutputAllLanes;
+
     private double occupancyAllLanes;
+
     private double meanSpeedHarmonicAllLanes;
+
     private double meanTimegapHarmonicAllLanes;
 
     /**
@@ -79,8 +84,6 @@ public class LoopDetector extends ObservableImpl {
         sumInvV = new double[laneCount];
 
         meanSpeed = new double[laneCount];
-        densityArithmetic = new double[laneCount];
-        flow = new double[laneCount];
         occupancy = new double[laneCount];
         vehCountOutput = new int[laneCount];
         meanSpeedHarmonic = new double[laneCount];
@@ -91,14 +94,12 @@ public class LoopDetector extends ObservableImpl {
         for (int i = 0; i < laneCount; i++) {
             reset(i);
         }
-        reset();
+        resetLaneAverages();
         notifyObservers(0);
     }
 
-    private void reset() {
+    private void resetLaneAverages() {
         meanSpeedAllLanes = 0;
-        densityArithmeticAllLanes = 0;
-        flowAllLanes = 0;
         vehCountOutputAllLanes = 0;
         occupancyAllLanes = 0;
         meanSpeedHarmonicAllLanes = 0;
@@ -134,7 +135,7 @@ public class LoopDetector extends ObservableImpl {
         }
 
         if ((simulationTime - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
-            for (int lane = 0; lane < laneCount; ++lane) {
+            for (int lane = 0; lane < laneCount; lane++) {
                 calculateAveragesForLane(lane);
             }
             calculateAveragesOverAllLanes();
@@ -153,13 +154,12 @@ public class LoopDetector extends ObservableImpl {
         vehCount[lane]++;
         final double speedVeh = veh.getSpeed();
         vSum[lane] += speedVeh;
-        occTime[lane] += veh.getLength() / speedVeh;
+        occTime[lane] += (speedVeh > 0) ? veh.getLength() / speedVeh : 0;
         sumInvV[lane] += (speedVeh > 0) ? 1. / speedVeh : 0;
-        // calculate brut timegap not from local detector data:
-        final Vehicle vehFront = laneSegment.frontVehicle(veh);
-        final double brutTimegap = (vehFront == null) ? 0 : (vehFront.getPosition() - veh.getPosition())
-                / vehFront.getSpeed();
-        // microscopic flow
+        // brut timegap not calculate from local detector data:
+        final Vehicle vehFront = laneSegment.frontVehicle(veh);  // FIXME returns always null!
+        final double brutTimegap = (vehFront == null) ? 0 : veh.getBrutDistance(vehFront) / vehFront.getSpeed();
+        // "microscopic flow"
         sumInvQ[lane] += (brutTimegap > 0) ? 1. / brutTimegap : 0;
     }
 
@@ -169,9 +169,7 @@ public class LoopDetector extends ObservableImpl {
      * @param lane
      */
     private void calculateAveragesForLane(int lane) {
-        flow[lane] = vehCount[lane] / dtSample;
         meanSpeed[lane] = (vehCount[lane] == 0) ? 0 : vSum[lane] / vehCount[lane];
-        densityArithmetic[lane] = (vehCount[lane] == 0) ? 0 : flow[lane] / meanSpeed[lane];
         occupancy[lane] = occTime[lane] / dtSample;
         vehCountOutput[lane] = vehCount[lane];
         meanSpeedHarmonic[lane] = (vehCount[lane] == 0) ? 0 : 1. / (sumInvV[lane] / vehCount[lane]);
@@ -179,20 +177,38 @@ public class LoopDetector extends ObservableImpl {
         reset(lane);
     }
 
-    private void calculateAveragesOverAllLanes() { // TODO rg 12/15/2011: Arne please check
-        reset();
+    private void calculateAveragesOverAllLanes() { 
+        resetLaneAverages();
         for (int i = 0; i < laneCount; i++) {
+            // vehicle count is extensive quantity
             vehCountOutputAllLanes += getVehCountOutput(i);
-            meanSpeedAllLanes += getMeanSpeed(i);
-
-            occupancyAllLanes += getOccupancy(i);// TODO rg 12/15/2011: Arne please check
-            meanSpeedHarmonicAllLanes += getMeanSpeedHarmonic(i);// TODO rg 12/15/2011: Arne please check
-            meanTimegapHarmonicAllLanes += getMeanTimegapHarmonic(i);// TODO rg 12/15/2011: Arne please check
+            // intensive quantities as averages weighted by vehicle counts
+            meanSpeedAllLanes += getVehCountOutput(i) * getMeanSpeed(i);
+            occupancyAllLanes += getOccupancy(i);
+            meanSpeedHarmonicAllLanes += getVehCountOutput(i) * getMeanSpeedHarmonic(i); 
+            meanTimegapHarmonicAllLanes += getVehCountOutput(i) * getMeanTimegapHarmonic(i);
         }
 
-        meanSpeedAllLanes = meanSpeedAllLanes / laneCount;
-        flowAllLanes = vehCountOutputAllLanes / (dtSample * laneCount);
-        densityArithmeticAllLanes = flowAllLanes / meanSpeedAllLanes;
+        meanSpeedAllLanes /= vehCountOutputAllLanes;
+        meanSpeedHarmonicAllLanes /= vehCountOutputAllLanes;
+        meanTimegapHarmonicAllLanes /= vehCountOutputAllLanes;
+        occupancyAllLanes /= laneCount;
+    }
+    
+    public double getDensityArithmetic(int i) {
+        return (Double.compare(meanSpeed[i], 0) == 0) ? 0 : getFlow(i) / meanSpeed[i];
+    }
+    
+    public double getDensityArithmeticAllLanes() {
+        return (Double.compare(meanSpeedAllLanes, 0) == 0) ? 0 : getFlowAllLanes() / meanSpeedAllLanes;
+    }
+
+    public double getFlow(int i){
+        return vehCountOutput[i] / dtSample;
+    }
+    
+    public double getFlowAllLanes() {
+        return vehCountOutputAllLanes / (dtSample * laneCount);
     }
 
     public double getDtSample() {
@@ -207,14 +223,7 @@ public class LoopDetector extends ObservableImpl {
         return meanSpeed[i];
     }
 
-    public double getDensityArithmetic(int i) {
-        return densityArithmetic[i];
-    }
-
-    public double getFlow(int i) {
-        return flow[i];
-    }
-
+  
     public double getOccupancy(int i) {
         return occupancy[i];
     }
@@ -235,13 +244,8 @@ public class LoopDetector extends ObservableImpl {
         return meanSpeedAllLanes;
     }
 
-    public double getDensityArithmeticAllLanes() {
-        return densityArithmeticAllLanes;
-    }
-
-    public double getFlowAllLanes() {
-        return flowAllLanes;
-    }
+   
+  
 
     public int getVehCountOutputAllLanes() {
         return vehCountOutputAllLanes;
