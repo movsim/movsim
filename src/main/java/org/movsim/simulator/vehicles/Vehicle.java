@@ -143,7 +143,7 @@ public class Vehicle {
     private double roadSegmentLength;
     private final int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
-    private long roadId;
+    private long roadId;  // FIXME meaning? on single roadsegment with roadSegmentId=1 this roadId is 0!? 
     private static int nextId = INITIAL_ID;
     private static int nextTemplateId = INITIAL_TEMPLATE_ID;
 
@@ -973,6 +973,8 @@ public class Vehicle {
      * Vehicle type.
      */
     public static enum Type {
+        
+        // TODO car type not needed in movsim except for Obstacle...
         /**
          * Vehicle type has not been set.
          */
