@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FileFloatingCars.
  */
+
+// TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
 public class FileFloatingCars implements ObserverInTime {
 
     private static final String extensionFormat = ".car.origin_%d.%06d.csv";
