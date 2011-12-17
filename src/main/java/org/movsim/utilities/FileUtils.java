@@ -79,7 +79,6 @@ public class FileUtils {
             final BufferedReader reader = new BufferedReader(new FileReader(filename));
             return reader;
         } catch (final Exception e) {
-            // e.printStackTrace();
             logger.error("cannot open file {} for reading", filename);
         }
         return null;
@@ -94,8 +93,6 @@ public class FileUtils {
         return System.getProperty("user.dir");
     }
 
-    // achtung, ist z.B. auf der V40 NICHT gesetzt !!!
-    // muss man ggf. per hand abfangen .... oder besser nicht benutzen.
     /**
      * Home directory.
      * 
@@ -104,13 +101,11 @@ public class FileUtils {
     public static String homeDirectory() {
         final String home = System.getProperty("user.home");
         if (home.equalsIgnoreCase("?")) {
-            // Logger.err(true,
             // "!!! Environmental variable getProperty(\"user.home\")= "+home+" not set correctly!!!");
         }
         return home;
     }
 
-    // check for existing file
     /**
      * File exists.
      * 
@@ -123,13 +118,11 @@ public class FileUtils {
     public static boolean fileExists(String filename, String msg) {
         final File file = new File(filename);
         if (file.exists() && file.isFile()) {
-            // Logger.log(msg + ": \"" + file.getName() + "\" exists!");
             return (true);
         }
         return (false);
     }
 
-    // check for existing file
     /**
      * File exists.
      * 
@@ -184,7 +177,6 @@ public class FileUtils {
         }
     }
 
-    // delete existing file
     /**
      * Delete file.
      * 
@@ -196,10 +188,10 @@ public class FileUtils {
     public static void deleteFile(String filename, String msg) {
         final File file = new File(filename);
         if (file.exists()) {
-            System.out.println(msg + ": file\"" + file.getName() + "\" exists!");
+            logger.info(msg + ": file\"" + file.getName() + "\" exists!");
             final boolean success = file.delete();
             if (success) {
-                System.out.println("file " + filename + " successfully deleted ...");
+                logger.info("file " + filename + " successfully deleted ...");
             }
         }
     }
@@ -229,7 +221,6 @@ public class FileUtils {
                 }
             }
         }
-        // The directory is now empty so delete it
         return dir.delete();
     }
 
@@ -252,8 +243,6 @@ public class FileUtils {
         }
     }
 
-    // returns a String[] of files found in the path applying to the filter
-    // string
     /**
      * Gets the file list.
      * 
@@ -312,10 +301,12 @@ public class FileUtils {
      *            the regex
      */
     public static void deleteFileList(String path, String regex) {
-        final String[] file = getFileList(path, regex);
-        for (int i = 0; i < file.length; i++) {
-            // System.out.println("********* test = "+file[i]);
-            deleteFile(file[i], "deleteFileList with regex = " + regex);
+        final String[] files = getFileList(path+ File.separator, regex);
+        for (int i = 0; i < files.length; i++) {
+            if(logger.isDebugEnabled()){
+                logger.debug("filename to delete = "+files[i]);
+            }
+            deleteFile(files[i], "deleteFileList with regex = " + regex);
         }
     }
 
@@ -367,10 +358,8 @@ public class FileUtils {
             bufferedReader.close();
             writer.close();
         } catch (final FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
