@@ -505,11 +505,11 @@ public class RoadSegmentTest {
         final Vehicle v2 = newVehicle(700.0, 3.0, Lane.LANE1);
         roadSegment.addVehicle(v2);
         assert roadSegment.eachLaneIsSorted();
-        rV = roadSegment.rearVehicle(Lane.LANE1, v0.getPosition());
+        rV = roadSegment.rearVehicle(Lane.LANE1, v0.getMidPosition());
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, v1.getPosition());
+        rV = roadSegment.rearVehicle(Lane.LANE1, v1.getMidPosition());
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, v2.getPosition());
+        rV = roadSegment.rearVehicle(Lane.LANE1, v2.getMidPosition());
         assertEquals(v2, rV);
         rV = roadSegment.rearVehicle(Lane.LANE1, 901.0);
         assertEquals(v0, rV);
@@ -542,7 +542,7 @@ public class RoadSegmentTest {
         Link.addJoin(r0, r1);
 
         final Vehicle v0 = newVehicle(3900.0, 1.0, Lane.LANE1);
-        assertEquals(3900.0, v0.posRearBumper(), delta);
+        assertEquals(3900.0, v0.getRearPosition(), delta);
         r1.addVehicle(v0);
         final Vehicle v1 = newVehicle(3700.0, 2.0, Lane.LANE1);
         r1.addVehicle(v1);
@@ -566,12 +566,12 @@ public class RoadSegmentTest {
         assertEquals(v2, rV);
         rV = r1.rearVehicle(Lane.LANE1, 3099.0);
         assertEquals(v3.getId(), rV.getId());
-        assertEquals(-100.0, rV.posRearBumper(), delta); // pos relative to r1
+        assertEquals(-100.0, rV.getRearPosition(), delta); // pos relative to r1
         assertEquals(v3.getSpeed(), rV.getSpeed(), delta);
 
         rV = r1.rearVehicle(Lane.LANE1, 3099.0);
         assertEquals(v3.getId(), rV.getId());
-        assertEquals(-100.0, rV.posRearBumper(), delta); // pos relative to r1
+        assertEquals(-100.0, rV.getRearPosition(), delta); // pos relative to r1
         rV = r0.rearVehicle(Lane.LANE1, 601.0);
         assertEquals(v3, rV);
         rV = r0.rearVehicle(Lane.LANE1, 600.0);
@@ -629,7 +629,7 @@ public class RoadSegmentTest {
         assertEquals(z1, rV);
         rV = r1.rearVehicle(Lane.LANE3, 4.0);
         assertEquals(z0.getId(), rV.getId());
-        assertEquals(-4.0, rV.posRearBumper(), delta);
+        assertEquals(-4.0, rV.getRearPosition(), delta);
         assertEquals(3.0, rV.getSpeed(), delta);
         rV = r1.rearVehicle(Lane.LANE3, 3.0);
         assertEquals(z0.getId(), rV.getId());
@@ -641,7 +641,7 @@ public class RoadSegmentTest {
         rV = r1.rearVehicle(Lane.LANE2, 2.0);
         assert rV != null;
         assertEquals(y0.getId(), rV.getId());
-        assertEquals(-2.0, rV.posRearBumper(), delta);
+        assertEquals(-2.0, rV.getRearPosition(), delta);
         assertEquals(5.0, rV.getSpeed(), delta);
         rV = r1.rearVehicle(Lane.LANE2, 1.0);
         assertEquals(y0.getId(), rV.getId());
@@ -717,11 +717,11 @@ public class RoadSegmentTest {
 
         final Vehicle v2 = newVehicle(700.0, 3.0, Lane.LANE1);
         roadSegment.addVehicle(v2);
-        fV = roadSegment.frontVehicle(Lane.LANE1, v0.getPosition());
+        fV = roadSegment.frontVehicle(Lane.LANE1, v0.getMidPosition());
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, v1.getPosition());
+        fV = roadSegment.frontVehicle(Lane.LANE1, v1.getMidPosition());
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, v2.getPosition());
+        fV = roadSegment.frontVehicle(Lane.LANE1, v2.getMidPosition());
         assertEquals(v1, fV);
         fV = roadSegment.frontVehicle(Lane.LANE1, 901.0);
         assertEquals(null, fV);
@@ -765,24 +765,24 @@ public class RoadSegmentTest {
         final Vehicle v4 = newVehicle(500.0, 5.0, Lane.LANE1);
         r0.addVehicle(v4);
 
-        Vehicle fV = r1.frontVehicle(Lane.LANE1, v0.getPosition());
+        Vehicle fV = r1.frontVehicle(Lane.LANE1, v0.getMidPosition());
         assertEquals(null, fV);
         fV = r1.frontVehicle(Lane.LANE1, r1.roadLength());
         assertEquals(null, fV);
-        fV = r1.frontVehicle(Lane.LANE1, v1.getPosition());
+        fV = r1.frontVehicle(Lane.LANE1, v1.getMidPosition());
         assertEquals(v0, fV);
-        fV = r1.frontVehicle(Lane.LANE1, v2.getPosition());
+        fV = r1.frontVehicle(Lane.LANE1, v2.getMidPosition());
         assertEquals(v1, fV);
 
         // vehicle in front of end of road0 is v2
         fV = r0.frontVehicle(Lane.LANE1, r0.roadLength());
         assertEquals(v2.getId(), fV.getId());
-        assertEquals(v2.getPosition() + r0.roadLength(), fV.getPosition(), delta);
+        assertEquals(v2.getMidPosition() + r0.roadLength(), fV.getMidPosition(), delta);
         assertEquals(v2.getSpeed(), fV.getSpeed(), delta);
         // vehicle in front of v3 is v2
-        fV = r0.frontVehicle(Lane.LANE1, v3.getPosition());
+        fV = r0.frontVehicle(Lane.LANE1, v3.getMidPosition());
         assertEquals(v2.getId(), fV.getId());
-        fV = r0.frontVehicle(Lane.LANE1, v4.getPosition());
+        fV = r0.frontVehicle(Lane.LANE1, v4.getMidPosition());
         assertEquals(v3, fV);
         fV = r0.frontVehicle(Lane.LANE1, 0.0);
         assertEquals(v4, fV);
@@ -826,7 +826,7 @@ public class RoadSegmentTest {
         assertEquals(z0, fV);
         fV = r0.frontVehicle(Lane.LANE2, 996.0);
         assertEquals(z1.getId(), fV.getId());
-        assertEquals(1005.0, fV.posRearBumper(), delta);
+        assertEquals(1005.0, fV.getRearPosition(), delta);
         assertEquals(1.0, fV.getSpeed(), delta);
         fV = r0.frontVehicle(Lane.LANE2, 997.0);
         assertEquals(z1.getId(), fV.getId());
@@ -835,7 +835,7 @@ public class RoadSegmentTest {
         assertEquals(y0, fV);
         fV = r0.frontVehicle(Lane.LANE1, 998.0);
         assertEquals(y1.getId(), fV.getId());
-        assertEquals(1003.0, fV.posRearBumper(), delta);
+        assertEquals(1003.0, fV.getRearPosition(), delta);
         assertEquals(4.0, fV.getSpeed(), delta);
         fV = r0.frontVehicle(Lane.LANE1, 999.0);
         assertEquals(y1.getId(), fV.getId());
@@ -891,9 +891,9 @@ public class RoadSegmentTest {
 
         final double dt = 0.25;
         roadSegment.updatePositionAndSpeed(dt, 0.0, 0);
-        assertEquals(902.5, v0.posRearBumper(), delta);
-        assertEquals(805.0, v1.posRearBumper(), delta);
-        assertEquals(707.5, v2.posRearBumper(), delta);
+        assertEquals(902.5, v0.getRearPosition(), delta);
+        assertEquals(805.0, v1.getRearPosition(), delta);
+        assertEquals(707.5, v2.getRearPosition(), delta);
     }
 
     /**
@@ -927,18 +927,18 @@ public class RoadSegmentTest {
         final double simulationTime = 0.0;
         final long iterationCount = 0;
         r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
-        assertEquals(705.0, v3.posRearBumper(), delta);
-        assertEquals(512.5, v4.posRearBumper(), delta);
+        assertEquals(705.0, v3.getRearPosition(), delta);
+        assertEquals(512.5, v4.getRearPosition(), delta);
 
         r1.updatePositionAndSpeed(dt, simulationTime, iterationCount);
-        assertEquals(3902.5, v0.posRearBumper(), delta);
-        assertEquals(3705.0, v1.posRearBumper(), delta);
-        assertEquals(3107.5, v2.posRearBumper(), delta);
+        assertEquals(3902.5, v0.getRearPosition(), delta);
+        assertEquals(3705.0, v1.getRearPosition(), delta);
+        assertEquals(3107.5, v2.getRearPosition(), delta);
         // check has been moved to new road segment by outflow
         r0.outFlow(dt, simulationTime, iterationCount);
         r1.outFlow(dt, simulationTime, iterationCount);
         assertEquals(r1.id(), v3.roadSegmentId());
-        assertEquals(5.0, v3.posRearBumper(), delta);
+        assertEquals(5.0, v3.getRearPosition(), delta);
     }
 
     /**
@@ -975,11 +975,11 @@ public class RoadSegmentTest {
         assertEquals(true, r0.eachLaneIsSorted());
         r0.outFlow(dt, simulationTime, iterationCount);
 
-        assertEquals(15.0, v0.posRearBumper(), delta);
-        assertEquals(3705.0, v1.posRearBumper(), delta);
-        assertEquals(3107.5, v2.posRearBumper(), delta);
-        assertEquals(705.0, v3.posRearBumper(), delta);
-        assertEquals(512.5, v4.posRearBumper(), delta);
+        assertEquals(15.0, v0.getRearPosition(), delta);
+        assertEquals(3705.0, v1.getRearPosition(), delta);
+        assertEquals(3107.5, v2.getRearPosition(), delta);
+        assertEquals(705.0, v3.getRearPosition(), delta);
+        assertEquals(512.5, v4.getRearPosition(), delta);
         assertEquals(true, r0.eachLaneIsSorted());
     }
 
@@ -1152,12 +1152,12 @@ public class RoadSegmentTest {
         final double simulationTime = 0.0;
         final long iterationCount = 0;
         r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
-        assertEquals(1009.0, v0.posRearBumper(), delta);
+        assertEquals(1009.0, v0.getRearPosition(), delta);
         r0.outFlow(dt, simulationTime, iterationCount);
         assertEquals(0, r0.totalVehicleCount());
         assertEquals(1, r1.totalVehicleCount());
         final Vehicle v = r1.getVehicle(Lane.LANE1, 0);
-        assertEquals(9.0, v.posRearBumper(), delta);
+        assertEquals(9.0, v.getRearPosition(), delta);
     }
 
     @Test

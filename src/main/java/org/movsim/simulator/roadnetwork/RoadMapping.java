@@ -479,7 +479,7 @@ public abstract class RoadMapping {
      * @return polygon representing vehicle
      */
     public RoadMapping.PolygonFloat mapFloat(Vehicle vehicle, double time) {
-        final RoadMapping.PosTheta posTheta = map(vehicle.getPosition(), laneOffset(vehicle.getLane()));
+        final RoadMapping.PosTheta posTheta = map(vehicle.getMidPosition(), laneOffset(vehicle.getLane()));
         return mapFloat(posTheta, vehicle.getLength(), vehicle.getWidth());
     }
 }

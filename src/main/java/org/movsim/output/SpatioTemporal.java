@@ -120,7 +120,7 @@ public class SpatioTemporal extends ObservableImpl {
 
         for (int i = 0; i < size; i++) {
             vMicro[i] = laneSegment.getVehicle(i).getSpeed();
-            xMicro[i] = laneSegment.getVehicle(i).getPosition();
+            xMicro[i] = laneSegment.getVehicle(i).getMidPosition();
         }
 
         // calculate density

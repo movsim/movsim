@@ -19,7 +19,6 @@
  */
 package org.movsim.output;
 
-import java.util.List;
 import java.util.Set;
 
 import org.movsim.input.model.output.FloatingCarInput;

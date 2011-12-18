@@ -166,7 +166,7 @@ public class FileTrajectories {
             final int N = laneSegment.vehicleCount();
             for (int i = 0; i < N; i++) {
                 final Vehicle me = laneSegment.getVehicle(i);
-                if ((me.getPosition() >= x_start_interval && me.getPosition() <= x_end_interval)) {
+                if ((me.getMidPosition() >= x_start_interval && me.getMidPosition() <= x_end_interval)) {
                     final Vehicle frontVeh = laneSegment.frontVehicle(me);
                     writeCarData(fstr, i, me, frontVeh);
                 }
@@ -189,7 +189,7 @@ public class FileTrajectories {
     private void writeCarData(PrintWriter fstr, int index, final Vehicle me, final Vehicle frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
-        fstr.printf(outputFormat, time, me.getLane(), me.getPosition(), me.getSpeed(), me.getAcc(), s, dv,
+        fstr.printf(outputFormat, time, me.getLane(), me.getMidPosition(), me.getSpeed(), me.getAcc(), s, dv,
                 me.getLabel(), me.getId());
         fstr.flush();
     }

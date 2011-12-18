@@ -170,7 +170,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public void add(final Vehicle veh) {
-        add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, false);
+        add(veh, veh.getMidPosition(), veh.getSpeed(), laneIndex, false);
     }
 
     /*
@@ -207,17 +207,17 @@ public class VehicleContainerImpl implements VehicleContainer {
 
         if (vehicles.isEmpty()) {
             vehicles.add(veh);
-        } else if (veh.getPosition() < getMostUpstream().getPosition()) {
+        } else if (veh.getMidPosition() < getMostUpstream().getMidPosition()) {
             // add after entry with greatest index
             vehicles.add(veh);
-        } else if (veh.getPosition() > getMostDownstream().getPosition()) {
+        } else if (veh.getMidPosition() > getMostDownstream().getMidPosition()) {
             // add before first entry
             vehicles.add(0, veh);
         } else {
             vehicles.add(0, veh);
             sort(); // robust but runtime performance ?
         }
-        logger.debug("vehicleContainerImpl: vehicle added: x={}, v={}", veh.getPosition(), veh.getSpeed());
+        logger.debug("vehicleContainerImpl: vehicle added: x={}, v={}", veh.getMidPosition(), veh.getSpeed());
     }
 
     /*
@@ -227,7 +227,7 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     @Override
     public void removeVehiclesDownstream(double roadLength) {
-        while (!vehicles.isEmpty() && getMostDownstream().getPosition() > roadLength) {
+        while (!vehicles.isEmpty() && getMostDownstream().getMidPosition() > roadLength) {
 
             if (connectedLaneDownstream == null) {
 
@@ -239,7 +239,7 @@ public class VehicleContainerImpl implements VehicleContainer {
             } else {
                 final Vehicle vehicleToTransfer = getMostDownstream();
                 vehicles.remove(vehicleToTransfer);
-                final double xInit = vehicleToTransfer.getPosition() - roadLength;
+                final double xInit = vehicleToTransfer.getMidPosition() - roadLength;
                 final double vInit = vehicleToTransfer.getSpeed();
 
                 // TODO old position also reset!!!
@@ -321,8 +321,8 @@ public class VehicleContainerImpl implements VehicleContainer {
         Collections.sort(vehicles, new Comparator<Vehicle>() {
             @Override
             public int compare(Vehicle o1, Vehicle o2) {
-                final Double pos1 = new Double((o1).getPosition());
-                final Double pos2 = new Double((o2).getPosition());
+                final Double pos1 = new Double((o1).getMidPosition());
+                final Double pos2 = new Double((o2).getMidPosition());
                 return pos2.compareTo(pos1);
             }
         });
@@ -361,12 +361,12 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     private Vehicle findVirtualLeader(final Vehicle veh) {
         // TODO efficient implementation with interval intersection
-        final double position = veh.getPosition();
+        final double position = veh.getMidPosition();
         // decrease index for traversing in downstream direction
         // return first vehicle on lane with *higher* position than veh
         for (int i = vehicles.size() - 1; i >= 0; i--) {
             final Vehicle vehOnLane = vehicles.get(i);
-            if (vehOnLane.getPosition() >= position) {
+            if (vehOnLane.getMidPosition() >= position) {
                 return vehOnLane;
             }
         }
@@ -383,12 +383,12 @@ public class VehicleContainerImpl implements VehicleContainer {
      */
     private Vehicle findVirtualFollower(final Vehicle veh) {
         // TODO efficient implementation
-        final double position = veh.getPosition();
+        final double position = veh.getMidPosition();
         // increase index for traversing in downstream direction
         // return first vehicle on lane with *lower* position than veh
         for (int i = 0, N = vehicles.size(); i < N; i++) {
             final Vehicle vehOnLane = vehicles.get(i);
-            if (vehOnLane.getPosition() <= position) {
+            if (vehOnLane.getMidPosition() <= position) {
                 return vehOnLane;
             }
         }
@@ -399,7 +399,7 @@ public class VehicleContainerImpl implements VehicleContainer {
     @Override
     public void addTestwise(final Vehicle veh) {
         if (veh != null) {
-            add(veh, veh.getPosition(), veh.getSpeed(), laneIndex, true);
+            add(veh, veh.getMidPosition(), veh.getSpeed(), laneIndex, true);
         }
     }
 

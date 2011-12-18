@@ -66,7 +66,7 @@ public class TrafficLightApproaching {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        distanceToTrafficlight = trafficLight.position() - me.getPosition() - 0.5 * me.getLength();
+        distanceToTrafficlight = trafficLight.position() - me.getMidPosition() - 0.5 * me.getLength();
 
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
@@ -91,7 +91,7 @@ public class TrafficLightApproaching {
                 final double brakeDist = (speed * speed) / (2 * bKinMax);
                 if (trafficLight.isGreenRed()
                         && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
-                                - me.getPosition()))) {
+                                - me.getMidPosition()))) {
                     // ignore traffic light
                     considerTrafficLight = false;
                 }
