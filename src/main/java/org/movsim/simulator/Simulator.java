@@ -257,7 +257,7 @@ public class Simulator implements Runnable {
                 }
                 final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                veh.setMidPosition(xLocal);
+                veh.setFrontPosition(xLocal);
                 veh.setSpeed(speedInit);
                 veh.setLane(Lane.LANE1);
                 roadSegment.addVehicle(veh);
@@ -277,7 +277,7 @@ public class Simulator implements Runnable {
                 // TODO: consider multi-lane case, distribute over all lanes
                 veh.setVehNumber(vehicleNumber);
                 ++vehicleNumber;
-                veh.setMidPosition(ic.getX());
+                veh.setFrontPosition(ic.getX());
                 veh.setSpeed(ic.getSpeed());
                 final int lane = ic.getInitLane();
                 veh.setLane(Lane.LANE1);

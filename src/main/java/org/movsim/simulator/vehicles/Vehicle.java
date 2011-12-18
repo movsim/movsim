@@ -408,36 +408,42 @@ public class Vehicle {
         return width;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns position of the front of this vehicle.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#position()
+     * @return position of the front of this vehicle
      */
-
-    // returns the vehicle's mid-position
-
-    public double getMidPosition() {
-        return midPosition;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#posFrontBumper()
-     */
-
     public double getFrontPosition() {
         return midPosition + 0.5 * length;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Sets the position of the rear of this vehicle.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#posReadBumper()
+     * @param rearPosition
+     *            new rear position
      */
+    public final void setFrontPosition(double frontPosition) {
+        this.midPosition = frontPosition - 0.5 * length;
+    }
 
-    public double getRearPosition() {
-        return midPosition - 0.5 * length;
+    /**
+     * Sets the position of the midpoint of this vehicle.
+     * 
+     * @param midPosition
+     *            new  mid position
+     */
+    public void setMidPosition(double position) {
+        this.midPosition = position;
+    }
+
+    /**
+     * Returns the position of the mid-point of this vehicle.
+     * 
+     * @return position of the mid-point of this vehicle
+     */
+    public double getMidPosition() {
+        return midPosition;
     }
 
     /**
@@ -450,6 +456,15 @@ public class Vehicle {
         this.midPosition = rearPosition + 0.5 * length;
     }
 
+    /**
+     * Returns the position of the rear of this vehicle.
+     * 
+     * @return position of the rear of this vehicle
+     */
+    public double getRearPosition() {
+        return midPosition - 0.5 * length;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -458,16 +473,6 @@ public class Vehicle {
 
     public double getPositionOld() {
         return positionOld;
-    }
-
-    /**
-     * Sets the position.
-     * 
-     * @param position
-     *            the new position
-     */
-    public void setMidPosition(double position) {
-        this.midPosition = position;
     }
 
     /**
