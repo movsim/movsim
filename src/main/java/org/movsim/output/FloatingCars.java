@@ -19,7 +19,7 @@
  */
 package org.movsim.output;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -35,33 +35,31 @@ public class FloatingCars extends ObservableImpl {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
 
-    private final Set<Integer> fcdList;
+    private final Collection<Integer> fcds;
     private final int nDtOut;
     private final RoadSegment roadSegment;
 
     /**
-     * Instantiates a new floating cars.
+     * Constructor.
      * 
      * @param roadSegment
      *            the road segment
      * @param input
      *            the input
      */
-    public FloatingCars(RoadSegment roadSegment, final FloatingCarInput input) {
+    public FloatingCars(RoadSegment roadSegment, FloatingCarInput input) {
         logger.debug("Cstr. FloatingCars");
 
         this.roadSegment = roadSegment;
         this.nDtOut = input.getNDt();
-        this.fcdList = input.getFloatingCars();
+        this.fcds = input.getFloatingCars();
     }
 
     /**
      * Update.
      * 
      * @param iterationCount
-     *            the itime
      * @param time
-     *            the time
      */
     public void update(long iterationCount, double time) {
         if (iterationCount % nDtOut == 0) {
@@ -70,8 +68,8 @@ public class FloatingCars extends ObservableImpl {
         }
     }
 
-    public Set<Integer> getFcdList() {
-        return fcdList;
+    public Collection<Integer> getFcds() {
+        return fcds;
     }
 
     public RoadSegment getRoadSegment() {

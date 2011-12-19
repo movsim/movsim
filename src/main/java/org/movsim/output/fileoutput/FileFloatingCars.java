@@ -21,8 +21,8 @@ package org.movsim.output.fileoutput;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.FloatingCars;
@@ -56,7 +56,7 @@ public class FileFloatingCars implements ObserverInTime {
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
     private final HashMap<Integer, PrintWriter> hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
     private final FloatingCars floatingCars;
-    private Set<Integer> fcdNumbers;
+    private Collection<Integer> fcdNumbers;
 
     /**
      * Instantiates a new FileFloatingCars.
@@ -72,14 +72,14 @@ public class FileFloatingCars implements ObserverInTime {
         final String regex = projectMetaData.getProjectName() + extensionRegex;
         FileUtils.deleteFileList(projectMetaData.getOutputPath(), regex);
 
-        fcdNumbers = floatingCars.getFcdList();
+        fcdNumbers = floatingCars.getFcds();
     }
 
     /**
      * Adds the fcd.
      * 
      * @param vehNumber
-     *            the veh number
+     *            the vehicle number
      */
     private void addFloatingCar(final Vehicle veh, int vehNumber) {
         final long originId = veh.roadSegmentId(); 
