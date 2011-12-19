@@ -9,10 +9,11 @@ set terminal postscript eps enhanced color solid font "Helvetica" 26
 set size 1,1
 
 # parameters
-if (!exists("inputPath")) inputPath = ""
+if (!exists("inputPath")) inputPath = "csv/"
 if (!exists("outputPath")) outputPath = "figs/"
 if (!exists("lang")) lang = "en"
 if (!exists("ldm")) ldm = "IDM"
+origin=1
 #print "lang=".lang
 #print "LDM=".ldm
 
@@ -21,7 +22,7 @@ baseFile = "test_trafficlights_".ldm
 
 # input files
 trafficlightFile = inputPath.baseFile.".R1_tl_log.csv"
-carFile(n) = sprintf(inputPath.baseFile.".V%06d.csv",n)
+carFile(n) = sprintf(inputPath.baseFile.".car.origin_%d.%06d.csv",origin,n)
 
 # output files
 trafficlightsOutput = outputPath.baseFile.".trajectories.eps"
@@ -91,9 +92,4 @@ splot\
  carFile(8)  using ($1):($3):(1) title car(2) with lines linestyle 1,\
  carFile(12) using ($1):($3):(1) title car(3) with lines linestyle 1,\
  carFile(16) using ($1):($3):(1) title car(4) with lines linestyle 1,\
- carFile(20) using ($1):($3):(1) title car(5) with lines linestyle 1,\
- carFile(24) using ($1):($3):(1) title car(6) with lines linestyle 1,\
- carFile(28) using ($1):($3):(1) title car(1) with lines linestyle 1,\
- carFile(32) using ($1):($3):(1) title car(2) with lines linestyle 1,\
- carFile(36) using ($1):($3):(1) title car(2) with lines linestyle 1,\
- carFile(40) using ($1):($3):(1) title car(3) with lines linestyle 1
+ carFile(20) using ($1):($3):(1) title car(5) with lines linestyle 1
