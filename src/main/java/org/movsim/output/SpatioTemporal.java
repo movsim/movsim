@@ -88,19 +88,17 @@ public class SpatioTemporal extends ObservableImpl {
     /**
      * Update.
      * 
-     * @param it
-     *            the it
-     * @param time
-     *            the time
-     * @param roadSection
-     *            the road section
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
      */
-    public void update(long it, double time, RoadSegment roadSegment) {
-        if ((time - timeOffset) >= dtOut) {
-            timeOffset = time;
+    public void update(double simulationTime, long iterationCount, RoadSegment roadSegment) {
+        if ((simulationTime - timeOffset) >= dtOut) {
+            timeOffset = simulationTime;
             // TODO quick hack for multi-lane compatibility
-            calcData(time, roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE));
-            notifyObservers(time);
+            calcData(simulationTime, roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE));
+            notifyObservers(simulationTime);
         }
     }
 

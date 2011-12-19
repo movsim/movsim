@@ -28,21 +28,18 @@ public class TravelTimeRoute {
 
     private final List<XYDataPoint> dataPoints;
 
-    private final double tauEMA = 60;
-    private final double betaEMA = Math.exp(-1. / tauEMA);
+    private static final double tauEMA = 60;
+    private static final double betaEMA = Math.exp(-1.0 / tauEMA);
+    private static final int N_DATA = 30; // cut-off parameter TODO inconsistent with tauEMA
+    private static final ExponentialMovingAverage ema = new ExponentialMovingAverage(tauEMA);
+
     private double travelTimeEMA = 0;
-
     private final List<XYDataPoint> emaPoints;
-    final int N_DATA = 30; // cut-off parameter TODO inconsistent with tauEMA
-    final ExponentialMovingAverage ema = new ExponentialMovingAverage(tauEMA);
 
-    public void calcEMA(double time) {
-        // System.out.println("calc ema with size()="+route.getDataPoints().size());
-        final int size = dataPoints.size();
-        final double emaValue = ema.calcEMA(time, dataPoints.subList(Math.max(0, size - N_DATA), size));
-        emaPoints.add(new XYDataPoint(time, emaValue));
-    }
-
+    /**
+     * Constructor.
+     * @param travelTimeRouteInput
+     */
     public TravelTimeRoute(TravelTimeRouteInput travelTimeRouteInput) {
         this.startId = travelTimeRouteInput.getStartId();
         this.endId = travelTimeRouteInput.getEndId();
@@ -58,23 +55,38 @@ public class TravelTimeRoute {
 
     }
 
+    public void calcEMA(double time) {
+        // System.out.println("calc ema with size()="+route.getDataPoints().size());
+        final int size = dataPoints.size();
+        final double emaValue = ema.calcEMA(time, dataPoints.subList(Math.max(0, size - N_DATA), size));
+        emaPoints.add(new XYDataPoint(time, emaValue));
+    }
+
     public List<XYDataPoint> getEmaPoints() {
         return emaPoints;
     }
 
-    public void update(long iterationCount, double time, RoadNetwork roadNetwork) {
+    /**
+     * Update
+     * 
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
+     * @param roadNetwork
+     */
+    public void update(double simulationTime, long iterationCount, RoadNetwork roadNetwork) {
 
         // dataPoints.clear();
         // check first start_position
         // TODO catch error if road id not available
 
-        checkNewVehicles(time, roadNetwork.findById((int) startId));
+        checkNewVehicles(simulationTime, roadNetwork.findById((int) startId));
 
         // check end_position
-        final double averageNewTT = checkPassedVehicles(time);
+        final double averageNewTT = checkPassedVehicles(simulationTime);
 
         travelTimeEMA = betaEMA * travelTimeEMA + (1 - betaEMA) * averageNewTT;
-
     }
 
     public double getTravelTimeEMA() {
@@ -103,24 +115,22 @@ public class TravelTimeRoute {
         double ttAverage = 0;
         final List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
         for (final Map.Entry<Vehicle, Double> entry : vehiclesOnRoute.entrySet()) {
-            final Vehicle veh = entry.getKey();
+            final Vehicle vehicle = entry.getKey();
             final double startTime = entry.getValue();
             // System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
-            if (veh.getRoadId() == endId && veh.getMidPosition() > endPosition) {
+            if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
                 final double travelTimeOnRoute = timeEndOfRoute - startTime;
                 dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
                 // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,
                 // timeEndOfRoute,travelTimeOnRoute);
-                stagedVehicles.add(veh);
+                stagedVehicles.add(vehicle);
                 ttAverage += travelTimeOnRoute;
             }
         }
-        for (final Vehicle veh : stagedVehicles) {
-            vehiclesOnRoute.remove(veh);
-            // System.out.printf("remove vehicle at x=%.2f from route map", veh.getPosition());
+        for (final Vehicle vehicle : stagedVehicles) {
+            vehiclesOnRoute.remove(vehicle);
+            // System.out.printf("remove vehicle at x=%.2f from route map", vehicle.getPosition());
         }
-
-        return (stagedVehicles.size() == 0) ? 0 : ttAverage / stagedVehicles.size();
+        return stagedVehicles.size() == 0 ? 0 : ttAverage / stagedVehicles.size();
     }
-
 }

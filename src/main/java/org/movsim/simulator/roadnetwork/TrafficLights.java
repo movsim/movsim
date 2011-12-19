@@ -55,10 +55,12 @@ public class TrafficLights implements Iterable<TrafficLight>{
     /**
      * Update.
      * 
+     * @param dt
+     *            delta-t, simulation time interval, seconds
+     * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
-     *            the itime
-     * @param time
-     *            the time
+     *            the number of iterations that have been executed
      * @param roadSegment
      */
     public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {
@@ -80,7 +82,7 @@ public class TrafficLights implements Iterable<TrafficLight>{
             }
         }
         if (fileTrafficLightRecorder != null) {
-            fileTrafficLightRecorder.update(iterationCount, simulationTime, trafficLights);
+            fileTrafficLightRecorder.update(simulationTime, iterationCount, trafficLights);
         }
     }
 

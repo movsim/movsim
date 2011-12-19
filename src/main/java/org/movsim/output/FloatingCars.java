@@ -58,12 +58,14 @@ public class FloatingCars extends ObservableImpl {
     /**
      * Update.
      * 
+     * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
-     * @param time
+     *            the number of iterations that have been executed
      */
-    public void update(long iterationCount, double time) {
+    public void update(double simulationTime, long iterationCount) {
         if (iterationCount % nDtOut == 0) {
-            notifyObservers(time);
+            notifyObservers(simulationTime);
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
         }
     }

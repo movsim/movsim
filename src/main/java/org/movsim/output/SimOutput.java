@@ -115,26 +115,26 @@ public class SimOutput implements SimObservables {
     /**
      * Update.
      *
+     * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
-     *            the itime
-     * @param time
-     *            the time
+     *            the number of iterations that have been executed
      */
-    public void update(long iterationCount, double time) {
+    public void update(double simulationTime, long iterationCount) {
 
         if (floatingCars != null) {
-            floatingCars.update(iterationCount, time);
+            floatingCars.update(simulationTime, iterationCount);
         }
         if (spatioTemporal != null) {
-            spatioTemporal.update(iterationCount, time, roadSegment);
+            spatioTemporal.update(simulationTime, iterationCount, roadSegment);
         }
 
         if (trajectories != null) {
-            trajectories.update(iterationCount, time);
+            trajectories.update(simulationTime, iterationCount);
         }
 
         if (travelTimes != null) {
-            travelTimes.update(iterationCount, time);
+            travelTimes.update(simulationTime, iterationCount);
         }
 
     }

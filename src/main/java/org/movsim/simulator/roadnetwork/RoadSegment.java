@@ -512,6 +512,16 @@ public class RoadSegment implements Iterable<Vehicle> {
         laneSegments[vehicle.getLane()].appendVehicle(vehicle);
     }
 
+    /**
+     * Updates the road conditions.
+     * 
+     * @param dt
+     *            delta-t, simulation time interval, seconds
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
+     */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
         if (trafficLights != null) {
             trafficLights.update(dt, simulationTime, iterationCount, this);
@@ -546,9 +556,11 @@ public class RoadSegment implements Iterable<Vehicle> {
      * </p>
      * 
      * @param dt
-     *            simulation time interval
+     *            delta-t, simulation time interval, seconds
      * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
+     *            the number of iterations that have been executed
      */
     public void laneChanging(double dt, double simulationTime, long iterationCount) {
         if (laneCount < 2) {
@@ -580,9 +592,11 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Accelerate.
      * 
      * @param dt
-     *            simulation time interval
+     *            delta-t, simulation time interval, seconds
      * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
+     *            the number of iterations that have been executed
      */
     public void accelerate(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
@@ -606,14 +620,14 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * <p>
      * Update the vehicle positions and velocities by calling vehicle.updatePositionAndSpeed for each vehicle.
-     * </p>
      * 
      * @param dt
-     *            simulation time interval
+     *            delta-t, simulation time interval, seconds
      * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
+     *            the number of iterations that have been executed
      */
     public void updatePositionAndSpeed(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
@@ -628,8 +642,11 @@ public class RoadSegment implements Iterable<Vehicle> {
      * If there is a traffic sink, use it to perform any traffic outflow.
      * 
      * @param dt
-     *            simulation time interval
+     *            delta-t, simulation time interval, seconds
      * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
      */
     // TODO ake properties of the downstream boundary condition should be encapsulated in own class ...
     public void outFlow(double dt, double simulationTime, long iterationCount) {
@@ -646,9 +663,11 @@ public class RoadSegment implements Iterable<Vehicle> {
      * If there is a traffic source, use it to perform any traffic inflow.
      * 
      * @param dt
-     *            simulation time interval
+     *            delta-t, simulation time interval, seconds
      * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
+     *            the number of iterations that have been executed
      */
     public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
@@ -658,6 +677,16 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
     }
 
+    /**
+     * Updates the detectors, if there are any.
+     * 
+     * @param dt
+     *            delta-t, simulation time interval, seconds
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
+     */
     public void updateDetectors(double dt, double simulationTime, long iterationCount) {
         if (this.loopDetectors != null) {
             loopDetectors.update(dt, simulationTime, iterationCount, this);

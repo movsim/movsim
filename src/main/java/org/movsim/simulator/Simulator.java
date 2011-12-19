@@ -299,7 +299,7 @@ public class Simulator implements Runnable {
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.update(iterationCount, time);
+        simOutput.update(time, iterationCount);
 
         while (!isSimulationRunFinished()) {
             updateTimestep();
@@ -334,7 +334,7 @@ public class Simulator implements Runnable {
         }
 
         roadNetwork.timeStep(timestep, time, iterationCount);
-        simOutput.update(iterationCount, time);
+        simOutput.update(time, iterationCount);
     }
 
     public long iterationCount() {

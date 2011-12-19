@@ -691,12 +691,12 @@ public class Vehicle {
         return acc;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#updatePostionAndSpeed(double)
+    /**
+     * Update.
+     *  
+     * @param dt
+     *            delta-t, simulation time interval, seconds
      */
-
     public void updatePositionAndSpeed(double dt) {
 
         // logger.debug("dt = {}", dt);
@@ -752,14 +752,15 @@ public class Vehicle {
         return (reactionTime + MovsimConstants.SMALL_VALUE > 0);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Update..
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#updateTrafficLight(double, org.movsim.simulator.roadSection.TrafficLight)
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param trafficLight
      */
-
-    public void updateTrafficLight(double time, TrafficLight trafficLight) {
-        trafficLightApproaching.update(this, time, trafficLight, longitudinalModel);
+    public void updateTrafficLight(double simulationTime, TrafficLight trafficLight) {
+        trafficLightApproaching.update(this, simulationTime, trafficLight, longitudinalModel);
 
     }
 

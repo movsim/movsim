@@ -27,18 +27,26 @@ public class TravelTimes extends ObservableImpl {
         }
     }
 
-    public void update(long iterationCount, double time) {
+    /**
+     * Update.
+     * 
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
+     */
+    public void update(double simulationTime, long iterationCount) {
 
         final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
         for (final TravelTimeRoute route : routes) {
-            route.update(iterationCount, time, roadNetwork);
+            route.update(simulationTime, iterationCount, roadNetwork);
             if (doNotificationUpdate) {
-                route.calcEMA(time);
+                route.calcEMA(simulationTime);
             }
         }
 
         if (doNotificationUpdate) {
-            notifyObservers(time);
+            notifyObservers(simulationTime);
             // System.out.println("n observers registered = "+
             // getObserversInTimeSize()+
             // " ... and notify them now: time="+time);

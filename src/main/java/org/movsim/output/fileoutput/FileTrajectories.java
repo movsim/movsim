@@ -109,20 +109,15 @@ public class FileTrajectories {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.output.Trajectories#update(int, double)
-     */
     /**
      * Update.
      * 
-     * @param iTime
-     *            the i time
-     * @param time
-     *            the time
+     * @param simulationTime
+     *            current simulation time, seconds
+     * @param iterationCount
+     *            the number of iterations that have been executed
      */
-    public void update(long iTime, double time) {
+    public void update(double simulationTime, long iterationCount) {
 
         if (fileHandles.isEmpty()) {
             // cannot initialize earlier because onramps and offramps are
@@ -130,11 +125,11 @@ public class FileTrajectories {
             createFileHandles();
         }
 
-        this.time = time;
+        this.time = simulationTime;
         // check time interval for output:
         if (time >= t_start_interval && time <= t_end_interval) {
 
-            if (iTime % 1000 == 0) {
+            if (iterationCount % 1000 == 0) {
                 logger.info("time = {}, timestep= {}", time);
             }
 

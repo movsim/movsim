@@ -117,12 +117,12 @@ public class TrafficLight {
     /**
      * Update.
      * 
-     * @param time
-     *            the time
+     * @param simulationTime
+     *            current simulation time, seconds
      */
-    public void update(double time) {
+    public void update(double simulationTime) {
         oldStatus = status;
-        currentCycleTime += time - lastUpdateTime;
+        currentCycleTime += simulationTime - lastUpdateTime;
 
         // logger.debug("update at time = {}, status = {}", time, status);
         // logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
@@ -141,7 +141,7 @@ public class TrafficLight {
             currentCycleTime -= totalCycleTime;
         }
 
-        lastUpdateTime = time;
+        lastUpdateTime = simulationTime;
     }
 
     // boolean redLightJustReleased(){

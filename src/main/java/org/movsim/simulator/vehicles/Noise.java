@@ -84,7 +84,7 @@ public class Noise {
      * Update.
      * 
      * @param dt
-     *            the dt
+     *            delta-t, simulation time interval, seconds
      */
     public void update(double dt) {
 

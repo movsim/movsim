@@ -117,8 +117,8 @@ public class LoopDetector extends ObservableImpl {
     /**
      * Update.
      * 
-     * @param time
-     *            the time
+     * @param simulationTime
+     *            current simulation time, seconds
      * @param roadSegment
      */
     public void update(double simulationTime, RoadSegment roadSegment) {

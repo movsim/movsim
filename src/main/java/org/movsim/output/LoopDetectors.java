@@ -72,9 +72,11 @@ public class LoopDetectors {
      * Update.
      * 
      * @param dt
-     *            simulation time interval
+     *            delta-t, simulation time interval, seconds
      * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
+     *            the number of iterations that have been executed
      * @param roadSegment
      */
     public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {

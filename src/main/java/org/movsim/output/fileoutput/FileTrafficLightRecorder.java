@@ -59,14 +59,14 @@ public class FileTrafficLightRecorder {
     /**
      * Update.
      * 
+     * @param simulationTime
+     *            current simulation time, seconds
      * @param iterationCount
-     *            the itime
-     * @param time
-     *            the time
+     *            the number of iterations that have been executed
      * @param trafficLights
      *            the traffic lights
      */
-    public void update(long iterationCount, double time, Iterable<TrafficLight> trafficLights) {
+    public void update(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights) {
 
         if (iterationCount % nDt != 0) {
             // no update; nothing to do
@@ -75,7 +75,7 @@ public class FileTrafficLightRecorder {
 
         // write data:
         if (fstr != null) {
-            fstr.printf("%8.2f   ", time);
+            fstr.printf("%8.2f   ", simulationTime);
             for (final TrafficLight trafficLight : trafficLights) {
                 fstr.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status());
             }
