@@ -1,6 +1,8 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.movsim.input.model.simulation.TrafficLightData;
@@ -13,20 +15,20 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class TrafficLights.
  */
-public class TrafficLights {
+public class TrafficLights implements Iterable<TrafficLight>{
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
     private final int nDt;
-    private List<TrafficLight> trafficLights;
-    private FileTrafficLightRecorder fileTrafficLightRecorder = null;
+    private Collection<TrafficLight> trafficLights;
+    private FileTrafficLightRecorder fileTrafficLightRecorder;
 
     /**
      * Constructor.
      * 
-     * @param projectName
      * @param trafficLightsInput
+     * @param roadSegment
      */
     public TrafficLights(TrafficLightsInput trafficLightsInput, RoadSegment roadSegment) {
 
@@ -38,10 +40,9 @@ public class TrafficLights {
     }
 
     /**
-     * Inits the traffic lights.
+     * Initializes the traffic lights.
      * 
      * @param trafficLightsInput
-     *            the traffic lights input
      */
     private void initTrafficLights(TrafficLightsInput trafficLightsInput) {
         trafficLights = new ArrayList<TrafficLight>();
@@ -78,18 +79,13 @@ public class TrafficLights {
                 }
             }
         }
-
         if (fileTrafficLightRecorder != null) {
             fileTrafficLightRecorder.update(iterationCount, simulationTime, trafficLights);
         }
     }
 
-    /**
-     * Gets the traffic lights.
-     * 
-     * @return the traffic lights
-     */
-    public List<TrafficLight> getTrafficLights() {
-        return trafficLights;
-    }
+	@Override
+	public Iterator<TrafficLight> iterator() {
+        return trafficLights.iterator();
+	}
 }

@@ -766,30 +766,12 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Gets the traffic lights.
-     * 
-     * @return the traffic lights
-     */
-    public List<TrafficLight> getTrafficLights() {
-        return trafficLights.getTrafficLights();
-    }
-
-    /**
-     * Returns the number of traffic lights in this road segment.
-     * 
-     * @return number of traffic lights in this road segment
-     */
-    public int trafficLightCount() {
-        return trafficLights == null ? 0 : getTrafficLights().size();
-    }
-
-    /**
      * Returns an iterable over all the traffic lights in the road segment.
      * 
      * @return an iterable over all the traffic lights in the road segment
      */
     public Iterable<TrafficLight> trafficLights() {
-        return getTrafficLights();
+        return trafficLights == null ? null : trafficLights;
     }
 
     /**
