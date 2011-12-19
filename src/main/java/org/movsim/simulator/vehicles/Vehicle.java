@@ -968,8 +968,6 @@ public class Vehicle {
      * Vehicle type.
      */
     public static enum Type {
-        
-        // TODO car type not needed in movsim except for Obstacle...
         /**
          * Vehicle type has not been set.
          */
@@ -979,17 +977,13 @@ public class Vehicle {
          */
         OBSTACLE,
         /**
-         * Vehicle is nominally a car.
+         * Standard vehicle.
          */
-        CAR,
+        VEHICLE,
         /**
-         * Vehicle is nominally a truck.
+         * The vehicle is a floating car, used to gather data about traffic conditions.
          */
-        TRUCK,
-        /**
-         * The vehicle is a test car, used to gather data about traffic conditions.
-         */
-        TEST_CAR
+        FLOATING_CAR
     }
 
     private Type type;
