@@ -26,11 +26,12 @@ if (ldm eq "BARL") c0 = 1
 if (ldm eq "GIPPS") c0 = 1
 if (ldm eq "KCA") c0 = 1
 if (ldm eq "NSM") c0 = 1
+origin=1
 
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
 if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
-carFile(n) = sprintf(inputPath.baseFile.".V%06d.csv",c0+n)
+carFile(n) = sprintf(inputPath.baseFile.".car.origin_%d.%06d.csv",origin,n)
 carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
 
 # output files

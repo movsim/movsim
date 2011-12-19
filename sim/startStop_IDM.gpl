@@ -2,4 +2,5 @@
 
 ldm = "IDM"
 lang = "en"
+inputPath = "csv/"
 load "startStop.gpl"
