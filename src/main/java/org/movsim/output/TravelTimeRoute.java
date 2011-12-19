@@ -91,7 +91,7 @@ public class TravelTimeRoute {
             // if(veh.getPosition() > 100 && veh.getPosition()<1000){
             // System.out.printf("veh: pos=%.4f, posOld=%.4f\n", veh.getPosition(), veh.getPositionOld());
             // }
-            if (veh.getPositionOld() < startPosition && veh.getPosition() > startPosition) {
+            if (veh.getPositionOld() < startPosition && veh.getMidPosition() > startPosition) {
                 vehiclesOnRoute.put(veh, timeStartOfRoute);
                 // System.out.printf("veh at x=%.2f put to travel time route, roadId=%d\n", veh.getPosition(), veh.getRoadId());
             }
@@ -106,7 +106,7 @@ public class TravelTimeRoute {
             final Vehicle veh = entry.getKey();
             final double startTime = entry.getValue();
             // System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
-            if (veh.getRoadId() == endId && veh.getPosition() > endPosition) {
+            if (veh.getRoadId() == endId && veh.getMidPosition() > endPosition) {
                 final double travelTimeOnRoute = timeEndOfRoute - startTime;
                 dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
                 // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,

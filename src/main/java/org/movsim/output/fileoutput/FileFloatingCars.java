@@ -161,7 +161,7 @@ public class FileFloatingCars implements ObserverInTime {
      *            the fstr
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
-        fstr.printf(outputFormat, time, veh.getLane(), veh.getPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
+        fstr.printf(outputFormat, time, veh.getLane(), veh.getMidPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
                 veh.getNetDistance(frontVeh), veh.getRelSpeed(frontVeh), veh.getDistanceToTrafficlight(),
                 1000 * veh.getActualFuelFlowLiterPerS(), veh.roadSegmentId(), veh.totalTraveledDistance());
         fstr.flush();

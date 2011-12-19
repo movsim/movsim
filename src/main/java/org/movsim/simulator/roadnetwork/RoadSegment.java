@@ -528,7 +528,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getPosition();
+                    final double pos = vehicle.getMidPosition();
                     vehicle.setSpeedlimit(speedLimits.calcSpeedLimit(pos));
                     logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedLimits.calcSpeedLimit(pos));
                 }
@@ -595,7 +595,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             // for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
             for (final Vehicle vehicle : laneSegment) {
                 // final Vehicle veh = vehiclesOnLane.get(i);
-                final double x = vehicle.getPosition();
+                final double x = vehicle.getMidPosition();
                 // TODO treat null case
                 final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
@@ -896,9 +896,9 @@ public class RoadSegment implements Iterable<Vehicle> {
                 if (netDistance < 0) {
                     logger.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d at x=%.4f ", index, vehicle.getPosition()));
+                    sb.append(String.format("Crash of Vehicle i=%d at x=%.4f ", index, vehicle.getMidPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh in front at x=%.4f on lane=%d\n", vehFront.getPosition(),
+                        sb.append(String.format("with veh in front at x=%.4f on lane=%d\n", vehFront.getMidPosition(),
                                 vehicle.getLane()));
                     }
                     sb.append("roadID=" + id);
@@ -912,7 +912,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String
                                 .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, id=%d%n",
-                                        j, veh.getPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
+                                        j, veh.getMidPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
                                         veh.getLength(), veh.getLane(), veh.getId()));
                     }
                     logger.error(sb.toString());

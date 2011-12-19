@@ -69,7 +69,7 @@ public class Vehicle {
     private final double width;
 
     /** The position. */
-    private double position;
+    private double midPosition;
 
     /** The old position. */
     private double positionOld;
@@ -278,7 +278,7 @@ public class Vehicle {
     public Vehicle(Vehicle source) {
         id = source.id;
         type = source.type;
-        position = source.position;
+        midPosition = source.midPosition;
         speed = source.speed;
         lane = source.lane;
         length = source.length;
@@ -316,7 +316,7 @@ public class Vehicle {
 
     private void initialize() {
         positionOld = 0;
-        position = 0;
+        midPosition = 0;
         speed = 0;
         acc = 0;
         isBrakeLightOn = false;
@@ -335,7 +335,7 @@ public class Vehicle {
     public void init(double pos, double v, int lane, long roadId) {
         this.laneOld = this.lane; // remember previous lane
         this.roadId = roadId;
-        this.position = pos;
+        this.midPosition = pos;
         this.positionOld = pos;
         this.speed = v;
         // targetlane not needed anymore for book-keeping, vehicle is in new
@@ -408,36 +408,42 @@ public class Vehicle {
         return width;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Returns position of the front of this vehicle.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#position()
+     * @return position of the front of this vehicle
      */
-
-    // returns the vehicle's mid-position
-
-    public double getPosition() {
-        return position;
+    public double getFrontPosition() {
+        return midPosition + 0.5 * length;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Sets the position of the rear of this vehicle.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#posFrontBumper()
+     * @param rearPosition
+     *            new rear position
      */
-
-    public double posFrontBumper() {
-        return position + 0.5 * length;
+    public final void setFrontPosition(double frontPosition) {
+        this.midPosition = frontPosition - 0.5 * length;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Sets the position of the midpoint of this vehicle.
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#posReadBumper()
+     * @param midPosition
+     *            new  mid position
      */
+    public void setMidPosition(double position) {
+        this.midPosition = position;
+    }
 
-    public double posRearBumper() {
-        return position - 0.5 * length;
+    /**
+     * Returns the position of the mid-point of this vehicle.
+     * 
+     * @return position of the mid-point of this vehicle
+     */
+    public double getMidPosition() {
+        return midPosition;
     }
 
     /**
@@ -447,7 +453,16 @@ public class Vehicle {
      *            new rear position
      */
     public final void setRearPosition(double rearPosition) {
-        this.position = rearPosition + 0.5 * length;
+        this.midPosition = rearPosition + 0.5 * length;
+    }
+
+    /**
+     * Returns the position of the rear of this vehicle.
+     * 
+     * @return position of the rear of this vehicle
+     */
+    public double getRearPosition() {
+        return midPosition - 0.5 * length;
     }
 
     /*
@@ -458,26 +473,6 @@ public class Vehicle {
 
     public double getPositionOld() {
         return positionOld;
-    }
-
-    /**
-     * Sets the position.
-     * 
-     * @param position
-     *            the new position
-     */
-    public void setPosition(double position) {
-        this.position = position;
-    }
-
-    /**
-     * Sets the position of the middle of the vehicle.
-     * 
-     * @param position
-     *            the position of the middle of the vehicle
-     */
-    public void setMidPosition(double position) {
-        setPosition(position);
     }
 
     /**
@@ -592,7 +587,7 @@ public class Vehicle {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        final double netGap = vehFront.getPosition() - position - 0.5 * (getLength() + vehFront.getLength());
+        final double netGap = vehFront.getMidPosition() - midPosition - 0.5 * (getLength() + vehFront.getLength());
         return netGap;
     }
     
@@ -600,7 +595,7 @@ public class Vehicle {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        return vehFront.getPosition() - position;
+        return vehFront.getMidPosition() - midPosition;
     }
 
     /*
@@ -708,12 +703,12 @@ public class Vehicle {
         // first increment postion,
         // then increment s with *new* v (second order: -0.5 a dt^2)
 
-        positionOld = position;
+        positionOld = midPosition;
 
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
-            final int advance = (int) (position + dt * speed + 0.5); 
-            position = advance;
+            final int advance = (int) (midPosition + dt * speed + 0.5); 
+            midPosition = advance;
             totalTraveledDistance += advance;
 
         } else {
@@ -722,7 +717,7 @@ public class Vehicle {
                 speed = 0;
             }
             final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
-            position += advance;
+            midPosition += advance;
             totalTraveledDistance += advance;
             speed += dt * acc;
             if (speed < 0) {

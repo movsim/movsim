@@ -51,30 +51,30 @@ public class PhysicalQuantities {
     }
 
     /**
-     * Gets the length.
+     * Returns this vehicle's length.
      * 
-     * @return the length
+     * @return vehicle's length, in meters
      */
     public double getLength() {
         return xScale * me.getLength();
     }
 
     /**
-     * Gets the width.
+     * Returns this vehicle's width.
      * 
-     * @return the width
+     * @return vehicle's width, in meters
      */
     public double getWidth() {
         return me.getWidth();
     }
 
     /**
-     * Gets the position.
+     * Returns the position of the middle of this vehicle.
      * 
-     * @return the position
+     * @return position of the middle of this vehicle
      */
-    public double getPosition() {
-        return xScale * me.getPosition();
+    public double getMidPosition() {
+        return xScale * me.getMidPosition();
     }
 
     /**
@@ -82,8 +82,8 @@ public class PhysicalQuantities {
      * 
      * @return the double
      */
-    public double posFrontBumper() {
-        return xScale * me.posFrontBumper();
+    public double getFrontPosition() {
+        return xScale * me.getFrontPosition();
     }
 
     /**
@@ -91,8 +91,8 @@ public class PhysicalQuantities {
      * 
      * @return the double
      */
-    public double posRearBumper() {
-        return xScale * me.posRearBumper();
+    public double getRearPosition() {
+        return xScale * me.getRearPosition();
     }
 
     /**

@@ -53,7 +53,6 @@ public class FileTrafficLightRecorder {
         final String outputPath = projectMetaData.getOutputPath();
         final String filename = outputPath + File.separator + projectMetaData.getProjectName()
                 + String.format(extensionFormat, roadSegment.id());
-        ;
         fstr = FileUtils.getWriter(filename);
         writeHeader(trafficLights);
     }

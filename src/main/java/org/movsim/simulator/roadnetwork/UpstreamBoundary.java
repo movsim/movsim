@@ -177,7 +177,7 @@ public class UpstreamBoundary implements SimulationTimeStep {
         }
         // (2) check if gap to leader is sufficiently large
         // origin of road section is assumed to be zero
-        final double netGapToLeader = leader.getPosition() - leader.getLength();
+        final double netGapToLeader = leader.getMidPosition() - leader.getLength();
         final double gapAtQMax = 1. / vehPrototype.getRhoQMax();
 
         // TODO what mechanism is called here?
@@ -235,8 +235,8 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
         final double speedDefault = inflowTimeSeries.getSpeed(time);
 
-        final double sFree = leader.getPosition() - leader.getLength();
-        final double xLast = leader.getPosition();
+        final double sFree = leader.getMidPosition() - leader.getLength();
+        final double xLast = leader.getMidPosition();
         final double vLast = leader.getSpeed();
         final double aLast = leader.getAcc();
 
