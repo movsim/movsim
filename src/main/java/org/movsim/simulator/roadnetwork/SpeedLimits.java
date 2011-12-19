@@ -19,6 +19,8 @@
  */
 package org.movsim.simulator.roadnetwork;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,20 +31,16 @@ import org.movsim.utilities.Tables;
 /**
  * The Class SpeedLimits.
  */
-public class SpeedLimits {
+public class SpeedLimits implements Iterable<SpeedLimit> {
 
     // final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
 
-    /** The pos values. */
-    private double[] posValues;
-
-    /** The speed values. */
-    private double[] speedValues;
-
-    private final List<SpeedLimit> speedLimits;
+    private double[] positions;
+    private double[] speeds;
+    private final Collection<SpeedLimit> speedLimits;
 
     /**
-     * Instantiates a new speed limits impl.
+     * Constructor.
      * 
      * @param speedLimitInputDataPoints
      *            the speed limit input data points
@@ -60,16 +58,16 @@ public class SpeedLimits {
      */
     private void generateSpaceSeriesData(List<SpeedLimitDataPoint> data) {
         final int size = data.size() + 1;
-        posValues = new double[size];
-        speedValues = new double[size];
+        positions = new double[size];
+        speeds = new double[size];
         // add constant maximum speed at origin x=0 for correct extrapolation
-        posValues[0] = 0;
-        speedValues[0] = MovsimConstants.MAX_VEHICLE_SPEED;
+        positions[0] = 0;
+        speeds[0] = MovsimConstants.MAX_VEHICLE_SPEED;
         for (int i = 1; i < size; i++) {
             final double pos = data.get(i - 1).getPosition();
-            posValues[i] = pos;
+            positions[i] = pos;
             final double speed = data.get(i - 1).getSpeedlimit();
-            speedValues[i] = speed;
+            speeds[i] = speed;
             speedLimits.add(new SpeedLimit(pos, speed));
         }
     }
@@ -80,22 +78,22 @@ public class SpeedLimits {
      * @return true, if is empty
      */
     public boolean isEmpty() {
-        return (speedValues.length == 0);
+        return speeds.length == 0;
     }
 
     /**
-     * Calc speed limit.
+     * Calculates the speed limit.
      * 
-     * @param x
-     *            the x
+     * @param position
      * @return the double
      */
-    public double calcSpeedLimit(double x) {
-        return (speedValues.length == 0) ? MovsimConstants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(posValues,
-                speedValues, x);
+    public double calcSpeedLimit(double position) {
+        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED :
+        	Tables.stepExtrapolation(positions, speeds, position);
     }
 
-    public List<SpeedLimit> getSpeedLimits() {
-        return speedLimits;
-    }
+	@Override
+	public Iterator<SpeedLimit> iterator() {
+        return speedLimits.iterator();
+	}
 }

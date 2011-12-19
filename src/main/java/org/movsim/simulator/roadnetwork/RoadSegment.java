@@ -508,7 +508,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param vehicle
      */
-
     public void appendVehicle(Vehicle vehicle) {
         laneSegments[vehicle.getLane()].appendVehicle(vehicle);
     }
@@ -730,30 +729,12 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Gets the speed limits for this road segment.
-     * 
-     * @return the speed limits
-     */
-    public List<SpeedLimit> getSpeedLimits() {
-        return speedLimits == null ? null : speedLimits.getSpeedLimits();
-    }
-
-    /**
-     * Returns the number of speed limits in this road segment.
-     * 
-     * @return number of speedLimits in this road segment
-     */
-    public int speedLimitCount() {
-        return speedLimits == null ? 0 : getSpeedLimits().size();
-    }
-
-    /**
      * Returns an iterable over all the speed limits in the road segment.
      * 
      * @return an iterable over all the speed limits in the road segment
      */
     public Iterable<SpeedLimit> speedLimits() {
-        return getSpeedLimits();
+        return speedLimits == null ? null : speedLimits;
     }
 
     /**
