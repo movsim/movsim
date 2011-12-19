@@ -103,7 +103,7 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_VDIFF?, GIPPS?, NEWELL?, KRAUSS?, NSM?, KKW?, MEMORY?)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, NEWELL?, KRAUSS?, NSM?, KKW?, MEMORY?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -131,8 +131,8 @@
 
 
 <!-- default: OVM variant with org. optimal velocity function -->
-<!ELEMENT OVM_VDIFF EMPTY>
-<!ATTLIST OVM_VDIFF
+<!ELEMENT OVM_FVDM EMPTY>
+<!ATTLIST OVM_FVDM
   v0          NMTOKEN #REQUIRED
   tau         NMTOKEN #REQUIRED
   s0          NMTOKEN #REQUIRED

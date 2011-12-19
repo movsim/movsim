@@ -37,7 +37,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_VDIFF;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
@@ -50,7 +50,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.KKW;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Krauss;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.NSM;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumACC;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumGipps;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumIDM;
@@ -58,7 +58,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKK
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKrauss;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNSM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNewell;
-import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_VDIFF;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_FCDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
@@ -198,8 +198,8 @@ public class VehicleGenerator {
             return new EquilibriumIDM(vehLength, (IDM) longModel);
         } else if (longModel.modelName() == ModelName.ACC) {
             return new EquilibriumACC(vehLength, (ACC) longModel);
-        } else if (longModel.modelName() == ModelName.OVM_VDIFF) {
-            return new EquilibriumOVM_VDIFF(vehLength, (OVM_VDIFF) longModel);
+        } else if (longModel.modelName() == ModelName.OVM_FVDM) {
+            return new EquilibriumOVM_FCDM(vehLength, (OVM_FVDM) longModel);
         } else if (longModel.modelName() == ModelName.GIPPS) {
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
         } else if (longModel.modelName() == ModelName.KRAUSS) {
@@ -235,8 +235,8 @@ public class VehicleGenerator {
             longModel = new IDM((LongitudinalModelInputDataIDM) modelInputData);
         } else if (modelName == ModelName.ACC) {
             longModel = new ACC((LongitudinalModelInputDataACC) modelInputData);
-        } else if (modelName == ModelName.OVM_VDIFF) {
-            longModel = new OVM_VDIFF((LongitudinalModelInputDataOVM_VDIFF) modelInputData);
+        } else if (modelName == ModelName.OVM_FVDM) {
+            longModel = new OVM_FVDM((LongitudinalModelInputDataOVM_FVDM) modelInputData);
         } else if (modelName == ModelName.GIPPS) {
             longModel = new Gipps(simulationTimestep, (LongitudinalModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {

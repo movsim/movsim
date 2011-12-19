@@ -36,7 +36,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelIn
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKraussImpl;
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNSMImpl;
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataOVM_VDIFFImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataOVM_FVDMImpl;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +73,7 @@ public class VehicleInput {
     private NoiseInputData noiseInputData = null;
 
     /**
-     * Instantiates a new vehicle input impl.
+     * Instantiates a new vehicle input.
      * 
      * @param elem
      *            the elem
@@ -123,8 +123,8 @@ public class VehicleInput {
             return new LongitudinalModelInputDataIDMImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.ACC.name())) {
             return new LongitudinalModelInputDataACCImpl(map);
-        } else if (modelName.equals(LongitudinalModelBase.ModelName.OVM_VDIFF.name())) {
-            return new LongitudinalModelInputDataOVM_VDIFFImpl(map);
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.OVM_FVDM.name())) {
+            return new LongitudinalModelInputDataOVM_FVDMImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.GIPPS.name())) {
             return new LongitudinalModelInputDataGippsImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KRAUSS.name())) {

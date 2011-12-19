@@ -19,21 +19,20 @@ import org.movsim.utilities.ScalingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
  */
 public abstract class LongitudinalModelBase implements Observer {
 
     public enum ModelCategory {
-        CONTINUOUS_MODEL, ITERATED_MAP_MODEL, CELLULAR_AUTOMATON;
+        TIME_CONTINUOUS_MODEL, ITERATED_COUPLED_MAP_MODEL, CELLULAR_AUTOMATON;
 
         public boolean isCA() {
             return (this == CELLULAR_AUTOMATON);
         }
 
         public boolean isIteratedMap() {
-            return (this == ITERATED_MAP_MODEL);
+            return (this == ITERATED_COUPLED_MAP_MODEL);
         }
         
         @Override
@@ -43,11 +42,11 @@ public abstract class LongitudinalModelBase implements Observer {
     }
 
     public enum ModelName {
-        IDM(ModelCategory.CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.CONTINUOUS_MODEL,
-                "Adaptive-Cruise-Control-Model"), OVM_VDIFF(ModelCategory.CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_MAP_MODEL,
-                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_MAP_MODEL, "Newell-Model"), KRAUSS(
-                ModelCategory.ITERATED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
+        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.TIME_CONTINUOUS_MODEL,
+                "Adaptive-Cruise-Control-Model"), OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL,
+                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL,
+                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"), KRAUSS(
+                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
                 "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
                 "Kerner-Klenov-Wolf-Model");
 
@@ -86,19 +85,15 @@ public abstract class LongitudinalModelBase implements Observer {
 
     private final double scalingLength;
 
-    /** The parameters. */
     public LongitudinalModelInputData parameters;
 
-    /** The id. */
     protected long id;
 
     /**
-     * Instantiates a new longitudinal model impl.
+     * Instantiates a new longitudinal model.
      * 
      * @param modelName
      *            the model name
-     * @param modelCategory
-     *            the model category
      * @param parameters
      *            the parameters
      */

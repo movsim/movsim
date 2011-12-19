@@ -19,23 +19,22 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_VDIFF;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_FVDM;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class EquilibriumOVM_VDIFF.
+ * The Class EquilibriumOVM_FVDM.
  */
-public class EquilibriumOVM_VDIFF extends EquilibriumProperties {
+public class EquilibriumOVM_FCDM extends EquilibriumProperties {
 
     /**
-     * Instantiates a new equilibrium ov m_ vdiff.
+     * Instantiates a new equilibrium OVM or FVDM .
      * 
      * @param length
      *            the length
      * @param vDiffModel
-     *            the v diff model
+     *            the velocity difference model
      */
-    public EquilibriumOVM_VDIFF(double length, OVM_VDIFF vDiffModel) {
+    public EquilibriumOVM_FCDM(double length, OVM_FVDM vDiffModel) {
         super(length);
         calcEquilibrium(vDiffModel);
         calcRhoQMax();
@@ -47,14 +46,13 @@ public class EquilibriumOVM_VDIFF extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(OVM_VDIFF model) {
+    private void calcEquilibrium(OVM_FVDM model) {
 
         double vIterate = model.getV0(); // variable of the relaxation equation
         final int iterMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 0.3 * model.getTau(); // iteration time step (in s)
                                                    // changes from
-        final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to
-                                                   // dtMax (rho=0)
+        final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to dtMax (rho=0)
 
         vEqTab[0] = model.getV0(); // start with rho=0
 
@@ -70,10 +68,7 @@ public class EquilibriumOVM_VDIFF extends EquilibriumProperties {
 
             for (int it = 1; it <= iterMax; it++) {
                 final double acc = model.calcAccSimple(s, vIterate, 0);
-                final double dtLoc = dtMax * vIterate / model.getV0() + dtMin; // it.
-                                                                               // step
-                                                                               // in
-                                                                               // [dtmin,dtmax]
+                final double dtLoc = dtMax * vIterate / model.getV0() + dtMin; // it. step in [dtmin,dtmax]
 
                 // actual relaxation
                 vIterate += dtLoc * acc;

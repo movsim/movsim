@@ -21,20 +21,19 @@ package org.movsim.input.model.vehicle.longitudinalmodel.impl;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_VDIFF;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class LongitudinalModelInputDataOVM_VDIFFImpl.
  */
-public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelInputDataImpl implements
-        LongitudinalModelInputDataOVM_VDIFF {
+public class LongitudinalModelInputDataOVM_FVDMImpl extends LongitudinalModelInputDataImpl implements
+        LongitudinalModelInputDataOVM_FVDM {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataOVM_VDIFFImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataOVM_FVDMImpl.class);
 
     /** The v0. */
     private double v0;
@@ -44,9 +43,8 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
     private double tau;
     private final double tauDefault;
 
-    /** The len interaction. */
-    private double lenInteraction;
-    private final double lenInteractionDefault;
+    private double transitionWidth;
+    private final double transitionWidthDefault;
 
     /** The beta. */
     private double beta;
@@ -65,18 +63,16 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
     private final int variantDefault;
 
     /**
-     * Instantiates a new model input data ov m_ vdiff impl.
+     * Instantiates a new model input data OVM or FVDM.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */
-    public LongitudinalModelInputDataOVM_VDIFFImpl(Map<String, String> map) {
-        super(ModelName.OVM_VDIFF);
+    public LongitudinalModelInputDataOVM_FVDMImpl(Map<String, String> map) {
+        super(ModelName.OVM_FVDM);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         tauDefault = tau = Double.parseDouble(map.get("tau"));
-        lenInteractionDefault = lenInteraction = Double.parseDouble(map.get("l_int"));
+        transitionWidthDefault = transitionWidth = Double.parseDouble(map.get("l_int"));
         betaDefault = beta = Double.parseDouble(map.get("beta"));
         lambdaDefault = lambda = Double.parseDouble(map.get("lambda"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));
@@ -93,7 +89,7 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
      */
     @Override
     protected void checkParameters() {
-        if (s0 < 0 || v0 < 0 || tau < 0 || lenInteraction < 0 || beta < 0 || lambda < 0 || variant < 0) {
+        if (s0 < 0 || v0 < 0 || tau < 0 || transitionWidth < 0 || beta < 0 || lambda < 0 || variant < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
                     getModelName().name());
             System.exit(-1);
@@ -111,7 +107,7 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
     public void resetParametersToDefault() {
         v0 = v0Default;
         tau = tauDefault;
-        lenInteraction = lenInteractionDefault;
+        transitionWidth = transitionWidthDefault;
         beta = betaDefault;
         lambda = lambdaDefault;
         s0 = s0Default;
@@ -154,8 +150,8 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
      * @see org.movsim.input.model.vehicle.longModel.impl.ModelInputDataOVM_VDIFF #getLenInteraction()
      */
     @Override
-    public double getLenInteraction() {
-        return lenInteraction;
+    public double getTransitionWidth() {
+        return transitionWidth;
     }
 
     /*
@@ -214,8 +210,8 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
      * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputDataOVM_VDIFF #getLenInteractionDefault()
      */
     @Override
-    public double getLenInteractionDefault() {
-        return lenInteractionDefault;
+    public double getTransitionWidthDefault() {
+        return transitionWidthDefault;
     }
 
     /*
@@ -287,7 +283,7 @@ public class LongitudinalModelInputDataOVM_VDIFFImpl extends LongitudinalModelIn
      */
     @Override
     public void setLenInteraction(double lenInteraction) {
-        this.lenInteraction = lenInteraction;
+        this.transitionWidth = lenInteraction;
         parametersUpdated();
     }
 

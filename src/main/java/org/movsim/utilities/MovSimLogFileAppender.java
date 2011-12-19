@@ -11,7 +11,7 @@ import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 
 /**
- * Logs to file "<output path>projectname.log".
+ * Logs to file "[output path]projectname.log".
  * 
  * TTCC: Time Thread Category Component
  * 
@@ -32,7 +32,7 @@ public class MovSimLogFileAppender {
      * 
      * View log4j.properties for defining logging levels for packages or to initialize other appenders like a rolling file appender.
      * 
-     * Logs to file "<output path>projectname.log".
+     * Logs to file "[output path]projectname.log".
      */
     public MovSimLogFileAppender() {
         Layout layout = new PatternLayout("%r [%t] %-5p (%F:%M:%L) - %m%n");

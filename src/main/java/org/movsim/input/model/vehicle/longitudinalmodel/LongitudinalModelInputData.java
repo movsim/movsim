@@ -22,7 +22,6 @@ package org.movsim.input.model.vehicle.longitudinalmodel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.utilities.Observable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface LongitudinalModelInputData.
  */

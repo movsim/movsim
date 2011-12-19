@@ -19,11 +19,10 @@
  */
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface LongitudinalModelInputDataOVM_VDIFF.
+ * The Interface LongitudinalModelInputDataOVM_FVDM.
  */
-public interface LongitudinalModelInputDataOVM_VDIFF extends LongitudinalModelInputData {
+public interface LongitudinalModelInputDataOVM_FVDM extends LongitudinalModelInputData {
 
     /**
      * Gets the s0.
@@ -47,11 +46,11 @@ public interface LongitudinalModelInputDataOVM_VDIFF extends LongitudinalModelIn
     double getTau();
 
     /**
-     * Gets the len interaction.
+     * Gets the transition width
      * 
-     * @return the len interaction
+     * @return the transition width
      */
-    double getLenInteraction();
+    double getTransitionWidth();
 
     /**
      * Gets the beta.
@@ -89,11 +88,11 @@ public interface LongitudinalModelInputDataOVM_VDIFF extends LongitudinalModelIn
     double getTauDefault();
 
     /**
-     * Gets the len interaction default.
+     * Gets the transition width default.
      * 
-     * @return the len interaction default
+     * @return the transition width default
      */
-    double getLenInteractionDefault();
+    double getTransitionWidthDefault();
 
     /**
      * Gets the beta default.
