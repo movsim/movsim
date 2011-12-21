@@ -15,14 +15,14 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class TrafficLights.
  */
-public class TrafficLights implements Iterable<TrafficLight>{
+public class TrafficLights implements Iterable<TrafficLight> {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
     private final int nDt;
-    private Collection<TrafficLight> trafficLights;
-    private FileTrafficLightRecorder fileTrafficLightRecorder;
+    private final Collection<TrafficLight> trafficLights;
+    private final FileTrafficLightRecorder fileTrafficLightRecorder;
 
     /**
      * Constructor.
@@ -32,10 +32,13 @@ public class TrafficLights implements Iterable<TrafficLight>{
      */
     public TrafficLights(TrafficLightsInput trafficLightsInput, RoadSegment roadSegment) {
 
+        trafficLights = new ArrayList<TrafficLight>();
         initTrafficLights(trafficLightsInput);
         nDt = trafficLightsInput.getnDtSample();
         if (trafficLightsInput.isWithLogging()) {
             fileTrafficLightRecorder = new FileTrafficLightRecorder(nDt, trafficLights, roadSegment);
+        } else {
+        	fileTrafficLightRecorder = null;
         }
     }
 
@@ -45,7 +48,6 @@ public class TrafficLights implements Iterable<TrafficLight>{
      * @param trafficLightsInput
      */
     private void initTrafficLights(TrafficLightsInput trafficLightsInput) {
-        trafficLights = new ArrayList<TrafficLight>();
         final List<TrafficLightData> trafficLightData = trafficLightsInput.getTrafficLightData();
         for (final TrafficLightData tlData : trafficLightData) {
             trafficLights.add(new TrafficLight(tlData));
