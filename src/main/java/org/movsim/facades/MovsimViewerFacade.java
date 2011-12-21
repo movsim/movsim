@@ -66,12 +66,12 @@ public class MovsimViewerFacade {
      */
     private MovsimViewerFacade() {
         System.out.println("create movsim viewer facade");
-        model = Simulator.getInstance();
+        projectMetaData = ProjectMetaData.getInstance();
+        model = new Simulator(projectMetaData);
 
         initLocalizationAndLogger();
 
         inputData = model.getSimInput();
-        projectMetaData = inputData.getProjectMetaData();
 
         projectMetaData.setInstantaneousFileOutput(false);
         projectMetaData.setXmlFromResources(true);

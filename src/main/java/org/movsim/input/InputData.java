@@ -45,12 +45,12 @@ public class InputData {
     /**
      * Instantiates a new input data.
      */
-    public InputData() {
-        projectMetaData = ProjectMetaData.getInstance();
+    public InputData(ProjectMetaData projectMetaData) {
+        this.projectMetaData = projectMetaData;
     }
 
     public void setProjectName(String projectname) {
-        this.projectMetaData.setProjectName(projectname);
+        projectMetaData.setProjectName(projectname);
     }
 
     public void setVehicleInputData(List<VehicleInput> vehicleInputData) {
@@ -89,5 +89,4 @@ public class InputData {
     public FuelConsumptionInput getFuelConsumptionInput() {
         return fuelConsumptionInput;
     }
-
 }

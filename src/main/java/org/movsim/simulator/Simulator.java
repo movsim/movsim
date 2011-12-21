@@ -57,9 +57,7 @@ public class Simulator implements Runnable {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
-    /** singleton pattern with eager initialization */
-    private static Simulator instance = new Simulator();
-
+    private final ProjectMetaData projectMetaData;
     private double time;
 
     private long iterationCount;
@@ -88,19 +86,15 @@ public class Simulator implements Runnable {
     /**
      * Instantiates a new simulator.
      */
-    private Simulator() {
-        inputData = new InputData(); // accesses static reference ProjectMetaData
+    public Simulator(ProjectMetaData projectMetaData) {
+    	this.projectMetaData = projectMetaData;
+        inputData = new InputData(projectMetaData); // accesses static reference ProjectMetaData
         roadNetwork = new RoadNetwork();
-    }
-
-    public static Simulator getInstance() {
-        return instance;
     }
 
     public void initialize() {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
 
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectName = projectMetaData.getProjectName();
 
         final SimulationInput simInput = parseMovSimXm();
@@ -175,7 +169,7 @@ public class Simulator implements Runnable {
      * @param projectMetaData
      * @return
      */
-    private boolean parseOpenDriveXml(final ProjectMetaData projectMetaData) {
+    private boolean parseOpenDriveXml(ProjectMetaData projectMetaData) {
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
         final String fullXodrFileName = xodrPath + xodrFileName;

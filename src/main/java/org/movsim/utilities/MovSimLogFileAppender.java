@@ -27,6 +27,10 @@ public class MovSimLogFileAppender {
     final static Logger logger = Logger.getLogger(Simulator.class);
     private FileAppender fileAppender;
 
+    public static void initialize(ProjectMetaData projectMetaData) {
+        new MovSimLogFileAppender(projectMetaData);
+    }
+    
     /**
      * Initializes a FileAppender and adds the appender.
      * 
@@ -34,17 +38,16 @@ public class MovSimLogFileAppender {
      * 
      * Logs to file "[output path]projectname.log".
      */
-    public MovSimLogFileAppender() {
+    private MovSimLogFileAppender(ProjectMetaData projectMetaData) {
         Layout layout = new PatternLayout("%r [%t] %-5p (%F:%M:%L) - %m%n");
 
         try {
-            final String filename = ProjectMetaData.getInstance().getOutputPath() + File.separator
-                    + ProjectMetaData.getInstance().getProjectName() + ".log";
+            final String filename = projectMetaData.getOutputPath() + File.separator
+                    + projectMetaData.getProjectName() + ".log";
             fileAppender = new FileAppender(layout, filename, false);
         } catch (IOException e) {
             e.printStackTrace();
         }
         logger.addAppender(fileAppender);
     }
-
 }

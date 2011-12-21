@@ -19,6 +19,7 @@
  */
 package org.movsim;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.SimCommandLine;
 import org.movsim.simulator.Simulator;
 import org.movsim.utilities.MovSimLogFileAppender;
@@ -35,23 +36,21 @@ public class MovsimMain {
      * The main method.
      * 
      * @param args
-     *            the arguments
+     *            the command line arguments
      */
     public static void main(String[] args) {
 
-        // CommandLine args options parser
-        // Results are set in ProjectMetaData
-        new SimCommandLine(args);
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        // parse the command line, putting the results into projectMetaData
+        SimCommandLine.parse(projectMetaData, args);
         
-        new MovSimLogFileAppender();
+        MovSimLogFileAppender.initialize(projectMetaData);
 
-        final Simulator simulator = Simulator.getInstance();
-        
+        final Simulator simulator = new Simulator(projectMetaData);
         simulator.initialize();
         
         Thread simThread = new Thread(simulator);
         simThread.setName("movsim-thread");
         simThread.start();
-
     }
 }

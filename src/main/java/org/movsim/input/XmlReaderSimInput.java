@@ -73,7 +73,7 @@ public class XmlReaderSimInput {
 
     private InputSource appletresource;
 
-    private ProjectMetaData projectMetaData;
+    private final ProjectMetaData projectMetaData;
 
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.

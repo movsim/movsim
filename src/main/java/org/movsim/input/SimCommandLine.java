@@ -44,6 +44,11 @@ public class SimCommandLine {
     private Options options;
 
     private final ProjectMetaData projectMetaData;
+    
+    public static void parse(ProjectMetaData projectMetaData, String[] args) {
+        new SimCommandLine(projectMetaData, args);
+    }
+    
 
     /**
      * Instantiates a new movsim command line parser.
@@ -55,11 +60,11 @@ public class SimCommandLine {
      * @param args
      *            the args
      */
-    public SimCommandLine(String[] args) {
+    private SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
 
         initLocalizationAndLogger();
 
-        projectMetaData = ProjectMetaData.getInstance();
+        this.projectMetaData = projectMetaData;
 
         createOptions();
         createParserAndParse(args);
@@ -162,7 +167,7 @@ public class SimCommandLine {
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
         }
-        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
+        projectMetaData.setOutputPath(FileUtils.getCanonicalPath(outputPath));
     }
 
     /**
