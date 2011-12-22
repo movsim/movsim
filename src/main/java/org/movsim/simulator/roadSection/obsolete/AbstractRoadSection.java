@@ -31,7 +31,7 @@
 //import org.movsim.simulator.roadnetwork.SpeedLimits;
 //import org.movsim.simulator.roadnetwork.TrafficLight;
 //import org.movsim.simulator.roadnetwork.TrafficLights;
-//import org.movsim.simulator.roadnetwork.UpstreamBoundary;
+//import org.movsim.simulator.roadnetwork.TrafficSource;
 //import org.movsim.simulator.vehicles.Vehicle;
 //import org.movsim.simulator.vehicles.VehicleGenerator;
 //import org.movsim.simulator.vehicles.obsolete.VehicleContainer;
@@ -74,7 +74,7 @@
 //    protected List<Vehicle> stagedVehicles;
 //
 //    /** The upstream boundary. */
-//    protected UpstreamBoundary upstreamBoundary;
+//    protected TrafficSource upstreamBoundary;
 //
 //    /** The flow cons bottlenecks. */
 //    protected FlowConservingBottlenecks flowConsBottlenecks;
@@ -439,7 +439,7 @@
 //        return toId;
 //    }
 //
-//    public UpstreamBoundary getUpstreamBoundary() {
+//    public TrafficSource getUpstreamBoundary() {
 //        return upstreamBoundary;
 //    }
 //

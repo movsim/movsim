@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class FileUpstreamBoundaryData.
+ * The Class FileTrafficSourceData.
  * 
  */
-public class FileUpstreamBoundaryData {
+public class FileTrafficSourceData {
 
-    final static Logger logger = LoggerFactory.getLogger(FileUpstreamBoundaryData.class);
+    final static Logger logger = LoggerFactory.getLogger(FileTrafficSourceData.class);
 
     private static final String extensionFormat = ".log_upBC.road_%d.csv";
     private static final String outputHeading = MovsimConstants.COMMENT_CHAR
@@ -30,7 +30,7 @@ public class FileUpstreamBoundaryData {
      * @param roadId
      * 
      */
-    public FileUpstreamBoundaryData(int roadId) {
+    public FileTrafficSourceData(int roadId) {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String outputPath = projectMetaData.getOutputPath();
         final String filename = outputPath + File.separator + projectMetaData.getProjectName()

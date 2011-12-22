@@ -143,7 +143,7 @@
 //        // TODO only dummy here for RoadSection interface
 //        flowConsBottlenecks = new FlowConservingBottlenecks(new ArrayList<FlowConservingBottleneckDataPoint>());
 //
-//        // upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
+//        // upstreamBoundary = new TrafficSource(id, vehGenerator, vehContainers, rampData.getTrafficSourceData(),
 //        // projectName);
 //
 //        mergeCount = 0;

@@ -92,7 +92,7 @@
 //
 //        initSimpleOnramps(inputData);
 //
-//        // upstreamBoundary = new UpstreamBoundary(id, vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
+//        // upstreamBoundary = new TrafficSource(id, vehGenerator, vehContainers, roadInput.getTrafficSourceData(),
 //        // inputData.getProjectMetaData().getProjectName());
 //
 //        flowConsBottlenecks = new FlowConservingBottlenecks(roadInput.getFlowConsBottleneckInputData());

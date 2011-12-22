@@ -24,7 +24,7 @@
 //import org.movsim.output.LoopDetector;
 //import org.movsim.simulator.roadnetwork.SpeedLimit;
 //import org.movsim.simulator.roadnetwork.TrafficLight;
-//import org.movsim.simulator.roadnetwork.UpstreamBoundary;
+//import org.movsim.simulator.roadnetwork.TrafficSource;
 //import org.movsim.simulator.vehicles.obsolete.VehicleContainer;
 //
 //// TODO: Auto-generated Javadoc
@@ -187,7 +187,7 @@
 //
 //    long getToId();
 //
-//    UpstreamBoundary getUpstreamBoundary();
+//    TrafficSource getUpstreamBoundary();
 //
 //    void setFractionOfLeavingVehicles(double newFraction);
 //

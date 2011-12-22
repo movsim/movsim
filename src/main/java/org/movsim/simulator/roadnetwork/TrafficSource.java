@@ -20,7 +20,7 @@
 package org.movsim.simulator.roadnetwork;
 
 import org.movsim.input.model.simulation.TrafficSourceData;
-import org.movsim.output.fileoutput.FileUpstreamBoundaryData;
+import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -29,12 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class UpstreamBoundary.
+ * The Class TrafficSource.
  */
-public class UpstreamBoundary implements SimulationTimeStep {
+public class TrafficSource implements SimulationTimeStep {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(UpstreamBoundary.class);
+    final static Logger logger = LoggerFactory.getLogger(TrafficSource.class);
 
     private double nWait;
 
@@ -53,7 +53,7 @@ public class UpstreamBoundary implements SimulationTimeStep {
 
     private int laneEnterLast;
 
-    private FileUpstreamBoundaryData fileUpstreamBoundaryData;
+    private FileTrafficSourceData fileTrafficSourceData;
 
     /**
      * Instantiates a new upstream boundary .
@@ -62,20 +62,20 @@ public class UpstreamBoundary implements SimulationTimeStep {
      *            the vehicle generator
      * @param vehContainers
      *            the veh containers
-     * @param upstreamBoundaryData
+     * @param trafficSourceData
      *            the upstream boundary data
      */
-    public UpstreamBoundary(long roadId, VehicleGenerator vehGenerator, RoadSegment roadSegment,
-            TrafficSourceData upstreamBoundaryData) {
+    public TrafficSource(long roadId, VehicleGenerator vehGenerator, RoadSegment roadSegment,
+            TrafficSourceData trafficSourceData) {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
         nWait = 0;
 
-        inflowTimeSeries = new InflowTimeSeries(upstreamBoundaryData.getInflowTimeSeries());
+        inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
 
-        if (upstreamBoundaryData.withLogging()) {
+        if (trafficSourceData.withLogging()) {
             enteringVehCounter = 1;
-            fileUpstreamBoundaryData = new FileUpstreamBoundaryData(roadSegment.id());
+            fileTrafficSourceData = new FileTrafficSourceData(roadSegment.id());
         }
     }
 
@@ -130,8 +130,8 @@ public class UpstreamBoundary implements SimulationTimeStep {
                 final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
-                    if (fileUpstreamBoundaryData != null) {
-                        fileUpstreamBoundaryData.update(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
+                    if (fileTrafficSourceData != null) {
+                        fileTrafficSourceData.update(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
                                 totalInflow, enteringVehCounter, nWait);
                     }
                     return; // only one insert per simulation update

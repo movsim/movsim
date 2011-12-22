@@ -43,7 +43,7 @@ public class MovsimControllers {
     // for(Long id : ids){
     // final RoadSection road = movsimViewerFacade.findRoadById(id);
     // if(road!=null){
-    // final UpstreamBoundary upBoundary = road.getUpstreamBoundary();
+    // final TrafficSource upBoundary = road.getUpstreamBoundary();
     // if(upBoundary!=null){
     // if(initFlowPerLane == -1){
     // initFlowPerLane = upBoundary.getFlowPerLane(0);

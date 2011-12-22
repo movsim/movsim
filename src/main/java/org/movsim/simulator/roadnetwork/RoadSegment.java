@@ -86,7 +86,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private SpeedLimits speedLimits;
 
     // Sources and Sinks
-    private UpstreamBoundary upstreamBoundary;
+    private TrafficSource trafficSource;
     // sink is of type TrafficFlowBase to allow the sink to be a TrafficFlowOnRamp
     private TrafficFlowBase sink;
     private int removedVehicleCount; // used for calculating traffic flow
@@ -203,23 +203,23 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the upstream boundary (traffic source) for this road segment.
+     * Returns the traffic source (upstream boundary) for this road segment.
      * 
-     * @return the upstream boundary
+     * @return the traffic source
      */
-    public final UpstreamBoundary getUpstreamBoundary() {
-        return upstreamBoundary;
+    public final TrafficSource getTrafficSource() {
+        return trafficSource;
     }
 
     /**
-     * Sets the upstream boundary (traffic source) for this road segment.
+     * Sets the traffic source (upstream boundary) for this road segment.
      * 
-     * @param upstreamBoundary
-     *            the upstream boundary
+     * @param trafficSource
+     *            the traffic source
      */
-    public final void setUpstreamBoundary(UpstreamBoundary upstreamBoundary) {
-        assert upstreamBoundary != null;
-        this.upstreamBoundary = upstreamBoundary;
+    public final void setTrafficSource(TrafficSource trafficSource) {
+        assert trafficSource != null;
+        this.trafficSource = trafficSource;
     }
 
     /**
@@ -671,8 +671,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void inFlow(double dt, double simulationTime, long iterationCount) {
         assert eachLaneIsSorted();
-        if (upstreamBoundary != null) {
-            upstreamBoundary.timeStep(dt, simulationTime, iterationCount);
+        if (trafficSource != null) {
+            trafficSource.timeStep(dt, simulationTime, iterationCount);
             assert assertInvariant();
         }
     }

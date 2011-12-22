@@ -53,7 +53,6 @@ public class RoadInput {
 
     private List<ICMicroData> icMicroData;
 
-    /** The upstream boundary data. */
     private TrafficSourceData trafficSourceData;
 
     private TrafficSinkData trafficSinkData;
@@ -302,11 +301,6 @@ public class RoadInput {
         return icMicroData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#getUpstreamBoundaryData()
-     */
     public TrafficSourceData getTrafficSourceData() {
         return trafficSourceData;
     }
