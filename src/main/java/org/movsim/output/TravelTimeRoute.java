@@ -118,14 +118,15 @@ public class TravelTimeRoute {
             final Vehicle vehicle = entry.getKey();
             final double startTime = entry.getValue();
             // System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
-            if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
-                final double travelTimeOnRoute = timeEndOfRoute - startTime;
-                dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
-                // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,
-                // timeEndOfRoute,travelTimeOnRoute);
-                stagedVehicles.add(vehicle);
-                ttAverage += travelTimeOnRoute;
-            }
+            //FIXME roadIds are from the old concept
+//            if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
+//                final double travelTimeOnRoute = timeEndOfRoute - startTime;
+//                dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
+//                // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,
+//                // timeEndOfRoute,travelTimeOnRoute);
+//                stagedVehicles.add(vehicle);
+//                ttAverage += travelTimeOnRoute;
+//            }
         }
         for (final Vehicle vehicle : stagedVehicles) {
             vehiclesOnRoute.remove(vehicle);
