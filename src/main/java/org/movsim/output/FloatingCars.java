@@ -35,7 +35,7 @@ public class FloatingCars extends ObservableImpl {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
 
-    private final Collection<Integer> fcds;
+    private final Collection<Integer> floatingCarVehicleNumbers;
     private final int nDtOut;
     private final RoadSegment roadSegment;
 
@@ -52,7 +52,7 @@ public class FloatingCars extends ObservableImpl {
 
         this.roadSegment = roadSegment;
         this.nDtOut = input.getNDt();
-        this.fcds = input.getFloatingCars();
+        this.floatingCarVehicleNumbers = input.getFloatingCars();
     }
 
     /**
@@ -70,8 +70,8 @@ public class FloatingCars extends ObservableImpl {
         }
     }
 
-    public Collection<Integer> getFcds() {
-        return fcds;
+    public Collection<Integer> getFloatingCarVehicleNumbers() {
+        return floatingCarVehicleNumbers;
     }
 
     public RoadSegment getRoadSegment() {

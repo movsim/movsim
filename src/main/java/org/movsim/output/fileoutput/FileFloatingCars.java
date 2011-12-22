@@ -72,7 +72,7 @@ public class FileFloatingCars implements ObserverInTime {
         final String regex = projectMetaData.getProjectName() + extensionRegex;
         FileUtils.deleteFileList(projectMetaData.getOutputPath(), regex);
 
-        fcdNumbers = floatingCars.getFcds();
+        fcdNumbers = floatingCars.getFloatingCarVehicleNumbers();
     }
 
     /**
