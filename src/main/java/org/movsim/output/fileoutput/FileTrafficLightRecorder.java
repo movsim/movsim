@@ -20,10 +20,7 @@
 package org.movsim.output.fileoutput;
 
 import java.io.File;
-import java.io.PrintWriter;
 
-import org.movsim.input.ProjectMetaData;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.utilities.FileUtils;
@@ -31,10 +28,9 @@ import org.movsim.utilities.FileUtils;
 /**
  * The Class FileTrafficLightRecorder.
  */
-public class FileTrafficLightRecorder {
+public class FileTrafficLightRecorder extends FileOutputBase {
 
     private static final String extensionFormat = ".R%d_tl_log.csv";
-    private PrintWriter fstr = null;
     private final int nDt;
 
     /**
@@ -46,13 +42,11 @@ public class FileTrafficLightRecorder {
      *            the traffic lights
      */
     public FileTrafficLightRecorder(int nDt, Iterable<TrafficLight> trafficLights, RoadSegment roadSegment) {
+    	super();
         this.nDt = nDt;
 
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
-                + String.format(extensionFormat, roadSegment.id());
-        fstr = FileUtils.getWriter(filename);
+        final String filename = path + File.separator + baseFilename + String.format(extensionFormat, roadSegment.id());
+        writer = FileUtils.getWriter(filename);
         writeHeader(trafficLights);
     }
 
@@ -74,13 +68,13 @@ public class FileTrafficLightRecorder {
         }
 
         // write data:
-        if (fstr != null) {
-            fstr.printf("%8.2f   ", simulationTime);
+        if (writer != null) {
+            writer.printf("%8.2f   ", simulationTime);
             for (final TrafficLight trafficLight : trafficLights) {
-                fstr.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status());
+                writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status());
             }
-            fstr.printf("%n");
-            fstr.flush();
+            writer.printf("%n");
+            writer.flush();
         }
     }
 
@@ -92,20 +86,20 @@ public class FileTrafficLightRecorder {
      */
     private void writeHeader(Iterable<TrafficLight> trafficLights) {
         // write header:
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " number codes for traffic lights status: %n");
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " green         %d %n", TrafficLight.GREEN_LIGHT);
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " green --> red %d %n", TrafficLight.GREEN_RED_LIGHT);
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " red           %d %n", TrafficLight.RED_LIGHT);
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " red --> green %d %n", TrafficLight.RED_GREEN_LIGHT);
+        writer.printf(COMMENT_CHAR + " number codes for traffic lights status: %n");
+        writer.printf(COMMENT_CHAR + " green         %d %n", TrafficLight.GREEN_LIGHT);
+        writer.printf(COMMENT_CHAR + " green --> red %d %n", TrafficLight.GREEN_RED_LIGHT);
+        writer.printf(COMMENT_CHAR + " red           %d %n", TrafficLight.RED_LIGHT);
+        writer.printf(COMMENT_CHAR + " red --> green %d %n", TrafficLight.RED_GREEN_LIGHT);
 
         int counter = 1;
         for (final TrafficLight trafficLight : trafficLights) {
-            fstr.printf(MovsimConstants.COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", counter,
+            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", counter,
                     trafficLight.position());
             counter++;
         }
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1",
+        writer.printf(COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1",
                 "status[1]_TL1", " etc. ");
-        fstr.flush();
+        writer.flush();
     }
 }

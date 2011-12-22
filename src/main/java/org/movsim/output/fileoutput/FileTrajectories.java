@@ -24,7 +24,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -37,10 +36,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FileTrajectories.
  */
-public class FileTrajectories {
+public class FileTrajectories extends FileOutputBase {
 
     private static final String extensionFormat = ".id%d_traj.csv";
-    private static final String outputHeading = MovsimConstants.COMMENT_CHAR
+    private static final String outputHeading = COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
 
@@ -66,6 +65,7 @@ public class FileTrajectories {
      *            the road section
      */
     public FileTrajectories(TrajectoriesInput trajectoriesInput, RoadSegment roadSegment) {
+    	super();
         logger.info("Constructor");
 
         dtOut = trajectoriesInput.getDt();
@@ -84,9 +84,7 @@ public class FileTrajectories {
      * Creates the file handles.
      */
     private void createFileHandles() {
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        final String outputPath = projectMetaData.getOutputPath();
-        final String filenameMainroad = outputPath + File.separator + projectMetaData.getProjectName()
+        final String filenameMainroad = path + File.separator + baseFilename
                 + String.format(extensionFormat, roadSegment.id());
         logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
         fileHandles.put((long) roadSegment.id(), FileUtils.getWriter(filenameMainroad));
@@ -188,5 +186,4 @@ public class FileTrajectories {
                 me.getLabel(), me.getId());
         fstr.flush();
     }
-
 }
