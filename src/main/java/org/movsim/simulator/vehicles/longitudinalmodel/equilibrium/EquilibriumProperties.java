@@ -21,7 +21,7 @@ package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
 
 import java.io.PrintWriter;
 
-import org.movsim.simulator.MovsimConstants;
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -149,9 +149,9 @@ public class EquilibriumProperties {
      */
     public void writeOutput(String filename) {
         final PrintWriter fstr = FileUtils.getWriter(filename);
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * rhoQMax);
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * qMax);
-        fstr.printf(MovsimConstants.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n");
+        fstr.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * rhoQMax);
+        fstr.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * qMax);
+        fstr.printf(FileOutputBase.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n");
         for (int i = 0; i < vEqTab.length; i++) {
             final double rho = getRho(i);
             final double s = getNetDistance(rho);

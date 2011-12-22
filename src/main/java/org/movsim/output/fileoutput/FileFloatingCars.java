@@ -24,9 +24,7 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.movsim.input.ProjectMetaData;
 import org.movsim.output.FloatingCars;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -40,12 +38,12 @@ import org.slf4j.LoggerFactory;
  */
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
-public class FileFloatingCars implements ObserverInTime {
+public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
 
     private static final String extensionFormat = ".car.origin_%d.%06d.csv";
     private static final String extensionRegex = "[.]car[.]origin_\\d+[.]\\d+[.]csv";
     
-    private static final String outputHeading = String.format("%s%9s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s", MovsimConstants.COMMENT_CHAR,
+    private static final String outputHeading = String.format("%s%9s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s", COMMENT_CHAR,
             "t[s]", "lane", "x[m]", "v[m/s]", "a[m/s^2]", "aModel[m/s^2]", "gap[m]", "dv[m/s]", "distToTrafficlight[m]", "fuelFlow[ml/s]", "roadId", "totalDistanceTraveled[m]");
 
     // note: number before decimal point is total width of field, not width of
@@ -65,12 +63,12 @@ public class FileFloatingCars implements ObserverInTime {
      *            the floating cars
      */
     public FileFloatingCars(FloatingCars floatingCars) {
+    	super();
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
 
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        final String regex = projectMetaData.getProjectName() + extensionRegex;
-        FileUtils.deleteFileList(projectMetaData.getOutputPath(), regex);
+        final String regex = baseFilename + extensionRegex;
+        FileUtils.deleteFileList(path, regex);
 
         fcdNumbers = floatingCars.getFcds();
     }
@@ -91,11 +89,11 @@ public class FileFloatingCars implements ObserverInTime {
     }
 
     private void printHeader(final PrintWriter fstr, final Vehicle veh) {
-        fstr.println(String.format("%s vehicle id = %d", MovsimConstants.COMMENT_CHAR, veh.getId()));
-        fstr.println(String.format("%s model label  = %s", MovsimConstants.COMMENT_CHAR, veh.getLabel()));
-        fstr.println(String.format("%s model category = %s", MovsimConstants.COMMENT_CHAR, 
+        fstr.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
+        fstr.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
+        fstr.println(String.format("%s model category = %s", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getCategory().toString()));
-        fstr.println(String.format("%s model category = %s (short name = %s)", MovsimConstants.COMMENT_CHAR, 
+        fstr.println(String.format("%s model category = %s (short name = %s)", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getDetailedName(), 
                 veh.getLongitudinalModel().modelName().getShortName()));
         
@@ -141,11 +139,9 @@ public class FileFloatingCars implements ObserverInTime {
      * @return the string
      */
     private String createFileName(long originId, int vehicleNumber) {
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+        final String filename = path + File.separator + baseFilename
                 + String.format(extensionFormat, originId, vehicleNumber);
-        return (filename);
+        return filename;
     }
 
     /**

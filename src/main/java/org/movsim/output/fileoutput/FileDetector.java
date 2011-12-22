@@ -3,20 +3,18 @@ package org.movsim.output.fileoutput;
 import java.io.File;
 import java.io.PrintWriter;
 
-import org.movsim.input.ProjectMetaData;
 import org.movsim.output.LoopDetector;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.ObserverInTime;
 
 /**
  * The Class FileDetector.
  */
-public class FileDetector implements ObserverInTime {
+public class FileDetector extends FileOutputBase implements ObserverInTime {
 
     private static final String extensionFormat = ".det.road_%d.x_%d.csv";
 
-    private static final String outputHeadingTime = String.format("%s%10s,", MovsimConstants.COMMENT_CHAR, "t[s]");
+    private static final String outputHeadingTime = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
     private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,", 
             "nVehTotal[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
     private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,", 
@@ -27,7 +25,6 @@ public class FileDetector implements ObserverInTime {
     private static final String outputFormatTime = "%10.1f, ";
     private static final String outputFormat = "%10d, %10.3f, %10.1f, %10.7f, %10.3f, %10.5f, ";
 
-    private PrintWriter printWriter = null;
     private final LoopDetector detector;
     private int laneCount;
 
@@ -39,19 +36,16 @@ public class FileDetector implements ObserverInTime {
      * @param laneCount
      */
     public FileDetector(long roadId, LoopDetector detector, int laneCount) {
-        final int xDetectorInt = (int) detector.getDetPosition();
+    	super();
+        final int xDetectorInt = (int)detector.getDetPosition();
         this.detector = detector;
         this.laneCount = laneCount;
 
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        final String outputPath = projectMetaData.getOutputPath();
-        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
+        final String filename = path + File.separator + baseFilename
                 + String.format(extensionFormat, roadId, xDetectorInt);
 
-        printWriter = initFile(filename);
-
+        writer = initFile(filename);
         detector.registerObserver(this);
-
     }
 
     /**
@@ -62,20 +56,20 @@ public class FileDetector implements ObserverInTime {
      * @return the printWriter
      */
     private PrintWriter initFile(String filename) {
-        printWriter = FileUtils.getWriter(filename);
-        printWriter.printf(MovsimConstants.COMMENT_CHAR
+    	writer = FileUtils.getWriter(filename);
+    	writer.printf(COMMENT_CHAR
                 + " number of lanes = %d. (Numbering starts from the most left lane as 1.)%n", laneCount);
-        printWriter.printf(MovsimConstants.COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
-        printWriter.printf(outputHeadingTime);
-        if(laneCount>1){
-            printWriter.printf(outputHeadingLaneAverage);
+    	writer.printf(COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
+    	writer.printf(outputHeadingTime);
+        if (laneCount > 1) {
+        	writer.printf(outputHeadingLaneAverage);
         }
         for (int i = 0; i < laneCount; i++) {
-            printWriter.printf(outputHeadingLane);
+        	writer.printf(outputHeadingLane);
         }
-        printWriter.printf("%n");
-        printWriter.flush();
-        return printWriter;
+        writer.printf("%n");
+        writer.flush();
+        return writer;
     }
 
 
@@ -86,13 +80,13 @@ public class FileDetector implements ObserverInTime {
      *            the time
      */
     private void writeAggregatedData(double time) {
-        printWriter.printf(outputFormatTime, time);
+    	writer.printf(outputFormatTime, time);
         if(laneCount > 1){
             writeLaneAverages();
         }
         writeQuantitiesPerLane();
-        printWriter.printf("%n");
-        printWriter.flush();
+        writer.printf("%n");
+        writer.flush();
     }
 
     /**
@@ -102,7 +96,7 @@ public class FileDetector implements ObserverInTime {
      */
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
-            printWriter.printf(outputFormat, detector.getVehCountOutput(i), 3.6 * detector.getMeanSpeed(i),
+        	writer.printf(outputFormat, detector.getVehCountOutput(i), 3.6 * detector.getMeanSpeed(i),
                     3600 * detector.getFlow(i), detector.getOccupancy(i), 3.6 * detector.getMeanSpeedHarmonic(i),
                     detector.getMeanTimegapHarmonic(i));
         }
@@ -114,7 +108,7 @@ public class FileDetector implements ObserverInTime {
      * @param time
      */
     private void writeLaneAverages() {
-        printWriter.printf(outputFormat, detector.getVehCountOutputAllLanes(),
+    	writer.printf(outputFormat, detector.getVehCountOutputAllLanes(),
                 3.6 * detector.getMeanSpeedAllLanes(), 3600 * detector.getFlowAllLanes(),
                 detector.getOccupancyAllLanes(), 3.6 * detector.getMeanSpeedHarmonicAllLanes(),
                 detector.getMeanTimegapHarmonicAllLanes());
@@ -129,5 +123,4 @@ public class FileDetector implements ObserverInTime {
     public void notifyObserver(double time) {
         writeAggregatedData(time);
     }
-
 }

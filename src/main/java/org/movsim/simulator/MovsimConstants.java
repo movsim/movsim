@@ -27,8 +27,6 @@ public interface MovsimConstants {
     // TODO: connection with maven version number
     final String RELEASE_VERSION = "1.2";
 
-    final String COMMENT_CHAR = "#";
-
     final double SMALL_VALUE = 1e-7;
 
     final double MAX_VEHICLE_SPEED = 200 / 3.6;
