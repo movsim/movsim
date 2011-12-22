@@ -26,14 +26,6 @@ public class FileTrafficSourceData extends FileOutputBase{
      * 
      */
     public FileTrafficSourceData(int roadId) {
-//        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-//        final String outputPath = projectMetaData.getOutputPath();
-//        final String filename = outputPath + File.separator + projectMetaData.getProjectName()
-//                + String.format(extensionFormat, roadId);
-//        fstrLogging = FileUtils.getWriter(filename);
-//        fstrLogging.printf(outputHeading);
-//=======
-//    public FileUpstreamBoundaryData(int roadId) {
     	super();
         final String filename = path + File.separator + baseFilename + String.format(extensionFormat, roadId);
         writer = FileUtils.getWriter(filename);
