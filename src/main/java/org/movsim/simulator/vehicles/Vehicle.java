@@ -143,7 +143,6 @@ public class Vehicle {
     private double roadSegmentLength;
     private final int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
-    private long roadId;  // FIXME meaning? on single roadsegment with roadSegmentId=1 this roadId is 0!? 
     private static long nextId = INITIAL_ID;
     private static long nextTemplateId = INITIAL_TEMPLATE_ID;
 
@@ -332,9 +331,8 @@ public class Vehicle {
 
     // central book-keeping of lanes (lane and laneOld)
 
-    public void init(double pos, double v, int lane, long roadId) {
+    public void init(double pos, double v, int lane) {
         this.laneOld = this.lane; // remember previous lane
-        this.roadId = roadId;
         this.midPosition = pos;
         this.positionOld = pos;
         this.speed = v;
@@ -552,10 +550,6 @@ public class Vehicle {
      */
     public long getId() {
         return id;
-    }
-
-    public long getRoadId() {
-        return roadId;
     }
 
     /*

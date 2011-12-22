@@ -201,7 +201,7 @@ public class VehicleContainerImpl implements VehicleContainer {
         if (!isTestwise) {
             vehCounter++;
             veh.setVehNumber(vehCounter);
-            veh.init(xInit, vInit, laneInit, roadID); // sets new lane index after lane
+            veh.init(xInit, vInit, laneInit); // sets new lane index after lane
             // change
         }
 
