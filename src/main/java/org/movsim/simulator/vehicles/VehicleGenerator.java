@@ -315,20 +315,16 @@ public class VehicleGenerator {
      * @return the vehicle
      */
     public Vehicle createVehicle(VehiclePrototype prototype) {
-        final int vehID = MyRandom.nextInt(); // for veh index
-        // final double length = prototype.length();
-        // final double reactionTime = prototype.reactionTime();
         final VehicleInput vehInput = prototype.getVehicleInput();
         final LongitudinalModelBase longModel = longitudinalModelFactory(vehInput.getAccelerationModelInputData(),
                 prototype.length());
 
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
 
-        // TODO lane-changing model impl
         final LaneChangingModel lcModel = new LaneChangingModel(vehInput.getLaneChangingInputData());
         final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
                 .getFuelConsumptionLabel());
-        final Vehicle veh = new Vehicle(prototype.getLabel(), vehID, longModel, vehInput, null, lcModel, fuelModel);
+        final Vehicle veh = new Vehicle(prototype.getLabel(), longModel, vehInput, null, lcModel, fuelModel);
         return veh;
     }
 

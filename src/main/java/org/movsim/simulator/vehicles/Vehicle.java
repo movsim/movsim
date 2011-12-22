@@ -97,7 +97,7 @@ public class Vehicle {
     private final double maxDecel;
 
     /** The id. */
-    int id;
+    long id;
 
     /** The vehicle number. */
     private int vehNumber;
@@ -144,8 +144,8 @@ public class Vehicle {
     private final int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
     private long roadId;  // FIXME meaning? on single roadsegment with roadSegmentId=1 this roadId is 0!? 
-    private static int nextId = INITIAL_ID;
-    private static int nextTemplateId = INITIAL_TEMPLATE_ID;
+    private static long nextId = INITIAL_ID;
+    private static long nextTemplateId = INITIAL_TEMPLATE_ID;
 
     /**
      * The type of numerical integration.
@@ -180,7 +180,7 @@ public class Vehicle {
      * 
      * @return the id of the last vehicle created
      */
-    public static int lastIdSet() {
+    public static long lastIdSet() {
         return nextId - 1;
     }
 
@@ -189,7 +189,7 @@ public class Vehicle {
      * 
      * @return the number of vehicles that have been created
      */
-    public static int count() {
+    public static long count() {
         return nextId - INITIAL_ID;
     }
 
@@ -209,10 +209,10 @@ public class Vehicle {
      * @param lcModel
      *            the lanechange model
      */
-    public Vehicle(String label, int id, final LongitudinalModelBase longitudinalModel, final VehicleInput vehInput,
+    public Vehicle(String label, final LongitudinalModelBase longitudinalModel, final VehicleInput vehInput,
             final Object cyclicBuffer, final LaneChangingModel lcModel, final FuelConsumption fuelModel) {
         this.label = label;
-        this.id = id;
+        id = nextId++;
         this.fuelModel = fuelModel;
 
         length = vehInput.getLength();
@@ -550,7 +550,7 @@ public class Vehicle {
      * @return vehicle's id
      * 
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
