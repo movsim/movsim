@@ -58,7 +58,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKK
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKrauss;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNSM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNewell;
-import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_FCDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
@@ -199,7 +199,7 @@ public class VehicleGenerator {
         } else if (longModel.modelName() == ModelName.ACC) {
             return new EquilibriumACC(vehLength, (ACC) longModel);
         } else if (longModel.modelName() == ModelName.OVM_FVDM) {
-            return new EquilibriumOVM_FCDM(vehLength, (OVM_FVDM) longModel);
+            return new EquilibriumOVM_FVDM(vehLength, (OVM_FVDM) longModel);
         } else if (longModel.modelName() == ModelName.GIPPS) {
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
         } else if (longModel.modelName() == ModelName.KRAUSS) {

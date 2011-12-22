@@ -24,7 +24,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_FVDM;
 /**
  * The Class EquilibriumOVM_FVDM.
  */
-public class EquilibriumOVM_FCDM extends EquilibriumProperties {
+public class EquilibriumOVM_FVDM extends EquilibriumProperties {
 
     /**
      * Instantiates a new equilibrium OVM or FVDM .
@@ -34,7 +34,7 @@ public class EquilibriumOVM_FCDM extends EquilibriumProperties {
      * @param vDiffModel
      *            the velocity difference model
      */
-    public EquilibriumOVM_FCDM(double length, OVM_FVDM vDiffModel) {
+    public EquilibriumOVM_FVDM(double length, OVM_FVDM vDiffModel) {
         super(length);
         calcEquilibrium(vDiffModel);
         calcRhoQMax();
