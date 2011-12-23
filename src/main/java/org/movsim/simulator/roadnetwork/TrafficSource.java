@@ -20,7 +20,6 @@
 package org.movsim.simulator.roadnetwork;
 
 import org.movsim.input.model.simulation.TrafficSourceData;
-import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -53,7 +52,15 @@ public class TrafficSource implements SimulationTimeStep {
 
     private int laneEnterLast;
 
-    private FileTrafficSourceData fileTrafficSourceData;
+    public interface RecordDataCallback {
+        /**
+         * Callback to allow the application to process or record the traffic source data.
+         * 
+         */
+        public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter,
+                double totalInflow, int enteringVehCounter, double nWait);
+    }
+    private RecordDataCallback recordDataCallback;
 
     /**
      * Instantiates a new upstream boundary .
@@ -72,11 +79,16 @@ public class TrafficSource implements SimulationTimeStep {
         nWait = 0;
 
         inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
+    }
 
-        if (trafficSourceData.withLogging()) {
-            enteringVehCounter = 1;
-            fileTrafficSourceData = new FileTrafficSourceData(roadSegment.id());
-        }
+    /**
+     * Sets the traffic source recorder.
+     * 
+     * @param recordDataCallback
+     */
+    public void setRecorder(RecordDataCallback recordDataCallback) {
+        enteringVehCounter = 1;
+        this.recordDataCallback = recordDataCallback;
     }
 
     /**
@@ -130,8 +142,8 @@ public class TrafficSource implements SimulationTimeStep {
                 final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
-                    if (fileTrafficSourceData != null) {
-                        fileTrafficSourceData.update(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
+                    if (recordDataCallback != null) {
+                    	recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
                                 totalInflow, enteringVehCounter, nWait);
                     }
                     return; // only one insert per simulation update

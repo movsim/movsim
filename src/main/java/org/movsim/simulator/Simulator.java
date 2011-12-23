@@ -37,6 +37,7 @@ import org.movsim.output.LoopDetectors;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
+import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
@@ -214,6 +215,9 @@ public class Simulator implements Runnable {
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final TrafficSource trafficSource = new TrafficSource(roadSegment.id(), vehGenerator, roadSegment,
                 trafficSourceData);
+        if (trafficSourceData.withLogging()) {
+        	trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.id()));
+        }
         roadSegment.setTrafficSource(trafficSource);
 
         // set up the traffic lights
