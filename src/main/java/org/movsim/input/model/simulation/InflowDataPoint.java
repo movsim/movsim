@@ -33,16 +33,30 @@ public class InflowDataPoint {
     private final double speed; // in m/s
 
     /**
-     * Instantiates a new inflow data point impl.
+     * Constructor.
      * 
      * @param map
      *            the map
      */
     public InflowDataPoint(Map<String, String> map) {
         this.time = Double.parseDouble(map.get("t"));
-        this.flow = Double.parseDouble(map.get("q_per_hour")) / 3600.0; // convert
-                                                                        // to SI
+        // convert to SI
+        this.flow = Double.parseDouble(map.get("q_per_hour")) / 3600.0;
         this.speed = Double.parseDouble(map.get("v"));
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param time
+     * @param flowPerHour
+     * @param speed
+     */
+    public InflowDataPoint(double time, double flowPerHour, double speed) {
+        this.time = time;
+        // convert to SI
+        this.flow = flowPerHour / 3600.0;
+        this.speed = speed;
     }
 
     /*
