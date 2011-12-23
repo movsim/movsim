@@ -23,18 +23,19 @@ import java.io.File;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.utilities.FileUtils;
 
 /**
  * The Class FileTrafficLightRecorder.
  */
-public class FileTrafficLightRecorder extends FileOutputBase {
+public class FileTrafficLightRecorder extends FileOutputBase implements TrafficLights.RecordDataCallback {
 
     private static final String extensionFormat = ".R%d_tl_log.csv";
     private final int nDt;
 
     /**
-     * Instantiates a new traffic light recorder.
+     * Constructor.
      * 
      * @param nDt
      *            the n dt
@@ -60,7 +61,8 @@ public class FileTrafficLightRecorder extends FileOutputBase {
      * @param trafficLights
      *            the traffic lights
      */
-    public void update(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights) {
+    @Override
+	public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights) {
 
         if (iterationCount % nDt != 0) {
             // no update; nothing to do

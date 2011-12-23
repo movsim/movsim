@@ -31,10 +31,12 @@ import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
+import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
@@ -207,19 +209,27 @@ public class Simulator implements Runnable {
      * @param roadinput
      */
     private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
-        // for now this is a minimal implementation, just the traffic source and traffic sink
-        // need to add further data, eg initial conditions, bottlenecks etc
+    	
+    	// set up the traffic source
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final TrafficSource trafficSource = new TrafficSource(roadSegment.id(), vehGenerator, roadSegment,
                 trafficSourceData);
         roadSegment.setTrafficSource(trafficSource);
 
-        final TrafficLights trafficLights = new TrafficLights(roadinput.getTrafficLightsInput(), roadSegment);
+        // set up the traffic lights
+        final TrafficLightsInput trafficLightsInput = roadinput.getTrafficLightsInput();
+        final TrafficLights trafficLights = new TrafficLights(trafficLightsInput);
+        if (trafficLightsInput.isWithLogging()) {
+            final int nDt = trafficLightsInput.getnDtSample();
+            trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));
+        }
         roadSegment.setTrafficLights(trafficLights);
 
+        // set up the speed limits
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
+        // set up the detectors
         final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput(),
                 roadSegment.laneCount());
         roadSegment.setLoopDetectors(loopDetectors);
@@ -227,6 +237,7 @@ public class Simulator implements Runnable {
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
                 roadinput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
+
         initialConditions(roadSegment, inputData.getSimulationInput(), roadinput);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();

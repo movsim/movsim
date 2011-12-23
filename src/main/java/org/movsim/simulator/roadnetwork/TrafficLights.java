@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
-import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +19,20 @@ public class TrafficLights implements Iterable<TrafficLight> {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
-    private final int nDt;
     private final Collection<TrafficLight> trafficLights;
-    private final FileTrafficLightRecorder fileTrafficLightRecorder;
+    public interface RecordDataCallback {
+        /**
+         * Callback to allow the application to process or record the traffic light data.
+         * 
+         * @param simulationTime
+         *            the current logical time in the simulation
+         * @param iterationCount 
+         * @param trafficLight
+         * @param roadSegment
+         */
+        public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights);
+    }
+    private RecordDataCallback recordDataCallback;
 
     /**
      * Constructor.
@@ -30,28 +40,22 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * @param trafficLightsInput
      * @param roadSegment
      */
-    public TrafficLights(TrafficLightsInput trafficLightsInput, RoadSegment roadSegment) {
+    public TrafficLights(TrafficLightsInput trafficLightsInput) {
 
         trafficLights = new ArrayList<TrafficLight>();
-        initTrafficLights(trafficLightsInput);
-        nDt = trafficLightsInput.getnDtSample();
-        if (trafficLightsInput.isWithLogging()) {
-            fileTrafficLightRecorder = new FileTrafficLightRecorder(nDt, trafficLights, roadSegment);
-        } else {
-        	fileTrafficLightRecorder = null;
-        }
-    }
-
-    /**
-     * Initializes the traffic lights.
-     * 
-     * @param trafficLightsInput
-     */
-    private void initTrafficLights(TrafficLightsInput trafficLightsInput) {
         final List<TrafficLightData> trafficLightData = trafficLightsInput.getTrafficLightData();
         for (final TrafficLightData tlData : trafficLightData) {
             trafficLights.add(new TrafficLight(tlData));
         }
+    }
+
+    /**
+     * Sets the traffic light recorder.
+     * 
+     * @param recordDataCallback
+     */
+    public void setRecorder(RecordDataCallback recordDataCallback) {
+        this.recordDataCallback = recordDataCallback;
     }
 
     /**
@@ -83,8 +87,8 @@ public class TrafficLights implements Iterable<TrafficLight> {
                 }
             }
         }
-        if (fileTrafficLightRecorder != null) {
-            fileTrafficLightRecorder.update(simulationTime, iterationCount, trafficLights);
+        if (recordDataCallback != null) {
+        	recordDataCallback.recordData(simulationTime, iterationCount, trafficLights);
         }
     }
 
