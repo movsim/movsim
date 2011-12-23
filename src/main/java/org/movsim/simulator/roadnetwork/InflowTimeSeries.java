@@ -69,9 +69,10 @@ public class InflowTimeSeries {
         flowValues = new double[size];
         speedValues = new double[size];
         for (int i = 0; i < size; i++) {
-            timeValues[i] = inflowTimeSeries.get(i).getTime();
-            flowValues[i] = inflowTimeSeries.get(i).getFlow();
-            speedValues[i] = inflowTimeSeries.get(i).getSpeed();
+        	final InflowDataPoint inflowDataPoint = inflowTimeSeries.get(i);
+            timeValues[i] = inflowDataPoint.getTime();
+            flowValues[i] = inflowDataPoint.getFlow();
+            speedValues[i] = inflowDataPoint.getSpeed();
             logger.debug("add data: flow={}, speed={}", flowValues[i], speedValues[i]);
         }
     }
