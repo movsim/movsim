@@ -19,7 +19,6 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -72,13 +71,11 @@ public class TrafficSource implements SimulationTimeStep {
      * @param trafficSourceData
      *            the upstream boundary data
      */
-    public TrafficSource(long roadId, VehicleGenerator vehGenerator, RoadSegment roadSegment,
-            TrafficSourceData trafficSourceData) {
+    public TrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment, InflowTimeSeries inflowTimeSeries) {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
+        this.inflowTimeSeries = inflowTimeSeries;
         nWait = 0;
-
-        inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
     }
 
     /**

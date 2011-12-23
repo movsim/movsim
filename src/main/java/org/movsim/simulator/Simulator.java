@@ -40,6 +40,7 @@ import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
+import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.RoadMapping;
@@ -213,8 +214,8 @@ public class Simulator implements Runnable {
     	
     	// set up the traffic source
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
-        final TrafficSource trafficSource = new TrafficSource(roadSegment.id(), vehGenerator, roadSegment,
-                trafficSourceData);
+        final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
+        final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
         if (trafficSourceData.withLogging()) {
         	trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.id()));
         }
