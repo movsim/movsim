@@ -4,6 +4,7 @@
 /bin
 */figs/*
 *.csv
+*.DS_Store
 *.internal_xml
 log4j.properties
 multiModel*.dtd
