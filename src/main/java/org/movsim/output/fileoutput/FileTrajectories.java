@@ -19,7 +19,6 @@
  */
 package org.movsim.output.fileoutput;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,9 +26,9 @@ import java.util.Iterator;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileTrajectories extends FileOutputBase {
 
-    private static final String extensionFormat = ".id%d_traj.csv";
+    private static final String extensionFormat = ".traj.road_%d.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
@@ -51,10 +50,10 @@ public class FileTrajectories extends FileOutputBase {
     private final double t_end_interval;
     private final double x_start_interval;
     private final double x_end_interval;
-    private final HashMap<Long, PrintWriter> fileHandles;
+    private final HashMap<Integer, PrintWriter> fileHandles;
     private double time = 0;
     private double lastUpdateTime = 0;
-    private final RoadSegment roadSegment;
+    private final RoadNetwork roadNetwork;
 
     /**
      * Instantiates a new trajectories.
@@ -64,7 +63,7 @@ public class FileTrajectories extends FileOutputBase {
      * @param roadSection
      *            the road section
      */
-    public FileTrajectories(TrajectoriesInput trajectoriesInput, RoadSegment roadSegment) {
+    public FileTrajectories(TrajectoriesInput trajectoriesInput, RoadNetwork roadNetwork) {
     	super();
         logger.info("Constructor");
 
@@ -74,9 +73,9 @@ public class FileTrajectories extends FileOutputBase {
         x_start_interval = trajectoriesInput.getStartPosition();
         x_end_interval = trajectoriesInput.getEndPosition();
 
-        this.roadSegment = roadSegment;
+        this.roadNetwork = roadNetwork;
 
-        fileHandles = new HashMap<Long, PrintWriter>();
+        fileHandles = new HashMap<Integer, PrintWriter>();
         logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
     }
 
@@ -84,26 +83,37 @@ public class FileTrajectories extends FileOutputBase {
      * Creates the file handles.
      */
     private void createFileHandles() {
-        final String filenameMainroad = path + File.separator + baseFilename
-                + String.format(extensionFormat, roadSegment.id());
-        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
-        fileHandles.put((long) roadSegment.id(), FileUtils.getWriter(filenameMainroad));
+    	for (final RoadSegment roadSegment : roadNetwork) {
+    		fileHandles.put(roadSegment.id(), createWriter(String.format(extensionFormat, roadSegment.id())));
+    	}
+//        final String filenameMainroad = path + File.separator + baseFilename
+//                + String.format(extensionFormat, roadSegment.id());
+//        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
+//        fileHandles.put(roadSegment.id(), createWriter(String.format(extensionFormat, roadSegment.id())));
 
-        /*
-         * // onramps int counter = 1; for(IOnRamp rmp : mainroad.onramps()){ final String filename =
-         * projectName+".onr_"+Integer.toString(counter)+endingFile; fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-         * counter++; } // offramps counter = 1; for(IStreet rmp : mainroad.offramps()){ final String filename =
-         * projectName+".offr_"+Integer.toString(counter)+endingFile; fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-         * counter++; }
-         */
+        
+//        // onramps
+//		int counter = 1;
+//		for (IOnRamp rmp : mainroad.onramps()) {
+//			final String filename = projectName + ".onr_" + Integer.toString(counter) + endingFile;
+//			fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
+//			counter++;
+//		}
+//		// offramps
+//		counter = 1;
+//		for (IStreet rmp : mainroad.offramps()) {
+//			final String filename = projectName + ".offr_" + Integer.toString(counter) + endingFile;
+//			fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
+//			counter++;
+//		}
 
         // write headers
-        final Iterator<Long> it = fileHandles.keySet().iterator();
+        final Iterator<Integer> it = fileHandles.keySet().iterator();
         while (it.hasNext()) {
-            final Long id = it.next();
-            final PrintWriter fstr = fileHandles.get(id);
-            fstr.println(outputHeading);
-            fstr.flush();
+            final Integer id = it.next();
+            final PrintWriter writer = fileHandles.get(id);
+            writer.println(outputHeading);
+            writer.flush();
         }
     }
 
@@ -135,7 +145,9 @@ public class FileTrajectories extends FileOutputBase {
 
                 lastUpdateTime = time;
 
-                writeTrajectories(fileHandles.get(roadSegment.id()), roadSegment);
+            	for (final RoadSegment roadSegment : roadNetwork) {
+                    writeTrajectories(fileHandles.get(roadSegment.id()), roadSegment);
+            	}
                 /*
                  * // onramps for(IOnRamp rmp : mainroad.onramps()){ writeTrajectories(fileHandles.get(rmp.roadIndex()),
                  * rmp.vehContainer()); } // offramps for(IStreet rmp : mainroad.offramps()){
@@ -148,11 +160,11 @@ public class FileTrajectories extends FileOutputBase {
     /**
      * Write trajectories.
      * 
-     * @param fstr
+     * @param writer
      *            the fstr
      * @param roadSegment
      */
-    private void writeTrajectories(PrintWriter fstr, RoadSegment roadSegment) {
+    private void writeTrajectories(PrintWriter writer, RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         for (int lane = 0; lane < laneCount; ++lane) {
             final LaneSegment laneSegment = roadSegment.laneSegment(lane);
@@ -161,7 +173,7 @@ public class FileTrajectories extends FileOutputBase {
                 final Vehicle me = laneSegment.getVehicle(i);
                 if ((me.getMidPosition() >= x_start_interval && me.getMidPosition() <= x_end_interval)) {
                     final Vehicle frontVeh = laneSegment.frontVehicle(me);
-                    writeCarData(fstr, i, me, frontVeh);
+                    writeCarData(writer, i, me, frontVeh);
                 }
             }
         }
@@ -170,8 +182,8 @@ public class FileTrajectories extends FileOutputBase {
     /**
      * Write car data.
      * 
-     * @param fstr
-     *            the fstr
+     * @param writer
+     *            the writer
      * @param index
      *            the index
      * @param me
@@ -179,11 +191,11 @@ public class FileTrajectories extends FileOutputBase {
      * @param frontVeh
      *            the front veh
      */
-    private void writeCarData(PrintWriter fstr, int index, final Vehicle me, final Vehicle frontVeh) {
+    private void writeCarData(PrintWriter writer, int index, final Vehicle me, final Vehicle frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
-        fstr.printf(outputFormat, time, me.getLane(), me.getMidPosition(), me.getSpeed(), me.getAcc(), s, dv,
+        writer.printf(outputFormat, time, me.getLane(), me.getMidPosition(), me.getSpeed(), me.getAcc(), s, dv,
                 me.getLabel(), me.getId());
-        fstr.flush();
+        writer.flush();
     }
 }

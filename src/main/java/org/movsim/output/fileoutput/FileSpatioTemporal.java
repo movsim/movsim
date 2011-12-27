@@ -1,9 +1,6 @@
 package org.movsim.output.fileoutput;
 
-import java.io.File;
-
 import org.movsim.output.SpatioTemporal;
-import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.ObserverInTime;
 
 /**
@@ -11,7 +8,7 @@ import org.movsim.utilities.ObserverInTime;
  */
 public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime {
 
-    private static final String extensionFormat = ".id%d_st.csv";
+    private static final String extensionFormat = ".st.road_%d.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
@@ -19,7 +16,7 @@ public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime
     private final SpatioTemporal spatioTemporal;
 
     /**
-     * Instantiates a new file spatio temporal.
+     * Constructor.
      * 
      * @param roadSectionID
      *            the road section id
@@ -27,15 +24,11 @@ public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime
      *            the spatio temporal
      */
     public FileSpatioTemporal(long roadSectionID, SpatioTemporal spatioTemporal) {
-
         this.spatioTemporal = spatioTemporal;
         spatioTemporal.registerObserver(this);
-        final String filename = path + File.separator + baseFilename
-                + String.format(extensionFormat, roadSectionID);
-        writer = FileUtils.getWriter(filename);
+        writer = createWriter(String.format(extensionFormat, roadSectionID));
         writer.printf(outputHeading);
         writer.flush();
-
     }
 
     /**

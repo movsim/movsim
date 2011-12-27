@@ -18,9 +18,9 @@ if (!exists("lang")) lang = "en"
 baseFile = "onramp_".ldm
 vehicle = ldm."1"
 
-# input files for road id=0
+# input files for road id=1, ramp id=4
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-stFile = inputPath.baseFile.".id0_st.csv"
+stFile = inputPath.baseFile.".st.road_1.csv"
 detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_1.csv"
 rampSourceFile = inputPath.baseFile.".source.road_4.csv"
@@ -34,9 +34,6 @@ detmicroOutput = outputPath.baseFile.".det_q_micro.eps"
 inflowOutput = outputPath.baseFile.".inflow_log.eps"
 v2dOutput = outputPath.baseFile.".v2d.eps"
 v2dallOutput = outputPath.baseFile.".v2d_all.eps"
-
-print "fundOutput = ",fundOutput
-print "please make sure that ".outputPath." already exists"
 
 
 ########  Languages  #####################################
@@ -194,8 +191,8 @@ set ylabel entranceDistanceLabel offset -1.5,0
 set yrange [xmin:xmax]
 
 unset surface
-set out v2dOutput
-# splot stFile using ($1/60.0):($2/1000.0-xramp):($3*3.6) with lines linestyle 99
+#set out v2dOutput
+#splot stFile using ($1/60.0):($2/1000.0-xramp):($3*3.6) with lines linestyle 99
 
 ####
 
@@ -203,7 +200,7 @@ set auto x
 set auto y
 set ylabel positionLabel offset -1.0,0
 set out v2dallOutput
-# splot stFile using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
+splot stFile using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
 
 set nolabel
 unset colorbox
