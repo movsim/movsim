@@ -46,7 +46,6 @@ public class SpatioTemporalInput {
         this.dt = Double.parseDouble(elem.getAttributeValue("dt"));
         this.dx = Double.parseDouble(elem.getAttributeValue("dx"));
         isInitialized = true;
-
     }
 
     /*
@@ -54,7 +53,7 @@ public class SpatioTemporalInput {
      * 
      * @see org.movsim.input.model.output.impl.MacroInput#getDt()
      */
-    public double getDt() {
+    public final double getDt() {
         return dt;
     }
 
@@ -63,7 +62,7 @@ public class SpatioTemporalInput {
      * 
      * @see org.movsim.input.model.output.impl.MacroInput#getDx()
      */
-    public double getDx() {
+    public final double getDx() {
         return dx;
     }
 
@@ -72,8 +71,7 @@ public class SpatioTemporalInput {
      * 
      * @see org.movsim.input.model.output.impl.MacroInput#isWithMacro()
      */
-    public boolean isWithMacro() {
+    public final boolean isWithMacro() {
         return isInitialized;
     }
-
 }
