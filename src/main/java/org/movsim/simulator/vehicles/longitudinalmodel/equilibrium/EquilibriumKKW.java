@@ -19,6 +19,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
 
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.KKW;
 
 // TODO: Auto-generated Javadoc
@@ -40,8 +41,8 @@ public class EquilibriumKKW extends EquilibriumProperties {
 
         calcEquilibrium(kcaModel);
         calcRhoQMax();
-
     }
+
 
     /**
      * Calc equilibrium.
@@ -49,13 +50,13 @@ public class EquilibriumKKW extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(KKW model) {
-        double vIter = model.getV0(); // variable of the relaxation equation
+    private void calcEquilibrium(LongitudinalModelBase model) {
+        double vIter = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
         final double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
-        vEqTab[0] = model.getV0(); // start with rho=0
+        vEqTab[0] = model.getDesiredSpeedParameterV0(); // start with rho=0
         final int length = vEqTab.length;
         for (int ir = 1; ir < length; ir++) {
             final double rho = getRho(ir);
@@ -65,10 +66,7 @@ public class EquilibriumKKW extends EquilibriumProperties {
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIter, 0.);
-                final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it.
-                                                                            // step
-                                                                            // in
-                                                                            // [dtmin,dtmax]
+                final double dtloc = dtMax * vIter / model.getDesiredSpeedParameterV0() + dtMin;
                 // actual relaxation
                 vIter += dtloc * acc;
                 if (vIter < 0) {
@@ -77,7 +75,5 @@ public class EquilibriumKKW extends EquilibriumProperties {
             }
             vEqTab[ir] = vIter;
         }
-
     }
-
 }

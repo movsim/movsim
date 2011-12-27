@@ -60,13 +60,13 @@ public class EquilibriumKrauss extends EquilibriumProperties {
         // the velocity v_it of one arbitrary vehicle
         // (no brain, but stable and simple method...)
 
-        double v_it = model.getV0(); // variable of the relaxation equation
+        double v_it = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int itmax = 100; // number of iteration steps in each relaxation
         final double dtmax = 2; // iteration time step (in s) changes from
         final double dtmin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
         // start with rho=0
-        vEqTab[0] = model.getV0();
+        vEqTab[0] = model.getDesiredSpeedParameterV0();
 
         for (int ir = 1; ir < vEqTab.length; ir++) {
             final double rho = rhoMax * ir / vEqTab.length;
@@ -74,21 +74,17 @@ public class EquilibriumKrauss extends EquilibriumProperties {
 
             // start iteration with equilibrium speed for previous density
             v_it = vEqTab[ir - 1];
-
             for (int it = 1; it <= itmax; it++) {
                 final double acc = model.calcAccSimple(s, v_it, 0.);
                 // iteration step in [dtmin,dtmax]
-                final double dtloc = dtmax * v_it / model.getV0() + dtmin;
-
+                final double dtloc = dtmax * v_it / model.getDesiredSpeedParameterV0() + dtmin;
                 // actual relaxation
                 v_it += dtloc * acc;
                 if (v_it < 0) {
                     v_it = 0;
                 }
-
             }
             vEqTab[ir] = v_it;
-
         }
     }
 }

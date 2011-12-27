@@ -32,15 +32,14 @@ public class EquilibriumNSM extends EquilibriumProperties {
      * 
      * @param length
      *            the length
-     * @param nsmModel
+     * @param model
      *            the nsm model
      */
-    public EquilibriumNSM(double length, NSM nsmModel) {
+    public EquilibriumNSM(double length, NSM model) {
         super(length);
 
-        calcEquilibrium(nsmModel);
+        calcEquilibrium(model);
         calcRhoQMax();
-
     }
 
     /**
@@ -50,12 +49,12 @@ public class EquilibriumNSM extends EquilibriumProperties {
      *            the model
      */
     private void calcEquilibrium(NSM model) {
-        double vIter = model.getV0(); // variable of the relaxation equation
+        double vIter = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
         final double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
-        vEqTab[0] = model.getV0(); // start with rho=0
+        vEqTab[0] = model.getDesiredSpeedParameterV0(); // start with rho=0
         final int length = vEqTab.length;
         for (int ir = 1; ir < length; ir++) {
             final double rho = getRho(ir);
@@ -65,10 +64,8 @@ public class EquilibriumNSM extends EquilibriumProperties {
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIter, 0.);
-                final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it.
-                                                                            // step
-                                                                            // in
-                                                                            // [dtmin,dtmax]
+                // interation step in [dtmin, dtmax]
+                final double dtloc = dtMax * vIter / model.getDesiredSpeedParameterV0() + dtMin;
                 // actual relaxation
                 vIter += dtloc * acc;
                 if (vIter < 0) {
@@ -78,5 +75,4 @@ public class EquilibriumNSM extends EquilibriumProperties {
             vEqTab[ir] = vIter;
         }
     }
-
 }

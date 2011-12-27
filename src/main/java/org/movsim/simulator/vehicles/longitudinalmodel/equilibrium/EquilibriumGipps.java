@@ -23,16 +23,16 @@ public class EquilibriumGipps extends EquilibriumProperties {
      * 
      * @param length
      *            the length
-     * @param gippsModel
+     * @param model
      *            the gipps model
      */
-    public EquilibriumGipps(double length, Gipps gippsModel) {
+    public EquilibriumGipps(double length, Gipps model) {
         super(length);
 
-        calcEquilibrium(gippsModel);
+        calcEquilibrium(model);
         calcRhoQMax();
-
     }
+
 
     // Calculates equilibrium velocity of Gipps and Gipps with finite s0
     // and free-acc exponent delta
@@ -41,23 +41,23 @@ public class EquilibriumGipps extends EquilibriumProperties {
     /**
      * Calc equilibrium.
      * 
-     * @param gippsModel
+     * @param model
      *            the gipps model
      */
-    private void calcEquilibrium(Gipps gippsModel) {
+    private void calcEquilibrium(Gipps model) {
 
         // Find equilibrium velocities veqtab[ir] with simple relaxation
         // method: Just model for homogeneous traffic solved for
         // the velocity v_it of one arbitrary vehicle
         // (no brain, but stable and simple method...)
 
-        double vIteration = gippsModel.getV0(); // variable of the relaxation equation
+        double vIteration = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int itmax = 100; // number of iteration steps in each relaxation
         final double dtmax = 2; // iteration time step (in s) changes from
         final double dtmin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
         // start with rho=0
-        vEqTab[0] = gippsModel.getV0();
+        vEqTab[0] = model.getDesiredSpeedParameterV0();
 
         for (int ir = 1; ir < vEqTab.length; ir++) {
             final double rho = rhoMax * ir / vEqTab.length;
@@ -65,12 +65,10 @@ public class EquilibriumGipps extends EquilibriumProperties {
 
             // start iteration with equilibrium speed for previous density
             vIteration = vEqTab[ir - 1];
-
             for (int it = 1; it <= itmax; it++) {
-                final double acc = gippsModel.calcAccSimple(s, vIteration, 0.);
+                final double acc = model.calcAccSimple(s, vIteration, 0.);
                 // iteration step in [dtmin,dtmax]
-                final double dtLocal = dtmax * vIteration / gippsModel.getV0() + dtmin;
-
+                final double dtLocal = dtmax * vIteration / model.getDesiredSpeedParameterV0() + dtmin;
                 // actual relaxation
                 vIteration += dtLocal * acc;
                 if (vIteration < 0) {
@@ -79,8 +77,6 @@ public class EquilibriumGipps extends EquilibriumProperties {
 
             }
             vEqTab[ir] = vIteration;
-
         }
     }
-
 }

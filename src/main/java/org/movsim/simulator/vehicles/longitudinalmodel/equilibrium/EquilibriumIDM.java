@@ -32,15 +32,14 @@ public class EquilibriumIDM extends EquilibriumProperties {
      * 
      * @param length
      *            the length
-     * @param idmModel
+     * @param model
      *            the idm model
      */
-    public EquilibriumIDM(double length, IDM idmModel) {
+    public EquilibriumIDM(double length, IDM model) {
         super(length);
 
-        calcEquilibrium(idmModel);
+        calcEquilibrium(model);
         calcRhoQMax();
-
     }
 
     /**
@@ -50,31 +49,28 @@ public class EquilibriumIDM extends EquilibriumProperties {
      *            the model
      */
     private void calcEquilibrium(IDM model) {
-        // Find equilibrium velocities veqtab[ir] with simple relaxation
+        // Find equilibrium velocities vEqTab[ir] with simple relaxation
         // method: Just model for homogeneous traffic solved for
         // the velocity v_it of one arbitrary vehicle
         // (no brain, but stable and simple method...)
 
-        double vIter = model.getV0(); // variable of the relaxation equation
+        double vIter = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
         final double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
-        vEqTab[0] = model.getV0(); // start with rho=0
+        vEqTab[0] = model.getDesiredSpeedParameterV0(); // start with rho=0
         final int length = vEqTab.length;
 
         for (int ir = 1; ir < length; ir++) {
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
-            // start iteration with equilibrium velocity for the previous
-            // density
+            // start iteration with equilibrium velocity for the previous density
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIter, 0.);
-                final double dtloc = dtMax * vIter / model.getV0() + dtMin; // it.
-                                                                            // step
-                                                                            // in
-                                                                            // [dtmin,dtmax]
+                // interation step in [dtmin, dtmax]
+                final double dtloc = dtMax * vIter / model.getDesiredSpeedParameterV0() + dtMin;
                 // actual relaxation
                 vIter += dtloc * acc;
                 if ((vIter < 0) || (s < model.getS0())) {
@@ -84,5 +80,4 @@ public class EquilibriumIDM extends EquilibriumProperties {
             vEqTab[ir] = vIter;
         }
     }
-
 }

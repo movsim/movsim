@@ -48,10 +48,9 @@ public class EquilibriumOVM_FVDM extends EquilibriumProperties {
      */
     private void calcEquilibrium(OVM_FVDM model) {
 
-        double vIterate = model.getV0(); // variable of the relaxation equation
+        double vIterate = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int iterMax = 100; // number of iteration steps in each relaxation
-        final double dtMax = 0.3 * model.getTau(); // iteration time step (in s)
-                                                   // changes from
+        final double dtMax = 0.3 * model.getTau(); // iteration time step (in s) changes from
         final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to dtMax (rho=0)
 
         vEqTab[0] = model.getV0(); // start with rho=0
@@ -62,23 +61,19 @@ public class EquilibriumOVM_FVDM extends EquilibriumProperties {
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
 
-            // start iteration with equilibrium velocity for the previous
-            // density
+            // start iteration with equilibrium velocity for the previous density
             vIterate = vEqTab[ir - 1];
-
             for (int it = 1; it <= iterMax; it++) {
                 final double acc = model.calcAccSimple(s, vIterate, 0);
-                final double dtLoc = dtMax * vIterate / model.getV0() + dtMin; // it. step in [dtmin,dtmax]
-
+                // interation step in [dtmin, dtmax]
+                final double dtLoc = dtMax * vIterate / model.getDesiredSpeedParameterV0() + dtMin;
                 // actual relaxation
                 vIterate += dtLoc * acc;
                 if ((vIterate < 0) || (s < model.getS0())) {
                     vIterate = 0;
                 }
-
             }
             vEqTab[ir] = vIterate;
         }
     }
-
 }
