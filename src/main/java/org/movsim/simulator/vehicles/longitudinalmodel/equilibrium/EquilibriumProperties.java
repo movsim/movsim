@@ -19,10 +19,6 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
 
-import java.io.PrintWriter;
-
-import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +51,7 @@ public class EquilibriumProperties {
     protected double[] vEqTab;
 
     /**
-     * Instantiates a new equilibrium properties impl.
+     * Constructor.
      * 
      * @param length
      *            the length
@@ -63,7 +59,7 @@ public class EquilibriumProperties {
     public EquilibriumProperties(double length) {
         this.length = length;
         vEqTab = new double[NRHO];
-        rhoMax = 1. / length;
+        rhoMax = 1.0 / length;
     }
 
     /**
@@ -100,8 +96,8 @@ public class EquilibriumProperties {
      *            the rho
      * @return the net distance
      */
-    protected double getNetDistance(double rho) {
-        return rho != 0 ? (1. / rho - 1. / rhoMax) : 0;
+    public double getNetDistance(double rho) {
+        return rho != 0.0 ? (1.0 / rho - 1.0 / rhoMax) : 0.0;
     }
 
     // calculate Qmax, and abszissa rhoQmax from veqtab (necessary for BC)
@@ -137,27 +133,15 @@ public class EquilibriumProperties {
      *            the i
      * @return the rho
      */
-    protected double getRho(int i) {
+    public double getRho(int i) {
         return rhoMax * i / (vEqTab.length - 1);
     }
 
-    /**
-     * Write output.
-     * 
-     * @param filename
-     *            the filename
-     */
-    public void writeOutput(String filename) {
-        final PrintWriter fstr = FileUtils.getWriter(filename);
-        fstr.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * rhoQMax);
-        fstr.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * qMax);
-        fstr.printf(FileOutputBase.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n");
-        for (int i = 0; i < vEqTab.length; i++) {
-            final double rho = getRho(i);
-            final double s = getNetDistance(rho);
-            fstr.printf("%8.2f, %8.2f, %8.2f, %8.2f%n", 1000 * rho, s, 3.6 * vEqTab[i], 3600 * rho * vEqTab[i]);
-        }
-        fstr.close();
+    public double getVEq(int i) {
+        return vEqTab[i];
     }
 
+    public int getVEqCount() {
+        return vEqTab.length;
+    }
 }

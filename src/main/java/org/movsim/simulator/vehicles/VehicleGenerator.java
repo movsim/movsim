@@ -38,7 +38,6 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
@@ -78,8 +77,6 @@ public class VehicleGenerator {
 
     private final boolean isWithReactionTimes;
 
-    private final boolean instantaneousFileOutput;
-
     private final ConsumptionModeling fuelConsumptionModels;
 
     /**
@@ -88,11 +85,9 @@ public class VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData,
-            boolean isWithWriteFundamentalDiagrams) {
+    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
-        this.instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
 
         // default for continuous micro models
         this.simulationTimestep = simulationTimestep;
@@ -101,11 +96,6 @@ public class VehicleGenerator {
         final List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehicleInputData);
         prototypes = createPrototypes(vehInputMap, heterogenInputData);
-
-        // output fundamental diagrams
-        if (instantaneousFileOutput && isWithWriteFundamentalDiagrams) {
-            FileFundamentalDiagram.writeFundamentalDiagrams(prototypes);
-        }
 
         isWithReactionTimes = checkForReactionTimes();
 
@@ -150,6 +140,10 @@ public class VehicleGenerator {
         // normalize heterogeneity fractions
         normalizeFractions(sumFraction, prototypes);
         return prototypes;
+    }
+
+    public HashMap<String, VehiclePrototype> prototypes() {
+    	return prototypes;
     }
 
     // add Obstacle as permanent Vehicle_Type

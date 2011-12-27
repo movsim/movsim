@@ -74,8 +74,9 @@ public class TrafficSource implements SimulationTimeStep {
     public TrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment, InflowTimeSeries inflowTimeSeries) {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
-        this.inflowTimeSeries = inflowTimeSeries;
         nWait = 0;
+
+        this.inflowTimeSeries = inflowTimeSeries;
     }
 
     /**
@@ -87,6 +88,7 @@ public class TrafficSource implements SimulationTimeStep {
         enteringVehCounter = 1;
         this.recordDataCallback = recordDataCallback;
     }
+
 
     /**
      * Gets the entering veh counter.

@@ -36,6 +36,7 @@ import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
 import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
+import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
@@ -144,8 +145,14 @@ public class Simulator implements Runnable {
      */
     private void createVehicleGenerator(final SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
+        vehGenerator = new VehicleGenerator(timestep, inputData, heterogenInputData);
+        // output fundamental diagrams
+        final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
-        vehGenerator = new VehicleGenerator(timestep, inputData, heterogenInputData, isWithFundDiagramOutput);
+        if (instantaneousFileOutput && isWithFundDiagramOutput) {
+            FileFundamentalDiagram.writeFundamentalDiagrams(vehGenerator.prototypes());
+        }
+
     }
 
     /**

@@ -146,6 +146,15 @@ public class VehiclePrototype {
     }
 
     /**
+     * Gets the equilibrium properties.
+     * 
+     * @return the equilibrium properties
+     */
+    public EquilibriumProperties getEquilibriumProperties() {
+        return equiProperties;
+    }
+
+    /**
      * Gets the rho q max.
      * 
      * @return the rho q max
@@ -163,16 +172,6 @@ public class VehiclePrototype {
      */
     public double getEquilibriumSpeed(double rho) {
         return equiProperties.getVEq(rho);
-    }
-
-    /**
-     * Write fundamental diagram.
-     * 
-     * @param filename
-     *            the filename
-     */
-    public void writeFundamentalDiagram(String filename) {
-        equiProperties.writeOutput(filename);
     }
 
     /**
