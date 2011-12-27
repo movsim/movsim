@@ -48,7 +48,7 @@ public class SimOutput implements SimObservables {
     private FileSpatioTemporal fileSpatioTemporal;
     private FloatingCars floatingCars = null;
     private FileFloatingCars fileFloatingCars;
-    private FileTrajectories trajectories = null;
+    private FileTrajectories fileTrajectories = null;
     private final boolean writeOutput;
     private final RoadNetwork roadNetwork;
     private final RoadSegment roadSegment;
@@ -106,10 +106,9 @@ public class SimOutput implements SimObservables {
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
             if (writeOutput) {
-                trajectories = new FileTrajectories(trajInput, roadSegment);
+                fileTrajectories = new FileTrajectories(trajInput, roadNetwork);
             }
         }
-
     }
 
     /**
@@ -129,8 +128,8 @@ public class SimOutput implements SimObservables {
             spatioTemporal.update(simulationTime, iterationCount, roadSegment);
         }
 
-        if (trajectories != null) {
-            trajectories.update(simulationTime, iterationCount);
+        if (fileTrajectories != null) {
+            fileTrajectories.update(simulationTime, iterationCount);
         }
 
         if (travelTimes != null) {
