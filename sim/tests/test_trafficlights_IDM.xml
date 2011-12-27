@@ -68,7 +68,6 @@
                 <FC number="36"/>
                 <FC number="40"/>
             </FLOATING_CAR_DATA>
-            <!--                <TRAFFIC_LIGHT_RECORDER n_dt="5" />-->
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
