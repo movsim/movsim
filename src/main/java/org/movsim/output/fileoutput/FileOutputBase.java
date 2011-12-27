@@ -1,8 +1,10 @@
 package org.movsim.output.fileoutput;
 
+import java.io.File;
 import java.io.PrintWriter;
 
 import org.movsim.input.ProjectMetaData;
+import org.movsim.utilities.FileUtils;
 
 public class FileOutputBase {
 
@@ -19,5 +21,10 @@ public class FileOutputBase {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         path = projectMetaData.getOutputPath();
         baseFilename = projectMetaData.getProjectName();
+    }
+
+    public PrintWriter createWriter(String extension) {
+        final String filename = path + File.separator + baseFilename + extension;
+        return FileUtils.getWriter(filename);
     }
 }
