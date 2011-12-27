@@ -71,7 +71,6 @@ public class SpatioTemporal extends ObservableImpl {
         roadlength = roadSegment.roadLength();
 
         initialize();
-
     }
 
     /**
@@ -112,6 +111,9 @@ public class SpatioTemporal extends ObservableImpl {
      */
     private void calcData(double time, LaneSegment laneSegment) {
         final int size = laneSegment.vehicleCount();
+        if (size == 0) {
+        	return;
+        }
         final double[] localDensity = new double[size];
         final double[] vMicro = new double[size];
         final double[] xMicro = new double[size];
@@ -190,5 +192,4 @@ public class SpatioTemporal extends ObservableImpl {
     public double getTimeOffset() {
         return timeOffset;
     }
-
 }
