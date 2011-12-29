@@ -45,6 +45,8 @@ compareDistanceOutput = outputPath.baseFile."_compare.s.eps"
 compareVelocityOutput = outputPath.baseFile."_compare.v.eps"
 compareAccelerationOutput = outputPath.baseFile."_compare.a.eps"
 
+# check for output directory:
+print "(try to) write to output path ",outputPath
 
 ########  Languages  #####################################
 
@@ -110,16 +112,19 @@ set xlabel densityLabel
 
 set title ldm." ".fundTitle
 set ylabel flowLabel
+print "write to ",fundOutput
 set out fundOutput
 plot fundFile using 1:4 title "" with lines linestyle 10
 
 set title ldm." ".veqTitle
 set ylabel veqLabel
+print "write to ",veqOutput
 set out veqOutput
 plot fundFile using 1:3 title "" with lines linestyle 10
 
 set title ldm." ".vqTitle
 set xlabel flowLabel
+print "write to ",vqOutput
 set out vqOutput
 plot fundFile u 4:3 title "" with lines linestyle 10
 
@@ -133,6 +138,7 @@ tmax=158
 if (ldm eq "BARL") tmax=120
 if (ldm eq "KCA") tmax=120
 if (ldm eq "NSM") tmax=120
+if (ldm eq "FVDM") tmax=360
 ##tmaxdata=101.  # Um bei Beschl. Kurve zu stoppen
 
 set xrange [tmin:tmax]
@@ -154,6 +160,7 @@ if (ldm eq "NSM") set yrange [0:55]
 set ytics 10
 # car 1: Entfernung zur Ampel !
 # car 1 is lead car, so take distance to traffic light (col 8), rather than distance to car in front
+print "write to ",distanceOutput
 set out distanceOutput
 plot\
   carFile(1)  using 1:(xscale*$9) title car(1)  with lines linestyle 1,\
@@ -173,6 +180,7 @@ if (compare eq "true")\
 
 set ylabel velocityLabel
 set yrange [0:55]
+print "write to ",velocityOutput
 set out velocityOutput
 plot\
   carFile(1)  using 1:(3.6*vscale*$4) title car(1)  with lines linestyle 1,\
@@ -182,6 +190,7 @@ plot\
   carFile(20) using 1:(3.6*vscale*$4) title car(20) with lines linestyle 5
 
 if (compare eq "true")\
+  print "write to ",compareVelocityOutput;\
   set out compareVelocityOutput;\
   plot\
     carFile(1)    using 1:(3.6*vscale*$4) title "java sim, ".car(1) with lines linestyle 11,\
@@ -198,6 +207,7 @@ if (ldm eq "GIPPS") set yrange [-1.5:2]
 if (ldm eq "KCA") set ytics 2; set yrange [-14:2]
 if (ldm eq "NSM") set ytics 5
 if (ldm eq "OVM") set ytics 5
+print "write to ",accelerationOutput
 set out accelerationOutput
 plot\
   carFile(1)  using 1:(ascale*$5) title car(1)  with lines linestyle 1,\
@@ -207,9 +217,12 @@ plot\
   carFile(20) using 1:(ascale*$5) title car(20) with lines linestyle 5
 
 if (compare eq "true")\
+  print "write to ",compareAccelerationOutput;\
   set out compareAccelerationOutput;\
   plot\
     carFile(1)     using 1:(ascale*$5) title "java sim, ".car(1)  with lines linestyle 11,\
     carLsaFile(1)  using 1:(ascale*$5) title "mic sim,  ".car(1)  with lines linestyle 12,\
     carFile(10)    using 1:(ascale*$5) title "java sim, ".car(10) with lines linestyle 11,\
     carLsaFile(10) using 1:(ascale*$5) title "mic sim,  ".car(10) with lines linestyle 12
+    
+print "done."
