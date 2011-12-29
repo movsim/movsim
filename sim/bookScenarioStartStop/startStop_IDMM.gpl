@@ -1,0 +1,7 @@
+# gnuplot command file
+
+ldm = "IDMM"
+lang = "en"
+inputPath = "csv/"
+load "startStop.gpl"
+
