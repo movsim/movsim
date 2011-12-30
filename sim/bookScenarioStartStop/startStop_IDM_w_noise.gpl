@@ -1,5 +1,5 @@
 # gnuplot command file
 
-ldm = "GIPPS"
+ldm = "IDM_w_noise"
 lang = "en"
 load "startStop.gpl"

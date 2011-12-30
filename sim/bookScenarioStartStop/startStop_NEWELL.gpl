@@ -1,5 +1,5 @@
 # gnuplot command file
 
-ldm = "GIPPS"
+ldm = "NEWELL"
 lang = "en"
 load "startStop.gpl"

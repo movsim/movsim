@@ -9,8 +9,10 @@ set terminal postscript eps enhanced color solid font "Helvetica" 26
 set size 1,1
 
 # parameters
-if (!exists("inputPath")) inputPath = "csv/"
-if (!exists("outputPath")) outputPath = "figs/"
+#if (!exists("inputPath")) inputPath = "csv/"
+#if (!exists("outputPath")) outputPath = "figs/"
+if (!exists("inputPath")) inputPath = "./"
+if (!exists("outputPath")) outputPath = "./"
 if (!exists("lang")) lang = "en"
 if (!exists("ldm")) ldm = "IDM"
 origin=1

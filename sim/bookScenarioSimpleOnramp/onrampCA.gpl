@@ -7,23 +7,35 @@
 #set datafile separator ","
 
 # parameters
-if (!exists("inputPath")) inputPath = "csv/"
+if (!exists("inputPath")) inputPath = ""
 if (!exists("outputPath")) outputPath = "figs/"
 if (!exists("ldm")) ldm = "IDM"
 if (!exists("lang")) lang = "en"
 #print "LDM=".ldm
-#print "lang=".lang
+#print "lan=".lang
+
+
+###############  Scalings CA (NSM, BARL, KKW)#######
+xscale=7.5
+if (ldm eq "KKW") xscale=0.5
+tscale=1.
+vscale=xscale/tscale
+rhoscale=1./xscale
+accscale=xscale/tscale**2
+####################################################
+
+
 
 # variables
 baseFile = "onramp_".ldm
 vehicle = ldm."1"
 
-# input files for road id=1, ramp id=4
+# input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-stFile = inputPath.baseFile.".st.road_1.csv"
-detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
-roadSourceFile = inputPath.baseFile.".source.road_1.csv"
-rampSourceFile = inputPath.baseFile.".source.road_4.csv"
+stFile = inputPath.baseFile.".id0_st.csv"
+detFile(n) = sprintf(inputPath.baseFile.".id0x%d_det.csv",n)
+roadSourceFile = inputPath.baseFile.".id0_source_log.csv"
+rampSourceFile = inputPath.baseFile.".id0_sramp1_source_log.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
@@ -34,6 +46,9 @@ detmicroOutput = outputPath.baseFile.".det_q_micro.eps"
 inflowOutput = outputPath.baseFile.".inflow_log.eps"
 v2dOutput = outputPath.baseFile.".v2d.eps"
 v2dallOutput = outputPath.baseFile.".v2d_all.eps"
+
+print "fundOutput = ",fundOutput
+print "please make sure that ".outputPath." already exists"
 
 
 ########  Languages  #####################################
@@ -101,17 +116,17 @@ set xlabel densityLabel
 set title ldm." ".fundTitle
 set ylabel flowLabel
 set out fundOutput
-plot fundFile using 1:4 title "" with lines linestyle 10
+plot fundFile using ($1/xscale):4 title "" with lines linestyle 10
 
 set title ldm." ".veqTitle
 set ylabel veqLabel
 set out veqOutput
-plot fundFile using 1:3 title "" with lines linestyle 10
+plot fundFile using ($1/xscale):($3*vscale) title "" with lines linestyle 10
 
 set title ldm." ".vqTitle
 set xlabel flowLabel
 set out vqOutput
-plot fundFile u 4:3 title "" with lines linestyle 10
+plot fundFile u 4:($3*vscale) title "" with lines linestyle 10
 
 ########################################################
 
@@ -124,18 +139,28 @@ set key box
 set xlabel densityLabel
 set ylabel flowLabel
 
+avgInterval=60   # sampling interval of detectors (s) 
+rhofun(q,v)=(v<=0.00001) ? 0  : 3600/avgInterval*q/v
+Qfun(q)    =(q<=0.00001) ? 0 : 3600/avgInterval*q
+
+
 set xrange [0:150]
 set out detOutput
-plot\
- detFile(200)  using 3:4 title "-7 km" with points linestyle 6,\
- detFile(400) using 3:4 title "-5 km" with points linestyle 4,\
+
+
+if (ldm eq "KKW") plot\
+ detFile(16000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
+ detFile(20000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
+ detFile(24000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
+ detFile(28000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-1.5 km" with points linestyle 1,\
+ fundFile using 1:4 title "FD" with lines linestyle 10; else plot\
+ detFile(1200) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
+ detFile(1400) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
+ detFile(1600) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
+ detFile(1800) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-1.5 km" with points linestyle 1,\
  fundFile using 1:4 title "FD" with lines linestyle 10
 
-set out detmicroOutput
-plot\
- detFile(200)  using ($8*3600/$7):($8*3600) title "-7 km" with points linestyle 6,\
- detFile(400) using ($8*3600/$7):($8*3600) title "-5 km" with points linestyle 4,\
- fundFile using 1:4 title "FD" with lines linestyle 10
+
 
 ######################################
 # logging of inflows for testing
@@ -177,7 +202,7 @@ xmin=-8  # km
 xmax=2
 xramp=15.  # km
 tmin=0
-tmax=90 # min
+#tmax=90 # min
 tmax=120
 #tshift=20.
 
@@ -191,8 +216,8 @@ set ylabel entranceDistanceLabel offset -1.5,0
 set yrange [xmin:xmax]
 
 unset surface
-#set out v2dOutput
-#splot stFile using ($1/60.0):($2/1000.0-xramp):($3*3.6) with lines linestyle 99
+set out v2dOutput
+splot stFile using ($1/60.0):(xscale*$2/1000.0-xramp):(vscale*$3*3.6) with lines linestyle 99
 
 ####
 
@@ -200,7 +225,7 @@ set auto x
 set auto y
 set ylabel positionLabel offset -1.0,0
 set out v2dallOutput
-splot stFile using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
+splot stFile using ($1/60.0):(xscale*$2/1000.0):(vscale*$3*3.6) with lines linestyle 99
 
 set nolabel
 unset colorbox

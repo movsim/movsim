@@ -11,7 +11,7 @@
 			</LONGITUDINAL_MODEL>
 			<LANE_CHANGE_MODEL />
 		</VEHICLE>
-		<VEHICLE label="Obstacle" length="6" b_max="20">
+		<VEHICLE label="Obstacle" length="0" b_max="20">
 			<LONGITUDINAL_MODEL>
 				<OVM_FVDM v0="0" tau="5" s0="2" l_int="8" beta="1.5"
 					lambda="0.6" variant="0" />
@@ -22,6 +22,7 @@
 	<SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
 		<TRAFFIC_COMPOSITION write_fund_diagrams="true">
 			<VEHICLE_TYPE label="FVDM1" fraction="1" />
+			<VEHICLE_TYPE label="Obstacle" fraction="0" />
 		</TRAFFIC_COMPOSITION>
 		<ROAD id="1">
 			<INITIAL_CONDITIONS>
@@ -51,21 +52,18 @@
 				<IC_MICRO x="240" v="0" />
 				<IC_MICRO x="250" v="0" />
 				<IC_MICRO x="260" v="0" />
-
-				<IC_MICRO x="1000" label="Obstacle" v="0" />
+				<IC_MICRO x="1000" v="0" label="Obstacle" />
 			</INITIAL_CONDITIONS>
-			<TRAFFIC_SOURCE />
-			<!-- <TRAFFIC_LIGHTS> <TRAFFIC_LIGHT x="1000" green_time="30" green_red_time="3" 
-				red_time="200" red_green_time="2" phase_shift="0" /> </TRAFFIC_LIGHTS> -->
 		</ROAD>
 		<OUTPUT>
 			<!-- output grid absorbs some information in acceleration -->
-			<FLOATING_CAR_DATA n_dt="5" perc_out="0" dn="0">
-				<FC number="1" />
-				<FC number="5" />
-				<FC number="10" />
-				<FC number="15" />
-				<FC number="20" />
+			<FLOATING_CAR_DATA n_dt="5">
+                                <!-- FC 1 is obstacle -->
+				<FC number="2" />
+				<FC number="6" />
+				<FC number="11" />
+				<FC number="16" />
+				<FC number="21" />
 			</FLOATING_CAR_DATA>
 		</OUTPUT>
 	</SIMULATION>

@@ -1,5 +1,6 @@
 # gnuplot command file
 
-ldm = "GIPPS"
+ldm = "IDMM"
 lang = "en"
-load "startStop.gpl"
+load "onramp.gpl"
+

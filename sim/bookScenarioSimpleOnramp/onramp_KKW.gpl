@@ -1,5 +1,6 @@
 # gnuplot command file
 
-ldm = "GIPPS"
+ldm = "KKW"
 lang = "en"
-load "startStop.gpl"
+load "onrampCA.gpl"
+

@@ -1,5 +1,6 @@
 # gnuplot command file
 
-ldm = "GIPPS"
+ldm = "FVDM"
 lang = "en"
-load "startStop.gpl"
+load "onramp.gpl"
+

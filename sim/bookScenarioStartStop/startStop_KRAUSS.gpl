@@ -2,6 +2,4 @@
 
 ldm = "KRAUSS"
 lang = "en"
-inputPath = "csv/"
 load "startStop.gpl"
-
