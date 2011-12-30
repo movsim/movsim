@@ -400,11 +400,10 @@ phase_shift      NMTOKEN "0"
   dx NMTOKEN "100"
 >
 
-<!-- possible output: percentage and/or dn and/or vla -->
+<!-- possible output: dn and/or list  -->
 <!ELEMENT FLOATING_CAR_DATA (FC*)>
 <!ATTLIST FLOATING_CAR_DATA 
 n_dt      NMTOKEN "1"
-perc_out  NMTOKEN "0"
 dn        NMTOKEN "0"
 >
 
@@ -413,7 +412,7 @@ dn        NMTOKEN "0"
 number  NMTOKEN #REQUIRED
 >
 
-<!-- <TRAJECTORIES dt_s="1" t_start_min="0" t_end_min="7" />  -->
+<!-- example: <TRAJECTORIES dt_s="1" t_start_min="0" t_end_min="7" />  -->
 <!ELEMENT TRAJECTORIES EMPTY>
 <!ATTLIST TRAJECTORIES
   dt           NMTOKEN "1"
