@@ -26,6 +26,7 @@
             </TRAFFIC_COMPOSITION>
         <ROAD id="1" >
             <INITIAL_CONDITIONS>
+                <!-- in number of cells -->
                 <IC_MICRO x="1" v="0" label="BARL1" />
                 <IC_MICRO x="2" v="0" label="BARL1" />
                 <IC_MICRO x="3" v="0" label="BARL1" />

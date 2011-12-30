@@ -25,9 +25,9 @@
                 <VEHICLE_TYPE label="KKW1" fraction="1" />
                 <VEHICLE_TYPE label="Obstacle" fraction="0" />
             </TRAFFIC_COMPOSITION>
-			 <!-- road id 0 indicates mainroad -->    
-         <ROAD id="1" > <!--  length="20000" lanes="1"> -->
+         <ROAD id="1" >
             <INITIAL_CONDITIONS>
+                <!-- in number of cells -->
                 <IC_MICRO x="20" v="0" label="KKW1" />
                 <IC_MICRO x="40" v="0" label="KKW1" />
                 <IC_MICRO x="60" v="0" label="KKW1" />

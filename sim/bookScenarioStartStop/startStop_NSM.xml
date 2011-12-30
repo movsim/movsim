@@ -25,9 +25,9 @@
            <VEHICLE_TYPE label="NSM1" fraction="1" />
            <VEHICLE_TYPE label="Obstacle" fraction="0" />
        </TRAFFIC_COMPOSITION>
-		 <!-- road id 0 indicates mainroad -->    
-         <ROAD id="1" > <!--  length="20000" lanes="1"> -->
+         <ROAD id="1" > 
             <INITIAL_CONDITIONS>
+                <!-- in number of cells -->
                 <IC_MICRO x="1" v="0" label="NSM1" />
                 <IC_MICRO x="2" v="0" label="NSM1" />
                 <IC_MICRO x="3" v="0" label="NSM1" />
