@@ -59,6 +59,7 @@ public class Newell extends LongitudinalModelBase {
 
     private void initParameters(double dt) {
         this.dt = dt;
+        initParameters();
     }
 
     /*
@@ -69,7 +70,6 @@ public class Newell extends LongitudinalModelBase {
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataNewell) parameters).getV0();
         this.v0 = ((LongitudinalModelInputDataNewell) parameters).getV0();
         this.s0 = ((LongitudinalModelInputDataNewell) parameters).getS0();
     }
