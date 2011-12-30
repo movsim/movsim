@@ -296,11 +296,11 @@ public class Simulator implements Runnable {
                 ++vehicleNumber;
                 veh.setFrontPosition(ic.getX());
                 veh.setSpeed(ic.getSpeed());
-                final int lane = ic.getInitLane();
+                final int lane = ic.getInitLane();  // TODO check lane numbering in ic input
                 veh.setLane(Lane.LANE1);
                 roadSegment.addVehicle(veh);
                 // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
-                logger.info("set vehicle with label = {}", veh.getLabel());
+                logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f", veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
             }
         }
     }

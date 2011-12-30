@@ -27,7 +27,7 @@ public class ICMicroData {
 
     private final double initSpeed;
 
-    private final int initLane; // most right lane: MovsimConstants.MOST_RIGHT_LANE
+    private final int initLane; 
 
     /** The type label. Empty string if no type */
     private final String typeLabel;
@@ -41,6 +41,7 @@ public class ICMicroData {
     public ICMicroData(Map<String, String> map) {
         this.initPosition = Double.parseDouble(map.get("x"));
         this.initSpeed = Double.parseDouble(map.get("v"));
+        // TODO check lane numbering with road segment logic and xodr !!!
         this.initLane = Integer.parseInt(map.get("lane")) - 1; // internal MovSim
         this.typeLabel = map.get("label");
     }
