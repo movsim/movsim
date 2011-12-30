@@ -96,7 +96,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         fstr.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getDetailedName(), 
                 veh.getLongitudinalModel().modelName().getShortName()));
-        fstr.println(String.format("%s vehicle length (in m) = %.2f", COMMENT_CHAR, veh.getLength()));
+        fstr.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities().getLength()));
         fstr.println(String.format("%s position x is defined by vehicle front (on the given road segment)", COMMENT_CHAR));
         
         fstr.println(outputHeading);
