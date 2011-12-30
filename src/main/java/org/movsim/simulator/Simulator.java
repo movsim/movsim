@@ -294,13 +294,17 @@ public class Simulator implements Runnable {
                 // TODO: consider multi-lane case, distribute over all lanes
                 veh.setVehNumber(vehicleNumber);
                 ++vehicleNumber;
-                veh.setFrontPosition(ic.getX());
-                veh.setSpeed(ic.getSpeed());
+                // testwise:
+                veh.setFrontPosition(Math.round(ic.getX()/veh.physicalQuantities().getxScale()));
+                veh.setSpeed(Math.round(ic.getSpeed()/veh.physicalQuantities().getvScale()));
                 final int lane = ic.getInitLane();  // TODO check lane numbering in ic input
                 veh.setLane(Lane.LANE1);
                 roadSegment.addVehicle(veh);
                 // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
                 logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f", veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
+                if(veh.getLongitudinalModel().isCA()){
+                    logger.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh.physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
+                }
             }
         }
     }

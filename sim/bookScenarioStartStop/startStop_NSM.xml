@@ -27,35 +27,35 @@
        </TRAFFIC_COMPOSITION>
          <ROAD id="1" > 
             <INITIAL_CONDITIONS>
-                <!-- in number of cells -->
-                <IC_MICRO x="1" v="0" label="NSM1" />
-                <IC_MICRO x="2" v="0" label="NSM1" />
-                <IC_MICRO x="3" v="0" label="NSM1" />
-                <IC_MICRO x="4" v="0" label="NSM1" />
-                <IC_MICRO x="5" v="0" label="NSM1" />
-                <IC_MICRO x="6" v="0" label="NSM1" />
-                <IC_MICRO x="7" v="0" label="NSM1" />
-                <IC_MICRO x="8" v="0" label="NSM1" />
-                <IC_MICRO x="9" v="0" label="NSM1" />
-                <IC_MICRO x="10" v="0" label="NSM1" />
-                <IC_MICRO x="11" v="0" label="NSM1" />
-                <IC_MICRO x="12" v="0" label="NSM1" />
-                <IC_MICRO x="13" v="0" label="NSM1" />
-                <IC_MICRO x="14" v="0" label="NSM1" />
-                <IC_MICRO x="15" v="0" label="NSM1" />
-                <IC_MICRO x="16" v="0" label="NSM1" />
-                <IC_MICRO x="17" v="0" label="NSM1" />
-                <IC_MICRO x="18" v="0" label="NSM1" />
-                <IC_MICRO x="19" v="0" label="NSM1" />
-                <IC_MICRO x="20" v="0" label="NSM1" />
-                <IC_MICRO x="21" v="0" label="NSM1" />
-                <IC_MICRO x="22" v="0" label="NSM1" />
-                <IC_MICRO x="23" v="0" label="NSM1" />
-                <IC_MICRO x="24" v="0" label="NSM1" />
-                <IC_MICRO x="25" v="0" label="NSM1" />
-                <IC_MICRO x="26" v="0" label="NSM1" />
+                <!-- in physical quantities (meter and m/s) -->         
+                <IC_MICRO x="7.5" v="0" label="NSM1" />
+                <IC_MICRO x="15.0" v="0" label="NSM1" />
+                <IC_MICRO x="22.5" v="0" label="NSM1" />
+                <IC_MICRO x="30.0" v="0" label="NSM1" />
+                <IC_MICRO x="37.5" v="0" label="NSM1" />
+                <IC_MICRO x="45.0" v="0" label="NSM1" />
+                <IC_MICRO x="52.5" v="0" label="NSM1" />
+                <IC_MICRO x="60.0" v="0" label="NSM1" />
+                <IC_MICRO x="67.5" v="0" label="NSM1" />
+                <IC_MICRO x="75.0" v="0" label="NSM1" />
+                <IC_MICRO x="82.5" v="0" label="NSM1" />
+                <IC_MICRO x="90.0" v="0" label="NSM1" />
+                <IC_MICRO x="97.5" v="0" label="NSM1" />
+                <IC_MICRO x="105.0" v="0" label="NSM1" />
+                <IC_MICRO x="112.5" v="0" label="NSM1" />
+                <IC_MICRO x="120.0" v="0" label="NSM1" />
+                <IC_MICRO x="127.5" v="0" label="NSM1" />
+                <IC_MICRO x="135.0" v="0" label="NSM1" />
+                <IC_MICRO x="142.5" v="0" label="NSM1" />
+                <IC_MICRO x="150.0" v="0" label="NSM1" />
+                <IC_MICRO x="157.5" v="0" label="NSM1" />
+                <IC_MICRO x="165.0" v="0" label="NSM1" />
+                <IC_MICRO x="172.5" v="0" label="NSM1" />
+                <IC_MICRO x="180.0" v="0" label="NSM1" />
+                <IC_MICRO x="187.5" v="0" label="NSM1" />
+                <IC_MICRO x="195.0" v="0" label="NSM1" />
                 <!-- obstacle shifts floating car numbers -->
-                <IC_MICRO x="100" v="0" label="Obstacle" />
+                <IC_MICRO x="750" v="0" label="Obstacle" />
            </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE />
             <TRAFFIC_SINK />

@@ -27,34 +27,34 @@
             </TRAFFIC_COMPOSITION>
          <ROAD id="1" >
             <INITIAL_CONDITIONS>
-                <!-- in number of cells -->
+                 <!-- in physical quantities (meter and m/s) -->      
+                <IC_MICRO x="10" v="0" label="KKW1" />
                 <IC_MICRO x="20" v="0" label="KKW1" />
+                <IC_MICRO x="30" v="0" label="KKW1" />
                 <IC_MICRO x="40" v="0" label="KKW1" />
+                <IC_MICRO x="50" v="0" label="KKW1" />
                 <IC_MICRO x="60" v="0" label="KKW1" />
+                <IC_MICRO x="70" v="0" label="KKW1" />
                 <IC_MICRO x="80" v="0" label="KKW1" />
+                <IC_MICRO x="90" v="0" label="KKW1" />
                 <IC_MICRO x="100" v="0" label="KKW1" />
+                <IC_MICRO x="110" v="0" label="KKW1" />
                 <IC_MICRO x="120" v="0" label="KKW1" />
+                <IC_MICRO x="130" v="0" label="KKW1" />
                 <IC_MICRO x="140" v="0" label="KKW1" />
+                <IC_MICRO x="150" v="0" label="KKW1" />
                 <IC_MICRO x="160" v="0" label="KKW1" />
+                <IC_MICRO x="170" v="0" label="KKW1" />
                 <IC_MICRO x="180" v="0" label="KKW1" />
+                <IC_MICRO x="190" v="0" label="KKW1" />
                 <IC_MICRO x="200" v="0" label="KKW1" />
+                <IC_MICRO x="210" v="0" label="KKW1" />
                 <IC_MICRO x="220" v="0" label="KKW1" />
+                <IC_MICRO x="230" v="0" label="KKW1" />
                 <IC_MICRO x="240" v="0" label="KKW1" />
-                <IC_MICRO x="260" v="0" label="KKW1" />
-                <IC_MICRO x="280" v="0" label="KKW1" />
-                <IC_MICRO x="300" v="0" label="KKW1" />
-                <IC_MICRO x="320" v="0" label="KKW1" />
-                <IC_MICRO x="340" v="0" label="KKW1" />
-                <IC_MICRO x="360" v="0" label="KKW1" />
-                <IC_MICRO x="380" v="0" label="KKW1" />
-                <IC_MICRO x="400" v="0" label="KKW1" />
-                <IC_MICRO x="420" v="0" label="KKW1" />
-                <IC_MICRO x="440" v="0" label="KKW1" />
-                <IC_MICRO x="460" v="0" label="KKW1" />
-                <IC_MICRO x="480" v="0" label="KKW1" />
-                <IC_MICRO x="500" v="0" label="KKW1" />
+                <IC_MICRO x="250" v="0" label="KKW1" />
                 <!-- obstacle shifts floating car numbers -->
-                <IC_MICRO x="2000" v="0" label="Obstacle" />
+                <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE />
             <TRAFFIC_SINK />
