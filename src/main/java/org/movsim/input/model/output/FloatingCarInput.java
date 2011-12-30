@@ -38,9 +38,6 @@ public class FloatingCarInput {
     /** The dn. */
     private int dn;
 
-    /** The perc out. */
-    private double percOut;
-
     /** The floating cars. */
     private Collection<Integer> floatingCars;
 
@@ -67,11 +64,6 @@ public class FloatingCarInput {
             logger.error("dn = {} not yet implemented. exit.", dn);
             System.exit(-1);
         }
-        this.percOut = Double.parseDouble(elem.getAttributeValue("perc_out"));
-        if (percOut > 0) {
-            logger.error("perc_out = {} (>0) not yet implemented. exit.", percOut);
-            System.exit(-1);
-        }
 
         floatingCars = new HashSet<Integer>();
         final List<Element> fcElems = elem.getChildren("FC");
@@ -82,7 +74,7 @@ public class FloatingCarInput {
             }
         }
 
-        isWithFC = (dn != 0 || !floatingCars.isEmpty() || percOut > 0);
+        isWithFC = (dn != 0 || !floatingCars.isEmpty());
     }
 
     /*
@@ -103,14 +95,6 @@ public class FloatingCarInput {
         return nDt;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.FloatingCarInput#getPercOut()
-     */
-    public double getPercOut() {
-        return percOut;
-    }
 
     /*
      * (non-Javadoc)
