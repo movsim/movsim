@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // paper reference / Kerner book
+// TODO consider also external speed limits 
 /**
  * The Class KKW.
  */
