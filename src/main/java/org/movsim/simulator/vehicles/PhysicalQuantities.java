@@ -46,7 +46,7 @@ public class PhysicalQuantities {
         xScale = veh.getLongitudinalModel() == null ? 1.0 : veh.getLongitudinalModel().getScalingLength();
 
         vScale = xScale / tscale;
-        accScale = Math.pow(xScale / tscale, 2);
+        accScale = xScale* Math.pow(tscale, 2);
         rhoScale = 1. / xScale;
     }
 
