@@ -111,8 +111,6 @@ public class VehicleGenerator {
             List<TrafficCompositionInputData> heterogenInputData) {
         final HashMap<String, VehiclePrototype> prototypes = new HashMap<String, VehiclePrototype>();
 
-        addObstacleSystemVehicleType(heterogenInputData);
-
         double sumFraction = 0;
         for (final TrafficCompositionInputData heterogen : heterogenInputData) {
             final String keyName = heterogen.getKeyName();
@@ -154,29 +152,29 @@ public class VehicleGenerator {
      * @param heterogenInputData
      *            the heterogen input data
      */
-    private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
-        boolean obstacleEntryIsContained = false;
-        for (final TrafficCompositionInputData het : heterogenInputData) {
-            if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
-                obstacleEntryIsContained = true;
-            }
-        }
-
-        if (obstacleEntryIsContained) {
-            logger.info(
-                    "vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite",
-                    MovsimConstants.OBSTACLE_KEY_NAME);
-        } else {
-            logger.info(
-                    "vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity",
-                    MovsimConstants.OBSTACLE_KEY_NAME);
-            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
-            mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
-            mapEntryObstacle.put("fraction", "0");
-            mapEntryObstacle.put("relative_v0_randomization", "0");
-            heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
-        }
-    }
+//    private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
+//        boolean obstacleEntryIsContained = false;
+//        for (final TrafficCompositionInputData het : heterogenInputData) {
+//            if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
+//                obstacleEntryIsContained = true;
+//            }
+//        }
+//
+//        if (obstacleEntryIsContained) {
+//            logger.info(
+//                    "vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite",
+//                    MovsimConstants.OBSTACLE_KEY_NAME);
+//        } else {
+//            logger.info(
+//                    "vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity",
+//                    MovsimConstants.OBSTACLE_KEY_NAME);
+//            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
+//            mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
+//            mapEntryObstacle.put("fraction", "0");
+//            mapEntryObstacle.put("relative_v0_randomization", "0");
+//            heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
+//        }
+//    }
 
     /**
      * Fund diagram factory.

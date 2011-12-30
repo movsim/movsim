@@ -41,8 +41,6 @@ public interface MovsimConstants {
 
     final int NO_CHANGE = 0;
 
-    final String OBSTACLE_KEY_NAME = "Obstacle";
-
     final double GAP_INFINITY = 10000;
 
     final double INVALID_GAP = -1;
