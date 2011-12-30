@@ -31,7 +31,7 @@ import org.movsim.utilities.FileUtils;
  */
 public class FileTrafficLightRecorder extends FileOutputBase implements TrafficLights.RecordDataCallback {
 
-    private static final String extensionFormat = ".R%d_tl_log.csv";
+    private static final String extensionFormat = ".log_trafficlights.road_%d.csv";
     private final int nDt;
 
     /**
