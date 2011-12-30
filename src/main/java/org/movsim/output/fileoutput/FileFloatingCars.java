@@ -145,7 +145,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     }
 
     /**
-     * Write data.
+     * Write data in physical (not scaled) quantities 
      * 
      * @param time
      *            the time
@@ -157,9 +157,11 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      *            the fstr
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
-        fstr.printf(outputFormat, time, veh.getLane(), veh.getMidPosition(), veh.getSpeed(), veh.getAcc(), veh.accModel(),
-                veh.getNetDistance(frontVeh), veh.getRelSpeed(frontVeh), veh.getDistanceToTrafficlight(),
-                1000 * veh.getActualFuelFlowLiterPerS(), veh.roadSegmentId(), veh.totalTraveledDistance());
+        fstr.printf(outputFormat, time, veh.getLane(), veh.physicalQuantities().getMidPosition(), veh.physicalQuantities().getSpeed(), veh
+                .physicalQuantities().getAcc(), veh.physicalQuantities().accModel(), veh.physicalQuantities()
+                .getNetDistance(frontVeh), veh.physicalQuantities().getRelSpeed(frontVeh), veh.physicalQuantities()
+                .getxScale() * veh.getDistanceToTrafficlight(), 1000 * veh.getActualFuelFlowLiterPerS(), veh
+                .roadSegmentId(), veh.physicalQuantities().totalTraveledDistance());
         fstr.flush();
     }
 

@@ -121,6 +121,10 @@ public class PhysicalQuantities {
     public double getAcc() {
         return accScale * me.getAcc();
     }
+    
+    public double accModel() {
+        return accScale * me.accModel();
+    }
 
     /**
      * Gets the net distance.
@@ -132,7 +136,11 @@ public class PhysicalQuantities {
     public double getNetDistance(final Vehicle vehFront) {
         return xScale * me.getNetDistance(vehFront);
     }
-
+    
+    public final double totalTraveledDistance(){
+        return xScale * me.totalTraveledDistance();
+    }
+    
     /**
      * Gets the rel speed.
      * 
@@ -142,6 +150,18 @@ public class PhysicalQuantities {
      */
     public double getRelSpeed(final Vehicle vehFront) {
         return vScale * me.getRelSpeed(vehFront);
+    }
+
+    public double getxScale() {
+        return xScale;
+    }
+
+    public double getvScale() {
+        return vScale;
+    }
+
+    public double getAccScale() {
+        return accScale;
     }
 
 }
