@@ -486,7 +486,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param obstacle
      */
-    // TODO ake adding an obstacle is also used in the OnrampMobilImpl --> setObstacleAtEndOfLane()
     public void addObstacle(Vehicle obstacle) {
         // assert obstacle.type() == Vehicle.Type.OBSTACLE;
         addVehicle(obstacle);
@@ -497,8 +496,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param vehicle
      */
-
-    // TODO ake movsim has the sophisticated vehicleGenerator for this
     public void addVehicle(Vehicle vehicle) {
         laneSegments[vehicle.getLane()].addVehicle(vehicle);
     }
