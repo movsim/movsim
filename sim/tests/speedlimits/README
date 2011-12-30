@@ -1,0 +1,5 @@
+* FVDM does not obey speed limit if there are other vehicles (far) in front
+
+* Cellular automata do not yet obey speed limits
+
+* Check also speed limit for two road segments (must be reset on second road segment)

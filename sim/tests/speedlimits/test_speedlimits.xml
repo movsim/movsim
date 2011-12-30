@@ -28,6 +28,18 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
+        <VEHICLE label="OVM1" length="6" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <OVM_FVDM v0="40" tau="3" s0="0 " l_int="8" beta="1.5" lambda="0" variant="0" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+        <VEHICLE label="FVDM1" length="6" b_max="9">
+	    <LONGITUDINAL_MODEL>
+		<OVM_FVDM v0="40" tau="5" s0="2" l_int="8" beta="1.5" lambda="0.6" variant="0" />
+   	    </LONGITUDINAL_MODEL>
+	<LANE_CHANGE_MODEL />
+        </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="18000" seed="42">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
@@ -35,12 +47,16 @@
             <VEHICLE_TYPE label="ACC1" fraction="0" />
             <VEHICLE_TYPE label="IDMM1" fraction="0" />
             <VEHICLE_TYPE label="IIDM1" fraction="0" />
+            <VEHICLE_TYPE label="OVM1" fraction="0" />
+            <VEHICLE_TYPE label="FVDM1" fraction="0" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <INITIAL_CONDITIONS>
-                <IC_MICRO x="10000" v="20" label="IDM1" />
-                <IC_MICRO x="20000" v="20" label="ACC1" />
-                <IC_MICRO x="40000" v="20" label="IIDM1" />
+                <IC_MICRO x="10000" v="20" label="FVDM1" />
+                <IC_MICRO x="30000" v="20" label="OVM1" />
+                <IC_MICRO x="50000" v="20" label="IDM1" />
+                <IC_MICRO x="60000" v="20" label="ACC1" />
+                <IC_MICRO x="70000" v="20" label="IIDM1" />
                 <IC_MICRO x="80000" v="20" label="IDMM1" />
             </INITIAL_CONDITIONS>
 <!--            <TRAFFIC_SOURCE>
@@ -60,6 +76,8 @@
                  <FC number="2" /> 
                  <FC number="3" />
                  <FC number="4" /> 
+                 <FC number="5" />
+                 <FC number="6" />
             </FLOATING_CAR_DATA>
         </OUTPUT>
     </SIMULATION>
