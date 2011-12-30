@@ -92,10 +92,11 @@ set nogrid
 
 #######  Scaling  ########################################
 
+# not needed anymore: floating car output in physical units
 xscale=1.0
-if (ldm eq "KKW")  xscale = 0.5
-if (ldm eq "BARL") xscale = 7.5
-if (ldm eq "NSM")  xscale = 7.5
+#if (ldm eq "KKW")  xscale = 0.5
+#if (ldm eq "BARL") xscale = 7.5
+#if (ldm eq "NSM")  xscale = 7.5
 tscale=1.0
 vscale=xscale/tscale
 rhoscale=1.0/xscale
@@ -153,11 +154,11 @@ print "carFile(1)=", carFile(1)," c0=",c0
 
 set out distanceOutput
 if(c0 == 1) plot\
-  carFile(1)  using 1:(xscale*$7) title car(1)  with lines linestyle 1,\
-  carFile(5)  using 1:(xscale*$7) title car(5)  with lines linestyle 2,\
-  carFile(10) using 1:(xscale*$7) title car(10) with lines linestyle 3,\
-  carFile(15) using 1:(xscale*$7) title car(15) with lines linestyle 4,\
-  carFile(20) using 1:(xscale*$7) title car(20) with lines linestyle 5
+  carFile(1)  using 1:(xscale*$9) title car(1)  with lines linestyle 1,\
+  carFile(5)  using 1:(xscale*$9) title car(5)  with lines linestyle 2,\
+  carFile(10) using 1:(xscale*$9) title car(10) with lines linestyle 3,\
+  carFile(15) using 1:(xscale*$9) title car(15) with lines linestyle 4,\
+  carFile(20) using 1:(xscale*$9) title car(20) with lines linestyle 5
 
 ########  Velocity Plot  #################################
 
@@ -165,11 +166,11 @@ set ylabel velocityLabel
 set yrange [0:55]
 set out velocityOutput
 plot\
-  carFile(1)  using 1:(3.6*vscale*$4) title car(1)  with lines linestyle 1,\
-  carFile(5)  using 1:(3.6*vscale*$4) title car(5)  with lines linestyle 2,\
-  carFile(10) using 1:(3.6*vscale*$4) title car(10) with lines linestyle 3,\
-  carFile(15) using 1:(3.6*vscale*$4) title car(15) with lines linestyle 4,\
-  carFile(20) using 1:(3.6*vscale*$4) title car(20) with lines linestyle 5
+  carFile(1)  using 1:(3.6*vscale*$6) title car(1)  with lines linestyle 1,\
+  carFile(5)  using 1:(3.6*vscale*$6) title car(5)  with lines linestyle 2,\
+  carFile(10) using 1:(3.6*vscale*$6) title car(10) with lines linestyle 3,\
+  carFile(15) using 1:(3.6*vscale*$6) title car(15) with lines linestyle 4,\
+  carFile(20) using 1:(3.6*vscale*$6) title car(20) with lines linestyle 5
 
 
 ########  Acceleration Plot  #############################
@@ -184,10 +185,10 @@ if (ldm eq "NSM") set ytics 5
 if (ldm eq "OVM") set ytics 5
 set out accelerationOutput
 plot\
-  carFile(1)  using 1:(ascale*$5) title car(1)  with lines linestyle 1,\
-  carFile(5)  using 1:(ascale*$5) title car(5)  with lines linestyle 2,\
-  carFile(10) using 1:(ascale*$5) title car(10) with lines linestyle 3,\
-  carFile(15) using 1:(ascale*$5) title car(15) with lines linestyle 4,\
-  carFile(20) using 1:(ascale*$5) title car(20) with lines linestyle 5
+  carFile(1)  using 1:(ascale*$7) title car(1)  with lines linestyle 1,\
+  carFile(5)  using 1:(ascale*$7) title car(5)  with lines linestyle 2,\
+  carFile(10) using 1:(ascale*$7) title car(10) with lines linestyle 3,\
+  carFile(15) using 1:(ascale*$7) title car(15) with lines linestyle 4,\
+  carFile(20) using 1:(ascale*$7) title car(20) with lines linestyle 5
 
 

@@ -17,13 +17,12 @@
         </VEHICLE>
     </VEHICLES>
     
-    
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
 	  <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="IDM1" fraction="1" />
                 <VEHICLE_TYPE label="Obstacle" fraction="0" />
             </TRAFFIC_COMPOSITION>
-        <ROAD id="0" >
+        <ROAD id="1" >
             <INITIAL_CONDITIONS>
                 <IC_MICRO x="10" v="0" />
                 <IC_MICRO x="20" v="0" />
