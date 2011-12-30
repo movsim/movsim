@@ -702,8 +702,8 @@ public class Vehicle {
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             final int advance = (int) (midPosition + dt * speed + 0.5); 
+            totalTraveledDistance += (advance-midPosition);
             midPosition = advance;
-            totalTraveledDistance += advance;
 
         } else {
             // continuous microscopic models and iterated maps
