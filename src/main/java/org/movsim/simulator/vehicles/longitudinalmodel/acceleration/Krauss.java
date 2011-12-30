@@ -58,12 +58,12 @@ public class Krauss extends LongitudinalModelBase {
     private double s0;
 
     /**
-     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-S CA default value 0.4 (PRE) or 1 (EPJB)
+     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular automaton default value 0.4 (PRE) or 1 (EPJB)
      */
     private double epsilon;
 
     /**
-     * Instantiates a new krauss instance.
+     * Instantiates a new Krauss instance.
      * 
      * @param modelName
      *            the model name
