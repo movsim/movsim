@@ -93,7 +93,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         fstr.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
         fstr.println(String.format("%s model category = %s", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getCategory().toString()));
-        fstr.println(String.format("%s model category = %s (short name = %s)", COMMENT_CHAR, 
+        fstr.println(String.format("%s model name = %s (short name = %s)", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getDetailedName(), 
                 veh.getLongitudinalModel().modelName().getShortName()));
         
