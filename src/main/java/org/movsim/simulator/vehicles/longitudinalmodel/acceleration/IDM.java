@@ -88,14 +88,12 @@ public class IDM extends LongitudinalModelBase {
      */
     public IDM(double v0, double a, double b, double T, double s0, double s1) {
         super(ModelName.IDM, null);
-        // super(Type.CONTINUOUS);
         this.v0 = v0;
         this.a = a;
         this.b = b;
         this.T = T;
         this.s0 = s0;
         this.s1 = s1;
-        // twoSqrtAb = 2.0 * Math.sqrt(a * b);
         this.delta = 4.0;
     }
 
