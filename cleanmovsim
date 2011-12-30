@@ -1,0 +1,8 @@
+#!/bin/sh
+# remove simulation and gnuplot output in current directory
+rm -fv *.csv
+rm -fv *.eps
+rm -fv *.log
+rm -fv *~
+
+

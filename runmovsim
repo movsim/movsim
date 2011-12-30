@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# example for start script for MovSim, see http://www.movsim.org
+# please specify your path to the target output folder and the target version
+# 
+java -jar $HOME/workspace/movsim/target/movsim-1.2-jar-with-dependencies.jar $@
+
+

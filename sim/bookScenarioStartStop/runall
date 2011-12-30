@@ -1,0 +1,19 @@
+#!/bin/sh
+# first test script for running/updating all simulations
+
+startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM FVDM KRAUSS NEWELL"
+## CAs not working due to scaled input: NSM BARL KKW "
+
+cleanmovsim
+
+for ldm in ${startStop}
+do
+  input="startStop_$ldm.xml"
+  echo "input = $input"
+  runmovsim -f $input
+  gnuplot "startStop_$ldm.gpl"
+  read -p pressKey
+done;
+
+
+
