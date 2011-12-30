@@ -38,9 +38,8 @@ public class NSM extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
 
-    // unit time for CA:
-    /** The Constant dtCA. */
-    private static final double dtCA = 1; // update timestep for CA !!
+    /** The constant unit time */
+    private static final double dtCA = 1; 
 
     /** The v0. */
     private double v0;
@@ -48,11 +47,11 @@ public class NSM extends LongitudinalModelBase {
     /** The p slowdown. */
     private double pSlowdown;
 
-    /** The p slow to start. */
-    private double pSlowToStart; // slow-to-start rule for Barlovic model
+    /** slow-to-start rule for Barlovic model */
+    private double pSlowToStart; 
 
     /**
-     * Instantiates a new nSM.
+     * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
      * 
      * @param modelName
      *            the model name
@@ -90,7 +89,12 @@ public class NSM extends LongitudinalModelBase {
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
-        return acc(s, v, dv, alphaT, alphaV0);
+        
+        // FIXME consider external speedlimit
+        //final double localV0 = Math.min(alphaV0*v0, me.getSpeedlimit()/me.physicalQuantities().getvScale());
+        final double localV0 = v0;
+        
+        return acc(s, v, dv, localV0);
     }
 
     /*
@@ -106,10 +110,11 @@ public class NSM extends LongitudinalModelBase {
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
 
-        final double alphaT = 1;
-        final double alphaV0 = 1;
+        // FIXME
+//        final double localV0 = Math.min(v0, me.getSpeedlimit()/me.physicalQuantities().getvScale());
+        final double localV0 = v0;
 
-        return acc(s, v, dv, alphaT, alphaV0);
+        return acc(s, v, dv, localV0);
     }
 
     /*
@@ -119,7 +124,7 @@ public class NSM extends LongitudinalModelBase {
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, 1, 1);
+        return acc(s, v, dv, v0);
     }
 
     /**
@@ -131,27 +136,28 @@ public class NSM extends LongitudinalModelBase {
      *            the v
      * @param dv
      *            the dv
-     * @param alphaT
-     *            the alpha t
-     * @param alphaV0
-     *            the alpha v0
+     * @param localT
+     *            the local T
+     * @param localV0
+     *            the local v0
      * @return the double
      */
-    private double acc(double s, double v, double dv, double alphaT, double alphaV0) {
-        final int v0Loc = (int) (alphaV0 * v0 + 0.5); // adapt v0 spatially
-        final int vLoc = (int) (v + 0.5);
+    private double acc(double s, double v, double dv, double localV0) {
+        final int v0Local = (int) (localV0 + 0.5); 
+        
+        final int vLocal = (int) (v + 0.5);
         int vNew = 0;
 
         final double r1 = MyRandom.nextDouble();
-        final double pb = (vLoc < 1) ? pSlowToStart : pSlowdown;
+        final double pb = (vLocal < 1) ? pSlowToStart : pSlowdown;
         final int slowdown = (r1 < pb) ? 1 : 0;
 
         final int sLoc = (int) (s + 0.5);
-        vNew = Math.min(vLoc + 1, v0Loc);
+        vNew = Math.min(vLocal + 1, v0Local);
         vNew = Math.min(vNew, sLoc);
         vNew = Math.max(0, vNew - slowdown);
 
-        return ((vNew - vLoc) / dtCA);
+        return ((vNew - vLocal) / dtCA);
     }
 
     /*
