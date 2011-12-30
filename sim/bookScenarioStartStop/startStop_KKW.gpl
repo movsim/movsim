@@ -1,0 +1,7 @@
+# gnuplot command file
+
+ldm = "KKW"
+lang = "en"
+inputPath = "csv/"
+load "startStop.gpl"
+

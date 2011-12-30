@@ -1,0 +1,7 @@
+# gnuplot command file
+
+ldm = "GIPPS"
+lang = "en"
+inputPath = "csv/"
+load "startStop.gpl"
+

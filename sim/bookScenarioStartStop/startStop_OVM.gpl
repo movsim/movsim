@@ -1,0 +1,7 @@
+# gnuplot command file
+
+ldm = "OVM"
+lang = "en"
+inputPath = "csv/"
+load "startStop.gpl"
+

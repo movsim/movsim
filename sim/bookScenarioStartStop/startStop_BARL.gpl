@@ -1,0 +1,7 @@
+# gnuplot command file
+
+ldm = "BARL"
+lang = "en"
+inputPath = "csv/"
+load "startStop.gpl"
+
