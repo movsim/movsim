@@ -170,7 +170,7 @@ public class OVM_FVDM extends LongitudinalModelBase {
             vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
-            // Triangular OVM function
+            // triangular OVM function
             final double T = beta; // "time headway"
             vOptimal = Math.max(Math.min((s - s0) / T, v0Local), 0.);
         } else if (choiceOptFuncVariant == 2) {
@@ -179,7 +179,7 @@ public class OVM_FVDM extends LongitudinalModelBase {
             final double Tmin = transitionWidthLoc + diffT; // minimum time headway
             final double Tmax = betaLoc + diffT; // maximum time headway
             final double Tdyn = (s - s0) / Math.max(v, MovsimConstants.SMALL_VALUE);
-            vOptimal = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v + 0., v0Local)
+            vOptimal = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v, v0Local)
                     : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0Local) : 0;
         } else {
             logger.error("optimal velocity variant = {} not implemented. exit.", choiceOptFuncVariant);
