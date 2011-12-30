@@ -20,12 +20,6 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5"/>
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL/>
-        </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1.0" duration="18000" seed="42">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
