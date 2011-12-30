@@ -27,7 +27,13 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="KKW" length="20">
+        <VEHICLE label="OVM_FVDM" length="5" b_max="100000">
+            <LONGITUDINAL_MODEL>
+                <OVM_FVDM v0="33.33" tau="0.65" s0="3" l_int="15" beta="1.5" lambda="0" variant="0" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+         <VEHICLE label="KKW" length="20">
             <LONGITUDINAL_MODEL>
                 <KKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
                 <!-- lambda="0.55" ? -->
@@ -41,20 +47,9 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="OVM_FVDM" length="5" b_max="100000">
-            <LONGITUDINAL_MODEL>
-                <OVM_FVDM v0="33.33" tau="0.65" s0="3" l_int="15" beta="1.5" lambda="0" variant="0" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5"/>
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL/>
-        </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="2000" fixed_seed="true" seed="42" crash_exit="false">
+    <!-- set dt=1 because it is a model parameter of the GIPPS model and also the necessary update timestep of the Nagel-Schreckenberg CA -->
+    <SIMULATION dt="1" duration="2000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION write_fund_diagrams="true">
             <VEHICLE_TYPE label="ACC" fraction="1" />
             <VEHICLE_TYPE label="GIPPS" fraction="1" />
