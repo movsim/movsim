@@ -20,7 +20,7 @@
         </VEHICLE>
     </VEHICLES>
     <!-- depends strongly on randomness resp. seed ! -->
-    <SIMULATION dt="1" duration="360" fixed_seed="false" > <!--  <seed="50"> -->
+    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="50"> 
 	  <TRAFFIC_COMPOSITION write_fund_diagrams="true">
                 <VEHICLE_TYPE label="KKW1" fraction="1" />
                 <VEHICLE_TYPE label="Obstacle" fraction="0" />

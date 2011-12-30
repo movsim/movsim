@@ -1,8 +1,7 @@
 #!/bin/sh
 # first test script for running/updating all simulations
 
-startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM FVDM KRAUSS NEWELL"
-## CAs not working due to scaled input: NSM BARL KKW "
+startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM FVDM KRAUSS NEWELL NSM BARL KKW"
 
 cleanmovsim
 

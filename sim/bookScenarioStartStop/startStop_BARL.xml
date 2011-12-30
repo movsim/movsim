@@ -24,7 +24,7 @@
                 <VEHICLE_TYPE label="BARL1" fraction="1" />
                 <VEHICLE_TYPE label="Obstacle" fraction="0" />
             </TRAFFIC_COMPOSITION>
-        <ROAD id="1" > <!--  length="20000" lanes="1"> -->
+        <ROAD id="1" >
             <INITIAL_CONDITIONS>
                 <IC_MICRO x="1" v="0" label="BARL1" />
                 <IC_MICRO x="2" v="0" label="BARL1" />
