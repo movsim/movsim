@@ -18,15 +18,15 @@ public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime
     /**
      * Constructor.
      * 
-     * @param roadSectionID
+     * @param roadId
      *            the road section id
      * @param spatioTemporal
      *            the spatio temporal
      */
-    public FileSpatioTemporal(long roadSectionID, SpatioTemporal spatioTemporal) {
+    public FileSpatioTemporal(long roadId, SpatioTemporal spatioTemporal) {
         this.spatioTemporal = spatioTemporal;
         spatioTemporal.registerObserver(this);
-        writer = createWriter(String.format(extensionFormat, roadSectionID));
+        writer = createWriter(String.format(extensionFormat, roadId));
         writer.printf(outputHeading);
         writer.flush();
     }
