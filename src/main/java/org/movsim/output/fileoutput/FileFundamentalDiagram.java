@@ -50,7 +50,7 @@ public class FileFundamentalDiagram {
      * @param filename
      *            the filename
      */
-    public static void writeFundamentalDiagram(EquilibriumProperties equilibriumProperties, String filename) {
+    private static void writeFundamentalDiagram(EquilibriumProperties equilibriumProperties, String filename) {
         final PrintWriter fstr = FileUtils.getWriter(filename);
         fstr.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * equilibriumProperties.getRhoQMax());
         fstr.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * equilibriumProperties.getQMax());
