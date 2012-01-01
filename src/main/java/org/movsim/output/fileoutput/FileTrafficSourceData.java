@@ -1,9 +1,6 @@
 package org.movsim.output.fileoutput;
 
-import java.io.File;
-
 import org.movsim.simulator.roadnetwork.TrafficSource;
-import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,8 +25,7 @@ public class FileTrafficSourceData extends FileOutputBase implements TrafficSour
      */
     public FileTrafficSourceData(int roadId) {
     	super();
-        final String filename = path + File.separator + baseFilename + String.format(extensionFormat, roadId);
-        writer = FileUtils.getWriter(filename);
+        writer = createWriter(String.format(extensionFormat, roadId));
         writer.printf(outputHeading);
     }
 
