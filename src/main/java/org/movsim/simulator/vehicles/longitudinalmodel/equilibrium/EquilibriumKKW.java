@@ -19,7 +19,6 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.KKW;
 
 // TODO: Auto-generated Javadoc
@@ -33,13 +32,13 @@ public class EquilibriumKKW extends EquilibriumProperties {
      * 
      * @param length
      *            the length
-     * @param kcaModel
+     * @param model
      *            the kca model
      */
-    public EquilibriumKKW(double length, KKW kcaModel) {
+    public EquilibriumKKW(double length, KKW model) {
         super(length);
 
-        calcEquilibrium(kcaModel);
+        calcEquilibrium(model);
         calcRhoQMax();
     }
 
@@ -50,7 +49,7 @@ public class EquilibriumKKW extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(LongitudinalModelBase model) {
+    private void calcEquilibrium(KKW model) {
         double vIter = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
@@ -61,11 +60,11 @@ public class EquilibriumKKW extends EquilibriumProperties {
         for (int ir = 1; ir < length; ir++) {
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
-            // start iteration with equilibrium velocity for the previous
-            // density
+            // start iteration with equilibrium velocity for the previous density
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIter, 0.);
+                // interation step in [dtmin, dtmax]
                 final double dtloc = dtMax * vIter / model.getDesiredSpeedParameterV0() + dtMin;
                 // actual relaxation
                 vIter += dtloc * acc;
