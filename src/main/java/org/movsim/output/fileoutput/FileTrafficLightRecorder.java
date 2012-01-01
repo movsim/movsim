@@ -19,12 +19,9 @@
  */
 package org.movsim.output.fileoutput;
 
-import java.io.File;
-
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.TrafficLights;
-import org.movsim.utilities.FileUtils;
 
 /**
  * The Class FileTrafficLightRecorder.
@@ -46,8 +43,7 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
     	super();
         this.nDt = nDt;
 
-        final String filename = path + File.separator + baseFilename + String.format(extensionFormat, roadSegment.id());
-        writer = FileUtils.getWriter(filename);
+        writer = createWriter(String.format(extensionFormat, roadSegment.id()));
         writeHeader(trafficLights);
     }
 
