@@ -20,7 +20,7 @@ vehicle = ldm."1"
 
 # input files for road id=0
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-stFile = inputPath.baseFile.".st.road_1.csv"
+stFile = inputPath.baseFile.".st.road_0.csv"
 detFile(n) = sprintf(inputPath.baseFile.".det.road_0.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_0.csv"
 rampSourceFile = inputPath.baseFile.".source.road_0.csv"
