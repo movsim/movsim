@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileTrajectories extends FileOutputBase {
 
-    private static final String extensionFormat = ".traj.road_%d.csv";
+    private static final String extensionFormat = ".traj.road_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
@@ -50,7 +50,7 @@ public class FileTrajectories extends FileOutputBase {
     private final double t_end_interval;
     private final double x_start_interval;
     private final double x_end_interval;
-    private final HashMap<Integer, PrintWriter> fileHandles;
+    private final HashMap<String, PrintWriter> fileHandles;
     private double time = 0;
     private double lastUpdateTime = 0;
     private final RoadNetwork roadNetwork;
@@ -75,7 +75,7 @@ public class FileTrajectories extends FileOutputBase {
 
         this.roadNetwork = roadNetwork;
 
-        fileHandles = new HashMap<Integer, PrintWriter>();
+        fileHandles = new HashMap<String, PrintWriter>();
         logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
     }
 
@@ -84,7 +84,7 @@ public class FileTrajectories extends FileOutputBase {
      */
     private void createFileHandles() {
     	for (final RoadSegment roadSegment : roadNetwork) {
-    		fileHandles.put(roadSegment.id(), createWriter(String.format(extensionFormat, roadSegment.id())));
+    		fileHandles.put(roadSegment.userId(), createWriter(String.format(extensionFormat, roadSegment.userId())));
     	}
 //        final String filenameMainroad = path + File.separator + baseFilename
 //                + String.format(extensionFormat, roadSegment.id());
@@ -108,9 +108,9 @@ public class FileTrajectories extends FileOutputBase {
 //		}
 
         // write headers
-        final Iterator<Integer> it = fileHandles.keySet().iterator();
+        final Iterator<String> it = fileHandles.keySet().iterator();
         while (it.hasNext()) {
-            final Integer id = it.next();
+            final String id = it.next();
             final PrintWriter writer = fileHandles.get(id);
             writer.println(outputHeading);
             writer.flush();
@@ -146,7 +146,7 @@ public class FileTrajectories extends FileOutputBase {
                 lastUpdateTime = time;
 
             	for (final RoadSegment roadSegment : roadNetwork) {
-                    writeTrajectories(fileHandles.get(roadSegment.id()), roadSegment);
+                    writeTrajectories(fileHandles.get(roadSegment.userId()), roadSegment);
             	}
                 /*
                  * // onramps for(IOnRamp rmp : mainroad.onramps()){ writeTrajectories(fileHandles.get(rmp.roadIndex()),

@@ -73,8 +73,8 @@ public class RoadSegment implements Iterable<Vehicle> {
     public static final int MAX_LANE_COUNT = 8;
     public static final int MAX_LANE_PAIR_COUNT = 12;
 
-    private final int id;
-    private String userId;
+    private final int id; // the id is an internally used unique identifier for the road
+    private String userId; // the userId is the id specified in the .xodr and .xml files
     private final double roadLength;
     private final double cumulativeRoadLength = -1.0; // total length of road up to start of segment
     private final int laneCount;
@@ -175,7 +175,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns this road segment's userId
+     * Returns this road segment's userId. The userId is the road's id as set in the .xodr and .xml files.
      * 
      * @return this road segment's userId
      */

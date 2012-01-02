@@ -12,7 +12,7 @@ public class FileTrafficSourceData extends FileOutputBase implements TrafficSour
 
     final static Logger logger = LoggerFactory.getLogger(FileTrafficSourceData.class);
 
-    private static final String extensionFormat = ".source.road_%d.csv";
+    private static final String extensionFormat = ".source.road_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s], lane,  xEnter[m],    v[km/h],   qBC[1/h],    count,      queue\n";
     private static final String outputFormat = "%10.2f, %4d, %10.2f, %10.2f, %10.2f, %8d, %10.5f%n";
@@ -23,7 +23,7 @@ public class FileTrafficSourceData extends FileOutputBase implements TrafficSour
      * @param roadId
      * 
      */
-    public FileTrafficSourceData(int roadId) {
+    public FileTrafficSourceData(String roadId) {
     	super();
         writer = createWriter(String.format(extensionFormat, roadId));
         writer.printf(outputHeading);

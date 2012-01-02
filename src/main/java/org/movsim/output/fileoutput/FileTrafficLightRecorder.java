@@ -43,7 +43,7 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
     	super();
         this.nDt = nDt;
 
-        writer = createWriter(String.format(extensionFormat, roadSegment.id()));
+        writer = createWriter(String.format(extensionFormat, roadSegment.userId()));
         writeHeader(trafficLights);
     }
 

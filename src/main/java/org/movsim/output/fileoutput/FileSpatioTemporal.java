@@ -8,7 +8,7 @@ import org.movsim.utilities.ObserverInTime;
  */
 public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime {
 
-    private static final String extensionFormat = ".st.road_%d.csv";
+    private static final String extensionFormat = ".st.road_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
@@ -23,7 +23,7 @@ public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime
      * @param spatioTemporal
      *            the spatio temporal
      */
-    public FileSpatioTemporal(long roadId, SpatioTemporal spatioTemporal) {
+    public FileSpatioTemporal(String roadId, SpatioTemporal spatioTemporal) {
         this.spatioTemporal = spatioTemporal;
         spatioTemporal.registerObserver(this);
         writer = createWriter(String.format(extensionFormat, roadId));

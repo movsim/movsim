@@ -116,7 +116,7 @@ public class Simulator implements Runnable {
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
-        final Map<Long, RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
+        final Map<String, RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
         if (loadedRoadNetwork == false && roadInputMap.size() == 1) {
             defaultTestingRoadMapping(roadInputMap); // TODO rg: This has to be corrected/deleted at some point
         } else {
@@ -129,9 +129,9 @@ public class Simulator implements Runnable {
     /**
      * @param roadInputMap
      */
-    private void matchRoadSegmentsAndRoadInput(final Map<Long, RoadInput> roadInputMap) {
+    private void matchRoadSegmentsAndRoadInput(final Map<String, RoadInput> roadInputMap) {
         for (final RoadInput roadinput : roadInputMap.values()) {
-            final RoadSegment roadSegment = roadNetwork.findById((int) roadinput.getId());
+            final RoadSegment roadSegment = roadNetwork.findByUserId(roadinput.getId());
             if (roadSegment != null) {
                 addInputToRoadSegment(roadSegment, roadinput);
             }
@@ -160,7 +160,7 @@ public class Simulator implements Runnable {
      * 
      * @param roadInputMap
      */
-    private void defaultTestingRoadMapping(final Map<Long, RoadInput> roadInputMap) {
+    private void defaultTestingRoadMapping(final Map<String, RoadInput> roadInputMap) {
         logger.warn("Simulation with test network");
         final RoadInput roadinput = roadInputMap.values().iterator().next();
         final int laneCount = 1;// roadinput.getLanes();
@@ -224,7 +224,7 @@ public class Simulator implements Runnable {
         final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
         final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
         if (trafficSourceData.withLogging()) {
-        	trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.id()));
+        	trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
         }
         roadSegment.setTrafficSource(trafficSource);
 
@@ -242,7 +242,7 @@ public class Simulator implements Runnable {
         roadSegment.setSpeedLimits(speedLimits);
 
         // set up the detectors
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.id(), roadinput.getDetectorInput(),
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.userId(), roadinput.getDetectorInput(),
                 roadSegment.laneCount());
         roadSegment.setLoopDetectors(loopDetectors);
 

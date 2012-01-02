@@ -54,7 +54,7 @@ public class SimulationInput {
 
     private boolean isWithWriteFundamentalDiagrams;
 
-    Map<Long, RoadInput> roadInputMap;
+    Map<String, RoadInput> roadInputMap;
 
     private final OutputInput outputInput;
 
@@ -104,7 +104,7 @@ public class SimulationInput {
             roadInputList.add(new RoadInput(roadElem));
         }
 
-        roadInputMap = new HashMap<Long, RoadInput>();
+        roadInputMap = new HashMap<String, RoadInput>();
         for (final RoadInput roadInputData : roadInputList) {
             roadInputMap.put(roadInputData.getId(), roadInputData);
         }
@@ -170,7 +170,7 @@ public class SimulationInput {
      * 
      * @see org.movsim.input.model.SimulationInput#getRoadInput()
      */
-    public Map<Long, RoadInput> getRoadInput() {
+    public Map<String, RoadInput> getRoadInput() {
         return roadInputMap;
     }
 

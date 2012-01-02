@@ -32,7 +32,7 @@ import org.movsim.input.model.simulation.TrafficSourceData;
 
 public class RoadInput {
 
-    private long id;
+    private String id;
 
     private double roadLength;
 
@@ -87,7 +87,8 @@ public class RoadInput {
     @SuppressWarnings("unchecked")
     private void parseRoadElement(Element elem) {
 
-        id = Long.parseLong(elem.getAttributeValue("id"));
+        //id = Long.parseLong(elem.getAttributeValue("id"));
+        id = elem.getAttributeValue("id");
         // roadLength = Double.parseDouble(elem.getAttributeValue("length"));
         // lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
 
@@ -341,7 +342,7 @@ public class RoadInput {
      * 
      * @see org.movsim.input.model.RoadInput#getId()
      */
-    public long getId() {
+    public String getId() {
         return id;
     }
 

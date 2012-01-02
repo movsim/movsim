@@ -46,7 +46,7 @@ public class LoopDetectors {
      *            the input
      * @param lanes 
      */
-    public LoopDetectors(long roadId, DetectorInput input, int laneCount) {
+    public LoopDetectors(String roadId, DetectorInput input, int laneCount) {
 
         detectors = new ArrayList<LoopDetector>();
 

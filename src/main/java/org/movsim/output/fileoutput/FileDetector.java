@@ -12,7 +12,7 @@ import org.movsim.utilities.ObserverInTime;
  */
 public class FileDetector extends FileOutputBase implements ObserverInTime {
 
-    private static final String extensionFormat = ".det.road_%d.x_%d.csv";
+    private static final String extensionFormat = ".det.road_%s.x_%d.csv";
 
     private static final String outputHeadingTime = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
     private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,", 
@@ -35,7 +35,7 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
      *            the detector
      * @param laneCount
      */
-    public FileDetector(long roadId, LoopDetector detector, int laneCount) {
+    public FileDetector(String roadId, LoopDetector detector, int laneCount) {
     	super();
         final int xDetectorInt = (int)detector.getDetPosition();
         this.detector = detector;
