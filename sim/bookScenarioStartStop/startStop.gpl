@@ -10,8 +10,8 @@ set datafile separator ","
 set terminal postscript eps enhanced color solid font "Helvetica" 26
 
 # parameters
-if (!exists("inputPath")) inputPath = ""
-if (!exists("outputPath")) outputPath = "figs/"
+if (!exists("inputPath")) inputPath = "./"
+if (!exists("outputPath")) outputPath = "./"
 if (!exists("ldm")) ldm = "IDM"
 if (!exists("lang")) lang = "en"
 #print "LDM=".ldm
