@@ -1,0 +1,5 @@
+# gnuplot command file
+
+ldm = "NSM"
+lang = "en"
+load "startStop.gpl"
