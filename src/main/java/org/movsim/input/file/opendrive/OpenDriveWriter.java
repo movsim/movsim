@@ -43,15 +43,15 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 public class OpenDriveWriter extends XMLWriterBase {
 
     static class Junction {
-        static int NOT_JUNCTION = -1;
+        static final String NOT_JUNCTION = "-1";
         static int nextId = 1001;
-        int id;
+        String id;
         String name;
 
         static class Connection {
-            int id;
-            int incomingRoadId;
-            int connectingRoadId;
+            String id;
+            String incomingRoadId;
+            String connectingRoadId;
 
             static enum ContactPoint {
                 START, END
@@ -74,9 +74,9 @@ public class OpenDriveWriter extends XMLWriterBase {
 
         ArrayList<Connection> connections = new ArrayList<Connection>();
 
-        Connection getConnection(int incommingRoadId, int connectingRoadId) {
+        Connection getConnection(String incommingRoadId, String connectingRoadId) {
             for (final Connection connection : connections) {
-                if (connection.incomingRoadId == incommingRoadId && connection.connectingRoadId == connectingRoadId) {
+                if (connection.incomingRoadId.equals(incommingRoadId) && connection.connectingRoadId.equals(connectingRoadId)) {
                     return connection;
                 }
             }
@@ -124,16 +124,16 @@ public class OpenDriveWriter extends XMLWriterBase {
 
     private void createJunctions(RoadNetwork roadNetwork) {
         for (final RoadSegment roadSegment : roadNetwork) {
-            if (predecessorId2(roadSegment) == RoadSegment.ID_NOT_SET) {
+            if (predecessorId2(roadSegment) == null) {
                 // need a junction for the predecessor
                 // connection is from incomingRoad to connectingRoad
                 final Junction junction = new Junction();
-                final int connectingRoadId = roadSegment.id();
+                final String connectingRoadId = roadSegment.userId();
                 final int laneCount = roadSegment.laneCount();
                 for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
                     final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
                     if (sourceRoadSegment != null) {
-                        final int incomingRoadId = sourceRoadSegment.id();
+                        final String incomingRoadId = sourceRoadSegment.userId();
                         final Junction.Connection connection = junction.getConnection(incomingRoadId, connectingRoadId);
                         connection.laneLinks.add(new Junction.Connection.LaneLink(laneToRightLaneId(sourceRoadSegment,
                                 roadSegment.sourceLane(lane)), laneToRightLaneId(roadSegment, lane)));
@@ -141,26 +141,26 @@ public class OpenDriveWriter extends XMLWriterBase {
                 }
                 if (junction.connections.size() > 0) {
                     junctions.add(junction);
-                    junction.id = Junction.nextId++;
+                    junction.id = Integer.toString(Junction.nextId++);
                 }
             }
-            if (successorId2(roadSegment) == RoadSegment.ID_NOT_SET) {
+            if (successorId2(roadSegment) == null) {
                 // need a junction for the successor
                 // connection is from connectingRoad to incomingRoad
                 final Junction junction = new Junction();
-                final int connectingRoadId = roadSegment.id();
+                final String connectingRoadId = roadSegment.userId();
                 final int laneCount = roadSegment.laneCount();
                 for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
                     final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
                     if (sinkRoadSegment != null) {
-                        final int incomingRoadId = sinkRoadSegment.id();
+                        final String incomingRoadId = sinkRoadSegment.userId();
                         final Junction.Connection connection = junction.getConnection(incomingRoadId, connectingRoadId);
                         connection.laneLinks.add(new Junction.Connection.LaneLink(laneToRightLaneId(roadSegment, lane),
                                 laneToRightLaneId(sinkRoadSegment, roadSegment.sinkLane(lane))));
                     }
                 }
                 if (junction.connections.size() > 0) {
-                    junction.id = Junction.nextId++;
+                    junction.id = Integer.toString(Junction.nextId++);
                     junctions.add(junction);
                 }
             }
@@ -196,35 +196,35 @@ public class OpenDriveWriter extends XMLWriterBase {
         assert roadSegment != null;
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
-        final String roadFormat = "id=\"%d\" name=\"R%d\" length=\"%f\" junction=\"%d\"";
-        final int junctionId = this.findJunctionByConnectingRoadId(roadSegment.id());
-        final String s = String.format(roadFormat, roadSegment.id(), roadSegment.id(), roadSegment.roadLength(),
+        final String roadFormat = "id=\"%s\" name=\"R%s\" length=\"%f\" junction=\"%d\"";
+        final String junctionId = findJunctionByConnectingRoadId(roadSegment.userId());
+        final String s = String.format(roadFormat, roadSegment.userId(), roadSegment.userId(), roadSegment.roadLength(),
                 junctionId);
         startTag("road", s);
         startTag("link");
         final String junctionLinkFormat = "elementType=\"junction\" elementId=\"%d\"";
         final String roadLinkFormat = "elementType=\"road\" elementId=\"%d\" contactPoint=\"%s\"";
-        final int predecessorJunctionId;
+        final String predecessorJunctionId;
         final RoadSegment aPredecessor = aPredecessor(roadSegment);
         if (aPredecessor == null) {
             predecessorJunctionId = Junction.NOT_JUNCTION;
         } else {
-            predecessorJunctionId = this.findJunctionByIncomingRoadId(aPredecessor.id());
-            if (predecessorJunctionId == Junction.NOT_JUNCTION) {
-                final int predecessorId = predecessorId(roadSegment);
+            predecessorJunctionId = findJunctionByIncomingRoadId(aPredecessor.userId());
+            if (predecessorJunctionId.equals(Junction.NOT_JUNCTION)) {
+                final String predecessorId = predecessorId(roadSegment);
                 writeTag("predecessor", String.format(roadLinkFormat, predecessorId, "end"));
             } else {
                 writeTag("predecessor", String.format(junctionLinkFormat, junctionId));
             }
         }
-        final int successorJunctionId;
+        final String successorJunctionId;
         final RoadSegment aSuccessor = aSuccessor(roadSegment);
         if (aSuccessor == null) {
             successorJunctionId = Junction.NOT_JUNCTION;
         } else {
-            successorJunctionId = this.findJunctionByIncomingRoadId(aSuccessor.id());
-            if (successorJunctionId == Junction.NOT_JUNCTION) {
-                final int successorId = successorId(roadSegment);
+            successorJunctionId = findJunctionByIncomingRoadId(aSuccessor.userId());
+            if (successorJunctionId.equals(Junction.NOT_JUNCTION)) {
+                final String successorId = successorId(roadSegment);
                 writeTag("successor", String.format(roadLinkFormat, successorId, "start"));
             } else {
                 writeTag("successor", String.format(junctionLinkFormat, junctionId));
@@ -248,12 +248,12 @@ public class OpenDriveWriter extends XMLWriterBase {
             final RoadSegment sinkRoadSegment = roadSegment.sourceRoadSegment(lane);
             boolean linkTag = false;
             final String idFormat = "id=\"%d\"";
-            if (sourceLane != Lane.NONE && sourceRoadSegment != null && predecessorJunctionId == Junction.NOT_JUNCTION) {
+            if (sourceLane != Lane.NONE && sourceRoadSegment != null && predecessorJunctionId.equals(Junction.NOT_JUNCTION)) {
                 linkTag = true;
                 startTag("link");
                 writeTag("predecessor", String.format(idFormat, laneToRightLaneId(sourceRoadSegment, sourceLane)));
             }
-            if (sinkLane != Lane.NONE && sinkRoadSegment != null && successorJunctionId == Junction.NOT_JUNCTION) {
+            if (sinkLane != Lane.NONE && sinkRoadSegment != null && successorJunctionId.equals(Junction.NOT_JUNCTION)) {
                 if (linkTag == false) {
                     linkTag = true;
                     startTag("link");
@@ -410,66 +410,64 @@ public class OpenDriveWriter extends XMLWriterBase {
         return null;
     }
 
-    private final int predecessorId(RoadSegment roadSegment) {
+    private final String predecessorId(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
-        final int prevId = RoadSegment.ID_NOT_SET;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
             if (sourceRoadSegment != null) {
-                return sourceRoadSegment.id();
+                return sourceRoadSegment.userId();
             }
         }
-        return prevId;
+        return null;
     }
 
-    private final int predecessorId2(RoadSegment roadSegment) {
+    private final String predecessorId2(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
-        int prevId = RoadSegment.ID_NOT_SET;
+        String prevId = null;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
-            final int id = sourceRoadSegment == null ? RoadSegment.ID_NOT_SET : sourceRoadSegment.id();
-            if (prevId != RoadSegment.ID_NOT_SET && id != RoadSegment.ID_NOT_SET && prevId != id) {
-                return RoadSegment.ID_NOT_SET;
+            final String id = sourceRoadSegment == null ? null : sourceRoadSegment.userId();
+            if (prevId != null && id != null && prevId != id) {
+                return null;
             }
-            if (id != RoadSegment.ID_NOT_SET) {
+            if (id != null) {
                 prevId = id;
             }
         }
         return prevId;
     }
 
-    private final int successorId(RoadSegment roadSegment) {
+    private final String successorId(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
-        final int prevId = RoadSegment.ID_NOT_SET;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
             if (sinkRoadSegment != null) {
-                return sinkRoadSegment.id();
+                return sinkRoadSegment.userId();
             }
         }
-        return prevId;
+        return null;
     }
 
-    private final int successorId2(RoadSegment roadSegment) {
+    private final String successorId2(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
-        int prevId = RoadSegment.ID_NOT_SET;
+        String prevId = null;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
-            final int id = sinkRoadSegment == null ? RoadSegment.ID_NOT_SET : sinkRoadSegment.id();
-            if (prevId != RoadSegment.ID_NOT_SET && id != RoadSegment.ID_NOT_SET && prevId != id) {
-                return RoadSegment.ID_NOT_SET;
+            final String id = sinkRoadSegment == null ? null : sinkRoadSegment.userId();
+            if (prevId != null && id != null && prevId != id) {
+                return null;
             }
-            if (id != RoadSegment.ID_NOT_SET) {
+            if (id != null) {
                 prevId = id;
             }
         }
         return prevId;
     }
 
-    private int findJunctionByIncomingRoadId(int incomingRoadId) {
+    private String findJunctionByIncomingRoadId(String incomingRoadId) {
         for (final Junction junction : junctions) {
             for (final Junction.Connection connection : junction.connections) {
-                if (connection.incomingRoadId == incomingRoadId) {
+                if (connection.incomingRoadId.equals(incomingRoadId)) {
                     return junction.id;
                 }
             }
@@ -477,10 +475,10 @@ public class OpenDriveWriter extends XMLWriterBase {
         return Junction.NOT_JUNCTION;
     }
 
-    private int findJunctionByConnectingRoadId(int connectingRoadId) {
+    private String findJunctionByConnectingRoadId(String connectingRoadId) {
         for (final Junction junction : junctions) {
             for (final Junction.Connection connection : junction.connections) {
-                if (connection.connectingRoadId == connectingRoadId) {
+                if (connection.connectingRoadId.equals(connectingRoadId)) {
                     return junction.id;
                 }
             }

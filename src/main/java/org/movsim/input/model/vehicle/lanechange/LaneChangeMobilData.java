@@ -17,11 +17,11 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.vehicle.laneChanging;
+package org.movsim.input.model.vehicle.lanechange;
 
 import java.util.Map;
 
-public class LaneChangingMobilData {
+public class LaneChangeMobilData {
 
     private double safeDeceleration;
     private double minimumGap;
@@ -29,7 +29,7 @@ public class LaneChangingMobilData {
     private double rightBiasAcceleration;
     private double politeness;
 
-    public LaneChangingMobilData() {
+    public LaneChangeMobilData() {
 
     }
 
@@ -44,7 +44,7 @@ public class LaneChangingMobilData {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData# getSafeDeceleration()
+     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getSafeDeceleration()
      */
     public double getSafeDeceleration() {
         return safeDeceleration;
@@ -53,7 +53,7 @@ public class LaneChangingMobilData {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData# getMinimumGap()
+     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getMinimumGap()
      */
     public double getMinimumGap() {
         return minimumGap;
@@ -62,7 +62,7 @@ public class LaneChangingMobilData {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData# getThresholdAcceleration()
+     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getThresholdAcceleration()
      */
     public double getThresholdAcceleration() {
         return thresholdAcceleration;
@@ -71,7 +71,7 @@ public class LaneChangingMobilData {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData# getRightBiasAcceleration()
+     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getRightBiasAcceleration()
      */
     public double getRightBiasAcceleration() {
         return rightBiasAcceleration;
@@ -80,7 +80,7 @@ public class LaneChangingMobilData {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData# getPoliteness()
+     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getPoliteness()
      */
     public double getPoliteness() {
         return politeness;

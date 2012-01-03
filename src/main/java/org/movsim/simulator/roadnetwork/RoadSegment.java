@@ -160,7 +160,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return this road segment's id
      */
-    public final int id() {
+    final int id() {
         return id;
     }
 
@@ -180,7 +180,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return this road segment's userId
      */
     public final String userId() {
-        return userId;
+        return userId == null ? Integer.toString(id) : userId;
     }
 
     /**
@@ -543,13 +543,13 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Lane changing.
+     * Lane change.
      * <p>
      * For each vehicle check if a lane change is desired and safe and, if so, make the lane change.
      * </p>
      * 
      * <p>
-     * <code>laneChanging</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
+     * <code>laneChange</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
      * </p>
      * 
      * @param dt
@@ -559,7 +559,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void laneChanging(double dt, double simulationTime, long iterationCount) {
+    public void laneChange(double dt, double simulationTime, long iterationCount) {
         if (laneCount < 2) {
             // need at least 2 lanes for lane changing
             return;
@@ -569,7 +569,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             stagedVehicles.clear();
             for (final Vehicle vehicle : laneSegment) {
                 assert vehicle.roadSegmentId() == id;
-                if (vehicle.considerLaneChanging(dt, this)) {
+                if (vehicle.considerLaneChange(dt, this)) {
                     stagedVehicles.add(vehicle);
                 }
             }

@@ -20,8 +20,8 @@ import java.util.Iterator;
 
 import org.junit.Test;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
-import org.movsim.simulator.vehicles.lanechanging.MOBIL;
+import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
+import org.movsim.simulator.vehicles.lanechange.MOBIL;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 
 /**
@@ -77,10 +77,10 @@ public class RoadSegmentTest {
         return new Vehicle(rearPosition, 0.0, lane, 5.0, 2.5);
     }
 
-    private LaneChangingModel newLaneChangeModel(Vehicle vehicle) {
+    private LaneChangeModel newLaneChangeModel(Vehicle vehicle) {
         final MOBIL mobil = new MOBIL(vehicle, GAP_MIN_FRONT_CAR, MAX_SAFE_BRAKING_CAR, POLITENESS_CAR, THRESHOLD_CAR,
                 BIAS_INSIDE_LANE_CAR);
-        return new LaneChangingModel(vehicle, mobil);
+        return new LaneChangeModel(vehicle, mobil);
     }
 
     /**
@@ -857,13 +857,13 @@ public class RoadSegmentTest {
         final Vehicle obstacle = newObstacle(600.0, Lane.LANE1);
         r0.addVehicle(obstacle);
         final Vehicle v0 = newVehicle(593.0, 5.0, Lane.LANE1);
-        final LaneChangingModel lcm = newLaneChangeModel(v0);
-        v0.setLaneChangingModel(lcm);
+        final LaneChangeModel lcm = newLaneChangeModel(v0);
+        v0.setLaneChangeModel(lcm);
         r0.addVehicle(v0);
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.laneChanging(dt, simulationTime, iterationCount);
+        r0.laneChange(dt, simulationTime, iterationCount);
         assertEquals(Lane.LANE1, obstacle.getLane());
         assertEquals(Lane.LANE2, v0.getLane());
         assertEquals(1, r0.laneSegment(Lane.LANE1).vehicleCount());

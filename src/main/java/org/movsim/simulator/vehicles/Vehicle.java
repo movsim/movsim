@@ -26,7 +26,7 @@ import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
+import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
@@ -110,7 +110,7 @@ public class Vehicle {
     private int targetLane;
 
     /** finite lane-changing duration */
-    private double tLaneChangingDelay;
+    private double tLaneChangeDelay;
 
     /** The speed limit. */
     private double speedlimit;
@@ -119,7 +119,7 @@ public class Vehicle {
     private LongitudinalModelBase longitudinalModel;
 
     /** The lane-changing model. */
-    private LaneChangingModel lcModel;
+    private LaneChangeModel lcModel;
 
     /** The memory. */
     private Memory memory = null;
@@ -209,7 +209,7 @@ public class Vehicle {
      *            the lanechange model
      */
     public Vehicle(String label, final LongitudinalModelBase longitudinalModel, final VehicleInput vehInput,
-            final Object cyclicBuffer, final LaneChangingModel lcModel, final FuelConsumption fuelModel) {
+            final Object cyclicBuffer, final LaneChangeModel lcModel, final FuelConsumption fuelModel) {
         this.label = label;
         id = nextId++;
         this.fuelModel = fuelModel;
@@ -768,11 +768,11 @@ public class Vehicle {
         longitudinalModel.removeObserver();
     }
 
-    public LaneChangingModel getLaneChangingModel() {
+    public LaneChangeModel getLaneChangeModel() {
         return lcModel;
     }
 
-    public void setLaneChangingModel(LaneChangingModel lcModel) {
+    public void setLaneChangeModel(LaneChangeModel lcModel) {
         this.lcModel = lcModel;
     }
 
@@ -797,10 +797,10 @@ public class Vehicle {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#considerLaneChanging(double, java.util.List)
+     * @see org.movsim.simulator.vehicles.Vehicle#considerLaneChange(double, java.util.List)
      */
 
-    public boolean considerLaneChanging(double dt, RoadSegment roadSegment) {
+    public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
 
         // no lane changing when not configured in xml.
         if (lcModel == null || !lcModel.isInitialized()) {
@@ -812,22 +812,22 @@ public class Vehicle {
             return false;
         }
 
-        if (inProcessOfLaneChanging()) {
-            updateLaneChangingDelay(dt);
+        if (inProcessOfLaneChange()) {
+            updateLaneChangeDelay(dt);
             return false;
         }
 
         // if not in lane-changing process do determine if new lane is more
         // attractive and lane change is possible
-        final int laneChangingDirection = lcModel.determineLaneChangingDirection(roadSegment);
+        final int laneChangeDirection = lcModel.determineLaneChangeDirection(roadSegment);
 
         // initiates a lane change: set targetLane to new value
         // the lane will be assigned by the vehicle container !!
-        if (laneChangingDirection != MovsimConstants.NO_CHANGE) {
-            setTargetLane(lane + laneChangingDirection);
+        if (laneChangeDirection != MovsimConstants.NO_CHANGE) {
+            setTargetLane(lane + laneChangeDirection);
             resetDelay();
-            updateLaneChangingDelay(dt);
-            logger.debug("do lane change to={} into target lane={}", laneChangingDirection, targetLane);
+            updateLaneChangeDelay(dt);
+            logger.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
             return true;
         }
 
@@ -839,7 +839,7 @@ public class Vehicle {
                            // virtual lane index from onramp
         resetDelay();
         final double delayInit = 0.2; // needs only to be > 0;
-        updateLaneChangingDelay(delayInit);
+        updateLaneChangeDelay(delayInit);
         logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
         if (oldLane == MovsimConstants.TO_LEFT) {
             // System.out.printf(".......... do lane change from ramp: virtual old lane (origin)=%d, contLane=%.4f", lane,
@@ -873,17 +873,17 @@ public class Vehicle {
     /*
      * (non-Javadoc)
      * 
-     * @see org.movsim.simulator.vehicles.Vehicle#inProcessOfLaneChanging()
+     * @see org.movsim.simulator.vehicles.Vehicle#inProcessOfLaneChange()
      */
-    public boolean inProcessOfLaneChanging() {
-        return (tLaneChangingDelay > 0 && tLaneChangingDelay < FINITE_LANE_CHANGE_TIME_S);
+    public boolean inProcessOfLaneChange() {
+        return (tLaneChangeDelay > 0 && tLaneChangeDelay < FINITE_LANE_CHANGE_TIME_S);
     }
 
     /**
      * Reset delay.
      */
     private void resetDelay() {
-        tLaneChangingDelay = 0;
+        tLaneChangeDelay = 0;
     }
 
     /**
@@ -892,8 +892,8 @@ public class Vehicle {
      * @param dt
      *            the dt
      */
-    private void updateLaneChangingDelay(double dt) {
-        tLaneChangingDelay += dt;
+    private void updateLaneChangeDelay(double dt) {
+        tLaneChangeDelay += dt;
     }
 
     /*
@@ -903,8 +903,8 @@ public class Vehicle {
      */
 
     public double getContinousLane() {
-        if (inProcessOfLaneChanging()) {
-            final double fractionTimeLaneChange = Math.min(1, tLaneChangingDelay / FINITE_LANE_CHANGE_TIME_S);
+        if (inProcessOfLaneChange()) {
+            final double fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_S);
             return fractionTimeLaneChange * lane + (1 - fractionTimeLaneChange) * laneOld;
         }
         return getLane();
