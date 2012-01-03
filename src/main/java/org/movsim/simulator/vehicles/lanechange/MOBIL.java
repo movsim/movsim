@@ -17,9 +17,9 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.lanechanging;
+package org.movsim.simulator.vehicles.lanechange;
 
-import org.movsim.input.model.vehicle.laneChanging.LaneChangingMobilData;
+import org.movsim.input.model.vehicle.lanechange.LaneChangeMobilData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -75,7 +75,7 @@ public class MOBIL {
      * @param lcMobilData
      *            the lc mobil data
      */
-    public MOBIL(final Vehicle vehicle, LaneChangingMobilData lcMobilData) {
+    public MOBIL(final Vehicle vehicle, LaneChangeMobilData lcMobilData) {
         this.me = vehicle;
         // TODO Auto-generated constructor stub
 
@@ -96,12 +96,12 @@ public class MOBIL {
         pRef = this.politeness = politeness;
     }
 
-    private boolean neigborsInProcessOfLaneChanging(final Vehicle v1, final Vehicle v2, final Vehicle v3) {
+    private boolean neigborsInProcessOfLaneChange(final Vehicle v1, final Vehicle v2, final Vehicle v3) {
         // finite delay criterion also for neighboring vehicles
-        final boolean oldFrontVehIsLaneChanging = (v1 == null) ? false : v1.inProcessOfLaneChanging();
-        final boolean newFrontVehIsLaneChanging = (v2 == null) ? false : v2.inProcessOfLaneChanging();
-        final boolean newBackVehIsLaneChanging = (v3 == null) ? false : v3.inProcessOfLaneChanging();
-        return (oldFrontVehIsLaneChanging || newFrontVehIsLaneChanging || newBackVehIsLaneChanging);
+        final boolean oldFrontVehIsLaneChange = (v1 == null) ? false : v1.inProcessOfLaneChange();
+        final boolean newFrontVehIsLaneChange = (v2 == null) ? false : v2.inProcessOfLaneChange();
+        final boolean newBackVehIsLaneChange = (v3 == null) ? false : v3.inProcessOfLaneChange();
+        return (oldFrontVehIsLaneChange || newFrontVehIsLaneChange || newBackVehIsLaneChange);
     }
 
     private boolean safetyCheckGaps(double gapFront, double gapBack) {
@@ -128,7 +128,7 @@ public class MOBIL {
         final Vehicle newBack = newLane.rearVehicle(me);
 
         // check if other vehicles are lane-changing
-        if (neigborsInProcessOfLaneChanging(oldFront, newFront, newBack)) {
+        if (neigborsInProcessOfLaneChange(oldFront, newFront, newBack)) {
             return prospectiveBalance;
         }
 

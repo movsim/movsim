@@ -17,7 +17,7 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.vehicle.laneChanging;
+package org.movsim.input.model.vehicle.lanechange;
 
 import java.util.List;
 import java.util.Map;
@@ -28,24 +28,24 @@ import org.movsim.input.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LaneChangingInputData {
+public class LaneChangeInputData {
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LaneChangingInputData.class);
+    final static Logger logger = LoggerFactory.getLogger(LaneChangeInputData.class);
 
     private final boolean isWithEuropeanRules;
 
     private final double critSpeedEuroRules; // in SI (m/s)
 
-    private final LaneChangingMobilData lcMobilData;
+    private final LaneChangeMobilData lcMobilData;
 
     private boolean isInitializedMobilData = false;
 
-    public LaneChangingInputData(final Element elem) {
+    public LaneChangeInputData(final Element elem) {
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         isWithEuropeanRules = Boolean.parseBoolean(map.get("eur_rules"));
         critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur"));
 
-        lcMobilData = new LaneChangingMobilData();
+        lcMobilData = new LaneChangeMobilData();
 
         final List<Element> lcModelElems = elem.getChildren();
         for (final Element lcModelElem : lcModelElems) {
@@ -94,7 +94,7 @@ public class LaneChangingInputData {
      * 
      * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getLcMobilData()
      */
-    public LaneChangingMobilData getLcMobilData() {
+    public LaneChangeMobilData getLcMobilData() {
         return lcMobilData;
     }
 }

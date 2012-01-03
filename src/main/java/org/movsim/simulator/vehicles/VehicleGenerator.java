@@ -37,7 +37,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
+import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ACC;
@@ -305,7 +305,7 @@ public class VehicleGenerator {
 
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
 
-        final LaneChangingModel lcModel = new LaneChangingModel(vehInput.getLaneChangingInputData());
+        final LaneChangeModel lcModel = new LaneChangeModel(vehInput.getLaneChangeInputData());
         final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
                 .getFuelConsumptionLabel());
         final Vehicle veh = new Vehicle(prototype.getLabel(), longModel, vehInput, null, lcModel, fuelModel);

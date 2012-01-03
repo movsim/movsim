@@ -24,6 +24,7 @@ stFile = inputPath.baseFile.".st.road_0.csv"
 detFile(n) = sprintf(inputPath.baseFile.".det.road_0.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_0.csv"
 rampSourceFile = inputPath.baseFile.".source.road_0.csv"
+trajectoriesFile = inputPath.baseFile.".traj.road_0.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
@@ -34,6 +35,8 @@ detmicroOutput = outputPath.baseFile.".det_q_micro.eps"
 inflowOutput = outputPath.baseFile.".inflow_log.eps"
 v2dOutput = outputPath.baseFile.".v2d.eps"
 v2dallOutput = outputPath.baseFile.".v2d_all.eps"
+a2dallOutput = outputPath.baseFile.".a2d_all.eps"
+trajectoriesOutput = outputPath.baseFile.".trajectories.eps"
 
 print "fundOutput = ",fundOutput
 print "please make sure that ".outputPath." already exists"
@@ -209,6 +212,19 @@ set ylabel positionLabel offset -1.0,0
 set out v2dallOutput
 splot stFile using ($1/60.0):($2/1000.0):($3*3.6) with lines linestyle 99
 
+set label 1 "a (m/s^2)" at screen 1.1,1.02
+set palette defined (-2 "red", -0.5 "orange", 0 "yellow", 0.2 "green", 0.6 "blue",  1.0 "#dd00ff", 1.5 "black" )
+set cbrange [-2:2]
+set out a2dallOutput
+splot stFile using ($2/60.0):($1/1000.0):6 with lines linestyle 99
+
 set nolabel
 unset colorbox
 unset pm3d
+
+set auto x
+set xrange [0:7]
+set xtics 1
+set auto y
+set out trajectoriesOutput
+plot trajectoriesFile using ($1/60.0):($4):(int($2) % 5 + 1) title "" with points lc variable

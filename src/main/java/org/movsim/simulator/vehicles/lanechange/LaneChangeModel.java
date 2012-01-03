@@ -17,9 +17,9 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.lanechanging;
+package org.movsim.simulator.vehicles.lanechange;
 
-import org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData;
+import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -28,12 +28,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class LaneChangingModel.
+ * The Class LaneChangeModel.
  */
-public class LaneChangingModel {
+public class LaneChangeModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LaneChangingModel.class);
+    final static Logger logger = LoggerFactory.getLogger(LaneChangeModel.class);
 
     // to avoid flips:
     public static double LANECHANGE_TDELAY_S = 3.0; // delay nach Spurwechsel
@@ -52,7 +52,7 @@ public class LaneChangingModel {
 
     private MOBIL lcModelMOBIL;
 
-    private final LaneChangingInputData lcInputData;
+    private final LaneChangeInputData lcInputData;
 
     /**
      * Instantiates a new lane changing model.
@@ -60,7 +60,7 @@ public class LaneChangingModel {
      * @param lcInputData
      *            the lc input data
      */
-    public LaneChangingModel(LaneChangingInputData lcInputData) {
+    public LaneChangeModel(LaneChangeInputData lcInputData) {
 
         this.lcInputData = lcInputData;
         this.withEuropeanRules = lcInputData.isWithEuropeanRules();
@@ -71,7 +71,7 @@ public class LaneChangingModel {
 
     }
 
-    public LaneChangingModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
+    public LaneChangeModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
         this.lcModelMOBIL = lcModelMOBIL;
         this.me = vehicle;
         this.withEuropeanRules = true;
@@ -112,9 +112,9 @@ public class LaneChangingModel {
 
     private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
 
-        // final boolean isLaneChangingFront = (frontVeh==null) ? false : frontVeh.inProcessOfLaneChanging();
-        // final boolean isLaneChangingBack = (backVeh==null) ? false : backVeh.inProcessOfLaneChanging();
-        // if(isLaneChangingBack || isLaneChangingFront){
+        // final boolean isLaneChangeFront = (frontVeh==null) ? false : frontVeh.inProcessOfLaneChange();
+        // final boolean isLaneChangeBack = (backVeh==null) ? false : backVeh.inProcessOfLaneChange();
+        // if(isLaneChangeBack || isLaneChangeFront){
         // return false;
         // }
 
@@ -151,7 +151,7 @@ public class LaneChangingModel {
         return (false);
     }
 
-    public int determineLaneChangingDirection(RoadSegment roadSegment) {
+    public int determineLaneChangeDirection(RoadSegment roadSegment) {
 
         final int currentLane = me.getLane();
 
