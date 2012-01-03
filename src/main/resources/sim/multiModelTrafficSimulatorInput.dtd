@@ -103,7 +103,7 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, NEWELL?, KRAUSS?, NSM?, KKW?, MEMORY?)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, KRAUSS?, NSM?, KKW?, MEMORY?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -158,12 +158,6 @@
   a            NMTOKEN #REQUIRED
   b            NMTOKEN #REQUIRED
   epsilon      NMTOKEN #REQUIRED
->
-
-<!ELEMENT NEWELL EMPTY>
-<!ATTLIST NEWELL
-  v0           NMTOKEN #REQUIRED
-  s0           NMTOKEN #REQUIRED
 >
 
 <!ELEMENT NSM EMPTY>

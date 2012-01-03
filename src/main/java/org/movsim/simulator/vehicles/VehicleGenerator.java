@@ -36,12 +36,10 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.vehicles.lanechanging.LaneChangingModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
-import org.movsim.simulator.vehicles.longitudinalmodel.Newell;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ACC;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Gipps;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
@@ -55,7 +53,6 @@ import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumID
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKKW;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKrauss;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNSM;
-import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNewell;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 import org.movsim.utilities.MyRandom;
@@ -195,8 +192,6 @@ public class VehicleGenerator {
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
         } else if (longModel.modelName() == ModelName.KRAUSS) {
             return new EquilibriumKrauss(vehLength, (Krauss) longModel);
-        } else if (longModel.modelName() == ModelName.NEWELL) {
-            return new EquilibriumNewell(vehLength, (Newell) longModel);
         } else if (longModel.modelName() == ModelName.NSM) {
             return new EquilibriumNSM(vehLength, (NSM) longModel);
         } else if (longModel.modelName() == ModelName.KKW) {
@@ -232,8 +227,6 @@ public class VehicleGenerator {
             longModel = new Gipps(simulationTimestep, (LongitudinalModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {
             longModel = new Krauss(simulationTimestep, (LongitudinalModelInputDataKrauss) modelInputData);
-        } else if (modelName == ModelName.NEWELL) {
-            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewell) modelInputData);
         } else if (modelName == ModelName.NSM) {
             longModel = new NSM((LongitudinalModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {
