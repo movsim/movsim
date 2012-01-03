@@ -160,7 +160,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return this road segment's id
      */
-    public final int id() {
+    final int id() {
         return id;
     }
 
@@ -180,7 +180,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return this road segment's userId
      */
     public final String userId() {
-        return userId;
+        return userId == null ? Integer.toString(id) : userId;
     }
 
     /**
