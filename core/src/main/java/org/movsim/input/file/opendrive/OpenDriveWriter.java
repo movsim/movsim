@@ -436,7 +436,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
             final String id = sourceRoadSegment == null ? null : sourceRoadSegment.userId();
-            if (prevId != null && id != null && prevId != id) {
+            if (prevId != null && id != null && !prevId.equals(id)) {
                 return null;
             }
             if (id != null) {
@@ -463,7 +463,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
             final String id = sinkRoadSegment == null ? null : sinkRoadSegment.userId();
-            if (prevId != null && id != null && prevId != id) {
+            if (prevId != null && id != null && !prevId.equals(id)) {
                 return null;
             }
             if (id != null) {
