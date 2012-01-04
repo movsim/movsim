@@ -181,7 +181,7 @@ public class OpenDriveWriter extends XMLWriterBase {
             return;
         }
         final String junctionFormat = "id=\"%s\" name=\"\"";
-        final String connectionFormat = "id=\"%s\" incomingRoad=\"%d\" connectingRoad=\"%d\" contactPoint=\"%s\"";
+        final String connectionFormat = "id=\"%s\" incomingRoad=\"%s\" connectingRoad=\"%s\" contactPoint=\"%s\"";
         final String laneLinkFormat = "from=\"%d\" to=\"%d\"";
         for (final Junction junction : junctions) {
             startTag("junction", String.format(junctionFormat, junction.id));
@@ -205,14 +205,14 @@ public class OpenDriveWriter extends XMLWriterBase {
         assert roadSegment != null;
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
-        final String roadFormat = "id=\"%s\" name=\"R%s\" length=\"%f\" junction=\"%d\"";
+        final String roadFormat = "id=\"%s\" name=\"R%s\" length=\"%f\" junction=\"%s\"";
         final String junctionId = findJunctionByConnectingRoadId(roadSegment.userId());
         final String s = String.format(roadFormat, roadSegment.userId(), roadSegment.userId(), roadSegment.roadLength(),
                 junctionId);
         startTag("road", s);
         startTag("link");
-        final String junctionLinkFormat = "elementType=\"junction\" elementId=\"%d\"";
-        final String roadLinkFormat = "elementType=\"road\" elementId=\"%d\" contactPoint=\"%s\"";
+        final String junctionLinkFormat = "elementType=\"junction\" elementId=\"%s\"";
+        final String roadLinkFormat = "elementType=\"road\" elementId=\"%s\" contactPoint=\"%s\"";
         final String predecessorJunctionId;
         final RoadSegment aPredecessor = aPredecessor(roadSegment);
         if (aPredecessor == null) {
