@@ -292,17 +292,18 @@ public class MovSimMenu extends JPanel {
         viewMenu.add(colorVehicles);
         viewMenu.addSeparator();
 
-        final JCheckBoxMenuItem cbStatusPanel = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("StatusPanel")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        handleDisplayStatusPanel(actionEvent);
-                    }
-                });
-        cbStatusPanel.setSelected(true);
-        viewMenu.add(cbStatusPanel);
+//        final JCheckBoxMenuItem cbStatusPanel = new JCheckBoxMenuItem(new AbstractAction(
+//                (String) resourceBundle.getObject("StatusPanel")) {//$NON-NLS-1$
+//                    private static final long serialVersionUID = 1L;
+//
+//                    @Override
+//                    public void actionPerformed(ActionEvent actionEvent) {
+//                        handleDisplayStatusPanel(actionEvent);
+//                    }
+//                });
+//        cbStatusPanel.setSelected(true);
+//        viewMenu.add(cbStatusPanel);
+        
         viewMenu.add(new JCheckBoxMenuItem(new AbstractAction((String) resourceBundle.getObject("LogOutput")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
 
@@ -612,14 +613,14 @@ public class MovSimMenu extends JPanel {
         }
     }
 
-    protected void handleDisplayStatusPanel(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            trafficUi.addStatusPanel();
-        } else {
-            trafficUi.removeStatusPanel();
-        }
-    }
+//    protected void handleDisplayStatusPanel(ActionEvent actionEvent) {
+//        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
+//        if (cb.isSelected()) {
+//            trafficUi.addStatusPanel();
+//        } else {
+//            trafficUi.removeStatusPanel();
+//        }
+//    }
 
     protected void handleDrawRoadIds(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();

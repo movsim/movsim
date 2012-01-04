@@ -58,16 +58,10 @@ public class TrafficUi extends Component {
 
     String scenarioFilename;
     transient TrafficCanvas.StatusControlCallbacks statusCallbacks;
-    private StatusPanel statusPanel;
 
-    public StatusPanel getStatusPanel() {
-        return statusPanel;
-    }
-
-    // private InflowOutFlowControlPanel inflowControl;
-    private JPanel controlPanel;
     private TrafficCanvasKeyListener controller;
     private ResourceBundle resourceBundle;
+    private StatusPanel statusPanel;
 
     public TrafficCanvasKeyListener getController() {
         return controller;
@@ -83,9 +77,8 @@ public class TrafficUi extends Component {
      * Handle component resized event.
      */
     public void resized() {
-        final Dimension dimensionStatusPanel = statusPanel.getPreferredSize();
         final int width = container.getSize().width;
-        final int height = container.getSize().height - dimensionStatusPanel.height;
+        final int height = container.getSize().height;
         trafficCanvas.setPreferredSize(new Dimension(width, height));
         trafficCanvas.setSize(width, height);
         trafficCanvas.requestFocusInWindow(); // give the canvas the keyboard focus
@@ -129,17 +122,12 @@ public class TrafficUi extends Component {
         resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(), Locale.getDefault());
         initStrings(resourceBundle);
 
-        layoutMainPanelAndCanvas();
-
         // first scenario
         trafficCanvas.setupTrafficScenario(Scenario.STARTSTOPFILE);
-        getStatusPanel().setWithTravelTimes(false);
-        getStatusPanel().setWithProgressBar(true);
-        // removeInflowOutFlowControls();
+        statusPanel.setWithTravelTimes(false);
+        statusPanel.setWithProgressBar(true);
 
         statusPanel.reset();
-        // inflowControl.reset();
-
         statusPanel.setProgressBarDuration();
 
     }
@@ -152,33 +140,6 @@ public class TrafficUi extends Component {
                 (String) resourceBundle.getObject("PerturbationApplied")); //$NON-NLS-1$
     }
 
-    private void layoutMainPanelAndCanvas() {
-
-        controlPanel = new JPanel();
-        // inflowControl = new InflowOutFlowControlPanel();
-
-        controlPanel.setLayout(new BorderLayout());
-
-        controlPanel.setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
-
-        statusPanel = new StatusPanel(resourceBundle);
-
-        container.add(controlPanel, BorderLayout.NORTH);
-        addStatusPanel();
-
-        // controlPanel.add(inflowControl, BorderLayout.SOUTH);
-
-        this.repaint();
-    }
-
-    // public void removeInflowOutFlowControls() {
-    // controlPanel.remove(inflowControl);
-    // }
-
-    // public void addInFlowOutFlowControls() {
-    // inflowControl = new InflowOutFlowControlPanel();
-    // controlPanel.add(inflowControl, BorderLayout.SOUTH);
-    // }
 
     public void quit() {
         if (trafficCanvas.isStopped() == false) {
@@ -191,30 +152,35 @@ public class TrafficUi extends Component {
         trafficCanvas.setDrawRoadId(drawRoadId);
     }
 
-    public void removeStatusPanel() {
-        container.remove(statusPanel);
-        final Dimension dimensionControlPanel = controlPanel.getPreferredSize();
+//    public void removeStatusPanel() {
+//        container.remove(statusPanel);
+//
+//        final int width = container.getSize().width;
+//        final int height = container.getSize().height;
+//        trafficCanvas.setPreferredSize(new Dimension(width, height));
+//        container.add(trafficCanvas, BorderLayout.CENTER);
+//        trafficCanvas.setSize(width, height);
+//    }
+//
+//    public void addStatusPanel() {
+//        final Dimension dimensionStatusPanel = statusPanel.getPreferredSize();
+//        final int width = container.getSize().width;
+//        final int height = container.getSize().height - dimensionStatusPanel.height;
+//        trafficCanvas.setPreferredSize(new Dimension(width, height));
+//        container.add(trafficCanvas, BorderLayout.CENTER);
+//        trafficCanvas.setSize(width, height);
+//        container.setSize(width, height + dimensionStatusPanel.height);
+//        container.setVisible(true);
+//        container.add(statusPanel, BorderLayout.SOUTH);
+//        container.validate();
+//    }
 
-        final int width = container.getSize().width;
-        final int height = container.getSize().height - dimensionControlPanel.height;
-        trafficCanvas.setPreferredSize(new Dimension(width, height));
-        container.add(trafficCanvas, BorderLayout.CENTER);
-        trafficCanvas.setSize(width, height);
+    public void setStatusPanel(StatusPanel statusPanel) {
+        this.statusPanel = statusPanel;
     }
 
-    public void addStatusPanel() {
-        final Dimension dimensionControlPanel = controlPanel.getPreferredSize();
-
-        final Dimension dimensionStatusPanel = statusPanel.getPreferredSize();
-        final int width = container.getSize().width;
-        final int height = container.getSize().height - dimensionControlPanel.height - dimensionStatusPanel.height;
-        trafficCanvas.setPreferredSize(new Dimension(width, height));
-        container.add(trafficCanvas, BorderLayout.CENTER);
-        trafficCanvas.setSize(width, height);
-        container.setSize(width, height + dimensionControlPanel.height + dimensionStatusPanel.height);
-        container.setVisible(true);
-        container.add(statusPanel, BorderLayout.SOUTH);
-        container.validate();
+    public StatusPanel getStatusPanel() {
+        return statusPanel;
     }
 
 }

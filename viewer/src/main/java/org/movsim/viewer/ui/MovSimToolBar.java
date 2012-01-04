@@ -52,12 +52,13 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
     static final private String RECENTER = "recenter";
     static final private String VEHICLE_COLORS = "vehicle colors";
     static final private String RESET = "reset";
-    static final private String VEHICLE_CHANGE = "vehicle change";
 
     JButton buttonStart;
     private final ResourceBundle resourceBundle;
 
     private final TrafficUi trafficUI;
+
+    private StatusPanel statusPanel;
 
     public MovSimToolBar(final TrafficUi trafficUi, final ResourceBundle resourceBundle) {
         super(resourceBundle.getString("ToolBarTitle"));
@@ -67,6 +68,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         setRollover(true);
         controller = trafficUi.getController();
         addButtons(this);
+        addStatusPanel(this);
 
         final StatusControlCallbacks statusCallbacks = new TrafficCanvas.StatusControlCallbacks() {
             @Override
@@ -134,9 +136,17 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         button = makeNavigationButton("colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
                 resourceBundle.getString("VehicleColors"));
         toolBar.add(button);
-        button = makeNavigationButton("vehicles", VEHICLE_CHANGE, resourceBundle.getString("VehiclesTip"),
-                resourceBundle.getString("Vehicles"));
-        toolBar.add(button);
+        
+        toolBar.addSeparator(new Dimension(20, 0));
+    }
+
+    /**
+     * @param toolBar
+     */
+    private void addStatusPanel(JToolBar toolBar) {
+        statusPanel = new StatusPanel(resourceBundle);
+        toolBar.add(statusPanel);
+        trafficUI.setStatusPanel(statusPanel);
     }
 
     protected JButton makeNavigationButton(String imageName, String actionCommand, String toolTipText, String altText) {
@@ -182,10 +192,8 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         } else if (e.getActionCommand().equals(VEHICLE_COLORS)) {
             controller.commandCycleVehicleColors();
         } else if (e.getActionCommand().equals(RESET)) {
-            trafficUI.getStatusPanel().reset();
+//            trafficUI.getStatusPanel().reset();
             controller.commandReset();
-        } else if (e.getActionCommand().equals(VEHICLE_CHANGE)) {
-            controller.commandVehicleChange();
         }
     }
 }

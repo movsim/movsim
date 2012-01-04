@@ -5,8 +5,6 @@ csv/
 *.csv
 *.DS_Store
 *.internal_xml
-log4j.properties
-multiModel*.dtd
 *.log
 *.log.*
 *.eps
