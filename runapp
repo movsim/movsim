@@ -1,9 +1,0 @@
-#!/bin/bash
-dirFigs="figs"
-java -jar target/movsim-1.2-jar-with-dependencies.jar -f sim/$1.xml /$2 $3 $4 $5
-cd sim
-if [ ! -d $dirFigs ]; then
-    mkdir $dirFigs
-fi
-gnuplot $1.gpl
-cd ..

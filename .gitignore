@@ -1,8 +1,7 @@
-/.settings
-/.classpath
-/target
-/bin
-*/figs/*
+target/
+bin/
+figs/
+csv/
 *.csv
 *.DS_Store
 *.internal_xml
