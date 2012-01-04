@@ -25,7 +25,7 @@ package org.movsim.output.fileoutput;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.vehicles.VehiclePrototype;
@@ -53,14 +53,13 @@ public class FileFundamentalDiagram {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         final String path = projectMetaData.getOutputPath();
         final String baseFilename = projectMetaData.getProjectName();
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final VehiclePrototype proto = prototypes.get(key);
-            if (proto.fraction() > 0) {
-                // avoid writing fundDia of "obstacles"
+        for (final Map.Entry<String, VehiclePrototype> entry : prototypes.entrySet()) {
+            final String key = entry.getKey();
+            final VehiclePrototype prototype = entry.getValue();
+            if (prototype.fraction() > 0) {
+                // avoid writing fundamental diagram of "obstacles"
                 final String filename = path + File.separator + baseFilename + ".fund_" + key + ".csv";
-                final EquilibriumProperties equilibriumProperties = proto.getEquilibriumProperties();
+                final EquilibriumProperties equilibriumProperties = prototype.getEquilibriumProperties();
                 writeFundamentalDiagram(equilibriumProperties, filename);
             }
         }
