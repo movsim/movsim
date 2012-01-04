@@ -36,9 +36,13 @@ import org.movsim.utilities.FileUtils;
  * The Class FileFundamentalDiagram.
  */
 public class FileFundamentalDiagram {
+    private static final String extensionFormat = ".fund_%s.csv";
+    private static final String outputHeading = FileOutputBase.COMMENT_CHAR +
+            " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n";
+    private static final String outputFormat = "%8.2f, %8.2f, %8.2f, %8.2f%n";
 
     /**
-     * Instantiates a new file fundamental diagram.
+     * Constructor.
      */
     private FileFundamentalDiagram() {
     }
@@ -58,7 +62,7 @@ public class FileFundamentalDiagram {
             final VehiclePrototype prototype = entry.getValue();
             if (prototype.fraction() > 0) {
                 // avoid writing fundamental diagram of "obstacles"
-                final String filename = path + File.separator + baseFilename + ".fund_" + key + ".csv";
+                final String filename = path + File.separator + baseFilename + String.format(extensionFormat, key);
                 final EquilibriumProperties equilibriumProperties = prototype.getEquilibriumProperties();
                 writeFundamentalDiagram(equilibriumProperties, filename);
             }
@@ -72,17 +76,17 @@ public class FileFundamentalDiagram {
      *            the filename
      */
     private static void writeFundamentalDiagram(EquilibriumProperties equilibriumProperties, String filename) {
-        final PrintWriter fstr = FileUtils.getWriter(filename);
-        fstr.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * equilibriumProperties.getRhoQMax());
-        fstr.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * equilibriumProperties.getQMax());
-        fstr.printf(FileOutputBase.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n");
+        final PrintWriter writer = FileUtils.getWriter(filename);
+        writer.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * equilibriumProperties.getRhoQMax());
+        writer.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * equilibriumProperties.getQMax());
+        writer.printf(outputHeading);
         final int count = equilibriumProperties.getVEqCount();
         for (int i = 0; i < count; i++) {
             final double rho = equilibriumProperties.getRho(i);
             final double s = equilibriumProperties.getNetDistance(rho);
             final double vEq = equilibriumProperties.getVEq(i);
-            fstr.printf("%8.2f, %8.2f, %8.2f, %8.2f%n", 1000 * rho, s, 3.6 * vEq, 3600 * rho * vEq);
+            writer.printf(outputFormat, 1000 * rho, s, 3.6 * vEq, 3600 * rho * vEq);
         }
-        fstr.close();
+        writer.close();
     }
 }
