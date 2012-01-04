@@ -1,0 +1,40 @@
+#!/bin/bash
+# first test script for running/updating all simulations
+
+run=". runapp"
+onramp="IDM IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL KKW NEWELL NSM"
+
+startStop="IDM IDM_w_noise IDMM IIDM ACC GIPPS OVM VDIFF KRAUSS BARL NSM KKW NEWELL"
+
+#######################################################
+function deleteSimOutput(){
+    echo "project = $1"
+    cd sim
+    rm -v $project.*.csv
+    cd figs
+    rm -v $project.*.eps
+    cd ..
+    cd ..
+}
+#######################################################
+for m in ${startStop}
+do
+  proj="startStop_$m"
+  echo "project = $proj"
+  deleteSimOutput $proj
+  $run $proj
+  read -p pressKey
+done;
+
+
+
+
+for m in ${onramp}
+do
+  proj="onramp_$m"
+  echo "project = $proj"
+  deleteSimOutput $proj
+  $run $proj
+  read -p pressKey
+done;
+
