@@ -73,7 +73,7 @@ public class FloatingCarInput {
         if (fcElems != null) {
             for (final Element fcElem : fcElems) {
                 final int iFC = Integer.parseInt(fcElem.getAttributeValue("number"));
-                floatingCars.add(new Integer(iFC));
+                floatingCars.add(Integer.valueOf(iFC));
             }
         }
 
