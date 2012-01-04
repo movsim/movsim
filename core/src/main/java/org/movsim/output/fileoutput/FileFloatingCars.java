@@ -87,11 +87,11 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         final String filename = createFileName(originId, vehNumber);
         final PrintWriter fstr = FileUtils.getWriter(filename);
         hashMap.put(vehNumber, fstr);
-        printHeader(fstr, veh);
+        writeHeader(fstr, veh);
         fstr.flush();
     }
 
-    private void printHeader(final PrintWriter fstr, final Vehicle veh) {
+    private void writeHeader(final PrintWriter fstr, final Vehicle veh) {
         fstr.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
         fstr.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
         fstr.println(String.format("%s model category = %s", COMMENT_CHAR, 

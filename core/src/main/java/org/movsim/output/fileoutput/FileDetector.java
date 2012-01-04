@@ -22,11 +22,7 @@
  */
 package org.movsim.output.fileoutput;
 
-import java.io.File;
-import java.io.PrintWriter;
-
 import org.movsim.output.LoopDetector;
-import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.ObserverInTime;
 
 /**
@@ -63,22 +59,16 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
         this.detector = detector;
         this.laneCount = laneCount;
 
-        final String filename = path + File.separator + baseFilename
-                + String.format(extensionFormat, roadId, xDetectorInt);
-
-        writer = initFile(filename);
+        writer = createWriter(String.format(extensionFormat, roadId, xDetectorInt));
+        writeHeader();
         detector.registerObserver(this);
     }
 
     /**
-     * Inits the printwriter and prints the header.
+     * Writes the header.
      * 
-     * @param filename
-     *            the filename
-     * @return the printWriter
      */
-    private PrintWriter initFile(String filename) {
-        writer = FileUtils.getWriter(filename);
+    private void writeHeader() {
         writer.printf(COMMENT_CHAR + " number of lanes = %d. (Numbering starts from the most left lane as 1.)%n",
                 laneCount);
         writer.printf(COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
@@ -91,7 +81,6 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
         }
         writer.printf("%n");
         writer.flush();
-        return writer;
     }
 
     /**
