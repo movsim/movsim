@@ -46,16 +46,16 @@ public class FileTrafficSourceData extends FileOutputBase implements TrafficSour
      * 
      */
     public FileTrafficSourceData(String roadId) {
-    	super();
+        super();
         writer = createWriter(String.format(extensionFormat, roadId));
         writer.printf(outputHeading);
     }
 
     @Override
-	public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter,
-            double totalInflow, int enteringVehCounter, double nWait) {
-        writer.printf(outputFormat, simulationTime, laneEnter, xEnter, 3.6 * vEnter,
-                3600 * totalInflow, enteringVehCounter, nWait);
+    public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter, double totalInflow,
+            int enteringVehCounter, double nWait) {
+        writer.printf(outputFormat, simulationTime, laneEnter, xEnter, 3.6 * vEnter, 3600 * totalInflow,
+                enteringVehCounter, nWait);
         writer.flush();
     }
 }

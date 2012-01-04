@@ -67,7 +67,7 @@ public class FileTrajectories extends FileOutputBase {
      *            the road section
      */
     public FileTrajectories(TrajectoriesInput trajectoriesInput, RoadNetwork roadNetwork) {
-    	super();
+        super();
         logger.info("Constructor");
 
         dtOut = trajectoriesInput.getDt();
@@ -148,9 +148,9 @@ public class FileTrajectories extends FileOutputBase {
 
                 lastUpdateTime = time;
 
-            	for (final RoadSegment roadSegment : roadNetwork) {
+                for (final RoadSegment roadSegment : roadNetwork) {
                     writeTrajectories(fileHandles.get(roadSegment.userId()), roadSegment);
-            	}
+                }
                 /*
                  * // onramps for(IOnRamp rmp : mainroad.onramps()){ writeTrajectories(fileHandles.get(rmp.roadIndex()),
                  * rmp.vehContainer()); } // offramps for(IStreet rmp : mainroad.offramps()){

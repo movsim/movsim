@@ -52,7 +52,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     // note: number before decimal point is total width of field, not width of
     // integer part
     private static final String outputFormat = "%10.2f,%10d,%10.1f,%10d,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f%n";
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
     private final HashMap<Integer, PrintWriter> hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
@@ -66,7 +66,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      *            the floating cars
      */
     public FileFloatingCars(FloatingCars floatingCars) {
-    	super();
+        super();
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
 
@@ -83,7 +83,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      *            the vehicle number
      */
     private void addFloatingCar(final Vehicle veh, int vehNumber) {
-        final long originId = veh.roadSegmentId(); 
+        final long originId = veh.roadSegmentId();
         final String filename = createFileName(originId, vehNumber);
         final PrintWriter fstr = FileUtils.getWriter(filename);
         hashMap.put(vehNumber, fstr);
@@ -119,10 +119,10 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
             final LaneSegment laneSegment = roadSegment.laneSegment(lane);
             for (final Vehicle vehOnLane : laneSegment) {
                 final int vehNumber = vehOnLane.getVehNumber();
-                if(fcdNumbers != null && fcdNumbers.contains(vehNumber)){
+                if (fcdNumbers != null && fcdNumbers.contains(vehNumber)) {
                     addFloatingCar(vehOnLane, vehNumber);
                     fcdNumbers.remove(vehNumber);
-                    if(fcdNumbers.isEmpty()){
+                    if (fcdNumbers.isEmpty()) {
                         fcdNumbers = null;
                     }
                 }
@@ -150,7 +150,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     }
 
     /**
-     * Write data in physical (not scaled) quantities 
+     * Write data in physical (not scaled) quantities
      * 
      * @param time
      *            the time

@@ -30,7 +30,7 @@ import org.movsim.utilities.FileUtils;
 
 public class FileOutputBase {
 
-	public static final String COMMENT_CHAR = "#";
+    public static final String COMMENT_CHAR = "#";
 
     final String path;
     final String baseFilename;
