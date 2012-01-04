@@ -1,27 +1,20 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
- *                             Ralph Germ, Martin Budden
- *                             <movsim@akesting.de>
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <movsim@akesting.de>
  * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  MovSim is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with MovSim.  If not, see <http://www.gnu.org/licenses/> or
- *  <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
  * ----------------------------------------------------------------------
  */
 
@@ -185,7 +178,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     @Override
     protected void reset() {
-    	super.reset();
+        super.reset();
         simulator.reset();
     }
 
@@ -275,7 +268,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             break;
         case LANE_CHANGE:
             color = Color.BLACK;
-            if (vehicle.inProcessOfLaneChanging()) {
+            if (vehicle.inProcessOfLaneChange()) {
                 color = Color.ORANGE;
             }
             break;
@@ -408,12 +401,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      */
     private void drawRoadSegments(Graphics2D g) {
-        for(final RoadSegment roadSegment : roadNetwork) {
+        for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            System.out.println("draw roadSegment: "+roadSegment);
+            System.out.println("draw roadSegment: " + roadSegment);
             assert roadMapping != null;
             drawRoadSegment(g, roadMapping);
-            drawRoadSegmentLines(g, roadMapping);  // in one step (parallel or sequential update)?!
+            drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!
         }
     }
 
@@ -422,7 +415,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
         g.setColor(Color.GRAY);
-//        g.setColor(roadMapping.roadColor());  // TODO
+        // g.setColor(roadMapping.roadColor()); // TODO
         PaintRoadMapping.paintRoadMapping(g, roadMapping);
     }
 
@@ -499,7 +492,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // paint the "virtual traffic light" controlling too much inflow
             g.setColor(Color.DARK_GRAY);
             // TODO
-            //final double shiftHack = (roadSection.getId() == RoadIDs.idOfframp) ? -roadSection.getRampMergingLength() : 0;
+            // final double shiftHack = (roadSection.getId() == RoadIDs.idOfframp) ? -roadSection.getRampMergingLength() : 0;
             final double shiftHack = 0;
             final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position() + shiftHack, offset);
             g.fillRect((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
@@ -539,7 +532,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         for (final SpeedLimit speedLimit : roadSegment.speedLimits()) {
             // TODO
-            //final double shiftHack = (roadSection.getId() == RoadIDs.idOfframp) ? -roadSection.getRampMergingLength() : 0;
+            // final double shiftHack = (roadSection.getId() == RoadIDs.idOfframp) ? -roadSection.getRampMergingLength() : 0;
             final double shiftHack = 0.0;
 
             if (speedLimit.getPosition() + shiftHack < 0) {
@@ -594,14 +587,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
             // draw the road segment source, if there is one
             if (roadSegment.getTrafficSource() != null) {
-                //g.setColor(roadSegment.source().type() == TrafficFlowBase.Type.SOURCE ? sourceColor : sourceJunctionColor);
+                // g.setColor(roadSegment.source().type() == TrafficFlowBase.Type.SOURCE ? sourceColor : sourceJunctionColor);
                 posTheta = roadMapping.startPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
             }
 
             // draw the road segment sink, if there is one
             if (roadSegment.sink() != null) {
-               // g.setColor(roadSegment.sink().type() == TrafficFlowBase.Type.SINK ? sinkColor : sinkJunctionColor);
+                // g.setColor(roadSegment.sink().type() == TrafficFlowBase.Type.SINK ? sinkColor : sinkJunctionColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
             }
@@ -622,28 +615,28 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
 
-             //if there is a traffic source, then draw its id
-//             final TrafficSource source = roadSection.source();
-//             TrafficSource source = null;
-//             if (source != null) {
-//             final int id = source.id();
-//             if (id != TrafficFlowBase.ID_NOT_SET) {
-//             if (source.type() == TrafficFlowBase.Type.SOURCE) {
-//                                    string = "S" + id; //$NON-NLS-1$
-//             } else {
-//                                    string = "R" + source.sinkRoad().id() + "J" + id; //$NON-NLS-1$ //$NON-NLS-2$
-//             }
-//             g.drawString(string, (int)(posTheta.x) + radius / 2,
-//             (int)(posTheta.y)
-//             + radius / 2);
-//             }
-//             }
+            // if there is a traffic source, then draw its id
+            // final TrafficSource source = roadSection.source();
+            // TrafficSource source = null;
+            // if (source != null) {
+            // final int id = source.id();
+            // if (id != TrafficFlowBase.ID_NOT_SET) {
+            // if (source.type() == TrafficFlowBase.Type.SOURCE) {
+            //                                    string = "S" + id; //$NON-NLS-1$
+            // } else {
+            //                                    string = "R" + source.sinkRoad().id() + "J" + id; //$NON-NLS-1$ //$NON-NLS-2$
+            // }
+            // g.drawString(string, (int)(posTheta.x) + radius / 2,
+            // (int)(posTheta.y)
+            // + radius / 2);
+            // }
+            // }
             // draw the road segment's id
             final int fontHeight = 12;
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight); //$NON-NLS-1$
             g.setFont(font);
             g.setColor(Color.BLACK);
-            g.drawString("R" + roadSegment.id(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
+            g.drawString("R" + roadSegment.userId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
 
             // if there is a traffic sink, then draw its id
             // final TrafficFlowBase sink = roadSection.sink();
