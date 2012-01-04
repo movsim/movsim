@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.movsim.input.model.simulation.InflowDataPoint;
 
 public class InflowTimeSeriesTest {
-    private final double delta = 0.00001;
+    private static final double delta = 0.00001;
 	private InflowTimeSeries inflowTimeSeries;
 
 	@Before

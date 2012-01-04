@@ -32,7 +32,7 @@ import org.junit.Test;
  * 
  */
 public class RoadMappingTest {
-    private final double delta = 0.00001;
+    private static final double delta = 0.00001;
 
     protected static class RoadMappingConcrete extends RoadMapping {
         public RoadMappingConcrete(int laneCount) {
