@@ -53,7 +53,7 @@ public class NullAppender extends AppenderSkeleton {
      * @see org.apache.log4j.AppenderSkeleton#doAppend(org.apache.log4j.spi.LoggingEvent )
      */
     @Override
-    public void doAppend(LoggingEvent event) {
+    public synchronized void doAppend(LoggingEvent event) {
     }
 
     /*
