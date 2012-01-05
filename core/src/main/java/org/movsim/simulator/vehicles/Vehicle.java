@@ -75,7 +75,7 @@ public class Vehicle {
     private double midPosition;
 
     /** The old position. */
-    private double positionOld;
+    private double midPositionOld;
     
     /** The total distance travelled */
     private double totalTraveledDistance;
@@ -317,7 +317,7 @@ public class Vehicle {
     }
 
     private void initialize() {
-        positionOld = 0;
+        midPositionOld = 0;
         midPosition = 0;
         speed = 0;
         acc = 0;
@@ -337,7 +337,7 @@ public class Vehicle {
     public void init(double pos, double v, int lane) {
         this.laneOld = this.lane; // remember previous lane
         this.midPosition = pos;
-        this.positionOld = pos;
+        this.midPositionOld = pos;
         this.speed = v;
         // targetlane not needed anymore for book-keeping, vehicle is in new
         // lane
@@ -396,7 +396,7 @@ public class Vehicle {
      * 
      * @return vehicle's length, in meters
      */
-    public double getLength() {
+    public final double getLength() {
         return length;
     }
 
@@ -405,7 +405,7 @@ public class Vehicle {
      * 
      * @return vehicle's width, in meters
      */
-    public double getWidth() {
+    public final double getWidth() {
         return width;
     }
 
@@ -414,7 +414,7 @@ public class Vehicle {
      * 
      * @return position of the front of this vehicle
      */
-    public double getFrontPosition() {
+    public final double getFrontPosition() {
         return midPosition + 0.5 * length;
     }
 
@@ -434,7 +434,7 @@ public class Vehicle {
      * @param midPosition
      *            new  mid position
      */
-    public void setMidPosition(double position) {
+    public final void setMidPosition(double position) {
         this.midPosition = position;
     }
 
@@ -443,7 +443,7 @@ public class Vehicle {
      * 
      * @return position of the mid-point of this vehicle
      */
-    public double getMidPosition() {
+    public final double getMidPosition() {
         return midPosition;
     }
 
@@ -462,7 +462,7 @@ public class Vehicle {
      * 
      * @return position of the rear of this vehicle
      */
-    public double getRearPosition() {
+    public final double getRearPosition() {
         return midPosition - 0.5 * length;
     }
 
@@ -472,8 +472,8 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#oldPosition()
      */
 
-    public double getPositionOld() {
-        return positionOld;
+    public final double getFrontPositionOld() {
+        return midPositionOld + 0.5 * length;
     }
 
     /**
@@ -481,7 +481,7 @@ public class Vehicle {
      * 
      * @return this vehicle's speed, in m/s
      */
-    public double getSpeed() {
+    public final double getSpeed() {
         return speed;
     }
 
@@ -491,7 +491,7 @@ public class Vehicle {
      * @param speed
      *            the new speed
      */
-    public void setSpeed(double speed) {
+    public final void setSpeed(double speed) {
         this.speed = speed;
     }
 
@@ -501,7 +501,7 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#speedlimit()
      */
 
-    public double getSpeedlimit() {
+    public final double getSpeedlimit() {
         return speedlimit;
     }
 
@@ -512,7 +512,7 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#setSpeedlimit(double)
      */
 
-    public void setSpeedlimit(double speedlimit) {
+    public final void setSpeedlimit(double speedlimit) {
         this.speedlimit = speedlimit;
     }
 
@@ -551,7 +551,7 @@ public class Vehicle {
      * @return vehicle's id
      * 
      */
-    public long getId() {
+    public final long getId() {
         return id;
     }
 
@@ -561,7 +561,7 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#getVehNumber()
      */
 
-    public int getVehNumber() {
+    public final int getVehNumber() {
         return vehNumber;
     }
 
@@ -584,15 +584,16 @@ public class Vehicle {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        final double netGap = vehFront.getMidPosition() - midPosition - 0.5 * (getLength() + vehFront.getLength());
+        //final double netGap = vehFront.getMidPosition() - midPosition - 0.5 * (getLength() + vehFront.getLength());
+        final double netGap = vehFront.getRearPosition() - getFrontPosition();
         return netGap;
     }
-    
+
     public double getBrutDistance(final Vehicle vehFront) {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        return vehFront.getMidPosition() - midPosition;
+        return vehFront.getFrontPosition() - getFrontPosition();
     }
 
     /*
@@ -601,11 +602,11 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#relSpeed(org.movsim.simulator.vehicles .Vehicle)
      */
 
-    public double getRelSpeed(Vehicle vehFront) {
+    public final double getRelSpeed(Vehicle vehFront) {
         if (vehFront == null) {
             return 0;
         }
-        return (speed - vehFront.getSpeed());
+        return speed - vehFront.getSpeed();
     }
 
     /*
@@ -656,8 +657,7 @@ public class Vehicle {
             acc = accModel;
         }
 
-        acc = Math.max(acc + accError, -maxDecel); // limited to maximum
-                                                   // deceleration
+        acc = Math.max(acc + accError, -maxDecel); // limited to maximum deceleration
         // logger.debug("acc = {}", acc );
     }
 
@@ -700,7 +700,7 @@ public class Vehicle {
         // first increment postion,
         // then increment s with *new* v (second order: -0.5 a dt^2)
 
-        positionOld = midPosition;
+        midPositionOld = midPosition;
 
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
@@ -731,11 +731,11 @@ public class Vehicle {
      * @see org.movsim.simulator.vehicles.Vehicle#getLane()
      */
 
-    public int getLane() {
+    public final int getLane() {
         return lane;
     }
 
-    public void setLane(int lane) {
+    public final void setLane(int lane) {
         this.lane = lane;
     }
 
