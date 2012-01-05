@@ -260,9 +260,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final double cumulativeRoadLength() {
-        if (cumulativeRoadLength >= 0.0) {
-            return cumulativeRoadLength;
-        }
+        // if (cumulativeRoadLength >= 0.0) {
+        //    return cumulativeRoadLength;
+        // }
         // final RoadSegment sourceRoadSegment = sourceRoadSegment(trafficLaneMax() - 1);
         // cumulativeRoadLength = sourceRoadSegment == null ? 0.0 : sourceRoadSegment.cumulativeRoadLength() +
         // sourceRoadSegment.roadLength();
