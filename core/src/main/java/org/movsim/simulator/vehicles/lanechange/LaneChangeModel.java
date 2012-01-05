@@ -178,9 +178,8 @@ public class LaneChangeModel {
             logger.debug("currentLane={}", currentLane);
             if (accToRight > accToLeft) {
                 return MovsimConstants.TO_RIGHT;
-            } else {
-                return MovsimConstants.TO_LEFT;
             }
+            return MovsimConstants.TO_LEFT;
         }
 
         return MovsimConstants.NO_CHANGE;

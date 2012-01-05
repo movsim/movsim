@@ -152,9 +152,8 @@ public class EngineModelImpl implements EngineModel {
         final double frequencyTest = getGearRatio(gearIndex) * v / carModel.getDynamicWheelCircumfence();
         if (frequencyTest > maxFrequency || frequencyTest < minFrequency) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     // --------------------------------------------------------
