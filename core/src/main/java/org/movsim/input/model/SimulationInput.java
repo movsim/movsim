@@ -102,6 +102,7 @@ public class SimulationInput {
         // -----------------------------------------------------------
 
         // quick hack: for road segment a mapping to ids is needed
+        @SuppressWarnings("unchecked")
         final List<Element> roadElems = elem.getChildren(XmlElementNames.Road);
         final List<RoadInput> roadInputList = new ArrayList<RoadInput>();
         for (final Element roadElem : roadElems) {
