@@ -361,15 +361,15 @@ public class Simulator implements Runnable {
         simOutput.update(time, iterationCount);
     }
 
-    public long iterationCount() {
+    public final long iterationCount() {
         return iterationCount;
     }
 
-    public double time() {
+    public final double time() {
         return time;
     }
 
-    public double timestep() {
+    public final double timestep() {
         return timestep;
     }
 
