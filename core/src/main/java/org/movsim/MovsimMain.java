@@ -49,7 +49,7 @@ public class MovsimMain {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // parse the command line, putting the results into projectMetaData
         SimCommandLine.parse(projectMetaData, args);
-        
+
         MovSimLogFileAppender.initialize(projectMetaData);
 
         final Simulator simulator = new Simulator(projectMetaData);
