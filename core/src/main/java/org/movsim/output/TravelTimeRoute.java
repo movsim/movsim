@@ -125,7 +125,7 @@ public class TravelTimeRoute {
             // if(veh.getPosition() > 100 && veh.getPosition()<1000){
             // System.out.printf("veh: pos=%.4f, posOld=%.4f\n", veh.getPosition(), veh.getPositionOld());
             // }
-            if (veh.getPositionOld() < startPosition && veh.getMidPosition() > startPosition) {
+            if (veh.getFrontPositionOld() < startPosition && veh.getFrontPosition() > startPosition) {
                 vehiclesOnRoute.put(veh, timeStartOfRoute);
                 // System.out.printf("veh at x=%.2f put to travel time route, roadId=%d\n", veh.getPosition(), veh.getRoadId());
             }

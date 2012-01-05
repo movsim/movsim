@@ -103,8 +103,8 @@ public class PhysicalQuantities {
      * 
      * @return the position old
      */
-    public double getPositionOld() {
-        return xScale * me.getPositionOld();
+    public double getFrontPositionOld() {
+        return xScale * me.getFrontPositionOld();
     }
 
     /**

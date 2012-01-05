@@ -140,7 +140,7 @@ public class LoopDetector extends ObservableImpl {
         for (int lane = 0; lane < laneCount; ++lane) {
             final LaneSegment laneSegment = roadSegment.laneSegment(lane);
             for (final Vehicle veh : laneSegment) {
-                if ((veh.getPositionOld() < detPosition) && (veh.getMidPosition() >= detPosition)) {
+                if ((veh.getFrontPositionOld() < detPosition) && (veh.getFrontPosition() >= detPosition)) {
                     countVehiclesAndDataForLane(laneSegment, lane, veh);
                 }
             }
