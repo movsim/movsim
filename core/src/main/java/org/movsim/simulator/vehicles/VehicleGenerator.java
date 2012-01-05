@@ -23,7 +23,6 @@
 package org.movsim.simulator.vehicles;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -248,11 +247,9 @@ public class VehicleGenerator {
      *            the sum fraction
      */
     private void normalizeFractions(double sumFraction, HashMap<String, VehiclePrototype> prototypes) {
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final double fraction = prototypes.get(key).fraction();
-            prototypes.get(key).setFraction(fraction / sumFraction);
+        for (final VehiclePrototype prototype : prototypes.values()) {
+            final double fraction = prototype.fraction();
+            prototype.setFraction(fraction / sumFraction);
         }
     }
 
@@ -262,10 +259,7 @@ public class VehicleGenerator {
      * @return true, if successful
      */
     private boolean checkForReactionTimes() {
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            final VehiclePrototype prototype = prototypes.get(key);
+        for (final VehiclePrototype prototype : prototypes.values()) {
             if (prototype.hasReactionTime()) {
                 return true;
             }
@@ -281,12 +275,10 @@ public class VehicleGenerator {
     public VehiclePrototype getVehiclePrototype() {
         final double randomNumber = MyRandom.nextDouble();
         double sumFraction = 0;
-        final Iterator<String> it = prototypes.keySet().iterator();
-        while (it.hasNext()) {
-            final String key = it.next();
-            sumFraction += prototypes.get(key).fraction();
+        for (final VehiclePrototype prototype : prototypes.values()) {
+            sumFraction += prototype.fraction();
             if (sumFraction >= randomNumber) {
-                return prototypes.get(key);
+                return prototype;
             }
         }
         logger.error("no vehicle prototype found for randomNumber= {}", randomNumber);
