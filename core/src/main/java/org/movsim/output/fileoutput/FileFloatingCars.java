@@ -33,6 +33,7 @@ import java.util.HashMap;
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
 import org.movsim.utilities.ObserverInTime;
@@ -88,24 +89,24 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     private void addFloatingCar(final Vehicle veh, int vehNumber) {
         final long originId = veh.roadSegmentId();
         final String filename = createFileName(originId, vehNumber);
-        final PrintWriter fstr = FileUtils.getWriter(filename);
-        hashMap.put(vehNumber, fstr);
-        writeHeader(fstr, veh);
-        fstr.flush();
+        final PrintWriter writer = FileUtils.getWriter(filename);
+        hashMap.put(vehNumber, writer);
+        writeHeader(writer, veh);
+        writer.flush();
     }
 
-    private void writeHeader(final PrintWriter fstr, final Vehicle veh) {
-        fstr.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
-        fstr.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
-        fstr.println(String.format("%s model category = %s", COMMENT_CHAR, 
+    private void writeHeader(final PrintWriter writer, final Vehicle veh) {
+        writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
+        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
+        writer.println(String.format("%s model category = %s", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getCategory().toString()));
-        fstr.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, 
+        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, 
                 veh.getLongitudinalModel().modelName().getDetailedName(), 
                 veh.getLongitudinalModel().modelName().getShortName()));
-        fstr.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities().getLength()));
-        fstr.println(String.format("%s position x is defined by vehicle front (on the given road segment)", COMMENT_CHAR));
+        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities().getLength()));
+        writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)", COMMENT_CHAR));
         
-        fstr.println(outputHeading);
+        writer.println(outputHeading);
     }
 
     /**
@@ -161,17 +162,18 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      *            the veh
      * @param frontVeh
      *            the front veh
-     * @param fstr
-     *            the fstr
+     * @param writer
+     *            the writer
      */
-    private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter fstr) {
-        fstr.printf(outputFormat, time, veh.getLane(), veh.physicalQuantities().getFrontPosition(), 
-                 veh.roadSegmentId(), veh.physicalQuantities().totalTraveledDistance(),
-                 veh.physicalQuantities().getSpeed(), veh.physicalQuantities().getAcc(), 
-                 veh.physicalQuantities().accModel(), veh.physicalQuantities().getNetDistance(frontVeh), 
-                 veh.physicalQuantities().getRelSpeed(frontVeh), veh.physicalQuantities()
-                .getxScale() * veh.getDistanceToTrafficlight(), 1000 * veh.getActualFuelFlowLiterPerS());
-        fstr.flush();
+    private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
+        final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
+        writer.printf(outputFormat, time, veh.getLane(), physicalQuantities.getFrontPosition(),
+                 veh.roadSegmentId(), physicalQuantities.totalTraveledDistance(),
+                 physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
+                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
+                 physicalQuantities.getRelSpeed(frontVeh), physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),
+                 1000 * veh.getActualFuelFlowLiterPerS());
+        writer.flush();
     }
 
     /*
