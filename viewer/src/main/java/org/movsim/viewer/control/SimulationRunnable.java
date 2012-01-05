@@ -311,14 +311,13 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                 }
             }
 
-            updateStatusCallback.updateStatus(simulationTime());
-
+            final double simulationTime = simulationTime();
+            updateStatusCallback.updateStatus(simulationTime);
             // updateDrawing calls back to the UI framework which then asynchronously redraws the view
-            updateDrawingCallback.updateDrawing(simulationTime());
-            updateStatusPanelCallback.updateStatusPanel(simulationTime());
+            updateDrawingCallback.updateDrawing(simulationTime);
+            updateStatusPanelCallback.updateStatusPanel(simulationTime);
 
             calculateTimewarp();
-
         }
     }
 
@@ -350,5 +349,4 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     public void setUpdateStatusCallback(UpdateStatusCallback updateStatusCallback) {
         this.updateStatusCallback = updateStatusCallback;
     }
-
 }
