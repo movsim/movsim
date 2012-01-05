@@ -36,8 +36,8 @@ public class XMLWriterBase {
         if (n <= 0) {
             return s;
         }
-        n += s.length();
-        final String ret = String.format("%1$#" + n + "s", s);
+        final int count = n + s.length();
+        final String ret = String.format("%1$#" + count + "s", s);
         return ret;
     }
 
