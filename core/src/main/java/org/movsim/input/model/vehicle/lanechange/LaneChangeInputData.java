@@ -50,6 +50,7 @@ public class LaneChangeInputData {
 
         lcMobilData = new LaneChangeMobilData();
 
+        @SuppressWarnings("unchecked")
         final List<Element> lcModelElems = elem.getChildren();
         for (final Element lcModelElem : lcModelElems) {
             if (lcModelElem.getName().equalsIgnoreCase(XmlElementNames.VehicleLaneChangeModelMobil)) {

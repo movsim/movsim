@@ -69,6 +69,7 @@ public class FloatingCarInput {
         }
 
         floatingCars = new HashSet<Integer>();
+        @SuppressWarnings("unchecked")
         final List<Element> fcElems = elem.getChildren("FC");
         if (fcElems != null) {
             for (final Element fcElem : fcElems) {

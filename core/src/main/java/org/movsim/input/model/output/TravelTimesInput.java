@@ -39,6 +39,7 @@ public class TravelTimesInput {
     public TravelTimesInput(Element elem) {
         routes = new LinkedList<TravelTimeRouteInput>();
 
+        @SuppressWarnings("unchecked")
         final List<Element> routeElems = elem.getChildren("ROUTE");
         if (routeElems != null) {
             for (final Element routeElem : routeElems) {

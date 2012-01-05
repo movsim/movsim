@@ -50,6 +50,7 @@ public class XmlUtils {
      */
     public static Map<String, String> putAttributesInHash(Element element) {
         final Map<String, String> map = new HashMap<String, String>();
+        @SuppressWarnings("unchecked")
         final List<Attribute> allAttr = element.getAttributes();
         for (final Attribute currentAttr : allAttr) {
             map.put(currentAttr.getName(), currentAttr.getValue());

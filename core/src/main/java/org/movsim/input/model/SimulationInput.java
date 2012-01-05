@@ -90,6 +90,7 @@ public class SimulationInput {
         if (heterogenElem != null) {
             isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
                     : false;
+            @SuppressWarnings("unchecked")
             final List<Element> vehTypeElems = elem.getChild(XmlElementNames.TrafficComposition).getChildren(
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {
