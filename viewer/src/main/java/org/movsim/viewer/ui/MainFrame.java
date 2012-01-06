@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class MainFrame extends JFrame {
@@ -74,6 +75,9 @@ public class MainFrame extends JFrame {
         setLocation(0, 20);
         setSize(INIT_FRAME_SIZE_WIDTH, INIT_FRAME_SIZE_HEIGHT);
         setVisible(true);
+        
+        // first scenario
+        canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
     }
     
     private void initLookAndFeel() {
