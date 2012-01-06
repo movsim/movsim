@@ -1,23 +1,23 @@
 /**
  * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * ---------------------------------------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim.
+ * If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
+ * 
  * ---------------------------------------------------------------------------------------------------------------------
  */
 package org.movsim.viewer.ui;
@@ -37,14 +37,9 @@ import javax.swing.SwingConstants;
 
 import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.viewer.control.SimulationRunnable;
-import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
-/**
- * @author ralph
- * 
- */
 public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStatusPanelCallback {
 
     private static final long serialVersionUID = 6663769351758390561L;
@@ -98,7 +93,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         this.movsimViewerFacade = MovsimViewerFacade.getInstance();
         this.simulationRunnable = SimulationRunnable.getInstance();
         this.setLayout(new FlowLayout());
-        this.setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
 
         simulationRunnable.setUpdateStatusPanelCallback(this);
 
@@ -107,11 +101,16 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     }
 
     private void createStatusViews() {
+
+        final Font font = new Font("Dialog", Font.PLAIN, 11);
+
         // current scenario
         lblScenario = new JLabel(resourceBundle.getString("lblScenario"));
+        lblScenario.setFont(font);
         lblCurrentScenario = new JLabel("");
+        lblCurrentScenario.setFont(font);
         lblCurrentScenario.setText(movsimViewerFacade.getProjectMetaData().getProjectName());
-        lblCurrentScenario.setPreferredSize(new Dimension(200, 22));
+        // lblCurrentScenario.setPreferredSize(new Dimension(140, 22));
 
         if (isWithProgressBar) {
             progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
@@ -119,11 +118,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             progressBar.setVisible(true);
         }
 
-        final Font font = new Font("Dialog", Font.BOLD, 12);
-
         // simulation time
         final String simTimeTooltip = resourceBundle.getString("simTimeTooltip");
         lblSimTime = new JLabel(resourceBundle.getString("lblSimTime"));
+        lblSimTime.setFont(font);
         lblSimTime.setToolTipText(simTimeTooltip);
 
         lblTimeDisplay = new JLabel("0:00:00");
@@ -134,6 +132,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         // update time
         final String deltaTimeTooltip = resourceBundle.getString("deltaTimeTooltip");
         lblDeltaTime = new JLabel(resourceBundle.getString("lblDeltaTime"));
+        lblDeltaTime.setFont(font);
         lblDeltaTime.setToolTipText(deltaTimeTooltip);
 
         lblDeltaTimeDisplay = new JLabel(simulationRunnable.timeStep() + " s");
@@ -144,6 +143,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         // timewarp
         final String timeWarpTooltip = resourceBundle.getString("timeWarpTooltip");
         lblTimeWarp = new JLabel(resourceBundle.getString("lblTimeWarp"));
+        lblTimeWarp.setFont(font);
         lblTimeWarp.setToolTipText(timeWarpTooltip);
 
         lblTimeWarpDisplay = new JLabel(String.valueOf(simulationRunnable.getSmoothedTimewarp()));
@@ -183,12 +183,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(Box.createRigidArea(new Dimension(6, 22)));
 
-        if (isWithProgressBar) {
-            add(progressBar);
-        }
-
-        add(Box.createRigidArea(new Dimension(6, 22)));
-
         add(lblSimTime);
         add(lblTimeDisplay);
 
@@ -200,6 +194,12 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(lblDeltaTime);
         add(lblDeltaTimeDisplay);
+
+        add(Box.createRigidArea(new Dimension(6, 22)));
+
+        if (isWithProgressBar) {
+            add(progressBar);
+        }
 
         if (withTravelTimes) {
             for (int i = 0, N = lblTravelTimeDisplays.size(); i < N; i++) {

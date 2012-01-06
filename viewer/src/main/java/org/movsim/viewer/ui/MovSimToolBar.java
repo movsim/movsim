@@ -44,6 +44,8 @@ import org.slf4j.LoggerFactory;
 
 public class MovSimToolBar extends JToolBar implements ActionListener {
 
+    private static final long serialVersionUID = 1L;
+
     final static Logger logger = LoggerFactory.getLogger(MovSimToolBar.class);
 
     protected String newline = "\n";
@@ -60,17 +62,18 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
 
     JButton buttonStart;
     private final ResourceBundle resourceBundle;
+    private StatusPanel statusPanel;
 
-    private final TrafficUi trafficUI;
-
-    public MovSimToolBar(final TrafficUi trafficUi, final ResourceBundle resourceBundle) {
+    public MovSimToolBar(StatusPanel statusPanel, final CanvasPanel canvasPanel, final ResourceBundle resourceBundle) {
         super(resourceBundle.getString("ToolBarTitle"));
-        this.trafficUI = trafficUi;
+        this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
         
         setRollover(true);
-        controller = trafficUi.getController();
+        controller = canvasPanel.controller;
         addButtons(this);
+        addSeparator();
+        add(statusPanel);
 
         final StatusControlCallbacks statusCallbacks = new TrafficCanvas.StatusControlCallbacks() {
             @Override
@@ -82,11 +85,11 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
             @SuppressWarnings({ "synthetic-access" })
             public void stateChanged() {
                 // final String buttonString;
-                if (trafficUi.trafficCanvas.isStopped()) {
+                if (canvasPanel.trafficCanvas.isStopped()) {
                     // buttonString = resourceBundle.getString("Start");
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
                             + ".png", 32, 32));
-                } else if (trafficUi.trafficCanvas.isPaused()) {
+                } else if (canvasPanel.trafficCanvas.isPaused()) {
                     // buttonString = resourceBundle.getString("Resume");
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
                             + ".png", 32, 32));
@@ -99,7 +102,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
             }
         };
 
-        trafficUi.trafficCanvas.setStatusControlCallbacks(statusCallbacks);
+        canvasPanel.trafficCanvas.setStatusControlCallbacks(statusCallbacks);
     }
 
     protected void addButtons(JToolBar toolBar) {
@@ -138,9 +141,9 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         button = makeNavigationButton("colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
                 resourceBundle.getString("VehicleColors"));
         toolBar.add(button);
-        button = makeNavigationButton("vehicles", VEHICLE_CHANGE, resourceBundle.getString("VehiclesTip"),
-                resourceBundle.getString("Vehicles"));
-        toolBar.add(button);
+//        button = makeNavigationButton("vehicles", VEHICLE_CHANGE, resourceBundle.getString("VehiclesTip"),
+//                resourceBundle.getString("Vehicles"));
+//        toolBar.add(button);
     }
 
     protected JButton makeNavigationButton(String imageName, String actionCommand, String toolTipText, String altText) {
@@ -186,7 +189,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         } else if (e.getActionCommand().equals(VEHICLE_COLORS)) {
             controller.commandCycleVehicleColors();
         } else if (e.getActionCommand().equals(RESET)) {
-            trafficUI.getStatusPanel().reset();
+            statusPanel.reset();
             controller.commandReset();
         } else if (e.getActionCommand().equals(VEHICLE_CHANGE)) {
             controller.commandVehicleChange();

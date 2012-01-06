@@ -194,14 +194,14 @@ public class ViewerApp extends JApplet {
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(),
                 Locale.getDefault());
 
-        final MovSimMenu trafficMenus = new MovSimMenu(trafficUi, frame, resourceBundle);
+//        final MovSimMenu trafficMenus = new MovSimMenu(trafficUi, frame, resourceBundle);
 
         final boolean isWithToolbar = true;
-        if (isWithToolbar) {
-            frame.add(new MovSimToolBar(trafficUi, resourceBundle), BorderLayout.NORTH);
-        }
+//        if (isWithToolbar) {
+//            frame.add(new MovSimToolBar(trafficUi, resourceBundle), BorderLayout.NORTH);
+//        }
 
-        trafficMenus.initMenus();
+//        trafficMenus.initMenus();
 
         trafficApplet.validate();
         trafficApplet.repaint();
