@@ -1,24 +1,21 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <movsim@akesting.de>
+ * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
+ * ----------------------------------------------------------------------
  */
 
 package org.movsim.viewer.ui;
@@ -58,10 +55,16 @@ public class TrafficUi extends Component {
 
     String scenarioFilename;
     transient TrafficCanvas.StatusControlCallbacks statusCallbacks;
+    private StatusPanel statusPanel;
 
+    public StatusPanel getStatusPanel() {
+        return statusPanel;
+    }
+
+    // private InflowOutFlowControlPanel inflowControl;
+    private JPanel controlPanel;
     private TrafficCanvasKeyListener controller;
     private ResourceBundle resourceBundle;
-    private StatusPanel statusPanel;
 
     public TrafficCanvasKeyListener getController() {
         return controller;
@@ -77,8 +80,9 @@ public class TrafficUi extends Component {
      * Handle component resized event.
      */
     public void resized() {
+        final Dimension dimensionStatusPanel = statusPanel.getPreferredSize();
         final int width = container.getSize().width;
-        final int height = container.getSize().height;
+        final int height = container.getSize().height - dimensionStatusPanel.height;
         trafficCanvas.setPreferredSize(new Dimension(width, height));
         trafficCanvas.setSize(width, height);
         trafficCanvas.requestFocusInWindow(); // give the canvas the keyboard focus
@@ -122,12 +126,17 @@ public class TrafficUi extends Component {
         resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(), Locale.getDefault());
         initStrings(resourceBundle);
 
+        layoutMainPanelAndCanvas();
+
         // first scenario
         trafficCanvas.setupTrafficScenario(Scenario.STARTSTOPFILE);
-        statusPanel.setWithTravelTimes(false);
-        statusPanel.setWithProgressBar(true);
+        getStatusPanel().setWithTravelTimes(false);
+        getStatusPanel().setWithProgressBar(true);
+        // removeInflowOutFlowControls();
 
         statusPanel.reset();
+        // inflowControl.reset();
+
         statusPanel.setProgressBarDuration();
 
     }
@@ -140,6 +149,33 @@ public class TrafficUi extends Component {
                 (String) resourceBundle.getObject("PerturbationApplied")); //$NON-NLS-1$
     }
 
+    private void layoutMainPanelAndCanvas() {
+
+        controlPanel = new JPanel();
+        // inflowControl = new InflowOutFlowControlPanel();
+
+        controlPanel.setLayout(new BorderLayout());
+
+        controlPanel.setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
+
+        statusPanel = new StatusPanel(resourceBundle);
+
+        container.add(controlPanel, BorderLayout.NORTH);
+        addStatusPanel();
+
+        // controlPanel.add(inflowControl, BorderLayout.SOUTH);
+
+        this.repaint();
+    }
+
+    // public void removeInflowOutFlowControls() {
+    // controlPanel.remove(inflowControl);
+    // }
+
+    // public void addInFlowOutFlowControls() {
+    // inflowControl = new InflowOutFlowControlPanel();
+    // controlPanel.add(inflowControl, BorderLayout.SOUTH);
+    // }
 
     public void quit() {
         if (trafficCanvas.isStopped() == false) {
@@ -152,35 +188,30 @@ public class TrafficUi extends Component {
         trafficCanvas.setDrawRoadId(drawRoadId);
     }
 
-//    public void removeStatusPanel() {
-//        container.remove(statusPanel);
-//
-//        final int width = container.getSize().width;
-//        final int height = container.getSize().height;
-//        trafficCanvas.setPreferredSize(new Dimension(width, height));
-//        container.add(trafficCanvas, BorderLayout.CENTER);
-//        trafficCanvas.setSize(width, height);
-//    }
-//
-//    public void addStatusPanel() {
-//        final Dimension dimensionStatusPanel = statusPanel.getPreferredSize();
-//        final int width = container.getSize().width;
-//        final int height = container.getSize().height - dimensionStatusPanel.height;
-//        trafficCanvas.setPreferredSize(new Dimension(width, height));
-//        container.add(trafficCanvas, BorderLayout.CENTER);
-//        trafficCanvas.setSize(width, height);
-//        container.setSize(width, height + dimensionStatusPanel.height);
-//        container.setVisible(true);
-//        container.add(statusPanel, BorderLayout.SOUTH);
-//        container.validate();
-//    }
+    public void removeStatusPanel() {
+        container.remove(statusPanel);
+        final Dimension dimensionControlPanel = controlPanel.getPreferredSize();
 
-    public void setStatusPanel(StatusPanel statusPanel) {
-        this.statusPanel = statusPanel;
+        final int width = container.getSize().width;
+        final int height = container.getSize().height - dimensionControlPanel.height;
+        trafficCanvas.setPreferredSize(new Dimension(width, height));
+        container.add(trafficCanvas, BorderLayout.CENTER);
+        trafficCanvas.setSize(width, height);
     }
 
-    public StatusPanel getStatusPanel() {
-        return statusPanel;
+    public void addStatusPanel() {
+        final Dimension dimensionControlPanel = controlPanel.getPreferredSize();
+
+        final Dimension dimensionStatusPanel = statusPanel.getPreferredSize();
+        final int width = container.getSize().width;
+        final int height = container.getSize().height - dimensionControlPanel.height - dimensionStatusPanel.height;
+        trafficCanvas.setPreferredSize(new Dimension(width, height));
+        container.add(trafficCanvas, BorderLayout.CENTER);
+        trafficCanvas.setSize(width, height);
+        container.setSize(width, height + dimensionControlPanel.height + dimensionStatusPanel.height);
+        container.setVisible(true);
+        container.add(statusPanel, BorderLayout.SOUTH);
+        container.validate();
     }
 
 }

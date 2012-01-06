@@ -1,24 +1,21 @@
 /**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+ * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden <movsim@akesting.de>
+ * ----------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator
+ * 
+ * MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with MovSim. If not, see <http://www.gnu.org/licenses/> or
+ * <http://www.movsim.org>.
+ * 
+ * ----------------------------------------------------------------------
  */
 
 package org.movsim.viewer.ui;
@@ -292,18 +289,17 @@ public class MovSimMenu extends JPanel {
         viewMenu.add(colorVehicles);
         viewMenu.addSeparator();
 
-//        final JCheckBoxMenuItem cbStatusPanel = new JCheckBoxMenuItem(new AbstractAction(
-//                (String) resourceBundle.getObject("StatusPanel")) {//$NON-NLS-1$
-//                    private static final long serialVersionUID = 1L;
-//
-//                    @Override
-//                    public void actionPerformed(ActionEvent actionEvent) {
-//                        handleDisplayStatusPanel(actionEvent);
-//                    }
-//                });
-//        cbStatusPanel.setSelected(true);
-//        viewMenu.add(cbStatusPanel);
-        
+        final JCheckBoxMenuItem cbStatusPanel = new JCheckBoxMenuItem(new AbstractAction(
+                (String) resourceBundle.getObject("StatusPanel")) {//$NON-NLS-1$
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        handleDisplayStatusPanel(actionEvent);
+                    }
+                });
+        cbStatusPanel.setSelected(true);
+        viewMenu.add(cbStatusPanel);
         viewMenu.add(new JCheckBoxMenuItem(new AbstractAction((String) resourceBundle.getObject("LogOutput")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
 
@@ -613,14 +609,14 @@ public class MovSimMenu extends JPanel {
         }
     }
 
-//    protected void handleDisplayStatusPanel(ActionEvent actionEvent) {
-//        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-//        if (cb.isSelected()) {
-//            trafficUi.addStatusPanel();
-//        } else {
-//            trafficUi.removeStatusPanel();
-//        }
-//    }
+    protected void handleDisplayStatusPanel(ActionEvent actionEvent) {
+        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
+        if (cb.isSelected()) {
+            trafficUi.addStatusPanel();
+        } else {
+            trafficUi.removeStatusPanel();
+        }
+    }
 
     protected void handleDrawRoadIds(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
