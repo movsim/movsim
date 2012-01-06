@@ -38,7 +38,6 @@ import org.movsim.viewer.control.SimulationRunnable;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 
 public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;

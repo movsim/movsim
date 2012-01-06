@@ -44,8 +44,10 @@ public class MainFrame extends JFrame {
     private static final int INIT_FRAME_SIZE_WIDTH = 1400;
     private static final int INIT_FRAME_SIZE_HEIGHT = 640;
     
-    private CanvasPanel canvasPanel;
     StatusPanel statusPanel;
+    
+    private CanvasPanel canvasPanel;
+    private MovSimToolBar toolBar;
 
     public MainFrame(ResourceBundle resourceBundle) {
         super(resourceBundle.getString("FrameName"));
@@ -57,10 +59,9 @@ public class MainFrame extends JFrame {
         canvasPanel = new CanvasPanel(resourceBundle);
         statusPanel = new StatusPanel(resourceBundle);
         
-        final MovSimMenu trafficMenus = new MovSimMenu(this, canvasPanel, resourceBundle);
-        trafficMenus.initMenus();
-        final MovSimToolBar toolBar = new MovSimToolBar(statusPanel, canvasPanel, resourceBundle);
-
+        addToolBar(resourceBundle);
+        addMenu(resourceBundle);
+        
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
         
@@ -78,6 +79,21 @@ public class MainFrame extends JFrame {
         
         // first scenario
         canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
+    }
+
+    /**
+     * @param resourceBundle
+     */
+    private void addToolBar(ResourceBundle resourceBundle) {
+        toolBar = new MovSimToolBar(statusPanel, canvasPanel, resourceBundle);
+    }
+
+    /**
+     * @param resourceBundle
+     */
+    private void addMenu(ResourceBundle resourceBundle) {
+        final MovSimMenu trafficMenus = new MovSimMenu(this, canvasPanel, resourceBundle);
+        trafficMenus.initMenus();
     }
     
     private void initLookAndFeel() {
