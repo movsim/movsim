@@ -31,28 +31,13 @@ Features:
 Installation
 ------------
 
-Install the [git](http://git-scm.com/download) version control system.
-
-Download this repository:
-
-    git clone git@github.com:movsim/movsim.git
-    
-or
-       
-    git clone https://github.com/movsim/movsim.git
-              
-Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 6
-of Java (JRE 1.6 or higher).
-
-Install [Apache Maven] (http://maven.apache.org/download.html). Maven is the software build and management tool that is used to build MovSim.
-
-MovSim produces output that can be plotted using _gnuplot_. If you wish to use this output to produce graphs, install [gnuplot](http://www.gnuplot.info/).
+For installation see the [README.md](https://github.com/movsim/movsim/blob/master/README.md) in the main MovSim directory.
 
 
 Usage
 -----
 
-To build the MovSim viewer, type `mvn install` from the main MovSim directory.
+To build the MovSim viewer, type `mvn install` from the MovSim viewer directory.
 
 The MovSim viewer can be run directly from the command-line. To see the MovSim options, type:
 

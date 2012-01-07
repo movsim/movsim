@@ -31,15 +31,15 @@ Features:
 Installation
 ------------
 
-For installation see the readme file: [README.md](https://github.com/movsim/movsim/blob/master/README.md).
+For installation see the [README.md](https://github.com/movsim/movsim/blob/master/README.md) in the main MovSim directory.
 
 
 Usage
 -----
 
-To build MovSim, type `mvn install` from the main MovSim directory.
+To build the MovSim core, type `mvn install` from the MovSim core directory.
 
-MovSim can be run directly from the command-line. To see the MovSim options, type:
+MovSim core can be run directly from the command-line. To see the MovSim options, type:
 
     java -jar target/movsim-1.2-jar-with-dependencies.jar -h
 
