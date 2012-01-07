@@ -160,13 +160,13 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
-            movsimViewerFacade.loadScenarioFromXml("onramp_IDM", "/sim/");        
+            movsimViewerFacade.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");        
             initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            movsimViewerFacade.loadScenarioFromXml("startStop_IDM", "/sim/");   
+            movsimViewerFacade.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");   
             initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
