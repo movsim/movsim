@@ -32,7 +32,7 @@
                 <IC_MICRO x="20000" v="3" label="NSM1" />
             </INITIAL_CONDITIONS>
             <SPEED_LIMITS>
-                <SPEED_LIMIT x="114000" speedlimit_kmh="120" />
+                <SPEED_LIMIT x="105000" speedlimit_kmh="120" />
                 <SPEED_LIMIT x="110000" speedlimit_kmh="60" />
                 <SPEED_LIMIT x="115000" speedlimit_kmh="120" />
                 <SPEED_LIMIT x="120000" speedlimit_kmh="200" />
