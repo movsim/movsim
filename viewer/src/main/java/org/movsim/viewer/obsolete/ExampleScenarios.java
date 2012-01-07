@@ -27,7 +27,6 @@
 package org.movsim.viewer.obsolete;
 
 import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
 
 /**
  * Collection of example traffic scenarios.

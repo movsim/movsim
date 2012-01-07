@@ -40,7 +40,6 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
-import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
@@ -326,7 +325,7 @@ public class Simulator implements Runnable {
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.update(time, iterationCount);
+        simOutput.update(timestep, time, iterationCount);
 
         while (!isSimulationRunFinished()) {
             updateTimestep();
@@ -361,7 +360,7 @@ public class Simulator implements Runnable {
         }
 
         roadNetwork.timeStep(timestep, time, iterationCount);
-        simOutput.update(time, iterationCount);
+        simOutput.update(timestep, time, iterationCount);
     }
 
     public final long iterationCount() {
@@ -380,7 +379,7 @@ public class Simulator implements Runnable {
         return inputData;
     }
 
-    public SimObservables getSimObservables() {
+    public SimOutput getSimOutput() {
         return simOutput;
     }
 

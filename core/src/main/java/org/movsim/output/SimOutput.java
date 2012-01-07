@@ -39,13 +39,14 @@ import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class SimOutput.
  */
-public class SimOutput implements SimObservables {
+public class SimOutput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
@@ -102,10 +103,14 @@ public class SimOutput implements SimObservables {
         }
 
         final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
-        if (spatioTemporalInput.isWithMacro()) {
-            spatioTemporal = new SpatioTemporal(spatioTemporalInput, roadSegment);
+        if (spatioTemporalInput.isWithMacro() && roadSegment != null) {
+            // TODO - route is hardcoded for now
+            final Route route = new Route();
+            route.setName("route 1");
+            route.add(roadSegment);
+            spatioTemporal = new SpatioTemporal(spatioTemporalInput, route);
             if (writeOutput) {
-                fileSpatioTemporal = new FileSpatioTemporal(roadSegment.userId(), spatioTemporal);
+                fileSpatioTemporal = new FileSpatioTemporal(route.getName(), spatioTemporal);
             }
         }
 
@@ -125,13 +130,13 @@ public class SimOutput implements SimObservables {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void update(double simulationTime, long iterationCount) {
+    public void update(double dt, double simulationTime, long iterationCount) {
 
         if (floatingCars != null) {
             floatingCars.update(simulationTime, iterationCount);
         }
         if (spatioTemporal != null) {
-            spatioTemporal.update(simulationTime, iterationCount, roadSegment);
+            spatioTemporal.timeStep(dt, simulationTime, iterationCount);
         }
 
         if (fileTrajectories != null) {
@@ -144,39 +149,34 @@ public class SimOutput implements SimObservables {
 
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the spatio temporal.
      * 
-     * @see org.movsim.output.SimObservables#getSpatioTemporal()
+     * @return the spatio temporal
      */
-    @Override
     public SpatioTemporal getSpatioTemporal() {
         return spatioTemporal;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the floating cars.
      * 
-     * @see org.movsim.output.SimObservables#getFloatingCars()
+     * @return the floating cars
      */
-    @Override
     public FloatingCars getFloatingCars() {
         return floatingCars;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the loop detectors.
      * 
-     * @see org.movsim.output.SimObservables#getLoopDetectors()
+     * @return the loop detectors
      */
-    @Override
     public List<LoopDetector> getLoopDetectors() {
         return roadSegment.getLoopDetectors().getDetectors();
     }
 
-    @Override
     public TravelTimes getTravelTimes() {
         return travelTimes;
     }
-
 }
