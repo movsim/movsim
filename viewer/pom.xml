@@ -52,7 +52,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>org.movsim.viewer.ViewerApp</mainClass>
+							<mainClass>org.movsim.viewer.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

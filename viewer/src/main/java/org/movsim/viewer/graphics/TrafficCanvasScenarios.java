@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 
 package org.movsim.viewer.graphics;
@@ -26,7 +29,6 @@ package org.movsim.viewer.graphics;
 import java.awt.Graphics2D;
 
 import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.viewer.ExampleScenarios;
 import org.movsim.viewer.control.SimulationRunnable;
 
 /**
@@ -135,7 +137,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     }
 
     @Override
-    protected void reset() {
+    public void reset() {
         super.reset();
         setSleepTime(INITIAL_SLEEP_TIME);
         initialScale = 1.0;
@@ -158,14 +160,14 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
-            ExampleScenarios.addOnrampFile(movsimViewerFacade);
+            movsimViewerFacade.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");        
             initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            ExampleScenarios.addStartStopFile(movsimViewerFacade);
-            initialScale = 0.5;
+            movsimViewerFacade.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");   
+            initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
             break;
