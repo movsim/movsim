@@ -23,7 +23,7 @@ origin=1
 baseFile = "test_trafficlights_".ldm
 
 # input files
-trafficlightFile = inputPath.baseFile.".log_trafficlights.road_1.csv"
+trafficlightFile = inputPath.baseFile.".trafficlights.road_1.csv"
 carFile(n) = sprintf(inputPath.baseFile.".car.origin_%d.%06d.csv",origin,n)
 
 # output files
