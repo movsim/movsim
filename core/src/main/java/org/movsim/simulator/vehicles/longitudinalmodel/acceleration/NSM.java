@@ -90,16 +90,21 @@ public class NSM extends LongitudinalModelBase {
      */
     @Override
     public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
-        // Local dynamical variables
+        // local dynamical variables
         final Vehicle vehFront = vehContainer.frontVehicle(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
         
-        // FIXME consider external speedlimit
-        //final double localV0 = Math.min(alphaV0*v0, me.getSpeedlimit()/me.physicalQuantities().getvScale());
-        final double localV0 = v0;
-        
+        // consider external speedlimit
+        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
+        if (logger.isDebugEnabled()) {
+            if (localV0 < v0) {
+                logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n", v0,
+                        localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
+            }
+        }
+
         return acc(s, v, dv, localV0);
     }
 
@@ -111,14 +116,19 @@ public class NSM extends LongitudinalModelBase {
      */
     @Override
     public double calcAcc(final Vehicle me, final Vehicle vehFront) {
-        // Local dynamical variables
+        // local dynamical variables
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
 
-        // FIXME
-//        final double localV0 = Math.min(v0, me.getSpeedlimit()/me.physicalQuantities().getvScale());
-        final double localV0 = v0;
+        // consider external speedlimit
+        final double localV0 = Math.min(v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
+        if (logger.isDebugEnabled()) {
+            if (localV0 < v0) {
+                logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n", v0,
+                        localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
+            }
+        }
 
         return acc(s, v, dv, localV0);
     }
@@ -149,7 +159,12 @@ public class NSM extends LongitudinalModelBase {
      * @return the double
      */
     private double acc(double s, double v, double dv, double localV0) {
-        final int v0Local = (int) (localV0 + 0.5); 
+        final int localIntegerV0 = (int) (localV0 + 0.5);
+        if (localIntegerV0 <= 0) {
+            logger.warn(
+                    "local desired speed localVO={} is mapped to CA integer v0={} probably due to a speed limit. Cannot move forward.",
+                    localV0, localIntegerV0);
+        }
         
         final int vLocal = (int) (v + 0.5);
         int vNew = 0;
@@ -159,7 +174,7 @@ public class NSM extends LongitudinalModelBase {
         final int slowdown = (r1 < pb) ? 1 : 0;
 
         final int sLoc = (int) (s + 0.5);
-        vNew = Math.min(vLocal + 1, v0Local);
+        vNew = Math.min(vLocal + 1, localIntegerV0);
         vNew = Math.min(vNew, sLoc);
         vNew = Math.max(0, vNew - slowdown);
 
