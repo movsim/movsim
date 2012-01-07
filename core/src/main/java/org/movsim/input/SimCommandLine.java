@@ -288,7 +288,7 @@ public class SimCommandLine {
         if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
         } else {
-            final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
+            final URL log4jConfig = MovsimMain.class.getResource("/config/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);
         }
     }
