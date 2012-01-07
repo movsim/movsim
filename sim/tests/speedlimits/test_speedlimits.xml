@@ -41,7 +41,7 @@
             <LANE_CHANGE_MODEL/>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="18000" seed="42">
+    <SIMULATION dt="0.2" duration="20000" seed="42">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
             <VEHICLE_TYPE label="IDM1" fraction="1"/>
             <VEHICLE_TYPE label="ACC1" fraction="0"/>

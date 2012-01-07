@@ -21,7 +21,7 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="1.0" duration="18000" seed="42">
+    <SIMULATION dt="1.0" duration="30000" seed="42">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
             <VEHICLE_TYPE label="BARL1" fraction="1" />
             <VEHICLE_TYPE label="NSM1" fraction="0" />
