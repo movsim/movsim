@@ -49,7 +49,7 @@ public class SimCommandLine {
 
     private Options options;
 
-    private final ProjectMetaData projectMetaData;
+    protected final ProjectMetaData projectMetaData;
     
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
         new SimCommandLine(projectMetaData, args);
@@ -66,7 +66,7 @@ public class SimCommandLine {
      * @param args
      *            the args
      */
-    private SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
+    public SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
 
         initLocalizationAndLogger();
 
@@ -229,7 +229,7 @@ public class SimCommandLine {
      * @param cmdline
      *            the cmdline
      */
-    private void optSimulation(CommandLine cmdline) {
+    public void optSimulation(CommandLine cmdline) {
         final String filename = cmdline.getOptionValue('f');
         if (filename == null || !FileUtils.fileExists(filename)) {
             System.err.println("No xml configuration file! Please specify via the option -f.");
@@ -266,7 +266,7 @@ public class SimCommandLine {
      *            the filename
      * @return true, if successful
      */
-    private boolean validateSimulationFileName(String filename) {
+    protected boolean validateSimulationFileName(String filename) {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             System.out

@@ -79,7 +79,7 @@ public class MovsimViewerFacade {
 
         inputData = model.getSimInput();
 
-        projectMetaData.setInstantaneousFileOutput(false);
+        projectMetaData.setInstantaneousFileOutput(true);
         projectMetaData.setXmlFromResources(false);
 
     }
