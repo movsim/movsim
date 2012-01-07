@@ -29,7 +29,6 @@ package org.movsim.viewer.graphics;
 import java.awt.Graphics2D;
 
 import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.viewer.ExampleScenarios;
 import org.movsim.viewer.control.SimulationRunnable;
 
 /**
@@ -138,7 +137,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     }
 
     @Override
-    protected void reset() {
+    public void reset() {
         super.reset();
         setSleepTime(INITIAL_SLEEP_TIME);
         initialScale = 1.0;
@@ -161,14 +160,14 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
-            ExampleScenarios.addOnrampFile(movsimViewerFacade);
+            movsimViewerFacade.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");        
             initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            ExampleScenarios.addStartStopFile(movsimViewerFacade);
-            initialScale = 0.5;
+            movsimViewerFacade.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");   
+            initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
             break;

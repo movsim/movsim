@@ -42,9 +42,11 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.Newell;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ACC;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Gipps;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
@@ -58,6 +60,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumID
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKKW;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKrauss;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNSM;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumNewell;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 import org.movsim.utilities.MyRandom;
@@ -86,7 +89,8 @@ public class VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
+    public VehicleGenerator(double simulationTimestep, InputData simInput,
+            List<TrafficCompositionInputData> heterogenInputData) {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
 
@@ -122,7 +126,8 @@ public class VehicleGenerator {
             }
             final VehicleInput vehInput = vehInputMap.get(keyName);
             final double vehLength = vehInput.getLength();
-            final LongitudinalModelBase longModel = longitudinalModelFactory(vehInput.getAccelerationModelInputData(), vehLength);
+            final LongitudinalModelBase longModel = longitudinalModelFactory(vehInput.getAccelerationModelInputData(),
+                    vehLength);
 
             final EquilibriumProperties fundDia = fundDiagramFactory(vehLength, longModel);
 
@@ -142,7 +147,7 @@ public class VehicleGenerator {
     }
 
     public HashMap<String, VehiclePrototype> prototypes() {
-    	return prototypes;
+        return prototypes;
     }
 
     // add Obstacle as permanent Vehicle_Type
@@ -153,29 +158,29 @@ public class VehicleGenerator {
      * @param heterogenInputData
      *            the heterogen input data
      */
-//    private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
-//        boolean obstacleEntryIsContained = false;
-//        for (final TrafficCompositionInputData het : heterogenInputData) {
-//            if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
-//                obstacleEntryIsContained = true;
-//            }
-//        }
-//
-//        if (obstacleEntryIsContained) {
-//            logger.info(
-//                    "vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite",
-//                    MovsimConstants.OBSTACLE_KEY_NAME);
-//        } else {
-//            logger.info(
-//                    "vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity",
-//                    MovsimConstants.OBSTACLE_KEY_NAME);
-//            final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
-//            mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
-//            mapEntryObstacle.put("fraction", "0");
-//            mapEntryObstacle.put("relative_v0_randomization", "0");
-//            heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
-//        }
-//    }
+    // private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
+    // boolean obstacleEntryIsContained = false;
+    // for (final TrafficCompositionInputData het : heterogenInputData) {
+    // if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
+    // obstacleEntryIsContained = true;
+    // }
+    // }
+    //
+    // if (obstacleEntryIsContained) {
+    // logger.info(
+    // "vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite",
+    // MovsimConstants.OBSTACLE_KEY_NAME);
+    // } else {
+    // logger.info(
+    // "vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity",
+    // MovsimConstants.OBSTACLE_KEY_NAME);
+    // final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
+    // mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
+    // mapEntryObstacle.put("fraction", "0");
+    // mapEntryObstacle.put("relative_v0_randomization", "0");
+    // heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
+    // }
+    // }
 
     /**
      * Fund diagram factory.
@@ -195,6 +200,8 @@ public class VehicleGenerator {
             return new EquilibriumOVM_FVDM(vehLength, (OVM_FVDM) longModel);
         } else if (longModel.modelName() == ModelName.GIPPS) {
             return new EquilibriumGipps(vehLength, (Gipps) longModel);
+        } else if (longModel.modelName() == ModelName.NEWELL) {
+            return new EquilibriumNewell(vehLength, (Newell) longModel);
         } else if (longModel.modelName() == ModelName.KRAUSS) {
             return new EquilibriumKrauss(vehLength, (Krauss) longModel);
         } else if (longModel.modelName() == ModelName.NSM) {
@@ -232,6 +239,8 @@ public class VehicleGenerator {
             longModel = new Gipps(simulationTimestep, (LongitudinalModelInputDataGipps) modelInputData);
         } else if (modelName == ModelName.KRAUSS) {
             longModel = new Krauss(simulationTimestep, (LongitudinalModelInputDataKrauss) modelInputData);
+        } else if (modelName == ModelName.NEWELL) {
+            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewellImpl) modelInputData);
         } else if (modelName == ModelName.NSM) {
             longModel = new NSM((LongitudinalModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {

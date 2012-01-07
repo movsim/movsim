@@ -73,7 +73,7 @@ public class XmlReaderSimInput {
     private Document doc;
 
     // dtd from resources. do *not* use the File.separator character
-    private final String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
+    private final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
 

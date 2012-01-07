@@ -28,8 +28,13 @@ package org.movsim.viewer;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.swing.JTextArea;
+
+import org.movsim.input.ProjectMetaData;
+import org.movsim.viewer.ui.LogWindow;
 import org.movsim.viewer.ui.MainFrame;
 import org.movsim.viewer.util.LocalizationStrings;
+import org.movsim.viewer.util.ViewerCommandLine;
 
 public class App {
 
@@ -40,7 +45,18 @@ public class App {
         
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(),
                 Locale.getDefault());
+
+        setupSwingLogArea();
         
-        new MainFrame(resourceBundle);
+        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        // parse the command line, putting the results into projectMetaData
+        new ViewerCommandLine(projectMetaData, args);
+        
+        new MainFrame(resourceBundle, projectMetaData);
+    }
+    
+    private static void setupSwingLogArea() {
+        final JTextArea logArea = new JTextArea();
+        LogWindow.setupLog4JAppender(logArea);
     }
 }

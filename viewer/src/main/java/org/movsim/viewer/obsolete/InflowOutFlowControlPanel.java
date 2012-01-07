@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.viewer.ui;
+package org.movsim.viewer.obsolete;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;

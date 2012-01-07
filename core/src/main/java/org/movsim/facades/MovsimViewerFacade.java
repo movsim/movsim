@@ -57,7 +57,7 @@ public class MovsimViewerFacade {
      * Inits the localization and logger.
      */
     public void initLocalizationAndLogger() {
-        final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
+        final URL log4jConfig = MovsimMain.class.getResource("/config/log4j.properties");
         PropertyConfigurator.configure(log4jConfig);
     }
 
@@ -79,8 +79,8 @@ public class MovsimViewerFacade {
 
         inputData = model.getSimInput();
 
-        projectMetaData.setInstantaneousFileOutput(false);
-        projectMetaData.setXmlFromResources(true);
+        projectMetaData.setInstantaneousFileOutput(true);
+        projectMetaData.setXmlFromResources(false);
 
     }
 

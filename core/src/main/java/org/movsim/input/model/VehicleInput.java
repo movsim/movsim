@@ -41,6 +41,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelIn
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKKWImpl;
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKraussImpl;
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNSMImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataOVM_FVDMImpl;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -134,6 +135,8 @@ public class VehicleInput {
             return new LongitudinalModelInputDataGippsImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KRAUSS.name())) {
             return new LongitudinalModelInputDataKraussImpl(map);
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.NEWELL.name())) {
+            return new LongitudinalModelInputDataNewellImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.NSM.name())) {
             return new LongitudinalModelInputDataNSMImpl(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KKW.name())) {

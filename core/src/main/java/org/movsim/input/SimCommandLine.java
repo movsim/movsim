@@ -49,7 +49,7 @@ public class SimCommandLine {
 
     private Options options;
 
-    private final ProjectMetaData projectMetaData;
+    protected final ProjectMetaData projectMetaData;
     
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
         new SimCommandLine(projectMetaData, args);
@@ -66,7 +66,7 @@ public class SimCommandLine {
      * @param args
      *            the args
      */
-    private SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
+    public SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
 
         initLocalizationAndLogger();
 
@@ -189,7 +189,7 @@ public class SimCommandLine {
      * Option: writes log4j.properties to local filesystem
      */
     private void optWriteLoggingProperties() {
-        final String resource = File.separator + "sim" + File.separator + "log4j.properties";
+        final String resource = File.separator + "config" + File.separator + "log4j.properties";
         final String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("logger properties file written to " + filename);
@@ -201,7 +201,7 @@ public class SimCommandLine {
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private void optWriteDtd() {
-        final String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
+        final String resource = File.separator + "config" + File.separator + "multiModelTrafficSimulatorInput.dtd";
         final String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("dtd file written to " + filename);
@@ -229,7 +229,7 @@ public class SimCommandLine {
      * @param cmdline
      *            the cmdline
      */
-    private void optSimulation(CommandLine cmdline) {
+    public void optSimulation(CommandLine cmdline) {
         final String filename = cmdline.getOptionValue('f');
         if (filename == null || !FileUtils.fileExists(filename)) {
             System.err.println("No xml configuration file! Please specify via the option -f.");
@@ -266,7 +266,7 @@ public class SimCommandLine {
      *            the filename
      * @return true, if successful
      */
-    private boolean validateSimulationFileName(String filename) {
+    protected boolean validateSimulationFileName(String filename) {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             System.out
@@ -288,7 +288,7 @@ public class SimCommandLine {
         if (file.exists() && file.isFile()) {
             PropertyConfigurator.configure("log4j.properties");
         } else {
-            final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
+            final URL log4jConfig = MovsimMain.class.getResource("/config/log4j.properties");
             PropertyConfigurator.configure(log4jConfig);
         }
     }

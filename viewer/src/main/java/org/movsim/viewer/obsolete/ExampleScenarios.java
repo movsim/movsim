@@ -24,7 +24,7 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.viewer;
+package org.movsim.viewer.obsolete;
 
 import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -38,13 +38,13 @@ public class ExampleScenarios {
     public static void addOnrampFile(MovsimViewerFacade movsimViewerFacade) {
         movsimViewerFacade.loadScenarioFromXml("onramp_IDM", "/sim/");        
         //movsimViewerFacade.loadScenarioFromXml("test_speedlimits", "/sim/", "x.xodr", "/roadnetwork/");        
-        final RoadNetwork roadNetwork = movsimViewerFacade.getSimulator().getRoadNetwork();
-        System.out.println("roadNetwork size: " + roadNetwork.size());
+//        final RoadNetwork roadNetwork = movsimViewerFacade.getSimulator().getRoadNetwork();
+//        System.out.println("roadNetwork size: " + roadNetwork.size());
     }
     
     public static void addStartStopFile(MovsimViewerFacade movsimViewerFacade) {
         movsimViewerFacade.loadScenarioFromXml("startStop_IDM", "/sim/");        
-        final RoadNetwork roadNetwork = movsimViewerFacade.getSimulator().getRoadNetwork();
-        System.out.println("roadNetwork size: " + roadNetwork.size());
+//        final RoadNetwork roadNetwork = movsimViewerFacade.getSimulator().getRoadNetwork();
+//        System.out.println("roadNetwork size: " + roadNetwork.size());
     }
 }

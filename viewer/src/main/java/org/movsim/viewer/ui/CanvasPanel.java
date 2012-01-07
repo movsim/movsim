@@ -38,7 +38,6 @@ import org.movsim.viewer.control.SimulationRunnable;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 
 public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -53,9 +52,6 @@ public class CanvasPanel extends JPanel {
         this.resourceBundle = resourceBundle;
 
         // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore
-
-        final JTextArea logArea = new JTextArea();
-        LogWindow.setupLog4JAppender(logArea);
 
         try {
             // Execute a job on the event-dispatching thread; creating this applet's GUI.
@@ -76,19 +72,14 @@ public class CanvasPanel extends JPanel {
         final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
         simulationRunnable = SimulationRunnable.getInstance();
 
-        this.setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
+        setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
 
         trafficCanvas = new TrafficCanvasScenarios(simulationRunnable, movsimViewerFacade);
-
-        this.controller = new TrafficCanvasKeyListener(trafficCanvas);
+        controller = new TrafficCanvasKeyListener(trafficCanvas);
 
         initStrings(resourceBundle);
 
-        layoutCanvas();
-
-        // first scenario
-        trafficCanvas.setupTrafficScenario(Scenario.STARTSTOPFILE);
-
+        layoutAndAddCanvasToPanel();
     }
 
     /**
@@ -110,15 +101,13 @@ public class CanvasPanel extends JPanel {
                 (String) resourceBundle.getObject("PerturbationApplied")); //$NON-NLS-1$
     }
 
-    private void layoutCanvas() {
-
+    private void layoutAndAddCanvasToPanel() {
         final int width = this.getSize().width;
         final int height = this.getSize().height;
         trafficCanvas.setPreferredSize(new Dimension(width, height));
-
         this.add(trafficCanvas, BorderLayout.CENTER);
         trafficCanvas.setSize(width, height);
-
+        
         this.repaint();
     }
 
