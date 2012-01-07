@@ -62,7 +62,7 @@ The MovSim viewer can be run directly from the command-line. To see the MovSim o
 Commercial use
 --------------
 
-For commercial use, please contact the copyright holders at movsim@akesting.de
+For commercial use, please contact the copyright holders at movsim.org@gmail.com
 
 
 Copyright
