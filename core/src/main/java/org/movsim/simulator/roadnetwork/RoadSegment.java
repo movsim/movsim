@@ -546,9 +546,10 @@ public class RoadSegment implements Iterable<Vehicle> {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getMidPosition();
-                    vehicle.setSpeedlimit(speedLimits.calcSpeedLimit(pos));
-                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedLimits.calcSpeedLimit(pos));
+                    final double pos = vehicle.getFrontPosition(); 
+                    final double speedlimit = speedLimits.calcSpeedLimit(pos);
+                    vehicle.setSpeedlimit(speedlimit);
+                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
                 }
             }
         }
