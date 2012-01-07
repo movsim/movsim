@@ -137,7 +137,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     }
 
     @Override
-    protected void reset() {
+    public void reset() {
         super.reset();
         setSleepTime(INITIAL_SLEEP_TIME);
         initialScale = 1.0;

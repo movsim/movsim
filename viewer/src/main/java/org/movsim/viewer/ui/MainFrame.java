@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -31,44 +31,43 @@ import java.awt.event.ComponentEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.movsim.facades.MovsimViewerFacade;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    private final Scenario firstScenario = Scenario.ONRAMPFILE;
+    private final Scenario defaultScenario = Scenario.ONRAMPFILE;
     private final int INIT_FRAME_SIZE_WIDTH = 1400;
     private final int INIT_FRAME_SIZE_HEIGHT = 640;
-    
+
     StatusPanel statusPanel;
-    
+
     private CanvasPanel canvasPanel;
     private MovSimToolBar toolBar;
 
-    public MainFrame(ResourceBundle resourceBundle) {
+    public MainFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
         super(resourceBundle.getString("FrameName"));
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
 
         initLookAndFeel();
-        
-        setupSwingLogArea();
-        
+
         canvasPanel = new CanvasPanel(resourceBundle);
         statusPanel = new StatusPanel(resourceBundle);
-        
+
         addToolBar(resourceBundle);
         addMenu(resourceBundle);
-        
+
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
-        
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -80,18 +79,19 @@ public class MainFrame extends JFrame {
         setLocation(0, 20);
         setSize(INIT_FRAME_SIZE_WIDTH, INIT_FRAME_SIZE_HEIGHT);
         setVisible(true);
-        
-        // first scenario
-        canvasPanel.trafficCanvas.setupTrafficScenario(firstScenario);
-        statusPanel.reset();
-    }
 
-    /**
-     * 
-     */
-    private void setupSwingLogArea() {
-        final JTextArea logArea = new JTextArea();
-        LogWindow.setupLog4JAppender(logArea);
+
+        // first scenario
+        if (projectMetaData.getProjectName().equals("")) {
+             canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
+        } else {
+            MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
+            movsimViewerFacade.loadScenarioFromXml(projectMetaData.getProjectName(),
+                    projectMetaData.getPathToProjectXmlFile());
+            canvasPanel.trafficCanvas.reset();
+            canvasPanel.trafficCanvas.start();
+        }
+        statusPanel.reset();
     }
 
     /**
@@ -108,7 +108,7 @@ public class MainFrame extends JFrame {
         final MovSimMenu trafficMenus = new MovSimMenu(this, canvasPanel, resourceBundle);
         trafficMenus.initMenus();
     }
-    
+
     private void initLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

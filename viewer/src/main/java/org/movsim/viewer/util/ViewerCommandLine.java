@@ -23,40 +23,38 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.viewer;
+package org.movsim.viewer.util;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import javax.swing.JTextArea;
-
+import org.apache.commons.cli.CommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.viewer.ui.LogWindow;
-import org.movsim.viewer.ui.MainFrame;
-import org.movsim.viewer.util.LocalizationStrings;
-import org.movsim.viewer.util.ViewerCommandLine;
+import org.movsim.input.SimCommandLine;
+import org.movsim.utilities.FileUtils;
 
-public class App {
+public class ViewerCommandLine extends SimCommandLine {
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        
-        final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(),
-                Locale.getDefault());
-
-        setupSwingLogArea();
-        
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        // parse the command line, putting the results into projectMetaData
-        new ViewerCommandLine(projectMetaData, args);
-        
-        new MainFrame(resourceBundle, projectMetaData);
+    public ViewerCommandLine(ProjectMetaData projectMetaData, String[] args) {
+        super(projectMetaData, args);
     }
-    
-    private static void setupSwingLogArea() {
-        final JTextArea logArea = new JTextArea();
-        LogWindow.setupLog4JAppender(logArea);
+    /**
+     * Option simulation.
+     * 
+     * @param cmdline
+     *            the cmdline
+     */
+    @Override
+    public void optSimulation(CommandLine cmdline) {
+        final String filename = cmdline.getOptionValue('f');
+        if (filename == null || !FileUtils.fileExists(filename)) {
+            System.err.println("No xml configuration file! Please specify via the option -f.");
+        } else {
+            final boolean isXml = validateSimulationFileName(filename);
+            if (isXml) {
+                final String name = FileUtils.getName(filename);
+                projectMetaData.setProjectName(name.substring(0, name.indexOf(".xml")));
+                projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
+            } else {
+                System.exit(-1);
+            }
+        }
     }
 }
