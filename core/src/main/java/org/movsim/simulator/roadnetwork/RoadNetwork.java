@@ -47,7 +47,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     private boolean isWithCrashExit;
 
     /**
-     * Set the name of the road network.
+     * Sets the name of the road network.
      * 
      * @param name
      */
