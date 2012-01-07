@@ -56,7 +56,7 @@ Usage
 
 To build MovSim, type `mvn install` from the main MovSim directory.
 
-To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/master/core/README.md) and [viewer]{(https://github.com/movsim/movsim/blob/master/viewer/README.md).
+To run the movsim _core_ or _viewer_ see their respective readme files: [core](https://github.com/movsim/movsim/blob/master/core/README.md) and [viewer](https://github.com/movsim/movsim/blob/master/viewer/README.md).
 
 
 Eclipse
@@ -66,7 +66,7 @@ MovSim can readily be built and run from within the Eclipse IDE. To use Eclipse:
 
 Install the [Eclipse IDE for Java Developers](http://www.eclipse.org/downloads/), if you do not already have it.
 
-From with the Eclipse IDE install the m2e(Maven Integration for Eclipse) plugin (From the _Help_ menu in Eclipse select _Eclipse Marketplace..._ and in the resulting enter `maven` in the _Find_ box and then install the plugin).
+From with the Eclipse IDE install the m2e(Maven Integration for Eclipse) plugin (from the _Help_ menu in Eclipse select _Eclipse Marketplace..._ and in the resulting enter `maven` in the _Find_ box and then install the plugin).
 
 Import the project into Eclipse from the _File >> Import_ menu item. In the resulting Select dialog, choose the _General >> Existing Projects into Workspace_ option. In the resulting dialog select the `movsim/core` directory and import. Repeat for the `movsim/viewer` directory.
 
