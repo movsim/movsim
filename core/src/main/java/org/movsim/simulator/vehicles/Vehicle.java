@@ -91,7 +91,7 @@ public class Vehicle {
 
     /** The actual acceleration. This is the acceleration calculated by the LDM moderated by other
      * factors, such as traffic lights
-     **/
+     */
     private double acc;
 
     private double accOld;
