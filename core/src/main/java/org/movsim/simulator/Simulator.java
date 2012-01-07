@@ -40,7 +40,6 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
-import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
@@ -380,7 +379,7 @@ public class Simulator implements Runnable {
         return inputData;
     }
 
-    public SimObservables getSimObservables() {
+    public SimOutput getSimOutput() {
         return simOutput;
     }
 

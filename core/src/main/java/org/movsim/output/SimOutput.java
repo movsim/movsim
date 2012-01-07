@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class SimOutput.
  */
-public class SimOutput implements SimObservables {
+public class SimOutput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
@@ -149,39 +149,34 @@ public class SimOutput implements SimObservables {
 
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the spatio temporal.
      * 
-     * @see org.movsim.output.SimObservables#getSpatioTemporal()
+     * @return the spatio temporal
      */
-    @Override
     public SpatioTemporal getSpatioTemporal() {
         return spatioTemporal;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the floating cars.
      * 
-     * @see org.movsim.output.SimObservables#getFloatingCars()
+     * @return the floating cars
      */
-    @Override
     public FloatingCars getFloatingCars() {
         return floatingCars;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the loop detectors.
      * 
-     * @see org.movsim.output.SimObservables#getLoopDetectors()
+     * @return the loop detectors
      */
-    @Override
     public List<LoopDetector> getLoopDetectors() {
         return roadSegment.getLoopDetectors().getDetectors();
     }
 
-    @Override
     public TravelTimes getTravelTimes() {
         return travelTimes;
     }
-
 }

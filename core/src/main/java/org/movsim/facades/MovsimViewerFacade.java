@@ -32,7 +32,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
 import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.SimObservables;
+import org.movsim.output.SimOutput;
 import org.movsim.simulator.Simulator;
 import org.movsim.utilities.XYDataPoint;
 import org.slf4j.Logger;
@@ -111,20 +111,20 @@ public class MovsimViewerFacade {
     }
 
     public List<List<XYDataPoint>> getTravelTimeEmas() {
-        return model.getSimObservables().getTravelTimes().getTravelTimeEmas();
+        return model.getSimOutput().getTravelTimes().getTravelTimeEmas();
     }
 
     public List<Double> getTravelTimeDataEMAs(double time) {
         final double tauEMA = 40;
-        return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time, tauEMA);
+        return model.getSimOutput().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
 
     public Simulator getSimulator() {
         return model;
     }
 
-    public SimObservables getSimObservables() {
-        return model.getSimObservables();
+    public SimOutput getSimOutput() {
+        return model.getSimOutput();
     }
 
     public ProjectMetaData getProjectMetaData() {
