@@ -47,12 +47,12 @@ public class ScalingHelper {
      * @return the scaling length
      */
     public static double getScalingLength(final ModelName modelName) {
-        double scaleCA = 1;
+        double scalingLengthCA = 1;
         if (modelName == ModelName.NSM) {
-            scaleCA = 7.5;
+            scalingLengthCA = 7.5;
         } else if (modelName == ModelName.KKW) {
-            scaleCA = 0.5;
+            scalingLengthCA = 0.5;
         }
-        return scaleCA;
+        return scalingLengthCA;
     }
 }
