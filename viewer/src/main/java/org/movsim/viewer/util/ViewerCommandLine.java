@@ -45,7 +45,7 @@ public class ViewerCommandLine extends SimCommandLine {
     public void optSimulation(CommandLine cmdline) {
         final String filename = cmdline.getOptionValue('f');
         if (filename == null || !FileUtils.fileExists(filename)) {
-            System.err.println("No xml configuration file! Please specify via the option -f.");
+            System.out.println("No xml configuration file! Please specify via the option -f. Fall back to default.");
         } else {
             final boolean isXml = validateSimulationFileName(filename);
             if (isXml) {
