@@ -27,8 +27,10 @@ package org.movsim.output;
 
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.utilities.ObservableImpl;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -38,43 +40,35 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class SpatioTemporalImpl.
  */
-public class SpatioTemporal extends ObservableImpl {
+public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
 
-    /** The dt out. */
     private final double dtOut;
-
-    /** The dx out. */
     private final double dxOut;
+    private final Route route;
+    private final double routeLength;
 
+    private int size;
     private double[] density;
-
     private double[] averageSpeed;
-
     private double[] flow;
-
-    /** The roadlength. */
-    private final double roadlength;
-
-    /** The time offset. */
     private double timeOffset;
 
     /**
-     * Instantiates a new spatio temporal impl.
+     * Constructor.
      * 
      * @param input
-     *            the input
-     * @param roadSection
-     *            the road section
+     * @param route
      */
-    public SpatioTemporal(SpatioTemporalInput input, RoadSegment roadSegment) {
+    public SpatioTemporal(SpatioTemporalInput input, Route route) {
 
         dtOut = input.getDt();
         dxOut = input.getDx();
 
-        roadlength = roadSegment.roadLength();
+        this.route = route;
+        routeLength = route.getLength();
 
         initialize();
     }
@@ -84,25 +78,18 @@ public class SpatioTemporal extends ObservableImpl {
      */
     private void initialize() {
         timeOffset = 0;
-        final int nxOut = (int) (roadlength / dxOut);
+        final int nxOut = (int) (routeLength / dxOut);
         density = new double[nxOut + 1];
         averageSpeed = new double[nxOut + 1];
         flow = new double[nxOut + 1];
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double simulationTime, long iterationCount, RoadSegment roadSegment) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         if ((simulationTime - timeOffset) >= dtOut) {
             timeOffset = simulationTime;
             // TODO quick hack for multi-lane compatibility
-            calcData(simulationTime, roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE));
+            calcData(simulationTime);
             notifyObservers(simulationTime);
         }
     }
@@ -115,10 +102,15 @@ public class SpatioTemporal extends ObservableImpl {
      * @param vehContainer
      *            the vehicle container
      */
-    private void calcData(double time, LaneSegment laneSegment) {
-        final int size = laneSegment.vehicleCount();
+    private void calcData(double time) {
+        // as first implementation, just use the first roadSegment in the route
+        // TODO - deal with multiple road segments in a route
+        final RoadSegment roadSegment = route.iterator().next();
+        assert roadSegment != null;
+        final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+        size = laneSegment.vehicleCount();
         if (size == 0) {
-        	return;
+            return;
         }
         final double[] localDensity = new double[size];
         final double[] vMicro = new double[size];
@@ -164,12 +156,20 @@ public class SpatioTemporal extends ObservableImpl {
     }
 
     /**
+     * Returns the size of the storage arrays.
+     * @return the size of the arrays
+     */
+    public int size() {
+        return size;
+    }
+
+    /**
      * Gets the density.
      * 
      * @return the density
      */
-    public double[] getDensity() {
-        return density;
+    public double getDensity(int index) {
+        return density[index];
     }
 
     /**
@@ -177,8 +177,8 @@ public class SpatioTemporal extends ObservableImpl {
      * 
      * @return the average speed
      */
-    public double[] getAverageSpeed() {
-        return averageSpeed;
+    public double getAverageSpeed(int index) {
+        return averageSpeed[index];
     }
 
     /**
@@ -186,8 +186,8 @@ public class SpatioTemporal extends ObservableImpl {
      * 
      * @return the flow
      */
-    public double[] getFlow() {
-        return flow;
+    public double getFlow(int index) {
+        return flow[index];
     }
 
     /**

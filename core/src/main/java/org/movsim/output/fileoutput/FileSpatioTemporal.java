@@ -63,11 +63,14 @@ public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime
      *            the time
      */
     private void writeOutput(double time) {
-        for (int j = 0, N = spatioTemporal.getDensity().length; j < N; j++) {
-            final double x = j * spatioTemporal.getDxOut();
+        final int count = spatioTemporal.size();
+        final double dx = spatioTemporal.getDxOut();
+        for (int i = 0; i < count; i++) {
+            final double x = i * dx;
+            // TODO - output acceleration
             // 0.0 is placeholder for acceleration which is not yet implemented
-            writer.printf(outputFormat, time, x, spatioTemporal.getAverageSpeed()[j], 0.0,
-                    1000 * spatioTemporal.getDensity()[j], 3600 * spatioTemporal.getFlow()[j]);
+            writer.printf(outputFormat, time, x, spatioTemporal.getAverageSpeed(i), 0.0,
+                    1000 * spatioTemporal.getDensity(i), 3600 * spatioTemporal.getFlow(i));
         }
         writer.printf("%n"); // block ends
         writer.flush();
