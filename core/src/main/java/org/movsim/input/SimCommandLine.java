@@ -189,7 +189,7 @@ public class SimCommandLine {
      * Option: writes log4j.properties to local filesystem
      */
     private void optWriteLoggingProperties() {
-        final String resource = File.separator + "sim" + File.separator + "log4j.properties";
+        final String resource = File.separator + "config" + File.separator + "log4j.properties";
         final String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("logger properties file written to " + filename);
@@ -201,7 +201,7 @@ public class SimCommandLine {
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private void optWriteDtd() {
-        final String resource = File.separator + "sim" + File.separator + "multiModelTrafficSimulatorInput.dtd";
+        final String resource = File.separator + "config" + File.separator + "multiModelTrafficSimulatorInput.dtd";
         final String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
         System.out.println("dtd file written to " + filename);
