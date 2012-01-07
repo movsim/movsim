@@ -108,7 +108,7 @@ public class Simulator implements Runnable {
 
         projectName = projectMetaData.getProjectName();
 
-        final SimulationInput simInput = parseMovSimXm();
+        final SimulationInput simInput = parseMovSimXml();
         final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
@@ -202,7 +202,7 @@ public class Simulator implements Runnable {
      * 
      * @return
      */
-    private SimulationInput parseMovSimXm() {
+    private SimulationInput parseMovSimXml() {
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
