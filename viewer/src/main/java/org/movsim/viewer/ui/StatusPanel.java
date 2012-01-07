@@ -113,7 +113,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblCurrentScenario = new JLabel("");
         lblCurrentScenario.setFont(font);
         lblCurrentScenario.setText(movsimViewerFacade.getProjectMetaData().getProjectName());
-        // lblCurrentScenario.setPreferredSize(new Dimension(140, 22));
+        lblCurrentScenario.setPreferredSize(new Dimension(100, 22));
 
         if (isWithProgressBar) {
             progressBar = new JProgressBar(SwingConstants.HORIZONTAL);

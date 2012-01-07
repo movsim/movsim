@@ -39,10 +39,11 @@ import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class MainFrame extends JFrame {
-
     private static final long serialVersionUID = 1L;
-    private static final int INIT_FRAME_SIZE_WIDTH = 1400;
-    private static final int INIT_FRAME_SIZE_HEIGHT = 640;
+
+    private final Scenario firstScenario = Scenario.ONRAMPFILE;
+    private final int INIT_FRAME_SIZE_WIDTH = 1400;
+    private final int INIT_FRAME_SIZE_HEIGHT = 640;
     
     StatusPanel statusPanel;
     
@@ -78,7 +79,8 @@ public class MainFrame extends JFrame {
         setVisible(true);
         
         // first scenario
-        canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
+        canvasPanel.trafficCanvas.setupTrafficScenario(firstScenario);
+        statusPanel.reset();
     }
 
     /**

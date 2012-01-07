@@ -158,6 +158,8 @@ public class MovSimMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
+//                canvasPanel.controller.commandOnrampFile();
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemOnRamp);
@@ -526,10 +528,12 @@ public class MovSimMenu extends JPanel {
     }
 
     protected void handleExampleOnramp(ActionEvent actionEvent, String string) {
-        // final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
-        // movsimViewerFacade.loadScenarioFromXml(string);
-        // trafficUi.getController().commandOnrampFile();
-        // uiDefaultReset();
+         final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
+         System.out.println(string);
+         System.exit(0);
+//         movsimViewerFacade.loadScenarioFromXml(string);
+//         trafficUi.getController().commandOnrampFile();
+         uiDefaultReset();
 
     }
 
