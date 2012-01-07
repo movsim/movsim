@@ -5,6 +5,5 @@
 /sim/figs/*
 /sim/*.csv
 /sim/*.internal_xml
-log4j.properties
 *.log
 *.log.*

@@ -53,9 +53,6 @@ public class CanvasPanel extends JPanel {
 
         // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore
 
-        final JTextArea logArea = new JTextArea();
-        LogWindow.setupLog4JAppender(logArea);
-
         try {
             // Execute a job on the event-dispatching thread; creating this applet's GUI.
             SwingUtilities.invokeAndWait(new Runnable() {

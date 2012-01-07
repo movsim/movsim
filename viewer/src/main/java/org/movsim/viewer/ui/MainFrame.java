@@ -31,6 +31,7 @@ import java.awt.event.ComponentEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -57,6 +58,8 @@ public class MainFrame extends JFrame {
 
         initLookAndFeel();
         
+        setpSwingLogArea();
+        
         canvasPanel = new CanvasPanel(resourceBundle);
         statusPanel = new StatusPanel(resourceBundle);
         
@@ -81,6 +84,14 @@ public class MainFrame extends JFrame {
         // first scenario
         canvasPanel.trafficCanvas.setupTrafficScenario(firstScenario);
         statusPanel.reset();
+    }
+
+    /**
+     * 
+     */
+    private void setpSwingLogArea() {
+        final JTextArea logArea = new JTextArea();
+        LogWindow.setupLog4JAppender(logArea);
     }
 
     /**
