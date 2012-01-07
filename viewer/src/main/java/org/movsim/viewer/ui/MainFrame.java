@@ -58,7 +58,7 @@ public class MainFrame extends JFrame {
 
         initLookAndFeel();
         
-        setpSwingLogArea();
+        setupSwingLogArea();
         
         canvasPanel = new CanvasPanel(resourceBundle);
         statusPanel = new StatusPanel(resourceBundle);
@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
     /**
      * 
      */
-    private void setpSwingLogArea() {
+    private void setupSwingLogArea() {
         final JTextArea logArea = new JTextArea();
         LogWindow.setupLog4JAppender(logArea);
     }
