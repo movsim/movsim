@@ -28,6 +28,7 @@ package org.movsim.output;
 import java.util.Collection;
 
 import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.utilities.ObservableImpl;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FloatingCars.
  */
-public class FloatingCars extends ObservableImpl {
+public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
@@ -61,15 +62,8 @@ public class FloatingCars extends ObservableImpl {
         this.floatingCarVehicleNumbers = input.getFloatingCars();
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double simulationTime, long iterationCount) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (iterationCount % nDtOut == 0) {
             notifyObservers(simulationTime);
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
