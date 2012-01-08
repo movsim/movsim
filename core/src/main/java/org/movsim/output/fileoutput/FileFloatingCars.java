@@ -25,7 +25,6 @@
  */
 package org.movsim.output.fileoutput;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
@@ -88,8 +87,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      */
     private void addFloatingCar(final Vehicle veh, int vehNumber) {
         final long originId = veh.roadSegmentId();
-        final String filename = createFileName(originId, vehNumber);
-        final PrintWriter writer = FileUtils.getWriter(filename);
+        final PrintWriter writer = createWriter(String.format(extensionFormat, originId, vehNumber));
         hashMap.put(vehNumber, writer);
         writeHeader(writer, veh);
         writer.flush();
@@ -105,7 +103,6 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
                 veh.getLongitudinalModel().modelName().getShortName()));
         writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities().getLength()));
         writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)", COMMENT_CHAR));
-        
         writer.println(outputHeading);
     }
 
@@ -136,21 +133,6 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
                 }
             }
         }
-    }
-
-    /**
-     * Creates the file name.
-     * 
-     * @param vehicleNumber
-     *            the vehicleNumber
-     * @param ending
-     *            the ending
-     * @return the string
-     */
-    private String createFileName(long originId, int vehicleNumber) {
-        final String filename = path + File.separator + baseFilename
-                + String.format(extensionFormat, originId, vehicleNumber);
-        return filename;
     }
 
     /**
