@@ -78,17 +78,16 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
      */
     private void initialize() {
         timeOffset = 0;
-        final int nxOut = (int) (routeLength / dxOut);
-        density = new double[nxOut + 1];
-        averageSpeed = new double[nxOut + 1];
-        flow = new double[nxOut + 1];
+        size = (int) (routeLength / dxOut) + 1;
+        density = new double[size];
+        averageSpeed = new double[size];
+        flow = new double[size];
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if ((simulationTime - timeOffset) >= dtOut) {
             timeOffset = simulationTime;
-            // TODO quick hack for multi-lane compatibility
             calcData(simulationTime);
             notifyObservers(simulationTime);
         }
@@ -103,37 +102,45 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
      *            the vehicle container
      */
     private void calcData(double time) {
-        // as first implementation, just use the first roadSegment in the route
-        // TODO - deal with multiple road segments in a route
-        final RoadSegment roadSegment = route.iterator().next();
-        assert roadSegment != null;
-        final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
-        size = laneSegment.vehicleCount();
-        if (size == 0) {
+        // TODO - deal with multiple lanes in a road segment
+        int vehicleCount = 0;
+        for (final RoadSegment roadSegment : route) {
+            final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+            vehicleCount += laneSegment.vehicleCount();
+        }
+        if (vehicleCount == 0) {
             return;
         }
-        final double[] localDensity = new double[size];
-        final double[] vMicro = new double[size];
-        final double[] xMicro = new double[size];
+        final double[] localDensity = new double[vehicleCount];
+        final double[] vMicro = new double[vehicleCount];
+        final double[] xMicro = new double[vehicleCount];
+        final double[] lengths = new double[vehicleCount];
 
-        for (int i = 0; i < size; i++) {
-            vMicro[i] = laneSegment.getVehicle(i).getSpeed();
-            xMicro[i] = laneSegment.getVehicle(i).getMidPosition();
+        int i = 0;
+        for (final RoadSegment roadSegment : route) {
+            final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+            final int laneVehicleCount = laneSegment.vehicleCount();
+            for (int j = 0; j < laneVehicleCount; ++j) {
+                vMicro[i] = laneSegment.getVehicle(j).getSpeed();
+                xMicro[i] = laneSegment.getVehicle(j).getMidPosition();
+                lengths[i] = laneSegment.getVehicle(j).getMidPosition();
+                ++i;
+            }
         }
 
         // calculate density
         localDensity[0] = 0;
-        for (int i = 1; i < size; i++) {
+        for (i = 1; i < vehicleCount; ++i) {
             final double dist = xMicro[i - 1] - xMicro[i];
-            final double length = laneSegment.getVehicle(i - 1).getLength();
-            localDensity[i] = (dist > length) ? 1 / dist : 1 / length;
+            final double length = lengths[i - 1];
+            localDensity[i] = (dist > length) ? 1.0 / dist : 1.0 / length;
         }
 
-        for (int j = 0; j < density.length; j++) {
-            final double x = j * dxOut;
-            density[j] = Tables.intpextp(xMicro, localDensity, x, true);
-            averageSpeed[j] = Tables.intpextp(xMicro, vMicro, x, true);
-            flow[j] = density[j] * averageSpeed[j];
+        for (i = 0; i < size; ++i) {
+            final double x = i * dxOut;
+            density[i] = Tables.intpextp(xMicro, localDensity, x, true);
+            averageSpeed[i] = Tables.intpextp(xMicro, vMicro, x, true);
+            flow[i] = density[i] * averageSpeed[i];
         }
     }
 

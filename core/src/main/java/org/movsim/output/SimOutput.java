@@ -72,6 +72,20 @@ public class SimOutput {
     public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
         roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
+        // TODO - route is hardcoded for now
+        final Route route = new Route();
+        route.setName("rt1");
+        route.add(roadSegment);
+        if (roadSegment.userId().equals("1")) {
+            RoadSegment nextRoadSegment = roadNetwork.findByUserId("2");
+            if (nextRoadSegment != null) {
+                route.add(nextRoadSegment);
+                nextRoadSegment = roadNetwork.findByUserId("3");
+                if (nextRoadSegment != null) {
+                    route.add(nextRoadSegment);
+                }
+            }
+        }
 
         // more restrictive than in other output classes TODO
         writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
@@ -104,10 +118,6 @@ public class SimOutput {
 
         final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInput.isWithMacro() && roadSegment != null) {
-            // TODO - route is hardcoded for now
-            final Route route = new Route();
-            route.setName("route 1");
-            route.add(roadSegment);
             spatioTemporal = new SpatioTemporal(spatioTemporalInput, route);
             if (writeOutput) {
                 fileSpatioTemporal = new FileSpatioTemporal(route.getName(), spatioTemporal);
@@ -125,6 +135,8 @@ public class SimOutput {
     /**
      * Update.
      *
+     * @param dt
+     *            simulation time interval, seconds.
      * @param simulationTime
      *            current simulation time, seconds
      * @param iterationCount
