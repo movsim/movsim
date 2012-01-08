@@ -117,6 +117,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         reset();
     }
 
+    public ProjectMetaData getProjectMetaData() {
+        return projectMetaData;
+    }
+
     public InputData getSimInput() {
         return inputData;
     }
@@ -131,6 +135,24 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public SimulationRunnable getSimulationRunnable() {
         return simulationRunnable;
+    }
+
+    public List<Double> getTravelTimeDataEMAs(double time) {
+        final double tauEMA = 40;
+        return simOutput.getTravelTimes().getTravelTimesEMA(time, tauEMA);
+    }
+
+    /**
+     * Load scenario from xml.
+     * 
+     * @param scenario
+     *            the scenario
+     */
+    public void loadScenarioFromXml(String scenario, String path) {
+        projectMetaData.setProjectName(scenario);
+        projectMetaData.setPathToProjectXmlFile(path);
+        projectMetaData.setOutputPath(path);
+        initialize();
     }
 
     /**

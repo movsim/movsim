@@ -34,7 +34,6 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
 import org.movsim.simulator.SimulationRunnable;
-import org.movsim.viewer.control.MovSimulationRunnable;
 
 /**
  * <p>
@@ -290,7 +289,7 @@ public abstract class SimulationCanvasBase extends Canvas {
      * @return the sleep time in milliseconds
      */
     public final int sleepTime() {
-        return MovSimulationRunnable.sleepTime();
+        return simulationRunnable.sleepTime();
     }
 
     /**

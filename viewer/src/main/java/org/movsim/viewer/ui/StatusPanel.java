@@ -38,8 +38,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.simulator.SimulationRunnable;
+import org.movsim.simulator.Simulator;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -47,7 +47,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     private static final long serialVersionUID = 6663769351758390561L;
 
-    private final MovsimViewerFacade movsimViewerFacade;
+    private final Simulator simulator;
     private final SimulationRunnable simulationRunnable;
 
     private boolean isWithProgressBar = true;
@@ -91,10 +91,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     private JLabel lblCurrentScenario;
 
-    public StatusPanel(ResourceBundle resourceBundle, SimulationRunnable simulationRunnable) {
+    public StatusPanel(ResourceBundle resourceBundle, Simulator simulator) {
         this.resourceBundle = resourceBundle;
-        this.simulationRunnable = simulationRunnable;
-        this.movsimViewerFacade = MovsimViewerFacade.getInstance();
+        this.simulator = simulator;
+        this.simulationRunnable = simulator.getSimulationRunnable();
         this.setLayout(new FlowLayout());
 
         simulationRunnable.setUpdateStatusPanelCallback(this);
@@ -112,7 +112,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblScenario.setFont(font);
         lblCurrentScenario = new JLabel("");
         lblCurrentScenario.setFont(font);
-        lblCurrentScenario.setText(movsimViewerFacade.getProjectMetaData().getProjectName());
+        lblCurrentScenario.setText(simulator.getProjectMetaData().getProjectName());
         lblCurrentScenario.setPreferredSize(new Dimension(100, 22));
 
         if (isWithProgressBar) {
@@ -215,7 +215,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     protected void setProgressBarDuration() {
         if (isWithProgressBar) {
-            final int maxSimTime = (int) movsimViewerFacade.getMaxSimTime();
+            final int maxSimTime = (int) simulationRunnable.duration();
             progressBar.setMaximum(maxSimTime);
         }
     }
@@ -233,7 +233,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
             // die TravelTimes haben eigentlich einen anderen notifier
             if (withTravelTimes) {
-                final List<Double> dataTT = movsimViewerFacade.getTravelTimeDataEMAs(time);
+                final List<Double> dataTT = simulator.getTravelTimeDataEMAs(time);
                 for (int i = 0, N = lblTravelTimeDisplays.size(); i < N; i++) {
                     lblTravelTimeDisplays.get(i).setText(String.format("%.1f min", dataTT.get(i) / 60.));
                 }

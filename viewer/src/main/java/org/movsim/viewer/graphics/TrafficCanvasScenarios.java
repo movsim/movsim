@@ -28,8 +28,8 @@ package org.movsim.viewer.graphics;
 
 import java.awt.Graphics2D;
 
-import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.simulator.SimulationRunnable;
+import org.movsim.simulator.Simulator;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -49,11 +49,9 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     private boolean inInitialSpeedUp;
     private double speedupEndTime;
     private int sleepTimeSave;
-    protected final MovsimViewerFacade movsimViewerFacade;
 
-    public TrafficCanvasScenarios(SimulationRunnable simulationRunnable, MovsimViewerFacade movsimViewerFacade) {
-        super(simulationRunnable, movsimViewerFacade.getSimulator());
-        this.movsimViewerFacade = movsimViewerFacade;
+    public TrafficCanvasScenarios(SimulationRunnable simulationRunnable, Simulator simulator) {
+        super(simulationRunnable, simulator);
 
         simulationRunnable.setUpdateStatusCallback(this);
         setStatusControlCallbacks(statusControlCallbacks);
@@ -152,18 +150,19 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         reset();
 
-        if (this.scenario == scenario)
+        if (this.scenario == scenario) {
             return; // TODO proper restart
+        }
 
         switch (scenario) {
         case ONRAMPFILE:
-            movsimViewerFacade.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");        
+            simulator.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");        
             initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            movsimViewerFacade.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");   
+            simulator.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");   
             initialScale = 1;
             setScale(initialScale);
             inInitialSpeedUp = false;

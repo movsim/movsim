@@ -31,7 +31,7 @@ public class MovsimControllers {
 
     private static MovsimControllers instance = null;
 
-    private final MovsimViewerFacade movsimViewerFacade;
+    private MovsimViewerFacade movsimViewerFacade;
 
     private List<Long> inflowControlMainroads;
     private double initFlowPerLaneMainroads;
@@ -43,7 +43,7 @@ public class MovsimControllers {
 
     private MovsimControllers() {
         // singleton
-        movsimViewerFacade = MovsimViewerFacade.getInstance();
+        //movsimViewerFacade = MovsimViewerFacade.getInstance();
     }
 
     public static synchronized MovsimControllers getInstance() {

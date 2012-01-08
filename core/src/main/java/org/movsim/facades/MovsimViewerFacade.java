@@ -56,7 +56,7 @@ public class MovsimViewerFacade {
     /**
      * Inits the localization and logger.
      */
-    public void initLocalizationAndLogger() {
+    private void initLocalizationAndLogger() {
         final URL log4jConfig = MovsimMain.class.getResource("/config/log4j.properties");
         PropertyConfigurator.configure(log4jConfig);
     }
@@ -84,21 +84,8 @@ public class MovsimViewerFacade {
 
     }
 
-    public static MovsimViewerFacade getInstance() {
+    private static MovsimViewerFacade getInstance() {
         return Holder.INSTANCE;
-    }
-
-    /**
-     * Load scenario from xml.
-     * 
-     * @param scenario
-     *            the scenario
-     */
-    public void loadScenarioFromXml(String scenario, String path) {
-        projectMetaData.setProjectName(scenario);
-        projectMetaData.setPathToProjectXmlFile(path);
-        projectMetaData.setOutputPath(path);
-        model.initialize();
     }
 
     /**
@@ -106,7 +93,7 @@ public class MovsimViewerFacade {
      * 
      * @return the max sim time
      */
-    public double getMaxSimTime() {
+    private double getMaxSimTime() {
         return inputData.getSimulationInput().getMaxSimTime();
     }
 
@@ -114,12 +101,12 @@ public class MovsimViewerFacade {
         return model.getSimOutput().getTravelTimes().getTravelTimeEmas();
     }
 
-    public List<Double> getTravelTimeDataEMAs(double time) {
+    private List<Double> getTravelTimeDataEMAs(double time) {
         final double tauEMA = 40;
         return model.getSimOutput().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
 
-    public Simulator getSimulator() {
+    private Simulator getSimulator() {
         return model;
     }
 
@@ -127,7 +114,7 @@ public class MovsimViewerFacade {
         return model.getSimOutput();
     }
 
-    public ProjectMetaData getProjectMetaData() {
+    private ProjectMetaData getProjectMetaData() {
         return projectMetaData;
     }
 }

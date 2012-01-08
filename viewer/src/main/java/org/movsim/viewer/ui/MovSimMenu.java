@@ -537,7 +537,7 @@ public class MovSimMenu extends JPanel {
     }
 
     public void startbuttonToPauseAtScenarioChange() {
-        if (canvasPanel.simulationRunnable.isPaused()) {
+        if (canvasPanel.simulator.getSimulationRunnable().isPaused()) {
             canvasPanel.controller.commandTogglePause();
         }
     }

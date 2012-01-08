@@ -35,9 +35,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
@@ -58,13 +56,11 @@ public class MainFrame extends JFrame {
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
 
-        final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
-        final Simulator simulator = movsimViewerFacade.getSimulator();
-        final SimulationRunnable simulationRunnable = simulator.getSimulationRunnable();
+        final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        canvasPanel = new CanvasPanel(resourceBundle, simulationRunnable);
-        statusPanel = new StatusPanel(resourceBundle, simulationRunnable);
+        canvasPanel = new CanvasPanel(resourceBundle, simulator);
+        statusPanel = new StatusPanel(resourceBundle, simulator);
 
         addToolBar(resourceBundle);
         addMenu(resourceBundle);
@@ -89,7 +85,7 @@ public class MainFrame extends JFrame {
         if (projectMetaData.getProjectName().equals("")) {
              canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
         } else {
-            movsimViewerFacade.loadScenarioFromXml(projectMetaData.getProjectName(),
+            simulator.loadScenarioFromXml(projectMetaData.getProjectName(),
                     projectMetaData.getPathToProjectXmlFile());
             canvasPanel.trafficCanvas.reset();
             canvasPanel.trafficCanvas.start();

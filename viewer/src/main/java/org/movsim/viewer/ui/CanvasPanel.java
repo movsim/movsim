@@ -32,8 +32,7 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.simulator.SimulationRunnable;
+import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
@@ -42,13 +41,13 @@ public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final ResourceBundle resourceBundle;
-    final SimulationRunnable simulationRunnable;
+    final Simulator simulator;
     TrafficCanvasScenarios trafficCanvas;
     TrafficCanvasKeyListener controller;
 
-    public CanvasPanel(ResourceBundle resourceBundle, SimulationRunnable simulationRunnable) {
+    public CanvasPanel(ResourceBundle resourceBundle, Simulator simulator) {
         this.resourceBundle = resourceBundle;
-        this.simulationRunnable = simulationRunnable;
+        this.simulator = simulator;
 
         // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore
 
@@ -68,11 +67,9 @@ public class CanvasPanel extends JPanel {
     }
 
     protected void initApp() {
-        final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
-
         setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
 
-        trafficCanvas = new TrafficCanvasScenarios(simulationRunnable, movsimViewerFacade);
+        trafficCanvas = new TrafficCanvasScenarios(simulator.getSimulationRunnable(), simulator);
         controller = new TrafficCanvasKeyListener(trafficCanvas);
 
         initStrings(resourceBundle);
