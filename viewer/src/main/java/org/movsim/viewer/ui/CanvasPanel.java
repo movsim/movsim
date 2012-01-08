@@ -33,7 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.viewer.control.SimulationRunnable;
+import org.movsim.simulator.SimulationRunnable;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
@@ -41,14 +41,14 @@ import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
+    private final ResourceBundle resourceBundle;
+    final SimulationRunnable simulationRunnable;
     TrafficCanvasScenarios trafficCanvas;
-    SimulationRunnable simulationRunnable;
     TrafficCanvasKeyListener controller;
 
-    private ResourceBundle resourceBundle;
-
-    public CanvasPanel(ResourceBundle resourceBundle) {
+    public CanvasPanel(ResourceBundle resourceBundle, SimulationRunnable simulationRunnable) {
         this.resourceBundle = resourceBundle;
+        this.simulationRunnable = simulationRunnable;
 
         // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore
 
@@ -69,7 +69,6 @@ public class CanvasPanel extends JPanel {
 
     protected void initApp() {
         final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
-        simulationRunnable = SimulationRunnable.getInstance();
 
         setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
 
@@ -106,7 +105,6 @@ public class CanvasPanel extends JPanel {
         trafficCanvas.setPreferredSize(new Dimension(width, height));
         this.add(trafficCanvas, BorderLayout.CENTER);
         trafficCanvas.setSize(width, height);
-        
         this.repaint();
     }
 

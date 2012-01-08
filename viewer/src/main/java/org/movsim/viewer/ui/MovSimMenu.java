@@ -41,7 +41,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
@@ -528,9 +527,9 @@ public class MovSimMenu extends JPanel {
     }
 
     protected void handleExampleOnramp(ActionEvent actionEvent, String string) {
-         final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
          System.out.println(string);
          System.exit(0);
+//         final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
 //         movsimViewerFacade.loadScenarioFromXml(string);
 //         trafficUi.getController().commandOnrampFile();
          uiDefaultReset();
@@ -686,10 +685,10 @@ public class MovSimMenu extends JPanel {
                     if (editor) {
                         new Editor(resourceBundle, file);
                     } else {
-                        final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
                         canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
+                        // final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
                         // movsimViewerFacade.loadScenarioFromXml(file);
-                        //                        uiDefaultReset();
+                        // uiDefaultReset();
                     }
                 }
             }

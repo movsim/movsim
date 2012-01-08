@@ -54,9 +54,6 @@ public class MovsimMain {
 
         final Simulator simulator = new Simulator(projectMetaData);
         simulator.initialize();
-
-        Thread simThread = new Thread(simulator);
-        simThread.setName("movsim-thread");
-        simThread.start();
+        simulator.runToCompletion();
     }
 }

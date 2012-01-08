@@ -37,6 +37,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.facades.MovsimViewerFacade;
 import org.movsim.input.ProjectMetaData;
+import org.movsim.simulator.SimulationRunnable;
+import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -47,9 +49,8 @@ public class MainFrame extends JFrame {
     private final int INIT_FRAME_SIZE_WIDTH = 1400;
     private final int INIT_FRAME_SIZE_HEIGHT = 640;
 
-    StatusPanel statusPanel;
-
-    private CanvasPanel canvasPanel;
+    final StatusPanel statusPanel;
+    private final CanvasPanel canvasPanel;
     private MovSimToolBar toolBar;
 
     public MainFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
@@ -57,10 +58,13 @@ public class MainFrame extends JFrame {
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
 
+        final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
+        final Simulator simulator = movsimViewerFacade.getSimulator();
+        final SimulationRunnable simulationRunnable = simulator.getSimulationRunnable();
         initLookAndFeel();
 
-        canvasPanel = new CanvasPanel(resourceBundle);
-        statusPanel = new StatusPanel(resourceBundle);
+        canvasPanel = new CanvasPanel(resourceBundle, simulationRunnable);
+        statusPanel = new StatusPanel(resourceBundle, simulationRunnable);
 
         addToolBar(resourceBundle);
         addMenu(resourceBundle);
@@ -85,7 +89,6 @@ public class MainFrame extends JFrame {
         if (projectMetaData.getProjectName().equals("")) {
              canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
         } else {
-            MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
             movsimViewerFacade.loadScenarioFromXml(projectMetaData.getProjectName(),
                     projectMetaData.getPathToProjectXmlFile());
             canvasPanel.trafficCanvas.reset();

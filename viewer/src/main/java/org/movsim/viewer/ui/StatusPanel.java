@@ -39,11 +39,11 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
 import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.viewer.control.SimulationRunnable;
+import org.movsim.simulator.SimulationRunnable;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
-public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStatusPanelCallback {
+public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStatusCallback {
 
     private static final long serialVersionUID = 6663769351758390561L;
 
@@ -91,10 +91,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     private JLabel lblCurrentScenario;
 
-    public StatusPanel(ResourceBundle resourceBundle) {
+    public StatusPanel(ResourceBundle resourceBundle, SimulationRunnable simulationRunnable) {
         this.resourceBundle = resourceBundle;
+        this.simulationRunnable = simulationRunnable;
         this.movsimViewerFacade = MovsimViewerFacade.getInstance();
-        this.simulationRunnable = SimulationRunnable.getInstance();
         this.setLayout(new FlowLayout());
 
         simulationRunnable.setUpdateStatusPanelCallback(this);
@@ -149,7 +149,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblTimeWarp.setFont(font);
         lblTimeWarp.setToolTipText(timeWarpTooltip);
 
-        lblTimeWarpDisplay = new JLabel(String.valueOf(simulationRunnable.getSmoothedTimewarp()));
+        lblTimeWarpDisplay = new JLabel(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
         lblTimeWarpDisplay.setFont(font);
         lblTimeWarpDisplay.setToolTipText(timeWarpTooltip);
         lblTimeWarpDisplay.setPreferredSize(new Dimension(42, 22));
@@ -229,7 +229,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             }
             lblTimeDisplay.setText(StringHelper.getTime(time, true, true, true));
             lblDeltaTimeDisplay.setText(String.valueOf(simulationRunnable.timeStep()) + " s");
-            lblTimeWarpDisplay.setText(String.valueOf(simulationRunnable.getSmoothedTimewarp()));
+            lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
 
             // die TravelTimes haben eigentlich einen anderen notifier
             if (withTravelTimes) {
@@ -253,13 +253,8 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         validate(); // make visible after reset
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.web.appletroad.control.SimulationRunnable.UpdateStatusPanelCallback#updateTravelTime(double)
-     */
     @Override
-    public void updateStatusPanel(double simulationTime) {
+    public void updateStatus(double simulationTime) {
         notifyObserver(simulationTime);
     }
 }

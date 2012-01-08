@@ -62,44 +62,30 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Simulator implements Runnable {
+public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
-    private final ProjectMetaData projectMetaData;
-    private double time;
-
-    private long iterationCount;
-
-    /**
-     * The timestep is a constant for one simulation run. It cannot be changed during a simulation.
-     * But of course you can run another simulation with a different timestep.
-     */
-    private double timestep;
-
-    /** The duration of the simulation, seconds. */
-    private double tMax;
-
-    private SimOutput simOutput;
-
-    private final InputData inputData;
-
-    private VehicleGenerator vehGenerator;
-
-    private String projectName;
-
     private long startTimeMillis;
 
+    private final ProjectMetaData projectMetaData;
+    private String projectName;
+    private final InputData inputData;
+    private VehicleGenerator vehGenerator;
+    private SimOutput simOutput;
     private final RoadNetwork roadNetwork;
+    private final SimulationRunnable simulationRunnable;
 
     /**
-     * Instantiates a new simulator.
+     * Constructor.
      */
     public Simulator(ProjectMetaData projectMetaData) {
-    	this.projectMetaData = projectMetaData;
+        this.projectMetaData = projectMetaData;
         inputData = new InputData(projectMetaData); // accesses static reference ProjectMetaData
         roadNetwork = new RoadNetwork();
+        simulationRunnable = new SimulationRunnable(this);
+        simulationRunnable.setCompletionCallback(this);
     }
 
     public void initialize() {
@@ -112,8 +98,8 @@ public class Simulator implements Runnable {
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
 
-        timestep = simInput.getTimestep();
-        tMax = simInput.getMaxSimTime();
+        simulationRunnable.setTimeStep(simInput.getTimestep());
+        simulationRunnable.setDuration(simInput.getMaxSimTime());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
@@ -129,6 +115,22 @@ public class Simulator implements Runnable {
         }
 
         reset();
+    }
+
+    public InputData getSimInput() {
+        return inputData;
+    }
+
+    public SimOutput getSimOutput() {
+        return simOutput;
+    }
+
+    public RoadNetwork getRoadNetwork() {
+        return roadNetwork;
+    }
+
+    public SimulationRunnable getSimulationRunnable() {
+        return simulationRunnable;
     }
 
     /**
@@ -150,7 +152,7 @@ public class Simulator implements Runnable {
      */
     private void createVehicleGenerator(final SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        vehGenerator = new VehicleGenerator(timestep, inputData, heterogenInputData);
+        vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData, heterogenInputData);
         // output fundamental diagrams
         final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
@@ -205,12 +207,6 @@ public class Simulator implements Runnable {
         final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
-    }
-
-    public void reset() {
-        time = 0;
-        iterationCount = 0;
-        simOutput = new SimOutput(inputData, roadNetwork);
     }
 
     /**
@@ -314,76 +310,39 @@ public class Simulator implements Runnable {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#run()
-     */
-    @Override
-    public void run() {
-        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", time, projectName);
+    public void reset() {
+        simulationRunnable.reset();
+        simOutput = new SimOutput(inputData, roadNetwork);
+    }
+
+    public void runToCompletion() {
+        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", simulationRunnable.simulationTime(), projectName);
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.timeStep(timestep, time, iterationCount);
+        simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(), simulationRunnable.iterationCount());
+        simulationRunnable.runToCompletion();
+    }
 
-        while (!isSimulationRunFinished()) {
-            updateTimestep();
-        }
-
-        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", time,
-                time / 3600, projectName));
+    @Override
+    public void simulationComplete(double simulationTime) {
+        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", simulationTime,
+                simulationTime / 3600, projectName));
         final double elapsedTime = 0.001 * (System.currentTimeMillis() - startTimeMillis);
         logger.info(String.format(
                 "time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime,
-                time / elapsedTime, 1000 * elapsedTime / iterationCount));
+                simulationTime / elapsedTime, 1000 * elapsedTime / simulationRunnable.iterationCount()));
     }
 
-    /**
-     * Stop this run.
-     * 
-     * @return true, if successful
-     */
-    public boolean isSimulationRunFinished() {
-        return (time > tMax);
-    }
-
-    public void updateTimestep() {
-        time += timestep;
-        iterationCount++;
-
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (iterationCount % 100 == 0) {
             if (logger.isInfoEnabled()) {
-                logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
-                        time / 3600, timestep, projectName));
+                logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
+                        simulationTime, simulationTime / 3600, dt, projectName));
             }
         }
-
-        roadNetwork.timeStep(timestep, time, iterationCount);
-        simOutput.timeStep(timestep, time, iterationCount);
-    }
-
-    public final long iterationCount() {
-        return iterationCount;
-    }
-
-    public final double time() {
-        return time;
-    }
-
-    public final double timestep() {
-        return timestep;
-    }
-
-    public InputData getSimInput() {
-        return inputData;
-    }
-
-    public SimOutput getSimOutput() {
-        return simOutput;
-    }
-
-    public RoadNetwork getRoadNetwork() {
-        return roadNetwork;
+        roadNetwork.timeStep(dt, simulationTime, iterationCount);
+        simOutput.timeStep(dt, simulationTime, iterationCount);
     }
 }

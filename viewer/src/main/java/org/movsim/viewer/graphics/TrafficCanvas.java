@@ -36,6 +36,7 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 
+import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -43,7 +44,6 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SpeedLimit;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.viewer.control.SimulationRunnable;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -126,10 +126,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     // brake light handling
     protected Color brakeLightColor = Color.RED;
 
-    private final double actualTimewarp = 0;
-    private final double smoothedTimewarp = 0;
-    private final double betaTimewarp = Math.exp(-1. / 50); // moving exponential average scale
-
     /**
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
@@ -166,7 +162,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     protected VehicleTipWindow vehicleTipWindow;
     private boolean withTreibisCars = GraphicsConfigurationParameters.TREIBIS_CARS;
-    private long lastUpdateTime_ms;
 
     public TrafficCanvas(SimulationRunnable simulationRunnable, Simulator simulator) {
         super(simulationRunnable);
@@ -315,9 +310,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         final long timeBeforePaint_ms = System.currentTimeMillis();
 
-        synchronized (simulationRunnable.getDataLock()) {
+        synchronized (simulationRunnable.dataLock) {
 
-            // drawTrafficLights(g);
+            drawTrafficLights(g);
 
             final double simulationTime = this.simulationTime();
 
@@ -618,7 +613,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             // String string;
-            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            // final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
 
             // if there is a traffic source, then draw its id

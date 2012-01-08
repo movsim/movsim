@@ -110,7 +110,7 @@ public class MovsimViewerFacade {
         return inputData.getSimulationInput().getMaxSimTime();
     }
 
-    public List<List<XYDataPoint>> getTravelTimeEmas() {
+    private List<List<XYDataPoint>> getTravelTimeEmas() {
         return model.getSimOutput().getTravelTimes().getTravelTimeEmas();
     }
 
@@ -123,7 +123,7 @@ public class MovsimViewerFacade {
         return model;
     }
 
-    public SimOutput getSimOutput() {
+    private SimOutput getSimOutput() {
         return model.getSimOutput();
     }
 
