@@ -1,80 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
-        <!-- vehicle length ==> cell units -->
-        <VEHICLE label="NSM1" length="1">
-            <!-- b_max not limited -->
-            <LONGITUDINAL_MODEL>
-                <!-- BARL variant : p0 != p possible -->
-                <NSM v0="2" p_slowdown="0.1" p_slow_start="0.1" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-        <VEHICLE label="Obstacle" length="1">
-            <!-- b_max not limited -->
-            <LONGITUDINAL_MODEL>
-                <NSM v0="0" p_slowdown="0" p_slow_start="0" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-    </VEHICLES>
-    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="42">
-<TRAFFIC_COMPOSITION write_fund_diagrams="true">
-           <VEHICLE_TYPE label="NSM1" fraction="1" />
-           <VEHICLE_TYPE label="Obstacle" fraction="0" />
-       </TRAFFIC_COMPOSITION>
-         <ROAD id="1" >
-            <INITIAL_CONDITIONS>
-                <!-- in physical quantities (meter and m/s) -->
-                <IC_MICRO x="7.5" v="0" label="NSM1" />
-                <IC_MICRO x="15.0" v="0" label="NSM1" />
-                <IC_MICRO x="22.5" v="0" label="NSM1" />
-                <IC_MICRO x="30.0" v="0" label="NSM1" />
-                <IC_MICRO x="37.5" v="0" label="NSM1" />
-                <IC_MICRO x="45.0" v="0" label="NSM1" />
-                <IC_MICRO x="52.5" v="0" label="NSM1" />
-                <IC_MICRO x="60.0" v="0" label="NSM1" />
-                <IC_MICRO x="67.5" v="0" label="NSM1" />
-                <IC_MICRO x="75.0" v="0" label="NSM1" />
-                <IC_MICRO x="82.5" v="0" label="NSM1" />
-                <IC_MICRO x="90.0" v="0" label="NSM1" />
-                <IC_MICRO x="97.5" v="0" label="NSM1" />
-                <IC_MICRO x="105.0" v="0" label="NSM1" />
-                <IC_MICRO x="112.5" v="0" label="NSM1" />
-                <IC_MICRO x="120.0" v="0" label="NSM1" />
-                <IC_MICRO x="127.5" v="0" label="NSM1" />
-                <IC_MICRO x="135.0" v="0" label="NSM1" />
-                <IC_MICRO x="142.5" v="0" label="NSM1" />
-                <IC_MICRO x="150.0" v="0" label="NSM1" />
-                <IC_MICRO x="157.5" v="0" label="NSM1" />
-                <IC_MICRO x="165.0" v="0" label="NSM1" />
-                <IC_MICRO x="172.5" v="0" label="NSM1" />
-                <IC_MICRO x="180.0" v="0" label="NSM1" />
-                <IC_MICRO x="187.5" v="0" label="NSM1" />
-                <IC_MICRO x="195.0" v="0" label="NSM1" />
-                <!-- obstacle shifts floating car numbers -->
-                <IC_MICRO x="750" v="0" label="Obstacle" />
-           </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE />
-            <TRAFFIC_SINK />
-            <FLOW_CONSERVING_INHOMOGENEITIES />
-            <SPEED_LIMITS />
-            <SIMPLE_RAMPS />
-            <TRAFFIC_LIGHTS />
-            <DETECTORS />
-        </ROAD>
-        <OUTPUT>
-                <FLOATING_CAR_DATA n_dt="1" dn="0">
-                    <!-- FC 1 is obstacle -->
-                    <FC number="2" />
-                    <FC number="6" />
-                    <FC number="11" />
-                    <FC number="16" />
-                    <FC number="21" />
-                </FLOATING_CAR_DATA>
-            </OUTPUT>
-
-    </SIMULATION>
+  <VEHICLES>
+    <!-- vehicle length ==> cell units -->
+    <VEHICLE label="NSM1" length="1">
+      <!-- b_max not limited -->
+      <LONGITUDINAL_MODEL>
+        <!-- BARL variant : p0 != p possible -->
+        <NSM v0="2" p_slowdown="0.1" p_slow_start="0.1" />
+      </LONGITUDINAL_MODEL>
+      <LANE_CHANGE_MODEL />
+    </VEHICLE>
+    <VEHICLE label="Obstacle" length="1">
+      <!-- b_max not limited -->
+      <LONGITUDINAL_MODEL>
+        <NSM v0="0" p_slowdown="0" p_slow_start="0" />
+      </LONGITUDINAL_MODEL>
+      <LANE_CHANGE_MODEL />
+    </VEHICLE>
+  </VEHICLES>
+  <SIMULATION dt="1" duration="360" fixed_seed="true" seed="42">
+    <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+      <VEHICLE_TYPE label="NSM1" fraction="1" />
+      <VEHICLE_TYPE label="Obstacle" fraction="0" />
+    </TRAFFIC_COMPOSITION>
+    <ROAD id="1">
+      <INITIAL_CONDITIONS>
+        <!-- in physical quantities (meter and m/s) -->
+        <IC_MICRO x="7.5" v="0" label="NSM1" />
+        <IC_MICRO x="15.0" v="0" label="NSM1" />
+        <IC_MICRO x="22.5" v="0" label="NSM1" />
+        <IC_MICRO x="30.0" v="0" label="NSM1" />
+        <IC_MICRO x="37.5" v="0" label="NSM1" />
+        <IC_MICRO x="45.0" v="0" label="NSM1" />
+        <IC_MICRO x="52.5" v="0" label="NSM1" />
+        <IC_MICRO x="60.0" v="0" label="NSM1" />
+        <IC_MICRO x="67.5" v="0" label="NSM1" />
+        <IC_MICRO x="75.0" v="0" label="NSM1" />
+        <IC_MICRO x="82.5" v="0" label="NSM1" />
+        <IC_MICRO x="90.0" v="0" label="NSM1" />
+        <IC_MICRO x="97.5" v="0" label="NSM1" />
+        <IC_MICRO x="105.0" v="0" label="NSM1" />
+        <IC_MICRO x="112.5" v="0" label="NSM1" />
+        <IC_MICRO x="120.0" v="0" label="NSM1" />
+        <IC_MICRO x="127.5" v="0" label="NSM1" />
+        <IC_MICRO x="135.0" v="0" label="NSM1" />
+        <IC_MICRO x="142.5" v="0" label="NSM1" />
+        <IC_MICRO x="150.0" v="0" label="NSM1" />
+        <IC_MICRO x="157.5" v="0" label="NSM1" />
+        <IC_MICRO x="165.0" v="0" label="NSM1" />
+        <IC_MICRO x="172.5" v="0" label="NSM1" />
+        <IC_MICRO x="180.0" v="0" label="NSM1" />
+        <IC_MICRO x="187.5" v="0" label="NSM1" />
+        <IC_MICRO x="195.0" v="0" label="NSM1" />
+        <!-- obstacle shifts floating car numbers -->
+        <IC_MICRO x="750" v="0" label="Obstacle" />
+      </INITIAL_CONDITIONS>
+      <TRAFFIC_SOURCE />
+      <TRAFFIC_SINK />
+      <FLOW_CONSERVING_INHOMOGENEITIES />
+      <SPEED_LIMITS />
+      <SIMPLE_RAMPS />
+      <TRAFFIC_LIGHTS />
+      <DETECTORS />
+    </ROAD>
+    <OUTPUT>
+      <FLOATING_CAR_DATA n_dt="1" dn="0">
+        <!-- FC 1 is obstacle -->
+        <FC number="2" />
+        <FC number="6" />
+        <FC number="11" />
+        <FC number="16" />
+        <FC number="21" />
+      </FLOATING_CAR_DATA>
+    </OUTPUT>
+  </SIMULATION>
 </SCENARIO>
+

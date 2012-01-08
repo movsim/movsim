@@ -1,74 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
 <SCENARIO>
-    <VEHICLES>
-        <VEHICLE label="ACC1" length="8" b_max="9">
-            <LONGITUDINAL_MODEL>
-                <ACC v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5"
-                    coolness="1" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-         <!-- Obstacle is system type. Do not change. -->
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-    </VEHICLES>
-    <SIMULATION dt="0.4" duration="7200" fixed_seed="true" seed="42">
+  <VEHICLES>
+    <VEHICLE label="ACC1" length="8" b_max="9">
+      <LONGITUDINAL_MODEL>
+        <ACC v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" coolness="1" />
+      </LONGITUDINAL_MODEL>
+      <LANE_CHANGE_MODEL />
+    </VEHICLE>
+    <!-- Obstacle is system type. Do not change. -->
+    <VEHICLE label="Obstacle" length="0">
+      <LONGITUDINAL_MODEL>
+        <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+      </LONGITUDINAL_MODEL>
+      <LANE_CHANGE_MODEL />
+    </VEHICLE>
+  </VEHICLES>
+  <SIMULATION dt="0.4" duration="7200" fixed_seed="true" seed="42">
     <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="ACC1" fraction="1" />
-            </TRAFFIC_COMPOSITION>
-        <!-- road id 0 indicates mainroad -->    
-        <ROAD id="0" length="20000" lanes="1">
-         
-            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="ACC1" fraction="1" />
-            </TRAFFIC_COMPOSITION>
-            <INITIAL_CONDITIONS>
-                <IC_MACRO x="8600" rho_per_km="2" v="30" />
-            </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="200" v="30" />
-                <INFLOW t="1500" q_per_hour="2200" v="22" />
-                <INFLOW t="10800" q_per_hour="1000" v="30" />
-            </TRAFFIC_SOURCE>
-            <TRAFFIC_SINK />
-            <!-- improve vehicle performance at inflow -->
-            <FLOW_CONSERVING_INHOMOGENEITIES>
-                <INHOMOGENEITY x="0" alpha_T="0.8" />
-                <INHOMOGENEITY x="2000" alpha_T="1" />
-            </FLOW_CONSERVING_INHOMOGENEITIES>
-            <SPEED_LIMITS>
-            </SPEED_LIMITS>
-            <SIMPLE_RAMPS>
-                <SIMPLE_RAMP x="15000" merge_length="1000"
-                    logging="true">
-                    <INFLOW t="0" q_per_hour="550" />
-                </SIMPLE_RAMP>
-            </SIMPLE_RAMPS>
-            <TRAFFIC_LIGHTS>
-            </TRAFFIC_LIGHTS>
-	    <DETECTORS dt="60" logging="true">
-               <CROSS_SECTION x="1000" />
-               <CROSS_SECTION x="6000" />
-               <CROSS_SECTION x="8000" />
-               <CROSS_SECTION x="9000" />
-               <CROSS_SECTION x="10000" />
-               <CROSS_SECTION x="11000" />
-               <CROSS_SECTION x="12000" />
-               <CROSS_SECTION x="13000" />
-               <CROSS_SECTION x="14000" />
-               <CROSS_SECTION x="15000" />
-               <CROSS_SECTION x="16000" />
-            </DETECTORS>
-        </ROAD>
-        <OUTPUT>
-          <SPATIOTEMPORAL dx="100" dt="40" />
-          <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
-        </OUTPUT>
-    </SIMULATION>
+      <VEHICLE_TYPE label="ACC1" fraction="1" />
+    </TRAFFIC_COMPOSITION>
+    <!-- road id 0 indicates mainroad -->
+    <ROAD id="0" length="20000" lanes="1">
+      <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <VEHICLE_TYPE label="ACC1" fraction="1" />
+      </TRAFFIC_COMPOSITION>
+      <INITIAL_CONDITIONS>
+        <IC_MACRO x="8600" rho_per_km="2" v="30" />
+      </INITIAL_CONDITIONS>
+      <TRAFFIC_SOURCE logging="true">
+        <INFLOW t="0" q_per_hour="200" v="30" />
+        <INFLOW t="1500" q_per_hour="2200" v="22" />
+        <INFLOW t="10800" q_per_hour="1000" v="30" />
+      </TRAFFIC_SOURCE>
+      <TRAFFIC_SINK />
+      <!-- improve vehicle performance at inflow -->
+      <FLOW_CONSERVING_INHOMOGENEITIES>
+        <INHOMOGENEITY x="0" alpha_T="0.8" />
+        <INHOMOGENEITY x="2000" alpha_T="1" />
+      </FLOW_CONSERVING_INHOMOGENEITIES>
+      <SPEED_LIMITS />
+      <SIMPLE_RAMPS>
+        <SIMPLE_RAMP x="15000" merge_length="1000" logging="true">
+          <INFLOW t="0" q_per_hour="550" />
+        </SIMPLE_RAMP>
+      </SIMPLE_RAMPS>
+      <TRAFFIC_LIGHTS />
+      <DETECTORS dt="60" logging="true">
+        <CROSS_SECTION x="1000" />
+        <CROSS_SECTION x="6000" />
+        <CROSS_SECTION x="8000" />
+        <CROSS_SECTION x="9000" />
+        <CROSS_SECTION x="10000" />
+        <CROSS_SECTION x="11000" />
+        <CROSS_SECTION x="12000" />
+        <CROSS_SECTION x="13000" />
+        <CROSS_SECTION x="14000" />
+        <CROSS_SECTION x="15000" />
+        <CROSS_SECTION x="16000" />
+      </DETECTORS>
+    </ROAD>
+    <OUTPUT>
+      <SPATIOTEMPORAL dx="100" dt="40" />
+      <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
+    </OUTPUT>
+  </SIMULATION>
 </SCENARIO>
+
