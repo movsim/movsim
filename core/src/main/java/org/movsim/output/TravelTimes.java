@@ -30,12 +30,13 @@ import java.util.List;
 
 import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.input.model.output.TravelTimesInput;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.utilities.ExponentialMovingAverage;
 import org.movsim.utilities.ObservableImpl;
 import org.movsim.utilities.XYDataPoint;
 
-public class TravelTimes extends ObservableImpl {
+public class TravelTimes extends ObservableImpl implements SimulationTimeStep {
 
     private final List<TravelTimeRoute> routes;
 
@@ -52,16 +53,8 @@ public class TravelTimes extends ObservableImpl {
         }
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double simulationTime, long iterationCount) {
-
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
         for (final TravelTimeRoute route : routes) {
             route.update(simulationTime, iterationCount, roadNetwork);

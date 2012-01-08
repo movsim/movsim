@@ -37,6 +37,7 @@ import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -46,7 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class SimOutput.
  */
-public class SimOutput {
+public class SimOutput implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
@@ -132,31 +133,22 @@ public class SimOutput {
         }
     }
 
-    /**
-     * Update.
-     *
-     * @param dt
-     *            simulation time interval, seconds.
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double dt, double simulationTime, long iterationCount) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
 
         if (floatingCars != null) {
-            floatingCars.update(simulationTime, iterationCount);
+            floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
         if (spatioTemporal != null) {
             spatioTemporal.timeStep(dt, simulationTime, iterationCount);
         }
 
         if (fileTrajectories != null) {
-            fileTrajectories.update(simulationTime, iterationCount);
+            fileTrajectories.timeStep(dt, simulationTime, iterationCount);
         }
 
         if (travelTimes != null) {
-            travelTimes.update(simulationTime, iterationCount);
+            travelTimes.timeStep(dt, simulationTime, iterationCount);
         }
 
     }

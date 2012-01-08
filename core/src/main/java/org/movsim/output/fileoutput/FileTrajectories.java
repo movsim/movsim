@@ -31,6 +31,7 @@ import java.util.Iterator;
 
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -41,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class FileTrajectories.
  */
-public class FileTrajectories extends FileOutputBase {
+public class FileTrajectories extends FileOutputBase implements SimulationTimeStep {
 
     private static final String extensionFormat = ".traj.road_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
@@ -123,15 +124,8 @@ public class FileTrajectories extends FileOutputBase {
         }
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double simulationTime, long iterationCount) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
 
         if (fileHandles.isEmpty()) {
             // cannot initialize earlier because onramps and offramps are

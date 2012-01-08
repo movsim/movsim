@@ -73,12 +73,12 @@ public class Simulator implements Runnable {
     private long iterationCount;
 
     /**
-     * The timestep is a constant for one simulation run. It cannot be changed during a simulation. But of course you can run another
-     * simulation with a different timestep.
+     * The timestep is a constant for one simulation run. It cannot be changed during a simulation.
+     * But of course you can run another simulation with a different timestep.
      */
     private double timestep;
 
-    /** The duration of the simulation. */
+    /** The duration of the simulation, seconds. */
     private double tMax;
 
     private SimOutput simOutput;
@@ -325,7 +325,7 @@ public class Simulator implements Runnable {
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.update(timestep, time, iterationCount);
+        simOutput.timeStep(timestep, time, iterationCount);
 
         while (!isSimulationRunFinished()) {
             updateTimestep();
@@ -360,7 +360,7 @@ public class Simulator implements Runnable {
         }
 
         roadNetwork.timeStep(timestep, time, iterationCount);
-        simOutput.update(timestep, time, iterationCount);
+        simOutput.timeStep(timestep, time, iterationCount);
     }
 
     public final long iterationCount() {
