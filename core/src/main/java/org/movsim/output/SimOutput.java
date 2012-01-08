@@ -76,8 +76,8 @@ public class SimOutput implements SimulationTimeStep {
         // TODO - route is hardcoded for now
         final Route route = new Route();
         route.setName("rt1");
-        route.add(roadSegment);
-        if (roadSegment.userId().equals("1")) {
+        if (roadSegment != null && roadSegment.userId().equals("1")) {
+            route.add(roadSegment);
             RoadSegment nextRoadSegment = roadNetwork.findByUserId("2");
             if (nextRoadSegment != null) {
                 route.add(nextRoadSegment);

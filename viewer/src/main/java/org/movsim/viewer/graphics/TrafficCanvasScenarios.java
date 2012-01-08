@@ -29,7 +29,7 @@ package org.movsim.viewer.graphics;
 import java.awt.Graphics2D;
 
 import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.viewer.control.SimulationRunnable;
+import org.movsim.simulator.SimulationRunnable;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -47,9 +47,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
     // speed boost to get vehicles onto network quickly
     private boolean inInitialSpeedUp;
-    private static final double INITIAL_SPEEDUP_DURATION = GraphicsConfigurationParameters.INITIAL_SPEEDUP_DURATION;
-    private static final double INITIAL_SPEEDUP_DURATION_OFF_ON_RAMP = GraphicsConfigurationParameters.INITIAL_SPEEDUP_DURATION_OFF_ON_RAMP;
-    private static double INITIAL_SPEEDUP_FACTOR = GraphicsConfigurationParameters.INITIAL_SPEEDUP_FACTOR;
     private double speedupEndTime;
     private int sleepTimeSave;
     protected final MovsimViewerFacade movsimViewerFacade;
