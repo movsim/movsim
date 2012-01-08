@@ -48,12 +48,12 @@ import org.movsim.viewer.util.SwingHelper;
 
 public class MovSimMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
-    CanvasPanel canvasPanel;
+    private final MainFrame frame;
+    final CanvasPanel canvasPanel;
     private final ResourceBundle resourceBundle;
-    // protected TravelTimeDiagram travelTimeDiagram;
-    private LogWindow logWindow;
-    private MainFrame frame;
 
+    private LogWindow logWindow;
+    // protected TravelTimeDiagram travelTimeDiagram;
     // private DetectorsView detectorsDiagram;
     // private SpatioTemporalView spatioTemporalDiagram;
     // private FloatingCarsAccelerationView fcAcc;
