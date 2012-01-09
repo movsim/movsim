@@ -41,22 +41,13 @@ public class InputData {
     final static Logger logger = LoggerFactory.getLogger(InputData.class);
 
     private List<VehicleInput> vehicleInputData;
-
     private SimulationInput simulationInput;
-
     private FuelConsumptionInput fuelConsumptionInput;
 
-    private final ProjectMetaData projectMetaData;
-
     /**
-     * Instantiates a new input data.
+     * Constructor.
      */
-    public InputData(ProjectMetaData projectMetaData) {
-        this.projectMetaData = projectMetaData;
-    }
-
-    public void setProjectName(String projectname) {
-        projectMetaData.setProjectName(projectname);
+    public InputData() {
     }
 
     public void setVehicleInputData(List<VehicleInput> vehicleInputData) {
@@ -82,10 +73,6 @@ public class InputData {
 
     public void setSimulationInput(SimulationInput simulationInput) {
         this.simulationInput = simulationInput;
-    }
-
-    public ProjectMetaData getProjectMetaData() {
-        return projectMetaData;
     }
 
     public void setFuelConsumptionInput(FuelConsumptionInput fuelConsumptionInput) {

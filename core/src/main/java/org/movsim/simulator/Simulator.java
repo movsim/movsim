@@ -82,7 +82,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public Simulator(ProjectMetaData projectMetaData) {
         this.projectMetaData = projectMetaData;
-        inputData = new InputData(projectMetaData); // accesses static reference ProjectMetaData
+        inputData = new InputData();
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -93,8 +93,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         projectName = projectMetaData.getProjectName();
 
-        final SimulationInput simInput = parseMovSimXml();
-        final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
+        final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
+        final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
 
@@ -103,7 +103,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
-        createVehicleGenerator(simInput);
+        vehGenerator = createVehicleGenerator(simInput);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -158,11 +158,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * @param roadInputMap
      */
-    private void matchRoadSegmentsAndRoadInput(final Map<String, RoadInput> roadInputMap) {
+    private void matchRoadSegmentsAndRoadInput(Map<String, RoadInput> roadInputMap) {
         for (final RoadInput roadinput : roadInputMap.values()) {
             final RoadSegment roadSegment = roadNetwork.findByUserId(roadinput.getId());
             if (roadSegment != null) {
-                addInputToRoadSegment(roadSegment, roadinput);
+                addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
             }
         }
     }
@@ -172,15 +172,16 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @param simInput
      */
-    private void createVehicleGenerator(final SimulationInput simInput) {
+    private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData, heterogenInputData);
+        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData, heterogenInputData);
         // output fundamental diagrams
         final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
         if (instantaneousFileOutput && isWithFundDiagramOutput) {
-            FileFundamentalDiagram.writeFundamentalDiagrams(vehGenerator.prototypes());
+            FileFundamentalDiagram.writeFundamentalDiagrams(projectMetaData, vehGenerator.prototypes());
         }
+        return vehGenerator;
 
     }
 
@@ -189,7 +190,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @param roadInputMap
      */
-    private void defaultTestingRoadMapping(final Map<String, RoadInput> roadInputMap) {
+    private void defaultTestingRoadMapping(Map<String, RoadInput> roadInputMap) {
         logger.warn("Simulation with test network");
         final RoadInput roadinput = roadInputMap.values().iterator().next();
         final int laneCount = 1;// roadinput.getLanes();
@@ -197,7 +198,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
-        addInputToRoadSegment(roadSegment, roadinput);
+        addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
         roadSegment.setUserId("1");
         roadSegment.addDefaultSink();
         roadNetwork.add(roadSegment);
@@ -209,7 +210,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param projectMetaData
      * @return
      */
-    private boolean parseOpenDriveXml(ProjectMetaData projectMetaData) {
+    private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
         final String fullXodrFileName = xodrPath + xodrFileName;
@@ -225,8 +226,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @return
      */
-    private SimulationInput parseMovSimXml() {
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+    private static SimulationInput parseMovSimXml(ProjectMetaData projectMetaData, InputData inputData) {
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(projectMetaData, inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
     }
@@ -240,9 +241,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param roadSegment
      * @param roadinput
      */
-    private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
-    	
-    	// set up the traffic source
+    private static void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput, VehicleGenerator vehGenerator) {
+        // set up the traffic source
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
         final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
@@ -273,12 +273,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 roadinput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
 
-        initialConditions(roadSegment, inputData.getSimulationInput(), roadinput);
+        initialConditions(roadSegment, roadinput, vehGenerator);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
 
-    private void initialConditions(RoadSegment roadSegment, SimulationInput simInput, RoadInput roadInput) {
+    private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
 
         // TODO: consider multi-lane case !!!
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
@@ -334,7 +334,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public void reset() {
         simulationRunnable.reset();
-        simOutput = new SimOutput(inputData, roadNetwork);
+        simOutput = new SimOutput(projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
     }
 
     public void runToCompletion() {

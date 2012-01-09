@@ -87,8 +87,8 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(final InputData inputData) {
-        projectMetaData = inputData.getProjectMetaData();
+    public XmlReaderSimInput(ProjectMetaData projectMetaDataParam, InputData inputData) {
+        this.projectMetaData = projectMetaDataParam;
         this.inputData = inputData;
         this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
                 + filenameEnding;

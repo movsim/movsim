@@ -57,20 +57,19 @@ public class SimOutput implements SimulationTimeStep {
     private FloatingCars floatingCars = null;
     private FileFloatingCars fileFloatingCars;
     private FileTrajectories fileTrajectories = null;
-    private final boolean writeOutput;
     private final RoadNetwork roadNetwork;
     private final RoadSegment roadSegment;
     private TravelTimes travelTimes;
 
     /**
-     * Instantiates a new sim output.
+     * Constructor.
      * 
      * @param simInput
      *            the sim input
      * @param roadSections
      *            the road sections
      */
-    public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
+    public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
         roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
         // TODO - route is hardcoded for now
@@ -87,9 +86,6 @@ public class SimOutput implements SimulationTimeStep {
                 }
             }
         }
-
-        // more restrictive than in other output classes TODO
-        writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
 
         // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();

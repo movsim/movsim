@@ -31,7 +31,6 @@ import java.util.Map;
 
 import org.movsim.consumption.FuelConsumption;
 import org.movsim.input.InputData;
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
@@ -89,11 +88,8 @@ public class VehicleGenerator {
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(double simulationTimestep, InputData simInput,
-            List<TrafficCompositionInputData> heterogenInputData) {
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
-
         // default for continuous micro models
         this.simulationTimestep = simulationTimestep;
         // create vehicle prototyps according to traffic composition

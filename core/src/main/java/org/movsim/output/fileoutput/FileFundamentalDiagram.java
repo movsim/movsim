@@ -56,8 +56,7 @@ public class FileFundamentalDiagram {
      * @param prototypes
      *            the prototypes
      */
-    public static void writeFundamentalDiagrams(HashMap<String, VehiclePrototype> prototypes) {
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+    public static void writeFundamentalDiagrams(ProjectMetaData projectMetaData, HashMap<String, VehiclePrototype> prototypes) {
         final String path = projectMetaData.getOutputPath();
         final String baseFilename = projectMetaData.getProjectName();
         for (final Map.Entry<String, VehiclePrototype> entry : prototypes.entrySet()) {
