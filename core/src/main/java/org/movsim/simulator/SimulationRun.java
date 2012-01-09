@@ -25,6 +25,8 @@
  */
 package org.movsim.simulator;
 
+import java.util.LinkedList;
+import java.util.List;
 
 public class SimulationRun {
     public interface CompletionCallback {
@@ -52,7 +54,7 @@ public class SimulationRun {
     protected double simulationTime; // Simulation time, seconds (reset to 0.0 in each run)
     protected long iterationCount;
     protected long totalSimulationTime;
-    protected UpdateStatusCallback updateStatusCallback;
+    protected List<UpdateStatusCallback> updateStatusCallbacks;
     protected CompletionCallback completionCallback;
     // simulation is an object that implements the SimulationTimeStep interface.
     protected final SimulationTimeStep simulation;
@@ -66,6 +68,7 @@ public class SimulationRun {
     public SimulationRun(SimulationTimeStep simulation) {
         assert simulation != null;
         this.simulation = simulation;
+        updateStatusCallbacks = new LinkedList<UpdateStatusCallback>();
     }
 
     /**
@@ -160,13 +163,12 @@ public class SimulationRun {
     }
 
     /**
-     * Sets the update status callback.
+     * Adds a update status callback.
      * 
      * @param updateStatusCallback
      */
-    public void setUpdateStatusCallback(UpdateStatusCallback updateStatusCallback) {
-        assert this.updateStatusCallback == null; // it's a mistake if this is set twice
-        this.updateStatusCallback = updateStatusCallback;
+    public void addUpdateStatusCallback(UpdateStatusCallback updateStatusCallback) {
+        updateStatusCallbacks.add(updateStatusCallback);
     }
 
     /**
@@ -191,7 +193,7 @@ public class SimulationRun {
         while (simulationTime <= timeLimit) {
             // perform the timeStep for the road network
             simulation.timeStep(dt, simulationTime, iterationCount);
-            if (updateStatusCallback != null) {
+            for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
                 updateStatusCallback.updateStatus(simulationTime);
             }
             simulationTime += dt;

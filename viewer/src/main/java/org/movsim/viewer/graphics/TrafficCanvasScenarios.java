@@ -53,7 +53,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     public TrafficCanvasScenarios(SimulationRunnable simulationRunnable, Simulator simulator) {
         super(simulationRunnable, simulator);
 
-        simulationRunnable.setUpdateStatusCallback(this);
+        simulationRunnable.addUpdateStatusCallback(this);
         setStatusControlCallbacks(statusControlCallbacks);
 
         final TrafficCanvasMouseWheelListener mousewheel = new TrafficCanvasMouseWheelListener(this);

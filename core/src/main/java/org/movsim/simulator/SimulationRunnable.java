@@ -26,7 +26,6 @@
 package org.movsim.simulator;
 
 
-
 /**
  * <p>
  * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to
@@ -65,7 +64,6 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     private UpdateDrawingCallback updateDrawingCallback;
     private HandleExceptionCallback handleExceptionCallback;
-    private UpdateStatusCallback updateStatusPanelCallback;
 
 //    private class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
 //        public DefaultExceptionHandler() {
@@ -130,16 +128,6 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     public void setHandleExceptionCallback(HandleExceptionCallback handleExceptionCallback) {
         assert this.handleExceptionCallback == null; // it's a mistake if this is set twice
         this.handleExceptionCallback = handleExceptionCallback;
-    }
-
-    /**
-     * Sets the update status panel callback.
-     * 
-     * @param updateStatusPanelCallback
-     */
-    public void setUpdateStatusPanelCallback(UpdateStatusCallback updateStatusPanelCallback) {
-        assert this.updateStatusPanelCallback == null; // it's a mistake if this is set twice
-        this.updateStatusPanelCallback = updateStatusPanelCallback;
     }
 
     /**
@@ -280,7 +268,6 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      */
     @Override
     public void run() {
-        assert updateStatusCallback != null;
         assert updateDrawingCallback != null;
         assert simulation != null;
         while (Thread.currentThread() == thread) {
@@ -309,9 +296,11 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
                     }
                     e.printStackTrace();
                 }
-                updateStatusCallback.updateStatus(simulationTime);
+                for (final UpdateStatusCallback updateStatusCallback : updateStatusCallbacks) {
+                    updateStatusCallback.updateStatus(simulationTime);
+                }
                 simulationTime += dt;
-                iterationCount++;
+                ++iterationCount;
                 totalSimulationTime += System.currentTimeMillis() - timeBeforeSim_ms;
             }
             // updateDrawing calls back to the UI framework which then asynchronously
@@ -326,7 +315,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         actualTimewarp = dt / (0.001 * (timeAfterSim_ms - lastUpdateTime_ms));
         lastUpdateTime_ms = timeAfterSim_ms;
 
-        smoothedTimewarp = (smoothedTimewarp == 0) ? actualTimewarp : betaTimewarp * smoothedTimewarp
-                + (1 - betaTimewarp) * actualTimewarp;
+        smoothedTimewarp = smoothedTimewarp == 0.0 ? actualTimewarp :
+            betaTimewarp * smoothedTimewarp + (1.0 - betaTimewarp) * actualTimewarp;
     }
 }

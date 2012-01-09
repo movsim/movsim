@@ -97,7 +97,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         this.simulationRunnable = simulator.getSimulationRunnable();
         this.setLayout(new FlowLayout());
 
-        simulationRunnable.setUpdateStatusPanelCallback(this);
+        simulationRunnable.addUpdateStatusCallback(this);
 
         createStatusViews();
         addStatusView();
