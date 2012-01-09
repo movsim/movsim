@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
-import org.movsim.input.model.consumption.FuelConsumptionInput;
+import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

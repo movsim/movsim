@@ -28,9 +28,9 @@ package org.movsim.simulator.vehicles;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.movsim.consumption.FuelConsumption;
-import org.movsim.input.model.consumption.ConsumptionModelInput;
-import org.movsim.input.model.consumption.FuelConsumptionInput;
+import org.movsim.input.model.vehicle.consumption.ConsumptionModelInput;
+import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
+import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

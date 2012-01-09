@@ -23,13 +23,13 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.consumption;
+package org.movsim.simulator.vehicles.consumption;
 
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Locale;
 
-import org.movsim.input.model.consumption.ConsumptionEngineModelInput;
+import org.movsim.input.model.vehicle.consumption.ConsumptionEngineModelInput;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

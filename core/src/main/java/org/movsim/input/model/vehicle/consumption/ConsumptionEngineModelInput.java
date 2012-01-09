@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input.model.consumption;
+package org.movsim.input.model.vehicle.consumption;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,9 +32,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
-import org.movsim.consumption.FuelConstants;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
+import org.movsim.simulator.vehicles.consumption.FuelConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

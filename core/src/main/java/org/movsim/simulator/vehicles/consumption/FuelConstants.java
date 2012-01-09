@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.consumption;
+package org.movsim.simulator.vehicles.consumption;
 
 public class FuelConstants {
 

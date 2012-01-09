@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input.model.consumption;
+package org.movsim.input.model.vehicle.consumption;
 
 import java.util.HashMap;
 import java.util.List;
