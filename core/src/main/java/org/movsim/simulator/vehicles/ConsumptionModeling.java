@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.movsim.consumption.FuelConsumption;
-import org.movsim.consumption.impl.FuelConsumptionImpl;
 import org.movsim.input.model.consumption.ConsumptionModelInput;
 import org.movsim.input.model.consumption.FuelConsumptionInput;
 import org.slf4j.Logger;
@@ -58,7 +57,7 @@ public class ConsumptionModeling {
                 final String key = entries.getKey();
                 final ConsumptionModelInput consModelInput = entries.getValue();
                 logger.info("create fuel consumption model with key={}", key);
-                fuelModelsMap.put(key, new FuelConsumptionImpl(consModelInput));
+                fuelModelsMap.put(key, new FuelConsumption(consModelInput));
             }
         }
     }

@@ -25,27 +25,86 @@
  */
 package org.movsim.consumption;
 
-public interface CarModel {
+import org.movsim.input.model.consumption.ConsumptionCarModelInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    double getMass();
+public class CarModel {
 
-    double getEmptyMass();
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(CarModel.class);
 
-    double getCwValue();
+    private final double rhoAir = FuelConstants.RHO_AIR;
+    private final double gravConstant = FuelConstants.GRAVITATION;
 
-    double getCrossSectionSurface();
+    private double mass; // mass of vehicle (kg)
+    private double cwValue; // hydrodynamical cwValue-value (dimensionless)
+    private double crossSectionSurface; // front area of vehicle (m^2)
+    private double consFrictionCoefficient; // constant friction coefficient (dimensionless)
+    private double vFrictionCoefficient; // friction coefficient prop to v (s/m)
+    private double electricPower; // power for electrical consumption (W)
+    private double dynamicRadius; // dynamic tire radius (<static r) (m)
 
-    double getConsFrictionCoefficient();
+    public CarModel(ConsumptionCarModelInput carInput) {
+        initialize(carInput);
+    }
 
-    double getvFrictionCoefficient();
+    private void initialize(ConsumptionCarModelInput carInput) {
+        mass = carInput.getVehicleMass();
+        cwValue = carInput.getCwValue();
+        crossSectionSurface = carInput.getCrossSectionSurface();
+        consFrictionCoefficient = carInput.getConsFrictionCoefficient();
+        vFrictionCoefficient = carInput.getvFrictionCoefficient();
+        electricPower = carInput.getElectricPower();
+        dynamicRadius = carInput.getDynamicTyreRadius();
+    }
 
-    double getElectricPower();
+    public double getFreeWheelingDecel(double v) {
+        return -(gravConstant * consFrictionCoefficient + gravConstant * vFrictionCoefficient * v + cwValue * rhoAir
+                * crossSectionSurface * v * v / (2 * mass));
+    }
 
-    double getDynamicRadius();
+    public double getForceMech(double v, double acc) {
+        final double c = mass * gravConstant * consFrictionCoefficient;
+        final double d = mass * gravConstant * vFrictionCoefficient;
+        final double e = 0.5 * rhoAir * cwValue * crossSectionSurface;
+        return c + d * v + e * v * v + mass * acc;
+    }
 
-    double getDynamicWheelCircumfence();
+    public double getMass() {
+        return mass;
+    }
 
-    double getForceMech(double v, double acc);
+    public double getEmptyMass() {
+        return mass;
+    }
 
-    double getFreeWheelingDecel(double v);
+    public double getCwValue() {
+        return cwValue;
+    }
+
+    public double getCrossSectionSurface() {
+        return crossSectionSurface;
+    }
+
+    public double getConsFrictionCoefficient() {
+        return consFrictionCoefficient;
+    }
+
+    public double getvFrictionCoefficient() {
+        return vFrictionCoefficient;
+    }
+
+    public double getElectricPower() {
+        return electricPower;
+    }
+
+    public double getDynamicRadius() {
+        return dynamicRadius;
+    }
+
+    public double getDynamicWheelCircumfence() {
+        return 2 * Math.PI * dynamicRadius;
+    }
+
 }
