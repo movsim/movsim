@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.viewer.graphics.charts.model;
+package org.movsim.viewer.ui.charts.model;
 
 public class FloatingCarDataPoint {
 

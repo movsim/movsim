@@ -1,3 +1,4 @@
+package org.movsim.viewer.ui.charts;
 ///**
 // * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
 // *                             Ralph Germ, Martin Budden
@@ -67,7 +68,7 @@
 // * @author ralph
 // * 
 // */
-//public class FloatingCarsSpeedView extends JFrame implements ActionListener, ObserverInTime {
+//public class FloatingCarsTrajectoriesView extends JFrame implements ActionListener, ObserverInTime {
 //
 //    private final FloatingCars floatingCars;
 //
@@ -103,7 +104,7 @@
 //     * @param floatingCarPanel
 //     * @param simulator
 //     */
-//    public FloatingCarsSpeedView() {
+//    public FloatingCarsTrajectoriesView() {
 //        this.simulator = Simulator.getInstance();
 //        this.setLayout(new BorderLayout());
 //
@@ -124,18 +125,18 @@
 //            floatingCars.registerObserver(this);
 //            listOfFloatingCars = floatingCars.getFcdList();
 //            floatingCarsDataPoints = new HashMap<Integer, List<FloatingCarDataPoint>>();
-//            System.out.println("Alles klar fc");
 //            floatingCarsList = floatingCars.getFcdList();
 //            numberOfFloatingCars = floatingCarsList.size();
 //            series = new XYSeries[numberOfFloatingCars];
 //            for (int i = 0; i < numberOfFloatingCars; i++) {
 //                series[i] = new XYSeries(String.valueOf(floatingCarsList.get(i) - 1));
 //                series[i].add(0, 0);
+//                System.out.println("fc: " + floatingCarsList.get(i));
 //            }
 //        }
 //
 //        setTitleChart("Floating Cars");
-//        setxAxis("x"); // TODO label speed
+//        setxAxis("x"); // TODO label trajectorie
 //        setyAxis("y");
 //        final JFreeChart chart = createChart();
 //        chartPanel = new ChartPanel(chart, true, false, false, true, true);
@@ -144,10 +145,13 @@
 //
 //        chartPanel.setMouseWheelEnabled(true);
 //
+//        // chartPanel.setHorizontalAxisTrace(true);
+//        // chartPanel.setVerticalAxisTrace(true);
+//
 //        lblTraveledDistance = new JLabel[numberOfFloatingCars];
 //        for (int i = 0; i < numberOfFloatingCars; i++) {
-//            lblTraveledDistance[i] = new JLabel("0 km/h");
-//            SwingHelper.setComponentSize(lblTraveledDistance[i], 68, 22);
+//            lblTraveledDistance[i] = new JLabel("0 m");
+//            SwingHelper.setComponentSize(lblTraveledDistance[i], 60, 22);
 //        }
 //        // Hide FC
 //        final JPanel checkBoxpanel = new JPanel();
@@ -164,7 +168,7 @@
 //
 //            final Integer fc = listOfFloatingCars.get(i);
 ////            final Vehicle floatingCar = floatingCars.getVehicleContainers().get(0).getVehicles().get(fc);
-////            lblTraveledDistance[i].setText(String.valueOf(floatingCar.physicalQuantities().getSpeed() + " km/h"));
+////            lblTraveledDistance[i].setText(String.valueOf(floatingCar.physicalQuantities().getPosition() + " m  "));
 ////            checkBoxpanel.add(Box.createVerticalGlue()); //TODO
 //        }
 //        final JCheckBox rendererCheckBox = new JCheckBox("dp");
@@ -178,7 +182,7 @@
 //        add(checkBoxpanel, BorderLayout.EAST);
 //        add(chartPanel, BorderLayout.CENTER);
 //
-//        format = new DecimalFormat("#.#");
+//        format = new DecimalFormat("#");
 //
 //        pack();
 //        setVisible(true);
@@ -205,17 +209,13 @@
 //        this.repaint();
 //    }
 //
-//    /**
-//     * @param i
-//     * 
-//     */
 //    private void addDataToSerie(XYSeries se, int fc, int i) {
 //        final List<FloatingCarDataPoint> speedData = floatingCarsDataPoints.get(fc);
 //
-//        final double yAx = speedData.get(speedData.size() - 1).getSpeed();
+//        final double yAx = speedData.get(speedData.size() - 1).getPosition();
 //        final double time = speedData.get(speedData.size() - 1).getTime();
 //        se.add(time, yAx);
-//        lblTraveledDistance[i].setText(String.valueOf(format.format(yAx) + " km/h"));
+//        lblTraveledDistance[i].setText(String.valueOf(format.format(yAx) + " m  "));
 //    }
 //
 //    private XYSeriesCollection createDataSerie() {
@@ -238,10 +238,6 @@
 //        final NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
 //        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 //
-//        final double duration = simulator.getSimInput().getSimulationInput().getMaxSimTime();
-//        final ValueAxis vDomainAxis = plot.getDomainAxis();
-//        domainAxis.setRange(0, duration);
-//
 //        // XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer)
 //        // plot.getRenderer();
 //        // renderer.setShapesVisible(true);
@@ -249,6 +245,13 @@
 //
 //        // smooth chart
 //        // chart.getXYPlot().setRenderer(new XYSplineRenderer());
+//
+//        final double duration = simulator.getSimInput().getSimulationInput().getMaxSimTime();
+//        final ValueAxis vDomainAxis = plot.getDomainAxis();
+//        domainAxis.setRange(0, duration);
+//
+//        final ValueAxis vRangeAxis = plot.getRangeAxis();
+//        vRangeAxis.setRange(0, 1000);
 //
 //        final LegendTitle legend = chart.getLegend();
 //        legend.setPosition(RectangleEdge.RIGHT);
@@ -269,7 +272,7 @@
 ////                floatingCarsDataPoints.get(fc).add(
 ////                        new FloatingCarDataPoint(time, floatingCar.physicalQuantities().getPosition(), floatingCar
 ////                                .physicalQuantities().getSpeed() * 3.6, floatingCar.physicalQuantities().getAcc()));
-////            }//TODO
+////            } //TODO
 //
 //        }
 //    }

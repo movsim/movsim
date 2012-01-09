@@ -1,3 +1,4 @@
+package org.movsim.viewer.ui.charts.util;
 ///**
 // * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
 // *                             Ralph Germ, Martin Budden
@@ -26,26 +27,23 @@
 // */
 //package org.movsim.viewer.graphics.charts.util;
 //
-//import org.jfree.chart.axis.TickUnit;
-//import org.jfree.chart.axis.ValueAxis;
+//import java.text.NumberFormat;
+//
+//import org.jfree.chart.axis.NumberTickUnit;
 //
 ///**
-// * Base class representing a tick unit. This determines the spacing of the tick marks on an axis.
-// * <P>
-// * This class (and any subclasses) should be immutable, the reason being that ORDERED collections of tick units are maintained and if one
-// * instance can be changed, it may destroy the order of the collection that it belongs to. In addition, if the implementations are
-// * immutable, they can belong to multiple collections.
+// * @author ralph
 // * 
-// * @see ValueAxis
 // */
-//public class MyTickUnit extends TickUnit {
+//public class MyYNumberTickUnit extends NumberTickUnit {
 //
 //    /**
 //     * @param size
+//     * @param formatter
+//     * @param minorTickCount
 //     */
-//    public MyTickUnit(double size) {
-//        super(size);
-//        // TODO Auto-generated constructor stub
+//    public MyYNumberTickUnit(double size, NumberFormat formatter, int minorTickCount) {
+//        super(size, formatter, minorTickCount);
 //    }
 //
 //    /**
@@ -62,5 +60,4 @@
 //    public String valueToString(double value) {
 //        return String.valueOf(value / 10);
 //    }
-//
 //}

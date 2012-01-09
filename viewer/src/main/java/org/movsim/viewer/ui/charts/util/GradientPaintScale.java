@@ -1,3 +1,4 @@
+package org.movsim.viewer.ui.charts.util;
 ///**
 // * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
 // *                             Ralph Germ, Martin Budden

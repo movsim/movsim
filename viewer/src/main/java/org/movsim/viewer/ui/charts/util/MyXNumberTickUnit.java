@@ -1,3 +1,4 @@
+package org.movsim.viewer.ui.charts.util;
 ///**
 // * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
 // *                             Ralph Germ, Martin Budden
@@ -26,13 +27,37 @@
 // */
 //package org.movsim.viewer.graphics.charts.util;
 //
-//import org.jfree.chart.axis.DateAxis;
-//import org.jfree.chart.axis.NumberAxis;
-//import org.jfree.chart.axis.TickUnits;
+//import java.text.NumberFormat;
+//
+//import org.jfree.chart.axis.NumberTickUnit;
 //
 ///**
-// * A collection of tick units, used by the {@link DateAxis} and {@link NumberAxis} classes.
+// * @author ralph
+// * 
 // */
-//public class MyTickUnits extends TickUnits {
+//public class MyXNumberTickUnit extends NumberTickUnit {
 //
+//    /**
+//     * @param size
+//     * @param formatter
+//     * @param minorTickCount
+//     */
+//    public MyXNumberTickUnit(double size, NumberFormat formatter, int minorTickCount) {
+//        super(size, formatter, minorTickCount);
+//    }
+//
+//    /**
+//     * Converts the supplied value to a string.
+//     * <P>
+//     * Subclasses may implement special formatting by overriding this method.
+//     * 
+//     * @param value
+//     *            the data value.
+//     * 
+//     * @return Value as string.
+//     */
+//    @Override
+//    public String valueToString(double value) {
+//        return String.valueOf(Math.round(value * 2 / 3));
+//    }
 //}

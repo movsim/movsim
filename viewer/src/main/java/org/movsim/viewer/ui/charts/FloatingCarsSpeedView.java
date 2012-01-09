@@ -1,3 +1,4 @@
+package org.movsim.viewer.ui.charts;
 ///**
 // * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber,
 // *                             Ralph Germ, Martin Budden
@@ -36,8 +37,6 @@
 //import java.util.HashMap;
 //import java.util.List;
 //import java.util.Map;
-//import java.util.concurrent.ExecutorService;
-//import java.util.concurrent.Executors;
 //
 //import javax.swing.Box;
 //import javax.swing.BoxLayout;
@@ -50,9 +49,6 @@
 //import org.jfree.chart.ChartPanel;
 //import org.jfree.chart.JFreeChart;
 //import org.jfree.chart.axis.NumberAxis;
-//import org.jfree.chart.axis.NumberTickUnit;
-//import org.jfree.chart.axis.TickUnitSource;
-//import org.jfree.chart.axis.TickUnits;
 //import org.jfree.chart.axis.ValueAxis;
 //import org.jfree.chart.plot.PlotOrientation;
 //import org.jfree.chart.plot.XYPlot;
@@ -72,7 +68,7 @@
 // * @author ralph
 // * 
 // */
-//public class FloatingCarsAccelerationView extends JFrame implements ActionListener, ObserverInTime, Runnable {
+//public class FloatingCarsSpeedView extends JFrame implements ActionListener, ObserverInTime {
 //
 //    private final FloatingCars floatingCars;
 //
@@ -104,15 +100,11 @@
 //
 //    private final DecimalFormat format;
 //
-//    private final ExecutorService exec;
-//
-//    private double time;
-//
 //    /**
 //     * @param floatingCarPanel
 //     * @param simulator
 //     */
-//    public FloatingCarsAccelerationView() {
+//    public FloatingCarsSpeedView() {
 //        this.simulator = Simulator.getInstance();
 //        this.setLayout(new BorderLayout());
 //
@@ -128,11 +120,12 @@
 //
 //        floatingCars = simulator.getSimObservables().getFloatingCars();
 //        if (floatingCars == null) {
-//            System.out.println("error, expected floating_cars xml configuration for use case here "); // TODO handle
+//            System.out.println("error, expected floating_cars xml configuration for use case here ");
 //        } else {
 //            floatingCars.registerObserver(this);
 //            listOfFloatingCars = floatingCars.getFcdList();
 //            floatingCarsDataPoints = new HashMap<Integer, List<FloatingCarDataPoint>>();
+//            System.out.println("Alles klar fc");
 //            floatingCarsList = floatingCars.getFcdList();
 //            numberOfFloatingCars = floatingCarsList.size();
 //            series = new XYSeries[numberOfFloatingCars];
@@ -143,44 +136,36 @@
 //        }
 //
 //        setTitleChart("Floating Cars");
-//        setxAxis("x"); // TODO Label acc
-//        setyAxis("Y");
+//        setxAxis("x"); // TODO label speed
+//        setyAxis("y");
 //        final JFreeChart chart = createChart();
-//
 //        chartPanel = new ChartPanel(chart, true, false, false, true, true);
 //
 //        SwingHelper.setComponentSize(chartPanel, 200, 100);
 //
 //        chartPanel.setMouseWheelEnabled(true);
 //
-//        // chartPanel.setHorizontalAxisTrace(true);
-//        // chartPanel.setVerticalAxisTrace(true);
-//
-//        // Hide FC checkboxes
-//        final JPanel checkBoxpanel = new JPanel();
-//
 //        lblTraveledDistance = new JLabel[numberOfFloatingCars];
 //        for (int i = 0; i < numberOfFloatingCars; i++) {
-//            lblTraveledDistance[i] = new JLabel("0 m/\u00B2");
+//            lblTraveledDistance[i] = new JLabel("0 km/h");
 //            SwingHelper.setComponentSize(lblTraveledDistance[i], 68, 22);
 //        }
-//
-//        checkBoxpanel.setLayout(new BoxLayout(checkBoxpanel, BoxLayout.PAGE_AXIS));
-//
+//        // Hide FC
+//        final JPanel checkBoxpanel = new JPanel();
+//        checkBoxpanel.setLayout(new BoxLayout(checkBoxpanel, BoxLayout.Y_AXIS));
 //        checkBoxpanel.add(Box.createRigidArea(new Dimension(10, 40)));
-//
 //        for (int i = 0; i < numberOfFloatingCars; i++) {
-//            final Integer fc = floatingCarsList.get(i);
-//            final JCheckBox jcheckbox = new JCheckBox("Car " + String.valueOf(fc - 1));
-//            jcheckbox.setActionCommand(String.valueOf(fc));
+//            final JCheckBox jcheckbox = new JCheckBox("Car " + String.valueOf(floatingCarsList.get(i) - 1));
+//            jcheckbox.setActionCommand(String.valueOf(floatingCarsList.get(i)));
 //            jcheckbox.addActionListener(this);
 //            jcheckbox.setSelected(true);
 //
 //            checkBoxpanel.add(jcheckbox);
 //            checkBoxpanel.add(lblTraveledDistance[i]);
 //
+//            final Integer fc = listOfFloatingCars.get(i);
 ////            final Vehicle floatingCar = floatingCars.getVehicleContainers().get(0).getVehicles().get(fc);
-////            lblTraveledDistance[i].setText(String.valueOf(floatingCar.physicalQuantities().getAcc() + " m/s\u00B2  "));
+////            lblTraveledDistance[i].setText(String.valueOf(floatingCar.physicalQuantities().getSpeed() + " km/h"));
 ////            checkBoxpanel.add(Box.createVerticalGlue()); //TODO
 //        }
 //        final JCheckBox rendererCheckBox = new JCheckBox("dp");
@@ -194,9 +179,7 @@
 //        add(checkBoxpanel, BorderLayout.EAST);
 //        add(chartPanel, BorderLayout.CENTER);
 //
-//        format = new DecimalFormat("#.##");
-//
-//        exec = Executors.newCachedThreadPool();
+//        format = new DecimalFormat("#.#");
 //
 //        pack();
 //        setVisible(true);
@@ -208,42 +191,32 @@
 //     * @see org.movsim.utilities.ObserverInTime#notifyObserver(double)
 //     */
 //    @Override
-//    public void notifyObserver(final double time) {
-//        this.time = time;
+//    public void notifyObserver(double time) {
 //        if (floatingCars != null) {
-//
-//            // new Thread(new Runnable() {
-//            //
-//            // @Override
-//            // public void run() {
-//            // // TODO Auto-generated method stub
-//            // pullFloatingCarsData(time);
-//            //
-//            // updateView();
-//            // }
-//            // }).start();
-//            exec.execute(this);
-//
+//            pullFloatingCarsData(time);
+//            updateView();
 //        }
 //    }
 //
 //    private void updateView() {
+//        // Add Data to XYSeries
 //        for (int i = 0; i < numberOfFloatingCars; i++) {
-//            addDataToSerieAndNextToChart(series[i], floatingCarsList.get(i), i);
-//
+//            addDataToSerie(series[i], floatingCarsList.get(i), i);
 //        }
-//
-//        System.out.println("updateview() Thread: " + Thread.currentThread().getName());
-//        // this.repaint();
+//        this.repaint();
 //    }
 //
-//    private void addDataToSerieAndNextToChart(XYSeries se, int fc, int i) {
-//        final List<FloatingCarDataPoint> accData = floatingCarsDataPoints.get(fc);
+//    /**
+//     * @param i
+//     * 
+//     */
+//    private void addDataToSerie(XYSeries se, int fc, int i) {
+//        final List<FloatingCarDataPoint> speedData = floatingCarsDataPoints.get(fc);
 //
-//        final double yAx = accData.get(accData.size() - 1).getAcc(); // gets the last added. concurrency problem!
-//        final double time = accData.get(accData.size() - 1).getTime();
+//        final double yAx = speedData.get(speedData.size() - 1).getSpeed();
+//        final double time = speedData.get(speedData.size() - 1).getTime();
 //        se.add(time, yAx);
-//        lblTraveledDistance[i].setText(String.valueOf(format.format(yAx) + " m/s\u00B2  "));
+//        lblTraveledDistance[i].setText(String.valueOf(format.format(yAx) + " km/h"));
 //    }
 //
 //    private XYSeriesCollection createDataSerie() {
@@ -261,7 +234,7 @@
 //        plot = (XYPlot) chart.getPlot();
 //
 //        final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-//        rangeAxis.setStandardTickUnits(createAccelerationTickUnits());
+//        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 //
 //        final NumberAxis domainAxis = (NumberAxis) plot.getDomainAxis();
 //        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -269,8 +242,6 @@
 //        final double duration = simulator.getSimInput().getSimulationInput().getMaxSimTime();
 //        final ValueAxis vDomainAxis = plot.getDomainAxis();
 //        domainAxis.setRange(0, duration);
-//
-//        // plot.setBackgroundPaint(Color.WHITE);
 //
 //        // XYLineAndShapeRenderer renderer = (XYLineAndShapeRenderer)
 //        // plot.getRenderer();
@@ -299,10 +270,9 @@
 ////                floatingCarsDataPoints.get(fc).add(
 ////                        new FloatingCarDataPoint(time, floatingCar.physicalQuantities().getPosition(), floatingCar
 ////                                .physicalQuantities().getSpeed() * 3.6, floatingCar.physicalQuantities().getAcc()));
-////            } // TODO
+////            }//TODO
 //
 //        }
-//        System.out.println("pulldate Thread :" + Thread.currentThread().getName());
 //    }
 //
 //    public String getTitleChart() {
@@ -339,6 +309,7 @@
 //
 //        final XYItemRenderer renderer = plot.getRenderer();
 //        for (int i = 0; i < numberOfFloatingCars; i++) {
+//            System.out.println("fcin action: " + floatingCarsList.get(i));
 //            if (e.getActionCommand().equals(String.valueOf(floatingCarsList.get(i)))) {
 //                if (i >= 0) {
 //                    final boolean flag = renderer.getItemVisible(i, 0);
@@ -347,6 +318,7 @@
 //            }
 //        }
 //        if (e.getActionCommand().equals("dp")) {
+//
 //            flagDp = !flagDp;
 //            final XYLineAndShapeRenderer rendererLS = (XYLineAndShapeRenderer) plot.getRenderer();
 //            rendererLS.setShapesVisible(flagDp);
@@ -355,95 +327,4 @@
 //
 //    }
 //
-//    public static TickUnitSource createAccelerationTickUnits() {
-//
-//        final TickUnits units = new TickUnits();
-//        final DecimalFormat df0 = new DecimalFormat("0.0");
-//        final DecimalFormat df1 = new DecimalFormat("0.0");
-//        final DecimalFormat df2 = new DecimalFormat("0.0");
-//        final DecimalFormat df3 = new DecimalFormat("0.0");
-//        final DecimalFormat df4 = new DecimalFormat("0.0");
-//        final DecimalFormat df5 = new DecimalFormat("0.0");
-//        final DecimalFormat df6 = new DecimalFormat("0.0");
-//        final DecimalFormat df7 = new DecimalFormat("0.0");
-//        final DecimalFormat df8 = new DecimalFormat("0.0");
-//        final DecimalFormat df9 = new DecimalFormat("0.0");
-//        final DecimalFormat df10 = new DecimalFormat("0.0");
-//
-//        // we can add the units in any order, the MyTickUnits collection will
-//        // sort them...
-//        units.add(new NumberTickUnit(0.0000001, df1, 2));
-//        units.add(new NumberTickUnit(0.000001, df2, 2));
-//        units.add(new NumberTickUnit(0.00001, df3, 2));
-//        units.add(new NumberTickUnit(0.0001, df4, 2));
-//        units.add(new NumberTickUnit(0.001, df5, 2));
-//        units.add(new NumberTickUnit(0.01, df6, 2));
-//        units.add(new NumberTickUnit(0.1, df7, 2));
-//        units.add(new NumberTickUnit(1, df8, 2));
-//        units.add(new NumberTickUnit(10, df8, 2));
-//        units.add(new NumberTickUnit(100, df8, 2));
-//        units.add(new NumberTickUnit(1000, df8, 2));
-//        units.add(new NumberTickUnit(10000, df8, 2));
-//        units.add(new NumberTickUnit(100000, df8, 2));
-//        units.add(new NumberTickUnit(1000000, df9, 2));
-//        units.add(new NumberTickUnit(10000000, df9, 2));
-//        units.add(new NumberTickUnit(100000000, df9, 2));
-//        units.add(new NumberTickUnit(1000000000, df10, 2));
-//        units.add(new NumberTickUnit(10000000000.0, df10, 2));
-//        units.add(new NumberTickUnit(100000000000.0, df10, 2));
-//
-//        units.add(new NumberTickUnit(0.00000025, df0, 5));
-//        units.add(new NumberTickUnit(0.0000025, df1, 5));
-//        units.add(new NumberTickUnit(0.000025, df2, 5));
-//        units.add(new NumberTickUnit(0.00025, df3, 5));
-//        units.add(new NumberTickUnit(0.0025, df4, 5));
-//        units.add(new NumberTickUnit(0.025, df5, 5));
-//        units.add(new NumberTickUnit(0.25, df6, 5));
-//        units.add(new NumberTickUnit(2.5, df7, 5));
-//        units.add(new NumberTickUnit(25, df8, 5));
-//        units.add(new NumberTickUnit(250, df8, 5));
-//        units.add(new NumberTickUnit(2500, df8, 5));
-//        units.add(new NumberTickUnit(25000, df8, 5));
-//        units.add(new NumberTickUnit(250000, df8, 5));
-//        units.add(new NumberTickUnit(2500000, df9, 5));
-//        units.add(new NumberTickUnit(25000000, df9, 5));
-//        units.add(new NumberTickUnit(250000000, df9, 5));
-//        units.add(new NumberTickUnit(2500000000.0, df10, 5));
-//        units.add(new NumberTickUnit(25000000000.0, df10, 5));
-//        units.add(new NumberTickUnit(250000000000.0, df10, 5));
-//
-//        units.add(new NumberTickUnit(0.0000005, df1, 5));
-//        units.add(new NumberTickUnit(0.000005, df2, 5));
-//        units.add(new NumberTickUnit(0.00005, df3, 5));
-//        units.add(new NumberTickUnit(0.0005, df4, 5));
-//        units.add(new NumberTickUnit(0.005, df5, 5));
-//        units.add(new NumberTickUnit(0.05, df6, 5));
-//        units.add(new NumberTickUnit(0.5, df7, 5));
-//        units.add(new NumberTickUnit(5L, df8, 5));
-//        units.add(new NumberTickUnit(50L, df8, 5));
-//        units.add(new NumberTickUnit(500L, df8, 5));
-//        units.add(new NumberTickUnit(5000L, df8, 5));
-//        units.add(new NumberTickUnit(50000L, df8, 5));
-//        units.add(new NumberTickUnit(500000L, df8, 5));
-//        units.add(new NumberTickUnit(5000000L, df9, 5));
-//        units.add(new NumberTickUnit(50000000L, df9, 5));
-//        units.add(new NumberTickUnit(500000000L, df9, 5));
-//        units.add(new NumberTickUnit(5000000000L, df10, 5));
-//        units.add(new NumberTickUnit(50000000000L, df10, 5));
-//        units.add(new NumberTickUnit(500000000000L, df10, 5));
-//
-//        return units;
-//
-//    }
-//
-//    /*
-//     * (non-Javadoc)
-//     * 
-//     * @see java.lang.Runnable#run()
-//     */
-//    @Override
-//    public void run() {
-//        pullFloatingCarsData(time);
-//        updateView();
-//    }
 //}
