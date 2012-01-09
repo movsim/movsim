@@ -26,12 +26,15 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.simulator.SimulationTimeStep;
+
 /**
  * Default sink: just removes vehicles that have reached the end of a road segment.
  */
-public class TrafficSink extends TrafficFlowBase {
+public class TrafficSink implements SimulationTimeStep {
 
     // For sinks roadSegment is the source road
+    protected RoadSegment roadSegment;
     private static final double MEASURING_INTERVAL = 45.0; // seconds
     private double measuredOutflow;
     private double dQ;
@@ -43,9 +46,27 @@ public class TrafficSink extends TrafficFlowBase {
      * @param roadSegment
      */
     public TrafficSink(RoadSegment roadSegment) {
-        super(Type.SINK);
         // for TrafficSinks and similar roadSegment is the source road
         setRoadSegment(roadSegment);
+    }
+
+    protected final void setRoadSegment(RoadSegment roadSegment) {
+        // a source has its road segment set once and only once, by the road segment
+        // in its setSource method
+        assert this.roadSegment == null;
+        assert roadSegment != null;
+        // assert roadSegment.source() == this || type != Type.SOURCE;
+
+        this.roadSegment = roadSegment;
+    }
+
+    /**
+     * Returns this traffic source's source road segment.
+     * 
+     * @return this traffic source's source road segment
+     */
+    public final RoadSegment sourceRoad() {
+        return roadSegment;
     }
 
     /**

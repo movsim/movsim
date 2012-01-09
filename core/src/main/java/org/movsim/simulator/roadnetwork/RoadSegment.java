@@ -99,8 +99,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     // Sources and Sinks
     private TrafficSource trafficSource;
-    // sink is of type TrafficFlowBase to allow the sink to be a TrafficFlowOnRamp
-    private TrafficFlowBase sink;
+    private TrafficSink sink;
     private int removedVehicleCount; // used for calculating traffic flow
     private RoadMapping roadMapping;
 
@@ -239,7 +238,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the traffic sink
      */
-    public final TrafficFlowBase sink() {
+    public final TrafficSink sink() {
         return sink;
     }
 
@@ -249,7 +248,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param sink
      *            the traffic sink
      */
-    public final void setSink(TrafficFlowBase sink) {
+    public final void setSink(TrafficSink sink) {
         this.sink = sink;
     }
 
