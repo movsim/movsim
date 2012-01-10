@@ -34,6 +34,7 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
 import org.slf4j.Logger;
@@ -704,14 +705,17 @@ public class Vehicle {
         // then increment s with *new* v (second order: -0.5 a dt^2)
 
         midPositionOld = midPosition;
-
+        
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             final int advance = (int) (midPosition + dt * speed + 0.5); 
             totalTraveledDistance += (advance-midPosition);
             midPosition = advance;
 
-        } else {
+        } else if (longitudinalModel != null && (longitudinalModel.modelName() == ModelName.NEWELL)) {
+            //TODO Newell position update: first speed calculation than position
+        }
+        else {
             // continuous microscopic models and iterated maps
             if (speed < 0) {
                 speed = 0;

@@ -17,11 +17,12 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -146,11 +147,6 @@ public class Newell extends LongitudinalModelBase {
         final double vNew = Math.min(Math.max((s - s0) / dtLocal, 0), v0Local);
 
         double aWanted = (vNew - v) / dtLocal;
-
-        // workaround to avoid crash
-        if (s / v < dt) {
-            aWanted = -10000000;
-        }
 
         return aWanted;
     }
