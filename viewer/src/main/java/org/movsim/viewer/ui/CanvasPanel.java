@@ -49,7 +49,7 @@ public class CanvasPanel extends JPanel {
         this.resourceBundle = resourceBundle;
         this.simulator = simulator;
 
-        // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore
+        // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore. Seems working fine with linux. Check windows and mac!
 
         try {
             // Execute a job on the event-dispatching thread; creating this applet's GUI.
