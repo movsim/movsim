@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -40,7 +40,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     static final long serialVersionUID = 1L;
 
     public static enum Scenario {
-        NONE, ONRAMPFILE, STARTSTOPFILE
+        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE
     }
 
     private Scenario scenario = Scenario.NONE;
@@ -156,16 +156,16 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
-            simulator.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");        
-            initialScale = 1;
-            setScale(initialScale);
-            inInitialSpeedUp = false;
+            simulator.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");
+            // initialScale = 1;
+            // setScale(initialScale);
+            // inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            simulator.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");   
-            initialScale = 1;
-            setScale(initialScale);
-            inInitialSpeedUp = false;
+            simulator.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");
+            break;
+        case CLOVERLEAFFILE:
+            simulator.loadScenarioFromXml("cloverleaf_ACC", "../sim/buildingBlocks/");
             break;
         default:
             return;

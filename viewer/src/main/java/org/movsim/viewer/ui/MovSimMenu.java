@@ -157,7 +157,6 @@ public class MovSimMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
-//                canvasPanel.controller.commandOnrampFile();
                 uiDefaultReset();
             }
         });
@@ -227,7 +226,8 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.CLOVERLEAFFILE);
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemCloverLeaf);
@@ -271,7 +271,6 @@ public class MovSimMenu extends JPanel {
         menuItemSpeedLimit.setEnabled(false);
         menuItemTrafficLight.setEnabled(false);
         menuItemLaneClosing.setEnabled(false);
-        menuItemCloverLeaf.setEnabled(false);
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
         menuItemRingRoad.setEnabled(false);
