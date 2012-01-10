@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <SCENARIO network_filename="cleaf.xodr">
   <VEHICLES>
     <VEHICLE label="ACC1" length="6" b_max="9">
       <LONGITUDINAL_MODEL>
-        <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+        <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
         <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1" />
@@ -14,7 +14,7 @@
     <!-- trucks -->
     <VEHICLE label="ACC2" length="16" b_max="9">
       <LONGITUDINAL_MODEL>
-        <ACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+        <ACC v0="25" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" coolness="1" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
         <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.3" politeness="0.1" />
