@@ -75,7 +75,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     static final long serialVersionUID = 1L;
     protected static final boolean DEBUG = false;
 
-    protected Simulator simulator;
+    protected final Simulator simulator;
     protected final RoadNetwork roadNetwork;
 
     /**

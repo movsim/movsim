@@ -41,7 +41,7 @@ public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final ResourceBundle resourceBundle;
-    Simulator simulator;
+    final Simulator simulator;
     TrafficCanvasScenarios trafficCanvas;
     TrafficCanvasKeyListener controller;
 
