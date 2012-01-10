@@ -75,7 +75,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     static final long serialVersionUID = 1L;
     protected static final boolean DEBUG = false;
 
-    protected final Simulator simulator;
+    protected Simulator simulator;
     protected final RoadNetwork roadNetwork;
 
     /**
@@ -404,7 +404,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawRoadSegments(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            System.out.println("draw roadSegment: " + roadSegment);
+            // System.out.println("draw roadSegment: " + roadSegment);
             assert roadMapping != null;
             drawRoadSegment(g, roadMapping);
             drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!

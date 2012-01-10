@@ -61,7 +61,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     static final long serialVersionUID = 1L;
 
-    protected final SimulationRunnable simulationRunnable;
+    protected SimulationRunnable simulationRunnable;
     protected long totalAnimationTime;
 
     // drawing support

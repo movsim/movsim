@@ -41,7 +41,7 @@ public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private final ResourceBundle resourceBundle;
-    final Simulator simulator;
+    Simulator simulator;
     TrafficCanvasScenarios trafficCanvas;
     TrafficCanvasKeyListener controller;
 
@@ -66,7 +66,7 @@ public class CanvasPanel extends JPanel {
 
     }
 
-    protected void initApp() {
+    public void initApp() {
         setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
 
         trafficCanvas = new TrafficCanvasScenarios(simulator.getSimulationRunnable(), simulator);

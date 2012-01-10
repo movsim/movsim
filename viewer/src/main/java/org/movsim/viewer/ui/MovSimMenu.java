@@ -41,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
@@ -512,27 +513,6 @@ public class MovSimMenu extends JPanel {
 
         menuItemPreferences.setEnabled(false);
         return menuFile;
-    }
-
-    public JMenuItem onrampAction(final String string) {
-        return new JMenuItem(new AbstractAction((String) resourceBundle.getObject(string)) {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                handleExampleOnramp(actionEvent, string);
-            }
-        });
-    }
-
-    protected void handleExampleOnramp(ActionEvent actionEvent, String string) {
-         System.out.println(string);
-         System.exit(0);
-//         final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
-//         movsimViewerFacade.loadScenarioFromXml(string);
-//         trafficUi.getController().commandOnrampFile();
-         uiDefaultReset();
-
     }
 
     public void startbuttonToPauseAtScenarioChange() {

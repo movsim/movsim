@@ -28,6 +28,7 @@ package org.movsim.viewer.graphics;
 
 import java.awt.Graphics2D;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 
@@ -156,15 +157,18 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
+            simulator.getRoadNetwork().clear();
             simulator.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");
             // initialScale = 1;
             // setScale(initialScale);
             // inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
+            simulator.getRoadNetwork().clear();
             simulator.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");
             break;
         case CLOVERLEAFFILE:
+            simulator.getRoadNetwork().clear();
             simulator.loadScenarioFromXml("cloverleaf_ACC", "../sim/buildingBlocks/");
             break;
         default:
