@@ -43,6 +43,7 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SpeedLimit;
 import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
@@ -657,10 +658,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             RoadMapping.PosTheta posTheta;
 
             // draw the road segment sink, if there is one
-            if (roadSegment.sink() != null) {
+            final TrafficSink sink = roadSegment.sink();
+            if (sink != null) {
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
+
+                String string = "outflow: " + sink.measuredOutflow();
+                g.drawString(string, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+                sink.measuredOutflow();
             }
         }
     }

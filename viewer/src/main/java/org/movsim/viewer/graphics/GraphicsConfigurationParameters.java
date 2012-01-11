@@ -46,8 +46,8 @@ public interface GraphicsConfigurationParameters {
     public static final boolean TREIBIS_CARS = false;
 
     public static final boolean DRAW_ROADID = true;
-    public static final boolean DRAWSOURCES = false;
-    public static final boolean DRAWSINKS = false;
+    public static final boolean DRAWSOURCES = true;
+    public static final boolean DRAWSINKS = true;
     public static final boolean DRAWSPEEDLIMITS = true;
     
 }
