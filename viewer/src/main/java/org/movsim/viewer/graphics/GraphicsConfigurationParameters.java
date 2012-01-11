@@ -36,7 +36,6 @@ public interface GraphicsConfigurationParameters {
     final double INITIAL_SCALE = 1.0 / Math.sqrt(2);
     final int INITIAL_OFFSET_X = 0;
     final int INITIAL_OFFSET_Y = 0;
-    final boolean DRAW_ROADID = true;
 
     static final double INITIAL_SPEEDUP_DURATION = 120.0;
     static final double INITIAL_SPEEDUP_DURATION_OFF_ON_RAMP = 440.0;
@@ -45,4 +44,9 @@ public interface GraphicsConfigurationParameters {
     static final int DEFAULT_SLEEP_TIME_MS = 40;
 
     public static final boolean TREIBIS_CARS = false;
+
+    public static final boolean DRAW_ROADID = true;
+    public static final boolean DRAWSOURCES = false;
+    public static final boolean DRAWSINKS = false;
+    
 }

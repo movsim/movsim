@@ -105,10 +105,6 @@ public class CanvasPanel extends JPanel {
         this.repaint();
     }
 
-    public void setDrawRoadId(boolean drawRoadId) {
-        trafficCanvas.setDrawRoadId(drawRoadId);
-    }
-
     public void quit() {
         if (trafficCanvas.isStopped() == false) {
             trafficCanvas.stop();

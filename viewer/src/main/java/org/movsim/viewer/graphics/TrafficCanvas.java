@@ -108,20 +108,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     // colors
     protected Color roadEdgeColor = Color.black;
-
     protected Color roadLineColor = Color.white;
-
     protected Color roadInhomogeneityColor = Color.darkGray;
-
     protected Color sourceColor = Color.white;
-
     protected Color sinkColor = Color.black;
-
     protected Color sourceJunctionColor = Color.cyan;
-
     protected Color sinkJunctionColor = Color.blue;
 
     protected boolean drawRoadId = GraphicsConfigurationParameters.DRAW_ROADID;
+    protected boolean drawSouces = GraphicsConfigurationParameters.DRAWSOURCES;
+    protected boolean drawSinks = GraphicsConfigurationParameters.DRAWSINKS;
 
     // brake light handling
     protected Color brakeLightColor = Color.RED;
@@ -232,6 +228,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     public void setDrawRoadId(boolean drawRoadId) {
         this.drawRoadId = drawRoadId;
+        repaint();
+    }
+    
+    public void setDrawSources(boolean b) {
+        this.drawSouces = b;
+        repaint();
+    }
+    
+    public void setDrawSinks(boolean b) {
+        this.drawSinks = b;
         repaint();
     }
 
@@ -393,6 +399,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         if (drawRoadId) {
             drawRoadSectionIds(g);
+        }
+        if (drawSouces) {
+            drawSources(g);
+        }
+        if (drawSinks) {
+            drawSinks(g);
         }
     }
 
@@ -574,33 +586,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    /**
-     * Draws the sources and sinks.
-     * 
-     * @param g
-     */
-    private void drawRoadId(Graphics2D g) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            final RoadMapping roadMapping = roadSegment.roadMapping();
-            assert roadMapping != null;
-            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            RoadMapping.PosTheta posTheta;
-
-            // draw the road segment source, if there is one
-            if (roadSegment.getTrafficSource() != null) {
-                // g.setColor(roadSegment.source().type() == TrafficFlowBase.Type.SOURCE ? sourceColor : sourceJunctionColor);
-                posTheta = roadMapping.startPos();
-                g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-            }
-
-            // draw the road segment sink, if there is one
-            if (roadSegment.sink() != null) {
-                // g.setColor(roadSegment.sink().type() == TrafficFlowBase.Type.SINK ? sinkColor : sinkJunctionColor);
-                posTheta = roadMapping.endPos();
-                g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-            }
-        }
-    }
 
     /**
      * Draws the ids for the road sections, sources and sinks.
@@ -662,6 +647,50 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // }
         }
     }
+    
+    /**
+     * Draws the sources and sinks.
+     * 
+     * @param g
+     */
+    private void drawSources(Graphics2D g) {
+        for (final RoadSegment roadSegment : roadNetwork) {
+            final RoadMapping roadMapping = roadSegment.roadMapping();
+            assert roadMapping != null;
+            final int radius = (int)((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            RoadMapping.PosTheta posTheta;
+
+            // draw the road segment source, if there is one
+            if (roadSegment.getTrafficSource() != null) {
+                g.setColor(sourceColor);
+                posTheta = roadMapping.startPos();
+                g.fillOval((int)posTheta.x - radius / 2, (int)posTheta.y - radius / 2, radius,
+                        radius);
+            }
+        }
+    }
+    /**
+     * Draws the sources and sinks.
+     * 
+     * @param g
+     */
+    private void drawSinks(Graphics2D g) {
+        for (final RoadSegment roadSegment : roadNetwork) {
+            final RoadMapping roadMapping = roadSegment.roadMapping();
+            assert roadMapping != null;
+            final int radius = (int)((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            RoadMapping.PosTheta posTheta;
+
+            // draw the road segment sink, if there is one
+            if (roadSegment.sink() != null) {
+                g.setColor(sinkColor);
+                posTheta = roadMapping.endPos();
+                g.fillOval((int)posTheta.x - radius / 2, (int)posTheta.y - radius / 2, radius,
+                        radius);
+            }
+        }
+    }
+    
 
     // ============================================================================================
     // SimulationRunnable callbacks

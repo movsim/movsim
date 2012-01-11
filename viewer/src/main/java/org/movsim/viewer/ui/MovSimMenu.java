@@ -41,7 +41,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import org.movsim.simulator.Simulator;
 import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
@@ -334,6 +333,7 @@ public class MovSimMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
+                        handleDrawSources(actionEvent);
                     }
                 });
         viewMenu.add(cbSources);
@@ -344,6 +344,7 @@ public class MovSimMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
+                        handleDrawSinks(actionEvent);
                     }
                 });
         viewMenu.add(cbSinks);
@@ -389,16 +390,16 @@ public class MovSimMenu extends JPanel {
                     }
                 });
         viewMenu.add(cbRoutesSpatioTemporal);
-
+        
         cbRoutesSpatioTemporal.setEnabled(false);
-        cbSources.setEnabled(false);
-        cbSinks.setEnabled(false);
         cbflowConservingBootleNecks.setEnabled(false);
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
         cbSpeedLimits.setEnabled(false);
 
         cbDrawRoadIds.setSelected(GraphicsConfigurationParameters.DRAW_ROADID);
+        cbSources.setSelected(GraphicsConfigurationParameters.DRAWSOURCES);
+        cbSinks.setSelected(GraphicsConfigurationParameters.DRAWSINKS);
         return viewMenu;
     }
 
@@ -609,9 +610,27 @@ public class MovSimMenu extends JPanel {
     protected void handleDrawRoadIds(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
         if (cb.isSelected()) {
-            canvasPanel.setDrawRoadId(true);
+            canvasPanel.trafficCanvas.setDrawRoadId(true);
         } else {
-            canvasPanel.setDrawRoadId(false);
+            canvasPanel.trafficCanvas.setDrawRoadId(false);
+        }
+    }
+    
+    protected void handleDrawSources(ActionEvent actionEvent) {
+        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
+        if (cb.isSelected()) {
+            canvasPanel.trafficCanvas.setDrawSources(true);
+        } else {
+            canvasPanel.trafficCanvas.setDrawSources(false);
+        }
+    }
+    
+    protected void handleDrawSinks(ActionEvent actionEvent) {
+        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
+        if (cb.isSelected()) {
+            canvasPanel.trafficCanvas.setDrawSinks(true);
+        } else {
+            canvasPanel.trafficCanvas.setDrawSinks(false);
         }
     }
 
