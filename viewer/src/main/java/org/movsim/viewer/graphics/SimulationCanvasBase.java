@@ -213,8 +213,7 @@ public abstract class SimulationCanvasBase extends Canvas {
         }
         bufferGraphics.setTransform(transform);
         if (backgroundChanged) {
-            // if the background has been changed, then its content needs to be
-            // repainted
+            // if the background has been changed, then its content needs to be repainted
             drawBackground(bufferGraphics);
             backgroundChanged = false;
         }

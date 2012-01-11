@@ -43,6 +43,7 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SpeedLimit;
 import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
@@ -159,7 +160,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     protected VehicleTipWindow vehicleTipWindow;
     private boolean withTreibisCars = GraphicsConfigurationParameters.TREIBIS_CARS;
-   
 
     public TrafficCanvas(SimulationRunnable simulationRunnable, Simulator simulator) {
         super(simulationRunnable);
@@ -232,17 +232,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         this.drawRoadId = drawRoadId;
         repaint();
     }
-    
+
     public void setDrawSources(boolean b) {
         this.drawSouces = b;
         repaint();
     }
-    
+
     public void setDrawSinks(boolean b) {
         this.drawSinks = b;
         repaint();
     }
-    
+
     public void setDrawSpeedLimits(boolean b) {
         this.drawSpeedLimits = b;
         repaint();
@@ -401,7 +401,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     @Override
     protected void drawBackground(Graphics2D g) {
         drawRoadSegments(g);
-        
+
         if (drawSpeedLimits) {
             drawSpeedLimits(g);
         }
@@ -595,7 +595,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-
     /**
      * Draws the ids for the road sections, sources and sinks.
      * 
@@ -606,57 +605,19 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
-            // String string;
-            // final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            String string;
+            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
 
-            // if there is a traffic source, then draw its id
-            // final TrafficSource source = roadSection.source();
-            // TrafficSource source = null;
-            // if (source != null) {
-            // final int id = source.id();
-            // if (id != TrafficFlowBase.ID_NOT_SET) {
-            // if (source.type() == TrafficFlowBase.Type.SOURCE) {
-            //                                    string = "S" + id; //$NON-NLS-1$
-            // } else {
-            //                                    string = "R" + source.sinkRoad().id() + "J" + id; //$NON-NLS-1$ //$NON-NLS-2$
-            // }
-            // g.drawString(string, (int)(posTheta.x) + radius / 2,
-            // (int)(posTheta.y)
-            // + radius / 2);
-            // }
-            // }
             // draw the road segment's id
             final int fontHeight = 12;
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight); //$NON-NLS-1$
             g.setFont(font);
             g.setColor(Color.BLACK);
             g.drawString("R" + roadSegment.userId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
-
-            // if there is a traffic sink, then draw its id
-            // final TrafficFlowBase sink = roadSection.sink();
-            // TrafficFlowBase sink = null;
-            // if (sink != null) {
-            // posTheta = roadMapping.map(roadMapping.roadLength());
-            // final int id = sink.id();
-            // if (id != TrafficFlowBase.ID_NOT_SET) {
-            // if (sink.type() == TrafficFlowBase.Type.SINK) {
-            //                        string = "S" + id; //$NON-NLS-1$
-            // } else {
-            //                        string = "R" + sink.sourceRoad().id() + "J" + id; //$NON-NLS-1$ //$NON-NLS-2$
-            // }
-            // g.drawString(string, (int)(posTheta.x) + radius / 2,
-            // (int)(posTheta.y)
-            // + radius / 2);
-            // }
-            // // ensure text shows up on sink
-            // g.setColor(sink.type() == TrafficFlowBase.Type.SINK ? sourceColor
-            // : Color.BLACK);
-            //                g.drawString("R" + roadSection.id(), (int)(posTheta.x), (int)(posTheta.y)); //$NON-NLS-1$
-            // }
         }
     }
-    
+
     /**
      * Draws the sources and sinks.
      * 
@@ -666,18 +627,23 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
-            final int radius = (int)((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             RoadMapping.PosTheta posTheta;
 
             // draw the road segment source, if there is one
-            if (roadSegment.getTrafficSource() != null) {
+            final TrafficSource trafficSource = roadSegment.getTrafficSource();
+            if (trafficSource != null) {
                 g.setColor(sourceColor);
                 posTheta = roadMapping.startPos();
-                g.fillOval((int)posTheta.x - radius / 2, (int)posTheta.y - radius / 2, radius,
-                        radius);
+                g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
+
+                g.setColor(Color.BLACK);
+                String string = "inflow: " + trafficSource.getTotalInflow(simulationTime());
+                g.drawString(string, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }
         }
     }
+
     /**
      * Draws the sources and sinks.
      * 
@@ -687,19 +653,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
-            final int radius = (int)((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             RoadMapping.PosTheta posTheta;
 
             // draw the road segment sink, if there is one
             if (roadSegment.sink() != null) {
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
-                g.fillOval((int)posTheta.x - radius / 2, (int)posTheta.y - radius / 2, radius,
-                        radius);
+                g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
             }
         }
     }
-    
 
     // ============================================================================================
     // SimulationRunnable callbacks
