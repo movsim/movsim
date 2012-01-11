@@ -98,6 +98,8 @@ public class TrafficCanvasKeyListener implements KeyListener {
     }
 
     public void commandReset() {
+        trafficCanvas.roadNetwork.clear();
+        trafficCanvas.simulator.initialize();
         trafficCanvas.reset();
 
     }
