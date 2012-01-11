@@ -113,6 +113,8 @@ public class LocalizationStrings extends ListResourceBundle {
             { "lblDeltaTime", "update time: " },
             { "timeWarpTooltip", "The speed-up of the simulation against the simulation time." },
             { "lblTimeWarp", "time warp:" },
+            { "vehicleCountTooltip", "The total number of vehicles in the current simulation." },
+            { "lblVehicleCount", "vehicles:" },
             { "traveltimeTooltip", "The (smoothed) travel time of route " },
             { "traveltime", "travel time " },
             { "highway", "highway" },

@@ -28,6 +28,7 @@ package org.movsim.viewer.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -40,6 +41,7 @@ import javax.swing.SwingConstants;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -90,6 +92,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     private JLabel lblScenario;
 
     private JLabel lblCurrentScenario;
+
+    private JLabel lblVehicleCount;
+
+    private JLabel lblVehicleCountDisplay;
 
     public StatusPanel(ResourceBundle resourceBundle, Simulator simulator) {
         this.resourceBundle = resourceBundle;
@@ -153,11 +159,31 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblTimeWarpDisplay.setFont(font);
         lblTimeWarpDisplay.setToolTipText(timeWarpTooltip);
         lblTimeWarpDisplay.setPreferredSize(new Dimension(42, 22));
+        
+        // vehicle count
+        final String vehicleCountTooltip = resourceBundle.getString("vehicleCountTooltip");
+        lblVehicleCount = new JLabel(resourceBundle.getString("lblVehicleCount"));
+        lblVehicleCount.setFont(font);
+        lblVehicleCount.setToolTipText(vehicleCountTooltip);
+
+
+        lblVehicleCountDisplay = new JLabel(String.valueOf(vehicleCount()));
+        lblVehicleCountDisplay.setFont(font);
+        lblVehicleCountDisplay.setToolTipText(vehicleCountTooltip);
+        lblVehicleCountDisplay.setPreferredSize(new Dimension(42, 22));
 
         if (withTravelTimes) {
             createTravelTimeLabels(font);
         }
 
+    }
+
+    private int vehicleCount() {
+        int vehicleCount = 0;
+        for (final RoadSegment roadSegment : simulator.getRoadNetwork()) {
+            vehicleCount += roadSegment.totalVehicleCount();
+        }
+        return vehicleCount;
     }
 
     private void createTravelTimeLabels(final Font f) {
@@ -197,6 +223,11 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(lblDeltaTime);
         add(lblDeltaTimeDisplay);
+        
+        add(Box.createRigidArea(new Dimension(6, 22)));
+
+        add(lblVehicleCount);
+        add(lblVehicleCountDisplay);
 
         add(Box.createRigidArea(new Dimension(6, 22)));
 
@@ -230,6 +261,8 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             lblTimeDisplay.setText(StringHelper.getTime(time, true, true, true));
             lblDeltaTimeDisplay.setText(String.valueOf(simulationRunnable.timeStep()) + " s");
             lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
+
+            lblVehicleCountDisplay.setText(String.valueOf(vehicleCount()));
 
             // die TravelTimes haben eigentlich einen anderen notifier
             if (withTravelTimes) {

@@ -123,7 +123,7 @@ public class TrafficSource implements SimulationTimeStep {
      *            the time
      * @return the total inflow
      */
-    private double getTotalInflow(double time) {
+    public double getTotalInflow(double time) {
         // inflow over all lanes
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         final int nLanes = roadSegment.laneCount();
