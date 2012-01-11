@@ -169,7 +169,8 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.OFFRAMPFILE);
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemOffRamp);
@@ -267,7 +268,6 @@ public class MovSimMenu extends JPanel {
         });
         scenarioMenu.add(menuItemRingRoad);
 
-        menuItemOffRamp.setEnabled(false);
         menuItemFlowConservingBottleNeck.setEnabled(false);
         menuItemSpeedLimit.setEnabled(false);
         menuItemTrafficLight.setEnabled(false);

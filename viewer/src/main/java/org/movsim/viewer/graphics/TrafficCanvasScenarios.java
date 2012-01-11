@@ -41,7 +41,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     static final long serialVersionUID = 1L;
 
     public static enum Scenario {
-        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE
+        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE
     }
 
     private Scenario scenario = Scenario.NONE;
@@ -157,7 +157,13 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
-            simulator.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");
+            simulator.loadScenarioFromXml("onramp_ACC", "../sim/buildingBlocks/");
+            // initialScale = 1;
+            // setScale(initialScale);
+            // inInitialSpeedUp = false;
+            break;
+        case OFFRAMPFILE:
+            simulator.loadScenarioFromXml("offramp_ACC", "../sim/buildingBlocks/");
             // initialScale = 1;
             // setScale(initialScale);
             // inInitialSpeedUp = false;
