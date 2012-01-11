@@ -249,7 +249,7 @@ public class LocalizationStrings extends ListResourceBundle {
             { "AboutTitle", "About" },
             {
                     "AboutText",
-                    "Version Viewer: 0.1" + " " + "\n" + "Version movsim.org: 1.1" + " " + "\n"
+                    "Version Viewer: 1.0" + " " + "\n" + "Version movsim.org: 1.2" + " " + "\n"
                             + "=========================================================================\n"
                             + "authors: Arne Kesting (TomTom), Ralph Germ, Martin Budden, Martin Treiber\n"
                             + "email: mail@akesting.de\n" + "(c) 2010, 2011, 2012\n"
