@@ -657,7 +657,7 @@ public class MovSimMenu extends JPanel {
             final int ret = fileChooser.showOpenDialog(canvasPanel);
             if (ret == JFileChooser.APPROVE_OPTION) {
                 final File file = fileChooser.getSelectedFile();
-                if (file != null) {
+                if (file != null && file.isFile()) {
                     // if the user has selected a file, then load it
                     if (editor) {
                         new Editor(resourceBundle, file);
