@@ -42,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 import org.movsim.simulator.Simulator;
+import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
@@ -658,16 +659,12 @@ public class MovSimMenu extends JPanel {
                 final File file = fileChooser.getSelectedFile();
                 if (file != null) {
                     // if the user has selected a file, then load it
-                    // final String filename =
-                    // FilenameUtils.removeExtension(file.getAbsolutePath());
-                    // trafficUi.loadScenarioAndRun(filename);
                     if (editor) {
                         new Editor(resourceBundle, file);
                     } else {
-                        canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
-                        // final MovsimViewerFacade movsimViewerFacade = MovsimViewerFacade.getInstance();
-                        // movsimViewerFacade.loadScenarioFromXml(file);
-                        // uiDefaultReset();
+                        canvasPanel.simulator.loadScenarioFromXml(FileUtils.getProjectName(file), FileUtils.getCanonicalPathWithoutFilename(file));
+                        uiDefaultReset();
+                        canvasPanel.trafficCanvas.forceRepaintBackground();
                     }
                 }
             }
