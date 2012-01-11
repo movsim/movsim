@@ -157,18 +157,15 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         switch (scenario) {
         case ONRAMPFILE:
-            simulator.getRoadNetwork().clear();
             simulator.loadScenarioFromXml("onramp_IDM", "../sim/buildingBlocks/");
             // initialScale = 1;
             // setScale(initialScale);
             // inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            simulator.getRoadNetwork().clear();
             simulator.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");
             break;
         case CLOVERLEAFFILE:
-            simulator.getRoadNetwork().clear();
             simulator.loadScenarioFromXml("cloverleaf_ACC", "../sim/buildingBlocks/");
             break;
         default:

@@ -107,7 +107,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
-        final Map<String, RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
+        final Map<String, RoadInput> roadInputMap = simInput.getRoadInput();
         if (loadedRoadNetwork == false && roadInputMap.size() == 1) {
             defaultTestingRoadMapping(roadInputMap); // TODO rg: This has to be corrected/deleted at some point
         } else {
@@ -149,9 +149,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      *            the scenario
      */
     public void loadScenarioFromXml(String scenario, String path) {
+        roadNetwork.clear();
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
-        projectMetaData.setOutputPath(path);
+        // projectMetaData.setOutputPath(path);
         initialize();
     }
 
@@ -174,7 +175,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData, heterogenInputData);
+        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData,
+                heterogenInputData);
         // output fundamental diagrams
         final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
@@ -241,13 +243,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param roadSegment
      * @param roadinput
      */
-    private static void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput, VehicleGenerator vehGenerator) {
+    private static void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput,
+            VehicleGenerator vehGenerator) {
         // set up the traffic source
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
         final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
         if (trafficSourceData.withLogging()) {
-        	trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+            trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
         }
         roadSegment.setTrafficSource(trafficSource);
 
@@ -318,15 +321,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 veh.setVehNumber(vehicleNumber);
                 ++vehicleNumber;
                 // testwise:
-                veh.setFrontPosition(Math.round(ic.getX()/veh.physicalQuantities().getxScale()));
-                veh.setSpeed(Math.round(ic.getSpeed()/veh.physicalQuantities().getvScale()));
-                final int lane = ic.getInitLane();  // TODO check lane numbering in ic input
+                veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
+                veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
+                final int lane = ic.getInitLane(); // TODO check lane numbering in ic input
                 veh.setLane(Lane.LANE1);
                 roadSegment.addVehicle(veh);
                 // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
-                logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f", veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
-                if(veh.getLongitudinalModel().isCA()){
-                    logger.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh.physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
+                logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
+                        veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
+                if (veh.getLongitudinalModel().isCA()) {
+                    logger.info(String.format(
+                            "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
+                                    .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
                 }
             }
         }
@@ -338,18 +344,20 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public void runToCompletion() {
-        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", simulationRunnable.simulationTime(), projectName);
+        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}",
+                simulationRunnable.simulationTime(), projectName);
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(), simulationRunnable.iterationCount());
+        simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(),
+                simulationRunnable.iterationCount());
         simulationRunnable.runToCompletion();
     }
 
     @Override
     public void simulationComplete(double simulationTime) {
-        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", simulationTime,
-                simulationTime / 3600, projectName));
+        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
+                simulationTime, simulationTime / 3600, projectName));
         final double elapsedTime = 0.001 * (System.currentTimeMillis() - startTimeMillis);
         logger.info(String.format(
                 "time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime,
