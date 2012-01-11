@@ -118,6 +118,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected boolean drawRoadId = GraphicsConfigurationParameters.DRAW_ROADID;
     protected boolean drawSouces = GraphicsConfigurationParameters.DRAWSOURCES;
     protected boolean drawSinks = GraphicsConfigurationParameters.DRAWSINKS;
+    protected boolean drawSpeedLimits = GraphicsConfigurationParameters.DRAWSPEEDLIMITS;
 
     // brake light handling
     protected Color brakeLightColor = Color.RED;
@@ -158,6 +159,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     protected VehicleTipWindow vehicleTipWindow;
     private boolean withTreibisCars = GraphicsConfigurationParameters.TREIBIS_CARS;
+   
 
     public TrafficCanvas(SimulationRunnable simulationRunnable, Simulator simulator) {
         super(simulationRunnable);
@@ -238,6 +240,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     
     public void setDrawSinks(boolean b) {
         this.drawSinks = b;
+        repaint();
+    }
+    
+    public void setDrawSpeedLimits(boolean b) {
+        this.drawSpeedLimits = b;
         repaint();
     }
 
@@ -394,8 +401,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     @Override
     protected void drawBackground(Graphics2D g) {
         drawRoadSegments(g);
-
-        drawSpeedLimits(g);
+        
+        if (drawSpeedLimits) {
+            drawSpeedLimits(g);
+        }
 
         if (drawRoadId) {
             drawRoadSectionIds(g);

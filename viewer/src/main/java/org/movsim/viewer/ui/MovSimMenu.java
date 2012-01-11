@@ -355,6 +355,7 @@ public class MovSimMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
+                        handleDrawSpeedLimits(actionEvent);
                     }
                 });
         viewMenu.add(cbSpeedLimits);
@@ -395,8 +396,8 @@ public class MovSimMenu extends JPanel {
         cbflowConservingBootleNecks.setEnabled(false);
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
-        cbSpeedLimits.setEnabled(false);
-
+        
+        cbSpeedLimits.setSelected(GraphicsConfigurationParameters.DRAWSPEEDLIMITS);
         cbDrawRoadIds.setSelected(GraphicsConfigurationParameters.DRAW_ROADID);
         cbSources.setSelected(GraphicsConfigurationParameters.DRAWSOURCES);
         cbSinks.setSelected(GraphicsConfigurationParameters.DRAWSINKS);
@@ -631,6 +632,15 @@ public class MovSimMenu extends JPanel {
             canvasPanel.trafficCanvas.setDrawSinks(true);
         } else {
             canvasPanel.trafficCanvas.setDrawSinks(false);
+        }
+    }
+    
+    protected void handleDrawSpeedLimits(ActionEvent actionEvent) {
+        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
+        if (cb.isSelected()) {
+            canvasPanel.trafficCanvas.setDrawSpeedLimits(true);
+        } else {
+            canvasPanel.trafficCanvas.setDrawSpeedLimits(false);
         }
     }
 
