@@ -399,6 +399,16 @@ public class FileUtils {
         }
         return string;
     }
+    
+    public static String getCanonicalPathWithoutFilename(File file) {
+        String string = null;
+        try {
+            string = file.getCanonicalPath().substring(0, file.getCanonicalPath().indexOf(file.getName()));
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return string;
+    }
 
     /**
      * @param xodrFilename
@@ -422,5 +432,11 @@ public class FileUtils {
             e.printStackTrace();
         }
         return path;
+    }
+
+    public static String getProjectName(File file) {
+        String name = null;
+        name = file.getName().substring(0, file.getName().indexOf(".xml"));
+        return name;
     }
 }
