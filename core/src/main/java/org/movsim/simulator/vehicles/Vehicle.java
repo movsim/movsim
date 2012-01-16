@@ -713,7 +713,18 @@ public class Vehicle {
             midPosition = advance;
 
         } else if (longitudinalModel != null && (longitudinalModel.modelName() == ModelName.NEWELL)) {
-            //TODO Newell position update: first speed calculation than position
+            //TODO Newell position update: first speed calculation than position. Check!
+            if (speed < 0) {
+                speed = 0;
+            }
+            speed += dt * acc;
+            final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
+            midPosition += advance;
+            totalTraveledDistance += advance;
+            if (speed < 0) {
+                speed = 0;
+                acc = 0;
+            }
         }
         else {
             // continuous microscopic models and iterated maps
