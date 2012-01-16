@@ -128,6 +128,13 @@ public class SwingHelper {
         }
         return (Frame) c;
     }
+    
+    public static JFrame getJFrame(Component c) {
+        while (c != null && !(c instanceof JFrame)) {
+            c = c.getParent();
+        }
+        return (JFrame) c;
+    }
 
     /**
      * hue values (see, e.g., http://help.adobe.com/en_US/Photoshop/11.0/images/wc_HSB.png): h=0:red, h=0.2: yellow, h=0.35: green, h=0.5:

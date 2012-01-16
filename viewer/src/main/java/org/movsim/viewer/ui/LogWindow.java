@@ -132,12 +132,12 @@ public class LogWindow extends JFrame {
         LogWindow.jTextArea = jTextArea;
     }
 
-    public void turnOffAllLoggers() {
+    public static void turnOffAllLoggers() {
         changeLevelOfAllLoggersTo(Level.OFF);
     }
 
     @SuppressWarnings("unchecked")
-    public void changeLevelOfAllLoggersTo(Level level) {
+    public static void changeLevelOfAllLoggersTo(Level level) {
         final Enumeration<org.apache.log4j.Logger> loggers = LogManager.getCurrentLoggers();
         while (loggers.hasMoreElements()) {
             final org.apache.log4j.Logger l = loggers.nextElement();

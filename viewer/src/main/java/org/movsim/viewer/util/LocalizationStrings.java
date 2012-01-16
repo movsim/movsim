@@ -106,9 +106,9 @@ public class LocalizationStrings extends ListResourceBundle {
             { "ToolBarTitle", "MovSim toolbar" },
 
             // StatusPanel
-            { "lblScenario", "current scenario: " },
-            { "lblSimTime", "simulation time: " },
-            { "simTimeTooltip", "The time of current simulation since start." },
+            { "lblScenario", "scenario: " },
+            { "lblSimTime", "time: " },
+            { "simTimeTooltip", "The time of the current simulation since start." },
             { "deltaTimeTooltip", "The simulation's numerical update (integration) time step." },
             { "lblDeltaTime", "update time: " },
             { "timeWarpTooltip", "The speed-up of the simulation against the simulation time." },
