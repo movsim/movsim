@@ -718,7 +718,7 @@ public class Vehicle {
                 speed = 0;
             }
             speed += dt * acc;
-            final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
+            final double advance = speed * dt * acc * dt * dt;
             midPosition += advance;
             totalTraveledDistance += advance;
             if (speed < 0) {
