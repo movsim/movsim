@@ -90,7 +90,7 @@ public class Applet extends JApplet {
      * @param resourceBundle
      */
     private void addMenu(ResourceBundle resourceBundle) {
-        final MenuApplet trafficMenus = new MenuApplet(this, canvasPanel, statusPanel, resourceBundle);
+        final AppletMenu trafficMenus = new AppletMenu(this, canvasPanel, statusPanel, resourceBundle);
         trafficMenus.initMenus();
     }
 

@@ -20,7 +20,7 @@ import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
-public class MenuApplet extends JPanel {
+public class AppletMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Applet frame;
     final CanvasPanel canvasPanel;
@@ -36,7 +36,7 @@ public class MenuApplet extends JPanel {
     // private FloatingCarsSpeedView fcSpeed;
     // private FloatingCarsTrajectoriesView fcTrajectories;
 
-    public MenuApplet(Applet mainFrame, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(Applet mainFrame, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
         this.statusPanel = statusPanel;
