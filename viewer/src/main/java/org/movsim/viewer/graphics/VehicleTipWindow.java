@@ -93,7 +93,7 @@ class VehicleTipWindow extends Window {
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
                 vehicle.getLane() + 1, 
-                vehiclePhysical.getMidPosition(),
+                vehiclePhysical.getFrontPosition(),
                 vehiclePhysical.getSpeed() * 3.6,
                 vehiclePhysical.getAcc(),
                 vehiclePhysical.getMidPosition(), 1, 1, 1);

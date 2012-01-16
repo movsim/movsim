@@ -25,16 +25,15 @@
  */
 package org.movsim.simulator;
 
-
 /**
  * <p>
- * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to
- * coordinate with an application UI thread.
+ * Class to encapsulate a simulation thread. Includes the necessary synchronization and callbacks to coordinate with an application UI
+ * thread.
  * </p>
  * 
  * <p>
- * This class is generic and can be used for any type of simulation: it can be used with any
- * simulation object that implements the SimulationTimeStep interface.
+ * This class is generic and can be used for any type of simulation: it can be used with any simulation object that implements the
+ * SimulationTimeStep interface.
  * </p>
  * 
  */
@@ -65,18 +64,18 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     private UpdateDrawingCallback updateDrawingCallback;
     private HandleExceptionCallback handleExceptionCallback;
 
-//    private class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
-//        public DefaultExceptionHandler() {
-//        }
-//        @Override
-//        public void uncaughtException(final Thread t, final Throwable e) {
-//            if (callbacks != null) {
-//                callbacks.handleException((Exception)e);
-//            }
-//            e.printStackTrace();
-//        }
-//     }
-//     private final DefaultExceptionHandler defaultExceptionHandler;
+    // private class DefaultExceptionHandler implements Thread.UncaughtExceptionHandler {
+    // public DefaultExceptionHandler() {
+    // }
+    // @Override
+    // public void uncaughtException(final Thread t, final Throwable e) {
+    // if (callbacks != null) {
+    // callbacks.handleException((Exception)e);
+    // }
+    // e.printStackTrace();
+    // }
+    // }
+    // private final DefaultExceptionHandler defaultExceptionHandler;
 
     // Times
     private int sleepTime_ms;
@@ -139,13 +138,13 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     public void setSleepTime(int sleepTime_ms) {
         this.sleepTime_ms = sleepTime_ms;
         sleepTimeUsed = sleepTime_ms;
-        dt = DEFAULT_TIMESTEP_S;
-        while (sleepTimeUsed > 40) {
-            // 40ms, so less than 25 frames per second which would be too jerky
-            // so reduce the sleep time and also reduce the timestep for the simulation
-            sleepTimeUsed /= 2;
-            dt /= 2;
-        }
+        // dt = DEFAULT_TIMESTEP_S;
+        // while (sleepTimeUsed > 40) {
+        // 40ms, so less than 25 frames per second which would be too jerky
+        // so reduce the sleep time and also reduce the timestep for the simulation
+        // sleepTimeUsed /= 2;
+        // dt /= 2;
+        // }
     }
 
     /**
@@ -159,6 +158,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns the time warp.
+     * 
      * @return
      */
     public double getTimewarp() {
@@ -167,6 +167,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * Returns the smoothed time warp.
+     * 
      * @return
      */
     public double getSmoothedTimewarp() {
@@ -248,21 +249,19 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
 
     /**
      * <p>
-     * Main thread loop. During the loop
-     * <code>timeStep(dt, simulationTime, iterationCount)<code> is called for the simulation object.
+     * Main thread loop. During the loop <code>timeStep(dt, simulationTime, iterationCount)<code> is called for the simulation object.
      * Typically the simulation object is an iterable collection of elements, each with their
      * own timestep method.
      * </p>
      * 
      * <p>
-     * This method is must be synchronized (using <code>dataLock</code>) (normally with the
-     * <code>drawForeground</code> method), so that elements are not updated, added or removed from
-     * the simulation while they are being drawn.
+     * This method is must be synchronized (using <code>dataLock</code>) (normally with the <code>drawForeground</code> method), so that
+     * elements are not updated, added or removed from the simulation while they are being drawn.
      * </p>
      * 
      * <p>
-     * <code>updateStatus(simulationTime)</code> is called after the simulation object has been
-     * updated to allow the application to make updates before the repaint is called.
+     * <code>updateStatus(simulationTime)</code> is called after the simulation object has been updated to allow the application to make
+     * updates before the repaint is called.
      * </p>
      * 
      */
@@ -315,7 +314,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         actualTimewarp = dt / (0.001 * (timeAfterSim_ms - lastUpdateTime_ms));
         lastUpdateTime_ms = timeAfterSim_ms;
 
-        smoothedTimewarp = smoothedTimewarp == 0.0 ? actualTimewarp :
-            betaTimewarp * smoothedTimewarp + (1.0 - betaTimewarp) * actualTimewarp;
+        smoothedTimewarp = smoothedTimewarp == 0.0 ? actualTimewarp : betaTimewarp * smoothedTimewarp
+                + (1.0 - betaTimewarp) * actualTimewarp;
     }
 }
