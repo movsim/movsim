@@ -186,22 +186,28 @@ public class XmlReaderSimInput {
 
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
-        String relativePath;
-        relativePath = checkIfAttributeHasPath(networkFileName);
+        if (projectMetaData.isXmlFromResources()) {
+            projectMetaData.setXodrFilename(networkFileName.substring(networkFileName.lastIndexOf("/")+1));
+            projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/")+1));
+            System.out.println("filename: " + networkFileName.substring(networkFileName.lastIndexOf("/")+1));
+            System.out.println("path: " + networkFileName.substring(0, networkFileName.lastIndexOf("/")+1));
+//            System.exit(0);
+        } else {
+            String relativePath;
+            relativePath = checkIfAttributeHasPath(networkFileName);
 
-        if (relativePath.equals("")) {
-            networkFileName = checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(networkFileName);
+            if (relativePath.equals("")) {
+                networkFileName = checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(networkFileName);
+            }
+
+            if (!FileUtils.fileExists(networkFileName)) {
+                logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
+                System.exit(-1); // TODO check from resources
+            }
+
+            projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
+            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename("/sim/buildingBlocks/"));
         }
-
-        final boolean networkFileExits = FileUtils.fileExists(networkFileName);
-
-        if (!projectMetaData.isXmlFromResources() && !networkFileExits) {
-            logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
-            System.exit(-1); // TODO check from resources
-        }
-
-        projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
-        projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
     }
 
     /**
