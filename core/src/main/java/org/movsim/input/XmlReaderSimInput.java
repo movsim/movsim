@@ -189,9 +189,6 @@ public class XmlReaderSimInput {
         if (projectMetaData.isXmlFromResources()) {
             projectMetaData.setXodrFilename(networkFileName.substring(networkFileName.lastIndexOf("/")+1));
             projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/")+1));
-            System.out.println("filename: " + networkFileName.substring(networkFileName.lastIndexOf("/")+1));
-            System.out.println("path: " + networkFileName.substring(0, networkFileName.lastIndexOf("/")+1));
-//            System.exit(0);
         } else {
             String relativePath;
             relativePath = checkIfAttributeHasPath(networkFileName);
@@ -206,7 +203,7 @@ public class XmlReaderSimInput {
             }
 
             projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
-            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename("/sim/buildingBlocks/"));
+            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
         }
     }
 

@@ -155,7 +155,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         if (this.scenario == scenario) {
             return; // TODO proper restart
         }
-
         final String path;
         switch (scenario) {
         case ONRAMPFILE:
@@ -178,6 +177,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             break;
         case CLOVERLEAFFILE:
             path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
+            System.out.println("path: "+ path);
             simulator.loadScenarioFromXml("cloverleaf_ACC", path);
             break;
         default:
