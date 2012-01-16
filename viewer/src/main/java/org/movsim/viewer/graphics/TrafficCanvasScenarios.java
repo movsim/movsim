@@ -27,6 +27,7 @@
 package org.movsim.viewer.graphics;
 
 import java.awt.Graphics2D;
+import java.io.File;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationRunnable;
@@ -155,24 +156,29 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             return; // TODO proper restart
         }
 
+        final String path;
         switch (scenario) {
         case ONRAMPFILE:
-            simulator.loadScenarioFromXml("onramp_ACC", "../sim/buildingBlocks/");
+            path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
+            simulator.loadScenarioFromXml("onramp_ACC", path);
             // initialScale = 1;
             // setScale(initialScale);
             // inInitialSpeedUp = false;
             break;
         case OFFRAMPFILE:
-            simulator.loadScenarioFromXml("offramp_ACC", "../sim/buildingBlocks/");
+            path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
+            simulator.loadScenarioFromXml("offramp_ACC", path);
             // initialScale = 1;
             // setScale(initialScale);
             // inInitialSpeedUp = false;
             break;
         case STARTSTOPFILE:
-            simulator.loadScenarioFromXml("startStop_IDM", "../sim/bookScenarioStartStop/");
+            path = ".."+File.separator+"sim"+File.separator+"bookScenarioStartStop"+File.separator;
+            simulator.loadScenarioFromXml("startStop_IDM", path);
             break;
         case CLOVERLEAFFILE:
-            simulator.loadScenarioFromXml("cloverleaf_ACC", "../sim/buildingBlocks/");
+            path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
+            simulator.loadScenarioFromXml("cloverleaf_ACC", path);
             break;
         default:
             return;
