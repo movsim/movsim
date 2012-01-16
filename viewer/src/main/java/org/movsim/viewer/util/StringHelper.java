@@ -29,25 +29,6 @@ import java.util.Formatter;
 
 public class StringHelper {
 
-    public static String replace(String str) {
-        return str.replaceAll(",", ".");
-    }
-
-    public static String getTrimmed(String str) {
-        return str.trim();
-    }
-
-    public static double getDouble(String str) {
-        return Double.parseDouble(str);
-    }
-
-    public static float getFloat(String str) {
-        return Float.parseFloat(str);
-    }
-
-    public static float getInt(String str) {
-        return Integer.parseInt(str);
-    }
 
     public static String getTime(double time_s, boolean withH, boolean withM, boolean withS) {
         final int time = (int) time_s;

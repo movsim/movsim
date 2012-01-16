@@ -254,6 +254,6 @@ public class LocalizationStrings extends ListResourceBundle {
                     "Version Viewer: 1.0" + " " + "\n" + "Version movsim.org: 1.2" + " " + "\n"
                             + "=========================================================================\n"
                             + "authors: Arne Kesting (TomTom), Ralph Germ, Martin Budden, Martin Treiber\n"
-                            + "email: mail@akesting.de\n" + "(c) 2010, 2011, 2012\n"
+                            + "email: movsim.org@gmail.com\n" + "(c) 2010, 2011, 2012\n"
                             + "=========================================================================\n" } };
 }

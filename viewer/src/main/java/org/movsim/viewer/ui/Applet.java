@@ -68,8 +68,8 @@ public class Applet extends JApplet {
             }
         });
 
-        this.setSize(1200, 800);
-        this.resize(1195, 795);
+        this.setSize(1280, 800);
+        this.resize(1274, 794);
 
         statusPanel.setWithProgressBar(false);
         simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());

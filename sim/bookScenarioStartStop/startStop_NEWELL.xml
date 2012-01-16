@@ -4,15 +4,15 @@
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
 <SCENARIO network_filename="startStop.xodr">
   <VEHICLES>
-    <VEHICLE label="NEWELL1" length="6" b_max="9">
+    <VEHICLE label="NEWELL1" length="5" b_max="9">
       <LONGITUDINAL_MODEL>
-        <NEWELL v0="15" s0="10" />
+        <NEWELL v0="15" s0="5" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL />
     </VEHICLE>
-    <VEHICLE label="Obstacle" length="8" b_max="9">
+    <VEHICLE label="Obstacle" length="5" b_max="9">
       <LONGITUDINAL_MODEL>
-        <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+        <NEWELL v0="0" s0="5" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL />
     </VEHICLE>

@@ -535,6 +535,7 @@ public class MenuApplet extends JPanel {
         } else {
             canvasPanel.trafficCanvas.setDrawRoadId(false);
         }
+        canvasPanel.trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSources(ActionEvent actionEvent) {
@@ -544,6 +545,7 @@ public class MenuApplet extends JPanel {
         } else {
             canvasPanel.trafficCanvas.setDrawSources(false);
         }
+        canvasPanel.trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSinks(ActionEvent actionEvent) {
@@ -553,6 +555,7 @@ public class MenuApplet extends JPanel {
         } else {
             canvasPanel.trafficCanvas.setDrawSinks(false);
         }
+        canvasPanel.trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSpeedLimits(ActionEvent actionEvent) {
@@ -562,6 +565,7 @@ public class MenuApplet extends JPanel {
         } else {
             canvasPanel.trafficCanvas.setDrawSpeedLimits(false);
         }
+        canvasPanel.trafficCanvas.forceRepaintBackground();
     }
 
     public void uiDefaultReset() {
