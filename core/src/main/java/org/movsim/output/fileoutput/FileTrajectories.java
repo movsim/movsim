@@ -171,7 +171,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
             final int N = laneSegment.vehicleCount();
             for (int i = 0; i < N; i++) {
                 final Vehicle me = laneSegment.getVehicle(i);
-                if ((me.getMidPosition() >= x_start_interval && me.getMidPosition() <= x_end_interval)) {
+                if ((me.getFrontPosition() >= x_start_interval && me.getFrontPosition() <= x_end_interval)) {
                     final Vehicle frontVeh = laneSegment.frontVehicle(me);
                     writeCarData(writer, i, me, frontVeh);
                 }
@@ -194,7 +194,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
     private void writeCarData(PrintWriter writer, int index, final Vehicle me, final Vehicle frontVeh) {
         final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
         final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
-        writer.printf(outputFormat, time, me.getLane(), me.getMidPosition(), me.getSpeed(), me.getAcc(), s, dv,
+        writer.printf(outputFormat, time, me.getLane(), me.getFrontPosition(), me.getSpeed(), me.getAcc(), s, dv,
                 me.getLabel(), me.getId());
         writer.flush();
     }

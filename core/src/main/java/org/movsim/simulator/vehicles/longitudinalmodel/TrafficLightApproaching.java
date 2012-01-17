@@ -72,7 +72,7 @@ public class TrafficLightApproaching {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        distanceToTrafficlight = trafficLight.position() - me.getMidPosition() - 0.5 * me.getLength();
+        distanceToTrafficlight = trafficLight.position() - me.getFrontPosition();
 
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
@@ -91,20 +91,15 @@ public class TrafficLightApproaching {
                 // TODO: decision logic while approaching yellow traffic light
                 // ignore traffic light if accTL exceeds two times comfortable
                 // deceleration or if kinematic braking is not possible anymore
-                final double bKinMax = 6; // typical value: bIDM <
-                                          // comfortBrakeDecel < bKinMax < bMax
+                final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
                 final double comfortBrakeDecel = 4;
                 final double brakeDist = (speed * speed) / (2 * bKinMax);
                 if (trafficLight.isGreenRed()
                         && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
-                                - me.getMidPosition()))) {
+                                - me.getFrontPosition()))) {
                     // ignore traffic light
                     considerTrafficLight = false;
                 }
-                // if(me.getVehNumber()==1){
-                // logger.debug("considerTrafficLight=true: distToTrafficlight={}, accTrafficLight={}",
-                // distanceToTrafficlight, accTrafficLight);
-                // }
             }
         }
     }

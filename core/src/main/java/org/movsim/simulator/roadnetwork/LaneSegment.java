@@ -228,7 +228,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
-        assert vehicle.getMidPosition() >= 0.0;
+        assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
         assert assertInvariant();
@@ -264,7 +264,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     public void appendVehicle(Vehicle vehicle) {
-        assert vehicle.getMidPosition() >= 0.0;
+        assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
@@ -326,7 +326,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // return a copy of the front vehicle on the source road segment, with its
                 // position set relative to the current road segment
                 final Vehicle rearVehicle = new Vehicle(sourceFrontVehicle);
-                rearVehicle.setMidPosition(rearVehicle.getMidPosition() - sourceLaneSegment.roadLength());
+                rearVehicle.setFrontPosition(rearVehicle.getFrontPosition() - sourceLaneSegment.roadLength());
                 return rearVehicle;
             }
         }
@@ -351,7 +351,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         // return a copy of the rear vehicle on the sink road segment, with its position
         // set relative to the current road segment
         final Vehicle ret = new Vehicle(sinkRearVehicle);
-        ret.setMidPosition(ret.getMidPosition() + roadSegment.roadLength());
+        ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
         return ret;
     }
 
@@ -372,7 +372,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         // return a copy of the rear vehicle on the sink lane segment, with its position
         // set relative to the current road segment
         final Vehicle ret = new Vehicle(vehicle);
-        ret.setMidPosition(ret.getMidPosition() + roadSegment.roadLength());
+        ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
         return ret;
     }
 
@@ -418,7 +418,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // return a copy of the rear vehicle on the sink road segment, with its position
                 // set relative to the current road segment
                 final Vehicle frontVehicle = new Vehicle(sinkRearVehicle);
-                frontVehicle.setMidPosition(frontVehicle.getMidPosition() + roadSegment.roadLength());
+                frontVehicle.setFrontPosition(frontVehicle.getFrontPosition() + roadSegment.roadLength());
                 return frontVehicle;
             }
         }

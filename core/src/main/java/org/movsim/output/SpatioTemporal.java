@@ -122,8 +122,8 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
             final int laneVehicleCount = laneSegment.vehicleCount();
             for (int j = 0; j < laneVehicleCount; ++j) {
                 vMicro[i] = laneSegment.getVehicle(j).getSpeed();
-                xMicro[i] = laneSegment.getVehicle(j).getMidPosition();
-                lengths[i] = laneSegment.getVehicle(j).getMidPosition();
+                xMicro[i] = laneSegment.getVehicle(j).getFrontPosition();
+                lengths[i] = laneSegment.getVehicle(j).getFrontPosition();
                 ++i;
             }
         }

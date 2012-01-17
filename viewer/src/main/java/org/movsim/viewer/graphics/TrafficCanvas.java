@@ -336,8 +336,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
                 PaintRoadMapping.setClipPath(g, roadMapping, clipPath);
                 for (final Vehicle vehicle : roadSegment) {
-                    final double vehOffset = 0; // roadSection.getRoadLength() - roadSection.getRampMergingLength();
-                    drawVehicle(g, simulationTime, roadMapping, vehicle, vehOffset);
+                    drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
             }
 
@@ -349,24 +348,20 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private void drawVehicle(Graphics2D g, final double simulationTime, final RoadMapping roadMapping,
-            final Vehicle vehicle, double vehPosOffset) {
+            final Vehicle vehicle) {
         // draw vehicle polygon at new position
-
         final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
-
         if (withTreibisCars) {
-            // PixCoordsMain pvs = new PixCoordsMain(pos[i], lane[i], 0, 0);
             final Color carcolor = vehicleColor(vehicle, simulationTime);
             final double vehLength = vehicle.physicalQuantities().getLength();
             final double vehWidth = vehicle.physicalQuantities().getWidth();
             final double scale = 1;// 0.2; // no scaling yet
 
             final CarImage2D car2d = new CarImage2D(vehWidth, vehLength, carcolor, scale);
-            // car2d.setPositionPix(pvs.xPoints[0], pvs.yPoints[0]);
             car2d.setPositionPix((int) (polygon.xPoints[0] + polygon.xPoints[1]) / 2,
                     (int) (polygon.yPoints[0] + polygon.yPoints[1]) / 2);
 
-            final double theta = roadMapping.map(vehicle.getMidPosition()).theta();
+            final double theta = roadMapping.map(vehicle.getFrontPosition()).theta();
             final double phi = Math.toDegrees(theta);
             car2d.setDirection(phi);
             car2d.draw(g);

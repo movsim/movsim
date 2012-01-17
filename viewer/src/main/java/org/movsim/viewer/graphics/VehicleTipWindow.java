@@ -96,7 +96,7 @@ class VehicleTipWindow extends Window {
                 vehiclePhysical.getFrontPosition(),
                 vehiclePhysical.getSpeed() * 3.6,
                 vehiclePhysical.getAcc(),
-                vehiclePhysical.getMidPosition(), 1, 1, 1);
+                vehiclePhysical.getFrontPosition(), 1, 1, 1);
         // }
         final Label label = new Label(string, Label.LEFT);
         label.setBackground(new Color(200, 220, 240));
