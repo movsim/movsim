@@ -36,6 +36,7 @@ import java.util.TimerTask;
 
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.ConversionUtilities;
 
 class VehicleTipWindow extends Window {
     /**
@@ -94,7 +95,7 @@ class VehicleTipWindow extends Window {
         string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
                 vehicle.getLane() + 1, 
                 vehiclePhysical.getFrontPosition(),
-                vehiclePhysical.getSpeed() * 3.6,
+                vehiclePhysical.getSpeed() * ConversionUtilities.MS_TO_KMH,
                 vehiclePhysical.getAcc(),
                 vehiclePhysical.getFrontPosition(), 1, 1, 1);
         // }
