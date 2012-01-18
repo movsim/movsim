@@ -46,6 +46,7 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -634,8 +635,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
 
                 g.setColor(Color.BLACK);
-                String string = "inflow: " + trafficSource.getTotalInflow(simulationTime());
-                g.drawString(string, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+                String inflowString =
+                        "inflow: " + (int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())) + " veh/h";
+                g.drawString(inflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }
         }
     }
@@ -658,9 +660,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-
-                String string = "outflow: " + sink.measuredOutflow();
-                g.drawString(string, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+                String outflowString = "outflow: " + (int) (ConversionUtilities.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
+                g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
                 sink.measuredOutflow();
             }
         }
