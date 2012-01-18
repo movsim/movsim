@@ -39,8 +39,9 @@ accelerationOutput = outputPath.baseFile.".a.eps"
 fuelOutput = outputPath.baseFile.".fuel.eps"
 fuelOutput100 = outputPath.baseFile.".fuel100.eps"
 
-print "fundOutput =",fundOutput
-print "please make sure that directory figs/ already exists"
+print "fundOutput = ",fundOutput
+print "please make sure that output directory ".outputPath." already exists"
+
 
 
 ########  Languages  #####################################
