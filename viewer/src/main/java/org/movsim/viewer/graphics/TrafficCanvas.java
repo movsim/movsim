@@ -397,6 +397,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     @Override
     protected void drawBackground(Graphics2D g) {
+        if (drawSouces) {
+            drawSources(g);
+        }
+        if (drawSinks) {
+            drawSinks(g);
+        }
         drawRoadSegments(g);
 
         if (drawSpeedLimits) {
@@ -406,12 +412,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         if (drawRoadId) {
             drawRoadSectionIds(g);
         }
-        if (drawSouces) {
-            drawSources(g);
-        }
-        if (drawSinks) {
-            drawSinks(g);
-        }
+        
     }
 
     /**
