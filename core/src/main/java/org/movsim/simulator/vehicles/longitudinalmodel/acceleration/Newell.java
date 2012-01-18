@@ -26,7 +26,6 @@ import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO paper reference ...
 /**
  * The Class Newell.
  */

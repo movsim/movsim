@@ -598,13 +598,13 @@ public class Vehicle {
             frontPosition = advance;
 
         } else if (longitudinalModel != null && (longitudinalModel.modelName() == ModelName.NEWELL)) {
-            // Newell position update: first speed calculation than position. Different to continuous microscopic models and iterated maps.
+            // Newell position update: Different to continuous microscopic models and iterated maps.
             // See chapter 10.7 english book version
             if (speed < 0) {
                 speed = 0;
             }
+            final double advance = speed * dt + acc * dt * dt;
             speed += dt * acc;
-            final double advance = speed * dt * acc * dt * dt;
             frontPosition += advance;
             totalTraveledDistance += advance;
             if (speed < 0) {
