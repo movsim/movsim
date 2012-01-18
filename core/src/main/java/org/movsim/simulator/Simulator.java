@@ -349,6 +349,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
+        // TODO FloatingCars do not need this call. First output line for t=0 is written twice to file
         simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(),
                 simulationRunnable.iterationCount());
         simulationRunnable.runToCompletion();
