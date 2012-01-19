@@ -6,18 +6,18 @@
   <VEHICLES>
     <VEHICLE label="NEWELL1" length="5" b_max="9">
       <LONGITUDINAL_MODEL>
-        <NEWELL v0="15" s0="5" />
+        <NEWELL v0="15" s0="1" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL />
     </VEHICLE>
-    <VEHICLE label="Obstacle" length="5" b_max="9">
+    <VEHICLE label="Obstacle" length="10" b_max="9">
       <LONGITUDINAL_MODEL>
-        <NEWELL v0="0" s0="5" />
+        <NEWELL v0="0" s0="3" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL />
     </VEHICLE>
   </VEHICLES>
-  <SIMULATION dt="1.0" duration="7200" fixed_seed="true" seed="42">
+  <SIMULATION dt="1.0" duration="7200" fixed_seed="true" seed="42" crash_exit="false">
     <TRAFFIC_COMPOSITION write_fund_diagrams="true">
       <VEHICLE_TYPE label="NEWELL1" fraction="1" />
       <VEHICLE_TYPE label="Obstacle" fraction="0" />
