@@ -66,7 +66,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         super(resourceBundle.getString("ToolBarTitle"));
         this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
-        
+
         setRollover(true);
         controller = canvasPanel.controller;
         addButtons(this);
@@ -76,27 +76,21 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         final StatusControlCallbacks statusCallbacks = new TrafficCanvas.StatusControlCallbacks() {
             @Override
             public void showStatusMessage(String message) {
-                // showStatus(message);
             }
 
             @Override
             @SuppressWarnings({ "synthetic-access" })
             public void stateChanged() {
-                // final String buttonString;
                 if (canvasPanel.trafficCanvas.isStopped()) {
-                    // buttonString = resourceBundle.getString("Start");
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
                             + ".png", 32, 32));
                 } else if (canvasPanel.trafficCanvas.isPaused()) {
-                    // buttonString = resourceBundle.getString("Resume");
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
                             + ".png", 32, 32));
                 } else {
-                    // buttonString = resourceBundle.getString("Pause");
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_pause"
                             + ".png", 32, 32));
                 }
-                // buttonStart.setText(buttonString);
             }
         };
 
@@ -139,9 +133,6 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         button = makeNavigationButton("colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
                 resourceBundle.getString("VehicleColors"));
         toolBar.add(button);
-//        button = makeNavigationButton("vehicles", VEHICLE_CHANGE, resourceBundle.getString("VehiclesTip"),
-//                resourceBundle.getString("Vehicles"));
-//        toolBar.add(button);
     }
 
     protected JButton makeNavigationButton(String imageName, String actionCommand, String toolTipText, String altText) {
