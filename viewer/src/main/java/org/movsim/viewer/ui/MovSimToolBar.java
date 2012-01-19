@@ -57,7 +57,6 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
     static final private String RECENTER = "recenter";
     static final private String VEHICLE_COLORS = "vehicle colors";
     static final private String RESET = "reset";
-    static final private String VEHICLE_CHANGE = "vehicle change";
 
     JButton buttonStart;
     private final ResourceBundle resourceBundle;
