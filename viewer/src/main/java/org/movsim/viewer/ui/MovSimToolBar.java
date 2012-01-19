@@ -128,9 +128,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
                 resourceBundle.getString("ZoomOut"));
         toolBar.add(button);
 
-        toolBar.addSeparator(new Dimension(20, 0));
-
-        button = makeNavigationButton("colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
+        button = makeNavigationButton("button_vehicle_colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
                 resourceBundle.getString("VehicleColors"));
         toolBar.add(button);
     }
