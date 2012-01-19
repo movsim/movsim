@@ -43,8 +43,6 @@ public interface GraphicsConfigurationParameters {
     static final int INITIAL_SLEEP_TIME = 26;
     static final int DEFAULT_SLEEP_TIME_MS = 40;
 
-    public static final boolean TREIBIS_CARS = false;
-
     public static final boolean DRAW_ROADID = true;
     public static final boolean DRAWSOURCES = true;
     public static final boolean DRAWSINKS = true;

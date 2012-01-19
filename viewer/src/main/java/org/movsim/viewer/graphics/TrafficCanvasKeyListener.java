@@ -104,11 +104,6 @@ public class TrafficCanvasKeyListener implements KeyListener {
 
     }
 
-    public void commandVehicleChange() {
-        trafficCanvas.toggleWithTreibisCars();
-        trafficCanvas.repaint();
-    }
-
     public void commandCycleVehicleColors() {
         if (trafficCanvas.velocities == null) {
             trafficCanvas.setVelocityColors();

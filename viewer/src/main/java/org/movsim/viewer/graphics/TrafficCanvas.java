@@ -161,7 +161,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected long vehicleToHighlightId = -1;
 
     protected VehicleTipWindow vehicleTipWindow;
-    private boolean withTreibisCars = GraphicsConfigurationParameters.TREIBIS_CARS;
 
     public TrafficCanvas(SimulationRunnable simulationRunnable, Simulator simulator) {
         super(simulationRunnable);
@@ -212,18 +211,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         accelerationColors = new Color[] { Color.WHITE, Color.RED, Color.BLACK, Color.GREEN };
         assert velocities.length == velocityColors.length - 1;
         assert accelerations.length == accelerationColors.length - 1;
-    }
-
-    public boolean isWithTreibisCars() {
-        return withTreibisCars;
-    }
-
-    public void setWithTreibisCars(boolean withTreibisCars) {
-        this.withTreibisCars = withTreibisCars;
-    }
-
-    public void toggleWithTreibisCars() {
-        this.withTreibisCars = !withTreibisCars;
     }
 
     public boolean isDrawRoadId() {
@@ -352,40 +339,24 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final Vehicle vehicle) {
         // draw vehicle polygon at new position
         final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
-        if (withTreibisCars) {
-            final Color carcolor = vehicleColor(vehicle, simulationTime);
-            final double vehLength = vehicle.physicalQuantities().getLength();
-            final double vehWidth = vehicle.physicalQuantities().getWidth();
-            final double scale = 1;// 0.2; // no scaling yet
+        vehiclePath.reset();
 
-            final CarImage2D car2d = new CarImage2D(vehWidth, vehLength, carcolor, scale);
-            car2d.setPositionPix((int) (polygon.xPoints[0] + polygon.xPoints[1]) / 2,
-                    (int) (polygon.yPoints[0] + polygon.yPoints[1]) / 2);
-
-            final double theta = roadMapping.map(vehicle.getFrontPosition()).theta();
-            final double phi = Math.toDegrees(theta);
-            car2d.setDirection(phi);
-            car2d.draw(g);
-        } else {
+        vehiclePath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
+        vehiclePath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
+        vehiclePath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);
+        vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
+        vehiclePath.closePath();
+        g.setPaint(vehicleColor(vehicle, simulationTime));
+        g.fill(vehiclePath);
+        if (vehicle.isBrakeLightOn()) {
+            // if the vehicle is decelerating then display the
             vehiclePath.reset();
-
-            vehiclePath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
-            vehiclePath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
-            vehiclePath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);
+            // points 2 & 3 are at the rear of vehicle
+            vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
             vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
             vehiclePath.closePath();
-            g.setPaint(vehicleColor(vehicle, simulationTime));
-            g.fill(vehiclePath);
-            if (vehicle.isBrakeLightOn()) {
-                // if the vehicle is decelerating then display the
-                vehiclePath.reset();
-                // points 2 & 3 are at the rear of vehicle
-                vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
-                vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
-                vehiclePath.closePath();
-                g.setPaint(brakeLightColor);
-                g.draw(vehiclePath);
-            }
+            g.setPaint(brakeLightColor);
+            g.draw(vehiclePath);
         }
     }
 
@@ -412,7 +383,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         if (drawRoadId) {
             drawRoadSectionIds(g);
         }
-        
+
     }
 
     /**
@@ -636,8 +607,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
 
                 g.setColor(Color.BLACK);
-                String inflowString =
-                        "inflow: " + (int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())) + " veh/h";
+                String inflowString = "inflow: "
+                        + (int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime()))
+                        + " veh/h";
                 g.drawString(inflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }
         }
@@ -661,7 +633,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                String outflowString = "outflow: " + (int) (ConversionUtilities.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
+                String outflowString = "outflow: " + (int) (ConversionUtilities.INVS_TO_INVH * sink.measuredOutflow())
+                        + " veh/h";
                 g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
                 sink.measuredOutflow();
             }

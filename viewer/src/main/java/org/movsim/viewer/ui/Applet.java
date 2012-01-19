@@ -36,7 +36,7 @@ public class Applet extends JApplet {
     public void init() {
 
         setLayout(new BorderLayout());
-        initLocalizationAndLogger();
+        initLogger();
         // final JTextArea logArea = new JTextArea();
         // LogWindow.setupLog4JAppender(logArea);
         // LogWindow.turnOffAllLoggers();
@@ -69,13 +69,14 @@ public class Applet extends JApplet {
         });
 
         this.setSize(1280, 800);
-        this.resize(1274, 794);
-
+        
         statusPanel.setWithProgressBar(false);
         simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
         canvasPanel.trafficCanvas.reset();
         canvasPanel.trafficCanvas.start();
         statusPanel.reset();
+
+        canvasPanel.resized();
         super.init();
     }
 
@@ -114,9 +115,7 @@ public class Applet extends JApplet {
     /**
      * Inits the localization and logger.
      */
-    private void initLocalizationAndLogger() {
-        // Locale.setDefault(Locale.US);
-
+    private void initLogger() {
         // Log Levels: DEBUG < INFO < WARN < ERROR;
         final URL log4jConfig = Applet.class.getResource("/config/log4japplet.properties");
         PropertyConfigurator.configure(log4jConfig);

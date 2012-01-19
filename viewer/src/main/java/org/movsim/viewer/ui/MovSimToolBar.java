@@ -34,9 +34,9 @@ import java.util.ResourceBundle;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvas.StatusControlCallbacks;
+import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,8 +190,6 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         } else if (e.getActionCommand().equals(RESET)) {
             statusPanel.reset();
             controller.commandReset();
-        } else if (e.getActionCommand().equals(VEHICLE_CHANGE)) {
-            controller.commandVehicleChange();
         }
     }
 }
