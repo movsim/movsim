@@ -60,15 +60,21 @@ public class Applet extends JApplet {
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
 
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                canvasPanel.resized();
-                canvasPanel.repaint();
-            }
-        });
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                canvasPanel.resized();
+//                canvasPanel.repaint();
+//            }
+//        });
 
         this.setSize(1280, 800);
+        this.resize(1280, 800);
+        canvasPanel.setSize(1280, 800);
+        canvasPanel.trafficCanvas.setSize(1280, 800);
+
+        canvasPanel.resized();
+        canvasPanel.repaint();
         
         statusPanel.setWithProgressBar(false);
         simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
@@ -76,7 +82,6 @@ public class Applet extends JApplet {
         canvasPanel.trafficCanvas.start();
         statusPanel.reset();
 
-        canvasPanel.resized();
         super.init();
     }
 

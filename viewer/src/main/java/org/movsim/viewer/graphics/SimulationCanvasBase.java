@@ -205,7 +205,11 @@ public abstract class SimulationCanvasBase extends Canvas {
     @Override
     public void update(Graphics g) {
         // final long timeBeforePaint_ms = System.currentTimeMillis();
-
+        if (backgroundBuffer == null) {
+            System.out.println("backgroundbuffer == null");
+            setSize(1200, 700);
+            return;
+        }
         final Graphics2D bufferGraphics = (Graphics2D) backgroundBuffer.getGraphics();
         if (backgroundChanged) {
             // clear the background before affine transforms

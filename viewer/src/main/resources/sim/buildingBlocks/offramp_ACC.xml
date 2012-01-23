@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="/sim/buildingBlocks/offrampA.xodr">
+<SCENARIO network_filename="offramp.xodr">
   <VEHICLES>
     <VEHICLE label="ACC1" length="6" b_max="9">
       <LONGITUDINAL_MODEL>
@@ -29,11 +29,9 @@
   </VEHICLES>
   <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42" crash_exit="false">
     <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-      <!-- <VEHICLE_TYPE label="IDM1" fraction="0" /> -->
       <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
       <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
     </TRAFFIC_COMPOSITION>
-    <!-- length="3800"  lanes="2" -->
     <ROAD id="1">
       <TRAFFIC_SOURCE logging="false">
         <INFLOW t="0" q_per_hour="1600" v="24" />
