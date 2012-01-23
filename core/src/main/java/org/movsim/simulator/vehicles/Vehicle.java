@@ -578,25 +578,18 @@ public class Vehicle {
     }
 
     /**
-     * Update.
+     * Update position and speed. Case distinction between cellular automata, Newell and continuos models/iterated maps
      * 
      * @param dt
      *            delta-t, simulation time interval, seconds
      */
     public void updatePositionAndSpeed(double dt) {
-
-        // logger.debug("dt = {}", dt);
-        // first increment postion,
-        // then increment s with *new* v (second order: -0.5 a dt^2)
-
         frontPositionOld = frontPosition;
-
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             final int advance = (int) (frontPosition + dt * speed + 0.5);
             totalTraveledDistance += (advance - frontPosition);
             frontPosition = advance;
-
         } else if (longitudinalModel != null && (longitudinalModel.modelName() == ModelName.NEWELL)) {
             // Newell position update: Different to continuous microscopic models and iterated maps.
             // See chapter 10.7 english book version
@@ -624,7 +617,6 @@ public class Vehicle {
                 speed = 0;
                 acc = 0;
             }
-
         }
     }
 
@@ -707,18 +699,6 @@ public class Vehicle {
 
         return false;
     }
-
-//    public void initLaneChangeFromRamp(int oldLane) {
-//        laneOld = oldLane; // virtual lane index from onramp
-//        resetDelay();
-//        final double delayInit = 0.2; // needs only to be > 0;
-//        updateLaneChangeDelay(delayInit);
-//        logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
-//        if (oldLane == MovsimConstants.TO_LEFT) {
-//            logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane,
-//                    getContinousLane());
-//        }
-//    }
 
     public int getTargetLane() {
         return targetLane;
