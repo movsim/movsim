@@ -708,17 +708,17 @@ public class Vehicle {
         return false;
     }
 
-    public void initLaneChangeFromRamp(int oldLane) {
-        laneOld = oldLane; // virtual lane index from onramp
-        resetDelay();
-        final double delayInit = 0.2; // needs only to be > 0;
-        updateLaneChangeDelay(delayInit);
-        logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
-        if (oldLane == MovsimConstants.TO_LEFT) {
-            logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane,
-                    getContinousLane());
-        }
-    }
+//    public void initLaneChangeFromRamp(int oldLane) {
+//        laneOld = oldLane; // virtual lane index from onramp
+//        resetDelay();
+//        final double delayInit = 0.2; // needs only to be > 0;
+//        updateLaneChangeDelay(delayInit);
+//        logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane, getContinousLane());
+//        if (oldLane == MovsimConstants.TO_LEFT) {
+//            logger.debug("do lane change from ramp: virtual old lane (origin)={}, contLane={}", lane,
+//                    getContinousLane());
+//        }
+//    }
 
     public int getTargetLane() {
         return targetLane;
