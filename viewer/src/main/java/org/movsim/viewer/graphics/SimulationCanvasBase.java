@@ -34,7 +34,6 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
 import org.movsim.simulator.SimulationRunnable;
-import org.movsim.simulator.SimulationTimeStep;
 
 /**
  * <p>
