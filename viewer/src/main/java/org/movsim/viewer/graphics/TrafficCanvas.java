@@ -601,6 +601,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
 
                 g.setColor(Color.BLACK);
+                // TODO this quantity reflects the desired inflow at the boundary but not the *actual* inflow. To be consistent
+                // with the measured outflow the actual fed-in flow should be displayed.
                 String inflowString = "inflow: "
                         + (int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime()))
                         + " veh/h";
