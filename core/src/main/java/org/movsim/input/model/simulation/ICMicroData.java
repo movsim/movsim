@@ -48,7 +48,7 @@ public class ICMicroData {
         this.initPosition = Double.parseDouble(map.get("x"));
         this.initSpeed = Double.parseDouble(map.get("v"));
         // TODO check lane numbering with road segment logic and xodr !!!
-        this.initLane = Integer.parseInt(map.get("lane")) - 1; // internal MovSim
+        this.initLane = Integer.parseInt(map.get("lane")); 
         this.typeLabel = map.get("label");
     }
 

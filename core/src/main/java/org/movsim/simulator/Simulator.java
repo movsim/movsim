@@ -283,7 +283,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
 
-        // TODO: consider multi-lane case !!!
+        // TODO: consider multi-lane case
+        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment transitions 
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
@@ -295,7 +296,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
                 final double rhoLocal = icMacro.rho(xLocal);
                 double speedInit = icMacro.vInit(xLocal);
-                if (speedInit == 0) {
+                if (speedInit <= 0) {
                     speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
                 }
                 final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
@@ -323,8 +324,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 // testwise:
                 veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
                 veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
-                final int lane = ic.getInitLane(); // TODO check lane numbering in ic input
-                veh.setLane(lane);
+                final int lane = ic.getInitLane(); 
+                if (lane <= 0 || lane > roadSegment.laneCount()) {
+                    logger.error("Error: lane=" + lane + " on road id=" + roadSegment.userId()
+                            + " does not exist. Choose as initial condition a lane between 1 and "
+                            + roadSegment.laneCount());
+                    System.exit(-1);
+                }
+                veh.setLane(lane-1);// TODO check lane numbering. internal lane numbering starts with 0?!
                 roadSegment.addVehicle(veh);
                 logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
                         veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
