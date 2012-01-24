@@ -633,10 +633,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                String outflowString = "outflow: " + (int) (ConversionUtilities.INVS_TO_INVH * sink.measuredOutflow())
+                String outflowString = "outflow: " + (int) (60 * sink.measuredOutflow())
                         + " veh/h";
                 g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
-                sink.measuredOutflow();
             }
         }
     }

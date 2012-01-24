@@ -223,6 +223,13 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * @return the removedVehicleCount
+     */
+    public int getRemovedVehicleCount() {
+        return removedVehicleCount;
+    }
+
+    /**
      * Adds a vehicle to this lane segment.
      * 
      * @param vehicle
@@ -632,5 +639,9 @@ public class LaneSegment implements Iterable<Vehicle> {
             assert vehicle.getLane() == lane;
         }
         return true;
+    }
+
+    public void clearVehicleRemovedCount() {
+        removedVehicleCount = 0;
     }
 }

@@ -34,6 +34,7 @@ import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
 import org.movsim.simulator.SimulationRunnable;
+import org.movsim.simulator.SimulationTimeStep;
 
 /**
  * <p>
@@ -96,6 +97,8 @@ public abstract class SimulationCanvasBase extends Canvas {
     protected AffineTransform transform = new AffineTransform();
 
     protected boolean zoomingAllowed = true;
+
+    protected double measuredTime = 0;
 
     /**
      * Abstract function to allow the view to draw the simulation background, normally this is everything that does not move.
@@ -205,22 +208,33 @@ public abstract class SimulationCanvasBase extends Canvas {
     @Override
     public void update(Graphics g) {
         // final long timeBeforePaint_ms = System.currentTimeMillis();
-        if (backgroundBuffer == null) {
-            System.out.println("backgroundbuffer == null");
-            setSize(1200, 700);
-            return;
-        }
+        // if (backgroundBuffer == null) {
+        // System.out.println("backgroundbuffer == null");
+        // setSize(1200, 700);
+        // return;
+        // }
         final Graphics2D bufferGraphics = (Graphics2D) backgroundBuffer.getGraphics();
         if (backgroundChanged) {
             // clear the background before affine transforms
             clearBackground(bufferGraphics);
         }
         bufferGraphics.setTransform(transform);
+        
         if (backgroundChanged) {
             // if the background has been changed, then its content needs to be repainted
             drawBackground(bufferGraphics);
             backgroundChanged = false;
         }
+        
+        // update outflow
+        measuredTime += simulationRunnable.timeStep();
+        if (measuredTime > 60) {
+            clearBackground(bufferGraphics);
+            bufferGraphics.setTransform(transform);
+            forceRepaintBackground();
+            measuredTime = 0;
+        }
+        
         drawForegroundAndBlit(g);
     }
 

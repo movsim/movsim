@@ -35,7 +35,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     // For sinks roadSegment is the source road
     protected RoadSegment roadSegment;
-    private static final double MEASURING_INTERVAL = 45.0; // seconds
+    private static final double MEASURING_INTERVAL = 60.0; // seconds
     private double measuredOutflow;
     private double dQ;
     private double measuredTime;
@@ -99,9 +99,10 @@ public class TrafficSink implements SimulationTimeStep {
         sourceRoad.removeVehiclesPastEnd();
         measuredTime += dt;
         if (measuredTime > MEASURING_INTERVAL) {
-            measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL;
+            measuredOutflow = sourceRoad.removedVehicleCount();
             sourceRoad.clearVehicleRemovedCount();
             measuredTime = 0.0;
+            System.out.println("measuredOutflow: "+measuredOutflow);
             // dQ = 0.0;
             // if (sourceRoad.source() != null) {
             // dQ = (measuredOutflow - sourceRoad.source().inflow());

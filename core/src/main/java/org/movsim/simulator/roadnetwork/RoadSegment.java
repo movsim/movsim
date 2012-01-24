@@ -394,6 +394,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return the number of vehicles removed from this road segment
      */
     public int removedVehicleCount() {
+        for (final LaneSegment laneSegment: laneSegments) {
+            removedVehicleCount += laneSegment.getRemovedVehicleCount();
+        }
         return removedVehicleCount;
     }
 
@@ -401,6 +404,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Clears the removed vehicle count.
      */
     public void clearVehicleRemovedCount() {
+        for (final LaneSegment laneSegment: laneSegments) {
+            laneSegment.clearVehicleRemovedCount();
+        }
         removedVehicleCount = 0;
     }
 
