@@ -266,7 +266,8 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.RINGROADFILE);
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemRingRoad);
@@ -274,7 +275,6 @@ public class MovSimMenu extends JPanel {
         menuItemFlowConservingBottleNeck.setEnabled(false);
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
-        menuItemRingRoad.setEnabled(false);
 
         return scenarioMenu;
     }
