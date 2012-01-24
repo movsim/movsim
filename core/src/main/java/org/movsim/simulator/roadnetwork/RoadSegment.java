@@ -100,7 +100,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     // Sources and Sinks
     private TrafficSource trafficSource;
     private TrafficSink sink;
-    private int removedVehicleCount; // used for calculating traffic flow
     private RoadMapping roadMapping;
 
     public static class TestCar {
@@ -394,6 +393,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return the number of vehicles removed from this road segment
      */
     public int removedVehicleCount() {
+        int removedVehicleCount = 0;
         for (final LaneSegment laneSegment: laneSegments) {
             removedVehicleCount += laneSegment.getRemovedVehicleCount();
         }
@@ -407,7 +407,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         for (final LaneSegment laneSegment: laneSegments) {
             laneSegment.clearVehicleRemovedCount();
         }
-        removedVehicleCount = 0;
     }
 
     /**
