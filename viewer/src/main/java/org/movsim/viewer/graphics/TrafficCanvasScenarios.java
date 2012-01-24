@@ -42,7 +42,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     static final long serialVersionUID = 1L;
 
     public static enum Scenario {
-        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE
+        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE, SPEEDLIMITFILE
     }
 
     private Scenario scenario = Scenario.NONE;
@@ -184,6 +184,16 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
             System.out.println("path: "+ path);
             simulator.loadScenarioFromXml("laneclosing_ACC", path);
+            break;
+        case TRAFFICLIGHTFILE:
+            path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
+            System.out.println("path: "+ path);
+            simulator.loadScenarioFromXml("trafficlight_ACC", path);
+            break;
+        case SPEEDLIMITFILE:
+            path = ".."+File.separator+"sim"+File.separator+"buildingBlocks"+File.separator;
+            System.out.println("path: "+ path);
+            simulator.loadScenarioFromXml("speedlimit_ACC", path);
             break;
         default:
             return;
