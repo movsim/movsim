@@ -146,9 +146,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private Color[] accelerationColors;
 
-    /** Status message strings */
-    String trafficInflowString;
-
     /** vehicle mouse-over support */
     String popupString;
 
@@ -198,13 +195,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      *            popup window format string for vehicle that leaves road segment at a specific exit
      * @param popupStringExitEndRoad
      *            popup window format string for vehicle that leaves road segment at end
-     * @param trafficInflowString
-     *            format string for displaying traffic inflow
      */
-    public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString) {
+    public void setMessageStrings(String popupString, String popupStringExitEndRoad) {
         this.popupString = popupString;
         this.popupStringExitEndRoad = popupStringExitEndRoad;
-        this.trafficInflowString = trafficInflowString;
     }
 
     void setVelocityColors() {
@@ -633,7 +627,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                String outflowString = "outflow: " + (int) (60 * sink.measuredOutflow())
+                String outflowString = "outflow: " + (int) (ConversionUtilities.INVS_TO_INVH * sink.measuredOutflow())
                         + " veh/h";
                 g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }

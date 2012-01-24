@@ -64,7 +64,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
     public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
             String perturbationRampingFinishedString, String perturbationAppliedString) {
-        setMessageStrings(popupString, popupStringExitEndRoad, trafficInflowString);
+        setMessageStrings(popupString, popupStringExitEndRoad);
     }
 
     @Override
