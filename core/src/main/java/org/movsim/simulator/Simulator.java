@@ -324,9 +324,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
                 veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
                 final int lane = ic.getInitLane(); // TODO check lane numbering in ic input
-                veh.setLane(Lane.LANE1);
+                veh.setLane(lane);
                 roadSegment.addVehicle(veh);
-                // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
                 logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
                         veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
                 if (veh.getLongitudinalModel().isCA()) {
