@@ -3,28 +3,22 @@
 
 <SCENARIO network_filename="laneclosing.xodr">
   <VEHICLES>
-    <VEHICLE label="ACC1" length="6" b_max="9">
+    <VEHICLE label="ACC1" length="5" b_max="9">
       <LONGITUDINAL_MODEL>
-        <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+        <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-        <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="1.2" politeness="0.1" />
+        <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.1" politeness="0.1" />
       </LANE_CHANGE_MODEL>
     </VEHICLE>
     <!-- trucks -->
     <VEHICLE label="ACC2" length="16" b_max="9">
       <LONGITUDINAL_MODEL>
-        <ACC v0="25" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" coolness="1" />
+        <ACC v0="25" T="1.5" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
       </LONGITUDINAL_MODEL>
       <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-        <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="1.8" politeness="0.1" />
+        <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.2" politeness="0.1" />
       </LANE_CHANGE_MODEL>
-    </VEHICLE>
-    <VEHICLE label="Obstacle" length="0">
-      <LONGITUDINAL_MODEL>
-        <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-      </LONGITUDINAL_MODEL>
-      <LANE_CHANGE_MODEL />
     </VEHICLE>
   </VEHICLES>
   <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42" crash_exit="false">
@@ -36,11 +30,12 @@
       <INITIAL_CONDITIONS>
       </INITIAL_CONDITIONS>
       <TRAFFIC_SOURCE logging="false">
-        <INFLOW t="0" q_per_hour="1000" v="24" />
+      <!-- inflow per lane results -->
+        <INFLOW t="0" q_per_hour="760" v="24" />
       </TRAFFIC_SOURCE>
       <SPEED_LIMITS>
-           <SPEED_LIMIT x="600" speedlimit_kmh="100" />
-           <SPEED_LIMIT x="800" speedlimit_kmh="80" /> 
+           <SPEED_LIMIT x="1200" speedlimit_kmh="100" />
+           <SPEED_LIMIT x="1600" speedlimit_kmh="80" /> 
       </SPEED_LIMITS>
       <TRAFFIC_LIGHTS />
       <DETECTORS />
