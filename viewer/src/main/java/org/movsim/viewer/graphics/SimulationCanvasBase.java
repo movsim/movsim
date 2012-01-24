@@ -61,6 +61,8 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     static final long serialVersionUID = 1L;
 
+    private static final double FORCE_REPAINT_BACKGROUND_INTERVAL = 60.0; // seconds;
+
     protected final SimulationRunnable simulationRunnable;
     protected long totalAnimationTime;
 
@@ -225,9 +227,9 @@ public abstract class SimulationCanvasBase extends Canvas {
             backgroundChanged = false;
         }
         
-        // update background (for outflow) every 60 seconds of simulation
+        // update background (for outflow) every e.g. 60 seconds of simulation
         measuredTime += simulationRunnable.timeStep();
-        if (measuredTime > 60) {
+        if (measuredTime > FORCE_REPAINT_BACKGROUND_INTERVAL) {
             forceRepaintBackground();
             measuredTime = 0;
         }
