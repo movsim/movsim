@@ -226,11 +226,9 @@ public abstract class SimulationCanvasBase extends Canvas {
             backgroundChanged = false;
         }
         
-        // update outflow
+        // update background (for outflow) every 60 seconds of simulation
         measuredTime += simulationRunnable.timeStep();
         if (measuredTime > 60) {
-            clearBackground(bufferGraphics);
-            bufferGraphics.setTransform(transform);
             forceRepaintBackground();
             measuredTime = 0;
         }
