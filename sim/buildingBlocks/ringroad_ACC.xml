@@ -23,7 +23,7 @@
     <ROAD id="43">
       <INITIAL_CONDITIONS>
         <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km -->
-        <IC_MACRO x="1" rho_per_km="35" v="20" />
+        <IC_MACRO x="1" rho_per_km="36" v="20" />
       </INITIAL_CONDITIONS>
     </ROAD>
     <OUTPUT>

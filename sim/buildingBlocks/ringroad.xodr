@@ -2,14 +2,14 @@
 <OpenDRIVE>
   <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
   
-   <road id="43" name="R43" length="879.6459426666667" junction="-1">
+   <road id="43" name="R43" length="1000" junction="-1">
         <link>
             <predecessor elementType="road" elementId="43" contactPoint="end" />
             <successor elementType="road" elementId="43" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="500" y="200" hdg="-0.0" length="879.6459426666667"><!-- hdgDegrees="-0.0"-->
-                <arc curvature="-0.007143" /><!-- radius="140.0"-->
+            <geometry s="0.0" x="500" y="200" hdg="-0.0" length="1000"><!-- hdgDegrees="-0.0"-->
+                <arc curvature="-0.00629" /><!-- radius="140.0"-->
             </geometry>
         </planView>
         <lanes>
