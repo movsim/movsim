@@ -27,7 +27,7 @@
       </LANE_CHANGE_MODEL>
     </VEHICLE>
   </VEHICLES>
-  <SIMULATION dt="0.2" duration="100000" fixed_seed="false">
+  <SIMULATION dt="0.2" duration="100000" fixed_seed="true">
     <TRAFFIC_COMPOSITION write_fund_diagrams="false">
       <VEHICLE_TYPE label="ACC1" fraction="0.8" />
       <VEHICLE_TYPE label="ACC2" fraction="0.2" />
