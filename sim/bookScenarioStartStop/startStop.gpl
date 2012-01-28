@@ -28,6 +28,7 @@ fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
 if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
 carFile(n) = sprintf(inputPath.baseFile.".car.origin_1.%06d.csv",c0+n)
 carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
+trajectoriesFile = inputPath.baseFile.".traj.route_rt1.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
@@ -38,6 +39,7 @@ velocityOutput = outputPath.baseFile.".v.eps"
 accelerationOutput = outputPath.baseFile.".a.eps"
 fuelOutput = outputPath.baseFile.".fuel.eps"
 fuelOutput100 = outputPath.baseFile.".fuel100.eps"
+trajectoriesOutput = outputPath.baseFile.".trajectories.eps"
 
 print "fundOutput = ",fundOutput
 print "please make sure that output directory ".outputPath." already exists"
@@ -179,4 +181,17 @@ plot\
   carFile(15) using 1:7 title car(15) with lines linestyle 4,\
   carFile(20) using 1:7 title car(20) with lines linestyle 5
 
+
+########  Trajectories Plot  #############################
+
+set nolabel
+unset colorbox
+unset pm3d
+
+set auto x
+set xrange [0:7]
+set xtics 1
+set auto y
+set out trajectoriesOutput
+plot trajectoriesFile using ($1/60.0):($3):(int($9) % 5 + 1) title "" with points lc variable
 
