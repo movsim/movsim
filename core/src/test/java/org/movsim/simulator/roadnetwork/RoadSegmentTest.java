@@ -350,7 +350,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#addVehicle(org.movsim.traffic.Vehicle)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addVehicle(org.movsim.simulator.vehicles.Vehicle)}
      */
     @Test
     public final void testAddVehicleVehicle() {
