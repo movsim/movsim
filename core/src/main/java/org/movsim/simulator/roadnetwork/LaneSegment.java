@@ -149,8 +149,6 @@ public class LaneSegment implements Iterable<Vehicle> {
     /**
      * Returns the number of vehicles on this lane segment.
      * 
-     * @param lane
-     * 
      * @return the number of vehicles on this lane segment
      */
     public final int vehicleCount() {
@@ -184,8 +182,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Removes the given vehicle.
-     * 
-     * @param index
+     * @param vehicle 
      */
     public void removeVehicle(Vehicle vehicle) {
         // TODO improve primitive implementation
@@ -305,6 +302,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Finds the vehicle immediately at or behind the given position.
+     * @param vehiclePos 
      * 
      * @return reference to the rear vehicle
      */
@@ -386,7 +384,6 @@ public class LaneSegment implements Iterable<Vehicle> {
     /**
      * Returns the front vehicle.
      * 
-     * @param lane
      * @return the front vehicle
      */
     public Vehicle frontVehicle() {
@@ -399,6 +396,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     /**
      * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.positon() > vehicePos (strictly
      * greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
+     * @param vehiclePos 
      * 
      * @return reference to the front vehicle
      */
@@ -521,6 +519,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param dt
      *            simulation time interval
      * @param simulationTime
+     * @param iterationCount 
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         assert laneIsSorted();
