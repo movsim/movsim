@@ -291,30 +291,6 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addInhomogeneity(org.movsim.traffic.Inhomogeneity)}
-     */
-    @Test
-    public final void testAddInhomogeneity() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#inhomogeneities()}
-     */
-    @Test
-    public final void testInhomogeneities() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setGradientProfile(org.movsim.traffic.GradientProfile)}
-     */
-    @Test
-    public final void testSetGradientProfile() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#roadLength()}
      */
     @Test
@@ -1221,82 +1197,10 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addTimeBasedDetector(double)}
-     */
-    @Test
-    public final void testAddTimeBasedDetector() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addSpaceBasedDetector(double)}
-     */
-    @Test
-    public final void testAddSpaceBasedDetector() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#timeBasedDetector(int, int)}
-     */
-    @Test
-    public final void testTimeBasedDetector() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#spaceBasedDetector(int, int)}
-     */
-    @Test
-    public final void testSpaceBasedDetector() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#clearTimeBasedDetectors()}
      */
     @Test
     public final void testClearTimeBasedDetectors() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#clearSpaceBasedDetectors()}
-     */
-    @Test
-    public final void testClearSpaceBasedDetectors() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#timeBasedDetectorCount()}
-     */
-    @Test
-    public final void testTimeBasedDetectorCount() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#spaceBasedDetectorCount()}
-     */
-    @Test
-    public final void testSpaceBasedDetectorCount() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#updatePositionsCacheForSpaceDetectors()}
-     */
-    @Test
-    public final void testUpdatePositionsCacheForSpaceDetectors() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#updateDetectors(double, double, long)}
-     */
-    @Test
-    public final void testUpdateDetectors() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
