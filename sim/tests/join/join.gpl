@@ -24,7 +24,7 @@ stFile = inputPath.baseFile.".st.route_rt1.csv"
 detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_1.csv"
 rampSourceFile = inputPath.baseFile.".source.road_1.csv"
-trajectoriesFile = inputPath.baseFile.".traj.road_1.csv"
+trajectoriesFile = inputPath.baseFile.".traj.route_rt1.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
@@ -138,9 +138,7 @@ set xlabel timeMinuteLabel
 set ylabel enteredVehicleLabel
 set out inflowOutput
 plot\
- roadSourceFile using ($1/60.0):6 title inflowRoadEnteredTitle with lines linestyle 1,\
- rampSourceFile using ($1/60.0):6 title inflowRampEnteredTitle with lines linestyle 3,\
- roadSourceFile using ($1/60.0):5 title inflowRoadFlowTitle with lines linestyle 2
+ roadSourceFile using ($1/60.0):6 title inflowRoadEnteredTitle with lines linestyle 1
 
 ############### 3d ###########
 
@@ -203,8 +201,8 @@ unset colorbox
 unset pm3d
 
 set auto x
-set xrange [0:7]
-set xtics 1
+set xrange [0:2]
+#set xtics 1
 set auto y
 set out trajectoriesOutput
-plot trajectoriesFile using ($1/60.0):($4):(int($2) % 5 + 1) title "" with points lc variable
+plot trajectoriesFile using ($1/60.0):($3/1000.0):(int($9) % 5 + 1) title "" with points lc variable
