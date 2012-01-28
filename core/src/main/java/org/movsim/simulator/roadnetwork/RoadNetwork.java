@@ -208,7 +208,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+            roadSegment.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         }
 
         // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)

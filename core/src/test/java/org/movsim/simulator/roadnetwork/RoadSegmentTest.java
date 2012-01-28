@@ -878,7 +878,7 @@ public class RoadSegmentTest {
         roadSegment.addVehicle(v2);
 
         final double dt = 0.25;
-        roadSegment.updatePositionAndSpeed(dt, 0.0, 0);
+        roadSegment.updateVehiclePositionsAndSpeeds(dt, 0.0, 0);
         assertEquals(902.5, v0.getRearPosition(), delta);
         assertEquals(805.0, v1.getRearPosition(), delta);
         assertEquals(707.5, v2.getRearPosition(), delta);
@@ -914,11 +914,11 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        r0.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         assertEquals(705.0, v3.getRearPosition(), delta);
         assertEquals(512.5, v4.getRearPosition(), delta);
 
-        r1.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        r1.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         assertEquals(3902.5, v0.getRearPosition(), delta);
         assertEquals(3705.0, v1.getRearPosition(), delta);
         assertEquals(3107.5, v2.getRearPosition(), delta);
@@ -959,7 +959,7 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        r0.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         assertEquals(true, r0.eachLaneIsSorted());
         r0.outFlow(dt, simulationTime, iterationCount);
 
@@ -1139,7 +1139,7 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        r0.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         assertEquals(1009.0, v0.getRearPosition(), delta);
         r0.outFlow(dt, simulationTime, iterationCount);
         assertEquals(0, r0.totalVehicleCount());
@@ -1170,7 +1170,7 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.updatePositionAndSpeed(dt, simulationTime, iterationCount);
+        r0.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         // assertEquals(1009.0, v1.getPosition(), delta);
         // assertEquals(1008.0, v2.getPosition(), delta);
         // assertEquals(1007.0, v3.getPosition(), delta);

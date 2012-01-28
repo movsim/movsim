@@ -643,7 +643,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void updatePositionAndSpeed(double dt, double simulationTime, long iterationCount) {
+    public void updateVehiclePositionsAndSpeeds(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             for (final Vehicle vehicle : laneSegment) {
