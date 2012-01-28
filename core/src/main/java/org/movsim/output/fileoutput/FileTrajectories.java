@@ -25,16 +25,12 @@
  */
 package org.movsim.output.fileoutput;
 
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,23 +40,22 @@ import org.slf4j.LoggerFactory;
  */
 public class FileTrajectories extends FileOutputBase implements SimulationTimeStep {
 
-    private static final String extensionFormat = ".traj.road_%s.csv";
+    private static final String extensionFormat = ".traj.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d%n";
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
+    private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 
     private final double dtOut;
     private final double t_start_interval;
     private final double t_end_interval;
     private final double x_start_interval;
     private final double x_end_interval;
-    private final HashMap<String, PrintWriter> fileHandles;
     private double time = 0;
     private double lastUpdateTime = 0;
-    private final RoadNetwork roadNetwork;
+    private final Route route;
 
     /**
      * Instantiates a new trajectories.
@@ -70,7 +65,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      * @param roadSection
      *            the road section
      */
-    public FileTrajectories(TrajectoriesInput trajectoriesInput, RoadNetwork roadNetwork) {
+    public FileTrajectories(TrajectoriesInput trajectoriesInput, Route route) {
         super();
         logger.info("Constructor");
 
@@ -80,121 +75,70 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         x_start_interval = trajectoriesInput.getStartPosition();
         x_end_interval = trajectoriesInput.getEndPosition();
 
-        this.roadNetwork = roadNetwork;
+        this.route = route;
 
-        fileHandles = new HashMap<String, PrintWriter>();
         logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
+        writer = createWriter(String.format(extensionFormat, route.getName()));
+        writeHeader();
     }
 
-    /**
-     * Creates the file handles.
-     */
-    private void createFileHandles() {
-    	for (final RoadSegment roadSegment : roadNetwork) {
-    		fileHandles.put(roadSegment.userId(), createWriter(String.format(extensionFormat, roadSegment.userId())));
-    	}
-//        final String filenameMainroad = path + File.separator + baseFilename
-//                + String.format(extensionFormat, roadSegment.id());
-//        logger.info("filenameMainroad={}, id={}", filenameMainroad, roadSegment.id());
-//        fileHandles.put(roadSegment.id(), createWriter(String.format(extensionFormat, roadSegment.id())));
-
-        
-//        // onramps
-//		int counter = 1;
-//		for (IOnRamp rmp : mainroad.onramps()) {
-//			final String filename = projectName + ".onr_" + Integer.toString(counter) + endingFile;
-//			fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-//			counter++;
-//		}
-//		// offramps
-//		counter = 1;
-//		for (IStreet rmp : mainroad.offramps()) {
-//			final String filename = projectName + ".offr_" + Integer.toString(counter) + endingFile;
-//			fileHandles.put(rmp.roadIndex(), FileUtils.getWriter(filename));
-//			counter++;
-//		}
-
-        // write headers
-        final Iterator<String> it = fileHandles.keySet().iterator();
-        while (it.hasNext()) {
-            final String id = it.next();
-            final PrintWriter writer = fileHandles.get(id);
-            writer.println(outputHeading);
-            writer.flush();
-        }
+    private void writeHeader() {
+        writer.println(outputHeading);
+        writer.flush();
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        if (fileHandles.isEmpty()) {
-            // cannot initialize earlier because onramps and offramps are
-            // constructed after constructing mainroad
-            createFileHandles();
-        }
-
         this.time = simulationTime;
         // check time interval for output:
         if (time >= t_start_interval && time <= t_end_interval) {
-
             if (iterationCount % 1000 == 0) {
                 logger.info("time = {}, timestep= {}", time);
             }
-
             if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= dtOut) {
-
                 lastUpdateTime = time;
-
-                for (final RoadSegment roadSegment : roadNetwork) {
-                    writeTrajectories(fileHandles.get(roadSegment.userId()), roadSegment);
-                }
-                /*
-                 * // onramps for(IOnRamp rmp : mainroad.onramps()){ writeTrajectories(fileHandles.get(rmp.roadIndex()),
-                 * rmp.vehContainer()); } // offramps for(IStreet rmp : mainroad.offramps()){
-                 * writeTrajectories(fileHandles.get(rmp.roadIndex()), rmp.vehContainer()); }
-                 */
-            } // of if
+                writeTrajectories();
+            }
         }
     }
 
     /**
      * Write trajectories.
      * 
-     * @param writer
-     *            the fstr
      * @param roadSegment
      */
-    private void writeTrajectories(PrintWriter writer, RoadSegment roadSegment) {
-        final int laneCount = roadSegment.laneCount();
-        for (int lane = 0; lane < laneCount; ++lane) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(lane);
-            final int N = laneSegment.vehicleCount();
-            for (int i = 0; i < N; i++) {
-                final Vehicle me = laneSegment.getVehicle(i);
-                if ((me.getFrontPosition() >= x_start_interval && me.getFrontPosition() <= x_end_interval)) {
-                    final Vehicle frontVeh = laneSegment.frontVehicle(me);
-                    writeCarData(writer, i, me, frontVeh);
+    private void writeTrajectories() {
+        double roadStartPos = 0.0;
+        for (final RoadSegment roadSegment : route) {
+            final int laneCount = roadSegment.laneCount();
+            for (int lane = 0; lane < laneCount; ++lane) {
+                final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+                final int vehicleCount = laneSegment.vehicleCount();
+                for (int i = 0; i < vehicleCount; ++i) {
+                    final Vehicle me = laneSegment.getVehicle(i);
+                    if ((me.getFrontPosition() >= x_start_interval && me.getFrontPosition() <= x_end_interval)) {
+                        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+                        writeVehicleData(me, roadStartPos, frontVehicle);
+                    }
                 }
             }
+            roadStartPos += roadSegment.roadLength();
         }
     }
 
     /**
-     * Write car data.
+     * Write vehicle data.
      * 
-     * @param writer
-     *            the writer
-     * @param index
-     *            the index
      * @param me
-     *            the me
-     * @param frontVeh
-     *            the front veh
+     * @param roadStartPos
+     * @param frontVehicle
      */
-    private void writeCarData(PrintWriter writer, int index, final Vehicle me, final Vehicle frontVeh) {
-        final double s = (frontVeh == null) ? 0 : me.getNetDistance(frontVeh);
-        final double dv = (frontVeh == null) ? 0 : me.getRelSpeed(frontVeh);
-        writer.printf(outputFormat, time, me.getLane(), me.getFrontPosition(), me.getSpeed(), me.getAcc(), s, dv,
+    private void writeVehicleData(Vehicle me, double roadStartPos, Vehicle frontVehicle) {
+        final double pos = me.getFrontPosition() + roadStartPos;
+        final double s = frontVehicle == null ? 0 : me.getNetDistance(frontVehicle);
+        final double dv = frontVehicle == null ? 0 : me.getRelSpeed(frontVehicle);
+        writer.printf(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv,
                 me.getLabel(), me.getId());
         writer.flush();
     }

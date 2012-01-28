@@ -124,7 +124,7 @@ public class SimOutput implements SimulationTimeStep {
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
             if (writeOutput) {
-                fileTrajectories = new FileTrajectories(trajInput, roadNetwork);
+                fileTrajectories = new FileTrajectories(trajInput, route);
             }
         }
     }
