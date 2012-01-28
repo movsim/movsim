@@ -29,7 +29,6 @@ package org.movsim.viewer.graphics;
 import java.awt.Graphics2D;
 import java.io.File;
 
-import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 

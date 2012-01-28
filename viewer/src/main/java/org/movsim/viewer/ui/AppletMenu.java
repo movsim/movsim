@@ -1,23 +1,18 @@
 package org.movsim.viewer.ui;
 
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.util.EventObject;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileFilter;
 
-import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class AppletMenu extends JPanel {
