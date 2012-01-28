@@ -144,15 +144,6 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.simulator.roadnetwork.RoadMapping, org.movsim.simulator.roadnetwork.TrafficSource)}
-     */
-    @Test
-    public final void testRoadSegmentRoadMappingTrafficSource() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#addDefaultSink()}
      */
     @Test
@@ -225,15 +216,6 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setSourceRoadSegmentForLane(org.movsim.simulator.roadnetwork.RoadSegment, int)}
-     */
-    @Test
-    public final void testSetSourceRoadSegmentForLane() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sourceRoadSegment(int)}
      */
     @Test
@@ -254,15 +236,6 @@ public class RoadSegmentTest {
      */
     @Test
     public final void testSourceLane() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setSinkRoadSegmentForLane(org.movsim.simulator.roadnetwork.RoadSegment, int)}
-     */
-    @Test
-    public final void testSetSinkRoadSegmentForLane() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
@@ -316,14 +289,6 @@ public class RoadSegmentTest {
         assertEquals(3, r.laneCount());
         r = new RoadSegment(roadLength, 4);
         assertEquals(4, r.laneCount());
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#testCar()}
-     */
-    @Test
-    public final void testTestCar() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
     /**
@@ -1193,14 +1158,6 @@ public class RoadSegmentTest {
      */
     @Test
     public final void testEachLaneIsSorted() {
-        // fail("Not yet implemented"); //$NON-NLS-1$
-    }
-
-    /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#clearTimeBasedDetectors()}
-     */
-    @Test
-    public final void testClearTimeBasedDetectors() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
