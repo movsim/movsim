@@ -53,7 +53,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addLanePair(int, org.movsim.simulator.roadsegment.traffic.RoadSegment, int, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addLanePair(int, org.movsim.simulator.roadnetwork.RoadSegment, int, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddLanePair() {
@@ -73,7 +73,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addJoin(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addJoin(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddJoin() {
@@ -95,7 +95,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addOffsetJoin(int, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addOffsetJoin(int, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddOffsetJoin() {
@@ -130,7 +130,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addMerge(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addMerge(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddMerge() {
@@ -139,7 +139,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addFork(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addFork(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddFork() {

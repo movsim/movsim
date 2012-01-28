@@ -80,7 +80,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.traffic.RoadMapping#roadLength()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#roadLength()}
      */
     @Test
     public void testRoadLength() {
@@ -100,7 +100,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.traffic.RoadMapping#laneWidth()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneWidth()}
      */
     @Test
     public void testLaneWidth() {
@@ -110,7 +110,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.traffic.RoadMapping#laneCount()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneCount()}
      */
     @Test
     public void testLaneCount() {
@@ -123,7 +123,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.traffic.RoadMapping#laneOffset(int)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneOffset(int)}
      */
     @Test
     public void testLaneOffset() {
