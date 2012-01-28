@@ -168,18 +168,18 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#source()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#getTrafficSource()}
      */
     @Test
-    public final void testSource() {
+    public final void testGetTrafficSource() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSource(org.movsim.simulator.roadnetwork.TrafficSource)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setTrafficSource(org.movsim.simulator.roadnetwork.TrafficSource)}
      */
     @Test
-    public final void testSetSource() {
+    public final void testSetTrafficSource() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
@@ -224,10 +224,10 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSourceLaneForLane(int, int)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSourceLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
      */
     @Test
-    public final void testSetSourceLaneForLane() {
+    public final void testSetSourceLaneSegmentForLane() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
@@ -248,10 +248,10 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSinkLaneForLane(int, int)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSinkLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
      */
     @Test
-    public final void testSetSinkLaneForLane() {
+    public final void testSetSinkLaneSegmentForLane() {
         // fail("Not yet implemented"); //$NON-NLS-1$
     }
 
@@ -795,10 +795,10 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#makeLaneChanges(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#laneChange(double, double, long)}
      */
     @Test
-    public final void testMakeLaneChanges() {
+    public final void testlaneChange() {
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
 
