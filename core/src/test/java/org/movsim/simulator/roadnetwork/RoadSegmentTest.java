@@ -185,7 +185,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#setSource(org.movsim.traffic.TrafficSource)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSource(org.movsim.simulator.roadnetwork.TrafficSource)}
      */
     @Test
     public final void testSetSource() {
@@ -193,7 +193,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadsegment.traffic.RoadSegment#sink()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#sink()}
      */
     @Test
     public final void testSink() {
