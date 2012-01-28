@@ -31,6 +31,7 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ObservableImpl;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -88,20 +89,15 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if ((simulationTime - timeOffset) >= dtOut) {
             timeOffset = simulationTime;
-            calcData(simulationTime);
+            calcData();
             notifyObservers(simulationTime);
         }
     }
 
     /**
      * Calculate data.
-     * 
-     * @param time
-     *            the time
-     * @param vehContainer
-     *            the vehicle container
      */
-    private void calcData(double time) {
+    private void calcData() {
         // TODO - deal with multiple lanes in a road segment
         int vehicleCount = 0;
         for (final RoadSegment roadSegment : route) {
@@ -121,9 +117,10 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
             final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
             final int laneVehicleCount = laneSegment.vehicleCount();
             for (int j = 0; j < laneVehicleCount; ++j) {
-                vMicro[i] = laneSegment.getVehicle(j).getSpeed();
-                xMicro[i] = laneSegment.getVehicle(j).getFrontPosition();
-                lengths[i] = laneSegment.getVehicle(j).getFrontPosition();
+                final Vehicle vehicle = laneSegment.getVehicle(j);
+                vMicro[i] = vehicle.getSpeed();
+                xMicro[i] = vehicle.getFrontPosition();
+                lengths[i] = vehicle.getLength();
                 ++i;
             }
         }
