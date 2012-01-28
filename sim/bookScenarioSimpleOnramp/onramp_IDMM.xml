@@ -24,7 +24,7 @@
       <VEHICLE_TYPE label="IDMM1" fraction="1" />
     </TRAFFIC_COMPOSITION>
     <!-- road id 0 indicates mainroad -->
-    <ROAD id="0" length="20000" lanes="1">
+    <ROAD id="1" length="20000" lanes="1">
       <INITIAL_CONDITIONS>
         <IC_MACRO x="8600" rho_per_km="2" v="30" />
       </INITIAL_CONDITIONS>

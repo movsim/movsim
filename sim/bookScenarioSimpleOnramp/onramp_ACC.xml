@@ -23,7 +23,7 @@
       <VEHICLE_TYPE label="ACC1" fraction="1" />
     </TRAFFIC_COMPOSITION>
     <!-- road id 0 indicates mainroad -->
-    <ROAD id="0" length="20000" lanes="1">
+    <ROAD id="1" length="20000" lanes="1">
       <TRAFFIC_COMPOSITION write_fund_diagrams="true">
         <VEHICLE_TYPE label="ACC1" fraction="1" />
       </TRAFFIC_COMPOSITION>
