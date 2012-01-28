@@ -113,7 +113,7 @@ class VehicleTipWindow extends Window {
         if (TrafficCanvas.DEBUG) {
             final DecimalFormat twoDP = new DecimalFormat("#.##"); //$NON-NLS-1$
             System.out.println("Vehicle id:" + vehicle.getId());//$NON-NLS-1$
-            System.out.println("  pos:" + (int) vehicle.physicalQuantities().getMidPosition());//$NON-NLS-1$
+            System.out.println("front  pos:" + (int) vehicle.physicalQuantities().getFrontPosition());//$NON-NLS-1$
             //                System.out.println("  dis:" + (int)vehicle.distanceTravelled());//$NON-NLS-1$
             //                System.out.println("  energyUsed:" + (int)vehicle.energyUsed());//$NON-NLS-1$
             //                // System.out.println("  energyUsedAccelerating:" + (int)vehicle.energyUsedAccelerating());//$NON-NLS-1$

@@ -174,7 +174,11 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.simulator.loadScenarioFromXml("speedlimit_ACC", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemSpeedLimit);
@@ -186,7 +190,11 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.simulator.loadScenarioFromXml("trafficlight_ACC", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemTrafficLight);
@@ -198,7 +206,11 @@ public class AppletMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        SwingHelper.notImplemented(canvasPanel);
+                        canvasPanel.simulator.loadScenarioFromXml("laneclosing_ACC", "/sim/buildingBlocks/");
+                        canvasPanel.trafficCanvas.reset();
+                        canvasPanel.trafficCanvas.start();
+                        statusPanel.reset();
+                        uiDefaultReset();
                     }
                 });
         scenarioMenu.add(menuItemLaneClosing);
@@ -247,18 +259,18 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.simulator.loadScenarioFromXml("ringroad_ACC", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemRingRoad);
 
         menuItemFlowConservingBottleNeck.setEnabled(false);
-        menuItemSpeedLimit.setEnabled(false);
-        menuItemTrafficLight.setEnabled(false);
-        menuItemLaneClosing.setEnabled(false);
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
-        menuItemRingRoad.setEnabled(false);
 
         return scenarioMenu;
     }
