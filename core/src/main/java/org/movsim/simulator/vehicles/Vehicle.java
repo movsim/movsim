@@ -279,8 +279,7 @@ public class Vehicle {
     /**
      * Constructor.
      */
-    public Vehicle(org.movsim.simulator.vehicles.Vehicle.Type car, LongitudinalModelBase ldm, Object lcm,
-            double length, double width, int i) {
+    public Vehicle(LongitudinalModelBase ldm, Object lcm, double length, double width) {
         id = nextId++;
         this.length = length;
         setRearPosition(0.0);
