@@ -90,8 +90,6 @@ public class ACC extends LongitudinalModelBase {
     /**
      * Instantiates a new aCC.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */

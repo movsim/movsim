@@ -71,8 +71,6 @@ public class Krauss extends LongitudinalModelBase {
     /**
      * Instantiates a new Krauss instance.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */

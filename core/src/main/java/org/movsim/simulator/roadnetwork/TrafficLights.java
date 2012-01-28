@@ -52,8 +52,7 @@ public class TrafficLights implements Iterable<TrafficLight> {
          * @param simulationTime
          *            the current logical time in the simulation
          * @param iterationCount 
-         * @param trafficLight
-         * @param roadSegment
+         * @param trafficLights
          */
         public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights);
     }
@@ -63,7 +62,6 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * Constructor.
      * 
      * @param trafficLightsInput
-     * @param roadSegment
      */
     public TrafficLights(TrafficLightsInput trafficLightsInput) {
 

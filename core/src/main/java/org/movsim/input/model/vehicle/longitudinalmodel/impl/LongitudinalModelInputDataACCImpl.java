@@ -77,8 +77,6 @@ public class LongitudinalModelInputDataACCImpl extends LongitudinalModelInputDat
     /**
      * Instantiates a new model input data acc impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */

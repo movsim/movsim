@@ -50,7 +50,6 @@ public class LoopDetectors {
      * 
      * @param input
      *            the input
-     * @param lanes 
      */
     public LoopDetectors(String roadId, DetectorInput input, int laneCount) {
 

@@ -46,8 +46,6 @@ public class Newell extends LongitudinalModelBase {
     /**
      * Instantiates a new newell.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */

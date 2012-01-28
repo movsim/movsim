@@ -840,7 +840,6 @@ public class Vehicle {
      * </p>
      * 
      * @param newLane
-     * @param newPos
      * @param exitPos
      */
     public void moveToNewRoadSegment(int newLane, double newRearPos, double exitPos) {

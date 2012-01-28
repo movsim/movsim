@@ -752,9 +752,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param lane
      *            lane in which to search
-     * @param subjectVehicle
-     * @param index
-     *            index of subject vehicle
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
@@ -765,7 +762,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Sets the speed limits for this road segment.
      * 
-     * @param trafficLights
+     * @param speedLimits
      */
     public void setSpeedLimits(SpeedLimits speedLimits) {
         this.speedLimits = speedLimits;

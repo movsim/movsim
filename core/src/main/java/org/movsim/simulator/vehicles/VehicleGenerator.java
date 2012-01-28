@@ -328,9 +328,8 @@ public class VehicleGenerator {
     /**
      * Creates the vehicle.
      * 
-     * @param type
+     * @param typeLabel
      *            the type
-     * @return the vehicle
      */
     public Vehicle createVehicle(String typeLabel) {
         if (!prototypes.containsKey(typeLabel)) {

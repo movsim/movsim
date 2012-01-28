@@ -88,8 +88,6 @@ public class KKW extends LongitudinalModelBase {
     /**
      * Instantiates a new kCA.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      * @param length

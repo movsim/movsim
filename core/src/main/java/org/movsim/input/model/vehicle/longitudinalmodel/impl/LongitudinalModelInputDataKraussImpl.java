@@ -67,8 +67,6 @@ public class LongitudinalModelInputDataKraussImpl extends LongitudinalModelInput
     /**
      * Instantiates a new acceleration model input data krauss impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */

@@ -59,8 +59,6 @@ public class NSM extends LongitudinalModelBase {
     /**
      * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */

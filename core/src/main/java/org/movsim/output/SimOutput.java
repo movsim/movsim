@@ -66,8 +66,6 @@ public class SimOutput implements SimulationTimeStep {
      * 
      * @param simInput
      *            the sim input
-     * @param roadSections
-     *            the road sections
      */
     public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;

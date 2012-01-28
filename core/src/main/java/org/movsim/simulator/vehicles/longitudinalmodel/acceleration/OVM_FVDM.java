@@ -67,8 +67,6 @@ public class OVM_FVDM extends LongitudinalModelBase {
     /**
      * Instantiates a new OVM = Optimal-Velocity Model or FVDM = Full-Velocity-Difference Model
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */

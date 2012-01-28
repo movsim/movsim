@@ -85,8 +85,6 @@ public class LongitudinalModelInputDataKKWImpl extends LongitudinalModelInputDat
     /**
      * Instantiates a new model input data kca impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */

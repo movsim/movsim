@@ -62,8 +62,6 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      * 
      * @param trajectoriesInput
      *            the trajectories input
-     * @param roadSection
-     *            the road section
      */
     public FileTrajectories(TrajectoriesInput trajectoriesInput, Route route) {
         super();

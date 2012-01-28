@@ -42,8 +42,6 @@ public class LongitudinalModelInputDataNewellImpl extends LongitudinalModelInput
     /**
      * Instantiates a new model input data newell impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */

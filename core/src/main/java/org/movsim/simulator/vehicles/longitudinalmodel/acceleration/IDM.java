@@ -75,8 +75,6 @@ public class IDM extends LongitudinalModelBase {
     /**
      * Instantiates a new IDM.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters: v0, T, s0, s1, a, b, delta
      */

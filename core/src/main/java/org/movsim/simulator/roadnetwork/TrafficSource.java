@@ -72,10 +72,6 @@ public class TrafficSource implements SimulationTimeStep {
      * 
      * @param vehGenerator
      *            the vehicle generator
-     * @param vehContainers
-     *            the veh containers
-     * @param trafficSourceData
-     *            the upstream boundary data
      */
     public TrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment, InflowTimeSeries inflowTimeSeries) {
         this.vehGenerator = vehGenerator;

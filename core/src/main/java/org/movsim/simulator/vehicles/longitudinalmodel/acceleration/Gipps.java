@@ -63,8 +63,6 @@ public class Gipps extends LongitudinalModelBase {
     /**
      * Instantiates a new gipps.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */

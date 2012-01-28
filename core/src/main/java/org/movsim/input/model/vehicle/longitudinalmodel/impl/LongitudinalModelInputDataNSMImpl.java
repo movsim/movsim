@@ -63,8 +63,6 @@ public class LongitudinalModelInputDataNSMImpl extends LongitudinalModelInputDat
     /**
      * Instantiates a new model input data nsm impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */

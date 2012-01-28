@@ -61,8 +61,6 @@ public class LongitudinalModelInputDataGippsImpl extends LongitudinalModelInputD
     /**
      * Instantiates a new model input data gipps impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */

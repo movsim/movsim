@@ -74,8 +74,6 @@ public class LongitudinalModelInputDataIDMImpl extends LongitudinalModelInputDat
     /**
      * Instantiates a new model input data idm impl.
      * 
-     * @param modelName
-     *            the model name
      * @param map
      *            the map
      */
