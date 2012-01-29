@@ -118,8 +118,9 @@ public class MOBIL {
         return acc <= -bSafe;
     }
 
-    public double calcAccelerationBalance(final int direction, RoadSegment roadSegment) {
+    public double calcAccelerationBalance(int direction, RoadSegment roadSegment) {
 
+        // set prospectiveBalance to large negative to indicate no lane change when not safe
         double prospectiveBalance = -Double.MAX_VALUE;
         final int currentLane = me.getLane();
         final LaneSegment newLane = roadSegment.laneSegment(currentLane + direction);
@@ -127,11 +128,11 @@ public class MOBIL {
             // never change lane into an entrance lane
             return prospectiveBalance;
         }
-        final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
 
         final Vehicle newFront = newLane.frontVehicle(me);
-        final Vehicle oldFront = ownLane.frontVehicle(me);
         final Vehicle newBack = newLane.rearVehicle(me);
+        final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
+        final Vehicle oldFront = ownLane.frontVehicle(me);
 
         // check if other vehicles are lane-changing
         if (neigborsInProcessOfLaneChange(oldFront, newFront, newBack)) {
