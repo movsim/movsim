@@ -102,18 +102,6 @@ public class MOBIL {
         pRef = this.politeness = politeness;
     }
 
-    private boolean neigborsInProcessOfLaneChange(final Vehicle v1, final Vehicle v2, final Vehicle v3) {
-        // finite delay criterion also for neighboring vehicles
-        final boolean oldFrontVehIsLaneChange = (v1 == null) ? false : v1.inProcessOfLaneChange();
-        final boolean newFrontVehIsLaneChange = (v2 == null) ? false : v2.inProcessOfLaneChange();
-        final boolean newBackVehIsLaneChange = (v3 == null) ? false : v3.inProcessOfLaneChange();
-        return (oldFrontVehIsLaneChange || newFrontVehIsLaneChange || newBackVehIsLaneChange);
-    }
-
-    private boolean safetyCheckGaps(double gapFront, double gapBack) {
-        return ((gapFront < gapMin) || (gapBack < gapMin));
-    }
-
     private boolean safetyCheckAcceleration(double acc) {
         return acc <= -bSafe;
     }
@@ -130,21 +118,31 @@ public class MOBIL {
         }
 
         final Vehicle newFront = newLane.frontVehicle(me);
+        if (newFront != null) {
+            if (newFront.inProcessOfLaneChange()) {
+                return prospectiveBalance;
+            }
+            final double gapFront = me.getNetDistance(newFront);
+            if (gapFront < gapMin) {
+                return prospectiveBalance;
+            }
+        }
         final Vehicle newBack = newLane.rearVehicle(me);
+        if (newBack != null) {
+            if (newBack.inProcessOfLaneChange()) {
+                return prospectiveBalance;
+            }
+            final double gapRear = newBack.getNetDistance(me);
+            if (gapRear < gapMin) {
+                return prospectiveBalance;
+            }
+        }
         final LaneSegment ownLane = roadSegment.laneSegment(currentLane);
         final Vehicle oldFront = ownLane.frontVehicle(me);
-
-        // check if other vehicles are lane-changing
-        if (neigborsInProcessOfLaneChange(oldFront, newFront, newBack)) {
-            return prospectiveBalance;
-        }
-
-        // safety: check distances
-        final double gapFront = me.getNetDistance(newFront);
-        final double gapBack = (newBack == null) ? MovsimConstants.GAP_INFINITY : newBack.getNetDistance(me);
-
-        if (safetyCheckGaps(gapFront, gapBack)) {
-            return prospectiveBalance;
+        if (oldFront != null) {
+            if (oldFront.inProcessOfLaneChange()) {
+                return prospectiveBalance;
+            }
         }
 
         // new situation: newBack with me as leader and following left lane cases
