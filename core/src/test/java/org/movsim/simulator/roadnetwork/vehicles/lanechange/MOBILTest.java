@@ -124,8 +124,30 @@ public class MOBILTest {
         v2.setLaneChangeModel(lcm2);
         roadSegment.addVehicle(v2);
 
+        // vehicles too close together, so acceleration balance should be large negative
         double balance = m1.calcAccelerationBalance(MovsimConstants.TO_LEFT, roadSegment);
         assertEquals(-Double.MAX_VALUE, balance, delta);
+        balance = m2.calcAccelerationBalance(MovsimConstants.TO_RIGHT, roadSegment);
+        assertEquals(-Double.MAX_VALUE, balance, delta);
+
+        // now set up with sufficient gap between vehicles, but v2 needs to decelerate, so it is not
+        // favourable to change lanes
+        roadSegment.clearVehicles();
+        v2.setFrontPosition(v1.getRearPosition() - 2 * minimumGap);
+        v2.setSpeed(80.0 / 3.6); // 80 km/h
+        roadSegment.addVehicle(v1);
+        roadSegment.addVehicle(v2);
+        balance = m2.calcAccelerationBalance(MovsimConstants.TO_RIGHT, roadSegment);
+        assertTrue(balance < 0.0);
+
+        // now set up with sufficient gap between vehicles, but v1 needs to brake heavily, so it is not
+        // safe to change lanes
+        roadSegment.clearVehicles();
+        v2.setRearPosition(v1.getFrontPosition() + 2 * minimumGap);
+        v2.setSpeed(80.0 / 3.6); // 80 km/h
+        v1.setSpeed(120.0 / 3.6); // 120 km/h
+        roadSegment.addVehicle(v1);
+        roadSegment.addVehicle(v2);
         balance = m2.calcAccelerationBalance(MovsimConstants.TO_RIGHT, roadSegment);
         assertEquals(-Double.MAX_VALUE, balance, delta);
     }
