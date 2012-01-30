@@ -119,7 +119,7 @@ public class SimulationInput {
 
         // -------------------------------------------------------
         // Output
-        outputInput = new OutputInput(elem.getChild(XmlElementNames.RoadOutput));
+        outputInput = new OutputInput(roadInputMap, elem.getChild(XmlElementNames.Output));
 
     }
 

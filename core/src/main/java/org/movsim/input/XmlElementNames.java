@@ -65,12 +65,15 @@ public interface XmlElementNames {
     public final String RoadRamps = "SIMPLE_RAMPS";
     public final String RoadSimpleRamp = "SIMPLE_RAMP";
     public final String RoadInflow = "INFLOW";
-    public final String RoadOutput = "OUTPUT";
+    public final String Output = "OUTPUT";
     public final String OutputFloatingCarData = "FLOATING_CAR_DATA";
     public final String OutputSpatioTemporal = "SPATIOTEMPORAL";
     public final String OutputDetectors = "DETECTORS";
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
     public final String OutputTravelTimes = "TRAVELTIMES";
+    public final String OutputRoutes = "ROUTES";
+    public final String OutputRoute = "ROUTE";
+    public final String OutputRoadId = "ROADID";
 
 }

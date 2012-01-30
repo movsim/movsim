@@ -388,9 +388,23 @@ phase_shift      NMTOKEN "0"
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (SPATIOTEMPORAL?, FLOATING_CAR_DATA?, TRAJECTORIES?, TRAVELTIMES?) >
+<!ELEMENT OUTPUT (ROUTES?, SPATIOTEMPORAL*, FLOATING_CAR_DATA?, TRAJECTORIES?, TRAVELTIMES?) >
 
 <!ATTLIST OUTPUT
+>
+
+<!ELEMENT ROUTES (ROUTE*)>
+<!ATTLIST ROUTES
+>
+
+<!ELEMENT ROUTE (ROADID*)>
+<!ATTLIST ROUTE
+label  NMTOKEN #REQUIRED 
+>
+
+<!ELEMENT ROADID EMPTY>
+<!ATTLIST ROADID
+id  NMTOKEN #REQUIRED 
 >
 
 <!-- output of spatio-temporal fields -->
@@ -398,6 +412,7 @@ phase_shift      NMTOKEN "0"
 <!ATTLIST SPATIOTEMPORAL
   dt NMTOKEN "60"
   dx NMTOKEN "100"
+  route NMTOKEN #REQUIRED
 >
 
 <!-- possible output: dn and/or list  -->
@@ -423,15 +438,7 @@ number  NMTOKEN #REQUIRED
 >
 
 
-<!ELEMENT TRAVELTIMES (ROUTE*)>
+<!ELEMENT TRAVELTIMES EMPTY>
 <!ATTLIST TRAVELTIMES
+  route     NMTOKEN #REQUIRED
 >
-
-<!ELEMENT ROUTE EMPTY>
-<!ATTLIST ROUTE
-start_id  NMTOKEN #REQUIRED 
-start_pos NMTOKEN #REQUIRED 
-end_id    NMTOKEN #REQUIRED 
-end_pos   NMTOKEN #REQUIRED 
->
-

@@ -25,12 +25,17 @@
  */
 package org.movsim.output;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.input.model.output.RouteInput;
+import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
@@ -52,13 +57,12 @@ public class SimOutput implements SimulationTimeStep {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
-    private SpatioTemporal spatioTemporal = null;
-    private FileSpatioTemporal fileSpatioTemporal;
+    private List<SpatioTemporal> spatioTemporals = null;
+    private List<FileSpatioTemporal> fileSpatioTemporal;
     private FloatingCars floatingCars = null;
     private FileFloatingCars fileFloatingCars;
     private FileTrajectories fileTrajectories = null;
     private final RoadNetwork roadNetwork;
-    private final RoadSegment roadSegment;
     private TravelTimes travelTimes;
 
     /**
@@ -69,39 +73,47 @@ public class SimOutput implements SimulationTimeStep {
      */
     public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
-        roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
-        // TODO - route is hardcoded for now
-        final Route route = new Route();
-        route.setName("rt1");
+        RoadSegment roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
+        // TODO - test route is hardcoded for now
+        final Route testRoute = new Route();
+        testRoute.setName("testRoute1");
         if (roadSegment != null && roadSegment.userId().equals("1")) {
-            route.add(roadSegment);
+            testRoute.add(roadSegment);
             RoadSegment nextRoadSegment = roadNetwork.findByUserId("2");
             if (nextRoadSegment != null) {
-                route.add(nextRoadSegment);
+                testRoute.add(nextRoadSegment);
                 nextRoadSegment = roadNetwork.findByUserId("3");
                 if (nextRoadSegment != null) {
-                    route.add(nextRoadSegment);
+                    testRoute.add(nextRoadSegment);
                 }
             }
         }
 
-        // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
             return;
         }
         final OutputInput outputInput = simulationInput.getOutputInput();
 
-        // TODO quick hack null treatment
-        // travel times
+        RoutesInput routesInput = outputInput.getRoutesInput();
+        Map<String, Route> routes = new HashMap<String, Route>();
+        if (routesInput != null) {
+            for (RouteInput routeInput : routesInput.getRoutes()) {
+                Route route = new Route();
+                route.setName(routeInput.getName());
+                List<String> roadIds = routeInput.getRoadIds();
+                for (String road : roadIds) {
+                    route.add(roadNetwork.findByUserId(road));
+                }
+                routes.put(route.getName(), route);
+            }
+        }
+
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
         if (travelTimesInput != null) {
             travelTimes = new TravelTimes(travelTimesInput, roadNetwork);
         }
 
-        // TODO hack: just *one* roadsection
-        // access not robust to fetch mainroad
-        // roadSection = roadSections.get(0);
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
@@ -111,18 +123,23 @@ public class SimOutput implements SimulationTimeStep {
             }
         }
 
-        final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
-        if (spatioTemporalInput.isWithMacro() && roadSegment != null) {
-            spatioTemporal = new SpatioTemporal(spatioTemporalInput, route);
-            if (writeOutput) {
-                fileSpatioTemporal = new FileSpatioTemporal(route.getName(), spatioTemporal);
+        final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
+        if (spatioTemporalInputs != null) {
+            spatioTemporals = new ArrayList<SpatioTemporal>();
+            for (SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
+                final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput, routes);
+                spatioTemporals.add(spatioTemporal);
+                if (writeOutput) {
+                    fileSpatioTemporal = new ArrayList<FileSpatioTemporal>();
+                    fileSpatioTemporal.add(new FileSpatioTemporal(spatioTemporal));
+                }
             }
         }
 
         final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
         if (trajInput.isInitialized()) {
             if (writeOutput) {
-                fileTrajectories = new FileTrajectories(trajInput, route);
+                fileTrajectories = new FileTrajectories(trajInput, testRoute); // TODO remove testRoute
             }
         }
     }
@@ -133,8 +150,10 @@ public class SimOutput implements SimulationTimeStep {
         if (floatingCars != null) {
             floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
-        if (spatioTemporal != null) {
-            spatioTemporal.timeStep(dt, simulationTime, iterationCount);
+        if (spatioTemporals != null) {
+            for (SpatioTemporal sp : spatioTemporals) {
+                sp.timeStep(dt, simulationTime, iterationCount);
+            }
         }
 
         if (fileTrajectories != null) {
@@ -148,12 +167,12 @@ public class SimOutput implements SimulationTimeStep {
     }
 
     /**
-     * Gets the spatio temporal.
+     * Gets the spatio temporals.
      * 
-     * @return the spatio temporal
+     * @return the spatio temporals
      */
-    public SpatioTemporal getSpatioTemporal() {
-        return spatioTemporal;
+    public List<SpatioTemporal> getSpatioTemporals() {
+        return spatioTemporals;
     }
 
     /**
@@ -170,7 +189,7 @@ public class SimOutput implements SimulationTimeStep {
      * 
      * @return the loop detectors
      */
-    public List<LoopDetector> getLoopDetectors() {
+    public List<LoopDetector> getLoopDetectors(RoadSegment roadSegment) {
         return roadSegment.getLoopDetectors().getDetectors();
     }
 

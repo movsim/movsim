@@ -38,20 +38,13 @@ public class FloatingCarInput {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCarInput.class);
 
-    /** The n dt. */
     private int nDt;
-
-    /** The dn. */
     private int dn;
-
-    /** The floating cars. */
     private Collection<Integer> floatingCars;
-
-    /** The is with fc. */
     private final boolean isWithFC;
 
     /**
-     * Instantiates a new floating car input impl.
+     * Instantiates a new floating car input.
      * 
      * @param elem
      *            the elem
@@ -84,39 +77,18 @@ public class FloatingCarInput {
         isWithFC = (dn != 0 || !floatingCars.isEmpty());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.FloatingCarInput#getDn()
-     */
     public int getDn() {
         return dn;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.FloatingCarInput#getDt()
-     */
     public int getNDt() {
         return nDt;
     }
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.FloatingCarInput#isWithFCD()
-     */
     public boolean isWithFCD() {
         return isWithFC;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.FloatingCarInput#getFloatingCars()
-     */
     public Collection<Integer> getFloatingCars() {
         return floatingCars;
     }

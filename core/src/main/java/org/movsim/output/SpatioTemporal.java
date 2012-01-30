@@ -25,6 +25,8 @@
  */
 package org.movsim.output;
 
+import java.util.Map;
+
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
@@ -37,7 +39,6 @@ import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SpatioTemporalImpl.
  */
@@ -61,15 +62,16 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
      * Constructor.
      * 
      * @param input
-     * @param route
+     * @param routes 
      */
-    public SpatioTemporal(SpatioTemporalInput input, Route route) {
+    public SpatioTemporal(SpatioTemporalInput input, Map<String, Route> routes) {
 
         dtOut = input.getDt();
         dxOut = input.getDx();
-
-        this.route = route;
+        route = routes.get(input.getRouteLabel());
         routeLength = route.getLength();
+        System.out.println("routename: " + route.getName());
+        System.out.println("routeLength: "+routeLength);
 
         initialize();
     }
@@ -161,6 +163,7 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
 
     /**
      * Returns the size of the storage arrays.
+     * 
      * @return the size of the arrays
      */
     public int size() {
@@ -201,5 +204,12 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
      */
     public double getTimeOffset() {
         return timeOffset;
+    }
+
+    /**
+     * @return the route
+     */
+    public Route getRoute() {
+        return route;
     }
 }

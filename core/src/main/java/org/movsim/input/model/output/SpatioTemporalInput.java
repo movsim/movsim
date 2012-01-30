@@ -29,55 +29,31 @@ import org.jdom.Element;
 
 public class SpatioTemporalInput {
 
-    /** The dt. */
     private double dt;
-
-    /** The dx. */
     private double dx;
-
-    /** The is initialized. */
-    private final boolean isInitialized;
+    private String label;
 
     /**
-     * Instantiates a new macro input impl.
+     * Constructor.
      * 
      * @param elem
      *            the elem
      */
     public SpatioTemporalInput(Element elem) {
-        if (elem == null) {
-            isInitialized = false;
-            return;
-        }
         this.dt = Double.parseDouble(elem.getAttributeValue("dt"));
         this.dx = Double.parseDouble(elem.getAttributeValue("dx"));
-        isInitialized = true;
+        this.label = elem.getAttributeValue("route");
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.MacroInput#getDt()
-     */
     public final double getDt() {
         return dt;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.MacroInput#getDx()
-     */
     public final double getDx() {
         return dx;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.output.impl.MacroInput#isWithMacro()
-     */
-    public final boolean isWithMacro() {
-        return isInitialized;
+    public String getRouteLabel() {
+        return label;
     }
 }

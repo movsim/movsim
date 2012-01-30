@@ -156,8 +156,6 @@ public class XmlReaderSimInput {
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
 
-        // parseOutputPathAttribute(root);
-
         parseNetworkFilename(root);
 
         // -------------------------------------------------------
@@ -238,19 +236,6 @@ public class XmlReaderSimInput {
         }
         return relativePath;
     }
-
-    // private void parseOutputPathAttribute(final Element root) {
-    // String outputPath = root.getAttribute("output_path").getValue();
-    // if (outputPath.equals("") || outputPath.isEmpty()) {
-    // return; // output path is taken from cmdline
-    // }
-    // logger.info("outputpath: {}", outputPath);
-    // final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
-    // if (!outputPathExits) {
-    // FileUtils.createDir(outputPath, "");
-    // }
-    // ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
-    // }
 
     /**
      * Read and validate xml.

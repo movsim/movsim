@@ -29,26 +29,15 @@ import org.jdom.Element;
 
 public class TrajectoriesInput {
 
-    /** The dt. */
     private double dt;
-
-    /** The start time. */
     private double startTime;
-
-    /** The end time. */
     private double endTime;
-
-    /** The start position. */
     private double startPosition;
-
-    /** The end position. */
     private double endPosition;
-
-    /** The is initialized. */
     private boolean isInitialized;
 
     /**
-     * Instantiates a new trajectories input impl.
+     * Instantiates a new trajectories input.
      * 
      * @param elem
      *            the elem
