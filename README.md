@@ -73,6 +73,12 @@ Import the project into Eclipse from the _File >> Import_ menu item. In the resu
 You can then build and run either the _core_ or _viewer_ Java applications.
 
 
+Wiki
+----
+
+The MovSim wiki is at: www.h1451310.stratoserver.net/movsimwiki/mediawiki/
+
+
 Commercial use
 --------------
 
