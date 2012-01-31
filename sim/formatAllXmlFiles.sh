@@ -1,6 +1,6 @@
 #!/bin/bash 
-# Get list of files to be foramtted
-file_list=`find . -name "*.xml" -type f`
+# Get list of files to be formatted
+file_list=`find . -name "*.xml" -o -name "*.xodr" -type f`
 for fn in $file_list
     do 
         echo "Processing $fn ...... "
