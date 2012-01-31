@@ -74,6 +74,6 @@ public interface XmlElementNames {
     public final String OutputTravelTimes = "TRAVELTIMES";
     public final String OutputRoutes = "ROUTES";
     public final String OutputRoute = "ROUTE";
-    public final String OutputRoadId = "ROADID";
+    public final String OutputRoadId = "ROAD";
 
 }

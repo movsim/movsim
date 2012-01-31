@@ -58,10 +58,10 @@ public class SimOutput implements SimulationTimeStep {
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
     private List<SpatioTemporal> spatioTemporals = null;
-    private List<FileSpatioTemporal> fileSpatioTemporal;
+    private List<FileSpatioTemporal> filesSpatioTemporal;
     private FloatingCars floatingCars = null;
     private FileFloatingCars fileFloatingCars;
-    private FileTrajectories fileTrajectories = null;
+    private List<FileTrajectories> filesTrajectories = null;
     private final RoadNetwork roadNetwork;
     private TravelTimes travelTimes;
 
@@ -94,7 +94,8 @@ public class SimOutput implements SimulationTimeStep {
             return;
         }
         final OutputInput outputInput = simulationInput.getOutputInput();
-
+        
+        // Routes for output
         RoutesInput routesInput = outputInput.getRoutesInput();
         Map<String, Route> routes = new HashMap<String, Route>();
         if (routesInput != null) {
@@ -108,7 +109,8 @@ public class SimOutput implements SimulationTimeStep {
                 routes.put(route.getName(), route);
             }
         }
-
+        
+        // Travel times output
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
         if (travelTimesInput != null) {
             travelTimes = new TravelTimes(travelTimesInput, roadNetwork);
@@ -122,24 +124,32 @@ public class SimOutput implements SimulationTimeStep {
                 fileFloatingCars = new FileFloatingCars(floatingCars);
             }
         }
-
+        
+        // Spatio temporal output
         final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInputs != null) {
             spatioTemporals = new ArrayList<SpatioTemporal>();
+            if (writeOutput) {
+                filesSpatioTemporal = new ArrayList<FileSpatioTemporal>();
+            }
             for (SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
                 final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput, routes);
                 spatioTemporals.add(spatioTemporal);
                 if (writeOutput) {
-                    fileSpatioTemporal = new ArrayList<FileSpatioTemporal>();
-                    fileSpatioTemporal.add(new FileSpatioTemporal(spatioTemporal));
+                    filesSpatioTemporal.add(new FileSpatioTemporal(spatioTemporal));
                 }
             }
         }
-
-        final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
-        if (trajInput.isInitialized()) {
+        
+        // Trajectories output
+        final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
+        if (trajInput != null) {
             if (writeOutput) {
-                fileTrajectories = new FileTrajectories(trajInput, testRoute); // TODO remove testRoute
+                filesTrajectories = new ArrayList<FileTrajectories>();
+                for (TrajectoriesInput traj: trajInput) {
+                    Route route = routes.get(traj.getLabel());
+                    filesTrajectories.add(new FileTrajectories(traj, route));
+                }
             }
         }
     }
@@ -156,8 +166,10 @@ public class SimOutput implements SimulationTimeStep {
             }
         }
 
-        if (fileTrajectories != null) {
-            fileTrajectories.timeStep(dt, simulationTime, iterationCount);
+        if (filesTrajectories != null) {
+            for (FileTrajectories filetraj: filesTrajectories) {
+                filetraj.timeStep(dt, simulationTime, iterationCount);
+            }
         }
 
         if (travelTimes != null) {

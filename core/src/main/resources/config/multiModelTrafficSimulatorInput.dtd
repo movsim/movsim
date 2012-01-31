@@ -2,7 +2,7 @@
 
 <!-- ##################################################################### -->
 <!-- DTD Validation Grammar for multi model traffic simulator              -->
-<!-- (c) 2011 Arne Kesting                                                 -->
+<!-- (c) 2011,2012 Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber -->
 <!-- ##################################################################### -->
 
 
@@ -388,7 +388,7 @@ phase_shift      NMTOKEN "0"
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (ROUTES?, SPATIOTEMPORAL*, FLOATING_CAR_DATA?, TRAJECTORIES?, TRAVELTIMES?) >
+<!ELEMENT OUTPUT (ROUTES?, SPATIOTEMPORAL*, FLOATING_CAR_DATA?, TRAJECTORIES*, TRAVELTIMES?) >
 
 <!ATTLIST OUTPUT
 >
@@ -397,14 +397,9 @@ phase_shift      NMTOKEN "0"
 <!ATTLIST ROUTES
 >
 
-<!ELEMENT ROUTE (ROADID*)>
+<!ELEMENT ROUTE (ROAD+)>
 <!ATTLIST ROUTE
 label  NMTOKEN #REQUIRED 
->
-
-<!ELEMENT ROADID EMPTY>
-<!ATTLIST ROADID
-id  NMTOKEN #REQUIRED 
 >
 
 <!-- output of spatio-temporal fields -->
@@ -433,8 +428,8 @@ number  NMTOKEN #REQUIRED
   dt           NMTOKEN "1"
   start_time   NMTOKEN "0"
   end_time     NMTOKEN "1e10"
-  start_x      NMTOKEN "0"
-  end_x        NMTOKEN "1e10"
+  route     NMTOKEN #REQUIRED
+  
 >
 
 

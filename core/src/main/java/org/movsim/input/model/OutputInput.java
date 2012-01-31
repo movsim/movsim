@@ -43,7 +43,7 @@ public class OutputInput {
 
     private List<SpatioTemporalInput> spatioTemporalInput;
 
-    private TrajectoriesInput trajectoriesInput;
+    private List<TrajectoriesInput> trajectoriesInput;
 
     private TravelTimesInput travelTimesInput;
 
@@ -74,9 +74,15 @@ public class OutputInput {
             }
         }
 
-        trajectoriesInput = new TrajectoriesInput(elem.getChild(XmlElementNames.OutputTrajectories));
+        if (elem.getChild(XmlElementNames.OutputTrajectories) != null) {
+            trajectoriesInput = new ArrayList<TrajectoriesInput>();
+            @SuppressWarnings("unchecked")
+            List<Element> elements = elem.getChildren(XmlElementNames.OutputTrajectories);
+            for (Element element : elements) {
+                trajectoriesInput.add(new TrajectoriesInput(element));
+            }
+        }
 
-        // TODO treat all elements similarly
         if (elem.getChild(XmlElementNames.OutputTravelTimes) != null) {
             travelTimesInput = new TravelTimesInput(elem.getChild(XmlElementNames.OutputTravelTimes));
         }
@@ -94,7 +100,7 @@ public class OutputInput {
         return spatioTemporalInput;
     }
 
-    public TrajectoriesInput getTrajectoriesInput() {
+    public List<TrajectoriesInput> getTrajectoriesInput() {
         return trajectoriesInput;
     }
 

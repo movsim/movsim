@@ -32,9 +32,7 @@ public class TrajectoriesInput {
     private double dt;
     private double startTime;
     private double endTime;
-    private double startPosition;
-    private double endPosition;
-    private boolean isInitialized;
+    private String label;
 
     /**
      * Instantiates a new trajectories input.
@@ -43,17 +41,10 @@ public class TrajectoriesInput {
      *            the elem
      */
     public TrajectoriesInput(Element elem) {
-        if (elem == null) {
-            isInitialized = false;
-            return;
-        }
-
         dt = Double.parseDouble(elem.getAttributeValue("dt"));
         startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
         endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
-        startPosition = Double.parseDouble(elem.getAttributeValue("start_x"));
-        endPosition = Double.parseDouble(elem.getAttributeValue("end_x"));
-        isInitialized = true;
+        label = elem.getAttributeValue("route");
     }
 
     /**
@@ -83,31 +74,7 @@ public class TrajectoriesInput {
         return endTime;
     }
 
-    /**
-     * Gets the start position.
-     * 
-     * @return the startPosition
-     */
-    public double getStartPosition() {
-        return startPosition;
+    public String getLabel() {
+        return label;
     }
-
-    /**
-     * Gets the end position.
-     * 
-     * @return the endPosition
-     */
-    public double getEndPosition() {
-        return endPosition;
-    }
-
-    /**
-     * Checks if is initialized.
-     * 
-     * @return the isInitialized
-     */
-    public boolean isInitialized() {
-        return isInitialized;
-    }
-
 }

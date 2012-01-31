@@ -65,13 +65,12 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      */
     public FileTrajectories(TrajectoriesInput trajectoriesInput, Route route) {
         super();
-        logger.info("Constructor");
 
         dtOut = trajectoriesInput.getDt();
         t_start_interval = trajectoriesInput.getStartTime();
         t_end_interval = trajectoriesInput.getEndTime();
-        x_start_interval = trajectoriesInput.getStartPosition();
-        x_end_interval = trajectoriesInput.getEndPosition();
+        x_start_interval = 0;
+        x_end_interval = route.getLength();
 
         this.route = route;
 
