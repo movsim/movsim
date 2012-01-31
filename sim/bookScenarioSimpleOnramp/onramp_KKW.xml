@@ -3,63 +3,63 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
 <SCENARIO path=".">
-  <VEHICLES>
-    <!-- vehicle length ==> cell units -->
-    <VEHICLE label="KKW1" length="15">
-      <!-- b_max not limited -->
-      <LONGITUDINAL_MODEL>
-        <KKW v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" />
-      </LONGITUDINAL_MODEL>
-      <LANE_CHANGE_MODEL />
-    </VEHICLE>
-    <!-- Obstacle is system type. Do not change. -->
-    <VEHICLE label="Obstacle" length="0">
-      <LONGITUDINAL_MODEL>
-        <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-      </LONGITUDINAL_MODEL>
-      <LANE_CHANGE_MODEL />
-    </VEHICLE>
-  </VEHICLES>
-  <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false">
-    <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-      <VEHICLE_TYPE label="KKW1" fraction="1" />
-    </TRAFFIC_COMPOSITION>
-    <!-- scaled units for time and space -->
-    <!-- road id 0 indicates mainroad -->
-    <ROAD id="1" length="40000" lanes="1">
-      <INITIAL_CONDITIONS>
-        <IC_MACRO x="2000" rho_per_km="2" v="3" />
-      </INITIAL_CONDITIONS>
-      <TRAFFIC_SOURCE logging="true">
-        <INFLOW t="0" q_per_hour="100" v="110" />
-        <INFLOW t="600" q_per_hour="2000" v="90" />
-      </TRAFFIC_SOURCE>
-      <TRAFFIC_SINK />
-      <!-- improve vehicle performance at inflow -->
-      <FLOW_CONSERVING_INHOMOGENEITIES />
-      <SPEED_LIMITS />
-      <SIMPLE_RAMPS>
-        <!-- scaled units! -->
-        <SIMPLE_RAMP x="30000" merge_length="1000" logging="true">
-          <INFLOW t="0" q_per_hour="550" />
-        </SIMPLE_RAMP>
-      </SIMPLE_RAMPS>
-      <TRAFFIC_LIGHTS />
-      <DETECTORS dt="60" logging="true">
-        <CROSS_SECTION x="16000" />
-        <CROSS_SECTION x="18000" />
-        <CROSS_SECTION x="20000" />
-        <CROSS_SECTION x="22000" />
-        <CROSS_SECTION x="24000" />
-        <CROSS_SECTION x="26000" />
-        <CROSS_SECTION x="28000" />
-        <CROSS_SECTION x="30000" />
-        <CROSS_SECTION x="32000" />
-      </DETECTORS>
-    </ROAD>
-    <OUTPUT>
-      <SPATIOTEMPORAL dx="200" dt="40" />
-    </OUTPUT>
-  </SIMULATION>
+    <VEHICLES>
+        <!-- vehicle length ==> cell units -->
+        <VEHICLE label="KKW1" length="15">
+            <!-- b_max not limited -->
+            <LONGITUDINAL_MODEL>
+                <KKW v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+        <!-- Obstacle is system type. Do not change. -->
+        <VEHICLE label="Obstacle" length="0">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="KKW1" fraction="1" />
+        </TRAFFIC_COMPOSITION>
+        <!-- scaled units for time and space -->
+        <!-- road id 0 indicates mainroad -->
+        <ROAD id="1" length="40000" lanes="1">
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="2000" rho_per_km="2" v="3" />
+            </INITIAL_CONDITIONS>
+            <TRAFFIC_SOURCE logging="true">
+                <INFLOW t="0" q_per_hour="100" v="110" />
+                <INFLOW t="600" q_per_hour="2000" v="90" />
+            </TRAFFIC_SOURCE>
+            <TRAFFIC_SINK />
+            <!-- improve vehicle performance at inflow -->
+            <FLOW_CONSERVING_INHOMOGENEITIES />
+            <SPEED_LIMITS />
+            <SIMPLE_RAMPS>
+                <!-- scaled units! -->
+                <SIMPLE_RAMP x="30000" merge_length="1000" logging="true">
+                    <INFLOW t="0" q_per_hour="550" />
+                </SIMPLE_RAMP>
+            </SIMPLE_RAMPS>
+            <TRAFFIC_LIGHTS />
+            <DETECTORS dt="60" logging="true">
+                <CROSS_SECTION x="16000" />
+                <CROSS_SECTION x="18000" />
+                <CROSS_SECTION x="20000" />
+                <CROSS_SECTION x="22000" />
+                <CROSS_SECTION x="24000" />
+                <CROSS_SECTION x="26000" />
+                <CROSS_SECTION x="28000" />
+                <CROSS_SECTION x="30000" />
+                <CROSS_SECTION x="32000" />
+            </DETECTORS>
+        </ROAD>
+        <OUTPUT>
+            <SPATIOTEMPORAL dx="200" dt="40" />
+        </OUTPUT>
+    </SIMULATION>
 </SCENARIO>
 
