@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE>
   <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-  
   <road name="R1" length="500.0" id="1" junction="-1">
     <link>
       <successor elementType="junction" elementId="15" contactPoint="start" />
@@ -105,11 +104,12 @@
   </road>
   <junction name="" id="15">
     <connection id="0" incomingRoad="1" connectingRoad="2" contactPoint="start">
-      <laneLink from="-1" to="-1"/>
-      <laneLink from="-2" to="-2"/>
+      <laneLink from="-1" to="-1" />
+      <laneLink from="-2" to="-2" />
     </connection>
     <connection id="1" incomingRoad="4" connectingRoad="2" contactPoint="start">
-      <laneLink from="-1" to="-3"/>
+      <laneLink from="-1" to="-3" />
     </connection>
   </junction>
 </OpenDRIVE>
+

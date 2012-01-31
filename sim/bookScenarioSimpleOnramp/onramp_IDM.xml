@@ -59,10 +59,10 @@
     <OUTPUT>
       <ROUTES>
         <ROUTE label="main">
-            <ROADID id="1" />
+          <ROADID id="1" />
         </ROUTE>
       </ROUTES>
-      <SPATIOTEMPORAL dx="100" dt="40" route="main"/>
+      <SPATIOTEMPORAL dx="100" dt="40" route="main" />
       <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
     </OUTPUT>
   </SIMULATION>

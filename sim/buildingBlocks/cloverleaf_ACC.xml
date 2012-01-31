@@ -33,8 +33,7 @@
       <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
     </TRAFFIC_COMPOSITION>
     <ROAD id="1">
-      <INITIAL_CONDITIONS>
-      </INITIAL_CONDITIONS>
+      <INITIAL_CONDITIONS />
       <TRAFFIC_SOURCE logging="false">
         <INFLOW t="0" q_per_hour="1600" v="24" />
       </TRAFFIC_SOURCE>
@@ -45,7 +44,7 @@
       <TRAFFIC_LIGHTS />
       <DETECTORS />
     </ROAD>
-     <ROAD id="10">
+    <ROAD id="10">
       <INITIAL_CONDITIONS />
       <TRAFFIC_SOURCE>
         <INFLOW t="0" q_per_hour="1300" />
@@ -63,7 +62,7 @@
       <TRAFFIC_LIGHTS />
       <DETECTORS />
     </ROAD>
-     <ROAD id="28">
+    <ROAD id="28">
       <INITIAL_CONDITIONS />
       <TRAFFIC_SOURCE>
         <INFLOW t="0" q_per_hour="1300" />

@@ -33,8 +33,7 @@
       <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
     </TRAFFIC_COMPOSITION>
     <ROAD id="1">
-      <INITIAL_CONDITIONS>
-      </INITIAL_CONDITIONS>
+      <INITIAL_CONDITIONS />
       <TRAFFIC_SOURCE logging="false">
         <INFLOW t="0" q_per_hour="600" v="24" />
       </TRAFFIC_SOURCE>
@@ -43,7 +42,7 @@
       </SPEED_LIMITS>
       <TRAFFIC_LIGHTS>
         <TRAFFIC_LIGHT x="1200" green_time="30" green_red_time="3" red_time="45" red_green_time="2" phase_shift="0" />
-<!--        <TRAFFIC_LIGHT x="1800" green_time="30" green_red_time="3" red_time="45" red_green_time="2" phase_shift="0" />-->
+        <!--        <TRAFFIC_LIGHT x="1800" green_time="30" green_red_time="3" red_time="45" red_green_time="2" phase_shift="0" />-->
       </TRAFFIC_LIGHTS>
       <DETECTORS />
     </ROAD>

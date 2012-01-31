@@ -50,8 +50,7 @@
       <TRAFFIC_LIGHTS />
       <DETECTORS />
     </ROAD>
-    <OUTPUT>
-    </OUTPUT>
+    <OUTPUT />
   </SIMULATION>
 </SCENARIO>
 

@@ -27,15 +27,14 @@
       <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
     </TRAFFIC_COMPOSITION>
     <ROAD id="1">
-      <INITIAL_CONDITIONS>
-      </INITIAL_CONDITIONS>
+      <INITIAL_CONDITIONS />
       <TRAFFIC_SOURCE logging="false">
-      <!-- inflow per lane results -->
+        <!-- inflow per lane results -->
         <INFLOW t="0" q_per_hour="760" v="24" />
       </TRAFFIC_SOURCE>
       <SPEED_LIMITS>
-           <SPEED_LIMIT x="1200" speedlimit_kmh="100" />
-           <SPEED_LIMIT x="1600" speedlimit_kmh="80" /> 
+        <SPEED_LIMIT x="1200" speedlimit_kmh="100" />
+        <SPEED_LIMIT x="1600" speedlimit_kmh="80" />
       </SPEED_LIMITS>
       <TRAFFIC_LIGHTS />
       <DETECTORS />
