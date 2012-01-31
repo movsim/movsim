@@ -73,43 +73,28 @@ public class SimOutput implements SimulationTimeStep {
      */
     public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
-        RoadSegment roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
-        // TODO - test route is hardcoded for now
-        final Route testRoute = new Route();
-        testRoute.setName("testRoute1");
-        if (roadSegment != null && roadSegment.userId().equals("1")) {
-            testRoute.add(roadSegment);
-            RoadSegment nextRoadSegment = roadNetwork.findByUserId("2");
-            if (nextRoadSegment != null) {
-                testRoute.add(nextRoadSegment);
-                nextRoadSegment = roadNetwork.findByUserId("3");
-                if (nextRoadSegment != null) {
-                    testRoute.add(nextRoadSegment);
-                }
-            }
-        }
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
             return;
         }
         final OutputInput outputInput = simulationInput.getOutputInput();
-        
+
         // Routes for output
-        RoutesInput routesInput = outputInput.getRoutesInput();
-        Map<String, Route> routes = new HashMap<String, Route>();
+        final RoutesInput routesInput = outputInput.getRoutesInput();
+        final Map<String, Route> routes = new HashMap<String, Route>();
         if (routesInput != null) {
-            for (RouteInput routeInput : routesInput.getRoutes()) {
-                Route route = new Route();
+            for (final RouteInput routeInput : routesInput.getRoutes()) {
+                final Route route = new Route();
                 route.setName(routeInput.getName());
-                List<String> roadIds = routeInput.getRoadIds();
-                for (String road : roadIds) {
-                    route.add(roadNetwork.findByUserId(road));
+                final List<String> roadIds = routeInput.getRoadIds();
+                for (final String roadId : roadIds) {
+                    route.add(roadNetwork.findByUserId(roadId));
                 }
                 routes.put(route.getName(), route);
             }
         }
-        
+
         // Travel times output
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
         if (travelTimesInput != null) {
@@ -117,6 +102,7 @@ public class SimOutput implements SimulationTimeStep {
         }
 
         // Floating Car Output
+        final RoadSegment roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
             floatingCars = new FloatingCars(roadSegment, floatingCarInput);
@@ -132,7 +118,7 @@ public class SimOutput implements SimulationTimeStep {
             if (writeOutput) {
                 filesSpatioTemporal = new ArrayList<FileSpatioTemporal>();
             }
-            for (SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
+            for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
                 final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput, routes);
                 spatioTemporals.add(spatioTemporal);
                 if (writeOutput) {
@@ -140,14 +126,14 @@ public class SimOutput implements SimulationTimeStep {
                 }
             }
         }
-        
+
         // Trajectories output
         final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
         if (trajInput != null) {
             if (writeOutput) {
                 filesTrajectories = new ArrayList<FileTrajectories>();
                 for (TrajectoriesInput traj: trajInput) {
-                    Route route = routes.get(traj.getLabel());
+                    final Route route = routes.get(traj.getLabel());
                     filesTrajectories.add(new FileTrajectories(traj, route));
                 }
             }
