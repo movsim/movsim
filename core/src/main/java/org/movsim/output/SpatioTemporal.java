@@ -62,7 +62,7 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
      * Constructor.
      * 
      * @param input
-     * @param routes 
+     * @param routes
      */
     public SpatioTemporal(SpatioTemporalInput input, Map<String, Route> routes) {
 
@@ -70,8 +70,6 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
         dxOut = input.getDx();
         route = routes.get(input.getRouteLabel());
         routeLength = route.getLength();
-        System.out.println("routename: " + route.getName());
-        System.out.println("routeLength: "+routeLength);
 
         initialize();
     }

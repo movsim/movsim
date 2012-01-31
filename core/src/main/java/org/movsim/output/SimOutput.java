@@ -94,7 +94,7 @@ public class SimOutput implements SimulationTimeStep {
             return;
         }
         final OutputInput outputInput = simulationInput.getOutputInput();
-        
+
         // Routes for output
         RoutesInput routesInput = outputInput.getRoutesInput();
         Map<String, Route> routes = new HashMap<String, Route>();
@@ -109,7 +109,7 @@ public class SimOutput implements SimulationTimeStep {
                 routes.put(route.getName(), route);
             }
         }
-        
+
         // Travel times output
         final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
         if (travelTimesInput != null) {
@@ -124,7 +124,7 @@ public class SimOutput implements SimulationTimeStep {
                 fileFloatingCars = new FileFloatingCars(floatingCars);
             }
         }
-        
+
         // Spatio temporal output
         final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInputs != null) {
@@ -140,13 +140,13 @@ public class SimOutput implements SimulationTimeStep {
                 }
             }
         }
-        
+
         // Trajectories output
         final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
         if (trajInput != null) {
             if (writeOutput) {
                 filesTrajectories = new ArrayList<FileTrajectories>();
-                for (TrajectoriesInput traj: trajInput) {
+                for (TrajectoriesInput traj : trajInput) {
                     Route route = routes.get(traj.getLabel());
                     filesTrajectories.add(new FileTrajectories(traj, route));
                 }
@@ -160,6 +160,7 @@ public class SimOutput implements SimulationTimeStep {
         if (floatingCars != null) {
             floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
+        
         if (spatioTemporals != null) {
             for (SpatioTemporal sp : spatioTemporals) {
                 sp.timeStep(dt, simulationTime, iterationCount);
@@ -167,7 +168,7 @@ public class SimOutput implements SimulationTimeStep {
         }
 
         if (filesTrajectories != null) {
-            for (FileTrajectories filetraj: filesTrajectories) {
+            for (FileTrajectories filetraj : filesTrajectories) {
                 filetraj.timeStep(dt, simulationTime, iterationCount);
             }
         }
