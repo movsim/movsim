@@ -119,7 +119,8 @@ public class SimOutput implements SimulationTimeStep {
                 filesSpatioTemporal = new ArrayList<FileSpatioTemporal>();
             }
             for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
-                final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput, routes);
+                final Route route = routes.get(spatioTemporalInput.getRouteLabel());
+                final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(), spatioTemporalInput.getDt(), route);
                 spatioTemporals.add(spatioTemporal);
                 if (writeOutput) {
                     filesSpatioTemporal.add(new FileSpatioTemporal(spatioTemporal));

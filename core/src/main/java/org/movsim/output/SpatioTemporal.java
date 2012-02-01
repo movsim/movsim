@@ -25,9 +25,6 @@
  */
 package org.movsim.output;
 
-import java.util.Map;
-
-import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -47,10 +44,9 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
 
-    private final double dtOut;
     private final double dxOut;
+    private final double dtOut;
     private final Route route;
-    private final double routeLength;
 
     private int size;
     private double[] density;
@@ -64,22 +60,14 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
      * @param input
      * @param routes
      */
-    public SpatioTemporal(SpatioTemporalInput input, Map<String, Route> routes) {
+    public SpatioTemporal(double dxOut, double dtOut, Route route) {
 
-        dtOut = input.getDt();
-        dxOut = input.getDx();
-        route = routes.get(input.getRouteLabel());
-        routeLength = route.getLength();
+        this.dxOut = dxOut;
+        this.dtOut = dtOut;
+        this.route = route;
 
-        initialize();
-    }
-
-    /**
-     * Initialize.
-     */
-    private void initialize() {
         timeOffset = 0;
-        size = (int) (routeLength / dxOut) + 1;
+        size = (int) (route.getLength() / dxOut) + 1;
         density = new double[size];
         averageSpeed = new double[size];
         flow = new double[size];
