@@ -57,11 +57,11 @@ public class SimOutput implements SimulationTimeStep {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
-    private List<SpatioTemporal> spatioTemporals = null;
+    private List<SpatioTemporal> spatioTemporals;
     private List<FileSpatioTemporal> filesSpatioTemporal;
-    private FloatingCars floatingCars = null;
+    private FloatingCars floatingCars;
     private FileFloatingCars fileFloatingCars;
-    private List<FileTrajectories> filesTrajectories = null;
+    private List<FileTrajectories> filesTrajectories;
     private final RoadNetwork roadNetwork;
     private TravelTimes travelTimes;
 
