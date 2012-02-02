@@ -45,7 +45,7 @@ public class OutputInput {
 
     private List<TrajectoriesInput> trajectoriesInput;
 
-    private TravelTimesInput travelTimesInput;
+    private List<TravelTimesInput> travelTimesInput;
 
     private RoutesInput routesInput;
 
@@ -84,7 +84,12 @@ public class OutputInput {
         }
 
         if (elem.getChild(XmlElementNames.OutputTravelTimes) != null) {
-            travelTimesInput = new TravelTimesInput(elem.getChild(XmlElementNames.OutputTravelTimes));
+            travelTimesInput = new ArrayList<TravelTimesInput>();
+            @SuppressWarnings("unchecked")
+            List<Element> elements = elem.getChildren(XmlElementNames.OutputTravelTimes);
+            for (Element element: elements) {
+                travelTimesInput.add(new TravelTimesInput(element));
+            }
         }
     }
 
@@ -104,7 +109,7 @@ public class OutputInput {
         return trajectoriesInput;
     }
 
-    public TravelTimesInput getTravelTimesInput() {
+    public List<TravelTimesInput> getTravelTimesInput() {
         return travelTimesInput;
     }
 

@@ -48,10 +48,10 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
     private final double dtOut;
     private final Route route;
 
-    private int size;
-    private double[] density;
-    private double[] averageSpeed;
-    private double[] flow;
+    private final int size;
+    private final double[] density;
+    private final double[] averageSpeed;
+    private final double[] flow;
     private double timeOffset;
 
     /**
