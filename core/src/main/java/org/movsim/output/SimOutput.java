@@ -73,7 +73,6 @@ public class SimOutput implements SimulationTimeStep {
      */
     public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
-        System.out.println("in Simputput contr.");
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
