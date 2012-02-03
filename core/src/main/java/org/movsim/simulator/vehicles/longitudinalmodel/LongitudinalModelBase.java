@@ -90,22 +90,17 @@ public abstract class LongitudinalModelBase implements Observer {
         public String toString() {
             return name();
         }
-
     }
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LongitudinalModelBase.class);
-
     private final ModelName modelName;
-
     private final double scalingLength;
-
-    public LongitudinalModelInputData parameters;
-
+    protected final LongitudinalModelInputData parameters;
     protected long id;
 
     /**
-     * Instantiates a new longitudinal model.
+     * Constructor.
      * 
      * @param modelName
      *            the model name
@@ -227,16 +222,20 @@ public abstract class LongitudinalModelBase implements Observer {
         // check left-vehicle's speed
 
         final Vehicle newFrontLeft = vehContainerLeftLane.frontVehicle(me);
-        final double speedFront = (newFrontLeft != null) ? newFrontLeft.getSpeed() : -1;
+        if (newFrontLeft == null) {
+            return accInOwnLane;
+        }
+        final double speedFront = newFrontLeft.getSpeed();
+        if (speedFront <= vCritEur) {
+            return accInOwnLane;
+        }
 
         // condition me.getSpeed() > speedFront will be evaluated by softer tanh
         // condition below
-        final double accLeft = (speedFront > vCritEur) ? calcAcc(me, vehContainerLeftLane, alphaT, alphaV0, alphaA)
-                : Double.MAX_VALUE;
+        final double accLeft = calcAcc(me, vehContainerLeftLane, alphaT, alphaV0, alphaA);
 
         // avoid hard switching by condition vMe>vLeft needed in European
         // acceleration rule
-
         final double frac = calcSmoothFraction(me.getSpeed(), speedFront);
         final double accResult = frac * Math.min(accInOwnLane, accLeft) + (1 - frac) * accInOwnLane;
 
@@ -277,5 +276,4 @@ public abstract class LongitudinalModelBase implements Observer {
      *            the new desired speed v0
      */
     protected abstract void setDesiredSpeedV0(double v0);
-
 }
