@@ -182,14 +182,15 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Removes the given vehicle.
-     * @param vehicle 
+     * @param vehicleToRemove 
      */
-    public void removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicleToRemove) {
         // TODO improve primitive implementation
+        final long vehicleId = vehicleToRemove.getId();
         final int count = vehicles.size();
         for (int i = 0; i < count; ++i) {
-            final Vehicle veh = vehicles.get(i);
-            if (veh.getId() == vehicle.getId()) {
+            final Vehicle vehicle = vehicles.get(i);
+            if (vehicle.getId() == vehicleId) {
                 vehicles.remove(i);
                 return;
             }
