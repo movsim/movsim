@@ -241,6 +241,7 @@ public class Vehicle {
         setRearPosition(rearPosition);
         this.speed = speed;
         this.lane = lane;
+        this.laneOld = lane;
         this.width = width;
         this.color = 0;
         fuelModel = null;
@@ -264,6 +265,7 @@ public class Vehicle {
         frontPosition = source.frontPosition;
         speed = source.speed;
         lane = source.lane;
+        laneOld = source.laneOld;
         length = source.length;
         width = source.width;
         color = source.color;
@@ -285,6 +287,7 @@ public class Vehicle {
         setRearPosition(0.0);
         this.speed = 0.0;
         this.lane = Lane.NONE;
+        this.laneOld = Lane.NONE;
         this.width = width;
         this.color = 0;
         fuelModel = null;
@@ -624,7 +627,10 @@ public class Vehicle {
     }
 
     public final void setLane(int lane) {
+        assert this.lane != lane;
+        laneOld = this.lane;
         this.lane = lane;
+        targetLane = Lane.NONE;
     }
 
     public boolean hasReactionTime() {
@@ -711,6 +717,7 @@ public class Vehicle {
      */
     private void setTargetLane(int targetLane) {
         assert targetLane >= 0;
+        assert targetLane != lane;
         this.targetLane = targetLane;
     }
 
@@ -842,12 +849,17 @@ public class Vehicle {
      * @param newLane
      * @param exitPos
      */
-    public void moveToNewRoadSegment(int newLane, double newRearPos, double exitPos) {
+    public void moveToNewRoadSegment(RoadSegment newRoadSegment, int newLane, double newRearPosition, double exitPos) {
         // distanceTravelledToStartOfRoadSegment += rearPosition - newRearPos;
         final int delta = laneOld - lane;
         lane = newLane;
         laneOld = lane + delta;
-        setRearPosition(newRearPos);
+        if (laneOld >= newRoadSegment.laneCount()) {
+            laneOld = newRoadSegment.laneCount() - 1;
+        } else if (laneOld < Lane.LANE1) {
+            laneOld = Lane.LANE1;
+        }
+        setRearPosition(newRearPosition);
         // this.exitEndPos = exitPos;
         // trafficLight = null;
         // speedLimit = 0.0;
@@ -886,5 +898,4 @@ public class Vehicle {
     public final double totalTraveledDistance() {
         return totalTraveledDistance;
     }
-
 }
