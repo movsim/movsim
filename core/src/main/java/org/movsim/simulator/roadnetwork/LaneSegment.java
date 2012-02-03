@@ -540,7 +540,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // TODO - check previous lane correct (used for drawing vehicle when changing lanes)
                 // final int prevLaneOnNewRoadSegment = lane;
                 // final int prevLaneOnNewRoadSegment = sinkLane[vehicle.previousLane()];
-                final double positionOnNewRoadSegment = vehicle.getRearPosition() - roadLength;
+                final double rearPositionOnNewRoadSegment = vehicle.getRearPosition() - roadLength;
                 double exitEndPos = Vehicle.EXIT_POSITION_NOT_SET;
                 if (sinkLaneSegment.type() == Lane.Type.TRAFFIC) {
                     final int exitRoadSegmentId = vehicle.exitRoadSegmentId();
@@ -558,7 +558,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                     }
                 }
                 final int laneOnNewRoadSegment = sinkLaneSegment.lane();
-                vehicle.moveToNewRoadSegment(laneOnNewRoadSegment, positionOnNewRoadSegment, exitEndPos);
+                vehicle.moveToNewRoadSegment(sinkLaneSegment.roadSegment(), laneOnNewRoadSegment, rearPositionOnNewRoadSegment, exitEndPos);
                 // remove vehicle from this road segment
                 vehicles.remove(0);
                 --count;

@@ -566,7 +566,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * </p>
      * 
      * <p>
-     * <code>laneChange</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
+     * <code>makeLaneChanges</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
      * </p>
      * 
      * @param dt
@@ -576,7 +576,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void laneChange(double dt, double simulationTime, long iterationCount) {
+    public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
         if (laneCount < 2) {
             // need at least 2 lanes for lane changing
             return;
@@ -595,9 +595,11 @@ public class RoadSegment implements Iterable<Vehicle> {
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
                 laneSegments[vehicle.getLane()].removeVehicle(vehicle);
-                assert laneSegments[vehicle.getTargetLane()].type() != Lane.Type.ENTRANCE;
-                vehicle.setLane(vehicle.getTargetLane());
-                laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
+                final int targetLane = vehicle.getTargetLane();
+                assert targetLane != Lane.NONE;
+                assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                vehicle.setLane(targetLane);
+                laneSegments[targetLane].addVehicle(vehicle);
             }
         }
     }
@@ -612,7 +614,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void accelerate(double dt, double simulationTime, long iterationCount) {
+    public void updateVehicleAccelerations(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             assert laneSegment.assertInvariant();
@@ -628,7 +630,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                vehicle.calcAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
+                vehicle.updateAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
             }
         }
     }
