@@ -595,9 +595,11 @@ public class RoadSegment implements Iterable<Vehicle> {
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
                 laneSegments[vehicle.getLane()].removeVehicle(vehicle);
-                assert laneSegments[vehicle.getTargetLane()].type() != Lane.Type.ENTRANCE;
-                vehicle.setLane(vehicle.getTargetLane());
-                laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
+                final int targetLane = vehicle.getTargetLane();
+                assert targetLane != Lane.NONE;
+                assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                vehicle.setLane(targetLane);
+                laneSegments[targetLane].addVehicle(vehicle);
             }
         }
     }
