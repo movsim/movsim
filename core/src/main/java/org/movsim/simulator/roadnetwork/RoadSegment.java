@@ -705,7 +705,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void updateDetectors(double dt, double simulationTime, long iterationCount) {
         if (this.loopDetectors != null) {
-            loopDetectors.update(dt, simulationTime, iterationCount, this);
+            loopDetectors.timeStep(dt, simulationTime, iterationCount);
         }
     }
 
