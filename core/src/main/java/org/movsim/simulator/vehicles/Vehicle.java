@@ -508,7 +508,7 @@ public class Vehicle {
         return speed - vehFront.getSpeed();
     }
 
-    public void calcAcceleration(double dt, final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
+    public void updateAcceleration(double dt, final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
             double alphaT, double alphaV0) {
 
         accOld = acc;

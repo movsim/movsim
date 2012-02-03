@@ -795,10 +795,10 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#laneChange(double, double, long)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#makeLaneChanges(double, double, long)}
      */
     @Test
-    public final void testlaneChange() {
+    public final void testMakeLaneChanges() {
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
 
@@ -816,7 +816,7 @@ public class RoadSegmentTest {
         final double dt = 0.25;
         final double simulationTime = 0.0;
         final long iterationCount = 0;
-        r0.laneChange(dt, simulationTime, iterationCount);
+        r0.makeLaneChanges(dt, simulationTime, iterationCount);
         assertEquals(Lane.LANE1, obstacle.getLane());
         assertEquals(Lane.LANE2, v0.getLane());
         assertEquals(1, r0.laneSegment(Lane.LANE1).vehicleCount());

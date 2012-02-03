@@ -200,11 +200,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // Note: must do lane changes before vehicle positions are updated (or after outFlow) to ensure
         // the vehicle's roadSegmentId is correctly set
         for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.laneChange(dt, simulationTime, iterationCount);
+            roadSegment.makeLaneChanges(dt, simulationTime, iterationCount);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.accelerate(dt, simulationTime, iterationCount);
+            roadSegment.updateVehicleAccelerations(dt, simulationTime, iterationCount);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
