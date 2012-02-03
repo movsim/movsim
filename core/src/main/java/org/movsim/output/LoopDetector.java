@@ -46,25 +46,25 @@ public class LoopDetector extends ObservableImpl {
 
     private double timeOffset;
 
-    private int[] vehCount;
+    private final int[] vehCount;
 
-    private double[] vSum;
+    private final double[] vSum;
 
-    private double[] occTime;
+    private final double[] occTime;
 
-    private double[] sumInvV;
+    private final double[] sumInvV;
 
-    private double[] sumInvQ;
+    private final double[] sumInvQ;
 
-    private double[] meanSpeed;
+    private final double[] meanSpeed;
 
-    private double[] occupancy;
+    private final double[] occupancy;
 
-    private int[] vehCountOutput;
+    private final int[] vehCountOutput;
 
-    private double[] meanSpeedHarmonic;
+    private final double[] meanSpeedHarmonic;
 
-    private double[] meanTimegapHarmonic;
+    private final double[] meanTimegapHarmonic;
 
     private int laneCount;
 
@@ -258,9 +258,6 @@ public class LoopDetector extends ObservableImpl {
     public double getMeanSpeedAllLanes() {
         return meanSpeedAllLanes;
     }
-
-   
-  
 
     public int getVehCountOutputAllLanes() {
         return vehCountOutputAllLanes;
