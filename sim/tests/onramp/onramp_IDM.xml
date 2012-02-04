@@ -46,7 +46,7 @@
                 <ROUTE label="route1">
                     <ROAD id="1" />
                     <ROAD id="2" />
-                    <ROAD id="2" />
+                    <ROAD id="3" />
                 </ROUTE>
             </ROUTES>
             <SPATIOTEMPORAL dx="100" dt="40" route="route1" />
