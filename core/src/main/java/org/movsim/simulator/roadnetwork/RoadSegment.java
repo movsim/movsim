@@ -594,12 +594,20 @@ public class RoadSegment implements Iterable<Vehicle> {
             // assign staged vehicles to new lanes
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
-                laneSegments[vehicle.getLane()].removeVehicle(vehicle);
                 final int targetLane = vehicle.getTargetLane();
                 assert targetLane != Lane.NONE;
                 assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
-                vehicle.setLane(targetLane);
-                laneSegments[targetLane].addVehicle(vehicle);
+                // TODO check safety criterion in target lane for subject vehicle and follower
+                // Criterion does not work, have to figure out why
+                if(vehicle.getLaneChangeModel().isMandatoryLaneChangeSafe(laneSegments[targetLane])){
+                    laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+                    vehicle.setLane(targetLane);
+                    laneSegments[targetLane].addVehicle(vehicle);
+                }
+                else{
+                    // TODO debug stuff. 
+                    System.out.println("!!!!!!!!!!! hey, lc is not safe !!");
+                }
             }
         }
     }
@@ -901,9 +909,9 @@ public class RoadSegment implements Iterable<Vehicle> {
                 if (netDistance < 0) {
                     logger.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d at x=%.4f ", index, vehicle.getFrontPosition()));
+                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(), vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh in front at x=%.4f on lane=%d\n", vehFront.getFrontPosition(),
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(), vehFront.getFrontPosition(),
                                 vehicle.getLane()));
                     }
                     sb.append("roadID=" + id);
