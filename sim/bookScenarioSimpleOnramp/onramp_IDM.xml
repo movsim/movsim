@@ -22,7 +22,6 @@
         <TRAFFIC_COMPOSITION write_fund_diagrams="true">
             <VEHICLE_TYPE label="IDM1" fraction="1" />
         </TRAFFIC_COMPOSITION>
-        <!-- road id 0 indicates mainroad -->
         <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="8600" rho_per_km="2" v="30" />

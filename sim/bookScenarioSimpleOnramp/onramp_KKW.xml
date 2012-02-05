@@ -2,7 +2,7 @@
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
-<SCENARIO path=".">
+<SCENARIO network_filename="simple_onramp.xodr">
     <VEHICLES>
         <!-- vehicle length ==> cell units -->
         <VEHICLE label="KKW1" length="15">
@@ -25,8 +25,7 @@
             <VEHICLE_TYPE label="KKW1" fraction="1" />
         </TRAFFIC_COMPOSITION>
         <!-- scaled units for time and space -->
-        <!-- road id 0 indicates mainroad -->
-        <ROAD id="1" length="40000" lanes="1">
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="2000" rho_per_km="2" v="3" />
             </INITIAL_CONDITIONS>
@@ -58,7 +57,13 @@
             </DETECTORS>
         </ROAD>
         <OUTPUT>
-            <SPATIOTEMPORAL dx="200" dt="40" />
+            <ROUTES>
+                <ROUTE label="main">
+                    <ROAD id="1" />
+                </ROUTE>
+            </ROUTES>
+            <SPATIOTEMPORAL dx="100" dt="40" route="main" />
+            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

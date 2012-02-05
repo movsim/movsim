@@ -2,7 +2,7 @@
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
-<SCENARIO>
+<SCENARIO network_filename="simple_onramp.xodr">
     <VEHICLES>
         <!-- check parameters from mic sim and book (ov function) !! -->
         <VEHICLE label="VDIFF1" length="6" b_max="10000000">
@@ -23,8 +23,7 @@
         <TRAFFIC_COMPOSITION write_fund_diagrams="true">
             <VEHICLE_TYPE label="VDIFF1" fraction="1" />
         </TRAFFIC_COMPOSITION>
-        <!-- road id 0 indicates mainroad -->
-        <ROAD id="1" length="20000" lanes="1">
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="8600" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>
@@ -61,8 +60,13 @@
             </DETECTORS>
         </ROAD>
         <OUTPUT>
-            <SPATIOTEMPORAL dx="100" dt="40" />
-            <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
+            <ROUTES>
+                <ROUTE label="main">
+                    <ROAD id="1" />
+                </ROUTE>
+            </ROUTES>
+            <SPATIOTEMPORAL dx="100" dt="40" route="main" />
+            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
