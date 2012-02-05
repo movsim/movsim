@@ -206,22 +206,22 @@ public abstract class LongitudinalModelBase implements Observer {
         return x;
     }
 
-    public abstract double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA);
+    public abstract double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA);
 
-    public double calcAccEur(double vCritEur, Vehicle me, LaneSegment vehContainer, LaneSegment vehContainerLeftLane,
+    public double calcAccEur(double vCritEur, Vehicle me, LaneSegment laneSegment, LaneSegment leftLaneSegment,
             double alphaT, double alphaV0, double alphaA) {
 
         // calculate normal acceleration in own lane
-        final double accInOwnLane = calcAcc(me, vehContainer, alphaT, alphaV0, alphaA);
+        final double accInOwnLane = calcAcc(me, laneSegment, alphaT, alphaV0, alphaA);
 
         // no lane on left-hand side
-        if (vehContainerLeftLane == null) {
+        if (leftLaneSegment == null) {
             return accInOwnLane;
         }
 
         // check left-vehicle's speed
 
-        final Vehicle newFrontLeft = vehContainerLeftLane.frontVehicle(me);
+        final Vehicle newFrontLeft = leftLaneSegment.frontVehicle(me);
         if (newFrontLeft == null) {
             return accInOwnLane;
         }
@@ -232,7 +232,7 @@ public abstract class LongitudinalModelBase implements Observer {
 
         // condition me.getSpeed() > speedFront will be evaluated by softer tanh
         // condition below
-        final double accLeft = calcAcc(me, vehContainerLeftLane, alphaT, alphaV0, alphaA);
+        final double accLeft = calcAcc(me, leftLaneSegment, alphaT, alphaV0, alphaA);
 
         // avoid hard switching by condition vMe>vLeft needed in European
         // acceleration rule
@@ -247,7 +247,7 @@ public abstract class LongitudinalModelBase implements Observer {
         return accResult;
     }
 
-    public abstract double calcAcc(final Vehicle me, final Vehicle vehFront);
+    public abstract double calcAcc(final Vehicle me, final Vehicle frontVehicle);
 
     /**
      * Calc acc simple.
