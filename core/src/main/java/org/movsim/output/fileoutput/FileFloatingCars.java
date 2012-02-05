@@ -49,12 +49,12 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
 
     private static final String extensionFormat = ".car.origin_%d.%06d.csv";
     private static final String extensionRegex = "[.]car[.]origin_\\d+[.]\\d+[.]csv";
-    
-    private static final String outputHeading = COMMENT_CHAR +
-            "     t[s],      lane,      x[m],    roadId, totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID";
+
+    private static final String outputHeading = COMMENT_CHAR
+            + "     t[s],    roadId,      lane,      x[m], totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID";
 
     // note: number before decimal point is total width of field, not width of integer part
-    private static final String outputFormat = "%10.2f,%10d,%10.1f,%10d,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d%n";
+    private static final String outputFormat = "%10.2f,%10d,%10d,%10.1f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d%n";
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
@@ -98,13 +98,14 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     private void writeHeader(final PrintWriter writer, final Vehicle veh) {
         writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
         writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
-        writer.println(String.format("%s model category = %s", COMMENT_CHAR, 
-                veh.getLongitudinalModel().modelName().getCategory().toString()));
-        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, 
-                veh.getLongitudinalModel().modelName().getDetailedName(), 
-                veh.getLongitudinalModel().modelName().getShortName()));
-        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities().getLength()));
-        writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)", COMMENT_CHAR));
+        writer.println(String.format("%s model category = %s", COMMENT_CHAR, veh.getLongitudinalModel().modelName()
+                .getCategory().toString()));
+        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, veh.getLongitudinalModel()
+                .modelName().getDetailedName(), veh.getLongitudinalModel().modelName().getShortName()));
+        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities()
+                .getLength()));
+        writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)",
+                COMMENT_CHAR));
         writer.println(outputHeading);
     }
 
@@ -122,7 +123,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
                 final LaneSegment laneSegment = roadSegment.laneSegment(lane);
                 for (final Vehicle vehOnLane : laneSegment) {
                     final int vehNumber = vehOnLane.getVehNumber();
-                    //logger.info("vehNumber={}", vehNumber);
+                    // logger.info("vehNumber={}", vehNumber);
                     if (fcdNumbers != null && fcdNumbers.contains(vehNumber)) {
                         addFloatingCar(vehOnLane, vehNumber);
                         fcdNumbers.remove(vehNumber);
@@ -153,12 +154,13 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
         final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
-        writer.printf(outputFormat, time, veh.getLane(), physicalQuantities.getFrontPosition(),
-                 veh.roadSegmentId(), physicalQuantities.totalTraveledDistance(),
-                 physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
-                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
-                 physicalQuantities.getRelSpeed(frontVeh), physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),
-                 1000 * veh.getActualFuelFlowLiterPerS(), frontVeh == null ? -1 : frontVeh.getVehNumber());
+        writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(),
+                physicalQuantities.getFrontPosition(), physicalQuantities.totalTraveledDistance(),
+                physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
+                physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
+                physicalQuantities.getRelSpeed(frontVeh),
+                physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),
+                1000 * veh.getActualFuelFlowLiterPerS(), frontVeh == null ? -1 : frontVeh.getVehNumber());
         writer.flush();
     }
 
