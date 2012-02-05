@@ -55,6 +55,11 @@
             </INITIAL_CONDITIONS>
         </ROAD>
         <OUTPUT>
+            <ROUTES>
+                <ROUTE label="main">
+                    <ROAD id="1" />
+                </ROUTE>
+            </ROUTES>
             <FLOATING_CAR_DATA n_dt="5">
                 <FC number="2" />
                 <FC number="6" />
@@ -62,6 +67,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
+            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
