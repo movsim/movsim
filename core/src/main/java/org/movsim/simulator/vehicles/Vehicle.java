@@ -110,7 +110,7 @@ public class Vehicle {
     private int lane;
     private int laneOld;
 
-    /** variable for remembering new target lane when assigning to new vehContainerLane */
+    /** variable for remembering new target lane when assigning to new laneSegment */
     private int targetLane;
 
     /** finite lane-changing duration */
@@ -253,6 +253,7 @@ public class Vehicle {
         longitudinalModel = null;
         label = "";
         physQuantities = new PhysicalQuantities(this);
+        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
     }
 
     /**
@@ -277,6 +278,7 @@ public class Vehicle {
         lcModel = source.lcModel;
         longitudinalModel = source.longitudinalModel;
         label = source.label;
+        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
     }
 
     /**
@@ -298,6 +300,7 @@ public class Vehicle {
         lcModel = null;
         longitudinalModel = ldm;
         label = "";
+        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
     }
 
     private void initialize() {
@@ -512,7 +515,7 @@ public class Vehicle {
         return speed - vehFront.getSpeed();
     }
 
-    public void updateAcceleration(double dt, final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
+    public void updateAcceleration(double dt, final LaneSegment laneSegment, final LaneSegment leftLaneSegment,
             double alphaT, double alphaV0) {
 
         accOld = acc;
@@ -521,7 +524,7 @@ public class Vehicle {
         if (noise != null) {
             noise.update(dt);
             accError = noise.getAccError();
-            final Vehicle vehFront = vehContainer.frontVehicle(this);
+            final Vehicle vehFront = laneSegment.frontVehicle(this);
             if (getNetDistance(vehFront) < MovsimConstants.CRITICAL_GAP) {
                 accError = Math.min(accError, 0.); // !!!
             }
@@ -542,7 +545,7 @@ public class Vehicle {
             alphaALocal *= memory.alphaA();
         }
 
-        accModel = calcAccModel(vehContainer, vehContainerLeftLane, alphaTLocal, alphaV0Local, alphaALocal);
+        accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
 
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching != null && trafficLightApproaching.considerTrafficLight()) {
@@ -558,11 +561,11 @@ public class Vehicle {
     // also noise (for transfering stochasticity to lane-changing) and other
     // relevant traffic situations!
 
-    public double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane) {
-        return calcAccModel(vehContainer, vehContainerLeftLane, 1, 1, 1);
+    public double calcAccModel(final LaneSegment laneSegment, final LaneSegment leftLaneSegment) {
+        return calcAccModel(laneSegment, leftLaneSegment, 1.0, 1.0, 1.0);
     }
 
-    private double calcAccModel(final LaneSegment vehContainer, final LaneSegment vehContainerLeftLane,
+    private double calcAccModel(final LaneSegment laneSegment, final LaneSegment leftLaneSegment,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
         if (longitudinalModel == null) {
             return 0.0;
@@ -571,10 +574,10 @@ public class Vehicle {
         final double acc;
 
         if (lcModel != null && lcModel.isInitialized() && lcModel.withEuropeanRules()) {
-            acc = longitudinalModel.calcAccEur(lcModel.vCritEurRules(), this, vehContainer, vehContainerLeftLane,
+            acc = longitudinalModel.calcAccEur(lcModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
                     alphaTLocal, alphaV0Local, alphaALocal);
         } else {
-            acc = longitudinalModel.calcAcc(this, vehContainer, alphaTLocal, alphaV0Local, alphaALocal);
+            acc = longitudinalModel.calcAcc(this, laneSegment, alphaTLocal, alphaV0Local, alphaALocal);
         }
 
         return acc;
