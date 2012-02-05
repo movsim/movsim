@@ -149,6 +149,7 @@ public class MOBIL {
         // new situation: newBack with me as leader and following left lane cases
         // TO_LEFT --> just the actual situation
         // TO_RIGHT --> consideration of left-lane (with me's leader) has no effect
+        // temporarily add the current vehicle to the new lane to calculate the new accelerations
         me.setLane(newLane);
         final int index = newLaneSegment.addVehicleTemp(me);
         final double newBackNewAcc = newBack == null ? 0 : newBack.calcAccModel(newLaneSegment, null);
