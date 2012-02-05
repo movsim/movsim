@@ -32,6 +32,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -152,6 +154,51 @@ public class MOBILTest {
         assertEquals(-Double.MAX_VALUE, balance, delta);
     }
 
+    @Test
+    public final void testCalcAccelerationBalance2() {
+        RoadSegment.resetNextId();
+        Vehicle.resetNextId();
+        final int laneCount = 2;
+        final int exitLaneCount = 1;
+        final RoadSegment r0 = new RoadSegment(300.0, laneCount + exitLaneCount);
+        final RoadSegment r1 = new RoadSegment(400.0, laneCount);
+        r0.setLaneType(Lane.LANE1, Lane.Type.EXIT);// so Lane1 is exit lane of r1
+        // join r0 and r1 so vehicles move from r0 to r1
+        // lane3 of r0 joins to lane2 of r1
+        // lane2 of r0 joins to lane1 of r1
+        // lane1 of r0 has no successor
+        Link.addJoin(r0, r1);
+        assertEquals(Lane.LANE2, r1.sourceLane(Lane.LANE1));
+        final double lengthCar = 6.0;
+        final double minimumGap = 2.0;
+        final double tooSmallGap = 1.0;
+        final double safeDeceleration = 4.0;
+        final double politeness = 0.1;
+        final double thresholdAcceleration = 0.2;
+        final double rightBiasAcceleration = 0.3;
+
+        // set up a vehicle in lane 2
+        final Vehicle v1 = newVehicle(293.1, 26.983, Lane.LANE3, lengthCar);
+        final MOBIL m1 = new MOBIL(v1, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        r0.addVehicle(v1);
+
+        final Vehicle v2 = newVehicle(6.3, 5.589, Lane.LANE1, lengthCar);
+        final MOBIL m2 = new MOBIL(v2, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        r1.addVehicle(v2);
+        final LaneSegment sls = r1.sourceLaneSegment(Lane.LANE2);
+        assertEquals(1, sls.vehicleCount());
+
+        final Vehicle v3 = newVehicle(25.0, 4.0, Lane.LANE1, lengthCar);
+        final MOBIL m3 = new MOBIL(v3, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        r1.addVehicle(v3);
+
+        final Vehicle rV = r1.rearVehicle(Lane.LANE2, v2.getRearPosition());
+        assertEquals(v1.getId(), rV.getId());
+
+        double balance = m2.calcAccelerationBalance(MovsimConstants.TO_LEFT, r1);
+        assertTrue(balance < 0.0);
+    }
+
     /**
      * Test method for {@link org.movsim.simulator.vehicles.lanechange.MOBIL#getMinimumGap()}.
      */
@@ -171,5 +218,4 @@ public class MOBILTest {
         final MOBIL mobil = new MOBIL(null, 0.0, safeDeceleration, 0.0, 0.0, 0.0);
         assertEquals(safeDeceleration, mobil.getSafeDeceleration(), delta);
     }
-
 }
