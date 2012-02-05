@@ -53,6 +53,7 @@ public class Vehicle {
      * 'Not Set' vehicle id value, guaranteed not to be used by any vehicles.
      */
     public static final int ID_NOT_SET = -1;
+    private static final int VEHICLE_NUMBER_NOT_SET = -1;
     /**
      * 'Not Set' road segment id value, guaranteed not to be used by any vehicles.
      */
@@ -104,7 +105,7 @@ public class Vehicle {
     long id;
 
     /** The vehicle number. */
-    private int vehNumber;
+    private int vehNumber = VEHICLE_NUMBER_NOT_SET;
 
     private int lane;
     private int laneOld;
@@ -482,7 +483,7 @@ public class Vehicle {
     }
 
     public final int getVehNumber() {
-        return vehNumber;
+        return vehNumber == VEHICLE_NUMBER_NOT_SET ? (int)id : vehNumber;
     }
 
     public void setVehNumber(int vehNumber) {

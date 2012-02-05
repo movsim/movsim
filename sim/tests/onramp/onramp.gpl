@@ -11,7 +11,7 @@ if (!exists("inputPath")) inputPath = "./"
 if (!exists("outputPath")) outputPath = "./"
 if (!exists("ldm")) ldm = "IDM"
 if (!exists("lang")) lang = "en"
-if (!exists("baseFile")) baseFile = "onramp_IDM"
+if (!exists("baseFile")) baseFile = "onramp_".ldm
 #print "LDM=".ldm
 #print "lang=".lang
 
@@ -20,11 +20,11 @@ vehicle = ldm."1"
 
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-stFile = inputPath.baseFile.".st.road_1.csv"
+stFile = inputPath.baseFile.".st.route_route1.csv"
 detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_1.csv"
 rampSourceFile = inputPath.baseFile.".source.road_1.csv"
-trajectoriesFile = inputPath.baseFile.".traj.road_1.csv"
+trajectoriesFile = inputPath.baseFile.".traj.route_route1.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"

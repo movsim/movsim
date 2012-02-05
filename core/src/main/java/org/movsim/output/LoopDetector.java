@@ -26,6 +26,7 @@
 package org.movsim.output;
 
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -36,35 +37,36 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class LoopDetector.
  */
-public class LoopDetector extends ObservableImpl {
+public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
 
     final static Logger logger = LoggerFactory.getLogger(LoopDetector.class);
 
+    private final RoadSegment roadSegment;
     private final double dtSample;
 
     private final double detPosition;
 
     private double timeOffset;
 
-    private int[] vehCount;
+    private final int[] vehCount;
 
-    private double[] vSum;
+    private final double[] vSum;
 
-    private double[] occTime;
+    private final double[] occTime;
 
-    private double[] sumInvV;
+    private final double[] sumInvV;
 
-    private double[] sumInvQ;
+    private final double[] sumInvQ;
 
-    private double[] meanSpeed;
+    private final double[] meanSpeed;
 
-    private double[] occupancy;
+    private final double[] occupancy;
 
-    private int[] vehCountOutput;
+    private final int[] vehCountOutput;
 
-    private double[] meanSpeedHarmonic;
+    private final double[] meanSpeedHarmonic;
 
-    private double[] meanTimegapHarmonic;
+    private final double[] meanTimegapHarmonic;
 
     private int laneCount;
 
@@ -79,7 +81,7 @@ public class LoopDetector extends ObservableImpl {
     private double meanTimegapHarmonicAllLanes;
 
     /**
-     * Instantiates a new loop detector.
+     * Constructor.
      * 
      * @param detPosition
      *            the det position
@@ -87,10 +89,11 @@ public class LoopDetector extends ObservableImpl {
      *            the dt sample
      * @param laneCount
      */
-    public LoopDetector(double detPosition, double dtSample, int laneCount) {
+    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample) {
+        this.roadSegment = roadSegment;
         this.detPosition = detPosition;
         this.dtSample = dtSample;
-        this.laneCount = laneCount;
+        laneCount = roadSegment.laneCount();
 
         vehCount = new int[laneCount];
         vSum = new double[laneCount];
@@ -129,15 +132,8 @@ public class LoopDetector extends ObservableImpl {
         sumInvV[lane] = 0;
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param roadSegment
-     */
-    public void update(double simulationTime, RoadSegment roadSegment) {
-
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         // brute force search: iterate over all lanes
         final int laneCount = roadSegment.laneCount();
         for (int lane = 0; lane < laneCount; ++lane) {
@@ -258,9 +254,6 @@ public class LoopDetector extends ObservableImpl {
     public double getMeanSpeedAllLanes() {
         return meanSpeedAllLanes;
     }
-
-   
-  
 
     public int getVehCountOutputAllLanes() {
         return vehCountOutputAllLanes;

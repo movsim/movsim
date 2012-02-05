@@ -6,17 +6,17 @@
             <LONGITUDINAL_MODEL>
                 <IDM v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0"/>
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="20">
                 <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1"/>
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- trucks -->
-        <VEHICLE label="IDM2" length="16" b_max="9">
+        <VEHICLE label="IDM2" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <IDM v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0"/>
+                <IDM v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0"/>
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.3" politeness="0.1"/>
+            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="20">
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1"/>
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <VEHICLE label="Obstacle" length="0">
@@ -26,8 +26,8 @@
             <LANE_CHANGE_MODEL/>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="2400" fixed_seed="true" seed="42" crash_exit="false">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+    <SIMULATION dt="0.2" duration="2400" fixed_seed="true" seed="42" crash_exit="true">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
             <VEHICLE_TYPE label="IDM1" fraction="0.8" relative_v0_randomization="0.2"/>
             <VEHICLE_TYPE label="IDM2" fraction="0.2" relative_v0_randomization="0.2"/>
         </TRAFFIC_COMPOSITION>
@@ -42,15 +42,20 @@
             </TRAFFIC_SOURCE>
         </ROAD>
         <OUTPUT>
-            <ROUTES>
-                <ROUTE label="route1">
-                    <ROAD id="1" />
-                    <ROAD id="2" />
-                    <ROAD id="2" />
-                </ROUTE>
-            </ROUTES>
-            <SPATIOTEMPORAL dx="100" dt="40" route="route1" />
-            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="route1" />
+            <FLOATING_CAR_DATA n_dt="1">
+                <FC number="280" />
+                <FC number="281" />
+                <FC number="1170" />
+                <FC number="1171" />
+                <FC number="1172" />
+                <FC number="1173" />
+                <FC number="1174" />
+                <FC number="1175" />
+                <FC number="1176" />
+                <FC number="1177" />
+                <FC number="1178" />
+                <FC number="1179" />
+            </FLOATING_CAR_DATA>
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

@@ -29,7 +29,6 @@ import java.util.Collection;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.SimulationTimeStep;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.utilities.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,6 @@ public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
 
     private final Collection<Integer> floatingCarVehicleNumbers;
     private final int nDtOut;
-    private final RoadSegment roadSegment;
 
     /**
      * Constructor.
@@ -54,10 +52,9 @@ public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
      * @param input
      *            the input
      */
-    public FloatingCars(RoadSegment roadSegment, FloatingCarInput input) {
+    public FloatingCars(FloatingCarInput input) {
         logger.debug("Cstr. FloatingCars");
 
-        this.roadSegment = roadSegment;
         this.nDtOut = input.getNDt();
         this.floatingCarVehicleNumbers = input.getFloatingCars();
     }
@@ -72,9 +69,5 @@ public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
 
     public Collection<Integer> getFloatingCarVehicleNumbers() {
         return floatingCarVehicleNumbers;
-    }
-
-    public RoadSegment getRoadSegment() {
-        return roadSegment;
     }
 }

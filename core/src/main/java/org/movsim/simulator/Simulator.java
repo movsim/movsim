@@ -268,8 +268,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadSegment.setSpeedLimits(speedLimits);
 
         // set up the detectors
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.userId(), roadinput.getDetectorInput(),
-                roadSegment.laneCount());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadinput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
 
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(

@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.output.fileoutput.FileDetector;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,56 +38,44 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class LoopDetectors.
  */
-public class LoopDetectors {
+public class LoopDetectors implements SimulationTimeStep {
     final static Logger logger = LoggerFactory.getLogger(LoopDetectors.class);
 
     /** The detectors. */
     private final List<LoopDetector> detectors;
-
     private List<FileDetector> fileDetectors;
 
     /**
-     * Instantiates a new loop detectors.
+     * Constructor.
      * 
      * @param input
      *            the input
      */
-    public LoopDetectors(String roadId, DetectorInput input, int laneCount) {
+    public LoopDetectors(RoadSegment roadSegment, DetectorInput input) {
 
         detectors = new ArrayList<LoopDetector>();
 
         if (input.isWithDetectors()) {
             final double dtSample = input.getSampleInterval();
-
             final List<Double> positions = input.getPositions();
-
             for (final Double detPosition : positions) {
-                detectors.add(new LoopDetector(detPosition, dtSample, laneCount));
+                detectors.add(new LoopDetector(roadSegment, detPosition, dtSample));
             }
 
             if (input.isWithLogging()) {
+                final int laneCount = roadSegment.laneCount();
                 fileDetectors = new ArrayList<FileDetector>();
                 for (final LoopDetector det : detectors) {
-                    fileDetectors.add(new FileDetector(roadId, det, laneCount));
+                    fileDetectors.add(new FileDetector(roadSegment.userId(), det, laneCount));
                 }
             }
         }
     }
 
-    /**
-     * Update.
-     * 
-     * @param dt
-     *            delta-t, simulation time interval, seconds
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     * @param roadSegment
-     */
-    public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         for (final LoopDetector detector : detectors) {
-            detector.update(simulationTime, roadSegment);
+            detector.timeStep(dt, simulationTime, iterationCount);
         }
     }
 

@@ -31,6 +31,7 @@ import java.util.HashMap;
 
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -49,18 +50,18 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     private static final String extensionFormat = ".car.origin_%d.%06d.csv";
     private static final String extensionRegex = "[.]car[.]origin_\\d+[.]\\d+[.]csv";
     
-    private static final String outputHeading = String.format("%s%9s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s,%10s", COMMENT_CHAR,
-            "t[s]", "lane", "x[m]", "roadId", "totalTravelledDistance[m]", "v[m/s]", "a[m/s^2]", "aModel[m/s^2]", "gap[m]", "dv[m/s]", "distToTrafficlight[m]", "fuelFlow[ml/s]");
+    private static final String outputHeading = COMMENT_CHAR +
+            "     t[s],      lane,      x[m],    roadId, totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID";
 
-    // note: number before decimal point is total width of field, not width of
-    // integer part
-    private static final String outputFormat = "%10.2f,%10d,%10.1f,%10d,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f%n";
+    // note: number before decimal point is total width of field, not width of integer part
+    private static final String outputFormat = "%10.2f,%10d,%10.1f,%10d,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d%n";
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
-    private final HashMap<Integer, PrintWriter> hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
+    private final RoadNetwork roadNetwork;
     private final FloatingCars floatingCars;
     private Collection<Integer> fcdNumbers;
+    private final HashMap<Integer, PrintWriter> hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
 
     /**
      * Instantiates a new FileFloatingCars.
@@ -68,8 +69,9 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      * @param floatingCars
      *            the floating cars
      */
-    public FileFloatingCars(FloatingCars floatingCars) {
+    public FileFloatingCars(RoadNetwork roadNetwork, FloatingCars floatingCars) {
         super();
+        this.roadNetwork = roadNetwork;
         this.floatingCars = floatingCars;
         floatingCars.registerObserver(this);
 
@@ -114,22 +116,24 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      */
     public void writeOutput(double updateTime) {
 
-        final RoadSegment roadSegment = floatingCars.getRoadSegment();
-        final int laneCount = roadSegment.laneCount();
-        for (int lane = 0; lane < laneCount; ++lane) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(lane);
-            for (final Vehicle vehOnLane : laneSegment) {
-                final int vehNumber = vehOnLane.getVehNumber();
-                if (fcdNumbers != null && fcdNumbers.contains(vehNumber)) {
-                    addFloatingCar(vehOnLane, vehNumber);
-                    fcdNumbers.remove(vehNumber);
-                    if (fcdNumbers.isEmpty()) {
-                        fcdNumbers = null;
+        for (final RoadSegment roadSegment : roadNetwork) {
+            final int laneCount = roadSegment.laneCount();
+            for (int lane = 0; lane < laneCount; ++lane) {
+                final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+                for (final Vehicle vehOnLane : laneSegment) {
+                    final int vehNumber = vehOnLane.getVehNumber();
+                    //logger.info("vehNumber={}", vehNumber);
+                    if (fcdNumbers != null && fcdNumbers.contains(vehNumber)) {
+                        addFloatingCar(vehOnLane, vehNumber);
+                        fcdNumbers.remove(vehNumber);
+                        if (fcdNumbers.isEmpty()) {
+                            fcdNumbers = null;
+                        }
                     }
-                }
-                if (hashMap.containsKey(vehNumber)) {
-                    final Vehicle frontVeh = laneSegment.frontVehicle(vehOnLane);
-                    writeData(updateTime, vehOnLane, frontVeh, hashMap.get(vehNumber));
+                    if (hashMap.containsKey(vehNumber)) {
+                        final Vehicle frontVeh = laneSegment.frontVehicle(vehOnLane);
+                        writeData(updateTime, vehOnLane, frontVeh, hashMap.get(vehNumber));
+                    }
                 }
             }
         }
@@ -154,7 +158,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
                  physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
                  physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
                  physicalQuantities.getRelSpeed(frontVeh), physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),
-                 1000 * veh.getActualFuelFlowLiterPerS());
+                 1000 * veh.getActualFuelFlowLiterPerS(), frontVeh == null ? -1 : frontVeh.getVehNumber());
         writer.flush();
     }
 
