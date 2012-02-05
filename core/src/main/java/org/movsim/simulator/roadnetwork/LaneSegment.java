@@ -175,7 +175,6 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param index
      *            index of vehicle to remove
      */
-    @Deprecated
     public void removeVehicle(int index) {
         vehicles.remove(index);
     }
@@ -249,6 +248,27 @@ public class LaneSegment implements Iterable<Vehicle> {
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
         assert assertInvariant();
+    }
+
+    public int addVehicleTemp(Vehicle vehicle) {
+        assert vehicle.getFrontPosition() >= 0.0;
+        assert vehicle.getSpeed() >= 0.0;
+        assert vehicle.getLane() == lane;
+        assert assertInvariant();
+        final int index = positionBinarySearch(vehicle.getRearPosition());
+        int pos = 0;
+        if (index < 0) {
+            pos = -index - 1;
+            vehicles.add(pos, vehicle);
+        } else if (index == 0) {
+            vehicles.add(pos, vehicle);
+        } else {
+            // vehicle is in the same position as an existing vehicle - this should not happen
+            assert false;
+        }
+        assert laneIsSorted();
+        assert assertInvariant();
+        return pos;
     }
 
     // TODO testwise add vehicle
