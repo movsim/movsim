@@ -57,7 +57,7 @@ public class IDM extends LongitudinalModelBase {
     /** safe time headway (s). */
     private double T;
 
-    /** bumper-to-bumper vehicle distance in jams or queues; minimun gap. */
+    /** bumper-to-bumper vehicle distance in jams or queues; minimum gap. */
     private double s0;
 
     /** gap parameter (m). */
@@ -209,7 +209,12 @@ public class IDM extends LongitudinalModelBase {
 
         final double localT = alphaT * T;
         // consider external speedlimit
-        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double localV0;
+        if (me.getSpeedlimit() != 0.0) {
+            localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        } else {
+            localV0 = alphaV0 * v0;
+        }
         final double localA = alphaA * a;
 
         return acc(s, v, dv, localT, localV0, localA);
@@ -223,7 +228,12 @@ public class IDM extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle);
 
         final double localT = T;
-        final double localV0 = Math.min(v0, me.getSpeedlimit());
+        final double localV0;
+        if (me.getSpeedlimit() != 0.0) {
+            localV0 = Math.min(v0, me.getSpeedlimit());
+        } else {
+            localV0 = v0;
+        }
         final double localA = a;
 
         return acc(s, v, dv, localT, localV0, localA);
@@ -258,8 +268,8 @@ public class IDM extends LongitudinalModelBase {
      */
     private double acc(double s, double v, double dv, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0) {
-            return 0;
+        if (v0Local == 0.0) {
+            return 0.0;
         }
 
         double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
@@ -269,7 +279,7 @@ public class IDM extends LongitudinalModelBase {
             sstar = s0;
         }
 
-        final double aWanted = aLocal * (1. - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
+        final double aWanted = aLocal * (1.0 - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
 
         logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
