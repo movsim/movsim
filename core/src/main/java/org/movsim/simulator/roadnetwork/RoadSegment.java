@@ -597,16 +597,13 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final int targetLane = vehicle.getTargetLane();
                 assert targetLane != Lane.NONE;
                 assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
-                // TODO check safety criterion in target lane for subject vehicle and follower
-                // Criterion does not work, have to figure out why
-                if(vehicle.getLaneChangeModel().isMandatoryLaneChangeSafe(laneSegments[targetLane])){
+                // check safety criterion in target lane for vehicle and follower
+                if (vehicle.getLaneChangeModel().isSafeLaneChange(laneSegments[targetLane])) {
                     laneSegments[vehicle.getLane()].removeVehicle(vehicle);
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane].addVehicle(vehicle);
-                }
-                else{
-                    // TODO debug stuff. 
-                    System.out.println("!!!!!!!!!!! hey, lc is not safe !!");
+                } else {
+                    logger.debug("check lane change of staged vehicle: lane change not possible due to conflict in target lane");
                 }
             }
         }
