@@ -1,144 +1,131 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.output;
 
-import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ObservableImpl;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class SpatioTemporalImpl.
  */
-public class SpatioTemporal extends ObservableImpl {
+public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
 
-    /** The dt out. */
-    private final double dtOut;
-
-    /** The dx out. */
     private final double dxOut;
+    private final double dtOut;
+    private final Route route;
 
-    private double[] density;
-
-    private double[] averageSpeed;
-
-    private double[] flow;
-
-    /** The roadlength. */
-    private final double roadlength;
-
-    /** The time offset. */
+    private final int size;
+    private final double[] density;
+    private final double[] averageSpeed;
+    private final double[] flow;
     private double timeOffset;
 
     /**
-     * Instantiates a new spatio temporal impl.
+     * Constructor.
      * 
      * @param input
-     *            the input
-     * @param roadSection
-     *            the road section
+     * @param routes
      */
-    public SpatioTemporal(SpatioTemporalInput input, RoadSegment roadSegment) {
+    public SpatioTemporal(double dxOut, double dtOut, Route route) {
 
-        dtOut = input.getDt();
-        dxOut = input.getDx();
+        this.dxOut = dxOut;
+        this.dtOut = dtOut;
+        this.route = route;
 
-        roadlength = roadSegment.roadLength();
-
-        initialize();
-    }
-
-    /**
-     * Initialize.
-     */
-    private void initialize() {
         timeOffset = 0;
-        final int nxOut = (int) (roadlength / dxOut);
-        density = new double[nxOut + 1];
-        averageSpeed = new double[nxOut + 1];
-        flow = new double[nxOut + 1];
+        size = (int) (route.getLength() / dxOut) + 1;
+        density = new double[size];
+        averageSpeed = new double[size];
+        flow = new double[size];
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double simulationTime, long iterationCount, RoadSegment roadSegment) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         if ((simulationTime - timeOffset) >= dtOut) {
             timeOffset = simulationTime;
-            // TODO quick hack for multi-lane compatibility
-            calcData(simulationTime, roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE));
+            calcData();
             notifyObservers(simulationTime);
         }
     }
 
     /**
      * Calculate data.
-     * 
-     * @param time
-     *            the time
-     * @param vehContainer
-     *            the vehicle container
      */
-    private void calcData(double time, LaneSegment laneSegment) {
-        final int size = laneSegment.vehicleCount();
-        if (size == 0) {
-        	return;
+    private void calcData() {
+        // TODO - deal with multiple lanes in a road segment
+        int vehicleCount = 0;
+        for (final RoadSegment roadSegment : route) {
+            final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+            vehicleCount += laneSegment.vehicleCount();
         }
-        final double[] localDensity = new double[size];
-        final double[] vMicro = new double[size];
-        final double[] xMicro = new double[size];
+        if (vehicleCount == 0) {
+            return;
+        }
+        final double[] localDensity = new double[vehicleCount];
+        final double[] vMicro = new double[vehicleCount];
+        final double[] xMicro = new double[vehicleCount];
+        final double[] lengths = new double[vehicleCount];
 
-        for (int i = 0; i < size; i++) {
-            vMicro[i] = laneSegment.getVehicle(i).getSpeed();
-            xMicro[i] = laneSegment.getVehicle(i).getMidPosition();
+        int i = 0;
+        for (final RoadSegment roadSegment : route) {
+            final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+            final int laneVehicleCount = laneSegment.vehicleCount();
+            for (int j = 0; j < laneVehicleCount; ++j) {
+                final Vehicle vehicle = laneSegment.getVehicle(j);
+                vMicro[i] = vehicle.getSpeed();
+                xMicro[i] = vehicle.getFrontPosition();
+                lengths[i] = vehicle.getLength();
+                ++i;
+            }
         }
 
         // calculate density
         localDensity[0] = 0;
-        for (int i = 1; i < size; i++) {
+        for (i = 1; i < vehicleCount; ++i) {
             final double dist = xMicro[i - 1] - xMicro[i];
-            final double length = laneSegment.getVehicle(i - 1).getLength();
-            localDensity[i] = (dist > length) ? 1 / dist : 1 / length;
+            final double length = lengths[i - 1];
+            localDensity[i] = (dist > length) ? 1.0 / dist : 1.0 / length;
         }
 
-        for (int j = 0; j < density.length; j++) {
-            final double x = j * dxOut;
-            density[j] = Tables.intpextp(xMicro, localDensity, x, true);
-            averageSpeed[j] = Tables.intpextp(xMicro, vMicro, x, true);
-            flow[j] = density[j] * averageSpeed[j];
+        for (i = 0; i < size; ++i) {
+            final double x = i * dxOut;
+            density[i] = Tables.intpextp(xMicro, localDensity, x, true);
+            averageSpeed[i] = Tables.intpextp(xMicro, vMicro, x, true);
+            flow[i] = density[i] * averageSpeed[i];
         }
     }
 
@@ -161,12 +148,21 @@ public class SpatioTemporal extends ObservableImpl {
     }
 
     /**
+     * Returns the size of the storage arrays.
+     * 
+     * @return the size of the arrays
+     */
+    public int size() {
+        return size;
+    }
+
+    /**
      * Gets the density.
      * 
      * @return the density
      */
-    public double[] getDensity() {
-        return density;
+    public double getDensity(int index) {
+        return density[index];
     }
 
     /**
@@ -174,8 +170,8 @@ public class SpatioTemporal extends ObservableImpl {
      * 
      * @return the average speed
      */
-    public double[] getAverageSpeed() {
-        return averageSpeed;
+    public double getAverageSpeed(int index) {
+        return averageSpeed[index];
     }
 
     /**
@@ -183,8 +179,8 @@ public class SpatioTemporal extends ObservableImpl {
      * 
      * @return the flow
      */
-    public double[] getFlow() {
-        return flow;
+    public double getFlow(int index) {
+        return flow[index];
     }
 
     /**
@@ -194,5 +190,12 @@ public class SpatioTemporal extends ObservableImpl {
      */
     public double getTimeOffset() {
         return timeOffset;
+    }
+
+    /**
+     * @return the route
+     */
+    public Route getRoute() {
+        return route;
     }
 }

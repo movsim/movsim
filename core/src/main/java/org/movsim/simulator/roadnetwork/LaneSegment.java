@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -146,8 +149,6 @@ public class LaneSegment implements Iterable<Vehicle> {
     /**
      * Returns the number of vehicles on this lane segment.
      * 
-     * @param lane
-     * 
      * @return the number of vehicles on this lane segment
      */
     public final int vehicleCount() {
@@ -174,22 +175,21 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param index
      *            index of vehicle to remove
      */
-    @Deprecated
     public void removeVehicle(int index) {
         vehicles.remove(index);
     }
 
     /**
      * Removes the given vehicle.
-     * 
-     * @param index
+     * @param vehicleToRemove 
      */
-    public void removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicleToRemove) {
         // TODO improve primitive implementation
+        final long vehicleId = vehicleToRemove.getId();
         final int count = vehicles.size();
         for (int i = 0; i < count; ++i) {
-            final Vehicle veh = vehicles.get(i);
-            if (veh.getId() == vehicle.getId()) {
+            final Vehicle vehicle = vehicles.get(i);
+            if (vehicle.getId() == vehicleId) {
                 vehicles.remove(i);
                 return;
             }
@@ -220,12 +220,19 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * @return the removedVehicleCount
+     */
+    public int getRemovedVehicleCount() {
+        return removedVehicleCount;
+    }
+
+    /**
      * Adds a vehicle to this lane segment.
      * 
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
-        assert vehicle.getMidPosition() >= 0.0;
+        assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
         assert assertInvariant();
@@ -241,6 +248,27 @@ public class LaneSegment implements Iterable<Vehicle> {
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
         assert assertInvariant();
+    }
+
+    public int addVehicleTemp(Vehicle vehicle) {
+        assert vehicle.getFrontPosition() >= 0.0;
+        assert vehicle.getSpeed() >= 0.0;
+        assert vehicle.getLane() == lane;
+        assert assertInvariant();
+        final int index = positionBinarySearch(vehicle.getRearPosition());
+        int pos = 0;
+        if (index < 0) {
+            pos = -index - 1;
+            vehicles.add(pos, vehicle);
+        } else if (index == 0) {
+            vehicles.add(pos, vehicle);
+        } else {
+            // vehicle is in the same position as an existing vehicle - this should not happen
+            assert false;
+        }
+        assert laneIsSorted();
+        assert assertInvariant();
+        return pos;
     }
 
     // TODO testwise add vehicle
@@ -261,7 +289,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     public void appendVehicle(Vehicle vehicle) {
-        assert vehicle.getMidPosition() >= 0.0;
+        assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
@@ -295,6 +323,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Finds the vehicle immediately at or behind the given position.
+     * @param vehiclePos 
      * 
      * @return reference to the rear vehicle
      */
@@ -323,7 +352,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // return a copy of the front vehicle on the source road segment, with its
                 // position set relative to the current road segment
                 final Vehicle rearVehicle = new Vehicle(sourceFrontVehicle);
-                rearVehicle.setMidPosition(rearVehicle.getMidPosition() - sourceLaneSegment.roadLength());
+                rearVehicle.setFrontPosition(rearVehicle.getFrontPosition() - sourceLaneSegment.roadLength());
                 return rearVehicle;
             }
         }
@@ -348,7 +377,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         // return a copy of the rear vehicle on the sink road segment, with its position
         // set relative to the current road segment
         final Vehicle ret = new Vehicle(sinkRearVehicle);
-        ret.setMidPosition(ret.getMidPosition() + roadSegment.roadLength());
+        ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
         return ret;
     }
 
@@ -369,14 +398,13 @@ public class LaneSegment implements Iterable<Vehicle> {
         // return a copy of the rear vehicle on the sink lane segment, with its position
         // set relative to the current road segment
         final Vehicle ret = new Vehicle(vehicle);
-        ret.setMidPosition(ret.getMidPosition() + roadSegment.roadLength());
+        ret.setFrontPosition(ret.getFrontPosition() + roadSegment.roadLength());
         return ret;
     }
 
     /**
      * Returns the front vehicle.
      * 
-     * @param lane
      * @return the front vehicle
      */
     public Vehicle frontVehicle() {
@@ -389,6 +417,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     /**
      * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.positon() > vehicePos (strictly
      * greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
+     * @param vehiclePos 
      * 
      * @return reference to the front vehicle
      */
@@ -415,7 +444,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // return a copy of the rear vehicle on the sink road segment, with its position
                 // set relative to the current road segment
                 final Vehicle frontVehicle = new Vehicle(sinkRearVehicle);
-                frontVehicle.setMidPosition(frontVehicle.getMidPosition() + roadSegment.roadLength());
+                frontVehicle.setFrontPosition(frontVehicle.getFrontPosition() + roadSegment.roadLength());
                 return frontVehicle;
             }
         }
@@ -511,6 +540,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param dt
      *            simulation time interval
      * @param simulationTime
+     * @param iterationCount 
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         assert laneIsSorted();
@@ -531,7 +561,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // TODO - check previous lane correct (used for drawing vehicle when changing lanes)
                 // final int prevLaneOnNewRoadSegment = lane;
                 // final int prevLaneOnNewRoadSegment = sinkLane[vehicle.previousLane()];
-                final double positionOnNewRoadSegment = vehicle.getRearPosition() - roadLength;
+                final double rearPositionOnNewRoadSegment = vehicle.getRearPosition() - roadLength;
                 double exitEndPos = Vehicle.EXIT_POSITION_NOT_SET;
                 if (sinkLaneSegment.type() == Lane.Type.TRAFFIC) {
                     final int exitRoadSegmentId = vehicle.exitRoadSegmentId();
@@ -549,7 +579,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                     }
                 }
                 final int laneOnNewRoadSegment = sinkLaneSegment.lane();
-                vehicle.moveToNewRoadSegment(laneOnNewRoadSegment, positionOnNewRoadSegment, exitEndPos);
+                vehicle.moveToNewRoadSegment(sinkLaneSegment.roadSegment(), laneOnNewRoadSegment, rearPositionOnNewRoadSegment, exitEndPos);
                 // remove vehicle from this road segment
                 vehicles.remove(0);
                 --count;
@@ -629,5 +659,9 @@ public class LaneSegment implements Iterable<Vehicle> {
             assert vehicle.getLane() == lane;
         }
         return true;
+    }
+
+    public void clearVehicleRemovedCount() {
+        removedVehicleCount = 0;
     }
 }

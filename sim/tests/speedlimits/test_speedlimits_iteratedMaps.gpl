@@ -60,18 +60,14 @@ set ylabel speedLabel
 origin=1
 set out outputPath.baseFile.".floating_cars_speed.eps"
 plot\
- carFile(origin, 1) using ($3/1000):(3.6*$6) title "car(1). GIPPS" with lines linestyle 1,\
- carFile(origin, 2) using ($3/1000):(3.6*$6) title "car(2). KRAUSS" with lines linestyle 2
-  
-  
+ carFile(origin, 1) using ($4/1000):(3.6*$6) title "car(1). GIPPS" with lines linestyle 1,\
+ carFile(origin, 2) using ($4/1000):(3.6*$6) title "car(2). KRAUSS" with lines linestyle 2
+
 set key bottom right
 set autoscale y
 set ylabel accelerationLabel
 
 set out outputPath.baseFile.".floating_cars_acc.eps"
 plot\
-  carFile(origin, 1) using ($3/1000):7 title "car(1). GIPPS" with lines linestyle 1,\
-  carFile(origin, 2) using ($3/1000):7 title "car(2). KRAUSS" with lines linestyle 2
-  
-  
-  
+  carFile(origin, 1) using ($4/1000):7 title "car(1). GIPPS" with lines linestyle 1,\
+  carFile(origin, 2) using ($4/1000):7 title "car(2). KRAUSS" with lines linestyle 2

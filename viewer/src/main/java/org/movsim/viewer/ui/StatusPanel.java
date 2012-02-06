@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.viewer.ui;
 
@@ -35,21 +38,17 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import org.movsim.facades.MovsimViewerFacade;
-import org.movsim.viewer.control.SimulationRunnable;
-import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
+import org.movsim.simulator.SimulationRunnable;
+import org.movsim.simulator.Simulator;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
-/**
- * @author ralph
- * 
- */
-public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStatusPanelCallback {
+public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStatusCallback {
 
     private static final long serialVersionUID = 6663769351758390561L;
 
-    private final MovsimViewerFacade movsimViewerFacade;
+    private final Simulator simulator;
     private final SimulationRunnable simulationRunnable;
 
     private boolean isWithProgressBar = true;
@@ -93,25 +92,33 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     private JLabel lblCurrentScenario;
 
-    public StatusPanel(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-        this.movsimViewerFacade = MovsimViewerFacade.getInstance();
-        this.simulationRunnable = SimulationRunnable.getInstance();
-        this.setLayout(new FlowLayout());
-        this.setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
+    private JLabel lblVehicleCount;
 
-        simulationRunnable.setUpdateStatusPanelCallback(this);
+    private JLabel lblVehicleCountDisplay;
+
+    public StatusPanel(ResourceBundle resourceBundle, Simulator simulator) {
+        this.resourceBundle = resourceBundle;
+        this.simulator = simulator;
+        this.simulationRunnable = simulator.getSimulationRunnable();
+        this.setLayout(new FlowLayout());
+
+        simulationRunnable.addUpdateStatusCallback(this);
 
         createStatusViews();
         addStatusView();
     }
 
     private void createStatusViews() {
+
+        final Font font = new Font("Dialog", Font.PLAIN, 11);
+
         // current scenario
         lblScenario = new JLabel(resourceBundle.getString("lblScenario"));
+        lblScenario.setFont(font);
         lblCurrentScenario = new JLabel("");
-        lblCurrentScenario.setText(movsimViewerFacade.getProjectMetaData().getProjectName());
-        lblCurrentScenario.setPreferredSize(new Dimension(200, 22));
+        lblCurrentScenario.setFont(font);
+        lblCurrentScenario.setText(simulator.getProjectMetaData().getProjectName());
+        lblCurrentScenario.setPreferredSize(new Dimension(100, 22));
 
         if (isWithProgressBar) {
             progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
@@ -119,11 +126,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             progressBar.setVisible(true);
         }
 
-        final Font font = new Font("Dialog", Font.BOLD, 12);
-
         // simulation time
         final String simTimeTooltip = resourceBundle.getString("simTimeTooltip");
         lblSimTime = new JLabel(resourceBundle.getString("lblSimTime"));
+        lblSimTime.setFont(font);
         lblSimTime.setToolTipText(simTimeTooltip);
 
         lblTimeDisplay = new JLabel("0:00:00");
@@ -134,6 +140,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         // update time
         final String deltaTimeTooltip = resourceBundle.getString("deltaTimeTooltip");
         lblDeltaTime = new JLabel(resourceBundle.getString("lblDeltaTime"));
+        lblDeltaTime.setFont(font);
         lblDeltaTime.setToolTipText(deltaTimeTooltip);
 
         lblDeltaTimeDisplay = new JLabel(simulationRunnable.timeStep() + " s");
@@ -144,17 +151,38 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         // timewarp
         final String timeWarpTooltip = resourceBundle.getString("timeWarpTooltip");
         lblTimeWarp = new JLabel(resourceBundle.getString("lblTimeWarp"));
+        lblTimeWarp.setFont(font);
         lblTimeWarp.setToolTipText(timeWarpTooltip);
 
-        lblTimeWarpDisplay = new JLabel(String.valueOf(simulationRunnable.getSmoothedTimewarp()));
+        lblTimeWarpDisplay = new JLabel(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
         lblTimeWarpDisplay.setFont(font);
         lblTimeWarpDisplay.setToolTipText(timeWarpTooltip);
         lblTimeWarpDisplay.setPreferredSize(new Dimension(42, 22));
+        
+        // vehicle count
+        final String vehicleCountTooltip = resourceBundle.getString("vehicleCountTooltip");
+        lblVehicleCount = new JLabel(resourceBundle.getString("lblVehicleCount"));
+        lblVehicleCount.setFont(font);
+        lblVehicleCount.setToolTipText(vehicleCountTooltip);
+
+
+        lblVehicleCountDisplay = new JLabel(String.valueOf(vehicleCount()));
+        lblVehicleCountDisplay.setFont(font);
+        lblVehicleCountDisplay.setToolTipText(vehicleCountTooltip);
+        lblVehicleCountDisplay.setPreferredSize(new Dimension(42, 22));
 
         if (withTravelTimes) {
             createTravelTimeLabels(font);
         }
 
+    }
+
+    private int vehicleCount() {
+        int vehicleCount = 0;
+        for (final RoadSegment roadSegment : simulator.getRoadNetwork()) {
+            vehicleCount += roadSegment.totalVehicleCount();
+        }
+        return vehicleCount;
     }
 
     private void createTravelTimeLabels(final Font f) {
@@ -183,12 +211,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(Box.createRigidArea(new Dimension(6, 22)));
 
-        if (isWithProgressBar) {
-            add(progressBar);
-        }
-
-        add(Box.createRigidArea(new Dimension(6, 22)));
-
         add(lblSimTime);
         add(lblTimeDisplay);
 
@@ -200,6 +222,17 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(lblDeltaTime);
         add(lblDeltaTimeDisplay);
+        
+        add(Box.createRigidArea(new Dimension(6, 22)));
+
+        add(lblVehicleCount);
+        add(lblVehicleCountDisplay);
+
+        add(Box.createRigidArea(new Dimension(6, 22)));
+
+        if (isWithProgressBar) {
+            add(progressBar);
+        }
 
         if (withTravelTimes) {
             for (int i = 0, N = lblTravelTimeDisplays.size(); i < N; i++) {
@@ -212,7 +245,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     protected void setProgressBarDuration() {
         if (isWithProgressBar) {
-            final int maxSimTime = (int) movsimViewerFacade.getMaxSimTime();
+            final int maxSimTime = (int) simulationRunnable.duration();
             progressBar.setMaximum(maxSimTime);
         }
     }
@@ -226,11 +259,13 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             }
             lblTimeDisplay.setText(StringHelper.getTime(time, true, true, true));
             lblDeltaTimeDisplay.setText(String.valueOf(simulationRunnable.timeStep()) + " s");
-            lblTimeWarpDisplay.setText(String.valueOf(simulationRunnable.getSmoothedTimewarp()));
+            lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
+
+            lblVehicleCountDisplay.setText(String.valueOf(vehicleCount()));
 
             // die TravelTimes haben eigentlich einen anderen notifier
             if (withTravelTimes) {
-                final List<Double> dataTT = movsimViewerFacade.getTravelTimeDataEMAs(time);
+                final List<Double> dataTT = simulator.getTravelTimeDataEMAs(time);
                 for (int i = 0, N = lblTravelTimeDisplays.size(); i < N; i++) {
                     lblTravelTimeDisplays.get(i).setText(String.format("%.1f min", dataTT.get(i) / 60.));
                 }
@@ -250,13 +285,8 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         validate(); // make visible after reset
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.web.appletroad.control.SimulationRunnable.UpdateStatusPanelCallback#updateTravelTime(double)
-     */
     @Override
-    public void updateStatusPanel(double simulationTime) {
+    public void updateStatus(double simulationTime) {
         notifyObserver(simulationTime);
     }
 }

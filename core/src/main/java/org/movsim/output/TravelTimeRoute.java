@@ -1,35 +1,39 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.output;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.input.model.output.TravelTimeRouteInput;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ExponentialMovingAverage;
 import org.movsim.utilities.XYDataPoint;
@@ -41,8 +45,8 @@ public class TravelTimeRoute {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TravelTimeRoute.class);
 
-    private final long startId;
-    private final long endId;
+    private final String startId;
+    // private String endId;
     private final double startPosition;
     private final double endPosition;
 
@@ -60,25 +64,28 @@ public class TravelTimeRoute {
 
     /**
      * Constructor.
+     * 
      * @param travelTimeRouteInput
      */
-    public TravelTimeRoute(TravelTimeRouteInput travelTimeRouteInput) {
-        this.startId = travelTimeRouteInput.getStartId();
-        this.endId = travelTimeRouteInput.getEndId();
-        this.startPosition = travelTimeRouteInput.getStartPosition();
-        this.endPosition = travelTimeRouteInput.getEndPosition();
+    public TravelTimeRoute(Route route) {
+        final Iterator<RoadSegment> iter = route.iterator();
+        this.startId = iter.next().userId();
+        // this.endId = startId;
+        // while (iter.hasNext()) {
+        // this.endId = iter.next().userId();
+        // }
+        this.startPosition = 0;
+        this.endPosition = route.getLength();
 
         vehiclesOnRoute = new HashMap<Vehicle, Double>();
         dataPoints = new LinkedList<XYDataPoint>();
         emaPoints = new LinkedList<XYDataPoint>();
 
-        logger.info("consider travel times on route with startId={}, endId={}", startId, endId);
+        logger.info("consider travel times on route {} with startId={}", route.getName(), startId);
         logger.info("with startPos={}, endPos={}", startPosition, endPosition);
-
     }
 
     public void calcEMA(double time) {
-        // System.out.println("calc ema with size()="+route.getDataPoints().size());
         final int size = dataPoints.size();
         final double emaValue = ema.calcEMA(time, dataPoints.subList(Math.max(0, size - N_DATA), size));
         emaPoints.add(new XYDataPoint(time, emaValue));
@@ -103,7 +110,7 @@ public class TravelTimeRoute {
         // check first start_position
         // TODO catch error if road id not available
 
-        checkNewVehicles(simulationTime, roadNetwork.findById((int) startId));
+        checkNewVehicles(simulationTime, roadNetwork.findByUserId(startId));
 
         // check end_position
         final double averageNewTT = checkPassedVehicles(simulationTime);
@@ -125,7 +132,7 @@ public class TravelTimeRoute {
             // if(veh.getPosition() > 100 && veh.getPosition()<1000){
             // System.out.printf("veh: pos=%.4f, posOld=%.4f\n", veh.getPosition(), veh.getPositionOld());
             // }
-            if (veh.getPositionOld() < startPosition && veh.getMidPosition() > startPosition) {
+            if (veh.getFrontPositionOld() < startPosition && veh.getFrontPosition() > startPosition) {
                 vehiclesOnRoute.put(veh, timeStartOfRoute);
                 // System.out.printf("veh at x=%.2f put to travel time route, roadId=%d\n", veh.getPosition(), veh.getRoadId());
             }
@@ -134,21 +141,21 @@ public class TravelTimeRoute {
     }
 
     private double checkPassedVehicles(final double timeEndOfRoute) {
-        double ttAverage = 0;
+        final double ttAverage = 0;
         final List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
         for (final Map.Entry<Vehicle, Double> entry : vehiclesOnRoute.entrySet()) {
             final Vehicle vehicle = entry.getKey();
             final double startTime = entry.getValue();
             // System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
-            //FIXME roadIds are from the old concept
-//            if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
-//                final double travelTimeOnRoute = timeEndOfRoute - startTime;
-//                dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
-//                // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,
-//                // timeEndOfRoute,travelTimeOnRoute);
-//                stagedVehicles.add(vehicle);
-//                ttAverage += travelTimeOnRoute;
-//            }
+            // FIXME roadIds are from the old concept
+            // if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
+            // final double travelTimeOnRoute = timeEndOfRoute - startTime;
+            // dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
+            // // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,
+            // // timeEndOfRoute,travelTimeOnRoute);
+            // stagedVehicles.add(vehicle);
+            // ttAverage += travelTimeOnRoute;
+            // }
         }
         for (final Vehicle vehicle : stagedVehicles) {
             vehiclesOnRoute.remove(vehicle);

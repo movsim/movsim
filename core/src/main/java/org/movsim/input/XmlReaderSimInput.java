@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.input;
 
@@ -39,7 +42,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehicleInput;
-import org.movsim.input.model.consumption.FuelConsumptionInput;
+import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +73,7 @@ public class XmlReaderSimInput {
     private Document doc;
 
     // dtd from resources. do *not* use the File.separator character
-    private final String dtdFilename = "/sim/multiModelTrafficSimulatorInput.dtd";
+    private final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
 
     private InputStream appletinputstream;
 
@@ -84,8 +87,8 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(final InputData inputData) {
-        projectMetaData = inputData.getProjectMetaData();
+    public XmlReaderSimInput(ProjectMetaData projectMetaDataParam, InputData inputData) {
+        this.projectMetaData = projectMetaDataParam;
         this.inputData = inputData;
         this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
                 + filenameEnding;
@@ -153,8 +156,6 @@ public class XmlReaderSimInput {
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
 
-        // parseOutputPathAttribute(root);
-
         parseNetworkFilename(root);
 
         // -------------------------------------------------------
@@ -183,22 +184,25 @@ public class XmlReaderSimInput {
 
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
-        String relativePath;
-        relativePath = checkIfAttributeHasPath(networkFileName);
+        if (projectMetaData.isXmlFromResources()) {
+            projectMetaData.setXodrFilename(networkFileName.substring(networkFileName.lastIndexOf("/")+1));
+            projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/")+1));
+        } else {
+            String relativePath;
+            relativePath = checkIfAttributeHasPath(networkFileName);
 
-        if (relativePath.equals("")) {
-            networkFileName = checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(networkFileName);
+            if (relativePath.equals("")) {
+                networkFileName = checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(networkFileName);
+            }
+
+            if (!FileUtils.fileExists(networkFileName)) {
+                logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
+                System.exit(-1); // TODO check from resources
+            }
+
+            projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
+            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
         }
-
-        final boolean networkFileExits = FileUtils.fileExists(networkFileName);
-
-        if (!projectMetaData.isXmlFromResources() && !networkFileExits) {
-            logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
-            System.exit(-1); // TODO check from resources
-        }
-
-        projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
-        projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
     }
 
     /**
@@ -232,19 +236,6 @@ public class XmlReaderSimInput {
         }
         return relativePath;
     }
-
-    // private void parseOutputPathAttribute(final Element root) {
-    // String outputPath = root.getAttribute("output_path").getValue();
-    // if (outputPath.equals("") || outputPath.isEmpty()) {
-    // return; // output path is taken from cmdline
-    // }
-    // logger.info("outputpath: {}", outputPath);
-    // final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
-    // if (!outputPathExits) {
-    // FileUtils.createDir(outputPath, "");
-    // }
-    // ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
-    // }
 
     /**
      * Read and validate xml.

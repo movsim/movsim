@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
@@ -60,8 +63,6 @@ public class Gipps extends LongitudinalModelBase {
     /**
      * Instantiates a new gipps.
      * 
-     * @param modelName
-     *            the model name
      * @param parameters
      *            the parameters
      */
@@ -134,17 +135,11 @@ public class Gipps extends LongitudinalModelBase {
         return s0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
-     */
     @Override
-    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.frontVehicle(me);
+        final Vehicle vehFront = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
@@ -163,7 +158,6 @@ public class Gipps extends LongitudinalModelBase {
 
         // actual Gipps formula
         return acc(s, v, dv, v0Local, TLocal);
-
     }
 
     /*
@@ -238,5 +232,4 @@ public class Gipps extends LongitudinalModelBase {
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
 }

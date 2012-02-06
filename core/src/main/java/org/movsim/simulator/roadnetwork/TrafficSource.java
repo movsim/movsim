@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.simulator.roadnetwork;
 
@@ -69,10 +72,6 @@ public class TrafficSource implements SimulationTimeStep {
      * 
      * @param vehGenerator
      *            the vehicle generator
-     * @param vehContainers
-     *            the veh containers
-     * @param trafficSourceData
-     *            the upstream boundary data
      */
     public TrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment, InflowTimeSeries inflowTimeSeries) {
         this.vehGenerator = vehGenerator;
@@ -120,7 +119,7 @@ public class TrafficSource implements SimulationTimeStep {
      *            the time
      * @return the total inflow
      */
-    private double getTotalInflow(double time) {
+    public double getTotalInflow(double time) {
         // inflow over all lanes
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         final int nLanes = roadSegment.laneCount();
@@ -189,23 +188,14 @@ public class TrafficSource implements SimulationTimeStep {
             enterVehicleOnEmptyRoad(laneSegment, time, vehPrototype);
             return true;
         }
-        // (2) check if gap to leader is sufficiently large
-        // origin of road section is assumed to be zero
-        final double netGapToLeader = leader.getMidPosition() - leader.getLength();
+        // (2) check if gap to leader is sufficiently large origin of road section is assumed to be zero
+        final double netGapToLeader = leader.getFrontPosition() - leader.getLength();
         final double gapAtQMax = 1. / vehPrototype.getRhoQMax();
 
-        // TODO what mechanism is called here?
-        // if (vehPrototype.getLongModel().modelName().equalsIgnoreCase("")) {
-        // final double tau = 1;
-        // gapAtQMax = leader.getSpeed() * tau;
-        // }
-
-        // minimal distance set to 80% of 1/rho at flow maximum in fundamental
-        // diagram
+        // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
         double minRequiredGap = 0.8 * gapAtQMax;
         if (vehPrototype.getLongModel().isCA()) {
-            final double tau = 1;
-            minRequiredGap = leader.getSpeed() * tau;
+            minRequiredGap = leader.getSpeed();
         }
         if (netGapToLeader > minRequiredGap) {
             enterVehicle(laneSegment, time, minRequiredGap, vehPrototype, leader);
@@ -236,13 +226,9 @@ public class TrafficSource implements SimulationTimeStep {
      * 
      * @param laneSegment
      * @param time
-     *            the time
      * @param sFreeMin
-     *            the s free min
      * @param vehPrototype
-     *            the veh prototype
      * @param leader
-     *            the leader
      */
     private void enterVehicle(LaneSegment laneSegment, double time, double sFreeMin, VehiclePrototype vehPrototype,
             Vehicle leader) {
@@ -265,15 +251,8 @@ public class TrafficSource implements SimulationTimeStep {
         final double bEff = Math.max(0.1, bMax + aLast);
         final double vMaxKin = vLast + Math.sqrt(2 * sFree * bEff);
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
-        // final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
 
         addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
-        // logger.debug("add vehicle from upstream boundary: xEnter={}, vEnter={}",
-        // xEnter, vEnter);
-
-        // System.out.printf("add vehicle from upstream boundary: vehType=%s, xLast=%.2f, vLast=%.2f, xEnter=%.2f, vEnter=%.2f, lane=%d, rhoEnter=%.2f, vMaxEq=%.2f, vMaxKin=%.2f %n",
-        // vehPrototype.getLabel(), xLast, vLast, xEnter, vEnter,
-        // vehContainer.getLaneIndex(), rhoEnter, vMaxEq, vMaxKin );
     }
 
     /**
@@ -290,7 +269,7 @@ public class TrafficSource implements SimulationTimeStep {
      */
     private void addVehicle(LaneSegment laneSegment, final VehiclePrototype vehPrototype, double xEnter, double vEnter) {
         final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
-        vehicle.setMidPosition(xEnter);
+        vehicle.setFrontPosition(xEnter);
         vehicle.setSpeed(vEnter);
         vehicle.setLane(laneSegment.lane());
         laneSegment.addVehicle(vehicle);

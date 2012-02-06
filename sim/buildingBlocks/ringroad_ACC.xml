@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<!-- README: TODOs -->
+<!-- Macroscopic initial conitions do not check for sufficient safety gap at boundary -->
+<!-- FCD Output does not work with macroscopic initial conditions -->
+<SCENARIO network_filename="ringroad.xodr">
+    <VEHICLES>
+        <VEHICLE label="ACC1" length="8" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="0.5" b="2.0" coolness="1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+            <!-- fluctuation strength needed for traffic flow breakdown if simulating only with one vehicle type -->
+            <NOISE tau="5" fluct_strength="0.05" />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="0.2" duration="10000" fixed_seed="false">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+            <VEHICLE_TYPE label="ACC1" fraction="1" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="43">
+            <INITIAL_CONDITIONS>
+                <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km -->
+                <IC_MACRO x="1" rho_per_km="36" v="20" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <OUTPUT>
+            <!--   <FLOATING_CAR_DATA n_dt="5">
+        <FC number="2" />
+      </FLOATING_CAR_DATA>   -->
+        </OUTPUT>
+    </SIMULATION>
+</SCENARIO>
+

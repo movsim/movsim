@@ -7,8 +7,8 @@
 #set datafile separator ","
 
 # parameters
-if (!exists("inputPath")) inputPath = ""
-if (!exists("outputPath")) outputPath = "figs/"
+if (!exists("inputPath")) inputPath = "./"
+if (!exists("outputPath")) outputPath = "./"
 if (!exists("ldm")) ldm = "IDM"
 if (!exists("lang")) lang = "en"
 #print "LDM=".ldm
@@ -32,10 +32,11 @@ vehicle = ldm."1"
 
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
-stFile = inputPath.baseFile.".id0_st.csv"
-detFile(n) = sprintf(inputPath.baseFile.".id0x%d_det.csv",n)
-roadSourceFile = inputPath.baseFile.".id0_source_log.csv"
-rampSourceFile = inputPath.baseFile.".id0_sramp1_source_log.csv"
+stFile = inputPath.baseFile.".st.route_main.csv"
+detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
+roadSourceFile = inputPath.baseFile.".source.road_1.csv"
+rampSourceFile = inputPath.baseFile.".source.road_1.csv"
+trajectoriesFile = inputPath.baseFile.".traj.route_main.csv"
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"

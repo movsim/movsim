@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.viewer.ui;
 
@@ -31,14 +34,16 @@ import java.util.ResourceBundle;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
-import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvas.StatusControlCallbacks;
+import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MovSimToolBar extends JToolBar implements ActionListener {
+
+    private static final long serialVersionUID = 1L;
 
     final static Logger logger = LoggerFactory.getLogger(MovSimToolBar.class);
 
@@ -55,49 +60,41 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
 
     JButton buttonStart;
     private final ResourceBundle resourceBundle;
-
-    private final TrafficUi trafficUI;
-
     private StatusPanel statusPanel;
 
-    public MovSimToolBar(final TrafficUi trafficUi, final ResourceBundle resourceBundle) {
+    public MovSimToolBar(StatusPanel statusPanel, final CanvasPanel canvasPanel, final ResourceBundle resourceBundle) {
         super(resourceBundle.getString("ToolBarTitle"));
-        this.trafficUI = trafficUi;
+        this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
-        
+
         setRollover(true);
-        controller = trafficUi.getController();
+        controller = canvasPanel.controller;
         addButtons(this);
-        addStatusPanel(this);
+        addSeparator();
+        add(statusPanel);
 
         final StatusControlCallbacks statusCallbacks = new TrafficCanvas.StatusControlCallbacks() {
             @Override
             public void showStatusMessage(String message) {
-                // showStatus(message);
             }
 
             @Override
             @SuppressWarnings({ "synthetic-access" })
             public void stateChanged() {
-                // final String buttonString;
-                if (trafficUi.trafficCanvas.isStopped()) {
-                    // buttonString = resourceBundle.getString("Start");
+                if (canvasPanel.trafficCanvas.isStopped()) {
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
                             + ".png", 32, 32));
-                } else if (trafficUi.trafficCanvas.isPaused()) {
-                    // buttonString = resourceBundle.getString("Resume");
+                } else if (canvasPanel.trafficCanvas.isPaused()) {
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"
                             + ".png", 32, 32));
                 } else {
-                    // buttonString = resourceBundle.getString("Pause");
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_pause"
                             + ".png", 32, 32));
                 }
-                // buttonStart.setText(buttonString);
             }
         };
 
-        trafficUi.trafficCanvas.setStatusControlCallbacks(statusCallbacks);
+        canvasPanel.trafficCanvas.setStatusControlCallbacks(statusCallbacks);
     }
 
     protected void addButtons(JToolBar toolBar) {
@@ -131,22 +128,9 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
                 resourceBundle.getString("ZoomOut"));
         toolBar.add(button);
 
-        toolBar.addSeparator(new Dimension(20, 0));
-
-        button = makeNavigationButton("colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
+        button = makeNavigationButton("button_vehicle_colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
                 resourceBundle.getString("VehicleColors"));
         toolBar.add(button);
-        
-        toolBar.addSeparator(new Dimension(20, 0));
-    }
-
-    /**
-     * @param toolBar
-     */
-    private void addStatusPanel(JToolBar toolBar) {
-        statusPanel = new StatusPanel(resourceBundle);
-        toolBar.add(statusPanel);
-        trafficUI.setStatusPanel(statusPanel);
     }
 
     protected JButton makeNavigationButton(String imageName, String actionCommand, String toolTipText, String altText) {
@@ -192,7 +176,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         } else if (e.getActionCommand().equals(VEHICLE_COLORS)) {
             controller.commandCycleVehicleColors();
         } else if (e.getActionCommand().equals(RESET)) {
-//            trafficUI.getStatusPanel().reset();
+            statusPanel.reset();
             controller.commandReset();
         }
     }

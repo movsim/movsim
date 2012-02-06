@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.simulator;
 
@@ -37,7 +40,6 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
-import org.movsim.output.SimObservables;
 import org.movsim.output.SimOutput;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
@@ -60,44 +62,30 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Simulator implements Runnable {
+public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Simulator.class);
 
-    private final ProjectMetaData projectMetaData;
-    private double time;
-
-    private long iterationCount;
-
-    /**
-     * The timestep is a constant for one simulation run. It cannot be changed during a simulation. But of course you can run another
-     * simulation with a different timestep.
-     */
-    private double timestep;
-
-    /** The duration of the simulation. */
-    private double tMax;
-
-    private SimOutput simOutput;
-
-    private final InputData inputData;
-
-    private VehicleGenerator vehGenerator;
-
-    private String projectName;
-
     private long startTimeMillis;
 
+    private final ProjectMetaData projectMetaData;
+    private String projectName;
+    private final InputData inputData;
+    private VehicleGenerator vehGenerator;
+    private SimOutput simOutput;
     private final RoadNetwork roadNetwork;
+    private final SimulationRunnable simulationRunnable;
 
     /**
-     * Instantiates a new simulator.
+     * Constructor.
      */
     public Simulator(ProjectMetaData projectMetaData) {
-    	this.projectMetaData = projectMetaData;
-        inputData = new InputData(projectMetaData); // accesses static reference ProjectMetaData
+        this.projectMetaData = projectMetaData;
+        inputData = new InputData();
         roadNetwork = new RoadNetwork();
+        simulationRunnable = new SimulationRunnable(this);
+        simulationRunnable.setCompletionCallback(this);
     }
 
     public void initialize() {
@@ -105,21 +93,21 @@ public class Simulator implements Runnable {
 
         projectName = projectMetaData.getProjectName();
 
-        final SimulationInput simInput = parseMovSimXm();
-        final boolean loadedRoadNetwork = parseOpenDriveXml(projectMetaData);
+        final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
+        final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
 
-        timestep = simInput.getTimestep();
-        tMax = simInput.getMaxSimTime();
+        simulationRunnable.setTimeStep(simInput.getTimestep());
+        simulationRunnable.setDuration(simInput.getMaxSimTime());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
-        createVehicleGenerator(simInput);
+        vehGenerator = createVehicleGenerator(simInput);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
-        final Map<String, RoadInput> roadInputMap = inputData.getSimulationInput().getRoadInput();
+        final Map<String, RoadInput> roadInputMap = simInput.getRoadInput();
         if (loadedRoadNetwork == false && roadInputMap.size() == 1) {
             defaultTestingRoadMapping(roadInputMap); // TODO rg: This has to be corrected/deleted at some point
         } else {
@@ -129,14 +117,53 @@ public class Simulator implements Runnable {
         reset();
     }
 
+    public ProjectMetaData getProjectMetaData() {
+        return projectMetaData;
+    }
+
+    public InputData getSimInput() {
+        return inputData;
+    }
+
+    public SimOutput getSimOutput() {
+        return simOutput;
+    }
+
+    public RoadNetwork getRoadNetwork() {
+        return roadNetwork;
+    }
+
+    public SimulationRunnable getSimulationRunnable() {
+        return simulationRunnable;
+    }
+
+    public List<Double> getTravelTimeDataEMAs(double time) {
+        final double tauEMA = 40;
+        return simOutput.getTravelTimes().getTravelTimesEMA(time, tauEMA);
+    }
+
+    /**
+     * Load scenario from xml.
+     * 
+     * @param scenario
+     *            the scenario
+     */
+    public void loadScenarioFromXml(String scenario, String path) {
+        roadNetwork.clear();
+        projectMetaData.setProjectName(scenario);
+        projectMetaData.setPathToProjectXmlFile(path);
+        // projectMetaData.setOutputPath(path);
+        initialize();
+    }
+
     /**
      * @param roadInputMap
      */
-    private void matchRoadSegmentsAndRoadInput(final Map<String, RoadInput> roadInputMap) {
+    private void matchRoadSegmentsAndRoadInput(Map<String, RoadInput> roadInputMap) {
         for (final RoadInput roadinput : roadInputMap.values()) {
             final RoadSegment roadSegment = roadNetwork.findByUserId(roadinput.getId());
             if (roadSegment != null) {
-                addInputToRoadSegment(roadSegment, roadinput);
+                addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
             }
         }
     }
@@ -146,15 +173,17 @@ public class Simulator implements Runnable {
      * 
      * @param simInput
      */
-    private void createVehicleGenerator(final SimulationInput simInput) {
+    private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        vehGenerator = new VehicleGenerator(timestep, inputData, heterogenInputData);
+        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData,
+                heterogenInputData);
         // output fundamental diagrams
         final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
         final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
         if (instantaneousFileOutput && isWithFundDiagramOutput) {
-            FileFundamentalDiagram.writeFundamentalDiagrams(vehGenerator.prototypes());
+            FileFundamentalDiagram.writeFundamentalDiagrams(projectMetaData, vehGenerator.prototypes());
         }
+        return vehGenerator;
 
     }
 
@@ -163,7 +192,7 @@ public class Simulator implements Runnable {
      * 
      * @param roadInputMap
      */
-    private void defaultTestingRoadMapping(final Map<String, RoadInput> roadInputMap) {
+    private void defaultTestingRoadMapping(Map<String, RoadInput> roadInputMap) {
         logger.warn("Simulation with test network");
         final RoadInput roadinput = roadInputMap.values().iterator().next();
         final int laneCount = 1;// roadinput.getLanes();
@@ -171,7 +200,7 @@ public class Simulator implements Runnable {
         // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
-        addInputToRoadSegment(roadSegment, roadinput);
+        addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
         roadSegment.setUserId("1");
         roadSegment.addDefaultSink();
         roadNetwork.add(roadSegment);
@@ -183,7 +212,7 @@ public class Simulator implements Runnable {
      * @param projectMetaData
      * @return
      */
-    private boolean parseOpenDriveXml(ProjectMetaData projectMetaData) {
+    private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
         final String xodrFileName = projectMetaData.getXodrFilename();
         final String xodrPath = projectMetaData.getXodrPath();
         final String fullXodrFileName = xodrPath + xodrFileName;
@@ -199,16 +228,10 @@ public class Simulator implements Runnable {
      * 
      * @return
      */
-    private SimulationInput parseMovSimXm() {
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(inputData);
+    private static SimulationInput parseMovSimXml(ProjectMetaData projectMetaData, InputData inputData) {
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(projectMetaData, inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
-    }
-
-    public void reset() {
-        time = 0;
-        iterationCount = 0;
-        simOutput = new SimOutput(inputData, roadNetwork);
     }
 
     /**
@@ -220,14 +243,14 @@ public class Simulator implements Runnable {
      * @param roadSegment
      * @param roadinput
      */
-    private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput) {
-    	
-    	// set up the traffic source
+    private static void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput,
+            VehicleGenerator vehGenerator) {
+        // set up the traffic source
         final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
         final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
         final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
         if (trafficSourceData.withLogging()) {
-        	trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+            trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
         }
         roadSegment.setTrafficSource(trafficSource);
 
@@ -245,22 +268,22 @@ public class Simulator implements Runnable {
         roadSegment.setSpeedLimits(speedLimits);
 
         // set up the detectors
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment.userId(), roadinput.getDetectorInput(),
-                roadSegment.laneCount());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadinput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
 
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
                 roadinput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
 
-        initialConditions(roadSegment, inputData.getSimulationInput(), roadinput);
+        initialConditions(roadSegment, roadinput, vehGenerator);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
 
-    private void initialConditions(RoadSegment roadSegment, SimulationInput simInput, RoadInput roadInput) {
+    private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
 
-        // TODO: consider multi-lane case !!!
+        // TODO: consider multi-lane case
+        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment transitions 
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
@@ -272,7 +295,7 @@ public class Simulator implements Runnable {
                 final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
                 final double rhoLocal = icMacro.rho(xLocal);
                 double speedInit = icMacro.vInit(xLocal);
-                if (speedInit == 0) {
+                if (speedInit <= 0) {
                     speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
                 }
                 final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
@@ -298,90 +321,64 @@ public class Simulator implements Runnable {
                 veh.setVehNumber(vehicleNumber);
                 ++vehicleNumber;
                 // testwise:
-                veh.setFrontPosition(Math.round(ic.getX()/veh.physicalQuantities().getxScale()));
-                veh.setSpeed(Math.round(ic.getSpeed()/veh.physicalQuantities().getvScale()));
-                final int lane = ic.getInitLane();  // TODO check lane numbering in ic input
-                veh.setLane(Lane.LANE1);
+                veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
+                veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
+                final int lane = ic.getInitLane(); 
+                if (lane <= 0 || lane > roadSegment.laneCount()) {
+                    logger.error("Error: lane=" + lane + " on road id=" + roadSegment.userId()
+                            + " does not exist. Choose as initial condition a lane between 1 and "
+                            + roadSegment.laneCount());
+                    System.exit(-1);
+                }
+                veh.setLane(lane-1);// TODO check lane numbering. internal lane numbering starts with 0?!
                 roadSegment.addVehicle(veh);
-                // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, posInit, speedInit);
-                logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f", veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
-                if(veh.getLongitudinalModel().isCA()){
-                    logger.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh.physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
+                logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
+                        veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
+                if (veh.getLongitudinalModel().isCA()) {
+                    logger.info(String.format(
+                            "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
+                                    .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
                 }
             }
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.Simulator#run()
-     */
-    @Override
-    public void run() {
-        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}", time, projectName);
+    public void reset() {
+        simulationRunnable.reset();
+        simOutput = new SimOutput(projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
+    }
+
+    public void runToCompletion() {
+        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}",
+                simulationRunnable.simulationTime(), projectName);
 
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
-        simOutput.update(time, iterationCount);
+        // TODO FloatingCars do not need this call. First output line for t=0 is written twice to file
+        simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(),
+                simulationRunnable.iterationCount());
+        simulationRunnable.runToCompletion();
+    }
 
-        while (!isSimulationRunFinished()) {
-            updateTimestep();
-        }
-
-        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s", time,
-                time / 3600, projectName));
+    @Override
+    public void simulationComplete(double simulationTime) {
+        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
+                simulationTime, simulationTime / 3600, projectName));
         final double elapsedTime = 0.001 * (System.currentTimeMillis() - startTimeMillis);
         logger.info(String.format(
                 "time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime,
-                time / elapsedTime, 1000 * elapsedTime / iterationCount));
+                simulationTime / elapsedTime, 1000 * elapsedTime / simulationRunnable.iterationCount()));
     }
 
-    /**
-     * Stop this run.
-     * 
-     * @return true, if successful
-     */
-    public boolean isSimulationRunFinished() {
-        return (time > tMax);
-    }
-
-    public void updateTimestep() {
-        time += timestep;
-        iterationCount++;
-
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (iterationCount % 100 == 0) {
             if (logger.isInfoEnabled()) {
-                logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s", time,
-                        time / 3600, timestep, projectName));
+                logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
+                        simulationTime, simulationTime / 3600, dt, projectName));
             }
         }
-
-        roadNetwork.timeStep(timestep, time, iterationCount);
-        simOutput.update(time, iterationCount);
-    }
-
-    public long iterationCount() {
-        return iterationCount;
-    }
-
-    public double time() {
-        return time;
-    }
-
-    public double timestep() {
-        return timestep;
-    }
-
-    public InputData getSimInput() {
-        return inputData;
-    }
-
-    public SimObservables getSimObservables() {
-        return simOutput;
-    }
-
-    public RoadNetwork getRoadNetwork() {
-        return roadNetwork;
+        roadNetwork.timeStep(dt, simulationTime, iterationCount);
+        simOutput.timeStep(dt, simulationTime, iterationCount);
     }
 }

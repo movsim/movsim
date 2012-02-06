@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
-<SCENARIO path="." >
+<SCENARIO network_filename="simple_onramp.xodr">
     <VEHICLES>
-       <!-- vehicle length ==> cell units -->
+        <!-- vehicle length ==> cell units -->
         <VEHICLE label="KKW1" length="15">
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
-              <KKW v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" />
+                <KKW v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
@@ -19,33 +20,30 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false" >
-	<TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="KKW1" fraction="1" />
-            </TRAFFIC_COMPOSITION>
-         <!-- scaled units for time and space -->
-		  <!-- road id 0 indicates mainroad -->    
-        <ROAD id="0" length="40000" lanes="1">
-            
+    <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="KKW1" fraction="1" />
+        </TRAFFIC_COMPOSITION>
+        <!-- scaled units for time and space -->
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="2000" rho_per_km="2" v="3" />
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="100"    v="110" />
+                <INFLOW t="0" q_per_hour="100" v="110" />
                 <INFLOW t="600" q_per_hour="2000" v="90" />
             </TRAFFIC_SOURCE>
             <TRAFFIC_SINK />
             <!-- improve vehicle performance at inflow -->
             <FLOW_CONSERVING_INHOMOGENEITIES />
-            <SPEED_LIMITS/>
+            <SPEED_LIMITS />
             <SIMPLE_RAMPS>
                 <!-- scaled units! -->
                 <SIMPLE_RAMP x="30000" merge_length="1000" logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
             </SIMPLE_RAMPS>
-            <TRAFFIC_LIGHTS>
-            </TRAFFIC_LIGHTS>
+            <TRAFFIC_LIGHTS />
             <DETECTORS dt="60" logging="true">
                 <CROSS_SECTION x="16000" />
                 <CROSS_SECTION x="18000" />
@@ -56,10 +54,17 @@
                 <CROSS_SECTION x="28000" />
                 <CROSS_SECTION x="30000" />
                 <CROSS_SECTION x="32000" />
-             </DETECTORS>
+            </DETECTORS>
         </ROAD>
         <OUTPUT>
-           <SPATIOTEMPORAL dx="200" dt="40" />
+            <ROUTES>
+                <ROUTE label="main">
+                    <ROAD id="1" />
+                </ROUTE>
+            </ROUTES>
+            <SPATIOTEMPORAL dx="100" dt="40" route="main" />
+            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
+

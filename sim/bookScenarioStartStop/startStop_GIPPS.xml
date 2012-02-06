@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
     <VEHICLES>
@@ -17,51 +18,52 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1.1" duration="360" fixed_seed="true" seed="42">
-	 <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="GIPPS1" fraction="1" />
-                <VEHICLE_TYPE label="Obstacle" fraction="0" />
-            </TRAFFIC_COMPOSITION>
-        <ROAD id="1" >
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="GIPPS1" fraction="1" />
+            <VEHICLE_TYPE label="Obstacle" fraction="0" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
-                <IC_MICRO x="10" v="0"  />
-                <IC_MICRO x="20" v="0"  />
-                <IC_MICRO x="30" v="0"  />
-                <IC_MICRO x="40" v="0"  />
-                <IC_MICRO x="50" v="0"  />
-                <IC_MICRO x="60" v="0"  />
-                <IC_MICRO x="70" v="0"  />
-                <IC_MICRO x="80" v="0"  />
-                <IC_MICRO x="90" v="0"  />
-                <IC_MICRO x="100" v="0"  />
-                <IC_MICRO x="110" v="0"  />
-                <IC_MICRO x="120" v="0"  />
-                <IC_MICRO x="130" v="0"  />
-                <IC_MICRO x="140" v="0"  />
-                <IC_MICRO x="150" v="0"  />
-                <IC_MICRO x="160" v="0"  />
-                <IC_MICRO x="170" v="0"  />
-                <IC_MICRO x="180" v="0"  />
-                <IC_MICRO x="190" v="0"  />
-                <IC_MICRO x="200" v="0"  />
-                <IC_MICRO x="210" v="0"  />
-                <IC_MICRO x="220" v="0"  />
-                <IC_MICRO x="230" v="0"  />
-                <IC_MICRO x="240" v="0"  />
-                <IC_MICRO x="250" v="0"  />
-                <IC_MICRO x="260" v="0"  />
+                <IC_MICRO x="10" v="0" />
+                <IC_MICRO x="20" v="0" />
+                <IC_MICRO x="30" v="0" />
+                <IC_MICRO x="40" v="0" />
+                <IC_MICRO x="50" v="0" />
+                <IC_MICRO x="60" v="0" />
+                <IC_MICRO x="70" v="0" />
+                <IC_MICRO x="80" v="0" />
+                <IC_MICRO x="90" v="0" />
+                <IC_MICRO x="100" v="0" />
+                <IC_MICRO x="110" v="0" />
+                <IC_MICRO x="120" v="0" />
+                <IC_MICRO x="130" v="0" />
+                <IC_MICRO x="140" v="0" />
+                <IC_MICRO x="150" v="0" />
+                <IC_MICRO x="160" v="0" />
+                <IC_MICRO x="170" v="0" />
+                <IC_MICRO x="180" v="0" />
+                <IC_MICRO x="190" v="0" />
+                <IC_MICRO x="200" v="0" />
+                <IC_MICRO x="210" v="0" />
+                <IC_MICRO x="220" v="0" />
+                <IC_MICRO x="230" v="0" />
+                <IC_MICRO x="240" v="0" />
+                <IC_MICRO x="250" v="0" />
+                <IC_MICRO x="260" v="0" />
                 <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="1" >
-                    <!-- FC 1 is obstacle -->
-                    <FC number="2" />
-                    <FC number="6" />
-                    <FC number="11" />
-                    <FC number="16" />
-                    <FC number="21" />
-                </FLOATING_CAR_DATA>
-            </OUTPUT>
+            <FLOATING_CAR_DATA n_dt="1">
+                <!-- FC 1 is obstacle -->
+                <FC number="2" />
+                <FC number="6" />
+                <FC number="11" />
+                <FC number="16" />
+                <FC number="21" />
+            </FLOATING_CAR_DATA>
+        </OUTPUT>
     </SIMULATION>
 </SCENARIO>
+

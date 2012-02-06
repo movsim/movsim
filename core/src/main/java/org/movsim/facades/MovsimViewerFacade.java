@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.facades;
 
@@ -29,7 +32,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimMain;
 import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.output.SimObservables;
+import org.movsim.output.SimOutput;
 import org.movsim.simulator.Simulator;
 import org.movsim.utilities.XYDataPoint;
 import org.slf4j.Logger;
@@ -53,8 +56,8 @@ public class MovsimViewerFacade {
     /**
      * Inits the localization and logger.
      */
-    public void initLocalizationAndLogger() {
-        final URL log4jConfig = MovsimMain.class.getResource("/sim/log4j.properties");
+    private void initLocalizationAndLogger() {
+        final URL log4jConfig = MovsimMain.class.getResource("/config/log4j.properties");
         PropertyConfigurator.configure(log4jConfig);
     }
 
@@ -76,26 +79,13 @@ public class MovsimViewerFacade {
 
         inputData = model.getSimInput();
 
-        projectMetaData.setInstantaneousFileOutput(false);
-        projectMetaData.setXmlFromResources(true);
+        projectMetaData.setInstantaneousFileOutput(true);
+        projectMetaData.setXmlFromResources(false);
 
     }
 
-    public static MovsimViewerFacade getInstance() {
+    private static MovsimViewerFacade getInstance() {
         return Holder.INSTANCE;
-    }
-
-    /**
-     * Load scenario from xml.
-     * 
-     * @param scenario
-     *            the scenario
-     */
-    public void loadScenarioFromXml(String scenario, String path) {
-        projectMetaData.setProjectName(scenario);
-        projectMetaData.setPathToProjectXmlFile(path);
-        projectMetaData.setOutputPath(path);
-        model.initialize();
     }
 
     /**
@@ -103,28 +93,28 @@ public class MovsimViewerFacade {
      * 
      * @return the max sim time
      */
-    public double getMaxSimTime() {
+    private double getMaxSimTime() {
         return inputData.getSimulationInput().getMaxSimTime();
     }
 
-    public List<List<XYDataPoint>> getTravelTimeEmas() {
-        return model.getSimObservables().getTravelTimes().getTravelTimeEmas();
+    private List<List<XYDataPoint>> getTravelTimeEmas() {
+        return model.getSimOutput().getTravelTimes().getTravelTimeEmas();
     }
 
-    public List<Double> getTravelTimeDataEMAs(double time) {
+    private List<Double> getTravelTimeDataEMAs(double time) {
         final double tauEMA = 40;
-        return model.getSimObservables().getTravelTimes().getTravelTimesEMA(time, tauEMA);
+        return model.getSimOutput().getTravelTimes().getTravelTimesEMA(time, tauEMA);
     }
 
-    public Simulator getSimulator() {
+    private Simulator getSimulator() {
         return model;
     }
 
-    public SimObservables getSimObservables() {
-        return model.getSimObservables();
+    private SimOutput getSimOutput() {
+        return model.getSimOutput();
     }
 
-    public ProjectMetaData getProjectMetaData() {
+    private ProjectMetaData getProjectMetaData() {
         return projectMetaData;
     }
 }

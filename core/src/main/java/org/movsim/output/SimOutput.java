@@ -1,179 +1,199 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.output;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.input.model.output.RouteInput;
+import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class SimOutput.
  */
-public class SimOutput implements SimObservables {
+public class SimOutput implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
 
-    private SpatioTemporal spatioTemporal = null;
-    private FileSpatioTemporal fileSpatioTemporal;
-    private FloatingCars floatingCars = null;
+    private List<SpatioTemporal> spatioTemporals;
+    private List<FileSpatioTemporal> filesSpatioTemporal;
+    private FloatingCars floatingCars;
     private FileFloatingCars fileFloatingCars;
-    private FileTrajectories fileTrajectories = null;
-    private final boolean writeOutput;
+    private List<FileTrajectories> filesTrajectories;
     private final RoadNetwork roadNetwork;
-    private final RoadSegment roadSegment;
     private TravelTimes travelTimes;
 
     /**
-     * Instantiates a new sim output.
+     * Constructor.
      * 
      * @param simInput
      *            the sim input
-     * @param roadSections
-     *            the road sections
      */
-    public SimOutput(InputData simInput, RoadNetwork roadNetwork) {
+    public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
-        roadSegment = roadNetwork.size() == 0 ? null : roadNetwork.iterator().next();
 
-        // more restrictive than in other output classes TODO
-        writeOutput = simInput.getProjectMetaData().isInstantaneousFileOutput();
-
-        // SingleRoad quickhack! TODO
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
             return;
         }
         final OutputInput outputInput = simulationInput.getOutputInput();
 
-        // TODO quick hack null treatment
-        // travel times
-        final TravelTimesInput travelTimesInput = outputInput.getTravelTimesInput();
-        if (travelTimesInput != null) {
-            travelTimes = new TravelTimes(travelTimesInput, roadNetwork);
+        // Routes for output
+        final RoutesInput routesInput = outputInput.getRoutesInput();
+        final Map<String, Route> routes = new HashMap<String, Route>();
+        if (routesInput != null) {
+            for (final RouteInput routeInput : routesInput.getRoutes()) {
+                final Route route = new Route();
+                route.setName(routeInput.getName());
+                final List<String> roadIds = routeInput.getRoadIds();
+                for (final String roadId : roadIds) {
+                    route.add(roadNetwork.findByUserId(roadId));
+                }
+                routes.put(route.getName(), route);
+            }
         }
 
-        // TODO hack: just *one* roadsection
-        // access not robust to fetch mainroad
-        // roadSection = roadSections.get(0);
+        // Travel times output
+        final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
+        if (travelTimesInput != null) {
+            travelTimes = new TravelTimes(travelTimesInput, routes, roadNetwork);
+        }
+
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput.isWithFCD()) {
-            floatingCars = new FloatingCars(roadSegment, floatingCarInput);
+            floatingCars = new FloatingCars(floatingCarInput);
             if (writeOutput) {
-                fileFloatingCars = new FileFloatingCars(floatingCars);
+                fileFloatingCars = new FileFloatingCars(roadNetwork, floatingCars);
             }
         }
 
-        final SpatioTemporalInput spatioTemporalInput = outputInput.getSpatioTemporalInput();
-        if (spatioTemporalInput.isWithMacro()) {
-            spatioTemporal = new SpatioTemporal(spatioTemporalInput, roadSegment);
+        // Spatio temporal output
+        final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
+        if (spatioTemporalInputs != null) {
+            spatioTemporals = new ArrayList<SpatioTemporal>();
             if (writeOutput) {
-                fileSpatioTemporal = new FileSpatioTemporal(roadSegment.userId(), spatioTemporal);
+                filesSpatioTemporal = new ArrayList<FileSpatioTemporal>();
+            }
+            for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
+                final Route route = routes.get(spatioTemporalInput.getRouteLabel());
+                final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
+                        spatioTemporalInput.getDt(), route);
+                spatioTemporals.add(spatioTemporal);
+                if (writeOutput) {
+                    filesSpatioTemporal.add(new FileSpatioTemporal(spatioTemporal));
+                }
             }
         }
 
-        final TrajectoriesInput trajInput = outputInput.getTrajectoriesInput();
-        if (trajInput.isInitialized()) {
+        // Trajectories output
+        final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
+        if (trajInput != null) {
             if (writeOutput) {
-                fileTrajectories = new FileTrajectories(trajInput, roadNetwork);
+                filesTrajectories = new ArrayList<FileTrajectories>();
+                for (final TrajectoriesInput traj : trajInput) {
+                    final Route route = routes.get(traj.getLabel());
+                    filesTrajectories.add(new FileTrajectories(traj, route));
+                }
             }
         }
     }
 
-    /**
-     * Update.
-     *
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param iterationCount
-     *            the number of iterations that have been executed
-     */
-    public void update(double simulationTime, long iterationCount) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
 
         if (floatingCars != null) {
-            floatingCars.update(simulationTime, iterationCount);
-        }
-        if (spatioTemporal != null) {
-            spatioTemporal.update(simulationTime, iterationCount, roadSegment);
+            floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
 
-        if (fileTrajectories != null) {
-            fileTrajectories.update(simulationTime, iterationCount);
+        if (spatioTemporals != null) {
+            for (final SpatioTemporal sp : spatioTemporals) {
+                sp.timeStep(dt, simulationTime, iterationCount);
+            }
+        }
+
+        if (filesTrajectories != null) {
+            for (final FileTrajectories filetraj : filesTrajectories) {
+                filetraj.timeStep(dt, simulationTime, iterationCount);
+            }
         }
 
         if (travelTimes != null) {
-            travelTimes.update(simulationTime, iterationCount);
+            travelTimes.timeStep(dt, simulationTime, iterationCount);
         }
 
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the spatio temporals.
      * 
-     * @see org.movsim.output.SimObservables#getSpatioTemporal()
+     * @return the spatio temporals
      */
-    @Override
-    public SpatioTemporal getSpatioTemporal() {
-        return spatioTemporal;
+    public List<SpatioTemporal> getSpatioTemporals() {
+        return spatioTemporals;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the floating cars.
      * 
-     * @see org.movsim.output.SimObservables#getFloatingCars()
+     * @return the floating cars
      */
-    @Override
     public FloatingCars getFloatingCars() {
         return floatingCars;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Gets the loop detectors.
      * 
-     * @see org.movsim.output.SimObservables#getLoopDetectors()
+     * @return the loop detectors
      */
-    @Override
-    public List<LoopDetector> getLoopDetectors() {
+    public List<LoopDetector> getLoopDetectors(RoadSegment roadSegment) {
         return roadSegment.getLoopDetectors().getDetectors();
     }
 
-    @Override
     public TravelTimes getTravelTimes() {
         return travelTimes;
     }
-
 }

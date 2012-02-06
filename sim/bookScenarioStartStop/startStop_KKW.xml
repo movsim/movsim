@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
-<SCENARIO  network_filename="startStop.xodr">
+<SCENARIO network_filename="startStop.xodr">
     <VEHICLES>
         <!-- vehicle length ==> cell units -->
         <VEHICLE label="KKW1" length="20">
             <LONGITUDINAL_MODEL>
-                <KKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
-                    vp="14" />
+                <KKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
         <VEHICLE label="Obstacle" length="20">
             <LONGITUDINAL_MODEL>
-                <KKW v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052"
-                    vp="14" />
+                <KKW v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
     <!-- depends strongly on randomness resp. seed ! -->
-    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="50"> 
-	  <TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="KKW1" fraction="1" />
-                <VEHICLE_TYPE label="Obstacle" fraction="0" />
-            </TRAFFIC_COMPOSITION>
-         <ROAD id="1" >
+    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="50">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="KKW1" fraction="1" />
+            <VEHICLE_TYPE label="Obstacle" fraction="0" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
-                 <!-- in physical quantities (meter and m/s) -->      
+                <!-- in physical quantities (meter and m/s) -->
                 <IC_MICRO x="10" v="0" label="KKW1" />
                 <IC_MICRO x="20" v="0" label="KKW1" />
                 <IC_MICRO x="30" v="0" label="KKW1" />
@@ -65,14 +64,15 @@
             <DETECTORS />
         </ROAD>
         <OUTPUT>
-        <FLOATING_CAR_DATA n_dt="1" dn="0">
-            <!-- FC 1 is obstacle -->
-            <FC number="2" />
-            <FC number="6" />
-            <FC number="11" />
-            <FC number="16" />
-            <FC number="21" />
-        </FLOATING_CAR_DATA>
-      </OUTPUT>
+            <FLOATING_CAR_DATA n_dt="1" dn="0">
+                <!-- FC 1 is obstacle -->
+                <FC number="2" />
+                <FC number="6" />
+                <FC number="11" />
+                <FC number="16" />
+                <FC number="21" />
+            </FLOATING_CAR_DATA>
+        </OUTPUT>
     </SIMULATION>
 </SCENARIO>
+

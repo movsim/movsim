@@ -31,40 +31,27 @@ Features:
 Installation
 ------------
 
-Install the [git](http://git-scm.com/download) version control system.
-
-Download this repository:
-
-    git clone git@github.com:movsim/movsim.git
-    
-or
-       
-    git clone https://github.com/movsim/movsim.git
-              
-Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 6
-of Java (JRE 1.6 or higher).
-
-Install [Apache Maven] (http://maven.apache.org/download.html). Maven is the software build and management tool that is used to build MovSim.
-
-MovSim produces output that can be plotted using _gnuplot_. If you wish to use this output to produce graphs, install [gnuplot](http://www.gnuplot.info/).
+For installation see the [README.md](https://github.com/movsim/movsim/blob/master/README.md) in the main MovSim directory.
 
 
 Usage
 -----
 
-To build MovSim, type `mvn install` from the main MovSim directory.
+To build the MovSim core, type `mvn install` from the MovSim core directory.
 
-There are a number of predefined simulation scenarios defined in the `sim/` directory. The `runapp` script can be used
-to run these scenarios and plot the results using gnuplot, for example:
+MovSim core can be run directly from the command-line. To see the MovSim options, type:
 
-    ./runapp startStop_IDM
+    java -jar target/movsim-1.2-jar-with-dependencies.jar -h
 
-etc. The `.csv` output is put in the `sim` directory. The graphical output is put in the `sim/figs` directory, in `.eps` (Encapsulated PostScript) files.
+There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim). The `runmovsim` script can be used to run the simulator and gnuplot for plot these scenarios, for example:
 
-MovSim can be run directly from the command-line. To see the MovSim options, type:
+    cd ../sim/bookScenarioStartStop/
+    ../../core/runmovsim -f startStop_IDM.xml
+    gnuplot startStop_IDM.gpl
 
-    java -jar target/movsim-1.1-jar-with-dependencies.jar -h
+The `.csv` output is put in the directory from which the simulator is called and the graphical output is put in `.eps` (Encapsulated PostScript) files.
 
+The script `cleanmovsim` can be used to delete all simulation output files in the current directory.
 
 Commercial use
 --------------

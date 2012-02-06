@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.simulator.vehicles.lanechange;
 
@@ -103,23 +106,26 @@ public class LaneChangeModel {
         return isInitialized;
     }
 
-    public boolean isMandatoryLaneChangeSafe(LaneSegment laneSegment) {
-        // works also for the "virtual" leader of me in considered lane
+
+    public boolean isSafeLaneChange(LaneSegment laneSegment) {
         final Vehicle front = laneSegment.frontVehicle(me);
-
         final Vehicle back = laneSegment.rearVehicle(me);
-
-        final boolean changeSafe = mandatoryWeavingChange(front, back); // TODO
+        final boolean changeSafe = checkSafetyCriterion(front, back, lcModelMOBIL.getSafeDeceleration());
         return changeSafe;
     }
 
-    private boolean mandatoryWeavingChange(final Vehicle frontVeh, final Vehicle backVeh) {
+    public boolean isSafeMandatoryLaneChange(LaneSegment laneSegment) {
+        final Vehicle front = laneSegment.frontVehicle(me);
+        final Vehicle back = laneSegment.rearVehicle(me);
+        // enforce mandatory lane change by increasing the safe deceleration for
+        // normal situations
+        final double increaseFactorMandatory = 2.0;
+        final double safeDeceleration = increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration();
+        final boolean changeSafe = checkSafetyCriterion(front, back, safeDeceleration); // TODO
+        return changeSafe;
+    }
 
-        // final boolean isLaneChangeFront = (frontVeh==null) ? false : frontVeh.inProcessOfLaneChange();
-        // final boolean isLaneChangeBack = (backVeh==null) ? false : backVeh.inProcessOfLaneChange();
-        // if(isLaneChangeBack || isLaneChangeFront){
-        // return false;
-        // }
+    private boolean checkSafetyCriterion(final Vehicle frontVeh, final Vehicle backVeh, double safeDeceleration) {
 
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);
@@ -135,23 +141,21 @@ public class LaneChangeModel {
         final double backNewAcc = (backVeh == null) ? 0 : backVeh.getLongitudinalModel().calcAcc(backVeh, me);
 
         // check security constraint for new follower
-        // enforce mandatory lane change by increasing the safe deceleration for
-        // normal situations
-        final double increaseFactorMandatory = 2.0;
-        if (backNewAcc <= -increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration()) {
+
+        if (backNewAcc <= -safeDeceleration) {
             logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
             logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
-            return (false);
+            return false;
         }
 
         final double meNewAcc = me.getLongitudinalModel().calcAcc(me, frontVeh);
-        if (meNewAcc >= -increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration()) {
+        if (meNewAcc >= -safeDeceleration) {
             logger.debug("meNewAcc={}, bSafe={}", meNewAcc, lcModelMOBIL.getSafeDeceleration());
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
             logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
-            return (true);
+            return true;
         }
-        return (false);
+        return false;
     }
 
     public int determineLaneChangeDirection(RoadSegment roadSegment) {

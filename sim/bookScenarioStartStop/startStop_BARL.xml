@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
     <VEHICLES>
@@ -7,7 +8,7 @@
         <VEHICLE label="BARL1" length="1">
             <!-- b_max not limited -->
             <LONGITUDINAL_MODEL>
-                 <!-- BARL variant : p_slow_start != p_slowdown -->
+                <!-- BARL variant : p_slow_start != p_slowdown -->
                 <NSM v0="2" p_slowdown="0.1" p_slow_start="0.2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
@@ -20,13 +21,13 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1" duration="360" fixed_seed="true" seed="42">
-	<TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="BARL1" fraction="1" />
-                <VEHICLE_TYPE label="Obstacle" fraction="0" />
-            </TRAFFIC_COMPOSITION>
-        <ROAD id="1" >
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="BARL1" fraction="1" />
+            <VEHICLE_TYPE label="Obstacle" fraction="0" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
-                <!-- in physical quantities (meter and m/s) -->         
+                <!-- in physical quantities (meter and m/s) -->
                 <IC_MICRO x="7.5" v="0" label="BARL1" />
                 <IC_MICRO x="15.0" v="0" label="BARL1" />
                 <IC_MICRO x="22.5" v="0" label="BARL1" />
@@ -65,14 +66,15 @@
             <DETECTORS />
         </ROAD>
         <OUTPUT>
-          <FLOATING_CAR_DATA n_dt="1" dn="0">
-             <!-- FC 1 is obstacle -->
-             <FC number="2" />
-             <FC number="6" />
-             <FC number="11" />
-             <FC number="16" />
-             <FC number="21" />
-         </FLOATING_CAR_DATA>
-       </OUTPUT>
+            <FLOATING_CAR_DATA n_dt="1" dn="0">
+                <!-- FC 1 is obstacle -->
+                <FC number="2" />
+                <FC number="6" />
+                <FC number="11" />
+                <FC number="16" />
+                <FC number="21" />
+            </FLOATING_CAR_DATA>
+        </OUTPUT>
     </SIMULATION>
 </SCENARIO>
+

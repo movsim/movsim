@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -50,7 +53,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addLanePair(int, org.movsim.simulator.roadsegment.traffic.RoadSegment, int, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addLanePair(int, org.movsim.simulator.roadnetwork.RoadSegment, int, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddLanePair() {
@@ -70,7 +73,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addJoin(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addJoin(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddJoin() {
@@ -92,7 +95,7 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addOffsetJoin(int, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addOffsetJoin(int, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddOffsetJoin() {
@@ -127,16 +130,35 @@ public class LinkTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addMerge(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addMerge(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddMerge() {
-        //fail("Not yet implemented"); //$NON-NLS-1$
+        final int laneCount = 2;
+        final int exitLaneCount = 1;
+        final RoadSegment r0 = new RoadSegment(300.0, laneCount + exitLaneCount);
+        final RoadSegment r1 = new RoadSegment(400.0, laneCount);
+        r0.setLaneType(Lane.LANE1, Lane.Type.EXIT);// so Lane1 is exit lane of r1
+        // join r0 and r1 so vehicles move from r0 to r1
+        // lane3 of r0 joins to lane2 of r1
+        // lane2 of r0 joins to lane1 of r1
+        // lane1 of r0 has no successor
+        Link.addJoin(r0, r1);
+        assertEquals(null, r0.sinkRoadSegment(Lane.LANE1));
+        assertEquals(r1, r0.sinkRoadSegment(Lane.LANE2));
+        assertEquals(r1, r0.sinkRoadSegment(Lane.LANE3));
+        assertEquals(Lane.NONE, r0.sinkLane(Lane.LANE1));
+        assertEquals(Lane.LANE1, r0.sinkLane(Lane.LANE2));
+        assertEquals(Lane.LANE2, r0.sinkLane(Lane.LANE3));
+        assertEquals(r0, r1.sourceRoadSegment(Lane.LANE1));
+        assertEquals(r0, r1.sourceRoadSegment(Lane.LANE2));
+        assertEquals(Lane.LANE2, r1.sourceLane(Lane.LANE1));
+        assertEquals(Lane.LANE3, r1.sourceLane(Lane.LANE2));
     }
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadsegment.traffic.Link#addFork(org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment, org.movsim.simulator.roadsegment.traffic.RoadSegment)}
+     * {@link org.movsim.simulator.roadnetwork.Link#addFork(org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.RoadSegment)}
      */
     @Test
     public final void testAddFork() {

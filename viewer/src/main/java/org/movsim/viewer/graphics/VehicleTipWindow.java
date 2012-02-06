@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.viewer.graphics;
 
@@ -33,6 +36,7 @@ import java.util.TimerTask;
 
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.ConversionUtilities;
 
 class VehicleTipWindow extends Window {
     /**
@@ -90,10 +94,10 @@ class VehicleTipWindow extends Window {
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
                 vehicle.getLane() + 1, 
-                vehiclePhysical.getMidPosition(),
-                vehiclePhysical.getSpeed() * 3.6,
+                vehiclePhysical.getFrontPosition(),
+                vehiclePhysical.getSpeed() * ConversionUtilities.MS_TO_KMH,
                 vehiclePhysical.getAcc(),
-                vehiclePhysical.getMidPosition(), 1, 1, 1);
+                vehiclePhysical.getFrontPosition(), 1, 1, 1);
         // }
         final Label label = new Label(string, Label.LEFT);
         label.setBackground(new Color(200, 220, 240));
@@ -109,7 +113,7 @@ class VehicleTipWindow extends Window {
         if (TrafficCanvas.DEBUG) {
             final DecimalFormat twoDP = new DecimalFormat("#.##"); //$NON-NLS-1$
             System.out.println("Vehicle id:" + vehicle.getId());//$NON-NLS-1$
-            System.out.println("  pos:" + (int) vehicle.physicalQuantities().getMidPosition());//$NON-NLS-1$
+            System.out.println("front  pos:" + (int) vehicle.physicalQuantities().getFrontPosition());//$NON-NLS-1$
             //                System.out.println("  dis:" + (int)vehicle.distanceTravelled());//$NON-NLS-1$
             //                System.out.println("  energyUsed:" + (int)vehicle.energyUsed());//$NON-NLS-1$
             //                // System.out.println("  energyUsedAccelerating:" + (int)vehicle.energyUsedAccelerating());//$NON-NLS-1$

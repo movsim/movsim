@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
-<SCENARIO>
+<SCENARIO network_filename="simple_onramp.xodr">
     <VEHICLES>
         <VEHICLE label="GIPPS1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
@@ -18,12 +19,10 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1.1" duration="7200" fixed_seed="true" seed="42">
-	<TRAFFIC_COMPOSITION write_fund_diagrams="true">
-                <VEHICLE_TYPE label="GIPPS1" fraction="1" />
-            </TRAFFIC_COMPOSITION>
-	 <!-- road id 0 indicates mainroad -->    
-        <ROAD id="0" length="20000" lanes="1">
-            
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="GIPPS1" fraction="1" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="8600" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>
@@ -38,33 +37,36 @@
                 <INHOMOGENEITY x="0" alpha_T="0.8" />
                 <INHOMOGENEITY x="2000" alpha_T="1" />
             </FLOW_CONSERVING_INHOMOGENEITIES>
-            <SPEED_LIMITS>
-            </SPEED_LIMITS>
+            <SPEED_LIMITS />
             <SIMPLE_RAMPS>
-                <SIMPLE_RAMP x="15000" merge_length="1000"
-                    logging="true">
+                <SIMPLE_RAMP x="15000" merge_length="1000" logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
             </SIMPLE_RAMPS>
-            <TRAFFIC_LIGHTS>
-            </TRAFFIC_LIGHTS>
-       	    <DETECTORS dt="60" logging="true">
-               <CROSS_SECTION x="1000" />
-               <CROSS_SECTION x="6000" />
-               <CROSS_SECTION x="8000" />
-               <CROSS_SECTION x="9000" />
-               <CROSS_SECTION x="10000" />
-               <CROSS_SECTION x="11000" />
-               <CROSS_SECTION x="12000" />
-               <CROSS_SECTION x="13000" />
-               <CROSS_SECTION x="14000" />
-               <CROSS_SECTION x="15000" />
-               <CROSS_SECTION x="16000" />
+            <TRAFFIC_LIGHTS />
+            <DETECTORS dt="60" logging="true">
+                <CROSS_SECTION x="1000" />
+                <CROSS_SECTION x="6000" />
+                <CROSS_SECTION x="8000" />
+                <CROSS_SECTION x="9000" />
+                <CROSS_SECTION x="10000" />
+                <CROSS_SECTION x="11000" />
+                <CROSS_SECTION x="12000" />
+                <CROSS_SECTION x="13000" />
+                <CROSS_SECTION x="14000" />
+                <CROSS_SECTION x="15000" />
+                <CROSS_SECTION x="16000" />
             </DETECTORS>
         </ROAD>
         <OUTPUT>
-                <SPATIOTEMPORAL dx="100" dt="40" />
-                <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" end_x="5000" />
-            </OUTPUT>
+            <ROUTES>
+                <ROUTE label="main">
+                    <ROAD id="1" />
+                </ROUTE>
+            </ROUTES>
+            <SPATIOTEMPORAL dx="100" dt="40" route="main" />
+            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
+        </OUTPUT>
     </SIMULATION>
 </SCENARIO>
+

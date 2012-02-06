@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 package org.movsim.input;
 
@@ -62,12 +65,15 @@ public interface XmlElementNames {
     public final String RoadRamps = "SIMPLE_RAMPS";
     public final String RoadSimpleRamp = "SIMPLE_RAMP";
     public final String RoadInflow = "INFLOW";
-    public final String RoadOutput = "OUTPUT";
+    public final String Output = "OUTPUT";
     public final String OutputFloatingCarData = "FLOATING_CAR_DATA";
     public final String OutputSpatioTemporal = "SPATIOTEMPORAL";
     public final String OutputDetectors = "DETECTORS";
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
     public final String OutputTravelTimes = "TRAVELTIMES";
+    public final String OutputRoutes = "ROUTES";
+    public final String OutputRoute = "ROUTE";
+    public final String OutputRoadId = "ROAD";
 
 }

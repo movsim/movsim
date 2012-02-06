@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 
 package org.movsim.viewer.graphics;
@@ -30,7 +33,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 
-import org.movsim.viewer.control.SimulationRunnable;
+import org.movsim.simulator.SimulationRunnable;
 
 /**
  * <p>
@@ -57,6 +60,8 @@ import org.movsim.viewer.control.SimulationRunnable;
 public abstract class SimulationCanvasBase extends Canvas {
 
     static final long serialVersionUID = 1L;
+
+    private static final double FORCE_REPAINT_BACKGROUND_INTERVAL = 60.0; // seconds;
 
     protected final SimulationRunnable simulationRunnable;
     protected long totalAnimationTime;
@@ -93,6 +98,8 @@ public abstract class SimulationCanvasBase extends Canvas {
     protected AffineTransform transform = new AffineTransform();
 
     protected boolean zoomingAllowed = true;
+
+    protected double measuredTime = 0;
 
     /**
      * Abstract function to allow the view to draw the simulation background, normally this is everything that does not move.
@@ -202,19 +209,31 @@ public abstract class SimulationCanvasBase extends Canvas {
     @Override
     public void update(Graphics g) {
         // final long timeBeforePaint_ms = System.currentTimeMillis();
-
+        // if (backgroundBuffer == null) {
+        // System.out.println("backgroundbuffer == null");
+        // setSize(1200, 700);
+        // return;
+        // }
         final Graphics2D bufferGraphics = (Graphics2D) backgroundBuffer.getGraphics();
         if (backgroundChanged) {
             // clear the background before affine transforms
             clearBackground(bufferGraphics);
         }
         bufferGraphics.setTransform(transform);
+        
         if (backgroundChanged) {
-            // if the background has been changed, then its content needs to be
-            // repainted
+            // if the background has been changed, then its content needs to be repainted
             drawBackground(bufferGraphics);
             backgroundChanged = false;
         }
+        
+        // update background (for outflow) every e.g. 60 seconds of simulation
+        measuredTime += simulationRunnable.timeStep();
+        if (measuredTime > FORCE_REPAINT_BACKGROUND_INTERVAL) {
+            forceRepaintBackground();
+            measuredTime = 0;
+        }
+        
         drawForegroundAndBlit(g);
     }
 
@@ -286,7 +305,7 @@ public abstract class SimulationCanvasBase extends Canvas {
      * @return the sleep time in milliseconds
      */
     public final int sleepTime() {
-        return SimulationRunnable.sleepTime();
+        return simulationRunnable.sleepTime();
     }
 
     /**

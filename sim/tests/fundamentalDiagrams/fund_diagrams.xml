@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <SCENARIO network_filename="fund_diagrams.xodr">
     <VEHICLES>
         <VEHICLE label="ACC" length="6" b_max="9">
@@ -33,7 +34,7 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-         <VEHICLE label="KKW" length="20">
+        <VEHICLE label="KKW" length="20">
             <LONGITUDINAL_MODEL>
                 <KKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
                 <!-- lambda="0.55" ? -->
@@ -67,3 +68,4 @@
         <OUTPUT />
     </SIMULATION>
 </SCENARIO>
+

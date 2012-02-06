@@ -1,24 +1,27 @@
-/**
- * Copyright (C) 2010, 2011 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                             <movsim.org@gmail.com>
- * ---------------------------------------------------------------------------------------------------------------------
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ *                                   <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
  * 
- *  This file is part of 
- *  
- *  MovSim - the multi-model open-source vehicular-traffic simulator 
- *
- *  MovSim is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  MovSim is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
- *  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- *  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with MovSim.
- *  If not, see <http://www.gnu.org/licenses/> or <http://www.movsim.org>.
- *  
- * ---------------------------------------------------------------------------------------------------------------------
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
  */
 
 package org.movsim.simulator.roadnetwork;
@@ -96,9 +99,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     // Sources and Sinks
     private TrafficSource trafficSource;
-    // sink is of type TrafficFlowBase to allow the sink to be a TrafficFlowOnRamp
-    private TrafficFlowBase sink;
-    private int removedVehicleCount; // used for calculating traffic flow
+    private TrafficSink sink;
     private RoadMapping roadMapping;
 
     public static class TestCar {
@@ -236,7 +237,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the traffic sink
      */
-    public final TrafficFlowBase sink() {
+    public final TrafficSink sink() {
         return sink;
     }
 
@@ -246,7 +247,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param sink
      *            the traffic sink
      */
-    public final void setSink(TrafficFlowBase sink) {
+    public final void setSink(TrafficSink sink) {
         this.sink = sink;
     }
 
@@ -392,6 +393,10 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return the number of vehicles removed from this road segment
      */
     public int removedVehicleCount() {
+        int removedVehicleCount = 0;
+        for (final LaneSegment laneSegment: laneSegments) {
+            removedVehicleCount += laneSegment.getRemovedVehicleCount();
+        }
         return removedVehicleCount;
     }
 
@@ -399,7 +404,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Clears the removed vehicle count.
      */
     public void clearVehicleRemovedCount() {
-        removedVehicleCount = 0;
+        for (final LaneSegment laneSegment: laneSegments) {
+            laneSegment.clearVehicleRemovedCount();
+        }
     }
 
     /**
@@ -543,9 +550,10 @@ public class RoadSegment implements Iterable<Vehicle> {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getMidPosition();
-                    vehicle.setSpeedlimit(speedLimits.calcSpeedLimit(pos));
-                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedLimits.calcSpeedLimit(pos));
+                    final double pos = vehicle.getFrontPosition(); 
+                    final double speedlimit = speedLimits.calcSpeedLimit(pos);
+                    vehicle.setSpeedlimit(speedlimit);
+                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
                 }
             }
         }
@@ -558,7 +566,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * </p>
      * 
      * <p>
-     * <code>laneChange</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
+     * <code>makeLaneChanges</code> preserves the vehicle sort order, since only lateral movements of vehicles are made.
      * </p>
      * 
      * @param dt
@@ -568,7 +576,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void laneChange(double dt, double simulationTime, long iterationCount) {
+    public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
         if (laneCount < 2) {
             // need at least 2 lanes for lane changing
             return;
@@ -586,10 +594,17 @@ public class RoadSegment implements Iterable<Vehicle> {
             // assign staged vehicles to new lanes
             // necessary update of new situation *after* lane-changing decisions
             for (final Vehicle vehicle : stagedVehicles) {
-                laneSegments[vehicle.getLane()].removeVehicle(vehicle);
-                assert laneSegments[vehicle.getTargetLane()].type() != Lane.Type.ENTRANCE;
-                vehicle.setLane(vehicle.getTargetLane());
-                laneSegments[vehicle.getTargetLane()].addVehicle(vehicle);
+                final int targetLane = vehicle.getTargetLane();
+                assert targetLane != Lane.NONE;
+                assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                // check safety criterion in target lane for vehicle and follower
+                if (vehicle.getLaneChangeModel().isSafeLaneChange(laneSegments[targetLane])) {
+                    laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+                    vehicle.setLane(targetLane);
+                    laneSegments[targetLane].addVehicle(vehicle);
+                } else {
+                    logger.debug("check lane change of staged vehicle: lane change not possible due to conflict in target lane");
+                }
             }
         }
     }
@@ -604,7 +619,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void accelerate(double dt, double simulationTime, long iterationCount) {
+    public void updateVehicleAccelerations(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             assert laneSegment.assertInvariant();
@@ -614,13 +629,13 @@ public class RoadSegment implements Iterable<Vehicle> {
             // for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
             for (final Vehicle vehicle : laneSegment) {
                 // final Vehicle veh = vehiclesOnLane.get(i);
-                final double x = vehicle.getMidPosition();
+                final double x = vehicle.getFrontPosition();
                 // TODO treat null case
                 final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                vehicle.calcAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
+                vehicle.updateAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
             }
         }
     }
@@ -635,7 +650,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void updatePositionAndSpeed(double dt, double simulationTime, long iterationCount) {
+    public void updateVehiclePositionsAndSpeeds(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             for (final Vehicle vehicle : laneSegment) {
@@ -695,7 +710,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void updateDetectors(double dt, double simulationTime, long iterationCount) {
         if (this.loopDetectors != null) {
-            loopDetectors.update(dt, simulationTime, iterationCount, this);
+            loopDetectors.timeStep(dt, simulationTime, iterationCount);
         }
     }
 
@@ -744,9 +759,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param lane
      *            lane in which to search
-     * @param subjectVehicle
-     * @param index
-     *            index of subject vehicle
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
@@ -757,7 +769,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Sets the speed limits for this road segment.
      * 
-     * @param trafficLights
+     * @param speedLimits
      */
     public void setSpeedLimits(SpeedLimits speedLimits) {
         this.speedLimits = speedLimits;
@@ -894,9 +906,9 @@ public class RoadSegment implements Iterable<Vehicle> {
                 if (netDistance < 0) {
                     logger.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d at x=%.4f ", index, vehicle.getMidPosition()));
+                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(), vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh in front at x=%.4f on lane=%d\n", vehFront.getMidPosition(),
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(), vehFront.getFrontPosition(),
                                 vehicle.getLane()));
                     }
                     sb.append("roadID=" + id);
@@ -910,7 +922,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String
                                 .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, id=%d%n",
-                                        j, veh.getMidPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
+                                        j, veh.getFrontPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
                                         veh.getLength(), veh.getLane(), veh.getId()));
                     }
                     logger.error(sb.toString());
