@@ -57,7 +57,7 @@ public class IDM extends LongitudinalModelBase {
     /** safe time headway (s). */
     private double T;
 
-    /** bumper-to-bumper vehicle distance in jams or queues; minimun gap. */
+    /** bumper-to-bumper vehicle distance in jams or queues; minimum gap. */
     private double s0;
 
     /** gap parameter (m). */
@@ -197,34 +197,43 @@ public class IDM extends LongitudinalModelBase {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         // space dependencies modeled by speedlimits, alpha's
 
         final double localT = alphaT * T;
         // consider external speedlimit
-        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double localV0;
+        if (me.getSpeedlimit() != 0.0) {
+            localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        } else {
+            localV0 = alphaV0 * v0;
+        }
         final double localA = alphaA * a;
 
         return acc(s, v, dv, localT, localV0, localA);
-
     }
 
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
+    public double calcAcc(Vehicle me, final Vehicle frontVehicle) {
         // Local dynamical variables
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         final double localT = T;
-        final double localV0 = Math.min(v0, me.getSpeedlimit());
+        final double localV0;
+        if (me.getSpeedlimit() != 0.0) {
+            localV0 = Math.min(v0, me.getSpeedlimit());
+        } else {
+            localV0 = v0;
+        }
         final double localA = a;
 
         return acc(s, v, dv, localT, localV0, localA);
@@ -259,8 +268,8 @@ public class IDM extends LongitudinalModelBase {
      */
     private double acc(double s, double v, double dv, double TLocal, double v0Local, double aLocal) {
         // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0) {
-            return 0;
+        if (v0Local == 0.0) {
+            return 0.0;
         }
 
         double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
@@ -270,7 +279,7 @@ public class IDM extends LongitudinalModelBase {
             sstar = s0;
         }
 
-        final double aWanted = aLocal * (1. - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
+        final double aWanted = aLocal * (1.0 - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
 
         logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle

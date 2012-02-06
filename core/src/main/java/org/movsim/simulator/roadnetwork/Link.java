@@ -78,7 +78,7 @@ public class Link {
         final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
         assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
         if (offset < 0) {
-            final int limit = sourceRoad.laneCount() - offset;
+            final int limit = sourceRoad.laneCount() + offset;
             for (int i = 0; i < limit; ++i) {
                 addLanePair(i - offset, sourceRoad, i, sinkRoad);
             }

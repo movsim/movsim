@@ -134,7 +134,26 @@ public class LinkTest {
      */
     @Test
     public final void testAddMerge() {
-        //fail("Not yet implemented"); //$NON-NLS-1$
+        final int laneCount = 2;
+        final int exitLaneCount = 1;
+        final RoadSegment r0 = new RoadSegment(300.0, laneCount + exitLaneCount);
+        final RoadSegment r1 = new RoadSegment(400.0, laneCount);
+        r0.setLaneType(Lane.LANE1, Lane.Type.EXIT);// so Lane1 is exit lane of r1
+        // join r0 and r1 so vehicles move from r0 to r1
+        // lane3 of r0 joins to lane2 of r1
+        // lane2 of r0 joins to lane1 of r1
+        // lane1 of r0 has no successor
+        Link.addJoin(r0, r1);
+        assertEquals(null, r0.sinkRoadSegment(Lane.LANE1));
+        assertEquals(r1, r0.sinkRoadSegment(Lane.LANE2));
+        assertEquals(r1, r0.sinkRoadSegment(Lane.LANE3));
+        assertEquals(Lane.NONE, r0.sinkLane(Lane.LANE1));
+        assertEquals(Lane.LANE1, r0.sinkLane(Lane.LANE2));
+        assertEquals(Lane.LANE2, r0.sinkLane(Lane.LANE3));
+        assertEquals(r0, r1.sourceRoadSegment(Lane.LANE1));
+        assertEquals(r0, r1.sourceRoadSegment(Lane.LANE2));
+        assertEquals(Lane.LANE2, r1.sourceLane(Lane.LANE1));
+        assertEquals(Lane.LANE3, r1.sourceLane(Lane.LANE2));
     }
 
     /**
