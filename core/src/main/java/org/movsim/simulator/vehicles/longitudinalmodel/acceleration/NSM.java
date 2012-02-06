@@ -80,19 +80,13 @@ public class NSM extends LongitudinalModelBase {
         this.pSlowToStart = ((LongitudinalModelInputDataNSM) parameters).getSlowToStart();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
-     */
     @Override
-    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
         // local dynamical variables
-        final Vehicle vehFront = vehContainer.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
         
         // consider external speedlimit
         final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
@@ -113,11 +107,11 @@ public class NSM extends LongitudinalModelBase {
      * org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
         // local dynamical variables
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         // consider external speedlimit
         final double localV0 = Math.min(v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
@@ -225,5 +219,4 @@ public class NSM extends LongitudinalModelBase {
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = (int) v0;
     }
-
 }

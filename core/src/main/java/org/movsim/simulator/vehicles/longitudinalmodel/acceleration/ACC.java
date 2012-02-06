@@ -110,17 +110,11 @@ public class ACC extends LongitudinalModelBase {
         this.coolness = ((LongitudinalModelInputDataACC) parameters).getCoolness();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
-     */
     @Override
-    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.frontVehicle(me);
+        final Vehicle vehFront = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(vehFront);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(vehFront);
@@ -139,7 +133,6 @@ public class ACC extends LongitudinalModelBase {
         final double aLocal = alphaA * a;
 
         return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);
-
     }
 
     /*
@@ -319,5 +312,4 @@ public class ACC extends LongitudinalModelBase {
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
 }
