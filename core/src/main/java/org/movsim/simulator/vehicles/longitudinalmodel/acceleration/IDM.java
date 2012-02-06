@@ -190,12 +190,6 @@ public class IDM extends LongitudinalModelBase {
         return b;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
-     */
     @Override
     public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 

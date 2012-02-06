@@ -78,13 +78,13 @@ public class Newell extends LongitudinalModelBase {
      * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
      */
     @Override
-    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = vehContainer.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         // TODO check modeling of parameter dt=T (dt is the constant update time and cannot be changed)
         final double dtLocal = alphaT * dt;
@@ -102,11 +102,11 @@ public class Newell extends LongitudinalModelBase {
      * org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
         // Local dynamic variables
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         final double dtLocal = dt;
         final double v0Local = Math.min(v0, me.getSpeedlimit());
@@ -167,5 +167,4 @@ public class Newell extends LongitudinalModelBase {
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
 }

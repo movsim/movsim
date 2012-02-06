@@ -92,20 +92,14 @@ public class OVM_FVDM extends LongitudinalModelBase {
         choiceOptFuncVariant = ((LongitudinalModelInputDataOVM_FVDM) parameters).getVariant();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
-     */
     @Override
-    public double calcAcc(Vehicle me, LaneSegment vehContainer, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamic variables
-        final Vehicle vehFront = vehContainer.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront); // only needed for VDIFF
+        final double dv = me.getRelSpeed(frontVehicle); // only needed for VDIFF
 
         // speed limit: OVM causes accidents due to immediate braking reaction
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
@@ -120,11 +114,11 @@ public class OVM_FVDM extends LongitudinalModelBase {
      * org.movsim.simulator.vehicles.Vehicle)
      */
     @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
         // Local dynamic variables
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         final double alphaT = 1;
         final double v0Local = Math.min(v0, me.getSpeedlimit());
@@ -292,5 +286,4 @@ public class OVM_FVDM extends LongitudinalModelBase {
     protected void setDesiredSpeedV0(double v0) {
         this.v0 = v0;
     }
-
 }
