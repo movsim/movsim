@@ -1,0 +1,6 @@
+# gnuplot command file
+
+ldm = "FVDM"
+lang = "en"
+load "onramp.gpl"
+

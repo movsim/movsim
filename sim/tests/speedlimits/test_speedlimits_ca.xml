@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<SCENARIO network_filename="test_speedlimits.xodr">
+    <VEHICLES>
+        <!-- vehicle length ==> cell units -->
+        <VEHICLE label="BARL1" length="1">
+            <!-- b_max not limited -->
+            <LONGITUDINAL_MODEL>
+                 <!-- BARL variant : p_slow_start != p_slowdown -->
+                <NSM v0="5" p_slowdown="0.1" p_slow_start="0.2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+       <VEHICLE label="NSM1" length="1">
+            <!-- b_max not limited -->
+            <LONGITUDINAL_MODEL>
+                <!-- BARL variant : p0 != p possible -->
+                <NSM v0="5" p_slowdown="0.1" p_slow_start="0.1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="1.0" duration="18000" seed="42">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+            <VEHICLE_TYPE label="BARL1" fraction="1" />
+            <VEHICLE_TYPE label="NSM1" fraction="0" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="1">
+            <INITIAL_CONDITIONS>
+                <IC_MICRO x="10000" v="3" label="BARL1" />
+                <IC_MICRO x="20000" v="3" label="NSM1" />
+            </INITIAL_CONDITIONS>
+            <SPEED_LIMITS>
+                <SPEED_LIMIT x="114000" speedlimit_kmh="120" />
+                <SPEED_LIMIT x="110000" speedlimit_kmh="60" />
+                <SPEED_LIMIT x="115000" speedlimit_kmh="120" />
+                <SPEED_LIMIT x="120000" speedlimit_kmh="200" />
+            </SPEED_LIMITS>
+        </ROAD>
+        <OUTPUT>
+            <FLOATING_CAR_DATA >
+                 <FC number="1" />
+                 <FC number="2" /> 
+            </FLOATING_CAR_DATA>
+        </OUTPUT>
+    </SIMULATION>
+</SCENARIO>

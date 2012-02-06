@@ -1,6 +1,0 @@
-# gnuplot command file
-
-ldm = "multilane"
-lang = "en"
-load "onramp.gpl"
-

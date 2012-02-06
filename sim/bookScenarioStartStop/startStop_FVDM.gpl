@@ -1,0 +1,5 @@
+# gnuplot command file
+
+ldm = "FVDM"
+lang = "en"
+load "startStop.gpl"

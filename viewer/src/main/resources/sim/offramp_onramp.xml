@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
+<!-- (c) Martin Treiber, Arne Kesting 2011 -->
+<SCENARIO path=".">
+    <VEHICLES>
+        <VEHICLE label="ACC1" length="8" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0"
+                    coolness="1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="true"
+                crit_speed_eur="20">
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1"
+                    bias_right="0.05" politeness="0.1" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <!-- trucks -->
+        <VEHICLE label="ACC2" length="16" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0"
+                    coolness="1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="true"
+                crit_speed_eur="20">
+                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2"
+                    bias_right="0.3" politeness="0.1" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="Obstacle" length="0">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42"
+        crash_exit="false">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+            <!-- <VEHICLE_TYPE label="IDM1" fraction="0" /> -->
+            <VEHICLE_TYPE label="ACC1" fraction="0.8"
+                relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="ACC2" fraction="0.2"
+                relative_v0_randomization="0.2" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="0" length="3800" lanes="2">
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="600" rho_per_km="2" v="30" />
+            </INITIAL_CONDITIONS>
+            <TRAFFIC_SOURCE logging="false">
+                <INFLOW t="0" q_per_hour="1600" v="24" />
+            </TRAFFIC_SOURCE>
+            <TRAFFIC_SINK />
+            <!-- improve vehicle performance at inflow -->
+            <FLOW_CONSERVING_INHOMOGENEITIES>
+                <INHOMOGENEITY x="0" alpha_T="0.7" />
+                <INHOMOGENEITY x="1000" alpha_T="1" />
+                <INHOMOGENEITY x="2500" alpha_T="1" />
+                <INHOMOGENEITY x="2600" alpha_T="1.1" />
+                <INHOMOGENEITY x="2700" alpha_T="1.0" />
+            </FLOW_CONSERVING_INHOMOGENEITIES>
+            <SPEED_LIMITS>
+                <!-- <SPEED_LIMIT x="2600" speedlimit_kmh="80" /> -->
+                <!-- <SPEED_LIMIT x="3600" speedlimit_kmh="200" /> -->
+            </SPEED_LIMITS>
+            <SIMPLE_RAMPS />
+            <!-- length of offramp is calculated by used RoadMapping (here: RoadMappingPolyBezier) -->
+            <TRAFFIC_LIGHTS />
+            <DETECTORS />
+        </ROAD>
+        <ROAD id="-1" x="400" merge_length="300" length="2729.0">
+            <INITIAL_CONDITIONS />
+            <TRAFFIC_SOURCE id="0" />
+            <TRAFFIC_SINK id="1" />
+            <FLOW_CONSERVING_INHOMOGENEITIES />
+            <SPEED_LIMITS>
+                <SPEED_LIMIT x="600" speedlimit_kmh="50" />
+                <SPEED_LIMIT x="2700" speedlimit_kmh="200" />
+            </SPEED_LIMITS>
+            <TRAFFIC_LIGHTS>
+                <TRAFFIC_LIGHT x="2000" green_time="45"
+                    green_red_time="3" red_time="30" red_green_time="2"
+                    phase_shift="20" />
+            </TRAFFIC_LIGHTS>
+            <DETECTORS />
+        </ROAD>
+
+
+        <ROAD id="2" x="2500" merge_length="300" length="800">
+            <INITIAL_CONDITIONS />
+            <TRAFFIC_SOURCE logging="false">
+                <INFLOW t="0" q_per_hour="450" />
+            </TRAFFIC_SOURCE>
+            <TRAFFIC_SINK id="0" />
+            <FLOW_CONSERVING_INHOMOGENEITIES />
+            <SPEED_LIMITS />
+            <TRAFFIC_LIGHTS />
+            <DETECTORS />
+        </ROAD>
+        <ROAD id="1" x="3200" merge_length="400" length="500">
+            <INITIAL_CONDITIONS />
+            <TRAFFIC_SOURCE id="-1" />
+            <TRAFFIC_SINK id="0" />
+            <FLOW_CONSERVING_INHOMOGENEITIES />
+            <SPEED_LIMITS />
+            <TRAFFIC_LIGHTS />
+            <DETECTORS />
+        </ROAD>
+        <OUTPUT>
+            <!-- <SPATIOTEMPORAL dx="100" dt="40" /> -->
+            <!-- <TRAJECTORIES dt="1" start_time="0" end_time="420" start_x="2000" 
+                end_x="5000" /> -->
+            <TRAVELTIMES>
+                <ROUTE start_id="0" start_pos="700" end_id="0" end_pos="3200" />
+                <ROUTE start_id="-1" start_pos="300" end_id="1" end_pos="100" />
+            </TRAVELTIMES>
+        </OUTPUT>
+    </SIMULATION>
+</SCENARIO>
+
+

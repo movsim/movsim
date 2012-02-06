@@ -1,5 +1,0 @@
-# gnuplot command file
-
-ldm = "VDIFF"
-lang = "en"
-load "startStop.gpl"
