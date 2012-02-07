@@ -226,7 +226,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, OUTPUT)>
+<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, ROUTES?, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration         NMTOKEN #REQUIRED
@@ -383,16 +383,6 @@ phase_shift      NMTOKEN "0"
   x  NMTOKEN #REQUIRED 
 >
 
-
-<!-- ##################################################################### -->
-<!--                           OUTPUT                                      -->
-<!-- ##################################################################### -->
-
-<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, ROUTES?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*) >
-
-<!ATTLIST OUTPUT
->
-
 <!ELEMENT ROUTES (ROUTE*)>
 <!ATTLIST ROUTES
 >
@@ -400,6 +390,16 @@ phase_shift      NMTOKEN "0"
 <!ELEMENT ROUTE (ROAD+)>
 <!ATTLIST ROUTE
 label  NMTOKEN #REQUIRED 
+>
+
+
+<!-- ##################################################################### -->
+<!--                           OUTPUT                                      -->
+<!-- ##################################################################### -->
+
+<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*) >
+
+<!ATTLIST OUTPUT
 >
 
 <!-- output of spatio-temporal fields -->

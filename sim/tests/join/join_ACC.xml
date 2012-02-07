@@ -38,14 +38,14 @@
             </TRAFFIC_SOURCE>
             <TRAFFIC_SINK />
         </ROAD>
+        <ROUTES>
+            <ROUTE label="route1">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
-            <ROUTES>
-                <ROUTE label="route1">
-                    <ROAD id="1" />
-                    <ROAD id="2" />
-                    <ROAD id="3" />
-                </ROUTE>
-            </ROUTES>
             <SPATIOTEMPORAL dx="100" dt="40" route="route1" />
             <TRAJECTORIES dt="1" start_time="0" end_time="120" route="route1" />
         </OUTPUT>

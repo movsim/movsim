@@ -56,12 +56,12 @@
                 <CROSS_SECTION x="2100" />
             </DETECTORS>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
-            <ROUTES>
-                <ROUTE label="main">
-                    <ROAD id="1" />
-                </ROUTE>
-            </ROUTES>
             <SPATIOTEMPORAL dx="100" dt="40" route="main" />
             <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
         </OUTPUT>
