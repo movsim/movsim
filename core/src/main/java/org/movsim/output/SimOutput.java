@@ -78,10 +78,9 @@ public class SimOutput implements SimulationTimeStep {
         if (simulationInput == null) {
             return;
         }
-        final OutputInput outputInput = simulationInput.getOutputInput();
 
-        // Routes for output
-        final RoutesInput routesInput = outputInput.getRoutesInput();
+        // Routes
+        final RoutesInput routesInput = simulationInput.getRoutesInput();
         final Map<String, Route> routes = new HashMap<String, Route>();
         if (routesInput != null) {
             for (final RouteInput routeInput : routesInput.getRoutes()) {
@@ -95,11 +94,7 @@ public class SimOutput implements SimulationTimeStep {
             }
         }
 
-        // Travel times output
-        final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
-        if (travelTimesInput != null) {
-            travelTimes = new TravelTimes(travelTimesInput, routes, roadNetwork);
-        }
+        final OutputInput outputInput = simulationInput.getOutputInput();
 
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
@@ -108,6 +103,12 @@ public class SimOutput implements SimulationTimeStep {
             if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(roadNetwork, floatingCars);
             }
+        }
+
+        // Travel times output
+        final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
+        if (travelTimesInput != null) {
+            travelTimes = new TravelTimes(travelTimesInput, routes, roadNetwork);
         }
 
         // Spatio temporal output
