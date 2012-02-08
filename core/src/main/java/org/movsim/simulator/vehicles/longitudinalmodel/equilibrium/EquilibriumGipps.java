@@ -66,13 +66,13 @@ public class EquilibriumGipps extends EquilibriumProperties {
         // the velocity v_it of one arbitrary vehicle
         // (no brain, but stable and simple method...)
 
-        double vIteration = model.getDesiredSpeedParameterV0(); // variable of the relaxation equation
+        double vIteration = model.getDesiredSpeed(); // variable of the relaxation equation
         final int itmax = 100; // number of iteration steps in each relaxation
         final double dtmax = 2; // iteration time step (in s) changes from
         final double dtmin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
         // start with rho=0
-        vEqTab[0] = model.getDesiredSpeedParameterV0();
+        vEqTab[0] = model.getDesiredSpeed();
 
         for (int ir = 1; ir < vEqTab.length; ir++) {
             final double rho = rhoMax * ir / vEqTab.length;
@@ -83,7 +83,7 @@ public class EquilibriumGipps extends EquilibriumProperties {
             for (int it = 1; it <= itmax; it++) {
                 final double acc = model.calcAccSimple(s, vIteration, 0.);
                 // iteration step in [dtmin,dtmax]
-                final double dtLocal = dtmax * vIteration / model.getDesiredSpeedParameterV0() + dtmin;
+                final double dtLocal = dtmax * vIteration / model.getDesiredSpeed() + dtmin;
                 // actual relaxation
                 vIteration += dtLocal * acc;
                 if (vIteration < 0) {

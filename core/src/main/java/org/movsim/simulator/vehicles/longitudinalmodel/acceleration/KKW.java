@@ -212,7 +212,7 @@ public class KKW extends LongitudinalModelBase {
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
      */
     @Override
-    public double getDesiredSpeedParameterV0() {
+    public double getDesiredSpeed() {
         return v0;
     }
 
@@ -285,7 +285,7 @@ public class KKW extends LongitudinalModelBase {
      * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
      */
     @Override
-    protected void setDesiredSpeedV0(double v0) {
+    protected void setDesiredSpeed(double v0) {
         this.v0 = (int) v0;
     }
 }

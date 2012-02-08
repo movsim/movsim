@@ -538,7 +538,7 @@ public class Vehicle {
         // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which depends on
         // speedlimits)
         if (memory != null) {
-            final double v0 = longitudinalModel.getDesiredSpeedParameterV0();
+            final double v0 = longitudinalModel.getDesiredSpeed();
             memory.update(dt, speed, v0);
             alphaTLocal *= memory.alphaT();
             alphaV0Local *= memory.alphaV0();

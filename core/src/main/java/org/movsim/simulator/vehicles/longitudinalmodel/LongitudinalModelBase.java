@@ -185,19 +185,19 @@ public abstract class LongitudinalModelBase implements Observer {
     }
 
     /**
-     * Gets the desired speed parameter v0.
+     * Returns the desired speed in free traffic.
      * 
-     * @return the desired speed parameter v0
+     * @return the desired speed (m/s)
      */
-    public abstract double getDesiredSpeedParameterV0();
+    public abstract double getDesiredSpeed();
 
     /**
-     * Sets the desired speed v0.
+     * Sets the vehicle's desired speed (m/s).
      * 
      * @param v0
-     *            the new desired speed v0
+     *            desired speed (m/s)
      */
-    protected abstract void setDesiredSpeedV0(double v0);
+    protected abstract void setDesiredSpeed(double v0);
 
     /**
      * Sets the relative randomization v0.
@@ -207,9 +207,9 @@ public abstract class LongitudinalModelBase implements Observer {
      */
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
-        final double newV0 = getDesiredSpeedParameterV0() * (1 + relRandomizationFactor * equalRandom);
-        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeedParameterV0(), newV0);
-        setDesiredSpeedV0(newV0);
+        final double newV0 = getDesiredSpeed() * (1 + relRandomizationFactor * equalRandom);
+        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeed(), newV0);
+        setDesiredSpeed(newV0);
     }
 
     protected double calcSmoothFraction(double speedMe, double speedFront) {
