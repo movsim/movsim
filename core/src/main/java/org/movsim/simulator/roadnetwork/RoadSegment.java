@@ -610,11 +610,8 @@ public class RoadSegment implements Iterable<Vehicle> {
             // final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
             final LaneSegment leftLaneSegment = null; // TODO get left lane ( leftLaneIndex < vehContainers.size() ) ?
                                                       // vehContainers.get(leftLaneIndex) : null;
-            // for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
             for (final Vehicle vehicle : laneSegment) {
-                // final Vehicle veh = vehiclesOnLane.get(i);
                 final double x = vehicle.getFrontPosition();
-                // TODO treat null case
                 final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
@@ -653,7 +650,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    // TODO ake properties of the downstream boundary condition should be encapsulated in own class ...
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.outFlow(dt, simulationTime, iterationCount);
@@ -746,7 +742,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
-
         return laneSegments[lane].frontVehicle(vehiclePos);
     }
 
@@ -855,7 +850,6 @@ public class RoadSegment implements Iterable<Vehicle> {
 
         @Override
         public Iterator<Vehicle> iterator() {
-            // TODO Auto-generated method stub
             return new VehicleIterator();
         }
     }
@@ -882,7 +876,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
-            // for(final Vehicle vehicle : laneSegment){
             for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
                 final Vehicle vehicle = laneSegment.getVehicle(index);
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
