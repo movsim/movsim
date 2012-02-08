@@ -49,7 +49,7 @@ public abstract class LongitudinalModelBase implements Observer {
         public boolean isIteratedMap() {
             return (this == ITERATED_COUPLED_MAP_MODEL);
         }
-        
+
         @Override
         public String toString() {
             return name();
@@ -81,7 +81,7 @@ public abstract class LongitudinalModelBase implements Observer {
         public final String getDetailedName() {
             return detailedName;
         }
-        
+
         public final String getShortName() {
             return name();
         }
@@ -120,15 +120,6 @@ public abstract class LongitudinalModelBase implements Observer {
     protected abstract void initParameters();
 
     /**
-     * Removes the observer.
-     */
-    public void removeObserver() {
-        if (parameters != null) {
-            parameters.removeObserver(this);
-        }
-    }
-
-    /**
      * Model name.
      * 
      * @return the string
@@ -165,12 +156,12 @@ public abstract class LongitudinalModelBase implements Observer {
     }
 
     /**
-     * Gets the scaling length.
-     * 
-     * @return the scaling length
+     * Removes the observer.
      */
-    public double getScalingLength() {
-        return scalingLength;
+    public void removeObserver() {
+        if (parameters != null) {
+            parameters.removeObserver(this);
+        }
     }
 
     /*
@@ -183,6 +174,30 @@ public abstract class LongitudinalModelBase implements Observer {
         initParameters();
         logger.debug("observer notified");
     }
+
+    /**
+     * Gets the scaling length.
+     * 
+     * @return the scaling length
+     */
+    public double getScalingLength() {
+        return scalingLength;
+    }
+
+    /**
+     * Gets the desired speed parameter v0.
+     * 
+     * @return the desired speed parameter v0
+     */
+    public abstract double getDesiredSpeedParameterV0();
+
+    /**
+     * Sets the desired speed v0.
+     * 
+     * @param v0
+     *            the new desired speed v0
+     */
+    protected abstract void setDesiredSpeedV0(double v0);
 
     /**
      * Sets the relative randomization v0.
@@ -205,8 +220,6 @@ public abstract class LongitudinalModelBase implements Observer {
         }
         return x;
     }
-
-    public abstract double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA);
 
     public double calcAccEur(double vCritEur, Vehicle me, LaneSegment laneSegment, LaneSegment leftLaneSegment,
             double alphaT, double alphaV0, double alphaA) {
@@ -247,6 +260,8 @@ public abstract class LongitudinalModelBase implements Observer {
         return accResult;
     }
 
+    public abstract double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA);
+
     public abstract double calcAcc(final Vehicle me, final Vehicle frontVehicle);
 
     /**
@@ -261,19 +276,4 @@ public abstract class LongitudinalModelBase implements Observer {
      * @return the double
      */
     public abstract double calcAccSimple(double s, double v, double dv);
-
-    /**
-     * Gets the desired speed parameter v0.
-     * 
-     * @return the desired speed parameter v0
-     */
-    public abstract double getDesiredSpeedParameterV0();
-
-    /**
-     * Sets the desired speed v0.
-     * 
-     * @param v0
-     *            the new desired speed v0
-     */
-    protected abstract void setDesiredSpeedV0(double v0);
 }
