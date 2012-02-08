@@ -50,6 +50,9 @@
             </ROUTE>
         </ROUTES>
         <OUTPUT>
+            <FLOATING_CAR_DATA n_dt="1">
+                <FC number="100" />
+            </FLOATING_CAR_DATA>
             <SPATIOTEMPORAL dx="100" dt="40" route="route1" />
             <TRAJECTORIES dt="1" start_time="0" end_time="120" route="route1" />
         </OUTPUT>

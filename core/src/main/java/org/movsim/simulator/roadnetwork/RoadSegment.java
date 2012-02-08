@@ -27,8 +27,6 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.movsim.output.LoopDetectors;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -88,7 +86,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final double cumulativeRoadLength = -1.0; // total length of road up to start of segment
     private final int laneCount;
     private final LaneSegment laneSegments[];
-    private final List<Vehicle> stagedVehicles;
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
     private TrafficLights trafficLights;
@@ -140,7 +137,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         id = nextId++;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
-        stagedVehicles = new LinkedList<Vehicle>();
     }
 
     /**
@@ -578,29 +574,20 @@ public class RoadSegment implements Iterable<Vehicle> {
             // need at least 2 lanes for lane changing
             return;
         }
+        // TODO assure priority for lane changes from slow to fast lanes  
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
-            stagedVehicles.clear();
-            for (final Vehicle vehicle : laneSegment) {
+            for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
+                Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
                 if (vehicle.considerLaneChange(dt, this)) {
-                    stagedVehicles.add(vehicle);
-                }
-            }
-
-            // assign staged vehicles to new lanes
-            // necessary update of new situation *after* lane-changing decisions
-            for (final Vehicle vehicle : stagedVehicles) {
-                final int targetLane = vehicle.getTargetLane();
-                assert targetLane != Lane.NONE;
-                assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
-                // check safety criterion in target lane for vehicle and follower
-                if (vehicle.getLaneChangeModel().isSafeLaneChange(laneSegments[targetLane])) {
-                    laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+                    final int targetLane = vehicle.getTargetLane();
+                    assert targetLane != Lane.NONE;
+                    assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                    // iteratorRemove avoids ConcurrentModificationException
+                    vehIterator.remove();  
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane].addVehicle(vehicle);
-                } else {
-                    logger.debug("check lane change of staged vehicle: lane change not possible due to conflict in target lane");
                 }
             }
         }
@@ -623,11 +610,8 @@ public class RoadSegment implements Iterable<Vehicle> {
             // final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
             final LaneSegment leftLaneSegment = null; // TODO get left lane ( leftLaneIndex < vehContainers.size() ) ?
                                                       // vehContainers.get(leftLaneIndex) : null;
-            // for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
             for (final Vehicle vehicle : laneSegment) {
-                // final Vehicle veh = vehiclesOnLane.get(i);
                 final double x = vehicle.getFrontPosition();
-                // TODO treat null case
                 final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
@@ -666,7 +650,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    // TODO ake properties of the downstream boundary condition should be encapsulated in own class ...
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.outFlow(dt, simulationTime, iterationCount);
@@ -759,7 +742,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
-
         return laneSegments[lane].frontVehicle(vehiclePos);
     }
 
@@ -868,7 +850,6 @@ public class RoadSegment implements Iterable<Vehicle> {
 
         @Override
         public Iterator<Vehicle> iterator() {
-            // TODO Auto-generated method stub
             return new VehicleIterator();
         }
     }
@@ -895,7 +876,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
-            // for(final Vehicle vehicle : laneSegment){
             for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
                 final Vehicle vehicle = laneSegment.getVehicle(index);
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);

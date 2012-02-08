@@ -26,22 +26,30 @@
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
-import org.movsim.utilities.Observable;
+import org.movsim.utilities.ObservableImpl;
 
 /**
- * The Interface LongitudinalModelInputData.
+ * The Class LongitudinalModelInputDataImpl.
  */
-public interface LongitudinalModelInputData extends Observable {
+public abstract class LongitudinalModelInputData extends ObservableImpl {
 
-    /**
-     * Gets the model name.
-     * 
-     * @return the model name
-     */
-    ModelName getModelName();
+    private final ModelName modelName;
 
-    /**
-     * Reset parameters to default.
-     */
-    void resetParametersToDefault();
+    public abstract void resetParametersToDefault();
+
+    protected abstract void checkParameters();
+
+    protected void parametersUpdated() {
+        checkParameters();
+        notifyObservers();
+    }
+
+    public LongitudinalModelInputData(ModelName modelName) {
+        this.modelName = modelName;
+    }
+
+    public ModelName getModelName() {
+        return modelName;
+    }
+
 }

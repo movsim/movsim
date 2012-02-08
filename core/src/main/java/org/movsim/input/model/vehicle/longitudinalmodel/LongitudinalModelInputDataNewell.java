@@ -17,7 +17,7 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.input.model.vehicle.longitudinalmodel.impl;
+package org.movsim.input.model.vehicle.longitudinalmodel;
 
 import java.util.Map;
 
@@ -26,12 +26,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class LongitudinalModelInputDataNewellImpl.
+ * The Class LongitudinalModelInputDataNewell.
  */
-public class LongitudinalModelInputDataNewellImpl extends LongitudinalModelInputDataImpl {
+public class LongitudinalModelInputDataNewell extends LongitudinalModelInputData {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataNewellImpl.class);
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataNewell.class);
 
     private double v0;
     private final double v0Default;
@@ -40,12 +40,12 @@ public class LongitudinalModelInputDataNewellImpl extends LongitudinalModelInput
     private final double s0Default;
 
     /**
-     * Instantiates a new model input data newell impl.
+     * Instantiates a new model input data Newell.
      * 
      * @param map
      *            the map
      */
-    public LongitudinalModelInputDataNewellImpl(Map<String, String> map) {
+    public LongitudinalModelInputDataNewell(Map<String, String> map) {
         super(ModelName.NEWELL);
         v0Default = v0 = Double.parseDouble(map.get("v0"));
         s0Default = s0 = Double.parseDouble(map.get("s0"));

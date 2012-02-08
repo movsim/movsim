@@ -39,8 +39,8 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
@@ -236,7 +236,7 @@ public class VehicleGenerator {
         } else if (modelName == ModelName.KRAUSS) {
             longModel = new Krauss(simulationTimestep, (LongitudinalModelInputDataKrauss) modelInputData);
         } else if (modelName == ModelName.NEWELL) {
-            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewellImpl) modelInputData);
+            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewell) modelInputData);
         } else if (modelName == ModelName.NSM) {
             longModel = new NSM((LongitudinalModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {

@@ -25,98 +25,119 @@
  */
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
-// TODO: Auto-generated Javadoc
+import java.util.Map;
+
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The Interface LongitudinalModelInputDataGipps.
+ * The Class LongitudinalModelInputDataGipps.
  */
-public interface LongitudinalModelInputDataGipps extends LongitudinalModelInputData {
+public class LongitudinalModelInputDataGipps extends LongitudinalModelInputData {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataGipps.class);
+
+    private double v0;
+    private final double v0Default;
+
+    private double a;
+    private final double aDefault;
+
+    private double b;
+    private final double bDefault;
+
+    private double s0;
+    private final double s0Default;
 
     /**
-     * Gets the v0.
+     * Instantiates a new model input data GIPPS.
      * 
-     * @return the v0
+     * @param map
+     *            the map
      */
-    double getV0();
+    public LongitudinalModelInputDataGipps(Map<String, String> map) {
+        super(ModelName.GIPPS);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        aDefault = a = Double.parseDouble(map.get("a"));
+        bDefault = b = Double.parseDouble(map.get("b"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        checkParameters();
+    }
 
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    double getA();
+    protected void checkParameters() {
+        if (v0 < 0 || a < 0 || b < 0 || s0 < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
 
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    double getB();
+        if (a == 0 || b == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
 
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    double getS0();
+    }
 
-    /**
-     * Gets the v0 default.
-     * 
-     * @return the v0 default
-     */
-    public double getV0Default();
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        a = aDefault;
+        b = bDefault;
+        s0 = s0Default;
+    }
 
-    /**
-     * Gets the a default.
-     * 
-     * @return the a default
-     */
-    public double getaDefault();
+    public double getV0() {
+        return v0;
+    }
 
-    /**
-     * Gets the b default.
-     * 
-     * @return the b default
-     */
-    public double getbDefault();
+    public double getA() {
+        return a;
+    }
 
-    /**
-     * Gets the s0 default.
-     * 
-     * @return the s0 default
-     */
-    public double getS0Default();
+    public double getB() {
+        return b;
+    }
 
-    /**
-     * Sets the v0.
-     * 
-     * @param v0
-     *            the new v0
-     */
-    public void setV0(double v0);
+    public double getS0() {
+        return s0;
+    }
 
-    /**
-     * Sets the a.
-     * 
-     * @param a
-     *            the new a
-     */
-    public void setA(double a);
+    public double getV0Default() {
+        return v0Default;
+    }
 
-    /**
-     * Sets the b.
-     * 
-     * @param b
-     *            the new b
-     */
-    public void setB(double b);
+    public double getaDefault() {
+        return aDefault;
+    }
 
-    /**
-     * Sets the s0.
-     * 
-     * @param s0
-     *            the new s0
-     */
-    public void setS0(double s0);
+    public double getbDefault() {
+        return bDefault;
+    }
+
+    public double getS0Default() {
+        return s0Default;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+    public void setA(double a) {
+        this.a = a;
+        parametersUpdated();
+    }
+
+    public void setB(double b) {
+        this.b = b;
+        parametersUpdated();
+    }
+
+    public void setS0(double s0) {
+        this.s0 = s0;
+        parametersUpdated();
+    }
 
 }
