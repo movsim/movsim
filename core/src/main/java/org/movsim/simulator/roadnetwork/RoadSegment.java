@@ -27,8 +27,6 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.movsim.output.LoopDetectors;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -88,7 +86,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final double cumulativeRoadLength = -1.0; // total length of road up to start of segment
     private final int laneCount;
     private final LaneSegment laneSegments[];
-    private final List<Vehicle> stagedVehicles;
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
     private TrafficLights trafficLights;
@@ -140,7 +137,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         id = nextId++;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
-        stagedVehicles = new LinkedList<Vehicle>();
     }
 
     /**
@@ -578,29 +574,20 @@ public class RoadSegment implements Iterable<Vehicle> {
             // need at least 2 lanes for lane changing
             return;
         }
+        // TODO assure priority for lane changes from slow to fast lanes  
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
-            stagedVehicles.clear();
-            for (final Vehicle vehicle : laneSegment) {
+            for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
+                Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
                 if (vehicle.considerLaneChange(dt, this)) {
-                    stagedVehicles.add(vehicle);
-                }
-            }
-
-            // assign staged vehicles to new lanes
-            // necessary update of new situation *after* lane-changing decisions
-            for (final Vehicle vehicle : stagedVehicles) {
-                final int targetLane = vehicle.getTargetLane();
-                assert targetLane != Lane.NONE;
-                assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
-                // check safety criterion in target lane for vehicle and follower
-                if (vehicle.getLaneChangeModel().isSafeLaneChange(laneSegments[targetLane])) {
-                    laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+                    final int targetLane = vehicle.getTargetLane();
+                    assert targetLane != Lane.NONE;
+                    assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                    // iteratorRemove avoids ConcurrentModificationException
+                    vehIterator.remove();  
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane].addVehicle(vehicle);
-                } else {
-                    logger.debug("check lane change of staged vehicle: lane change not possible due to conflict in target lane");
                 }
             }
         }
