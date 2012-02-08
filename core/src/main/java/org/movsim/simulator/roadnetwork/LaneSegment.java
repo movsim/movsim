@@ -38,8 +38,12 @@ import org.slf4j.LoggerFactory;
  * A LaneSegment represents a lane within a RoadSegment.
  * </p>
  * <p>
- * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is kept sorted so
- * that the vehicles in front of and behind a given vehicle can be found efficiently.
+ * Lanes are of different types including traffic lanes, exit (deceleration) lanes and entrance (acceleration) lanes.
+ * Typically vehicle behavior (and especially lane change behavior) is different in each type of lane.
+ * </p>
+ * <p>
+ * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles
+ * in front of and behind a given vehicle can be found efficiently.
  * </p>
  * <p>
  * Vehicles are sorted in order of decreasing position:
@@ -65,6 +69,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Constructor.
+     * 
      * @param roadSegment
      * @param lane
      */
@@ -181,7 +186,8 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Removes the given vehicle.
-     * @param vehicleToRemove 
+     * 
+     * @param vehicleToRemove
      */
     public void removeVehicle(Vehicle vehicleToRemove) {
         // TODO improve primitive implementation
@@ -323,7 +329,8 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Finds the vehicle immediately at or behind the given position.
-     * @param vehiclePos 
+     * 
+     * @param vehiclePos
      * 
      * @return reference to the rear vehicle
      */
@@ -415,9 +422,10 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.positon() > vehicePos (strictly
-     * greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
-     * @param vehiclePos 
+     * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.positon() >
+     * vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
+     * 
+     * @param vehiclePos
      * 
      * @return reference to the front vehicle
      */
@@ -540,7 +548,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param dt
      *            simulation time interval
      * @param simulationTime
-     * @param iterationCount 
+     * @param iterationCount
      */
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         assert laneIsSorted();
@@ -579,7 +587,8 @@ public class LaneSegment implements Iterable<Vehicle> {
                     }
                 }
                 final int laneOnNewRoadSegment = sinkLaneSegment.lane();
-                vehicle.moveToNewRoadSegment(sinkLaneSegment.roadSegment(), laneOnNewRoadSegment, rearPositionOnNewRoadSegment, exitEndPos);
+                vehicle.moveToNewRoadSegment(sinkLaneSegment.roadSegment(), laneOnNewRoadSegment,
+                        rearPositionOnNewRoadSegment, exitEndPos);
                 // remove vehicle from this road segment
                 vehicles.remove(0);
                 --count;
