@@ -35,14 +35,14 @@ import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataACCImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataGippsImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataIDMImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKKWImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataKraussImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNSMImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataOVM_FVDMImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,21 +126,21 @@ public class VehicleInput {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         if (modelName.equals(LongitudinalModelBase.ModelName.IDM.name())) {
-            return new LongitudinalModelInputDataIDMImpl(map);
+            return new LongitudinalModelInputDataIDM(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.ACC.name())) {
-            return new LongitudinalModelInputDataACCImpl(map);
+            return new LongitudinalModelInputDataACC(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.OVM_FVDM.name())) {
-            return new LongitudinalModelInputDataOVM_FVDMImpl(map);
+            return new LongitudinalModelInputDataOVM_FVDM(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.GIPPS.name())) {
-            return new LongitudinalModelInputDataGippsImpl(map);
+            return new LongitudinalModelInputDataGipps(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KRAUSS.name())) {
-            return new LongitudinalModelInputDataKraussImpl(map);
+            return new LongitudinalModelInputDataKrauss(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.NEWELL.name())) {
-            return new LongitudinalModelInputDataNewellImpl(map);
+            return new LongitudinalModelInputDataNewell(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.NSM.name())) {
-            return new LongitudinalModelInputDataNSMImpl(map);
+            return new LongitudinalModelInputDataNSM(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KKW.name())) {
-            return new LongitudinalModelInputDataKKWImpl(map);
+            return new LongitudinalModelInputDataKKW(map);
         } else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);

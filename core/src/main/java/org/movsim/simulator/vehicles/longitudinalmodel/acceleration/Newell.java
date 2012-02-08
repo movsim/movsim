@@ -19,7 +19,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
@@ -49,7 +49,7 @@ public class Newell extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public Newell(double dt, LongitudinalModelInputDataNewellImpl parameters) {
+    public Newell(double dt, LongitudinalModelInputDataNewell parameters) {
         super(ModelName.NEWELL, parameters);
         initParameters(dt);
     }
@@ -67,8 +67,8 @@ public class Newell extends LongitudinalModelBase {
     @Override
     protected void initParameters() {
         logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataNewellImpl) parameters).getV0();
-        this.s0 = ((LongitudinalModelInputDataNewellImpl) parameters).getS0();
+        this.v0 = ((LongitudinalModelInputDataNewell) parameters).getV0();
+        this.s0 = ((LongitudinalModelInputDataNewell) parameters).getS0();
     }
 
     /*

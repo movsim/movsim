@@ -25,172 +25,174 @@
  */
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
-// TODO: Auto-generated Javadoc
+import java.util.Map;
+
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The Interface LongitudinalModelInputDataIDM.
+ * The Class LongitudinalModelInputDataIDM.
  */
-public interface LongitudinalModelInputDataIDM extends LongitudinalModelInputData {
+public class LongitudinalModelInputDataIDM extends LongitudinalModelInputData {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataIDM.class);
+
+    private double v0;
+
+    private final double v0Default;
+
+    private double T;
+    private final double TDefault;
+
+    private double s0;
+    private final double s0Default;
+
+    private double s1;
+    private final double s1Default;
+
+    private double delta;
+    private final double deltaDefault;
+
+    private double a;
+    private final double aDefault;
+
+    private double b;
+    private final double bDefault;
 
     /**
-     * Gets the v0.
+     * Instantiates a new model input data IDM.
      * 
-     * @return the v0
+     * @param map
+     *            the map
      */
-    double getV0();
+    public LongitudinalModelInputDataIDM(Map<String, String> map) {
+        super(ModelName.IDM);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        TDefault = T = Double.parseDouble(map.get("T"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        s1Default = s1 = Double.parseDouble(map.get("s1"));
+        deltaDefault = delta = Double.parseDouble(map.get("delta"));
+        aDefault = a = Double.parseDouble(map.get("a"));
+        bDefault = b = Double.parseDouble(map.get("b"));
+        checkParameters();
 
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    double getT();
+    }
 
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    double getS0();
+    protected void checkParameters() {
+        if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
 
-    /**
-     * Gets the s1.
-     * 
-     * @return the s1
-     */
-    double getS1();
+        if (T == 0 || a == 0 || b == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
+    }
 
-    /**
-     * Gets the delta.
-     * 
-     * @return the delta
-     */
-    double getDelta();
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        T = TDefault;
+        s0 = s0Default;
+        s1 = s1Default;
+        delta = deltaDefault;
+        a = aDefault;
+        b = bDefault;
+    }
 
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    double getA();
+    public double getV0() {
+        return v0;
+    }
 
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    double getB();
+    public double getT() {
+        return T;
+    }
 
-    /**
-     * Gets the v0 default.
-     * 
-     * @return the v0 default
-     */
-    double getV0Default();
+    public double getS0() {
+        return s0;
+    }
 
-    /**
-     * Gets the t default.
-     * 
-     * @return the t default
-     */
-    double getTDefault();
+    public double getS1() {
+        return s1;
+    }
 
-    /**
-     * Gets the s0 default.
-     * 
-     * @return the s0 default
-     */
-    double getS0Default();
+    public double getDelta() {
+        return delta;
+    }
 
-    /**
-     * Gets the s1 default.
-     * 
-     * @return the s1 default
-     */
-    double getS1Default();
+    public double getA() {
+        return a;
+    }
 
-    /**
-     * Gets the delta default.
-     * 
-     * @return the delta default
-     */
-    double getDeltaDefault();
+    public double getB() {
+        return b;
+    }
 
-    /**
-     * Gets the a default.
-     * 
-     * @return the a default
-     */
-    double getaDefault();
+    public double getV0Default() {
+        return v0Default;
+    }
 
-    /**
-     * Gets the b default.
-     * 
-     * @return the b default
-     */
-    double getbDefault();
+    public double getTDefault() {
+        return TDefault;
+    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.longModel.AccelerationModelInputData# resetParametersToDefault()
-     */
-    @Override
-    void resetParametersToDefault();
+    public double getS0Default() {
+        return s0Default;
+    }
 
-    /**
-     * Sets the v0.
-     * 
-     * @param v0
-     *            the new v0
-     */
-    void setV0(double v0);
+    public double getS1Default() {
+        return s1Default;
+    }
 
-    /**
-     * Sets the t.
-     * 
-     * @param timegap
-     *            the new t
-     */
-    void setT(double timegap);
+    public double getDeltaDefault() {
+        return deltaDefault;
+    }
 
-    /**
-     * Sets the s0.
-     * 
-     * @param s0
-     *            the new s0
-     */
-    void setS0(double s0);
+    public double getaDefault() {
+        return aDefault;
+    }
 
-    /**
-     * Sets the s1.
-     * 
-     * @param s1
-     *            the new s1
-     */
-    void setS1(double s1);
+    public double getbDefault() {
+        return bDefault;
+    }
 
-    /**
-     * Sets the delta.
-     * 
-     * @param delta
-     *            the new delta
-     */
-    void setDelta(double delta);
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
 
-    /**
-     * Sets the a.
-     * 
-     * @param a
-     *            the new a
-     */
-    void setA(double a);
+    public void setT(double timegap) {
+        this.T = timegap;
+        parametersUpdated();
+    }
 
-    /**
-     * Sets the b.
-     * 
-     * @param b
-     *            the new b
-     */
-    void setB(double b);
+    public void setS0(double s0) {
+        this.s0 = s0;
+        parametersUpdated();
+    }
+
+    public void setS1(double s1) {
+        this.s1 = s1;
+        parametersUpdated();
+    }
+
+    public void setDelta(double delta) {
+        this.delta = delta;
+        parametersUpdated();
+    }
+
+    public void setA(double a) {
+        this.a = a;
+        parametersUpdated();
+    }
+
+    public void setB(double b) {
+        this.b = b;
+        parametersUpdated();
+    }
 
 }
