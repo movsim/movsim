@@ -37,40 +37,37 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of road may be created
- * by combining two road segments running in opposite directions.
+ * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch
+ * of road may be created by combining two road segments running in opposite directions.
  * </p>
  * <p>
  * RoadSegments may be combined to form a road network.
  * </p>
- * 
  * <p>
- * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road segment and a sink road
- * to which vehicles exit. RoadSegments at the edge of the network will normally be connected to only one other road segment: traffic inflow
- * and outflow will be controlled directly by source and sink objects.
+ * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road
+ * segment and a sink road to which vehicles exit. RoadSegments at the edge of the network will normally be connected
+ * to only one other road segment: traffic inflow and outflow will be controlled directly by source and sink objects.
  * </p>
  * <p>
- * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be connected to a source
- * (incoming) lane of another road segment. This allows the forking and merging of road segments, the creation of on-ramps and off-ramps. By
- * connecting the lanes of a number of road segments in this way, complex junctions and interchanges may be created.
+ * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be
+ * connected to a source (incoming) lane of another road segment. This allows the forking and merging of road segments,
+ * the creation of on-ramps and off-ramps. By connecting the lanes of a number of road segments in this way, complex
+ * junctions and interchanges may be created.
  * </p>
  * <p>
- * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or winding, it just knows
- * about the vehicles it contains and what it is connected to. A vehicle's coordinates on a RoadsSegment are given by the vehicle's position
- * relative to the start of the RoadSegment and the vehicle's lane.
+ * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or
+ * winding, it just knows about the vehicles it contains and what it is connected to. A vehicle's coordinates on a
+ * RoadsSegment are given by the vehicle's position relative to the start of the RoadSegment and the vehicle's lane.
  * </p>
  * <p>
- * A RoadSegment has <code>laneCount</code> lanes. Lanes are of three types, traffic lanes, exit (deceleration) lanes and entrance
- * (acceleration) lanes. Typically vehicle behavior (and especially lane change behavior) is different in each type of lane.
+ * A RoadSegment has <code>laneCount</code> lanes. Lanes within a RoadSegment are represented by the LaneSegment
+ * class.
  * </p>
  * <p>
- * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's RoadMapping. The
- * RoadMapping is not used in the traffic simulation itself and is only used by software that draws the road network and the vehicles upon
- * it.
- * </p>
- * <p>
- * The vehicles on a each lane of a road segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles in
- * front of and behind a given vehicle can be found efficiently.
+ * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's
+ * RoadMapping. Although the RoadMapping is primarily used by software that draws the road network and the vehicles
+ * upon it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its
+ * gradient.
  * </p>
  */
 public class RoadSegment implements Iterable<Vehicle> {
@@ -394,7 +391,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public int removedVehicleCount() {
         int removedVehicleCount = 0;
-        for (final LaneSegment laneSegment: laneSegments) {
+        for (final LaneSegment laneSegment : laneSegments) {
             removedVehicleCount += laneSegment.getRemovedVehicleCount();
         }
         return removedVehicleCount;
@@ -404,7 +401,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Clears the removed vehicle count.
      */
     public void clearVehicleRemovedCount() {
-        for (final LaneSegment laneSegment: laneSegments) {
+        for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.clearVehicleRemovedCount();
         }
     }
@@ -550,7 +547,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getFrontPosition(); 
+                    final double pos = vehicle.getFrontPosition();
                     final double speedlimit = speedLimits.calcSpeedLimit(pos);
                     vehicle.setSpeedlimit(speedlimit);
                     logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
@@ -906,10 +903,11 @@ public class RoadSegment implements Iterable<Vehicle> {
                 if (netDistance < 0) {
                     logger.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(), vehicle.getFrontPosition()));
+                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
+                            vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(), vehFront.getFrontPosition(),
-                                vehicle.getLane()));
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
+                                vehFront.getFrontPosition(), vehicle.getLane()));
                     }
                     sb.append("roadID=" + id);
                     sb.append(", net distance=" + netDistance);
