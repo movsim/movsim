@@ -59,7 +59,7 @@ public class EquilibriumOVM_FVDM extends EquilibriumProperties {
         final double dtMax = 0.3 * model.getTau(); // iteration time step (in s) changes from
         final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to dtMax (rho=0)
 
-        vEqTab[0] = model.getV0(); // start with rho=0
+        vEqTab[0] = model.getDesiredSpeed(); // start with rho=0
 
         final int length = vEqTab.length;
         for (int ir = 1; ir < length; ir++) {

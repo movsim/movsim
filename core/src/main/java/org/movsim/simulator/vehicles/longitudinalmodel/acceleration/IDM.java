@@ -55,22 +55,22 @@ public class IDM extends LongitudinalModelBase {
     private double v0;
 
     /** safe time headway (s). */
-    private double T;
+    private final double T;
 
     /** bumper-to-bumper vehicle distance in jams or queues; minimum gap. */
-    private double s0;
+    private final double s0;
 
     /** gap parameter (m). */
-    private double s1;
+    private final double s1;
 
     /** acceleration (m/s^2). */
-    private double a;
+    private final double a;
 
     /** comfortable (desired) deceleration (braking), (m/s^2). */
-    private double b;
+    private final double b;
 
     /** acceleration exponent. */
-    private double delta;
+    private final double delta;
 
     /**
      * Instantiates a new IDM.
@@ -80,7 +80,14 @@ public class IDM extends LongitudinalModelBase {
      */
     public IDM(LongitudinalModelInputDataIDM parameters) {
         super(ModelName.IDM, parameters);
-        initParameters();
+        logger.debug("init model parameters");
+        this.v0 = parameters.getV0();
+        this.T = parameters.getT();
+        this.s0 = parameters.getS0();
+        this.s1 = parameters.getS1();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.delta = parameters.getDelta();
     }
 
     /**
@@ -110,39 +117,14 @@ public class IDM extends LongitudinalModelBase {
         this.delta = 4.0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
     @Override
-    protected void initParameters() {
-        logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataIDM) parameters).getV0();
-        this.T = ((LongitudinalModelInputDataIDM) parameters).getT();
-        this.s0 = ((LongitudinalModelInputDataIDM) parameters).getS0();
-        this.s1 = ((LongitudinalModelInputDataIDM) parameters).getS1();
-        this.a = ((LongitudinalModelInputDataIDM) parameters).getA();
-        this.b = ((LongitudinalModelInputDataIDM) parameters).getB();
-        this.delta = ((LongitudinalModelInputDataIDM) parameters).getDelta();
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
     }
 
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
+    @Override
+    public double getDesiredSpeed() {
         return v0;
-    }
-
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    public double getT() {
-        return T;
     }
 
     /**
@@ -161,6 +143,15 @@ public class IDM extends LongitudinalModelBase {
      */
     public double getS1() {
         return s1;
+    }
+
+    /**
+     * Gets the t.
+     * 
+     * @return the t
+     */
+    public double getT() {
+        return T;
     }
 
     /**
@@ -233,11 +224,6 @@ public class IDM extends LongitudinalModelBase {
         return acc(s, v, dv, localT, localV0, localA);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, T, v0, a);
@@ -277,25 +263,5 @@ public class IDM extends LongitudinalModelBase {
 
         logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
     }
 }

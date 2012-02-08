@@ -95,21 +95,88 @@ public class ACC extends LongitudinalModelBase {
      */
     public ACC(LongitudinalModelInputDataACC parameters) {
         super(ModelName.ACC, parameters);
-        initParameters();
+        this.v0 = parameters.getV0();
+        this.T = parameters.getT();
+        this.s0 = parameters.getS0();
+        this.s1 = parameters.getS1();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.delta = parameters.getDelta();
+        this.coolness = parameters.getCoolness();
     }
 
     @Override
-    protected void initParameters() {
-        this.v0 = ((LongitudinalModelInputDataACC) parameters).getV0();
-        this.T = ((LongitudinalModelInputDataACC) parameters).getT();
-        this.s0 = ((LongitudinalModelInputDataACC) parameters).getS0();
-        this.s1 = ((LongitudinalModelInputDataACC) parameters).getS1();
-        this.a = ((LongitudinalModelInputDataACC) parameters).getA();
-        this.b = ((LongitudinalModelInputDataACC) parameters).getB();
-        this.delta = ((LongitudinalModelInputDataACC) parameters).getDelta();
-        this.coolness = ((LongitudinalModelInputDataACC) parameters).getCoolness();
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
     }
 
+    @Override
+    public double getDesiredSpeed() {
+        return v0;
+    }
+
+    /**
+     * Gets the s0.
+     * 
+     * @return the s0
+     */
+    public double getS0() {
+        return s0;
+    }
+
+    /**
+     * Gets the s1.
+     * 
+     * @return the s1
+     */
+    public double getS1() {
+        return s1;
+    }
+
+    /**
+     * Gets the t.
+     * 
+     * @return the t
+     */
+    public double getT() {
+        return T;
+    }
+
+    /**
+     * Gets the delta.
+     * 
+     * @return the delta
+     */
+    public double getDelta() {
+        return delta;
+    }
+
+    /**
+     * Gets the a.
+     * 
+     * @return the a
+     */
+    public double getA() {
+        return a;
+    }
+
+    /**
+     * Gets the b.
+     * 
+     * @return the b
+     */
+    public double getB() {
+        return b;
+    }
+
+    /**
+     * Gets the coolness.
+     * 
+     * @return the coolness
+     */
+    public double getCoolness() {
+        return coolness;
+    }
     @Override
     public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
@@ -219,97 +286,5 @@ public class ACC extends LongitudinalModelBase {
                 * (accCAH + b * Math.tanh((accIIDM - accCAH) / b));
 
         return accACC_IIDM;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
-    }
-
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    public double getT() {
-        return T;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
-    }
-
-    /**
-     * Gets the s1.
-     * 
-     * @return the s1
-     */
-    public double getS1() {
-        return s1;
-    }
-
-    /**
-     * Gets the delta.
-     * 
-     * @return the delta
-     */
-    public double getDelta() {
-        return delta;
-    }
-
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    public double getA() {
-        return a;
-    }
-
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    public double getB() {
-        return b;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the coolness.
-     * 
-     * @return the coolness
-     */
-    public double getCoolness() {
-        return coolness;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
     }
 }

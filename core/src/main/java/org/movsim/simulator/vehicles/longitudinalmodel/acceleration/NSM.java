@@ -51,10 +51,10 @@ public class NSM extends LongitudinalModelBase {
     private double v0;
 
     /** The p slowdown. */
-    private double pSlowdown;
+    private final double pSlowdown;
 
     /** slow-to-start rule for Barlovic model */
-    private double pSlowToStart; 
+    private final double pSlowToStart; 
 
     /**
      * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
@@ -64,20 +64,38 @@ public class NSM extends LongitudinalModelBase {
      */
     public NSM(LongitudinalModelInputDataNSM parameters) {
         super(ModelName.NSM, parameters);
-        initParameters();
+        logger.debug("init model parameters");
+        this.v0 = parameters.getV0();
+        this.pSlowdown = parameters.getSlowdown();
+        this.pSlowToStart = parameters.getSlowToStart();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
     @Override
-    protected void initParameters() {
-        logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataNSM) parameters).getV0();
-        this.pSlowdown = ((LongitudinalModelInputDataNSM) parameters).getSlowdown();
-        this.pSlowToStart = ((LongitudinalModelInputDataNSM) parameters).getSlowToStart();
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = (int)v0;
+    }
+
+    @Override
+    public double getDesiredSpeed() {
+        return v0;
+    }
+
+    /**
+     * Gets the slowdown.
+     * 
+     * @return the slowdown
+     */
+    public double getSlowdown() {
+        return pSlowdown;
+    }
+
+    /**
+     * Gets the slow to start.
+     * 
+     * @return the slow to start
+     */
+    public double getSlowToStart() {
+        return pSlowToStart;
     }
 
     @Override
@@ -87,7 +105,7 @@ public class NSM extends LongitudinalModelBase {
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
-        
+
         // consider external speedlimit
         final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
         if (logger.isDebugEnabled()) {
@@ -100,12 +118,6 @@ public class NSM extends LongitudinalModelBase {
         return acc(s, v, dv, localV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle) {
         // local dynamical variables
@@ -125,11 +137,6 @@ public class NSM extends LongitudinalModelBase {
         return acc(s, v, dv, localV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, v0);
@@ -157,8 +164,8 @@ public class NSM extends LongitudinalModelBase {
                     "local desired speed localVO={} is mapped to CA integer v0={} probably due to a speed limit. Cannot move forward.",
                     localV0, localIntegerV0);
         }
-        
-        final int vLocal = (int) (v + 0.5);
+
+        final int vLocal = (int)(v + 0.5);
         int vNew = 0;
 
         final double r1 = MyRandom.nextDouble();
@@ -170,53 +177,6 @@ public class NSM extends LongitudinalModelBase {
         vNew = Math.min(vNew, sLoc);
         vNew = Math.max(0, vNew - slowdown);
 
-        return ((vNew - vLocal) / dtCA);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
-    }
-
-    /**
-     * Gets the slowdown.
-     * 
-     * @return the slowdown
-     */
-    public double getSlowdown() {
-        return pSlowdown;
-    }
-
-    /**
-     * Gets the slow to start.
-     * 
-     * @return the slow to start
-     */
-    public double getSlowToStart() {
-        return pSlowToStart;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = (int) v0;
+        return (vNew - vLocal) / dtCA;
     }
 }

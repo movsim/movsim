@@ -34,14 +34,14 @@ public class Newell extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
 
-    /** The dt. */
-    private double dt;
-
     /** The v0. */
     private double v0;
 
+    /** The dt. */
+    private final double dt;
+
     /** The s0. */
-    private double s0;
+    private final double s0;
 
     /**
      * Instantiates a new newell.
@@ -51,32 +51,22 @@ public class Newell extends LongitudinalModelBase {
      */
     public Newell(double dt, LongitudinalModelInputDataNewellImpl parameters) {
         super(ModelName.NEWELL, parameters);
-        initParameters(dt);
-    }
-
-    private void initParameters(double dt) {
         this.dt = dt;
-        initParameters();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
-    @Override
-    protected void initParameters() {
         logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataNewellImpl) parameters).getV0();
-        this.s0 = ((LongitudinalModelInputDataNewellImpl) parameters).getS0();
+        this.v0 = parameters.getV0();
+        this.s0 = parameters.getS0();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #acc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.VehicleContainer, double, double, double)
-     */
+    @Override
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
+    }
+
+    @Override
+    public double getDesiredSpeed() {
+        return v0;
+    }
+
     @Override
     public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
@@ -95,12 +85,6 @@ public class Newell extends LongitudinalModelBase {
         return acc(s, v, dv, dtLocal, v0Local);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle) {
         // Local dynamic variables
@@ -114,11 +98,6 @@ public class Newell extends LongitudinalModelBase {
         return acc(s, v, dv, dtLocal, v0Local);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, dt, v0);
@@ -146,25 +125,5 @@ public class Newell extends LongitudinalModelBase {
         double aWanted = (vNew - v) / dtLocal;
 
         return aWanted;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
     }
 }

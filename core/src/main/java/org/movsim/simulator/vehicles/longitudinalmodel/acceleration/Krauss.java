@@ -46,22 +46,22 @@ public class Krauss extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);
 
-    /**
-     * The parameter T is given by the update timestep dt: dt = T = Tr = tau_relax
-     */
-    private double T;
-
     /** The v0. */
     private double v0;
 
+    /**
+     * The parameter T is given by the update timestep dt: dt = T = Tr = tau_relax
+     */
+    private final double T;
+
     /** The a. */
-    private double a;
+    private final double a;
 
     /** The b. */
-    private double b;
+    private final double b;
 
     /** The s0. */
-    private double s0;
+    private final double s0;
 
     /**
      * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular automaton default value 0.4 (PRE) or 1 (EPJB)
@@ -76,27 +76,32 @@ public class Krauss extends LongitudinalModelBase {
      */
     public Krauss(double dt, LongitudinalModelInputDataKrauss parameters) {
         super(ModelName.KRAUSS, parameters);
-        initParameters(dt);
-    }
-
-    private void initParameters(double dt) {
         this.T = dt;
-        initParameters();
+        logger.debug("init model parameters");
+        this.v0 = parameters.getV0();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.s0 = parameters.getS0();
+        this.epsilon = parameters.getEpsilon();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
     @Override
-    protected void initParameters() {
-        logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataKrauss) parameters).getV0();
-        this.a = ((LongitudinalModelInputDataKrauss) parameters).getA();
-        this.b = ((LongitudinalModelInputDataKrauss) parameters).getB();
-        this.s0 = ((LongitudinalModelInputDataKrauss) parameters).getS0();
-        this.epsilon = ((LongitudinalModelInputDataKrauss) parameters).getEpsilon();
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
+    }
+
+    @Override
+    public double getDesiredSpeed() {
+        return v0;
+    }
+
+    /**
+     * Gets the s0.
+     * 
+     * @return the s0
+     */
+    public double getS0() {
+        return s0;
     }
 
     /**
@@ -106,15 +111,6 @@ public class Krauss extends LongitudinalModelBase {
      */
     public double getT() {
         return T;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
     }
 
     /**
@@ -133,15 +129,6 @@ public class Krauss extends LongitudinalModelBase {
      */
     public double getB() {
         return b;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
     }
 
     /**
@@ -166,12 +153,6 @@ public class Krauss extends LongitudinalModelBase {
         return acc(s, v, dv, localT, localV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle) {
         // Local dynamical variables
@@ -185,11 +166,6 @@ public class Krauss extends LongitudinalModelBase {
         return acc(s, v, dv, localT, localV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, T, v0);
@@ -239,25 +215,5 @@ public class Krauss extends LongitudinalModelBase {
         final double aWanted = (vNew - v) / TLocal;
 
         return aWanted;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
     }
 }

@@ -107,7 +107,7 @@ public abstract class LongitudinalModelBase implements Observer {
      * @param parameters
      *            the parameters
      */
-    public LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
+    protected LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
         this.modelName = modelName;
         this.parameters = parameters;
         // this.id = MyRandom.nextInt();
@@ -116,8 +116,6 @@ public abstract class LongitudinalModelBase implements Observer {
             parameters.registerObserver(this);
         }
     }
-
-    protected abstract void initParameters();
 
     /**
      * Model name.
@@ -164,14 +162,9 @@ public abstract class LongitudinalModelBase implements Observer {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.utilities.Observer#notifyObserver()
-     */
     @Override
     public void notifyObserver() {
-        initParameters();
+        //initParameters();
         logger.debug("observer notified");
     }
 
@@ -185,19 +178,19 @@ public abstract class LongitudinalModelBase implements Observer {
     }
 
     /**
-     * Returns the desired speed in free traffic.
-     * 
-     * @return the desired speed (m/s)
-     */
-    public abstract double getDesiredSpeed();
-
-    /**
      * Sets the vehicle's desired speed (m/s).
      * 
      * @param v0
      *            desired speed (m/s)
      */
     protected abstract void setDesiredSpeed(double v0);
+
+    /**
+     * Returns the desired speed in free traffic.
+     * 
+     * @return the desired speed (m/s)
+     */
+    public abstract double getDesiredSpeed();
 
     /**
      * Sets the relative randomization v0.
