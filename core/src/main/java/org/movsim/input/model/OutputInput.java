@@ -55,8 +55,13 @@ public class OutputInput {
      *            the elem
      */
     public OutputInput(Map<String, RoadInput> roadInputMap, Element elem) {
-
-        floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData));
+        if (elem == null) {
+            return;
+        }
+        
+        if (elem.getChild(XmlElementNames.OutputFloatingCarData) != null) {
+            floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData)); 
+        }
 
         if (elem.getChild(XmlElementNames.OutputSpatioTemporal) != null) {
             spatioTemporalInput = new ArrayList<SpatioTemporalInput>();

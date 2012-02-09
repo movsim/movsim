@@ -98,7 +98,7 @@ public class SimOutput implements SimulationTimeStep {
 
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
-        if (floatingCarInput.isWithFCD()) {
+        if (floatingCarInput != null) {
             floatingCars = new FloatingCars(floatingCarInput);
             if (writeOutput) {
                 fileFloatingCars = new FileFloatingCars(roadNetwork, floatingCars);
