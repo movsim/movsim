@@ -6,8 +6,8 @@ for fn in $file_list
         echo "Processing $fn ...... "
         # format file
         java -jar xmlformatter-0.0.1-SNAPSHOT-jar-with-dependencies.jar $fn
-        # line ending
-        sed -i 's/\r$//' $fn
+        # line ending is set in xmlformatter plattform-dependent
+        # sed -i 's/\r$//' $fn
         done
 
 echo "    Done" 
