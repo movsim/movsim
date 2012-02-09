@@ -41,11 +41,10 @@ public class TrafficLightsInput {
 
     private int nDtSample = 0;
 
-    /** The with logging. */
     private boolean withLogging = false;
 
     /**
-     * Instantiates a new traffic lights input impl.
+     * Instantiates a new traffic lights input.
      * 
      * @param elem
      *            the elem
@@ -76,29 +75,14 @@ public class TrafficLightsInput {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.TrafficLightsInput#getTrafficLightData ()
-     */
     public List<TrafficLightData> getTrafficLightData() {
         return trafficLightData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.TrafficLightsInput#getnDtSample()
-     */
     public int getnDtSample() {
         return nDtSample;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.TrafficLightsInput#isWithLogging()
-     */
     public boolean isWithLogging() {
         return withLogging;
     }
