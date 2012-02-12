@@ -653,10 +653,6 @@ public class Vehicle {
 
     }
 
-    public void removeObservers() {
-        longitudinalModel.removeObserver();
-    }
-
     public LaneChangeModel getLaneChangeModel() {
         return lcModel;
     }
