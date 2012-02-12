@@ -7,7 +7,7 @@
     <version>1.2</version>
     <packaging>jar</packaging>
 
-    <name>movsim</name>
+    <name>movsimcore</name>
     <description>multi-model, open-source vehicular-traffic simulator </description>
     <url>http://www.movsim.org</url>
 
