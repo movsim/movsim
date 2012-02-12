@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    <road name="R1" length="400.0" id="1" junction="-1">
+    <road name="R1" length="800.0" id="1" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="40.0" y="300.0" hdg="0.0" length="400.0">
+            <geometry s="0.0" x="40.0" y="300.0" hdg="0.0" length="800.0">
                 <line />
             </geometry>
         </planView>
@@ -29,7 +29,7 @@
             <successor elementType="junction" elementId="1009" />
         </link>
         <planView>
-            <geometry s="0.0" x="440.0" y="300.0" hdg="0.0" length="200.0">
+            <geometry s="0.0" x="840.0" y="300.0" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
@@ -60,7 +60,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="640.0" y="300.0" hdg="0.0" length="400.0">
+            <geometry s="0.0" x="1040.0" y="300.0" hdg="0.0" length="400.0">
                 <line />
             </geometry>
         </planView>
@@ -88,7 +88,7 @@
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="640.0" y="315.0" hdg="-0.209385" length="408.931535">
+            <geometry s="0.0" x="1040.0" y="315.0" hdg="-0.209385" length="408.931535">
                 <line />
             </geometry>
         </planView>

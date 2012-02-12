@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep  2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    <road name="R1" length="2000.0" id="1" junction="-1">
+    <road name="R1" length="1600.0" id="1" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="0.0" y="300.0" hdg="0.0" length="2000.0">
+            <geometry s="0.0" x="0.0" y="300.0" hdg="0.0" length="1600.0">
                 <line />
             </geometry>
         </planView>
@@ -26,12 +26,12 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R2" length="1000.0" id="2" junction="-1">
+    <road name="R2" length="400.0" id="2" junction="-1">
         <link>
             <predecessor elementType="road" elementId="1" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="2000.0" y="305.0" hdg="0.0" length="1000.0">
+            <geometry s="0.0" x="1600.0" y="305.0" hdg="0.0" length="400.0">
                 <line />
             </geometry>
         </planView>
