@@ -1,0 +1,4 @@
+The simulation scenarios in this directory are used in the applet version of the viewer. Therefore, these simulations are configured *without* file output. 
+
+This directory can be accessed in the jar file by "/sim/buildingblocks/".
+
