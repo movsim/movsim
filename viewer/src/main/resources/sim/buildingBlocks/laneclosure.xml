@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="laneclosure.xodr">
+<SCENARIO network_filename="/sim/buildingBlocks/laneclosure.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="5" b_max="9">
             <LONGITUDINAL_MODEL>

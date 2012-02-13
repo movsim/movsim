@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="onramp.xodr">
+<SCENARIO network_filename="/sim/buildingBlocks/onramp.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>

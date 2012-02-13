@@ -4,7 +4,7 @@
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <!-- TODO: Macroscopic initial conitions do not check for sufficient safety gap at boundary -->
 <!-- TODO: FCD Output does not work with macroscopic initial conditions -->
-<SCENARIO network_filename="ringroad.xodr">
+<SCENARIO network_filename="/sim/buildingBlocks/ringroad.xodr">
     <VEHICLES>
         <VEHICLE label="IDM" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
