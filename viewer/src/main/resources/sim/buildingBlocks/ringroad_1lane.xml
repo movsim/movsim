@@ -25,11 +25,7 @@
                 <IC_MACRO x="1" rho_per_km="36" v="20" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="5">
-                <FC number="2" />
-            </FLOATING_CAR_DATA>
-        </OUTPUT>
+        <OUTPUT />
     </SIMULATION>
 </SCENARIO>
 
