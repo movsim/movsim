@@ -88,7 +88,8 @@ public class LocalizationStrings extends ListResourceBundle {
             { "CloverLeaf", "clover leaf" },
             { "RoundAbout", "roundabout" },
             { "CityInterSection", "city intersection" },
-            { "RingRoad", "ring road" },
+            { "RingRoad", "ring road with one lane" },
+            { "RingRoad2Lanes", "ring with road two lanes" },
 
             // Help Menu
             { "HelpMenu", "Help" },
