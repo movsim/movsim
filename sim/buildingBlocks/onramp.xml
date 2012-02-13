@@ -40,10 +40,10 @@
             <DETECTORS />
         </ROAD>
         <ROAD id="4">
-         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="ACC1" fraction="0.96" relative_v0_randomization="0.1" />
-            <!-- <VEHICLE_TYPE label="ACC2" fraction="0.04" relative_v0_randomization="0.1" /> -->
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="ACC1" fraction="0.96" relative_v0_randomization="0.1" />
+                <!-- <VEHICLE_TYPE label="ACC2" fraction="0.04" relative_v0_randomization="0.1" /> -->
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE>
                 <INFLOW t="0" q_per_hour="500" />

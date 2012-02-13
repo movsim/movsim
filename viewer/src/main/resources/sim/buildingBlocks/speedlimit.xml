@@ -29,7 +29,7 @@
         <ROAD id="1">
             <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE logging="false">
-                <INFLOW t="0" q_per_hour="1700"/>
+                <INFLOW t="0" q_per_hour="1700" />
             </TRAFFIC_SOURCE>
             <SPEED_LIMITS>
                 <SPEED_LIMIT x="700" speedlimit_kmh="50" />

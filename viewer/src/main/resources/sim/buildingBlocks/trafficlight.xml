@@ -11,7 +11,7 @@
                 <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-         <VEHICLE label="ACC1" length="6" b_max="9">
+        <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
                 <ACC v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
             </LONGITUDINAL_MODEL>
