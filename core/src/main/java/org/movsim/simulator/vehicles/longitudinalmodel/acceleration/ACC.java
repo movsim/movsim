@@ -50,19 +50,9 @@ public class ACC extends LongitudinalModelBase {
     final static Logger logger = LoggerFactory.getLogger(ACC.class);
 
     /**
-     * The v0. desired velocity (m/s)
-     */
-    private double v0;
-
-    /**
      * The T. time headway (s)
      */
     private double T;
-
-    /**
-     * The s0. bumper-to-bumper distance (m)
-     */
-    private double s0;
 
     /** The s1. */
     private double s1;
@@ -103,25 +93,6 @@ public class ACC extends LongitudinalModelBase {
         this.b = parameters.getB();
         this.delta = parameters.getDelta();
         this.coolness = parameters.getCoolness();
-    }
-
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
     }
 
     /**

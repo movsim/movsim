@@ -47,9 +47,6 @@ public class NSM extends LongitudinalModelBase {
     /** The constant unit time */
     private static final double dtCA = 1; 
 
-    /** The v0. */
-    private double v0;
-
     /** The p slowdown. */
     private final double pSlowdown;
 
@@ -76,8 +73,8 @@ public class NSM extends LongitudinalModelBase {
     }
 
     @Override
-    public double getDesiredSpeed() {
-        return v0;
+    public double getS0() {
+        throw new UnsupportedOperationException("getS0 not applicable for NSM model.");
     }
 
     /**

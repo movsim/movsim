@@ -41,12 +41,6 @@ public class OVM_FVDM extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_FVDM.class);
 
-    /** The v0. Desired velocity*/
-    private double v0;
-
-    /** The s0. Minimum distance gap*/
-    private final double s0;
-
     /** The tau. Speed adaptation time*/
     private final double tau;
 
@@ -80,25 +74,6 @@ public class OVM_FVDM extends LongitudinalModelBase {
         this.beta = parameters.getBeta();
         this.lambda = parameters.getLambda();
         choiceOptFuncVariant = parameters.getVariant();
-    }
-
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
     }
 
     /**

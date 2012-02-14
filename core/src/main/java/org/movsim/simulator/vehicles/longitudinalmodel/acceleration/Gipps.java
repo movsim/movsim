@@ -43,9 +43,6 @@ public class Gipps extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Gipps.class);
 
-    /** The v0. */
-    private double v0;
-
     /**
      * The T. results from update timestep dt dt = T = Tr = tau_relax
      */
@@ -56,9 +53,6 @@ public class Gipps extends LongitudinalModelBase {
 
     /** The b. */
     private final double b;
-
-    /** The s0. */
-    private final double s0;
 
     /**
      * Instantiates a new gipps.
@@ -83,15 +77,6 @@ public class Gipps extends LongitudinalModelBase {
     @Override
     public double getDesiredSpeed() {
         return v0;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
     }
 
     /**

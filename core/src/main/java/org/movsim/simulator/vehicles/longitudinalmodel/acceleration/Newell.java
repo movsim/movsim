@@ -34,14 +34,8 @@ public class Newell extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
 
-    /** The v0. */
-    private double v0;
-
     /** The dt. */
     private final double dt;
-
-    /** The s0. */
-    private final double s0;
 
     /**
      * Instantiates a new newell.
@@ -55,16 +49,6 @@ public class Newell extends LongitudinalModelBase {
         logger.debug("init model parameters");
         this.v0 = parameters.getV0();
         this.s0 = parameters.getS0();
-    }
-
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
     }
 
     @Override
