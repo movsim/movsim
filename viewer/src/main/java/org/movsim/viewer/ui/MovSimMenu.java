@@ -183,7 +183,8 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.FLOWCONSERVINGBOTTLENECK);
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemFlowConservingBottleNeck);
@@ -286,7 +287,6 @@ public class MovSimMenu extends JPanel {
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
 
-        menuItemFlowConservingBottleNeck.setEnabled(false);
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
 

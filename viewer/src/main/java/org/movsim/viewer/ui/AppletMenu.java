@@ -158,7 +158,11 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.simulator.loadScenarioFromXml("flow_conserving_bottleneck", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemFlowConservingBottleNeck);
@@ -279,7 +283,6 @@ public class AppletMenu extends JPanel {
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
 
-        menuItemFlowConservingBottleNeck.setEnabled(false);
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
 
