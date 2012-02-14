@@ -41,7 +41,6 @@ public abstract class LongitudinalModelInputData extends ObservableImpl {
 
     protected void parametersUpdated() {
         checkParameters();
-        notifyObservers();
     }
 
     public LongitudinalModelInputData(ModelName modelName) {
