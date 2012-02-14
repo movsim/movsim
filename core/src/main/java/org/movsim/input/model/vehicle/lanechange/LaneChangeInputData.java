@@ -39,11 +39,8 @@ public class LaneChangeInputData {
     final static Logger logger = LoggerFactory.getLogger(LaneChangeInputData.class);
 
     private final boolean isWithEuropeanRules;
-
     private final double critSpeedEuroRules; // in SI (m/s)
-
     private final LaneChangeMobilData lcMobilData;
-
     private boolean isInitializedMobilData = false;
 
     public LaneChangeInputData(final Element elem) {
@@ -62,45 +59,23 @@ public class LaneChangeInputData {
                 isInitializedMobilData = true;
             } else {
                 logger.error("lane-changing model with name {} not yet implemented!", lcModelElem.getName());
-                // logger.error("more than one lane-changing model is specified for a vehicle!");
                 System.exit(-1);
             }
         }
-
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#isInitializedMobilData()
-     */
     public boolean isInitializedMobilData() {
         return isInitializedMobilData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#isWithEuropeanRules()
-     */
     public boolean isWithEuropeanRules() {
         return isWithEuropeanRules;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getCritSpeedEuroRules()
-     */
     public double getCritSpeedEuroRules() {
         return critSpeedEuroRules;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChanging.LaneChangingInputData#getLcMobilData()
-     */
     public LaneChangeMobilData getLcMobilData() {
         return lcMobilData;
     }

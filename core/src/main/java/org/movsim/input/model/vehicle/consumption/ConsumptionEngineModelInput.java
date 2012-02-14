@@ -42,15 +42,23 @@ public class ConsumptionEngineModelInput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionEngineModelInput.class);
-
-    private final double maxPower; // in kW
-    private final double cylinderVolume; // in liter
-    private final double idleConsumptionRateLiterPerSecond; // in liter per second
-    private final double minSpecificConsumption; // in kg/Ws
-    private final double effectivePressureMinimum; // in Pascal
-    private final double effectivePressureMaximum; // in Pascal
-    private final double idleRotationRate; // per second
-    private final double maxRotationRate; // per second
+    
+    /** in kW */
+    private final double maxPower;
+    /** in liter*/
+    private final double cylinderVolume;
+    /** in liter per second*/
+    private final double idleConsumptionRateLiterPerSecond;
+    /** in kg/Ws */
+    private final double minSpecificConsumption;
+    /** in Pascal*/
+    private final double effectivePressureMinimum;
+    /** in Pascal*/
+    private final double effectivePressureMaximum;
+    /** per second*/
+    private final double idleRotationRate;
+    /** per second*/
+    private final double maxRotationRate;
 
     private List<Double> gearRatios;
 
@@ -79,7 +87,9 @@ public class ConsumptionEngineModelInput {
 
     }
 
-    // default gear box with 5 gears
+    /**
+     * Sets default gear box with 5 gears
+     */
     private void setDefaultGears() {
         gearRatios = new ArrayList<Double>();
         gearRatios.add(13.9);

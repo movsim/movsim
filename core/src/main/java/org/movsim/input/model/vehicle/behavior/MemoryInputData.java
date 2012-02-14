@@ -27,25 +27,25 @@ package org.movsim.input.model.vehicle.behavior;
 
 import java.util.Map;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MemoryInputData.
+ * 
+ * Example xml tag:
+ * <MEMORY tau="600" alpha_a="1" alpha_v0="1" alpha_T="1.7" />
  */
 public class MemoryInputData {
 
-    // <MEMORY tau="600" alpha_a="1" alpha_v0="1" alpha_T="1.7" />
+    /** The tau. in seconds */
+    private final double tau;
 
-    /** The tau. */
-    private final double tau; // in seconds
+    /** The resignation max alpha t. unitless */
+    private final double resignationMaxAlphaT; 
 
-    /** The resignation max alpha t. */
-    private final double resignationMaxAlphaT; // unitless
+    /** The resignation min alpha v0. unitless*/
+    private final double resignationMinAlphaV0;
 
-    /** The resignation min alpha v0. */
-    private final double resignationMinAlphaV0; // unitless
-
-    /** The resignation min alpha a. */
-    private final double resignationMinAlphaA; // unitless
+    /** The resignation min alpha a. unitless*/
+    private final double resignationMinAlphaA;
 
     /**
      * Instantiates a new memory input data.
@@ -61,7 +61,7 @@ public class MemoryInputData {
     }
 
     /**
-     * Gets the tau.
+     * Gets the tau. in seconds
      * 
      * @return the tau
      */
