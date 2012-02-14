@@ -1,0 +1,4 @@
+The simulation scenarios in this directory are also used in the applet version of the viewer. Therefore, these simulations are configured *without* file output. 
+
+For applet deployment, the simulation configuration files are copied into the path "movsim/viewer/src/main/resources/sim/buildingBlocks".
+

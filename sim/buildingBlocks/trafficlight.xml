@@ -3,46 +3,45 @@
 
 <SCENARIO network_filename="trafficlight.xodr">
     <VEHICLES>
+        <VEHICLE label="IDM1" length="6" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
         <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+                <ACC v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
                 <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- trucks -->
-        <VEHICLE label="ACC2" length="16" b_max="9">
+        <VEHICLE label="IDM2" length="16" b_max="9">
             <LONGITUDINAL_MODEL>
-                <ACC v0="25" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" coolness="1" />
+                <IDM v0="18" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
                 <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.3" politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="IDM1" fraction="0.4" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="ACC1" fraction="0.4" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE logging="false">
-                <INFLOW t="0" q_per_hour="600" v="24" />
+                <INFLOW t="0" q_per_hour="500" />
             </TRAFFIC_SOURCE>
-            <SPEED_LIMITS>
-                <SPEED_LIMIT x="200" speedlimit_kmh="50" />
-            </SPEED_LIMITS>
             <TRAFFIC_LIGHTS>
-                <TRAFFIC_LIGHT x="1200" green_time="30" green_red_time="3" red_time="45" red_green_time="2" phase_shift="0" />
-                <!--        <TRAFFIC_LIGHT x="1800" green_time="30" green_red_time="3" red_time="45" red_green_time="2" phase_shift="0" />-->
+                <TRAFFIC_LIGHT x="1000" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" />
             </TRAFFIC_LIGHTS>
             <DETECTORS />
         </ROAD>

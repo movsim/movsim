@@ -127,7 +127,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("onramp_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("onramp", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -142,7 +142,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("offramp_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("offramp", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -169,7 +169,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("speedlimit_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("speedlimit", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -185,7 +185,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("trafficlight_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("trafficlight", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -201,7 +201,7 @@ public class AppletMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        canvasPanel.simulator.loadScenarioFromXml("laneclosing_ACC", "/sim/buildingBlocks/");
+                        canvasPanel.simulator.loadScenarioFromXml("laneclosure", "/sim/buildingBlocks/");
                         canvasPanel.trafficCanvas.reset();
                         canvasPanel.trafficCanvas.start();
                         statusPanel.reset();
@@ -216,7 +216,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("cloverleaf_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("cloverleaf", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -254,7 +254,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("ringroad_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("ringroad_1lane", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -262,6 +262,22 @@ public class AppletMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoad);
+
+        final JMenuItem menuItemRingRoadTwoLanes = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("RingRoad2Lanes")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.simulator.loadScenarioFromXml("ringroad_2lanes", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemRingRoadTwoLanes);
 
         menuItemFlowConservingBottleNeck.setEnabled(false);
         menuItemRoundAbout.setEnabled(false);
@@ -523,15 +539,6 @@ public class AppletMenu extends JPanel {
             logWindow = new LogWindow(resourceBundle, cbMenu);
         } else {
             SwingHelper.closeWindow(logWindow);
-        }
-    }
-
-    protected void handleDisplayStatusPanel(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            // frame.addStatusPanel();
-        } else {
-            // frame.removeStatusPanel();
         }
     }
 

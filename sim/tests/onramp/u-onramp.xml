@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <SCENARIO>
     <VEHICLES>
         <VEHICLE label="IDM1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
                 <IDM v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL/>
+            <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
     <OUTPUT>
@@ -44,3 +45,4 @@
         </ROAD>
     </SIMULATION>
 </SCENARIO>
+

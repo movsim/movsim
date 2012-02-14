@@ -29,7 +29,6 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
-import org.movsim.utilities.Observer;
 import org.movsim.utilities.ScalingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
  */
-public abstract class LongitudinalModelBase implements Observer {
+public abstract class LongitudinalModelBase{
 
     public enum ModelCategory {
         TIME_CONTINUOUS_MODEL, ITERATED_COUPLED_MAP_MODEL, CELLULAR_AUTOMATON;
@@ -110,11 +109,7 @@ public abstract class LongitudinalModelBase implements Observer {
     protected LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
         this.modelName = modelName;
         this.parameters = parameters;
-        // this.id = MyRandom.nextInt();
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
-        if (parameters != null) {
-            parameters.registerObserver(this);
-        }
     }
 
     /**
@@ -151,21 +146,6 @@ public abstract class LongitudinalModelBase implements Observer {
      */
     public boolean isIteratedMap() {
         return modelName.getCategory().isIteratedMap();
-    }
-
-    /**
-     * Removes the observer.
-     */
-    public void removeObserver() {
-        if (parameters != null) {
-            parameters.removeObserver(this);
-        }
-    }
-
-    @Override
-    public void notifyObserver() {
-        //initParameters();
-        logger.debug("observer notified");
     }
 
     /**

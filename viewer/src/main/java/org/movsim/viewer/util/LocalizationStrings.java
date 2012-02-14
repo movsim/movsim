@@ -84,11 +84,12 @@ public class LocalizationStrings extends ListResourceBundle {
             { "FlowConservingBottleNeck", "flow conserving bottleneck" },
             { "SpeedLimit", "speed limit" },
             { "TrafficLight", "traffic light" },
-            { "LaneClosing", "lane closing" },
+            { "LaneClosing", "lane closure" },
             { "CloverLeaf", "clover leaf" },
             { "RoundAbout", "roundabout" },
             { "CityInterSection", "city intersection" },
-            { "RingRoad", "ring road" },
+            { "RingRoad", "ring road with one lane" },
+            { "RingRoad2Lanes", "ring with road two lanes" },
 
             // Help Menu
             { "HelpMenu", "Help" },
@@ -251,9 +252,9 @@ public class LocalizationStrings extends ListResourceBundle {
             { "AboutTitle", "About" },
             {
                     "AboutText",
-                    "Version Viewer: 1.0" + " " + "\n" + "Version movsim.org: 1.2" + " " + "\n"
+                    "Version Viewer: 1.0" + " " + "\n" + "Version MovSim.org: 1.2" + " " + "\n"
                             + "=========================================================================\n"
-                            + "authors: Arne Kesting (TomTom), Ralph Germ, Martin Budden, Martin Treiber\n"
+                            + "authors: Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber\n"
                             + "email: movsim.org@gmail.com\n" + "(c) 2010, 2011, 2012\n"
                             + "=========================================================================\n" } };
 }

@@ -59,14 +59,6 @@ public class FuelConsumptionInput {
         }
     }
 
-    // public ConsumptionModelInput getConsumptionModelInput(String label) {
-    // if (!consumptionModelInput.containsKey(label)) {
-    // logger.error("consumption model with label={} is not available from the input. Exit.", label);
-    // System.exit(-1);
-    // }
-    // return consumptionModelInput.get(label);
-    // }
-
     public Map<String, ConsumptionModelInput> getConsumptionModelInput() {
         return consumptionModelInput;
     }
