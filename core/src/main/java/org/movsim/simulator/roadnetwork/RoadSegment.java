@@ -939,7 +939,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         @Override
         public void remove() {
             // not supported
-            assert false;
+            throw new UnsupportedOperationException("no remove possible");
         }
     }
 
