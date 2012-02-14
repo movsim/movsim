@@ -25,7 +25,6 @@
  */
 package org.movsim.utilities;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface ObservableInTime.
  */

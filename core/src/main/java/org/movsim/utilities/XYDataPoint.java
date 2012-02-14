@@ -42,5 +42,4 @@ public class XYDataPoint {
     public double getY() {
         return y;
     }
-
 }
