@@ -51,14 +51,8 @@ public class IDM extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
 
-    /** desired velocity (m/s). */
-    private double v0;
-
     /** safe time headway (s). */
     private final double T;
-
-    /** bumper-to-bumper vehicle distance in jams or queues; minimum gap. */
-    private final double s0;
 
     /** gap parameter (m). */
     private final double s1;
@@ -115,25 +109,6 @@ public class IDM extends LongitudinalModelBase {
         this.s0 = s0;
         this.s1 = s1;
         this.delta = 4.0;
-    }
-
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
     }
 
     /**

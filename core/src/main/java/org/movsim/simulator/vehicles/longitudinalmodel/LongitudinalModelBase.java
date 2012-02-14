@@ -97,6 +97,14 @@ public abstract class LongitudinalModelBase{
     private final double scalingLength;
     protected final LongitudinalModelInputData parameters;
     protected long id;
+    /**
+     * The desired speed (m/s)
+     */
+    protected double v0;
+    /**
+     * Minimum bumper-to-bumper distance (m)
+     */
+    protected double s0;
 
     /**
      * Constructor.
@@ -163,14 +171,18 @@ public abstract class LongitudinalModelBase{
      * @param v0
      *            desired speed (m/s)
      */
-    protected abstract void setDesiredSpeed(double v0);
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
+    }
 
     /**
      * Returns the desired speed in free traffic.
      * 
      * @return the desired speed (m/s)
      */
-    public abstract double getDesiredSpeed();
+    public double getDesiredSpeed() {
+        return v0;
+    }
 
     /**
      * Sets the relative randomization v0.
@@ -183,6 +195,15 @@ public abstract class LongitudinalModelBase{
         final double newV0 = getDesiredSpeed() * (1 + relRandomizationFactor * equalRandom);
         logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeed(), newV0);
         setDesiredSpeed(newV0);
+    }
+
+    /**
+     * Gets the minimum bumper-to-bumper distance.
+     * 
+     * @return the minimum bumper-to-bumper distance
+     */
+    public double getS0() {
+        return s0;
     }
 
     protected double calcSmoothFraction(double speedMe, double speedFront) {

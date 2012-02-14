@@ -49,9 +49,6 @@ public class KKW extends LongitudinalModelBase {
      */
     private static final double dtCA = 1; //
 
-    /** The v0. */
-    private double v0;
-
     /**
      * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
      */
@@ -110,9 +107,10 @@ public class KKW extends LongitudinalModelBase {
     protected void setDesiredSpeed(double v0) {
         this.v0 = (int) v0;
     }
+
     @Override
-    public double getDesiredSpeed() {
-        return v0;
+    public double getS0() {
+        throw new UnsupportedOperationException("getS0 not applicable for KKW model.");
     }
 
     /**

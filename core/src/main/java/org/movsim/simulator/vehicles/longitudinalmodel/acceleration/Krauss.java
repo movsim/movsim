@@ -46,9 +46,6 @@ public class Krauss extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);
 
-    /** The v0. */
-    private double v0;
-
     /**
      * The parameter T is given by the update timestep dt: dt = T = Tr = tau_relax
      */
@@ -59,9 +56,6 @@ public class Krauss extends LongitudinalModelBase {
 
     /** The b. */
     private final double b;
-
-    /** The s0. */
-    private final double s0;
 
     /**
      * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular automaton default value 0.4 (PRE) or 1 (EPJB)
@@ -83,25 +77,6 @@ public class Krauss extends LongitudinalModelBase {
         this.b = parameters.getB();
         this.s0 = parameters.getS0();
         this.epsilon = parameters.getEpsilon();
-    }
-
-    @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
     }
 
     /**
