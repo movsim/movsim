@@ -1,0 +1,55 @@
+package org.movsim.input.model.vehicle.longitudinalmodel;
+
+import java.util.Map;
+
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+
+/**
+ * <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" P0="150" V_c="5" P_tackling="100" V_c_tackling="1.5" b="2"/>
+ *
+ * @author ralph
+ *
+ */
+public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
+
+    private double mass;
+    private double A;
+    private double cw;
+    private double friction;
+    private double T;
+    private double s0;
+    private double p0;
+    private double V_c;
+    private double P_tackling;
+    private double V_c_tackling;
+    private double b;
+
+    public LongitudinalModelInputDataCCS(Map<String, String> map) {
+        super(ModelName.CCS);
+        mass = Double.parseDouble(map.get("mass"));
+        A = Double.parseDouble(map.get("A"));
+        cw = Double.parseDouble(map.get("cw"));
+        friction = Double.parseDouble(map.get("friction"));
+        T = Double.parseDouble(map.get("T"));
+        s0 = Double.parseDouble(map.get("s0"));
+        p0 = Double.parseDouble(map.get("p0"));
+        V_c = Double.parseDouble(map.get("V_c"));
+        P_tackling = Double.parseDouble(map.get("P_tackling"));
+        V_c_tackling = Double.parseDouble(map.get("V_c_tackling"));
+        b = Double.parseDouble(map.get("b"));
+        
+    }
+    
+    @Override
+    public void resetParametersToDefault() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void checkParameters() {
+        // TODO Auto-generated method stub
+
+    }
+
+}
