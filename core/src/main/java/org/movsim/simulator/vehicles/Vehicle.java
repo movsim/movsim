@@ -202,7 +202,7 @@ public class Vehicle {
         this.fuelModel = fuelModel;
 
         length = vehInput.getLength();
-        width = MovsimConstants.VEHICLE_WIDTH;
+        width = vehInput.getWidth();
         reactionTime = vehInput.getReactionTime();
         maxDecel = vehInput.getMaxDeceleration();
 

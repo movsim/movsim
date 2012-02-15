@@ -97,6 +97,7 @@
 <!ATTLIST VEHICLE
   label           CDATA   #REQUIRED
   length          NMTOKEN #REQUIRED
+  width           NMTOKEN "4.4"
   b_max           NMTOKEN "10000"
   reaction_time   NMTOKEN "0"
   consumption     NMTOKEN "none"

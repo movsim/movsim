@@ -58,6 +58,8 @@ public class VehicleInput {
 
     /** The length. cannot be changed while simulating */
     private final double length;
+    
+    private final double width;
 
     /** The max deceleration. in m/s^2, positive (default: Infinity) */
     private final double maxDeceleration;
@@ -89,6 +91,7 @@ public class VehicleInput {
     public VehicleInput(Element elem) {
         this.label = elem.getAttributeValue("label");
         this.length = Double.parseDouble(elem.getAttributeValue("length"));
+        this.width = Double.parseDouble(elem.getAttributeValue("width"));
         this.maxDeceleration = Double.parseDouble(elem.getAttributeValue("b_max"));
         this.reactionTime = Double.parseDouble(elem.getAttributeValue("reaction_time"));
         this.fuelConsumptionLabel = elem.getAttributeValue("consumption");
@@ -151,92 +154,46 @@ public class VehicleInput {
         return null; // not reached, instead exit
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#getLabel()
-     */
     public String getLabel() {
         return label;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#getLength()
-     */
     public double getLength() {
         return length;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#getMaxDeceleration()
-     */
+    public double getWidth() {
+        return width;
+    }
+
     public double getMaxDeceleration() {
         return maxDeceleration;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#getModelInputData()
-     */
     public LongitudinalModelInputData getAccelerationModelInputData() {
         return modelInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.VehicleInput#getLaneChangeInputData()
-     */
     public LaneChangeInputData getLaneChangeInputData() {
         return laneChangeInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#isWithMemory()
-     */
     public boolean isWithMemory() {
         return (memoryInputData != null);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#getMemoryInputData()
-     */
     public MemoryInputData getMemoryInputData() {
         return memoryInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#isWithNoise()
-     */
     public boolean isWithNoise() {
         return (noiseInputData != null);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.VehicleInput#getNoiseInputData()
-     */
     public NoiseInputData getNoiseInputData() {
         return noiseInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.VehicleInput#getReactionTime()
-     */
     public double getReactionTime() {
         return reactionTime;
     }
@@ -244,5 +201,4 @@ public class VehicleInput {
     public String getFuelConsumptionLabel() {
         return fuelConsumptionLabel;
     }
-
 }
