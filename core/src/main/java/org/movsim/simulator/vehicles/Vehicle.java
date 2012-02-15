@@ -195,8 +195,8 @@ public class Vehicle {
         return nextId - INITIAL_ID;
     }
 
-    public Vehicle(String label, final LongitudinalModelBase longitudinalModel, final VehicleInput vehInput,
-            final Object cyclicBuffer, final LaneChangeModel lcModel, final FuelConsumption fuelModel) {
+    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput,
+            Object cyclicBuffer, LaneChangeModel lcModel, FuelConsumption fuelModel) {
         this.label = label;
         id = nextId++;
         this.fuelModel = fuelModel;
@@ -493,7 +493,7 @@ public class Vehicle {
         this.vehNumber = vehNumber;
     }
 
-    public double getNetDistance(final Vehicle vehFront) {
+    public double getNetDistance(Vehicle vehFront) {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
@@ -501,7 +501,7 @@ public class Vehicle {
         return netGap;
     }
 
-    public double getBrutDistance(final Vehicle vehFront) {
+    public double getBrutDistance(Vehicle vehFront) {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
@@ -515,7 +515,7 @@ public class Vehicle {
         return speed - vehFront.getSpeed();
     }
 
-    public void updateAcceleration(double dt, final LaneSegment laneSegment, final LaneSegment leftLaneSegment,
+    public void updateAcceleration(double dt, LaneSegment laneSegment, LaneSegment leftLaneSegment,
             double alphaT, double alphaV0) {
 
         accOld = acc;
@@ -561,11 +561,11 @@ public class Vehicle {
     // also noise (for transfering stochasticity to lane-changing) and other
     // relevant traffic situations!
 
-    public double calcAccModel(final LaneSegment laneSegment, final LaneSegment leftLaneSegment) {
+    public double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment) {
         return calcAccModel(laneSegment, leftLaneSegment, 1.0, 1.0, 1.0);
     }
 
-    private double calcAccModel(final LaneSegment laneSegment, final LaneSegment leftLaneSegment,
+    private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment,
             double alphaTLocal, double alphaV0Local, double alphaALocal) {
         if (longitudinalModel == null) {
             return 0.0;

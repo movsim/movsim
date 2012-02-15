@@ -87,7 +87,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      * @param vehNumber
      *            the vehicle number
      */
-    private void addFloatingCar(final Vehicle veh, int vehNumber) {
+    private void addFloatingCar(Vehicle veh, int vehNumber) {
         final long originId = veh.roadSegmentId();
         final PrintWriter writer = createWriter(String.format(extensionFormat, originId, vehNumber));
         hashMap.put(vehNumber, writer);
@@ -95,7 +95,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         writer.flush();
     }
 
-    private void writeHeader(final PrintWriter writer, final Vehicle veh) {
+    private void writeHeader(PrintWriter writer, Vehicle veh) {
         writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
         writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
         writer.println(String.format("%s model category = %s", COMMENT_CHAR, veh.getLongitudinalModel().modelName()

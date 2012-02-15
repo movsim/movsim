@@ -61,7 +61,7 @@ public class Tables {
         return intp_value;
     }
 
-    public static double intpextp(final double[] x_vals, final double[] y_vals, final double x) {
+    public static double intpextp(double[] x_vals, double[] y_vals, double x) {
         final int nx = x_vals.length;
         final int ny = y_vals.length;
         final int n = Math.min(nx, ny);

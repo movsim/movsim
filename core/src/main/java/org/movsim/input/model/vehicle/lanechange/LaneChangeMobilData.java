@@ -38,7 +38,7 @@ public class LaneChangeMobilData {
     public LaneChangeMobilData() {
     }
 
-    public void init(final Map<String, String> map) {
+    public void init(Map<String, String> map) {
         safeDeceleration = Double.parseDouble(map.get("b_safe"));
         minimumGap = Double.parseDouble(map.get("s_min"));
         thresholdAcceleration = Double.parseDouble(map.get("threshold"));

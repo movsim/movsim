@@ -43,7 +43,7 @@ public class LaneChangeInputData {
     private final LaneChangeMobilData lcMobilData;
     private boolean isInitializedMobilData = false;
 
-    public LaneChangeInputData(final Element elem) {
+    public LaneChangeInputData(Element elem) {
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         isWithEuropeanRules = Boolean.parseBoolean(map.get("eur_rules"));
         critSpeedEuroRules = Double.parseDouble(map.get("crit_speed_eur"));
