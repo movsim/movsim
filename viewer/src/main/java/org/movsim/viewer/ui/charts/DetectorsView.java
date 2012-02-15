@@ -81,7 +81,7 @@ package org.movsim.viewer.ui.charts;
 //    private Plot plot;
 //    private final double scaleCA;
 //
-//    public DetectorsView(ResourceBundle resourceBundle, final JCheckBoxMenuItem cb) {
+//    public DetectorsView(ResourceBundle resourceBundle, JCheckBoxMenuItem cb) {
 //        this.setLayout(new BorderLayout());
 //        setLocation(10, 700);
 //

@@ -275,7 +275,7 @@ public class XmlReaderSimInput {
      *            the input source
      * @return the document
      */
-    private Document getDocument(InputSource inputSource) {
+    private Document getDocument(final InputSource inputSource) {
 
         final Document doc = (Document) AccessController.doPrivileged(new PrivilegedAction<Object>() {
 

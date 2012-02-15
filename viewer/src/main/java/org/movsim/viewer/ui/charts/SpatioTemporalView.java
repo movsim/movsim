@@ -81,7 +81,7 @@ package org.movsim.viewer.ui.charts;
 //    private final double scaleCA;
 //    private double rows;
 //
-//    public SpatioTemporalView(ResourceBundle resourceBundle, final JCheckBoxMenuItem cb) {
+//    public SpatioTemporalView(ResourceBundle resourceBundle, JCheckBoxMenuItem cb) {
 //        this.simulator = Simulator.getInstance();
 //        this.setLayout(new BorderLayout());
 //        setLocation(10, 700);
