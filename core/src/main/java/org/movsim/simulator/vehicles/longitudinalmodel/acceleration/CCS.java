@@ -47,8 +47,8 @@ public class CCS extends LongitudinalModelBase {
         P_tackling = parameters.getP_tackling();
         V_c_tackling = parameters.getV_c_tackling();
         b = parameters.getB();
-    }
 
+    }
     @Override
     public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
