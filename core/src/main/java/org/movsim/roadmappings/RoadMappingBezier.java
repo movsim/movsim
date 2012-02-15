@@ -115,8 +115,7 @@ public class RoadMappingBezier extends RoadMapping {
 
     /**
      * Constructor to append a bezier road mapping onto a previously existing road mapping, matching the endpoints and
-     * tangents at the
-     * endpoints.
+     * tangents at the endpoints.
      * 
      * @param roadMapping
      *            the road mapping to append to
@@ -219,8 +218,7 @@ public class RoadMappingBezier extends RoadMapping {
 
     /**
      * Arc length parameterization. Convert from road position (arc length) to natural Bezier parameter(t) using linear
-     * interpolation of
-     * pre-computed arc lengths.
+     * interpolation of pre-computed arc lengths.
      * 
      * @param roadPos
      * @return natural Bezier parameter

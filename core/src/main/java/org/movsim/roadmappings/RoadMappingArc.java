@@ -28,8 +28,7 @@ package org.movsim.roadmappings;
 
 /**
  * Maps a road segment onto an arc of a circle. Angles are interpreted as in the Argand diagram, that is 0 is at the 3
- * o'clock position. A
- * positive angle indicates a counter-clockwise rotation while a negative angle indicates a clockwise rotation.
+ * o'clock position. A positive angle indicates a counter-clockwise rotation while a negative angle indicates a clockwise rotation.
  */
 public class RoadMappingArc extends RoadMappingCircle {
 

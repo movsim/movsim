@@ -56,14 +56,14 @@ public abstract class LongitudinalModelBase {
     }
 
     public enum ModelName {
-        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Adaptive-Cruise-Control-Model"), OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Gipps-Model"), NEWELL(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"), KRAUSS(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
-                "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model");
+        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"),
+                ACC(ModelCategory.TIME_CONTINUOUS_MODEL, "Adaptive-Cruise-Control-Model"),
+                OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Optimal-Velocity-Model / Full-Velocity-Difference-Model"),
+                GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Gipps-Model"),
+                NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),
+                KRAUSS(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"),
+                NSM(ModelCategory.CELLULAR_AUTOMATON,"Nagel-Schreckenberg-Model / Barlovic-Model"),
+                KKW(ModelCategory.CELLULAR_AUTOMATON,"Kerner-Klenov-Wolf-Model");
 
         private final ModelCategory modelCategory;
 

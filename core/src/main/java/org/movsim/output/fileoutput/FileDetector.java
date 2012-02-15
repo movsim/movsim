@@ -38,8 +38,8 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
     private static final String outputHeadingTime = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
     private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,",
             "nVehTotal[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
-    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,", "nVeh[1]",
-            "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
+    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,", 
+            "nVeh[1]", "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
 
     // note: number before decimal point is total width of field, not width of
     // integer part
