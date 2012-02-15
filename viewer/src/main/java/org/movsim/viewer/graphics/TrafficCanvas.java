@@ -59,6 +59,7 @@ import org.movsim.viewer.util.SwingHelper;
  * Handles:
  * <ul>
  * <li>Drawing the road network and the vehicles upon it.</li>
+ * <li>Standard mouse events.</li>
  * <li>Mouse-over and clicks on vehicles (when simulation paused).</li>
  * <li>Key events.</li>
  * </ul>

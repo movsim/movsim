@@ -43,10 +43,9 @@ import org.movsim.simulator.SimulationRunnable;
  * <p>
  * This base class handles:
  * <ul>
- * <li>synchronization between the simulation and UI threads</li>
- * <li>starting, stopping, pausing and resuming of the simulation</li>
- * <li>zooming and panning</li>
- * <li>standard mouse events</li>
+ * <li>Synchronization between the simulation and UI threads.</li>
+ * <li>Starting, stopping, pausing and resuming of the simulation.</li>
+ * <li>Zooming and panning.</li>
  * </ul>
  * </p>
  * 
