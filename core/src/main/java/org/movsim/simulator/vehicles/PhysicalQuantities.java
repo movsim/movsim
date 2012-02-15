@@ -52,7 +52,7 @@ public class PhysicalQuantities {
         xScale = veh.getLongitudinalModel() == null ? 1.0 : veh.getLongitudinalModel().getScalingLength();
 
         vScale = xScale / tscale;
-        accScale = xScale* Math.pow(tscale, 2);
+        accScale = xScale * Math.pow(tscale, 2);
         rhoScale = 1. / xScale;
     }
 
@@ -127,7 +127,7 @@ public class PhysicalQuantities {
     public double getAcc() {
         return accScale * me.getAcc();
     }
-    
+
     public double accModel() {
         return accScale * me.accModel();
     }
@@ -142,11 +142,11 @@ public class PhysicalQuantities {
     public double getNetDistance(Vehicle vehFront) {
         return xScale * me.getNetDistance(vehFront);
     }
-    
-    public final double totalTraveledDistance(){
+
+    public final double totalTraveledDistance() {
         return xScale * me.totalTraveledDistance();
     }
-    
+
     /**
      * Gets the rel speed.
      * 

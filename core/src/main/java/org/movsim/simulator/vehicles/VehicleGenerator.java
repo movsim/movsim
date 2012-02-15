@@ -83,12 +83,14 @@ public class VehicleGenerator {
     private final ConsumptionModeling fuelConsumptionModels;
 
     /**
-     * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param instantaneousFileOutput is true.
+     * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param
+     * instantaneousFileOutput is true.
      * 
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
+    public VehicleGenerator(double simulationTimestep, InputData simInput,
+            List<TrafficCompositionInputData> heterogenInputData) {
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
         // default for continuous micro models
         this.simulationTimestep = simulationTimestep;

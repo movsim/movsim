@@ -195,8 +195,8 @@ public class Vehicle {
         return nextId - INITIAL_ID;
     }
 
-    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput,
-            Object cyclicBuffer, LaneChangeModel lcModel, FuelConsumption fuelModel) {
+    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput, Object cyclicBuffer,
+            LaneChangeModel lcModel, FuelConsumption fuelModel) {
         this.label = label;
         id = nextId++;
         this.fuelModel = fuelModel;
@@ -337,8 +337,9 @@ public class Vehicle {
     }
 
     /**
-     * Sets this vehicle's color object cache value. Primarily of use by AWT which rather inefficiently uses objects rather than integers to
-     * represent color values. Note that an object is cached so Vehicle.java has no dependency on AWT.
+     * Sets this vehicle's color object cache value. Primarily of use by AWT which rather inefficiently uses objects
+     * rather than integers to represent color values. Note that an object is cached so Vehicle.java has no dependency
+     * on AWT.
      * 
      * @param colorObject
      */
@@ -486,7 +487,7 @@ public class Vehicle {
     }
 
     public final int getVehNumber() {
-        return vehNumber == VEHICLE_NUMBER_NOT_SET ? (int)id : vehNumber;
+        return vehNumber == VEHICLE_NUMBER_NOT_SET ? (int) id : vehNumber;
     }
 
     public void setVehNumber(int vehNumber) {
@@ -515,8 +516,8 @@ public class Vehicle {
         return speed - vehFront.getSpeed();
     }
 
-    public void updateAcceleration(double dt, LaneSegment laneSegment, LaneSegment leftLaneSegment,
-            double alphaT, double alphaV0) {
+    public void updateAcceleration(double dt, LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaT,
+            double alphaV0) {
 
         accOld = acc;
         // acceleration noise:
@@ -535,8 +536,8 @@ public class Vehicle {
         double alphaV0Local = alphaV0;
         double alphaALocal = 1;
 
-        // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which depends on
-        // speedlimits)
+        // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which
+        // depends on speedlimits)
         if (memory != null) {
             final double v0 = longitudinalModel.getDesiredSpeed();
             memory.update(dt, speed, v0);
@@ -565,8 +566,8 @@ public class Vehicle {
         return calcAccModel(laneSegment, leftLaneSegment, 1.0, 1.0, 1.0);
     }
 
-    private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment,
-            double alphaTLocal, double alphaV0Local, double alphaALocal) {
+    private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaTLocal,
+            double alphaV0Local, double alphaALocal) {
         if (longitudinalModel == null) {
             return 0.0;
         }
@@ -842,8 +843,9 @@ public class Vehicle {
      * Called when vehicle changes road segments (and possibly also lanes) at a link or junction.
      * </p>
      * <p>
-     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and <code>timeAtWhichLastChangedLanes</code> are
-     * used to interpolate this vehicle's lateral position and so give the appearance of a smooth lane change.
+     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and
+     * <code>timeAtWhichLastChangedLanes</code> are used to interpolate this vehicle's lateral position and so give the
+     * appearance of a smooth lane change.
      * </p>
      * 
      * @param newLane
