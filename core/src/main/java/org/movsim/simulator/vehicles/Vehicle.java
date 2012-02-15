@@ -41,7 +41,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class Vehicle.
+ * <p>
+ * Model for a vehicle in a traffic simulation.
+ * </p>
+ * 
+ * <p>
+ * Each vehicle has its own unique immutable id which is assigned when the vehicle is created.
+ * </p>
+ * 
+ * <p>
+ * A vehicle has a size, given by its length and width.
+ * </p>
+ * 
+ * <p>
+ * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's
+ * position is given by the position of the front of the vehicle on the road segment and also by the
+ * vehicle's lane.
+ * </p>
+ * 
+ * <p>
+ * A vehicle possesses two intelligence modules:
+ * <ul>
+ * <li>a LongitudinalModel which determines its acceleration in the direction of travel.
+ * </li>
+ * <li>a LaneChangeModel which determines when it changes lanes.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Vehicles are quite frequently created and destroyed, so by design they have few allocated
+ * properties.
+ * </p>
  */
 public class Vehicle {
 
