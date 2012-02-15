@@ -71,6 +71,7 @@ public class LongitudinalModelInputDataNSM extends LongitudinalModelInputData {
         checkParameters();
     }
 
+    @Override
     protected void checkParameters() {
         if (pSlowToStart < pSlowdown) {
             logger.error("slow to start logic requires pSlowToStart > pSlowdown, but input {} < {} ", pSlowToStart,
@@ -86,6 +87,7 @@ public class LongitudinalModelInputDataNSM extends LongitudinalModelInputData {
         }
     }
 
+    @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
         pSlowToStart = pSlowToStartDefault;

@@ -82,6 +82,7 @@ public class LongitudinalModelInputDataACC extends LongitudinalModelInputData {
         checkParameters();
     }
 
+    @Override
     protected void checkParameters() {
         if (coolness < 0 || coolness > 1) {
             logger.error(" coolness parameter = {} not well defined in input. please choose value within [0,1]. exit");
@@ -99,6 +100,7 @@ public class LongitudinalModelInputDataACC extends LongitudinalModelInputData {
         }
     }
 
+    @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
         T = TDefault;

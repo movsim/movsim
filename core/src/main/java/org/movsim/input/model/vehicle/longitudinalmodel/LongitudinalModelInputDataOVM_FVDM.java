@@ -81,6 +81,7 @@ public class LongitudinalModelInputDataOVM_FVDM extends LongitudinalModelInputDa
 
     }
 
+    @Override
     protected void checkParameters() {
         if (s0 < 0 || v0 < 0 || tau < 0 || transitionWidth < 0 || beta < 0 || lambda < 0 || variant < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
@@ -91,6 +92,7 @@ public class LongitudinalModelInputDataOVM_FVDM extends LongitudinalModelInputDa
         // TODO further param check
     }
 
+    @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
         tau = tauDefault;
