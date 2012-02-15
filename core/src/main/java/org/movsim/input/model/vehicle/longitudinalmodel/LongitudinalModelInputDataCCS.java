@@ -26,7 +26,6 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
 
     public LongitudinalModelInputDataCCS(Map<String, String> map) {
         super(ModelName.CCS);
-        System.out.println("HiIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
         mass = Double.parseDouble(map.get("mass"));
         A = Double.parseDouble(map.get("A"));
         cw = Double.parseDouble(map.get("cw"));

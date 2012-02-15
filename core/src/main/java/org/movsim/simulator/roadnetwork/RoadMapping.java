@@ -146,7 +146,7 @@ public abstract class RoadMapping {
     /**
      * Default width of traffic lanes.
      */
-    public static final double DEFAULT_LANE_WIDTH = 10.0;
+    public static final double DEFAULT_LANE_WIDTH = 2.0;
 
     // Immutable Properties
     protected final int laneCount;

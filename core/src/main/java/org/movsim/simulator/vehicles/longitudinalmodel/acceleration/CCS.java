@@ -47,8 +47,6 @@ public class CCS extends LongitudinalModelBase {
         P_tackling = parameters.getP_tackling();
         V_c_tackling = parameters.getV_c_tackling();
         b = parameters.getB();
-        System.out.println("constr. CSS. p0: "+P0);
-        System.out.println("length: "+ lenght);
     }
 
     @Override
