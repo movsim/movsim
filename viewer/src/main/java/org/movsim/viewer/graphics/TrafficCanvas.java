@@ -582,7 +582,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     /**
-     * Draws the sources and sinks.
+     * Draws the sources.
      * 
      * @param g
      */
@@ -612,7 +612,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     /**
-     * Draws the sources and sinks.
+     * Draws the sinks.
      * 
      * @param g
      */
