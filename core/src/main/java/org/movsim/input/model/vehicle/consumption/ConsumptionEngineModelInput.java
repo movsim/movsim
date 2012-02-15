@@ -42,22 +42,22 @@ public class ConsumptionEngineModelInput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionEngineModelInput.class);
-    
+
     /** in kW */
     private final double maxPower;
-    /** in liter*/
+    /** in liter */
     private final double cylinderVolume;
-    /** in liter per second*/
+    /** in liter per second */
     private final double idleConsumptionRateLiterPerSecond;
     /** in kg/Ws */
     private final double minSpecificConsumption;
-    /** in Pascal*/
+    /** in Pascal */
     private final double effectivePressureMinimum;
-    /** in Pascal*/
+    /** in Pascal */
     private final double effectivePressureMaximum;
-    /** per second*/
+    /** per second */
     private final double idleRotationRate;
-    /** per second*/
+    /** per second */
     private final double maxRotationRate;
 
     private List<Double> gearRatios;

@@ -169,7 +169,8 @@ public class OVM_FVDM extends LongitudinalModelBase {
             // standard OVM function (Bando model)
             // scale OVM/VDIFF so that v0 represents actual desired speed
             final double v0Prev = v0Local / (1.0 + Math.tanh(betaLoc));
-            vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
+            vOptimal = Math
+                    .max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // triangular OVM function

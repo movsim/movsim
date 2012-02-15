@@ -94,8 +94,8 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @return the double
      */
     public double calcSpeedLimit(double position) {
-        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED :
-        	Tables.stepExtrapolation(positions, speeds, position);
+        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(positions, speeds,
+                position);
     }
 
     @Override

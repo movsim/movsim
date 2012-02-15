@@ -285,7 +285,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
 
         // TODO: consider multi-lane case
-        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment transitions 
+        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment
+        // transitions
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");

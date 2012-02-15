@@ -34,8 +34,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class IDM.
  * <p>
- * Implementation of the 'intelligent driver model'(IDM).
- * <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
+ * Implementation of the 'intelligent driver model'(IDM). <a
+ * href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
  * </p>
  * <p>
  * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3

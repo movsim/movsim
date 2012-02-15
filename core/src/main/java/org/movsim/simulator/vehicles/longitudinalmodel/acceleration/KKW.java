@@ -212,7 +212,7 @@ public class KKW extends LongitudinalModelBase {
 
         // dynamic part
         // (Delta x-d)/tau mit s=Delta x-d und tau=1 (s)
-        final int vSafe = (int) s; 
+        final int vSafe = (int) s;
         final int dvSign = (dv < -0.5) ? 1 : (dv > 0.5) ? -1 : 0;
         final int vC = (s > D - length) ? vLoc + a * (int) dtCA : vLoc + a * (int) dtCA * dvSign;
         int vtilde = Math.min(Math.min(v0Loc, vSafe), vC);

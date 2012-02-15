@@ -69,7 +69,8 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their
+     * belts.
      */
     @Override
     protected void onLowMemory() {

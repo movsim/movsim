@@ -33,7 +33,7 @@ public class ICMicroData {
 
     private final double initSpeed;
 
-    private final int initLane; 
+    private final int initLane;
 
     /** The type label. Empty string if no type */
     private final String typeLabel;
@@ -48,7 +48,7 @@ public class ICMicroData {
         this.initPosition = Double.parseDouble(map.get("x"));
         this.initSpeed = Double.parseDouble(map.get("v"));
         // TODO check lane numbering with road segment logic and xodr !!!
-        this.initLane = Integer.parseInt(map.get("lane")); 
+        this.initLane = Integer.parseInt(map.get("lane"));
         this.typeLabel = map.get("label");
     }
 

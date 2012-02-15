@@ -9,7 +9,7 @@ public class RouteInput {
     public RouteInput() {
         roadIds = new ArrayList<String>();
     }
-    
+
     public String getName() {
         return name;
     }

@@ -168,7 +168,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         occTime[lane] += (speedVeh > 0) ? veh.getLength() / speedVeh : 0;
         sumInvV[lane] += (speedVeh > 0) ? 1. / speedVeh : 0;
         // brut timegap not calculate from local detector data:
-        final Vehicle vehFront = laneSegment.frontVehicle(veh);  
+        final Vehicle vehFront = laneSegment.frontVehicle(veh);
         final double brutTimegap = (vehFront == null) ? 0 : veh.getBrutDistance(vehFront) / vehFront.getSpeed();
         // "microscopic flow"
         sumInvQ[lane] += (brutTimegap > 0) ? 1. / brutTimegap : 0;
@@ -188,7 +188,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         reset(lane);
     }
 
-    private void calculateAveragesOverAllLanes() { 
+    private void calculateAveragesOverAllLanes() {
         resetLaneAverages();
         for (int i = 0; i < laneCount; i++) {
             // vehicle count is extensive quantity
@@ -196,7 +196,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
             // intensive quantities as averages weighted by vehicle counts
             meanSpeedAllLanes += getVehCountOutput(i) * getMeanSpeed(i);
             occupancyAllLanes += getOccupancy(i);
-            meanSpeedHarmonicAllLanes += getVehCountOutput(i) * getMeanSpeedHarmonic(i); 
+            meanSpeedHarmonicAllLanes += getVehCountOutput(i) * getMeanSpeedHarmonic(i);
             meanTimegapHarmonicAllLanes += getVehCountOutput(i) * getMeanTimegapHarmonic(i);
         }
 
@@ -205,19 +205,19 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         meanTimegapHarmonicAllLanes /= vehCountOutputAllLanes;
         occupancyAllLanes /= laneCount;
     }
-    
+
     public double getDensityArithmetic(int i) {
         return (Double.compare(meanSpeed[i], 0) == 0) ? 0 : getFlow(i) / meanSpeed[i];
     }
-    
+
     public double getDensityArithmeticAllLanes() {
         return (Double.compare(meanSpeedAllLanes, 0) == 0) ? 0 : getFlowAllLanes() / meanSpeedAllLanes;
     }
 
-    public double getFlow(int i){
+    public double getFlow(int i) {
         return vehCountOutput[i] / dtSample;
     }
-    
+
     public double getFlowAllLanes() {
         return vehCountOutputAllLanes / (dtSample * laneCount);
     }
@@ -234,7 +234,6 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         return meanSpeed[i];
     }
 
-  
     public double getOccupancy(int i) {
         return occupancy[i];
     }

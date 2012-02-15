@@ -185,8 +185,8 @@ public class XmlReaderSimInput {
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
         if (projectMetaData.isXmlFromResources()) {
-            projectMetaData.setXodrFilename(networkFileName.substring(networkFileName.lastIndexOf("/")+1));
-            projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/")+1));
+            projectMetaData.setXodrFilename(networkFileName.substring(networkFileName.lastIndexOf("/") + 1));
+            projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/") + 1));
         } else {
             String relativePath;
             relativePath = checkIfAttributeHasPath(networkFileName);
