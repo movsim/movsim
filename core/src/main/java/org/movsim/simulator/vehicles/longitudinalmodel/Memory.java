@@ -145,5 +145,4 @@ public class Memory {
     public double alphaT() {
         return alphaT;
     }
-
 }

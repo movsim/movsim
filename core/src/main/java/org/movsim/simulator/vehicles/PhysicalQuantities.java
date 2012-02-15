@@ -169,5 +169,4 @@ public class PhysicalQuantities {
     public double getAccScale() {
         return accScale;
     }
-
 }
