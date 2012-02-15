@@ -195,15 +195,15 @@ alpha_a  NMTOKEN "1"
 
 <!-- Cross coutry skiing model -->
 <!ELEMENT CCS EMPTY>
-<!ATTLIST CCS 
+<!ATTLIST CCS
   mass          NMTOKEN #REQUIRED
   cw            NMTOKEN #REQUIRED
-  A             NMTOKEN #REQUIRED        <!-- Querschnitt ; Cross section of the front-->
+  A             NMTOKEN #REQUIRED
   friction      NMTOKEN #REQUIRED
   P0            NMTOKEN #REQUIRED
-  V_c            NMTOKEN #REQUIRED
+  V_c           NMTOKEN #REQUIRED
   P_tackling    NMTOKEN #REQUIRED
-  V_c_tackling   NMTOKEN #REQUIRED
+  V_c_tackling  NMTOKEN #REQUIRED
   T             NMTOKEN #REQUIRED
   s0            NMTOKEN #REQUIRED
   b             NMTOKEN #REQUIRED

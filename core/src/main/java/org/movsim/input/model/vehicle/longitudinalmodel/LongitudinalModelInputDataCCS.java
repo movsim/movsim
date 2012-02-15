@@ -18,7 +18,7 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
     private double friction;
     private double T;
     private double s0;
-    private double p0;
+    private double P0;
     private double V_c;
     private double P_tackling;
     private double V_c_tackling;
@@ -26,18 +26,18 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
 
     public LongitudinalModelInputDataCCS(Map<String, String> map) {
         super(ModelName.CCS);
+        System.out.println("HiIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
         mass = Double.parseDouble(map.get("mass"));
         A = Double.parseDouble(map.get("A"));
         cw = Double.parseDouble(map.get("cw"));
         friction = Double.parseDouble(map.get("friction"));
         T = Double.parseDouble(map.get("T"));
         s0 = Double.parseDouble(map.get("s0"));
-        p0 = Double.parseDouble(map.get("p0"));
+        P0 = Double.parseDouble(map.get("P0"));
         V_c = Double.parseDouble(map.get("V_c"));
         P_tackling = Double.parseDouble(map.get("P_tackling"));
         V_c_tackling = Double.parseDouble(map.get("V_c_tackling"));
         b = Double.parseDouble(map.get("b"));
-        
     }
     
     /**
@@ -86,7 +86,7 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
      * @return the p0
      */
     public double getP0() {
-        return p0;
+        return P0;
     }
 
     /**
