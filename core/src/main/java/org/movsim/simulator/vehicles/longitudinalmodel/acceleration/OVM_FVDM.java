@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -122,10 +121,9 @@ public class OVM_FVDM extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamic variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle); // only needed for VDIFF
@@ -133,19 +131,6 @@ public class OVM_FVDM extends LongitudinalModelBase {
         // speed limit: OVM causes accidents due to immediate braking reaction
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
         // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
-        return acc(s, v, dv, alphaT, v0Local);
-    }
-
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
-        // Local dynamic variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        final double alphaT = 1;
-        final double v0Local = Math.min(v0, me.getSpeedlimit());
-
         return acc(s, v, dv, alphaT, v0Local);
     }
 

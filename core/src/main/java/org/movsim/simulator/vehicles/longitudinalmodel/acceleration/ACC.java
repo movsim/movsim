@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -148,16 +147,16 @@ public class ACC extends LongitudinalModelBase {
     public double getCoolness() {
         return coolness;
     }
+
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
-        final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
+        final double aLead = frontVehicle == null ? me.getAcc() : frontVehicle.getAcc();
 
         // space dependencies modeled by speedlimits, alpha's
 
@@ -173,32 +172,6 @@ public class ACC extends LongitudinalModelBase {
         return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
-    @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
-        // Local dynamic variables
-        final double s = me.getNetDistance(vehFront);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
-        final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
-
-        final double TLocal = T;
-        final double v0Local = Math.min(v0, me.getSpeedlimit());
-        final double aLocal = a;
-
-        return acc(s, v, dv, aLead, TLocal, v0Local, aLocal);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, 0, T, v0, a);
