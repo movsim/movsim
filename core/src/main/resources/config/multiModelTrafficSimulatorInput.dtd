@@ -103,7 +103,7 @@
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, KRAUSS?, NEWELL?, NSM?, KKW?, MEMORY?)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, KRAUSS?, NEWELL?, NSM?, KKW?, MEMORY?, CCS?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -193,6 +193,21 @@ alpha_v0 NMTOKEN #REQUIRED
 alpha_a  NMTOKEN "1"
 >
 
+<!-- Cross coutry skiing model -->
+<!ELEMENT CCS EMPTY>
+<!ATTLIST CCS 
+  mass          NMTOKEN #REQUIRED
+  cw            NMTOKEN #REQUIRED
+  A             NMTOKEN #REQUIRED        <!-- Querschnitt ; Cross section of the front-->
+  friction      NMTOKEN #REQUIRED
+  P0            NMTOKEN #REQUIRED
+  V_c            NMTOKEN #REQUIRED
+  P_tackling    NMTOKEN #REQUIRED
+  V_c_tackling   NMTOKEN #REQUIRED
+  T             NMTOKEN #REQUIRED
+  s0            NMTOKEN #REQUIRED
+  b             NMTOKEN #REQUIRED
+>
 
 <!ELEMENT LANE_CHANGE_MODEL (MOBIL?)>
 <!ATTLIST LANE_CHANGE_MODEL 

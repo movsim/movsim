@@ -36,6 +36,7 @@ import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataCCS;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
@@ -141,6 +142,8 @@ public class VehicleInput {
             return new LongitudinalModelInputDataNSM(map);
         } else if (modelName.equals(LongitudinalModelBase.ModelName.KKW.name())) {
             return new LongitudinalModelInputDataKKW(map);
+        } else if (modelName.equals(LongitudinalModelBase.ModelName.CCS.name())) {
+            return new LongitudinalModelInputDataCCS(map);
         } else {
             logger.error("model with name {} not yet implemented. exit.", modelName);
             System.exit(-1);

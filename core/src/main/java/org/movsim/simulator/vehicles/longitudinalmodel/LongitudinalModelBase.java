@@ -62,7 +62,7 @@ public abstract class LongitudinalModelBase{
                 "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
                 ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
                 "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model");
+                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model");
 
         private final ModelCategory modelCategory;
 
