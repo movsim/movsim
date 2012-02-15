@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
  */
-public abstract class LongitudinalModelBase{
+public abstract class LongitudinalModelBase {
 
     public enum ModelCategory {
         TIME_CONTINUOUS_MODEL, ITERATED_COUPLED_MAP_MODEL, CELLULAR_AUTOMATON;
@@ -56,13 +56,14 @@ public abstract class LongitudinalModelBase{
     }
 
     public enum ModelName {
-        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Adaptive-Cruise-Control-Model"), OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL,
-                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
-                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
-                "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model");
+        IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"),
+                ACC(ModelCategory.TIME_CONTINUOUS_MODEL, "Adaptive-Cruise-Control-Model"),
+                OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Optimal-Velocity-Model / Full-Velocity-Difference-Model"),
+                GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Gipps-Model"),
+                NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),
+                KRAUSS(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"),
+                NSM(ModelCategory.CELLULAR_AUTOMATON,"Nagel-Schreckenberg-Model / Barlovic-Model"),
+                KKW(ModelCategory.CELLULAR_AUTOMATON,"Kerner-Klenov-Wolf-Model");
 
         private final ModelCategory modelCategory;
 
@@ -137,7 +138,7 @@ public abstract class LongitudinalModelBase{
     public ModelCategory getModelCategory() {
         return modelName.getCategory();
     }
-    
+
     /**
      * Checks if is cellular automaton.
      * 
@@ -217,7 +218,9 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me, under European lane changing rules (no "undertaking").
-     * @param vCritEur critical speed under which European rules no longer apply
+     * 
+     * @param vCritEur
+     *            critical speed under which European rules no longer apply
      * @param me
      * @param laneSegment
      * @param leftLaneSegment
@@ -266,6 +269,7 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me.
+     * 
      * @param me
      * @param laneSegment
      * @param alphaT
@@ -282,6 +286,7 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me.
+     * 
      * @param me
      * @param frontVehicle
      * @param alphaT
@@ -293,6 +298,7 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me.
+     * 
      * @param me
      * @param frontVehicle
      * @return the calculated acceleration
