@@ -40,6 +40,83 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
         
     }
     
+    /**
+     * @return the mass
+     */
+    public double getMass() {
+        return mass;
+    }
+
+    /**
+     * @return the a
+     */
+    public double getA() {
+        return A;
+    }
+
+    /**
+     * @return the cw
+     */
+    public double getCw() {
+        return cw;
+    }
+
+    /**
+     * @return the friction
+     */
+    public double getFriction() {
+        return friction;
+    }
+
+    /**
+     * @return the t
+     */
+    public double getT() {
+        return T;
+    }
+
+    /**
+     * @return the s0
+     */
+    public double getS0() {
+        return s0;
+    }
+
+    /**
+     * @return the p0
+     */
+    public double getP0() {
+        return p0;
+    }
+
+    /**
+     * @return the v_c
+     */
+    public double getV_c() {
+        return V_c;
+    }
+
+    /**
+     * @return the p_tackling
+     */
+    public double getP_tackling() {
+        return P_tackling;
+    }
+
+    /**
+     * @return the v_c_tackling
+     */
+    public double getV_c_tackling() {
+        return V_c_tackling;
+    }
+
+    /**
+     * @return the b
+     */
+    public double getB() {
+        return b;
+    }
+
     @Override
     public void resetParametersToDefault() {
         // TODO Auto-generated method stub
