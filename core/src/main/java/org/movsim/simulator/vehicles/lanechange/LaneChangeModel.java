@@ -106,7 +106,6 @@ public class LaneChangeModel {
         return isInitialized;
     }
 
-
     public boolean isSafeLaneChange(LaneSegment laneSegment) {
         final Vehicle front = laneSegment.frontVehicle(me);
         final Vehicle back = laneSegment.rearVehicle(me);

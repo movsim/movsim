@@ -176,7 +176,6 @@ public class MOBIL {
         // old situation for new back: just provides the actual left-lane situation
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLaneSegment, null) : 0.0;
 
-
         final double oldBackNewAcc;
         if (oldBack == null) {
             oldBackNewAcc = 0.0;
@@ -185,9 +184,9 @@ public class MOBIL {
             // that iterates over the vehicles in the current lane. So calculate oldBackNewAcc based on just
             // the front vehicle.
             oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
-//            currentLaneSegment.removeVehicle(me);
-//            oldBackNewAcc = oldBack.calcAccModel(currentLaneSegment, null);
-//            currentLaneSegment.addVehicle(me);
+            // currentLaneSegment.removeVehicle(me);
+            // oldBackNewAcc = oldBack.calcAccModel(currentLaneSegment, null);
+            // currentLaneSegment.addVehicle(me);
         }
 
         // MOBIL trade-off for driver and neighborhood
