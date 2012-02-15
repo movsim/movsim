@@ -95,7 +95,8 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Clear the road network so that it is empty and ready to accept new RoadSegments, Vehicles, sources, sinks and junctions.
+     * Clear the road network so that it is empty and ready to accept new RoadSegments, Vehicles, sources, sinks and
+     * junctions.
      */
     public void clear() {
         name = null;
@@ -108,7 +109,8 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their
+     * belts.
      */
     public void onLowMemory() {
         roadSegments.trimToSize();
@@ -148,12 +150,13 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     /**
      * <p>
-     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane changing decisions. Each update
-     * step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In particular, the
-     * complete old state (positions, lanes, speeds ...) is made available during the complete update step of one timestep. Then the outflow
-     * is performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from the road network) when
-     * required. Then the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Finally the
-     * vehicle detectors are updated.
+     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane changing
+     * decisions. Each update step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise,
+     * inconsistencies would occur. In particular, the complete old state (positions, lanes, speeds ...) is made
+     * available during the complete update step of one timestep. Then the outflow is performed for each road segment,
+     * moving vehicles onto the next road segment (or removing them entirely from the road network) when required. Then
+     * the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Finally
+     * the vehicle detectors are updated.
      * </p>
      * 
      * <p>
@@ -171,11 +174,13 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * <li>perform decisions (do the lane changes, cruising/stopping at traffic light, etc.)</li>
      * </ol>
      * 
-     * <li>Do the related bookkeeping (update of inflow and outflow at boundaries) and update virtual detectors</li> </ol>
+     * <li>Do the related bookkeeping (update of inflow and outflow at boundaries) and update virtual detectors</li>
+     * </ol>
      * </p>
      * 
      * <p>
-     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order (i),(ii),(iii).
+     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order
+     * (i),(ii),(iii).
      * </p>
      * 
      * @param dt

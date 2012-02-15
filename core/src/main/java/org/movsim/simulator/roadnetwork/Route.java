@@ -69,6 +69,7 @@ public class Route implements Iterable<RoadSegment> {
     public final double getLength() {
         return length;
     }
+
     /**
      * Returns the number of RoadSegments in the route.
      * 
