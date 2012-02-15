@@ -329,8 +329,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    private void drawVehicle(Graphics2D g, final double simulationTime, final RoadMapping roadMapping,
-            final Vehicle vehicle) {
+    private void drawVehicle(Graphics2D g, double simulationTime, RoadMapping roadMapping, Vehicle vehicle) {
         // draw vehicle polygon at new position
         final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
         vehiclePath.reset();

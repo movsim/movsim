@@ -68,7 +68,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
     // public DefaultExceptionHandler() {
     // }
     // @Override
-    // public void uncaughtException(final Thread t, final Throwable e) {
+    // public void uncaughtException(Thread t, Throwable e) {
     // if (callbacks != null) {
     // callbacks.handleException((Exception)e);
     // }

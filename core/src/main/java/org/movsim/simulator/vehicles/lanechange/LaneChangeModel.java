@@ -114,7 +114,7 @@ public class LaneChangeModel {
         return changeSafe;
     }
 
-    private boolean checkSafetyCriterion(final Vehicle frontVeh, final Vehicle backVeh, double safeDeceleration) {
+    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh, double safeDeceleration) {
 
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);

@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -157,10 +156,9 @@ public class IDM extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
@@ -176,25 +174,6 @@ public class IDM extends LongitudinalModelBase {
             localV0 = alphaV0 * v0;
         }
         final double localA = alphaA * a;
-
-        return acc(s, v, dv, localT, localV0, localA);
-    }
-
-    @Override
-    public double calcAcc(Vehicle me, final Vehicle frontVehicle) {
-        // Local dynamical variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        final double localT = T;
-        final double localV0;
-        if (me.getSpeedlimit() != 0.0) {
-            localV0 = Math.min(v0, me.getSpeedlimit());
-        } else {
-            localV0 = v0;
-        }
-        final double localA = a;
 
         return acc(s, v, dv, localT, localV0, localA);
     }

@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
@@ -96,34 +95,14 @@ public class NSM extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         // local dynamical variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
 
         // consider external speedlimit
         final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
-        if (logger.isDebugEnabled()) {
-            if (localV0 < v0) {
-                logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n", v0,
-                        localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
-            }
-        }
-
-        return acc(s, v, dv, localV0);
-    }
-
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
-        // local dynamical variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        // consider external speedlimit
-        final double localV0 = Math.min(v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
         if (logger.isDebugEnabled()) {
             if (localV0 < v0) {
                 logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n", v0,

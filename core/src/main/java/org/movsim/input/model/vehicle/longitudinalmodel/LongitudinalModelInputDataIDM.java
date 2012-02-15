@@ -80,6 +80,7 @@ public class LongitudinalModelInputDataIDM extends LongitudinalModelInputData {
 
     }
 
+    @Override
     protected void checkParameters() {
         if (v0 < 0 || T < 0 || s0 < 0 || s1 < 0 || delta < 0 || a < 0 || b < 0) {
             logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
@@ -94,6 +95,7 @@ public class LongitudinalModelInputDataIDM extends LongitudinalModelInputData {
         }
     }
 
+    @Override
     public void resetParametersToDefault() {
         v0 = v0Default;
         T = TDefault;

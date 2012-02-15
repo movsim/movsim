@@ -67,7 +67,7 @@ public class MOBIL {
      * @param vehicle
      *            the vehicle
      */
-    public MOBIL(final Vehicle vehicle) {
+    public MOBIL(Vehicle vehicle) {
         this.me = vehicle;
         // TODO handle this case with *no* <MOBIL> xml element
 
@@ -81,7 +81,7 @@ public class MOBIL {
      * @param lcMobilData
      *            the lc mobil data
      */
-    public MOBIL(final Vehicle vehicle, LaneChangeMobilData lcMobilData) {
+    public MOBIL(Vehicle vehicle, LaneChangeMobilData lcMobilData) {
         this.me = vehicle;
         // TODO Auto-generated constructor stub
 
@@ -92,7 +92,7 @@ public class MOBIL {
         pRef = politeness = lcMobilData.getPoliteness();
     }
 
-    public MOBIL(final Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
+    public MOBIL(Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
             double thresholdAcceleration, double rightBiasAcceleration) {
         this.me = vehicle;
         bSafeRef = bSafe = safeDeceleration;

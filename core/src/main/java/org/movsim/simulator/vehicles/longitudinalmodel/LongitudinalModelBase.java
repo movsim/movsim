@@ -215,6 +215,17 @@ public abstract class LongitudinalModelBase{
         return x;
     }
 
+    /**
+     * Calculates the acceleration of vehicle me, under European lane changing rules (no "undertaking").
+     * @param vCritEur critical speed under which European rules no longer apply
+     * @param me
+     * @param laneSegment
+     * @param leftLaneSegment
+     * @param alphaT
+     * @param alphaV0
+     * @param alphaA
+     * @return the acceleration of vehicle me
+     */
     public double calcAccEur(double vCritEur, Vehicle me, LaneSegment laneSegment, LaneSegment leftLaneSegment,
             double alphaT, double alphaV0, double alphaA) {
 
@@ -227,7 +238,6 @@ public abstract class LongitudinalModelBase{
         }
 
         // check left-vehicle's speed
-
         final Vehicle newFrontLeft = leftLaneSegment.frontVehicle(me);
         if (newFrontLeft == null) {
             return accInOwnLane;
@@ -254,12 +264,45 @@ public abstract class LongitudinalModelBase{
         return accResult;
     }
 
-    public abstract double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA);
-
-    public abstract double calcAcc(final Vehicle me, final Vehicle frontVehicle);
+    /**
+     * Calculates the acceleration of vehicle me.
+     * @param me
+     * @param laneSegment
+     * @param alphaT
+     * @param alphaV0
+     * @param alphaA
+     * @return the calculated acceleration
+     */
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+        // By default only consider the vehicle in front when calculating acceleration.
+        // LDMs that consider more than the front vehicle should override this method.
+        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+        return calcAcc(me, frontVehicle, alphaT, alphaV0, alphaA);
+    }
 
     /**
-     * Calc acc simple.
+     * Calculates the acceleration of vehicle me.
+     * @param me
+     * @param frontVehicle
+     * @param alphaT
+     * @param alphaV0
+     * @param alphaA
+     * @return the calculated acceleration
+     */
+    public abstract double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA);
+
+    /**
+     * Calculates the acceleration of vehicle me.
+     * @param me
+     * @param frontVehicle
+     * @return the calculated acceleration
+     */
+    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
+        return calcAcc(me, frontVehicle, 1.0, 1.0, 1.0);
+    }
+
+    /**
+     * Calculates the vehicular acceleration.
      * 
      * @param s
      *            the s
@@ -267,7 +310,7 @@ public abstract class LongitudinalModelBase{
      *            the v
      * @param dv
      *            the dv
-     * @return the double
+     * @return the calculated acceleration
      */
     public abstract double calcAccSimple(double s, double v, double dv);
 }

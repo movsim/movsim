@@ -46,7 +46,7 @@ public class PhysicalQuantities {
      * @param veh
      *            the veh
      */
-    public PhysicalQuantities(final Vehicle veh) {
+    public PhysicalQuantities(Vehicle veh) {
         this.me = veh;
 
         xScale = veh.getLongitudinalModel() == null ? 1.0 : veh.getLongitudinalModel().getScalingLength();
@@ -139,7 +139,7 @@ public class PhysicalQuantities {
      *            the veh front
      * @return the net distance
      */
-    public double getNetDistance(final Vehicle vehFront) {
+    public double getNetDistance(Vehicle vehFront) {
         return xScale * me.getNetDistance(vehFront);
     }
     
@@ -154,7 +154,7 @@ public class PhysicalQuantities {
      *            the veh front
      * @return the rel speed
      */
-    public double getRelSpeed(final Vehicle vehFront) {
+    public double getRelSpeed(Vehicle vehFront) {
         return vScale * me.getRelSpeed(vehFront);
     }
 

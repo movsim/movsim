@@ -126,7 +126,7 @@ public class TravelTimeRoute {
         return dataPoints;
     }
 
-    private void checkNewVehicles(final double timeStartOfRoute, final RoadSegment roadSegment) {
+    private void checkNewVehicles(double timeStartOfRoute, RoadSegment roadSegment) {
         // for(final LaneSegment laneSegment : roadSegment){
         for (final Vehicle veh : roadSegment) {
             // if(veh.getPosition() > 100 && veh.getPosition()<1000){
@@ -140,7 +140,7 @@ public class TravelTimeRoute {
         // }
     }
 
-    private double checkPassedVehicles(final double timeEndOfRoute) {
+    private double checkPassedVehicles(double timeEndOfRoute) {
         final double ttAverage = 0;
         final List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
         for (final Map.Entry<Vehicle, Double> entry : vehiclesOnRoute.entrySet()) {

@@ -160,7 +160,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
      * @param lane
      * @param veh
      */
-    private void countVehiclesAndDataForLane(final LaneSegment laneSegment, int lane, final Vehicle veh) {
+    private void countVehiclesAndDataForLane(LaneSegment laneSegment, int lane, Vehicle veh) {
         // new vehicle crossed detector
         vehCount[lane]++;
         final double speedVeh = veh.getSpeed();

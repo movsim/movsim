@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
@@ -116,27 +115,13 @@ public class Krauss extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
-        final Vehicle vehFront = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
-
-        final double localT = alphaT * T;
-        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
-
-        return acc(s, v, dv, localT, localV0);
-    }
-
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
-        // Local dynamical variables
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
 
-        final double localT = T;
-        final double localV0 = Math.min(v0, me.getSpeedlimit());
+        final double localT = alphaT * T;
+        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
 
         return acc(s, v, dv, localT, localV0);
     }

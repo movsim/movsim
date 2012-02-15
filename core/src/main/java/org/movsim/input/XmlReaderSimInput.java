@@ -137,7 +137,7 @@ public class XmlReaderSimInput {
      * @param outFilename
      *            the output file name
      */
-    private void writeInternalXmlToFile(final Document localDoc, String outFilename) {
+    private void writeInternalXmlToFile(Document localDoc, String outFilename) {
         final PrintWriter writer = FileUtils.getWriter(outFilename);
         final XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());

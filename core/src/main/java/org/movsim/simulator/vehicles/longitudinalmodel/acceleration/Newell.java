@@ -20,7 +20,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -52,10 +51,9 @@ public class Newell extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
@@ -66,19 +64,6 @@ public class Newell extends LongitudinalModelBase {
         final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
 
         // actual Newell formula
-        return acc(s, v, dv, dtLocal, v0Local);
-    }
-
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
-        // Local dynamic variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        final double dtLocal = dt;
-        final double v0Local = Math.min(v0, me.getSpeedlimit());
-
         return acc(s, v, dv, dtLocal, v0Local);
     }
 

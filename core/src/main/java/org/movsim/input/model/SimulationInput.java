@@ -73,7 +73,7 @@ public class SimulationInput {
      * @param elem
      *            the elem
      */
-    public SimulationInput(final Element elem) {
+    public SimulationInput(Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));

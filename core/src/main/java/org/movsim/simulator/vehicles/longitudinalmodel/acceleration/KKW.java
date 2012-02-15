@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
@@ -168,31 +167,11 @@ public class KKW extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
-        // Local dynamical variables
-        final Vehicle vehFront = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
-
-        return acc(s, v, dv, alphaT, alphaV0);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         // Local dynamical variables
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
-
-        final double alphaT = 1;
-        final double alphaV0 = 1;
 
         return acc(s, v, dv, alphaT, alphaV0);
     }
@@ -204,7 +183,7 @@ public class KKW extends LongitudinalModelBase {
      */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, 1, 1);
+        return acc(s, v, dv, 1.0, 1.0);
     }
 
     /**

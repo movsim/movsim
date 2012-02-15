@@ -177,7 +177,7 @@ public class TrafficSource implements SimulationTimeStep {
      *            the q bc
      * @return true, if successful
      */
-    private boolean tryEnteringNewVehicle(final LaneSegment laneSegment, double time, double qBC) {
+    private boolean tryEnteringNewVehicle(LaneSegment laneSegment, double time, double qBC) {
 
         // type of new vehicle
         final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
@@ -267,7 +267,7 @@ public class TrafficSource implements SimulationTimeStep {
      * @param vEnter
      *            the v enter
      */
-    private void addVehicle(LaneSegment laneSegment, final VehiclePrototype vehPrototype, double xEnter, double vEnter) {
+    private void addVehicle(LaneSegment laneSegment, VehiclePrototype vehPrototype, double xEnter, double vEnter) {
         final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
         vehicle.setFrontPosition(xEnter);
         vehicle.setSpeed(vEnter);
