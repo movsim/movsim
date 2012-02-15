@@ -36,6 +36,7 @@ public interface GraphicsConfigurationParameters {
     final double INITIAL_SCALE = 1.0 / Math.sqrt(2);
     final int INITIAL_OFFSET_X = 0;
     final int INITIAL_OFFSET_Y = 0;
+    final double DEFAULT_LANE_WIDTH = 2;
 
     static final double INITIAL_SPEEDUP_DURATION = 120.0;
     static final double INITIAL_SPEEDUP_DURATION_OFF_ON_RAMP = 440.0;
