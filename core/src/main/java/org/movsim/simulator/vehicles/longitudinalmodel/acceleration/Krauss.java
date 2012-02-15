@@ -57,7 +57,8 @@ public class Krauss extends LongitudinalModelBase {
     private final double b;
 
     /**
-     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular automaton default value 0.4 (PRE) or 1 (EPJB)
+     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular
+     * automaton default value 0.4 (PRE) or 1 (EPJB)
      */
     private double epsilon;
 
@@ -141,8 +142,8 @@ public class Krauss extends LongitudinalModelBase {
      * @param dv
      *            the dv
      * @param TLocal
-     *            the local time gap. Notice that inconsistencies may arise for nontrivial values since then no longer dt=T=tau_relax making
-     *            the vSafe formula possibly inconsistent
+     *            the local time gap. Notice that inconsistencies may arise for nontrivial values since then no longer
+     *            dt=T=tau_relax making the vSafe formula possibly inconsistent
      * @param v0Local
      *            the v0 local
      * 
@@ -151,9 +152,9 @@ public class Krauss extends LongitudinalModelBase {
     private double acc(double s, double v, double dv, double TLocal, double v0Local) {
         final double vp = v - dv;
         /**
-         * safe speed; complicated formula in PRE 55, 5601 (1997) is essentially the vSafe formula for the simple Gipps model. The
-         * complicated formula considers effects of finite dt; this is treated uniformly for all models in our update routine, so it is not
-         * necessary here. Therefore the simple Gipps vSafe formula is chosen
+         * safe speed; complicated formula in PRE 55, 5601 (1997) is essentially the vSafe formula for the simple Gipps
+         * model. The complicated formula considers effects of finite dt; this is treated uniformly for all models in
+         * our update routine, so it is not necessary here. Therefore the simple Gipps vSafe formula is chosen
          */
         final double vSafe = -b * TLocal + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - s0, 0.));
 
@@ -166,8 +167,9 @@ public class Krauss extends LongitudinalModelBase {
         // three additional code lines
 
         /**
-         * vLower = lower limit of new speed (denoted v0 in PRE) some modifications due to dimensional units were applied. Notice that
-         * vLower may be > vUpper in some cut-in situations: these inconsistencies were not recognized/treated in the PRE publication
+         * vLower = lower limit of new speed (denoted v0 in PRE) some modifications due to dimensional units were
+         * applied. Notice that vLower may be > vUpper in some cut-in situations: these inconsistencies were not
+         * recognized/treated in the PRE publication
          */
         final double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
         final double r = MyRandom.nextDouble(); // instance of uniform(0,1) distribution

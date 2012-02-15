@@ -176,11 +176,6 @@ public class KKW extends LongitudinalModelBase {
         return acc(s, v, dv, alphaT, alphaV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, 1.0, 1.0);
@@ -207,17 +202,17 @@ public class KKW extends LongitudinalModelBase {
         final int vLoc = (int) (v + 0.5);
 
         final double kLoc = alphaT * k;
-        final int a = 1; // cell length/dt^2 with dt=1 s and length 0.5 m => 0.5
-                         // m/s^2
+        // cell length/dt^2 with dt=1 s and length 0.5 m => 0.5 m/s^2
+        final int a = 1;
 
         final double pa = (vLoc < vp) ? pa1 : pa2;
         final double pb = (vLoc < 1) ? pb0 : pb1;
-        final double D = length + kLoc * vLoc * dtCA; // double bei Kerner, da k
-                                                      // reelle Zahl
+        // double bei Kerner, da k reelle Zahl
+        final double D = length + kLoc * vLoc * dtCA;
 
         // dynamic part
-        final int vSafe = (int) s; // (Delta x-d)/tau mit s=Delta x-d und tau=1
-                                   // (s)
+        // (Delta x-d)/tau mit s=Delta x-d und tau=1 (s)
+        final int vSafe = (int) s; 
         final int dvSign = (dv < -0.5) ? 1 : (dv > 0.5) ? -1 : 0;
         final int vC = (s > D - length) ? vLoc + a * (int) dtCA : vLoc + a * (int) dtCA * dvSign;
         int vtilde = Math.min(Math.min(v0Loc, vSafe), vC);
