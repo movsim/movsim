@@ -134,7 +134,8 @@ public class TravelTimeRoute {
             // }
             if (veh.getFrontPositionOld() < startPosition && veh.getFrontPosition() > startPosition) {
                 vehiclesOnRoute.put(veh, timeStartOfRoute);
-                // System.out.printf("veh at x=%.2f put to travel time route, roadId=%d\n", veh.getPosition(), veh.getRoadId());
+                // System.out.printf("veh at x=%.2f put to travel time route, roadId=%d\n", veh.getPosition(),
+                // veh.getRoadId());
             }
         }
         // }
@@ -151,7 +152,8 @@ public class TravelTimeRoute {
             // if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
             // final double travelTimeOnRoute = timeEndOfRoute - startTime;
             // dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
-            // // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n", startTime,
+            // // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n",
+            // startTime,
             // // timeEndOfRoute,travelTimeOnRoute);
             // stagedVehicles.add(vehicle);
             // ttAverage += travelTimeOnRoute;

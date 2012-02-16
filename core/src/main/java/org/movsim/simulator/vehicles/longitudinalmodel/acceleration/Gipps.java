@@ -73,6 +73,7 @@ public class Gipps extends LongitudinalModelBase {
     protected void setDesiredSpeed(double v0) {
         this.v0 = v0;
     }
+
     @Override
     public double getDesiredSpeed() {
         return v0;

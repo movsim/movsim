@@ -48,7 +48,7 @@ public class InflowTimeSeries {
 
     private double constantFlowPerLane = -1;
 
-    /** constant init speed = 80 km/h*/
+    /** constant init speed = 80 km/h */
     private final double constantInitSpeed = 80 / 3.6;
 
     /**
@@ -75,7 +75,7 @@ public class InflowTimeSeries {
         flowValues = new double[size];
         speedValues = new double[size];
         for (int i = 0; i < size; i++) {
-        	final InflowDataPoint inflowDataPoint = inflowTimeSeries.get(i);
+            final InflowDataPoint inflowDataPoint = inflowTimeSeries.get(i);
             timeValues[i] = inflowDataPoint.getTime();
             flowValues[i] = inflowDataPoint.getFlow();
             speedValues[i] = inflowDataPoint.getSpeed();

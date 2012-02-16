@@ -28,16 +28,18 @@ package org.movsim.simulator.roadnetwork;
 
 /**
  * <p>
- * Simple connection between road segments, where each lane has an unambiguous predecessor and successor. Allows merging and forking of road
- * segments.
+ * Simple connection between road segments, where each lane has an unambiguous predecessor and successor. Allows merging
+ * and forking of road segments.
  * </p>
  * <p>
- * There are one or more source road segments and one or more sink road segments. Each lane in a source road segment is normally paired with
- * lane in a sink road segment. It is, however, possible to have unpaired lanes in either the source road segment (for example when the road
- * narrows, or at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at the start of an off-ramp).
+ * There are one or more source road segments and one or more sink road segments. Each lane in a source road segment is
+ * normally paired with lane in a sink road segment. It is, however, possible to have unpaired lanes in either the
+ * source road segment (for example when the road narrows, or at the end of an on-ramp) or in the sink road segment (for
+ * example when the road widens, or at the start of an off-ramp).
  * </p>
  * <p>
- * For complex connections between road segments, for example an urban road junction, or a roundabout, use a <code>Junction</code>.
+ * For complex connections between road segments, for example an urban road junction, or a roundabout, use a
+ * <code>Junction</code>.
  * </p>
  * 
  */

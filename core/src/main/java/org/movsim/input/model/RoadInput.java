@@ -102,7 +102,7 @@ public class RoadInput {
     @SuppressWarnings("unchecked")
     private void parseRoadElement(Element elem) {
 
-        //id = Long.parseLong(elem.getAttributeValue("id"));
+        // id = Long.parseLong(elem.getAttributeValue("id"));
         id = elem.getAttributeValue("id");
         // roadLength = Double.parseDouble(elem.getAttributeValue("length"));
         // lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
@@ -130,9 +130,9 @@ public class RoadInput {
         // -----------------------------------------------------------
 
         // Initial Conditions Micro
-        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? 
-                new ArrayList<Element>() : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
-                XmlElementNames.RoadInitialConditionsIcMicro);
+        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new ArrayList<Element>()
+                : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+                        XmlElementNames.RoadInitialConditionsIcMicro);
         icMicroData = new ArrayList<ICMicroData>();
         for (final Element icMicroElem : icMicroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMicroElem);
@@ -152,8 +152,9 @@ public class RoadInput {
         // -----------------------------------------------------------
 
         // Initial Conditions Macro
-        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions)== null ?
-                new ArrayList<Element>() :  elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(XmlElementNames.RoadInitialConditionsIcMacro);
+        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new ArrayList<Element>()
+                : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+                        XmlElementNames.RoadInitialConditionsIcMacro);
         icMacroData = new ArrayList<ICMacroData>();
         for (final Element icMacroElem : icMacroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMacroElem);

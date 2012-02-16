@@ -39,7 +39,8 @@ public class FuelConsumption {
     final static Logger logger = LoggerFactory.getLogger(FuelConsumption.class);
 
     // if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds
-    private final double LIMIT_SPEC_CONS = 900 * FuelConstants.CONVERSION_GRAMM_PER_KWH_TO_SI; // 900=3-4 times the minimum
+    // 900=3-4 times the minimum
+    private final double LIMIT_SPEC_CONS = 900 * FuelConstants.CONVERSION_GRAMM_PER_KWH_TO_SI;
 
     // extremely high flow in motor regimes that cannot be reached
     private final double POW_ERROR = 1e7; // 10000 KW

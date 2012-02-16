@@ -34,15 +34,15 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class IDM.
  * <p>
- * Implementation of the 'intelligent driver model'(IDM). <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article
- * IDM.</a>
+ * Implementation of the 'intelligent driver model'(IDM).
+ * <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
  * </p>
  * <p>
  * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
  * </p>
  * <p>
- * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in
- * Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
+ * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested
+ * Traffic States in Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
 public class IDM extends LongitudinalModelBase {

@@ -44,13 +44,13 @@ public class NSM extends LongitudinalModelBase {
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
 
     /** The constant unit time */
-    private static final double dtCA = 1; 
+    private static final double dtCA = 1;
 
     /** The p slowdown. */
     private final double pSlowdown;
 
     /** slow-to-start rule for Barlovic model */
-    private final double pSlowToStart; 
+    private final double pSlowToStart;
 
     /**
      * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
@@ -68,7 +68,7 @@ public class NSM extends LongitudinalModelBase {
 
     @Override
     protected void setDesiredSpeed(double v0) {
-        this.v0 = (int)v0;
+        this.v0 = (int) v0;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class NSM extends LongitudinalModelBase {
                     localV0, localIntegerV0);
         }
 
-        final int vLocal = (int)(v + 0.5);
+        final int vLocal = (int) (v + 0.5);
         int vNew = 0;
 
         final double r1 = MyRandom.nextDouble();

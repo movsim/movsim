@@ -40,7 +40,7 @@ public class OVM_FVDM extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(OVM_FVDM.class);
 
-    /** The tau. Speed adaptation time*/
+    /** The tau. Speed adaptation time */
     private final double tau;
 
     /** The transition width */
@@ -49,7 +49,8 @@ public class OVM_FVDM extends LongitudinalModelBase {
     /** The beta. Form factor */
     private final double beta;
 
-    /** The lambda. Sensitivity. */ // TODO rg 12/19/2011: called gamma in the book
+    /** The lambda. Sensitivity. */
+    // TODO rg 12/19/2011: called gamma in the book
     private final double lambda;
 
     /**
@@ -167,16 +168,16 @@ public class OVM_FVDM extends LongitudinalModelBase {
         if (choiceOptFuncVariant == 0 || choiceOptFuncVariant == 3) {
             // standard OVM function (Bando model)
             // scale OVM/VDIFF so that v0 represents actual desired speed
-            final double v0Prev = v0Local / (1. + Math.tanh(betaLoc));
+            final double v0Prev = v0Local / (1.0 + Math.tanh(betaLoc));
             vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (choiceOptFuncVariant == 1) {
             // triangular OVM function
             final double T = beta; // "time headway"
-            vOptimal = Math.max(Math.min((s - s0) / T, v0Local), 0.);
+            vOptimal = Math.max(Math.min((s - s0) / T, v0Local), 0.0);
         } else if (choiceOptFuncVariant == 2) {
             // "Three-phase" OVM function
-            final double diffT = 0. * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
+            final double diffT = 0.0 * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
             final double Tmin = transitionWidthLoc + diffT; // minimum time headway
             final double Tmax = betaLoc + diffT; // maximum time headway
             final double Tdyn = (s - s0) / Math.max(v, MovsimConstants.SMALL_VALUE);

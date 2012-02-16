@@ -35,16 +35,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch
- * of road may be created by combining two road segments running in opposite directions.
+ * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of
+ * road may be created by combining two road segments running in opposite directions.
  * </p>
  * <p>
  * RoadSegments may be combined to form a road network.
  * </p>
  * <p>
  * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road
- * segment and a sink road to which vehicles exit. RoadSegments at the edge of the network will normally be connected
- * to only one other road segment: traffic inflow and outflow will be controlled directly by source and sink objects.
+ * segment and a sink road to which vehicles exit. RoadSegments at the edge of the network will normally be connected to
+ * only one other road segment: traffic inflow and outflow will be controlled directly by source and sink objects.
  * </p>
  * <p>
  * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be
@@ -58,14 +58,12 @@ import org.slf4j.LoggerFactory;
  * RoadsSegment are given by the vehicle's position relative to the start of the RoadSegment and the vehicle's lane.
  * </p>
  * <p>
- * A RoadSegment has <code>laneCount</code> lanes. Lanes within a RoadSegment are represented by the LaneSegment
- * class.
+ * A RoadSegment has <code>laneCount</code> lanes. Lanes within a RoadSegment are represented by the LaneSegment class.
  * </p>
  * <p>
  * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's
- * RoadMapping. Although the RoadMapping is primarily used by software that draws the road network and the vehicles
- * upon it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its
- * gradient.
+ * RoadMapping. Although the RoadMapping is primarily used by software that draws the road network and the vehicles upon
+ * it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its gradient.
  * </p>
  */
 public class RoadSegment implements Iterable<Vehicle> {
@@ -255,7 +253,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final double cumulativeRoadLength() {
         // if (cumulativeRoadLength >= 0.0) {
-        //    return cumulativeRoadLength;
+        // return cumulativeRoadLength;
         // }
         // final RoadSegment sourceRoadSegment = sourceRoadSegment(trafficLaneMax() - 1);
         // cumulativeRoadLength = sourceRoadSegment == null ? 0.0 : sourceRoadSegment.cumulativeRoadLength() +
@@ -574,7 +572,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             // need at least 2 lanes for lane changing
             return;
         }
-        // TODO assure priority for lane changes from slow to fast lanes  
+        // TODO assure priority for lane changes from slow to fast lanes
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
             for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
@@ -585,7 +583,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                     assert targetLane != Lane.NONE;
                     assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
                     // iteratorRemove avoids ConcurrentModificationException
-                    vehIterator.remove();  
+                    vehIterator.remove();
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane].addVehicle(vehicle);
                 }
@@ -734,8 +732,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that vehicle.positon() >
-     * vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
+     * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
+     * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
+     * be in the rear.
      * 
      * @param lane
      *            lane in which to search

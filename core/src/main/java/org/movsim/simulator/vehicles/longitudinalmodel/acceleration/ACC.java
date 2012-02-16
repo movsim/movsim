@@ -72,7 +72,8 @@ public class ACC extends LongitudinalModelBase {
     private double delta;
 
     /**
-     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in range [0, 1]
+     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in
+     * range [0, 1]
      */
     private double coolness;
 

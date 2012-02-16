@@ -169,7 +169,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     /**
-     * this is the default vehGenerator for *all* roadsections if an individual vehicle composition is defined for a specific road
+     * This is the default vehGenerator for *all* roadsections if an individual vehicle composition is defined for a
+     * specific road.
      * 
      * @param simInput
      */
@@ -188,7 +189,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     /**
-     * there was no xodr file and there is only one road segment in the MovSimXML file so set up a default s-shaped road mapping
+     * There was no xodr file and there is only one road segment in the MovSimXML file so set up a default s-shaped road
+     * mapping.
      * 
      * @param roadInputMap
      */
@@ -207,7 +209,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     /**
-     * Parse the OpenDrive (.xodr) file to load the network topology and road layout
+     * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
      * 
      * @param projectMetaData
      * @return
@@ -223,8 +225,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     /**
-     * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models, traffic composition,
-     * traffic sources etc
+     * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models,
+     * traffic composition, traffic sources etc.
      * 
      * @return
      */
@@ -237,8 +239,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Add input data to road segment.
      * 
-     * Note by rules of encapsulation this function is NOT a member of RoadSegment, since RoadSegment should not be aware of form of XML
-     * file or RoadInput data structure.
+     * Note by rules of encapsulation this function is NOT a member of RoadSegment, since RoadSegment should not be
+     * aware of form of XML file or RoadInput data structure.
      * 
      * @param roadSegment
      * @param roadinput
@@ -283,7 +285,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
 
         // TODO: consider multi-lane case
-        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment transitions 
+        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment
+        // transitions
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
@@ -323,14 +326,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 // testwise:
                 veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
                 veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
-                final int lane = ic.getInitLane(); 
+                final int lane = ic.getInitLane();
                 if (lane <= 0 || lane > roadSegment.laneCount()) {
                     logger.error("Error: lane=" + lane + " on road id=" + roadSegment.userId()
                             + " does not exist. Choose as initial condition a lane between 1 and "
                             + roadSegment.laneCount());
                     System.exit(-1);
                 }
-                veh.setLane(lane-1);// TODO check lane numbering. internal lane numbering starts with 0?!
+                veh.setLane(lane - 1);// TODO check lane numbering. internal lane numbering starts with 0?!
                 roadSegment.addVehicle(veh);
                 logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
                         veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));

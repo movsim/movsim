@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
  */
-public abstract class LongitudinalModelBase{
+public abstract class LongitudinalModelBase {
 
     public enum ModelCategory {
         TIME_CONTINUOUS_MODEL, ITERATED_COUPLED_MAP_MODEL, CELLULAR_AUTOMATON;
@@ -217,7 +217,9 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me, under European lane changing rules (no "undertaking").
-     * @param vCritEur critical speed under which European rules no longer apply
+     * 
+     * @param vCritEur
+     *            critical speed under which European rules no longer apply
      * @param me
      * @param laneSegment
      * @param leftLaneSegment
@@ -266,6 +268,7 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me.
+     * 
      * @param me
      * @param laneSegment
      * @param alphaT
@@ -282,6 +285,7 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me.
+     * 
      * @param me
      * @param frontVehicle
      * @param alphaT
@@ -293,6 +297,7 @@ public abstract class LongitudinalModelBase{
 
     /**
      * Calculates the acceleration of vehicle me.
+     * 
      * @param me
      * @param frontVehicle
      * @return the calculated acceleration

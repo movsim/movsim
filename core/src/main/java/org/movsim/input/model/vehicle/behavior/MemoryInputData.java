@@ -39,12 +39,12 @@ public class MemoryInputData {
     private final double tau;
 
     /** The resignation max alpha t. unitless */
-    private final double resignationMaxAlphaT; 
+    private final double resignationMaxAlphaT;
 
-    /** The resignation min alpha v0. unitless*/
+    /** The resignation min alpha v0. unitless */
     private final double resignationMinAlphaV0;
 
-    /** The resignation min alpha a. unitless*/
+    /** The resignation min alpha a. unitless */
     private final double resignationMinAlphaA;
 
     /**

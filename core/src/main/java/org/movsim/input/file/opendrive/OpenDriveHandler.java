@@ -449,7 +449,8 @@ public class OpenDriveHandler extends DefaultHandler {
                     if (road.link.predecessorType != null && road.link.predecessorType.equals("road")) {
                         final RoadSegment sourceRoadSegment = roadNetwork.findByUserId(road.link.predecessorId);
                         if (sourceRoadSegment == null) {
-                            throw new SAXException("Cannot find predecessor link:" + road.link.predecessorId); // stop parsing
+                            throw new SAXException("Cannot find predecessor link:" + road.link.predecessorId); // stop
+                                                                                                               // parsing
                         }
                         for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
                             if (lane.link != null) {

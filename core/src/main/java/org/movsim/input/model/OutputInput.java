@@ -58,9 +58,9 @@ public class OutputInput {
         if (elem == null) {
             return;
         }
-        
+
         if (elem.getChild(XmlElementNames.OutputFloatingCarData) != null) {
-            floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData)); 
+            floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData));
         }
 
         if (elem.getChild(XmlElementNames.OutputSpatioTemporal) != null) {

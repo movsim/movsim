@@ -48,7 +48,6 @@ public class EquilibriumKKW extends EquilibriumProperties {
         calcRhoQMax();
     }
 
-
     /**
      * Calc equilibrium.
      * 

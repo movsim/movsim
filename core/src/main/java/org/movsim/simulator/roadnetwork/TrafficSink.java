@@ -99,7 +99,7 @@ public class TrafficSink implements SimulationTimeStep {
         sourceRoad.removeVehiclesPastEnd();
         measuredTime += dt;
         if (measuredTime > MEASURING_INTERVAL) {
-            measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL;  // vehicles per second
+            measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL; // vehicles per second
             sourceRoad.clearVehicleRemovedCount();
             measuredTime = 0.0;
             // dQ = 0.0;

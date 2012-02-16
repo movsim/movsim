@@ -30,7 +30,8 @@ import org.movsim.input.file.xml.XMLReaderBase;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 
 /**
- * Reads an OpenDRIVE format file and uses it to create a road network, see: http://www.opendrive.org/docs/OpenDRIVEFormatSpecRev1.3D.pdf
+ * Reads an OpenDRIVE format file and uses it to create a road network, see:
+ * http://www.opendrive.org/docs/OpenDRIVEFormatSpecRev1.3D.pdf
  */
 public class OpenDriveReader extends XMLReaderBase {
     /**

@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
- * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical position, that is an x,y
- * coordinate (given in meters).
+ * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical
+ * position, that is an x,y coordinate (given in meters).
  */
 public abstract class RoadMapping {
 
@@ -111,8 +111,8 @@ public abstract class RoadMapping {
      * Class representing a position in space plus a direction.
      * </p>
      * <p>
-     * Angles are interpreted as in the Argand diagram, that is they are measured in a counter-clockwise direction from the x-axis (3
-     * o'clock position).
+     * Angles are interpreted as in the Argand diagram, that is they are measured in a counter-clockwise direction from
+     * the x-axis (3 o'clock position).
      * </p>
      */
     public static class PosTheta {
@@ -192,7 +192,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their
+     * belts.
      */
     protected void onLowMemory() {
         // By default does nothing. Subclasses may implement memory saving.
@@ -217,8 +218,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not traffic lanes and may be treated differently,
-     * especially for lane changes.
+     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not traffic lanes and may be
+     * treated differently, especially for lane changes.
      * 
      * @param trafficLaneMin
      */
@@ -236,8 +237,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be treated differently,
-     * especially for lane changes.
+     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be
+     * treated differently, especially for lane changes.
      * 
      * @param trafficLaneMax
      */
@@ -369,8 +370,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Returns the offset of the center of the lane. Fractional lanes are supported to facilitate the drawing of vehicles in the process of
-     * changing lanes.
+     * Returns the offset of the center of the lane. Fractional lanes are supported to facilitate the drawing of
+     * vehicles in the process of changing lanes.
      * 
      * @param lane
      * @return the offset of the center of the lane
@@ -400,8 +401,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Set a clipping region based on the road position and length. Simple implementation at the moment: only one clipping region is
-     * supported.
+     * Set a clipping region based on the road position and length. Simple implementation at the moment: only one
+     * clipping region is supported.
      * 
      * @param pos
      *            position of the clipping region on the road

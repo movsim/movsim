@@ -130,5 +130,4 @@ public class TrafficLightApproaching {
     public double getDistanceToTrafficlight() {
         return distanceToTrafficlight;
     }
-
 }

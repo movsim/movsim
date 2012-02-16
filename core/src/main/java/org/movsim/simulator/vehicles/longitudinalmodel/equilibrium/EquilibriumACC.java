@@ -48,7 +48,6 @@ public class EquilibriumACC extends EquilibriumProperties {
         calcRhoQMax();
     }
 
-
     // Calculates equilibrium velocity of IDM and IDM with finite s0
     // and free-acc exponent delta
     // uses numeric iteration procedure and
