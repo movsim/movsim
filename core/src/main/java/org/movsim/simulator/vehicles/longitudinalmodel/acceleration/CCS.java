@@ -31,11 +31,10 @@ public class CCS extends LongitudinalModelBase {
      * 
      * @param parameters
      *            the parameters
-     * @param vehLength 
+     * @param vehLength
      */
     public CCS(LongitudinalModelInputDataCCS parameters, double vehLength) {
         super(ModelName.CCS, parameters);
-        logger.debug("init model parameters");
         lenght = vehLength;
         mass = parameters.getMass();
         A = parameters.getA();
@@ -47,8 +46,8 @@ public class CCS extends LongitudinalModelBase {
         P_tackling = parameters.getP_tackling();
         V_c_tackling = parameters.getV_c_tackling();
         b = parameters.getB();
-
     }
+
     @Override
     public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
 
@@ -61,7 +60,7 @@ public class CCS extends LongitudinalModelBase {
         // space dependencies modeled by speedlimits, alpha's
 
         final double localT = alphaT * T;
-      
+
         // consider external speedlimit
         final double localV0;
         if (me.getSpeedlimit() != 0.0) {
@@ -104,21 +103,18 @@ public class CCS extends LongitudinalModelBase {
             return 0.0;
         }
 
-        final double aWanted =  1; // aLocal * (1.0 - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
+        final double aWanted = 1; // aLocal * (1.0 - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
 
         logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
     }
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase#getDesiredSpeed()
-     */
+
     @Override
     public double getDesiredSpeed() {
-        return 100;
-//        throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
+        return 20;
+        // throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
     }
+
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         // TODO Auto-generated method stub

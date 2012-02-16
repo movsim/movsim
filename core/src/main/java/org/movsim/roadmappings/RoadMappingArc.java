@@ -26,6 +26,8 @@
 
 package org.movsim.roadmappings;
 
+import org.movsim.simulator.roadnetwork.RoadMapping;
+
 /**
  * Maps a road segment onto an arc of a circle. Angles are interpreted as in the Argand diagram, that is 0 is at the 3
  * o'clock position. A positive angle indicates a counter-clockwise rotation while a negative angle indicates a
@@ -82,6 +84,18 @@ public class RoadMappingArc extends RoadMappingCircle {
             double curvature) {
         super(laneCount, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
         roadLength = length;
+        laneWidth = RoadMapping.DEFAULT_LANE_WIDTH; //TODO remove Default for lane width
+        this.startAngle = startAngle;
+        arcAngle = roadLength * curvature;
+        centerX = x0 - radius * Math.cos(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
+        centerY = y0 + radius * Math.sin(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
+    }
+    
+    public RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length, double a,
+            double curvature) {
+        super(laneCount, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
+        roadLength = length;
+        laneWidth = a;
         this.startAngle = startAngle;
         arcAngle = roadLength * curvature;
         centerX = x0 - radius * Math.cos(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);

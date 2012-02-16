@@ -337,11 +337,11 @@ public class OpenDriveHandler extends DefaultHandler {
                 switch (geometry.type) {
                 case LINE:
                     roadMapping = new RoadMappingLine(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-                            geometry.length);
+                            geometry.length, geometry.a);
                     break;
                 case ARC:
                     roadMapping = new RoadMappingArc(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-                            geometry.length, geometry.curvature);
+                            geometry.length, geometry.a, geometry.curvature);
                     break;
                 case POLY3:
                     throw new SAXException("POLY3 geometry not yet supported (in road: " + road.name + " )");

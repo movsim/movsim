@@ -143,14 +143,9 @@ public abstract class RoadMapping {
         }
     }
 
-    /**
-     * Default width of traffic lanes.
-     */
-    public static final double DEFAULT_LANE_WIDTH = 2.0;
-
     // Immutable Properties
     protected final int laneCount;
-    protected final double laneWidth = DEFAULT_LANE_WIDTH;
+    protected double laneWidth;
     protected final double roadWidth;
     // trafficLaneMin and trafficLaneMax set the range of lanes for normal traffic in the road
     // segment lanes less than trafficLaneMin or greater than trafficLaneMax are exit or entrance
@@ -170,6 +165,8 @@ public abstract class RoadMapping {
     protected double y0;
     // Clipping Region
     protected static final int POINT_COUNT = 4;
+    public static final int DEFAULT_LANE_WIDTH = 10;
+    
     protected final PolygonFloat polygonFloat = new PolygonFloat(POINT_COUNT);
     protected ArrayList<PolygonFloat> clippingPolygons;
     protected PolygonFloat outsideClippingPolygon;
@@ -428,7 +425,7 @@ public abstract class RoadMapping {
             outsideClippingPolygon.yPoints[3] = LARGE_NUMBER;
         }
         final PolygonFloat clippingPolygon = new PolygonFloat(POINT_COUNT);
-        final double offset = 1.5 * laneCount * RoadMapping.DEFAULT_LANE_WIDTH;
+        final double offset = 1.5 * laneCount * laneWidth;
         PosTheta posTheta;
         posTheta = map(pos + length, -offset);
         clippingPolygon.xPoints[0] = (float) posTheta.x;
