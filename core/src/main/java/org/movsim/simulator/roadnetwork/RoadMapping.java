@@ -165,11 +165,12 @@ public abstract class RoadMapping {
     protected double y0;
     // Clipping Region
     protected static final int POINT_COUNT = 4;
-    public static final int DEFAULT_LANE_WIDTH = 10;
-    
+
     protected final PolygonFloat polygonFloat = new PolygonFloat(POINT_COUNT);
     protected ArrayList<PolygonFloat> clippingPolygons;
     protected PolygonFloat outsideClippingPolygon;
+
+    public static final double DEFAULT_LANE_WIDTH = 2;
 
     /**
      * Constructor.
@@ -184,6 +185,7 @@ public abstract class RoadMapping {
         this.y0 = y0;
         trafficLaneMin = Lane.LANE1;
         trafficLaneMax = laneCount;
+        laneWidth = DEFAULT_LANE_WIDTH;
         roadWidth = laneWidth * laneCount;
         roadColor = defaultRoadColor;
     }

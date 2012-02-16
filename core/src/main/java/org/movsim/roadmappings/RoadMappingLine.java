@@ -74,18 +74,6 @@ public class RoadMappingLine extends RoadMapping {
      */
     public RoadMappingLine(int laneCount, double s, double x0, double y0, double theta, double length) {
         super(laneCount, x0, y0);
-        laneWidth = RoadMapping.DEFAULT_LANE_WIDTH; //TODO remove default for lane width
-        roadLength = length;
-        posTheta.sinTheta = Math.sin(theta);
-        posTheta.cosTheta = Math.cos(theta);
-        x1 = x0 + length * posTheta.cosTheta;
-        y1 = y0 + length * posTheta.sinTheta;
-    }
-    
-    public RoadMappingLine(int laneCount, double s, double x0, double y0, double theta, double length, double a) {
-        super(laneCount, x0, y0);
-        laneWidth = a;
-        System.out.println("lanewidth= "+laneWidth);
         roadLength = length;
         posTheta.sinTheta = Math.sin(theta);
         posTheta.cosTheta = Math.cos(theta);
