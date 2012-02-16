@@ -119,5 +119,10 @@ public class CCS extends LongitudinalModelBase {
         return 100;
 //        throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
     }
+    @Override
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 }
