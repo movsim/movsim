@@ -3575,9 +3575,10 @@
     <!--      =============================================== curve before street crossing ======================== -->
     
     
-        <road name="L12" length="100.0" id="12" junction="-1">
+        <road name="L12" length="100.0" id="12" junction="10001">
         <link>
-<!--            <successor elementType="road" elementId="10" contactPoint="start" />-->
+            <predecessor elementType="road" elementId="11" contactPoint="end" />
+            <successor elementType="junction" elementId="10001" />
         </link>
         <planView>
             <geometry s="0.0" x="-232.0" y="-1882.0" hdg="1.5707965" length="100.0">  <!-- hdg="3.141593" left to right-->
@@ -3848,7 +3849,342 @@
                 </right>
             </laneSection>
         </lanes>
+    </road>
+    
+        <road name="L13" length="50.0" id="13" junction="-1">
+        <link>
+<!--            <successor elementType="road" elementId="10" contactPoint="start" />-->
+<!--                <successor elementType="junction" elementId="10001" />-->
+
+            <predecessor elementType="road" elementId="12" contactPoint="end" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="-205.0" y="-1981.0" hdg="0.83" length="50.0">  <!-- hdg="3.141593" left to right-->
+                <line />>
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="mwyEntry" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                    </lane>
+                    <lane id="-3" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-2" />
+                        </link>
+                    </lane>
+                    <lane id="-4" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-3" />
+                        </link>
+                    </lane>
+                    <lane id="-5" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-4" />
+                        </link>
+                    </lane>
+                    <lane id="-6" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-5" />
+                        </link>
+                    </lane>
+                    <lane id="-7" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-6" />
+                        </link>
+                    </lane>
+                    <lane id="-8" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-7" />
+                        </link>
+                    </lane>
+                    <lane id="-9" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-8" />
+                        </link>
+                    </lane>
+                    <lane id="-10" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-9" />
+                        </link>
+                    </lane>
+                    <lane id="-11" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-10" />
+                        </link>
+                    </lane>
+                    <lane id="-12" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-11" />
+                        </link>
+                    </lane>
+                    <lane id="-13" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-12" />
+                        </link>
+                    </lane>
+                    <lane id="-14" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-13" />
+                        </link>
+                    </lane>
+                    <lane id="-15" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-14" />
+                        </link>
+                    </lane>
+                    <lane id="-16" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-15" />
+                        </link>
+                    </lane>
+                    <lane id="-17" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-16" />
+                        </link>
+                    </lane>
+                    <lane id="-18" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-17" />
+                        </link>
+                    </lane>
+                    <lane id="-19" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-18" />
+                        </link>
+                    </lane>
+                    <lane id="-20" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-19" />
+                        </link>
+                    </lane>
+                    <lane id="-21" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-20" />
+                        </link>
+                    </lane>
+                    <lane id="-22" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-21" />
+                        </link>
+                    </lane>
+                    <lane id="-23" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-22" />
+                        </link>
+                    </lane>
+                    <lane id="-24" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-23" />
+                        </link>
+                    </lane>
+                    <lane id="-25" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-24" />
+                        </link>
+                    </lane>
+                    <lane id="-26" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-25" />
+                        </link>
+                    </lane>
+                    <lane id="-27" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-26" />
+                        </link>
+                    </lane>
+                    <lane id="-28" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-27" />
+                        </link>
+                    </lane>
+                    <lane id="-29" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-28" />
+                        </link>
+                    </lane>
+                    <lane id="-30" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-29" />
+                        </link>
+                    </lane>
+                    <lane id="-31" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-30" />
+                        </link>
+                    </lane>
+                    <lane id="-32" type="mwyEntry" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+     <road name="L14" length="50.0" id="14" junction="-1">
+        <link>
+<!--            <successor elementType="road" elementId="12" contactPoint="start" />-->
+            <predecessor elementType="road" elementId="12" contactPoint="end" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="-174.0" y="-1949.0" hdg="0.83" length="50.0">  <!-- hdg="3.141593" left to right-->
+            <arc curvature="-0.008" />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-2" />
+                        </link>
+                    </lane>
+                    <lane id="-3" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-3" />
+                        </link>
+                    </lane>
+                    <lane id="-4" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-4" />
+                        </link>
+                    </lane>
+                    <lane id="-5" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-5" />
+                        </link>
+                    </lane>
+                    <lane id="-6" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-6" />
+                        </link>
+                    </lane>
+                    <lane id="-7" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-7" />
+                        </link>
+                    </lane>
+                    <lane id="-8" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-8" />
+                        </link>
+                    </lane>
+                    <lane id="-9" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-9" />
+                        </link>
+                    </lane>
+                    <lane id="-10" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-10" />
+                        </link>
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
     </road> 
+    
+    
+    
+     <junction id="10001" name="streetcrossing">
+        <connection id="0" incomingRoad="13" connectingRoad="12" contactPoint="start">
+            <laneLink from="-2" to="-1" />
+            <laneLink from="-3" to="-2" />
+            <laneLink from="-4" to="-3" />
+            <laneLink from="-5" to="-4" />
+            <laneLink from="-6" to="-5" />
+            <laneLink from="-7" to="-6" />
+            <laneLink from="-8" to="-7" />
+            <laneLink from="-9" to="-8" />
+            <laneLink from="-10" to="-9" />
+            <laneLink from="-11" to="-10" />
+            <laneLink from="-12" to="-11" />
+            <laneLink from="-13" to="-12" />
+            <laneLink from="-14" to="-13" />
+            <laneLink from="-15" to="-14" />
+            <laneLink from="-16" to="-15" />
+            <laneLink from="-17" to="-16" />
+            <laneLink from="-18" to="-17" />
+            <laneLink from="-19" to="-18" />
+            <laneLink from="-20" to="-19" />
+            <laneLink from="-21" to="-20" />
+            <laneLink from="-22" to="-21" />
+            <laneLink from="-23" to="-22" />
+            <laneLink from="-24" to="-23" />
+            <laneLink from="-25" to="-24" />
+            <laneLink from="-26" to="-25" />
+            <laneLink from="-27" to="-26" />
+            <laneLink from="-28" to="-27" />
+            <laneLink from="-29" to="-28" />
+            <laneLink from="-30" to="-29" />
+            <laneLink from="-31" to="-30" />
+            <laneLink from="-32" to="-31" />
+            <laneLink from="-33" to="-32" />
+        </connection>
+        <connection id="1" incomingRoad="14" connectingRoad="12" contactPoint="start">
+            <laneLink from="-34" to="-1" />
+            <laneLink from="-35" to="-2" />
+            <laneLink from="-36" to="-3" />
+            <laneLink from="-37" to="-4" />
+            <laneLink from="-38" to="-5" />
+            <laneLink from="-39" to="-6" />
+            <laneLink from="-40" to="-7" />
+            <laneLink from="-41" to="-8" />
+            <laneLink from="-42" to="-9" />
+            <laneLink from="-43" to="-10" />
+        </connection>
+    </junction>
     
 </OpenDRIVE>
 

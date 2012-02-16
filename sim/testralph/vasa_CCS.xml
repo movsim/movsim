@@ -3,14 +3,6 @@
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="vasa.xodr">
     <VEHICLES>
-<!--    <VEHICLE label="CCS1" length="2" width="1" b_max="9">-->
-<!--            <LONGITUDINAL_MODEL>-->
-<!--                <ACC v0="35" T="1.0" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />-->
-<!--            </LONGITUDINAL_MODEL>-->
-<!--            <LANE_CHANGE_MODEL eur_rules="false">-->
-<!--                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1" />-->
-<!--            </LANE_CHANGE_MODEL>-->
-<!--        </VEHICLE>-->
         <VEHICLE label="CCS1" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" P0="150" V_c="5" P_tackling="100" V_c_tackling="1.5" b="2"/>
@@ -34,7 +26,7 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="1000" fixed_seed="true" seed="42">
+    <SIMULATION dt="0.2" duration="1000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
             <VEHICLE_TYPE label="CCS1" fraction="1" />
             <VEHICLE_TYPE label="CCS1" fraction="1" />
