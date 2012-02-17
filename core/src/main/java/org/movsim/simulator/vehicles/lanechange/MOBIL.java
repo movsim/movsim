@@ -183,7 +183,12 @@ public class MOBIL {
             // cannot temporarily remove the current vehicle from the current lane, since we are in a loop
             // that iterates over the vehicles in the current lane. So calculate oldBackNewAcc based on just
             // the front vehicle.
-            oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
+if (currentLaneSegment.frontVehicle(me) != null ) { //TODO remove quickhack for avoiding nullpointer
+    oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
+} else {
+    oldBackNewAcc = 0.0;
+}
+           
             // currentLaneSegment.removeVehicle(me);
             // oldBackNewAcc = oldBack.calcAccModel(currentLaneSegment, null);
             // currentLaneSegment.addVehicle(me);
