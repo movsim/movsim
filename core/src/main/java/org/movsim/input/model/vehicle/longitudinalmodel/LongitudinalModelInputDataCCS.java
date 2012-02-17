@@ -20,8 +20,8 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
     private double s0;
     private double P0;
     private double V_c;
-    private double P_tackling;
-    private double V_c_tackling;
+    private double P_straddle;
+    private double V_c_straddle;
     private double b;
 
     public LongitudinalModelInputDataCCS(Map<String, String> map) {
@@ -34,8 +34,8 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
         s0 = Double.parseDouble(map.get("s0"));
         P0 = Double.parseDouble(map.get("P0"));
         V_c = Double.parseDouble(map.get("V_c"));
-        P_tackling = Double.parseDouble(map.get("P_tackling"));
-        V_c_tackling = Double.parseDouble(map.get("V_c_tackling"));
+        P_straddle = Double.parseDouble(map.get("P_straddle"));
+        V_c_straddle = Double.parseDouble(map.get("V_c_straddle"));
         b = Double.parseDouble(map.get("b"));
     }
     
@@ -98,15 +98,15 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
     /**
      * @return the p_tackling
      */
-    public double getP_tackling() {
-        return P_tackling;
+    public double getP_straddle() {
+        return P_straddle;
     }
 
     /**
      * @return the v_c_tackling
      */
-    public double getV_c_tackling() {
-        return V_c_tackling;
+    public double getV_c_straddle() {
+        return V_c_straddle;
     }
 
     /**

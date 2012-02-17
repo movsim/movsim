@@ -48,7 +48,6 @@ import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
-import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -285,31 +284,33 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
 
         // TODO: consider multi-lane case
-        // TODO: bug in ringroad case and probably also with several road sections: crash occurs at road segment
-        // transitions
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
+
         if (!icMacroData.isEmpty()) {
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
-            final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
-            // if ringroad: set xLocalMin e.g. -SMALL_VAL
-            final double xLocalMin = 0;
-            double xLocal = roadSegment.roadLength(); // start from behind
-            while (xLocal > xLocalMin) {
-                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
-                final double rhoLocal = icMacro.rho(xLocal);
-                double speedInit = icMacro.vInit(xLocal);
-                if (speedInit <= 0) {
-                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
+            System.out.println("roadInput.getLanes(): "+roadSegment.laneCount());
+            for (int lane = 0; lane < roadSegment.laneCount(); lane++) {
+                final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
+                // if ringroad: set xLocalMin e.g. -SMALL_VAL
+                final double xLocalMin = 0;
+                double xLocal = roadSegment.roadLength(); // start from behind
+                while (xLocal > xLocalMin) {
+                    final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+                    final double rhoLocal = icMacro.rho(xLocal);
+                    double speedInit = icMacro.vInit(xLocal);
+                    if (speedInit <= 0) {
+                        speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
+                    }
+                    final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
+                    final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
+                    veh.setFrontPosition(xLocal);
+                    veh.setSpeed(speedInit);
+                    veh.setLane(lane);
+                    roadSegment.addVehicle(veh);
+                    // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
+                    logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
+                    xLocal -= 1 / rhoLocal;
                 }
-                final int laneEnter = MovsimConstants.MOST_RIGHT_LANE;
-                final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                veh.setFrontPosition(xLocal);
-                veh.setSpeed(speedInit);
-                veh.setLane(Lane.LANE1);
-                roadSegment.addVehicle(veh);
-                // vehContainers.get(MovsimConstants.MOST_RIGHT_LANE).add(veh, xLocal, speedInit);
-                logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
-                xLocal -= 1 / rhoLocal;
             }
         } else {
             logger.debug(("choose micro initial conditions"));

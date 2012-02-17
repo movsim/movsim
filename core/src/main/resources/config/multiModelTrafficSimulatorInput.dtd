@@ -203,8 +203,8 @@ alpha_a  NMTOKEN "1"
   friction      NMTOKEN #REQUIRED
   P0            NMTOKEN #REQUIRED
   V_c           NMTOKEN #REQUIRED
-  P_tackling    NMTOKEN #REQUIRED
-  V_c_tackling  NMTOKEN #REQUIRED
+  P_straddle    NMTOKEN #REQUIRED
+  V_c_straddle  NMTOKEN #REQUIRED
   T             NMTOKEN #REQUIRED
   s0            NMTOKEN #REQUIRED
   b             NMTOKEN #REQUIRED

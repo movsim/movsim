@@ -17,14 +17,20 @@ public class CCS extends LongitudinalModelBase {
     private double friction;
     private double T;
     private double P0;
-    private double V_c;
-    private double P_tackling;
-    private double V_c_tackling;
+    private double v_c;
+    private double P_straddle;
+    private double V_c_straddle;
     private double b;
 
     private double a;
 
     private double lenght;
+
+    private int gradient;
+
+    private double density_air = 1.3;
+
+    private double grav = 9.81;
 
     /**
      * Instantiates a new CCS (cross country skiing).
@@ -42,10 +48,12 @@ public class CCS extends LongitudinalModelBase {
         friction = parameters.getFriction();
         T = parameters.getT();
         P0 = parameters.getP0();
-        V_c = parameters.getV_c();
-        P_tackling = parameters.getP_tackling();
-        V_c_tackling = parameters.getV_c_tackling();
+        v_c = parameters.getV_c();
+        P_straddle = parameters.getP_straddle();
+        V_c_straddle = parameters.getV_c_straddle();
         b = parameters.getB();
+
+//        System.out.println("P0"+P0);
     }
 
     @Override
@@ -61,16 +69,10 @@ public class CCS extends LongitudinalModelBase {
 
         final double localT = alphaT * T;
 
-        // consider external speedlimit
-        final double localV0;
-        if (me.getSpeedlimit() != 0.0) {
-            localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
-        } else {
-            localV0 = alphaV0 * v0;
-        }
-        final double localA = alphaA * a;
+        
 
-        return acc(s, v, dv, localT, localV0, localA);
+        gradient = 0;
+        return acc(s, v, dv, gradient );
     }
 
     @Override
@@ -89,26 +91,38 @@ public class CCS extends LongitudinalModelBase {
         }
         final double localA = a;
 
-        return acc(s, v, dv, localT, localV0, localA);
+//        System.out.println("v," +v+" gradient "+gradient );
+        
+        return acc(s, v, dv, gradient);
     }
 
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, T, v0, a);
+        return acc(s, v, dv, gradient);
     }
 
-    private double acc(double s, double v, double dv, double TLocal, double v0Local, double aLocal) {
-        // treat special case of v0=0 (standing obstacle)
-        if (v0Local == 0.0) {
-            return 0.0;
-        }
+    private double acc(double s, double v, double dv, double gradient) {
 
-        final double aWanted = 1; // aLocal * (1.0 - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
-
+        double a_max = 4*P0 / (v_c*mass);
+        double P_diagonal = 4 * (v/v_c)*(1-v/v_c) * ((v<v_c) ? 1 : 0);
+        
+        double P_straddle = 4 * (v/V_c_straddle)*(1-v/v_c) * ((v<V_c_straddle) ? 1 : 0);
+        
+        double P = Math.max(P0, P_straddle);
+        
+        double acc_free = ((v>0.01*v_c)? P/(mass*v) : a_max) - 0.5*cw*A*density_air*v*v/mass - grav  *(friction*v + gradient);
+        
+        double b_kin = dv*dv * ((dv>0) ? 1: 0) / Math.max(s-s0, 0.01*s0);
+     
+        double acc_int = - Math.min(b_kin*b_kin, b*b) / b - Math.max(acc_free, 0.5*a_max ) * v * T / Math.max(s-s0, 0.01*s0);
+        
+        double aWanted = Math.max(acc_free + acc_int, -b-gradient*grav);
+        
         logger.debug("aWanted = {}", aWanted);
-        return aWanted; // limit to -bMax in Vehicle
+        return aWanted;
     }
 
+   
     @Override
     public double getDesiredSpeed() {
         return 20;

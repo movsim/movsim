@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<SCENARIO network_filename="startStop.xodr">
+    <VEHICLES>
+        <VEHICLE label="CCS1" length="8" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" P0="150" V_c="5" P_straddle="100" V_c_straddle="1.5" b="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+        <VEHICLE label="Obstacle" length="8" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <VEHICLE_TYPE label="CCS1" fraction="1" />
+            <VEHICLE_TYPE label="Obstacle" fraction="0" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="1">
+            <INITIAL_CONDITIONS>
+                <IC_MICRO x="10" v="0" />
+                <IC_MICRO x="20" v="0" />
+                <IC_MICRO x="30" v="0" />
+                <IC_MICRO x="40" v="0" />
+                <IC_MICRO x="50" v="0" />
+                <IC_MICRO x="60" v="0" />
+                <IC_MICRO x="70" v="0" />
+                <IC_MICRO x="80" v="0" />
+                <IC_MICRO x="90" v="0" />
+                <IC_MICRO x="100" v="0" />
+                <IC_MICRO x="110" v="0" />
+                <IC_MICRO x="120" v="0" />
+                <IC_MICRO x="130" v="0" />
+                <IC_MICRO x="140" v="0" />
+                <IC_MICRO x="150" v="0" />
+                <IC_MICRO x="160" v="0" />
+                <IC_MICRO x="170" v="0" />
+                <IC_MICRO x="180" v="0" />
+                <IC_MICRO x="190" v="0" />
+                <IC_MICRO x="200" v="0" />
+                <IC_MICRO x="210" v="0" />
+                <IC_MICRO x="220" v="0" />
+                <IC_MICRO x="230" v="0" />
+                <IC_MICRO x="240" v="0" />
+                <IC_MICRO x="250" v="0" />
+                <IC_MICRO x="260" v="0" />
+                <!-- obstacle shifts floating car numbers -->
+                <IC_MICRO x="1000" v="0" label="Obstacle" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
+        <OUTPUT>
+            <FLOATING_CAR_DATA n_dt="5">
+                <FC number="2" />
+                <FC number="3" />
+                <FC number="11" />
+                <FC number="16" />
+                <FC number="21" />
+            </FLOATING_CAR_DATA>
+            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
+        </OUTPUT>
+    </SIMULATION>
+</SCENARIO>
+
