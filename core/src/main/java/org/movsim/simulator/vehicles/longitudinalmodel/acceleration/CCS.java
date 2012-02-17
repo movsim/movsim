@@ -1,9 +1,9 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataCCS;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,27 +52,24 @@ public class CCS extends LongitudinalModelBase {
         P_straddle = parameters.getP_straddle();
         V_c_straddle = parameters.getV_c_straddle();
         b = parameters.getB();
-
-//        System.out.println("P0"+P0);
+    }
+    
+    /**
+     * Sets the relative randomization v0.
+     * 
+     * @param relRandomizationFactor
+     *            the new relative randomization v0
+     */
+    @Override
+    public void setRelativeRandomizationV0(double relRandomizationFactor) {
+        final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
+        final double newP0 = P0 * (1 + relRandomizationFactor * equalRandom);
+        logger.debug("randomization of desired speeds: p0={}, new p0={}", P0, newP0);
+        setP0(newP0);
     }
 
-    @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
-
-        // Local dynamical variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        // space dependencies modeled by speedlimits, alpha's
-
-        final double localT = alphaT * T;
-
-        
-
-        gradient = 0;
-        return acc(s, v, dv, gradient );
+    private void setP0(double newP0) {
+        this.P0 = newP0;
     }
 
     @Override
@@ -81,15 +78,6 @@ public class CCS extends LongitudinalModelBase {
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
-
-        final double localT = T;
-        final double localV0;
-        if (me.getSpeedlimit() != 0.0) {
-            localV0 = Math.min(v0, me.getSpeedlimit());
-        } else {
-            localV0 = v0;
-        }
-        final double localA = a;
 
 //        System.out.println("v," +v+" gradient "+gradient );
         
@@ -104,18 +92,15 @@ public class CCS extends LongitudinalModelBase {
     private double acc(double s, double v, double dv, double gradient) {
 
         double a_max = 4*P0 / (v_c*mass);
+        
         double P_diagonal = 4 * (v/v_c)*(1-v/v_c) * ((v<v_c) ? 1 : 0);
-        
         double P_straddle = 4 * (v/V_c_straddle)*(1-v/v_c) * ((v<V_c_straddle) ? 1 : 0);
-        
         double P = Math.max(P0, P_straddle);
+
+        double b_kin = dv*dv * ((dv>0) ? 1: 0) / Math.max(s-s0, 0.01*s0);
         
         double acc_free = ((v>0.01*v_c)? P/(mass*v) : a_max) - 0.5*cw*A*DENSITY_AIR*v*v/mass - EARTH_GRAVITY  *(friction*v + gradient);
-        
-        double b_kin = dv*dv * ((dv>0) ? 1: 0) / Math.max(s-s0, 0.01*s0);
-     
         double acc_int = - Math.min(b_kin*b_kin, b*b) / b - Math.max(acc_free, 0.5*a_max ) * v * T / Math.max(s-s0, 0.01*s0);
-        
         double aWanted = Math.max(acc_free + acc_int, -b-gradient*EARTH_GRAVITY);
         
         logger.debug("aWanted = {}", aWanted);
@@ -125,14 +110,19 @@ public class CCS extends LongitudinalModelBase {
    
     @Override
     public double getDesiredSpeed() {
-        return 20;
-        // throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
+         throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
     }
 
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
-        // TODO Auto-generated method stub
-        return 0;
+
+        // Local dynamical variables
+        final double s = me.getNetDistance(frontVehicle);
+        final double v = me.getSpeed();
+        final double dv = me.getRelSpeed(frontVehicle);
+
+        gradient = 0;
+        return acc(s, v, dv, gradient );
     }
 
 }

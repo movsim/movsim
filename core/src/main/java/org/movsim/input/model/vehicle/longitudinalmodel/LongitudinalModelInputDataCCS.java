@@ -5,10 +5,11 @@ import java.util.Map;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 
 /**
- * <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" P0="150" V_c="5" P_tackling="100" V_c_tackling="1.5" b="2"/>
- *
+ * <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" P0="150" V_c="5" P_tackling="100" V_c_tackling="1.5"
+ * b="2"/>
+ * 
  * @author ralph
- *
+ * 
  */
 public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
 
@@ -38,7 +39,7 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
         V_c_straddle = Double.parseDouble(map.get("V_c_straddle"));
         b = Double.parseDouble(map.get("b"));
     }
-    
+
     /**
      * @return the mass
      */

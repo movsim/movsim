@@ -7,8 +7,8 @@ public class EquilibriumCCS extends EquilibriumProperties {
     public EquilibriumCCS(double length, CCS model) {
         super(length);
 
-        calcEquilibrium(model);
-        calcRhoQMax();
+//        calcEquilibrium(model);
+//        calcRhoQMax();
     }
 
     /**
