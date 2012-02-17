@@ -38,6 +38,7 @@ public class CCS extends LongitudinalModelBase {
      */
     public CCS(LongitudinalModelInputDataCCS parameters, double vehLength) {
         super(ModelName.CCS, parameters);
+        s0 = parameters.getS0();
         lenght = vehLength;
         mass = parameters.getMass();
         A = parameters.getA();
@@ -89,19 +90,24 @@ public class CCS extends LongitudinalModelBase {
     private double acc(double s, double v, double dv, double gradient) {
 
         double a_max = 4 * p0 / (v_c * mass);
+        double gradientSlip = a_max/EARTH_GRAVITY; 
 
-        double P_diagonal = 4 * (v / v_c) * (1 - v / v_c) * ((v < v_c) ? 1 : 0);
-        double P_straddle = 4 * (v / v_c_straddle) * (1 - v / v_c) * ((v < v_c_straddle) ? 1 : 0);
-        double P = Math.max(p0, P_straddle);
+        double F_diagonal = (4 * p0 / v_c) * (1 - v / v_c) * ((v < v_c) ? 1 : 0);
+        double F_straddle = (4 *p_straddle / v_c_straddle) * (1 - v / v_c) * ((v < v_c_straddle) ? 1 : 0);
+        
+        double F = (gradient < 0.5 * gradientSlip) ? F_diagonal: Math.max(F_diagonal, F_straddle);
 
-        double b_kin = dv * dv * ((dv > 0) ? 1 : 0) / Math.max(s - s0, 0.01 * s0);
+        double b_kin = 0.5 * v * dv * ((dv > 0) ? 1 : 0) / Math.max(s - s0, 0.00001 * s0);
 
-        double acc_free = ((v > 0.01 * v_c) ? P / (mass * v) : a_max) - 0.5 * cw * A * DENSITY_AIR * v * v / mass
-                - EARTH_GRAVITY * (friction * v + gradient);
-        double acc_int = -Math.min(b_kin * b_kin, b * b) / b - Math.max(acc_free, 0.5 * a_max) * v * T
-                / Math.max(s - s0, 0.01 * s0);
-        double aWanted = Math.max(acc_free + acc_int, -b - gradient * EARTH_GRAVITY);
-
+        double acc_free = F/mass- 0.5 * cw * A * DENSITY_AIR * v * v / mass
+                - EARTH_GRAVITY * (friction + gradient);
+        
+        double s_rel = (v*T+s0)/Math.max(s - s0, 0.00001 * s0);
+        double b_max = 2; //TODO new Parameter to xml
+        double acc_int = - (b_kin * b_kin / b) - Math.max(b*(s_rel-1), 0)- Math.max(acc_free*s_rel, 0);
+        double aWanted = Math.max(acc_free + acc_int, -b_max - gradient * EARTH_GRAVITY);
+//if(s<2) { System.out.println("s: "+s+ "s0:  "+s0+"  s_rel: "+ s_rel+"   v:  "+v+"   afree: "+acc_free+"    acc_int: "+acc_int+ "   awanted: "+ aWanted);
+//}
         logger.debug("aWanted = {}", aWanted);
         return aWanted;
     }

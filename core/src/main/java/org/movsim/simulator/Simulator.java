@@ -315,7 +315,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final String vehTypeFromFile = ic.getLabel();
                 final Vehicle veh = (vehTypeFromFile.length() == 0) ? vehGenerator.createVehicle() : vehGenerator
                         .createVehicle(vehTypeFromFile);
-                // TODO: consider multi-lane case, distribute over all lanes
                 veh.setVehNumber(vehicleNumber);
                 ++vehicleNumber;
                 // testwise:
