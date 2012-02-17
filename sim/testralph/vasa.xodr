@@ -6,7 +6,8 @@
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="400.0" y="0.0" hdg="2.0" length="700.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="400.0" y="0.0" hdg="2.0" length="700.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -377,13 +378,13 @@
             </laneSection>
         </lanes>
     </road>
-    
     <road name="L2" length="300.0" id="2" junction="-1">
         <link>
             <successor elementType="road" elementId="3" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="108.0" y="-636.0" hdg="1.9" length="300.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="108.0" y="-636.0" hdg="1.9" length="300.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -748,13 +749,13 @@
             </laneSection>
         </lanes>
     </road>
-   
-   <road name="L3" length="100.0" id="3" junction="-1">
+    <road name="L3" length="100.0" id="3" junction="-1">
         <link>
             <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="11.0" y="-920.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="11.0" y="-920.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -1107,13 +1108,13 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L4" length="100.0" id="4" junction="-1">
+    <road name="L4" length="100.0" id="4" junction="-1">
         <link>
             <successor elementType="road" elementId="5" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-22.0" y="-1015.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-22.0" y="-1015.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -1453,14 +1454,14 @@
                 </right>
             </laneSection>
         </lanes>
-    </road> 
-    
-     <road name="L5" length="100.0" id="5" junction="-1">
+    </road>
+    <road name="L5" length="100.0" id="5" junction="-1">
         <link>
             <successor elementType="road" elementId="6" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-54.0" y="-1109.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-54.0" y="-1109.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -1789,13 +1790,13 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L6" length="100.0" id="6" junction="-1">
+    <road name="L6" length="100.0" id="6" junction="-1">
         <link>
             <successor elementType="road" elementId="7" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-87.0" y="-1204.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-87.0" y="-1204.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -2112,13 +2113,13 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L7" length="100.0" id="7" junction="-1">
+    <road name="L7" length="100.0" id="7" junction="-1">
         <link>
             <successor elementType="road" elementId="8" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-120.0" y="-1299.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-120.0" y="-1299.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -2422,14 +2423,14 @@
                 </right>
             </laneSection>
         </lanes>
-    </road> 
-   
+    </road>
     <road name="L8" length="100.0" id="8" junction="-1">
         <link>
             <successor elementType="road" elementId="9" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-152.0" y="-1394.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-152.0" y="-1394.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -2722,13 +2723,13 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L9" length="100.0" id="9" junction="-1">
+    <road name="L9" length="100.0" id="9" junction="-1">
         <link>
             <successor elementType="road" elementId="10" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-185.0" y="-1489.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-185.0" y="-1489.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <line />
             </geometry>
         </planView>
@@ -3008,14 +3009,14 @@
                 </right>
             </laneSection>
         </lanes>
-    </road> 
-    
-     <road name="L10" length="100.0" id="10" junction="-1">
+    </road>
+    <road name="L10" length="100.0" id="10" junction="-1">
         <link>
             <successor elementType="road" elementId="11" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-216.0" y="-1584.0" hdg="1.9" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-216.0" y="-1584.0" hdg="1.9" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <arc curvature="-0.00322" />
             </geometry>
         </planView>
@@ -3282,22 +3283,24 @@
                     </lane>
                     <lane id="-44" type="driving" level="0">
                         <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
-                         <link>
+                        <link>
                             <successor id="-44" />
                         </link>
                     </lane>
                 </right>
             </laneSection>
         </lanes>
-    </road> 
-    
-     <road name="L11" length="200.0" id="11" junction="-1">
+    </road>
+    <road name="L11" length="200.0" id="11" junction="-1">
         <link>
+            <predecessor elementType="road" elementId="10" contactPoint="end" />
             <successor elementType="road" elementId="12" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="-233.0" y="-1682.0" hdg="1.5707965" length="200.0">  <!-- hdg="3.141593" left to right-->
-            <line />>
+            <geometry s="0.0" x="-233.0" y="-1682.0" hdg="1.5707965" length="200.0">
+                <!-- hdg="3.141593" left to right-->
+                <line />
+                &gt;
             </geometry>
         </planView>
         <lanes>
@@ -3563,33 +3566,34 @@
                     </lane>
                     <lane id="-44" type="driving" level="0">
                         <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
-                         <link>
+                        <link>
                             <successor id="-44" />
                         </link>
                     </lane>
                 </right>
             </laneSection>
         </lanes>
-    </road> 
-    
+    </road>
     <!--      =============================================== curve before street crossing ======================== -->
-    
-    
-        <road name="L12" length="100.0" id="12" junction="10001">
+    <road name="L12" length="100.0" id="12" junction="-1">
         <link>
             <predecessor elementType="road" elementId="11" contactPoint="end" />
             <successor elementType="junction" elementId="10001" />
         </link>
         <planView>
-            <geometry s="0.0" x="-232.0" y="-1882.0" hdg="1.5707965" length="100.0">  <!-- hdg="3.141593" left to right-->
+            <geometry s="0.0" x="-232.0" y="-1882.0" hdg="1.5707965" length="100.0">
+                <!-- hdg="3.141593" left to right-->
                 <arc curvature="-0.0074" />
             </geometry>
         </planView>
         <lanes>
             <laneSection s="0.0">
                 <right>
-                    <lane id="-1" type="mwyEntry" level="0">
+                    <lane id="-1" type="driving" level="0">
                         <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-43" />
+                        </link>
                     </lane>
                     <lane id="-2" type="driving" level="0">
                         <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
@@ -3843,24 +3847,27 @@
                             <successor id="-42" />
                         </link>
                     </lane>
-                    <lane id="-44" type="mwyEntry" level="0">
+                    <lane id="-44" type="driving" level="0">
                         <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-44" />
+                        </link>
                     </lane>
                 </right>
             </laneSection>
         </lanes>
     </road>
-    
-        <road name="L13" length="50.0" id="13" junction="-1">
+    <road name="L13" length="50.0" id="13" junction="-1">
         <link>
-<!--            <successor elementType="road" elementId="10" contactPoint="start" />-->
-<!--                <successor elementType="junction" elementId="10001" />-->
-
+            <!--            <successor elementType="road" elementId="10" contactPoint="start" />-->
+            <!--                <successor elementType="junction" elementId="10001" />-->
             <predecessor elementType="road" elementId="12" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="-206.0" y="-1981.0" hdg="0.83" length="50.0">  <!-- hdg="3.141593" left to right-->
-                <line />>
+            <geometry s="0.0" x="-206.0" y="-1981.0" hdg="0.83" length="50.0">
+                <!-- hdg="3.141593" left to right-->
+                <line />
+                &gt;
             </geometry>
         </planView>
         <lanes>
@@ -4049,22 +4056,34 @@
                             <successor id="-30" />
                         </link>
                     </lane>
-                    <lane id="-32" type="mwyEntry" level="0">
+                    <lane id="-32" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-31" />
+                        </link>
+                    </lane>
+                    <lane id="-33" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-32" />
+                        </link>
+                    </lane>
+                    <lane id="-34" type="mwyEntry" level="0">
                         <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </right>
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L14" length="50.0" id="14" junction="-1">
+    <road name="L14" length="50.0" id="14" junction="-1">
         <link>
-<!--            <successor elementType="road" elementId="12" contactPoint="start" />-->
+            <!--            <successor elementType="road" elementId="12" contactPoint="start" />-->
             <predecessor elementType="road" elementId="12" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="-173.0" y="-1951.0" hdg="0.83" length="50.0">  <!-- hdg="3.141593" left to right-->
-            <arc curvature="-0.008" />
+            <geometry s="0.0" x="-173.0" y="-1951.0" hdg="0.83" length="50.0">
+                <!-- hdg="3.141593" left to right-->
+                <arc curvature="-0.008" />
             </geometry>
         </planView>
         <lanes>
@@ -4130,47 +4149,51 @@
                             <successor id="-10" />
                         </link>
                     </lane>
+                    <lane id="-11" type="driving" level="0">
+                        <width sOffset="0.0" a="2.0" b="0.0" c="0.0" d="0.0" />
+                        <link>
+                            <successor id="-11" />
+                        </link>
+                    </lane>
                 </right>
             </laneSection>
         </lanes>
-    </road> 
-    
-    
-    
-     <junction id="10001" name="streetcrossing">
+    </road>
+    <junction id="10001" name="streetcrossing">
         <connection id="0" incomingRoad="13" connectingRoad="12" contactPoint="start">
-            <laneLink from="-2" to="-1" />
-            <laneLink from="-3" to="-2" />
-            <laneLink from="-4" to="-3" />
-            <laneLink from="-5" to="-4" />
-            <laneLink from="-6" to="-5" />
-            <laneLink from="-7" to="-6" />
-            <laneLink from="-8" to="-7" />
-            <laneLink from="-9" to="-8" />
-            <laneLink from="-10" to="-9" />
-            <laneLink from="-11" to="-10" />
-            <laneLink from="-12" to="-11" />
-            <laneLink from="-13" to="-12" />
-            <laneLink from="-14" to="-13" />
-            <laneLink from="-15" to="-14" />
-            <laneLink from="-16" to="-15" />
-            <laneLink from="-17" to="-16" />
-            <laneLink from="-18" to="-17" />
-            <laneLink from="-19" to="-18" />
-            <laneLink from="-20" to="-19" />
-            <laneLink from="-21" to="-20" />
-            <laneLink from="-22" to="-21" />
-            <laneLink from="-23" to="-22" />
-            <laneLink from="-24" to="-23" />
-            <laneLink from="-25" to="-24" />
-            <laneLink from="-26" to="-25" />
-            <laneLink from="-27" to="-26" />
-            <laneLink from="-28" to="-27" />
-            <laneLink from="-29" to="-28" />
-            <laneLink from="-30" to="-29" />
-            <laneLink from="-31" to="-30" />
-            <laneLink from="-32" to="-31" />
-            <laneLink from="-33" to="-32" />
+            <laneLink from="-1" to="-1" />
+            <laneLink from="-2" to="-2" />
+            <laneLink from="-3" to="-3" />
+            <laneLink from="-4" to="-4" />
+            <laneLink from="-5" to="-5" />
+            <laneLink from="-6" to="-6" />
+            <laneLink from="-7" to="-7" />
+            <laneLink from="-8" to="-8" />
+            <laneLink from="-9" to="-9" />
+            <laneLink from="-10" to="-10" />
+            <laneLink from="-11" to="-11" />
+            <laneLink from="-12" to="-12" />
+            <laneLink from="-13" to="-13" />
+            <laneLink from="-14" to="-14" />
+            <laneLink from="-15" to="-15" />
+            <laneLink from="-16" to="-16" />
+            <laneLink from="-17" to="-17" />
+            <laneLink from="-18" to="-18" />
+            <laneLink from="-19" to="-19" />
+            <laneLink from="-20" to="-20" />
+            <laneLink from="-21" to="-21" />
+            <laneLink from="-22" to="-22" />
+            <laneLink from="-23" to="-23" />
+            <laneLink from="-24" to="-24" />
+            <laneLink from="-25" to="-25" />
+            <laneLink from="-26" to="-26" />
+            <laneLink from="-27" to="-27" />
+            <laneLink from="-28" to="-28" />
+            <laneLink from="-29" to="-29" />
+            <laneLink from="-30" to="-30" />
+            <laneLink from="-31" to="-31" />
+            <laneLink from="-32" to="-32" />
+            <laneLink from="-33" to="-33" />
         </connection>
         <connection id="1" incomingRoad="14" connectingRoad="12" contactPoint="start">
             <laneLink from="-34" to="-1" />
@@ -4183,8 +4206,8 @@
             <laneLink from="-41" to="-8" />
             <laneLink from="-42" to="-9" />
             <laneLink from="-43" to="-10" />
+            <laneLink from="-44" to="-11" />
         </connection>
     </junction>
-    
 </OpenDRIVE>
 

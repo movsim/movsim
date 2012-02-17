@@ -6,11 +6,11 @@
     <VEHICLES>
         <VEHICLE label="CCS1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" P0="150" V_c="5" P_straddle="100" V_c_straddle="1.5" b="2" />
+                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="2" P0="200" V_c="5" P_straddle="150" V_c_straddle="1.5" b="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="8" b_max="9">
+        <VEHICLE label="Obstacle" length="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
             </LONGITUDINAL_MODEL>
@@ -63,6 +63,7 @@
             <FLOATING_CAR_DATA n_dt="5">
                 <FC number="2" />
                 <FC number="3" />
+                <FC number="6" />
                 <FC number="11" />
                 <FC number="16" />
                 <FC number="21" />

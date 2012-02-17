@@ -1,93 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="vasa.xodr">
     <VEHICLES>
         <VEHICLE label="CCS1" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" P0="150" V_c="5" P_tackling="100" V_c_tackling="1.5" b="2"/>
+                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" P0="200" V_c="5" P_straddle="150" V_c_straddle="1.5" b="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="2.0" s_min="2.0" threshold="0.1" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="2.0" s_min="1.0" threshold="0.05" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-         <VEHICLE label="CCS2" length="2" width="1" b_max="9">
+        <VEHICLE label="CCS2" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" P0="140" V_c="5" P_tackling="90" V_c_tackling="1.5" b="2"/>
+                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" P0="150" V_c="5" P_straddle="100" V_c_straddle="1.5" b="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="2.0" s_min="2.0" threshold="0.1" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="2.0" s_min="1.0" threshold="0.2" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
-        </VEHICLE>
-        <VEHICLE label="Obstacle" length="8" b_max="9">
-            <LONGITUDINAL_MODEL>
-                <ACC v0="0" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="1" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="1000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="1" />
-            <VEHICLE_TYPE label="CCS1" fraction="1" />
-            <VEHICLE_TYPE label="CCS2" fraction="1" />
-            <VEHICLE_TYPE label="Obstacle" fraction="0" />
+            <VEHICLE_TYPE label="CCS1" fraction="0.3" relative_v0_randomization="0.1" />
+            <VEHICLE_TYPE label="CCS2" fraction="0.7" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <INITIAL_CONDITIONS>
-<!--                <IC_MACRO x="1" rho_per_km="155" v="0"/>-->
-<IC_MICRO x="10" v="0" />
-                <IC_MICRO x="20" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="30" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="40" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="50" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="60" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="70" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="80" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="90" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="100" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="110" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="120" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="130" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="140" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="150" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="160" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="170" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="180" v="0" lane="1" label="CCS1"/>
-                <IC_MICRO x="190" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="200" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="210" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="220" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="230" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="240" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="250" v="0" lane="1" label="CCS2"/>
-                <IC_MICRO x="260" v="0" lane="1" label="CCS2"/>
-                
-                <IC_MICRO x="20" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="30" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="40" v="0" lane="3" label="CCS2"/>
-                <IC_MICRO x="50" v="0" lane="4" label="CCS1"/>
-                <IC_MICRO x="60" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="70" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="80" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="90" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="100" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="110" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="120" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="130" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="140" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="150" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="160" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="170" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="180" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="190" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="200" v="0" lane="2" label="CCS1"/>
-                <IC_MICRO x="210" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="220" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="230" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="240" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="250" v="0" lane="2" label="CCS2"/>
-                <IC_MICRO x="260" v="0" lane="2" label="CCS2"/>
+                <IC_MACRO x="1" rho_per_km="330" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <OUTPUT />
