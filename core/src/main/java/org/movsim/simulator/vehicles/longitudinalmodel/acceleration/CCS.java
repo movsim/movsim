@@ -10,6 +10,10 @@ import org.slf4j.LoggerFactory;
 public class CCS extends LongitudinalModelBase {
 
     final static Logger logger = LoggerFactory.getLogger(CCS.class);
+    
+
+    final static private double DENSITY_AIR = 1.3;
+    final static private double EARTH_GRAVITY = 9.81;
 
     private double mass;
     private double A;
@@ -27,10 +31,6 @@ public class CCS extends LongitudinalModelBase {
     private double lenght;
 
     private int gradient;
-
-    private double density_air = 1.3;
-
-    private double grav = 9.81;
 
     /**
      * Instantiates a new CCS (cross country skiing).
@@ -110,13 +110,13 @@ public class CCS extends LongitudinalModelBase {
         
         double P = Math.max(P0, P_straddle);
         
-        double acc_free = ((v>0.01*v_c)? P/(mass*v) : a_max) - 0.5*cw*A*density_air*v*v/mass - grav  *(friction*v + gradient);
+        double acc_free = ((v>0.01*v_c)? P/(mass*v) : a_max) - 0.5*cw*A*DENSITY_AIR*v*v/mass - EARTH_GRAVITY  *(friction*v + gradient);
         
         double b_kin = dv*dv * ((dv>0) ? 1: 0) / Math.max(s-s0, 0.01*s0);
      
         double acc_int = - Math.min(b_kin*b_kin, b*b) / b - Math.max(acc_free, 0.5*a_max ) * v * T / Math.max(s-s0, 0.01*s0);
         
-        double aWanted = Math.max(acc_free + acc_int, -b-gradient*grav);
+        double aWanted = Math.max(acc_free + acc_int, -b-gradient*EARTH_GRAVITY);
         
         logger.debug("aWanted = {}", aWanted);
         return aWanted;
