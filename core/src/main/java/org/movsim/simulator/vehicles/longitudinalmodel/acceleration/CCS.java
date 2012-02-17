@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 public class CCS extends LongitudinalModelBase {
 
     final static Logger logger = LoggerFactory.getLogger(CCS.class);
-    
 
     final static private double DENSITY_AIR = 1.3;
     final static private double EARTH_GRAVITY = 9.81;
@@ -20,10 +19,10 @@ public class CCS extends LongitudinalModelBase {
     private double cw;
     private double friction;
     private double T;
-    private double P0;
+    private double p0;
     private double v_c;
-    private double P_straddle;
-    private double V_c_straddle;
+    private double p_straddle;
+    private double v_c_straddle;
     private double b;
 
     private double a;
@@ -47,13 +46,13 @@ public class CCS extends LongitudinalModelBase {
         cw = parameters.getCw();
         friction = parameters.getFriction();
         T = parameters.getT();
-        P0 = parameters.getP0();
+        p0 = parameters.getP0();
         v_c = parameters.getV_c();
-        P_straddle = parameters.getP_straddle();
-        V_c_straddle = parameters.getV_c_straddle();
+        p_straddle = parameters.getP_straddle();
+        v_c_straddle = parameters.getV_c_straddle();
         b = parameters.getB();
     }
-    
+
     /**
      * Sets the relative randomization v0.
      * 
@@ -63,13 +62,13 @@ public class CCS extends LongitudinalModelBase {
     @Override
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
-        final double newP0 = P0 * (1 + relRandomizationFactor * equalRandom);
-        logger.debug("randomization of desired speeds: p0={}, new p0={}", P0, newP0);
+        final double newP0 = p0 * (1 + relRandomizationFactor * equalRandom);
+        logger.debug("randomization of desired speeds: p0={}, new p0={}", p0, newP0);
         setP0(newP0);
     }
 
     private void setP0(double newP0) {
-        this.P0 = newP0;
+        this.p0 = newP0;
     }
 
     @Override
@@ -79,8 +78,8 @@ public class CCS extends LongitudinalModelBase {
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
 
-//        System.out.println("v," +v+" gradient "+gradient );
-        
+        // System.out.println("v," +v+" gradient "+gradient );
+
         return acc(s, v, dv, gradient);
     }
 
@@ -91,26 +90,27 @@ public class CCS extends LongitudinalModelBase {
 
     private double acc(double s, double v, double dv, double gradient) {
 
-        double a_max = 4*P0 / (v_c*mass);
-        
-        double P_diagonal = 4 * (v/v_c)*(1-v/v_c) * ((v<v_c) ? 1 : 0);
-        double P_straddle = 4 * (v/V_c_straddle)*(1-v/v_c) * ((v<V_c_straddle) ? 1 : 0);
-        double P = Math.max(P0, P_straddle);
+        double a_max = 4 * p0 / (v_c * mass);
 
-        double b_kin = dv*dv * ((dv>0) ? 1: 0) / Math.max(s-s0, 0.01*s0);
-        
-        double acc_free = ((v>0.01*v_c)? P/(mass*v) : a_max) - 0.5*cw*A*DENSITY_AIR*v*v/mass - EARTH_GRAVITY  *(friction*v + gradient);
-        double acc_int = - Math.min(b_kin*b_kin, b*b) / b - Math.max(acc_free, 0.5*a_max ) * v * T / Math.max(s-s0, 0.01*s0);
-        double aWanted = Math.max(acc_free + acc_int, -b-gradient*EARTH_GRAVITY);
-        
+        double P_diagonal = 4 * (v / v_c) * (1 - v / v_c) * ((v < v_c) ? 1 : 0);
+        double P_straddle = 4 * (v / v_c_straddle) * (1 - v / v_c) * ((v < v_c_straddle) ? 1 : 0);
+        double P = Math.max(p0, P_straddle);
+
+        double b_kin = dv * dv * ((dv > 0) ? 1 : 0) / Math.max(s - s0, 0.01 * s0);
+
+        double acc_free = ((v > 0.01 * v_c) ? P / (mass * v) : a_max) - 0.5 * cw * A * DENSITY_AIR * v * v / mass
+                - EARTH_GRAVITY * (friction * v + gradient);
+        double acc_int = -Math.min(b_kin * b_kin, b * b) / b - Math.max(acc_free, 0.5 * a_max) * v * T
+                / Math.max(s - s0, 0.01 * s0);
+        double aWanted = Math.max(acc_free + acc_int, -b - gradient * EARTH_GRAVITY);
+
         logger.debug("aWanted = {}", aWanted);
         return aWanted;
     }
 
-   
     @Override
     public double getDesiredSpeed() {
-         throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
+        throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CCS extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle);
 
         gradient = 0;
-        return acc(s, v, dv, gradient );
+        return acc(s, v, dv, gradient);
     }
 
 }
