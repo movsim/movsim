@@ -245,7 +245,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         switch (vehicleColorMode) {
         case VELOCITY_COLOR:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
-            return SwingHelper.getColorAccordingToSpectrum(0, 140, v);
+            return SwingHelper.getColorAccordingToSpectrum(0, GraphicsConfigurationParameters.VmaxForColorSpectrum, v);
         case ACCELERATION_COLOR:
             final double a = vehicle.physicalQuantities().getAcc();
             count = accelerations.length;
