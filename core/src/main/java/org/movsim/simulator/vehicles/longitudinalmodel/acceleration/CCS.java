@@ -25,8 +25,6 @@ public class CCS extends LongitudinalModelBase {
     private double v_c_straddle;
     private double b;
 
-    private double a;
-
     private double lenght;
 
     private int gradient;
