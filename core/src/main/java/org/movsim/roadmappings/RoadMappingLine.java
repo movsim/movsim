@@ -112,12 +112,11 @@ public class RoadMappingLine extends RoadMapping {
         init();
     }
 
-//    public RoadMappingLine(int laneCount, double s, double x, double y, double hdg, double length, double a) {
-//        this(laneCount, s, x, y, hdg, length);
-//        laneWidth = a;
-//        roadWidth = laneWidth * laneCount;
-//        System.out.println("laneWidth: "+laneWidth+"    roadwidth "+roadWidth);
-//    }
+    public RoadMappingLine(int laneCount, double s, double x, double y, double hdg, double length, double a) {
+        this(laneCount, s, x, y, hdg, length);
+        laneWidth = a;
+        roadWidth = laneWidth * laneCount;
+    }
 
     protected void init() {
         final double opp = y1 - y0;

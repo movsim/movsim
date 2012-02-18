@@ -336,19 +336,23 @@ public class OpenDriveHandler extends DefaultHandler {
         if (element.equals("road")) {
             // create a RoadSegment from the parsed road element and add it to the road network
             final int laneCount = road.lanes.laneSection.right.size() + road.lanes.laneSection.left.size();
+            double laneWidth = 0;
+            if (road.lanes.laneSection.right.get(0) !=null) {
+                laneWidth = road.lanes.laneSection.right.get(0).width;
+            } else if (road.lanes.laneSection.left.get(0) !=null){
+                laneWidth = road.lanes.laneSection.left.get(0).width;
+            }
             final RoadMapping roadMapping;
             if (road.planView.geometries.size() == 1) {
                 final Road.PlanView.Geometry geometry = road.planView.geometries.get(0);
                 switch (geometry.type) {
                 case LINE:
                     roadMapping = new RoadMappingLine(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-                            geometry.length);
-//                    roadMapping = new RoadMappingLine(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-//                            geometry.length, geometry.a);
+                            geometry.length, laneWidth);
                     break;
                 case ARC:
                     roadMapping = new RoadMappingArc(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-                            geometry.length, geometry.curvature);
+                            geometry.length, geometry.curvature, laneWidth);
                     break;
                 case POLY3:
                     throw new SAXException("POLY3 geometry not yet supported (in road: " + road.name + " )");
