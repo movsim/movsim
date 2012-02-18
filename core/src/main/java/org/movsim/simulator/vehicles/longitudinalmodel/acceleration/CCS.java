@@ -105,7 +105,7 @@ public class CCS extends LongitudinalModelBase {
 
         double s_rel = (v * T + 0.5 * s0) / Math.max(s - 0.5 * s0, 0.00001 * s0);
         double acc_int = -(b_kin * b_kin / b) - Math.max(b * (s_rel - 1), 0) - Math.max(acc_free * s_rel, 0);
-        double aWanted = Math.max(acc_free + acc_int, -b_maximal - gradient * EARTH_GRAVITY);
+        double aWanted = Math.max(acc_free + acc_int, - b_maximal - gradient * EARTH_GRAVITY);
         // if(s<2) { System.out.println("s: "+s+ "s0:  "+s0+"  s_rel: "+
         // s_rel+"   v:  "+v+"   afree: "+acc_free+"    acc_int: "+acc_int+ "   awanted: "+ aWanted);
         // }
