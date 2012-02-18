@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <SCENARIO network_filename="vasa.xodr">
     <VEHICLES>
         <VEHICLE label="CCS1" length="2" width="1" b_max="9">
@@ -9,7 +9,7 @@
                 <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="2.0" s_min="1.0" threshold="0.05" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="1.0" s_min="0.6" threshold="0.001" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <VEHICLE label="CCS2" length="2" width="1" b_max="9">
@@ -17,7 +17,7 @@
                 <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2"/>
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="2.0" s_min="1.0" threshold="0.2" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="1.0" s_min="0.6" threshold="0.001" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
     </VEHICLES>
@@ -28,8 +28,26 @@
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="1" rho_per_km="390" v="0" />
+                <IC_MACRO x="1" rho_per_km="340" v="0" />
+<!--            <IC_MICRO x="600" v="0" lane="1" />-->
             </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="11">
+            <SLOPES>
+                <SLOPE x="10" gradient="0.03" />
+                <SLOPE x="100" gradient="-0.1" />
+                <SLOPE x="140" gradient="0.0" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="13">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.2" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="14">
+            <SLOPES>
+                <SLOPE x="20" gradient="0.2" />
+            </SLOPES>
         </ROAD>
         <OUTPUT />
     </SIMULATION>

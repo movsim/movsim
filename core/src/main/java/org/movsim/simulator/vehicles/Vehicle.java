@@ -54,35 +54,32 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * <p>
- * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's
- * position is given by the position of the front of the vehicle on the road segment and also by the
- * vehicle's lane.
+ * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the
+ * position of the front of the vehicle on the road segment and also by the vehicle's lane.
  * </p>
  * 
  * <p>
  * A vehicle possesses two intelligence modules:
  * <ul>
- * <li>a LongitudinalModel which determines its acceleration in the direction of travel.
- * </li>
+ * <li>a LongitudinalModel which determines its acceleration in the direction of travel.</li>
  * <li>a LaneChangeModel which determines when it changes lanes.</li>
  * </ul>
  * </p>
  * <p>
- * Vehicles are quite frequently created and destroyed, so by design they have few allocated
- * properties.
+ * Vehicles are quite frequently created and destroyed, so by design they have few allocated properties.
  * </p>
  */
 public class Vehicle {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Vehicle.class);
-    
+
     protected static final int INITIAL_ID = 1;
     protected static final int INITIAL_TEMPLATE_ID = -1;
-    
+
     private static long nextId = INITIAL_ID;
     private static long nextTemplateId = INITIAL_TEMPLATE_ID;
-    
+
     /**
      * 'Not Set' vehicle id value, guaranteed not to be used by any vehicles.
      */
@@ -436,7 +433,7 @@ public class Vehicle {
     }
 
     /**
-     * Sets the reference position of this vehicle by the rear porsition.
+     * Sets the reference position of this vehicle by the rear position.
      * 
      * @param rearPosition
      *            new rear position
@@ -453,12 +450,6 @@ public class Vehicle {
     public final double getRearPosition() {
         return frontPosition - length;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#oldPosition()
-     */
 
     public final double getFrontPositionOld() {
         return frontPositionOld;
@@ -496,9 +487,13 @@ public class Vehicle {
     public final void setSpeedlimit(double speedlimit) {
         this.speedlimit = speedlimit;
     }
-    
+
     public void setSlope(double slope) {
         this.slope = slope;
+    }
+
+    public double getSlope() {
+        return slope;
     }
 
     public double getAcc() {
