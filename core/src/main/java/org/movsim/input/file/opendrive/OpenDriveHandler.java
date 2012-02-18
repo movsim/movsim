@@ -60,9 +60,9 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 @SuppressWarnings("nls")
 public class OpenDriveHandler extends DefaultHandler {
-    
+
     final static Logger logger = LoggerFactory.getLogger(OpenDriveHandler.class);
-    
+
     private final ArrayList<String> stack = new ArrayList<String>();
     private int elementIndex = 0;
     private final int limit = 100000;
@@ -337,9 +337,9 @@ public class OpenDriveHandler extends DefaultHandler {
             // create a RoadSegment from the parsed road element and add it to the road network
             final int laneCount = road.lanes.laneSection.right.size() + road.lanes.laneSection.left.size();
             double laneWidth = 0;
-            if (road.lanes.laneSection.right.get(0) !=null) {
+            if (road.lanes.laneSection.right.get(0) != null) {
                 laneWidth = road.lanes.laneSection.right.get(0).width;
-            } else if (road.lanes.laneSection.left.get(0) !=null){
+            } else if (road.lanes.laneSection.left.get(0) != null) {
                 laneWidth = road.lanes.laneSection.left.get(0).width;
             }
             final RoadMapping roadMapping;

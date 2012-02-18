@@ -103,7 +103,7 @@ public class CCS extends LongitudinalModelBase {
 
         double acc_free = F / mass - 0.5 * cw * A * DENSITY_AIR * v * v / mass - EARTH_GRAVITY * (friction + gradient);
 
-        double s_rel = (v * T + 0.5*s0) / Math.max(s - 0.5*s0, 0.00001 * s0);
+        double s_rel = (v * T + 0.5 * s0) / Math.max(s - 0.5 * s0, 0.00001 * s0);
         double acc_int = -(b_kin * b_kin / b) - Math.max(b * (s_rel - 1), 0) - Math.max(acc_free * s_rel, 0);
         double aWanted = Math.max(acc_free + acc_int, -b_maximal - gradient * EARTH_GRAVITY);
         // if(s<2) { System.out.println("s: "+s+ "s0:  "+s0+"  s_rel: "+
@@ -112,7 +112,7 @@ public class CCS extends LongitudinalModelBase {
         logger.debug("aWanted = {}", aWanted);
         return aWanted;
     }
-    
+
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
@@ -124,7 +124,7 @@ public class CCS extends LongitudinalModelBase {
         gradient = 0;
         return acc(s, v, dv, gradient);
     }
-    
+
     @Override
     public double getDesiredSpeed() {
         throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
