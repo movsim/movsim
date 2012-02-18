@@ -51,6 +51,7 @@ import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Slopes;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.TrafficSource;
@@ -267,6 +268,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set up the speed limits
         final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
+
+        // set up the slopes
+        final Slopes slopes = new Slopes(roadinput.getSlopesInputData());
+        roadSegment.setSlopes(slopes);
 
         // set up the detectors
         final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadinput.getDetectorInput());

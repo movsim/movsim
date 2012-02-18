@@ -125,8 +125,7 @@ public class RoadInput {
             public int compare(ICMicroData o1, ICMicroData o2) {
                 final Double pos1 = new Double((o1).getX());
                 final Double pos2 = new Double((o2).getX());
-                return pos2.compareTo(pos1); // sort with DECREASING x because
-                                             // of FC veh counting
+                return pos2.compareTo(pos1); // sort with DECREASING x because of FC veh counting
             }
         });
 
@@ -204,7 +203,6 @@ public class RoadInput {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(slopeElem);
                 slopesInputData.add(new SlopeDataPoint(map));
             }
-
             Collections.sort(slopesInputData, new Comparator<SlopeDataPoint>() {
                 @Override
                 public int compare(SlopeDataPoint o1, SlopeDataPoint o2) {
@@ -241,8 +239,6 @@ public class RoadInput {
 
         // Detectors
         detectorInput = new DetectorInput(elem.getChild(XmlElementNames.OutputDetectors));
-
-
     }
 
     public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
@@ -272,7 +268,7 @@ public class RoadInput {
     public List<SpeedLimitDataPoint> getSpeedLimitInputData() {
         return speedLimitInputData;
     }
-    
+
     public List<SlopeDataPoint> getSlopesInputData() {
         return slopesInputData;
     }

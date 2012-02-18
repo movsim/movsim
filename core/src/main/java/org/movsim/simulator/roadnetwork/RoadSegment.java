@@ -88,6 +88,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private FlowConservingBottlenecks flowConservingBottlenecks;
     private TrafficLights trafficLights;
     private SpeedLimits speedLimits;
+    private Slopes slopes;
 
     // Sources and Sinks
     private TrafficSource trafficSource;
@@ -752,7 +753,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setSpeedLimits(SpeedLimits speedLimits) {
         this.speedLimits = speedLimits;
     }
-
+    
     /**
      * Returns an iterable over all the speed limits in the road segment.
      * 
@@ -760,6 +761,24 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public Iterable<SpeedLimit> speedLimits() {
         return speedLimits == null ? null : speedLimits;
+    }
+    
+    /**
+     * Sets the slopes for this road segment.
+     * 
+     * @param slopes
+     */
+    public void setSlopes(Slopes slopes) {
+        this.slopes = slopes;
+    }
+    
+    /**
+     * Returns an iterable over all the slopes in the road segment.
+     * 
+     * @return an iterable over all the slopes in the road segment
+     */
+    public Iterable<Slope> slopes() {
+        return slopes == null ? null : slopes;
     }
 
     /**
