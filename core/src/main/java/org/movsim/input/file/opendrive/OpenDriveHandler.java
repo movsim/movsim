@@ -38,6 +38,8 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -58,6 +60,9 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 @SuppressWarnings("nls")
 public class OpenDriveHandler extends DefaultHandler {
+    
+    final static Logger logger = LoggerFactory.getLogger(OpenDriveHandler.class);
+    
     private final ArrayList<String> stack = new ArrayList<String>();
     private int elementIndex = 0;
     private final int limit = 100000;
@@ -203,7 +208,7 @@ public class OpenDriveHandler extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        System.out.println("startElement: " + qName);
+        logger.debug("startElement: " + qName);
         ++elementIndex;
         if (elementIndex > limit && limit > 0) {
             throw new SAXException("Reached limit count"); // stop parsing
@@ -325,7 +330,7 @@ public class OpenDriveHandler extends DefaultHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        System.out.println("endElement: " + qName);
+        logger.debug("endElement: " + qName);
         stack.remove(stack.size() - 1); // pop element
         final String element = qName.toLowerCase();
         if (element.equals("road")) {
@@ -338,6 +343,8 @@ public class OpenDriveHandler extends DefaultHandler {
                 case LINE:
                     roadMapping = new RoadMappingLine(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
                             geometry.length);
+//                    roadMapping = new RoadMappingLine(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
+//                            geometry.length, geometry.a);
                     break;
                 case ARC:
                     roadMapping = new RoadMappingArc(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
@@ -489,7 +496,7 @@ public class OpenDriveHandler extends DefaultHandler {
             // iterate through all the junctions
             for (final Junction junction : junctions) {
                 for (final Junction.Connection connection : junction.connections) {
-                    // System.out.println("Junction id:" + junction.id);
+                    // logger.debug("Junction id:" + junction.id);
                     final RoadSegment incomingRoadSegment = roadNetwork.findByUserId(connection.incomingRoad);
                     if (incomingRoadSegment == null) {
                         throw new SAXException("Cannot find incoming road: " + connection.incomingRoad);
@@ -503,14 +510,14 @@ public class OpenDriveHandler extends DefaultHandler {
                         for (final Junction.Connection.LaneLink laneLink : connection.laneLinks) {
                             final int fromLane = laneIdToLaneIndex(incomingRoadSegment, laneLink.from);
                             final int toLane = laneIdToLaneIndex(connenctingRoadSegment, laneLink.to);
-                            // System.out.println("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
+                            // logger.debug("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
                             Link.addLanePair(fromLane, incomingRoadSegment, toLane, connenctingRoadSegment);
                         }
                     } else if (road.link.successorType.equals("junction") && road.link.successorId.equals(junction.id)) {
                         for (final Junction.Connection.LaneLink laneLink : connection.laneLinks) {
                             final int fromLane = laneIdToLaneIndex(connenctingRoadSegment, laneLink.from);
                             final int toLane = laneIdToLaneIndex(incomingRoadSegment, laneLink.to);
-                            // System.out.println("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
+                            // logger.debug("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
                             Link.addLanePair(fromLane, connenctingRoadSegment, toLane, incomingRoadSegment);
                         }
                     } else {
@@ -539,7 +546,7 @@ public class OpenDriveHandler extends DefaultHandler {
     // @Override
     // public void characters(char ch[], int start, int length) throws SAXException {
     // final String string = new String(ch, start, length);
-    // System.out.println("characters:" + string);
+    // logger.debug("characters:" + string);
     // }
 
     private double getDouble(Attributes attributes, String qName) throws SAXException {

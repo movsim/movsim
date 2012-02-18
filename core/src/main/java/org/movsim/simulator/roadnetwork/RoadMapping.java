@@ -146,7 +146,7 @@ public abstract class RoadMapping {
     // Immutable Properties
     protected final int laneCount;
     protected double laneWidth;
-    protected final double roadWidth;
+    protected double roadWidth;
     // trafficLaneMin and trafficLaneMax set the range of lanes for normal traffic in the road
     // segment lanes less than trafficLaneMin or greater than trafficLaneMax are exit or entrance
     // ramps.
