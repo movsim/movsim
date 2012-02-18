@@ -28,7 +28,7 @@
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="1" rho_per_km="330" v="0" />
+                <IC_MACRO x="1" rho_per_km="390" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <OUTPUT />
