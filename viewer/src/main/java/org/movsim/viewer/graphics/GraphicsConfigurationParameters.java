@@ -49,6 +49,6 @@ public interface GraphicsConfigurationParameters {
     public static final boolean DRAWSINKS = true;
     public static final boolean DRAWSPEEDLIMITS = true;
 
-    public static final double VmaxForColorSpectrum = 50;
+    public static final double VmaxForColorSpectrum = 30;
     
 }

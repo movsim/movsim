@@ -197,17 +197,18 @@ alpha_a  NMTOKEN "1"
 <!-- Cross coutry skiing model -->
 <!ELEMENT CCS EMPTY>
 <!ATTLIST CCS
-  mass          NMTOKEN #REQUIRED
-  cw            NMTOKEN #REQUIRED
-  A             NMTOKEN #REQUIRED
-  friction      NMTOKEN #REQUIRED
-  P0            NMTOKEN #REQUIRED
-  V_c           NMTOKEN #REQUIRED
-  P_straddle    NMTOKEN #REQUIRED
-  V_c_straddle  NMTOKEN #REQUIRED
-  T             NMTOKEN #REQUIRED
-  s0            NMTOKEN #REQUIRED
-  b             NMTOKEN #REQUIRED
+  mass            NMTOKEN #REQUIRED
+  cw              NMTOKEN #REQUIRED
+  A               NMTOKEN #REQUIRED
+  friction        NMTOKEN #REQUIRED
+  p0              NMTOKEN #REQUIRED
+  v_c             NMTOKEN #REQUIRED
+  p_herringbone   NMTOKEN #REQUIRED
+  v_c_herringbone NMTOKEN #REQUIRED
+  T               NMTOKEN #REQUIRED
+  s0              NMTOKEN #REQUIRED
+  b               NMTOKEN #REQUIRED
+  b_maximal       NMTOKEN #REQUIRED
 >
 
 <!ELEMENT LANE_CHANGE_MODEL (MOBIL?)>

@@ -6,7 +6,7 @@
     <VEHICLES>
         <VEHICLE label="CCS1" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" P0="200" V_c="5" P_straddle="150" V_c_straddle="1.5" b="1" />
+                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
                 <MOBIL b_safe="2.0" s_min="1.0" threshold="0.05" bias_right="0.0" politeness="0.0" />
@@ -14,7 +14,7 @@
         </VEHICLE>
         <VEHICLE label="CCS2" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" P0="150" V_c="5" P_straddle="100" V_c_straddle="1.5" b="1" />
+                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2"/>
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
                 <MOBIL b_safe="2.0" s_min="1.0" threshold="0.2" bias_right="0.0" politeness="0.0" />
