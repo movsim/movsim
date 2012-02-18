@@ -284,6 +284,7 @@ public class Vehicle {
         label = "";
         physQuantities = new PhysicalQuantities(this);
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = 0;
     }
 
     /**
@@ -309,6 +310,7 @@ public class Vehicle {
         longitudinalModel = source.longitudinalModel;
         label = source.label;
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = source.slope;
     }
 
     /**
@@ -331,6 +333,7 @@ public class Vehicle {
         longitudinalModel = ldm;
         label = "";
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = 0;
     }
 
     private void initialize() {
@@ -339,8 +342,8 @@ public class Vehicle {
         speed = 0;
         acc = 0;
         isBrakeLightOn = false;
-
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = 0;
     }
 
     public String getLabel() {
