@@ -6,18 +6,18 @@
     <VEHICLES>
         <VEHICLE label="CCS1" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />
+                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="1.0" s_min="0.6" threshold="0.001" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="1.0" s_min="0.2" threshold="0.0001" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <VEHICLE label="CCS2" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2"/>
+                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.5" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="1.0" s_min="0.6" threshold="0.001" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="1.0" s_min="0.5" threshold="0.0001" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
     </VEHICLES>
@@ -29,7 +29,7 @@
         <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="1" rho_per_km="340" v="0" />
-<!--            <IC_MICRO x="600" v="0" lane="1" />-->
+                <!--            <IC_MICRO x="600" v="0" lane="1" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="11">
