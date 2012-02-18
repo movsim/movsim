@@ -152,7 +152,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.clear();
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
-        // projectMetaData.setOutputPath(path);
         initialize();
     }
 
