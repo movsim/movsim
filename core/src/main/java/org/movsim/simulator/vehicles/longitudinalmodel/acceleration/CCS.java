@@ -64,7 +64,7 @@ public class CCS extends LongitudinalModelBase {
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
         final double newP0 = p0 * (1 + relRandomizationFactor * equalRandom);
-        logger.debug("randomization of desired speeds: p0={}, new p0={}", p0, newP0);
+        logger.debug("randomization of power: p0={}, new p0={}", p0, newP0);
         setP0(newP0);
     }
 
@@ -114,11 +114,6 @@ public class CCS extends LongitudinalModelBase {
     }
     
     @Override
-    public double getDesiredSpeed() {
-        throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
-    }
-
-    @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
@@ -129,5 +124,9 @@ public class CCS extends LongitudinalModelBase {
         gradient = 0;
         return acc(s, v, dv, gradient);
     }
-
+    
+    @Override
+    public double getDesiredSpeed() {
+        throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
+    }
 }
