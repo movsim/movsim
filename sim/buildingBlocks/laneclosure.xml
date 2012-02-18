@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <SCENARIO network_filename="laneclosure.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="5" b_max="9">
