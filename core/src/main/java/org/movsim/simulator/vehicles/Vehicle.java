@@ -76,8 +76,13 @@ public class Vehicle {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Vehicle.class);
+    
     protected static final int INITIAL_ID = 1;
     protected static final int INITIAL_TEMPLATE_ID = -1;
+    
+    private static long nextId = INITIAL_ID;
+    private static long nextTemplateId = INITIAL_TEMPLATE_ID;
+    
     /**
      * 'Not Set' vehicle id value, guaranteed not to be used by any vehicles.
      */
@@ -130,7 +135,6 @@ public class Vehicle {
     /** The max deceleration . */
     private final double maxDecel;
 
-    /** The id. */
     long id;
 
     /** The vehicle number. */
@@ -146,6 +150,7 @@ public class Vehicle {
     private double tLaneChangeDelay;
 
     private double speedlimit;
+    private double slope;
 
     /** The longitudinal model. */
     private LongitudinalModelBase longitudinalModel;
@@ -163,7 +168,6 @@ public class Vehicle {
     private Object colorObject; // color object cache
 
     private final TrafficLightApproaching trafficLightApproaching;
-
     private final FuelConsumption fuelModel; // can be null
 
     private boolean isBrakeLightOn;
@@ -174,9 +178,6 @@ public class Vehicle {
     private int roadSegmentId;
     private double roadSegmentLength;
     private final int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
-
-    private static long nextId = INITIAL_ID;
-    private static long nextTemplateId = INITIAL_TEMPLATE_ID;
 
     /**
      * The type of numerical integration.
@@ -491,6 +492,10 @@ public class Vehicle {
      */
     public final void setSpeedlimit(double speedlimit) {
         this.speedlimit = speedlimit;
+    }
+    
+    public void setSlope(double slope) {
+        this.slope = slope;
     }
 
     public double getAcc() {
@@ -929,4 +934,5 @@ public class Vehicle {
     public final double totalTraveledDistance() {
         return totalTraveledDistance;
     }
+
 }

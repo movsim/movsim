@@ -532,11 +532,9 @@ public class RoadSegment implements Iterable<Vehicle> {
             trafficLights.update(dt, simulationTime, iterationCount, this);
         }
         updateSpeedLimits();
+        updateSlopes();
     }
 
-    /**
-     * Update speed limits.
-     */
     private void updateSpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {
             for (final LaneSegment laneSegment : laneSegments) {
@@ -546,6 +544,20 @@ public class RoadSegment implements Iterable<Vehicle> {
                     final double speedlimit = speedLimits.calcSpeedLimit(pos);
                     vehicle.setSpeedlimit(speedlimit);
                     logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
+                }
+            }
+        }
+    }
+    
+    private void updateSlopes() {
+        if (slopes != null && slopes.isEmpty() == false) {
+            for (final LaneSegment laneSegment : laneSegments) {
+                for (final Vehicle vehicle : laneSegment) {
+                    assert vehicle.roadSegmentId() == id;
+                    final double pos = vehicle.getFrontPosition();
+                    final double slope = slopes.calcSlope(pos);
+                    vehicle.setSlope(slope);
+                    logger.debug("pos={} --> slope gradient{}", pos, slope);
                 }
             }
         }
