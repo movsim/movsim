@@ -20,10 +20,11 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
     private double T;
     private double s0;
     private double P0;
-    private double V_c;
-    private double P_straddle;
-    private double V_c_straddle;
+    private double v_c;
+    private double p_herringbone;
+    private double v_c_herringbone;
     private double b;
+    private double b_maximal;
 
     public LongitudinalModelInputDataCCS(Map<String, String> map) {
         super(ModelName.CCS);
@@ -33,11 +34,12 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
         friction = Double.parseDouble(map.get("friction"));
         T = Double.parseDouble(map.get("T"));
         s0 = Double.parseDouble(map.get("s0"));
-        P0 = Double.parseDouble(map.get("P0"));
-        V_c = Double.parseDouble(map.get("V_c"));
-        P_straddle = Double.parseDouble(map.get("P_straddle"));
-        V_c_straddle = Double.parseDouble(map.get("V_c_straddle"));
+        P0 = Double.parseDouble(map.get("p0"));
+        v_c = Double.parseDouble(map.get("v_c"));
+        p_herringbone = Double.parseDouble(map.get("p_herringbone"));
+        v_c_herringbone = Double.parseDouble(map.get("v_c_herringbone"));
         b = Double.parseDouble(map.get("b"));
+        b_maximal = Double.parseDouble(map.get("b_maximal"));
     }
 
     /**
@@ -93,21 +95,21 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
      * @return the v_c
      */
     public double getV_c() {
-        return V_c;
+        return v_c;
     }
 
     /**
      * @return the p_tackling
      */
-    public double getP_straddle() {
-        return P_straddle;
+    public double getP_herringbone() {
+        return p_herringbone;
     }
 
     /**
      * @return the v_c_tackling
      */
-    public double getV_c_straddle() {
-        return V_c_straddle;
+    public double getV_c_herringbone() {
+        return v_c_herringbone;
     }
 
     /**
@@ -115,6 +117,10 @@ public class LongitudinalModelInputDataCCS extends LongitudinalModelInputData {
      */
     public double getB() {
         return b;
+    }
+    
+    public double getB_maximal() {
+        return b_maximal;
     }
 
     @Override

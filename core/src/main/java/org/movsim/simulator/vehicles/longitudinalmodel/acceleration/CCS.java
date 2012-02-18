@@ -21,9 +21,10 @@ public class CCS extends LongitudinalModelBase {
     private double T;
     private double p0;
     private double v_c;
-    private double p_straddle;
-    private double v_c_straddle;
+    private double p_herrginbone;
+    private double v_c_herringbone;
     private double b;
+    private double b_maximal;
 
     private double lenght;
 
@@ -38,7 +39,6 @@ public class CCS extends LongitudinalModelBase {
      */
     public CCS(LongitudinalModelInputDataCCS parameters, double vehLength) {
         super(ModelName.CCS, parameters);
-        s0 = parameters.getS0();
         lenght = vehLength;
         mass = parameters.getMass();
         A = parameters.getA();
@@ -47,9 +47,11 @@ public class CCS extends LongitudinalModelBase {
         T = parameters.getT();
         p0 = parameters.getP0();
         v_c = parameters.getV_c();
-        p_straddle = parameters.getP_straddle();
-        v_c_straddle = parameters.getV_c_straddle();
+        p_herrginbone = parameters.getP_herringbone();
+        v_c_herringbone = parameters.getV_c_herringbone();
         b = parameters.getB();
+        b_maximal = parameters.getB_maximal();
+        s0 = parameters.getS0();
     }
 
     /**
@@ -90,24 +92,23 @@ public class CCS extends LongitudinalModelBase {
     private double acc(double s, double v, double dv, double gradient) {
 
         double a_max = 4 * p0 / (v_c * mass);
-        double gradientSlip = a_max/EARTH_GRAVITY; 
+        double gradientSlip = a_max / EARTH_GRAVITY;
 
         double F_diagonal = (4 * p0 / v_c) * (1 - v / v_c) * ((v < v_c) ? 1 : 0);
-        double F_straddle = (4 *p_straddle / v_c_straddle) * (1 - v / v_c) * ((v < v_c_straddle) ? 1 : 0);
-        
-        double F = (gradient < 0.5 * gradientSlip) ? F_diagonal: Math.max(F_diagonal, F_straddle);
+        double F_herringbone = (4 * p_herrginbone / v_c_herringbone) * (1 - v / v_c) * ((v < v_c_herringbone) ? 1 : 0);
+
+        double F = (gradient < 0.5 * gradientSlip) ? F_diagonal : Math.max(F_diagonal, F_herringbone);
 
         double b_kin = 0.5 * v * dv * ((dv > 0) ? 1 : 0) / Math.max(s - s0, 0.00001 * s0);
 
-        double acc_free = F/mass- 0.5 * cw * A * DENSITY_AIR * v * v / mass
-                - EARTH_GRAVITY * (friction + gradient);
-        
-        double s_rel = (v*T+s0)/Math.max(s - s0, 0.00001 * s0);
-        double b_max = 2; //TODO new Parameter to xml
-        double acc_int = - (b_kin * b_kin / b) - Math.max(b*(s_rel-1), 0)- Math.max(acc_free*s_rel, 0);
-        double aWanted = Math.max(acc_free + acc_int, -b_max - gradient * EARTH_GRAVITY);
-//if(s<2) { System.out.println("s: "+s+ "s0:  "+s0+"  s_rel: "+ s_rel+"   v:  "+v+"   afree: "+acc_free+"    acc_int: "+acc_int+ "   awanted: "+ aWanted);
-//}
+        double acc_free = F / mass - 0.5 * cw * A * DENSITY_AIR * v * v / mass - EARTH_GRAVITY * (friction + gradient);
+
+        double s_rel = (v * T + s0) / Math.max(s - s0, 0.00001 * s0);
+        double acc_int = -(b_kin * b_kin / b) - Math.max(b * (s_rel - 1), 0) - Math.max(acc_free * s_rel, 0);
+        double aWanted = Math.max(acc_free + acc_int, -b_maximal - gradient * EARTH_GRAVITY);
+        // if(s<2) { System.out.println("s: "+s+ "s0:  "+s0+"  s_rel: "+
+        // s_rel+"   v:  "+v+"   afree: "+acc_free+"    acc_int: "+acc_int+ "   awanted: "+ aWanted);
+        // }
         logger.debug("aWanted = {}", aWanted);
         return aWanted;
     }
