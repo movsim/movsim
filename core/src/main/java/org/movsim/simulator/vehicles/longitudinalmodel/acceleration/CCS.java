@@ -21,7 +21,7 @@ public class CCS extends LongitudinalModelBase {
     private double T;
     private double p0;
     private double v_c;
-    private double p_herrginbone;
+    private double p_herringbone;
     private double v_c_herringbone;
     private double b;
     private double b_maximal;
@@ -47,7 +47,7 @@ public class CCS extends LongitudinalModelBase {
         T = parameters.getT();
         p0 = parameters.getP0();
         v_c = parameters.getV_c();
-        p_herrginbone = parameters.getP_herringbone();
+        p_herringbone = parameters.getP_herringbone();
         v_c_herringbone = parameters.getV_c_herringbone();
         b = parameters.getB();
         b_maximal = parameters.getB_maximal();
@@ -95,7 +95,7 @@ public class CCS extends LongitudinalModelBase {
         double gradientSlip = a_max / EARTH_GRAVITY;
 
         double F_diagonal = (4 * p0 / v_c) * (1 - v / v_c) * ((v < v_c) ? 1 : 0);
-        double F_herringbone = (4 * p_herrginbone / v_c_herringbone) * (1 - v / v_c) * ((v < v_c_herringbone) ? 1 : 0);
+        double F_herringbone = (4 * p_herringbone / v_c_herringbone) * (1 - v / v_c) * ((v < v_c_herringbone) ? 1 : 0);
 
         double F = (gradient < 0.5 * gradientSlip) ? F_diagonal : Math.max(F_diagonal, F_herringbone);
 
@@ -103,7 +103,7 @@ public class CCS extends LongitudinalModelBase {
 
         double acc_free = F / mass - 0.5 * cw * A * DENSITY_AIR * v * v / mass - EARTH_GRAVITY * (friction + gradient);
 
-        double s_rel = (v * T + s0) / Math.max(s - s0, 0.00001 * s0);
+        double s_rel = (v * T + 0.5*s0) / Math.max(s - 0.5*s0, 0.00001 * s0);
         double acc_int = -(b_kin * b_kin / b) - Math.max(b * (s_rel - 1), 0) - Math.max(acc_free * s_rel, 0);
         double aWanted = Math.max(acc_free + acc_int, -b_maximal - gradient * EARTH_GRAVITY);
         // if(s<2) { System.out.println("s: "+s+ "s0:  "+s0+"  s_rel: "+
@@ -112,7 +112,7 @@ public class CCS extends LongitudinalModelBase {
         logger.debug("aWanted = {}", aWanted);
         return aWanted;
     }
-
+    
     @Override
     public double getDesiredSpeed() {
         throw new UnsupportedOperationException("getDesiredSpeed not applicable for CSS model.");
