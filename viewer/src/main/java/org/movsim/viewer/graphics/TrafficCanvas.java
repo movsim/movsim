@@ -255,7 +255,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         switch (vehicleColorMode) {
         case VELOCITY_COLOR:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
-            System.out.println("getVmaxForColorSpectrum()"+getVmaxForColorSpectrum());
             return SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum() , v);
         case ACCELERATION_COLOR:
             final double a = vehicle.physicalQuantities().getAcc();
@@ -411,7 +410,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
         g.setColor(Color.GRAY);
-        // g.setColor(roadMapping.roadColor()); // TODO
+        g.setColor(roadMapping.roadColor());
         PaintRoadMapping.paintRoadMapping(g, roadMapping);
     }
 

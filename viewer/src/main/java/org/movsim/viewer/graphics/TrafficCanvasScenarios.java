@@ -26,11 +26,13 @@
 
 package org.movsim.viewer.graphics;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -74,7 +76,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
     @Override
     public void updateStatus(double simulationTime) {
-        // System.out.println("TrafficCanvas.updateStatus:" + simulationTime);
         if (isInitialSpeedUp && simulationTime > speedupEndTime) {
             isInitialSpeedUp = false;
             setSleepTime(sleepTimeSave);
@@ -167,10 +168,18 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case VASALOPPET:
             path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
-            initialScale = 0.4;
-            setScale(initialScale);
-            setSleepTime(5);
+            setSleepTime(0);
             setVmaxForColorSpectrum(40);
+            setxOffset(400);
+            setyOffset(700);
+            roadLineColor = Color.LIGHT_GRAY;
+            roadEdgeColor = Color.DARK_GRAY;
+            backgroundColor = Color.WHITE;
+            initialScale = 0.8;
+            setScale(initialScale);
+            for (RoadSegment segment: roadNetwork) {
+                segment.roadMapping().setRoadColor(Color.LIGHT_GRAY);
+            }
             break;
         default:
             return;

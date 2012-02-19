@@ -29,7 +29,7 @@
         <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="1" rho_per_km="340" v="0" />
-                <!--            <IC_MICRO x="600" v="0" lane="1" />-->
+<!--                            <IC_MICRO x="600" v="0" lane="1" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="11">

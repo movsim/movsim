@@ -26,6 +26,7 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.movsim.simulator.vehicles.Vehicle;
@@ -154,9 +155,8 @@ public abstract class RoadMapping {
     private int trafficLaneMax;
     // Road
     protected double roadLength;
-    protected int roadColor;
-    protected static final int ROAD_COLOR_NOT_SET = -2;
-    protected static int defaultRoadColor = ROAD_COLOR_NOT_SET;
+    protected Color roadColor;
+    protected static Color defaultRoadColor = Color.GRAY;
     // Positioning
     // pre-allocate single posTheta for the road mapping. This is shared and reused, so must be used
     // carefully.
@@ -203,7 +203,7 @@ public abstract class RoadMapping {
      * 
      * @return the default road color
      */
-    public static int defaultRoadColor() {
+    public static Color defaultRoadColor() {
         return RoadMapping.defaultRoadColor;
     }
 
@@ -212,7 +212,7 @@ public abstract class RoadMapping {
      * 
      * @param defaultRoadColor
      */
-    public static void setDefaultRoadColor(int defaultRoadColor) {
+    public static void setDefaultRoadColor(Color defaultRoadColor) {
         RoadMapping.defaultRoadColor = defaultRoadColor;
     }
 
@@ -335,10 +335,10 @@ public abstract class RoadMapping {
     /**
      * Sets the road color.
      * 
-     * @param roadColor
+     * @param color
      */
-    public final void setRoadColor(int roadColor) {
-        this.roadColor = roadColor;
+    public final void setRoadColor(Color color) {
+        this.roadColor = color;
     }
 
     /**
@@ -346,7 +346,7 @@ public abstract class RoadMapping {
      * 
      * @return road color
      */
-    public final int roadColor() {
+    public final Color roadColor() {
         return roadColor;
     }
 
