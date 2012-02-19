@@ -118,6 +118,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected Color sinkColor = Color.black;
     protected Color sourceJunctionColor = Color.cyan;
     protected Color sinkJunctionColor = Color.blue;
+    
+    private double vmaxForColorSpectrum = GraphicsConfigurationParameters.VmaxForColorSpectrum;
 
     protected boolean drawRoadId = GraphicsConfigurationParameters.DRAW_ROADID;
     protected boolean drawSouces = GraphicsConfigurationParameters.DRAWSOURCES;
@@ -207,6 +209,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         assert velocities.length == velocityColors.length - 1;
         assert accelerations.length == accelerationColors.length - 1;
     }
+    
+    public double getVmaxForColorSpectrum() {
+        return vmaxForColorSpectrum;
+    }
+
+    public void setVmaxForColorSpectrum(double vmaxForColorSpectrum) {
+        this.vmaxForColorSpectrum = vmaxForColorSpectrum;
+    }
 
     public boolean isDrawRoadId() {
         return drawRoadId;
@@ -245,7 +255,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         switch (vehicleColorMode) {
         case VELOCITY_COLOR:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
-            return SwingHelper.getColorAccordingToSpectrum(0, GraphicsConfigurationParameters.VmaxForColorSpectrum, v);
+            return SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum() , v);
         case ACCELERATION_COLOR:
             final double a = vehicle.physicalQuantities().getAcc();
             count = accelerations.length;

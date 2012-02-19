@@ -286,6 +286,21 @@ public class MovSimMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
+        
+        scenarioMenu.addSeparator();
+        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("Vasaloppet")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemVasaLoppet);
+        
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
@@ -639,6 +654,7 @@ public class MovSimMenu extends JPanel {
     }
 
     public void uiDefaultReset() {
+        canvasPanel.trafficCanvas.setVmaxForColorSpectrum(GraphicsConfigurationParameters.VmaxForColorSpectrum);
         startbuttonToPauseAtScenarioChange();
         frame.statusPanel.setWithTravelTimes(false);
         frame.statusPanel.setWithProgressBar(true);

@@ -90,6 +90,7 @@ public class LocalizationStrings extends ListResourceBundle {
             { "CityInterSection", "city intersection" },
             { "RingRoad", "ring road with one lane" },
             { "RingRoad2Lanes", "ring with road two lanes" },
+            { "Vasaloppet", "Vasaloppet start phase simulation" },
 
             // Help Menu
             { "HelpMenu", "Help" },
