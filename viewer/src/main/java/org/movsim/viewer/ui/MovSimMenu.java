@@ -297,6 +297,7 @@ public class MovSimMenu extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
                 uiDefaultReset();
+                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(40);
             }
         });
         scenarioMenu.add(menuItemVasaLoppet);

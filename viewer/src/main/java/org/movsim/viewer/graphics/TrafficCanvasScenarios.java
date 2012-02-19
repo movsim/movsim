@@ -47,7 +47,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     private Scenario scenario = Scenario.NONE;
 
     // speed boost to get vehicles onto network quickly
-    private boolean inInitialSpeedUp;
+    private boolean isInitialSpeedUp;
     private double speedupEndTime;
     private int sleepTimeSave;
 
@@ -75,8 +75,8 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     @Override
     public void updateStatus(double simulationTime) {
         // System.out.println("TrafficCanvas.updateStatus:" + simulationTime);
-        if (inInitialSpeedUp && simulationTime > speedupEndTime) {
-            inInitialSpeedUp = false;
+        if (isInitialSpeedUp && simulationTime > speedupEndTime) {
+            isInitialSpeedUp = false;
             setSleepTime(sleepTimeSave);
         }
     }
@@ -102,7 +102,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         super.reset();
         setSleepTime(INITIAL_SLEEP_TIME);
         initialScale = 1.0;
-        inInitialSpeedUp = false;
+        isInitialSpeedUp = false;
         vehicleToHighlightId = -1;
         forceRepaintBackground();
     }
@@ -167,6 +167,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case VASALOPPET:
             path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
+            initialScale = 0.4;
+            setScale(initialScale);
+            setSleepTime(5);
+            setVmaxForColorSpectrum(40);
             break;
         default:
             return;
