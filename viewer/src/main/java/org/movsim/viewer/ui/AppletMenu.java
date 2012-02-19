@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class AppletMenu extends JPanel {
@@ -282,6 +283,25 @@ public class AppletMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
+        
+        scenarioMenu.addSeparator();
+        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("Vasaloppet")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.simulator.loadScenarioFromXml("vasa_CCS", "/sim/examples/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
+                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(40);
+            }
+        });
+        scenarioMenu.add(menuItemVasaLoppet);
+        
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
