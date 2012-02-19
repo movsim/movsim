@@ -178,7 +178,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             initialScale = 0.8;
             setScale(initialScale);
             for (RoadSegment segment: roadNetwork) {
-                segment.roadMapping().setRoadColor(Color.LIGHT_GRAY);
+                segment.roadMapping().setRoadColor(Color.WHITE);
             }
             break;
         default:

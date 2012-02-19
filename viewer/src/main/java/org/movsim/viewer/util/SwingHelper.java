@@ -160,10 +160,10 @@ public class SwingHelper {
 
         // possibly a reduction of brightness near h=0.5 looks nicer;
         // first try max brightness (0-1)
-        final float b = (float) 1.0;
+        final float b = (float) 0.92;
 
         final int rgb = Color.HSBtoRGB(h, s, b);
-        return v >= 0 ? new Color(rgb) : Color.white;
+        return v > 0 ? new Color(rgb) : Color.BLACK;
     }
 
     public static void notImplemented(Component c) {
