@@ -497,12 +497,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final int size = (int) (2 * roadMapping.laneWidth());
         final int radius = (int) (1.8 * roadMapping.laneWidth());
         for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-            // paint the "virtual traffic light" controlling too much inflow
             g.setColor(Color.DARK_GRAY);
-            // TODO
-            // final double shiftHack = (roadSection.getId() == RoadIDs.idOfframp) ? -roadSection.getRampMergingLength() : 0;
-            final double shiftHack = 0;
-            final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position() + shiftHack, offset);
+            final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
             g.fillRect((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
             if (trafficLight.isGreen()) {
                 g.setColor(Color.GREEN);
