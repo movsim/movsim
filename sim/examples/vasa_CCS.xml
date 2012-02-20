@@ -6,18 +6,18 @@
     <VEHICLES>
         <VEHICLE label="CCS1" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.3" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />
+                <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.0" s0="0.6" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1.1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="1.0" s_min="0.2" threshold="0.0001" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="1.0" s_min="1.0" threshold="0.01" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <VEHICLE label="CCS2" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.5" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2" />
+                <CCS mass="84" A="1" cw="0.7" friction="0.02" T="1.2" s0="0.8" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
-                <MOBIL b_safe="1.0" s_min="0.5" threshold="0.0001" bias_right="0.0" politeness="0.0" />
+                <MOBIL b_safe="1.0" s_min="1.0" threshold="0.01" bias_right="0.0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
     </VEHICLES>
@@ -26,27 +26,32 @@
             <VEHICLE_TYPE label="CCS1" fraction="0.3" relative_v0_randomization="0.1" />
             <VEHICLE_TYPE label="CCS2" fraction="0.7" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>
-        <ROAD id="1">
+        <ROAD id="0">
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="1" rho_per_km="340" v="0" />
+                <IC_MACRO x="500" rho_per_km="370" v="0" />
 <!--                            <IC_MICRO x="600" v="0" lane="1" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="11">
             <SLOPES>
                 <SLOPE x="10" gradient="0.03" />
-                <SLOPE x="100" gradient="-0.1" />
-                <SLOPE x="140" gradient="0.0" />
+                <SLOPE x="100" gradient="-0.06" />
+                <SLOPE x="140" gradient="0.02" />
             </SLOPES>
         </ROAD>
         <ROAD id="13">
             <SLOPES>
-                <SLOPE x="1" gradient="0.2" />
+                <SLOPE x="1" gradient="0.14" />
             </SLOPES>
         </ROAD>
         <ROAD id="14">
             <SLOPES>
-                <SLOPE x="20" gradient="0.2" />
+                <SLOPE x="20" gradient="0.16" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="15">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.06" />
             </SLOPES>
         </ROAD>
         <OUTPUT />
