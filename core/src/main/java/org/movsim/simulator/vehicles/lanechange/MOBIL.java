@@ -31,6 +31,7 @@ import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 
 /**
  * The Class MOBIL.
@@ -62,7 +63,7 @@ public class MOBIL {
     private final Vehicle me;
 
     /**
-     * Instantiates a new mOBIL impl.
+     * Instantiates a new MOBIL.
      * 
      * @param vehicle
      *            the vehicle
@@ -74,17 +75,15 @@ public class MOBIL {
     }
 
     /**
-     * Instantiates a new MOBIL impl.
+     * Instantiates a new MOBIL.
      * 
      * @param vehicle
      *            the vehicle
      * @param lcMobilData
-     *            the lc mobil data
+     *            the lane change MOBIL data
      */
     public MOBIL(Vehicle vehicle, LaneChangeMobilData lcMobilData) {
         this.me = vehicle;
-        // TODO Auto-generated constructor stub
-
         bSafeRef = bSafe = lcMobilData.getSafeDeceleration();
         biasRightRef = biasRight = lcMobilData.getRightBiasAcceleration();
         gapMin = lcMobilData.getMinimumGap();
@@ -113,8 +112,8 @@ public class MOBIL {
         final int currentLane = me.getLane();
         final int newLane = currentLane + direction;
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
-        if (newLaneSegment.type() == Lane.Type.ENTRANCE) {
-            // never change lane into an entrance lane
+        if ((newLaneSegment.type() == Lane.Type.ENTRANCE) && (me.getLongitudinalModel().modelName() != ModelName.CCS)) {
+            // never change lane into an entrance lane except //TODO remove check for CCS if not needed anymore
             return prospectiveBalance;
         }
 
@@ -183,12 +182,12 @@ public class MOBIL {
             // cannot temporarily remove the current vehicle from the current lane, since we are in a loop
             // that iterates over the vehicles in the current lane. So calculate oldBackNewAcc based on just
             // the front vehicle.
-if (currentLaneSegment.frontVehicle(me) != null ) { //TODO remove quickhack for avoiding nullpointer
-    oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
-} else {
-    oldBackNewAcc = 0.0;
-}
-           
+            if (currentLaneSegment.frontVehicle(me) != null) { // TODO remove quickhack for avoiding nullpointer
+                oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
+            } else {
+                oldBackNewAcc = 0.0;
+            }
+
             // currentLaneSegment.removeVehicle(me);
             // oldBackNewAcc = oldBack.calcAccModel(currentLaneSegment, null);
             // currentLaneSegment.addVehicle(me);
@@ -203,8 +202,19 @@ if (currentLaneSegment.frontVehicle(me) != null ) { //TODO remove quickhack for 
         final int changeTo = newLaneSegment.lane() - currentLaneSegment.lane();
         final double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
 
-        prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
-                * biasRight;
+        // TODO adjust hack for CCS
+        if (me.getLongitudinalModel().modelName() == ModelName.CCS) {
+            int laneCount = roadSegment.laneCount();
+            if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
+                prospectiveBalance = 1000000;
+            } else {
+                prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
+                        * biasRight;
+            }
+        } else {
+            prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
+                    * biasRight;
+        }
 
         return prospectiveBalance;
     }
