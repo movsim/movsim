@@ -200,16 +200,15 @@ public class MOBIL {
 
         // MOBIL's incentive formula
         final int changeTo = newLaneSegment.lane() - currentLaneSegment.lane();
-        final double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
+        double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
 
         // TODO adjust hack for CCS
         if (me.getLongitudinalModel().modelName() == ModelName.CCS) {
             int laneCount = roadSegment.laneCount();
             if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
-                prospectiveBalance = 1000000;
+                prospectiveBalance = 1000;
             } else {
-                prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
-                        * biasRight;
+                // TODO bias towards middle lanes;
             }
         } else {
             prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
