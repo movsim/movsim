@@ -71,8 +71,6 @@ public class MOBIL {
     public MOBIL(Vehicle vehicle) {
         this.me = vehicle;
         // TODO handle this case with *no* <MOBIL> xml element
-        System.err.println("sorry...");
-        System.exit(-1);
     }
 
     /**
