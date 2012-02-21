@@ -71,7 +71,8 @@ public class MOBIL {
     public MOBIL(Vehicle vehicle) {
         this.me = vehicle;
         // TODO handle this case with *no* <MOBIL> xml element
-
+        System.err.println("sorry...");
+        System.exit(-1);
     }
 
     /**
@@ -198,22 +199,34 @@ public class MOBIL {
         final double newBackDiffAcc = newBackNewAcc - newBackOldAcc;
         final double meDiffAcc = meNewAcc - meOldAcc;
 
-        // MOBIL's incentive formula
+       
         final int changeTo = newLaneSegment.lane() - currentLaneSegment.lane();
-        double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
-
+        
         // TODO adjust hack for CCS
-        if (me.getLongitudinalModel().modelName() == ModelName.CCS) {
-            int laneCount = roadSegment.laneCount();
+        if (me.getLongitudinalModel().modelName() == ModelName.CCS ) {
+            
+            final int laneCount = roadSegment.laneCount();
             if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
-                prospectiveBalance = 1000;
+                prospectiveBalance = 1000;  // mandatory change from ending lane
             } else {
-                // TODO bias towards middle lanes;
+                // bias towards middle lanes:
+                int biasSign = -1;
+                // assume increasing lane index from right to left
+                if ((currentLane < laneCount/2 && changeTo == MovsimConstants.TO_LEFT) || (currentLane > laneCount/2 && changeTo == MovsimConstants.TO_RIGHT)){
+                    biasSign = 1;  // in favor of changing to the middle
+                }
+                prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold + biasSign
+                        * biasRight;
             }
-        } else {
-            prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
-                    * biasRight;
+            
+            return prospectiveBalance; // quick hack ends here
         }
+        // MOBIL's incentive formula
+        
+        final int biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
+            
+        prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
+                    * biasRight;
 
         return prospectiveBalance;
     }
