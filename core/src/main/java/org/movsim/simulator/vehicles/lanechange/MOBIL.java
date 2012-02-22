@@ -203,14 +203,14 @@ public class MOBIL {
         // TODO adjust hack for CCS
         if (me.getLongitudinalModel().modelName() == ModelName.CCS ) {
             
-            final int laneCount = roadSegment.laneCount();
             if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
                 prospectiveBalance = 1000;  // mandatory change from ending lane
             } else {
                 // bias towards middle lanes:
                 int biasSign = -1;
                 // assume increasing lane index from right to left
-                if ((currentLane < laneCount/2 && changeTo == MovsimConstants.TO_LEFT) || (currentLane > laneCount/2 && changeTo == MovsimConstants.TO_RIGHT)){
+                final int laneCount = roadSegment.laneCount();
+                if ((currentLane+6 < laneCount/2 && changeTo == MovsimConstants.TO_LEFT) || (currentLane-6 > laneCount/2 && changeTo == MovsimConstants.TO_RIGHT)){
                     biasSign = 1;  // in favor of changing to the middle
                 }
                 prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold + biasSign

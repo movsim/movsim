@@ -149,16 +149,10 @@ public class Vehicle {
     private double speedlimit;
     private double slope;
 
-    /** The longitudinal model. */
     private LongitudinalModelBase longitudinalModel;
+    private LaneChangeModel laneChangeModel;
 
-    /** The lane change model. */
-    private LaneChangeModel lcModel;
-
-    /** The memory. */
     private Memory memory = null;
-
-    /** The noise. */
     private Noise noise = null;
 
     private int color;
@@ -234,13 +228,11 @@ public class Vehicle {
         maxDecel = vehInput.getMaxDeceleration();
 
         initialize();
-        // longitudinal ("car-following") model
         this.longitudinalModel = longitudinalModel;
         physQuantities = new PhysicalQuantities(this);
 
-        // lane-changing model
-        this.lcModel = lcModel;
-        lcModel.initialize(this);
+        this.laneChangeModel = lcModel;
+        laneChangeModel.initialize(this);
 
         // no effect if model is not configured with memory effect
         if (vehInput.isWithMemory()) {
@@ -276,7 +268,7 @@ public class Vehicle {
         trafficLightApproaching = null;
         reactionTime = 0.0;
         maxDecel = 0.0;
-        lcModel = null;
+        laneChangeModel = null;
         longitudinalModel = null;
         label = "";
         physQuantities = new PhysicalQuantities(this);
@@ -303,7 +295,7 @@ public class Vehicle {
         trafficLightApproaching = source.trafficLightApproaching;
         reactionTime = source.reactionTime;
         maxDecel = source.maxDecel;
-        lcModel = source.lcModel;
+        laneChangeModel = source.laneChangeModel;
         longitudinalModel = source.longitudinalModel;
         label = source.label;
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
@@ -326,7 +318,7 @@ public class Vehicle {
         trafficLightApproaching = null;
         reactionTime = 0.0;
         maxDecel = 0.0;
-        lcModel = null;
+        laneChangeModel = null;
         longitudinalModel = ldm;
         label = "";
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
@@ -606,8 +598,8 @@ public class Vehicle {
 
         final double acc;
 
-        if (lcModel != null && lcModel.isInitialized() && lcModel.withEuropeanRules()) {
-            acc = longitudinalModel.calcAccEur(lcModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
+        if (laneChangeModel != null && laneChangeModel.isInitialized() && laneChangeModel.withEuropeanRules()) {
+            acc = longitudinalModel.calcAccEur(laneChangeModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
                     alphaTLocal, alphaV0Local, alphaALocal);
         } else {
             acc = longitudinalModel.calcAcc(this, laneSegment, alphaTLocal, alphaV0Local, alphaALocal);
@@ -687,11 +679,11 @@ public class Vehicle {
     }
 
     public LaneChangeModel getLaneChangeModel() {
-        return lcModel;
+        return laneChangeModel;
     }
 
     public void setLaneChangeModel(LaneChangeModel lcModel) {
-        this.lcModel = lcModel;
+        this.laneChangeModel = lcModel;
     }
 
     public LongitudinalModelBase getLongitudinalModel() {
@@ -709,7 +701,7 @@ public class Vehicle {
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
 
         // no lane changing when not configured in xml.
-        if (lcModel == null || !lcModel.isInitialized()) {
+        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
 
@@ -724,7 +716,7 @@ public class Vehicle {
         }
 
         // if not in lane-changing process do determine if new lane is more attractive and lane change is possible
-        final int laneChangeDirection = lcModel.determineLaneChangeDirection(roadSegment);
+        final int laneChangeDirection = laneChangeModel.determineLaneChangeDirection(roadSegment);
 
         // initiates a lane change: set targetLane to new value the lane will be assigned by the vehicle container !!
         if (laneChangeDirection != MovsimConstants.NO_CHANGE) {
