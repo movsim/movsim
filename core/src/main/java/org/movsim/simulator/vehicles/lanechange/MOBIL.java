@@ -111,7 +111,7 @@ public class MOBIL {
         final int currentLane = me.getLane();
         final int newLane = currentLane + direction;
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
-        if ((newLaneSegment.type() == Lane.Type.ENTRANCE) && (me.getLongitudinalModel().modelName() != ModelName.CCS)) {
+        if ((newLaneSegment.type() == Lane.Type.ENTRANCE) ) {
             // never change lane into an entrance lane except //TODO remove check for CCS if not needed anymore
             return prospectiveBalance;
         }
@@ -166,14 +166,14 @@ public class MOBIL {
         final double meOldAcc = me.calcAccModel(currentLaneSegment, null);
 
         // old situation for old back
-        final Vehicle oldBack = currentLaneSegment.rearVehicle(me);
-
         // in old situation same left lane as me
+        final Vehicle oldBack = currentLaneSegment.rearVehicle(me);
         final double oldBackOldAcc = (oldBack != null) ? oldBack.calcAccModel(currentLaneSegment, null) : 0.0;
 
         // old situation for new back: just provides the actual left-lane situation
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLaneSegment, null) : 0.0;
 
+        // new situation for new back: 
         final double oldBackNewAcc;
         if (oldBack == null) {
             oldBackNewAcc = 0.0;
@@ -200,25 +200,41 @@ public class MOBIL {
        
         final int changeTo = newLaneSegment.lane() - currentLaneSegment.lane();
         
+
+
+
+
+
         // TODO adjust hack for CCS
-        if (me.getLongitudinalModel().modelName() == ModelName.CCS ) {
-            
+        if (me.getLongitudinalModel().modelName() == ModelName.CCS) {
+            double biasForced = 10000;
+            double biasNormal = 0.2;
+            double bias;
+            final int laneCount = roadSegment.laneCount();
+
             if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
-                prospectiveBalance = 1000;  // mandatory change from ending lane
+		double factor=(currentLane>0.5*(laneCount-1))
+		    ? (laneCount-currentLane) : (currentLane+1);
+                System.out.println("currentLane: "+ currentLane+ " factor*biasForced="+ factor*biasForced);
+
+                return biasForced*factor;
             } else {
-                // bias towards middle lanes:
-                int biasSign = -1;
-                // assume increasing lane index from right to left
-                final int laneCount = roadSegment.laneCount();
-                if ((currentLane+6 < laneCount/2 && changeTo == MovsimConstants.TO_LEFT) || (currentLane-6 > laneCount/2 && changeTo == MovsimConstants.TO_RIGHT)){
-                    biasSign = 1;  // in favor of changing to the middle
-                }
-                prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold + biasSign
-                        * biasRight;
+                 // assume increasing lane index from right to left
+                bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
             }
+
+	    prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold -bias*direction;
             
             return prospectiveBalance; // quick hack ends here
         }
+
+
+
+
+
+
+
+
         // MOBIL's incentive formula
         
         final int biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;

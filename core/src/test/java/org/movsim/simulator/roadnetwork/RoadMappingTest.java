@@ -102,12 +102,12 @@ public class RoadMappingTest {
     /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneWidth()}
      */
-    @Test
-    public void testLaneWidth() {
-        final int LANE_COUNT = 3;
-        final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
-        assertEquals(RoadMapping.DEFAULT_LANE_WIDTH, roadMapping.laneWidth(), delta);
-    }
+    //@Test
+    //public void testLaneWidth() {
+    //   final int LANE_COUNT = 3;
+    //   final RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
+    //   assertEquals(RoadMapping.DEFAULT_LANE_WIDTH, roadMapping.laneWidth(), delta);
+    //}
 
     /**
      * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneCount()}
