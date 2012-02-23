@@ -25,90 +25,120 @@
  */
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
-// TODO: Auto-generated Javadoc
+import java.util.Map;
+
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The Interface LongitudinalModelInputDataNSM.
+ * The Class LongitudinalModelInputDataNSM.
  */
-public interface LongitudinalModelInputDataNSM extends LongitudinalModelInputData {
+public class LongitudinalModelInputDataNSM extends LongitudinalModelInputData {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataNSM.class);
 
     /**
-     * Gets the v0.
-     * 
-     * @return the v0
+     * The v0. desired velocity (cell units/time unit)
      */
-    double getV0();
+    private double v0;
+    private final double v0Default;
 
     /**
-     * Gets the slowdown.
-     * 
-     * @return the slowdown
+     * The p slowdown. Troedelwahrscheinlichkeit - slowdown probability
      */
-    double getSlowdown();
+    private double pSlowdown;
+    private final double pSlowdownDefault;
 
     /**
-     * Gets the slow to start.
-     * 
-     * @return the slow to start
+     * The p slow to start. slow-to-start rule (Barlovic)
      */
-    double getSlowToStart();
+    private double pSlowToStart;
+    private final double pSlowToStartDefault;
 
     /**
-     * Gets the v0 default.
+     * Instantiates a new model input data nsm impl.
      * 
-     * @return the v0 default
+     * @param map
+     *            the map
      */
-    double getV0Default();
+    public LongitudinalModelInputDataNSM(Map<String, String> map) {
+        super(ModelName.NSM);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        pSlowToStartDefault = pSlowToStart = Double.parseDouble(map.get("p_slow_start"));
+        pSlowdownDefault = pSlowdown = Double.parseDouble(map.get("p_slowdown"));
+        checkParameters();
+    }
 
-    /**
-     * Gets the p slowdown.
-     * 
-     * @return the p slowdown
-     */
-    double getpSlowdown();
+    @Override
+    protected void checkParameters() {
+        if (pSlowToStart < pSlowdown) {
+            logger.error("slow to start logic requires pSlowToStart > pSlowdown, but input {} < {} ", pSlowToStart,
+                    pSlowdown);
+            logger.error("please check parameters. exit", getModelName().name());
+            System.exit(-1);
+        }
 
-    /**
-     * Gets the p slowdown default.
-     * 
-     * @return the p slowdown default
-     */
-    double getpSlowdownDefault();
+        if (v0 < 0 || pSlowdown < 0 || pSlowToStart < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
+    }
 
-    /**
-     * Gets the p slow to start.
-     * 
-     * @return the p slow to start
-     */
-    double getpSlowToStart();
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        pSlowToStart = pSlowToStartDefault;
+        pSlowdown = pSlowdownDefault;
+    }
 
-    /**
-     * Gets the p slow to start default.
-     * 
-     * @return the p slow to start default
-     */
-    double getpSlowToStartDefault();
+    public double getV0() {
+        return v0;
+    }
 
-    /**
-     * Sets the v0.
-     * 
-     * @param v0
-     *            the new v0
-     */
-    void setV0(double v0);
+    public double getSlowdown() {
+        return pSlowdown;
+    }
 
-    /**
-     * Sets the p slowdown.
-     * 
-     * @param pSlowdown
-     *            the new p slowdown
-     */
-    void setpSlowdown(double pSlowdown);
+    public double getSlowToStart() {
+        return pSlowToStart;
+    }
 
-    /**
-     * Sets the p slow to start.
-     * 
-     * @param pSlowToStart
-     *            the new p slow to start
-     */
-    void setpSlowToStart(double pSlowToStart);
+    public double getV0Default() {
+        return v0Default;
+    }
+
+    public double getpSlowdown() {
+        return pSlowdown;
+    }
+
+    public double getpSlowdownDefault() {
+        return pSlowdownDefault;
+    }
+
+    public double getpSlowToStart() {
+        return pSlowToStart;
+    }
+
+    public double getpSlowToStartDefault() {
+        return pSlowToStartDefault;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+    public void setpSlowdown(double pSlowdown) {
+        this.pSlowdown = pSlowdown;
+        parametersUpdated();
+    }
+
+    public void setpSlowToStart(double pSlowToStart) {
+        this.pSlowToStart = pSlowToStart;
+        parametersUpdated();
+    }
 
 }

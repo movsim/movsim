@@ -27,8 +27,6 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.movsim.output.LoopDetectors;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -37,40 +35,35 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <p>
- * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of road may be created
- * by combining two road segments running in opposite directions.
+ * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of
+ * road may be created by combining two road segments running in opposite directions.
  * </p>
  * <p>
  * RoadSegments may be combined to form a road network.
  * </p>
- * 
  * <p>
- * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road segment and a sink road
- * to which vehicles exit. RoadSegments at the edge of the network will normally be connected to only one other road segment: traffic inflow
- * and outflow will be controlled directly by source and sink objects.
+ * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road
+ * segment and a sink road to which vehicles exit. RoadSegments at the edge of the network will normally be connected to
+ * only one other road segment: traffic inflow and outflow will be controlled directly by source and sink objects.
  * </p>
  * <p>
- * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be connected to a source
- * (incoming) lane of another road segment. This allows the forking and merging of road segments, the creation of on-ramps and off-ramps. By
- * connecting the lanes of a number of road segments in this way, complex junctions and interchanges may be created.
+ * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be
+ * connected to a source (incoming) lane of another road segment. This allows the forking and merging of road segments,
+ * the creation of on-ramps and off-ramps. By connecting the lanes of a number of road segments in this way, complex
+ * junctions and interchanges may be created.
  * </p>
  * <p>
- * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or winding, it just knows
- * about the vehicles it contains and what it is connected to. A vehicle's coordinates on a RoadsSegment are given by the vehicle's position
- * relative to the start of the RoadSegment and the vehicle's lane.
+ * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or
+ * winding, it just knows about the vehicles it contains and what it is connected to. A vehicle's coordinates on a
+ * RoadsSegment are given by the vehicle's position relative to the start of the RoadSegment and the vehicle's lane.
  * </p>
  * <p>
- * A RoadSegment has <code>laneCount</code> lanes. Lanes are of three types, traffic lanes, exit (deceleration) lanes and entrance
- * (acceleration) lanes. Typically vehicle behavior (and especially lane change behavior) is different in each type of lane.
+ * A RoadSegment has <code>laneCount</code> lanes. Lanes within a RoadSegment are represented by the LaneSegment class.
  * </p>
  * <p>
- * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's RoadMapping. The
- * RoadMapping is not used in the traffic simulation itself and is only used by software that draws the road network and the vehicles upon
- * it.
- * </p>
- * <p>
- * The vehicles on a each lane of a road segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles in
- * front of and behind a given vehicle can be found efficiently.
+ * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's
+ * RoadMapping. Although the RoadMapping is primarily used by software that draws the road network and the vehicles upon
+ * it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its gradient.
  * </p>
  */
 public class RoadSegment implements Iterable<Vehicle> {
@@ -91,11 +84,11 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final double cumulativeRoadLength = -1.0; // total length of road up to start of segment
     private final int laneCount;
     private final LaneSegment laneSegments[];
-    private final List<Vehicle> stagedVehicles;
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
     private TrafficLights trafficLights;
     private SpeedLimits speedLimits;
+    private Slopes slopes;
 
     // Sources and Sinks
     private TrafficSource trafficSource;
@@ -143,7 +136,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         id = nextId++;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
-        stagedVehicles = new LinkedList<Vehicle>();
     }
 
     /**
@@ -262,7 +254,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public final double cumulativeRoadLength() {
         // if (cumulativeRoadLength >= 0.0) {
-        //    return cumulativeRoadLength;
+        // return cumulativeRoadLength;
         // }
         // final RoadSegment sourceRoadSegment = sourceRoadSegment(trafficLaneMax() - 1);
         // cumulativeRoadLength = sourceRoadSegment == null ? 0.0 : sourceRoadSegment.cumulativeRoadLength() +
@@ -394,7 +386,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public int removedVehicleCount() {
         int removedVehicleCount = 0;
-        for (final LaneSegment laneSegment: laneSegments) {
+        for (final LaneSegment laneSegment : laneSegments) {
             removedVehicleCount += laneSegment.getRemovedVehicleCount();
         }
         return removedVehicleCount;
@@ -404,7 +396,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Clears the removed vehicle count.
      */
     public void clearVehicleRemovedCount() {
-        for (final LaneSegment laneSegment: laneSegments) {
+        for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.clearVehicleRemovedCount();
         }
     }
@@ -540,20 +532,32 @@ public class RoadSegment implements Iterable<Vehicle> {
             trafficLights.update(dt, simulationTime, iterationCount, this);
         }
         updateSpeedLimits();
+        updateSlopes();
     }
 
-    /**
-     * Update speed limits.
-     */
     private void updateSpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getFrontPosition(); 
+                    final double pos = vehicle.getFrontPosition();
                     final double speedlimit = speedLimits.calcSpeedLimit(pos);
                     vehicle.setSpeedlimit(speedlimit);
                     logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
+                }
+            }
+        }
+    }
+    
+    private void updateSlopes() {
+        if (slopes != null && slopes.isEmpty() == false) {
+            for (final LaneSegment laneSegment : laneSegments) {
+                for (final Vehicle vehicle : laneSegment) {
+                    assert vehicle.roadSegmentId() == id;
+                    final double pos = vehicle.getFrontPosition();
+                    final double slope = slopes.calcSlope(pos);
+                    vehicle.setSlope(slope);
+                    logger.debug("pos={} --> slope gradient{}", pos, slope);
                 }
             }
         }
@@ -581,29 +585,20 @@ public class RoadSegment implements Iterable<Vehicle> {
             // need at least 2 lanes for lane changing
             return;
         }
+        // TODO assure priority for lane changes from slow to fast lanes
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
-            stagedVehicles.clear();
-            for (final Vehicle vehicle : laneSegment) {
+            for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
+                Vehicle vehicle = vehIterator.next();
                 assert vehicle.roadSegmentId() == id;
                 if (vehicle.considerLaneChange(dt, this)) {
-                    stagedVehicles.add(vehicle);
-                }
-            }
-
-            // assign staged vehicles to new lanes
-            // necessary update of new situation *after* lane-changing decisions
-            for (final Vehicle vehicle : stagedVehicles) {
-                final int targetLane = vehicle.getTargetLane();
-                assert targetLane != Lane.NONE;
-                assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
-                // check safety criterion in target lane for vehicle and follower
-                if (vehicle.getLaneChangeModel().isSafeLaneChange(laneSegments[targetLane])) {
-                    laneSegments[vehicle.getLane()].removeVehicle(vehicle);
+                    final int targetLane = vehicle.getTargetLane();
+                    assert targetLane != Lane.NONE;
+                    assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                    // iteratorRemove avoids ConcurrentModificationException
+                    vehIterator.remove();
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane].addVehicle(vehicle);
-                } else {
-                    logger.debug("check lane change of staged vehicle: lane change not possible due to conflict in target lane");
                 }
             }
         }
@@ -626,11 +621,8 @@ public class RoadSegment implements Iterable<Vehicle> {
             // final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
             final LaneSegment leftLaneSegment = null; // TODO get left lane ( leftLaneIndex < vehContainers.size() ) ?
                                                       // vehContainers.get(leftLaneIndex) : null;
-            // for (int i = 0, N = vehiclesOnLane.size(); i < N; i++) {
             for (final Vehicle vehicle : laneSegment) {
-                // final Vehicle veh = vehiclesOnLane.get(i);
                 final double x = vehicle.getFrontPosition();
-                // TODO treat null case
                 final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
@@ -669,7 +661,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    // TODO ake properties of the downstream boundary condition should be encapsulated in own class ...
     public void outFlow(double dt, double simulationTime, long iterationCount) {
         for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.outFlow(dt, simulationTime, iterationCount);
@@ -754,15 +745,15 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that vehicle.positon() >
-     * vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
+     * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
+     * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
+     * be in the rear.
      * 
      * @param lane
      *            lane in which to search
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
-
         return laneSegments[lane].frontVehicle(vehiclePos);
     }
 
@@ -774,7 +765,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setSpeedLimits(SpeedLimits speedLimits) {
         this.speedLimits = speedLimits;
     }
-
+    
     /**
      * Returns an iterable over all the speed limits in the road segment.
      * 
@@ -782,6 +773,24 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public Iterable<SpeedLimit> speedLimits() {
         return speedLimits == null ? null : speedLimits;
+    }
+    
+    /**
+     * Sets the slopes for this road segment.
+     * 
+     * @param slopes
+     */
+    public void setSlopes(Slopes slopes) {
+        this.slopes = slopes;
+    }
+    
+    /**
+     * Returns an iterable over all the slopes in the road segment.
+     * 
+     * @return an iterable over all the slopes in the road segment
+     */
+    public Iterable<Slope> slopes() {
+        return slopes == null ? null : slopes;
     }
 
     /**
@@ -871,7 +880,6 @@ public class RoadSegment implements Iterable<Vehicle> {
 
         @Override
         public Iterator<Vehicle> iterator() {
-            // TODO Auto-generated method stub
             return new VehicleIterator();
         }
     }
@@ -898,7 +906,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
-            // for(final Vehicle vehicle : laneSegment){
             for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
                 final Vehicle vehicle = laneSegment.getVehicle(index);
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
@@ -906,10 +913,11 @@ public class RoadSegment implements Iterable<Vehicle> {
                 if (netDistance < 0) {
                     logger.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(), vehicle.getFrontPosition()));
+                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
+                            vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(), vehFront.getFrontPosition(),
-                                vehicle.getLane()));
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
+                                vehFront.getFrontPosition(), vehicle.getLane()));
                     }
                     sb.append("roadID=" + id);
                     sb.append(", net distance=" + netDistance);
@@ -961,7 +969,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         @Override
         public void remove() {
             // not supported
-            assert false;
+            throw new UnsupportedOperationException("no remove possible");
         }
     }
 

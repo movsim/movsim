@@ -36,6 +36,7 @@ public interface GraphicsConfigurationParameters {
     final double INITIAL_SCALE = 1.0 / Math.sqrt(2);
     final int INITIAL_OFFSET_X = 0;
     final int INITIAL_OFFSET_Y = 0;
+    final double DEFAULT_LANE_WIDTH = 10;
 
     static final double INITIAL_SPEEDUP_DURATION = 120.0;
     static final double INITIAL_SPEEDUP_DURATION_OFF_ON_RAMP = 440.0;
@@ -47,5 +48,9 @@ public interface GraphicsConfigurationParameters {
     public static final boolean DRAWSOURCES = true;
     public static final boolean DRAWSINKS = true;
     public static final boolean DRAWSPEEDLIMITS = true;
+    public static final boolean SLOPES = true;
+
+    public static final double VmaxForColorSpectrum = 140;
+
     
 }

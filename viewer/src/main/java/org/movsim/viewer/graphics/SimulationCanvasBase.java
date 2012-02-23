@@ -43,10 +43,9 @@ import org.movsim.simulator.SimulationRunnable;
  * <p>
  * This base class handles:
  * <ul>
- * <li>synchronization between the simulation and UI threads</li>
- * <li>starting, stopping, pausing and resuming of the simulation</li>
- * <li>zooming and panning</li>
- * <li>standard mouse events</li>
+ * <li>Synchronization between the simulation and UI threads.</li>
+ * <li>Starting, stopping, pausing and resuming of the simulation.</li>
+ * <li>Zooming and panning.</li>
  * </ul>
  * </p>
  * 
@@ -73,7 +72,7 @@ public abstract class SimulationCanvasBase extends Canvas {
     private int bufferWidth;
     protected boolean backgroundChanged;
     // default background color
-    private Color backgroundColor = GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM;
+    protected Color backgroundColor = GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM;
     // scale factor pixels/m, smaller value means a smaller looking view
     double scale = GraphicsConfigurationParameters.INITIAL_SCALE;
     int xOffset = GraphicsConfigurationParameters.INITIAL_OFFSET_X;

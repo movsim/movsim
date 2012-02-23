@@ -38,7 +38,7 @@ public class Applet extends JApplet {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXmlFromResources(true);
         projectMetaData.setInstantaneousFileOutput(false);
-        projectMetaData.setProjectName("cloverleaf_ACC");
+        projectMetaData.setProjectName("cloverleaf");
         projectMetaData.setPathToProjectXmlFile("/sim/buildingBlocks/");
 
         final Simulator simulator = new Simulator(projectMetaData);

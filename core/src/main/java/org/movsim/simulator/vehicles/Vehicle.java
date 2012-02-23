@@ -41,14 +41,45 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class Vehicle.
+ * <p>
+ * Model for a vehicle in a traffic simulation.
+ * </p>
+ * 
+ * <p>
+ * Each vehicle has its own unique immutable id which is assigned when the vehicle is created.
+ * </p>
+ * 
+ * <p>
+ * A vehicle has a size, given by its length and width.
+ * </p>
+ * 
+ * <p>
+ * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the
+ * position of the front of the vehicle on the road segment and also by the vehicle's lane.
+ * </p>
+ * 
+ * <p>
+ * A vehicle possesses two intelligence modules:
+ * <ul>
+ * <li>a LongitudinalModel which determines its acceleration in the direction of travel.</li>
+ * <li>a LaneChangeModel which determines when it changes lanes.</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Vehicles are quite frequently created and destroyed, so by design they have few allocated properties.
+ * </p>
  */
 public class Vehicle {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Vehicle.class);
+
     protected static final int INITIAL_ID = 1;
     protected static final int INITIAL_TEMPLATE_ID = -1;
+
+    private static long nextId = INITIAL_ID;
+    private static long nextTemplateId = INITIAL_TEMPLATE_ID;
+
     /**
      * 'Not Set' vehicle id value, guaranteed not to be used by any vehicles.
      */
@@ -101,7 +132,6 @@ public class Vehicle {
     /** The max deceleration . */
     private final double maxDecel;
 
-    /** The id. */
     long id;
 
     /** The vehicle number. */
@@ -117,6 +147,7 @@ public class Vehicle {
     private double tLaneChangeDelay;
 
     private double speedlimit;
+    private double slope;
 
     /** The longitudinal model. */
     private LongitudinalModelBase longitudinalModel;
@@ -134,7 +165,6 @@ public class Vehicle {
     private Object colorObject; // color object cache
 
     private final TrafficLightApproaching trafficLightApproaching;
-
     private final FuelConsumption fuelModel; // can be null
 
     private boolean isBrakeLightOn;
@@ -145,9 +175,6 @@ public class Vehicle {
     private int roadSegmentId;
     private double roadSegmentLength;
     private final int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
-
-    private static long nextId = INITIAL_ID;
-    private static long nextTemplateId = INITIAL_TEMPLATE_ID;
 
     /**
      * The type of numerical integration.
@@ -195,14 +222,14 @@ public class Vehicle {
         return nextId - INITIAL_ID;
     }
 
-    public Vehicle(String label, final LongitudinalModelBase longitudinalModel, final VehicleInput vehInput,
-            final Object cyclicBuffer, final LaneChangeModel lcModel, final FuelConsumption fuelModel) {
+    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput, Object cyclicBuffer,
+            LaneChangeModel lcModel, FuelConsumption fuelModel) {
         this.label = label;
         id = nextId++;
         this.fuelModel = fuelModel;
 
         length = vehInput.getLength();
-        width = MovsimConstants.VEHICLE_WIDTH;
+        width = vehInput.getWidth();
         reactionTime = vehInput.getReactionTime();
         maxDecel = vehInput.getMaxDeceleration();
 
@@ -254,6 +281,7 @@ public class Vehicle {
         label = "";
         physQuantities = new PhysicalQuantities(this);
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = 0;
     }
 
     /**
@@ -279,6 +307,7 @@ public class Vehicle {
         longitudinalModel = source.longitudinalModel;
         label = source.label;
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = source.slope;
     }
 
     /**
@@ -301,6 +330,7 @@ public class Vehicle {
         longitudinalModel = ldm;
         label = "";
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = 0;
     }
 
     private void initialize() {
@@ -309,8 +339,8 @@ public class Vehicle {
         speed = 0;
         acc = 0;
         isBrakeLightOn = false;
-
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+        slope = 0;
     }
 
     public String getLabel() {
@@ -337,8 +367,9 @@ public class Vehicle {
     }
 
     /**
-     * Sets this vehicle's color object cache value. Primarily of use by AWT which rather inefficiently uses objects rather than integers to
-     * represent color values. Note that an object is cached so Vehicle.java has no dependency on AWT.
+     * Sets this vehicle's color object cache value. Primarily of use by AWT which rather inefficiently uses objects
+     * rather than integers to represent color values. Note that an object is cached so Vehicle.java has no dependency
+     * on AWT.
      * 
      * @param colorObject
      */
@@ -402,7 +433,7 @@ public class Vehicle {
     }
 
     /**
-     * Sets the reference position of this vehicle by the rear porsition.
+     * Sets the reference position of this vehicle by the rear position.
      * 
      * @param rearPosition
      *            new rear position
@@ -419,12 +450,6 @@ public class Vehicle {
     public final double getRearPosition() {
         return frontPosition - length;
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.Vehicle#oldPosition()
-     */
 
     public final double getFrontPositionOld() {
         return frontPositionOld;
@@ -463,6 +488,14 @@ public class Vehicle {
         this.speedlimit = speedlimit;
     }
 
+    public void setSlope(double slope) {
+        this.slope = slope;
+    }
+
+    public double getSlope() {
+        return slope;
+    }
+
     public double getAcc() {
         return acc;
     }
@@ -486,14 +519,14 @@ public class Vehicle {
     }
 
     public final int getVehNumber() {
-        return vehNumber == VEHICLE_NUMBER_NOT_SET ? (int)id : vehNumber;
+        return vehNumber == VEHICLE_NUMBER_NOT_SET ? (int) id : vehNumber;
     }
 
     public void setVehNumber(int vehNumber) {
         this.vehNumber = vehNumber;
     }
 
-    public double getNetDistance(final Vehicle vehFront) {
+    public double getNetDistance(Vehicle vehFront) {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
@@ -501,7 +534,7 @@ public class Vehicle {
         return netGap;
     }
 
-    public double getBrutDistance(final Vehicle vehFront) {
+    public double getBrutDistance(Vehicle vehFront) {
         if (vehFront == null) {
             return MovsimConstants.GAP_INFINITY;
         }
@@ -515,8 +548,8 @@ public class Vehicle {
         return speed - vehFront.getSpeed();
     }
 
-    public void updateAcceleration(double dt, final LaneSegment laneSegment, final LaneSegment leftLaneSegment,
-            double alphaT, double alphaV0) {
+    public void updateAcceleration(double dt, LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaT,
+            double alphaV0) {
 
         accOld = acc;
         // acceleration noise:
@@ -535,10 +568,10 @@ public class Vehicle {
         double alphaV0Local = alphaV0;
         double alphaALocal = 1;
 
-        // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which depends on
-        // speedlimits)
+        // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which
+        // depends on speedlimits)
         if (memory != null) {
-            final double v0 = longitudinalModel.getDesiredSpeedParameterV0();
+            final double v0 = longitudinalModel.getDesiredSpeed();
             memory.update(dt, speed, v0);
             alphaTLocal *= memory.alphaT();
             alphaV0Local *= memory.alphaV0();
@@ -561,12 +594,12 @@ public class Vehicle {
     // also noise (for transfering stochasticity to lane-changing) and other
     // relevant traffic situations!
 
-    public double calcAccModel(final LaneSegment laneSegment, final LaneSegment leftLaneSegment) {
+    public double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment) {
         return calcAccModel(laneSegment, leftLaneSegment, 1.0, 1.0, 1.0);
     }
 
-    private double calcAccModel(final LaneSegment laneSegment, final LaneSegment leftLaneSegment,
-            double alphaTLocal, double alphaV0Local, double alphaALocal) {
+    private double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaTLocal,
+            double alphaV0Local, double alphaALocal) {
         if (longitudinalModel == null) {
             return 0.0;
         }
@@ -651,10 +684,6 @@ public class Vehicle {
     public void updateTrafficLight(double simulationTime, TrafficLight trafficLight) {
         trafficLightApproaching.update(this, simulationTime, trafficLight, longitudinalModel);
 
-    }
-
-    public void removeObservers() {
-        longitudinalModel.removeObserver();
     }
 
     public LaneChangeModel getLaneChangeModel() {
@@ -846,8 +875,9 @@ public class Vehicle {
      * Called when vehicle changes road segments (and possibly also lanes) at a link or junction.
      * </p>
      * <p>
-     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and <code>timeAtWhichLastChangedLanes</code> are
-     * used to interpolate this vehicle's lateral position and so give the appearance of a smooth lane change.
+     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and
+     * <code>timeAtWhichLastChangedLanes</code> are used to interpolate this vehicle's lateral position and so give the
+     * appearance of a smooth lane change.
      * </p>
      * 
      * @param newLane
@@ -902,4 +932,5 @@ public class Vehicle {
     public final double totalTraveledDistance() {
         return totalTraveledDistance;
     }
+
 }

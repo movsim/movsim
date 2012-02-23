@@ -38,45 +38,13 @@ public class Tables {
 
     private static final double TINY_VALUE = 1.e-10;
 
-    /**
-     * Instantiates a new tables.
-     */
     private Tables() {
     }
-
-    /**
-     * Intp.
-     * 
-     * @param tab
-     *            the tab
-     * @param x
-     *            the x
-     * @param xmin
-     *            the xmin
-     * @param xmax
-     *            the xmax
-     * @return the double
-     */
 
     public static double intp(double[] tab, double x, double xmin, double xmax) {
         return intp(tab, tab.length, x, xmin, xmax);
     }
 
-    /**
-     * Intp.
-     * 
-     * @param tab
-     *            the tab
-     * @param n
-     *            the n
-     * @param x
-     *            the x
-     * @param xmin
-     *            the xmin
-     * @param xmax
-     *            the xmax
-     * @return the double
-     */
     public static double intp(double[] tab, int n, double x, double xmin, double xmax) {
         double intp_value = tab[0];
         final double ir = n * (x - xmin) / (xmax - xmin);
@@ -93,19 +61,7 @@ public class Tables {
         return intp_value;
     }
 
-    /**
-     * Intpextp.
-     * 
-     * @param x_vals
-     *            the x_vals
-     * @param y_vals
-     *            the y_vals
-     * @param x
-     *            the x
-     * @return the double
-     */
-
-    public static double intpextp(final double[] x_vals, final double[] y_vals, final double x) {
+    public static double intpextp(double[] x_vals, double[] y_vals, double x) {
         final int nx = x_vals.length;
         final int ny = y_vals.length;
         final int n = Math.min(nx, ny);
@@ -146,40 +102,10 @@ public class Tables {
     // Version using only the index range imin ... imax and extrapolating
     // constant values otherwise; reverse=true means that the array x
     // has x values in decreasing order. NOT TIME OPTIMIZED
-    /**
-     * Intpextp.
-     * 
-     * @param x
-     *            the x
-     * @param y
-     *            the y
-     * @param pos
-     *            the pos
-     * @param reverse
-     *            the reverse
-     * @return the double
-     */
     public static double intpextp(double[] x, double[] y, double pos, boolean reverse) {
         return intpextp(x, y, pos, 0, x.length - 1, reverse);
     }
 
-    /**
-     * Intpextp.
-     * 
-     * @param x
-     *            the x
-     * @param y
-     *            the y
-     * @param pos
-     *            the pos
-     * @param imin
-     *            the imin
-     * @param imax
-     *            the imax
-     * @param reverse
-     *            the reverse
-     * @return the double
-     */
     public static double intpextp(double[] x, double[] y, double pos, int imin, int imax, boolean reverse) {
 
         final double tinyValue = 0.000001;
@@ -208,17 +134,6 @@ public class Tables {
 
     // TODO check implementation !!!
     // extrapolate left-hand side values for use in speedlimit
-    /**
-     * Step extrapolation.
-     * 
-     * @param x_vals
-     *            the x_vals
-     * @param y_vals
-     *            the y_vals
-     * @param x
-     *            the x
-     * @return the double
-     */
     public static double stepExtrapolation(double[] x_vals, double[] y_vals, double x) {
         final int nx = x_vals.length;
         final int ny = y_vals.length;

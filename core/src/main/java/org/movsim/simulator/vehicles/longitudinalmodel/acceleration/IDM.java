@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -35,15 +34,15 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class IDM.
  * <p>
- * Implementation of the 'intelligent driver model'(IDM). <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article
- * IDM.</a>
+ * Implementation of the 'intelligent driver model'(IDM).
+ * <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
  * </p>
  * <p>
  * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
  * </p>
  * <p>
- * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested Traffic States in
- * Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
+ * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested
+ * Traffic States in Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
 public class IDM extends LongitudinalModelBase {
@@ -51,26 +50,20 @@ public class IDM extends LongitudinalModelBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(IDM.class);
 
-    /** desired velocity (m/s). */
-    private double v0;
-
     /** safe time headway (s). */
-    private double T;
-
-    /** bumper-to-bumper vehicle distance in jams or queues; minimum gap. */
-    private double s0;
+    private final double T;
 
     /** gap parameter (m). */
-    private double s1;
+    private final double s1;
 
     /** acceleration (m/s^2). */
-    private double a;
+    private final double a;
 
     /** comfortable (desired) deceleration (braking), (m/s^2). */
-    private double b;
+    private final double b;
 
     /** acceleration exponent. */
-    private double delta;
+    private final double delta;
 
     /**
      * Instantiates a new IDM.
@@ -80,7 +73,14 @@ public class IDM extends LongitudinalModelBase {
      */
     public IDM(LongitudinalModelInputDataIDM parameters) {
         super(ModelName.IDM, parameters);
-        initParameters();
+        logger.debug("init model parameters");
+        this.v0 = parameters.getV0();
+        this.T = parameters.getT();
+        this.s0 = parameters.getS0();
+        this.s1 = parameters.getS1();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.delta = parameters.getDelta();
     }
 
     /**
@@ -110,30 +110,13 @@ public class IDM extends LongitudinalModelBase {
         this.delta = 4.0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
-    @Override
-    protected void initParameters() {
-        logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataIDM) parameters).getV0();
-        this.T = ((LongitudinalModelInputDataIDM) parameters).getT();
-        this.s0 = ((LongitudinalModelInputDataIDM) parameters).getS0();
-        this.s1 = ((LongitudinalModelInputDataIDM) parameters).getS1();
-        this.a = ((LongitudinalModelInputDataIDM) parameters).getA();
-        this.b = ((LongitudinalModelInputDataIDM) parameters).getB();
-        this.delta = ((LongitudinalModelInputDataIDM) parameters).getDelta();
-    }
-
     /**
-     * Gets the v0.
+     * Gets the s1.
      * 
-     * @return the v0
+     * @return the s1
      */
-    public double getV0() {
-        return v0;
+    public double getS1() {
+        return s1;
     }
 
     /**
@@ -143,24 +126,6 @@ public class IDM extends LongitudinalModelBase {
      */
     public double getT() {
         return T;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
-    }
-
-    /**
-     * Gets the s1.
-     * 
-     * @return the s1
-     */
-    public double getS1() {
-        return s1;
     }
 
     /**
@@ -191,10 +156,9 @@ public class IDM extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
@@ -214,30 +178,6 @@ public class IDM extends LongitudinalModelBase {
         return acc(s, v, dv, localT, localV0, localA);
     }
 
-    @Override
-    public double calcAcc(Vehicle me, final Vehicle frontVehicle) {
-        // Local dynamical variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        final double localT = T;
-        final double localV0;
-        if (me.getSpeedlimit() != 0.0) {
-            localV0 = Math.min(v0, me.getSpeedlimit());
-        } else {
-            localV0 = v0;
-        }
-        final double localA = a;
-
-        return acc(s, v, dv, localT, localV0, localA);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, T, v0, a);
@@ -277,25 +217,5 @@ public class IDM extends LongitudinalModelBase {
 
         logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeedParameterV0() {
-        return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeedV0(double v0) {
-        this.v0 = v0;
     }
 }

@@ -66,7 +66,6 @@ public class FileUtils {
             final PrintWriter fstr = new PrintWriter(new BufferedWriter(new FileWriter(filename, false)));
             return fstr;
         } catch (final java.io.IOException e) {
-            // e.printStackTrace();
             logger.error("cannot open file {} for writing", filename);
         }
         return null;
@@ -107,7 +106,6 @@ public class FileUtils {
     public static String homeDirectory() {
         final String home = System.getProperty("user.home");
         if (home.equalsIgnoreCase("?")) {
-            // "!!! Environmental variable getProperty(\"user.home\")= "+home+" not set correctly!!!");
         }
         return home;
     }
@@ -202,20 +200,13 @@ public class FileUtils {
         }
     }
 
-    // Deletes all files and subdirectories under dir.
-    // Returns true if all deletions were successful.
-    // If a deletion fails, the method stops attempting to delete and returns
-    // false.
-    // Deletes all files and subdirectories under dir.
-    // Returns true if all deletions were successful.
-    // If a deletion fails, the method stops attempting to delete and returns
-    // false.
     /**
-     * Delete dir.
+     * Deletes all files and subdirectories under dir.
      * 
      * @param dir
      *            the dir
-     * @return true, if successful
+     * @return true, if all deletions were successful. If a deletion fails, the method stops attempting to delete and
+     *         returns false.
      */
     private static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
@@ -243,8 +234,6 @@ public class FileUtils {
         final File dir = new File(dirName);
         final boolean success = deleteDir(dir);
         if (!success) {
-            // Logger.err("deleteDir: cannot delete directory " + dirName);
-            // Logger.err("exit now!!!");
             System.exit(-5);
         }
     }
@@ -266,23 +255,13 @@ public class FileUtils {
 
             public PatternFilter(String regex) {
                 this.regex = regex;
-                // Logger.log("PatternFilter has regex  = " + regex);
             }
 
             @Override
             public boolean accept(File f, String name) {
-                // String fString = f.toString().toLowerCase();
-                // Logger.log("fString = "+fString);
-                // pattern consists of two pattern given by user und ends with a
-                // number!!!
                 final Pattern patternRegex = Pattern.compile(regex);
                 final Matcher matcher = patternRegex.matcher(name);
                 final boolean matches = matcher.matches();
-
-                // if (matches) {
-                // System.out.println("regex: \"" + regex + "\" matches in  \""
-                // + name + "\"");
-                // }
                 return (matches);
             }
         }
@@ -292,7 +271,6 @@ public class FileUtils {
         if (fileNames != null) {
             for (int i = 0; i < fileNames.length; i++) {
                 fileNames[i] = path + fileNames[i];
-                // System.out.println("filename = " + fileNames[i]);
             }
         }
         return (fileNames);
@@ -307,10 +285,10 @@ public class FileUtils {
      *            the regex
      */
     public static void deleteFileList(String path, String regex) {
-        final String[] files = getFileList(path+ File.separator, regex);
+        final String[] files = getFileList(path + File.separator, regex);
         for (int i = 0; i < files.length; i++) {
-            if(logger.isDebugEnabled()){
-                logger.debug("filename to delete = "+files[i]);
+            if (logger.isDebugEnabled()) {
+                logger.debug("filename to delete = " + files[i]);
             }
             deleteFile(files[i], "deleteFileList with regex = " + regex);
         }
@@ -399,7 +377,7 @@ public class FileUtils {
         }
         return string;
     }
-    
+
     public static String getCanonicalPathWithoutFilename(File file) {
         String string = null;
         try {

@@ -26,13 +26,14 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
- * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical position, that is an x,y
- * coordinate (given in meters).
+ * A RoadMapping maps a logical road position (given by a lane and a position on a road segment) onto a physical
+ * position, that is an x,y coordinate (given in meters).
  */
 public abstract class RoadMapping {
 
@@ -111,8 +112,8 @@ public abstract class RoadMapping {
      * Class representing a position in space plus a direction.
      * </p>
      * <p>
-     * Angles are interpreted as in the Argand diagram, that is they are measured in a counter-clockwise direction from the x-axis (3
-     * o'clock position).
+     * Angles are interpreted as in the Argand diagram, that is they are measured in a counter-clockwise direction from
+     * the x-axis (3 o'clock position).
      * </p>
      */
     public static class PosTheta {
@@ -143,15 +144,10 @@ public abstract class RoadMapping {
         }
     }
 
-    /**
-     * Default width of traffic lanes.
-     */
-    public static final double DEFAULT_LANE_WIDTH = 10.0;
-
     // Immutable Properties
     protected final int laneCount;
-    protected final double laneWidth = DEFAULT_LANE_WIDTH;
-    protected final double roadWidth;
+    protected double laneWidth;
+    protected double roadWidth;
     // trafficLaneMin and trafficLaneMax set the range of lanes for normal traffic in the road
     // segment lanes less than trafficLaneMin or greater than trafficLaneMax are exit or entrance
     // ramps.
@@ -159,9 +155,8 @@ public abstract class RoadMapping {
     private int trafficLaneMax;
     // Road
     protected double roadLength;
-    protected int roadColor;
-    protected static final int ROAD_COLOR_NOT_SET = -2;
-    protected static int defaultRoadColor = ROAD_COLOR_NOT_SET;
+    protected Color roadColor;
+    protected static Color defaultRoadColor = Color.GRAY;
     // Positioning
     // pre-allocate single posTheta for the road mapping. This is shared and reused, so must be used
     // carefully.
@@ -170,9 +165,12 @@ public abstract class RoadMapping {
     protected double y0;
     // Clipping Region
     protected static final int POINT_COUNT = 4;
+
     protected final PolygonFloat polygonFloat = new PolygonFloat(POINT_COUNT);
     protected ArrayList<PolygonFloat> clippingPolygons;
     protected PolygonFloat outsideClippingPolygon;
+
+    public static final double DEFAULT_LANE_WIDTH = 2;
 
     /**
      * Constructor.
@@ -187,12 +185,14 @@ public abstract class RoadMapping {
         this.y0 = y0;
         trafficLaneMin = Lane.LANE1;
         trafficLaneMax = laneCount;
+        laneWidth = DEFAULT_LANE_WIDTH;
         roadWidth = laneWidth * laneCount;
         roadColor = defaultRoadColor;
     }
 
     /**
-     * Called when the system is running low on memory, and would like actively running process to try to tighten their belts.
+     * Called when the system is running low on memory, and would like actively running process to try to tighten their
+     * belts.
      */
     protected void onLowMemory() {
         // By default does nothing. Subclasses may implement memory saving.
@@ -203,7 +203,7 @@ public abstract class RoadMapping {
      * 
      * @return the default road color
      */
-    public static int defaultRoadColor() {
+    public static Color defaultRoadColor() {
         return RoadMapping.defaultRoadColor;
     }
 
@@ -212,13 +212,13 @@ public abstract class RoadMapping {
      * 
      * @param defaultRoadColor
      */
-    public static void setDefaultRoadColor(int defaultRoadColor) {
+    public static void setDefaultRoadColor(Color defaultRoadColor) {
         RoadMapping.defaultRoadColor = defaultRoadColor;
     }
 
     /**
-     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not traffic lanes and may be treated differently,
-     * especially for lane changes.
+     * Sets the minimum traffic lane. Lanes with <code>lane &lt; trafficLaneMin</code> are not traffic lanes and may be
+     * treated differently, especially for lane changes.
      * 
      * @param trafficLaneMin
      */
@@ -236,8 +236,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be treated differently,
-     * especially for lane changes.
+     * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be
+     * treated differently, especially for lane changes.
      * 
      * @param trafficLaneMax
      */
@@ -335,10 +335,10 @@ public abstract class RoadMapping {
     /**
      * Sets the road color.
      * 
-     * @param roadColor
+     * @param color
      */
-    public final void setRoadColor(int roadColor) {
-        this.roadColor = roadColor;
+    public final void setRoadColor(Color color) {
+        this.roadColor = color;
     }
 
     /**
@@ -346,7 +346,7 @@ public abstract class RoadMapping {
      * 
      * @return road color
      */
-    public final int roadColor() {
+    public final Color roadColor() {
         return roadColor;
     }
 
@@ -369,8 +369,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Returns the offset of the center of the lane. Fractional lanes are supported to facilitate the drawing of vehicles in the process of
-     * changing lanes.
+     * Returns the offset of the center of the lane. Fractional lanes are supported to facilitate the drawing of
+     * vehicles in the process of changing lanes.
      * 
      * @param lane
      * @return the offset of the center of the lane
@@ -400,8 +400,8 @@ public abstract class RoadMapping {
     }
 
     /**
-     * Set a clipping region based on the road position and length. Simple implementation at the moment: only one clipping region is
-     * supported.
+     * Set a clipping region based on the road position and length. Simple implementation at the moment: only one
+     * clipping region is supported.
      * 
      * @param pos
      *            position of the clipping region on the road
@@ -427,7 +427,7 @@ public abstract class RoadMapping {
             outsideClippingPolygon.yPoints[3] = LARGE_NUMBER;
         }
         final PolygonFloat clippingPolygon = new PolygonFloat(POINT_COUNT);
-        final double offset = 1.5 * laneCount * RoadMapping.DEFAULT_LANE_WIDTH;
+        final double offset = 1.5 * laneCount * laneWidth;
         PosTheta posTheta;
         posTheta = map(pos + length, -offset);
         clippingPolygon.xPoints[0] = (float) posTheta.x;

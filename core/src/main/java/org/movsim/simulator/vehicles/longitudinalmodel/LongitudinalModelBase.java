@@ -29,7 +29,6 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
-import org.movsim.utilities.Observer;
 import org.movsim.utilities.ScalingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
  */
-public abstract class LongitudinalModelBase implements Observer {
+public abstract class LongitudinalModelBase {
 
     public enum ModelCategory {
         TIME_CONTINUOUS_MODEL, ITERATED_COUPLED_MAP_MODEL, CELLULAR_AUTOMATON;
@@ -49,7 +48,7 @@ public abstract class LongitudinalModelBase implements Observer {
         public boolean isIteratedMap() {
             return (this == ITERATED_COUPLED_MAP_MODEL);
         }
-        
+
         @Override
         public String toString() {
             return name();
@@ -63,7 +62,7 @@ public abstract class LongitudinalModelBase implements Observer {
                 "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
                 ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
                 "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model");
+                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model");
 
         private final ModelCategory modelCategory;
 
@@ -81,7 +80,7 @@ public abstract class LongitudinalModelBase implements Observer {
         public final String getDetailedName() {
             return detailedName;
         }
-        
+
         public final String getShortName() {
             return name();
         }
@@ -98,6 +97,14 @@ public abstract class LongitudinalModelBase implements Observer {
     private final double scalingLength;
     protected final LongitudinalModelInputData parameters;
     protected long id;
+    /**
+     * The desired speed (m/s)
+     */
+    protected double v0;
+    /**
+     * Minimum bumper-to-bumper distance (m)
+     */
+    protected double s0;
 
     /**
      * Constructor.
@@ -107,25 +114,10 @@ public abstract class LongitudinalModelBase implements Observer {
      * @param parameters
      *            the parameters
      */
-    public LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
+    protected LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
         this.modelName = modelName;
         this.parameters = parameters;
-        // this.id = MyRandom.nextInt();
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
-        if (parameters != null) {
-            parameters.registerObserver(this);
-        }
-    }
-
-    protected abstract void initParameters();
-
-    /**
-     * Removes the observer.
-     */
-    public void removeObserver() {
-        if (parameters != null) {
-            parameters.removeObserver(this);
-        }
     }
 
     /**
@@ -173,15 +165,23 @@ public abstract class LongitudinalModelBase implements Observer {
         return scalingLength;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Sets the vehicle's desired speed (m/s).
      * 
-     * @see org.movsim.utilities.Observer#notifyObserver()
+     * @param v0
+     *            desired speed (m/s)
      */
-    @Override
-    public void notifyObserver() {
-        initParameters();
-        logger.debug("observer notified");
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
+    }
+
+    /**
+     * Returns the desired speed in free traffic.
+     * 
+     * @return the desired speed (m/s)
+     */
+    public double getDesiredSpeed() {
+        return v0;
     }
 
     /**
@@ -192,9 +192,18 @@ public abstract class LongitudinalModelBase implements Observer {
      */
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
-        final double newV0 = getDesiredSpeedParameterV0() * (1 + relRandomizationFactor * equalRandom);
-        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeedParameterV0(), newV0);
-        setDesiredSpeedV0(newV0);
+        final double newV0 = getDesiredSpeed() * (1 + relRandomizationFactor * equalRandom);
+        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeed(), newV0);
+        setDesiredSpeed(newV0);
+    }
+
+    /**
+     * Gets the minimum bumper-to-bumper distance.
+     * 
+     * @return the minimum bumper-to-bumper distance
+     */
+    public double getS0() {
+        return s0;
     }
 
     protected double calcSmoothFraction(double speedMe, double speedFront) {
@@ -206,8 +215,19 @@ public abstract class LongitudinalModelBase implements Observer {
         return x;
     }
 
-    public abstract double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA);
-
+    /**
+     * Calculates the acceleration of vehicle me, under European lane changing rules (no "undertaking").
+     * 
+     * @param vCritEur
+     *            critical speed under which European rules no longer apply
+     * @param me
+     * @param laneSegment
+     * @param leftLaneSegment
+     * @param alphaT
+     * @param alphaV0
+     * @param alphaA
+     * @return the acceleration of vehicle me
+     */
     public double calcAccEur(double vCritEur, Vehicle me, LaneSegment laneSegment, LaneSegment leftLaneSegment,
             double alphaT, double alphaV0, double alphaA) {
 
@@ -220,7 +240,6 @@ public abstract class LongitudinalModelBase implements Observer {
         }
 
         // check left-vehicle's speed
-
         final Vehicle newFrontLeft = leftLaneSegment.frontVehicle(me);
         if (newFrontLeft == null) {
             return accInOwnLane;
@@ -247,10 +266,48 @@ public abstract class LongitudinalModelBase implements Observer {
         return accResult;
     }
 
-    public abstract double calcAcc(final Vehicle me, final Vehicle frontVehicle);
+    /**
+     * Calculates the acceleration of vehicle me.
+     * 
+     * @param me
+     * @param laneSegment
+     * @param alphaT
+     * @param alphaV0
+     * @param alphaA
+     * @return the calculated acceleration
+     */
+    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+        // By default only consider the vehicle in front when calculating acceleration.
+        // LDMs that consider more than the front vehicle should override this method.
+        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+        return calcAcc(me, frontVehicle, alphaT, alphaV0, alphaA);
+    }
 
     /**
-     * Calc acc simple.
+     * Calculates the acceleration of vehicle me.
+     * 
+     * @param me
+     * @param frontVehicle
+     * @param alphaT
+     * @param alphaV0
+     * @param alphaA
+     * @return the calculated acceleration
+     */
+    public abstract double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA);
+
+    /**
+     * Calculates the acceleration of vehicle me.
+     * 
+     * @param me
+     * @param frontVehicle
+     * @return the calculated acceleration
+     */
+    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
+        return calcAcc(me, frontVehicle, 1.0, 1.0, 1.0);
+    }
+
+    /**
+     * Calculates the vehicular acceleration.
      * 
      * @param s
      *            the s
@@ -258,22 +315,7 @@ public abstract class LongitudinalModelBase implements Observer {
      *            the v
      * @param dv
      *            the dv
-     * @return the double
+     * @return the calculated acceleration
      */
     public abstract double calcAccSimple(double s, double v, double dv);
-
-    /**
-     * Gets the desired speed parameter v0.
-     * 
-     * @return the desired speed parameter v0
-     */
-    public abstract double getDesiredSpeedParameterV0();
-
-    /**
-     * Sets the desired speed v0.
-     * 
-     * @param v0
-     *            the new desired speed v0
-     */
-    protected abstract void setDesiredSpeedV0(double v0);
 }

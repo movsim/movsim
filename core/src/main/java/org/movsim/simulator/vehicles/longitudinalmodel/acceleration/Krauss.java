@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
@@ -49,22 +48,17 @@ public class Krauss extends LongitudinalModelBase {
     /**
      * The parameter T is given by the update timestep dt: dt = T = Tr = tau_relax
      */
-    private double T;
-
-    /** The v0. */
-    private double v0;
+    private final double T;
 
     /** The a. */
-    private double a;
+    private final double a;
 
     /** The b. */
-    private double b;
-
-    /** The s0. */
-    private double s0;
+    private final double b;
 
     /**
-     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular automaton default value 0.4 (PRE) or 1 (EPJB)
+     * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular
+     * automaton default value 0.4 (PRE) or 1 (EPJB)
      */
     private double epsilon;
 
@@ -76,27 +70,13 @@ public class Krauss extends LongitudinalModelBase {
      */
     public Krauss(double dt, LongitudinalModelInputDataKrauss parameters) {
         super(ModelName.KRAUSS, parameters);
-        initParameters(dt);
-    }
-
-    private void initParameters(double dt) {
         this.T = dt;
-        initParameters();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
-    @Override
-    protected void initParameters() {
         logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataKrauss) parameters).getV0();
-        this.a = ((LongitudinalModelInputDataKrauss) parameters).getA();
-        this.b = ((LongitudinalModelInputDataKrauss) parameters).getB();
-        this.s0 = ((LongitudinalModelInputDataKrauss) parameters).getS0();
-        this.epsilon = ((LongitudinalModelInputDataKrauss) parameters).getEpsilon();
+        this.v0 = parameters.getV0();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.s0 = parameters.getS0();
+        this.epsilon = parameters.getEpsilon();
     }
 
     /**
@@ -106,15 +86,6 @@ public class Krauss extends LongitudinalModelBase {
      */
     public double getT() {
         return T;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
     }
 
     /**
@@ -136,15 +107,6 @@ public class Krauss extends LongitudinalModelBase {
     }
 
     /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
-    }
-
-    /**
      * Gets the epsilon.
      * 
      * @return the epsilon
@@ -154,11 +116,10 @@ public class Krauss extends LongitudinalModelBase {
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
-        final Vehicle vehFront = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
         final double localT = alphaT * T;
         final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
@@ -166,30 +127,6 @@ public class Krauss extends LongitudinalModelBase {
         return acc(s, v, dv, localT, localV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
-        // Local dynamical variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        final double localT = T;
-        final double localV0 = Math.min(v0, me.getSpeedlimit());
-
-        return acc(s, v, dv, localT, localV0);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, T, v0);
@@ -205,8 +142,8 @@ public class Krauss extends LongitudinalModelBase {
      * @param dv
      *            the dv
      * @param TLocal
-     *            the local time gap. Notice that inconsistencies may arise for nontrivial values since then no longer dt=T=tau_relax making
-     *            the vSafe formula possibly inconsistent
+     *            the local time gap. Notice that inconsistencies may arise for nontrivial values since then no longer
+     *            dt=T=tau_relax making the vSafe formula possibly inconsistent
      * @param v0Local
      *            the v0 local
      * 
@@ -215,9 +152,9 @@ public class Krauss extends LongitudinalModelBase {
     private double acc(double s, double v, double dv, double TLocal, double v0Local) {
         final double vp = v - dv;
         /**
-         * safe speed; complicated formula in PRE 55, 5601 (1997) is essentially the vSafe formula for the simple Gipps model. The
-         * complicated formula considers effects of finite dt; this is treated uniformly for all models in our update routine, so it is not
-         * necessary here. Therefore the simple Gipps vSafe formula is chosen
+         * safe speed; complicated formula in PRE 55, 5601 (1997) is essentially the vSafe formula for the simple Gipps
+         * model. The complicated formula considers effects of finite dt; this is treated uniformly for all models in
+         * our update routine, so it is not necessary here. Therefore the simple Gipps vSafe formula is chosen
          */
         final double vSafe = -b * TLocal + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - s0, 0.));
 
@@ -230,8 +167,9 @@ public class Krauss extends LongitudinalModelBase {
         // three additional code lines
 
         /**
-         * vLower = lower limit of new speed (denoted v0 in PRE) some modifications due to dimensional units were applied. Notice that
-         * vLower may be > vUpper in some cut-in situations: these inconsistencies were not recognized/treated in the PRE publication
+         * vLower = lower limit of new speed (denoted v0 in PRE) some modifications due to dimensional units were
+         * applied. Notice that vLower may be > vUpper in some cut-in situations: these inconsistencies were not
+         * recognized/treated in the PRE publication
          */
         final double vLower = (1 - epsilon) * vUpper + epsilon * Math.max(0, (v - b * TLocal));
         final double r = MyRandom.nextDouble(); // instance of uniform(0,1) distribution
@@ -239,25 +177,5 @@ public class Krauss extends LongitudinalModelBase {
         final double aWanted = (vNew - v) / TLocal;
 
         return aWanted;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeedParameterV0() {
-        return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeedV0(double v0) {
-        this.v0 = v0;
     }
 }

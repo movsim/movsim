@@ -133,8 +133,8 @@ public class SimulationRun {
      * </p>
      * 
      * <p>
-     * This is the logical time in the simulation (that is the sum of the deltaTs), not the amount
-     * of real time that has been required to do the simulation calculations.
+     * This is the logical time in the simulation (that is the sum of the deltaTs), not the amount of real time that has
+     * been required to do the simulation calculations.
      * </p>
      * 
      * @return the simulation time

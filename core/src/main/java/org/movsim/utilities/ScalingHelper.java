@@ -46,7 +46,7 @@ public class ScalingHelper {
      *            the model name
      * @return the scaling length
      */
-    public static double getScalingLength(final ModelName modelName) {
+    public static double getScalingLength(ModelName modelName) {
         double scalingLengthCA = 1;
         if (modelName == ModelName.NSM) {
             scalingLengthCA = 7.5;

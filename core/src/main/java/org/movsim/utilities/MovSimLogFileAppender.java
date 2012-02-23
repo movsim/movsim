@@ -40,8 +40,9 @@ import org.movsim.simulator.Simulator;
  * 
  * TTCC: Time Thread Category Component
  * 
- * The first field is the number of milliseconds elapsed since the start of the program. The second field is the thread making the log
- * request. The third field is the level of the log statement. The fourth field is the name of the logger associated with the log request.
+ * The first field is the number of milliseconds elapsed since the start of the program. The second field is the thread
+ * making the log request. The third field is the level of the log statement. The fourth field is the name of the logger
+ * associated with the log request.
  * The text after the '-' is the message of the statement. Pattern=%r [%t] %-5p (%F:%M:%L) - %m%n
  * 
  * @author Ralph Germ
@@ -55,11 +56,12 @@ public class MovSimLogFileAppender {
     public static void initialize(ProjectMetaData projectMetaData) {
         new MovSimLogFileAppender(projectMetaData);
     }
-    
+
     /**
      * Initializes a FileAppender and adds the appender.
      * 
-     * View log4j.properties for defining logging levels for packages or to initialize other appenders like a rolling file appender.
+     * View log4j.properties for defining logging levels for packages or to initialize other appenders like a rolling
+     * file appender.
      * 
      * Logs to file "[output path]projectname.log".
      */
@@ -67,8 +69,8 @@ public class MovSimLogFileAppender {
         Layout layout = new PatternLayout("%r [%t] %-5p (%F:%M:%L) - %m%n");
 
         try {
-            final String filename = projectMetaData.getOutputPath() + File.separator
-                    + projectMetaData.getProjectName() + ".log";
+            final String filename = projectMetaData.getOutputPath() + File.separator + projectMetaData.getProjectName()
+                    + ".log";
             fileAppender = new FileAppender(layout, filename, false);
         } catch (IOException e) {
             e.printStackTrace();

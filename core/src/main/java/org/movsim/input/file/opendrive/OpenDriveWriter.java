@@ -88,7 +88,8 @@ public class OpenDriveWriter extends XMLWriterBase {
 
         Connection getConnection(String incommingRoadId, String connectingRoadId) {
             for (final Connection connection : connections) {
-                if (connection.incomingRoadId.equals(incommingRoadId) && connection.connectingRoadId.equals(connectingRoadId)) {
+                if (connection.incomingRoadId.equals(incommingRoadId)
+                        && connection.connectingRoadId.equals(connectingRoadId)) {
                     return connection;
                 }
             }
@@ -210,8 +211,8 @@ public class OpenDriveWriter extends XMLWriterBase {
         assert roadMapping != null;
         final String roadFormat = "id=\"%s\" name=\"R%s\" length=\"%f\" junction=\"%s\"";
         final String junctionId = findJunctionByConnectingRoadId(roadSegment.userId());
-        final String s = String.format(roadFormat, roadSegment.userId(), roadSegment.userId(), roadSegment.roadLength(),
-                junctionId);
+        final String s = String.format(roadFormat, roadSegment.userId(), roadSegment.userId(),
+                roadSegment.roadLength(), junctionId);
         startTag("road", s);
         startTag("link");
         final String junctionLinkFormat = "elementType=\"junction\" elementId=\"%s\"";
@@ -260,7 +261,8 @@ public class OpenDriveWriter extends XMLWriterBase {
             final RoadSegment sinkRoadSegment = roadSegment.sourceRoadSegment(lane);
             boolean linkTag = false;
             final String idFormat = "id=\"%d\"";
-            if (sourceLane != Lane.NONE && sourceRoadSegment != null && predecessorJunctionId.equals(Junction.NOT_JUNCTION)) {
+            if (sourceLane != Lane.NONE && sourceRoadSegment != null
+                    && predecessorJunctionId.equals(Junction.NOT_JUNCTION)) {
                 linkTag = true;
                 startTag("link");
                 writeTag("predecessor", String.format(idFormat, laneToRightLaneId(sourceRoadSegment, sourceLane)));

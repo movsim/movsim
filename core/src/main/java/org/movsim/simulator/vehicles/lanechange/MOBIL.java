@@ -31,6 +31,7 @@ import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 
 /**
  * The Class MOBIL.
@@ -62,29 +63,26 @@ public class MOBIL {
     private final Vehicle me;
 
     /**
-     * Instantiates a new mOBIL impl.
+     * Instantiates a new MOBIL.
      * 
      * @param vehicle
      *            the vehicle
      */
-    public MOBIL(final Vehicle vehicle) {
+    public MOBIL(Vehicle vehicle) {
         this.me = vehicle;
         // TODO handle this case with *no* <MOBIL> xml element
-
     }
 
     /**
-     * Instantiates a new MOBIL impl.
+     * Instantiates a new MOBIL.
      * 
      * @param vehicle
      *            the vehicle
      * @param lcMobilData
-     *            the lc mobil data
+     *            the lane change MOBIL data
      */
-    public MOBIL(final Vehicle vehicle, LaneChangeMobilData lcMobilData) {
+    public MOBIL(Vehicle vehicle, LaneChangeMobilData lcMobilData) {
         this.me = vehicle;
-        // TODO Auto-generated constructor stub
-
         bSafeRef = bSafe = lcMobilData.getSafeDeceleration();
         biasRightRef = biasRight = lcMobilData.getRightBiasAcceleration();
         gapMin = lcMobilData.getMinimumGap();
@@ -92,7 +90,7 @@ public class MOBIL {
         pRef = politeness = lcMobilData.getPoliteness();
     }
 
-    public MOBIL(final Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
+    public MOBIL(Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
             double thresholdAcceleration, double rightBiasAcceleration) {
         this.me = vehicle;
         bSafeRef = bSafe = safeDeceleration;
@@ -113,8 +111,8 @@ public class MOBIL {
         final int currentLane = me.getLane();
         final int newLane = currentLane + direction;
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
-        if (newLaneSegment.type() == Lane.Type.ENTRANCE) {
-            // never change lane into an entrance lane
+        if ((newLaneSegment.type() == Lane.Type.ENTRANCE) && (me.getLongitudinalModel().modelName() != ModelName.CCS)) {
+            // never change lane into an entrance lane except //TODO remove check for CCS if not needed anymore
             return prospectiveBalance;
         }
 
@@ -176,7 +174,6 @@ public class MOBIL {
         // old situation for new back: just provides the actual left-lane situation
         final double newBackOldAcc = (newBack != null) ? newBack.calcAccModel(newLaneSegment, null) : 0.0;
 
-
         final double oldBackNewAcc;
         if (oldBack == null) {
             oldBackNewAcc = 0.0;
@@ -184,10 +181,15 @@ public class MOBIL {
             // cannot temporarily remove the current vehicle from the current lane, since we are in a loop
             // that iterates over the vehicles in the current lane. So calculate oldBackNewAcc based on just
             // the front vehicle.
-            oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
-//            currentLaneSegment.removeVehicle(me);
-//            oldBackNewAcc = oldBack.calcAccModel(currentLaneSegment, null);
-//            currentLaneSegment.addVehicle(me);
+            if (currentLaneSegment.frontVehicle(me) != null) { // TODO remove quickhack for avoiding nullpointer
+                oldBackNewAcc = oldBack.getLongitudinalModel().calcAcc(oldBack, currentLaneSegment.frontVehicle(me));
+            } else {
+                oldBackNewAcc = 0.0;
+            }
+
+            // currentLaneSegment.removeVehicle(me);
+            // oldBackNewAcc = oldBack.calcAccModel(currentLaneSegment, null);
+            // currentLaneSegment.addVehicle(me);
         }
 
         // MOBIL trade-off for driver and neighborhood
@@ -195,12 +197,34 @@ public class MOBIL {
         final double newBackDiffAcc = newBackNewAcc - newBackOldAcc;
         final double meDiffAcc = meNewAcc - meOldAcc;
 
-        // MOBIL's incentive formula
+       
         final int changeTo = newLaneSegment.lane() - currentLaneSegment.lane();
-        final double biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
-
+        
+        // TODO adjust hack for CCS
+        if (me.getLongitudinalModel().modelName() == ModelName.CCS ) {
+            
+            final int laneCount = roadSegment.laneCount();
+            if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
+                prospectiveBalance = 1000;  // mandatory change from ending lane
+            } else {
+                // bias towards middle lanes:
+                int biasSign = -1;
+                // assume increasing lane index from right to left
+                if ((currentLane < laneCount/2 && changeTo == MovsimConstants.TO_LEFT) || (currentLane > laneCount/2 && changeTo == MovsimConstants.TO_RIGHT)){
+                    biasSign = 1;  // in favor of changing to the middle
+                }
+                prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold + biasSign
+                        * biasRight;
+            }
+            
+            return prospectiveBalance; // quick hack ends here
+        }
+        // MOBIL's incentive formula
+        
+        final int biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
+            
         prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
-                * biasRight;
+                    * biasRight;
 
         return prospectiveBalance;
     }

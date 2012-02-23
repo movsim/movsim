@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -46,19 +45,13 @@ public class Gipps extends LongitudinalModelBase {
     /**
      * The T. results from update timestep dt dt = T = Tr = tau_relax
      */
-    private double T;
-
-    /** The v0. */
-    private double v0;
+    private final double T;
 
     /** The a. */
-    private double a;
+    private final double a;
 
     /** The b. */
-    private double b;
-
-    /** The s0. */
-    private double s0;
+    private final double b;
 
     /**
      * Instantiates a new gipps.
@@ -68,26 +61,22 @@ public class Gipps extends LongitudinalModelBase {
      */
     public Gipps(double dt, LongitudinalModelInputDataGipps parameters) {
         super(ModelName.GIPPS, parameters);
-        initParameters(dt);
-    }
-
-    private void initParameters(double dt) {
         this.T = dt;
-        initParameters();
+        logger.debug("init model parameters");
+        this.v0 = parameters.getV0();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.s0 = parameters.getS0();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
     @Override
-    protected void initParameters() {
-        logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataGipps) parameters).getV0();
-        this.a = ((LongitudinalModelInputDataGipps) parameters).getA();
-        this.b = ((LongitudinalModelInputDataGipps) parameters).getB();
-        this.s0 = ((LongitudinalModelInputDataGipps) parameters).getS0();
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = v0;
+    }
+
+    @Override
+    public double getDesiredSpeed() {
+        return v0;
     }
 
     /**
@@ -97,15 +86,6 @@ public class Gipps extends LongitudinalModelBase {
      */
     public double getT() {
         return T;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
     }
 
     /**
@@ -126,23 +106,13 @@ public class Gipps extends LongitudinalModelBase {
         return b;
     }
 
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
-    }
-
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = (vehFront == null) ? 0 : v - vehFront.getSpeed();
+        final double dv = me.getRelSpeed(frontVehicle);
 
         // space dependencies modeled by speedlimits, alpha's
 
@@ -160,30 +130,6 @@ public class Gipps extends LongitudinalModelBase {
         return acc(s, v, dv, v0Local, TLocal);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
-    @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
-        // Local dynamical variables
-        final double s = me.getNetDistance(vehFront);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
-
-        final double TLocal = T;
-        final double v0Local = Math.min(v0, me.getSpeedlimit());
-
-        return acc(s, v, dv, v0Local, TLocal);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, v0, T);
@@ -211,25 +157,5 @@ public class Gipps extends LongitudinalModelBase {
         final double vNew = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
         final double aWanted = (vNew - v) / TLocal;
         return aWanted;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeedParameterV0() {
-        return v0;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeedV0(double v0) {
-        this.v0 = v0;
     }
 }

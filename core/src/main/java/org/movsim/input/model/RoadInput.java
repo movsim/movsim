@@ -39,6 +39,7 @@ import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
+import org.movsim.input.model.simulation.SlopeDataPoint;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
@@ -49,19 +50,8 @@ public class RoadInput {
 
     private String id;
 
-    private double roadLength;
-
-    private int lanes;
-
-    // TODO this is a property of an onramp/offramp and not of an mainroad
-    private double rampMergingLength;
-
-    // TODO this is a property of an onramp/offramp and not of an mainroad
-    private double rampStartPosition;
-
     private boolean isWithWriteFundamentalDiagrams;
 
-    /** The heterogeneity input data. */
     private List<TrafficCompositionInputData> trafficCompositionInputData;
 
     private List<ICMacroData> icMacroData;
@@ -72,7 +62,6 @@ public class RoadInput {
 
     private TrafficSinkData trafficSinkData;
 
-    /** The flow conserving bottleneck input data. */
     private List<FlowConservingBottleneckDataPoint> flowConsBottleneckInputData;
 
     private List<SpeedLimitDataPoint> speedLimitInputData;
@@ -82,6 +71,8 @@ public class RoadInput {
     private TrafficLightsInput trafficLightsInput;
 
     private DetectorInput detectorInput;
+
+    private List<SlopeDataPoint> slopesInputData;
 
     /**
      * Instantiates a new road input.
@@ -102,14 +93,7 @@ public class RoadInput {
     @SuppressWarnings("unchecked")
     private void parseRoadElement(Element elem) {
 
-        //id = Long.parseLong(elem.getAttributeValue("id"));
         id = elem.getAttributeValue("id");
-        // roadLength = Double.parseDouble(elem.getAttributeValue("length"));
-        // lanes = Integer.parseInt(elem.getAttributeValue("lanes"));
-
-        // rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-        // rampMergingLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
-        // -----------------------------------------------------------
 
         // heterogeneity element with vehicle types
         trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
@@ -127,39 +111,33 @@ public class RoadInput {
             }
         }
 
-        // -----------------------------------------------------------
-
         // Initial Conditions Micro
-        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? 
-                new ArrayList<Element>() : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
-                XmlElementNames.RoadInitialConditionsIcMicro);
+        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new ArrayList<Element>()
+                : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+                        XmlElementNames.RoadInitialConditionsIcMicro);
         icMicroData = new ArrayList<ICMicroData>();
         for (final Element icMicroElem : icMicroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMicroElem);
             icMicroData.add(new ICMicroData(map));
         }
-
         Collections.sort(icMicroData, new Comparator<ICMicroData>() {
             @Override
             public int compare(ICMicroData o1, ICMicroData o2) {
                 final Double pos1 = new Double((o1).getX());
                 final Double pos2 = new Double((o2).getX());
-                return pos2.compareTo(pos1); // sort with DECREASING x because
-                                             // of FC veh counting
+                return pos2.compareTo(pos1); // sort with DECREASING x because of FC veh counting
             }
         });
 
-        // -----------------------------------------------------------
-
         // Initial Conditions Macro
-        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions)== null ?
-                new ArrayList<Element>() :  elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(XmlElementNames.RoadInitialConditionsIcMacro);
+        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new ArrayList<Element>()
+                : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
+                        XmlElementNames.RoadInitialConditionsIcMacro);
         icMacroData = new ArrayList<ICMacroData>();
         for (final Element icMacroElem : icMacroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMacroElem);
             icMacroData.add(new ICMacroData(map));
         }
-
         Collections.sort(icMacroData, new Comparator<ICMacroData>() {
             @Override
             public int compare(ICMacroData o1, ICMacroData o2) {
@@ -169,19 +147,13 @@ public class RoadInput {
             }
         });
 
-        // -----------------------------------------------------------
-
         // TRAFFIC_SOURCE
         final Element roadSourceElem = elem.getChild(XmlElementNames.RoadTrafficSource);
         trafficSourceData = new TrafficSourceData(roadSourceElem);
 
-        // -----------------------------------------------------------
-
         // TRAFFIC_SINK
         final Element roadSinkElem = elem.getChild(XmlElementNames.RoadTrafficSink);
         trafficSinkData = new TrafficSinkData(roadSinkElem);
-
-        // -----------------------------------------------------------
 
         // FlowConservingBottlenecks
         flowConsBottleneckInputData = new ArrayList<FlowConservingBottleneckDataPoint>();
@@ -193,7 +165,6 @@ public class RoadInput {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(flowConsElem);
                 flowConsBottleneckInputData.add(new FlowConservingBottleneckDataPoint(map));
             }
-
             Collections.sort(flowConsBottleneckInputData, new Comparator<FlowConservingBottleneckDataPoint>() {
                 @Override
                 public int compare(FlowConservingBottleneckDataPoint o1, FlowConservingBottleneckDataPoint o2) {
@@ -204,8 +175,6 @@ public class RoadInput {
             });
         }
 
-        // -----------------------------------------------------------
-
         // speed limits
         speedLimitInputData = new ArrayList<SpeedLimitDataPoint>();
         final Element speedLimitsElement = elem.getChild(XmlElementNames.RoadSpeedLimits);
@@ -215,7 +184,6 @@ public class RoadInput {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(speedLimitElem);
                 speedLimitInputData.add(new SpeedLimitDataPoint(map));
             }
-
             Collections.sort(speedLimitInputData, new Comparator<SpeedLimitDataPoint>() {
                 @Override
                 public int compare(SpeedLimitDataPoint o1, SpeedLimitDataPoint o2) {
@@ -226,7 +194,24 @@ public class RoadInput {
             });
         }
 
-        // -----------------------------------------------------------
+        // slopes
+        slopesInputData = new ArrayList<SlopeDataPoint>();
+        final Element slopesElement = elem.getChild(XmlElementNames.RoadSlopes);
+        if (slopesElement != null) {
+            final List<Element> slopeElems = slopesElement.getChildren(XmlElementNames.RoadSlope);
+            for (final Element slopeElem : slopeElems) {
+                final Map<String, String> map = XmlUtils.putAttributesInHash(slopeElem);
+                slopesInputData.add(new SlopeDataPoint(map));
+            }
+            Collections.sort(slopesInputData, new Comparator<SlopeDataPoint>() {
+                @Override
+                public int compare(SlopeDataPoint o1, SlopeDataPoint o2) {
+                    final Double pos1 = new Double((o1).getPosition());
+                    final Double pos2 = new Double((o2).getPosition());
+                    return pos1.compareTo(pos2); // sort with increasing x
+                }
+            });
+        }
 
         // non-physical ramps implementing a drop-down mechanism without
         // lane-changing decisions
@@ -238,7 +223,6 @@ public class RoadInput {
             for (final Element simpleRampElem : simpleRampElems) {
                 simpleRamps.add(new SimpleRampData(simpleRampElem));
             }
-
             Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
                 @Override
                 public int compare(SimpleRampData o1, SimpleRampData o2) {
@@ -247,72 +231,24 @@ public class RoadInput {
                     return pos1.compareTo(pos2); // sort with increasing x
                 }
             });
-
-            // -----------------------------------------------------------
-            // physical ramps
-            // ramps = new ArrayList<RampData>();
-            // final List<Element> rampElems = rampsElement.getChildren(XmlElementNames.RoadRamp);
-            // for (final Element rampElem : rampElems) {
-            // ramps.add(new RampDataImpl(rampElem));
-            // }
-            //
-            // Collections.sort(ramps, new Comparator<RampData>() {
-            // @Override
-            // public int compare(RampData o1, RampData o2) {
-            // final Double pos1 = new Double((o1).getRampStartPosition());
-            // final Double pos2 = new Double((o2).getRampStartPosition());
-            // return pos1.compareTo(pos2); // sort with increasing x
-            // }
-            // });
         }
 
-        // -----------------------------------------------------------
-
         // Trafficlights
-
         final Element trafficLightsElement = elem.getChild(XmlElementNames.RoadTrafficLights);
         trafficLightsInput = new TrafficLightsInput(trafficLightsElement);
 
-        // -----------------------------------------------------------
-
+        // Detectors
         detectorInput = new DetectorInput(elem.getChild(XmlElementNames.OutputDetectors));
-
-        // -----------------------------------------------------------
-
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getRoadLength()
-     */
-    public double getRoadLength() {
-        return roadLength;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
-     */
     public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
         return trafficCompositionInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getIcMacroData()
-     */
     public List<ICMacroData> getIcMacroData() {
         return icMacroData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getIcMicroData()
-     */
     public List<ICMicroData> getIcMicroData() {
         return icMicroData;
     }
@@ -325,84 +261,36 @@ public class RoadInput {
         return trafficSinkData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getFlowConsBottleneckInputData ()
-     */
     public List<FlowConservingBottleneckDataPoint> getFlowConsBottleneckInputData() {
         return flowConsBottleneckInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#getSpeedLimitInputData()
-     */
     public List<SpeedLimitDataPoint> getSpeedLimitInputData() {
         return speedLimitInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getLanes()
-     */
-    public int getLanes() {
-        return lanes;
+    public List<SlopeDataPoint> getSlopesInputData() {
+        return slopesInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#getId()
-     */
     public String getId() {
         return id;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#isWithWriteFundamentalDiagrams()
-     */
     public boolean isWithWriteFundamentalDiagrams() {
         return isWithWriteFundamentalDiagrams;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#getSimpleRamps()
-     */
     public List<SimpleRampData> getSimpleRamps() {
         return simpleRamps;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.OutputInput#getDetectorInput()
-     */
     public DetectorInput getDetectorInput() {
         return detectorInput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#getTrafficLightsInput()
-     */
     public TrafficLightsInput getTrafficLightsInput() {
         return trafficLightsInput;
-    }
-
-    public double getRampMergingLength() {
-        return rampMergingLength;
-    }
-
-    public double getRampStartPosition() {
-        return rampStartPosition;
     }
 
 }

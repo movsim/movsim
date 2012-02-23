@@ -127,7 +127,8 @@ public class LogWindow extends JFrame {
         setVisible(true);
     }
 
-    public static void setupLog4JAppender(JTextArea jTextArea) {
+    public static void setupLog4JAppender() {
+        final JTextArea jTextArea = new JTextArea();
         SwingLogAppender.setTextArea(jTextArea);
         LogWindow.jTextArea = jTextArea;
     }

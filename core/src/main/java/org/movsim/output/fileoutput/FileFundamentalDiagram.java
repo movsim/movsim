@@ -40,8 +40,7 @@ import org.movsim.utilities.FileUtils;
  */
 public class FileFundamentalDiagram {
     private static final String extensionFormat = ".fund_%s.csv";
-    private static final String outputHeading = FileOutputBase.COMMENT_CHAR +
-            " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n";
+    private static final String outputHeading = FileOutputBase.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n";
     private static final String outputFormat = "%8.2f, %8.2f, %8.2f, %8.2f%n";
 
     /**
@@ -56,7 +55,8 @@ public class FileFundamentalDiagram {
      * @param prototypes
      *            the prototypes
      */
-    public static void writeFundamentalDiagrams(ProjectMetaData projectMetaData, HashMap<String, VehiclePrototype> prototypes) {
+    public static void writeFundamentalDiagrams(ProjectMetaData projectMetaData,
+            HashMap<String, VehiclePrototype> prototypes) {
         final String path = projectMetaData.getOutputPath();
         final String baseFilename = projectMetaData.getProjectName();
         for (final Map.Entry<String, VehiclePrototype> entry : prototypes.entrySet()) {
@@ -79,7 +79,8 @@ public class FileFundamentalDiagram {
      */
     private static void writeFundamentalDiagram(EquilibriumProperties equilibriumProperties, String filename) {
         final PrintWriter writer = FileUtils.getWriter(filename);
-        writer.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n", 1000 * equilibriumProperties.getRhoQMax());
+        writer.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n",
+                1000 * equilibriumProperties.getRhoQMax());
         writer.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * equilibriumProperties.getQMax());
         writer.printf(outputHeading);
         final int count = equilibriumProperties.getVEqCount();

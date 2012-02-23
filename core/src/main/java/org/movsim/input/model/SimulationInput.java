@@ -33,6 +33,7 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
+import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,13 +65,15 @@ public class SimulationInput {
 
     private final OutputInput outputInput;
 
+    private RoutesInput routesInput;
+
     /**
      * Instantiates a new simulation input.
      * 
      * @param elem
      *            the elem
      */
-    public SimulationInput(final Element elem) {
+    public SimulationInput(Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
         maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
@@ -117,6 +120,12 @@ public class SimulationInput {
             roadInputMap.put(roadInputData.getId(), roadInputData);
         }
 
+        // Routes
+
+        if (elem.getChild(XmlElementNames.OutputRoutes) != null) {
+            routesInput = new RoutesInput(roadInputMap, elem.getChild(XmlElementNames.OutputRoutes));
+        }
+
         // -------------------------------------------------------
         // Output
         outputInput = new OutputInput(roadInputMap, elem.getChild(XmlElementNames.Output));
@@ -137,168 +146,48 @@ public class SimulationInput {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getTimestep()
-     */
     public double getTimestep() {
         return timestep;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getMaxSimulationTime()
-     */
     public double getMaxSimTime() {
         return maxSimTime;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#isWithFixedSeed()
-     */
     public boolean isWithFixedSeed() {
         return withFixedSeed;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getRandomSeed()
-     */
     public int getRandomSeed() {
         return randomSeed;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.SimulationInput#getRoadInput()
-     */
     public Map<String, RoadInput> getRoadInput() {
         return roadInputMap;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.SimulationInput#getSingleRoadInput()
-     */
     public RoadInput getSingleRoadInput() {
         // Quick hack: assume only one single main road !!!
         return roadInputMap.get(0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.SimulationInput#getOutputInput()
-     */
     public OutputInput getOutputInput() {
         return outputInput;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.SimulationInput#isWithCrashExit()
-     */
     public boolean isWithCrashExit() {
         return withCrashExit;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.impl.SimulationInput#getHeterogeneityInputData()
-     */
     public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
         return trafficCompositionInputData;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.RoadInput#isWithWriteFundamentalDiagrams()
-     */
     public boolean isWithWriteFundamentalDiagrams() {
         return isWithWriteFundamentalDiagrams;
     }
 
+    public RoutesInput getRoutesInput() {
+        return routesInput;
+    }
 }
-
-// }
-//
-// /**
-// * Gets the timestep.
-// *
-// * @return the timestep
-// */
-// double getTimestep();
-//
-// /**
-// * Gets the duration of the simulation.
-// *
-// * @return the max simulation time
-// */
-// double getMaxSimTime();
-//
-// /**
-// * Checks if is with fixed seed.
-// *
-// * @return true, if is with fixed seed
-// */
-// boolean isWithFixedSeed();
-//
-// /**
-// * Checks if is with crash exit.
-// *
-// * @return true, if is with crash exit
-// */
-// boolean isWithCrashExit();
-//
-// /**
-// * Gets the random seed.
-// *
-// * @return the random seed
-// */
-// int getRandomSeed();
-//
-//
-// /**
-// * Checks if is with write fundamental diagrams.
-// *
-// * @return true, if is with write fundamental diagrams
-// */
-// boolean isWithWriteFundamentalDiagrams();
-//
-// /**
-// * Gets the heterogeneity input data.
-// *
-// * @return the heterogeneity input data
-// */
-// List<TrafficCompositionInputData> getTrafficCompositionInputData();
-//
-//
-// //ArrayList<RoadInput> getRoadInput();
-// Map<Long, RoadInput> getRoadInput();
-//
-//
-// /**
-// * Gets the single road input. Quick hack: only one single main road
-// *
-// * @return the single road input
-// */
-// RoadInput getSingleRoadInput();
-//
-// /**
-// * Gets the output input.
-// *
-// * @return the output input
-// */
-// OutputInput getOutputInput();
-//
-// }

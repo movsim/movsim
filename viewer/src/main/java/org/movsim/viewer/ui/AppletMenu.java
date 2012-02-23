@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class AppletMenu extends JPanel {
@@ -127,7 +128,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("onramp_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("onramp", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -142,7 +143,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("offramp_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("offramp", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -158,7 +159,11 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingHelper.notImplemented(canvasPanel);
+                canvasPanel.simulator.loadScenarioFromXml("flow_conserving_bottleneck", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemFlowConservingBottleNeck);
@@ -169,7 +174,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("speedlimit_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("speedlimit", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -185,7 +190,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("trafficlight_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("trafficlight", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -201,7 +206,7 @@ public class AppletMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        canvasPanel.simulator.loadScenarioFromXml("laneclosing_ACC", "/sim/buildingBlocks/");
+                        canvasPanel.simulator.loadScenarioFromXml("laneclosure", "/sim/buildingBlocks/");
                         canvasPanel.trafficCanvas.reset();
                         canvasPanel.trafficCanvas.start();
                         statusPanel.reset();
@@ -216,7 +221,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("cloverleaf_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("cloverleaf", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -254,7 +259,7 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("ringroad_ACC", "/sim/buildingBlocks/");
+                canvasPanel.simulator.loadScenarioFromXml("ringroad_1lane", "/sim/buildingBlocks/");
                 canvasPanel.trafficCanvas.reset();
                 canvasPanel.trafficCanvas.start();
                 statusPanel.reset();
@@ -263,7 +268,41 @@ public class AppletMenu extends JPanel {
         });
         scenarioMenu.add(menuItemRingRoad);
 
-        menuItemFlowConservingBottleNeck.setEnabled(false);
+        final JMenuItem menuItemRingRoadTwoLanes = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("RingRoad2Lanes")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.simulator.loadScenarioFromXml("ringroad_2lanes", "/sim/buildingBlocks/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemRingRoadTwoLanes);
+        
+        scenarioMenu.addSeparator();
+        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("Vasaloppet")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.simulator.loadScenarioFromXml("vasa_CCS", "/sim/examples/");
+                canvasPanel.trafficCanvas.reset();
+                canvasPanel.trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
+                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(40);
+            }
+        });
+        scenarioMenu.add(menuItemVasaLoppet);
+        
+
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
 
@@ -523,15 +562,6 @@ public class AppletMenu extends JPanel {
             logWindow = new LogWindow(resourceBundle, cbMenu);
         } else {
             SwingHelper.closeWindow(logWindow);
-        }
-    }
-
-    protected void handleDisplayStatusPanel(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            // frame.addStatusPanel();
-        } else {
-            // frame.removeStatusPanel();
         }
     }
 

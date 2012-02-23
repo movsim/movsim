@@ -87,7 +87,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      * @param vehNumber
      *            the vehicle number
      */
-    private void addFloatingCar(final Vehicle veh, int vehNumber) {
+    private void addFloatingCar(Vehicle veh, int vehNumber) {
         final long originId = veh.roadSegmentId();
         final PrintWriter writer = createWriter(String.format(extensionFormat, originId, vehNumber));
         hashMap.put(vehNumber, writer);
@@ -95,7 +95,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         writer.flush();
     }
 
-    private void writeHeader(final PrintWriter writer, final Vehicle veh) {
+    private void writeHeader(PrintWriter writer, Vehicle veh) {
         writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
         writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
         writer.println(String.format("%s model category = %s", COMMENT_CHAR, veh.getLongitudinalModel().modelName()
@@ -154,9 +154,8 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      */
     private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
         final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
-        writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(),
-                physicalQuantities.getFrontPosition(), physicalQuantities.totalTraveledDistance(),
-                physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
+        writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(), physicalQuantities.getFrontPosition(),
+                physicalQuantities.totalTraveledDistance(), physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
                 physicalQuantities.getRelSpeed(frontVeh),
                 physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),

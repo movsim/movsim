@@ -36,10 +36,9 @@ public class LaneChangeMobilData {
     private double politeness;
 
     public LaneChangeMobilData() {
-
     }
 
-    public void init(final Map<String, String> map) {
+    public void init(Map<String, String> map) {
         safeDeceleration = Double.parseDouble(map.get("b_safe"));
         minimumGap = Double.parseDouble(map.get("s_min"));
         thresholdAcceleration = Double.parseDouble(map.get("threshold"));
@@ -47,47 +46,22 @@ public class LaneChangeMobilData {
         politeness = Double.parseDouble(map.get("politeness"));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getSafeDeceleration()
-     */
     public double getSafeDeceleration() {
         return safeDeceleration;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getMinimumGap()
-     */
     public double getMinimumGap() {
         return minimumGap;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getThresholdAcceleration()
-     */
     public double getThresholdAcceleration() {
         return thresholdAcceleration;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getRightBiasAcceleration()
-     */
     public double getRightBiasAcceleration() {
         return rightBiasAcceleration;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.vehicle.laneChange.LaneChangeMobilData# getPoliteness()
-     */
     public double getPoliteness() {
         return politeness;
     }

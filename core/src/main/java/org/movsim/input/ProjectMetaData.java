@@ -38,8 +38,8 @@ public class ProjectMetaData {
     private boolean onlyValidation = false;
     private boolean writeInternalXml = false;
 
-    /** 
-     * Needed for Applet. Change to true, if you cannot access the file system. 
+    /**
+     * Needed for Applet. Change to true, if you cannot access the file system.
      * Allows to read the config files from resources instead.
      */
     private boolean xmlFromResources = false;

@@ -51,8 +51,7 @@ public class TrafficSourceData {
     public TrafficSourceData(Element elem) {
         if (elem == null) {
             withLogging = false;
-        }
-        else{
+        } else {
             withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
             final List<Element> upInflowElems = elem.getChildren(XmlElementNames.RoadInflow);
             parseAndSortInflowElements(upInflowElems);

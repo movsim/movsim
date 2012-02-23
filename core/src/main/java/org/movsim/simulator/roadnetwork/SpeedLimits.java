@@ -98,8 +98,8 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
         	Tables.stepExtrapolation(positions, speeds, position);
     }
 
-	@Override
-	public Iterator<SpeedLimit> iterator() {
+    @Override
+    public Iterator<SpeedLimit> iterator() {
         return speedLimits.iterator();
-	}
+    }
 }

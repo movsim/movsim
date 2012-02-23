@@ -54,12 +54,12 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
-            <ROUTES>
-                <ROUTE label="main">
-                    <ROAD id="1" />
-                </ROUTE>
-            </ROUTES>
             <FLOATING_CAR_DATA n_dt="5">
                 <FC number="2" />
                 <FC number="6" />

@@ -9,40 +9,36 @@
 <SCENARIO network_filename="ringroad_2lanes.xodr">
     <VEHICLES>
         <!-- fast vehicle type (car) -->
-        <VEHICLE label="ACC1" length="6" b_max="9">
+        <VEHICLE label="FAST_TYPE" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <ACC v0="35" T="1" s0="3" s1="0" delta="4" a="0.7" b="3.0" coolness="1" />
+                <IDM v0="35" T="1" s0="3" s1="0" delta="4" a="0.7" b="3.0" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="20">
                 <MOBIL b_safe="6.0" s_min="2.0" threshold="0.15" bias_right="0.3" politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- slow vehicle type (truck) -->
-        <VEHICLE label="ACC2" length="15" b_max="9">
+        <VEHICLE label="SLOW_TYPE" length="15" b_max="9">
             <LONGITUDINAL_MODEL>
-                <ACC v0="25" T="1.2" s0="3" s1="0" delta="4" a="0.5" b="3.0" coolness="1" />
+                <IDM v0="25" T="1.2" s0="3" s1="0" delta="4" a="0.5" b="3.0" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="20">
                 <MOBIL b_safe="6.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.2" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="100000" fixed_seed="true">
+    <SIMULATION dt="0.2" duration="1000000" fixed_seed="true" seed="42" crash_exit="true">
         <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="ACC1" fraction="0.8" />
-            <VEHICLE_TYPE label="ACC2" fraction="0.2" />
+            <VEHICLE_TYPE label="FAST_TYPE" fraction="0.8" />
+            <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="43">
             <INITIAL_CONDITIONS>
-                <!-- critical density for emerging stop-and-go wave about >= 52 vehicles per km -->
-                <IC_MACRO x="1" rho_per_km="55" v="20" />
+                <!-- critical density for emerging stop-and-go wave about >= ?? vehicles per km -->
+                <IC_MACRO x="1" rho_per_km="30" v="20" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        <OUTPUT>
-            <!--   <FLOATING_CAR_DATA n_dt="5">
-        <FC number="2" />
-      </FLOATING_CAR_DATA>   -->
-        </OUTPUT>
+        <OUTPUT />
     </SIMULATION>
 </SCENARIO>
 

@@ -27,13 +27,11 @@ package org.movsim.utilities;
 
 import java.util.Random;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MyRandom.
  */
 public class MyRandom {
 
-    /** The rand. */
     private static Random rand;
 
     /**

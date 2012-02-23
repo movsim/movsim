@@ -50,7 +50,7 @@ public class InflowDataPoint {
         this.flow = Double.parseDouble(map.get("q_per_hour")) / 3600.0;
         this.speed = Double.parseDouble(map.get("v"));
     }
-    
+
     /**
      * Constructor.
      * 

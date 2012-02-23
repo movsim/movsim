@@ -45,17 +45,19 @@ public class TrafficLights implements Iterable<TrafficLight> {
     final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
     private final Collection<TrafficLight> trafficLights;
+
     public interface RecordDataCallback {
         /**
          * Callback to allow the application to process or record the traffic light data.
          * 
          * @param simulationTime
          *            the current logical time in the simulation
-         * @param iterationCount 
+         * @param iterationCount
          * @param trafficLights
          */
         public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights);
     }
+
     private RecordDataCallback recordDataCallback;
 
     /**
@@ -111,12 +113,12 @@ public class TrafficLights implements Iterable<TrafficLight> {
             }
         }
         if (recordDataCallback != null) {
-        	recordDataCallback.recordData(simulationTime, iterationCount, trafficLights);
+            recordDataCallback.recordData(simulationTime, iterationCount, trafficLights);
         }
     }
 
-	@Override
-	public Iterator<TrafficLight> iterator() {
+    @Override
+    public Iterator<TrafficLight> iterator() {
         return trafficLights.iterator();
-	}
+    }
 }

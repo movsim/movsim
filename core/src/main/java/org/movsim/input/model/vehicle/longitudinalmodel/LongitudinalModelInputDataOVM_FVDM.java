@@ -25,163 +25,173 @@
  */
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
+import java.util.Map;
+
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The Interface LongitudinalModelInputDataOVM_FVDM.
+ * The Class LongitudinalModelInputDataOVM_VDIFF.
  */
-public interface LongitudinalModelInputDataOVM_FVDM extends LongitudinalModelInputData {
+public class LongitudinalModelInputDataOVM_FVDM extends LongitudinalModelInputData {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataOVM_FVDM.class);
+
+    private double v0;
+    private final double v0Default;
+
+    private double tau;
+    private final double tauDefault;
+
+    private double transitionWidth;
+    private final double transitionWidthDefault;
+
+    private double beta;
+    private final double betaDefault;
+
+    private double lambda;
+    private final double lambdaDefault;
+
+    private double s0;
+    private final double s0Default;
+
+    private int variant;
+    private final int variantDefault;
 
     /**
-     * Gets the s0.
+     * Instantiates a new model input data OVM or FVDM.
      * 
-     * @return the s0
+     * @param map
+     *            the map
      */
-    double getS0();
+    public LongitudinalModelInputDataOVM_FVDM(Map<String, String> map) {
+        super(ModelName.OVM_FVDM);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        tauDefault = tau = Double.parseDouble(map.get("tau"));
+        transitionWidthDefault = transitionWidth = Double.parseDouble(map.get("l_int"));
+        betaDefault = beta = Double.parseDouble(map.get("beta"));
+        lambdaDefault = lambda = Double.parseDouble(map.get("lambda"));
+        s0Default = s0 = Double.parseDouble(map.get("s0"));
+        variantDefault = variant = Integer.parseInt(map.get("variant"));
 
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    double getV0();
+        checkParameters();
 
-    /**
-     * Gets the tau.
-     * 
-     * @return the tau
-     */
-    double getTau();
+    }
 
-    /**
-     * Gets the transition width
-     * 
-     * @return the transition width
-     */
-    double getTransitionWidth();
+    @Override
+    protected void checkParameters() {
+        if (s0 < 0 || v0 < 0 || tau < 0 || transitionWidth < 0 || beta < 0 || lambda < 0 || variant < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
 
-    /**
-     * Gets the beta.
-     * 
-     * @return the beta
-     */
-    double getBeta();
+        // TODO further param check
+    }
 
-    /**
-     * Gets the lambda.
-     * 
-     * @return the lambda
-     */
-    double getLambda();
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        tau = tauDefault;
+        transitionWidth = transitionWidthDefault;
+        beta = betaDefault;
+        lambda = lambdaDefault;
+        s0 = s0Default;
+        variant = variantDefault;
+    }
 
-    /**
-     * Gets the variant.
-     * 
-     * @return the variant
-     */
-    int getVariant();
+    public double getS0() {
+        return s0;
+    }
 
-    /**
-     * Gets the v0 default.
-     * 
-     * @return the v0 default
-     */
-    double getV0Default();
+    public double getV0() {
+        return v0;
+    }
 
-    /**
-     * Gets the tau default.
-     * 
-     * @return the tau default
-     */
-    double getTauDefault();
+    public double getTau() {
+        return tau;
+    }
 
-    /**
-     * Gets the transition width default.
-     * 
-     * @return the transition width default
-     */
-    double getTransitionWidthDefault();
+    public double getTransitionWidth() {
+        return transitionWidth;
+    }
 
-    /**
-     * Gets the beta default.
-     * 
-     * @return the beta default
-     */
-    double getBetaDefault();
+    public double getBeta() {
+        return beta;
+    }
 
-    /**
-     * Gets the lambda default.
-     * 
-     * @return the lambda default
-     */
-    double getLambdaDefault();
+    public double getLambda() {
+        return lambda;
+    }
 
-    /**
-     * Gets the s0 default.
-     * 
-     * @return the s0 default
-     */
-    double getS0Default();
+    public int getVariant() {
+        return variant;
+    }
 
-    /**
-     * Gets the variant default.
-     * 
-     * @return the variant default
-     */
-    int getVariantDefault();
+    public double getV0Default() {
+        return v0Default;
+    }
 
-    /**
-     * Sets the v0.
-     * 
-     * @param v0
-     *            the new v0
-     */
-    void setV0(double v0);
+    public double getTauDefault() {
+        return tauDefault;
+    }
 
-    /**
-     * Sets the tau.
-     * 
-     * @param tau
-     *            the new tau
-     */
-    void setTau(double tau);
+    public double getTransitionWidthDefault() {
+        return transitionWidthDefault;
+    }
 
-    /**
-     * Sets the len interaction.
-     * 
-     * @param lenInteraction
-     *            the new len interaction
-     */
-    void setLenInteraction(double lenInteraction);
+    public double getBetaDefault() {
+        return betaDefault;
+    }
 
-    /**
-     * Sets the beta.
-     * 
-     * @param beta
-     *            the new beta
-     */
-    void setBeta(double beta);
+    public double getLambdaDefault() {
+        return lambdaDefault;
+    }
 
-    /**
-     * Sets the lambda.
-     * 
-     * @param lambda
-     *            the new lambda
-     */
-    void setLambda(double lambda);
+    public double getS0Default() {
+        return s0Default;
+    }
 
-    /**
-     * Sets the s0.
-     * 
-     * @param s0
-     *            the new s0
-     */
-    void setS0(double s0);
+    public int getVariantDefault() {
+        return variantDefault;
+    }
 
-    /**
-     * Sets the variant.
-     * 
-     * @param variant
-     *            the new variant
-     */
-    void setVariant(int variant);
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+    public void setTau(double tau) {
+        this.tau = tau;
+        parametersUpdated();
+    }
+
+    public void setLenInteraction(double lenInteraction) {
+        this.transitionWidth = lenInteraction;
+        parametersUpdated();
+    }
+
+    public void setBeta(double beta) {
+        this.beta = beta;
+        parametersUpdated();
+    }
+
+    public void setLambda(double lambda) {
+        this.lambda = lambda;
+        parametersUpdated();
+    }
+
+    public void setS0(double s0) {
+        this.s0 = s0;
+        parametersUpdated();
+    }
+
+    public void setVariant(int variant) {
+        this.variant = variant;
+        parametersUpdated();
+    }
 
 }

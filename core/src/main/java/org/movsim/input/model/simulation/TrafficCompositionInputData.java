@@ -29,16 +29,12 @@ import java.util.Map;
 
 public class TrafficCompositionInputData {
 
-    /** The key name. */
     private final String keyName;
-
-    /** The fraction. */
     private final double fraction;
-
     private final double relativeRandomizationDesiredSpeed;
 
     /**
-     * Instantiates a new heterogeneity input data impl.
+     * Instantiates a new heterogeneity input data.
      * 
      * @param map
      *            the map
@@ -50,29 +46,14 @@ public class TrafficCompositionInputData {
         this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.HeterogeneityInputData#getKeyName ()
-     */
     public String getKeyName() {
         return keyName;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.HeterogeneityInputData#getFraction ()
-     */
     public double getFraction() {
         return fraction;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.HeterogeneityInputData#getRelativeRandomizationDesiredSpeed()
-     */
     public double getRelativeRandomizationDesiredSpeed() {
         return relativeRandomizationDesiredSpeed;
     }

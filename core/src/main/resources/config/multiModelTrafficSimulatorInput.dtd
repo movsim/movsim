@@ -97,13 +97,14 @@
 <!ATTLIST VEHICLE
   label           CDATA   #REQUIRED
   length          NMTOKEN #REQUIRED
+  width           NMTOKEN "4.4"
   b_max           NMTOKEN "10000"
   reaction_time   NMTOKEN "0"
   consumption     NMTOKEN "none"
 >
 
 <!-- Longitudinal model elements -->
-<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, KRAUSS?, NEWELL?, NSM?, KKW?, MEMORY?)>
+<!ELEMENT LONGITUDINAL_MODEL (IDM?, ACC?, OVM_FVDM?, GIPPS?, KRAUSS?, NEWELL?, NSM?, KKW?, MEMORY?, CCS?)>
 
 <!-- see IDM paper and/or website for reference -->
 <!ELEMENT IDM EMPTY>
@@ -193,6 +194,22 @@ alpha_v0 NMTOKEN #REQUIRED
 alpha_a  NMTOKEN "1"
 >
 
+<!-- Cross coutry skiing model -->
+<!ELEMENT CCS EMPTY>
+<!ATTLIST CCS
+  mass            NMTOKEN #REQUIRED
+  cw              NMTOKEN #REQUIRED
+  A               NMTOKEN #REQUIRED
+  friction        NMTOKEN #REQUIRED
+  p0              NMTOKEN #REQUIRED
+  v_c             NMTOKEN #REQUIRED
+  p_herringbone   NMTOKEN #REQUIRED
+  v_c_herringbone NMTOKEN #REQUIRED
+  T               NMTOKEN #REQUIRED
+  s0              NMTOKEN #REQUIRED
+  b               NMTOKEN #REQUIRED
+  b_maximal       NMTOKEN #REQUIRED
+>
 
 <!ELEMENT LANE_CHANGE_MODEL (MOBIL?)>
 <!ATTLIST LANE_CHANGE_MODEL 
@@ -226,7 +243,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!-- Infrastructure and Simulation settings                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, OUTPUT)>
+<!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, ROUTES?, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
   duration         NMTOKEN #REQUIRED
@@ -251,7 +268,7 @@ fluct_strength   NMTOKEN #REQUIRED
 
 
 
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS?, TRAFFIC_SOURCE?, TRAFFIC_SINK?, FLOW_CONSERVING_INHOMOGENEITIES?, SPEED_LIMITS?, SIMPLE_RAMPS*, TRAFFIC_LIGHTS?, DETECTORS?)>
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS?, TRAFFIC_SOURCE?, TRAFFIC_SINK?, FLOW_CONSERVING_INHOMOGENEITIES?, SPEED_LIMITS?, SLOPES?, SIMPLE_RAMPS*, TRAFFIC_LIGHTS?, DETECTORS?)>
 
 <!-- for RAMP x and merge_length needed; not necessary for modeling a MAINROAD-->
 <!ATTLIST ROAD
@@ -314,16 +331,25 @@ alpha_T   NMTOKEN "1"
 alpha_v0  NMTOKEN "1"
 > 
 
-
 <!-- speed limits -->
 <!ELEMENT SPEED_LIMITS (SPEED_LIMIT*)>
 <!ATTLIST SPEED_LIMITS
-> 
+>
 
 <!ELEMENT SPEED_LIMIT EMPTY>
 <!ATTLIST SPEED_LIMIT
 x         NMTOKEN #REQUIRED
 speedlimit_kmh NMTOKEN #REQUIRED
+> 
+<!-- slopes -->
+<!ELEMENT SLOPES (SLOPE*)>
+<!ATTLIST SLOPES
+> 
+
+<!ELEMENT SLOPE EMPTY>
+<!ATTLIST SLOPE
+x         NMTOKEN #REQUIRED
+gradient  NMTOKEN #REQUIRED
 > 
 
   
@@ -383,16 +409,6 @@ phase_shift      NMTOKEN "0"
   x  NMTOKEN #REQUIRED 
 >
 
-
-<!-- ##################################################################### -->
-<!--                           OUTPUT                                      -->
-<!-- ##################################################################### -->
-
-<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, ROUTES?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*) >
-
-<!ATTLIST OUTPUT
->
-
 <!ELEMENT ROUTES (ROUTE*)>
 <!ATTLIST ROUTES
 >
@@ -400,6 +416,16 @@ phase_shift      NMTOKEN "0"
 <!ELEMENT ROUTE (ROAD+)>
 <!ATTLIST ROUTE
 label  NMTOKEN #REQUIRED 
+>
+
+
+<!-- ##################################################################### -->
+<!--                           OUTPUT                                      -->
+<!-- ##################################################################### -->
+
+<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*) >
+
+<!ATTLIST OUTPUT
 >
 
 <!-- output of spatio-temporal fields -->

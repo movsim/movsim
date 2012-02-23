@@ -78,7 +78,7 @@ package org.movsim.viewer.ui.charts;
 //    private XYSeriesCollection dataSet;
 //    private XYPlot plot;
 //
-//    public TravelTimeDiagram(ResourceBundle resourceBundle, final JCheckBoxMenuItem cbMenu) {
+//    public TravelTimeDiagram(ResourceBundle resourceBundle, JCheckBoxMenuItem cbMenu) {
 //        super(resourceBundle.getString("TitleFrameTravelTime"));
 //        TITLE_CHART = resourceBundle.getString("TitleFrameTravelTime");
 //        X_LABEL_CHART = resourceBundle.getString("xLabelChart");

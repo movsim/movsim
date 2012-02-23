@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -50,19 +49,9 @@ public class ACC extends LongitudinalModelBase {
     final static Logger logger = LoggerFactory.getLogger(ACC.class);
 
     /**
-     * The v0. desired velocity (m/s)
-     */
-    private double v0;
-
-    /**
      * The T. time headway (s)
      */
     private double T;
-
-    /**
-     * The s0. bumper-to-bumper distance (m)
-     */
-    private double s0;
 
     /** The s1. */
     private double s1;
@@ -83,7 +72,8 @@ public class ACC extends LongitudinalModelBase {
     private double delta;
 
     /**
-     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in range [0, 1]
+     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in
+     * range [0, 1]
      */
     private double coolness;
 
@@ -95,31 +85,79 @@ public class ACC extends LongitudinalModelBase {
      */
     public ACC(LongitudinalModelInputDataACC parameters) {
         super(ModelName.ACC, parameters);
-        initParameters();
+        this.v0 = parameters.getV0();
+        this.T = parameters.getT();
+        this.s0 = parameters.getS0();
+        this.s1 = parameters.getS1();
+        this.a = parameters.getA();
+        this.b = parameters.getB();
+        this.delta = parameters.getDelta();
+        this.coolness = parameters.getCoolness();
+    }
+
+    /**
+     * Gets the s1.
+     * 
+     * @return the s1
+     */
+    public double getS1() {
+        return s1;
+    }
+
+    /**
+     * Gets the t.
+     * 
+     * @return the t
+     */
+    public double getT() {
+        return T;
+    }
+
+    /**
+     * Gets the delta.
+     * 
+     * @return the delta
+     */
+    public double getDelta() {
+        return delta;
+    }
+
+    /**
+     * Gets the a.
+     * 
+     * @return the a
+     */
+    public double getA() {
+        return a;
+    }
+
+    /**
+     * Gets the b.
+     * 
+     * @return the b
+     */
+    public double getB() {
+        return b;
+    }
+
+    /**
+     * Gets the coolness.
+     * 
+     * @return the coolness
+     */
+    public double getCoolness() {
+        return coolness;
     }
 
     @Override
-    protected void initParameters() {
-        this.v0 = ((LongitudinalModelInputDataACC) parameters).getV0();
-        this.T = ((LongitudinalModelInputDataACC) parameters).getT();
-        this.s0 = ((LongitudinalModelInputDataACC) parameters).getS0();
-        this.s1 = ((LongitudinalModelInputDataACC) parameters).getS1();
-        this.a = ((LongitudinalModelInputDataACC) parameters).getA();
-        this.b = ((LongitudinalModelInputDataACC) parameters).getB();
-        this.delta = ((LongitudinalModelInputDataACC) parameters).getDelta();
-        this.coolness = ((LongitudinalModelInputDataACC) parameters).getCoolness();
-    }
-
-    @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
 
         // Local dynamical variables
-        final Vehicle vehFront = laneSegment.frontVehicle(me);
-        final double s = me.getNetDistance(vehFront);
+        final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
+        final double dv = me.getRelSpeed(frontVehicle);
 
-        final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
+        final double aLead = frontVehicle == null ? me.getAcc() : frontVehicle.getAcc();
 
         // space dependencies modeled by speedlimits, alpha's
 
@@ -135,32 +173,6 @@ public class ACC extends LongitudinalModelBase {
         return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
-    @Override
-    public double calcAcc(final Vehicle me, final Vehicle vehFront) {
-        // Local dynamic variables
-        final double s = me.getNetDistance(vehFront);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(vehFront);
-        final double aLead = (vehFront == null) ? me.getAcc() : vehFront.getAcc();
-
-        final double TLocal = T;
-        final double v0Local = Math.min(v0, me.getSpeedlimit());
-        final double aLocal = a;
-
-        return acc(s, v, dv, aLead, TLocal, v0Local, aLocal);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, 0, T, v0, a);
@@ -219,97 +231,5 @@ public class ACC extends LongitudinalModelBase {
                 * (accCAH + b * Math.tanh((accIIDM - accCAH) / b));
 
         return accACC_IIDM;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
-    }
-
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    public double getT() {
-        return T;
-    }
-
-    /**
-     * Gets the s0.
-     * 
-     * @return the s0
-     */
-    public double getS0() {
-        return s0;
-    }
-
-    /**
-     * Gets the s1.
-     * 
-     * @return the s1
-     */
-    public double getS1() {
-        return s1;
-    }
-
-    /**
-     * Gets the delta.
-     * 
-     * @return the delta
-     */
-    public double getDelta() {
-        return delta;
-    }
-
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    public double getA() {
-        return a;
-    }
-
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    public double getB() {
-        return b;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeedParameterV0() {
-        return v0;
-    }
-
-    /**
-     * Gets the coolness.
-     * 
-     * @return the coolness
-     */
-    public double getCoolness() {
-        return coolness;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeedV0(double v0) {
-        this.v0 = v0;
     }
 }

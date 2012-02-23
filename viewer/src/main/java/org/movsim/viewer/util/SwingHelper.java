@@ -128,7 +128,7 @@ public class SwingHelper {
         }
         return (Frame) c;
     }
-    
+
     public static JFrame getJFrame(Component c) {
         while (c != null && !(c instanceof JFrame)) {
             c = c.getParent();
@@ -143,12 +143,10 @@ public class SwingHelper {
     public static Color getColorAccordingToSpectrum(double vmin, double vmax, double v) {
 
         // tune following values if not satisfied
-        // (the floor function of any hue value >=1 will be subtracted by
-        // HSBtoRGB)
+        // (the floor function of any hue value >=1 will be subtracted by HSBtoRGB)
 
         final double hue_vmin = 1.00; // hue value for minimum speed value; red
-        final double hue_vmax = 1.84; // hue value for max speed (1 will be
-        // subtracted); violetblue
+        final double hue_vmax = 1.84; // hue value for max speed (1 will be subtracted); violetblue
 
         // possibly a nonlinear hue(speed) function looks nicer;
         // first try this truncuated-linear one
@@ -162,10 +160,10 @@ public class SwingHelper {
 
         // possibly a reduction of brightness near h=0.5 looks nicer;
         // first try max brightness (0-1)
-        final float b = (float) 1.0;
+        final float b = (float) 0.92;
 
         final int rgb = Color.HSBtoRGB(h, s, b);
-        return v >= 0 ? new Color(rgb) : Color.white;
+        return v > 0 ? new Color(rgb) : Color.BLACK;
     }
 
     public static void notImplemented(Component c) {

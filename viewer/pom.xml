@@ -78,4 +78,5 @@
 		</plugins>
 	</build>
 	<artifactId>viewer</artifactId>
+	<description>graphical user interface and visualization frontend to movsim core</description>
 </project>

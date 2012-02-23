@@ -35,7 +35,7 @@ public class ExponentialMovingAverage {
         this.tau = tau;
     }
 
-    public double calcEMA(double time, final List<XYDataPoint> timeSeries) {
+    public double calcEMA(double time, List<XYDataPoint> timeSeries) {
         if (timeSeries.isEmpty()) {
             return 0;
         }

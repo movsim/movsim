@@ -25,164 +25,196 @@
  */
 package org.movsim.input.model.vehicle.longitudinalmodel;
 
-// TODO: Auto-generated Javadoc
+import java.util.Map;
+
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The Interface LongitudinalModelInputDataKKW.
+ * The Class LongitudinalModelInputDataKKW.
  */
-public interface LongitudinalModelInputDataKKW extends LongitudinalModelInputData {
+public class LongitudinalModelInputDataKKW extends LongitudinalModelInputData {
+
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelInputDataKKW.class);
+
+    private double v0;
+    private final double v0Default;
 
     /**
-     * Gets the v0.
-     * 
-     * @return the v0
+     * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
      */
-    double getV0();
+    private double k;
+    private final double kDefault;
 
     /**
-     * Gets the k.
-     * 
-     * @return the k
+     * The pb0. "Troedelwahrsch." for standing vehicles
      */
-    double getK();
+    private double pb0;
+    private final double pb0Default;
 
     /**
-     * Gets the pb0.
-     * 
-     * @return the pb0
+     * The pb1. "Troedelwahrsch." for moving vehicles
      */
-    double getPb0();
+    private double pb1;
+    private final double pb1Default;
 
     /**
-     * Gets the pb1.
-     * 
-     * @return the pb1
+     * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v<vp
      */
-    double getPb1();
+    private double pa1;
+    private final double pa1Default;
 
     /**
-     * Gets the pa1.
-     * 
-     * @return the pa1
+     * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v>=vp
      */
-    double getPa1();
+    private double pa2;
+    private final double pa2Default;
 
     /**
-     * Gets the pa2.
-     * 
-     * @return the pa2
+     * The vp. Geschw., ab der weniger "anti-getroedelt" wird
      */
-    double getPa2();
+    private double vp;
+    private final double vpDefault;
 
     /**
-     * Gets the vp.
+     * Instantiates a new model input data KKW.
      * 
-     * @return the vp
+     * @param map
+     *            the map
      */
-    double getVp();
+    public LongitudinalModelInputDataKKW(Map<String, String> map) {
+        super(ModelName.KKW);
+        v0Default = v0 = Double.parseDouble(map.get("v0"));
+        kDefault = k = Double.parseDouble(map.get("k"));
+        pb0Default = pb0 = Double.parseDouble(map.get("pb0"));
+        pb1Default = pb1 = Double.parseDouble(map.get("pb1"));
+        pa1Default = pa1 = Double.parseDouble(map.get("pa1"));
+        pa2Default = pa2 = Double.parseDouble(map.get("pa2"));
+        vpDefault = vp = Double.parseDouble(map.get("vp"));
+        checkParameters();
+    }
 
-    /**
-     * Gets the v0 default.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the v0 default
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #checkParameters()
      */
-    double getV0Default();
+    @Override
+    protected void checkParameters() {
+        if (v0 < 0 || k < 0 || pb0 < 0 || pb1 < 0 || pa1 < 0 || pa2 < 0 || vp < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    getModelName().name());
+            System.exit(-1);
+        }
+    }
 
-    /**
-     * Gets the k default.
+    /*
+     * (non-Javadoc)
      * 
-     * @return the k default
+     * @see org.movsim.input.model.vehicle.longModel.impl.AccelerationModelInputDataImpl #resetParametersToDefault()
      */
-    double getkDefault();
+    @Override
+    public void resetParametersToDefault() {
+        v0 = v0Default;
+        k = kDefault;
+        pb0 = pb0Default;
+        pb1 = pb1Default;
+        pa1 = pa1Default;
+        pa2 = pa2Default;
+        vp = vpDefault;
+    }
 
-    /**
-     * Gets the pb0 default.
-     * 
-     * @return the pb0 default
-     */
-    double getPb0Default();
+    public double getV0() {
+        return v0;
+    }
 
-    /**
-     * Gets the pb1 default.
-     * 
-     * @return the pb1 default
-     */
-    double getPb1Default();
+    public double getK() {
+        return k;
+    }
 
-    /**
-     * Gets the pa1 default.
-     * 
-     * @return the pa1 default
-     */
-    double getPa1Default();
+    public double getPb0() {
+        return pb0;
+    }
 
-    /**
-     * Gets the pa2 default.
-     * 
-     * @return the pa2 default
-     */
-    double getPa2Default();
+    public double getPb1() {
+        return pb1;
+    }
 
-    /**
-     * Gets the vp default.
-     * 
-     * @return the vp default
-     */
-    double getVpDefault();
+    public double getPa1() {
+        return pa1;
+    }
 
-    /**
-     * Sets the v0.
-     * 
-     * @param v0
-     *            the new v0
-     */
-    void setV0(double v0);
+    public double getPa2() {
+        return pa2;
+    }
 
-    /**
-     * Sets the k.
-     * 
-     * @param k
-     *            the new k
-     */
-    void setK(double k);
+    public double getVp() {
+        return vp;
+    }
 
-    /**
-     * Sets the pb0.
-     * 
-     * @param pb0
-     *            the new pb0
-     */
-    void setPb0(double pb0);
+    public double getV0Default() {
+        return v0Default;
+    }
 
-    /**
-     * Sets the pb1.
-     * 
-     * @param pb1
-     *            the new pb1
-     */
-    void setPb1(double pb1);
+    public double getkDefault() {
+        return kDefault;
+    }
 
-    /**
-     * Sets the pa1.
-     * 
-     * @param pa1
-     *            the new pa1
-     */
-    void setPa1(double pa1);
+    public double getPb0Default() {
+        return pb0Default;
+    }
 
-    /**
-     * Sets the pa2.
-     * 
-     * @param pa2
-     *            the new pa2
-     */
-    void setPa2(double pa2);
+    public double getPb1Default() {
+        return pb1Default;
+    }
 
-    /**
-     * Sets the vp.
-     * 
-     * @param vp
-     *            the new vp
-     */
-    void setVp(double vp);
+    public double getPa1Default() {
+        return pa1Default;
+    }
+
+    public double getPa2Default() {
+        return pa2Default;
+    }
+
+    public double getVpDefault() {
+        return vpDefault;
+    }
+
+    public void setV0(double v0) {
+        this.v0 = v0;
+        parametersUpdated();
+    }
+
+    public void setK(double k) {
+        this.k = k;
+        parametersUpdated();
+    }
+
+    public void setPb0(double pb0) {
+        this.pb0 = pb0;
+        parametersUpdated();
+    }
+
+    public void setPb1(double pb1) {
+        this.pb1 = pb1;
+        parametersUpdated();
+    }
+
+    public void setPa1(double pa1) {
+        this.pa1 = pa1;
+        parametersUpdated();
+    }
+
+    public void setPa2(double pa2) {
+        this.pa2 = pa2;
+        parametersUpdated();
+    }
+
+    public void setVp(double vp) {
+        this.vp = vp;
+        parametersUpdated();
+    }
 
 }

@@ -41,7 +41,6 @@ public class FloatingCarInput {
     private int nDt;
     private int dn;
     private Collection<Integer> floatingCars;
-    private final boolean isWithFC;
 
     /**
      * Instantiates a new floating car input.
@@ -50,11 +49,6 @@ public class FloatingCarInput {
      *            the elem
      */
     public FloatingCarInput(Element elem) {
-
-        if (elem == null) {
-            isWithFC = false; // not initialized
-            return;
-        }
 
         this.nDt = Integer.parseInt(elem.getAttributeValue("n_dt"));
 
@@ -74,7 +68,6 @@ public class FloatingCarInput {
             }
         }
 
-        isWithFC = (dn != 0 || !floatingCars.isEmpty());
     }
 
     public int getDn() {
@@ -83,10 +76,6 @@ public class FloatingCarInput {
 
     public int getNDt() {
         return nDt;
-    }
-
-    public boolean isWithFCD() {
-        return isWithFC;
     }
 
     public Collection<Integer> getFloatingCars() {

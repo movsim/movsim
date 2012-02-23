@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
@@ -45,16 +44,13 @@ public class NSM extends LongitudinalModelBase {
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
 
     /** The constant unit time */
-    private static final double dtCA = 1; 
-
-    /** The v0. */
-    private double v0;
+    private static final double dtCA = 1;
 
     /** The p slowdown. */
-    private double pSlowdown;
+    private final double pSlowdown;
 
     /** slow-to-start rule for Barlovic model */
-    private double pSlowToStart; 
+    private final double pSlowToStart;
 
     /**
      * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
@@ -64,30 +60,47 @@ public class NSM extends LongitudinalModelBase {
      */
     public NSM(LongitudinalModelInputDataNSM parameters) {
         super(ModelName.NSM, parameters);
-        initParameters();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#initParameters()
-     */
-    @Override
-    protected void initParameters() {
         logger.debug("init model parameters");
-        this.v0 = ((LongitudinalModelInputDataNSM) parameters).getV0();
-        this.pSlowdown = ((LongitudinalModelInputDataNSM) parameters).getSlowdown();
-        this.pSlowToStart = ((LongitudinalModelInputDataNSM) parameters).getSlowToStart();
+        this.v0 = parameters.getV0();
+        this.pSlowdown = parameters.getSlowdown();
+        this.pSlowToStart = parameters.getSlowToStart();
     }
 
     @Override
-    public double calcAcc(Vehicle me, LaneSegment laneSegment, double alphaT, double alphaV0, double alphaA) {
+    protected void setDesiredSpeed(double v0) {
+        this.v0 = (int) v0;
+    }
+
+    @Override
+    public double getS0() {
+        throw new UnsupportedOperationException("getS0 not applicable for NSM model.");
+    }
+
+    /**
+     * Gets the slowdown.
+     * 
+     * @return the slowdown
+     */
+    public double getSlowdown() {
+        return pSlowdown;
+    }
+
+    /**
+     * Gets the slow to start.
+     * 
+     * @return the slow to start
+     */
+    public double getSlowToStart() {
+        return pSlowToStart;
+    }
+
+    @Override
+    public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         // local dynamical variables
-        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
         final double dv = me.getRelSpeed(frontVehicle);
-        
+
         // consider external speedlimit
         final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
         if (logger.isDebugEnabled()) {
@@ -100,36 +113,6 @@ public class NSM extends LongitudinalModelBase {
         return acc(s, v, dv, localV0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel#calcAcc(org.movsim.simulator.vehicles.Vehicle,
-     * org.movsim.simulator.vehicles.Vehicle)
-     */
-    @Override
-    public double calcAcc(Vehicle me, Vehicle frontVehicle) {
-        // local dynamical variables
-        final double s = me.getNetDistance(frontVehicle);
-        final double v = me.getSpeed();
-        final double dv = me.getRelSpeed(frontVehicle);
-
-        // consider external speedlimit
-        final double localV0 = Math.min(v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
-        if (logger.isDebugEnabled()) {
-            if (localV0 < v0) {
-                logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n", v0,
-                        localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
-            }
-        }
-
-        return acc(s, v, dv, localV0);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.AccelerationModel #accSimple(double, double, double)
-     */
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         return acc(s, v, dv, v0);
@@ -157,7 +140,7 @@ public class NSM extends LongitudinalModelBase {
                     "local desired speed localVO={} is mapped to CA integer v0={} probably due to a speed limit. Cannot move forward.",
                     localV0, localIntegerV0);
         }
-        
+
         final int vLocal = (int) (v + 0.5);
         int vNew = 0;
 
@@ -170,53 +153,6 @@ public class NSM extends LongitudinalModelBase {
         vNew = Math.min(vNew, sLoc);
         vNew = Math.max(0, vNew - slowdown);
 
-        return ((vNew - vLocal) / dtCA);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl. LongitudinalModel#parameterV0()
-     */
-    @Override
-    public double getDesiredSpeedParameterV0() {
-        return v0;
-    }
-
-    /**
-     * Gets the v0.
-     * 
-     * @return the v0
-     */
-    public double getV0() {
-        return v0;
-    }
-
-    /**
-     * Gets the slowdown.
-     * 
-     * @return the slowdown
-     */
-    public double getSlowdown() {
-        return pSlowdown;
-    }
-
-    /**
-     * Gets the slow to start.
-     * 
-     * @return the slow to start
-     */
-    public double getSlowToStart() {
-        return pSlowToStart;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.simulator.vehicles.longmodel.accelerationmodels.impl.AccelerationModelAbstract#setDesiredSpeedV0(double)
-     */
-    @Override
-    protected void setDesiredSpeedV0(double v0) {
-        this.v0 = (int) v0;
+        return (vNew - vLocal) / dtCA;
     }
 }

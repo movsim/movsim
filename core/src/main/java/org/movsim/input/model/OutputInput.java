@@ -32,7 +32,6 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
@@ -47,8 +46,6 @@ public class OutputInput {
 
     private List<TravelTimesInput> travelTimesInput;
 
-    private RoutesInput routesInput;
-
     /**
      * Instantiates a new output input.
      * 
@@ -58,12 +55,13 @@ public class OutputInput {
      *            the elem
      */
     public OutputInput(Map<String, RoadInput> roadInputMap, Element elem) {
-
-        if (elem.getChild(XmlElementNames.OutputRoutes) != null) {
-            routesInput = new RoutesInput(roadInputMap, elem.getChild(XmlElementNames.OutputRoutes));
+        if (elem == null) {
+            return;
         }
 
-        floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData));
+        if (elem.getChild(XmlElementNames.OutputFloatingCarData) != null) {
+            floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData));
+        }
 
         if (elem.getChild(XmlElementNames.OutputSpatioTemporal) != null) {
             spatioTemporalInput = new ArrayList<SpatioTemporalInput>();
@@ -87,14 +85,10 @@ public class OutputInput {
             travelTimesInput = new ArrayList<TravelTimesInput>();
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputTravelTimes);
-            for (Element element: elements) {
+            for (Element element : elements) {
                 travelTimesInput.add(new TravelTimesInput(element));
             }
         }
-    }
-
-    public RoutesInput getRoutesInput() {
-        return routesInput;
     }
 
     public FloatingCarInput getFloatingCarInput() {

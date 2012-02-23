@@ -34,18 +34,20 @@ import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataCCS;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
+import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.input.model.vehicle.longitudinalmodel.impl.LongitudinalModelInputDataNewellImpl;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ACC;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Gipps;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.KKW;
@@ -54,6 +56,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.NSM;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Newell;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumACC;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumCCS;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumGipps;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumIDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumKKW;
@@ -83,12 +86,14 @@ public class VehicleGenerator {
     private final ConsumptionModeling fuelConsumptionModels;
 
     /**
-     * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param instantaneousFileOutput is true.
+     * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param
+     * instantaneousFileOutput is true.
      * 
      * @param simInput
      *            the sim input
      */
-    public VehicleGenerator(double simulationTimestep, InputData simInput, List<TrafficCompositionInputData> heterogenInputData) {
+    public VehicleGenerator(double simulationTimestep, InputData simInput,
+            List<TrafficCompositionInputData> heterogenInputData) {
         // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
         // default for continuous micro models
         this.simulationTimestep = simulationTimestep;
@@ -204,6 +209,8 @@ public class VehicleGenerator {
             return new EquilibriumNSM(vehLength, (NSM) longModel);
         } else if (longModel.modelName() == ModelName.KKW) {
             return new EquilibriumKKW(vehLength, (KKW) longModel);
+        } else if (longModel.modelName() == ModelName.CCS) {
+            return new EquilibriumCCS(vehLength, (CCS) longModel);
         } else {
             logger.error("no fundamental diagram constructed for model {}. exit.", longModel.modelName().name());
             System.exit(0);
@@ -236,11 +243,13 @@ public class VehicleGenerator {
         } else if (modelName == ModelName.KRAUSS) {
             longModel = new Krauss(simulationTimestep, (LongitudinalModelInputDataKrauss) modelInputData);
         } else if (modelName == ModelName.NEWELL) {
-            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewellImpl) modelInputData);
+            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewell) modelInputData);
         } else if (modelName == ModelName.NSM) {
             longModel = new NSM((LongitudinalModelInputDataNSM) modelInputData);
         } else if (modelName == ModelName.KKW) {
             longModel = new KKW((LongitudinalModelInputDataKKW) modelInputData, vehLength);
+        } else if (modelName == ModelName.CCS) {
+            longModel = new CCS((LongitudinalModelInputDataCCS) modelInputData, vehLength);
         } else {
             logger.error("create model by inputParameter: Model {} not known !", modelName);
             System.exit(0);

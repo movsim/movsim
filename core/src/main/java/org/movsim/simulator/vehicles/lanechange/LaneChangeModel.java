@@ -106,7 +106,6 @@ public class LaneChangeModel {
         return isInitialized;
     }
 
-
     public boolean isSafeLaneChange(LaneSegment laneSegment) {
         final Vehicle front = laneSegment.frontVehicle(me);
         final Vehicle back = laneSegment.rearVehicle(me);
@@ -114,18 +113,7 @@ public class LaneChangeModel {
         return changeSafe;
     }
 
-    public boolean isSafeMandatoryLaneChange(LaneSegment laneSegment) {
-        final Vehicle front = laneSegment.frontVehicle(me);
-        final Vehicle back = laneSegment.rearVehicle(me);
-        // enforce mandatory lane change by increasing the safe deceleration for
-        // normal situations
-        final double increaseFactorMandatory = 2.0;
-        final double safeDeceleration = increaseFactorMandatory * lcModelMOBIL.getSafeDeceleration();
-        final boolean changeSafe = checkSafetyCriterion(front, back, safeDeceleration); // TODO
-        return changeSafe;
-    }
-
-    private boolean checkSafetyCriterion(final Vehicle frontVeh, final Vehicle backVeh, double safeDeceleration) {
+    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh, double safeDeceleration) {
 
         // safety incentive (in two steps)
         final double gapFront = me.getNetDistance(frontVeh);
