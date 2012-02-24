@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 public class AppletMenu extends JPanel {

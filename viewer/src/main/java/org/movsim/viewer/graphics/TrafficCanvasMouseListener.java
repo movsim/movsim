@@ -184,7 +184,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 for (final Vehicle vehicle : roadSegment) {
                     // TODO quick hack here,no correction for offsets
-                    final double vehPosOffset = 0;
                     final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
                     path.reset();
                     path.moveTo(polygon.xPoints[0], polygon.yPoints[0]);

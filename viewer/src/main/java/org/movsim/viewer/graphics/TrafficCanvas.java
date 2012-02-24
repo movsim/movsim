@@ -31,8 +31,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
@@ -633,7 +631,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
-            String string;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
 
