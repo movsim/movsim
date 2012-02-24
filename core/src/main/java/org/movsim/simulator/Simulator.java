@@ -331,7 +331,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                             + roadSegment.laneCount());
                     System.exit(-1);
                 }
-                veh.setLane(lane - 1);// TODO check lane numbering. internal lane numbering starts with 0?!
+                veh.setLane(lane - 1);
                 roadSegment.addVehicle(veh);
                 logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
                         veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
