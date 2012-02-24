@@ -163,6 +163,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             final RoadSegment roadSegment = roadNetwork.findByUserId(roadinput.getId());
             if (roadSegment != null) {
                 addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
+            } else {
+                // at least warn user that roadId cannot be matched to xodr roadnetwork
+                // TODO add option to exit here if user sets option. Such input errors are just annoying.
+                logger.warn("cannot find roadId={} from input in constructed roadNetwork. IGNORE DATA!!!");
             }
         }
     }
