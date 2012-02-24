@@ -36,19 +36,12 @@ import org.movsim.utilities.Tables;
  */
 public class InitialConditionsMacro {
 
-    // final static double SMALL_VAL = 1e-7;
-
-    /** The pos. */
     double[] pos;
-
-    /** The rho. */
     double[] rho;
-
-    /** The speed. */
     double[] speed;
 
     /**
-     * Instantiates a new initial conditions macro impl.
+     * Instantiates a new initial conditions macro.
      * 
      * @param icData
      *            the ic data
