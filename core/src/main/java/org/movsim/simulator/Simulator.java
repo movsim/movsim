@@ -89,7 +89,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public void initialize() {
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011)");
+        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
 
         projectName = projectMetaData.getProjectName();
 
