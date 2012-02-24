@@ -2,7 +2,6 @@
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <OpenDRIVE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="OpenDRIVE_1.3.xsd">
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    
     <road name="start10" length="170.0" id="-10" junction="-1">
         <link>
             <successor elementType="road" elementId="-9" contactPoint="start" />
@@ -380,7 +379,6 @@
             </laneSection>
         </lanes>
     </road>
-    
     <road name="start09" length="100.0" id="-9" junction="-1">
         <link>
             <successor elementType="road" elementId="-8" contactPoint="start" />
@@ -758,8 +756,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start08" length="50.0" id="-8" junction="-1">
+    <road name="start08" length="50.0" id="-8" junction="-1">
         <link>
             <successor elementType="road" elementId="-7" contactPoint="start" />
         </link>
@@ -1136,8 +1133,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start07" length="50.0" id="-7" junction="-1">
+    <road name="start07" length="50.0" id="-7" junction="-1">
         <link>
             <successor elementType="road" elementId="-6" contactPoint="start" />
         </link>
@@ -1514,8 +1510,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start06" length="50.0" id="-6" junction="-1">
+    <road name="start06" length="50.0" id="-6" junction="-1">
         <link>
             <successor elementType="road" elementId="-5" contactPoint="start" />
         </link>
@@ -1892,8 +1887,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start05" length="50.0" id="-5" junction="-1">
+    <road name="start05" length="50.0" id="-5" junction="-1">
         <link>
             <successor elementType="road" elementId="-4" contactPoint="start" />
         </link>
@@ -2270,8 +2264,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start04" length="50.0" id="-4" junction="-1">
+    <road name="start04" length="50.0" id="-4" junction="-1">
         <link>
             <successor elementType="road" elementId="-3" contactPoint="start" />
         </link>
@@ -2648,8 +2641,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start03" length="50.0" id="-3" junction="-1">
+    <road name="start03" length="50.0" id="-3" junction="-1">
         <link>
             <successor elementType="road" elementId="-2" contactPoint="start" />
         </link>
@@ -3026,8 +3018,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="start02" length="50.0" id="-2" junction="-1">
+    <road name="start02" length="50.0" id="-2" junction="-1">
         <link>
             <successor elementType="road" elementId="-1" contactPoint="start" />
         </link>
@@ -3404,7 +3395,6 @@
             </laneSection>
         </lanes>
     </road>
-    
     <road name="start01" length="50.0" id="-1" junction="-1">
         <link>
             <successor elementType="road" elementId="0" contactPoint="start" />
@@ -3782,8 +3772,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="startelite" length="24.0" id="0" junction="-1">
+    <road name="startelite" length="24.0" id="0" junction="-1">
         <link>
             <successor elementType="road" elementId="1" contactPoint="start" />
         </link>
@@ -4160,12 +4149,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-    
-    
     <!-- ================= Race course ============================================================================ -->
-    
-    
     <road name="L1" length="20.0" id="1" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />

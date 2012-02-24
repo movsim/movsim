@@ -12,10 +12,6 @@
                 <MOBIL b_safe="5.0" s_min="1.0" threshold="0." bias_right="0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-
-
-
         <VEHICLE label="CCS2" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.7" friction="0.02" T="0.6" s0="0.8" p0="150" v_c="5" p_herringbone="100" v_c_herringbone="1.5" b="1" b_maximal="2" />
@@ -24,8 +20,6 @@
                 <MOBIL b_safe="5.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-
         <VEHICLE label="CCS3" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.8" friction="0.02" T="0.8" s0="1.0" p0="120" v_c="3" p_herringbone="80" v_c_herringbone="1.5" b="1" b_maximal="2" />
@@ -34,9 +28,7 @@
                 <MOBIL b_safe="5.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-
-       <VEHICLE label="CCS10" length="2" width="1" b_max="9">
+        <VEHICLE label="CCS10" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.8" friction="0.03" T="1.5" s0="2.0" p0="50" v_c="2" p_herringbone="40" v_c_herringbone="0.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
@@ -44,157 +36,135 @@
                 <MOBIL b_safe="5.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-
-
-
-
     </VEHICLES>
-
-
-
-
     <SIMULATION dt="0.2" duration="4000" fixed_seed="true" seed="42" crash_exit="false">
-       <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
             <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
             <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
             <VEHICLE_TYPE label="CCS3" fraction="0.2" relative_v0_randomization="0.2" />
             <VEHICLE_TYPE label="CCS10" fraction="0.8" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>
-        
         <ROAD id="0">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="1.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="1.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="100" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
-         <ROAD id="-1">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.1" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.1" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+        <ROAD id="-1">
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.1" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.8" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.1" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="200" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
-         <ROAD id="-2">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.7" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.3" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+        <ROAD id="-2">
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.7" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.3" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-3">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.2" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.2" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.8" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-4">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.1" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.9" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.1" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.9" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-5">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-6">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-7">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.2" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.8" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.2" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-8">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.5" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="0.5" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.5" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.5" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-9">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.3" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.3" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        
         <ROAD id="-10">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-            <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-            <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS3" fraction="0.0" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+                <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="10" rho_per_km="300" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
-    
-        
         <ROAD id="11">
             <SLOPES>
                 <SLOPE x="10" gradient="0.03" />
