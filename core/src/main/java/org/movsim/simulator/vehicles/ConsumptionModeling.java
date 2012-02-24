@@ -41,14 +41,12 @@ public class ConsumptionModeling {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionModeling.class);
 
-    private Map<String, FuelConsumption> fuelModelsMap;
+    private final Map<String, FuelConsumption> fuelModelsMap = new HashMap<String, FuelConsumption>();
 
     public ConsumptionModeling(FuelConsumptionInput input) {
         if (input == null) {
             return;
         }
-
-        fuelModelsMap = new HashMap<String, FuelConsumption>();
 
         if (input.getConsumptionModelInput() == null) {
             logger.info("no fuel consumption models defined.");
