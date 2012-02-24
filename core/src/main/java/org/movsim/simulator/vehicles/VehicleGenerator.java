@@ -28,8 +28,10 @@ package org.movsim.simulator.vehicles;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.movsim.input.InputData;
+import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
@@ -77,7 +79,7 @@ public class VehicleGenerator {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(VehicleGenerator.class);
 
-    private final HashMap<String, VehiclePrototype> prototypes;
+    private final HashMap<String, VehiclePrototype> defaultPrototypes;
 
     private final double simulationTimestep;
 
@@ -85,27 +87,46 @@ public class VehicleGenerator {
 
     private final ConsumptionModeling fuelConsumptionModels;
 
+    private HashMap<String, HashMap<String, VehiclePrototype>> allRoadPrototypes;
+
     /**
      * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param
      * instantaneousFileOutput is true.
      * 
-     * @param simInput
-     *            the sim input
      */
     public VehicleGenerator(double simulationTimestep, InputData simInput,
-            List<TrafficCompositionInputData> heterogenInputData) {
-        // TODO avoid access of simInput, heterogenInputData is from Simulation *or* from Road
-        // default for continuous micro models
+            List<TrafficCompositionInputData> defaultHeterogenInputData) {
         this.simulationTimestep = simulationTimestep;
-        // create vehicle prototyps according to traffic composition
-        // (heterogeneity)
+        
         final List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehicleInputData);
-        prototypes = createPrototypes(vehInputMap, heterogenInputData);
+        
+        allRoadPrototypes = createAllPrototypesForEachRoadWithTrafficComposition(simInput, vehInputMap);
+
+        defaultPrototypes = createPrototypes(vehInputMap, defaultHeterogenInputData);
 
         isWithReactionTimes = checkForReactionTimes();
 
         fuelConsumptionModels = new ConsumptionModeling(simInput.getFuelConsumptionInput());
+    }
+
+    /**
+     * @param simInput
+     * @param vehInputMap
+     */
+    private HashMap<String, HashMap<String,VehiclePrototype>> createAllPrototypesForEachRoadWithTrafficComposition(InputData simInput,
+            final Map<String, VehicleInput> vehInputMap) {
+        HashMap<String, HashMap<String,VehiclePrototype>> allPrototypes = new HashMap<String, HashMap<String,VehiclePrototype>>();
+        Set<String> keys = simInput.getSimulationInput().getRoadInput().keySet();
+        for (String key: keys) {
+            RoadInput roadInput = simInput.getSimulationInput().getRoadInput().get(key);
+            List<TrafficCompositionInputData> trafficCompositionData = roadInput.getTrafficCompositionInputData();
+            if (trafficCompositionData != null) {
+                HashMap<String, VehiclePrototype> protoTypesForRoad = createPrototypes(vehInputMap, trafficCompositionData);
+                allPrototypes.put(key, protoTypesForRoad);
+            }
+        }
+        return allPrototypes;
     }
 
     /**
@@ -148,40 +169,8 @@ public class VehicleGenerator {
     }
 
     public HashMap<String, VehiclePrototype> prototypes() {
-        return prototypes;
+        return defaultPrototypes;
     }
-
-    // add Obstacle as permanent Vehicle_Type
-    // first check if Obstacle is already part of user defined heterogeneity input
-    /**
-     * Adds the obstacle system vehicle type.
-     * 
-     * @param heterogenInputData
-     *            the heterogen input data
-     */
-    // private void addObstacleSystemVehicleType(List<TrafficCompositionInputData> heterogenInputData) {
-    // boolean obstacleEntryIsContained = false;
-    // for (final TrafficCompositionInputData het : heterogenInputData) {
-    // if (het.getKeyName().equals(MovsimConstants.OBSTACLE_KEY_NAME)) {
-    // obstacleEntryIsContained = true;
-    // }
-    // }
-    //
-    // if (obstacleEntryIsContained) {
-    // logger.info(
-    // "vehicle system type with keyname = {} for Obstacle in Heterogeneity already defined by user. do not overwrite",
-    // MovsimConstants.OBSTACLE_KEY_NAME);
-    // } else {
-    // logger.info(
-    // "vehicle system type with keyname = {} for Obstacle will be automatically defined in Heterogeneity",
-    // MovsimConstants.OBSTACLE_KEY_NAME);
-    // final Map<String, String> mapEntryObstacle = new HashMap<String, String>();
-    // mapEntryObstacle.put("label", MovsimConstants.OBSTACLE_KEY_NAME);
-    // mapEntryObstacle.put("fraction", "0");
-    // mapEntryObstacle.put("relative_v0_randomization", "0");
-    // heterogenInputData.add(new TrafficCompositionInputData(mapEntryObstacle));
-    // }
-    // }
 
     /**
      * Fund diagram factory.
@@ -276,7 +265,7 @@ public class VehicleGenerator {
      * @return true, if successful
      */
     private boolean checkForReactionTimes() {
-        for (final VehiclePrototype prototype : prototypes.values()) {
+        for (final VehiclePrototype prototype : defaultPrototypes.values()) {
             if (prototype.hasReactionTime()) {
                 return true;
             }
@@ -292,7 +281,27 @@ public class VehicleGenerator {
     public VehiclePrototype getVehiclePrototype() {
         final double randomNumber = MyRandom.nextDouble();
         double sumFraction = 0;
-        for (final VehiclePrototype prototype : prototypes.values()) {
+        for (final VehiclePrototype prototype : defaultPrototypes.values()) {
+            sumFraction += prototype.fraction();
+            if (sumFraction >= randomNumber) {
+                return prototype;
+            }
+        }
+        logger.error("no vehicle prototype found for randomNumber= {}", randomNumber);
+        System.exit(-1);
+        return null; // not reached after exit
+    }
+    
+    public VehiclePrototype getVehiclePrototype(String roadId) {
+        HashMap<String, VehiclePrototype> protos = allRoadPrototypes.get(roadId);
+        if (protos == null) {
+            System.out.println("default");
+            return getVehiclePrototype(); //default
+        }
+        
+        final double randomNumber = MyRandom.nextDouble();
+        double sumFraction = 0;
+        for (final VehiclePrototype prototype : protos.values()) {
             sumFraction += prototype.fraction();
             if (sumFraction >= randomNumber) {
                 return prototype;
@@ -341,11 +350,11 @@ public class VehicleGenerator {
      *            the type
      */
     public Vehicle createVehicle(String typeLabel) {
-        if (!prototypes.containsKey(typeLabel)) {
+        if (!defaultPrototypes.containsKey(typeLabel)) {
             logger.error("cannot create vehicle. label = {} not defined. exit. ", typeLabel);
             System.exit(-1);
         }
-        final VehiclePrototype prototype = prototypes.get(typeLabel);
+        final VehiclePrototype prototype = defaultPrototypes.get(typeLabel);
         logger.debug("create vehicle with label = {}", typeLabel);
         return createVehicle(prototype);
     }

@@ -198,7 +198,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final RoadInput roadinput = roadInputMap.values().iterator().next();
         final int laneCount = 1;// roadinput.getLanes();
         final double roadLength = 1500;// roadinput.getRoadLength();
-        // final RoadMapping roadMapping = new RoadMappingLine(laneCount, 0, 0, 0, roadLength);
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
         addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
@@ -276,6 +275,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadinput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
 
+        // set up the flow conserving bottlenecks
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
                 roadinput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
@@ -295,7 +295,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final double xLocalMin = 0;
                 double xLocal = roadSegment.roadLength(); // start from behind
                 while (xLocal > xLocalMin) {
-                    final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+                    String roadId = roadInput.getId();
+                    final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(roadId);
                     final double rhoLocal = icMacro.rho(xLocal);
                     double speedInit = icMacro.vInit(xLocal);
                     if (speedInit <= 0) {
