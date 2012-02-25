@@ -47,6 +47,7 @@ import org.movsim.viewer.util.SwingHelper;
  * 
  */
 public class Editor extends JFrame {
+    private static final long serialVersionUID = 2162057086169952290L;
     private final JTextArea textarea;
     private final File file;
 

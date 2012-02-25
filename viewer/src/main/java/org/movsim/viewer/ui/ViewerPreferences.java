@@ -40,6 +40,8 @@ import org.movsim.viewer.util.SwingHelper;
  */
 public class ViewerPreferences extends JFrame {
 
+    private static final long serialVersionUID = -7133363889525927714L;
+
     /**
      * @param resourceBundle
      */

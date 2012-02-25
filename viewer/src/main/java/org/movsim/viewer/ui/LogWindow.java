@@ -56,6 +56,8 @@ import org.slf4j.LoggerFactory;
  */
 public class LogWindow extends JFrame {
 
+    private static final long serialVersionUID = 7260621844785396283L;
+
     final static Logger logger = LoggerFactory.getLogger(LogWindow.class);
 
     static private JTextArea jTextArea = null;
