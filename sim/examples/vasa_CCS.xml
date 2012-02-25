@@ -140,7 +140,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="0.5" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-<!--                <IC_MACRO x="10" rho_per_km="300" v="0" />-->
+                <!--                <IC_MACRO x="10" rho_per_km="300" v="0" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-9">
@@ -151,7 +151,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.3" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-<!--                <IC_MACRO x="10" rho_per_km="300" v="0" />-->
+                <!--                <IC_MACRO x="10" rho_per_km="300" v="0" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-10">
@@ -162,7 +162,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-<!--                <IC_MACRO x="10" rho_per_km="330" v="0" />-->
+                <!--                <IC_MACRO x="10" rho_per_km="330" v="0" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="11">
