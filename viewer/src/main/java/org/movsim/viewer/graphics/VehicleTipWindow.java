@@ -30,7 +30,6 @@ import java.awt.Frame;
 import java.awt.Label;
 import java.awt.Point;
 import java.awt.Window;
-import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -39,33 +38,29 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ConversionUtilities;
 
 class VehicleTipWindow extends Window {
-    /**
-     * 
-     */
-    private final TrafficCanvas trafficCanvas;
 
     private static final long serialVersionUID = 1L;
+
+    private final TrafficCanvas trafficCanvas;
 
     long currentPopupId = 0;
 
     final Frame owner;
 
     class PopupTimer {
-        private final Timer timer = new Timer();
 
-        private static final int popupTime = 3000; // milliseconds
+        private static final int popupTime = 4000; // milliseconds
+
+        private final Timer timer = new Timer();
 
         long timedPopupId;
 
         void start(long id) {
-            // System.out.println("PopupTimer.start:"+id);//$NON-NLS-1$
             timedPopupId = id;
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    // System.out.println("PopupTimer.run:"+timedPopup);//$NON-NLS-1$
                     if (timedPopupId == currentPopupId) {
-                        // System.out.println("PopupTimer.hide:"+timedPopup);//$NON-NLS-1$
                         setVisible(false);
                         VehicleTipWindow.this.trafficCanvas.vehiclePopup = null;
                     }
@@ -83,21 +78,11 @@ class VehicleTipWindow extends Window {
     @SuppressWarnings({ "boxing" })
     public void show(Point point, Vehicle vehicle) {
         String string;
-        // if (vehicle.exitRoadSegmentId() ==
-        // Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
-        // string = String.format(popupStringExitEndRoad, vehicle.id(),
-        // vehicle.lane() + 1,
-        // vehicle.position(), vehicle.velocity() * 3.6,
-        // vehicle.acceleration(),
-        // vehicle.distanceTravelled());
-        // } else {
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
-                vehicle.getLane() + 1, 
-                vehiclePhysical.getFrontPosition(),
-                vehiclePhysical.getSpeed() * ConversionUtilities.MS_TO_KMH,
-                vehiclePhysical.getAcc(),
-                vehiclePhysical.getFrontPosition(), 1, 1, 1);
+                vehicle.getLane() + 1, vehiclePhysical.getFrontPosition(), vehiclePhysical.getSpeed()
+                        * ConversionUtilities.MS_TO_KMH, vehiclePhysical.getAcc(), vehicle.totalTraveledDistance(), 1,
+                1, 1);
         // }
         final Label label = new Label(string, Label.LEFT);
         label.setBackground(new Color(200, 220, 240));
@@ -110,16 +95,5 @@ class VehicleTipWindow extends Window {
         setVisible(true);
         final PopupTimer popupTimer = new PopupTimer();
         popupTimer.start(currentPopupId);
-        if (TrafficCanvas.DEBUG) {
-            final DecimalFormat twoDP = new DecimalFormat("#.##"); //$NON-NLS-1$
-            System.out.println("Vehicle id:" + vehicle.getId());//$NON-NLS-1$
-            System.out.println("front  pos:" + (int) vehicle.physicalQuantities().getFrontPosition());//$NON-NLS-1$
-            //                System.out.println("  dis:" + (int)vehicle.distanceTravelled());//$NON-NLS-1$
-            //                System.out.println("  energyUsed:" + (int)vehicle.energyUsed());//$NON-NLS-1$
-            //                // System.out.println("  energyUsedAccelerating:" + (int)vehicle.energyUsedAccelerating());//$NON-NLS-1$
-            //                // System.out.println("  energyUsedMoving:" + (int)vehicle.energyUsedMoving());//$NON-NLS-1$
-            //                System.out.println("  fuel:" + twoDP.format(vehicle.fuelUsed()));//$NON-NLS-1$
-            //                System.out.println("  fuelEconomy:" + twoDP.format(vehicle.fuelEconomy()));//$NON-NLS-1$
-        }
     }
 }
