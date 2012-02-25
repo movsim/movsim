@@ -1,9 +1,0 @@
-Compilieren (vom movsim basedir aus)
-
-mvn install 
-
-
-
-Laufenlassen eines Projkts: runapp <Projektname ohne .xml und ohne Pfad>
-Projekte: sim/*.xml
-

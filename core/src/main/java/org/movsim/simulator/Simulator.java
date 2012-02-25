@@ -102,7 +102,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setDuration(simInput.getMaxSimTime());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-
+        
         vehGenerator = createVehicleGenerator(simInput);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and

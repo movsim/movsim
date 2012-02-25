@@ -11,3 +11,4 @@ csv/
 *.log.*
 *.eps
 *~
+/.project
