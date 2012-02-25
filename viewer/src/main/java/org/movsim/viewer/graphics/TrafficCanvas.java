@@ -47,7 +47,6 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
@@ -153,16 +152,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /** vehicle mouse-over support */
     String popupString;
-
     String popupStringExitEndRoad;
-
     protected Vehicle vehiclePopup;
+    protected VehicleTipWindow vehicleTipWindow;
 
     protected long lastVehicleViewed = -1;
-
     protected long vehicleToHighlightId = -1;
-
-    protected VehicleTipWindow vehicleTipWindow;
 
     public TrafficCanvas(SimulationRunnable simulationRunnable, Simulator simulator) {
         super(simulationRunnable);
@@ -437,19 +432,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     private void drawRoadSegmentLines(Graphics2D g, RoadMapping roadMapping) {
 
-        final float lineWidth = 1.0f; // a bit large, but ensures they are
-                                      // visible
+        final float lineWidth = 1.0f; // a bit large, but ensures they are visible
         final float lineLength = 5.0f;
         final float gapLength = 0.0f; // TODO rg modified for vasaloppet
-        // TODO set dashPhase so road-line joins between road segments are
-        // smooth
-
-        // TODO
-        // final float dashPhase = (float) (roadSection.getRoadLength() %
-        // (lineLength + gapLength));
         final float dashPhase = (float) (roadMapping.roadLength() % (lineLength + gapLength));
-        // final float dashPhase = (float)(roadSection.cumulativeRoadLength() %
-        // (lineLength + gapLength));
 
         final Stroke lineStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
                 new float[] { lineLength, gapLength }, dashPhase);
