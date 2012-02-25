@@ -49,6 +49,7 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
@@ -121,7 +122,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected Color sinkColor = Color.black;
     protected Color sourceJunctionColor = Color.cyan;
     protected Color sinkJunctionColor = Color.blue;
-    
+
     private double vmaxForColorSpectrum = GraphicsConfigurationParameters.VmaxForColorSpectrum;
 
     protected boolean drawRoadId = GraphicsConfigurationParameters.DRAW_ROADID;
@@ -137,7 +138,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
     protected enum VehicleColorMode {
-        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
+        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_COLOR, VEHICLE_LABEL_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
     }
 
     /** Color mode displayed on startup */
@@ -148,10 +149,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     double[] velocities;
 
     private Color[] velocityColors;
+    private Color[] accelerationColors;
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
-
-    private Color[] accelerationColors;
 
     /** vehicle mouse-over support */
     String popupString;
@@ -213,7 +213,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         assert velocities.length == velocityColors.length - 1;
         assert accelerations.length == accelerationColors.length - 1;
     }
-    
+
     public double getVmaxForColorSpectrum() {
         return vmaxForColorSpectrum;
     }
@@ -245,7 +245,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         this.drawSpeedLimits = b;
         repaint();
     }
-    
+
     public void setDrawSlopes(boolean b) {
         this.drawSlopes = b;
         repaint();
@@ -289,9 +289,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         case VEHICLE_COLOR:
             color = Color.BLACK;
             break;
+        case VEHICLE_LABEL_COLOR:
+            String label = vehicle.getLabel();
+            // color = labelColors.get(label); //TODO put a color for each prototype in a HashMap
+            color = Color.GREEN;
+            break;
         default:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
-            return SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum() , v);
+            color = SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum(), v);
         }
         return color;
     }
@@ -392,7 +397,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         if (drawSpeedLimits) {
             drawSpeedLimits(g);
         }
-        
+
         if (drawSlopes) {
             drawSlopes(g);
         }
@@ -460,7 +465,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
                 // use exit stroke pattern for on-ramps, off-ramps etc
                 final Stroke exitStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
-                        10.0f, new float[] { 5.0f, gapLength }, 5.0f); //TODO rg: modified for vasaloppet 6.0f
+                        10.0f, new float[] { 5.0f, gapLength }, 5.0f); // TODO rg: modified for vasaloppet 6.0f
                 g.setStroke(exitStroke);
             } else {
                 g.setStroke(lineStroke);
@@ -518,7 +523,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             drawSpeedLimitsOnRoad(g, roadSegment);
         }
     }
-    
+
     private void drawSlopes(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             drawSlopesOnRoad(g, roadSegment);
@@ -575,7 +580,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             }
         }
     }
-    
+
     private void drawSlopesOnRoad(Graphics2D g, RoadSegment roadSegment) {
         if (roadSegment.slopes() == null) {
             return;
@@ -583,7 +588,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
-        final double laneWidth = 10; //;
+        final double laneWidth = 10; // ;
         final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * (roadMapping.laneWidth() + 1);
         final int redRadius2 = (int) (2.5 * laneWidth) / 2;
         final int whiteRadius2 = (int) (2.0 * laneWidth) / 2;
@@ -596,13 +601,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             g.setFont(font);
             final RoadMapping.PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
 
-            final double gradient = slope.getGradient()*100;
+            final double gradient = slope.getGradient() * 100;
             if (gradient != 0) {
                 g.setColor(Color.BLACK);
-                final String text = String.valueOf((int) (gradient))+" %";
+                final String text = String.valueOf((int) (gradient)) + " %";
                 final int textWidth = fontMetrics.stringWidth(text);
                 g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + yOffset));
-                
+
             } else {
                 // Draw a line between points (x1,y1) and (x2,y2)
                 // draw speed limit clearing

@@ -108,11 +108,10 @@ public class TrafficCanvasKeyListener implements KeyListener {
         if (trafficCanvas.velocities == null) {
             trafficCanvas.setVelocityColors();
         }
-        // Cycle through the first four vehicle color modes. This is the only
-        // place
+        // Cycle through the first ... vehicle color modes. This is the only place
         // where the use of an enum for the color mode is somewhat awkward.
         int vcmOrdinal = trafficCanvas.vehicleColorMode.ordinal() + 1;
-        if (vcmOrdinal >= 4) {
+        if (vcmOrdinal >= 5) {
             vcmOrdinal = 0;
         }
         trafficCanvas.vehicleColorMode = VehicleColorMode.values()[vcmOrdinal];
