@@ -28,6 +28,8 @@ public class CCS extends LongitudinalModelBase {
 
     private double lenght;
 
+    private int counter = 0;
+
     // private int gradient;
 
     /**
@@ -116,7 +118,13 @@ public class CCS extends LongitudinalModelBase {
 
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
-
+        
+        // wave start hack
+        if ((me.roadSegmentId() == 8 && counter < 300) || (me.roadSegmentId() == 6 && counter < 600)) {
+            counter++;
+            return 0;
+        }
+        
         // Local dynamical variables
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();
