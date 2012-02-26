@@ -296,7 +296,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
             for (int lane = 0; lane < roadSegment.laneCount(); lane++) {
                 final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
-                final double xLocalMin = 0;
+                final double xLocalMin = vehGenerator.getVehiclePrototype(roadSegment.userId()).length(); // crash avoidence for more than one roadsegment
                 double xLocal = roadSegment.roadLength(); // start from behind
                 while (xLocal > xLocalMin) {
                     String roadId = roadInput.getId();

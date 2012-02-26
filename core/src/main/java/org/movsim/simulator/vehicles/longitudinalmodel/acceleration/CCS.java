@@ -120,7 +120,7 @@ public class CCS extends LongitudinalModelBase {
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         
         // wave start hack
-        if ((me.roadSegmentId() == 8 && counter < 300) || (me.roadSegmentId() == 6 && counter < 600)) {
+        if ((me.roadSegmentId() == 6 && counter < 1500) || (me.roadSegmentId() == 2 && counter < 3000)) {
             counter++;
             return 0;
         }

@@ -22,7 +22,7 @@
         </VEHICLE>
         <VEHICLE label="CCS3" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.8" friction="0.02" T="0.8" s0="1.0" p0="120" v_c="3" p_herringbone="80" v_c_herringbone="1.5" b="1" b_maximal="2" />
+                <CCS mass="80" A="1" cw="0.8" friction="0.02" T="0.8" s0="1.0" p0="120" v_c="4" p_herringbone="80" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
                 <MOBIL b_safe="5.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
@@ -30,7 +30,7 @@
         </VEHICLE>
         <VEHICLE label="CCS10" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
-                <CCS mass="80" A="1" cw="0.8" friction="0.03" T="1.5" s0="2.0" p0="50" v_c="2" p_herringbone="40" v_c_herringbone="0.5" b="1" b_maximal="2" />
+                <CCS mass="80" A="1" cw="0.8" friction="0.03" T="1.5" s0="2.0" p0="100" v_c="3" p_herringbone="70" v_c_herringbone="0.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="false">
                 <MOBIL b_safe="5.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
@@ -63,7 +63,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="200" v="0" />
+                <IC_MACRO x="10" rho_per_km="250" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-2">
@@ -74,51 +74,51 @@
                 <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="300" v="0" />
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-3">
             <TRAFFIC_COMPOSITION write_fund_diagrams="false">
                 <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-                <VEHICLE_TYPE label="CCS2" fraction="0.2" relative_v0_randomization="0.2" />
-                <VEHICLE_TYPE label="CCS3" fraction="0.8" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.4" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.6" relative_v0_randomization="0.2" />
                 <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="300" v="0" />
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-4">
             <TRAFFIC_COMPOSITION write_fund_diagrams="false">
                 <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-                <VEHICLE_TYPE label="CCS2" fraction="0.1" relative_v0_randomization="0.2" />
-                <VEHICLE_TYPE label="CCS3" fraction="0.9" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.2" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.8" relative_v0_randomization="0.2" />
                 <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="300" v="0" />
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-5">
             <TRAFFIC_COMPOSITION write_fund_diagrams="false">
                 <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
-                <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-                <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS2" fraction="0.1" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.9" relative_v0_randomization="0.2" />
                 <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="300" v="0" />
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-6">
             <TRAFFIC_COMPOSITION write_fund_diagrams="false">
                 <VEHICLE_TYPE label="CCS1" fraction="0.0" relative_v0_randomization="0.1" />
                 <VEHICLE_TYPE label="CCS2" fraction="0.0" relative_v0_randomization="0.2" />
-                <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
-                <VEHICLE_TYPE label="CCS10" fraction="0.0" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS3" fraction="0.9" relative_v0_randomization="0.2" />
+                <VEHICLE_TYPE label="CCS10" fraction="0.1" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="300" v="0" />
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-7">
@@ -129,7 +129,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="0.2" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <IC_MACRO x="10" rho_per_km="300" v="0" />
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-8">
@@ -140,7 +140,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="0.5" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <!--                <IC_MACRO x="10" rho_per_km="300" v="0" />-->
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-9">
@@ -151,7 +151,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.3" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <!--                <IC_MACRO x="10" rho_per_km="300" v="0" />-->
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="-10">
@@ -162,7 +162,7 @@
                 <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <!--                <IC_MACRO x="10" rho_per_km="330" v="0" />-->
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROAD id="11">

@@ -9721,7 +9721,7 @@
     </road>
     <road name="L33" length="20.0" id="33" junction="-1">
         <link>
-                        <successor elementType="road" elementId="34" contactPoint="start" />
+            <successor elementType="road" elementId="34" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="-97.0" y="-2081.0" hdg="0.83" length="20.0">
@@ -9922,10 +9922,9 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L34" length="40.0" id="34" junction="-1">
+    <road name="L34" length="40.0" id="34" junction="-1">
         <link>
-                        <successor elementType="road" elementId="35" contactPoint="start" />
+            <successor elementType="road" elementId="35" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="-82.0" y="-2095.0" hdg="0.66" length="40.0">
@@ -10114,10 +10113,9 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L35" length="20.0" id="35" junction="-1">
+    <road name="L35" length="20.0" id="35" junction="-1">
         <link>
-                        <successor elementType="road" elementId="36" contactPoint="start" />
+            <successor elementType="road" elementId="36" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="-46.0" y="-2113.0" hdg="0.18" length="20.0">
@@ -10294,10 +10292,9 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L36" length="20.0" id="36" junction="-1">
+    <road name="L36" length="20.0" id="36" junction="-1">
         <link>
-                        <successor elementType="road" elementId="37" contactPoint="start" />
+            <successor elementType="road" elementId="37" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="-26.0" y="-2117.0" hdg="0.18" length="20.0">
@@ -10462,15 +10459,14 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L37" length="20.0" id="37" junction="-1">
+    <road name="L37" length="20.0" id="37" junction="-1">
         <link>
-                        <successor elementType="road" elementId="38" contactPoint="start" />
+            <successor elementType="road" elementId="38" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="-6.0" y="-2121.0" hdg="0.18" length="20.0">
                 <!-- hdg="3.141593" left to right-->
-                 <line />
+                <line />
             </geometry>
         </planView>
         <lanes>
@@ -10618,10 +10614,9 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L38" length="40.0" id="38" junction="-1">
+    <road name="L38" length="40.0" id="38" junction="-1">
         <link>
-                        <successor elementType="road" elementId="39" contactPoint="start" />
+            <successor elementType="road" elementId="39" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="14.0" y="-2125.0" hdg="0.18" length="40.0">
@@ -10768,10 +10763,9 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L39" length="20.0" id="39" junction="-1">
+    <road name="L39" length="20.0" id="39" junction="-1">
         <link>
-                        <successor elementType="road" elementId="40" contactPoint="start" />
+            <successor elementType="road" elementId="40" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="40.0" y="-2153.0" hdg="1.38" length="20.0">
@@ -10912,10 +10906,9 @@
             </laneSection>
         </lanes>
     </road>
-    
-     <road name="L40" length="20.0" id="40" junction="-1">
+    <road name="L40" length="20.0" id="40" junction="-1">
         <link>
-<!--                        <successor elementType="road" elementId="40" contactPoint="start" />-->
+            <!--                        <successor elementType="road" elementId="40" contactPoint="start" />-->
         </link>
         <planView>
             <geometry s="0.0" x="44.0" y="-2173.0" hdg="1.38" length="20.0">
@@ -11044,8 +11037,6 @@
             </laneSection>
         </lanes>
     </road>
-    
-    
     <junction id="10001" name="streetcrossing">
         <connection id="0" incomingRoad="13" connectingRoad="12" contactPoint="start">
             <laneLink from="-1" to="-1" />
