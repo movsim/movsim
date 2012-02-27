@@ -44,6 +44,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
  * Test module for the MOBIL class.
  * 
  */
+@SuppressWarnings("static-method")
 public class MOBILTest {
     private static final double delta = 0.00001;
 
@@ -99,7 +100,7 @@ public class MOBILTest {
     @Test
     public final void testCalcAccelerationBalance() {
         final double lengthCar = 6.0;
-        final double lengthTruck = 16.0;
+        // final double lengthTruck = 16.0;
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
         final double roadLength = 1000.0;
@@ -179,7 +180,7 @@ public class MOBILTest {
 
         // set up a vehicle in lane 2
         final Vehicle v1 = newVehicle(293.1, 26.983, Lane.LANE3, lengthCar);
-        final MOBIL m1 = new MOBIL(v1, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        // final MOBIL m1 = new MOBIL(v1, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
         r0.addVehicle(v1);
 
         final Vehicle v2 = newVehicle(6.3, 5.589, Lane.LANE1, lengthCar);

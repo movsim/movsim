@@ -187,7 +187,7 @@ public class OpenDriveHandler extends DefaultHandler {
     private Road.PlanView.Geometry geometry;
     private ArrayList<Road> roads;
 
-    private Road findByUserId(ArrayList<Road> roads, String id) {
+    private static Road findByUserId(ArrayList<Road> roads, String id) {
         for (final Road road : roads) {
             if (road.id.equals(id)) {
                 return road;
@@ -553,7 +553,7 @@ public class OpenDriveHandler extends DefaultHandler {
     // logger.debug("characters:" + string);
     // }
 
-    private double getDouble(Attributes attributes, String qName) throws SAXException {
+    private static double getDouble(Attributes attributes, String qName) throws SAXException {
         final String value = attributes.getValue(qName);
         if (value == null) {
             throw new SAXException("No value for attribute " + qName);
@@ -566,7 +566,7 @@ public class OpenDriveHandler extends DefaultHandler {
     // return value == null ? defaultValue : Double.parseDouble(value);
     // }
 
-    private int getInt(Attributes attributes, String qName) throws SAXException {
+    private static int getInt(Attributes attributes, String qName) throws SAXException {
         final String value = attributes.getValue(qName);
         if (value == null) {
             throw new SAXException("No value for attribute " + qName);

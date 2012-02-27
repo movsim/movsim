@@ -181,7 +181,7 @@ public class VehicleGenerator {
      *            the long model
      * @return the equilibrium properties
      */
-    private EquilibriumProperties fundDiagramFactory(double vehLength, LongitudinalModelBase longModel) {
+    private static EquilibriumProperties fundDiagramFactory(double vehLength, LongitudinalModelBase longModel) {
         if (longModel.modelName() == ModelName.IDM) {
             return new EquilibriumIDM(vehLength, (IDM) longModel);
         } else if (longModel.modelName() == ModelName.ACC) {
@@ -252,7 +252,7 @@ public class VehicleGenerator {
      * @param sumFraction
      *            the sum fraction
      */
-    private void normalizeFractions(double sumFraction, HashMap<String, VehiclePrototype> prototypes) {
+    private static void normalizeFractions(double sumFraction, HashMap<String, VehiclePrototype> prototypes) {
         for (final VehiclePrototype prototype : prototypes.values()) {
             final double fraction = prototype.fraction();
             prototype.setFraction(fraction / sumFraction);

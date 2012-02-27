@@ -33,6 +33,7 @@ import org.junit.Test;
 /**
  * Test module for the Link class.
  */
+@SuppressWarnings("static-method")
 public class LinkTest {
 
     protected static class RoadMappingConcrete extends RoadMapping {

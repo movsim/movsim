@@ -57,6 +57,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * The Class XmlReaderSimInput.
  */
+@SuppressWarnings("synthetic-access")
 public class XmlReaderSimInput {
 
     /** The Constant logger. */
@@ -137,7 +138,7 @@ public class XmlReaderSimInput {
      * @param outFilename
      *            the output file name
      */
-    private void writeInternalXmlToFile(Document localDoc, String outFilename) {
+    private static void writeInternalXmlToFile(Document localDoc, String outFilename) {
         final PrintWriter writer = FileUtils.getWriter(outFilename);
         final XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());
@@ -226,7 +227,7 @@ public class XmlReaderSimInput {
      * @param networkFileName
      * @return relativePath
      */
-    private String checkIfAttributeHasPath(String networkFileName) {
+    private static String checkIfAttributeHasPath(String networkFileName) {
         String relativePath;
         if (networkFileName.lastIndexOf(File.separator) == -1) {
             relativePath = "";
