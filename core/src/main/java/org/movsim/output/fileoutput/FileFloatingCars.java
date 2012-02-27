@@ -28,6 +28,7 @@ package org.movsim.output.fileoutput;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.movsim.output.FloatingCars;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -61,7 +62,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     private final RoadNetwork roadNetwork;
     private final FloatingCars floatingCars;
     private Collection<Integer> fcdNumbers;
-    private final HashMap<Integer, PrintWriter> hashMap = new HashMap<Integer, PrintWriter>(149, 0.75f);
+    private final Map<Integer, PrintWriter> printWriters = new HashMap<Integer, PrintWriter>(149, 0.75f);
 
     /**
      * Instantiates a new FileFloatingCars.
@@ -90,7 +91,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     private void addFloatingCar(Vehicle veh, int vehNumber) {
         final long originId = veh.roadSegmentId();
         final PrintWriter writer = createWriter(String.format(extensionFormat, originId, vehNumber));
-        hashMap.put(vehNumber, writer);
+        printWriters.put(vehNumber, writer);
         writeHeader(writer, veh);
         writer.flush();
     }
@@ -125,15 +126,16 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
                     final int vehNumber = vehOnLane.getVehNumber();
                     // logger.info("vehNumber={}", vehNumber);
                     if (fcdNumbers != null && fcdNumbers.contains(vehNumber)) {
+                        // System.out.println("vehOnLane: " + vehOnLane + "      vehNumber: " + vehNumber);
                         addFloatingCar(vehOnLane, vehNumber);
                         fcdNumbers.remove(vehNumber);
                         if (fcdNumbers.isEmpty()) {
                             fcdNumbers = null;
                         }
                     }
-                    if (hashMap.containsKey(vehNumber)) {
+                    if (printWriters.containsKey(vehNumber)) {
                         final Vehicle frontVeh = laneSegment.frontVehicle(vehOnLane);
-                        writeData(updateTime, vehOnLane, frontVeh, hashMap.get(vehNumber));
+                        writeData(updateTime, vehOnLane, frontVeh, printWriters.get(vehNumber));
                     }
                 }
             }
