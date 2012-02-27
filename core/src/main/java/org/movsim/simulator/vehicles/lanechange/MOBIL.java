@@ -213,12 +213,7 @@ public class MOBIL {
             }
 
             // assume increasing lane index from right to left
-            if (laneCount > 14) {
-                bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
-            } else {
-                bias = 0;
-                politeness = 0.1;
-            }
+            bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
 
             prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - bias
                     * direction;
