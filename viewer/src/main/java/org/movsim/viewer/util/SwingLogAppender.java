@@ -31,6 +31,7 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.WriterAppender;
 import org.apache.log4j.spi.LoggingEvent;
 
+@SuppressWarnings("synthetic-access")
 public class SwingLogAppender extends WriterAppender {
 
     static private JTextArea jTextArea = null;

@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.util.SwingHelper;
 
+@SuppressWarnings("synthetic-access")
 public class AppletMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Applet frame;

@@ -113,7 +113,7 @@ public class Applet extends JApplet {
     /**
      * Inits the localization and logger.
      */
-    private void initLogger() {
+    private static void initLogger() {
         // Log Levels: DEBUG < INFO < WARN < ERROR;
         final URL log4jConfig = Applet.class.getResource("/config/log4japplet.properties");
         PropertyConfigurator.configure(log4jConfig);

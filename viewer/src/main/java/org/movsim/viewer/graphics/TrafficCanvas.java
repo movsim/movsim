@@ -283,7 +283,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             color = Color.BLACK;
             break;
         case VEHICLE_LABEL_COLOR:
-            String label = vehicle.getLabel();
+            // String label = vehicle.getLabel();
             // color = labelColors.get(label); //TODO put a color for each prototype in a HashMap
             color = Color.GREEN;
             break;
@@ -416,7 +416,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    private void drawRoadSegment(Graphics2D g, RoadMapping roadMapping) {
+    private static void drawRoadSegment(Graphics2D g, RoadMapping roadMapping) {
         final BasicStroke roadStroke = new BasicStroke((float) roadMapping.roadWidth(), BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
@@ -475,7 +475,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    private void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
+    private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
         if (roadSegment.trafficLights() == null) {
             return;
         }
@@ -525,7 +525,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final int redRadius2 = (int) (2.5 * roadMapping.laneWidth()) / 2;
         final int whiteRadius2 = (int) (2.0 * roadMapping.laneWidth()) / 2;
         final int fontHeight = whiteRadius2;
-        final int yOffset = (int) (0.4 * fontHeight);
+        final int offsetY = (int) (0.4 * fontHeight);
         final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
         final FontMetrics fontMetrics = getFontMetrics(font);
 
@@ -544,7 +544,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(Color.BLACK);
                 final String text = String.valueOf((int) (speedLimit.getSpeedLimitKmh()));
                 final int textWidth = fontMetrics.stringWidth(text);
-                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + yOffset));
+                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
             } else {
                 // Draw a line between points (x1,y1) and (x2,y2)
                 // draw speed limit clearing
@@ -577,7 +577,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final int redRadius2 = (int) (2.5 * laneWidth) / 2;
         final int whiteRadius2 = (int) (2.0 * laneWidth) / 2;
         final int fontHeight = whiteRadius2;
-        final int yOffset = (int) (0.4 * fontHeight);
+        final int offsetY = (int) (0.4 * fontHeight);
         final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
         final FontMetrics fontMetrics = getFontMetrics(font);
 
@@ -590,7 +590,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(Color.BLACK);
                 final String text = String.valueOf((int) (gradient)) + " %";
                 final int textWidth = fontMetrics.stringWidth(text);
-                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + yOffset));
+                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
 
             } else {
                 // Draw a line between points (x1,y1) and (x2,y2)

@@ -46,6 +46,7 @@ import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
+@SuppressWarnings("synthetic-access")
 public class MovSimMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final MainFrame frame;

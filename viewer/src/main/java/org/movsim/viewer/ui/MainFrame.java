@@ -40,6 +40,7 @@ import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
+@SuppressWarnings("synthetic-access")
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 

@@ -67,7 +67,7 @@ public class TrafficCanvasMouseWheelListener implements MouseWheelListener {
      * @param message
      * @param e
      */
-    private void saySomething(String message, MouseWheelEvent e) {
+    private static void saySomething(String message, MouseWheelEvent e) {
         logger.info(message);
     }
 

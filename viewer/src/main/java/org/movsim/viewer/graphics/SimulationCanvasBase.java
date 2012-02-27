@@ -137,13 +137,13 @@ public abstract class SimulationCanvasBase extends Canvas {
     }
 
     @Override
-    public void setSize(int width, int height) {
+    public void setSize(int newWidth, int newHeight) {
         assert isDisplayable();
-        super.setSize(Math.max(width, 10), Math.max(height, 10));
+        super.setSize(Math.max(newWidth, 10), Math.max(newHeight, 10));
         // System.out.println("SetSize:" + width + "," + height);//$NON-NLS-1$ //$NON-NLS-2$
         // System.out.println("SetSize get:" + getWidth() + "," + getHeight());//$NON-NLS-1$ //$NON-NLS-2$
-        width = getWidth();
-        height = getHeight();
+        final int width = getWidth();
+        final int height = getHeight();
         setTransform();
         if (backgroundBuffer == null || width > bufferWidth || height > bufferHeight) {
             backgroundBuffer = createImage(width, height);
