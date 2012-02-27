@@ -156,21 +156,21 @@ public class EngineModel {
 
     // --------------------------------------------------------
     // power = 2*pi*f*M
-    public double getMoment(double power, double frequency) {
+    public static double getMoment(double power, double frequency) {
         return power / (2 * Math.PI * frequency);
     }
 
-    public double getPower(double moment, double frequency) {
+    public static double getPower(double moment, double frequency) {
         return 2 * Math.PI * frequency * moment;
     }
 
     // --------------------------------------------------------
     // model for loss moment
-    public double getLossPower(double frequency) {
+    public static double getLossPower(double frequency) {
         return getPower(getModelLossMoment(frequency), frequency);
     }
 
-    public double getModelLossMoment(double frequency) {
+    public static double getModelLossMoment(double frequency) {
         // heuristic parameters, assume constant coefficient for *all* gears
         final double a = 0.003;
         final double b = 0.03;

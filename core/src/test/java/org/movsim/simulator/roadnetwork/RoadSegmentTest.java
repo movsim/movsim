@@ -39,16 +39,17 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 /**
  * Test module for the RoadSegment class.
  */
+@SuppressWarnings("static-method")
 public class RoadSegmentTest {
     private final double delta = 0.00001;
 
     // max safe braking decelerations
     private static final double MAX_SAFE_BRAKING_CAR = 5.0;
-    private static final double MAX_SAFE_SELF_BRAKING = 8.0;
+    // private static final double MAX_SAFE_SELF_BRAKING = 8.0;
 
     // minimum distances
     private static final double GAP_MIN_FRONT_CAR = 4.0;
-    private static final double GAP_MIN_REAR_CAR = 8.0;
+    // private static final double GAP_MIN_REAR_CAR = 8.0;
 
     // inside-lane bias
     private static final double BIAS_INSIDE_LANE_CAR = 0.1;

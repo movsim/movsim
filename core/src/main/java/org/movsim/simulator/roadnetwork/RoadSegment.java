@@ -825,6 +825,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return true;
     }
 
+    @SuppressWarnings("synthetic-access")
     private class VehicleIterator implements Iterator<Vehicle>, Iterable<Vehicle> {
         int lane;
         int index;
@@ -943,6 +944,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
     }
 
+    @SuppressWarnings("synthetic-access")
     private class LaneSegmentIterator implements Iterator<LaneSegment> {
         int index;
 

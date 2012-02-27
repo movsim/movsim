@@ -136,7 +136,7 @@ public class SimulationInput {
      * @param xodrFilename
      * @return
      */
-    private boolean validateOpenDriveFileName(String xodrFilename) {
+    private static boolean validateOpenDriveFileName(String xodrFilename) {
         final int i = xodrFilename.lastIndexOf(".xodr");
         if (i < 0) {
             System.out

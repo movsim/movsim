@@ -96,7 +96,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         writer.flush();
     }
 
-    private void writeHeader(PrintWriter writer, Vehicle veh) {
+    private static void writeHeader(PrintWriter writer, Vehicle veh) {
         writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
         writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
         writer.println(String.format("%s model category = %s", COMMENT_CHAR, veh.getLongitudinalModel().modelName()
@@ -154,7 +154,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      * @param writer
      *            the writer
      */
-    private void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
+    private static void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
         final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
         writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(), physicalQuantities.getFrontPosition(),
                 physicalQuantities.totalTraveledDistance(), physicalQuantities.getSpeed(), physicalQuantities.getAcc(),

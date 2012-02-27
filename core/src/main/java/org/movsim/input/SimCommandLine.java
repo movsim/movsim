@@ -178,7 +178,7 @@ public class SimCommandLine {
     /**
      * Option: prints the version number of this Movsim release.
      */
-    private void optPrintVersion() {
+    private static void optPrintVersion() {
         System.out.println("movsim release version: " + MovsimConstants.RELEASE_VERSION);
 
         System.exit(0);
@@ -187,7 +187,7 @@ public class SimCommandLine {
     /**
      * Option: writes log4j.properties to local filesystem
      */
-    private void optWriteLoggingProperties() {
+    private static void optWriteLoggingProperties() {
         final String resource = File.separator + "config" + File.separator + "log4j.properties";
         final String filename = "log4j.properties";
         FileUtils.resourceToFile(resource, filename);
@@ -199,7 +199,7 @@ public class SimCommandLine {
     /**
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
-    private void optWriteDtd() {
+    private static void optWriteDtd() {
         final String resource = File.separator + "config" + File.separator + "multiModelTrafficSimulatorInput.dtd";
         final String filename = "multiModelTrafficSimulatorInput.dtd";
         FileUtils.resourceToFile(resource, filename);
@@ -265,7 +265,7 @@ public class SimCommandLine {
      *            the filename
      * @return true, if successful
      */
-    protected boolean validateSimulationFileName(String filename) {
+    protected static boolean validateSimulationFileName(String filename) {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             System.out
@@ -279,7 +279,7 @@ public class SimCommandLine {
     /**
      * Inits the localization and logger.
      */
-    private void initLocalizationAndLogger() {
+    private static void initLocalizationAndLogger() {
         Locale.setDefault(Locale.US);
 
         // Log Levels: DEBUG < INFO < WARN < ERROR;

@@ -190,7 +190,7 @@ public class SimOutput implements SimulationTimeStep {
      * 
      * @return the loop detectors
      */
-    public List<LoopDetector> getLoopDetectors(RoadSegment roadSegment) {
+    public static List<LoopDetector> getLoopDetectors(RoadSegment roadSegment) {
         return roadSegment.getLoopDetectors().getDetectors();
     }
 

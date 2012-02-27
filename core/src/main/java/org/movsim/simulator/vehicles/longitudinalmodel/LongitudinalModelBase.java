@@ -206,7 +206,7 @@ public abstract class LongitudinalModelBase {
         return s0;
     }
 
-    protected double calcSmoothFraction(double speedMe, double speedFront) {
+    protected static double calcSmoothFraction(double speedMe, double speedFront) {
         final double widthDeltaSpeed = 1; // parameter
         double x = 0; // limiting case: consider only acceleration in vehicle's lane
         if (speedFront >= 0) {
