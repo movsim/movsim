@@ -172,7 +172,7 @@ public class MOBILTest {
         assertEquals(Lane.LANE2, r1.sourceLane(Lane.LANE1));
         final double lengthCar = 6.0;
         final double minimumGap = 2.0;
-        final double tooSmallGap = 1.0;
+        // final double tooSmallGap = 1.0;
         final double safeDeceleration = 4.0;
         final double politeness = 0.1;
         final double thresholdAcceleration = 0.2;
