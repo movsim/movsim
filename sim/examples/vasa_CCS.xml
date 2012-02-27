@@ -259,12 +259,12 @@
         </ROAD>
         <ROAD id="37">
             <SLOPES>
-                <SLOPE x="1" gradient="0.02" />
+                <SLOPE x="1" gradient="0.03" />
             </SLOPES>
         </ROAD>
         <ROAD id="38">
             <SLOPES>
-                <SLOPE x="1" gradient="0.11" />
+                <SLOPE x="1" gradient="0.09" />
             </SLOPES>
         </ROAD>
         <ROAD id="39">
