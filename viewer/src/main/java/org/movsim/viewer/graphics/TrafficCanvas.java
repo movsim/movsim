@@ -359,16 +359,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         vehiclePath.closePath();
         g.setPaint(vehicleColor(vehicle, simulationTime));
         g.fill(vehiclePath);
-        if (vehicle.isBrakeLightOn()) {
-            // if the vehicle is decelerating then display the
-            vehiclePath.reset();
-            // points 2 & 3 are at the rear of vehicle
-            vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
-            vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
-            vehiclePath.closePath();
-            g.setPaint(brakeLightColor);
-            g.draw(vehiclePath);
-        }
+//        if (vehicle.isBrakeLightOn()) {
+//            // if the vehicle is decelerating then display the
+//            vehiclePath.reset();
+//            // points 2 & 3 are at the rear of vehicle
+//            vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
+//            vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
+//            vehiclePath.closePath();
+//            g.setPaint(brakeLightColor);
+//            g.draw(vehiclePath);
+//        }
     }
 
     /**
