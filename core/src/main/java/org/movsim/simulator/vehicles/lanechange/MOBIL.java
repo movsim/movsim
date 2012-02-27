@@ -202,7 +202,7 @@ public class MOBIL {
         // hack for CCS
         if (me.getLongitudinalModel().modelName() == ModelName.CCS) {
             double biasForced = 10000;
-            double biasNormal = 0.1;
+            double biasNormal = 0.24;
             double bias;
             final int laneCount = roadSegment.laneCount();
 
@@ -213,7 +213,12 @@ public class MOBIL {
             }
 
             // assume increasing lane index from right to left
-            bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
+            if (laneCount > 14) {
+                bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
+            } else {
+                bias = 0;
+                politeness = 0.1;
+            }
 
             prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - bias
                     * direction;

@@ -119,9 +119,8 @@ public class CCS extends LongitudinalModelBase {
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         
-        // wave start hack
-        if (false){
-	    //(me.roadSegmentId() <= 8 && counter < 500) || (me.roadSegmentId() == 2 && counter < 1000)) {
+        // wave start hack 300 = 1min
+        if ((me.roadSegmentId() <= 7 && counter < 1500) || (me.roadSegmentId() <= 5 && counter < 3000) || (me.roadSegmentId() <= 2 && counter < 9000)) {
             counter++;
             return 0;
         }

@@ -169,13 +169,14 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
             setSleepTime(0);
-            setVmaxForColorSpectrum(40);
+            setVmaxForColorSpectrum(22);
             setxOffset(400);
             setyOffset(700);
+            setDrawSources(false);
             roadLineColor = Color.LIGHT_GRAY;
             roadEdgeColor = Color.DARK_GRAY;
             backgroundColor = Color.WHITE;
-            initialScale = 0.8;
+            initialScale = 0.6;
             setScale(initialScale);
             for (RoadSegment segment: roadNetwork) {
                 segment.roadMapping().setRoadColor(Color.WHITE);
