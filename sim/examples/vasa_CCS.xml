@@ -36,7 +36,7 @@
                 <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-            <VEHICLE label="CCS4" length="2" width="1" b_max="9">
+        <VEHICLE label="CCS4" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.7" friction="0.02" T="0.6" s0="0.7" p0="160" v_c="7" p_herringbone="130" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
@@ -60,7 +60,7 @@
                 <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-            <VEHICLE label="CCS7" length="2" width="1" b_max="9">
+        <VEHICLE label="CCS7" length="2" width="1" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.7" friction="0.03" T="0.7" s0="0.8" p0="130" v_c="4" p_herringbone="90" v_c_herringbone="1.5" b="1" b_maximal="2" />
             </LONGITUDINAL_MODEL>
@@ -216,13 +216,12 @@
             <SLOPES>
                 <SLOPE x="1" gradient="0.03" />
             </SLOPES>
-            </ROAD>
-            <ROAD id="21">
+        </ROAD>
+        <ROAD id="21">
             <SLOPES>
                 <SLOPE x="1" gradient="0.08" />
             </SLOPES>
         </ROAD>
-        
         <ROAD id="30">
             <SLOPES>
                 <SLOPE x="1" gradient="0.06" />
@@ -247,8 +246,8 @@
             <SLOPES>
                 <SLOPE x="1" gradient="0.02" />
             </SLOPES>
-            </ROAD>
-            <ROAD id="35">
+        </ROAD>
+        <ROAD id="35">
             <SLOPES>
                 <SLOPE x="1" gradient="0.06" />
             </SLOPES>
