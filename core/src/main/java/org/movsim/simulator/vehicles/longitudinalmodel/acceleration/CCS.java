@@ -120,10 +120,10 @@ public class CCS extends LongitudinalModelBase {
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         
         // wave start hack 300 = 1min
-        if ((me.roadSegmentId() <= 7 && counter < 1500) || (me.roadSegmentId() <= 5 && counter < 3000) || (me.roadSegmentId() <= 2 && counter < 9000)) {
-            counter++;
-            return 0;
-        }
+	// if ((me.roadSegmentId() <= 7 && counter < 1500) || (me.roadSegmentId() <= 5 && counter < 3000) || (me.roadSegmentId() <= 2 && counter < 9000)) {
+	//  counter++;
+	//  return 0;
+        //}
         
         // Local dynamical variables
         final double s = me.getNetDistance(frontVehicle);
