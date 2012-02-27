@@ -190,7 +190,7 @@ public class MOBILTest {
         assertEquals(1, sls.vehicleCount());
 
         final Vehicle v3 = newVehicle(25.0, 4.0, Lane.LANE1, lengthCar);
-        final MOBIL m3 = new MOBIL(v3, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        // final MOBIL m3 = new MOBIL(v3, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
         r1.addVehicle(v3);
 
         final Vehicle rV = r1.rearVehicle(Lane.LANE2, v2.getRearPosition());
