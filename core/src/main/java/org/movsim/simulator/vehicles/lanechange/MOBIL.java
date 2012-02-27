@@ -202,7 +202,7 @@ public class MOBIL {
         // hack for CCS
         if (me.getLongitudinalModel().modelName() == ModelName.CCS) {
             double biasForced = 10000;
-            double biasNormal = 0.2;
+            double biasNormal = 0.1;
             double bias;
             final int laneCount = roadSegment.laneCount();
 
