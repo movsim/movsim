@@ -102,7 +102,7 @@ public class CCS extends LongitudinalModelBase {
 
         double F = (gradient < 0.5 * gradientSlip) ? F_diagonal : Math.max(F_diagonal, F_herringbone);
 
-        double b_kin = 0.5 * v * dv * ((dv > 0) ? 1 : 0) / Math.max(s - s0, 0.00001 * s0);
+        double b_kin = 0.5 * v * dv * ((dv > 0) ? 1 : 0) / Math.max(s, 0.00001 * s0);
 
         double acc_free = F / mass - 0.5 * cw * A * DENSITY_AIR * v * v / mass - EARTH_GRAVITY * (friction + gradient);
 
@@ -120,7 +120,8 @@ public class CCS extends LongitudinalModelBase {
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
         
         // wave start hack
-        if ((me.roadSegmentId() == 6 && counter < 1500) || (me.roadSegmentId() == 2 && counter < 3000)) {
+        if (false){
+	    //(me.roadSegmentId() <= 8 && counter < 500) || (me.roadSegmentId() == 2 && counter < 1000)) {
             counter++;
             return 0;
         }
