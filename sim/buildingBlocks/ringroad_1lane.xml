@@ -20,6 +20,9 @@
             <VEHICLE_TYPE label="IDM" fraction="1" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+            <VEHICLE_TYPE label="IDM" fraction="1" />
+        </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km -->
                 <IC_MACRO x="1" rho_per_km="36" v="20" />
