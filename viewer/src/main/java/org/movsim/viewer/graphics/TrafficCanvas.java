@@ -359,16 +359,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         vehiclePath.closePath();
         g.setPaint(vehicleColor(vehicle, simulationTime));
         g.fill(vehiclePath);
-//        if (vehicle.isBrakeLightOn()) {
-//            // if the vehicle is decelerating then display the
-//            vehiclePath.reset();
-//            // points 2 & 3 are at the rear of vehicle
-//            vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
-//            vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
-//            vehiclePath.closePath();
-//            g.setPaint(brakeLightColor);
-//            g.draw(vehiclePath);
-//        }
+        if (vehicle.isBrakeLightOn()) {
+            // if the vehicle is decelerating then display the
+            vehiclePath.reset();
+            // points 2 & 3 are at the rear of vehicle
+            vehiclePath.moveTo(polygon.xPoints[2], polygon.yPoints[2]);
+            vehiclePath.lineTo(polygon.xPoints[3], polygon.yPoints[3]);
+            vehiclePath.closePath();
+            g.setPaint(brakeLightColor);
+            g.draw(vehiclePath);
+        }
     }
 
     /**
@@ -434,7 +434,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         final float lineWidth = 1.0f; // a bit large, but ensures they are visible
         final float lineLength = 5.0f;
-        final float gapLength = 0.0f; // TODO rg modified for vasaloppet
+        final float gapLength = 15.0f; // TODO rg modified for vasaloppet old= 15
         final float dashPhase = (float) (roadMapping.roadLength() % (lineLength + gapLength));
 
         final Stroke lineStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
@@ -449,7 +449,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
                 // use exit stroke pattern for on-ramps, off-ramps etc
                 final Stroke exitStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
-                        10.0f, new float[] { 5.0f, gapLength }, 5.0f); // TODO rg: modified for vasaloppet 6.0f
+                        10.0f, new float[] { 5.0f, 6.0f }, 5.0f); // TODO rg: modified for vasaloppet 6.0f
                 g.setStroke(exitStroke);
             } else {
                 g.setStroke(lineStroke);

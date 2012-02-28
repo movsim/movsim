@@ -284,23 +284,27 @@ public class AppletMenu extends JPanel {
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
         
-        scenarioMenu.addSeparator();
-        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
-                resourceBundle.getString("Vasaloppet")) {
-
-            private static final long serialVersionUID = 4633365854029111923L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("vasa_CCS", "/sim/examples/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
-                statusPanel.reset();
-                uiDefaultReset();
-                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(40);
-            }
-        });
-        scenarioMenu.add(menuItemVasaLoppet);
+//        scenarioMenu.addSeparator();
+//        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
+//                resourceBundle.getString("Vasaloppet")) {
+//
+//            private static final long serialVersionUID = 4633365854029111923L;
+//
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                canvasPanel.simulator.loadScenarioFromXml("vasa_CCS", "/sim/examples/");
+//                canvasPanel.trafficCanvas.reset();
+//                canvasPanel.trafficCanvas.start();
+//                statusPanel.reset();
+//                uiDefaultReset();
+//                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(22);
+//                canvasPanel.trafficCanvas.setSleepTime(0);
+//                canvasPanel.trafficCanvas.setxOffset(400);
+//                canvasPanel.trafficCanvas.setyOffset(700);
+//                canvasPanel.trafficCanvas.setDrawSources(false);
+//            }
+//        });
+//        scenarioMenu.add(menuItemVasaLoppet);
         
 
         menuItemRoundAbout.setEnabled(false);

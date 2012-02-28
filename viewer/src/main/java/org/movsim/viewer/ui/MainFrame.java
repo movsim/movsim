@@ -44,7 +44,7 @@ import org.movsim.viewer.util.SwingHelper;
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    private final Scenario defaultScenario = Scenario.VASALOPPET;
+    private final Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
     private final int INIT_FRAME_SIZE_WIDTH = 1400;
     private final int INIT_FRAME_SIZE_HEIGHT = 640;
 
