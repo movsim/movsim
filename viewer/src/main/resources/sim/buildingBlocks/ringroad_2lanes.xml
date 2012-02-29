@@ -33,17 +33,16 @@
             <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="43">
+        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+            <VEHICLE_TYPE label="FAST_TYPE" fraction="0.8" />
+            <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />
+        </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
-                <!-- critical density for emerging stop-and-go wave about >= 52 vehicles per km -->
-                <IC_MACRO x="1" rho_per_km="55" v="20" />
+                <!-- critical density for emerging stop-and-go wave about >= ?? vehicles per km -->
+                <IC_MACRO x="1" rho_per_km="30" v="20" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="5">
-                <FC number="13" />
-                <FC number="40" />
-            </FLOATING_CAR_DATA>
-        </OUTPUT>
+        <OUTPUT />
     </SIMULATION>
 </SCENARIO>
 
