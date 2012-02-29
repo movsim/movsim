@@ -146,7 +146,7 @@ public class LocalizationStrings extends ListResourceBundle {
             { "Slower", "Slower" },
             { "SlowerTip", "Slows down the animation" },
 
-            { "VehicleColorsTip", "Changes vehicle colors to reflect their speed or acceleration" },
+            { "VehicleColorsTip", "Toggles through color modes" },
             { "Vehicles", "Change Vehicles" },
             { "VehiclesTip", "Changes vehicles" },
 
