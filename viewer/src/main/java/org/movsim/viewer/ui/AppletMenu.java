@@ -25,13 +25,6 @@ public class AppletMenu extends JPanel {
     private LogWindow logWindow;
     private StatusPanel statusPanel;
 
-    // protected TravelTimeDiagram travelTimeDiagram;
-    // private DetectorsView detectorsDiagram;
-    // private SpatioTemporalView spatioTemporalDiagram;
-    // private FloatingCarsAccelerationView fcAcc;
-    // private FloatingCarsSpeedView fcSpeed;
-    // private FloatingCarsTrajectoriesView fcTrajectories;
-
     public AppletMenu(Applet mainFrame, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
@@ -283,29 +276,6 @@ public class AppletMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
-        
-//        scenarioMenu.addSeparator();
-//        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
-//                resourceBundle.getString("Vasaloppet")) {
-//
-//            private static final long serialVersionUID = 4633365854029111923L;
-//
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                canvasPanel.simulator.loadScenarioFromXml("vasa_CCS", "/sim/examples/");
-//                canvasPanel.trafficCanvas.reset();
-//                canvasPanel.trafficCanvas.start();
-//                statusPanel.reset();
-//                uiDefaultReset();
-//                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(22);
-//                canvasPanel.trafficCanvas.setSleepTime(0);
-//                canvasPanel.trafficCanvas.setxOffset(400);
-//                canvasPanel.trafficCanvas.setyOffset(700);
-//                canvasPanel.trafficCanvas.setDrawSources(false);
-//            }
-//        });
-//        scenarioMenu.add(menuItemVasaLoppet);
-        
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
@@ -498,10 +468,6 @@ public class AppletMenu extends JPanel {
         final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
         final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
         JOptionPane.showMessageDialog(canvasPanel, aboutString, titleString, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void handlePreferences(EventObject event) {
-        new ViewerPreferences(resourceBundle);
     }
 
     protected void handleTravelTimeDiagram(ActionEvent actionEvent) {
