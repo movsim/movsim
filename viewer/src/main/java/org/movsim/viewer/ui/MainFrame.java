@@ -26,6 +26,7 @@
 package org.movsim.viewer.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ResourceBundle;
@@ -45,8 +46,6 @@ public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private final Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
-    private final int INIT_FRAME_SIZE_WIDTH = 1400;
-    private final int INIT_FRAME_SIZE_HEIGHT = 640;
 
     final StatusPanel statusPanel;
     private final CanvasPanel canvasPanel;
@@ -77,17 +76,14 @@ public class MainFrame extends JFrame {
             }
         });
 
-        setLocation(0, 20);
-        setSize(INIT_FRAME_SIZE_WIDTH, INIT_FRAME_SIZE_HEIGHT);
+        this.setExtendedState(Frame.MAXIMIZED_BOTH);
         setVisible(true);
-
 
         // first scenario
         if (projectMetaData.getProjectName().equals("")) {
-             canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
+            canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
         } else {
-            simulator.loadScenarioFromXml(projectMetaData.getProjectName(),
-                    projectMetaData.getPathToProjectXmlFile());
+            simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
             canvasPanel.trafficCanvas.reset();
             canvasPanel.trafficCanvas.start();
         }
