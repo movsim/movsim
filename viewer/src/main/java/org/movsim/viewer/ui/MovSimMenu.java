@@ -55,13 +55,6 @@ public class MovSimMenu extends JPanel {
 
     private LogWindow logWindow;
 
-    // protected TravelTimeDiagram travelTimeDiagram;
-    // private DetectorsView detectorsDiagram;
-    // private SpatioTemporalView spatioTemporalDiagram;
-    // private FloatingCarsAccelerationView fcAcc;
-    // private FloatingCarsSpeedView fcSpeed;
-    // private FloatingCarsTrajectoriesView fcTrajectories;
-
     public MovSimMenu(MainFrame mainFrame, CanvasPanel canvasPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
@@ -287,10 +280,9 @@ public class MovSimMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
-        
+
         scenarioMenu.addSeparator();
-        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
-                resourceBundle.getString("Vasaloppet")) {
+        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(resourceBundle.getString("Vasaloppet")) {
 
             private static final long serialVersionUID = 4633365854029111923L;
 
@@ -306,7 +298,6 @@ public class MovSimMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemVasaLoppet);
-        
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
@@ -501,21 +492,8 @@ public class MovSimMenu extends JPanel {
 
     private JMenu fileMenu() {
         final JMenu menuFile = new JMenu((String) resourceBundle.getObject("FileMenu")); //$NON-NLS-1$
-        // menuFile.setMnemonic(KeyEvent.VK_F); // not useful, because we have an KeyListener for f 'faster'
 
-        menuFile.add(new JMenuItem(new OpenAction((String) resourceBundle.getObject("FileMenuOpen"), false)));
-        menuFile.add(new JMenuItem(new OpenAction((String) resourceBundle.getObject("XmlEditor"), true)));
-        // final JMenuItem menuItemXmlEditor = new JMenuItem(new AbstractAction(resourceBundle.getString("XmlEditor")) {
-        //
-        // private static final long serialVersionUID = -1280435957379756272L;
-        //
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // // TODO Auto-generated method stub
-        //
-        // }
-        // });
-        // menuFile.add(menuItemXmlEditor);
+        menuFile.add(new JMenuItem(new OpenAction((String) resourceBundle.getObject("FileMenuOpen"))));
 
         final JMenuItem menuItemPreferences = new JMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("FileMenuPreferences")) {//$NON-NLS-1$
@@ -670,11 +648,9 @@ public class MovSimMenu extends JPanel {
     // --------------------------------------------------------------------------------------
     class OpenAction extends AbstractAction {
         private static final long serialVersionUID = 1L;
-        private boolean editor;
 
-        public OpenAction(String title, boolean editor) {
+        public OpenAction(String title) {
             super(title);
-            this.editor = editor;
         }
 
         @Override
@@ -704,14 +680,10 @@ public class MovSimMenu extends JPanel {
                 final File file = fileChooser.getSelectedFile();
                 if (file != null && file.isFile()) {
                     // if the user has selected a file, then load it
-                    if (editor) {
-                        new Editor(resourceBundle, file);
-                    } else {
-                        canvasPanel.simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
-                                FileUtils.getCanonicalPathWithoutFilename(file));
-                        uiDefaultReset();
-                        canvasPanel.trafficCanvas.forceRepaintBackground();
-                    }
+                    canvasPanel.simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
+                            FileUtils.getCanonicalPathWithoutFilename(file));
+                    uiDefaultReset();
+                    canvasPanel.trafficCanvas.forceRepaintBackground();
                 }
             }
         }
