@@ -35,6 +35,7 @@ import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.util.Properties;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
@@ -80,6 +81,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     static final long serialVersionUID = 1L;
     protected static final boolean DEBUG = false;
 
+    private static Properties properties;
+
+    public static Properties getProperties() {
+        return properties;
+    }
+
+    public static void setProperties(Properties properties) {
+        TrafficCanvas.properties = properties;
+    }
+
     protected final Simulator simulator;
     protected final RoadNetwork roadNetwork;
 
@@ -101,7 +112,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     protected StatusControlCallbacks statusControlCallbacks;
 
-    protected static final int INITIAL_SLEEP_TIME = GraphicsConfigurationParameters.INITIAL_SLEEP_TIME;
+    protected final int initialSleepTime;
 
     // pre-allocate vehicle drawing path
     private final GeneralPath vehiclePath = new GeneralPath();
@@ -109,7 +120,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     // pre-allocate clipping path for road mappings
     private final GeneralPath clipPath = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
-    protected double initialScale = GraphicsConfigurationParameters.INITIAL_SCALE;
+    protected double initialScale;
 
     // colors
     protected Color roadEdgeColor = Color.black;
@@ -120,7 +131,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected Color sourceJunctionColor = Color.cyan;
     protected Color sinkJunctionColor = Color.blue;
 
-    private double vmaxForColorSpectrum = GraphicsConfigurationParameters.VmaxForColorSpectrum;
+    private double vmaxForColorSpectrum;
 
     protected boolean drawRoadId = GraphicsConfigurationParameters.DRAW_ROADID;
     protected boolean drawSouces = GraphicsConfigurationParameters.DRAWSOURCES;
@@ -163,9 +174,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         super(simulationRunnable);
         this.simulator = simulator;
         this.roadNetwork = simulator.getRoadNetwork();
+        this.vmaxForColorSpectrum = Double.parseDouble(properties.getProperty("vmaxForColorSpectrum", "140"));
+        this.initialSleepTime = Integer.parseInt(properties.getProperty("initial_sleep_time", "26"));
+        this.initialScale = Double.parseDouble(properties.getProperty("", "0.707106781"));
         simulationRunnable.setUpdateDrawingCallback(this);
         simulationRunnable.setHandleExceptionCallback(this);
-        setSleepTime(INITIAL_SLEEP_TIME);
+        setSleepTime(initialSleepTime);
+        
+        setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundRedValue", "214")),
+                Integer.parseInt(properties.getProperty("backgroundGreenValue", "217")),
+                Integer.parseInt(properties.getProperty("backgroundBlueValue", "223"))));
 
         final TrafficCanvasMouseListener mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
         addMouseListener(mouseListener);
@@ -177,6 +195,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected void reset() {
         super.reset();
         simulator.reset();
+    }
+
+    @Override
+    public void resetScaleAndOffset() {
+        scale = initialScale;
+        xOffset = Integer.parseInt(properties.getProperty("xOffset", "0"));
+        yOffset = Integer.parseInt(properties.getProperty("yOffset", "0"));
+        setTransform();
     }
 
     /**

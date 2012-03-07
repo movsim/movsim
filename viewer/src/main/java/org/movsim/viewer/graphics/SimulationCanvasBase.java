@@ -72,11 +72,11 @@ public abstract class SimulationCanvasBase extends Canvas {
     private int bufferWidth;
     protected boolean backgroundChanged;
     // default background color
-    protected Color backgroundColor = GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM;
+    protected Color backgroundColor;
     // scale factor pixels/m, smaller value means a smaller looking view
-    double scale = GraphicsConfigurationParameters.INITIAL_SCALE;
-    int xOffset = GraphicsConfigurationParameters.INITIAL_OFFSET_X;
-    int yOffset = GraphicsConfigurationParameters.INITIAL_OFFSET_Y;
+    double scale;
+    int xOffset = 0;
+    int yOffset = 0;
 
     public int getxOffset() {
         return xOffset;
@@ -127,6 +127,8 @@ public abstract class SimulationCanvasBase extends Canvas {
         resetScaleAndOffset();
         simulationRunnable.reset();
     }
+
+    public abstract void resetScaleAndOffset(); 
 
     protected void setTransform() {
         transform.setToIdentity();
@@ -188,13 +190,6 @@ public abstract class SimulationCanvasBase extends Canvas {
         setTransform();
     }
 
-    public void resetScaleAndOffset() {
-        scale = GraphicsConfigurationParameters.INITIAL_SCALE;
-        xOffset = GraphicsConfigurationParameters.INITIAL_OFFSET_X;
-        yOffset = GraphicsConfigurationParameters.INITIAL_OFFSET_Y;
-        setTransform();
-    }
-
     public void forceRepaintBackground() {
         backgroundChanged = true;
         repaint();
@@ -207,12 +202,6 @@ public abstract class SimulationCanvasBase extends Canvas {
      */
     @Override
     public void update(Graphics g) {
-        // final long timeBeforePaint_ms = System.currentTimeMillis();
-        // if (backgroundBuffer == null) {
-        // System.out.println("backgroundbuffer == null");
-        // setSize(1200, 700);
-        // return;
-        // }
         final Graphics2D bufferGraphics = (Graphics2D) backgroundBuffer.getGraphics();
         if (backgroundChanged) {
             // clear the background before affine transforms
@@ -262,7 +251,6 @@ public abstract class SimulationCanvasBase extends Canvas {
      * @param g
      */
     private void drawForegroundAndBlit(Graphics g) {
-
         // copy the background buffer to the foregroundBuffer buffer
         final Graphics2D foregroundGraphics = (Graphics2D) foregroundBuffer.getGraphics();
         foregroundGraphics.drawImage(backgroundBuffer, 0, 0, null);

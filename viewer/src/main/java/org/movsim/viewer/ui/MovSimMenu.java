@@ -43,6 +43,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -638,7 +639,7 @@ public class MovSimMenu extends JPanel {
     }
 
     public void uiDefaultReset() {
-        canvasPanel.trafficCanvas.setVmaxForColorSpectrum(GraphicsConfigurationParameters.VmaxForColorSpectrum);
+        canvasPanel.trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty("vmaxForColorSpectrum", "140")));
         startbuttonToPauseAtScenarioChange();
         frame.statusPanel.setWithProgressBar(true);
         frame.statusPanel.reset();

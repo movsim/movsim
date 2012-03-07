@@ -25,24 +25,7 @@
  */
 package org.movsim.viewer.graphics;
 
-import java.awt.Color;
-
 public interface GraphicsConfigurationParameters {
-    public static final Color BACKGROUND_COLOR = new Color(230, 230, 230);
-
-    public static final Color BACKGROUND_COLOR_SIM = new Color(0x74, 0xac, 0x23); // green grass
-    // public static final Color BACKGROUND_COLOR_SIM = new Color(214, 217, 223); // Nimbus
-
-    final double INITIAL_SCALE = 1.0 / Math.sqrt(2);
-    final int INITIAL_OFFSET_X = 0;
-    final int INITIAL_OFFSET_Y = 0;
-    final double DEFAULT_LANE_WIDTH = 10;
-
-    static final double INITIAL_SPEEDUP_DURATION = 120.0;
-    static final double INITIAL_SPEEDUP_DURATION_OFF_ON_RAMP = 440.0;
-    static final double INITIAL_SPEEDUP_FACTOR = 12.0;
-    static final int INITIAL_SLEEP_TIME = 26;
-    static final int DEFAULT_SLEEP_TIME_MS = 40;
 
     public static final boolean DRAW_ROADID = true;
     public static final boolean DRAWSOURCES = true;
@@ -50,7 +33,4 @@ public interface GraphicsConfigurationParameters {
     public static final boolean DRAWSPEEDLIMITS = true;
     public static final boolean SLOPES = true;
 
-    public static final double VmaxForColorSpectrum = 140;
-
-    
 }

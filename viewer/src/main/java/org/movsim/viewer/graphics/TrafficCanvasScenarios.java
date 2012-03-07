@@ -101,7 +101,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     @Override
     public void reset() {
         super.reset();
-        setSleepTime(INITIAL_SLEEP_TIME);
+        setSleepTime(initialSleepTime);
         initialScale = 1.0;
         isInitialSpeedUp = false;
         vehicleToHighlightId = -1;
@@ -178,7 +178,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             backgroundColor = Color.WHITE;
             initialScale = 0.6;
             setScale(initialScale);
-            for (RoadSegment segment: roadNetwork) {
+            for (RoadSegment segment : roadNetwork) {
                 segment.roadMapping().setRoadColor(Color.WHITE);
             }
             break;

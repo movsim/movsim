@@ -29,6 +29,11 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
@@ -38,6 +43,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -45,7 +51,7 @@ import org.movsim.viewer.util.SwingHelper;
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    private final Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
+    private Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
 
     final StatusPanel statusPanel;
     private final CanvasPanel canvasPanel;
@@ -58,6 +64,11 @@ public class MainFrame extends JFrame {
 
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
+
+        // createProperties();
+        final Properties properties = loadProperties();
+        TrafficCanvas.setProperties(properties);
+        defaultScenario = Scenario.valueOf(properties.getProperty("defaultScenario"));
 
         canvasPanel = new CanvasPanel(resourceBundle, simulator);
         statusPanel = new StatusPanel(resourceBundle, simulator);
@@ -88,6 +99,19 @@ public class MainFrame extends JFrame {
             canvasPanel.trafficCanvas.start();
         }
         statusPanel.reset();
+    }
+
+    private static Properties loadProperties() {
+        Properties props = new Properties();
+        try {
+            props.load(new FileInputStream(".." + File.separator + "sim" + File.separator + "defaultconfig.properties"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return props;
+
     }
 
     /**
