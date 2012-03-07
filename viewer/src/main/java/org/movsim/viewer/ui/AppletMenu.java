@@ -577,7 +577,6 @@ public class AppletMenu extends JPanel {
 
     public void uiDefaultReset() {
         startbuttonToPauseAtScenarioChange();
-        statusPanel.setWithTravelTimes(false);
         statusPanel.setWithProgressBar(false);
         statusPanel.reset();
     }

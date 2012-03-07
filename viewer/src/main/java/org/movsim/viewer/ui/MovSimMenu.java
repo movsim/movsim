@@ -640,7 +640,6 @@ public class MovSimMenu extends JPanel {
     public void uiDefaultReset() {
         canvasPanel.trafficCanvas.setVmaxForColorSpectrum(GraphicsConfigurationParameters.VmaxForColorSpectrum);
         startbuttonToPauseAtScenarioChange();
-        frame.statusPanel.setWithTravelTimes(false);
         frame.statusPanel.setWithProgressBar(true);
         frame.statusPanel.reset();
     }
