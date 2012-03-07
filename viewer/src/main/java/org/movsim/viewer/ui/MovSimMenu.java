@@ -533,7 +533,7 @@ public class MovSimMenu extends JPanel {
     }
 
     private void handlePreferences(EventObject event) {
-        new ViewerPreferences(resourceBundle);
+        ViewerPreferences viewerPreferences = new ViewerPreferences(resourceBundle);
     }
 
     protected void handleTravelTimeDiagram(ActionEvent actionEvent) {
