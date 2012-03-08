@@ -203,7 +203,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     @Override
     public void resetScaleAndOffset() {
-        scale = Double.parseDouble(properties.getProperty("", "0.707106781"));
+        scale = Double.parseDouble(properties.getProperty("initialScale", "0.707106781"));
         xOffset = Integer.parseInt(properties.getProperty("xOffset", "0"));
         yOffset = Integer.parseInt(properties.getProperty("yOffset", "0"));
         setTransform();
