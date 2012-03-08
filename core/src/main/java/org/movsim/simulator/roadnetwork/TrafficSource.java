@@ -190,7 +190,7 @@ public class TrafficSource implements SimulationTimeStep {
             return true;
         }
         // (2) check if gap to leader is sufficiently large origin of road section is assumed to be zero
-        final double netGapToLeader = leader.getFrontPosition() - leader.getLength();
+        final double netGapToLeader = leader.getRearPosition(); 
         final double gapAtQMax = 1. / vehPrototype.getRhoQMax();
 
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
