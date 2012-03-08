@@ -151,7 +151,6 @@ public class XmlReaderSimInput {
     /**
      * From dom to internal data structure.
      */
-    @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
 
