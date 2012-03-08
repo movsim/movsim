@@ -142,15 +142,12 @@ public abstract class SimulationCanvasBase extends Canvas {
     public void setSize(int newWidth, int newHeight) {
         assert isDisplayable();
         super.setSize(Math.max(newWidth, 10), Math.max(newHeight, 10));
-        // System.out.println("SetSize:" + width + "," + height);//$NON-NLS-1$ //$NON-NLS-2$
-        // System.out.println("SetSize get:" + getWidth() + "," + getHeight());//$NON-NLS-1$ //$NON-NLS-2$
         final int width = getWidth();
         final int height = getHeight();
         setTransform();
         if (backgroundBuffer == null || width > bufferWidth || height > bufferHeight) {
             backgroundBuffer = createImage(width, height);
-            assert backgroundBuffer != null; // assert preconditions for
-                                             // createImage have been met
+            assert backgroundBuffer != null; // assert preconditions for createImage have been met
             foregroundBuffer = createImage(width, height);
             assert foregroundBuffer != null;
             bufferWidth = width;

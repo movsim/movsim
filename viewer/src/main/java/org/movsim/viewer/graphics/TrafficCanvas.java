@@ -35,8 +35,13 @@ import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadMapping;
@@ -50,6 +55,7 @@ import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
+import org.movsim.viewer.ui.MainFrame;
 import org.movsim.viewer.util.SwingHelper;
 
 /**
@@ -112,35 +118,34 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     protected StatusControlCallbacks statusControlCallbacks;
 
-    protected final int initialSleepTime;
-
     // pre-allocate vehicle drawing path
     private final GeneralPath vehiclePath = new GeneralPath();
 
     // pre-allocate clipping path for road mappings
     private final GeneralPath clipPath = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
-    protected double initialScale;
-
     // colors
-    protected Color roadEdgeColor = Color.black;
-    protected Color roadLineColor = Color.white;
-    protected Color roadInhomogeneityColor = Color.darkGray;
-    protected Color sourceColor = Color.white;
-    protected Color sinkColor = Color.black;
-    protected Color sourceJunctionColor = Color.cyan;
-    protected Color sinkJunctionColor = Color.blue;
+    protected Color roadColor;
+    protected Color roadEdgeColor;
+    protected Color roadLineColor;
+    protected Color sourceColor;
+    protected Color sinkColor;
 
     private double vmaxForColorSpectrum;
 
-    protected boolean drawRoadId = GraphicsConfigurationParameters.DRAW_ROADID;
-    protected boolean drawSouces = GraphicsConfigurationParameters.DRAWSOURCES;
-    protected boolean drawSinks = GraphicsConfigurationParameters.DRAWSINKS;
-    protected boolean drawSpeedLimits = GraphicsConfigurationParameters.DRAWSPEEDLIMITS;
-    protected boolean drawSlopes = GraphicsConfigurationParameters.SLOPES;
+    protected boolean drawRoadId;
+    protected boolean drawSources;
+    protected boolean drawSinks;
+    protected boolean drawSpeedLimits;
+    protected boolean drawSlopes;
 
     // brake light handling
     protected Color brakeLightColor = Color.RED;
+    
+    float lineWidth;
+    float lineLength;
+    float gapLength;
+    float gapLengthExit;
 
     /**
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
@@ -174,22 +179,70 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         super(simulationRunnable);
         this.simulator = simulator;
         this.roadNetwork = simulator.getRoadNetwork();
-        this.vmaxForColorSpectrum = Double.parseDouble(properties.getProperty("vmaxForColorSpectrum", "140"));
-        this.initialSleepTime = Integer.parseInt(properties.getProperty("initial_sleep_time", "26"));
-        this.initialScale = Double.parseDouble(properties.getProperty("", "0.707106781"));
+        
+        initGraphicConfigFieldsFromProperties();
+        
         simulationRunnable.setUpdateDrawingCallback(this);
         simulationRunnable.setHandleExceptionCallback(this);
-        setSleepTime(initialSleepTime);
-        
-        setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundRedValue", "214")),
-                Integer.parseInt(properties.getProperty("backgroundGreenValue", "217")),
-                Integer.parseInt(properties.getProperty("backgroundBlueValue", "223"))));
 
         final TrafficCanvasMouseListener mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
         addKeyListener(new TrafficCanvasKeyListener(this));
     }
+
+    protected void initGraphicConfigFieldsFromProperties() {
+        setDrawRoadId(Boolean.parseBoolean(properties.getProperty("drawRoadId", "true")));
+        setDrawSinks(Boolean.parseBoolean(properties.getProperty("drawSinks", "true")));
+        setDrawSources(Boolean.parseBoolean(properties.getProperty("drawSources", "true")));
+        setDrawSlopes(Boolean.parseBoolean(properties.getProperty("drawSlopes", "true")));
+        setDrawSpeedLimits(Boolean.parseBoolean(properties.getProperty("drawSpeedLimits", "true")));
+        
+        setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundColor", "FFFFFF"), 16)));
+        roadColor = new Color(Integer.parseInt(properties.getProperty("roadColor", "666666"), 16));
+        roadEdgeColor = new Color(Integer.parseInt(properties.getProperty("roadEdgeColor", "000000"), 16));
+        roadLineColor = new Color(Integer.parseInt(properties.getProperty("roadLineColor", "FFFFFF"), 16));
+        sourceColor = new Color(Integer.parseInt(properties.getProperty("sourceColor", "FFFFFF"), 16));
+        sinkColor = new Color(Integer.parseInt(properties.getProperty("sinkColor", "000000"), 16));
+
+        setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty("vmaxForColorSpectrum", "140")));
+
+        lineWidth = Float.parseFloat(properties.getProperty("lineWidth", "1.0"));
+        lineLength = Float.parseFloat(properties.getProperty("lineLength", "5.0"));
+        gapLength = Float.parseFloat(properties.getProperty("gapLength", "15.0"));
+        gapLengthExit= Float.parseFloat(properties.getProperty("gapLengthExit", "6.0"));
+
+        scale = Double.parseDouble(properties.getProperty("initialScale", "0.707106781"));
+        setSleepTime(Integer.parseInt(properties.getProperty("initial_sleep_time", "26")));
+    }
+    
+    protected static Properties loadProperties() {
+        Properties applicationProps = null;
+        try {
+            // create and load default properties
+            Properties defaultProperties = new Properties();
+            final InputStream is = MainFrame.class.getResourceAsStream("/config/defaultviewerconfig.properties");
+            defaultProperties.load(is);
+
+            // create application properties with default
+            applicationProps = new Properties(defaultProperties);
+            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+            String projectName = ProjectMetaData.getInstance().getProjectName();
+            // now load specific project properties
+            InputStream in = new FileInputStream(path + projectName + ".properties");
+            applicationProps.load(in);
+            in.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return applicationProps;
+
+    }
+
 
     @Override
     protected void reset() {
@@ -199,7 +252,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     @Override
     public void resetScaleAndOffset() {
-        scale = initialScale;
+        scale = Double.parseDouble(properties.getProperty("initialScale", "0.707106781"));
         xOffset = Integer.parseInt(properties.getProperty("xOffset", "0"));
         yOffset = Integer.parseInt(properties.getProperty("yOffset", "0"));
         setTransform();
@@ -250,8 +303,37 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         repaint();
     }
 
+    /**
+     * @return the drawSouces
+     */
+    public boolean isDrawSources() {
+        return drawSources;
+    }
+
+
+    /**
+     * @return the drawSinks
+     */
+    public boolean isDrawSinks() {
+        return drawSinks;
+    }
+
+    /**
+     * @return the drawSpeedLimits
+     */
+    public boolean isDrawSpeedLimits() {
+        return drawSpeedLimits;
+    }
+
+    /**
+     * @return the drawSlopes
+     */
+    public boolean isDrawSlopes() {
+        return drawSlopes;
+    }
+
     public void setDrawSources(boolean b) {
-        this.drawSouces = b;
+        this.drawSources = b;
         repaint();
     }
 
@@ -405,7 +487,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     @Override
     protected void drawBackground(Graphics2D g) {
-        if (drawSouces) {
+        if (drawSources) {
             drawSources(g);
         }
         if (drawSinks) {
@@ -457,10 +539,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      */
     private void drawRoadSegmentLines(Graphics2D g, RoadMapping roadMapping) {
-
-        final float lineWidth = 1.0f; // a bit large, but ensures they are visible
-        final float lineLength = 5.0f;
-        final float gapLength = 15.0f; // TODO rg modified for vasaloppet old= 15
         final float dashPhase = (float) (roadMapping.roadLength() % (lineLength + gapLength));
 
         final Stroke lineStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10.0f,
@@ -475,7 +553,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
                 // use exit stroke pattern for on-ramps, off-ramps etc
                 final Stroke exitStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
-                        10.0f, new float[] { 5.0f, 6.0f }, 5.0f); // TODO rg: modified for vasaloppet 6.0f
+                        10.0f, new float[] { 5.0f, gapLengthExit }, 5.0f);
                 g.setStroke(exitStroke);
             } else {
                 g.setStroke(lineStroke);

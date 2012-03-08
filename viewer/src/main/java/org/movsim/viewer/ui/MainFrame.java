@@ -29,10 +29,10 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -65,7 +65,6 @@ public class MainFrame extends JFrame {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        // createProperties();
         final Properties properties = loadProperties();
         TrafficCanvas.setProperties(properties);
         defaultScenario = Scenario.valueOf(properties.getProperty("defaultScenario"));
@@ -102,15 +101,29 @@ public class MainFrame extends JFrame {
     }
 
     private static Properties loadProperties() {
-        Properties props = new Properties();
+        Properties applicationProps = null;
         try {
-            props.load(new FileInputStream(".." + File.separator + "sim" + File.separator + "defaultconfig.properties"));
+            // create and load default properties
+            Properties defaultProperties = new Properties();
+            final InputStream is = MainFrame.class.getResourceAsStream("/config/defaultviewerconfig.properties");
+            defaultProperties.load(is);
+
+            // create application properties with default
+            applicationProps = new Properties(defaultProperties);
+            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+            String projectName = ProjectMetaData.getInstance().getProjectName();
+            // now load specific project properties
+            InputStream in = new FileInputStream(path + projectName + ".properties");
+            applicationProps.load(in);
+            in.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return props;
+
+        return applicationProps;
 
     }
 
