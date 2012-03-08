@@ -85,6 +85,8 @@ public class Vehicle {
      */
     public static final int ID_NOT_SET = -1;
     private static final int VEHICLE_NUMBER_NOT_SET = -1;
+    private static final int LANE_NOT_SET = -1;
+    
     /**
      * 'Not Set' road segment id value, guaranteed not to be used by any vehicles.
      */
@@ -138,7 +140,7 @@ public class Vehicle {
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
 
-    private int lane;
+    private int lane = LANE_NOT_SET;
     private int laneOld;
 
     /** variable for remembering new target lane when assigning to new laneSegment */
