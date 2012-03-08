@@ -41,8 +41,7 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
-import org.movsim.output.SimOutput;
-import org.movsim.output.fileoutput.FileFundamentalDiagram;
+import org.movsim.output.SimulationOutput;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
@@ -77,7 +76,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private String projectName;
     private final InputData inputData;
     private VehicleGenerator vehGenerator;
-    private SimOutput simOutput;
+    private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
     private final SimulationRunnable simulationRunnable;
 
@@ -129,7 +128,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return inputData;
     }
 
-    public SimOutput getSimOutput() {
+    public SimulationOutput getSimOutput() {
         return simOutput;
     }
 
@@ -185,12 +184,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData,
                 heterogenInputData);
-        // output fundamental diagrams
-        final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
-        final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
-        if (instantaneousFileOutput && isWithFundDiagramOutput) {
-            FileFundamentalDiagram.writeFundamentalDiagrams(projectMetaData, vehGenerator.prototypes());
-        }
         return vehGenerator;
 
     }
@@ -424,7 +417,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public void reset() {
         simulationRunnable.reset();
-        simOutput = new SimOutput(projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
+        simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
     }
 
     public void runToCompletion() {

@@ -33,13 +33,16 @@ import java.util.Map;
 import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.RouteInput;
 import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
+import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
+import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.simulator.SimulationTimeStep;
@@ -50,12 +53,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class SimOutput.
+ * The Class SimulationOutput.
  */
-public class SimOutput implements SimulationTimeStep {
+public class SimulationOutput implements SimulationTimeStep {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(SimOutput.class);
+    final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<SpatioTemporal> spatioTemporals;
     private List<FileSpatioTemporal> filesSpatioTemporal;
@@ -64,14 +67,15 @@ public class SimOutput implements SimulationTimeStep {
     private List<FileTrajectories> filesTrajectories;
     private final RoadNetwork roadNetwork;
     private TravelTimes travelTimes;
-
+    
     /**
      * Constructor.
+     * @param simulationTimestep 
      * 
      * @param simInput
      *            the sim input
      */
-    public SimOutput(boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
+    public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
@@ -79,6 +83,10 @@ public class SimOutput implements SimulationTimeStep {
             return;
         }
 
+        if(writeOutput){
+            writeFundamentalDiagrams(simulationTimestep, simInput.getVehiclesInput());
+        }
+        
         // Routes
         final RoutesInput routesInput = simulationInput.getRoutesInput();
         final Map<String, Route> routes = new HashMap<String, Route>();
@@ -138,6 +146,19 @@ public class SimOutput implements SimulationTimeStep {
                     final Route route = routes.get(traj.getLabel());
                     filesTrajectories.add(new FileTrajectories(traj, route));
                 }
+            }
+        }
+    }
+
+    private static void writeFundamentalDiagrams(double simulationTimestep, VehiclesInput vehiclesInput) {
+        if(!vehiclesInput.isWriteFundamentalDiagrams()){
+            return;
+        }
+        final String ignoreLabel = "Obstacle";  // quick hack
+        logger.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
+        for(VehicleInput vehicleInput : vehiclesInput.getVehicleInput()){
+            if(!ignoreLabel.equalsIgnoreCase(vehicleInput.getLabel())){
+                FileFundamentalDiagram.writeToFile(simulationTimestep, vehicleInput);
             }
         }
     }

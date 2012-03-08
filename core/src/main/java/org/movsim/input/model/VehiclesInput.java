@@ -42,6 +42,7 @@ public class VehiclesInput {
         this.isWriteFundamentalDiagrams = elem.getAttributeValue("write_fund_diagrams").equals("true") ? true
               : false;
         
+        @SuppressWarnings("unchecked")
         final List<Element> vehicleElements = elem.getChildren();
         for (final Element vehElem : vehicleElements) {
             vehicleInput.add(new VehicleInput(vehElem));
