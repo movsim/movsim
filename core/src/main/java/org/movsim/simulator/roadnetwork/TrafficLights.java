@@ -26,7 +26,8 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class TrafficLights implements Iterable<TrafficLight> {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
-    private final Collection<TrafficLight> trafficLights;
+    private final List<TrafficLight> trafficLights = new ArrayList<TrafficLight>();
 
     public interface RecordDataCallback {
         /**
@@ -66,12 +67,19 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * @param trafficLightsInput
      */
     public TrafficLights(TrafficLightsInput trafficLightsInput) {
-
-        trafficLights = new ArrayList<TrafficLight>();
         final List<TrafficLightData> trafficLightData = trafficLightsInput.getTrafficLightData();
         for (final TrafficLightData tlData : trafficLightData) {
             trafficLights.add(new TrafficLight(tlData));
         }
+        
+        Collections.sort(trafficLights, new Comparator<TrafficLight>() {
+            @Override
+            public int compare(TrafficLight o1, TrafficLight o2) {
+                final Double pos1 = new Double(o1.position());
+                final Double pos2 = new Double(o2.position());
+                return pos1.compareTo(pos2); // sort with increasing x
+            }
+        });
     }
 
     /**
@@ -102,12 +110,17 @@ public class TrafficLights implements Iterable<TrafficLight> {
                 trafficLight.update(simulationTime);
             }
             // then update vehicle status approaching traffic lights
-            final int laneCount = roadSegment.laneCount();
-            for (int lane = 0; lane < laneCount; ++lane) {
-                final LaneSegment laneSegment = roadSegment.laneSegment(lane);
+            final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
+            while(laneSegmentIterator.hasNext()){
+                final LaneSegment laneSegment = laneSegmentIterator.next();
                 for (final Vehicle vehicle : laneSegment) {
+                    // quick hack criterion for selecting next downstream traffic light
+                    // assume that trafficLights are sorted with increasing position 
                     for (final TrafficLight trafficLight : trafficLights) {
-                        vehicle.updateTrafficLight(simulationTime, trafficLight);
+                        if(vehicle.getFrontPosition() < trafficLight.position() ){
+                            vehicle.updateTrafficLight(simulationTime, trafficLight);
+                            break;
+                        }
                     }
                 }
             }
