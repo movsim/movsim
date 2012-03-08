@@ -234,7 +234,6 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        // TODO path also from xml
         validate(FileUtils.getInputSourceFromFilename(xmlFilename));
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
