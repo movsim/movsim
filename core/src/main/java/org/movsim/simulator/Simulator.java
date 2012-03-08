@@ -332,7 +332,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
             double position = roadSegment.roadLength(); // start at end of segment
             while (position > 0) {
-                String roadId = roadInput.getId(); // TODO
                 final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
 
                 final double rhoLocal = icMacro.rho(position);
