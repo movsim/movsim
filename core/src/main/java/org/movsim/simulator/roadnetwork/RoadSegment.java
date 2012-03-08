@@ -482,7 +482,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Removes any vehicles that have moved past the end of this road segment.
      */
-    // TODO ake this is a property of/task for the downstream boundary condition --> remove here
     public void removeVehiclesPastEnd() {
         for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.removeVehiclesPastEnd();
