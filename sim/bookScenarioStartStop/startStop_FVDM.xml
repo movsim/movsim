@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <!-- variants: 0=fullVD orig, 1=fullVD secBased, 2=threePhase -->
         <VEHICLE label="FVDM1" length="8" b_max="100">
             <LONGITUDINAL_MODEL>
@@ -19,7 +19,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="FVDM1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
@@ -54,6 +54,11 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
             <!-- output grid absorbs some information in acceleration -->
             <FLOATING_CAR_DATA n_dt="5">
@@ -64,6 +69,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
+             <TRAJECTORIES dt="1" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

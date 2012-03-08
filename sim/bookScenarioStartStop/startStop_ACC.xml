@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="ACC1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
                 <ACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="1" />
@@ -18,7 +18,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
