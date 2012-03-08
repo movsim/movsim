@@ -33,7 +33,7 @@ import org.movsim.utilities.MovSimLogFileAppender;
 /**
  * The Class MovsimCoreMain.
  * 
- * MovSim command line tool.
+ * MovSim core command line interface.
  * 
  */
 public class MovsimCoreMain {
