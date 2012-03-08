@@ -30,10 +30,6 @@
             <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="43">
-            <TRAFFIC_COMPOSITION>
-                <VEHICLE_TYPE label="FAST_TYPE" fraction="0.8" />
-                <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />
-            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="1" rho_per_km="30" v="-1" />
             </INITIAL_CONDITIONS>
