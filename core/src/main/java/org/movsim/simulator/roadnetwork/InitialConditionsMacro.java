@@ -64,6 +64,7 @@ public class InitialConditionsMacro {
                 pos[i] = icData.get(i).getX();
                 rho[i] = rhoLocal;
                 final double speedLocal = icData.get(i).getSpeed();
+                // negative speed value will be replaced by equilibrium speed
                 speed[i] = (speedLocal <= MovsimConstants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
             }
         }

@@ -283,11 +283,12 @@ fluct_strength   NMTOKEN #REQUIRED
 <!ATTLIST INITIAL_CONDITIONS 
 > 
 
+<!-- speed default value corresponds to equilibrium speed -->  
 <!ELEMENT IC_MACRO EMPTY>
 <!ATTLIST IC_MACRO
   x          NMTOKEN #REQUIRED
   rho_per_km NMTOKEN #REQUIRED
-  v          NMTOKEN "0"
+  v          NMTOKEN "-1"
 > 
 
 <!-- most right lane is =1, increment for further lanes  -->
