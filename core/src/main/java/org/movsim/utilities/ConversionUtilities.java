@@ -28,12 +28,18 @@ package org.movsim.utilities;
 public interface ConversionUtilities {
 
     /** convert 1/s to 1/h */
-    final double INVS_TO_INVH = 3600;
+    final double INVS_TO_INVH = 3600.;
 
     /** convert m/s to km/h */
     final double MS_TO_KMH = 3.6;
 
     /** convert km/h to m/s */
     final double KMH_TO_MS = 1. / MS_TO_KMH;
+
+    /** convert (e.g. traffic densities) from 1/m to 1/km */
+    final double INVM_TO_INVKM = 1000.;
+    
+    /** convert (e.g. traffic densities) from 1/km to 1/m */
+    final double INVKM_TO_INVM = 1./INVM_TO_INVKM;
 
 }
