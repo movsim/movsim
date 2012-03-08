@@ -25,9 +25,9 @@
  */
 package org.movsim.input.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -95,12 +95,10 @@ public class RoadInput {
 
         id = elem.getAttributeValue("id");
 
-        // heterogeneity element with vehicle types
-        trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
-
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         // optional for specific road
         if (heterogenElem != null) {
+            trafficCompositionInputData = new LinkedList<TrafficCompositionInputData>();
             final List<Element> vehTypeElems = elem.getChild(XmlElementNames.TrafficComposition).getChildren(
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {
@@ -110,10 +108,10 @@ public class RoadInput {
         }
 
         // Initial Conditions Micro
-        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new ArrayList<Element>()
+        final List<Element> icMicroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new LinkedList<Element>()
                 : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
                         XmlElementNames.RoadInitialConditionsIcMicro);
-        icMicroData = new ArrayList<ICMicroData>();
+        icMicroData = new LinkedList<ICMicroData>();
         for (final Element icMicroElem : icMicroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMicroElem);
             icMicroData.add(new ICMicroData(map));
@@ -128,10 +126,10 @@ public class RoadInput {
         });
 
         // Initial Conditions Macro
-        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new ArrayList<Element>()
+        final List<Element> icMacroElems = elem.getChild(XmlElementNames.RoadInitialConditions) == null ? new LinkedList<Element>()
                 : elem.getChild(XmlElementNames.RoadInitialConditions).getChildren(
                         XmlElementNames.RoadInitialConditionsIcMacro);
-        icMacroData = new ArrayList<ICMacroData>();
+        icMacroData = new LinkedList<ICMacroData>();
         for (final Element icMacroElem : icMacroElems) {
             final Map<String, String> map = XmlUtils.putAttributesInHash(icMacroElem);
             icMacroData.add(new ICMacroData(map));
@@ -154,7 +152,7 @@ public class RoadInput {
         trafficSinkData = new TrafficSinkData(roadSinkElem);
 
         // FlowConservingBottlenecks
-        flowConsBottleneckInputData = new ArrayList<FlowConservingBottleneckDataPoint>();
+        flowConsBottleneckInputData = new LinkedList<FlowConservingBottleneckDataPoint>();
         final Element flowConsBottlenecksElement = elem.getChild(XmlElementNames.RoadFlowConservingInhomogeneities);
         if (flowConsBottlenecksElement != null) {
             final List<Element> flowConsElems = flowConsBottlenecksElement
@@ -174,7 +172,7 @@ public class RoadInput {
         }
 
         // speed limits
-        speedLimitInputData = new ArrayList<SpeedLimitDataPoint>();
+        speedLimitInputData = new LinkedList<SpeedLimitDataPoint>();
         final Element speedLimitsElement = elem.getChild(XmlElementNames.RoadSpeedLimits);
         if (speedLimitsElement != null) {
             final List<Element> speedLimitElems = speedLimitsElement.getChildren(XmlElementNames.RoadSpeedLimit);
@@ -193,7 +191,7 @@ public class RoadInput {
         }
 
         // slopes
-        slopesInputData = new ArrayList<SlopeDataPoint>();
+        slopesInputData = new LinkedList<SlopeDataPoint>();
         final Element slopesElement = elem.getChild(XmlElementNames.RoadSlopes);
         if (slopesElement != null) {
             final List<Element> slopeElems = slopesElement.getChildren(XmlElementNames.RoadSlope);
@@ -213,7 +211,7 @@ public class RoadInput {
 
         // non-physical ramps implementing a drop-down mechanism without
         // lane-changing decisions
-        simpleRamps = new ArrayList<SimpleRampData>();
+        simpleRamps = new LinkedList<SimpleRampData>();
 
         final Element rampsElement = elem.getChild(XmlElementNames.RoadRamps);
         if (rampsElement != null) {

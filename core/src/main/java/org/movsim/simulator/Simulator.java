@@ -162,28 +162,27 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param roadInputMap
      */
     private void matchRoadSegmentsAndRoadInput(Map<String, RoadInput> roadInputMap) {
-        for (final RoadInput roadinput : roadInputMap.values()) {
-            final RoadSegment roadSegment = roadNetwork.findByUserId(roadinput.getId());
+        for (final RoadInput roadInput : roadInputMap.values()) {
+            final RoadSegment roadSegment = roadNetwork.findByUserId(roadInput.getId());
             if (roadSegment != null) {
-                addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
+                addInputToRoadSegment(roadSegment, roadInput, vehGenerator);
             } else {
                 // at least warn user that roadId cannot be matched to xodr roadnetwork
                 // TODO add option to exit here if user sets option. Such input errors are just annoying.
-                logger.warn("cannot find roadId={} from input in constructed roadNetwork. IGNORE DATA!!!", roadinput.getId());
+                logger.warn("cannot find roadId={} from input in constructed roadNetwork. IGNORE DATA!!!", roadInput.getId());
             }
         }
     }
 
     /**
-     * This is the default vehGenerator for *all* roadsections if an individual vehicle composition is defined for a
-     * specific road.
+     * This is the default vehGenerator for all roadSegments as long as no individual vehicle composition of a roadSegment is defined
      * 
      * @param simInput
      */
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData,
-                heterogenInputData);
+        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
+                inputData.getVehiclesInput(), heterogenInputData, inputData.getFuelConsumptionInput());
         return vehGenerator;
 
     }
@@ -242,21 +241,32 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * aware of form of XML file or RoadInput data structure.
      * 
      * @param roadSegment
-     * @param roadinput
+     * @param roadInput
      */
-    private static void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput,
-            VehicleGenerator vehGenerator) {
+    private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadInput,
+            VehicleGenerator defaultVehGenerator) {
+        
+        VehicleGenerator roadVehGenerator = defaultVehGenerator;  
+        // set up vehicle generator for roadElement
+        final List<TrafficCompositionInputData> roadHeterogeneity = roadInput.getTrafficCompositionInputData();
+        if(roadHeterogeneity != null){
+            // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
+            roadVehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehiclesInput(),
+                    roadHeterogeneity, inputData.getFuelConsumptionInput());
+            logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
+        }
+        
         // set up the traffic source
-        final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
+        final TrafficSourceData trafficSourceData = roadInput.getTrafficSourceData();
         final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
-        final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
+        final TrafficSource trafficSource = new TrafficSource(roadVehGenerator, roadSegment, inflowTimeSeries);
         if (trafficSourceData.withLogging()) {
             trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
         }
         roadSegment.setTrafficSource(trafficSource);
 
         // set up the traffic lights
-        final TrafficLightsInput trafficLightsInput = roadinput.getTrafficLightsInput();
+        final TrafficLightsInput trafficLightsInput = roadInput.getTrafficLightsInput();
         final TrafficLights trafficLights = new TrafficLights(trafficLightsInput);
         if (trafficLightsInput.isWithLogging()) {
             final int nDt = trafficLightsInput.getnDtSample();
@@ -265,23 +275,23 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadSegment.setTrafficLights(trafficLights);
 
         // set up the speed limits
-        final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
+        final SpeedLimits speedLimits = new SpeedLimits(roadInput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
         // set up the slopes
-        final Slopes slopes = new Slopes(roadinput.getSlopesInputData());
+        final Slopes slopes = new Slopes(roadInput.getSlopesInputData());
         roadSegment.setSlopes(slopes);
 
         // set up the detectors
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadinput.getDetectorInput());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadInput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
 
         // set up the flow conserving bottlenecks
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
-                roadinput.getFlowConsBottleneckInputData());
+                roadInput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
 
-        initialConditions(roadSegment, roadinput, vehGenerator);
+        initialConditions(roadSegment, roadInput, roadVehGenerator);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
@@ -323,7 +333,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             double position = roadSegment.roadLength(); // start at end of segment
             while (position > 0) {
                 String roadId = roadInput.getId(); // TODO
-                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(roadId);
+                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
 
                 final double rhoLocal = icMacro.rho(position);
                 double speedInit = icMacro.vInit(position);
