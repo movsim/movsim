@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
 <SCENARIO network_filename="simple_onramp.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <!-- vehicle length ==> cell units -->
         <VEHICLE label="KKW1" length="15">
             <!-- b_max not limited -->
@@ -21,7 +21,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1" duration="7200" fixed_seed="true" seed="42" crash_exit="false">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="KKW1" fraction="1" />
         </TRAFFIC_COMPOSITION>
         <!-- scaled units for time and space -->
