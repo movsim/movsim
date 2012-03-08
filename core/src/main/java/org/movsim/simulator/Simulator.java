@@ -299,6 +299,33 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }  
     }
 
+    private static void setMacroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
+            VehicleGenerator vehGenerator, final List<ICMacroData> icMacroData) {
+        logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
+        for (int lane = 0; lane < roadSegment.laneCount(); lane++) {
+            final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
+            // crash avoidence for more than one roadsegment
+            final double xLocalMin = vehGenerator.getVehiclePrototype(roadSegment.userId()).length(); 
+            double xLocal = roadSegment.roadLength(); // start from behind
+            while (xLocal > xLocalMin) {
+                String roadId = roadInput.getId();
+                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(roadId);
+                final double rhoLocal = icMacro.rho(xLocal);
+                double speedInit = icMacro.vInit(xLocal);
+                if (speedInit <= 0) {
+                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
+                }
+                final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
+                veh.setFrontPosition(xLocal);
+                veh.setSpeed(speedInit);
+                veh.setLane(lane);
+                roadSegment.addVehicle(veh);
+                logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
+                xLocal -= 1 / rhoLocal;
+            }
+        }
+    }
+    
     private static void setMicroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator vehGenerator, List<ICMicroData> icSingle) {
         logger.debug(("choose micro initial conditions"));
@@ -328,33 +355,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 logger.info(String.format(
                         "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
                                 .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
-            }
-        }
-    }
-
-    private static void setMacroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
-            VehicleGenerator vehGenerator, final List<ICMacroData> icMacroData) {
-        logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
-        for (int lane = 0; lane < roadSegment.laneCount(); lane++) {
-            final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
-            // crash avoidence for more than one roadsegment
-            final double xLocalMin = vehGenerator.getVehiclePrototype(roadSegment.userId()).length(); 
-            double xLocal = roadSegment.roadLength(); // start from behind
-            while (xLocal > xLocalMin) {
-                String roadId = roadInput.getId();
-                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(roadId);
-                final double rhoLocal = icMacro.rho(xLocal);
-                double speedInit = icMacro.vInit(xLocal);
-                if (speedInit <= 0) {
-                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
-                }
-                final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                veh.setFrontPosition(xLocal);
-                veh.setSpeed(speedInit);
-                veh.setLane(lane);
-                roadSegment.addVehicle(veh);
-                logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
-                xLocal -= 1 / rhoLocal;
             }
         }
     }
