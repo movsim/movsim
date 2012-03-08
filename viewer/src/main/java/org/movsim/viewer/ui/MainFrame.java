@@ -29,10 +29,9 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -65,7 +64,6 @@ public class MainFrame extends JFrame {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        // createProperties();
         final Properties properties = loadProperties();
         TrafficCanvas.setProperties(properties);
         defaultScenario = Scenario.valueOf(properties.getProperty("defaultScenario"));
@@ -104,7 +102,8 @@ public class MainFrame extends JFrame {
     private static Properties loadProperties() {
         Properties props = new Properties();
         try {
-            props.load(new FileInputStream(".." + File.separator + "sim" + File.separator + "defaultconfig.properties"));
+            final InputStream is = MainFrame.class.getResourceAsStream("/config/defaultviewerconfig.properties");
+            props.load(is);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -101,8 +101,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     @Override
     public void reset() {
         super.reset();
-        setSleepTime(initialSleepTime);
-        initialScale = 1.0;
         isInitialSpeedUp = false;
         vehicleToHighlightId = -1;
         forceRepaintBackground();
@@ -125,9 +123,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case ONRAMPFILE: // TODO rg path
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("onramp", path);
-            // initialScale = 1;
-            // setScale(initialScale);
-            // inInitialSpeedUp = false;
             break;
         case OFFRAMPFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
@@ -176,8 +171,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             roadLineColor = Color.LIGHT_GRAY;
             roadEdgeColor = Color.DARK_GRAY;
             backgroundColor = Color.WHITE;
-            initialScale = 0.6;
-            setScale(initialScale);
             for (RoadSegment segment : roadNetwork) {
                 segment.roadMapping().setRoadColor(Color.WHITE);
             }

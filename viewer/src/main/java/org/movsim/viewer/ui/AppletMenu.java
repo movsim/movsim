@@ -12,7 +12,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
@@ -380,10 +379,10 @@ public class AppletMenu extends JPanel {
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
 
-        cbSpeedLimits.setSelected(GraphicsConfigurationParameters.DRAWSPEEDLIMITS);
-        cbDrawRoadIds.setSelected(GraphicsConfigurationParameters.DRAW_ROADID);
-        cbSources.setSelected(GraphicsConfigurationParameters.DRAWSOURCES);
-        cbSinks.setSelected(GraphicsConfigurationParameters.DRAWSINKS);
+        cbSpeedLimits.setSelected(canvasPanel.trafficCanvas.isDrawSpeedLimits());
+        cbDrawRoadIds.setSelected(canvasPanel.trafficCanvas.isDrawRoadId());
+        cbSources.setSelected(canvasPanel.trafficCanvas.isDrawSources());
+        cbSinks.setSelected(canvasPanel.trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 
