@@ -29,6 +29,7 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,16 +101,29 @@ public class MainFrame extends JFrame {
     }
 
     private static Properties loadProperties() {
-        Properties props = new Properties();
+        Properties applicationProps = null;
         try {
+            // create and load default properties
+            Properties defaultProperties = new Properties();
             final InputStream is = MainFrame.class.getResourceAsStream("/config/defaultviewerconfig.properties");
-            props.load(is);
+            defaultProperties.load(is);
+
+            // create application properties with default
+            applicationProps = new Properties(defaultProperties);
+            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+            String projectName = ProjectMetaData.getInstance().getProjectName();
+            // now load specific project properties
+            InputStream in = new FileInputStream(path + projectName + ".properties");
+            applicationProps.load(in);
+            in.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return props;
+
+        return applicationProps;
 
     }
 
