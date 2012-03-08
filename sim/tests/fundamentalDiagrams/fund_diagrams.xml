@@ -2,7 +2,7 @@
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <SCENARIO network_filename="fund_diagrams.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="ACC" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
                 <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
@@ -51,7 +51,7 @@
     </VEHICLES>
     <!-- set dt=1 because it is a model parameter of the GIPPS model and also the necessary update timestep of the Nagel-Schreckenberg CA -->
     <SIMULATION dt="1" duration="2000" fixed_seed="true" seed="42" crash_exit="false">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC" fraction="1" />
             <VEHICLE_TYPE label="GIPPS" fraction="1" />
             <VEHICLE_TYPE label="IDM" fraction="1" />
