@@ -132,7 +132,8 @@ public class Vehicle {
     /** The max deceleration . */
     private final double maxDecel;
 
-    long id;
+    /** The unique id of the vehicle */
+    final long id;
 
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
@@ -282,7 +283,7 @@ public class Vehicle {
      * @param source
      */
     public Vehicle(Vehicle source) {
-        id = source.id;
+        id = source.id;  // TODO id not unique in this case 
         type = source.type;
         frontPosition = source.frontPosition;
         speed = source.speed;
