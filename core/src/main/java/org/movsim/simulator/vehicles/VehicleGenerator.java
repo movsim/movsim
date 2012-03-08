@@ -55,7 +55,7 @@ public class VehicleGenerator {
     private final double simulationTimestep;
 
     private final boolean isWithReactionTimes;
-    
+
     private final HashMap<String, VehiclePrototype> prototypes;
 
     private final ConsumptionModeling fuelConsumptionModels;
@@ -65,38 +65,20 @@ public class VehicleGenerator {
      * instantaneousFileOutput is true.
      * 
      */
-    public VehicleGenerator(double simulationTimestep, VehiclesInput vehiclesInput, List<TrafficCompositionInputData> defaultHeterogenInputData, FuelConsumptionInput fuelConsumptionInput) {
+    public VehicleGenerator(double simulationTimestep, VehiclesInput vehiclesInput,
+            List<TrafficCompositionInputData> defaultHeterogenInputData, FuelConsumptionInput fuelConsumptionInput) {
         this.simulationTimestep = simulationTimestep;
-        
-        final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehiclesInput.getVehicleInput());
-        
+
+        final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehiclesInput
+                .getVehicleInput());
+
         prototypes = createPrototypes(vehInputMap, defaultHeterogenInputData);
 
         isWithReactionTimes = checkForReactionTimes();
 
-        
-        // TODO 
+        // TODO new design for fuel etc.
         fuelConsumptionModels = new ConsumptionModeling(fuelConsumptionInput);
     }
-//
-//    /**
-//     * @param simInput
-//     * @param vehInputMap
-//     */
-//    private void createAllPrototypesForEachRoadWithTrafficComposition(List<TrafficCompositionInputData> trafficCompositionData, 
-//            final Map<String, VehicleInput> vehInputMap) {
-//        //Set<String> keys = simInput.getSimulationInput().getRoadInput().keySet();
-//        //for (String key: keys) {
-//            //RoadInput roadInput = simInput.getSimulationInput().getRoadInput().get(key);
-//      //   List<TrafficCompositionInputData> trafficCompositionData= roadInput.getTrafficCompositionInputData();
-//            //if (trafficCompositionData != null) {
-//        for(TrafficCompositionInputData data : trafficCompositionData){
-//            String keyName = data.getKeyName();
-//            VehiclePrototype proto = new VehiclePrototype(label, fraction, longModel, equilProperties, vehicleInput, relativeRandomizationV0)
-//            allRoadPrototypes.put(keyName, );
-//            }
-//        //}
-//    }
 
     /**
      * Creates the prototypes.
@@ -117,7 +99,8 @@ public class VehicleGenerator {
             }
             final VehicleInput vehInput = vehInputMap.get(keyName);
             final double vehLength = vehInput.getLength();
-            final LongitudinalModelBase longModel = LongitudinalModelFactory.create(vehLength, vehInput.getAccelerationModelInputData(), simulationTimestep);
+            final LongitudinalModelBase longModel = LongitudinalModelFactory.create(vehLength,
+                    vehInput.getAccelerationModelInputData(), simulationTimestep);
             final EquilibriumProperties fundDia = EquilibriumPropertiesFactory.create(vehLength, longModel);
             final double fraction = heterogen.getFraction();
             logger.debug("fraction = {}", fraction);
@@ -138,9 +121,6 @@ public class VehicleGenerator {
         return prototypes;
     }
 
-   
-
-    
     /**
      * Normalize fractions.
      * 
@@ -186,26 +166,6 @@ public class VehicleGenerator {
         System.exit(-1);
         return null; // not reached after exit
     }
-    
-//    public VehiclePrototype getVehiclePrototype(String roadId) {
-//        HashMap<String, VehiclePrototype> protos = allRoadPrototypes.get(roadId);
-//        if (protos == null) {
-//            System.out.println("default");
-//            return getVehiclePrototype(); //default
-//        }
-//        
-//        final double randomNumber = MyRandom.nextDouble();
-//        double sumFraction = 0;
-//        for (final VehiclePrototype prototype : protos.values()) {
-//            sumFraction += prototype.fraction();
-//            if (sumFraction >= randomNumber) {
-//                return prototype;
-//            }
-//        }
-//        logger.error("no vehicle prototype found for randomNumber= {} and roadId={}", randomNumber, roadId);
-//        System.exit(-1);
-//        return null; // not reached after exit
-//    }
 
     /**
      * Creates the vehicle.
@@ -216,7 +176,8 @@ public class VehicleGenerator {
      */
     public Vehicle createVehicle(VehiclePrototype prototype) {
         final VehicleInput vehInput = prototype.getVehicleInput();
-        final LongitudinalModelBase longModel = LongitudinalModelFactory.create(prototype.length(), vehInput.getAccelerationModelInputData(), simulationTimestep);
+        final LongitudinalModelBase longModel = LongitudinalModelFactory.create(prototype.length(),
+                vehInput.getAccelerationModelInputData(), simulationTimestep);
 
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
 
