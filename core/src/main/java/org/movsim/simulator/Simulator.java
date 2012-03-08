@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,7 @@ import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -302,9 +304,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void setMacroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator vehGenerator, final List<ICMacroData> icMacroData) {
         logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
-        for (int lane = 0; lane < roadSegment.laneCount(); lane++) {
-            final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
-            // crash avoidence for more than one roadsegment
+        final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
+        final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
+        while(laneSegmentIterator.hasNext()){
+            LaneSegment lane = laneSegmentIterator.next();
             final double xLocalMin = vehGenerator.getVehiclePrototype(roadSegment.userId()).length(); 
             double xLocal = roadSegment.roadLength(); // start from behind
             while (xLocal > xLocalMin) {
@@ -318,12 +321,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
                 veh.setFrontPosition(xLocal);
                 veh.setSpeed(speedInit);
-                veh.setLane(lane);
+                veh.setLane(lane.lane());
                 roadSegment.addVehicle(veh);
                 logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
                 xLocal -= 1 / rhoLocal;
             }
         }
+        
+        
     }
     
     private static void setMicroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
