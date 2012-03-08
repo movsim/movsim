@@ -307,7 +307,7 @@ public class VehicleGenerator {
                 return prototype;
             }
         }
-        logger.error("no vehicle prototype found for randomNumber= {}", randomNumber);
+        logger.error("no vehicle prototype found for randomNumber= {} and roadId={}", randomNumber, roadId);
         System.exit(-1);
         return null; // not reached after exit
     }
