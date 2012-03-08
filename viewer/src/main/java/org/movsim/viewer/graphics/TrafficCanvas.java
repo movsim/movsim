@@ -119,10 +119,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private final GeneralPath clipPath = new GeneralPath(Path2D.WIND_EVEN_ODD);
 
     // colors
-    protected Color roadEdgeColor = Color.black;
-    protected Color roadLineColor = new Color(0xffffff);
-    protected Color sourceColor = Color.white;
-    protected Color sinkColor = Color.black;
+    protected Color roadEdgeColor;
+    protected Color roadLineColor;
+    protected Color sourceColor;
+    protected Color sinkColor;
 
     private double vmaxForColorSpectrum;
 
