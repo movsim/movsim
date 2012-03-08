@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.VehiclesInput;
+import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ public class InputData {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(InputData.class);
 
-    private List<VehicleInput> vehicleInputData;
+    private VehiclesInput vehiclesInput;
     private SimulationInput simulationInput;
     private FuelConsumptionInput fuelConsumptionInput;
 
@@ -48,14 +49,6 @@ public class InputData {
      * Constructor.
      */
     public InputData() {
-    }
-
-    public void setVehicleInputData(List<VehicleInput> vehicleInputData) {
-        this.vehicleInputData = vehicleInputData;
-    }
-
-    public List<VehicleInput> getVehicleInputData() {
-        return vehicleInputData;
     }
 
     public static Map<String, VehicleInput> createVehicleInputDataMap(List<VehicleInput> vehicleInputData) {
@@ -82,4 +75,14 @@ public class InputData {
     public FuelConsumptionInput getFuelConsumptionInput() {
         return fuelConsumptionInput;
     }
+
+    
+    public VehiclesInput getVehiclesInput(){
+        return vehiclesInput;
+    }
+    
+    public void setVehiclesInput(VehiclesInput vehiclesInput) {
+        this.vehiclesInput = vehiclesInput;
+    }
+    
 }

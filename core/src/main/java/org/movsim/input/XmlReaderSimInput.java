@@ -31,8 +31,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -41,7 +39,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -165,14 +163,9 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
-
-        final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
-
-        for (final Element vehElem : vehicleElements) {
-            vehicleInputData.add(new VehicleInput(vehElem));
-        }
-        inputData.setVehicleInputData(vehicleInputData);
+        final Element vehiclesElem = root.getChild(XmlElementNames.DriverVehicleUnits);
+        final VehiclesInput vehiclesInput = new VehiclesInput(vehiclesElem);
+        inputData.setVehiclesInput(vehiclesInput);
 
         // -------------------------------------------------------
 

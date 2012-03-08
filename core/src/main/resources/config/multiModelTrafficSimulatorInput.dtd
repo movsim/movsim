@@ -91,6 +91,10 @@
 <!-- ##################################################################### -->
 
 <!ELEMENT VEHICLES (VEHICLE+) >
+<!ATTLIST VEHICLES
+  write_fund_diagrams  (false|true) "false"
+>
+
 
 <!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGE_MODEL, NOISE?) >
 
@@ -256,7 +260,6 @@ fluct_strength   NMTOKEN #REQUIRED
 
 <!ELEMENT TRAFFIC_COMPOSITION (VEHICLE_TYPE+)>
 <!ATTLIST TRAFFIC_COMPOSITION
-  write_fund_diagrams  (false|true) "false"
 >
 
 <!ELEMENT VEHICLE_TYPE EMPTY >

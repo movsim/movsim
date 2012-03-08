@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;

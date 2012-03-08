@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;

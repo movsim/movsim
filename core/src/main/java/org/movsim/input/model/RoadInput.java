@@ -101,8 +101,6 @@ public class RoadInput {
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         // optional for specific road
         if (heterogenElem != null) {
-            isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
-                    : false;
             final List<Element> vehTypeElems = elem.getChild(XmlElementNames.TrafficComposition).getChildren(
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {

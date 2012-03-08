@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input.model;
+package org.movsim.input.model.vehicle;
 
 import java.util.List;
 import java.util.Map;

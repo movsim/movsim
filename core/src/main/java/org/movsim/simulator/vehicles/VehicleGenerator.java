@@ -32,8 +32,8 @@ import java.util.Set;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.RoadInput;
-import org.movsim.input.model.VehicleInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataCCS;
@@ -98,7 +98,7 @@ public class VehicleGenerator {
             List<TrafficCompositionInputData> defaultHeterogenInputData) {
         this.simulationTimestep = simulationTimestep;
         
-        final List<VehicleInput> vehicleInputData = simInput.getVehicleInputData();
+        final List<VehicleInput> vehicleInputData = simInput.getVehiclesInput().getVehicleInput();
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehicleInputData);
         
         allRoadPrototypes = createAllPrototypesForEachRoadWithTrafficComposition(simInput, vehInputMap);
