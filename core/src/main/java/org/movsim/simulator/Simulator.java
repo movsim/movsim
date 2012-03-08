@@ -49,6 +49,7 @@ import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
+import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -60,6 +61,7 @@ import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.utilities.ConversionUtilities;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -301,34 +303,90 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }  
     }
 
+    /**
+     * Determine vehicle positions on all relevant lanes while considering minimum gaps to avoid accidents. Gaps are
+     * left at the beginning and the end of the road segment on purpose. However, the consistency check is not complete
+     * and other segments are not considered.
+     * 
+     * @param roadSegment
+     * @param roadInput
+     * @param vehGenerator
+     * @param icMacroData
+     */
     private static void setMacroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator vehGenerator, final List<ICMacroData> icMacroData) {
-        logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
+
+        logger.info("choose macro initial conditions: generate vehicles from macro-density ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
+
         final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
-        while(laneSegmentIterator.hasNext()){
+        while (laneSegmentIterator.hasNext()) {
             LaneSegment lane = laneSegmentIterator.next();
-            final double xLocalMin = vehGenerator.getVehiclePrototype(roadSegment.userId()).length(); 
-            double xLocal = roadSegment.roadLength(); // start from behind
-            while (xLocal > xLocalMin) {
-                String roadId = roadInput.getId();
+            if (lane.type() != Lane.Type.TRAFFIC) {
+                logger.debug("no macroscopic initial conditions for non-traffic lanes (slip roads etc).");
+                continue;
+            }
+
+            double position = roadSegment.roadLength(); // start at end of segment
+            while (position > 0) {
+                String roadId = roadInput.getId(); // TODO
                 final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(roadId);
-                final double rhoLocal = icMacro.rho(xLocal);
-                double speedInit = icMacro.vInit(xLocal);
-                if (speedInit <= 0) {
+
+                final double rhoLocal = icMacro.rho(position);
+                double speedInit = icMacro.vInit(position);
+                if (speedInit < 0) {
                     speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
+                    logger.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
                 }
+
+                if(logger.isDebugEnabled()){
+                logger.debug(String.format(
+                        "macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
+                        roadInput.getId(), position, ConversionUtilities.INVM_TO_INVKM * rhoLocal,
+                        ConversionUtilities.MS_TO_KMH * speedInit));
+                }
+
+                if (rhoLocal <= 0) {
+                    logger.debug("no vehicle added at x={} for vanishing initial density={}.", position, rhoLocal);
+                    position -= 50;  // move on in upstream direction 
+                    continue;
+                }
+
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                veh.setFrontPosition(xLocal);
-                veh.setSpeed(speedInit);
-                veh.setLane(lane.lane());
-                roadSegment.addVehicle(veh);
-                logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
-                xLocal -= 1 / rhoLocal;
+                final double meanDistanceInLane = 1. / (rhoLocal + MovsimConstants.SMALL_VALUE);
+                final double minimumGap = veh.getLength() + veh.getLongitudinalModel().getS0();
+                final double posDecrement = Math.max(meanDistanceInLane, minimumGap);
+                position -= posDecrement;
+                
+                if(position <= posDecrement){
+                    logger.debug("leave minimum gap at origin of road segment and start with next lane, pos={}", position);
+                    break; 
+                }
+                final Vehicle leader = lane.rearVehicle();
+                final double gapToLeader = (leader == null) ? MovsimConstants.GAP_INFINITY : leader.getRearPosition()
+                        - position;
+                
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format(
+                            "meanDistance=%.3f, minimumGap=%.2f, posDecrement=%.3f, gapToLeader=%.3f\n",
+                            meanDistanceInLane, minimumGap, posDecrement, gapToLeader));
+                }
+                
+                if (gapToLeader > 0) {
+                    veh.setFrontPosition(position);
+                    veh.setSpeed(speedInit);
+                    veh.setLane(lane.lane());
+                    logger.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position,
+                            speedInit);
+                    roadSegment.addVehicle(veh);
+                }
+                else{
+                    logger.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position,
+                            speedInit);
+                }
+                
             }
         }
-        
-        
     }
     
     private static void setMicroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
