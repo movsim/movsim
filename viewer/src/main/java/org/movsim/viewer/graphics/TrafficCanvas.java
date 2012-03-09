@@ -534,7 +534,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final BasicStroke roadStroke = new BasicStroke((float) roadMapping.roadWidth(), BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
-        g.setColor(Color.GRAY);
         g.setColor(roadMapping.roadColor());
         PaintRoadMapping.paintRoadMapping(g, roadMapping);
     }
