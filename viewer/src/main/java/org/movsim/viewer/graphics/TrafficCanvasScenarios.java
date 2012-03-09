@@ -137,6 +137,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case CLOVERLEAFFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("cloverleaf", path);
+            initGraphicSettings();
             break;
         case LANECLOSINGFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;

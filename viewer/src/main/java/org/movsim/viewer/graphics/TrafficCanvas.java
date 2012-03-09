@@ -55,7 +55,6 @@ import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
-import org.movsim.viewer.ui.MainFrame;
 import org.movsim.viewer.util.SwingHelper;
 
 /**
@@ -141,7 +140,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     // brake light handling
     protected Color brakeLightColor = Color.RED;
-    
+
     float lineWidth;
     float lineLength;
     float gapLength;
@@ -180,8 +179,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         this.simulator = simulator;
         this.roadNetwork = simulator.getRoadNetwork();
         
+        if (getProperties() == null) {
+            setProperties(loadProperties());
+        }
+
         initGraphicConfigFieldsFromProperties();
-        
+
         simulationRunnable.setUpdateDrawingCallback(this);
         simulationRunnable.setHandleExceptionCallback(this);
 
@@ -197,7 +200,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         setDrawSources(Boolean.parseBoolean(properties.getProperty("drawSources", "true")));
         setDrawSlopes(Boolean.parseBoolean(properties.getProperty("drawSlopes", "true")));
         setDrawSpeedLimits(Boolean.parseBoolean(properties.getProperty("drawSpeedLimits", "true")));
-        
+
         setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundColor", "FFFFFF"), 16)));
         roadColor = new Color(Integer.parseInt(properties.getProperty("roadColor", "666666"), 16));
         roadEdgeColor = new Color(Integer.parseInt(properties.getProperty("roadEdgeColor", "000000"), 16));
@@ -210,28 +213,33 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         lineWidth = Float.parseFloat(properties.getProperty("lineWidth", "1.0"));
         lineLength = Float.parseFloat(properties.getProperty("lineLength", "5.0"));
         gapLength = Float.parseFloat(properties.getProperty("gapLength", "15.0"));
-        gapLengthExit= Float.parseFloat(properties.getProperty("gapLengthExit", "6.0"));
+        gapLengthExit = Float.parseFloat(properties.getProperty("gapLengthExit", "6.0"));
 
         scale = Double.parseDouble(properties.getProperty("initialScale", "0.707106781"));
         setSleepTime(Integer.parseInt(properties.getProperty("initial_sleep_time", "26")));
     }
-    
+
     protected static Properties loadProperties() {
         Properties applicationProps = null;
         try {
             // create and load default properties
             Properties defaultProperties = new Properties();
-            final InputStream is = MainFrame.class.getResourceAsStream("/config/defaultviewerconfig.properties");
+            final InputStream is = TrafficCanvas.class.getResourceAsStream("/config/defaultviewerconfig.properties");
             defaultProperties.load(is);
 
             // create application properties with default
             applicationProps = new Properties(defaultProperties);
-            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
-            String projectName = ProjectMetaData.getInstance().getProjectName();
+
             // now load specific project properties
-            InputStream in = new FileInputStream(path + projectName + ".properties");
-            applicationProps.load(in);
-            in.close();
+            if (ProjectMetaData.getInstance().isXmlFromResources()) {
+
+            } else {
+                String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+                String projectName = ProjectMetaData.getInstance().getProjectName();
+                InputStream in = new FileInputStream(path + projectName + ".properties");
+                applicationProps.load(in);
+                in.close();
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -242,7 +250,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         return applicationProps;
 
     }
-
 
     @Override
     protected void reset() {
@@ -309,7 +316,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     public boolean isDrawSources() {
         return drawSources;
     }
-
 
     /**
      * @return the drawSinks

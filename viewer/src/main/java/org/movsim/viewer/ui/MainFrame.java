@@ -29,11 +29,6 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
@@ -43,7 +38,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -64,10 +58,6 @@ public class MainFrame extends JFrame {
 
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
-
-        final Properties properties = loadProperties();
-        TrafficCanvas.setProperties(properties);
-        defaultScenario = Scenario.valueOf(properties.getProperty("defaultScenario"));
 
         canvasPanel = new CanvasPanel(resourceBundle, simulator);
         statusPanel = new StatusPanel(resourceBundle, simulator);
@@ -98,33 +88,6 @@ public class MainFrame extends JFrame {
             canvasPanel.trafficCanvas.start();
         }
         statusPanel.reset();
-    }
-
-    private static Properties loadProperties() {
-        Properties applicationProps = null;
-        try {
-            // create and load default properties
-            Properties defaultProperties = new Properties();
-            final InputStream is = MainFrame.class.getResourceAsStream("/config/defaultviewerconfig.properties");
-            defaultProperties.load(is);
-
-            // create application properties with default
-            applicationProps = new Properties(defaultProperties);
-            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
-            String projectName = ProjectMetaData.getInstance().getProjectName();
-            // now load specific project properties
-            InputStream in = new FileInputStream(path + projectName + ".properties");
-            applicationProps.load(in);
-            in.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return applicationProps;
-
     }
 
     /**
