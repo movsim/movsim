@@ -246,7 +246,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            // ignore exception.
         } catch (IOException e) {
             e.printStackTrace();
         }
