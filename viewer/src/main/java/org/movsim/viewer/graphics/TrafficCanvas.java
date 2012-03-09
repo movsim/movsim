@@ -178,7 +178,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         super(simulationRunnable);
         this.simulator = simulator;
         this.roadNetwork = simulator.getRoadNetwork();
-        
+
         if (getProperties() == null) {
             setProperties(loadProperties());
         }
@@ -226,16 +226,20 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             Properties defaultProperties = new Properties();
             final InputStream is = TrafficCanvas.class.getResourceAsStream("/config/defaultviewerconfig.properties");
             defaultProperties.load(is);
+            is.close();
 
             // create application properties with default
             applicationProps = new Properties(defaultProperties);
 
             // now load specific project properties
+            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+            String projectName = ProjectMetaData.getInstance().getProjectName();
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
-
+                final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
+                        + ".properties");
+                defaultProperties.load(inputStream);
+                inputStream.close();
             } else {
-                String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
-                String projectName = ProjectMetaData.getInstance().getProjectName();
                 InputStream in = new FileInputStream(path + projectName + ".properties");
                 applicationProps.load(in);
                 in.close();
