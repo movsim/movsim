@@ -214,71 +214,66 @@ public class MOBIL {
 
             // assume increasing lane index from right to left
             bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
-            
+
             prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - bias
                     * direction;
 
+            // ###########################################################
+            // new hack: bias considering BOTH the plus and the minus lane
 
-	    //###########################################################
-	    // new hack: bias considering BOTH the plus and the minus lane 
+            // Parameter considering BOTH the plus and the minus lane
+            double vc = 0.5; // maximum speed for the method to be effective
+            double biasmax = 50; // maximum bias
+            double fracCoop = 0.8; // fraction of cooperative runners/vehicles
+            double b = 10; // normal deceleration (=b in acc models)
+            double dt = 0.2; // !! get elsewhere!!
 
-	    // Parameter considering BOTH the plus and the minus lane 
-	    double vc=0.5;  // maximum speed for the method to be effective
-	    double biasmax=50;  // maximum bias
-	    double fracCoop=0.8;  // fraction of cooperative runners/vehicles
-	    double b=10; // normal deceleration (=b in acc models)
-	    double dt=0.2; //!! get elsewhere!!
+            // local variables need for both (1) and (2)
 
-	    // local variables need for both (1) and (2)
-
-
-	    int lanePlus = currentLane + direction;
-	    int laneMinus = currentLane - direction;
-	    if ( (Math.min(lanePlus, laneMinus)<0)
-		 || (Math.max(lanePlus, laneMinus)>laneCount-1))return prospectiveBalance;
+            int lanePlus = currentLane + direction;
+            int laneMinus = currentLane - direction;
+            if ((Math.min(lanePlus, laneMinus) < 0) || (Math.max(lanePlus, laneMinus) > laneCount - 1))
+                return prospectiveBalance;
 
             final LaneSegment laneSegmentPlus = roadSegment.laneSegment(lanePlus);
             final LaneSegment laneSegmentMinus = roadSegment.laneSegment(laneMinus);
-	    final Vehicle frontPlus = laneSegmentPlus.frontVehicle(me);
+            final Vehicle frontPlus = laneSegmentPlus.frontVehicle(me);
             final Vehicle rearPlus = laneSegmentPlus.rearVehicle(me);
             final Vehicle frontMinus = laneSegmentMinus.frontVehicle(me);
             final Vehicle rearMinus = laneSegmentMinus.rearVehicle(me);
-            if ((frontPlus == null) || (frontMinus == null)
-		|| (rearPlus == null) || (rearMinus == null))return prospectiveBalance;
+            if ((frontPlus == null) || (frontMinus == null) || (rearPlus == null) || (rearMinus == null))
+                return prospectiveBalance;
 
-	    double vPlus=Math.min(frontPlus.getSpeed(), rearPlus.getSpeed());
-	    double vMinus=Math.min(frontMinus.getSpeed(), rearMinus.getSpeed());
-	    double vAdj=Math.min(vPlus,vMinus);
+            double vPlus = Math.min(frontPlus.getSpeed(), rearPlus.getSpeed());
+            double vMinus = Math.min(frontMinus.getSpeed(), rearMinus.getSpeed());
+            double vAdj = Math.min(vPlus, vMinus);
 
-	    // (1) cooperative braking of runners/vehicles 
-	    // to make space for agents on congested adjacent lane(s)
+            // (1) cooperative braking of runners/vehicles
+            // to make space for agents on congested adjacent lane(s)
 
-	    int vehPerCoopVeh=(int)(1./(fracCoop+1e-6));
-	    double accCoop=0;
-	    if(me.getId()%vehPerCoopVeh==0){
-		accCoop=-b*Math.max(0., (vc-vAdj)/vc)
-		    * (Math.min(1., Math.max(0, ((me.getSpeed()-vc)/vc))));
-		accCoop=Math.max(-b, accCoop+me.getAcc());
-		me.setSpeed(me.getSpeed() + dt * accCoop);
-	    }
-
-	    // (2) anticipatory lane changes of runners adjacent of congested lanes
-	    // to the free lane on the other side (if applicable)
-
-
- 
- 
-	    int isEffective= ((vPlus-me.getSpeed())*(me.getSpeed()-vMinus)>0)?1:0;
-	    double abiasBoth=isEffective*( (vPlus-vMinus>0) ? 1 : -1)*biasmax
-		* Math.max(0., (vc-vAdj)/vc);
-	    prospectiveBalance += abiasBoth;
-	    if(false){
-		  System.out.println("currentLane="+currentLane+" direction="+direction+" vPlus="+vPlus+" vMinus="+vMinus+" v="+me.getSpeed());
-                System.out.println("abiasBoth="+abiasBoth);
+            int vehPerCoopVeh = (int) (1. / (fracCoop + 1e-6));
+            double accCoop = 0;
+            if (me.getId() % vehPerCoopVeh == 0) {
+                accCoop = -b * Math.max(0., (vc - vAdj) / vc)
+                        * (Math.min(1., Math.max(0, ((me.getSpeed() - vc) / vc))));
+                accCoop = Math.max(-b, accCoop + me.getAcc());
+                me.setSpeed(me.getSpeed() + dt * accCoop);
             }
-	
-	    //###########################################################
-	    
+
+            // (2) anticipatory lane changes of runners adjacent of congested lanes
+            // to the free lane on the other side (if applicable)
+
+            int isEffective = ((vPlus - me.getSpeed()) * (me.getSpeed() - vMinus) > 0) ? 1 : 0;
+            double abiasBoth = isEffective * ((vPlus - vMinus > 0) ? 1 : -1) * biasmax * Math.max(0., (vc - vAdj) / vc);
+            prospectiveBalance += abiasBoth;
+            if (false) {
+                System.out.println("currentLane=" + currentLane + " direction=" + direction + " vPlus=" + vPlus
+                        + " vMinus=" + vMinus + " v=" + me.getSpeed());
+                System.out.println("abiasBoth=" + abiasBoth);
+            }
+
+            // ###########################################################
+
             return prospectiveBalance; // quick hack ends here
         }
 

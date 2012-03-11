@@ -27,7 +27,6 @@ package org.movsim.input.model.vehicle.longitudinalmodel;
 
 import java.util.Map;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
