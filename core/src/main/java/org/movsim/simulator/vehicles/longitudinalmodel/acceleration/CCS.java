@@ -14,6 +14,27 @@ public class CCS extends LongitudinalModelBase {
     final static private double DENSITY_AIR = 1.3;
     final static private double EARTH_GRAVITY = 9.81;
 
+    public static enum Waves {
+        NOWAVE, FOURWAVES, TENWAVES
+    }
+
+    public static Waves wave = Waves.NOWAVE;
+
+    /**
+     * @return the wave
+     */
+    public static Waves getWave() {
+        return wave;
+    }
+
+    /**
+     * @param wave
+     *            the wave to set
+     */
+    public static void setWave(Waves wave) {
+        CCS.wave = wave;
+    }
+
     private double mass;
     private double A;
     private double cw;
@@ -25,12 +46,10 @@ public class CCS extends LongitudinalModelBase {
     private double v_c_herringbone;
     private double b;
     private double b_maximal;
-
     private double lenght;
 
     private int counter = 0;
 
-    // private int gradient;
 
     /**
      * Instantiates a new CCS (cross country skiing).
@@ -57,7 +76,7 @@ public class CCS extends LongitudinalModelBase {
     }
 
     /**
-     * Sets the relative randomization v0.
+     * Sets the relative randomization v0. Well in this case the p0!
      * 
      * @param relRandomizationFactor
      *            the new relative randomization v0
@@ -67,6 +86,7 @@ public class CCS extends LongitudinalModelBase {
         final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
         final double newP0 = p0 * (1 + relRandomizationFactor * equalRandom);
         logger.debug("randomization of power: p0={}, new p0={}", p0, newP0);
+        // System.out.println("randomization of power: p0= "+ p0+" new p0= "+ newP0);
         setP0(newP0);
     }
 
@@ -118,13 +138,26 @@ public class CCS extends LongitudinalModelBase {
 
     @Override
     public double calcAcc(Vehicle me, Vehicle frontVehicle, double alphaT, double alphaV0, double alphaA) {
-        
+
         // wave start hack 300 = 1min
-	// if ((me.roadSegmentId() <= 7 && counter < 1500) || (me.roadSegmentId() <= 5 && counter < 3000) || (me.roadSegmentId() <= 2 && counter < 9000)) {
-	//  counter++;
-	//  return 0;
-        //}
-        
+        if (wave == Waves.FOURWAVES) {
+            if ((me.roadSegmentId() <= 7 && counter < 1500) || (me.roadSegmentId() <= 5 && counter < 3000)
+                    || (me.roadSegmentId() <= 2 && counter < 9000)) {
+                counter++;
+                me.setSpeed(0);
+                return 0;
+            }
+        } else if (wave == Waves.TENWAVES) {
+            if ((me.roadSegmentId() <= 8 && counter < 1500)
+                    || (me.roadSegmentId() <= 7 && counter < 3000) || (me.roadSegmentId() <= 6 && counter < 4500)
+                    || (me.roadSegmentId() <= 5 && counter < 6000) || (me.roadSegmentId() <= 4 && counter < 7500)
+                    || (me.roadSegmentId() <= 3 && counter < 9000) || (me.roadSegmentId() <= 2 && counter < 10500)) {
+                counter++;
+                me.setSpeed(0);
+                return 0;
+            }
+        }
+
         // Local dynamical variables
         final double s = me.getNetDistance(frontVehicle);
         final double v = me.getSpeed();

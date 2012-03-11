@@ -41,6 +41,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS.Waves;
 import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
@@ -290,11 +292,7 @@ public class MovSimMenu extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
                 uiDefaultReset();
-                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(22);
-                canvasPanel.trafficCanvas.setSleepTime(0);
-                canvasPanel.trafficCanvas.setxOffset(400);
-                canvasPanel.trafficCanvas.setyOffset(700);
-                canvasPanel.trafficCanvas.setDrawSources(false);
+                CCS.setWave(Waves.FOURWAVES);
             }
         });
         scenarioMenu.add(menuItemVasaLoppet);
