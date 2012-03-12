@@ -266,11 +266,9 @@ public class MOBIL {
             int isEffective = ((vPlus - me.getSpeed()) * (me.getSpeed() - vMinus) > 0) ? 1 : 0;
             double abiasBoth = isEffective * ((vPlus - vMinus > 0) ? 1 : -1) * biasmax * Math.max(0., (vc - vAdj) / vc);
             prospectiveBalance += abiasBoth;
-            if (false) {
-                System.out.println("currentLane=" + currentLane + " direction=" + direction + " vPlus=" + vPlus
-                        + " vMinus=" + vMinus + " v=" + me.getSpeed());
-                System.out.println("abiasBoth=" + abiasBoth);
-            }
+            // System.out.println("currentLane=" + currentLane + " direction=" + direction + " vPlus=" + vPlus
+            // + " vMinus=" + vMinus + " v=" + me.getSpeed());
+            // System.out.println("abiasBoth=" + abiasBoth);
 
             // ###########################################################
 
