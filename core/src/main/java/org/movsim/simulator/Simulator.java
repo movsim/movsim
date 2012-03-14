@@ -57,6 +57,7 @@ import org.movsim.simulator.roadnetwork.Slopes;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.vehicles.FuelConsumptionModelPool;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
@@ -75,6 +76,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final ProjectMetaData projectMetaData;
     private String projectName;
     private final InputData inputData;
+    private FuelConsumptionModelPool fuelConsumptionModelPool;
     private VehicleGenerator vehGenerator;
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
@@ -97,6 +99,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         projectName = projectMetaData.getProjectName();
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
+        
+        fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
+        
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
@@ -182,7 +187,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
         final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
-                inputData.getVehiclesInput(), heterogenInputData, inputData.getFuelConsumptionInput());
+                inputData.getVehiclesInput(), heterogenInputData, fuelConsumptionModelPool);
         return vehGenerator;
 
     }
@@ -252,7 +257,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if(roadHeterogeneity != null){
             // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
             roadVehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehiclesInput(),
-                    roadHeterogeneity, inputData.getFuelConsumptionInput());
+                    roadHeterogeneity, fuelConsumptionModelPool);
             logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
         }
         

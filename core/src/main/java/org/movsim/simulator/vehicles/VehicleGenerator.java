@@ -33,7 +33,6 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.vehicle.VehicleInput;
-import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
@@ -58,7 +57,7 @@ public class VehicleGenerator {
 
     private final HashMap<String, VehiclePrototype> prototypes;
 
-    private final ConsumptionModeling fuelConsumptionModels;
+    private final FuelConsumptionModelPool fuelConsumptionModels;
 
     /**
      * Instantiates a new vehicle generator. And writes fundamental diagram to file system if the param
@@ -66,7 +65,7 @@ public class VehicleGenerator {
      * 
      */
     public VehicleGenerator(double simulationTimestep, VehiclesInput vehiclesInput,
-            List<TrafficCompositionInputData> defaultHeterogenInputData, FuelConsumptionInput fuelConsumptionInput) {
+            List<TrafficCompositionInputData> defaultHeterogenInputData, FuelConsumptionModelPool fuelConsumptionModelPool) {
         this.simulationTimestep = simulationTimestep;
 
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehiclesInput
@@ -76,8 +75,7 @@ public class VehicleGenerator {
 
         isWithReactionTimes = checkForReactionTimes();
 
-        // TODO new design for fuel etc.
-        fuelConsumptionModels = new ConsumptionModeling(fuelConsumptionInput);
+        this.fuelConsumptionModels = fuelConsumptionModelPool;
     }
 
     /**

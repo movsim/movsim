@@ -34,16 +34,16 @@ import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConsumptionModeling {
+public class FuelConsumptionModelPool {
 
     private static final String DEFAULT_DUMMY_LABEL = "none"; // default from dtd
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ConsumptionModeling.class);
+    final static Logger logger = LoggerFactory.getLogger(FuelConsumptionModelPool.class);
 
     private final Map<String, FuelConsumption> fuelModelsMap = new HashMap<String, FuelConsumption>();
 
-    public ConsumptionModeling(FuelConsumptionInput input) {
+    public FuelConsumptionModelPool(FuelConsumptionInput input) {
         if (input == null) {
             return;
         }
