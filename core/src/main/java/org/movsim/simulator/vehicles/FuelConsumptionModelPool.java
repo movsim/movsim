@@ -55,7 +55,7 @@ public class FuelConsumptionModelPool {
                 final String key = entries.getKey();
                 final ConsumptionModelInput consModelInput = entries.getValue();
                 logger.info("create fuel consumption model with key={}", key);
-                fuelModelsMap.put(key, new FuelConsumption(consModelInput));
+                fuelModelsMap.put(key, new FuelConsumption(key, consModelInput));
             }
         }
     }
