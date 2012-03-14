@@ -170,6 +170,10 @@ public class FuelConsumption {
 
     private void writeZeroAccelTest(String filename) {
         final PrintWriter fstr = FileUtils.getWriter(filename);
+        if(fstr==null){
+            logger.error("cannot write to file={}", filename);
+            return;
+        }
         fstr.printf("# veh mass = %.1f%n", carModel.getMass());
         fstr.printf("# number of gears = %d%n", engineModel.getNumberOfGears());
         fstr.printf("# v[m/s], accFreeWheeling[m/s^2], fuelFlow[l/h], gear, c100[l/100km]%n");
@@ -197,6 +201,10 @@ public class FuelConsumption {
     private void writeJanteDataFields(int gearTest, String filename) {
         final boolean determineOptimalGear = (gearTest == 0) ? true : false;
         final PrintWriter fstr = FileUtils.getWriter(filename);
+        if(fstr==null){
+            logger.error("cannot write to file={}", filename);
+            return;
+        }
         fstr.println("#Jante Fuel consumption:");
         fstr.println("# v(km/h), acc(m/s^2), forceMech(N), powMech(kW), fuelFlow(l/h), consump(liters/100km), Gear");
 

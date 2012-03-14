@@ -73,6 +73,8 @@ public class EngineModel {
         // TODO
         final String label = "carConsumption";
         final String filename = "sim/startStop_ACC." + label + ".specCons";
+        
+        // TODO fix output nullpointer ex
         writeOutput(filename);
     }
 
@@ -251,6 +253,10 @@ public class EngineModel {
     // TODO
     private void writeOutput(String filename) {
         final PrintWriter fstr = FileUtils.getWriter(filename);
+        if(fstr==null){
+            logger.error("cannot write to file={}", filename);
+            return;
+        }
         logger.info("write to file = {}", filename);
         // fstr.printf("# power in idle mode = %f kW%n", 0.001*powIdle);
         fstr.printf("# c_spec0 in idle mode = %f kg/kWh = %f Liter/kWh %n", 3.6e6 * cSpec0Idle, 3.6e6
