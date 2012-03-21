@@ -125,6 +125,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         reset();
     }
 
+    public VehicleGenerator getVehicleGenerator() {
+        return vehGenerator;
+    }
+
     public ProjectMetaData getProjectMetaData() {
         return projectMetaData;
     }
