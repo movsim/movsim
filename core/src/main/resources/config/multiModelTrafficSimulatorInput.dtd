@@ -91,6 +91,10 @@
 <!-- ##################################################################### -->
 
 <!ELEMENT VEHICLES (VEHICLE+) >
+<!ATTLIST VEHICLES
+  write_fund_diagrams  (false|true) "false"
+>
+
 
 <!ELEMENT VEHICLE (LONGITUDINAL_MODEL, LANE_CHANGE_MODEL, NOISE?) >
 
@@ -256,7 +260,6 @@ fluct_strength   NMTOKEN #REQUIRED
 
 <!ELEMENT TRAFFIC_COMPOSITION (VEHICLE_TYPE+)>
 <!ATTLIST TRAFFIC_COMPOSITION
-  write_fund_diagrams  (false|true) "false"
 >
 
 <!ELEMENT VEHICLE_TYPE EMPTY >
@@ -268,7 +271,7 @@ fluct_strength   NMTOKEN #REQUIRED
 
 
 
-<!ELEMENT ROAD (TRAFFIC_COMPOSITION*, INITIAL_CONDITIONS?, TRAFFIC_SOURCE?, TRAFFIC_SINK?, FLOW_CONSERVING_INHOMOGENEITIES?, SPEED_LIMITS?, SLOPES?, SIMPLE_RAMPS*, TRAFFIC_LIGHTS?, DETECTORS?)>
+<!ELEMENT ROAD (TRAFFIC_COMPOSITION?, INITIAL_CONDITIONS?, TRAFFIC_SOURCE?, TRAFFIC_SINK?, FLOW_CONSERVING_INHOMOGENEITIES?, SPEED_LIMITS?, SLOPES?, SIMPLE_RAMPS*, TRAFFIC_LIGHTS?, DETECTORS?)>
 
 <!-- for RAMP x and merge_length needed; not necessary for modeling a MAINROAD-->
 <!ATTLIST ROAD
@@ -283,11 +286,12 @@ fluct_strength   NMTOKEN #REQUIRED
 <!ATTLIST INITIAL_CONDITIONS 
 > 
 
+<!-- speed default value corresponds to equilibrium speed -->  
 <!ELEMENT IC_MACRO EMPTY>
 <!ATTLIST IC_MACRO
   x          NMTOKEN #REQUIRED
   rho_per_km NMTOKEN #REQUIRED
-  v          NMTOKEN "0"
+  v          NMTOKEN "-1"
 > 
 
 <!-- most right lane is =1, increment for further lanes  -->

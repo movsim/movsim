@@ -34,6 +34,7 @@ import org.junit.Test;
  * Test module for the RoadMapping class.
  * 
  */
+@SuppressWarnings("static-method")
 public class RoadMappingTest {
     private static final double delta = 0.00001;
 

@@ -41,11 +41,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS.Waves;
 import org.movsim.utilities.FileUtils;
-import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
+@SuppressWarnings("synthetic-access")
 public class MovSimMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final MainFrame frame;
@@ -53,13 +56,6 @@ public class MovSimMenu extends JPanel {
     private final ResourceBundle resourceBundle;
 
     private LogWindow logWindow;
-
-    // protected TravelTimeDiagram travelTimeDiagram;
-    // private DetectorsView detectorsDiagram;
-    // private SpatioTemporalView spatioTemporalDiagram;
-    // private FloatingCarsAccelerationView fcAcc;
-    // private FloatingCarsSpeedView fcSpeed;
-    // private FloatingCarsTrajectoriesView fcTrajectories;
 
     public MovSimMenu(MainFrame mainFrame, CanvasPanel canvasPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
@@ -286,10 +282,9 @@ public class MovSimMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
-        
+
         scenarioMenu.addSeparator();
-        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
-                resourceBundle.getString("Vasaloppet")) {
+        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(resourceBundle.getString("Vasaloppet")) {
 
             private static final long serialVersionUID = 4633365854029111923L;
 
@@ -297,11 +292,10 @@ public class MovSimMenu extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
                 uiDefaultReset();
-                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(40);
+                CCS.setWave(Waves.FOURWAVES);
             }
         });
         scenarioMenu.add(menuItemVasaLoppet);
-        
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
@@ -416,10 +410,10 @@ public class MovSimMenu extends JPanel {
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
 
-        cbSpeedLimits.setSelected(GraphicsConfigurationParameters.DRAWSPEEDLIMITS);
-        cbDrawRoadIds.setSelected(GraphicsConfigurationParameters.DRAW_ROADID);
-        cbSources.setSelected(GraphicsConfigurationParameters.DRAWSOURCES);
-        cbSinks.setSelected(GraphicsConfigurationParameters.DRAWSINKS);
+        cbSpeedLimits.setSelected(canvasPanel.trafficCanvas.isDrawSpeedLimits());
+        cbDrawRoadIds.setSelected(canvasPanel.trafficCanvas.isDrawRoadId());
+        cbSources.setSelected(canvasPanel.trafficCanvas.isDrawSources());
+        cbSinks.setSelected(canvasPanel.trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 
@@ -496,21 +490,8 @@ public class MovSimMenu extends JPanel {
 
     private JMenu fileMenu() {
         final JMenu menuFile = new JMenu((String) resourceBundle.getObject("FileMenu")); //$NON-NLS-1$
-        // menuFile.setMnemonic(KeyEvent.VK_F); // not useful, because we have an KeyListener for f 'faster'
 
-        menuFile.add(new JMenuItem(new OpenAction((String) resourceBundle.getObject("FileMenuOpen"), false)));
-        menuFile.add(new JMenuItem(new OpenAction((String) resourceBundle.getObject("XmlEditor"), true)));
-        // final JMenuItem menuItemXmlEditor = new JMenuItem(new AbstractAction(resourceBundle.getString("XmlEditor")) {
-        //
-        // private static final long serialVersionUID = -1280435957379756272L;
-        //
-        // @Override
-        // public void actionPerformed(ActionEvent e) {
-        // // TODO Auto-generated method stub
-        //
-        // }
-        // });
-        // menuFile.add(menuItemXmlEditor);
+        menuFile.add(new JMenuItem(new OpenAction((String) resourceBundle.getObject("FileMenuOpen"))));
 
         final JMenuItem menuItemPreferences = new JMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("FileMenuPreferences")) {//$NON-NLS-1$
@@ -550,7 +531,7 @@ public class MovSimMenu extends JPanel {
     }
 
     private void handlePreferences(EventObject event) {
-        new ViewerPreferences(resourceBundle);
+        ViewerPreferences viewerPreferences = new ViewerPreferences(resourceBundle);
     }
 
     protected void handleTravelTimeDiagram(ActionEvent actionEvent) {
@@ -655,9 +636,9 @@ public class MovSimMenu extends JPanel {
     }
 
     public void uiDefaultReset() {
-        canvasPanel.trafficCanvas.setVmaxForColorSpectrum(GraphicsConfigurationParameters.VmaxForColorSpectrum);
+        canvasPanel.trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty(
+                "vmaxForColorSpectrum", "140")));
         startbuttonToPauseAtScenarioChange();
-        frame.statusPanel.setWithTravelTimes(false);
         frame.statusPanel.setWithProgressBar(true);
         frame.statusPanel.reset();
     }
@@ -665,11 +646,9 @@ public class MovSimMenu extends JPanel {
     // --------------------------------------------------------------------------------------
     class OpenAction extends AbstractAction {
         private static final long serialVersionUID = 1L;
-        private boolean editor;
 
-        public OpenAction(String title, boolean editor) {
+        public OpenAction(String title) {
             super(title);
-            this.editor = editor;
         }
 
         @Override
@@ -699,14 +678,10 @@ public class MovSimMenu extends JPanel {
                 final File file = fileChooser.getSelectedFile();
                 if (file != null && file.isFile()) {
                     // if the user has selected a file, then load it
-                    if (editor) {
-                        new Editor(resourceBundle, file);
-                    } else {
-                        canvasPanel.simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
-                                FileUtils.getCanonicalPathWithoutFilename(file));
-                        uiDefaultReset();
-                        canvasPanel.trafficCanvas.forceRepaintBackground();
-                    }
+                    canvasPanel.simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
+                            FileUtils.getCanonicalPathWithoutFilename(file));
+                    uiDefaultReset();
+                    canvasPanel.trafficCanvas.forceRepaintBackground();
                 }
             }
         }

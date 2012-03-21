@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;

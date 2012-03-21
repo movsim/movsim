@@ -28,7 +28,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="2400" fixed_seed="true" seed="42" crash_exit="false">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="IDM1" fraction="0.8" relative_v0_randomization="0.2" />
             <VEHICLE_TYPE label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>

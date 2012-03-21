@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input.model;
+package org.movsim.input.model.vehicle;
 
 import java.util.List;
 import java.util.Map;
@@ -126,7 +126,7 @@ public class VehicleInput {
      *            the elem
      * @return the model input data
      */
-    private LongitudinalModelInputData modelInputDataFactory(Element elem) {
+    private static LongitudinalModelInputData modelInputDataFactory(Element elem) {
         final String modelName = elem.getName();
         final Map<String, String> map = XmlUtils.putAttributesInHash(elem);
         if (modelName.equals(LongitudinalModelBase.ModelName.IDM.name())) {

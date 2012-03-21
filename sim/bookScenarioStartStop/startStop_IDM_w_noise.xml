@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="IDM1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
                 <IDM v0="15" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
@@ -19,7 +19,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="IDM1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
@@ -55,6 +55,11 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
+         <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
             <FLOATING_CAR_DATA n_dt="5">
                 <FC number="2" />
@@ -63,6 +68,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
+             <TRAJECTORIES dt="1" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

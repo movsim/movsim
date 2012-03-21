@@ -482,7 +482,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Removes any vehicles that have moved past the end of this road segment.
      */
-    // TODO ake this is a property of/task for the downstream boundary condition --> remove here
     public void removeVehiclesPastEnd() {
         for (final LaneSegment laneSegment : laneSegments) {
             laneSegment.removeVehiclesPastEnd();
@@ -534,7 +533,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         updateSpeedLimits();
         updateSlopes();
     }
-
+    
     private void updateSpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {
             for (final LaneSegment laneSegment : laneSegments) {
@@ -825,6 +824,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return true;
     }
 
+    @SuppressWarnings("synthetic-access")
     private class VehicleIterator implements Iterator<Vehicle>, Iterable<Vehicle> {
         int lane;
         int index;
@@ -943,6 +943,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
     }
 
+    @SuppressWarnings("synthetic-access")
     private class LaneSegmentIterator implements Iterator<LaneSegment> {
         int index;
 

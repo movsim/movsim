@@ -25,71 +25,62 @@
  */
 package org.movsim.output.fileoutput;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.movsim.input.ProjectMetaData;
-import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.input.model.vehicle.VehicleInput;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelFactory;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
-import org.movsim.utilities.FileUtils;
+import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumPropertiesFactory;
+import org.movsim.utilities.ConversionUtilities;
 
 /**
  * The Class FileFundamentalDiagram.
  */
-public class FileFundamentalDiagram {
+public class FileFundamentalDiagram extends FileOutputBase {
+    
     private static final String extensionFormat = ".fund_%s.csv";
-    private static final String outputHeading = FileOutputBase.COMMENT_CHAR + " rho[1/km],  s[m],vEq[km/h], Q[veh/h]%n";
+    private static final String outputHeading = String.format("%s %8s, %8s, %8s, %8s%n", FileOutputBase.COMMENT_CHAR,
+            "rho[1/km]", "s[m]", "vEq[km/h]", "Q[veh/h]");
     private static final String outputFormat = "%8.2f, %8.2f, %8.2f, %8.2f%n";
 
-    /**
-     * Constructor.
-     */
-    private FileFundamentalDiagram() {
+    public static void writeToFile(double simulationTimestep, VehicleInput vehicleInput) {
+        new FileFundamentalDiagram(simulationTimestep, vehicleInput);
     }
 
-    /**
-     * Write fundamental diagrams.
-     * 
-     * @param prototypes
-     *            the prototypes
-     */
-    public static void writeFundamentalDiagrams(ProjectMetaData projectMetaData,
-            HashMap<String, VehiclePrototype> prototypes) {
-        final String path = projectMetaData.getOutputPath();
-        final String baseFilename = projectMetaData.getProjectName();
-        for (final Map.Entry<String, VehiclePrototype> entry : prototypes.entrySet()) {
-            final String key = entry.getKey();
-            final VehiclePrototype prototype = entry.getValue();
-            if (prototype.fraction() > 0) {
-                // avoid writing fundamental diagram of "obstacles"
-                final String filename = path + File.separator + baseFilename + String.format(extensionFormat, key);
-                final EquilibriumProperties equilibriumProperties = prototype.getEquilibriumProperties();
-                writeFundamentalDiagram(equilibriumProperties, filename);
-            }
-        }
+    /** Simulation timestep is model parameter for iterated map models (and cellular automata) */
+    private FileFundamentalDiagram(double simulationTimestep, VehicleInput vehicleInput) {
+        super();
+        final String label = vehicleInput.getLabel();
+
+        final double vehicleLength = vehicleInput.getLength();
+
+        final LongitudinalModelBase longModel = LongitudinalModelFactory.create(vehicleLength,
+                vehicleInput.getAccelerationModelInputData(), simulationTimestep);
+        final EquilibriumProperties eqProperties = EquilibriumPropertiesFactory.create(vehicleLength, longModel);
+
+        writer = createWriter(String.format(extensionFormat, label));
+        writeHeader(simulationTimestep, eqProperties);
+        writeFundamentalDiagram(eqProperties);
+        writer.close();
     }
 
-    /**
-     * Write output.
-     * 
-     * @param filename
-     *            the filename
-     */
-    private static void writeFundamentalDiagram(EquilibriumProperties equilibriumProperties, String filename) {
-        final PrintWriter writer = FileUtils.getWriter(filename);
-        writer.printf(FileOutputBase.COMMENT_CHAR + " rho at max Q = %8.3f%n",
+    private void writeHeader(double timestep, EquilibriumProperties equilibriumProperties) {
+        writer.printf("%s rho at max Q = %8.3f%n", FileOutputBase.COMMENT_CHAR,
                 1000 * equilibriumProperties.getRhoQMax());
-        writer.printf(FileOutputBase.COMMENT_CHAR + " max Q        = %8.3f%n", 3600 * equilibriumProperties.getQMax());
+        writer.printf("%s max Q        = %8.3f%n", FileOutputBase.COMMENT_CHAR, ConversionUtilities.INVS_TO_INVH
+                * equilibriumProperties.getQMax());
+        writer.printf("%s simulation timestep (model parameter for iterated map models) = %.3f%n",
+                FileOutputBase.COMMENT_CHAR, timestep);
         writer.printf(outputHeading);
+    }
+
+    private void writeFundamentalDiagram(EquilibriumProperties equilibriumProperties) {
         final int count = equilibriumProperties.getVEqCount();
         for (int i = 0; i < count; i++) {
             final double rho = equilibriumProperties.getRho(i);
             final double s = equilibriumProperties.getNetDistance(rho);
             final double vEq = equilibriumProperties.getVEq(i);
-            writer.printf(outputFormat, 1000 * rho, s, 3.6 * vEq, 3600 * rho * vEq);
+            writer.printf(outputFormat, ConversionUtilities.INVM_TO_INVKM * rho, s,
+                    ConversionUtilities.MS_TO_KMH * vEq, ConversionUtilities.INVS_TO_INVH * rho * vEq);
         }
-        writer.close();
     }
 }

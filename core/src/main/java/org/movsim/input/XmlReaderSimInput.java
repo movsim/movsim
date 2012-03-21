@@ -31,8 +31,6 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -41,7 +39,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -57,6 +55,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 /**
  * The Class XmlReaderSimInput.
  */
+@SuppressWarnings("synthetic-access")
 public class XmlReaderSimInput {
 
     /** The Constant logger. */
@@ -137,7 +136,7 @@ public class XmlReaderSimInput {
      * @param outFilename
      *            the output file name
      */
-    private void writeInternalXmlToFile(Document localDoc, String outFilename) {
+    private static void writeInternalXmlToFile(Document localDoc, String outFilename) {
         final PrintWriter writer = FileUtils.getWriter(outFilename);
         final XMLOutputter outputter = new XMLOutputter();
         outputter.setFormat(Format.getPrettyFormat());
@@ -152,7 +151,6 @@ public class XmlReaderSimInput {
     /**
      * From dom to internal data structure.
      */
-    @SuppressWarnings("unchecked")
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
 
@@ -164,14 +162,9 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final List<VehicleInput> vehicleInputData = new ArrayList<VehicleInput>();
-
-        final List<Element> vehicleElements = root.getChild(XmlElementNames.DriverVehicleUnits).getChildren();
-
-        for (final Element vehElem : vehicleElements) {
-            vehicleInputData.add(new VehicleInput(vehElem));
-        }
-        inputData.setVehicleInputData(vehicleInputData);
+        final Element vehiclesElem = root.getChild(XmlElementNames.DriverVehicleUnits);
+        final VehiclesInput vehiclesInput = new VehiclesInput(vehiclesElem);
+        inputData.setVehiclesInput(vehiclesInput);
 
         // -------------------------------------------------------
 
@@ -226,7 +219,7 @@ public class XmlReaderSimInput {
      * @param networkFileName
      * @return relativePath
      */
-    private String checkIfAttributeHasPath(String networkFileName) {
+    private static String checkIfAttributeHasPath(String networkFileName) {
         String relativePath;
         if (networkFileName.lastIndexOf(File.separator) == -1) {
             relativePath = "";
@@ -241,7 +234,6 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        // TODO path also from xml
         validate(FileUtils.getInputSourceFromFilename(xmlFilename));
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }

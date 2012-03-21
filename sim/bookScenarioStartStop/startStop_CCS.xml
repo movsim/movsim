@@ -3,7 +3,7 @@
 
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="CCS1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
                 <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="2" p0="200" v_c="5" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />
@@ -18,7 +18,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="CCS1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
@@ -68,7 +68,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
-            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="main" />
+            <TRAJECTORIES dt="1" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

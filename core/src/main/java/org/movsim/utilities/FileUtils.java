@@ -40,7 +40,7 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.movsim.MovsimMain;
+import org.movsim.MovsimCoreMain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -62,7 +62,7 @@ public class FileUtils {
      */
     public static PrintWriter getWriter(String filename) {
         try {
-            logger.debug("open file {} for writing", filename);
+            logger.info("open file {} for writing", filename);
             final PrintWriter fstr = new PrintWriter(new BufferedWriter(new FileWriter(filename, false)));
             return fstr;
         } catch (final java.io.IOException e) {
@@ -243,23 +243,23 @@ public class FileUtils {
      * 
      * @param path
      *            the path
-     * @param regex
-     *            the regex
+     * @param regexExpression
+     *            the regexExpression
      * @return the file list
      */
     public static String[] getFileList(String path, String regex) {
         final File dir = new File(path);
 
         class PatternFilter implements FilenameFilter {
-            String regex;
+            final String regexExpression;
 
             public PatternFilter(String regex) {
-                this.regex = regex;
+                regexExpression = regex;
             }
 
             @Override
             public boolean accept(File f, String name) {
-                final Pattern patternRegex = Pattern.compile(regex);
+                final Pattern patternRegex = Pattern.compile(regexExpression);
                 final Matcher matcher = patternRegex.matcher(name);
                 final boolean matches = matcher.matches();
                 return (matches);
@@ -281,8 +281,8 @@ public class FileUtils {
      * 
      * @param path
      *            the path
-     * @param regex
-     *            the regex
+     * @param regexExpression
+     *            the regexExpression
      */
     public static void deleteFileList(String path, String regex) {
         final String[] files = getFileList(path + File.separator, regex);
@@ -290,7 +290,7 @@ public class FileUtils {
             if (logger.isDebugEnabled()) {
                 logger.debug("filename to delete = " + files[i]);
             }
-            deleteFile(files[i], "deleteFileList with regex = " + regex);
+            deleteFile(files[i], "deleteFileList with regexExpression = " + regex);
         }
     }
 
@@ -326,7 +326,7 @@ public class FileUtils {
      */
     public static void resourceToFile(String res, String filename) {
         try {
-            final InputStream resourceAsStream = MovsimMain.class.getResourceAsStream(res);
+            final InputStream resourceAsStream = MovsimCoreMain.class.getResourceAsStream(res);
 
             if (resourceAsStream == null) {
                 logger.debug("resource {} not included!", res);

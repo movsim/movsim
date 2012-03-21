@@ -79,7 +79,6 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
             }
 
             @Override
-            @SuppressWarnings({ "synthetic-access" })
             public void stateChanged() {
                 if (canvasPanel.trafficCanvas.isStopped()) {
                     buttonStart.setIcon(SwingHelper.createImageIcon(this.getClass(), "/images/" + "button_play"

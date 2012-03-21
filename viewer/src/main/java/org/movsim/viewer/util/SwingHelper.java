@@ -63,22 +63,20 @@ public class SwingHelper {
 
     public static ImageIcon createImageIcon(Class<?> bezugsklasse, String path) {
         final URL imgURL = bezugsklasse.getResource(path);
-        if (imgURL != null)
+        if (imgURL != null) {
             return new ImageIcon(imgURL);
-        else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
         }
+        System.err.println("Couldn't find file: " + path);
+        return null;
     }
 
     public static ImageIcon createImageIcon(Class<?> bezugsklasse, String path, int width, int height) {
         final URL imgURL = bezugsklasse.getResource(path);
-        if (imgURL != null)
+        if (imgURL != null) {
             return new ImageIcon(new ImageIcon(imgURL).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-        else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
         }
+        System.err.println("Couldn't find file: " + path);
+        return null;
     }
 
     /**

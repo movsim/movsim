@@ -129,7 +129,7 @@ public class EquilibriumProperties {
      * @return the v eq
      */
     public double getVEq(double rho) {
-        return Tables.intp(vEqTab, rho, 0, rhoMax);
+        return Tables.intp(vEqTab, Math.min(rho, rhoMax), 0, rhoMax);
     }
 
     /**

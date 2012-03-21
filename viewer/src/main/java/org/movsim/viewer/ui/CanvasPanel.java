@@ -33,7 +33,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.movsim.simulator.Simulator;
-import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 
@@ -49,7 +48,8 @@ public class CanvasPanel extends JPanel {
         this.resourceBundle = resourceBundle;
         this.simulator = simulator;
 
-        // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore. Seems working fine with linux. Check windows and mac!
+        // SwingHelper.makeLightWeightComponentsVisible(); // TODO check if needed anymore. Seems working fine with linux. Check windows and
+        // mac!
 
         try {
             // Execute a job on the event-dispatching thread; creating this applet's GUI.
@@ -67,8 +67,6 @@ public class CanvasPanel extends JPanel {
     }
 
     public void initApp() {
-        setBackground(GraphicsConfigurationParameters.BACKGROUND_COLOR_SIM);
-
         trafficCanvas = new TrafficCanvasScenarios(simulator.getSimulationRunnable(), simulator);
         controller = new TrafficCanvasKeyListener(trafficCanvas);
 

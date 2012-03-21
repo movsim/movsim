@@ -196,8 +196,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // being updated twice (for example when a vehicle moves of the end of a road segment
         // onto the next road segment.
 
-        logger.debug("called timeStep: time={}", simulationTime);
-        // TODO road segments have replaced road sections, so need to replicate below for correct parallel update
+        logger.debug("called timeStep: time={}, timestep=", simulationTime, dt);
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.updateRoadConditions(dt, simulationTime, iterationCount);
         }
@@ -216,10 +215,9 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             roadSegment.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         }
 
-        // boolean flag to configure whether to exit or not (the latter is desired in a graphical mode)
-//        for (final RoadSegment roadSegment : roadSegments) {
-//            roadSegment.checkForInconsistencies(simulationTime, iterationCount, isWithCrashExit);
-//        }
+        for (final RoadSegment roadSegment : roadSegments) {
+            roadSegment.checkForInconsistencies(simulationTime, iterationCount, isWithCrashExit);
+        }
 
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.outFlow(dt, simulationTime, iterationCount);

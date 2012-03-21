@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="GIPPS1" length="8" b_max="20">
             <LONGITUDINAL_MODEL>
                 <GIPPS v0="15" a="1.5" b="1.0" s0="2" />
@@ -18,7 +18,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1.1" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="GIPPS1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
@@ -54,6 +54,11 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
             <FLOATING_CAR_DATA n_dt="1">
                 <!-- FC 1 is obstacle -->
@@ -63,6 +68,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
+            <TRAJECTORIES dt="1" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
 <SCENARIO network_filename="simple_onramp.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="KRAUSS1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
                 <KRAUSS v0="33.33" a="1.0" b="1.0" s0="3" epsilon="0.4" />
@@ -19,7 +19,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1.0" duration="7200" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="KRAUSS1" fraction="1" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">

@@ -95,14 +95,10 @@ public class RoadInput {
 
         id = elem.getAttributeValue("id");
 
-        // heterogeneity element with vehicle types
-        trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
-
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         // optional for specific road
         if (heterogenElem != null) {
-            isWithWriteFundamentalDiagrams = heterogenElem.getAttributeValue("write_fund_diagrams").equals("true") ? true
-                    : false;
+            trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
             final List<Element> vehTypeElems = elem.getChild(XmlElementNames.TrafficComposition).getChildren(
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {

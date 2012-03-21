@@ -27,16 +27,18 @@ package org.movsim.input.model.simulation;
 
 import java.util.Map;
 
+import org.movsim.utilities.ConversionUtilities;
+
 public class ICMacroData {
 
     /** The x. */
     private final double x;
 
-    /** The rho. */
-    private final double rho; // in 1/m
+    /** The rho. Unit: 1/m */
+    private final double rho; 
 
-    /** The speed. */
-    private final double speed; // in m/s, (default value)
+    /** The speed. Unit: m/s */
+    private final double speed;
 
     /**
      * Instantiates a new iC macro data impl.
@@ -46,34 +48,19 @@ public class ICMacroData {
      */
     public ICMacroData(Map<String, String> map) {
         this.x = Double.parseDouble(map.get("x"));
-        this.rho = Double.parseDouble(map.get("rho_per_km")) / 1000.0; // convert
-                                                                       // to SI
+        this.rho = ConversionUtilities.INVKM_TO_INVM*Double.parseDouble(map.get("rho_per_km"));
+        // negative speed value allowed for using equilibrium speed 
         this.speed = Double.parseDouble(map.get("v"));
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMacroData#getX()
-     */
     public double getX() {
         return x;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMacroData#getRho()
-     */
     public double getRho() {
         return rho;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.impl.ICMacroData#getSpeed()
-     */
     public double getSpeed() {
         return speed;
     }

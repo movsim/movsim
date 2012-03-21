@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
 <SCENARIO network_filename="startStop.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <!-- vehicle length ==> cell units -->
         <VEHICLE label="NSM1" length="1">
             <!-- b_max not limited -->
@@ -22,7 +22,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="NSM1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
@@ -58,14 +58,12 @@
                 <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="750" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE />
-            <TRAFFIC_SINK />
-            <FLOW_CONSERVING_INHOMOGENEITIES />
-            <SPEED_LIMITS />
-            <SIMPLE_RAMPS />
-            <TRAFFIC_LIGHTS />
-            <DETECTORS />
         </ROAD>
+        <ROUTES>
+            <ROUTE label="main">
+                <ROAD id="1" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
             <FLOATING_CAR_DATA n_dt="1" dn="0">
                 <!-- FC 1 is obstacle -->
@@ -75,6 +73,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
+             <TRAJECTORIES dt="1" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

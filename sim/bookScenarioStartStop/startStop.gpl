@@ -122,6 +122,7 @@ if (ldm eq "BARL") tmax=120
 if (ldm eq "KKW") tmax=150
 if (ldm eq "NSM") tmax=120
 if (ldm eq "FVDM") tmax=360
+if (ldm eq "CCS") tmax=250
 
 set xrange [tmin:tmax]
 set xtics 30
@@ -184,14 +185,15 @@ plot\
 
 ########  Trajectories Plot  #############################
 
+set ylabel distanceLabel
 set nolabel
 unset colorbox
 unset pm3d
-
 set auto x
-set xrange [0:7]
-set xtics 1
 set auto y
+set xrange [0:tmax]
+set xtics auto
+set ytics auto
 set out trajectoriesOutput
-plot trajectoriesFile using ($1/60.0):($3):(int($9) % 5 + 1) title "" with points lc variable
+plot trajectoriesFile using 1:($3):(int($9) % 5 + 1) title "" with points lt 7 ps 0.3 lc variable
 

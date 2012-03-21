@@ -25,7 +25,8 @@
  */
 package org.movsim.simulator.roadnetwork.vehicles.lanechange;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -44,6 +45,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
  * Test module for the MOBIL class.
  * 
  */
+@SuppressWarnings("static-method")
 public class MOBILTest {
     private static final double delta = 0.00001;
 
@@ -99,7 +101,7 @@ public class MOBILTest {
     @Test
     public final void testCalcAccelerationBalance() {
         final double lengthCar = 6.0;
-        final double lengthTruck = 16.0;
+        // final double lengthTruck = 16.0;
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
         final double roadLength = 1000.0;
@@ -171,7 +173,7 @@ public class MOBILTest {
         assertEquals(Lane.LANE2, r1.sourceLane(Lane.LANE1));
         final double lengthCar = 6.0;
         final double minimumGap = 2.0;
-        final double tooSmallGap = 1.0;
+        // final double tooSmallGap = 1.0;
         final double safeDeceleration = 4.0;
         final double politeness = 0.1;
         final double thresholdAcceleration = 0.2;
@@ -179,7 +181,7 @@ public class MOBILTest {
 
         // set up a vehicle in lane 2
         final Vehicle v1 = newVehicle(293.1, 26.983, Lane.LANE3, lengthCar);
-        final MOBIL m1 = new MOBIL(v1, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        // final MOBIL m1 = new MOBIL(v1, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
         r0.addVehicle(v1);
 
         final Vehicle v2 = newVehicle(6.3, 5.589, Lane.LANE1, lengthCar);
@@ -189,7 +191,7 @@ public class MOBILTest {
         assertEquals(1, sls.vehicleCount());
 
         final Vehicle v3 = newVehicle(25.0, 4.0, Lane.LANE1, lengthCar);
-        final MOBIL m3 = new MOBIL(v3, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        // final MOBIL m3 = new MOBIL(v3, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
         r1.addVehicle(v3);
 
         final Vehicle rV = r1.rearVehicle(Lane.LANE2, v2.getRearPosition());

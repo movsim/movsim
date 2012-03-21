@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.VehicleInput;
+import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -85,6 +85,8 @@ public class Vehicle {
      */
     public static final int ID_NOT_SET = -1;
     private static final int VEHICLE_NUMBER_NOT_SET = -1;
+    private static final int LANE_NOT_SET = -1;
+    
     /**
      * 'Not Set' road segment id value, guaranteed not to be used by any vehicles.
      */
@@ -132,12 +134,13 @@ public class Vehicle {
     /** The max deceleration . */
     private final double maxDecel;
 
-    long id;
+    /** The unique id of the vehicle */
+    final long id;
 
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
 
-    private int lane;
+    private int lane = LANE_NOT_SET;
     private int laneOld;
 
     /** variable for remembering new target lane when assigning to new laneSegment */
@@ -282,7 +285,7 @@ public class Vehicle {
      * @param source
      */
     public Vehicle(Vehicle source) {
-        id = source.id;
+        id = source.id;  // TODO id not unique in this case 
         type = source.type;
         frontPosition = source.frontPosition;
         speed = source.speed;

@@ -2,9 +2,6 @@
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
-<!-- README: TODOs -->
-<!-- Macroscopic initial conditions (IC) do not check for sufficient safety gap at boundary -->
-<!-- Macroscopic IC do not distribute over more 1 lane (initial density is therefore not "per lane") -->
 <!-- FCD Output does not work with macroscopic initial conditions -->
 <SCENARIO network_filename="ringroad_2lanes.xodr">
     <VEHICLES>
@@ -27,15 +24,14 @@
             </LANE_CHANGE_MODEL>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="1000000" fixed_seed="true" seed="42" crash_exit="true">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+    <SIMULATION dt="0.2" duration="1000000" fixed_seed="true" seed="42" crash_exit="false">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="FAST_TYPE" fraction="0.8" />
             <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="43">
             <INITIAL_CONDITIONS>
-                <!-- critical density for emerging stop-and-go wave about >= ?? vehicles per km -->
-                <IC_MACRO x="1" rho_per_km="30" v="20" />
+                <IC_MACRO x="1" rho_per_km="30" v="-1" />
             </INITIAL_CONDITIONS>
         </ROAD>
         <OUTPUT />

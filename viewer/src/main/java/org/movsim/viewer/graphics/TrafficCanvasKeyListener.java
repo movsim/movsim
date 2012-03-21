@@ -73,7 +73,6 @@ public class TrafficCanvasKeyListener implements KeyListener {
 
     public void commandRecenter() {
         trafficCanvas.resetScaleAndOffset();
-        trafficCanvas.setScale(trafficCanvas.initialScale);
         trafficCanvas.forceRepaintBackground();
     }
 

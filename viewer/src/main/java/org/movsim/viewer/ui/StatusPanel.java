@@ -28,8 +28,6 @@ package org.movsim.viewer.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.Box;
@@ -69,20 +67,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     private JLabel lblDeltaTimeDisplay;
     private JLabel lblTimeWarp;
     private JLabel lblTimeWarpDisplay;
-
-    // travel times for TT scenario
-    boolean withTravelTimes = false;
-
-    public void setWithTravelTimes(boolean withTravelTimes) {
-        this.withTravelTimes = withTravelTimes;
-    }
-
-    public boolean isWithTravelTimes() {
-        return withTravelTimes;
-    }
-
-    private List<JLabel> lblTravelTimes;
-    private List<JLabel> lblTravelTimeDisplays;
 
     private double time;
 
@@ -154,26 +138,21 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblTimeWarp.setFont(font);
         lblTimeWarp.setToolTipText(timeWarpTooltip);
 
-        lblTimeWarpDisplay = new JLabel(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
+        lblTimeWarpDisplay = new JLabel(String.valueOf(String.format("%.1f", simulationRunnable.getSmoothedTimewarp())));
         lblTimeWarpDisplay.setFont(font);
         lblTimeWarpDisplay.setToolTipText(timeWarpTooltip);
         lblTimeWarpDisplay.setPreferredSize(new Dimension(42, 22));
-        
+
         // vehicle count
         final String vehicleCountTooltip = resourceBundle.getString("vehicleCountTooltip");
         lblVehicleCount = new JLabel(resourceBundle.getString("lblVehicleCount"));
         lblVehicleCount.setFont(font);
         lblVehicleCount.setToolTipText(vehicleCountTooltip);
 
-
         lblVehicleCountDisplay = new JLabel(String.valueOf(vehicleCount()));
         lblVehicleCountDisplay.setFont(font);
         lblVehicleCountDisplay.setToolTipText(vehicleCountTooltip);
         lblVehicleCountDisplay.setPreferredSize(new Dimension(42, 22));
-
-        if (withTravelTimes) {
-            createTravelTimeLabels(font);
-        }
 
     }
 
@@ -183,26 +162,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             vehicleCount += roadSegment.totalVehicleCount();
         }
         return vehicleCount;
-    }
-
-    private void createTravelTimeLabels(final Font f) {
-        // hack
-        lblTravelTimes = new LinkedList<JLabel>();
-        lblTravelTimeDisplays = new LinkedList<JLabel>();
-
-        for (int i = 0; i < 2; i++) {
-            final String traveltimeTooltip = resourceBundle.getString("traveltimeTooltip") + i + ".";
-            final JLabel tt = new JLabel(resourceBundle.getString("traveltime")
-                    + ((i == 0) ? resourceBundle.getString("highway") : resourceBundle.getString("detour")) + ":");
-            tt.setToolTipText(traveltimeTooltip);
-            lblTravelTimes.add(tt);
-
-            final JLabel ttD = new JLabel(String.valueOf(0));
-            ttD.setFont(f);
-            ttD.setToolTipText(traveltimeTooltip);
-            ttD.setPreferredSize(new Dimension(80, 22));
-            lblTravelTimeDisplays.add(ttD);
-        }
     }
 
     public void addStatusView() {
@@ -222,7 +181,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(lblDeltaTime);
         add(lblDeltaTimeDisplay);
-        
+
         add(Box.createRigidArea(new Dimension(6, 22)));
 
         add(lblVehicleCount);
@@ -233,14 +192,6 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         if (isWithProgressBar) {
             add(progressBar);
         }
-
-        if (withTravelTimes) {
-            for (int i = 0, N = lblTravelTimeDisplays.size(); i < N; i++) {
-                add(Box.createRigidArea(new Dimension(6, 22)));
-                add(lblTravelTimes.get(i));
-                add(lblTravelTimeDisplays.get(i));
-            }
-        }
     }
 
     protected void setProgressBarDuration() {
@@ -250,6 +201,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         }
     }
 
+    @SuppressWarnings("hiding")
     public void notifyObserver(double time) {
         if (time > this.time) {
             final int intTime = (int) time;
@@ -259,17 +211,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             }
             lblTimeDisplay.setText(StringHelper.getTime(time, true, true, true));
             lblDeltaTimeDisplay.setText(String.valueOf(simulationRunnable.timeStep()) + " s");
-            lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f",simulationRunnable.getSmoothedTimewarp())));
+            lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f", simulationRunnable.getSmoothedTimewarp())));
 
             lblVehicleCountDisplay.setText(String.valueOf(vehicleCount()));
 
-            // die TravelTimes haben eigentlich einen anderen notifier
-            if (withTravelTimes) {
-                final List<Double> dataTT = simulator.getTravelTimeDataEMAs(time);
-                for (int i = 0, N = lblTravelTimeDisplays.size(); i < N; i++) {
-                    lblTravelTimeDisplays.get(i).setText(String.format("%.1f min", dataTT.get(i) / 60.));
-                }
-            }
             this.time = time;
         }
     }

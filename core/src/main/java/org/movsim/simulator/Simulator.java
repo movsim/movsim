@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +41,15 @@ import org.movsim.input.model.simulation.TrafficCompositionInputData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
-import org.movsim.output.SimOutput;
-import org.movsim.output.fileoutput.FileFundamentalDiagram;
+import org.movsim.output.SimulationOutput;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
+import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -55,9 +57,11 @@ import org.movsim.simulator.roadnetwork.Slopes;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.vehicles.FuelConsumptionModelPool;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.utilities.ConversionUtilities;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,8 +76,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final ProjectMetaData projectMetaData;
     private String projectName;
     private final InputData inputData;
+    private FuelConsumptionModelPool fuelConsumptionModelPool;
     private VehicleGenerator vehGenerator;
-    private SimOutput simOutput;
+    private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
     private final SimulationRunnable simulationRunnable;
 
@@ -94,6 +99,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         projectName = projectMetaData.getProjectName();
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
+        
+        fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
+        
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
@@ -125,7 +133,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return inputData;
     }
 
-    public SimOutput getSimOutput() {
+    public SimulationOutput getSimOutput() {
         return simOutput;
     }
 
@@ -159,34 +167,27 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param roadInputMap
      */
     private void matchRoadSegmentsAndRoadInput(Map<String, RoadInput> roadInputMap) {
-        for (final RoadInput roadinput : roadInputMap.values()) {
-            final RoadSegment roadSegment = roadNetwork.findByUserId(roadinput.getId());
+        for (final RoadInput roadInput : roadInputMap.values()) {
+            final RoadSegment roadSegment = roadNetwork.findByUserId(roadInput.getId());
             if (roadSegment != null) {
-                addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
+                addInputToRoadSegment(roadSegment, roadInput, vehGenerator);
             } else {
                 // at least warn user that roadId cannot be matched to xodr roadnetwork
                 // TODO add option to exit here if user sets option. Such input errors are just annoying.
-                logger.warn("cannot find roadId={} from input in constructed roadNetwork. IGNORE DATA!!!", roadinput.getId());
+                logger.warn("cannot find roadId={} from input in constructed roadNetwork. IGNORE DATA!!!", roadInput.getId());
             }
         }
     }
 
     /**
-     * This is the default vehGenerator for *all* roadsections if an individual vehicle composition is defined for a
-     * specific road.
+     * This is the default vehGenerator for all roadSegments as long as no individual vehicle composition of a roadSegment is defined
      * 
      * @param simInput
      */
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
-        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData,
-                heterogenInputData);
-        // output fundamental diagrams
-        final boolean instantaneousFileOutput = projectMetaData.isInstantaneousFileOutput();
-        final boolean isWithFundDiagramOutput = simInput.isWithWriteFundamentalDiagrams();
-        if (instantaneousFileOutput && isWithFundDiagramOutput) {
-            FileFundamentalDiagram.writeFundamentalDiagrams(projectMetaData, vehGenerator.prototypes());
-        }
+        final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
+                inputData.getVehiclesInput(), heterogenInputData, fuelConsumptionModelPool);
         return vehGenerator;
 
     }
@@ -245,21 +246,32 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * aware of form of XML file or RoadInput data structure.
      * 
      * @param roadSegment
-     * @param roadinput
+     * @param roadInput
      */
-    private static void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadinput,
-            VehicleGenerator vehGenerator) {
+    private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadInput,
+            VehicleGenerator defaultVehGenerator) {
+        
+        VehicleGenerator roadVehGenerator = defaultVehGenerator;  
+        // set up vehicle generator for roadElement
+        final List<TrafficCompositionInputData> roadHeterogeneity = roadInput.getTrafficCompositionInputData();
+        if(roadHeterogeneity != null){
+            // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
+            roadVehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehiclesInput(),
+                    roadHeterogeneity, fuelConsumptionModelPool);
+            logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
+        }
+        
         // set up the traffic source
-        final TrafficSourceData trafficSourceData = roadinput.getTrafficSourceData();
+        final TrafficSourceData trafficSourceData = roadInput.getTrafficSourceData();
         final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
-        final TrafficSource trafficSource = new TrafficSource(vehGenerator, roadSegment, inflowTimeSeries);
+        final TrafficSource trafficSource = new TrafficSource(roadVehGenerator, roadSegment, inflowTimeSeries);
         if (trafficSourceData.withLogging()) {
             trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
         }
         roadSegment.setTrafficSource(trafficSource);
 
         // set up the traffic lights
-        final TrafficLightsInput trafficLightsInput = roadinput.getTrafficLightsInput();
+        final TrafficLightsInput trafficLightsInput = roadInput.getTrafficLightsInput();
         final TrafficLights trafficLights = new TrafficLights(trafficLightsInput);
         if (trafficLightsInput.isWithLogging()) {
             final int nDt = trafficLightsInput.getnDtSample();
@@ -268,90 +280,158 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadSegment.setTrafficLights(trafficLights);
 
         // set up the speed limits
-        final SpeedLimits speedLimits = new SpeedLimits(roadinput.getSpeedLimitInputData());
+        final SpeedLimits speedLimits = new SpeedLimits(roadInput.getSpeedLimitInputData());
         roadSegment.setSpeedLimits(speedLimits);
 
         // set up the slopes
-        final Slopes slopes = new Slopes(roadinput.getSlopesInputData());
+        final Slopes slopes = new Slopes(roadInput.getSlopesInputData());
         roadSegment.setSlopes(slopes);
 
         // set up the detectors
-        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadinput.getDetectorInput());
+        final LoopDetectors loopDetectors = new LoopDetectors(roadSegment, roadInput.getDetectorInput());
         roadSegment.setLoopDetectors(loopDetectors);
 
         // set up the flow conserving bottlenecks
         final FlowConservingBottlenecks flowConservingBottlenecks = new FlowConservingBottlenecks(
-                roadinput.getFlowConsBottleneckInputData());
+                roadInput.getFlowConsBottleneckInputData());
         roadSegment.setFlowConservingBottlenecks(flowConservingBottlenecks);
 
-        initialConditions(roadSegment, roadinput, vehGenerator);
+        initialConditions(roadSegment, roadInput, roadVehGenerator);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
 
     private static void initialConditions(RoadSegment roadSegment, RoadInput roadInput, VehicleGenerator vehGenerator) {
-
         final List<ICMacroData> icMacroData = roadInput.getIcMacroData();
         if (!icMacroData.isEmpty()) {
-            logger.debug("choose macro initial conditions: generate vehicles from macro-density ");
-            for (int lane = 0; lane < roadSegment.laneCount(); lane++) {
-                final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
-                final double xLocalMin = vehGenerator.getVehiclePrototype(roadSegment.userId()).length(); // crash avoidence for more than one roadsegment
-                double xLocal = roadSegment.roadLength(); // start from behind
-                while (xLocal > xLocalMin) {
-                    String roadId = roadInput.getId();
-                    final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype(roadId);
-                    final double rhoLocal = icMacro.rho(xLocal);
-                    double speedInit = icMacro.vInit(xLocal);
-                    if (speedInit <= 0) {
-                        speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
-                    }
-                    final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
-                    veh.setFrontPosition(xLocal);
-                    veh.setSpeed(speedInit);
-                    veh.setLane(lane);
-                    roadSegment.addVehicle(veh);
-                    logger.debug("init conditions macro: rhoLoc={}/km, xLoc={}", 1000 * rhoLocal, xLocal);
-                    xLocal -= 1 / rhoLocal;
-                }
-            }
+            setMacroInitialConditions(roadSegment, roadInput, vehGenerator, icMacroData);
         } else {
-            logger.debug(("choose micro initial conditions"));
             final List<ICMicroData> icSingle = roadInput.getIcMicroData();
-            int vehicleNumber = 1;
-            for (final ICMicroData ic : icSingle) {
-                // TODO counter
-                final String vehTypeFromFile = ic.getLabel();
-                final Vehicle veh = (vehTypeFromFile.length() == 0) ? vehGenerator.createVehicle() : vehGenerator
-                        .createVehicle(vehTypeFromFile);
-                veh.setVehNumber(vehicleNumber);
-                ++vehicleNumber;
-                // testwise:
-                veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
-                veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
-                final int lane = ic.getInitLane();
-                if (lane <= 0 || lane > roadSegment.laneCount()) {
-                    logger.error("Error: lane=" + lane + " on road id=" + roadSegment.userId()
-                            + " does not exist. Choose as initial condition a lane between 1 and "
-                            + roadSegment.laneCount());
-                    System.exit(-1);
+            setMicroInitialConditions(roadSegment, roadInput, vehGenerator, icSingle);
+        }  
+    }
+
+    /**
+     * Determine vehicle positions on all relevant lanes while considering minimum gaps to avoid accidents. Gaps are
+     * left at the beginning and the end of the road segment on purpose. However, the consistency check is not complete
+     * and other segments are not considered.
+     * 
+     * @param roadSegment
+     * @param roadInput
+     * @param vehGenerator
+     * @param icMacroData
+     */
+    private static void setMacroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
+            VehicleGenerator vehGenerator, final List<ICMacroData> icMacroData) {
+
+        logger.info("choose macro initial conditions: generate vehicles from macro-density ");
+        final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
+
+        final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
+        while (laneSegmentIterator.hasNext()) {
+            LaneSegment lane = laneSegmentIterator.next();
+            if (lane.type() != Lane.Type.TRAFFIC) {
+                logger.debug("no macroscopic initial conditions for non-traffic lanes (slip roads etc).");
+                continue;
+            }
+
+            double position = roadSegment.roadLength(); // start at end of segment
+            while (position > 0) {
+                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+
+                final double rhoLocal = icMacro.rho(position);
+                double speedInit = icMacro.vInit(position);
+                if (speedInit < 0) {
+                    speedInit = vehPrototype.getEquilibriumSpeed(rhoLocal);
+                    logger.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
                 }
-                veh.setLane(lane - 1);
-                roadSegment.addVehicle(veh);
-                logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
-                        veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
-                if (veh.getLongitudinalModel().isCA()) {
-                    logger.info(String.format(
-                            "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
-                                    .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
+
+                if(logger.isDebugEnabled()){
+                logger.debug(String.format(
+                        "macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
+                        roadInput.getId(), position, ConversionUtilities.INVM_TO_INVKM * rhoLocal,
+                        ConversionUtilities.MS_TO_KMH * speedInit));
                 }
+
+                if (rhoLocal <= 0) {
+                    logger.debug("no vehicle added at x={} for vanishing initial density={}.", position, rhoLocal);
+                    position -= 50;  // move on in upstream direction 
+                    continue;
+                }
+
+                final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
+                final double meanDistanceInLane = 1. / (rhoLocal + MovsimConstants.SMALL_VALUE);
+                final double minimumGap = veh.getLength() + veh.getLongitudinalModel().getS0();
+                final double posDecrement = Math.max(meanDistanceInLane, minimumGap);
+                position -= posDecrement;
+                
+                if(position <= posDecrement){
+                    logger.debug("leave minimum gap at origin of road segment and start with next lane, pos={}", position);
+                    break; 
+                }
+                final Vehicle leader = lane.rearVehicle();
+                final double gapToLeader = (leader == null) ? MovsimConstants.GAP_INFINITY : leader.getRearPosition()
+                        - position;
+                
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format(
+                            "meanDistance=%.3f, minimumGap=%.2f, posDecrement=%.3f, gapToLeader=%.3f\n",
+                            meanDistanceInLane, minimumGap, posDecrement, gapToLeader));
+                }
+                
+                if (gapToLeader > 0) {
+                    veh.setFrontPosition(position);
+                    veh.setSpeed(speedInit);
+                    veh.setLane(lane.lane());
+                    logger.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position,
+                            speedInit);
+                    roadSegment.addVehicle(veh);
+                }
+                else{
+                    logger.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position,
+                            speedInit);
+                }
+                
+            }
+        }
+    }
+    
+    private static void setMicroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
+            VehicleGenerator vehGenerator, List<ICMicroData> icSingle) {
+        logger.debug(("choose micro initial conditions"));
+        int vehicleNumber = 1;
+        for (final ICMicroData ic : icSingle) {
+            // TODO counter
+            final String vehTypeFromFile = ic.getLabel();
+            final Vehicle veh = (vehTypeFromFile.length() == 0) ? vehGenerator.createVehicle() : vehGenerator
+                    .createVehicle(vehTypeFromFile);
+            veh.setVehNumber(vehicleNumber);
+            ++vehicleNumber;
+            // testwise:
+            veh.setFrontPosition(Math.round(ic.getX() / veh.physicalQuantities().getxScale()));
+            veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
+            final int lane = ic.getInitLane();
+            if (lane <= 0 || lane > roadSegment.laneCount()) {
+                logger.error("Error: lane=" + lane + " on road id=" + roadSegment.userId()
+                        + " does not exist. Choose as initial condition a lane between 1 and "
+                        + roadSegment.laneCount());
+                System.exit(-1);
+            }
+            veh.setLane(lane - 1);
+            roadSegment.addVehicle(veh);
+            logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
+                    veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
+            if (veh.getLongitudinalModel().isCA()) {
+                logger.info(String.format(
+                        "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
+                                .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
             }
         }
     }
 
     public void reset() {
         simulationRunnable.reset();
-        simOutput = new SimOutput(projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
+        simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
     }
 
     public void runToCompletion() {

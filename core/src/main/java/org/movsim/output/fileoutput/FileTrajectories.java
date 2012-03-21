@@ -91,7 +91,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         // check time interval for output:
         if (time >= t_start_interval && time <= t_end_interval) {
             if (iterationCount % 1000 == 0) {
-                logger.info("time = {}, timestep= {}", time);
+                logger.info("time = {}, timestep= {}", time, dt);
             }
             if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= dtOut) {
                 lastUpdateTime = time;

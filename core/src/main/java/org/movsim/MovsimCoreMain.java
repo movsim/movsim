@@ -31,12 +31,12 @@ import org.movsim.simulator.Simulator;
 import org.movsim.utilities.MovSimLogFileAppender;
 
 /**
- * The Class MovsimMain.
+ * The Class MovsimCoreMain.
  * 
- * MovSim command line tool.
+ * MovSim core command line interface.
  * 
  */
-public class MovsimMain {
+public class MovsimCoreMain {
 
     /**
      * The main method.

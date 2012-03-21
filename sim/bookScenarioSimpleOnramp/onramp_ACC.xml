@@ -3,7 +3,7 @@
 
 <!-- (c) Martin Treiber, Arne Kesting 2011 -->
 <SCENARIO network_filename="simple_onramp.xodr">
-    <VEHICLES>
+    <VEHICLES write_fund_diagrams="true">
         <VEHICLE label="ACC1" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
                 <ACC v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" coolness="1" />
@@ -23,7 +23,7 @@
             <VEHICLE_TYPE label="ACC1" fraction="1" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
-            <TRAFFIC_COMPOSITION write_fund_diagrams="true">
+            <TRAFFIC_COMPOSITION>
                 <VEHICLE_TYPE label="ACC1" fraction="1" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>

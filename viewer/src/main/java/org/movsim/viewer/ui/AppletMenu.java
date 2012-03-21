@@ -12,9 +12,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.movsim.viewer.graphics.GraphicsConfigurationParameters;
 import org.movsim.viewer.util.SwingHelper;
 
+@SuppressWarnings("synthetic-access")
 public class AppletMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Applet frame;
@@ -23,13 +23,6 @@ public class AppletMenu extends JPanel {
 
     private LogWindow logWindow;
     private StatusPanel statusPanel;
-
-    // protected TravelTimeDiagram travelTimeDiagram;
-    // private DetectorsView detectorsDiagram;
-    // private SpatioTemporalView spatioTemporalDiagram;
-    // private FloatingCarsAccelerationView fcAcc;
-    // private FloatingCarsSpeedView fcSpeed;
-    // private FloatingCarsTrajectoriesView fcTrajectories;
 
     public AppletMenu(Applet mainFrame, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
@@ -282,25 +275,6 @@ public class AppletMenu extends JPanel {
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
-        
-        scenarioMenu.addSeparator();
-        final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(
-                resourceBundle.getString("Vasaloppet")) {
-
-            private static final long serialVersionUID = 4633365854029111923L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("vasa_CCS", "/sim/examples/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
-                statusPanel.reset();
-                uiDefaultReset();
-                canvasPanel.trafficCanvas.setVmaxForColorSpectrum(40);
-            }
-        });
-        scenarioMenu.add(menuItemVasaLoppet);
-        
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
@@ -405,10 +379,10 @@ public class AppletMenu extends JPanel {
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
 
-        cbSpeedLimits.setSelected(GraphicsConfigurationParameters.DRAWSPEEDLIMITS);
-        cbDrawRoadIds.setSelected(GraphicsConfigurationParameters.DRAW_ROADID);
-        cbSources.setSelected(GraphicsConfigurationParameters.DRAWSOURCES);
-        cbSinks.setSelected(GraphicsConfigurationParameters.DRAWSINKS);
+        cbSpeedLimits.setSelected(canvasPanel.trafficCanvas.isDrawSpeedLimits());
+        cbDrawRoadIds.setSelected(canvasPanel.trafficCanvas.isDrawRoadId());
+        cbSources.setSelected(canvasPanel.trafficCanvas.isDrawSources());
+        cbSinks.setSelected(canvasPanel.trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 
@@ -493,10 +467,6 @@ public class AppletMenu extends JPanel {
         final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
         final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
         JOptionPane.showMessageDialog(canvasPanel, aboutString, titleString, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void handlePreferences(EventObject event) {
-        new ViewerPreferences(resourceBundle);
     }
 
     protected void handleTravelTimeDiagram(ActionEvent actionEvent) {
@@ -606,7 +576,6 @@ public class AppletMenu extends JPanel {
 
     public void uiDefaultReset() {
         startbuttonToPauseAtScenarioChange();
-        statusPanel.setWithTravelTimes(false);
         statusPanel.setWithProgressBar(false);
         statusPanel.reset();
     }

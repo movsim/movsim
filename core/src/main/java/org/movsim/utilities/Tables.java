@@ -54,6 +54,8 @@ public class Tables {
             intp_value = (1 - rest) * tab[i] + rest * tab[i + 1];
         } else if (i == n - 1) {
             intp_value = tab[n - 1];
+        } else if( i== n){
+            intp_value = xmax;
         } else {
             logger.error("intp: index i = " + i + " (ir=" + ir + ") out of range\n");
             System.exit(-1);

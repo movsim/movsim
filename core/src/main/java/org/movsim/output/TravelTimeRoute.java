@@ -144,21 +144,21 @@ public class TravelTimeRoute {
     private double checkPassedVehicles(double timeEndOfRoute) {
         final double ttAverage = 0;
         final List<Vehicle> stagedVehicles = new LinkedList<Vehicle>();
-        for (final Map.Entry<Vehicle, Double> entry : vehiclesOnRoute.entrySet()) {
-            final Vehicle vehicle = entry.getKey();
-            final double startTime = entry.getValue();
-            // System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
-            // FIXME roadIds are from the old concept
-            // if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
-            // final double travelTimeOnRoute = timeEndOfRoute - startTime;
-            // dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
-            // // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n",
-            // startTime,
-            // // timeEndOfRoute,travelTimeOnRoute);
-            // stagedVehicles.add(vehicle);
-            // ttAverage += travelTimeOnRoute;
-            // }
-        }
+//        for (final Map.Entry<Vehicle, Double> entry : vehiclesOnRoute.entrySet()) {
+//            final Vehicle vehicle = entry.getKey();
+//            final double startTime = entry.getValue();
+//            System.out.printf("consider vehicle ... roadId=%d, pos=%.4f\n", veh.getRoadId(), veh.getPosition());
+//            FIXME roadIds are from the old concept
+//            if (vehicle.getRoadId() == endId && vehicle.getMidPosition() > endPosition) {
+//                final double travelTimeOnRoute = timeEndOfRoute - startTime;
+//                dataPoints.add(new XYDataPoint(timeEndOfRoute, travelTimeOnRoute));
+//                // System.out.printf("vehicle with finished traveltime route: startTime=%.4f, endTime=%.4f, tt=%.4f\n",
+//                startTime,
+//                // timeEndOfRoute,travelTimeOnRoute);
+//                stagedVehicles.add(vehicle);
+//                ttAverage += travelTimeOnRoute;
+//            }
+//        }
         for (final Vehicle vehicle : stagedVehicles) {
             vehiclesOnRoute.remove(vehicle);
             // System.out.printf("remove vehicle at x=%.2f from route map", vehicle.getPosition());

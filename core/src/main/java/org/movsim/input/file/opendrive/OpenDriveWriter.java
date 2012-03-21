@@ -402,7 +402,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         }
     }
 
-    private final RoadSegment aPredecessor(RoadSegment roadSegment) {
+    private final static RoadSegment aPredecessor(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
@@ -413,7 +413,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         return null;
     }
 
-    private final RoadSegment aSuccessor(RoadSegment roadSegment) {
+    private final static RoadSegment aSuccessor(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
@@ -424,7 +424,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         return null;
     }
 
-    private final String predecessorId(RoadSegment roadSegment) {
+    private final static String predecessorId(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sourceRoadSegment = roadSegment.sourceRoadSegment(lane);
@@ -435,7 +435,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         return null;
     }
 
-    private final String predecessorId2(RoadSegment roadSegment) {
+    private final static String predecessorId2(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         String prevId = null;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
@@ -451,7 +451,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         return prevId;
     }
 
-    private final String successorId(RoadSegment roadSegment) {
+    private final static String successorId(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {
             final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane);
@@ -462,7 +462,7 @@ public class OpenDriveWriter extends XMLWriterBase {
         return null;
     }
 
-    private final String successorId2(RoadSegment roadSegment) {
+    private final static String successorId2(RoadSegment roadSegment) {
         final int laneCount = roadSegment.laneCount();
         String prevId = null;
         for (int lane = Lane.LANE1; lane < laneCount; ++lane) {

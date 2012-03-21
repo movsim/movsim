@@ -26,7 +26,6 @@
 
 package org.movsim.viewer.graphics;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
 
@@ -101,8 +100,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     @Override
     public void reset() {
         super.reset();
-        setSleepTime(INITIAL_SLEEP_TIME);
-        initialScale = 1.0;
         isInitialSpeedUp = false;
         vehicleToHighlightId = -1;
         forceRepaintBackground();
@@ -125,61 +122,57 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case ONRAMPFILE: // TODO rg path
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("onramp", path);
-            // initialScale = 1;
-            // setScale(initialScale);
-            // inInitialSpeedUp = false;
+            initGraphicSettings();
             break;
         case OFFRAMPFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("offramp", path);
+            initGraphicSettings();
             break;
         case STARTSTOPFILE:
             path = ".." + File.separator + "sim" + File.separator + "bookScenarioStartStop" + File.separator;
             simulator.loadScenarioFromXml("startStop_IDM", path);
+            initGraphicSettings();
             break;
         case CLOVERLEAFFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("cloverleaf", path);
+            initGraphicSettings();
             break;
         case LANECLOSINGFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("laneclosure", path);
+            initGraphicSettings();
             break;
         case TRAFFICLIGHTFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("trafficlight", path);
+            initGraphicSettings();
             break;
         case SPEEDLIMITFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("speedlimit", path);
+            initGraphicSettings();
             break;
         case RINGROADONELANEFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_1lane", path);
+            initGraphicSettings();
             break;
         case RINGROADTWOLANESFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_2lanes", path);
+            initGraphicSettings();
             break;
         case FLOWCONSERVINGBOTTLENECK:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("flow_conserving_bottleneck", path);
+            initGraphicSettings();
             break;
         case VASALOPPET:
             path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
-            setSleepTime(0);
-            setVmaxForColorSpectrum(40);
-            setxOffset(400);
-            setyOffset(700);
-            roadLineColor = Color.LIGHT_GRAY;
-            roadEdgeColor = Color.DARK_GRAY;
-            backgroundColor = Color.WHITE;
-            initialScale = 0.8;
-            setScale(initialScale);
-            for (RoadSegment segment: roadNetwork) {
-                segment.roadMapping().setRoadColor(Color.WHITE);
-            }
+            initGraphicSettings();
             break;
         default:
             return;
@@ -188,6 +181,16 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         forceRepaintBackground();
         this.scenario = scenario;
         start();
+    }
+
+    private void initGraphicSettings() {
+        setProperties(loadProperties());
+        initGraphicConfigFieldsFromProperties();
+        resetScaleAndOffset();
+
+        for (RoadSegment segment : roadNetwork) {
+            segment.roadMapping().setRoadColor(roadColor);
+        }
     }
 
 }

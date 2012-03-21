@@ -37,6 +37,7 @@ import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.ConversionUtilities;
 
+@SuppressWarnings("synthetic-access")
 class VehicleTipWindow extends Window {
 
     private static final long serialVersionUID = 1L;

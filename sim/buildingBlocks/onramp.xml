@@ -28,7 +28,7 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42" crash_exit="false">
-        <TRAFFIC_COMPOSITION write_fund_diagrams="false">
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC1" fraction="0.9" relative_v0_randomization="0.1" />
             <VEHICLE_TYPE label="ACC2" fraction="0.1" relative_v0_randomization="0.1" />
         </TRAFFIC_COMPOSITION>
@@ -40,9 +40,9 @@
             <DETECTORS />
         </ROAD>
         <ROAD id="4">
-            <TRAFFIC_COMPOSITION write_fund_diagrams="false">
-                <VEHICLE_TYPE label="ACC1" fraction="0.96" relative_v0_randomization="0.1" />
-                <!-- <VEHICLE_TYPE label="ACC2" fraction="0.04" relative_v0_randomization="0.1" /> -->
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="ACC1" fraction="0.98" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="ACC2" fraction="0.02" relative_v0_randomization="0.1" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE>
