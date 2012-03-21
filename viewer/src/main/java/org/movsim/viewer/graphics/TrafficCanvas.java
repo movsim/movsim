@@ -39,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import org.movsim.input.ProjectMetaData;
@@ -150,7 +151,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
     protected enum VehicleColorMode {
-        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_COLOR, VEHICLE_LABEL_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
+        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_LABEL_COLOR, VEHICLE_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
     }
 
     /** Color mode displayed on startup */
@@ -162,6 +163,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private Color[] velocityColors;
     private Color[] accelerationColors;
+    protected Hashtable<String, Color> labelColors;
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
 
@@ -234,8 +236,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // now load specific project properties
             String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
             String projectName = ProjectMetaData.getInstance().getProjectName();
-            System.out.println("path :"+path);
-            System.out.println("proj: "+projectName);
+            System.out.println("path :" + path);
+            System.out.println("proj: " + projectName);
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
                 final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
                         + ".properties");
@@ -405,9 +407,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             color = Color.BLACK;
             break;
         case VEHICLE_LABEL_COLOR:
-            // String label = vehicle.getLabel();
-            // color = labelColors.get(label); //TODO put a color for each prototype in a HashMap
-            color = Color.GREEN;
+            String label = vehicle.getLabel();
+            color = labelColors.get(label);
             break;
         default:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
