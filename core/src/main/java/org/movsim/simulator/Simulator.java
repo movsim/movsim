@@ -112,7 +112,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set its input data accordingly
         final Map<String, RoadInput> roadInputMap = simInput.getRoadInput();
         if (loadedRoadNetwork == false && roadInputMap.size() == 1) {
-            defaultTestingRoadMapping(roadInputMap); // TODO rg: This has to be corrected/deleted at some point
+            defaultTestingRoadMapping(roadInputMap);
         } else {
             matchRoadSegmentsAndRoadInput(roadInputMap);
         }
@@ -196,8 +196,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private void defaultTestingRoadMapping(Map<String, RoadInput> roadInputMap) {
         logger.warn("Simulation with test network");
         final RoadInput roadinput = roadInputMap.values().iterator().next();
-        final int laneCount = 1;// roadinput.getLanes();
-        final double roadLength = 1500;// roadinput.getRoadLength();
+        final int laneCount = 1;
+        final double roadLength = 1500;
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
         addInputToRoadSegment(roadSegment, roadinput, vehGenerator);
