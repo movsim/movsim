@@ -234,11 +234,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // now load specific project properties
             String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
             String projectName = ProjectMetaData.getInstance().getProjectName();
+            System.out.println("path :"+path);
+            System.out.println("proj: "+projectName);
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
                 final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
                         + ".properties");
-                defaultProperties.load(inputStream);
-                inputStream.close();
+                if (inputStream != null) {
+                    defaultProperties.load(inputStream);
+                    inputStream.close();
+                }
             } else {
                 InputStream in = new FileInputStream(path + projectName + ".properties");
                 applicationProps.load(in);
