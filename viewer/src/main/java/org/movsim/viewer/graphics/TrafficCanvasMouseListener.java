@@ -26,6 +26,7 @@
 package org.movsim.viewer.graphics;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -80,12 +81,25 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         }
         for (final RoadSegment roadSegment : roadNetwork) {
             if (roadSegment.trafficLights() != null) {
-            for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-                // check if the user has clicked on a traffic light, if they have then change the
-                // traffic light to the next color
-                // TODO need to check that the mouse is actually in the traffic light
-                trafficLight.nextState();
-                trafficCanvas.repaint();
+                final RoadMapping roadMapping = roadSegment.roadMapping();
+                for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
+                    final Rectangle trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
+                    // check if the user has clicked on a traffic light, if they have then change the
+                    // traffic light to the next color
+                    final Point point = e.getPoint();
+                    final Point2D transformedPoint = new Point2D.Float();
+                    final GeneralPath path = new GeneralPath();
+                    try {
+                        // convert from mouse coordinates to canvas coordinates
+                        trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
+                    } catch (final NoninvertibleTransformException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
+                    if (trafficLightRect.contains(transformedPoint)) {
+                        trafficLight.nextState();
+                        trafficCanvas.repaint();
+                    }
                 }
             }
         }

@@ -522,7 +522,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         if (drawRoadId) {
             drawRoadSectionIds(g);
         }
-
     }
 
     /**
@@ -615,7 +614,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
             g.setColor(Color.DARK_GRAY);
             final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
-            g.fillRect((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
+            g.fill(trafficLightRect(roadMapping, trafficLight));
             switch (trafficLight.status()) {
             case TrafficLight.GREEN_LIGHT:
                 g.setColor(Color.GREEN);
