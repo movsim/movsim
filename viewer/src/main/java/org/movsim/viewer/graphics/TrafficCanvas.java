@@ -31,6 +31,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
@@ -593,6 +594,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
+    public static Rectangle trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
+        final int offset = -(int) ((roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth());
+        final int size = (int) (2 * roadMapping.laneWidth());
+        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
+        final Rectangle rect = new Rectangle((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
+        return rect;
+    }
+
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
         if (roadSegment.trafficLights() == null) {
             return;
@@ -607,14 +616,19 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             g.setColor(Color.DARK_GRAY);
             final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
             g.fillRect((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
-            if (trafficLight.isGreen()) {
+            switch (trafficLight.status()) {
+            case TrafficLight.GREEN_LIGHT:
                 g.setColor(Color.GREEN);
-            } else if (trafficLight.isRed()) {
-                g.setColor(Color.RED);
-            } else if (trafficLight.isRedGreen()) {
-                g.setColor(Color.ORANGE);
-            } else {
+                break;
+            case TrafficLight.GREEN_RED_LIGHT:
                 g.setColor(Color.YELLOW);
+                break;
+            case TrafficLight.RED_LIGHT:
+                g.setColor(Color.RED);
+                break;
+            case TrafficLight.RED_GREEN_LIGHT:
+                g.setColor(Color.ORANGE);
+                break;
             }
             g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
         }
@@ -623,12 +637,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawSpeedLimits(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             drawSpeedLimitsOnRoad(g, roadSegment);
-        }
-    }
-
-    private void drawSlopes(Graphics2D g) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            drawSlopesOnRoad(g, roadSegment);
         }
     }
 
@@ -680,6 +688,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
                 g2.draw(line);
             }
+        }
+    }
+
+    private void drawSlopes(Graphics2D g) {
+        for (final RoadSegment roadSegment : roadNetwork) {
+            drawSlopesOnRoad(g, roadSegment);
         }
     }
 
@@ -762,7 +776,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            RoadMapping.PosTheta posTheta;
+            final RoadMapping.PosTheta posTheta;
 
             // draw the road segment source, if there is one
             final TrafficSource trafficSource = roadSegment.getTrafficSource();
@@ -792,7 +806,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            RoadMapping.PosTheta posTheta;
+            final RoadMapping.PosTheta posTheta;
 
             // draw the road segment sink, if there is one
             final TrafficSink sink = roadSegment.sink();
