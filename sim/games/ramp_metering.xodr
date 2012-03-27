@@ -21,9 +21,6 @@
                     <lane id="-2" type="driving" level="false">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
-                    <lane id="-3" type="driving" level="false">
-                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
                 </right>
             </laneSection>
         </lanes>
@@ -54,13 +51,7 @@
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
-                    <lane id="-3" type="driving" level="false">
-                        <link>
-                            <predecessor id="-3" />
-                        </link>
-                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
-                    <lane id="-4" type="mwyExit" level="false">
+                    <lane id="-3" type="mwyExit" level="false">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </right>
@@ -83,21 +74,12 @@
                     <lane id="-1" type="driving" level="false">
                         <link>
                             <predecessor id="-1" />
-                            <successor id="-1" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                     <lane id="-2" type="driving" level="false">
                         <link>
                             <predecessor id="-2" />
-                            <successor id="-2" />
-                        </link>
-                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
-                    <lane id="-3" type="driving" level="false">
-                        <link>
-                            <predecessor id="-3" />
-                            <successor id="-3" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
@@ -105,13 +87,12 @@
             </laneSection>
         </lanes>
     </road>
-    <road id="25" name="R25" length="1417.0" junction="-1">
+    <road id="25" name="R25" length="1412.0" junction="-1">
         <link>
-            <predecessor elementType="road" elementId="24" contactPoint="end" />
             <successor elementType="road" elementId="26" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="05" y="522.5" hdg="-0.0" length="1417.0">
+            <geometry s="0.0" x="0.0" y="522.5" hdg="-0.0" length="1417.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -150,7 +131,7 @@
             <successor elementType="road" elementId="27" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1417.0" y="522.5" hdg="-0.0" length="250.0">
+            <geometry s="0.0" x="1412.0" y="522.5" hdg="-0.0" length="250.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -188,7 +169,7 @@
             <predecessor elementType="road" elementId="26" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1667.0" y="522.5" hdg="-0.0" length="583.0">
+            <geometry s="0.0" x="1662.0" y="522.5" hdg="-0.0" length="583.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -224,7 +205,7 @@
             <successor elementType="road" elementId="26" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="542.5" y="1417.0" hdg="1.570796" length="1374.446786">
+            <geometry s="0.0" x="537.5" y="1417.0" hdg="1.570796" length="1374.446786">
                 <!-- hdgDegrees="90.0"-->
                 <arc curvature="-0.001143" />
                 <!-- radius="875.0"-->
@@ -235,7 +216,7 @@
                 <right>
                     <lane id="-1" type="driving" level="false">
                         <link>
-                            <predecessor id="-4" />
+                            <predecessor id="-3" />
                             <successor id="-4" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
@@ -246,10 +227,9 @@
     </road>
     <junction id="1001" name="">
         <connection id="0" incomingRoad="37" connectingRoad="2" contactPoint="start">
-            <laneLink from="-4" to="-1" />
+            <laneLink from="-3" to="-1" />
         </connection>
         <connection id="1" incomingRoad="3" connectingRoad="2" contactPoint="start">
-            <laneLink from="-3" to="-3" />
             <laneLink from="-2" to="-2" />
             <laneLink from="-1" to="-1" />
         </connection>

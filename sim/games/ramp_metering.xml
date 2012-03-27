@@ -8,7 +8,7 @@
                 <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1"/>
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1"/>
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1"/>
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <VEHICLE label="Obstacle" length="0">
@@ -45,7 +45,6 @@
         </ROAD>
         <ROAD id="37">
             <INITIAL_CONDITIONS/>
-            <TRAFFIC_SOURCE/>
             <TRAFFIC_LIGHTS>
                 <!-- zero time period means that light will not change automatically from that color -->
                 <TRAFFIC_LIGHT x="1200" green_time="0" green_red_time="0" red_time="0" red_green_time="0" phase_shift="0"/>
