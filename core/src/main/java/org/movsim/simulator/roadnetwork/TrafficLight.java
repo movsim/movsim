@@ -289,67 +289,12 @@ public class TrafficLight {
     }
 
     /**
-     * Checks if is green.
-     * 
-     * @return true, if is green
-     */
-    public boolean isGreen() {
-        return (status == GREEN_LIGHT);
-    }
-
-    /**
-     * Checks if is green red.
-     * 
-     * @return true, if is green red
-     */
-    public boolean isGreenRed() {
-        return (status == GREEN_RED_LIGHT);
-    }
-
-    /**
-     * Checks if is red.
-     * 
-     * @return true, if is red
-     */
-    public boolean isRed() {
-        return (status == RED_LIGHT);
-    }
-
-    /**
-     * Checks if is red green.
-     * 
-     * @return true, if is red green
-     */
-    public boolean isRedGreen() {
-        return (status == RED_GREEN_LIGHT);
-    }
-
-    /**
      * Status.
      * 
      * @return the int
      */
     public int status() {
         return status;
-    }
-
-    /**
-     * Gets the status.
-     * 
-     * @return the status
-     */
-    String getStatus() {
-        switch (status) {
-        case GREEN_LIGHT:
-            return "green";
-        case GREEN_RED_LIGHT:
-            return "green_red";
-        case RED_LIGHT:
-            return "red";
-        case RED_GREEN_LIGHT:
-            return "red_green";
-        }
-        return "error: not defined!";
     }
 
     public void setRelativeRedPhase(double initRelativeRedPhase) {
@@ -369,7 +314,6 @@ public class TrafficLight {
 
         initialize();
         status = oldStatus;
-
     }
 
     public double getRelativeRedPhase() {
