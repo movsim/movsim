@@ -36,6 +36,7 @@ import java.awt.geom.Point2D;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
@@ -76,6 +77,17 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
+        }
+        for (final RoadSegment roadSegment : roadNetwork) {
+            if (roadSegment.trafficLights() != null) {
+            for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
+                // check if the user has clicked on a traffic light, if they have then change the
+                // traffic light to the next color
+                // TODO need to check that the mouse is actually in the traffic light
+                trafficLight.nextState();
+                trafficCanvas.repaint();
+                }
+            }
         }
     }
 
@@ -118,6 +130,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseEntered(MouseEvent e) {
+        System.out.println("SimCanvas mouseEntered"); //$NON-NLS-1$
 
     }
 

@@ -46,7 +46,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     static final long serialVersionUID = 1L;
 
     public static enum Scenario {
-        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE, SPEEDLIMITFILE, RINGROADONELANEFILE, RINGROADTWOLANESFILE, FLOWCONSERVINGBOTTLENECK, VASALOPPET
+        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE,
+        SPEEDLIMITFILE, RINGROADONELANEFILE, RINGROADTWOLANESFILE, FLOWCONSERVINGBOTTLENECK,
+        RAMPMETERING,
+        VASALOPPET
     }
 
     private Scenario scenario = Scenario.NONE;
@@ -171,6 +174,11 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case FLOWCONSERVINGBOTTLENECK:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("flow_conserving_bottleneck", path);
+            initGraphicSettings();
+            break;
+        case RAMPMETERING:
+            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
+            simulator.loadScenarioFromXml("ramp_metering", path);
             initGraphicSettings();
             break;
         case VASALOPPET:

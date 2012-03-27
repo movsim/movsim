@@ -284,6 +284,20 @@ public class MovSimMenu extends JPanel {
         scenarioMenu.add(menuItemRingRoadTwoLanes);
 
         scenarioMenu.addSeparator();
+        final JMenuItem menuItemGameRampMetering = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("GameRampMetering")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.RAMPMETERING);
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemGameRampMetering);
+
+        scenarioMenu.addSeparator();
         final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(resourceBundle.getString("Vasaloppet")) {
 
             private static final long serialVersionUID = 4633365854029111923L;
