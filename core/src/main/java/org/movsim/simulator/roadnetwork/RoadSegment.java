@@ -162,7 +162,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return this road segment's id
      */
-    final int id() {
+    public final int id() {
         return id;
     }
 
