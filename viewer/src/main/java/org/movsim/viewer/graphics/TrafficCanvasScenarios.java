@@ -184,6 +184,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case ROUTING:
             path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
             simulator.loadScenarioFromXml("routing", path);
+            vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
             initGraphicSettings();
             break;
         case VASALOPPET:
@@ -227,5 +228,4 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             labelColors.put(prototype, color);
         }
     }
-
 }
