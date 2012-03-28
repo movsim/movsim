@@ -76,7 +76,7 @@ public class TrafficLightApproaching {
 
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
-        } else if (!trafficLight.isGreen()) {
+        } else if  (trafficLight.status() != TrafficLight.GREEN_LIGHT) {
             // TODO define it as parameter ("range of sight" or so) ?!
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
@@ -94,7 +94,7 @@ public class TrafficLightApproaching {
                 final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
                 final double comfortBrakeDecel = 4;
                 final double brakeDist = (speed * speed) / (2 * bKinMax);
-                if (trafficLight.isGreenRed()
+                if (trafficLight.status() == TrafficLight.GREEN_RED_LIGHT
                         && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
                                 - me.getFrontPosition()))) {
                     // ignore traffic light

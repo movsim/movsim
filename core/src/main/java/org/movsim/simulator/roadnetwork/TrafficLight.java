@@ -133,21 +133,50 @@ public class TrafficLight {
         // logger.debug("update at time = {}, status = {}", time, status);
         // logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
 
-        if (currentCycleTime > greenTimePeriod) {
+        // if any color time period is zero then the light will not automatically change from that color
+        if (greenTimePeriod != 0.0 && currentCycleTime > greenTimePeriod) {
             status = GREEN_RED_LIGHT;
         }
-        if (currentCycleTime > greenTimePeriod + greenRedTimePeriod) {
+        if (greenRedTimePeriod != 0.0 && currentCycleTime > greenTimePeriod + greenRedTimePeriod) {
             status = RED_LIGHT;
         }
-        if (currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
+        if (redTimePeriod != 0.0 && currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
             status = RED_GREEN_LIGHT;
         }
-        if (currentCycleTime >= totalCycleTime) {
+        if (redGreenTimePeriod != 0.0 && currentCycleTime >= totalCycleTime) {
             status = GREEN_LIGHT;
             currentCycleTime -= totalCycleTime;
         }
 
         lastUpdateTime = simulationTime;
+    }
+
+    /**
+     * Set the traffic light to its next state.
+     * 
+     * @param simulationTime
+     *            current simulation time, seconds
+     */
+    public void nextState() {
+        oldStatus = status;
+        switch (status) {
+        case GREEN_LIGHT:
+            status = GREEN_RED_LIGHT;
+            currentCycleTime = greenTimePeriod;
+            break;
+        case GREEN_RED_LIGHT:
+            status = RED_LIGHT;
+            currentCycleTime = greenTimePeriod + greenRedTimePeriod;
+            break;
+        case RED_LIGHT:
+            status = RED_GREEN_LIGHT;
+            currentCycleTime = greenTimePeriod + greenRedTimePeriod + redTimePeriod;
+            break;
+        case RED_GREEN_LIGHT:
+            status = GREEN_LIGHT;
+            currentCycleTime = 0.0;
+            break;
+        }
     }
 
     // boolean redLightJustReleased(){
@@ -260,67 +289,12 @@ public class TrafficLight {
     }
 
     /**
-     * Checks if is green.
-     * 
-     * @return true, if is green
-     */
-    public boolean isGreen() {
-        return (status == GREEN_LIGHT);
-    }
-
-    /**
-     * Checks if is green red.
-     * 
-     * @return true, if is green red
-     */
-    public boolean isGreenRed() {
-        return (status == GREEN_RED_LIGHT);
-    }
-
-    /**
-     * Checks if is red.
-     * 
-     * @return true, if is red
-     */
-    public boolean isRed() {
-        return (status == RED_LIGHT);
-    }
-
-    /**
-     * Checks if is red green.
-     * 
-     * @return true, if is red green
-     */
-    public boolean isRedGreen() {
-        return (status == RED_GREEN_LIGHT);
-    }
-
-    /**
      * Status.
      * 
      * @return the int
      */
     public int status() {
         return status;
-    }
-
-    /**
-     * Gets the status.
-     * 
-     * @return the status
-     */
-    String getStatus() {
-        switch (status) {
-        case GREEN_LIGHT:
-            return "green";
-        case GREEN_RED_LIGHT:
-            return "green_red";
-        case RED_LIGHT:
-            return "red";
-        case RED_GREEN_LIGHT:
-            return "red_green";
-        }
-        return "error: not defined!";
     }
 
     public void setRelativeRedPhase(double initRelativeRedPhase) {
@@ -340,7 +314,6 @@ public class TrafficLight {
 
         initialize();
         status = oldStatus;
-
     }
 
     public double getRelativeRedPhase() {

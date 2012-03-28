@@ -26,12 +26,16 @@
 
 package org.movsim.viewer.graphics;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
+import java.util.Hashtable;
+import java.util.Set;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.vehicles.VehicleGenerator;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -42,7 +46,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     static final long serialVersionUID = 1L;
 
     public static enum Scenario {
-        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE, SPEEDLIMITFILE, RINGROADONELANEFILE, RINGROADTWOLANESFILE, FLOWCONSERVINGBOTTLENECK, VASALOPPET
+        NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE,
+        SPEEDLIMITFILE, RINGROADONELANEFILE, RINGROADTWOLANESFILE, FLOWCONSERVINGBOTTLENECK,
+        RAMPMETERING,
+        VASALOPPET
     }
 
     private Scenario scenario = Scenario.NONE;
@@ -169,6 +176,11 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             simulator.loadScenarioFromXml("flow_conserving_bottleneck", path);
             initGraphicSettings();
             break;
+        case RAMPMETERING:
+            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
+            simulator.loadScenarioFromXml("ramp_metering", path);
+            initGraphicSettings();
+            break;
         case VASALOPPET:
             path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
@@ -190,6 +202,24 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         for (RoadSegment segment : roadNetwork) {
             segment.roadMapping().setRoadColor(roadColor);
+        }
+
+        VehicleGenerator vehicleGenerator = simulator.getVehicleGenerator();
+        Set<String> prototypeLabels = vehicleGenerator.prototypes().keySet();
+        // Random random = new Random();
+        labelColors = new Hashtable<String, Color>();
+        for (String prototype : prototypeLabels) {
+            int R = (int) (Math.random() * 256);
+            int G = (int) (Math.random() * 256);
+            int B = (int) (Math.random() * 256);
+            Color color = new Color(R, G, B);
+
+            // final float hue = random.nextFloat();
+            // final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
+            // final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
+            // Color color = Color.getHSBColor(hue, saturation, luminance);
+
+            labelColors.put(prototype, color);
         }
     }
 

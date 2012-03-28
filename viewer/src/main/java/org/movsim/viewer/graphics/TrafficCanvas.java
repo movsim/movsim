@@ -31,6 +31,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
@@ -39,6 +40,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Hashtable;
 import java.util.Properties;
 
 import org.movsim.input.ProjectMetaData;
@@ -150,7 +152,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
     protected enum VehicleColorMode {
-        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_COLOR, VEHICLE_LABEL_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
+        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_LABEL_COLOR, VEHICLE_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
     }
 
     /** Color mode displayed on startup */
@@ -162,6 +164,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private Color[] velocityColors;
     private Color[] accelerationColors;
+    protected Hashtable<String, Color> labelColors;
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
 
@@ -234,11 +237,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // now load specific project properties
             String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
             String projectName = ProjectMetaData.getInstance().getProjectName();
+            System.out.println("path :" + path);
+            System.out.println("proj: " + projectName);
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
                 final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
                         + ".properties");
-                defaultProperties.load(inputStream);
-                inputStream.close();
+                if (inputStream != null) {
+                    defaultProperties.load(inputStream);
+                    inputStream.close();
+                }
             } else {
                 InputStream in = new FileInputStream(path + projectName + ".properties");
                 applicationProps.load(in);
@@ -401,9 +408,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             color = Color.BLACK;
             break;
         case VEHICLE_LABEL_COLOR:
-            // String label = vehicle.getLabel();
-            // color = labelColors.get(label); //TODO put a color for each prototype in a HashMap
-            color = Color.GREEN;
+            String label = vehicle.getLabel();
+            color = labelColors.get(label);
             break;
         default:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
@@ -516,7 +522,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         if (drawRoadId) {
             drawRoadSectionIds(g);
         }
-
     }
 
     /**
@@ -588,6 +593,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
+    public static Rectangle trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
+        final int offset = -(int) ((roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth());
+        final int size = (int) (2 * roadMapping.laneWidth());
+        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
+        final Rectangle rect = new Rectangle((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
+        return rect;
+    }
+
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
         if (roadSegment.trafficLights() == null) {
             return;
@@ -601,15 +614,20 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
             g.setColor(Color.DARK_GRAY);
             final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
-            g.fillRect((int) posTheta.x - size / 2, (int) posTheta.y - size / 2, size, size);
-            if (trafficLight.isGreen()) {
+            g.fill(trafficLightRect(roadMapping, trafficLight));
+            switch (trafficLight.status()) {
+            case TrafficLight.GREEN_LIGHT:
                 g.setColor(Color.GREEN);
-            } else if (trafficLight.isRed()) {
-                g.setColor(Color.RED);
-            } else if (trafficLight.isRedGreen()) {
-                g.setColor(Color.ORANGE);
-            } else {
+                break;
+            case TrafficLight.GREEN_RED_LIGHT:
                 g.setColor(Color.YELLOW);
+                break;
+            case TrafficLight.RED_LIGHT:
+                g.setColor(Color.RED);
+                break;
+            case TrafficLight.RED_GREEN_LIGHT:
+                g.setColor(Color.ORANGE);
+                break;
             }
             g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
         }
@@ -618,12 +636,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawSpeedLimits(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             drawSpeedLimitsOnRoad(g, roadSegment);
-        }
-    }
-
-    private void drawSlopes(Graphics2D g) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            drawSlopesOnRoad(g, roadSegment);
         }
     }
 
@@ -675,6 +687,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
                 g2.draw(line);
             }
+        }
+    }
+
+    private void drawSlopes(Graphics2D g) {
+        for (final RoadSegment roadSegment : roadNetwork) {
+            drawSlopesOnRoad(g, roadSegment);
         }
     }
 
@@ -757,7 +775,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            RoadMapping.PosTheta posTheta;
+            final RoadMapping.PosTheta posTheta;
 
             // draw the road segment source, if there is one
             final TrafficSource trafficSource = roadSegment.getTrafficSource();
@@ -787,7 +805,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            RoadMapping.PosTheta posTheta;
+            final RoadMapping.PosTheta posTheta;
 
             // draw the road segment sink, if there is one
             final TrafficSink sink = roadSegment.sink();

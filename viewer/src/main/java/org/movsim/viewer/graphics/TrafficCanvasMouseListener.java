@@ -26,6 +26,7 @@
 package org.movsim.viewer.graphics;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -36,6 +37,7 @@ import java.awt.geom.Point2D;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
@@ -76,6 +78,30 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
+        }
+        for (final RoadSegment roadSegment : roadNetwork) {
+            if (roadSegment.trafficLights() != null) {
+                final RoadMapping roadMapping = roadSegment.roadMapping();
+                for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
+                    final Rectangle trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
+                    // check if the user has clicked on a traffic light, if they have then change the
+                    // traffic light to the next color
+                    final Point point = e.getPoint();
+                    final Point2D transformedPoint = new Point2D.Float();
+                    final GeneralPath path = new GeneralPath();
+                    try {
+                        // convert from mouse coordinates to canvas coordinates
+                        trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
+                    } catch (final NoninvertibleTransformException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
+                    if (trafficLightRect.contains(transformedPoint)) {
+                        trafficLight.nextState();
+                        trafficCanvas.repaint();
+                    }
+                }
+            }
         }
     }
 
@@ -118,6 +144,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseEntered(MouseEvent e) {
+        System.out.println("SimCanvas mouseEntered"); //$NON-NLS-1$
 
     }
 

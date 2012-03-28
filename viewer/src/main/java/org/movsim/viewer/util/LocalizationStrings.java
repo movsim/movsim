@@ -89,6 +89,7 @@ public class LocalizationStrings extends ListResourceBundle {
             { "CityInterSection", "city intersection" },
             { "RingRoad", "ring road with one lane" },
             { "RingRoad2Lanes", "ring with road two lanes" },
+            { "GameRampMetering", "ramp metering game" },
             { "Vasaloppet", "Vasaloppet start phase simulation" },
             { "VasaloppetThreeWaves", "Vasaloppet start phase simulation with 3 waves" },
             { "VasaloppetTenWaves", "Vasaloppet start phase simulation with 10 waves" },

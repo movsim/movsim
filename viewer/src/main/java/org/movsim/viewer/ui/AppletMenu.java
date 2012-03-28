@@ -41,8 +41,8 @@ public class AppletMenu extends JPanel {
         final JMenu outputMenu = outputMenu();
 
         menuBar.add(scenarioMenu);
-        menuBar.add(modelMenu);
-        menuBar.add(outputMenu);
+        // menuBar.add(modelMenu);
+        // menuBar.add(outputMenu);
         menuBar.add(viewMenu);
         menuBar.add(helpMenu);
 
@@ -284,20 +284,20 @@ public class AppletMenu extends JPanel {
 
     private JMenu viewMenu() {
         final JMenu viewMenu = new JMenu((String) resourceBundle.getObject("ViewMenu"));
-        final JMenu colorVehicles = new JMenu(resourceBundle.getString("VehicleColors"));
-
-        final JMenuItem menuItemVehicleColorSpeedDependant = new JMenuItem(
-                resourceBundle.getString("VehicleColorSpeedDependant"));
-        final JMenuItem menuItemVehicleColorRandom = new JMenuItem(resourceBundle.getString("VehicleColorRandom"));
-        colorVehicles.add(menuItemVehicleColorSpeedDependant);
-        colorVehicles.add(menuItemVehicleColorRandom);
-
-        menuItemVehicleColorSpeedDependant.setEnabled(false);
-        menuItemVehicleColorRandom.setEnabled(false);
-
-        viewMenu.add(colorVehicles);
-
-        viewMenu.addSeparator();
+        // final JMenu colorVehicles = new JMenu(resourceBundle.getString("VehicleColors"));
+        //
+        // final JMenuItem menuItemVehicleColorSpeedDependant = new JMenuItem(
+        // resourceBundle.getString("VehicleColorSpeedDependant"));
+        // final JMenuItem menuItemVehicleColorRandom = new JMenuItem(resourceBundle.getString("VehicleColorRandom"));
+        // colorVehicles.add(menuItemVehicleColorSpeedDependant);
+        // colorVehicles.add(menuItemVehicleColorRandom);
+        //
+        // menuItemVehicleColorSpeedDependant.setEnabled(false);
+        // menuItemVehicleColorRandom.setEnabled(false);
+        //
+        // viewMenu.add(colorVehicles);
+        //
+        // viewMenu.addSeparator();
         final JCheckBoxMenuItem cbDrawRoadIds = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawRoadIds")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
