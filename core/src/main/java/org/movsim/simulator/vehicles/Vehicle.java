@@ -171,7 +171,7 @@ public class Vehicle {
     // Exit Handling
     private int roadSegmentId;
     private double roadSegmentLength;
-    private final int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+    private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
     /**
      * The type of numerical integration.
@@ -729,7 +729,6 @@ public class Vehicle {
             logger.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
             return true;
         }
-
         return false;
     }
 
@@ -924,8 +923,14 @@ public class Vehicle {
         return exitRoadSegmentId;
     }
 
+    /**
+     * Sets the id of the road segment in which this vehicle wishes to exit.
+     */
+    public final void setExitRoadSegmentId(int exitRoadSegmentId) {
+        this.exitRoadSegmentId = exitRoadSegmentId;
+    }
+
     public final double totalTraveledDistance() {
         return totalTraveledDistance;
     }
-
 }

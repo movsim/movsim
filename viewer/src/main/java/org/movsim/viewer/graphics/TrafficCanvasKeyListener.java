@@ -100,7 +100,6 @@ public class TrafficCanvasKeyListener implements KeyListener {
         trafficCanvas.roadNetwork.clear();
         trafficCanvas.simulator.initialize();
         trafficCanvas.reset();
-
     }
 
     public void commandCycleVehicleColors() {
@@ -110,11 +109,11 @@ public class TrafficCanvasKeyListener implements KeyListener {
         // Cycle through the first ... vehicle color modes. This is the only place
         // where the use of an enum for the color mode is somewhat awkward.
         int vcmOrdinal = trafficCanvas.vehicleColorMode.ordinal() + 1;
-        if (vcmOrdinal >= 4) {
+        if (vcmOrdinal > TrafficCanvas.VehicleColorMode.EXIT_COLOR.ordinal()) {
             vcmOrdinal = 0;
         }
         trafficCanvas.vehicleColorMode = VehicleColorMode.values()[vcmOrdinal];
-        logger.debug("VehicleColorMode: {}", trafficCanvas.vehicleColorMode);
+        logger.info("VehicleColorMode: {}", trafficCanvas.vehicleColorMode);
         trafficCanvas.repaint();
     }
 
