@@ -34,6 +34,8 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -80,6 +82,13 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             trafficCanvas.repaint();
         }
         for (final RoadSegment roadSegment : roadNetwork) {
+            // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
+            if (roadSegment.userId().equals("1")) {
+                final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
+                for (final Vehicle vehicle : laneSegment) {
+                    vehicle.setExitRoadSegmentId(laneSegment.sinkLaneSegment().roadSegment().id());
+                }
+            }
             if (roadSegment.trafficLights() != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
