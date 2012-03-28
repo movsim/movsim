@@ -152,12 +152,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
     protected enum VehicleColorMode {
-        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_LABEL_COLOR, VEHICLE_COLOR, HIGHLIGHT_VEHICLE, EXIT_COLOR
+        VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_LABEL_COLOR, VEHICLE_COLOR, EXIT_COLOR, HIGHLIGHT_VEHICLE
     }
 
     /** Color mode displayed on startup */
     protected VehicleColorMode vehicleColorMode = VehicleColorMode.VELOCITY_COLOR;
-
     protected VehicleColorMode vehicleColorModeSave;
 
     double[] velocities;
@@ -226,7 +225,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         Properties applicationProps = null;
         try {
             // create and load default properties
-            Properties defaultProperties = new Properties();
+            final Properties defaultProperties = new Properties();
             final InputStream is = TrafficCanvas.class.getResourceAsStream("/config/defaultviewerconfig.properties");
             defaultProperties.load(is);
             is.close();
@@ -235,10 +234,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             applicationProps = new Properties(defaultProperties);
 
             // now load specific project properties
-            String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
-            String projectName = ProjectMetaData.getInstance().getProjectName();
-            System.out.println("path :" + path);
-            System.out.println("proj: " + projectName);
+            final String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+            final String projectName = ProjectMetaData.getInstance().getProjectName();
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
                 final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
                         + ".properties");
@@ -247,7 +244,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                     inputStream.close();
                 }
             } else {
-                InputStream in = new FileInputStream(path + projectName + ".properties");
+                final InputStream in = new FileInputStream(path + projectName + ".properties");
                 applicationProps.load(in);
                 in.close();
             }
@@ -257,9 +254,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return applicationProps;
-
     }
 
     @Override
@@ -390,10 +385,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             return accelerationColors[accelerationColors.length - 1];
         case EXIT_COLOR:
             color = Color.BLACK;
-            // if (vehicle.exitRoadSegmentId() != Vehicle.EXIT_AT_ROAD_END) {
-            // switch (vehicle.exitRoadSegmentId() % 5) {
-            // case 0:
-            color = Color.WHITE;
+            if (vehicle.exitRoadSegmentId() != Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
+                // switch (vehicle.exitRoadSegmentId() % 5) {
+                // case 0:
+                color = Color.WHITE;
+            }
             break;
         case HIGHLIGHT_VEHICLE:
             color = vehicle.getId() == vehicleToHighlightId ? Color.BLUE : Color.BLACK;
