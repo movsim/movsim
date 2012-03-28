@@ -60,8 +60,6 @@ public class MOBIL {
 
     private double pRef;
 
-    private final Vehicle me;
-
     /**
      * Instantiates a new MOBIL.
      * 
@@ -69,7 +67,6 @@ public class MOBIL {
      *            the vehicle
      */
     public MOBIL(Vehicle vehicle) {
-        this.me = vehicle;
         // TODO handle this case with *no* <MOBIL> xml element
     }
 
@@ -82,7 +79,6 @@ public class MOBIL {
      *            the lane change MOBIL data
      */
     public MOBIL(Vehicle vehicle, LaneChangeMobilData lcMobilData) {
-        this.me = vehicle;
         bSafeRef = bSafe = lcMobilData.getSafeDeceleration();
         biasRightRef = biasRight = lcMobilData.getRightBiasAcceleration();
         gapMin = lcMobilData.getMinimumGap();
@@ -92,7 +88,6 @@ public class MOBIL {
 
     public MOBIL(Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
             double thresholdAcceleration, double rightBiasAcceleration) {
-        this.me = vehicle;
         bSafeRef = bSafe = safeDeceleration;
         biasRightRef = biasRight = rightBiasAcceleration;
         gapMin = minimumGap;
@@ -104,7 +99,7 @@ public class MOBIL {
         return acc <= -bSafe;
     }
 
-    public double calcAccelerationBalance(int direction, RoadSegment roadSegment) {
+    public double calcAccelerationBalance(Vehicle me, int direction, RoadSegment roadSegment) {
 
         // set prospectiveBalance to large negative to indicate no lane change when not safe
         double prospectiveBalance = -Double.MAX_VALUE;
@@ -112,7 +107,7 @@ public class MOBIL {
         final int newLane = currentLane + direction;
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
         if ((newLaneSegment.type() == Lane.Type.ENTRANCE)) {
-            // never change lane into an entrance lane except
+            // never change lane into an entrance lane
             return prospectiveBalance;
         }
 
