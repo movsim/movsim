@@ -8,7 +8,7 @@
                 <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1"/>
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1"/>
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.1" politeness="0.1"/>
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <VEHICLE label="Obstacle" length="0">
@@ -25,7 +25,7 @@
         <ROAD id="1">
             <INITIAL_CONDITIONS/>
             <TRAFFIC_SOURCE logging="false">
-                <INFLOW t="0" q_per_hour="1300" v="24"/>
+                <INFLOW t="0" q_per_hour="800" v="24"/>
             </TRAFFIC_SOURCE>
             <SPEED_LIMITS>
                 <!--   <SPEED_LIMIT x="2600" speedlimit_kmh="80" /> -->
@@ -37,7 +37,7 @@
         <ROAD id="25">
             <INITIAL_CONDITIONS/>
             <TRAFFIC_SOURCE>
-                <INFLOW t="0" q_per_hour="1100"/>
+                <INFLOW t="0" q_per_hour="1200"/>
             </TRAFFIC_SOURCE>
             <SPEED_LIMITS/>
             <TRAFFIC_LIGHTS/>
@@ -47,7 +47,8 @@
             <INITIAL_CONDITIONS/>
             <TRAFFIC_LIGHTS>
                 <!-- zero time period means that light will not change automatically from that color -->
-                <TRAFFIC_LIGHT x="1200" green_time="0" green_red_time="0" red_time="0" red_green_time="0" phase_shift="0"/>
+                <!-- negative time period means that light will not use that color -->
+                <TRAFFIC_LIGHT x="1374" green_time="0" green_red_time="-1" red_time="0" red_green_time="-1" phase_shift="0"/>
             </TRAFFIC_LIGHTS>
         </ROAD>
         <OUTPUT/>
