@@ -48,7 +48,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     public static enum Scenario {
         NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE,
         SPEEDLIMITFILE, RINGROADONELANEFILE, RINGROADTWOLANESFILE, FLOWCONSERVINGBOTTLENECK,
-        RAMPMETERING,
+        RAMPMETERING, ROUTING,
         VASALOPPET
     }
 
@@ -179,6 +179,11 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case RAMPMETERING:
             path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
             simulator.loadScenarioFromXml("ramp_metering", path);
+            initGraphicSettings();
+            break;
+        case ROUTING:
+            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
+            simulator.loadScenarioFromXml("routing", path);
             initGraphicSettings();
             break;
         case VASALOPPET:

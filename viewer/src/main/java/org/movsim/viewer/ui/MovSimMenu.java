@@ -297,6 +297,19 @@ public class MovSimMenu extends JPanel {
         });
         scenarioMenu.add(menuItemGameRampMetering);
 
+        final JMenuItem menuItemGameRouting = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("GameRouting")) {
+
+            private static final long serialVersionUID = 4633365854029111923L;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ROUTING);
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemGameRouting);
+
         scenarioMenu.addSeparator();
         final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(resourceBundle.getString("Vasaloppet")) {
 
