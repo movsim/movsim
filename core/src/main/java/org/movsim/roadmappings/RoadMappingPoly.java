@@ -48,8 +48,8 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
      * 
      * @param laneCount
      */
-    public RoadMappingPoly(int laneCount) {
-        super(laneCount, 0, 0);
+    public RoadMappingPoly(int laneCount, double laneWidth) {
+        super(laneCount, laneWidth, 0, 0);
     }
 
     /**

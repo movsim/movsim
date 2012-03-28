@@ -179,15 +179,26 @@ public abstract class RoadMapping {
      * @param x0
      * @param y0
      */
-    protected RoadMapping(int laneCount, double x0, double y0) {
+    protected RoadMapping(int laneCount, double laneWidth, double x0, double y0) {
         this.laneCount = laneCount;
         this.x0 = x0;
         this.y0 = y0;
         trafficLaneMin = Lane.LANE1;
         trafficLaneMax = laneCount;
-        laneWidth = DEFAULT_LANE_WIDTH;
+        this.laneWidth = laneWidth;
         roadWidth = laneWidth * laneCount;
         roadColor = defaultRoadColor;
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param laneCount
+     * @param x0
+     * @param y0
+     */
+    protected RoadMapping(int laneCount, double x0, double y0) {
+        this(laneCount, DEFAULT_LANE_WIDTH, x0, y0);
     }
 
     /**

@@ -336,7 +336,7 @@ public class OpenDriveHandler extends DefaultHandler {
         if (element.equals("road")) {
             // create a RoadSegment from the parsed road element and add it to the road network
             final int laneCount = road.lanes.laneSection.right.size() + road.lanes.laneSection.left.size();
-            double laneWidth = 0;
+            double laneWidth = 0.0;
             if (road.lanes.laneSection.right.get(0) != null) {
                 laneWidth = road.lanes.laneSection.right.get(0).width;
             } else if (road.lanes.laneSection.left.get(0) != null) {
@@ -362,8 +362,8 @@ public class OpenDriveHandler extends DefaultHandler {
                     throw new SAXException("Unknown geometry for road: " + road.name);
                 }
             } else {
-                roadMapping = new RoadMappingPoly(laneCount);
-                final RoadMappingPoly roadMappingPoly = (RoadMappingPoly) roadMapping;
+                roadMapping = new RoadMappingPoly(laneCount, laneWidth);
+                final RoadMappingPoly roadMappingPoly = (RoadMappingPoly)roadMapping;
                 for (int i = 0; i < road.planView.geometries.size(); ++i) {
                     final Road.PlanView.Geometry geometry = road.planView.geometries.get(i);
                     switch (geometry.type) {
