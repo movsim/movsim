@@ -254,7 +254,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator defaultVehGenerator) {
-        
+
         VehicleGenerator roadVehGenerator = defaultVehGenerator;  
         // set up vehicle generator for roadElement
         final List<TrafficCompositionInputData> roadHeterogeneity = roadInput.getTrafficCompositionInputData();
@@ -264,15 +264,17 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                     roadHeterogeneity, fuelConsumptionModelPool);
             logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
         }
-        
+
         // set up the traffic source
         final TrafficSourceData trafficSourceData = roadInput.getTrafficSourceData();
-        final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
-        final TrafficSource trafficSource = new TrafficSource(roadVehGenerator, roadSegment, inflowTimeSeries);
-        if (trafficSourceData.withLogging()) {
-            trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+        if (trafficSourceData.getInflowTimeSeries().size() != 0) {
+            final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflowTimeSeries());
+            final TrafficSource trafficSource = new TrafficSource(roadVehGenerator, roadSegment, inflowTimeSeries);
+            if (trafficSourceData.withLogging()) {
+                trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+            }
+            roadSegment.setTrafficSource(trafficSource);
         }
-        roadSegment.setTrafficSource(trafficSource);
 
         // set up the traffic lights
         final TrafficLightsInput trafficLightsInput = roadInput.getTrafficLightsInput();
