@@ -95,7 +95,7 @@
             <successor elementType="road" elementId="26" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="0.0" y="522.5" hdg="-0.0" length="1417.0">
+            <geometry s="0.0" x="0.0" y="522.5" hdg="-0.0" length="1412.0">
                 <!-- hdgDegrees="-0.0"-->
                 <line />
             </geometry>
@@ -166,9 +166,6 @@
                 </right>
             </laneSection>
         </lanes>
-        <objects>
-            <tunnel s="25.0" length="30.0" id="R5T1" type="underpass" lighting="0.0" daylight="1.0" />
-        </objects>
     </road>
     <road id="27" name="R27" length="583.0" junction="-1">
         <link>
