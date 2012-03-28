@@ -57,32 +57,30 @@ public class TrafficLight {
 
     /** The status. */
     private int status;
-
     /** The old status. */
     private int oldStatus;
 
+    private int lightCount;
     /** The total cycle time. */
     private double totalCycleTime;
 
     /** The green time period. */
     private double greenTimePeriod;
-
     private final double greenTimePeriodInit;
 
     /** The red time period. */
     private double redTimePeriod;
-
     private final double redTimePeriodInit;
 
     /** The green red time period. */
     private double greenRedTimePeriod;
-
     private final double greenRedTimePeriodInit;
+    private boolean hasGreenRedStatus;
 
     /** The red green time period. */
     private double redGreenTimePeriod;
-
     private final double redGreenTimePeriodInit;
+    private boolean hasRedGreenStatus;
 
     /** The phase shift. */
     private final double phaseShift;
@@ -94,20 +92,46 @@ public class TrafficLight {
     private double lastUpdateTime = 0;
 
     /**
-     * Instantiates a new traffic light.
+     * Constructor.
+     */
+    public TrafficLight(double position, double greenTime, double greenRedTime, double redTime, double redGreenTime, double phaseShift) {
+        this.position = position;
+        this.greenTimePeriod = greenTime;
+        this.redTimePeriod = redTime;
+        this.greenRedTimePeriod = greenRedTime;
+        greenTimePeriodInit = greenTimePeriod;
+        redTimePeriodInit = redTimePeriod;
+        greenRedTimePeriodInit = greenRedTimePeriod;
+        redGreenTimePeriodInit = redGreenTimePeriod;
+        hasGreenRedStatus = true;
+        if (greenRedTimePeriod < 0.0) {
+            greenRedTimePeriod = 0.0;
+            hasGreenRedStatus = false;
+        }
+        hasRedGreenStatus = true;
+        this.redGreenTimePeriod = redGreenTime;
+        if (redGreenTimePeriod < 0.0) {
+            redGreenTimePeriod = 0.0;
+            hasRedGreenStatus = false;
+        }
+        lightCount = hasGreenRedStatus == false && hasRedGreenStatus == false ? 2 : 3;
+        this.phaseShift = phaseShift;
+        initialize();
+    }
+
+    /**
+     * Constructor.
      * 
      * @param inputData
      *            the input data
      */
     public TrafficLight(TrafficLightData inputData) {
-        position = inputData.getX();
-        greenTimePeriodInit = greenTimePeriod = inputData.getGreenTime();
-        redTimePeriodInit = redTimePeriod = inputData.getRedTime();
-        greenRedTimePeriodInit = greenRedTimePeriod = inputData.getGreenRedTimePeriod();
-        redGreenTimePeriodInit = redGreenTimePeriod = inputData.getRedGreenTimePeriod();
-        phaseShift = inputData.getPhaseShift();
-
-        initialize();
+        this(inputData.getX(), 
+            inputData.getGreenTime(),
+            inputData.getGreenRedTimePeriod(),
+            inputData.getRedTime(),
+            inputData.getRedGreenTimePeriod(),
+            inputData.getPhaseShift());
     }
 
     /**
@@ -120,6 +144,13 @@ public class TrafficLight {
         logger.debug("initialize traffic light at pos = {}", position);
     }
 
+    /**
+     * Return the number of lights this traffic light has, can be 1, 2 or 3.
+     * @return
+     */
+    public int lightCount() {
+        return lightCount;
+    }
     /**
      * Update.
      * 
@@ -134,16 +165,16 @@ public class TrafficLight {
         // logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
 
         // if any color time period is zero then the light will not automatically change from that color
-        if (greenTimePeriod != 0.0 && currentCycleTime > greenTimePeriod) {
+        if (greenTimePeriod > 0.0 && currentCycleTime > greenTimePeriod) {
             status = GREEN_RED_LIGHT;
         }
-        if (greenRedTimePeriod != 0.0 && currentCycleTime > greenTimePeriod + greenRedTimePeriod) {
+        if (greenRedTimePeriod > 0.0 && currentCycleTime > greenTimePeriod + greenRedTimePeriod) {
             status = RED_LIGHT;
         }
-        if (redTimePeriod != 0.0 && currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
+        if (redTimePeriod > 0.0 && currentCycleTime > greenTimePeriod + greenRedTimePeriod + redTimePeriod) {
             status = RED_GREEN_LIGHT;
         }
-        if (redGreenTimePeriod != 0.0 && currentCycleTime >= totalCycleTime) {
+        if (redGreenTimePeriod > 0.0 && currentCycleTime >= totalCycleTime) {
             status = GREEN_LIGHT;
             currentCycleTime -= totalCycleTime;
         }
@@ -161,16 +192,26 @@ public class TrafficLight {
         oldStatus = status;
         switch (status) {
         case GREEN_LIGHT:
-            status = GREEN_RED_LIGHT;
-            currentCycleTime = greenTimePeriod;
+            if (hasGreenRedStatus == true) {
+                status = GREEN_RED_LIGHT;
+                currentCycleTime = greenTimePeriod;
+            } else {
+                status = RED_LIGHT;
+                currentCycleTime = greenTimePeriod + greenRedTimePeriod;
+            }
             break;
         case GREEN_RED_LIGHT:
             status = RED_LIGHT;
             currentCycleTime = greenTimePeriod + greenRedTimePeriod;
             break;
         case RED_LIGHT:
-            status = RED_GREEN_LIGHT;
-            currentCycleTime = greenTimePeriod + greenRedTimePeriod + redTimePeriod;
+            if (hasGreenRedStatus == true) {
+                status = RED_GREEN_LIGHT;
+                currentCycleTime = greenTimePeriod + greenRedTimePeriod + redTimePeriod;
+            } else {
+                status = GREEN_LIGHT;
+                currentCycleTime = 0.0;
+            }
             break;
         case RED_GREEN_LIGHT:
             status = GREEN_LIGHT;
@@ -291,7 +332,7 @@ public class TrafficLight {
     /**
      * Status.
      * 
-     * @return the int
+     * @return the status
      */
     public int status() {
         return status;

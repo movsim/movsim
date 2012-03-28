@@ -26,13 +26,13 @@
 package org.movsim.viewer.graphics;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -83,7 +83,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             if (roadSegment.trafficLights() != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-                    final Rectangle trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
+                    final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
                     // check if the user has clicked on a traffic light, if they have then change the
                     // traffic light to the next color
                     final Point point = e.getPoint();
