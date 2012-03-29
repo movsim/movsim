@@ -34,7 +34,7 @@ import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.XmlUtils;
 import org.movsim.input.model.output.RoutesInput;
-import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class SimulationInput {
 
     private final int randomSeed;
 
-    private final List<TrafficCompositionInputData> trafficCompositionInputData;
+    private final List<VehicleTypeInput> vehicleTypeInputs;
 
     private boolean isWithWriteFundamentalDiagrams;
 
@@ -89,7 +89,7 @@ public class SimulationInput {
         }
 
         // default heterogeneity element with vehicle types
-        trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
+        vehicleTypeInputs = new ArrayList<VehicleTypeInput>();
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
 
         // optional for specific road
@@ -99,7 +99,7 @@ public class SimulationInput {
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
-                trafficCompositionInputData.add(new TrafficCompositionInputData(map));
+                vehicleTypeInputs.add(new VehicleTypeInput(map));
             }
         }
 
@@ -177,8 +177,8 @@ public class SimulationInput {
         return withCrashExit;
     }
 
-    public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
-        return trafficCompositionInputData;
+    public List<VehicleTypeInput> getTrafficCompositionInputData() {
+        return vehicleTypeInputs;
     }
 
     public boolean isWithWriteFundamentalDiagrams() {

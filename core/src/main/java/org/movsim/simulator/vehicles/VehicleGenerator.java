@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.movsim.input.InputData;
 import org.movsim.input.model.VehiclesInput;
-import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -65,13 +65,13 @@ public class VehicleGenerator {
      * 
      */
     public VehicleGenerator(double simulationTimestep, VehiclesInput vehiclesInput,
-            List<TrafficCompositionInputData> defaultHeterogenInputData, FuelConsumptionModelPool fuelConsumptionModelPool) {
+            List<VehicleTypeInput> vehicleTypeInputs, FuelConsumptionModelPool fuelConsumptionModelPool) {
         this.simulationTimestep = simulationTimestep;
 
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehiclesInput
                 .getVehicleInput());
 
-        prototypes = createPrototypes(vehInputMap, defaultHeterogenInputData);
+        prototypes = createPrototypes(vehInputMap, vehicleTypeInputs);
 
         isWithReactionTimes = checkForReactionTimes();
 
@@ -84,12 +84,12 @@ public class VehicleGenerator {
      * @return the double
      */
     private HashMap<String, VehiclePrototype> createPrototypes(Map<String, VehicleInput> vehInputMap,
-            List<TrafficCompositionInputData> heterogenInputData) {
+            List<VehicleTypeInput> vehicleTypeInputs) {
         final HashMap<String, VehiclePrototype> prototypes = new HashMap<String, VehiclePrototype>();
 
         double sumFraction = 0;
-        for (final TrafficCompositionInputData heterogen : heterogenInputData) {
-            final String keyName = heterogen.getKeyName();
+        for (final VehicleTypeInput vehicleTypeInput : vehicleTypeInputs) {
+            final String keyName = vehicleTypeInput.getKeyName();
             logger.debug("key name={}", keyName);
             if (!vehInputMap.containsKey(keyName)) {
                 logger.error("no corresponding vehicle found. check vehicle input with label={}", keyName);
@@ -100,17 +100,17 @@ public class VehicleGenerator {
             final LongitudinalModelBase longModel = LongitudinalModelFactory.create(vehLength,
                     vehInput.getAccelerationModelInputData(), simulationTimestep);
             final EquilibriumProperties fundDia = EquilibriumPropertiesFactory.create(vehLength, longModel);
-            final double fraction = heterogen.getFraction();
+            final double fraction = vehicleTypeInput.getFraction();
             logger.debug("fraction = {}", fraction);
 
             sumFraction += fraction;
-            final double relRandomizationV0 = heterogen.getRelativeRandomizationDesiredSpeed();
+            final double relRandomizationV0 = vehicleTypeInput.getRelativeRandomizationDesiredSpeed();
             final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput,
                     relRandomizationV0);
             prototypes.put(keyName, vehProto);
 
         }
-        // normalize heterogeneity fractions
+        // normalize vehicle type fractions
         normalizeFractions(sumFraction, prototypes);
         return prototypes;
     }

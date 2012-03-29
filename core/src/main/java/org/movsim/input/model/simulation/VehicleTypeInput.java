@@ -27,7 +27,7 @@ package org.movsim.input.model.simulation;
 
 import java.util.Map;
 
-public class TrafficCompositionInputData {
+public class VehicleTypeInput {
 
     private final String keyName;
     private final double fraction;
@@ -39,7 +39,7 @@ public class TrafficCompositionInputData {
      * @param map
      *            the map
      */
-    public TrafficCompositionInputData(Map<String, String> map) {
+    public VehicleTypeInput(Map<String, String> map) {
         this.keyName = map.get("label");
         this.fraction = Double.parseDouble(map.get("fraction"));
         System.out.println("rand=" + map.get("relative_v0_randomization") + "     key:" + keyName);
