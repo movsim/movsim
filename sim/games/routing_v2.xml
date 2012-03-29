@@ -9,7 +9,7 @@
                 <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="15.0" s_min="2.0" threshold="0.1" bias_right="0." politeness="0.1" />
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0." politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- trucks -->
