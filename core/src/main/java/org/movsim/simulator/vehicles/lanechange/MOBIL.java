@@ -106,7 +106,7 @@ public class MOBIL {
         final int currentLane = me.getLane();
         final int newLane = currentLane + direction;
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
-        if ((newLaneSegment.type() == Lane.Type.ENTRANCE)) {
+        if (newLaneSegment.type() == Lane.Type.ENTRANCE) {
             // never change lane into an entrance lane
             return prospectiveBalance;
         }

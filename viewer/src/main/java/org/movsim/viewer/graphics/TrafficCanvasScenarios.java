@@ -178,12 +178,12 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             break;
         case RAMPMETERING:
             path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
-            simulator.loadScenarioFromXml("ramp_metering", path);
+            simulator.loadScenarioFromXml("ramp_metering_v1", path);
             initGraphicSettings();
             break;
         case ROUTING:
             path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
-            simulator.loadScenarioFromXml("routing", path);
+            simulator.loadScenarioFromXml("routing_v2", path);
             vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
             initGraphicSettings();
             break;

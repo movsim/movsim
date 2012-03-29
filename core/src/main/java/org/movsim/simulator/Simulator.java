@@ -37,7 +37,7 @@ import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
-import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
 import org.movsim.output.LoopDetectors;
@@ -99,9 +99,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         projectName = projectMetaData.getProjectName();
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
-        
+
         fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
-        
+
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
@@ -110,7 +110,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setDuration(simInput.getMaxSimTime());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-        
+
         vehGenerator = createVehicleGenerator(simInput);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
@@ -189,9 +189,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param simInput
      */
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
-        final List<TrafficCompositionInputData> heterogenInputData = simInput.getTrafficCompositionInputData();
+        final List<VehicleTypeInput> vehicleTypeInputs = simInput.getTrafficCompositionInputData();
         final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
-                inputData.getVehiclesInput(), heterogenInputData, fuelConsumptionModelPool);
+                inputData.getVehiclesInput(), vehicleTypeInputs, fuelConsumptionModelPool);
         return vehGenerator;
 
     }
@@ -255,13 +255,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator defaultVehGenerator) {
 
-        VehicleGenerator roadVehGenerator = defaultVehGenerator;  
+        VehicleGenerator roadVehGenerator = defaultVehGenerator;
         // set up vehicle generator for roadElement
-        final List<TrafficCompositionInputData> roadHeterogeneity = roadInput.getTrafficCompositionInputData();
-        if(roadHeterogeneity != null){
+        final List<VehicleTypeInput> roadVehicleTypeInputs = roadInput.getTrafficCompositionInputData();
+        if(roadVehicleTypeInputs != null){
             // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
             roadVehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehiclesInput(),
-                    roadHeterogeneity, fuelConsumptionModelPool);
+                    roadVehicleTypeInputs, fuelConsumptionModelPool);
             logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
         }
 

@@ -157,10 +157,10 @@ public class LaneChangeModel {
 
         // consider mandatory lane-change to exit
         if (me.exitRoadSegmentId() == roadSegment.id()) {
-            if (me.getLane() == Lane.LANE1) {
+            if (currentLane == Lane.LANE1) {
                 // already in exit lane, so do not move out of it
                 return MovsimConstants.NO_CHANGE;
-            } else if (me.getLane() == Lane.LANE2) {
+            } else if (currentLane == Lane.LANE2) {
                 final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
                 if (isSafeLaneChange(laneSegment)) {
                     return MovsimConstants.TO_RIGHT;
@@ -171,12 +171,20 @@ public class LaneChangeModel {
 
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
-            accToRight = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_RIGHT, roadSegment);
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_RIGHT);
+            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
+                accToRight = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_RIGHT, roadSegment);
+            }
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < roadSegment.laneCount()) {
-            accToLeft = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_LEFT, roadSegment);
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_LEFT);
+            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
+                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_LEFT, roadSegment);
+            }
         }
 
         // decision
