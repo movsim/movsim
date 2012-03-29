@@ -1,0 +1,55 @@
+
+Game: Traffic Light Master ("Ampelspiel")
+
+Interactive action:  
+
+Control the traffic lights of the two
+intersections by klicking the "switch lights" buttons. Each klick on one of the two "switch lights" button
+instantaneously initializes a change
+of the "phase", i.e., of the "green" directions (Up/down or
+left/right). However, due to safety constraints, an intermediate
+phase of yellow lights of typically 3 seconds ("Zwischenzeit") must be introduced
+between the two phases. Neither
+vehicle can pass the intersection during the intermediate phases.
+
+Externally given:
+
+A fixed traffic demand curve with a "rush-hour" peak containing a total of n
+cars (e.g., n=200). Much more traffic on the horizontal main street than
+on the vertical secondary streets
+
+Objective: 
+
+Switch the lights so as to serve the n vehicles as fast as
+possible. Game is over if all vehicles are served, i.e., there are no
+remaining vehicles in the network.
+The best serving times appear in the "High Scores" list.
+
+What makes the game interesting:
+
+ The strategy is multi-level with conflicting effects
+such that the optimal strategy is nontrivial:
+
+* for light traffic (beginning) one may try to serve each vehicle (the
+  road length is defined such that the travel time from the entry
+  points  to the
+  intersections is greater than the intermediate phase so this is
+  possible)
+
+* for intermediate traffic, green waves may be appropriate. For a
+  suitable cycle time, one can even make attempts at bi-directional
+  green waves (e.g. 20 s free travel time between intersections <=>
+  cycle time = 40 s)
+
+* For high traffic demand, the mainroad should be given priority even
+  if the queue on the secondary roads become longer: If the mainroad
+  spills over, there is a gridlock, and the secondary directions
+  are blocked even if they have "green".
+
+* Finally, longer cycle
+  times give more total traffic throughput (because of the
+  intermediate times) but are incompatible with
+  bidirectional green waves. This strategy is appropriate especially
+  during the end-game phase where no new vehicles are introduced and the player
+  must empty the network.
+
