@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE>
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-    <road name="R1" length="800.0" id="1" junction="-1">
+    <road name="R1" length="200.0" id="1" junction="-1">
         <link>
             <successor elementType="road" elementId="2" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="40.0" y="300.0" hdg="0.0" length="800.0">
+            <geometry s="0.0" x="0" y="100" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
@@ -29,7 +29,7 @@
             <successor elementType="junction" elementId="1009" />
         </link>
         <planView>
-            <geometry s="0.0" x="840.0" y="300.0" hdg="0.0" length="200.0">
+            <geometry s="0.0" x="200" y="100" hdg="0.0" length="200.0">
                 <line />
             </geometry>
         </planView>
@@ -55,13 +55,13 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R3" length="1000.0" id="3" junction="-1">
+    <road name="R3" length="524.3" id="3" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
             <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="1040.0" y="300.0" hdg="0.0" length="1000.0">
+            <geometry s="0.0" x="400" y="100" hdg="0.0" length="524.3">
                 <line />
             </geometry>
         </planView>
@@ -84,13 +84,13 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R4" length="300.0" id="4" junction="-1">
+    <road name="R4" length="100" id="4" junction="-1">
         <link>
             <predecessor elementType="junction" elementId="1015" contactPoint="end" />
             <successor elementType="road" elementId="5" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="2040.0" y="300.0" hdg="0.0" length="300.0">
+            <geometry s="0.0" x="924.3" y="100" hdg="0.0" length="100.0">
                 <line />
             </geometry>
         </planView>
@@ -116,12 +116,12 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R5" length="300.0" id="5" junction="-1">
+    <road name="R5" length="100.0" id="5" junction="-1">
         <link>
             <predecessor elementType="road" elementId="4" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="2340.0" y="300.0" hdg="0.0" length="300.0">
+            <geometry s="0.0" x="1024.3" y="100" hdg="0.0" length="100.0">
                 <line />
             </geometry>
         </planView>
@@ -144,21 +144,35 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R6" length="1016.105075" id="6" junction="-1">
+    <road name="R6" length="614.2" id="6" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
+ 
         <planView>
-            <geometry s="0.0" x="1040.0" y="315.0" hdg="-0.209385" length="408.931535">
+            <geometry s="0.0" x="400" y="115" hdg="0" length="78.5">
+                <arc curvature="-0.01" /> 
+            </geometry>
+            <geometry s="78.5" x="470.7" y="144.3" hdg="-0.785" length="100.0">
                 <line />
             </geometry>
-            <geometry s="408.931535" x="1440.0" y="400.0" hdg="0.0" length="100.0">
+            <geometry s="179" x="541" y="215" hdg="-0.785" length="78.5">
+                <arc curvature="0.01" /> 
+            </geometry>
+            <geometry s="257" x="612" y="244.3" hdg="0." length="100.0">
                 <line />
             </geometry>
-            <geometry s="608.931535" x="1540.0" y="400.0" hdg="0.168390" length="507.173540">
+            <geometry s="357" x="712" y="244.3" hdg="0." length="78.5">
+                <arc curvature="0.01" /> 
+            </geometry>
+            <geometry s="436" x="783" y="215" hdg="0.785" length="100.0">
                 <line />
+            </geometry>
+            <geometry s="536" x="854" y="144.3" hdg="0.785" length="78.5">
+                <arc curvature="-0.01" /> 
             </geometry>
         </planView>
+
         <lanes>
             <laneSection s="0.0">
                 <right>

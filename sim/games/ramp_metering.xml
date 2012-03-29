@@ -38,6 +38,11 @@
             <INITIAL_CONDITIONS/>
             <TRAFFIC_SOURCE>
                 <INFLOW t="0" q_per_hour="1200"/>
+                <INFLOW t="30" q_per_hour="1500"/>
+                <INFLOW t="60" q_per_hour="1800"/>
+                <INFLOW t="150" q_per_hour="1500"/>
+                <INFLOW t="180" q_per_hour="1200"/>
+                <INFLOW t="210" q_per_hour="0"/>
             </TRAFFIC_SOURCE>
             <SPEED_LIMITS/>
             <TRAFFIC_LIGHTS/>

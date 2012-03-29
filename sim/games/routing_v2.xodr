@@ -272,30 +272,12 @@
                             <predecessor id="-3" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                        <width sOffset="200.0" a="6.0" b="0.0" c="0.0" d="0.0" />
+                        <width sOffset="400.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </right>
             </laneSection>
-            <laneSection s="200.0">
-                <right>
-                    <lane id="-1" type="driving" level="0">
-                        <link>
-                            <predecessor id="-3" />
-                        </link>
-                        <width sOffset="0.0" a="6.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
-                </right>
-            </laneSection>
-            <laneSection s="400.0">
-                <right>
-                    <lane id="-1" type="driving" level="0">
-                        <link>
-                            <predecessor id="-3" />
-                        </link>
-                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
-                </right>
-            </laneSection>
-        </lanes>
+         </lanes>
     </road>
 
 
