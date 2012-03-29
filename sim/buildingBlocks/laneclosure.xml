@@ -30,11 +30,12 @@
             <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE logging="false">
                 <!-- inflow per lane -->
-                <INFLOW t="0" q_per_hour="760" v="24" />
+                <INFLOW t="0" q_per_hour="1400" v="24" />
             </TRAFFIC_SOURCE>
             <SPEED_LIMITS>
-                <SPEED_LIMIT x="1200" speedlimit_kmh="100" />
-                <SPEED_LIMIT x="1600" speedlimit_kmh="80" />
+                <SPEED_LIMIT x="600" speedlimit_kmh="100" />
+                <SPEED_LIMIT x="900" speedlimit_kmh="80" />
+                <SPEED_LIMIT x="1200" speedlimit_kmh="130" />
             </SPEED_LIMITS>
             <TRAFFIC_LIGHTS />
             <DETECTORS />

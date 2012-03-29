@@ -1,0 +1,109 @@
+
+print "calculating the geometric data for the routing game"
+
+print "geometric input parameters=first section of this file"
+
+################## geometric input ##########################
+w_lane=10.  # lane width
+R1_xstart=0.
+R1_ystart=100.
+R1_length=200.
+R2_length=200.
+R6_radius=100.  # curvature radius of arc segments of road R6
+R6_phi=0.25*pi  # angle change (rad) for each of the arc segments
+R6_lengthDiag=100.  # length of the diagonal straight segments
+R6_lengthHoriz=100.  # length of the horizontal straight segments
+R4_length=200.
+R5_length=100.
+#################  dependent quantities #####################
+
+R1_x=R1_xstart
+R1_y=R1_ystart
+R1_hdg=0.
+
+R2_x=R1_length
+R2_y=R1_ystart
+R2_hdg=0.
+
+R6_1_s=0
+R6_1_x=R2_x+R2_length
+R6_1_y=R2_y+1.5*w_lane
+R6_1_hdg=0
+R6_1_curvature=-1./R6_radius
+R6_1_length=R6_phi*R6_radius
+
+R6_2_s=R6_1_length
+R6_2_x=R6_1_x+R6_radius*sin(R6_phi)
+R6_2_y=R6_1_y+R6_radius*(1.-cos(R6_phi))
+R6_2_hdg=-R6_phi
+R6_2_length=R6_lengthDiag
+
+R6_3_s=R6_2_s+R6_2_length
+R6_3_x=R6_2_x+R6_2_length*cos(R6_phi)
+R6_3_y=R6_2_y+R6_2_length*sin(R6_phi)
+R6_3_hdg=R6_2_hdg
+R6_3_curvature=+1./R6_radius
+R6_3_length=R6_phi*R6_radius
+
+R6_4_s=R6_3_s+R6_3_length
+R6_4_x=R6_3_x+R6_radius*sin(R6_phi)
+R6_4_y=R6_3_y+R6_radius*(1.-cos(R6_phi))
+R6_4_hdg=0.
+R6_4_length=R6_lengthHoriz
+
+R6_5_s=R6_4_s+R6_4_length
+R6_5_x=R6_4_x+R6_4_length
+R6_5_y=R6_4_y
+R6_5_hdg=0.
+R6_5_curvature=+1./R6_radius
+R6_5_length=R6_phi*R6_radius
+
+R6_6_s=R6_5_s+R6_5_length
+R6_6_x=R6_5_x+R6_radius*sin(R6_phi)
+R6_6_y=R6_5_y-R6_radius*(1.-cos(R6_phi))
+R6_6_hdg=-R6_phi
+R6_6_length=R6_lengthDiag
+
+R6_7_s=R6_6_s+R6_6_length
+R6_7_x=R6_6_x+R6_6_length*cos(R6_phi)
+R6_7_y=R6_6_y-R6_6_length*sin(R6_phi)
+R6_7_hdg=-R6_phi
+R6_7_curvature=-1./R6_radius
+R6_7_length=R6_phi*R6_radius
+
+
+R3_x=R2_x+R2_length
+R3_y=R2_y
+R3_hdg=0.
+R3_length=2*(R6_4_x-R6_1_x)+R6_4_length
+
+R4_x=R3_x+R3_length
+R4_y=R3_y
+R4_hdg=0.
+
+R5_x=R4_x+R4_length
+R5_y=R4_y
+R5_hdg=0.
+
+print "R1_x=",R1_x," R1_y=",R1_y," R1_hdg=",R1_hdg," R1_length=",R1_length
+print "R2_x=",R2_x," R2_y=",R2_y," R2_hdg=",R2_hdg," R2_length=",R2_length
+print "R3_x=",R3_x," R3_y=",R3_y," R3_hdg=",R3_hdg," R3_length=",R3_length
+print "R4_x=",R4_x," R4_y=",R4_y," R4_hdg=",R4_hdg," R4_length=",R4_length
+print "R5_x=",R5_x," R5_y=",R5_y," R5_hdg=",R5_hdg," R5_length=",R5_length
+
+print "R6_1_s=",R6_1_s," R6_1_x=",R6_1_x," R6_1_y=",R6_1_y
+print "   R6_1_hdg=",R6_1_hdg," R6_1_length=",R6_1_length," R6_1_curvature=",R6_1_curvature
+print "R6_2_s=",R6_2_s," R6_2_x=",R6_2_x," R6_2_y=",R6_2_y
+print "   R6_2_hdg=",R6_2_hdg," R6_2_length=",R6_2_length
+print "R6_3_s=",R6_3_s," R6_3_x=",R6_3_x," R6_3_y=",R6_3_y
+print "   R6_3_hdg=",R6_3_hdg," R6_3_length=",R6_3_length," R6_3_curvature=",R6_3_curvature
+print "R6_4_s=",R6_4_s," R6_4_x=",R6_4_x," R6_4_y=",R6_4_y
+print "   R6_4_hdg=",R6_4_hdg," R6_4_length=",R6_4_length
+print "R6_5_s=",R6_5_s," R6_5_x=",R6_5_x," R6_5_y=",R6_5_y
+print "   R6_5_hdg=",R6_5_hdg," R6_5_length=",R6_5_length," R6_5_curvature=",R6_5_curvature
+print "R6_6_s=",R6_6_s," R6_6_x=",R6_6_x," R6_6_y=",R6_6_y
+print "   R6_6_hdg=",R6_6_hdg," R6_6_length=",R6_6_length
+print "R6_7_s=",R6_7_s," R6_7_x=",R6_7_x," R6_7_y=",R6_7_y
+print "   R6_7_hdg=",R6_7_hdg," R6_7_length=",R6_7_length," R6_7_curvature=",R6_7_curvature
+print "R6_length=",R6_7_s+R6_7_length
+

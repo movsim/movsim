@@ -41,7 +41,7 @@ import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.SlopeDataPoint;
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
-import org.movsim.input.model.simulation.TrafficCompositionInputData;
+import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
@@ -52,7 +52,7 @@ public class RoadInput {
 
     private boolean isWithWriteFundamentalDiagrams;
 
-    private List<TrafficCompositionInputData> trafficCompositionInputData;
+    private List<VehicleTypeInput> trafficCompositionInputData;
 
     private List<ICMacroData> icMacroData;
 
@@ -98,12 +98,12 @@ public class RoadInput {
         final Element heterogenElem = elem.getChild(XmlElementNames.TrafficComposition);
         // optional for specific road
         if (heterogenElem != null) {
-            trafficCompositionInputData = new ArrayList<TrafficCompositionInputData>();
+            trafficCompositionInputData = new ArrayList<VehicleTypeInput>();
             final List<Element> vehTypeElems = elem.getChild(XmlElementNames.TrafficComposition).getChildren(
                     XmlElementNames.RoadVehicleType);
             for (final Element vehTypeElem : vehTypeElems) {
                 final Map<String, String> map = XmlUtils.putAttributesInHash(vehTypeElem);
-                trafficCompositionInputData.add(new TrafficCompositionInputData(map));
+                trafficCompositionInputData.add(new VehicleTypeInput(map));
             }
         }
 
@@ -237,7 +237,7 @@ public class RoadInput {
         detectorInput = new DetectorInput(elem.getChild(XmlElementNames.OutputDetectors));
     }
 
-    public List<TrafficCompositionInputData> getTrafficCompositionInputData() {
+    public List<VehicleTypeInput> getTrafficCompositionInputData() {
         return trafficCompositionInputData;
     }
 

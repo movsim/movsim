@@ -1,3 +1,7 @@
+package org.movsim.simulator.roadnetwork;
+
+import org.movsim.simulator.vehicles.Vehicle;
+
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
  *                                   <movsim.org@gmail.com>
@@ -24,23 +28,23 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.simulator.roadnetwork;
+public class VariableMessageSignDiversion extends VariableMessageSignBase {
 
-public class Slope {
+    private final static double VISIBILITY_OF_SIGN = 400;// sign visible from 400m
 
-    private final double position;
-    private final double gradient;
-
-    public Slope(double pos, double gradient) {
-        this.position = pos;
-        this.gradient = gradient;
+    @Override
+    public void apply(Vehicle vehicle, RoadSegment roadSegment) {
+        if (vehicle.getLane() == Lane.LANE1 && 
+                roadSegment.roadLength() - vehicle.getFrontPosition() <= VISIBILITY_OF_SIGN) {
+            final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
+            vehicle.setExitRoadSegmentId(laneSegment.sinkLaneSegment().roadSegment().id());
+        }
     }
 
-    public double getPosition() {
-        return position;
-    }
-
-    public double getGradient() {
-        return gradient;
+    @Override
+    public void cancel(Vehicle vehicle, RoadSegment roadSegment) {
+        if (vehicle.getLane() == Lane.LANE1) {
+            vehicle.setExitRoadSegmentId(Vehicle.ROAD_SEGMENT_ID_NOT_SET);
+        }
     }
 }

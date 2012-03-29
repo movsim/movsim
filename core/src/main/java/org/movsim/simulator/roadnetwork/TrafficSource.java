@@ -109,7 +109,7 @@ public class TrafficSource implements SimulationTimeStep {
      * @return the new cyclic lane index for entering
      */
     private int getNewCyclicLaneIndexForEntering(int iLane) {
-        return (iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1);
+        return iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1;
     }
 
     /**
@@ -131,7 +131,7 @@ public class TrafficSource implements SimulationTimeStep {
         // integrate inflow demand
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
-        if (nWait >= 1) {
+        if (nWait >= 1.0) {
             // try to insert new vehicle at inflow
             // iterate periodically over n lanes
             int iLane = laneEnterLast;
@@ -290,5 +290,4 @@ public class TrafficSource implements SimulationTimeStep {
     public double getFlowPerLane(double time) {
         return inflowTimeSeries.getFlowPerLane(time);
     }
-
 }

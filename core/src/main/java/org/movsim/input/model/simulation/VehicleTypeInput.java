@@ -23,24 +23,38 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
+package org.movsim.input.model.simulation;
 
-package org.movsim.simulator.roadnetwork;
+import java.util.Map;
 
-public class Slope {
+public class VehicleTypeInput {
 
-    private final double position;
-    private final double gradient;
+    private final String keyName;
+    private final double fraction;
+    private final double relativeRandomizationDesiredSpeed;
 
-    public Slope(double pos, double gradient) {
-        this.position = pos;
-        this.gradient = gradient;
+    /**
+     * Instantiates a new heterogeneity input data.
+     * 
+     * @param map
+     *            the map
+     */
+    public VehicleTypeInput(Map<String, String> map) {
+        this.keyName = map.get("label");
+        this.fraction = Double.parseDouble(map.get("fraction"));
+        System.out.println("rand=" + map.get("relative_v0_randomization") + "     key:" + keyName);
+        this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
     }
 
-    public double getPosition() {
-        return position;
+    public String getKeyName() {
+        return keyName;
     }
 
-    public double getGradient() {
-        return gradient;
+    public double getFraction() {
+        return fraction;
+    }
+
+    public double getRelativeRandomizationDesiredSpeed() {
+        return relativeRandomizationDesiredSpeed;
     }
 }

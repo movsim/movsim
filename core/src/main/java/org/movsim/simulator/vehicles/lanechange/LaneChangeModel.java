@@ -27,6 +27,7 @@ package org.movsim.simulator.vehicles.lanechange;
 
 import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -120,7 +121,7 @@ public class LaneChangeModel {
         final double gapBack = (backVeh == null) ? MovsimConstants.GAP_INFINITY : backVeh.getNetDistance(me);
 
         // check distances
-        // negative net distances possible because of different veh lengths!
+        // negative net distances possible because of different vehicle lengths!
         if (gapFront < lcModelMOBIL.getMinimumGap() || gapBack < lcModelMOBIL.getMinimumGap()) {
             logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
             return false;
@@ -154,14 +155,36 @@ public class LaneChangeModel {
         double accToLeft = -Double.MAX_VALUE;
         double accToRight = -Double.MAX_VALUE;
 
+        // consider mandatory lane-change to exit
+        if (me.exitRoadSegmentId() == roadSegment.id()) {
+            if (currentLane == Lane.LANE1) {
+                // already in exit lane, so do not move out of it
+                return MovsimConstants.NO_CHANGE;
+            } else if (currentLane == Lane.LANE2) {
+                final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
+                if (isSafeLaneChange(laneSegment)) {
+                    return MovsimConstants.TO_RIGHT;
+                }
+                return MovsimConstants.NO_CHANGE;
+            }
+        }
+
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
-            accToRight = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_RIGHT, roadSegment);
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_RIGHT);
+            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
+                accToRight = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_RIGHT, roadSegment);
+            }
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < roadSegment.laneCount()) {
-            accToLeft = lcModelMOBIL.calcAccelerationBalance(MovsimConstants.TO_LEFT, roadSegment);
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_LEFT);
+            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
+                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_LEFT, roadSegment);
+            }
         }
 
         // decision
@@ -194,5 +217,4 @@ public class LaneChangeModel {
     public double vCritEurRules() {
         return vCritEur;
     }
-
 }

@@ -23,38 +23,21 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input.model.simulation;
 
-import java.util.Map;
+package org.movsim.simulator.roadnetwork;
 
-public class TrafficCompositionInputData {
+import org.movsim.simulator.vehicles.Vehicle;
 
-    private final String keyName;
-    private final double fraction;
-    private final double relativeRandomizationDesiredSpeed;
+public abstract class VariableMessageSignBase {
 
     /**
-     * Instantiates a new heterogeneity input data.
-     * 
-     * @param map
-     *            the map
+     * Apply the VMS to a vehicle
+     * @param vehicle
      */
-    public TrafficCompositionInputData(Map<String, String> map) {
-        this.keyName = map.get("label");
-        this.fraction = Double.parseDouble(map.get("fraction"));
-        System.out.println("rand=" + map.get("relative_v0_randomization") + "     key:" + keyName);
-        this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
-    }
-
-    public String getKeyName() {
-        return keyName;
-    }
-
-    public double getFraction() {
-        return fraction;
-    }
-
-    public double getRelativeRandomizationDesiredSpeed() {
-        return relativeRandomizationDesiredSpeed;
-    }
+    public abstract void apply(Vehicle vehicle, RoadSegment roadSegment);
+    /**
+     * Cancel the effect of the VMS on a vehicle
+     * @param vehicle
+     */
+    public abstract void cancel(Vehicle vehicle, RoadSegment roadSegment);
 }
