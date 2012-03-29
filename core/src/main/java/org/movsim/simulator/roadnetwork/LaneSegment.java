@@ -469,10 +469,10 @@ public class LaneSegment implements Iterable<Vehicle> {
 
         while (low <= high) {
             final int mid = (low + high) >> 1;
-            final double midPos = vehicles.get(mid).getRearPosition();
+            final double rearPos = vehicles.get(mid).getRearPosition();
             // final int compare = Double.compare(midPos, vehiclePos);
             // note vehicles are sorted in reverse order of position
-            final int compare = Double.compare(vehiclePos, midPos);
+            final int compare = Double.compare(vehiclePos, rearPos);
             if (compare < 0) {
                 low = mid + 1;
             } else if (compare > 0) {
