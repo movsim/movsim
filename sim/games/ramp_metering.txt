@@ -1,0 +1,50 @@
+The Ramp Metering Game ("Stauvermeidungsspiel")
+
+
+Interactive action:  
+
+Control the traffic light metering the ramp inflow to the freeway. No
+yellow phases and no minimum green times apply here, i.e., one can let
+pass a single vehicle at a time. 
+
+
+Externally given:
+
+A fixed traffic demand curve on the freeway and the secondary road 
+with a "rush-hour" peak. A fixed percentage of vehicles on the
+secondary road (e.g., 50%) turns right and enters the freeway via the traffic
+light. The traffic flow is set so that congestion occurs on the
+freeway if the traffic light is left green all the time.
+
+Objective: 
+
+Delay the jam on the freeway by controlling the inflow with the
+metering traffic light. Simultaneously avoid too long waiting times
+behind the light, and definitely a spillover to the
+secondary road. Game is over if the rush-hour is over and 
+all vehicles are served, i.e., the
+network is empty. High-scores list as in the Traffic Lights
+Master. Besides the totsal playing time, one could also score by total
+travelling time. This increases the negative weights of freeeway
+congestion and shifts the optimal control strategy to generally more
+"green"
+
+
+What makes the game interesting:
+
+The twofold and contradicting objectives: "Avoid jams on the freeway",
+and "avoid waiting times and spillovers at the secondary network". If a spillover
+happens, this will also obstruct all vehicles intending to drive
+straight ahead on the secondary road (see the figure). The ensuing gridlock situation
+leads to a massive congestion on the secondary road which takes long
+to dissolve by switching the metering light to green. (The resulting
+rush of entering vehicles, however, will certainly lead to a breakdown
+on the freeway ...) Notice also the delay between switching the light
+to green, and movements of the vehicles at the back of the
+queue. (the position of the starting vehicles  propagates upstream with 15 km/h). In
+the meantime, additional entering vehicles may cause the gridlock ...
+
+ 
+
+
+

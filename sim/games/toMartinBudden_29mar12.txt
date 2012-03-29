@@ -1,0 +1,20 @@
+Hi Martin,
+
+I have tried to make a first playable version but encountered several bugs:
+
+Bug 1: clock is not always working after restart (need to restart twice). However, this occors on a nondeterministic basis (not critical)
+
+Bug 2: The detour does not always work. Often, when the toggle is set to "use mainroad", some vehicles will nevertheless diverge at the last moment (particularly when the mainroad is congested). This happens reproducible when not clicking at the simulation at all. If the mainroad is heavily congested, clicking seems to have no effect at all. (moderately critical)
+
+Bug 3: Sometimes, vehicles on link 3 will not change to the right lane alhough there is no traffic on this lane. This results in inefficient traffic flow. There is no deterministic means to reproduce this bug since it depends on Bug 2 which is undeterministic as well. The best bet is to bring the main road at the verge of congestion (by deactivating the detour VMS) and activating the VMS before real congestion sets in. (critical)
+
+Bug 4: Spillovers are not treated correctly: Diverging vehicles will crash into vehicles already on the offramp if there is a queue at the offramp. This results in immobile vehicles that will not leave the system. (critical)
+
+It is nontrivial to solve this corrwectly since the situation is nontrivial for real drivers as well: Obey the VMS although the recommended route is obviously congested, or better ignore it?
+
+The first option is relevant for the ramp metering game, and for mandatory diverging lane changes in general, e.g., prescribed by the new <route> element: One has to stop on the through lane, at the latest at the most downstream position enabling a diverge until one can enter the offramp. This creates the classical and infamous spillover gridlock. A minimal (though not too unrealistic) implementation consists in placing a standing virtual vehicle at this position (quite in analogy to onramps) and simultaneously forbidding lane changes to the left. I think this is the minimal technical realisation of the necessary longitudinal-transversal coupling. Of course, the lane change itself must obey the usual MOBIL roules with aggressive bias (e.g. =b_max= m/s^2) and aggressive safety limits (=b_max as well). This should prevent the accidents mentioned above.
+
+The second option is relevant for discretionary lane changes (which would be more realistic for the routing game although Option 1 would be more instructive here as well): Try to change lanes using MOBIL with a high bias and an aggressive safety threshold but without longitudinal-transversal coupling, i.e., these drivers see no standing virtual vehicle (but they are prohibited to change to the left as well). If the driver cannot change until he or she passes the last exit possibility, he or she reverts to a normal mainroad user.
+
+
+Martin 
