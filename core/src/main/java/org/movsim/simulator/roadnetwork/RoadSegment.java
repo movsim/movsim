@@ -563,10 +563,34 @@ public class RoadSegment implements Iterable<Vehicle> {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    variableMessageSigns.apply(vehicle);
+                    variableMessageSigns.apply(vehicle, this);
                 }
             }
         }
+    }
+
+    public void addVariableMessageSign(VariableMessageSignBase variableMessageSign) {
+        if (variableMessageSigns == null) {
+            variableMessageSigns = new VariableMessageSigns();
+        }
+        variableMessageSigns.add(variableMessageSign);
+        for (final LaneSegment laneSegment : laneSegments) {
+            for (final Vehicle vehicle : laneSegment) {
+                assert vehicle.roadSegmentId() == id;
+                variableMessageSign.apply(vehicle, this);
+            }
+        }
+    }
+
+    public void removeVariableMessageSign(VariableMessageSignBase variableMessageSign) {
+        assert variableMessageSigns != null;
+        for (final LaneSegment laneSegment : laneSegments) {
+            for (final Vehicle vehicle : laneSegment) {
+                assert vehicle.roadSegmentId() == id;
+                variableMessageSign.cancel(vehicle, this);
+            }
+        }
+        variableMessageSigns.remove(variableMessageSign);
     }
 
     /**
