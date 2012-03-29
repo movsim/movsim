@@ -30,6 +30,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -163,6 +164,7 @@ public class Vehicle {
 
     private final TrafficLightApproaching trafficLightApproaching;
     private final FuelConsumption fuelModel; // can be null
+    private final Route route;
 
     private boolean isBrakeLightOn;
 
@@ -220,7 +222,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput, Object cyclicBuffer,
-            LaneChangeModel lcModel, FuelConsumption fuelModel) {
+            LaneChangeModel lcModel, FuelConsumption fuelModel, Route route) {
         this.label = label;
         id = nextId++;
         this.fuelModel = fuelModel;
@@ -247,6 +249,7 @@ public class Vehicle {
         }
 
         trafficLightApproaching = new TrafficLightApproaching();
+        this.route = route;
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
@@ -277,6 +280,7 @@ public class Vehicle {
         physQuantities = new PhysicalQuantities(this);
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = 0;
+        route = null;
     }
 
     /**
@@ -303,6 +307,7 @@ public class Vehicle {
         label = source.label;
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = source.slope;
+        route = source.route;
     }
 
     /**
@@ -326,6 +331,7 @@ public class Vehicle {
         label = "";
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = 0;
+        route = null;
     }
 
     private void initialize() {

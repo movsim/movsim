@@ -33,6 +33,7 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.vehicle.VehicleInput;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
@@ -65,13 +66,14 @@ public class VehicleGenerator {
      * 
      */
     public VehicleGenerator(double simulationTimestep, VehiclesInput vehiclesInput,
-            List<VehicleTypeInput> vehicleTypeInputs, FuelConsumptionModelPool fuelConsumptionModelPool) {
+            List<VehicleTypeInput> vehicleTypeInputs, FuelConsumptionModelPool fuelConsumptionModelPool,
+            Map<String, Route> routes) {
         this.simulationTimestep = simulationTimestep;
 
         final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehiclesInput
                 .getVehicleInput());
 
-        prototypes = createPrototypes(vehInputMap, vehicleTypeInputs);
+        prototypes = createPrototypes(vehInputMap, vehicleTypeInputs, routes);
 
         isWithReactionTimes = checkForReactionTimes();
 
@@ -84,7 +86,7 @@ public class VehicleGenerator {
      * @return the double
      */
     private HashMap<String, VehiclePrototype> createPrototypes(Map<String, VehicleInput> vehInputMap,
-            List<VehicleTypeInput> vehicleTypeInputs) {
+            List<VehicleTypeInput> vehicleTypeInputs, Map<String, Route> routes) {
         final HashMap<String, VehiclePrototype> prototypes = new HashMap<String, VehiclePrototype>();
 
         double sumFraction = 0;
@@ -105,11 +107,13 @@ public class VehicleGenerator {
 
             sumFraction += fraction;
             final double relRandomizationV0 = vehicleTypeInput.getRelativeRandomizationDesiredSpeed();
+            final String routeLabel = vehicleTypeInput.getRouteLabel();
+            final Route route = routeLabel == null ? null : routes.get(routeLabel);
             final VehiclePrototype vehProto = new VehiclePrototype(keyName, fraction, longModel, fundDia, vehInput,
-                    relRandomizationV0);
+                    relRandomizationV0, route);
             prototypes.put(keyName, vehProto);
-
         }
+
         // normalize vehicle type fractions
         normalizeFractions(sumFraction, prototypes);
         return prototypes;
@@ -182,7 +186,7 @@ public class VehicleGenerator {
         final LaneChangeModel lcModel = new LaneChangeModel(vehInput.getLaneChangeInputData());
         final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
                 .getFuelConsumptionLabel());
-        final Vehicle veh = new Vehicle(prototype.getLabel(), longModel, vehInput, null, lcModel, fuelModel);
+        final Vehicle veh = new Vehicle(prototype.getLabel(), longModel, vehInput, null, lcModel, fuelModel, prototype.getRoute());
         return veh;
     }
 

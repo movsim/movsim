@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ import org.movsim.input.XmlReaderSimInput;
 import org.movsim.input.file.opendrive.OpenDriveReader;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.output.RouteInput;
+import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.VehicleTypeInput;
@@ -53,6 +56,7 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.Slopes;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
@@ -80,6 +84,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private VehicleGenerator vehGenerator;
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
+    private Map<String, Route> routes;
     private final SimulationRunnable simulationRunnable;
 
     /**
@@ -112,6 +117,20 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
         vehGenerator = createVehicleGenerator(simInput);
+
+        // Routes
+        final RoutesInput routesInput = simInput.getRoutesInput();
+        routes = new HashMap<String, Route>();
+        if (routesInput != null) {
+            for (final RouteInput routeInput : routesInput.getRoutes()) {
+                final Route route = new Route(routeInput.getName());
+                final List<String> roadIds = routeInput.getRoadIds();
+                for (final String roadId : roadIds) {
+                    route.add(roadNetwork.findByUserId(roadId));
+                }
+                routes.put(route.getName(), route);
+            }
+        }
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -191,7 +210,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
         final List<VehicleTypeInput> vehicleTypeInputs = simInput.getTrafficCompositionInputData();
         final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
-                inputData.getVehiclesInput(), vehicleTypeInputs, fuelConsumptionModelPool);
+                inputData.getVehiclesInput(), vehicleTypeInputs, fuelConsumptionModelPool, routes);
         return vehGenerator;
 
     }
@@ -261,7 +280,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if(roadVehicleTypeInputs != null){
             // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
             roadVehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehiclesInput(),
-                    roadVehicleTypeInputs, fuelConsumptionModelPool);
+                    roadVehicleTypeInputs, fuelConsumptionModelPool, routes);
             logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
         }
 
@@ -437,7 +456,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public void reset() {
         simulationRunnable.reset();
-        simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork);
+        simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork, routes);
     }
 
     public void runToCompletion() {
