@@ -97,9 +97,11 @@ public class TrafficCanvasKeyListener implements KeyListener {
     }
 
     public void commandReset() {
+        trafficCanvas.stop();
         trafficCanvas.roadNetwork.clear();
         trafficCanvas.simulator.initialize();
         trafficCanvas.reset();
+        trafficCanvas.start();
     }
 
     public void commandCycleVehicleColors() {
