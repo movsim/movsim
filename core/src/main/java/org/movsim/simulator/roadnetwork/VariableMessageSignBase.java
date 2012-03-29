@@ -26,21 +26,18 @@
 
 package org.movsim.simulator.roadnetwork;
 
-public class Slope {
+import org.movsim.simulator.vehicles.Vehicle;
 
-    private final double position;
-    private final double gradient;
+public abstract class VariableMessageSignBase {
 
-    public Slope(double pos, double gradient) {
-        this.position = pos;
-        this.gradient = gradient;
-    }
-
-    public double getPosition() {
-        return position;
-    }
-
-    public double getGradient() {
-        return gradient;
-    }
+    /**
+     * Apply the VMS to a vehicle
+     * @param vehicle
+     */
+    public abstract void apply(Vehicle vehicle, RoadSegment roadSegment);
+    /**
+     * Cancel the effect of the VMS on a vehicle
+     * @param vehicle
+     */
+    public abstract void cancel(Vehicle vehicle, RoadSegment roadSegment);
 }

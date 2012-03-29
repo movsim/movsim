@@ -26,20 +26,24 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Tables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class SpeedLimits.
  */
 public class SpeedLimits implements Iterable<SpeedLimit> {
 
-    // final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
+    final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
 
     private double[] positions;
     private double[] speeds;
@@ -88,6 +92,17 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
     }
 
     /**
+     * Apply the speed limit to a vehicle
+     * @param vehicle
+     */
+    public void apply(Vehicle vehicle) {
+        final double pos = vehicle.getFrontPosition();
+        final double speedlimit = calcSpeedLimit(pos);
+        vehicle.setSpeedlimit(speedlimit);
+        logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
+    }
+
+    /**
      * Calculates the speed limit.
      * 
      * @param position
@@ -95,11 +110,14 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      */
     public double calcSpeedLimit(double position) {
         return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED :
-        	Tables.stepExtrapolation(positions, speeds, position);
+            Tables.stepExtrapolation(positions, speeds, position);
     }
 
     @Override
     public Iterator<SpeedLimit> iterator() {
+        if (speedLimits == null) {
+            return Collections.<SpeedLimit> emptyList().iterator();
+        }
         return speedLimits.iterator();
     }
 }
