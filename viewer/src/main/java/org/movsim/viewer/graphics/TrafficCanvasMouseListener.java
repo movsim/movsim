@@ -34,12 +34,12 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import org.movsim.simulator.roadnetwork.Lane;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.roadnetwork.VariableMessageSignBase;
+import org.movsim.simulator.roadnetwork.VariableMessageSignDiversion;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
@@ -48,6 +48,8 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
 
     private final TrafficCanvas trafficCanvas;
     private final RoadNetwork roadNetwork;
+    private boolean diversionOn;
+    private VariableMessageSignBase variableMessageSign = new VariableMessageSignDiversion();
     private boolean inDrag;
     private int startDragX;
     private int startDragY;
@@ -84,10 +86,14 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         for (final RoadSegment roadSegment : roadNetwork) {
             // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
             if (roadSegment.userId().equals("1")) {
-                final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
-                for (final Vehicle vehicle : laneSegment) {
-                    vehicle.setExitRoadSegmentId(laneSegment.sinkLaneSegment().roadSegment().id());
+                if (diversionOn == false) {
+                    diversionOn = true;
+                    roadSegment.addVariableMessageSign(variableMessageSign);
+                } else {
+                    diversionOn = false;
+                    roadSegment.removeVariableMessageSign(variableMessageSign);
                 }
+                trafficCanvas.repaint();
             }
             if (roadSegment.trafficLights() != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
