@@ -99,9 +99,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         projectName = projectMetaData.getProjectName();
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
-        
+
         fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
-        
+
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
@@ -110,7 +110,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setDuration(simInput.getMaxSimTime());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-        
+
         vehGenerator = createVehicleGenerator(simInput);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
@@ -255,7 +255,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private void addInputToRoadSegment(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator defaultVehGenerator) {
 
-        VehicleGenerator roadVehGenerator = defaultVehGenerator;  
+        VehicleGenerator roadVehGenerator = defaultVehGenerator;
         // set up vehicle generator for roadElement
         final List<TrafficCompositionInputData> roadHeterogeneity = roadInput.getTrafficCompositionInputData();
         if(roadHeterogeneity != null){
