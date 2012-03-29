@@ -64,7 +64,7 @@ public class LaneChangeModel {
     // distance at which driver should think about changing lanes for exit
     private static double distanceBeforeExitWantsToChangeLanes = 500.0;
     // distance at which driver must get into exit lane
-    private static double distanceBeforeExitMustChangeLanes = 200.0;
+    public static double distanceBeforeExitMustChangeLanes = 200.0;
 
     /**
      * Instantiates a new lane changing model.
@@ -115,38 +115,41 @@ public class LaneChangeModel {
     public boolean isSafeLaneChange(LaneSegment laneSegment) {
         final Vehicle front = laneSegment.frontVehicle(me);
         final Vehicle back = laneSegment.rearVehicle(me);
-        final boolean changeSafe = checkSafetyCriterion(front, back, lcModelMOBIL.getSafeDeceleration());
+        final boolean changeSafe = checkSafetyCriterion(front, back);
         return changeSafe;
     }
 
-    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh, double safeDeceleration) {
+    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh) {
 
         // safety incentive (in two steps)
+        final double safeDeceleration = lcModelMOBIL.getSafeDeceleration();
         final double gapFront = me.getNetDistance(frontVeh);
-        final double gapBack = (backVeh == null) ? MovsimConstants.GAP_INFINITY : backVeh.getNetDistance(me);
-
         // check distances
         // negative net distances possible because of different vehicle lengths!
-        if (gapFront < lcModelMOBIL.getMinimumGap() || gapBack < lcModelMOBIL.getMinimumGap()) {
-            logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
+        if (gapFront < lcModelMOBIL.getMinimumGap()) {
+            logger.debug("gapFront={}", gapFront);
             return false;
         }
-
-        final double backNewAcc = (backVeh == null) ? 0 : backVeh.getLongitudinalModel().calcAcc(backVeh, me);
-
-        // check security constraint for new follower
-
-        if (backNewAcc <= -safeDeceleration) {
-            logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
-            logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
-            return false;
+        if (backVeh != null) {
+            final double gapBack = backVeh.getNetDistance(me);
+            if (gapBack < lcModelMOBIL.getMinimumGap()) {
+                logger.debug("gapBack={}", gapBack);
+                return false;
+            }
+            final double backNewAcc = backVeh.getLongitudinalModel().calcAcc(backVeh, me);
+            // check security constraint for new follower
+            if (backNewAcc <= -safeDeceleration) {
+                logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
+                logger.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
+                return false;
+            }
         }
 
         final double meNewAcc = me.getLongitudinalModel().calcAcc(me, frontVeh);
         if (meNewAcc >= -safeDeceleration) {
-            logger.debug("meNewAcc={}, bSafe={}", meNewAcc, lcModelMOBIL.getSafeDeceleration());
-            logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
-            logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
+            logger.debug("meNewAcc={}, bSafe={}", meNewAcc, safeDeceleration);
+            //logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
+            //logger.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
             return true;
         }
         return false;
@@ -155,10 +158,6 @@ public class LaneChangeModel {
     public int determineLaneChangeDirection(RoadSegment roadSegment) {
 
         final int currentLane = me.getLane();
-
-        // initialize with largest possible deceleration
-        double accToLeft = -Double.MAX_VALUE;
-        double accToRight = -Double.MAX_VALUE;
 
         // consider mandatory lane-change to exit
         if (me.exitRoadSegmentId() == roadSegment.id()) {
@@ -191,6 +190,9 @@ public class LaneChangeModel {
             }
         }
 
+        // initialize with largest possible deceleration
+        double accToLeft = -Double.MAX_VALUE;
+        double accToRight = -Double.MAX_VALUE;
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
             final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_RIGHT);
