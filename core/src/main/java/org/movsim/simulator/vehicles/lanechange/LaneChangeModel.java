@@ -60,6 +60,11 @@ public class LaneChangeModel {
     private MOBIL lcModelMOBIL;
 
     private final LaneChangeInputData lcInputData;
+    // Exit Handling
+    // distance at which driver should think about changing lanes for exit
+    private static double distanceBeforeExitWantsToChangeLanes = 500.0;
+    // distance at which driver must get into exit lane
+    private static double distanceBeforeExitMustChangeLanes = 200.0;
 
     /**
      * Instantiates a new lane changing model.
@@ -161,11 +166,28 @@ public class LaneChangeModel {
                 // already in exit lane, so do not move out of it
                 return MovsimConstants.NO_CHANGE;
             } else if (currentLane == Lane.LANE2) {
-                final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
-                if (isSafeLaneChange(laneSegment)) {
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(Lane.LANE1);
+                if (isSafeLaneChange(newLaneSegment)) {
                     return MovsimConstants.TO_RIGHT;
                 }
                 return MovsimConstants.NO_CHANGE;
+            }
+        }
+        final LaneSegment sinkLaneSegment = roadSegment.laneSegment(currentLane).sinkLaneSegment();
+        if (sinkLaneSegment != null && me.exitRoadSegmentId() == sinkLaneSegment.roadSegment().id()) {
+            // next road segment is the exit segment
+            final double distanceToExit = roadSegment.roadLength() - me.getFrontPosition();
+            if (distanceToExit < distanceBeforeExitMustChangeLanes) {
+                if (currentLane == Lane.LANE1) {
+                    // already in exit lane, so do not move out of it
+                    return MovsimConstants.NO_CHANGE;
+                } else if (currentLane == Lane.LANE2) {
+                    final LaneSegment newLaneSegment = roadSegment.laneSegment(Lane.LANE1);
+                    if (isSafeLaneChange(newLaneSegment)) {
+                        return MovsimConstants.TO_RIGHT;
+                    }
+                    return MovsimConstants.NO_CHANGE;
+                }
             }
         }
 

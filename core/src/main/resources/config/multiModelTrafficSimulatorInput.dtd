@@ -267,6 +267,7 @@ fluct_strength   NMTOKEN #REQUIRED
   label     CDATA    #REQUIRED
   fraction  NMTOKEN  #REQUIRED
   relative_v0_randomization NMTOKEN "0.0"
+  route_label CDATA ""
 >
 
 

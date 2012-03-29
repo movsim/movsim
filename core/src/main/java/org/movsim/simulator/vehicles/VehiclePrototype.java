@@ -27,6 +27,7 @@ package org.movsim.simulator.vehicles;
 
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 
@@ -58,6 +59,7 @@ public class VehiclePrototype {
     private final VehicleInput vehicleInput;
 
     private final double relativeRandomizationV0;
+    private final Route route;
 
     /**
      * Instantiates a new vehicle prototype.
@@ -76,7 +78,7 @@ public class VehiclePrototype {
      *            the relative randomization v0
      */
     public VehiclePrototype(String label, double fraction, LongitudinalModelBase longModel,
-            EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0) {
+            EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0, Route route) {
         this.label = label;
         this.length = vehicleInput.getLength();
         this.reactionTime = vehicleInput.getReactionTime();
@@ -85,6 +87,7 @@ public class VehiclePrototype {
         this.equiProperties = equilProperties;
         this.vehicleInput = vehicleInput;
         this.relativeRandomizationV0 = relativeRandomizationV0;
+        this.route = route;
     }
 
     /**
@@ -196,5 +199,14 @@ public class VehiclePrototype {
      */
     public double getRelativeRandomizationV0() {
         return relativeRandomizationV0;
+    }
+
+    /**
+     * Gets the route.
+     * 
+     * @return the route
+     */
+    public Route getRoute() {
+        return route;
     }
 }

@@ -32,9 +32,10 @@ public class VehicleTypeInput {
     private final String keyName;
     private final double fraction;
     private final double relativeRandomizationDesiredSpeed;
+    private final String routeLabel;
 
     /**
-     * Instantiates a new heterogeneity input data.
+     * Constructor.
      * 
      * @param map
      *            the map
@@ -44,6 +45,8 @@ public class VehicleTypeInput {
         this.fraction = Double.parseDouble(map.get("fraction"));
         System.out.println("rand=" + map.get("relative_v0_randomization") + "     key:" + keyName);
         this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
+        final String routeLabel = map.get("route_label");
+        this.routeLabel = routeLabel.equals("") ? null : routeLabel;
     }
 
     public String getKeyName() {
@@ -56,5 +59,9 @@ public class VehicleTypeInput {
 
     public double getRelativeRandomizationDesiredSpeed() {
         return relativeRandomizationDesiredSpeed;
+    }
+
+    public String getRouteLabel() {
+        return routeLabel;
     }
 }

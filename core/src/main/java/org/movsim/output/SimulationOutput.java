@@ -26,7 +26,6 @@
 package org.movsim.output;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +34,6 @@ import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.RouteInput;
-import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
@@ -75,7 +72,7 @@ public class SimulationOutput implements SimulationTimeStep {
      * @param simInput
      *            the sim input
      */
-    public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput, RoadNetwork roadNetwork) {
+    public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput, RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
@@ -85,21 +82,6 @@ public class SimulationOutput implements SimulationTimeStep {
 
         if(writeOutput){
             writeFundamentalDiagrams(simulationTimestep, simInput.getVehiclesInput());
-        }
-        
-        // Routes
-        final RoutesInput routesInput = simulationInput.getRoutesInput();
-        final Map<String, Route> routes = new HashMap<String, Route>();
-        if (routesInput != null) {
-            for (final RouteInput routeInput : routesInput.getRoutes()) {
-                final Route route = new Route();
-                route.setName(routeInput.getName());
-                final List<String> roadIds = routeInput.getRoadIds();
-                for (final String roadId : roadIds) {
-                    route.add(roadNetwork.findByUserId(roadId));
-                }
-                routes.put(route.getName(), route);
-            }
         }
 
         final OutputInput outputInput = simulationInput.getOutputInput();

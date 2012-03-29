@@ -65,6 +65,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         this.roadNetwork = roadNetwork;
     }
 
+    public void reset() {
+        diversionOn = false;
+    }
+
     /*
      * (non-Javadoc)
      * 
