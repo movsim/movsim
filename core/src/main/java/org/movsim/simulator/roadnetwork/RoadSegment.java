@@ -89,6 +89,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private TrafficLights trafficLights;
     private SpeedLimits speedLimits;
     private Slopes slopes;
+    private VariableMessageSigns variableMessageSigns;
 
     // Sources and Sinks
     private TrafficSource trafficSource;
@@ -530,33 +531,39 @@ public class RoadSegment implements Iterable<Vehicle> {
         if (trafficLights != null) {
             trafficLights.update(dt, simulationTime, iterationCount, this);
         }
-        updateSpeedLimits();
-        updateSlopes();
+        applySpeedLimits();
+        applySlopes();
+        applyVariableMessageSigns();
     }
-    
-    private void updateSpeedLimits() {
+
+    private void applySpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getFrontPosition();
-                    final double speedlimit = speedLimits.calcSpeedLimit(pos);
-                    vehicle.setSpeedlimit(speedlimit);
-                    logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
+                    speedLimits.apply(vehicle);
                 }
             }
         }
     }
-    
-    private void updateSlopes() {
+
+    private void applySlopes() {
         if (slopes != null && slopes.isEmpty() == false) {
             for (final LaneSegment laneSegment : laneSegments) {
                 for (final Vehicle vehicle : laneSegment) {
                     assert vehicle.roadSegmentId() == id;
-                    final double pos = vehicle.getFrontPosition();
-                    final double slope = slopes.calcSlope(pos);
-                    vehicle.setSlope(slope);
-                    logger.debug("pos={} --> slope gradient{}", pos, slope);
+                    slopes.apply(vehicle);
+                }
+            }
+        }
+    }
+
+    private void applyVariableMessageSigns() {
+        if (variableMessageSigns != null && variableMessageSigns.isEmpty() == false) {
+            for (final LaneSegment laneSegment : laneSegments) {
+                for (final Vehicle vehicle : laneSegment) {
+                    assert vehicle.roadSegmentId() == id;
+                    variableMessageSigns.apply(vehicle);
                 }
             }
         }
@@ -764,16 +771,16 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setSpeedLimits(SpeedLimits speedLimits) {
         this.speedLimits = speedLimits;
     }
-    
+
     /**
      * Returns an iterable over all the speed limits in the road segment.
      * 
      * @return an iterable over all the speed limits in the road segment
      */
     public Iterable<SpeedLimit> speedLimits() {
-        return speedLimits == null ? null : speedLimits;
+        return speedLimits;
     }
-    
+
     /**
      * Sets the slopes for this road segment.
      * 
@@ -782,7 +789,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setSlopes(Slopes slopes) {
         this.slopes = slopes;
     }
-    
+
     /**
      * Returns an iterable over all the slopes in the road segment.
      * 
