@@ -972,6 +972,17 @@ public class Vehicle {
                     if (routeRoadSegment.exitsOnto(nextRouteRoadSegment.id())) {
                         // this vehicle needs to exit on this roadSegment
                         exitRoadSegmentId = roadSegmentId;
+                    } else {
+                        if (routeIndex + 1 < route.size()) {
+                            // there is another roadSegment on the route
+                            // so check if the next roadSegment is joined to an exit lane
+                            // of the current roadSegment
+                            final RoadSegment nextNextRouteRoadSegment = route.get(routeIndex + 1);
+                            if (nextRouteRoadSegment.exitsOnto(nextNextRouteRoadSegment.id())) {
+                                // this vehicle needs to exit on this roadSegment
+                                exitRoadSegmentId = roadSegmentId;
+                            }
+                        }
                     }
                 }
             }
