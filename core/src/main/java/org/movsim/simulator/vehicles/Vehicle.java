@@ -133,7 +133,7 @@ public class Vehicle {
     private final double reactionTime;
 
     /** The max deceleration . */
-    private final double maxDecel;
+    private final double maxDeceleration;
 
     /** The unique id of the vehicle */
     final long id;
@@ -231,7 +231,7 @@ public class Vehicle {
         length = vehInput.getLength();
         width = vehInput.getWidth();
         reactionTime = vehInput.getReactionTime();
-        maxDecel = vehInput.getMaxDeceleration();
+        maxDeceleration = vehInput.getMaxDeceleration();
 
         initialize();
         this.longitudinalModel = longitudinalModel;
@@ -274,7 +274,7 @@ public class Vehicle {
         fuelModel = null;
         trafficLightApproaching = null;
         reactionTime = 0.0;
-        maxDecel = 0.0;
+        maxDeceleration = 0.0;
         laneChangeModel = null;
         longitudinalModel = null;
         label = "";
@@ -302,7 +302,7 @@ public class Vehicle {
         fuelModel = source.fuelModel;
         trafficLightApproaching = source.trafficLightApproaching;
         reactionTime = source.reactionTime;
-        maxDecel = source.maxDecel;
+        maxDeceleration = source.maxDeceleration;
         laneChangeModel = source.laneChangeModel;
         longitudinalModel = source.longitudinalModel;
         label = source.label;
@@ -326,7 +326,7 @@ public class Vehicle {
         fuelModel = null;
         trafficLightApproaching = null;
         reactionTime = 0.0;
-        maxDecel = 0.0;
+        maxDeceleration = 0.0;
         laneChangeModel = null;
         longitudinalModel = ldm;
         label = "";
@@ -584,7 +584,7 @@ public class Vehicle {
         acc = moderateAcceleration(accModel, null);
 
 
-        acc = Math.max(acc + accError, -maxDecel); // limited to maximum deceleration
+        acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
     }
     /**
      * Moderates this vehicle's acceleration according to factors other than the LDM. For
@@ -1018,5 +1018,9 @@ public class Vehicle {
 
     public final double totalTraveledDistance() {
         return totalTraveledDistance;
+    }
+
+    public double getMaxDeceleration() {
+        return maxDeceleration;
     }
 }
