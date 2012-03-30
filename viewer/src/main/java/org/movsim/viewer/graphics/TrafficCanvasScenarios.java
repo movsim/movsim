@@ -113,6 +113,14 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     }
 
     /**
+     * Returns the current traffic scenario.
+     * @return the current traffic scenario
+     */
+    Scenario scenario() {
+        return scenario;
+    }
+
+    /**
      * Sets up the given traffic scenario.
      * 
      * @param scenario
