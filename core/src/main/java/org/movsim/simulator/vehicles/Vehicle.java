@@ -958,7 +958,9 @@ public class Vehicle {
         this.roadSegmentId = roadSegmentId;
         this.roadSegmentLength = roadSegmentLength;
         // assume this vehicle does not exit on this road segment
-        exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+        if (roadSegmentId != exitRoadSegmentId) {
+            exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+        }
         if (route != null && routeIndex < route.size()) {
             final RoadSegment routeRoadSegment = route.get(routeIndex);
             ++routeIndex;
