@@ -161,8 +161,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     double[] velocities;
 
-    private Color[] velocityColors;
-    private Color[] accelerationColors;
+    Color[] accelerationColors;
     protected Hashtable<String, Color> labelColors;
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
@@ -295,9 +294,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         this.popupStringExitEndRoad = popupStringExitEndRoad;
     }
 
-    void setVelocityColors() {
+    void setAccelerationColors() {
         accelerationColors = new Color[] { Color.WHITE, Color.RED, Color.BLACK, Color.GREEN };
-        assert velocities.length == velocityColors.length - 1;
         assert accelerations.length == accelerationColors.length - 1;
     }
 
