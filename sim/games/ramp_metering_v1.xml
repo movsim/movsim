@@ -31,6 +31,10 @@
             <VEHICLE_TYPE label="ACC1" fraction="1.0" relative_v0_randomization="0.0"/>
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="ACC1" fraction="0.5" relative_v0_randomization="0.0" route_label="north"/>
+                <VEHICLE_TYPE label="ACC2" fraction="0.5" relative_v0_randomization="0.0" route_label="north_then_east"/>
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS/>
             <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="800" v="24"/>
@@ -48,10 +52,6 @@
             <DETECTORS/>
         </ROAD>
         <ROAD id="25">
-            <TRAFFIC_COMPOSITION>
-                <VEHICLE_TYPE label="ACC1" fraction="0.5" relative_v0_randomization="0.0" route_label="north"/>
-                <VEHICLE_TYPE label="ACC2" fraction="0.5" relative_v0_randomization="0.0" route_label="north_then_east"/>
-            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS/>
             <TRAFFIC_SOURCE>
                 <INFLOW t="0" q_per_hour="1200"/>
