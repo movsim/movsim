@@ -165,13 +165,14 @@ public class Vehicle {
     private final TrafficLightApproaching trafficLightApproaching;
     private final FuelConsumption fuelModel; // can be null
     private final Route route;
+    private int routeIndex;
 
     private boolean isBrakeLightOn;
 
     private PhysicalQuantities physQuantities;
 
     // Exit Handling
-    private int roadSegmentId;
+    private int roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     private double roadSegmentLength;
     private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
@@ -940,6 +941,7 @@ public class Vehicle {
             laneOld = Lane.LANE1;
         }
         setRearPosition(newRearPosition);
+        setRoadSegment(newRoadSegment.id(), newRoadSegment.roadLength());
         // this.exitEndPos = exitPos;
         // trafficLight = null;
         // speedLimit = 0.0;
@@ -955,6 +957,25 @@ public class Vehicle {
     public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
         this.roadSegmentId = roadSegmentId;
         this.roadSegmentLength = roadSegmentLength;
+        // assume this vehicle does not exit on this road segment
+        exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+        if (route != null && routeIndex < route.size()) {
+            final RoadSegment routeRoadSegment = route.get(routeIndex);
+            ++routeIndex;
+            if (routeRoadSegment.id() == roadSegmentId) {
+                // this vehicle is on the route
+                if (routeIndex < route.size()) {
+                    // there is another roadSegment on the route
+                    // so check if the next roadSegment is joined to an exit lane
+                    // of the current roadSegment
+                    final RoadSegment nextRouteRoadSegment = route.get(routeIndex);
+                    if (routeRoadSegment.exitsOnto(nextRouteRoadSegment.id())) {
+                        // this vehicle needs to exit on this roadSegment
+                        exitRoadSegmentId = roadSegmentId;
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -508,6 +508,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void addObstacle(Vehicle obstacle) {
         // assert obstacle.type() == Vehicle.Type.OBSTACLE;
+        obstacle.setRoadSegment(id, roadLength);
         addVehicle(obstacle);
     }
 
