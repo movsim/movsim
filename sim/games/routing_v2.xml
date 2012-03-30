@@ -57,6 +57,10 @@
                 <INHOMOGENEITY x="600" alpha_T="3.5" alpha_v0="0.4" />
                 <INHOMOGENEITY x="600" alpha_T="1.8" alpha_v0="0.7" />
             </FLOW_CONSERVING_INHOMOGENEITIES>
+              <SPEED_LIMITS>
+                <SPEED_LIMIT x="200" speedlimit_kmh="50" />
+                <SPEED_LIMIT x="500" speedlimit_kmh="200" />
+            </SPEED_LIMITS>
          </ROAD>
 
  
