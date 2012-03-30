@@ -86,6 +86,13 @@ public class Route implements Iterable<RoadSegment> {
     }
 
     /**
+     * Gets the road segment of the given index
+     */
+    public RoadSegment get(int index) {
+        return roadSegments.get(index);
+    }
+
+    /**
      * Returns an iterator over all the road segments in the road network.
      * 
      * @return an iterator over all the road segments in the road network
