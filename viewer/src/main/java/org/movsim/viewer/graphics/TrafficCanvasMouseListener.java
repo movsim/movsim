@@ -90,7 +90,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
         for (final RoadSegment roadSegment : roadNetwork) {
             // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
             final TrafficCanvasScenarios trafficCanvasScenarios = (TrafficCanvasScenarios) trafficCanvas;
-            if (trafficCanvasScenarios.scenario() ==  TrafficCanvasScenarios.Scenario.RAMPMETERING && roadSegment.userId().equals("1")) {
+            if (trafficCanvasScenarios.scenario() ==  TrafficCanvasScenarios.Scenario.ROUTING && roadSegment.userId().equals("1")) {
                 if (diversionOn == false) {
                     diversionOn = true;
                     roadSegment.addVariableMessageSign(variableMessageSign);
