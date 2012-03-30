@@ -238,9 +238,10 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
-        assert vehicle.getFrontPosition() >= 0.0;
+        // TODO assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
+        assert vehicle.roadSegmentId() == roadSegment.id();
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
         if (index < 0) {
@@ -251,7 +252,6 @@ public class LaneSegment implements Iterable<Vehicle> {
             // vehicle is in the same position as an existing vehicle - this should not happen
             assert false;
         }
-        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         assert laneIsSorted();
         assert assertInvariant();
     }
@@ -298,7 +298,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
-        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
+        assert vehicle.roadSegmentId() == roadSegment.id();
         assert laneIsSorted();
         assert assertInvariant();
         if (DEBUG) {
@@ -469,10 +469,10 @@ public class LaneSegment implements Iterable<Vehicle> {
 
         while (low <= high) {
             final int mid = (low + high) >> 1;
-            final double midPos = vehicles.get(mid).getRearPosition();
+            final double rearPos = vehicles.get(mid).getRearPosition();
             // final int compare = Double.compare(midPos, vehiclePos);
             // note vehicles are sorted in reverse order of position
-            final int compare = Double.compare(vehiclePos, midPos);
+            final int compare = Double.compare(vehiclePos, rearPos);
             if (compare < 0) {
                 low = mid + 1;
             } else if (compare > 0) {

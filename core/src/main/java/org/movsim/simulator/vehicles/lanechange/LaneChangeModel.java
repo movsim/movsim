@@ -60,6 +60,11 @@ public class LaneChangeModel {
     private MOBIL lcModelMOBIL;
 
     private final LaneChangeInputData lcInputData;
+    // Exit Handling
+    // distance at which driver should think about changing lanes for exit
+    private static double distanceBeforeExitWantsToChangeLanes = 500.0;
+    // distance at which driver must get into exit lane
+    public static double distanceBeforeExitMustChangeLanes = 200.0;
 
     /**
      * Instantiates a new lane changing model.
@@ -110,38 +115,41 @@ public class LaneChangeModel {
     public boolean isSafeLaneChange(LaneSegment laneSegment) {
         final Vehicle front = laneSegment.frontVehicle(me);
         final Vehicle back = laneSegment.rearVehicle(me);
-        final boolean changeSafe = checkSafetyCriterion(front, back, lcModelMOBIL.getSafeDeceleration());
+        final boolean changeSafe = checkSafetyCriterion(front, back);
         return changeSafe;
     }
 
-    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh, double safeDeceleration) {
+    private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh) {
 
         // safety incentive (in two steps)
+        final double safeDeceleration = lcModelMOBIL.getSafeDeceleration();
         final double gapFront = me.getNetDistance(frontVeh);
-        final double gapBack = (backVeh == null) ? MovsimConstants.GAP_INFINITY : backVeh.getNetDistance(me);
-
         // check distances
         // negative net distances possible because of different vehicle lengths!
-        if (gapFront < lcModelMOBIL.getMinimumGap() || gapBack < lcModelMOBIL.getMinimumGap()) {
-            logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
+        if (gapFront < lcModelMOBIL.getMinimumGap()) {
+            logger.debug("gapFront={}", gapFront);
             return false;
         }
-
-        final double backNewAcc = (backVeh == null) ? 0 : backVeh.getLongitudinalModel().calcAcc(backVeh, me);
-
-        // check security constraint for new follower
-
-        if (backNewAcc <= -safeDeceleration) {
-            logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
-            logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
-            return false;
+        if (backVeh != null) {
+            final double gapBack = backVeh.getNetDistance(me);
+            if (gapBack < lcModelMOBIL.getMinimumGap()) {
+                logger.debug("gapBack={}", gapBack);
+                return false;
+            }
+            final double backNewAcc = backVeh.getLongitudinalModel().calcAcc(backVeh, me);
+            // check security constraint for new follower
+            if (backNewAcc <= -safeDeceleration) {
+                logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
+                logger.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
+                return false;
+            }
         }
 
         final double meNewAcc = me.getLongitudinalModel().calcAcc(me, frontVeh);
         if (meNewAcc >= -safeDeceleration) {
-            logger.debug("meNewAcc={}, bSafe={}", meNewAcc, lcModelMOBIL.getSafeDeceleration());
-            logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
-            logger.debug("backNewAcc={}, bSafe={}", backNewAcc, lcModelMOBIL.getSafeDeceleration());
+            logger.debug("meNewAcc={}, bSafe={}", meNewAcc, safeDeceleration);
+            //logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
+            //logger.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
             return true;
         }
         return false;
@@ -151,24 +159,40 @@ public class LaneChangeModel {
 
         final int currentLane = me.getLane();
 
-        // initialize with largest possible deceleration
-        double accToLeft = -Double.MAX_VALUE;
-        double accToRight = -Double.MAX_VALUE;
-
         // consider mandatory lane-change to exit
         if (me.exitRoadSegmentId() == roadSegment.id()) {
             if (currentLane == Lane.LANE1) {
                 // already in exit lane, so do not move out of it
                 return MovsimConstants.NO_CHANGE;
-            } else if (currentLane == Lane.LANE2) {
-                final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
-                if (isSafeLaneChange(laneSegment)) {
+            } else if (currentLane > Lane.LANE1) {
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
+                if (isSafeLaneChange(newLaneSegment)) {
                     return MovsimConstants.TO_RIGHT;
                 }
                 return MovsimConstants.NO_CHANGE;
             }
         }
+        final LaneSegment sinkLaneSegment = roadSegment.laneSegment(currentLane).sinkLaneSegment();
+        if (sinkLaneSegment != null && me.exitRoadSegmentId() == sinkLaneSegment.roadSegment().id()) {
+            // next road segment is the exit segment
+            final double distanceToExit = roadSegment.roadLength() - me.getFrontPosition();
+            if (distanceToExit < distanceBeforeExitMustChangeLanes) {
+                if (currentLane == Lane.LANE1) {
+                    // already in exit lane, so do not move out of it
+                    return MovsimConstants.NO_CHANGE;
+                } else if (currentLane > Lane.LANE1) {
+                    final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
+                    if (isSafeLaneChange(newLaneSegment)) {
+                        return MovsimConstants.TO_RIGHT;
+                    }
+                    return MovsimConstants.NO_CHANGE;
+                }
+            }
+        }
 
+        // initialize with largest possible deceleration
+        double accToLeft = -Double.MAX_VALUE;
+        double accToRight = -Double.MAX_VALUE;
         // consider lane-changing to right-hand side lane (decreasing lane index)
         if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
             final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_RIGHT);

@@ -238,8 +238,8 @@ public class PaintRoadMapping {
             }
         }
         // default drawing
-        final double sectionLength = 5.0; // draw the road in sections 5 meters
-                                          // long
+        // draw the road in sections 5 meters long
+        final double sectionLength = 5.0;
         double roadPos = 0.0;
         posTheta = roadMapping.startPos(lateralOffset);
         from.setLocation(posTheta.x, posTheta.y);

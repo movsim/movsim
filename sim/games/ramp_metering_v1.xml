@@ -11,6 +11,14 @@
                 <MOBIL b_safe="50.0" s_min="2.0" threshold="0.05" bias_right="0.1" politeness="0."/>
             </LANE_CHANGE_MODEL>
         </VEHICLE>
+        <VEHICLE label="ACC2" length="6" b_max="10000">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1"/>
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+                <MOBIL b_safe="50.0" s_min="2.0" threshold="0.05" bias_right="0.1" politeness="0."/>
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
         <VEHICLE label="Obstacle" length="0">
             <LONGITUDINAL_MODEL>
                 <IDM v0="0" T="1" s0="2" a="1.0" b="1.5"/>
@@ -23,6 +31,10 @@
             <VEHICLE_TYPE label="ACC1" fraction="1.0" relative_v0_randomization="0.0"/>
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="ACC1" fraction="0.5" relative_v0_randomization="0.0" route_label="north"/>
+                <VEHICLE_TYPE label="ACC2" fraction="0.5" relative_v0_randomization="0.0" route_label="north_then_east"/>
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS/>
             <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="800" v="24"/>
@@ -61,6 +73,20 @@
                 <TRAFFIC_LIGHT x="300" green_time="0" green_red_time="-1" red_time="0" red_green_time="-1" phase_shift="0"/>
             </TRAFFIC_LIGHTS>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="north">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
+            </ROUTE>
+            <ROUTE label="north_then_east">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="37" />
+                <ROAD id="26" />
+                <ROAD id="27" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT/>
     </SIMULATION>
 </SCENARIO>

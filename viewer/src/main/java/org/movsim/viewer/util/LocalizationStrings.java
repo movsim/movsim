@@ -147,12 +147,8 @@ public class LocalizationStrings extends ListResourceBundle {
             { "VehicleColorsTip", "Toggles through color modes" },
 
             // vehicle information popup window
-            {
-                    "VehiclePopup",
-                    "Vehicle\n  id: %d\n type: %s\n lane: %d\n  pos: %.0fm\n  vel: %.0f km/h\n  acc: %.4f m/s\u00B2\n  distance: %.0fm\n  exit: R%d(L%d:L%d)" },
-            {
-                    "VehiclePopupNoExit",
-                    "Vehicle\n  id: %d\n  lane: %d\n  pos: %.0fm\n  vel: %.0f km/h\n  acc: %.4f m/s\u00B2\n  distance: %.0fm\n  exit: end of road" },
+            { "VehiclePopup", "Vehicle\n  id: %d\n type: %s\n lane: %d\n  pos: %.0fm\n  vel: %.0f km/h\n  acc: %.4f m/s\u00B2\n  distance: %.0fm\n  exit: %s" },
+            { "VehiclePopupNoExit", "end of road" },
 
             // status messages
             { "Paused", "Paused" },

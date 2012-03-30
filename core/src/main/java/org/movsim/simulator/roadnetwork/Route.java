@@ -39,16 +39,8 @@ public class Route implements Iterable<RoadSegment> {
     /**
      * Constructor.
      */
-    public Route() {
+    public Route(String name) {
         roadSegments = new ArrayList<RoadSegment>();
-    }
-
-    /**
-     * Sets the name of the road network.
-     * 
-     * @param name
-     */
-    public final void setName(String name) {
         this.name = name;
     }
 
@@ -91,6 +83,13 @@ public class Route implements Iterable<RoadSegment> {
         roadSegments.add(roadSegment);
         length += roadSegment.roadLength();
         return roadSegment;
+    }
+
+    /**
+     * Gets the road segment of the given index
+     */
+    public RoadSegment get(int index) {
+        return roadSegments.get(index);
     }
 
     /**

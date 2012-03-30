@@ -1,0 +1,53 @@
+The Routing Game ("Navi-Spiel")
+
+
+Interactive action:  
+
+Control the routing recommendation by clicking at the toggle switch
+"Use Deviation" - "Use Main Road" (the text changes with each
+click). When the routing recommendation is "Use Deviation", all
+vehicles on the right lane use the deviation. The vehicles on all
+other lanes (and all vehicles if "Use Main Road" is active) remain on
+the freeway.
+
+
+Externally given:
+
+A fixed traffic demand curve with a "rush-hour" peak containing a total of n
+cars (e.g., n=500). The main road ("freeway") has a road-works
+bottleneck. At peak demand, the inflow exceeds the freeway
+capacity. It is set such that even the best player should not manage
+to avoid all breakdowns.  The capacity of the "village bottleneck"
+is half the capacity of one freeway lane (or less).
+
+Objective: 
+
+Switch the routing recommendation so as to optimally use the capacity
+of the two roads. Game is over if all vehicles are served, i.e., the
+network is empty. High-scores list as in the Traffic Lights Master.
+
+What makes the game interesting:
+
+The delay between decision time (when the vehicles pass the
+location of the blue "decision button") and the effects of the
+decision (when vehicle pass the respective bottlenecks. During this
+time, the congestion(s) behind the bottlenecks may have accumulated or
+dissolved. Thus, the naive strategy "Use the route where the congested
+zone is the shortest" will lead to oscillations. 
+The game should be designed that the lure to use the
+deviation is great, and that the secondary-network congestions are
+severe (the capacity of the "village bottleneck" is small) maybe even
+resulting in a spill-over at the deviation leading to an additional
+off-ramp bottleneck at the main road. However, the capacity drop of
+the freeway bottleneck is much more pronounced than that of the
+village bottleneck. Therefore, it may be useful to delay a mainroad
+breakdown as long as possible even if this provokes an earlier
+breakdown on the secondary network. (In fact, this is the basic
+strategy of the ramp metering: Use metering to prevent a breakdown; do
+not meter if a breakdown already has occurred). 
+
+By the way: A "ramp metering game" (in a way, the reverse of the
+routing game) can be devised as well.
+
+
+

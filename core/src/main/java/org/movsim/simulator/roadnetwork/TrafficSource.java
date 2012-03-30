@@ -273,6 +273,7 @@ public class TrafficSource implements SimulationTimeStep {
         vehicle.setFrontPosition(xEnter);
         vehicle.setSpeed(vEnter);
         vehicle.setLane(laneSegment.lane());
+        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         laneSegment.addVehicle(vehicle);
         // status variables of entering vehicle for logging
         enteringVehCounter++;

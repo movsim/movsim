@@ -97,14 +97,16 @@ public class TrafficCanvasKeyListener implements KeyListener {
     }
 
     public void commandReset() {
+        trafficCanvas.stop();
         trafficCanvas.roadNetwork.clear();
         trafficCanvas.simulator.initialize();
         trafficCanvas.reset();
+        trafficCanvas.start();
     }
 
     public void commandCycleVehicleColors() {
-        if (trafficCanvas.velocities == null) {
-            trafficCanvas.setVelocityColors();
+        if (trafficCanvas.accelerationColors == null) {
+            trafficCanvas.setAccelerationColors();
         }
         // Cycle through the first ... vehicle color modes. This is the only place
         // where the use of an enum for the color mode is somewhat awkward.
@@ -118,8 +120,8 @@ public class TrafficCanvasKeyListener implements KeyListener {
     }
 
     public void commandToggleVehicleColorMode(VehicleColorMode mode) {
-        if (trafficCanvas.velocities == null) {
-            trafficCanvas.setVelocityColors();
+        if (trafficCanvas.accelerationColors == null) {
+            trafficCanvas.setAccelerationColors();
         }
         if (trafficCanvas.vehicleColorMode == mode) {
             trafficCanvas.vehicleColorMode = trafficCanvas.vehicleColorModeSave;

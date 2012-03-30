@@ -161,8 +161,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     double[] velocities;
 
-    private Color[] velocityColors;
-    private Color[] accelerationColors;
+    Color[] accelerationColors;
     protected Hashtable<String, Color> labelColors;
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
@@ -172,6 +171,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     String popupStringExitEndRoad;
     protected Vehicle vehiclePopup;
     protected VehicleTipWindow vehicleTipWindow;
+    final TrafficCanvasMouseListener mouseListener;
 
     protected long lastVehicleViewed = -1;
     protected long vehicleToHighlightId = -1;
@@ -190,7 +190,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         simulationRunnable.setUpdateDrawingCallback(this);
         simulationRunnable.setHandleExceptionCallback(this);
 
-        final TrafficCanvasMouseListener mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
+        mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
         addKeyListener(new TrafficCanvasKeyListener(this));
@@ -261,6 +261,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected void reset() {
         super.reset();
         simulator.reset();
+        mouseListener.reset();
     }
 
     @Override
@@ -293,9 +294,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         this.popupStringExitEndRoad = popupStringExitEndRoad;
     }
 
-    void setVelocityColors() {
+    void setAccelerationColors() {
         accelerationColors = new Color[] { Color.WHITE, Color.RED, Color.BLACK, Color.GREEN };
-        assert velocities.length == velocityColors.length - 1;
         assert accelerations.length == accelerationColors.length - 1;
     }
 

@@ -140,7 +140,10 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     @Override
     public void setSize(int newWidth, int newHeight) {
-        assert isDisplayable();
+        // TODO assert isDisplayable();
+        if (!isDisplayable()) {
+            return;
+        }
         super.setSize(Math.max(newWidth, 10), Math.max(newHeight, 10));
         final int width = getWidth();
         final int height = getHeight();

@@ -64,13 +64,13 @@
 
     <!-- Upstream: Diverge R2; downstream: single lane R7 -->
     <!-- Lane closing left lane laneId=-1 -->
-    <road name="R3" length="350" id="3" junction="-1">
+    <road name="R3" length="200" id="3" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
             <successor elementType="road" elementId="7" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="400" y="100" hdg="0.0" length="350">
+            <geometry s="0.0" x="400" y="100" hdg="0.0" length="200">
                 <line />
             </geometry>
         </planView>
@@ -90,19 +90,38 @@
             </laneSection>
         </lanes>
 
+<!--
+        <lanes>
+            <laneSection s="0.0">
+                <right>
+                    <lane id="-1" type="mwyEntry" level="0">
+                        <link>
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                    <lane id="-2" type="driving" level="0">
+                        <link>
+                            <successor id="-1" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+ -->
 
    </road>
 
     <!-- Single-lane bottleneck-->
     <!-- Upstream: Two-lane road R3 -->
     <!-- Downstream: Two-lane road R8 -->
-    <road name="R7" length="100" id="7" junction="-1">
+    <road name="R7" length="200" id="7" junction="-1">
         <link>
             <predecessor elementType="road" elementId="3" contactPoint="end" />
             <successor elementType="road" elementId="8" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="750.0" y="105" hdg="0.0" length="100">
+            <geometry s="0.0" x="600.0" y="105" hdg="0.0" length="200">
                 <line />
             </geometry>
         </planView>
@@ -125,13 +144,13 @@
     <!-- Upstream: Single-lane road R7 -->
     <!-- Downstream: Two-lane road R4 -->
     <!-- (junction only if ambiguous, would be diverge, here) -->
-    <road name="R8" length="74.3" id="8" junction="-1">
+    <road name="R8" length="124.3" id="8" junction="-1">
         <link>
              <predecessor elementType="road" elementId="7" contactPoint="end" />
              <successor elementType="road" elementId="4" contactPoint="start" />
         </link>
         <planView>
-            <geometry s="0.0" x="850" y="100" hdg="0.0" length="74.3">
+            <geometry s="0.0" x="800" y="100" hdg="0.0" length="124.3">
                 <line />
             </geometry>
         </planView>
@@ -253,12 +272,30 @@
                             <predecessor id="-3" />
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                        <width sOffset="200.0" a="6.0" b="0.0" c="0.0" d="0.0" />
-                        <width sOffset="400.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
                 </right>
             </laneSection>
-         </lanes>
+            <laneSection s="200.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-3" />
+                        </link>
+                        <width sOffset="0.0" a="6.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+            <laneSection s="400.0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
+                        <link>
+                            <predecessor id="-3" />
+                        </link>
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
     </road>
 
 

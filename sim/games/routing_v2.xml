@@ -9,7 +9,7 @@
                 <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="15.0" s_min="2.0" threshold="0.1" bias_right="0." politeness="0.1" />
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0." politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- trucks -->
@@ -28,7 +28,7 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="3600" fixed_seed="true" seed="42" crash_exit="false">
+    <SIMULATION dt="0.2" duration="86400" fixed_seed="true" seed="42" crash_exit="false">
 
         <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC1" fraction="1.0" relative_v0_randomization="0.0" />
@@ -37,8 +37,8 @@
         <ROAD id="1">
             <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="0" />
-                <INFLOW t="60" q_per_hour="2200" />
-                <INFLOW t="180" q_per_hour="2200" />
+                <INFLOW t="60" q_per_hour="1800" />
+                <INFLOW t="180" q_per_hour="1800" />
                 <INFLOW t="240" q_per_hour="0" />
             </TRAFFIC_SOURCE>
             <FLOW_CONSERVING_INHOMOGENEITIES>
@@ -52,10 +52,10 @@
 
         <ROAD id="10">
             <FLOW_CONSERVING_INHOMOGENEITIES>
-                <INHOMOGENEITY x="200" alpha_T="1.8" alpha_v0="0.7" />
-                <INHOMOGENEITY x="200" alpha_T="3.5" alpha_v0="0.4" />
-                <INHOMOGENEITY x="400" alpha_T="3.5" alpha_v0="0.4" />
                 <INHOMOGENEITY x="400" alpha_T="1.8" alpha_v0="0.7" />
+                <INHOMOGENEITY x="400" alpha_T="3.5" alpha_v0="0.4" />
+                <INHOMOGENEITY x="600" alpha_T="3.5" alpha_v0="0.4" />
+                <INHOMOGENEITY x="600" alpha_T="1.8" alpha_v0="0.7" />
             </FLOW_CONSERVING_INHOMOGENEITIES>
          </ROAD>
 
