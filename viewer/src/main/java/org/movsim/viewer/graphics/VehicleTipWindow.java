@@ -78,13 +78,16 @@ class VehicleTipWindow extends Window {
 
     @SuppressWarnings({ "boxing" })
     public void show(Point point, Vehicle vehicle) {
-        String string;
+        final String exitString;
+        if (vehicle.exitRoadSegmentId() == Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
+            exitString = this.trafficCanvas.popupStringExitEndRoad;
+        } else {
+            exitString = this.trafficCanvas.roadNetwork.findById(vehicle.exitRoadSegmentId()).userId();
+        }
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
-        string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
-                vehicle.getLane() + 1, vehiclePhysical.getFrontPosition(), vehiclePhysical.getSpeed()
-                        * ConversionUtilities.MS_TO_KMH, vehiclePhysical.getAcc(), vehicle.totalTraveledDistance(), 1,
-                1, 1);
-        // }
+        final String string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),
+                    vehicle.getLane() + 1, vehiclePhysical.getFrontPosition(), vehiclePhysical.getSpeed()
+                            * ConversionUtilities.MS_TO_KMH, vehiclePhysical.getAcc(), vehicle.totalTraveledDistance(), exitString);
         final Label label = new Label(string, Label.LEFT);
         label.setBackground(new Color(200, 220, 240));
         removeAll();
