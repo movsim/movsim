@@ -518,6 +518,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
+        vehicle.setRoadSegment(id, roadLength);
         laneSegments[vehicle.getLane()].addVehicle(vehicle);
     }
 
@@ -527,6 +528,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void appendVehicle(Vehicle vehicle) {
+        vehicle.setRoadSegment(id, roadLength);
         laneSegments[vehicle.getLane()].appendVehicle(vehicle);
     }
 
