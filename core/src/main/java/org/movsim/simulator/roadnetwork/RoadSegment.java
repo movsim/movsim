@@ -380,6 +380,18 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane].sinkLaneSegment().lane();
     }
 
+    public boolean exitsOnto(int exitRoadSegmentId) {
+        for (int lane = 0; lane < laneCount; ++lane) {
+            final LaneSegment laneSegment = laneSegments[lane];
+            if (laneSegment.type() == Lane.Type.EXIT) {
+                if (laneSegment.sinkLaneSegment().roadSegment().id() == exitRoadSegmentId) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Returns the number of vehicles removed from this road segment.
      * 
