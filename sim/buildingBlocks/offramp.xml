@@ -30,14 +30,26 @@
     </VEHICLES>
     <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" route_label="east"/>
+            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" route_label="south"/>
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="1200" />
             </TRAFFIC_SOURCE>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="east">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
+            </ROUTE>
+            <ROUTE label="south">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="4" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT />
     </SIMULATION>
 </SCENARIO>
