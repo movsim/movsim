@@ -257,7 +257,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     public int addVehicleTemp(Vehicle vehicle) {
-        assert vehicle.getFrontPosition() >= 0.0;
+        // assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
         assert vehicle.getLane() == lane;
         assert assertInvariant();
