@@ -164,8 +164,8 @@ public class LaneChangeModel {
             if (currentLane == Lane.LANE1) {
                 // already in exit lane, so do not move out of it
                 return MovsimConstants.NO_CHANGE;
-            } else if (currentLane == Lane.LANE2) {
-                final LaneSegment newLaneSegment = roadSegment.laneSegment(Lane.LANE1);
+            } else if (currentLane > Lane.LANE1) {
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
                 if (isSafeLaneChange(newLaneSegment)) {
                     return MovsimConstants.TO_RIGHT;
                 }
@@ -180,8 +180,8 @@ public class LaneChangeModel {
                 if (currentLane == Lane.LANE1) {
                     // already in exit lane, so do not move out of it
                     return MovsimConstants.NO_CHANGE;
-                } else if (currentLane == Lane.LANE2) {
-                    final LaneSegment newLaneSegment = roadSegment.laneSegment(Lane.LANE1);
+                } else if (currentLane > Lane.LANE1) {
+                    final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
                     if (isSafeLaneChange(newLaneSegment)) {
                         return MovsimConstants.TO_RIGHT;
                     }
