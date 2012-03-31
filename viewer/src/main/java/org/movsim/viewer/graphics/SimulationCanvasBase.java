@@ -123,7 +123,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     }
 
-    protected void reset() {
+    public void reset() {
         resetScaleAndOffset();
         simulationRunnable.reset();
     }

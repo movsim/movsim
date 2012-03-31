@@ -176,8 +176,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected long lastVehicleViewed = -1;
     protected long vehicleToHighlightId = -1;
 
-    public TrafficCanvas(SimulationRunnable simulationRunnable, Simulator simulator) {
-        super(simulationRunnable);
+    public TrafficCanvas(Simulator simulator) {
+        super(simulator.getSimulationRunnable());
         this.simulator = simulator;
         this.roadNetwork = simulator.getRoadNetwork();
 
@@ -258,7 +258,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     @Override
-    protected void reset() {
+    public void reset() {
         super.reset();
         simulator.reset();
         mouseListener.reset();
@@ -459,11 +459,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
                 }
             }
-
             totalAnimationTime += System.currentTimeMillis() - timeBeforePaint_ms;
-
             drawAfterVehiclesMoved(g, simulationRunnable.simulationTime(), simulationRunnable.iterationCount());
-
         }
     }
 
@@ -471,7 +468,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // draw vehicle polygon at new position
         final RoadMapping.PolygonFloat polygon = roadMapping.mapFloat(vehicle, simulationTime);
         vehiclePath.reset();
-
         vehiclePath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
         vehiclePath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
         vehiclePath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);

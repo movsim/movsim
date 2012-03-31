@@ -32,7 +32,6 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Set;
 
-import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -59,8 +58,8 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     private double speedupEndTime;
     private int sleepTimeSave;
 
-    public TrafficCanvasScenarios(SimulationRunnable simulationRunnable, Simulator simulator) {
-        super(simulationRunnable, simulator);
+    public TrafficCanvasScenarios(Simulator simulator) {
+        super(simulator);
 
         simulationRunnable.addUpdateStatusCallback(this);
         setStatusControlCallbacks(statusControlCallbacks);
