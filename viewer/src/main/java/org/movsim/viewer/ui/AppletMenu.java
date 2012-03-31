@@ -12,21 +12,27 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
 public class AppletMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Applet frame;
-    final CanvasPanel canvasPanel;
+    private final CanvasPanel canvasPanel;
+    private final TrafficCanvas trafficCanvas;
+    private final Simulator simulator;
     private final ResourceBundle resourceBundle;
 
     private LogWindow logWindow;
     private StatusPanel statusPanel;
 
-    public AppletMenu(Applet mainFrame, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(Applet mainFrame, Simulator simulator, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
+        this.trafficCanvas = canvasPanel.trafficCanvas();
+        this.simulator = simulator;
         this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
     }
@@ -120,9 +126,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("onramp", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("onramp", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -135,9 +141,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("offramp", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("offramp", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -151,9 +157,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("flow_conserving_bottleneck", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("flow_conserving_bottleneck", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -166,9 +172,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("speedlimit", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("speedlimit", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -182,9 +188,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("trafficlight", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("trafficlight", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -198,9 +204,9 @@ public class AppletMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        canvasPanel.simulator.loadScenarioFromXml("laneclosure", "/sim/buildingBlocks/");
-                        canvasPanel.trafficCanvas.reset();
-                        canvasPanel.trafficCanvas.start();
+                        simulator.loadScenarioFromXml("laneclosure", "/sim/buildingBlocks/");
+                        trafficCanvas.reset();
+                        trafficCanvas.start();
                         statusPanel.reset();
                         uiDefaultReset();
                     }
@@ -213,9 +219,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("cloverleaf", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("cloverleaf", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -251,9 +257,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("ringroad_1lane", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("ringroad_1lane", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -267,9 +273,9 @@ public class AppletMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("ringroad_2lanes", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("ringroad_2lanes", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -379,10 +385,10 @@ public class AppletMenu extends JPanel {
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
 
-        cbSpeedLimits.setSelected(canvasPanel.trafficCanvas.isDrawSpeedLimits());
-        cbDrawRoadIds.setSelected(canvasPanel.trafficCanvas.isDrawRoadId());
-        cbSources.setSelected(canvasPanel.trafficCanvas.isDrawSources());
-        cbSinks.setSelected(canvasPanel.trafficCanvas.isDrawSinks());
+        cbSpeedLimits.setSelected(trafficCanvas.isDrawSpeedLimits());
+        cbDrawRoadIds.setSelected(trafficCanvas.isDrawRoadId());
+        cbSources.setSelected(trafficCanvas.isDrawSources());
+        cbSinks.setSelected(trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 
@@ -458,8 +464,8 @@ public class AppletMenu extends JPanel {
     }
 
     public void startbuttonToPauseAtScenarioChange() {
-        if (canvasPanel.simulator.getSimulationRunnable().isPaused()) {
-            canvasPanel.controller.commandTogglePause();
+        if (simulator.getSimulationRunnable().isPaused()) {
+            canvasPanel.controller().commandTogglePause();
         }
     }
 
@@ -536,42 +542,26 @@ public class AppletMenu extends JPanel {
 
     protected void handleDrawRoadIds(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawRoadId(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawRoadId(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawRoadId(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSources(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSources(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSources(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawSources(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSinks(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSinks(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSinks(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawSinks(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSpeedLimits(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSpeedLimits(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSpeedLimits(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawSpeedLimits(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     public void uiDefaultReset() {
@@ -579,5 +569,4 @@ public class AppletMenu extends JPanel {
         statusPanel.setWithProgressBar(false);
         statusPanel.reset();
     }
-
 }

@@ -39,12 +39,10 @@ import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    final Simulator simulator;
-    TrafficCanvasScenarios trafficCanvas;
-    TrafficCanvasKeyListener controller;
+    private TrafficCanvasScenarios trafficCanvas;
+    private TrafficCanvasKeyListener controller;
 
-    public CanvasPanel(final ResourceBundle resourceBundle, Simulator simulator) {
-        this.simulator = simulator;
+    public CanvasPanel(final ResourceBundle resourceBundle, final Simulator simulator) {
 
         // TODO check if needed anymore. Seems working fine with linux. Check windows and mac!
         // SwingHelper.makeLightWeightComponentsVisible();
@@ -54,7 +52,7 @@ public class CanvasPanel extends JPanel {
             SwingUtilities.invokeAndWait(new Runnable() {
                 @Override
                 public void run() {
-                    initApp(resourceBundle);
+                    initApp(resourceBundle, simulator);
                 }
             });
         } catch (final Exception e) {
@@ -63,8 +61,16 @@ public class CanvasPanel extends JPanel {
         }
     }
 
-    public void initApp(ResourceBundle resourceBundle) {
-        trafficCanvas = new TrafficCanvasScenarios(simulator.getSimulationRunnable(), simulator);
+    public final TrafficCanvasScenarios trafficCanvas() {
+        return trafficCanvas;
+    }
+
+    public final TrafficCanvasKeyListener controller() {
+        return controller;
+    }
+
+    public void initApp(ResourceBundle resourceBundle, Simulator simulator) {
+        trafficCanvas = new TrafficCanvasScenarios(simulator);
         controller = new TrafficCanvasKeyListener(trafficCanvas);
         initStrings(resourceBundle);
         layoutAndAddCanvasToPanel();

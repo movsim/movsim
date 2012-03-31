@@ -38,6 +38,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -60,10 +61,11 @@ public class MainFrame extends JFrame {
         initLookAndFeel();
 
         canvasPanel = new CanvasPanel(resourceBundle, simulator);
+        final TrafficCanvasScenarios trafficCanvas = canvasPanel.trafficCanvas();
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
         addToolBar(resourceBundle);
-        addMenu(resourceBundle);
+        addMenu(resourceBundle, simulator);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
@@ -81,11 +83,11 @@ public class MainFrame extends JFrame {
 
         // first scenario
         if (projectMetaData.getProjectName().equals("")) {
-            canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
+            trafficCanvas.setupTrafficScenario(defaultScenario);
         } else {
             simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-            canvasPanel.trafficCanvas.reset();
-            canvasPanel.trafficCanvas.start();
+            trafficCanvas.reset();
+            trafficCanvas.start();
         }
         statusPanel.reset();
     }
@@ -94,14 +96,14 @@ public class MainFrame extends JFrame {
      * @param resourceBundle
      */
     private void addToolBar(ResourceBundle resourceBundle) {
-        toolBar = new MovSimToolBar(statusPanel, canvasPanel, resourceBundle);
+        toolBar = new MovSimToolBar(statusPanel, canvasPanel.trafficCanvas(), canvasPanel.controller(), resourceBundle);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addMenu(ResourceBundle resourceBundle) {
-        final MovSimMenu trafficMenus = new MovSimMenu(this, canvasPanel, resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator) {
+        final MovSimMenu trafficMenus = new MovSimMenu(this, simulator, canvasPanel, canvasPanel.trafficCanvas(), resourceBundle);
         trafficMenus.initMenus();
     }
 

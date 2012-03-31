@@ -41,25 +41,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.movsim.simulator.Simulator;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS.Waves;
 import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvas;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
 public class MovSimMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
+    private final Simulator simulator;
     private final MainFrame frame;
-    final CanvasPanel canvasPanel;
+    private final CanvasPanel canvasPanel;
+    private final TrafficCanvasScenarios trafficCanvas;
     private final ResourceBundle resourceBundle;
 
     private LogWindow logWindow;
 
-    public MovSimMenu(MainFrame mainFrame, CanvasPanel canvasPanel, ResourceBundle resourceBundle) {
+    public MovSimMenu(MainFrame mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
+        this.simulator = simulator;
         this.canvasPanel = canvasPanel;
+        this.trafficCanvas = trafficCanvas;
         this.resourceBundle = resourceBundle;
     }
 
@@ -154,7 +160,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
                 uiDefaultReset();
             }
         });
@@ -166,7 +172,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.OFFRAMPFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.OFFRAMPFILE);
                 uiDefaultReset();
             }
         });
@@ -179,7 +185,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.FLOWCONSERVINGBOTTLENECK);
+                trafficCanvas.setupTrafficScenario(Scenario.FLOWCONSERVINGBOTTLENECK);
                 uiDefaultReset();
             }
         });
@@ -191,7 +197,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.SPEEDLIMITFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.SPEEDLIMITFILE);
                 uiDefaultReset();
             }
         });
@@ -204,7 +210,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.TRAFFICLIGHTFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.TRAFFICLIGHTFILE);
                 uiDefaultReset();
             }
         });
@@ -217,7 +223,7 @@ public class MovSimMenu extends JPanel {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.LANECLOSINGFILE);
+                        trafficCanvas.setupTrafficScenario(Scenario.LANECLOSINGFILE);
                         uiDefaultReset();
                     }
                 });
@@ -229,7 +235,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.CLOVERLEAFFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.CLOVERLEAFFILE);
                 uiDefaultReset();
             }
         });
@@ -264,7 +270,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.RINGROADONELANEFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.RINGROADONELANEFILE);
                 uiDefaultReset();
             }
         });
@@ -277,7 +283,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.RINGROADTWOLANESFILE);
+                trafficCanvas.setupTrafficScenario(Scenario.RINGROADTWOLANESFILE);
                 uiDefaultReset();
             }
         });
@@ -291,7 +297,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.RAMPMETERING);
+                trafficCanvas.setupTrafficScenario(Scenario.RAMPMETERING);
                 uiDefaultReset();
             }
         });
@@ -304,7 +310,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.ROUTING);
+                trafficCanvas.setupTrafficScenario(Scenario.ROUTING);
                 uiDefaultReset();
             }
         });
@@ -317,7 +323,7 @@ public class MovSimMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
+                trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
                 uiDefaultReset();
                 CCS.setWave(Waves.FOURWAVES);
             }
@@ -437,10 +443,10 @@ public class MovSimMenu extends JPanel {
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
 
-        cbSpeedLimits.setSelected(canvasPanel.trafficCanvas.isDrawSpeedLimits());
-        cbDrawRoadIds.setSelected(canvasPanel.trafficCanvas.isDrawRoadId());
-        cbSources.setSelected(canvasPanel.trafficCanvas.isDrawSources());
-        cbSinks.setSelected(canvasPanel.trafficCanvas.isDrawSinks());
+        cbSpeedLimits.setSelected(trafficCanvas.isDrawSpeedLimits());
+        cbDrawRoadIds.setSelected(trafficCanvas.isDrawRoadId());
+        cbSources.setSelected(trafficCanvas.isDrawSources());
+        cbSinks.setSelected(trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 
@@ -546,8 +552,8 @@ public class MovSimMenu extends JPanel {
     }
 
     public void startbuttonToPauseAtScenarioChange() {
-        if (canvasPanel.simulator.getSimulationRunnable().isPaused()) {
-            canvasPanel.controller.commandTogglePause();
+        if (simulator.getSimulationRunnable().isPaused()) {
+            canvasPanel.controller().commandTogglePause();
         }
     }
 
@@ -628,42 +634,26 @@ public class MovSimMenu extends JPanel {
 
     protected void handleDrawRoadIds(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawRoadId(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawRoadId(false);
-        }
+        trafficCanvas.setDrawRoadId(cb.isSelected());
     }
 
     protected void handleDrawSources(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSources(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSources(false);
-        }
+        trafficCanvas.setDrawSources(cb.isSelected());
     }
 
     protected void handleDrawSinks(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSinks(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSinks(false);
-        }
+        trafficCanvas.setDrawSinks(cb.isSelected());
     }
 
     protected void handleDrawSpeedLimits(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSpeedLimits(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSpeedLimits(false);
-        }
+        trafficCanvas.setDrawSpeedLimits(cb.isSelected());
     }
 
     public void uiDefaultReset() {
-        canvasPanel.trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty(
+        trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty(
                 "vmaxForColorSpectrum", "140")));
         startbuttonToPauseAtScenarioChange();
         frame.statusPanel.setWithProgressBar(true);
@@ -705,10 +695,10 @@ public class MovSimMenu extends JPanel {
                 final File file = fileChooser.getSelectedFile();
                 if (file != null && file.isFile()) {
                     // if the user has selected a file, then load it
-                    canvasPanel.simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
+                    simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
                             FileUtils.getCanonicalPathWithoutFilename(file));
                     uiDefaultReset();
-                    canvasPanel.trafficCanvas.forceRepaintBackground();
+                    trafficCanvas.forceRepaintBackground();
                 }
             }
         }

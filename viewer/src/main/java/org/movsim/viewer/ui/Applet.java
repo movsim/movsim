@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.SimulationCanvasBase;
 import org.movsim.viewer.util.LocalizationStrings;
 
 public class Applet extends JApplet {
@@ -48,10 +49,11 @@ public class Applet extends JApplet {
         initLookAndFeel();
 
         canvasPanel = new CanvasPanel(resourceBundle, simulator);
+        final SimulationCanvasBase trafficCanvas = canvasPanel.trafficCanvas();
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
         addToolBar(resourceBundle);
-        addMenu(resourceBundle);
+        addMenu(resourceBundle, simulator);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
@@ -60,15 +62,15 @@ public class Applet extends JApplet {
         this.setSize(1280, 800);
         this.resize(1280, 800);
         canvasPanel.setSize(1280, 800);
-        canvasPanel.trafficCanvas.setSize(1280, 800);
+        trafficCanvas.setSize(1280, 800);
 
         canvasPanel.resized();
         canvasPanel.repaint();
-        
+
         statusPanel.setWithProgressBar(false);
         simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-        canvasPanel.trafficCanvas.reset();
-        canvasPanel.trafficCanvas.start();
+        trafficCanvas.reset();
+        trafficCanvas.start();
         statusPanel.reset();
 
         super.init();
@@ -78,14 +80,14 @@ public class Applet extends JApplet {
      * @param resourceBundle
      */
     private void addToolBar(ResourceBundle resourceBundle) {
-        toolBar = new MovSimToolBar(statusPanel, canvasPanel, resourceBundle);
+        toolBar = new MovSimToolBar(statusPanel, canvasPanel.trafficCanvas(), canvasPanel.controller(), resourceBundle);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addMenu(ResourceBundle resourceBundle) {
-        final AppletMenu trafficMenus = new AppletMenu(this, canvasPanel, statusPanel, resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator) {
+        final AppletMenu trafficMenus = new AppletMenu(this, simulator, canvasPanel, statusPanel, resourceBundle);
         trafficMenus.initMenus();
     }
 
