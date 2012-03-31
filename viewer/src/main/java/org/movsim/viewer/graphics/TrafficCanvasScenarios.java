@@ -206,7 +206,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
         forceRepaintBackground();
         this.scenario = scenario;
-        start();
     }
 
     private void initGraphicSettings() {
@@ -214,12 +213,12 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         initGraphicConfigFieldsFromProperties();
         resetScaleAndOffset();
 
-        for (RoadSegment segment : roadNetwork) {
+        for (final RoadSegment segment : roadNetwork) {
             segment.roadMapping().setRoadColor(roadColor);
         }
 
-        VehicleGenerator vehicleGenerator = simulator.getVehicleGenerator();
-        Set<String> prototypeLabels = vehicleGenerator.prototypes().keySet();
+        final VehicleGenerator vehicleGenerator = simulator.getVehicleGenerator();
+        final Set<String> prototypeLabels = vehicleGenerator.prototypes().keySet();
         // Random random = new Random();
         labelColors = new Hashtable<String, Color>();
         for (String prototype : prototypeLabels) {
