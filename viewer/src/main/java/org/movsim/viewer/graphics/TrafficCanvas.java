@@ -258,6 +258,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     @Override
+    void stateChanged() {
+        if (statusControlCallbacks != null) {
+            statusControlCallbacks.stateChanged();
+        }
+    }
+
+    @Override
     public void reset() {
         super.reset();
         simulator.reset();
