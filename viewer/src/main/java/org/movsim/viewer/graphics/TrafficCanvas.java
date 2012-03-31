@@ -56,6 +56,7 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.Colors;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
@@ -408,7 +409,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             }
             break;
         case VEHICLE_COLOR:
-            color = Color.BLACK;
+            // use vehicle's cache for AWT color object
+            color = (Color)vehicle.colorObject();
+            if(color==null){
+                int vehColorInt = vehicle.color();
+                color = new Color(Colors.red(vehColorInt), Colors.green(vehColorInt), Colors.blue(vehColorInt));
+                vehicle.setColorObject(color); 
+            }
             break;
         case VEHICLE_LABEL_COLOR:
             String label = vehicle.getLabel();
