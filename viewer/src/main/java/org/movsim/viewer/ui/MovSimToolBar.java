@@ -96,42 +96,25 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
     }
 
     protected void addButtons(JToolBar toolBar, ResourceBundle resourceBundle) {
-        JButton button = null;
-
-        buttonStart = makeNavigationButton("button_pause", START, resourceBundle.getString("StartTip"),
-                resourceBundle.getString("Start"));
+        buttonStart = createButton(resourceBundle, "button_pause", START, "StartTip", "Start");
         toolBar.add(buttonStart);
 
-        button = makeNavigationButton("button_rew", SLOWER, resourceBundle.getString("SlowerTip"),
-                resourceBundle.getString("Slower"));
-        toolBar.add(button);
-        button = makeNavigationButton("button_ffw", FASTER, resourceBundle.getString("FasterTip"),
-                resourceBundle.getString("Faster"));
-        toolBar.add(button);
+        toolBar.add(createButton(resourceBundle, "button_rew", SLOWER, "SlowerTip", "Slower"));
+        toolBar.add(createButton(resourceBundle, "button_ffw", FASTER, "FasterTip", "Faster"));
 
-        button = makeNavigationButton("button_repeat", RESET, resourceBundle.getString("ResetTip"),
-                resourceBundle.getString("Reset"));
-        toolBar.add(button);
+        toolBar.add(createButton(resourceBundle, "button_repeat", RESET, "ResetTip", "Reset"));
 
         toolBar.addSeparator(new Dimension(20, 0));
 
-        button = makeNavigationButton("locate", RECENTER, resourceBundle.getString("RecenterTip"),
-                resourceBundle.getString("Recenter"));
-        toolBar.add(button);
+        toolBar.add(createButton(resourceBundle, "locate", RECENTER, "RecenterTip", "Recenter"));
 
-        button = makeNavigationButton("zoom_in", ZOOM_IN, resourceBundle.getString("ZoomInTip"),
-                resourceBundle.getString("ZoomIn"));
-        toolBar.add(button);
-        button = makeNavigationButton("zoom_out", ZOOM_OUT, resourceBundle.getString("ZoomOutTip"),
-                resourceBundle.getString("ZoomOut"));
-        toolBar.add(button);
+        toolBar.add(createButton(resourceBundle, "zoom_in", ZOOM_IN, "ZoomInTip", "ZoomIn"));
+        toolBar.add(createButton(resourceBundle, "zoom_out", ZOOM_OUT, "ZoomOutTip", "ZoomOut"));
 
-        button = makeNavigationButton("button_vehicle_colors", VEHICLE_COLORS, resourceBundle.getString("VehicleColorsTip"),
-                resourceBundle.getString("VehicleColors"));
-        toolBar.add(button);
+        toolBar.add(createButton(resourceBundle, "button_vehicle_colors", VEHICLE_COLORS, "VehicleColorsTip", "VehicleColors"));
     }
 
-    protected JButton makeNavigationButton(String imageName, String actionCommand, String toolTipText, String altText) {
+    protected JButton createButton(ResourceBundle resourceBundle ,String imageName, String actionCommand, String toolTipResource, String textResource) {
         // Look for the image.
         final String imgLocation = "/images/" + imageName + ".png";
         final URL imageURL = MovSimToolBar.class.getResource(imgLocation);
@@ -139,13 +122,13 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         // Create and initialize the button.
         final JButton button = new JButton();
         button.setActionCommand(actionCommand);
-        button.setToolTipText(toolTipText);
+        button.setToolTipText(resourceBundle.getString(toolTipResource));
         button.addActionListener(this);
 
         if (imageURL != null) { // image found
             button.setIcon(SwingHelper.createImageIcon(this.getClass(), imgLocation, 32, 32));
         } else { // no image found
-            button.setText(altText);
+            button.setText(resourceBundle.getString(textResource));
             logger.error("Resource not found: ", imgLocation);
         }
         return button;
