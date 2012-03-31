@@ -551,12 +551,6 @@ public class MovSimMenu extends JPanel {
         return menuFile;
     }
 
-    public void startbuttonToPauseAtScenarioChange() {
-        if (simulator.getSimulationRunnable().isPaused()) {
-            canvasPanel.controller().commandTogglePause();
-        }
-    }
-
     private void handleAbout(EventObject event) {
         final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
         final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
@@ -655,9 +649,9 @@ public class MovSimMenu extends JPanel {
     public void uiDefaultReset() {
         trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty(
                 "vmaxForColorSpectrum", "140")));
-        startbuttonToPauseAtScenarioChange();
         frame.statusPanel.setWithProgressBar(true);
         frame.statusPanel.reset();
+        trafficCanvas.start();
     }
 
     // --------------------------------------------------------------------------------------

@@ -463,12 +463,6 @@ public class AppletMenu extends JPanel {
         return helpMenu;
     }
 
-    public void startbuttonToPauseAtScenarioChange() {
-        if (simulator.getSimulationRunnable().isPaused()) {
-            canvasPanel.controller().commandTogglePause();
-        }
-    }
-
     private void handleAbout(EventObject event) {
         final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
         final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
@@ -565,8 +559,8 @@ public class AppletMenu extends JPanel {
     }
 
     public void uiDefaultReset() {
-        startbuttonToPauseAtScenarioChange();
         statusPanel.setWithProgressBar(false);
         statusPanel.reset();
+        trafficCanvas.start();
     }
 }

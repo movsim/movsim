@@ -79,7 +79,6 @@ public class MainFrame extends JFrame {
         });
 
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        setVisible(true);
 
         // first scenario
         if (projectMetaData.getProjectName().equals("")) {
@@ -87,9 +86,10 @@ public class MainFrame extends JFrame {
         } else {
             simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
             trafficCanvas.reset();
-            trafficCanvas.start();
         }
         statusPanel.reset();
+        trafficCanvas.start();
+        setVisible(true);
     }
 
     /**
