@@ -59,21 +59,20 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
     static final private String RESET = "reset";
 
     JButton buttonStart;
-    private final ResourceBundle resourceBundle;
     private StatusPanel statusPanel;
+    private final StatusControlCallbacks statusCallbacks;
 
     public MovSimToolBar(StatusPanel statusPanel, final CanvasPanel canvasPanel, ResourceBundle resourceBundle) {
         super(resourceBundle.getString("ToolBarTitle"));
         this.statusPanel = statusPanel;
-        this.resourceBundle = resourceBundle;
 
         setRollover(true);
         controller = canvasPanel.controller;
-        addButtons(this);
+        addButtons(this, resourceBundle);
         addSeparator();
         add(statusPanel);
 
-        final StatusControlCallbacks statusCallbacks = new TrafficCanvas.StatusControlCallbacks() {
+        statusCallbacks = new TrafficCanvas.StatusControlCallbacks() {
             @Override
             public void showStatusMessage(String message) {
             }
@@ -96,7 +95,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         canvasPanel.trafficCanvas.setStatusControlCallbacks(statusCallbacks);
     }
 
-    protected void addButtons(JToolBar toolBar) {
+    protected void addButtons(JToolBar toolBar, ResourceBundle resourceBundle) {
         JButton button = null;
 
         buttonStart = makeNavigationButton("button_pause", START, resourceBundle.getString("StartTip"),
@@ -177,6 +176,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
         } else if (e.getActionCommand().equals(RESET)) {
             statusPanel.reset();
             controller.commandReset();
+            statusCallbacks.stateChanged();
         }
     }
 }
