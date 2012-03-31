@@ -36,16 +36,16 @@ import org.slf4j.LoggerFactory;
 public class TrafficLight {
 
     // cycle is GREEN --> GREEN_RED --> RED --> RED_GREEN --> GREEN
-    /** The GREE n_ light. */
+    /** The green light. */
     public static final int GREEN_LIGHT = 0;
 
-    /** The GREE n_ re d_ light. */
+    /** The green_red light. */
     public static final int GREEN_RED_LIGHT = 1;
 
-    /** The RE d_ light. */
+    /** The red light. */
     public static final int RED_LIGHT = 2;
 
-    /** The RE d_ gree n_ light. */
+    /** The red_green light. */
     public static final int RED_GREEN_LIGHT = 3;
 
     /** The Constant logger. */
