@@ -471,6 +471,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.runToCompletion();
     }
 
+    /**
+     * Returns true if the simulation has finished.
+     */
+    public boolean isFinished() {
+        return false;
+    }
+
     @Override
     public void simulationComplete(double simulationTime) {
         logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",

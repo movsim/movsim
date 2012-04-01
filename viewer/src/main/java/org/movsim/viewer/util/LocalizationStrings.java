@@ -155,6 +155,7 @@ public class LocalizationStrings extends ListResourceBundle {
             { "RampingFinished", "Ramping finished" },
             { "PerturbationApplied", "Perturbation applied" },
             { "TrafficInflow", "Traffic inflow: %d vehicles per hour" },
+            { "SimulationFinished", "Simulation finished in %d seconds" },
 
             // Error messages
             { "NoTravelTime", "No travel time configuration provided in xml!" },

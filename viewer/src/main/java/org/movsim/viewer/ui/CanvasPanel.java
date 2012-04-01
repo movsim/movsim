@@ -80,7 +80,8 @@ public class CanvasPanel extends JPanel {
                 (String) resourceBundle.getObject("VehiclePopupNoExit"), //$NON-NLS-1$
                 (String) resourceBundle.getObject("TrafficInflow"), //$NON-NLS-1$
                 (String) resourceBundle.getObject("RampingFinished"), //$NON-NLS-1$
-                (String) resourceBundle.getObject("PerturbationApplied")); //$NON-NLS-1$
+                (String) resourceBundle.getObject("PerturbationApplied"),
+                (String) resourceBundle.getObject("SimulationFinished")); //$NON-NLS-1$
     }
 
     private void layoutAndAddCanvasToPanel() {

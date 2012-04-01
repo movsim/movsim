@@ -30,6 +30,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -56,6 +58,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     private boolean isInitialSpeedUp;
     private double speedupEndTime;
     private int sleepTimeSave;
+    String simulationFinished;
 
     public TrafficCanvasScenarios(Simulator simulator) {
         super(simulator);
@@ -68,8 +71,9 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     }
 
     public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
-            String perturbationRampingFinishedString, String perturbationAppliedString) {
+            String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
         setMessageStrings(popupString, popupStringExitEndRoad);
+        this.simulationFinished = simulationFinished;
     }
 
     @Override
@@ -83,6 +87,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         if (isInitialSpeedUp && simulationTime > speedupEndTime) {
             isInitialSpeedUp = false;
             setSleepTime(sleepTimeSave);
+        }
+        if (simulator.isFinished() && simulationFinished != null) {
+            JOptionPane.showMessageDialog(null, String.format(simulationFinished, (int) simulationTime));
+            simulationRunnable.stop();
         }
     }
 
