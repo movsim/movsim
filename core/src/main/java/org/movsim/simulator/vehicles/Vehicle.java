@@ -583,7 +583,7 @@ public class Vehicle {
         }
 
         accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
-        acc = moderateAcceleration(accModel, null);
+        acc = moderateAcceleration(accModel);
 
 
         acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
@@ -597,15 +597,15 @@ public class Vehicle {
      *            acceleration as calculated by LDM
      * @return moderated acceleration
      */
-    protected final double moderateAcceleration(double acc, Vehicle frontVehicle) {
+    protected final double moderateAcceleration(double acc) {
         double moderatedAcc = acc;
         // if (acc < -7.5) {
         //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
         // }
         if (trafficLightApproaching != null) {
-            moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc, frontVehicle);
+            moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc);
         }
-        moderatedAcc = accelerationConsideringExit(moderatedAcc, frontVehicle);
+        moderatedAcc = accelerationConsideringExit(moderatedAcc);
         return moderatedAcc;
     }
 
@@ -614,7 +614,7 @@ public class Vehicle {
      * 
      * @return acceleration considering traffic light
      */
-    protected double accelerationConsideringTrafficLight(double acc, Vehicle frontVehicle) {
+    protected double accelerationConsideringTrafficLight(double acc) {
         double moderatedAcc = acc;
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching.considerTrafficLight()) {
@@ -628,7 +628,7 @@ public class Vehicle {
      * 
      * @return acceleration considering exit
      */
-    protected double accelerationConsideringExit(double acc, Vehicle frontVehicle) {
+    protected double accelerationConsideringExit(double acc) {
         double moderatedAcc = acc;
         if (exitRoadSegmentId == this.roadSegmentId && getLane() != Lane.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
