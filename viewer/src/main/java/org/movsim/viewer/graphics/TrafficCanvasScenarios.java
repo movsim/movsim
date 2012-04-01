@@ -40,6 +40,7 @@ import org.movsim.simulator.vehicles.VehicleGenerator;
  */
 public class TrafficCanvasScenarios extends TrafficCanvas {
 
+    @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
 
     public static enum Scenario {
