@@ -165,6 +165,47 @@ public class LaneChangeModel {
 
     public int determineLaneChangeDirection(RoadSegment roadSegment) {
 
+        final int mandatoryLaneChangeToExit = mandatoryLaneChangeToExit(roadSegment);
+        if(mandatoryLaneChangeToExit != Lane.NO_CHANGE){
+            return mandatoryLaneChangeToExit;
+        }
+        
+        final int currentLane = me.getLane();
+        // initialize with largest possible deceleration
+        double accToLeft = -Double.MAX_VALUE;
+        double accToRight = -Double.MAX_VALUE;
+        // consider lane-changing to right-hand side lane (decreasing lane index)
+        if (currentLane - 1 >= Lane.MOST_RIGHT_LANE) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
+            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
+                accToRight = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_RIGHT, roadSegment);
+            }
+        }
+
+        // consider lane-changing to left-hand side lane (increasing the lane index)
+        if (currentLane + 1 < roadSegment.laneCount()) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_LEFT);
+            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
+                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_LEFT, roadSegment);
+            }
+        }
+
+        // decision
+        if ((accToRight > 0) || (accToLeft > 0)) {
+            logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
+            logger.debug("currentLane={}", currentLane);
+            if (accToRight > accToLeft) {
+                return Lane.TO_RIGHT;
+            }
+            return Lane.TO_LEFT;
+        }
+
+        return Lane.NO_CHANGE;
+    }
+
+    private int mandatoryLaneChangeToExit(RoadSegment roadSegment) {
         final int currentLane = me.getLane();
 
         // consider mandatory lane-change to exit
@@ -200,39 +241,7 @@ public class LaneChangeModel {
                 }
             }
         }
-
-        // initialize with largest possible deceleration
-        double accToLeft = -Double.MAX_VALUE;
-        double accToRight = -Double.MAX_VALUE;
-        // consider lane-changing to right-hand side lane (decreasing lane index)
-        if (currentLane - 1 >= Lane.MOST_RIGHT_LANE) {
-            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
-            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
-                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
-                accToRight = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_RIGHT, roadSegment);
-            }
-        }
-
-        // consider lane-changing to left-hand side lane (increasing the lane index)
-        if (currentLane + 1 < roadSegment.laneCount()) {
-            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_LEFT);
-            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
-                // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
-                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_LEFT, roadSegment);
-            }
-        }
-
-        // decision
-        if ((accToRight > 0) || (accToLeft > 0)) {
-            logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
-            logger.debug("currentLane={}", currentLane);
-            if (accToRight > accToLeft) {
-                return Lane.TO_RIGHT;
-            }
-            return Lane.TO_LEFT;
-        }
-
-        return Lane.NO_CHANGE;
+        return currentLane;
     }
 
 
