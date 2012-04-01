@@ -598,14 +598,15 @@ public class Vehicle {
      * @return moderated acceleration
      */
     protected final double moderateAcceleration(double acc, Vehicle frontVehicle) {
+        double moderatedAcc = acc;
         // if (acc < -7.5) {
         //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
         // }
         if (trafficLightApproaching != null) {
-            acc = accelerationConsideringTrafficLight(acc, frontVehicle);
+            moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc, frontVehicle);
         }
-        acc = accelerationConsideringExit(acc, frontVehicle);
-        return acc;
+        moderatedAcc = accelerationConsideringExit(moderatedAcc, frontVehicle);
+        return moderatedAcc;
     }
 
     /**
@@ -614,11 +615,12 @@ public class Vehicle {
      * @return acceleration considering traffic light
      */
     protected double accelerationConsideringTrafficLight(double acc, Vehicle frontVehicle) {
+        double moderatedAcc = acc;
         // consider red or amber/yellow traffic light:
         if (trafficLightApproaching.considerTrafficLight()) {
-            acc = Math.min(acc, trafficLightApproaching.accApproaching());
+            moderatedAcc = Math.min(moderatedAcc, trafficLightApproaching.accApproaching());
         }
-        return acc;
+        return moderatedAcc;
     }
 
     /**
@@ -627,17 +629,18 @@ public class Vehicle {
      * @return acceleration considering exit
      */
     protected double accelerationConsideringExit(double acc, Vehicle frontVehicle) {
+        double moderatedAcc = acc;
         if (exitRoadSegmentId == this.roadSegmentId && getLane() != Lane.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
             final double distanceToExit = roadSegmentLength - getFrontPosition();
             if (distanceToExit > 0) { // if negative have passed exit
                 if (distanceToExit < LaneChangeModel.distanceBeforeExitMustChangeLanes) {
                     // treat the end of the exit lane as a stopped vehicle
-                    acc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
+                    moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
                 }
             }
         }
-        return acc;
+        return moderatedAcc;
     }
 
     // TODO this acceleration is the base for MOBIL decision: could consider
