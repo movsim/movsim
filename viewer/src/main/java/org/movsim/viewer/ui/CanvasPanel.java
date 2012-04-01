@@ -58,8 +58,8 @@ public class CanvasPanel extends JPanel {
         }
     }
 
-    public void initApp(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
-        this.trafficCanvas = trafficCanvas;
+    public void initApp(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvasScenarios) {
+        this.trafficCanvas = trafficCanvasScenarios;
         initStrings(resourceBundle);
         layoutAndAddCanvasToPanel();
     }
