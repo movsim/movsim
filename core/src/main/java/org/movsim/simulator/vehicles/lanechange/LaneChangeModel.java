@@ -43,8 +43,8 @@ public class LaneChangeModel {
     final static Logger logger = LoggerFactory.getLogger(LaneChangeModel.class);
 
     // to avoid flips:
-    public static double LANECHANGE_TDELAY_S = 3.0; // delay nach Spurwechsel
-    public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay nach
+    public static double LANECHANGE_TDELAY_S = 3.0; // delay after lane change
+    public static double LANECHANGE_TDELAY_FRONT_S = 3.0; // delay after a cut-in ahead
 
     private final boolean withEuropeanRules;
 
@@ -111,6 +111,14 @@ public class LaneChangeModel {
     public boolean isInitialized() {
         return isInitialized;
     }
+    
+    public boolean withEuropeanRules() {
+        return withEuropeanRules;
+    }
+
+    public double vCritEurRules() {
+        return vCritEur;
+    }
 
     public boolean isSafeLaneChange(LaneSegment laneSegment) {
         final Vehicle front = laneSegment.frontVehicle(me);
@@ -121,23 +129,24 @@ public class LaneChangeModel {
 
     private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh) {
 
-        // safety incentive (in two steps)
         final double safeDeceleration = lcModelMOBIL.getSafeDeceleration();
+        
+        // check distance to front vehicle
         final double gapFront = me.getNetDistance(frontVeh);
-        // check distances
-        // negative net distances possible because of different vehicle lengths!
         if (gapFront < lcModelMOBIL.getMinimumGap()) {
             logger.debug("gapFront={}", gapFront);
             return false;
         }
+        
+        // check distance to vehicle at behind
         if (backVeh != null) {
             final double gapBack = backVeh.getNetDistance(me);
             if (gapBack < lcModelMOBIL.getMinimumGap()) {
                 logger.debug("gapBack={}", gapBack);
                 return false;
             }
+            // check acceleration of back vehicle
             final double backNewAcc = backVeh.getLongitudinalModel().calcAcc(backVeh, me);
-            // check security constraint for new follower
             if (backNewAcc <= -safeDeceleration) {
                 logger.debug("gapFront = {}, gapBack = {}", gapFront, gapBack);
                 logger.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
@@ -145,13 +154,13 @@ public class LaneChangeModel {
             }
         }
 
+        // check acceleration of vehicle ahead
         final double meNewAcc = me.getLongitudinalModel().calcAcc(me, frontVeh);
         if (meNewAcc >= -safeDeceleration) {
             logger.debug("meNewAcc={}, bSafe={}", meNewAcc, safeDeceleration);
-            //logger.debug("gapFront={}, gapBack={}", gapFront, gapBack);
-            //logger.debug("backNewAcc={}, bSafe={}", backNewAcc, safeDeceleration);
             return true;
         }
+        
         return false;
     }
 
@@ -234,11 +243,4 @@ public class LaneChangeModel {
         }
     }
 
-    public boolean withEuropeanRules() {
-        return withEuropeanRules;
-    }
-
-    public double vCritEurRules() {
-        return vCritEur;
-    }
 }
