@@ -27,18 +27,25 @@
 package org.movsim.simulator.roadnetwork;
 
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.utilities.ConversionUtilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default sink: just removes vehicles that have reached the end of a road segment.
  */
 public class TrafficSink implements SimulationTimeStep {
 
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(TrafficSink.class);
+    
     // For sinks roadSegment is the source road
     protected RoadSegment roadSegment;
-    private static final double MEASURING_INTERVAL = 60.0; // seconds
+    // measure actual outflow 
+    private static final double MEASURING_INTERVAL_S = 60.0; 
     private double measuredOutflow;
-    private double dQ;
     private double measuredTime;
+    private double dQ;
 
     /**
      * Constructor.
@@ -48,6 +55,8 @@ public class TrafficSink implements SimulationTimeStep {
     public TrafficSink(RoadSegment roadSegment) {
         // for TrafficSinks and similar roadSegment is the source road
         setRoadSegment(roadSegment);
+        measuredTime = 0;
+        measuredOutflow = 0;
     }
 
     protected final void setRoadSegment(RoadSegment roadSegment) {
@@ -95,24 +104,14 @@ public class TrafficSink implements SimulationTimeStep {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         final RoadSegment sourceRoad = sourceRoad();
-        // remove any vehicles that have gone past the end of the road segment
         sourceRoad.removeVehiclesPastEnd();
         measuredTime += dt;
-        if (measuredTime > MEASURING_INTERVAL) {
-            measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL; // vehicles per second
+        if (measuredTime > MEASURING_INTERVAL_S) {
+            measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL_S; // vehicles per second
             sourceRoad.clearVehicleRemovedCount();
             measuredTime = 0.0;
-            // dQ = 0.0;
-            // if (sourceRoad.source() != null) {
-            // dQ = (measuredOutflow - sourceRoad.source().inflow());
-            // }
-
-            //            System.out.println("Sink (R" + roadSegment.roadId() +",S" + id + ") outflow: " + (int)(measuredOutflow * 3600));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-            //            System.out.println("Sink R" + roadSegment.roadId() + " outflow: " + (int)(measuredOutflow * 3600));//$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-            // if (roadSegment.source().type() == TrafficFlowBase.Type.SOURCE) {
-            //                System.out.println("  flow:" + (int)(roadSegment.source().inFlow() * 3600));//$NON-NLS-1$
-            //                System.out.println("    dQ:" + (int)(dQ * 3600));//$NON-NLS-1$
-            // }
+            logger.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", 
+                    roadSegment.id(), measuredOutflow*ConversionUtilities.INVS_TO_INVH);
         }
     }
 }

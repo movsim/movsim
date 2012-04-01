@@ -29,6 +29,7 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.utilities.ConversionUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,14 @@ public class TrafficSource implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficSource.class);
+    
+    private static final double MEASURING_INTERVAL_S = 60.0;
+    
+    private double measuredInflow;
+    
+    private double measuredTime;
+    
+    private int measuredInflowCount;
 
     private double nWait;
 
@@ -78,6 +87,9 @@ public class TrafficSource implements SimulationTimeStep {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
         nWait = 0;
+        measuredInflow = 0;
+        measuredTime = 0;
+        measuredInflowCount = 0;
 
         this.inflowTimeSeries = inflowTimeSeries;
     }
@@ -131,6 +143,16 @@ public class TrafficSource implements SimulationTimeStep {
         // integrate inflow demand
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
+        
+        measuredTime += dt;
+        if (measuredTime > MEASURING_INTERVAL_S) {
+            measuredInflow = measuredInflowCount /MEASURING_INTERVAL_S; // vehicles per second 
+            measuredTime = 0.0;
+            measuredInflowCount = 0;
+            logger.debug(String.format("source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles", 
+                    roadSegment.id(), measuredInflow*ConversionUtilities.INVS_TO_INVH, getQueueLength()));
+        }
+        
         if (nWait >= 1.0) {
             // try to insert new vehicle at inflow
             // iterate periodically over n lanes
@@ -143,6 +165,7 @@ public class TrafficSource implements SimulationTimeStep {
                 final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
+                    measuredInflowCount++;
                     if (recordDataCallback != null) {
                         recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
                                 totalInflow, enteringVehCounter, nWait);
@@ -291,4 +314,24 @@ public class TrafficSource implements SimulationTimeStep {
     public double getFlowPerLane(double time) {
         return inflowTimeSeries.getFlowPerLane(time);
     }
+    
+    /**
+     * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
+     * 
+     * @return measured inflow over all lanes in vehicles per seconds
+     * 
+     */
+    public double measuredInflow() {
+        return measuredInflow;
+    }
+
+    /**
+     * Returns the number of vehicles in the queue.
+     * 
+     * @return integer queue length over all lanes
+     */
+    public int getQueueLength() {
+        return (int)nWait;
+    }
+
 }

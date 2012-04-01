@@ -40,7 +40,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.movsim.input.ProjectMetaData;
@@ -55,6 +56,7 @@ import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.Colors;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
@@ -162,7 +164,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     double[] velocities;
 
     Color[] accelerationColors;
-    protected Hashtable<String, Color> labelColors;
+    protected final Map<String, Color> labelColors = new HashMap<String, Color>();
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
 
@@ -379,12 +381,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     protected Color vehicleColor(Vehicle vehicle, double simulationTime) {
         Color color;
-        final int count;
 
         switch (vehicleColorMode) {
         case ACCELERATION_COLOR:
             final double a = vehicle.physicalQuantities().getAcc();
-            count = accelerations.length;
+            final int count = accelerations.length;
             for (int i = 0; i < count; ++i) {
                 if (a < accelerations[i])
                     return accelerationColors[i];
@@ -408,11 +409,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             }
             break;
         case VEHICLE_COLOR:
-            color = Color.BLACK;
+            // use vehicle's cache for AWT color object
+            color = (Color)vehicle.colorObject();
+            if(color==null){
+                int vehColorInt = vehicle.color();
+                color = new Color(Colors.red(vehColorInt), Colors.green(vehColorInt), Colors.blue(vehColorInt));
+                vehicle.setColorObject(color); 
+            }
             break;
         case VEHICLE_LABEL_COLOR:
             String label = vehicle.getLabel();
-            color = labelColors.get(label);
+            color = labelColors.containsKey(label) ? labelColors.get(label) : Color.MAGENTA;
             break;
         default:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;
@@ -869,14 +876,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sourceColor);
                 posTheta = roadMapping.startPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-
                 g.setColor(Color.BLACK);
-                // TODO this quantity reflects the desired inflow at the boundary but not the *actual* inflow. To be consistent
-                // with the measured outflow the actual fed-in flow should be displayed.
-                String inflowString = "inflow: "
-                        + (int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime()))
-                        + " veh/h";
-                g.drawString(inflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+                StringBuilder inflowStringBuilder = new StringBuilder();
+                inflowStringBuilder.append("set/target inflow: ");
+                inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())));
+                inflowStringBuilder.append("/");
+                inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource.measuredInflow()));
+                inflowStringBuilder.append(" veh/h");
+                inflowStringBuilder.append(" (");
+                inflowStringBuilder.append(trafficSource.getQueueLength());
+                inflowStringBuilder.append(")");
+                g.drawString(inflowStringBuilder.toString(), (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }
         }
     }

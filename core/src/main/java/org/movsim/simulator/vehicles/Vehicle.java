@@ -38,6 +38,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
+import org.movsim.utilities.Colors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,7 +162,7 @@ public class Vehicle {
 
     private int color;
     private Object colorObject; // color object cache
-
+   
     private final TrafficLightApproaching trafficLightApproaching;
     private final FuelConsumption fuelModel; // can be null
     private final Route route;
@@ -255,6 +256,7 @@ public class Vehicle {
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
 
+        this.color = Colors.randomColor();
     }
 
     /**
