@@ -130,9 +130,8 @@ public class LogWindow extends JFrame {
     }
 
     public static void setupLog4JAppender() {
-        final JTextArea jTextArea = new JTextArea();
-        SwingLogAppender.setTextArea(jTextArea);
-        LogWindow.jTextArea = jTextArea;
+        LogWindow.jTextArea = new JTextArea();
+        SwingLogAppender.setTextArea(LogWindow.jTextArea);
     }
 
     public static void turnOffAllLoggers() {
