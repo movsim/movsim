@@ -131,7 +131,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        // System.out.println("mousePressed at " + e.getPoint()); //$NON-NLS-1$
         if (!draggingAllowed) {
             return;
         }
@@ -151,7 +150,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        // System.out.println("mouseReleased at" + e.getPoint()); //$NON-NLS-1$
         inDrag = false;
         trafficCanvas.backgroundChanged = false;
     }
@@ -183,7 +181,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     @Override
     public void mouseDragged(MouseEvent e) {
         final Point p = e.getPoint();
-        // System.out.println("mouseDragged:" + p.x + "," + p.y); //$NON-NLS-1$ //$NON-NLS-2$
         if (inDrag) {
             final int xOffsetNew = xOffsetSave + (int) ((p.x - startDragX) / trafficCanvas.scale);
             final int yOffsetNew = yOffsetSave + (int) ((p.y - startDragY) / trafficCanvas.scale);
@@ -192,7 +189,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 trafficCanvas.xOffset = xOffsetNew;
                 trafficCanvas.yOffset = yOffsetNew;
                 trafficCanvas.setTransform();
-                // System.out.println("new offset: " + xOffset + ", " + yOffset);//$NON-NLS-1$ //$NON-NLS-2$
                 trafficCanvas.forceRepaintBackground();
             }
         }
@@ -210,7 +206,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 trafficCanvas.vehicleTipWindow = new VehicleTipWindow(trafficCanvas,
                         SwingHelper.getFrame(trafficCanvas));
             }
-            //System.out.println("SimCanvas mouseMoved"); //$NON-NLS-1$
             final Point point = e.getPoint();
             final Point2D transformedPoint = new Point2D.Float();
             final GeneralPath path = new GeneralPath();
