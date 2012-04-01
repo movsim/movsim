@@ -671,7 +671,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                vehicle.updateAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
+                // TODO hack for testing acceleration behavior to exit 
+                vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment, alphaT, alphaV0);
             }
         }
     }

@@ -34,6 +34,7 @@ import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
+import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -552,7 +553,7 @@ public class Vehicle {
         return speed - vehFront.getSpeed();
     }
 
-    public void updateAcceleration(double dt, LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaT,
+    public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaT,
             double alphaV0) {
 
         accOld = acc;
@@ -583,9 +584,9 @@ public class Vehicle {
         }
 
         accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
-        
-        // moderate acceleration by traffic lights or for preparing mandatory lane changes to exit sliproads 
-        acc = moderateAcceleration(accModel);
+
+        // moderate acceleration by traffic lights or for preparing mandatory lane changes to exit sliproads
+        acc = moderateAcceleration(accModel, roadSegment);
 
         acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
     }
@@ -596,9 +597,10 @@ public class Vehicle {
      * 
      * @param acc
      *            acceleration as calculated by LDM
+     * @param roadSegment 
      * @return moderated acceleration
      */
-    protected final double moderateAcceleration(double acc) {
+    protected final double moderateAcceleration(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
         // if (acc < -7.5) {
         //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
@@ -606,7 +608,7 @@ public class Vehicle {
         if (trafficLightApproaching != null) {
             moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc);
         }
-        moderatedAcc = accelerationConsideringExit(moderatedAcc);
+        moderatedAcc = accelerationConsideringExit(moderatedAcc, roadSegment);
         return moderatedAcc;
     }
 
@@ -626,20 +628,30 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's acceleration considering the exit.
+     * @param roadSegment 
      * 
      * @return acceleration considering exit
      */
-    protected double accelerationConsideringExit(double acc) {
+    protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
         if (exitRoadSegmentId == this.roadSegmentId && getLane() != Lane.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
-            final double distanceToExit = roadSegmentLength - getFrontPosition();
-            if (distanceToExit > 0) { // if negative have passed exit
-                if (distanceToExit < LaneChangeModel.distanceBeforeExitMustChangeLanes) {
-                    // treat the end of the exit lane as a stopped vehicle
-                    moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
-                }
+            // react to vehicle ahead in exit lane
+            final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
+            if(exitLaneSegment!=null && exitLaneSegment.type() == Lane.Type.EXIT){
+                //final double distanceToExit = getDistanceToRoadSegmentEnd();
+                //if (distanceToExit > 0) { // if negative have passed exit
+                //if (distanceToExit < LaneChangeModel.distanceBeforeExitMustChangeLanes) {
+                // treat the end of the exit lane as a stopped vehicle
+                double accToVehicleInExitLane = longitudinalModel.calcAcc(this, exitLaneSegment.frontVehicle(this));
+                // limit deceleration
+                accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -4.0);
+                logger.debug("accToVehicleInExitLane={}, own speed={}", accToVehicleInExitLane, speed);  // TODO
+                //moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
+                moderatedAcc = Math.min(acc, accToVehicleInExitLane);
+                //}
             }
+            
         }
         return moderatedAcc;
     }
@@ -777,7 +789,8 @@ public class Vehicle {
         }
 
         // if not in lane-changing process do determine if new lane is more attractive and lane change is possible
-        final int laneChangeDirection = laneChangeModel.determineLaneChangeDirection(roadSegment);
+        LaneChangeDecision lcDecision = laneChangeModel.makeDecision(roadSegment);
+        final int laneChangeDirection = lcDecision.getDirection();
 
         // initiates a lane change: set targetLane to new value the lane will be assigned by the vehicle container !!
         if (laneChangeDirection != Lane.NO_CHANGE) {
@@ -1027,5 +1040,12 @@ public class Vehicle {
 
     public double getMaxDeceleration() {
         return maxDeceleration;
+    }
+    
+    public double getDistanceToRoadSegmentEnd(){
+        if(roadSegmentLength<=0){
+            return -1;  
+        }
+        return roadSegmentLength - getFrontPosition();
     }
 }
