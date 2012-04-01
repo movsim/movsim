@@ -173,13 +173,16 @@ public class LaneChangeModel {
                 // already in exit lane, so do not move out of it
                 return Lane.NO_CHANGE;
             } else if (currentLane > Lane.LANE1) {
-                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane - 1);
+                // evaluate situation on the right lane
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
                 if (isSafeLaneChange(newLaneSegment)) {
                     return Lane.TO_RIGHT;
                 }
                 return Lane.NO_CHANGE;
             }
         }
+        
+        // consider mandatory lane-change to exit on next road segment ahead
         final LaneSegment sinkLaneSegment = roadSegment.laneSegment(currentLane).sinkLaneSegment();
         if (sinkLaneSegment != null && me.exitRoadSegmentId() == sinkLaneSegment.roadSegment().id()) {
             // next road segment is the exit segment
@@ -189,7 +192,7 @@ public class LaneChangeModel {
                     // already in exit lane, so do not move out of it
                     return Lane.NO_CHANGE;
                 } else if (currentLane > Lane.LANE1) {
-                    final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
+                    final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
                     if (isSafeLaneChange(newLaneSegment)) {
                         return Lane.TO_RIGHT;
                     }
