@@ -22,14 +22,13 @@ public class Applet extends JApplet {
 
     private CanvasPanel canvasPanel;
     private StatusPanel statusPanel;
-
     private Component toolBar;
 
     @Override
     public void init() {
 
         setLayout(new BorderLayout());
-        initLogger();
+        initializeLogger();
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName());
 
         final String scenario = getParameter("scenario");
@@ -73,16 +72,10 @@ public class Applet extends JApplet {
         super.init();
     }
 
-    /**
-     * @param resourceBundle
-     */
     private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
         toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
-    /**
-     * @param resourceBundle
-     */
     private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
         final AppletMenu trafficMenus = new AppletMenu(this, simulator, canvasPanel, trafficCanvas, statusPanel, resourceBundle);
         trafficMenus.initMenus();
@@ -105,9 +98,9 @@ public class Applet extends JApplet {
     }
 
     /**
-     * Inits the localization and logger.
+     * Initializes the logger.
      */
-    private static void initLogger() {
+    private static void initializeLogger() {
         // Log Levels: DEBUG < INFO < WARN < ERROR;
         final URL log4jConfig = Applet.class.getResource("/config/log4japplet.properties");
         PropertyConfigurator.configure(log4jConfig);
