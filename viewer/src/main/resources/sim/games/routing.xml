@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<SCENARIO network_filename="/sim/games/routing.xodr">
+    <VEHICLES>
+        <VEHICLE label="ACC1" length="6" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0." politeness="0.1" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <!-- trucks -->
+        <VEHICLE label="ACC2" length="16" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <ACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+                <MOBIL b_safe="4.0" s_min="2.0" threshold="0.2" bias_right="0.0" politeness="0.1" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="Obstacle" length="0">
+            <LONGITUDINAL_MODEL>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL />
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="0.2" duration="86400" fixed_seed="true" seed="42" crash_exit="false">
+
+        <TRAFFIC_COMPOSITION>
+            <VEHICLE_TYPE label="ACC1" fraction="1.0" relative_v0_randomization="0.0" />
+        </TRAFFIC_COMPOSITION>
+ 
+        <ROAD id="1">
+            <TRAFFIC_SOURCE logging="false">
+                <INFLOW t="0" q_per_hour="0" />
+                <INFLOW t="60" q_per_hour="1800" />
+                <INFLOW t="180" q_per_hour="1800" />
+                <INFLOW t="240" q_per_hour="0" />
+            </TRAFFIC_SOURCE>
+            <FLOW_CONSERVING_INHOMOGENEITIES>
+                <INHOMOGENEITY x="0" alpha_T="0.8" alpha_v0="1" />
+                <INHOMOGENEITY x="200" alpha_T="1." alpha_v0="1" />
+            </FLOW_CONSERVING_INHOMOGENEITIES>
+
+        </ROAD>
+ 
+
+
+        <ROAD id="10">
+            <FLOW_CONSERVING_INHOMOGENEITIES>
+                <INHOMOGENEITY x="400" alpha_T="1.8" alpha_v0="0.7" />
+                <INHOMOGENEITY x="400" alpha_T="3.5" alpha_v0="0.4" />
+                <INHOMOGENEITY x="600" alpha_T="3.5" alpha_v0="0.4" />
+                <INHOMOGENEITY x="600" alpha_T="1.8" alpha_v0="0.7" />
+            </FLOW_CONSERVING_INHOMOGENEITIES>
+              <SPEED_LIMITS>
+                <SPEED_LIMIT x="200" speedlimit_kmh="50" />
+                <SPEED_LIMIT x="500" speedlimit_kmh="200" />
+            </SPEED_LIMITS>
+         </ROAD>
+
+ 
+        <OUTPUT />
+
+    </SIMULATION>
+</SCENARIO>
+
