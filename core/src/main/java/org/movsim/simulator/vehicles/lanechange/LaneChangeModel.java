@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.lanechange;
 
 import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -51,7 +50,7 @@ public class LaneChangeModel {
     /** critical speed for kicking in European rules (in m/s) */
     private final double vCritEur;
 
-    private int mandatoryChange = MovsimConstants.NO_CHANGE;
+    private int mandatoryChange = Lane.NO_CHANGE;
 
     private Vehicle me;
 
@@ -172,13 +171,13 @@ public class LaneChangeModel {
         if (me.exitRoadSegmentId() == roadSegment.id()) {
             if (currentLane == Lane.LANE1) {
                 // already in exit lane, so do not move out of it
-                return MovsimConstants.NO_CHANGE;
+                return Lane.NO_CHANGE;
             } else if (currentLane > Lane.LANE1) {
-                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane - 1);
                 if (isSafeLaneChange(newLaneSegment)) {
-                    return MovsimConstants.TO_RIGHT;
+                    return Lane.TO_RIGHT;
                 }
-                return MovsimConstants.NO_CHANGE;
+                return Lane.NO_CHANGE;
             }
         }
         final LaneSegment sinkLaneSegment = roadSegment.laneSegment(currentLane).sinkLaneSegment();
@@ -188,13 +187,13 @@ public class LaneChangeModel {
             if (distanceToExit < distanceBeforeExitMustChangeLanes) {
                 if (currentLane == Lane.LANE1) {
                     // already in exit lane, so do not move out of it
-                    return MovsimConstants.NO_CHANGE;
+                    return Lane.NO_CHANGE;
                 } else if (currentLane > Lane.LANE1) {
                     final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane -1);
                     if (isSafeLaneChange(newLaneSegment)) {
-                        return MovsimConstants.TO_RIGHT;
+                        return Lane.TO_RIGHT;
                     }
-                    return MovsimConstants.NO_CHANGE;
+                    return Lane.NO_CHANGE;
                 }
             }
         }
@@ -203,20 +202,20 @@ public class LaneChangeModel {
         double accToLeft = -Double.MAX_VALUE;
         double accToRight = -Double.MAX_VALUE;
         // consider lane-changing to right-hand side lane (decreasing lane index)
-        if (currentLane - 1 >= MovsimConstants.MOST_RIGHT_LANE) {
-            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_RIGHT);
+        if (currentLane - 1 >= Lane.MOST_RIGHT_LANE) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
             if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
                 // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
-                accToRight = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_RIGHT, roadSegment);
+                accToRight = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_RIGHT, roadSegment);
             }
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
         if (currentLane + 1 < roadSegment.laneCount()) {
-            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + MovsimConstants.TO_LEFT);
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_LEFT);
             if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
                 // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane changing
-                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, MovsimConstants.TO_LEFT, roadSegment);
+                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_LEFT, roadSegment);
             }
         }
 
@@ -225,12 +224,12 @@ public class LaneChangeModel {
             logger.debug("accToRight={}, accToLeft={}", accToRight, accToLeft);
             logger.debug("currentLane={}", currentLane);
             if (accToRight > accToLeft) {
-                return MovsimConstants.TO_RIGHT;
+                return Lane.TO_RIGHT;
             }
-            return MovsimConstants.TO_LEFT;
+            return Lane.TO_LEFT;
         }
 
-        return MovsimConstants.NO_CHANGE;
+        return Lane.NO_CHANGE;
     }
 
 

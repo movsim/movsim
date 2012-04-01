@@ -31,7 +31,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Link;
@@ -129,9 +128,9 @@ public class MOBILTest {
         roadSegment.addVehicle(v2);
 
         // vehicles too close together, so acceleration balance should be large negative
-        double balance = m1.calcAccelerationBalance(v1, MovsimConstants.TO_LEFT, roadSegment);
+        double balance = m1.calcAccelerationBalance(v1, Lane.TO_LEFT, roadSegment);
         assertEquals(-Double.MAX_VALUE, balance, delta);
-        balance = m2.calcAccelerationBalance(v2, MovsimConstants.TO_RIGHT, roadSegment);
+        balance = m2.calcAccelerationBalance(v2, Lane.TO_RIGHT, roadSegment);
         assertEquals(-Double.MAX_VALUE, balance, delta);
 
         // now set up with sufficient gap between vehicles, but v2 needs to decelerate, so it is not
@@ -141,7 +140,7 @@ public class MOBILTest {
         v2.setSpeed(80.0 / 3.6); // 80 km/h
         roadSegment.addVehicle(v1);
         roadSegment.addVehicle(v2);
-        balance = m2.calcAccelerationBalance(v2, MovsimConstants.TO_RIGHT, roadSegment);
+        balance = m2.calcAccelerationBalance(v2, Lane.TO_RIGHT, roadSegment);
         assertTrue(balance < 0.0);
 
         // now set up with sufficient gap between vehicles, but v1 needs to brake heavily, so it is not
@@ -152,7 +151,7 @@ public class MOBILTest {
         v1.setSpeed(120.0 / 3.6); // 120 km/h
         roadSegment.addVehicle(v1);
         roadSegment.addVehicle(v2);
-        balance = m2.calcAccelerationBalance(v2, MovsimConstants.TO_RIGHT, roadSegment);
+        balance = m2.calcAccelerationBalance(v2, Lane.TO_RIGHT, roadSegment);
         assertEquals(-Double.MAX_VALUE, balance, delta);
     }
 
@@ -197,7 +196,7 @@ public class MOBILTest {
         final Vehicle rV = r1.rearVehicle(Lane.LANE2, v2.getRearPosition());
         assertEquals(v1.getId(), rV.getId());
 
-        double balance = m2.calcAccelerationBalance(v2, MovsimConstants.TO_LEFT, r1);
+        double balance = m2.calcAccelerationBalance(v2, Lane.TO_LEFT, r1);
         assertTrue(balance < 0.0);
     }
 

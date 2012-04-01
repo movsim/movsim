@@ -779,7 +779,7 @@ public class Vehicle {
         final int laneChangeDirection = laneChangeModel.determineLaneChangeDirection(roadSegment);
 
         // initiates a lane change: set targetLane to new value the lane will be assigned by the vehicle container !!
-        if (laneChangeDirection != MovsimConstants.NO_CHANGE) {
+        if (laneChangeDirection != Lane.NO_CHANGE) {
             setTargetLane(lane + laneChangeDirection);
             resetDelay();
             updateLaneChangeDelay(dt);

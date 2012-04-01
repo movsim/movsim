@@ -25,8 +25,8 @@
  */
 package org.movsim.output;
 
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -89,7 +89,7 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
         // TODO - deal with multiple lanes in a road segment
         int vehicleCount = 0;
         for (final RoadSegment roadSegment : route) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+            final LaneSegment laneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
             vehicleCount += laneSegment.vehicleCount();
         }
         if (vehicleCount == 0) {
@@ -102,7 +102,7 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
 
         int i = 0;
         for (final RoadSegment roadSegment : route) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(MovsimConstants.MOST_RIGHT_LANE);
+            final LaneSegment laneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
             final int laneVehicleCount = laneSegment.vehicleCount();
             for (int j = 0; j < laneVehicleCount; ++j) {
                 final Vehicle vehicle = laneSegment.getVehicle(j);
