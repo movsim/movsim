@@ -35,6 +35,8 @@ import javax.swing.JOptionPane;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -44,6 +46,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
 
     @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
+    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasScenarios.class);
 
     public static enum Scenario {
         NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE,
@@ -227,7 +230,7 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
                 // final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
                 // Color color = Color.getHSBColor(hue, saturation, luminance);
 
-                System.out.println("set color for vehicle label=" + vehicleTypeLabel); //$NON-NLS-1$
+                logger.info("set color for vehicle label={}", vehicleTypeLabel);
                 labelColors.put(vehicleTypeLabel, color);
             }
         }

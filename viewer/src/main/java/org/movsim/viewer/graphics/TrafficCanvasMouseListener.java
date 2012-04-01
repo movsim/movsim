@@ -43,9 +43,12 @@ import org.movsim.simulator.roadnetwork.VariableMessageSignDiversion;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TrafficCanvasMouseListener implements MouseListener, MouseMotionListener {
 
+    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
     private final TrafficCanvas trafficCanvas;
     private final RoadNetwork roadNetwork;
     private boolean diversionOn;
@@ -76,13 +79,9 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (TrafficCanvas.DEBUG) {
-            System.out.println("mouseClicked at " + e.getPoint()); //$NON-NLS-1$
-        }
+        logger.debug("mouseClicked at " + e.getPoint()); //$NON-NLS-1$
         if (trafficCanvas.lastVehicleViewed != -1) {
-            if (TrafficCanvas.DEBUG) {
-                System.out.println("vehicle id set"); //$NON-NLS-1$
-            }
+            logger.debug("vehicle id set"); //$NON-NLS-1$
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
@@ -164,8 +163,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("SimCanvas mouseEntered"); //$NON-NLS-1$
-
+        logger.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
     }
 
     /*
@@ -175,7 +173,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 
     /*
