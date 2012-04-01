@@ -25,13 +25,8 @@
  */
 package org.movsim.input;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
-import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +46,6 @@ public class InputData {
     public InputData() {
     }
 
-    public static Map<String, VehicleInput> createVehicleInputDataMap(List<VehicleInput> vehicleInputData) {
-        final HashMap<String, VehicleInput> map = new HashMap<String, VehicleInput>();
-        for (final VehicleInput vehInput : vehicleInputData) {
-            final String keyName = vehInput.getLabel();
-            map.put(keyName, vehInput);
-        }
-        return map;
-    }
-
     public SimulationInput getSimulationInput() {
         return simulationInput;
     }
@@ -75,7 +61,6 @@ public class InputData {
     public FuelConsumptionInput getFuelConsumptionInput() {
         return fuelConsumptionInput;
     }
-
     
     public VehiclesInput getVehiclesInput(){
         return vehiclesInput;

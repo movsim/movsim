@@ -428,7 +428,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             break;
         case VEHICLE_LABEL_COLOR:
             String label = vehicle.getLabel();
-            color = labelColors.containsKey(label) ? labelColors.get(label) : Color.MAGENTA;
+            color = labelColors.containsKey(label) ? labelColors.get(label) : Color.WHITE;
             break;
         default:
             final double v = vehicle.physicalQuantities().getSpeed() * 3.6;

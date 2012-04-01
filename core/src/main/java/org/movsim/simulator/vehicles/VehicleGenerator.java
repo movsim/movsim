@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.input.InputData;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.vehicle.VehicleInput;
@@ -70,10 +69,7 @@ public class VehicleGenerator {
             Map<String, Route> routes) {
         this.simulationTimestep = simulationTimestep;
 
-        final Map<String, VehicleInput> vehInputMap = InputData.createVehicleInputDataMap(vehiclesInput
-                .getVehicleInput());
-
-        prototypes = createPrototypes(vehInputMap, vehicleTypeInputs, routes);
+        prototypes = createPrototypes(vehiclesInput.getVehicleInputMap(), vehicleTypeInputs, routes);
 
         isWithReactionTimes = checkForReactionTimes();
 

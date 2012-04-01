@@ -32,9 +32,9 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.vehicles.VehicleGenerator;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -172,7 +172,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case RINGROADONELANEFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_1lane", path);
-            initGraphicSettings();
             break;
         case RINGROADTWOLANESFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
@@ -213,10 +212,11 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             segment.roadMapping().setRoadColor(roadColor);
         }
 
-        // TODO more than one vehicle generator is possible. list must be generated from VEHICLE input
-        final VehicleGenerator vehicleGenerator = simulator.getVehicleGenerator();
-        if (vehicleGenerator != null) {
-            for (String vehicleTypeLabel : vehicleGenerator.prototypes().keySet()) {
+        VehiclesInput vehiclesInput = simulator.getVehiclesInput();
+        if (vehiclesInput == null) {
+            System.out.println("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
+        } else {
+            for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
                 int r = (int) (Math.random() * 256);
                 int g = (int) (Math.random() * 256);
                 int b = (int) (Math.random() * 256);
