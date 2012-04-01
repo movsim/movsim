@@ -583,8 +583,9 @@ public class Vehicle {
         }
 
         accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
+        
+        // moderate acceleration by traffic lights or for preparing mandatory lane changes to exit sliproads 
         acc = moderateAcceleration(accModel);
-
 
         acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
     }
