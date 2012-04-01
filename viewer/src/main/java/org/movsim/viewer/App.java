@@ -48,7 +48,7 @@ public class App {
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // parse the command line, putting the results into projectMetaData
-        ViewerCommandLine viewerCommandLine = new ViewerCommandLine(projectMetaData, args);
+        ViewerCommandLine.parse(projectMetaData, args);
 
         AppFrame appFrame = new AppFrame(resourceBundle, projectMetaData);
     }

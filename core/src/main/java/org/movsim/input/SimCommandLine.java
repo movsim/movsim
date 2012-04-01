@@ -47,16 +47,17 @@ import org.movsim.utilities.FileUtils;
  */
 public class SimCommandLine {
 
+    final CommandLineParser parser;
     private Options options;
-
     protected final ProjectMetaData projectMetaData;
 
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
-        new SimCommandLine(projectMetaData, args);
+        final SimCommandLine commandLine = new SimCommandLine(projectMetaData, args);
+        commandLine.parse(args);
     }
 
     /**
-     * Instantiates a new movsim command line parser.
+     * Constructor.
      * 
      * Intitializes logger and localization.
      * 
@@ -67,13 +68,30 @@ public class SimCommandLine {
      */
     public SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
 
-        initLocalizationAndLogger();
-
+        Locale.setDefault(Locale.US);
+        initializeLogger();
         this.projectMetaData = projectMetaData;
-
         createOptions();
-        createParserAndParse(args);
+        parser = new GnuParser();
+    }
 
+    /**
+     * Parse the command line.
+     * 
+     * @param args
+     *            the args
+     */
+    public void parse(String[] args) {
+        // create the parser
+        try {
+            // parse the command line arguments
+            final CommandLine cmdline = parser.parse(options, args);
+            parse(cmdline);
+        } catch (final ParseException exp) {
+            // something went wrong
+            System.out.printf("Parsing failed.  Reason: %s %n", exp.getMessage());
+            optHelp();
+        }
         final String projectName = projectMetaData.getProjectName();
         if (projectMetaData.isWriteInternalXml() && projectName.isEmpty()) {
             System.err.println("no xml file for simulation configuration found!");
@@ -106,26 +124,6 @@ public class SimCommandLine {
         OptionBuilder.withDescription("argument is the output path relative to calling directory");
         final Option outputPathOption = OptionBuilder.create("o");
         options.addOption(outputPathOption);
-    }
-
-    /**
-     * Creates the parser and parse.
-     * 
-     * @param args
-     *            the args
-     */
-    private void createParserAndParse(String[] args) {
-        // create the parser
-        final CommandLineParser parser = new GnuParser();
-        try {
-            // parse the command line arguments
-            final CommandLine cmdline = parser.parse(options, args);
-            parse(cmdline);
-        } catch (final ParseException exp) {
-            // something went wrong
-            System.out.printf("Parsing failed.  Reason: %s %n", exp.getMessage());
-            optHelp();
-        }
     }
 
     /**
@@ -252,9 +250,7 @@ public class SimCommandLine {
         System.out.println("option -h. Exit Programm");
 
         final HelpFormatter formatter = new HelpFormatter();
-
         formatter.printHelp("movsim", options);
-
         System.exit(0);
     }
 
@@ -277,11 +273,9 @@ public class SimCommandLine {
     }
 
     /**
-     * Inits the localization and logger.
+     * Initializes the logger.
      */
-    private static void initLocalizationAndLogger() {
-        Locale.setDefault(Locale.US);
-
+    private static void initializeLogger() {
         // Log Levels: DEBUG < INFO < WARN < ERROR;
         final File file = new File("log4j.properties");
         if (file.exists() && file.isFile()) {
