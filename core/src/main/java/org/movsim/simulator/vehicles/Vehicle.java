@@ -736,7 +736,6 @@ public class Vehicle {
      */
     public void updateTrafficLight(double simulationTime, TrafficLight trafficLight) {
         trafficLightApproaching.update(this, simulationTime, trafficLight, longitudinalModel);
-
     }
 
     public LaneChangeModel getLaneChangeModel() {
