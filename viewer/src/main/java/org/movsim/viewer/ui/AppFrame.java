@@ -43,7 +43,7 @@ import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
-public class MainFrame extends JFrame {
+public class AppFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
     final StatusPanel statusPanel;
     private MovSimToolBar toolBar;
 
-    public MainFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
+    public AppFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
         super(resourceBundle.getString("FrameName"));
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
@@ -103,7 +103,7 @@ public class MainFrame extends JFrame {
      * @param resourceBundle
      */
     private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
-        final MovSimMenu trafficMenus = new MovSimMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
+        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
         trafficMenus.initMenus();
     }
 

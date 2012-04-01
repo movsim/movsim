@@ -51,17 +51,17 @@ import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
-public class MovSimMenu extends JPanel {
+public class AppMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Simulator simulator;
-    private final MainFrame frame;
+    private final AppFrame frame;
     private final CanvasPanel canvasPanel;
     private final TrafficCanvasScenarios trafficCanvas;
     private final ResourceBundle resourceBundle;
 
     private LogWindow logWindow;
 
-    public MovSimMenu(MainFrame mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, ResourceBundle resourceBundle) {
+    public AppMenu(AppFrame mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.simulator = simulator;
         this.canvasPanel = canvasPanel;
