@@ -72,7 +72,6 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public static final int ID_NOT_SET = -1;
     public static final int INITIAL_ID = 1;
-    private static final boolean DEBUG = false;
     private static int nextId = INITIAL_ID;
 
     public static final int MAX_LANE_COUNT = 8;

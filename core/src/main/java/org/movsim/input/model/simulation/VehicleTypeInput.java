@@ -27,8 +27,12 @@ package org.movsim.input.model.simulation;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class VehicleTypeInput {
 
+    final static Logger logger = LoggerFactory.getLogger(VehicleTypeInput.class);
     private final String keyName;
     private final double fraction;
     private final double relativeRandomizationDesiredSpeed;
@@ -43,7 +47,7 @@ public class VehicleTypeInput {
     public VehicleTypeInput(Map<String, String> map) {
         this.keyName = map.get("label");
         this.fraction = Double.parseDouble(map.get("fraction"));
-        System.out.println("rand=" + map.get("relative_v0_randomization") + "     key:" + keyName);
+        logger.info("rand={}     key:{}", map.get("relative_v0_randomization"), keyName);
         this.relativeRandomizationDesiredSpeed = Double.parseDouble(map.get("relative_v0_randomization"));
         final String routeLabel = map.get("route_label");
         this.routeLabel = routeLabel.equals("") ? null : routeLabel;
