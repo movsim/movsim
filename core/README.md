@@ -53,6 +53,15 @@ The `.csv` output is put in the directory from which the simulator is called and
 
 The script `cleanmovsim` can be used to delete all simulation output files in the current directory.
 
+
+Logging output
+--------------
+
+MovSim's logging output is controlled the `/config/log4j.properties` properties file.
+
+Logging levels are: `DEBUG < INFO < WARN < ERROR`
+
+
 Commercial use
 --------------
 
