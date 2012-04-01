@@ -233,14 +233,5 @@ public class LaneChangeModel {
         return MovsimConstants.NO_CHANGE;
     }
 
-    public void setMandatoryChange(int incentive) {
-        if (incentive == MovsimConstants.NO_CHANGE || incentive == MovsimConstants.TO_RIGHT
-                || incentive == MovsimConstants.TO_LEFT) {
-            mandatoryChange = incentive;
-            System.out.println("LaneChange.setMandatoryChange:" + " mandatoryChange= " + mandatoryChange);
-        } else {
-            System.exit(-1); // debugging
-        }
-    }
 
 }
