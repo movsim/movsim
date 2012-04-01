@@ -87,6 +87,7 @@ import org.movsim.viewer.util.SwingHelper;
 public class TrafficCanvas extends SimulationCanvasBase implements SimulationRunnable.UpdateDrawingCallback,
         SimulationRunnable.HandleExceptionCallback, SimulationRunnable.UpdateStatusCallback {
 
+    @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
     protected static final boolean DEBUG = false;
 
