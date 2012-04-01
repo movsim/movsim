@@ -14,11 +14,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.viewer.graphics.SimulationCanvasBase;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.LocalizationStrings;
 
 public class Applet extends JApplet {
-
     private static final long serialVersionUID = 1L;
 
     private CanvasPanel canvasPanel;
@@ -33,7 +32,7 @@ public class Applet extends JApplet {
         initLogger();
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName());
 
-        String scenario = getParameter("scenario");
+        final String scenario = getParameter("scenario");
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXmlFromResources(true);
         projectMetaData.setInstantaneousFileOutput(false);
@@ -43,24 +42,22 @@ public class Applet extends JApplet {
         } else {
             projectMetaData.setProjectName(scenario);
         }
-       
 
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        canvasPanel = new CanvasPanel(resourceBundle, simulator);
-        final SimulationCanvasBase trafficCanvas = canvasPanel.trafficCanvas();
+        final TrafficCanvasScenarios trafficCanvas = new TrafficCanvasScenarios(simulator);
+        canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
-        addToolBar(resourceBundle);
-        addMenu(resourceBundle, simulator);
+        addToolBar(resourceBundle, trafficCanvas);
+        addMenu(resourceBundle, simulator, trafficCanvas);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
 
-
-        this.setSize(1280, 800);
-        this.resize(1280, 800);
+        setSize(1280, 800);
+        resize(1280, 800);
         canvasPanel.setSize(1280, 800);
         trafficCanvas.setSize(1280, 800);
 
@@ -79,15 +76,15 @@ public class Applet extends JApplet {
     /**
      * @param resourceBundle
      */
-    private void addToolBar(ResourceBundle resourceBundle) {
-        toolBar = new MovSimToolBar(statusPanel, canvasPanel.trafficCanvas(), canvasPanel.controller(), resourceBundle);
+    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
+        toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addMenu(ResourceBundle resourceBundle, Simulator simulator) {
-        final AppletMenu trafficMenus = new AppletMenu(this, simulator, canvasPanel, statusPanel, resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
+        final AppletMenu trafficMenus = new AppletMenu(this, simulator, canvasPanel, trafficCanvas, statusPanel, resourceBundle);
         trafficMenus.initMenus();
     }
 
@@ -104,7 +101,6 @@ public class Applet extends JApplet {
         } catch (final UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
         SwingUtilities.updateComponentTreeUI(this);
     }
 

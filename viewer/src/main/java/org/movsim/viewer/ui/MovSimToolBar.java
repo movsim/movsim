@@ -62,12 +62,12 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
     private final StatusPanel statusPanel;
     private final StatusControlCallbacks statusCallbacks;
 
-    public MovSimToolBar(StatusPanel statusPanel, final TrafficCanvas trafficCanvas, TrafficCanvasKeyListener controller, ResourceBundle resourceBundle) {
+    public MovSimToolBar(StatusPanel statusPanel, final TrafficCanvas trafficCanvas, ResourceBundle resourceBundle) {
         super(resourceBundle.getString("ToolBarTitle"));
         this.statusPanel = statusPanel;
 
         setRollover(true);
-        this.controller = controller;
+        this.controller = trafficCanvas.controller();
         addButtons(this, resourceBundle);
         addSeparator();
         add(statusPanel);

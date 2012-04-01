@@ -115,10 +115,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
          *            the status message
          */
         public void showStatusMessage(String message);
-
         public void stateChanged();
     }
-
     protected StatusControlCallbacks statusControlCallbacks;
 
     // pre-allocate vehicle drawing path
@@ -174,6 +172,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected Vehicle vehiclePopup;
     protected VehicleTipWindow vehicleTipWindow;
     final TrafficCanvasMouseListener mouseListener;
+    final TrafficCanvasKeyListener controller;
 
     protected long lastVehicleViewed = -1;
     protected long vehicleToHighlightId = -1;
@@ -195,7 +194,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
-        addKeyListener(new TrafficCanvasKeyListener(this));
+        controller = new TrafficCanvasKeyListener(this);
+        addKeyListener(controller);
+    }
+
+    /**
+     * Returns the traffic canvas controller.
+     * @return the traffic canvas controller
+     */
+    public TrafficCanvasKeyListener controller() {
+        return controller;
     }
 
     protected void initGraphicConfigFieldsFromProperties() {

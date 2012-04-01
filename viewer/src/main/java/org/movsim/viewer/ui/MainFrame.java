@@ -48,8 +48,8 @@ public class MainFrame extends JFrame {
 
     private Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
 
-    final StatusPanel statusPanel;
     private final CanvasPanel canvasPanel;
+    final StatusPanel statusPanel;
     private MovSimToolBar toolBar;
 
     public MainFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
@@ -60,12 +60,12 @@ public class MainFrame extends JFrame {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        canvasPanel = new CanvasPanel(resourceBundle, simulator);
-        final TrafficCanvasScenarios trafficCanvas = canvasPanel.trafficCanvas();
+        final TrafficCanvasScenarios trafficCanvas = new TrafficCanvasScenarios(simulator);
+        canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
-        addToolBar(resourceBundle);
-        addMenu(resourceBundle, simulator);
+        addToolBar(resourceBundle, trafficCanvas);
+        addMenu(resourceBundle, simulator, trafficCanvas);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
@@ -95,15 +95,15 @@ public class MainFrame extends JFrame {
     /**
      * @param resourceBundle
      */
-    private void addToolBar(ResourceBundle resourceBundle) {
-        toolBar = new MovSimToolBar(statusPanel, canvasPanel.trafficCanvas(), canvasPanel.controller(), resourceBundle);
+    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
+        toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addMenu(ResourceBundle resourceBundle, Simulator simulator) {
-        final MovSimMenu trafficMenus = new MovSimMenu(this, simulator, canvasPanel, canvasPanel.trafficCanvas(), resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
+        final MovSimMenu trafficMenus = new MovSimMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
         trafficMenus.initMenus();
     }
 
@@ -120,7 +120,6 @@ public class MainFrame extends JFrame {
         } catch (final UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
         SwingUtilities.updateComponentTreeUI(this);
     }
 }

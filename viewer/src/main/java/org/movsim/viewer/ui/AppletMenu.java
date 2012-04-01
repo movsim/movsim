@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvas;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
@@ -28,10 +29,10 @@ public class AppletMenu extends JPanel {
     private LogWindow logWindow;
     private StatusPanel statusPanel;
 
-    public AppletMenu(Applet mainFrame, Simulator simulator, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(Applet mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
-        this.trafficCanvas = canvasPanel.trafficCanvas();
+        this.trafficCanvas = trafficCanvas;
         this.simulator = simulator;
         this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
