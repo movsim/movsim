@@ -137,65 +137,105 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
      */
     public void setupTrafficScenario(Scenario scenario) {
 
+        final String path;
+        switch (scenario) {
+        case ONRAMPFILE: // TODO rg path
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case OFFRAMPFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case STARTSTOPFILE:
+            path = ".." + File.separator + "sim" + File.separator + "bookScenarioStartStop" + File.separator;
+            break;
+        case CLOVERLEAFFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case LANECLOSINGFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case TRAFFICLIGHTFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case SPEEDLIMITFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case RINGROADONELANEFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case RINGROADTWOLANESFILE:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case FLOWCONSERVINGBOTTLENECK:
+            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
+            break;
+        case RAMPMETERING:
+            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
+            break;
+        case ROUTING:
+            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
+            break;
+        case VASALOPPET:
+            path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
+            break;
+        default:
+            path = "";
+        }
+        setupTrafficScenario(scenario, path);
+    }
+
+    /**
+     * Sets up the given traffic scenario.
+     * 
+     * @param scenario
+     */
+    public void setupTrafficScenario(Scenario scenario, String path) {
+
         reset();
 
         if (this.scenario == scenario) {
             return; // TODO proper restart
         }
-        final String path;
         switch (scenario) {
         case ONRAMPFILE: // TODO rg path
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("onramp", path);
             break;
         case OFFRAMPFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("offramp", path);
             break;
         case STARTSTOPFILE:
-            path = ".." + File.separator + "sim" + File.separator + "bookScenarioStartStop" + File.separator;
             simulator.loadScenarioFromXml("startStop_IDM", path);
             break;
         case CLOVERLEAFFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("cloverleaf", path);
             break;
         case LANECLOSINGFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("laneclosure", path);
             break;
         case TRAFFICLIGHTFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("trafficlight", path);
             break;
         case SPEEDLIMITFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("speedlimit", path);
             break;
         case RINGROADONELANEFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_1lane", path);
             break;
         case RINGROADTWOLANESFILE:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_2lanes", path);
             break;
         case FLOWCONSERVINGBOTTLENECK:
-            path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("flow_conserving_bottleneck", path);
             break;
         case RAMPMETERING:
-            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
-            simulator.loadScenarioFromXml("ramp_metering_v1", path);
+            simulator.loadScenarioFromXml("ramp_metering", path);
             vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
             break;
         case ROUTING:
-            path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
-            simulator.loadScenarioFromXml("routing_v2", path);
+            simulator.loadScenarioFromXml("routing", path);
             vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
             break;
         case VASALOPPET:
-            path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
             break;
         default:
