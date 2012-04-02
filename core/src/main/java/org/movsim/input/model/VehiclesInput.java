@@ -26,15 +26,21 @@
 
 package org.movsim.input.model;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.model.vehicle.VehicleInput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VehiclesInput {
-
-    private final List<VehicleInput> vehicleInput = new LinkedList<VehicleInput>();
+    
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(VehiclesInput.class);
+    
+    private final Map<String, VehicleInput> vehicleInputMap = new HashMap<String, VehicleInput>();
     
     private final boolean isWriteFundamentalDiagrams;
     
@@ -45,12 +51,20 @@ public class VehiclesInput {
         @SuppressWarnings("unchecked")
         final List<Element> vehicleElements = elem.getChildren();
         for (final Element vehElem : vehicleElements) {
-            vehicleInput.add(new VehicleInput(vehElem));
+            final VehicleInput vehicleInput = new VehicleInput(vehElem);
+            final String labelName = vehicleInput.getLabel();
+            if (vehicleInputMap.containsKey(labelName)) {
+                logger.error(
+                        "vehicle label={} already exists. Please check input file for duplicate label identifier.",
+                        labelName);
+                System.exit(-1);
+            }
+            vehicleInputMap.put(labelName, vehicleInput);
         }
     }
     
-    public List<VehicleInput> getVehicleInput() {
-        return vehicleInput;
+    public Map<String, VehicleInput> getVehicleInputMap() {
+        return vehicleInputMap;
     }
 
     public boolean isWriteFundamentalDiagrams() {

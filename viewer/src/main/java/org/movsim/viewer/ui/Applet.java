@@ -14,25 +14,24 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.LocalizationStrings;
 
 public class Applet extends JApplet {
-
     private static final long serialVersionUID = 1L;
 
     private CanvasPanel canvasPanel;
     private StatusPanel statusPanel;
-
     private Component toolBar;
 
     @Override
     public void init() {
 
         setLayout(new BorderLayout());
-        initLogger();
+        initializeLogger();
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName());
 
-        String scenario = getParameter("scenario");
+        final String scenario = getParameter("scenario");
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXmlFromResources(true);
         projectMetaData.setInstantaneousFileOutput(false);
@@ -42,50 +41,43 @@ public class Applet extends JApplet {
         } else {
             projectMetaData.setProjectName(scenario);
         }
-       
 
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        canvasPanel = new CanvasPanel(resourceBundle, simulator);
+        final TrafficCanvasScenarios trafficCanvas = new TrafficCanvasScenarios(simulator);
+        canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
-        addToolBar(resourceBundle);
-        addMenu(resourceBundle);
+        addToolBar(resourceBundle, trafficCanvas);
+        addMenu(resourceBundle, simulator, trafficCanvas);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
 
-
-        this.setSize(1280, 800);
-        this.resize(1280, 800);
+        setSize(1280, 800);
+        resize(1280, 800);
         canvasPanel.setSize(1280, 800);
-        canvasPanel.trafficCanvas.setSize(1280, 800);
+        trafficCanvas.setSize(1280, 800);
 
         canvasPanel.resized();
         canvasPanel.repaint();
-        
+
         statusPanel.setWithProgressBar(false);
         simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-        canvasPanel.trafficCanvas.reset();
-        canvasPanel.trafficCanvas.start();
+        trafficCanvas.reset();
+        trafficCanvas.start();
         statusPanel.reset();
 
         super.init();
     }
 
-    /**
-     * @param resourceBundle
-     */
-    private void addToolBar(ResourceBundle resourceBundle) {
-        toolBar = new MovSimToolBar(statusPanel, canvasPanel, resourceBundle);
+    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
+        toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
-    /**
-     * @param resourceBundle
-     */
-    private void addMenu(ResourceBundle resourceBundle) {
-        final AppletMenu trafficMenus = new AppletMenu(this, canvasPanel, statusPanel, resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
+        final AppletMenu trafficMenus = new AppletMenu(this, simulator, canvasPanel, trafficCanvas, statusPanel, resourceBundle);
         trafficMenus.initMenus();
     }
 
@@ -102,14 +94,13 @@ public class Applet extends JApplet {
         } catch (final UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
         SwingUtilities.updateComponentTreeUI(this);
     }
 
     /**
-     * Inits the localization and logger.
+     * Initializes the logger.
      */
-    private static void initLogger() {
+    private static void initializeLogger() {
         // Log Levels: DEBUG < INFO < WARN < ERROR;
         final URL log4jConfig = Applet.class.getResource("/config/log4japplet.properties");
         PropertyConfigurator.configure(log4jConfig);

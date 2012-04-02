@@ -50,6 +50,12 @@ public class Lane {
     public static final int LANE8 = 7;
     public static final int HARD_SHOULDER = -1;
     public static final int NONE = -2;
+    
+    
+    public final static int TO_LEFT = 1;
+    public final static int TO_RIGHT = -1;
+    public final static int NO_CHANGE = 0;
+    public final static int MOST_RIGHT_LANE = LANE1; 
 
     /**
      * Lane type.
@@ -80,4 +86,5 @@ public class Lane {
          */
         BICYCLE,
     }
+    
 }

@@ -29,13 +29,14 @@ package org.movsim.viewer.graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.File;
-import java.util.Hashtable;
-import java.util.Set;
 
-import org.movsim.simulator.SimulationRunnable;
+import javax.swing.JOptionPane;
+
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Traffic Canvas subclass that setups up the actual road network and traffic simulation scenarios.
@@ -43,7 +44,9 @@ import org.movsim.simulator.vehicles.VehicleGenerator;
  */
 public class TrafficCanvasScenarios extends TrafficCanvas {
 
+    @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
+    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasScenarios.class);
 
     public static enum Scenario {
         NONE, ONRAMPFILE, STARTSTOPFILE, CLOVERLEAFFILE, OFFRAMPFILE, LANECLOSINGFILE, TRAFFICLIGHTFILE,
@@ -58,9 +61,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     private boolean isInitialSpeedUp;
     private double speedupEndTime;
     private int sleepTimeSave;
+    String simulationFinished;
 
-    public TrafficCanvasScenarios(SimulationRunnable simulationRunnable, Simulator simulator) {
-        super(simulationRunnable, simulator);
+    public TrafficCanvasScenarios(Simulator simulator) {
+        super(simulator);
 
         simulationRunnable.addUpdateStatusCallback(this);
         setStatusControlCallbacks(statusControlCallbacks);
@@ -70,8 +74,9 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     }
 
     public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
-            String perturbationRampingFinishedString, String perturbationAppliedString) {
+            String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
         setMessageStrings(popupString, popupStringExitEndRoad);
+        this.simulationFinished = simulationFinished;
     }
 
     @Override
@@ -85,6 +90,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         if (isInitialSpeedUp && simulationTime > speedupEndTime) {
             isInitialSpeedUp = false;
             setSleepTime(sleepTimeSave);
+        }
+        if (simulator.isFinished() && simulationFinished != null) {
+            JOptionPane.showMessageDialog(null, String.format(simulationFinished, (int) simulationTime));
+            simulationRunnable.stop();
         }
     }
 
@@ -109,7 +118,16 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         super.reset();
         isInitialSpeedUp = false;
         vehicleToHighlightId = -1;
+        initGraphicSettings();
         forceRepaintBackground();
+    }
+
+    /**
+     * Returns the current traffic scenario.
+     * @return the current traffic scenario
+     */
+    Scenario scenario() {
+        return scenario;
     }
 
     /**
@@ -129,77 +147,63 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         case ONRAMPFILE: // TODO rg path
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("onramp", path);
-            initGraphicSettings();
             break;
         case OFFRAMPFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("offramp", path);
-            initGraphicSettings();
             break;
         case STARTSTOPFILE:
             path = ".." + File.separator + "sim" + File.separator + "bookScenarioStartStop" + File.separator;
             simulator.loadScenarioFromXml("startStop_IDM", path);
-            initGraphicSettings();
             break;
         case CLOVERLEAFFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("cloverleaf", path);
-            initGraphicSettings();
             break;
         case LANECLOSINGFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("laneclosure", path);
-            initGraphicSettings();
             break;
         case TRAFFICLIGHTFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("trafficlight", path);
-            initGraphicSettings();
             break;
         case SPEEDLIMITFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("speedlimit", path);
-            initGraphicSettings();
             break;
         case RINGROADONELANEFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_1lane", path);
-            initGraphicSettings();
             break;
         case RINGROADTWOLANESFILE:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("ringroad_2lanes", path);
-            initGraphicSettings();
             break;
         case FLOWCONSERVINGBOTTLENECK:
             path = ".." + File.separator + "sim" + File.separator + "buildingBlocks" + File.separator;
             simulator.loadScenarioFromXml("flow_conserving_bottleneck", path);
-            initGraphicSettings();
             break;
         case RAMPMETERING:
             path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
             simulator.loadScenarioFromXml("ramp_metering_v1", path);
             vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
-            initGraphicSettings();
             break;
         case ROUTING:
             path = ".." + File.separator + "sim" + File.separator + "games" + File.separator;
             simulator.loadScenarioFromXml("routing_v2", path);
             vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
-            initGraphicSettings();
             break;
         case VASALOPPET:
             path = ".." + File.separator + "sim" + File.separator + "examples" + File.separator;
             simulator.loadScenarioFromXml("vasa_CCS", path);
-            initGraphicSettings();
             break;
         default:
-            return;
+            // nothing to do
         }
-
+        initGraphicSettings();
         forceRepaintBackground();
         this.scenario = scenario;
-        start();
     }
 
     private void initGraphicSettings() {
@@ -207,26 +211,28 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
         initGraphicConfigFieldsFromProperties();
         resetScaleAndOffset();
 
-        for (RoadSegment segment : roadNetwork) {
+        for (final RoadSegment segment : roadNetwork) {
             segment.roadMapping().setRoadColor(roadColor);
         }
 
-        VehicleGenerator vehicleGenerator = simulator.getVehicleGenerator();
-        Set<String> prototypeLabels = vehicleGenerator.prototypes().keySet();
-        // Random random = new Random();
-        labelColors = new Hashtable<String, Color>();
-        for (String prototype : prototypeLabels) {
-            int R = (int) (Math.random() * 256);
-            int G = (int) (Math.random() * 256);
-            int B = (int) (Math.random() * 256);
-            Color color = new Color(R, G, B);
+        VehiclesInput vehiclesInput = simulator.getVehiclesInput();
+        if (vehiclesInput == null) {
+            System.out.println("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
+        } else {
+            for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
+                int r = (int) (Math.random() * 256);
+                int g = (int) (Math.random() * 256);
+                int b = (int) (Math.random() * 256);
+                Color color = new Color(r, g, b);
 
-            // final float hue = random.nextFloat();
-            // final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
-            // final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
-            // Color color = Color.getHSBColor(hue, saturation, luminance);
+                // final float hue = random.nextFloat();
+                // final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
+                // final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
+                // Color color = Color.getHSBColor(hue, saturation, luminance);
 
-            labelColors.put(prototype, color);
+                logger.info("set color for vehicle label={}", vehicleTypeLabel);
+                labelColors.put(vehicleTypeLabel, color);
+            }
         }
     }
 }

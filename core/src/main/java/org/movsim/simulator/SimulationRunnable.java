@@ -214,6 +214,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      */
     public void start() {
         reset();
+        pausedWhenRunning = false;
         if (thread == null) {
             thread = new Thread(this);
             // thread.setUncaughtExceptionHandler(defaultExceptionHandler);

@@ -39,6 +39,7 @@ import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
 import org.movsim.roadmappings.RoadMappingLine;
+import org.movsim.roadmappings.RoadMappingPoly;
 import org.movsim.roadmappings.RoadMappingPolyBezier;
 import org.movsim.roadmappings.RoadMappingPolyLine;
 import org.movsim.roadmappings.RoadMappingS;
@@ -160,6 +161,12 @@ public class PaintRoadMapping {
             to.setLocation(posTheta.x, posTheta.y);
             line.setLine(from, to);
             g.draw(line);
+            return;
+        } else if (roadMappingClass == RoadMappingPoly.class) {
+            final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
+            for (final RoadMapping map : poly) {
+                paintRoadMapping(g, map, lateralOffset);
+            }
             return;
         } else if (roadMappingClass == RoadMappingPolyLine.class) {
             // TODO need to properly handle joins of the lines in the polyline

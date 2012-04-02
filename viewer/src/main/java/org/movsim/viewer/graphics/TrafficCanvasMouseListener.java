@@ -43,9 +43,12 @@ import org.movsim.simulator.roadnetwork.VariableMessageSignDiversion;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TrafficCanvasMouseListener implements MouseListener, MouseMotionListener {
 
+    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
     private final TrafficCanvas trafficCanvas;
     private final RoadNetwork roadNetwork;
     private boolean diversionOn;
@@ -76,20 +79,17 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (TrafficCanvas.DEBUG) {
-            System.out.println("mouseClicked at " + e.getPoint()); //$NON-NLS-1$
-        }
+        logger.debug("mouseClicked at " + e.getPoint()); //$NON-NLS-1$
         if (trafficCanvas.lastVehicleViewed != -1) {
-            if (TrafficCanvas.DEBUG) {
-                System.out.println("vehicle id set"); //$NON-NLS-1$
-            }
+            logger.debug("vehicle id set"); //$NON-NLS-1$
             trafficCanvas.vehicleToHighlightId = trafficCanvas.lastVehicleViewed;
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
         }
         for (final RoadSegment roadSegment : roadNetwork) {
             // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
-            if (roadSegment.userId().equals("1")) {
+            final TrafficCanvasScenarios trafficCanvasScenarios = (TrafficCanvasScenarios) trafficCanvas;
+            if (trafficCanvasScenarios.scenario() ==  TrafficCanvasScenarios.Scenario.ROUTING && roadSegment.userId().equals("1")) {
                 if (diversionOn == false) {
                     diversionOn = true;
                     roadSegment.addVariableMessageSign(variableMessageSign);
@@ -131,7 +131,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        // System.out.println("mousePressed at " + e.getPoint()); //$NON-NLS-1$
         if (!draggingAllowed) {
             return;
         }
@@ -151,7 +150,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        // System.out.println("mouseReleased at" + e.getPoint()); //$NON-NLS-1$
         inDrag = false;
         trafficCanvas.backgroundChanged = false;
     }
@@ -163,8 +161,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("SimCanvas mouseEntered"); //$NON-NLS-1$
-
+        logger.debug("SimCanvas mouseEntered"); //$NON-NLS-1$
     }
 
     /*
@@ -174,7 +171,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseExited(MouseEvent e) {
-
     }
 
     /*
@@ -185,7 +181,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     @Override
     public void mouseDragged(MouseEvent e) {
         final Point p = e.getPoint();
-        // System.out.println("mouseDragged:" + p.x + "," + p.y); //$NON-NLS-1$ //$NON-NLS-2$
         if (inDrag) {
             final int xOffsetNew = xOffsetSave + (int) ((p.x - startDragX) / trafficCanvas.scale);
             final int yOffsetNew = yOffsetSave + (int) ((p.y - startDragY) / trafficCanvas.scale);
@@ -194,7 +189,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 trafficCanvas.xOffset = xOffsetNew;
                 trafficCanvas.yOffset = yOffsetNew;
                 trafficCanvas.setTransform();
-                // System.out.println("new offset: " + xOffset + ", " + yOffset);//$NON-NLS-1$ //$NON-NLS-2$
                 trafficCanvas.forceRepaintBackground();
             }
         }
@@ -212,7 +206,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 trafficCanvas.vehicleTipWindow = new VehicleTipWindow(trafficCanvas,
                         SwingHelper.getFrame(trafficCanvas));
             }
-            //System.out.println("SimCanvas mouseMoved"); //$NON-NLS-1$
             final Point point = e.getPoint();
             final Point2D transformedPoint = new Point2D.Float();
             final GeneralPath path = new GeneralPath();

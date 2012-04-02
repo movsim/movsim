@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.viewer.ui.LogWindow;
-import org.movsim.viewer.ui.MainFrame;
+import org.movsim.viewer.ui.AppFrame;
 import org.movsim.viewer.util.LocalizationStrings;
 import org.movsim.viewer.util.ViewerCommandLine;
 
@@ -48,8 +48,8 @@ public class App {
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // parse the command line, putting the results into projectMetaData
-        ViewerCommandLine viewerCommandLine = new ViewerCommandLine(projectMetaData, args);
+        ViewerCommandLine.parse(projectMetaData, args);
 
-        MainFrame mainFrame = new MainFrame(resourceBundle, projectMetaData);
+        AppFrame appFrame = new AppFrame(resourceBundle, projectMetaData);
     }
 }

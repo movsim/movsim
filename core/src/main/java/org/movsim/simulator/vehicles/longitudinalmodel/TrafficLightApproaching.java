@@ -76,7 +76,10 @@ public class TrafficLightApproaching {
 
         if (distanceToTrafficlight <= 0) {
             distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
-        } else if  (trafficLight.status() != TrafficLight.GREEN_LIGHT) {
+            return;
+        }
+
+        if (trafficLight.status() != TrafficLight.GREEN_LIGHT) {
             // TODO define it as parameter ("range of sight" or so) ?!
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
@@ -91,14 +94,28 @@ public class TrafficLightApproaching {
                 // TODO: decision logic while approaching yellow traffic light
                 // ignore traffic light if accTL exceeds two times comfortable
                 // deceleration or if kinematic braking is not possible anymore
-                final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
-                final double comfortBrakeDecel = 4;
-                final double brakeDist = (speed * speed) / (2 * bKinMax);
-                if (trafficLight.status() == TrafficLight.GREEN_RED_LIGHT
-                        && (accTrafficLight <= -comfortBrakeDecel || brakeDist >= Math.abs(trafficLight.position()
-                                - me.getFrontPosition()))) {
-                    // ignore traffic light
-                    considerTrafficLight = false;
+
+                if (trafficLight.status() == TrafficLight.GREEN_RED_LIGHT) {
+                    final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
+                    final double comfortBrakeDecel = 4;
+                    final double brakeDist = (speed * speed) / (2 * bKinMax);
+                    if ((accTrafficLight <= -comfortBrakeDecel || brakeDist >= distanceToTrafficlight)) {
+                        // ignore traffic light
+                        considerTrafficLight = false;
+                    }
+                }
+
+                // traffic light is already red
+                if (trafficLight.status() == TrafficLight.RED_LIGHT) {
+                    final double maxDeceleration = me.getMaxDeceleration();
+                    final double minBrakeDist = (speed * speed) / (2 * maxDeceleration);
+                    if (accTrafficLight <= -maxDeceleration || minBrakeDist >= distanceToTrafficlight) {
+                        // ignore traffic light
+                        logger.info(String
+                                .format("veh id=%d in dilemma zone is going to pass red light at distance=%.2fm due to physics (assuming user-defined max. possible braking=%.2fm/s^2!",
+                                        me.getId(), distanceToTrafficlight, maxDeceleration));
+                        considerTrafficLight = false;
+                    }
                 }
             }
         }

@@ -44,6 +44,14 @@ The MovSim viewer can be run directly from the command-line. To see the MovSim o
     java -jar viewer/target/viewer-1.0-jar-with-dependencies.jar -h
 
 
+Logging output
+--------------
+
+MovSim's logging output is controlled by a properties file `/config/log4j.properties` for the java app and `/config/log4japplet.properties` for the java applet.
+
+Logging levels are: `DEBUG < INFO < WARN < ERROR`
+
+
 Commercial use
 --------------
 

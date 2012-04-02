@@ -37,16 +37,6 @@ public interface MovsimConstants {
 
     final double MAX_VEHICLE_SPEED = 200 / 3.6;
 
-    /** The most right lane (related to list index) */
-    final int MOST_RIGHT_LANE = 0; // increment lane index for further lanes to the left
-
-    // TODO
-    final int TO_LEFT = 1;
-
-    final int TO_RIGHT = -1;
-
-    final int NO_CHANGE = 0;
-
     final double GAP_INFINITY = 10000;
 
     final double INVALID_GAP = -1;

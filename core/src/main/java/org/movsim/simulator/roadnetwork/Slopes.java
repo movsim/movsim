@@ -94,7 +94,7 @@ public class Slopes implements Iterable<Slope> {
         final double pos = vehicle.getFrontPosition();
         final double slope = calcSlope(pos);
         vehicle.setSlope(slope);
-        logger.debug("pos={} --> slope gradient{}", pos, slope);
+        logger.debug("pos={} --> slope gradient={}", pos, slope);
     }
 
     public double calcSlope(double position) {

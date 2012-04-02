@@ -32,6 +32,11 @@ import org.movsim.utilities.FileUtils;
 
 public class ViewerCommandLine extends SimCommandLine {
 
+    public static void parse(ProjectMetaData projectMetaData, String[] args) {
+        final ViewerCommandLine commandLine = new ViewerCommandLine(projectMetaData, args);
+        commandLine.parse(args);
+    }
+
     public ViewerCommandLine(ProjectMetaData projectMetaData, String[] args) {
         super(projectMetaData, args);
     }

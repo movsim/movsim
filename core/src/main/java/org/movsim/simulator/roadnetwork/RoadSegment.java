@@ -72,7 +72,6 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     public static final int ID_NOT_SET = -1;
     public static final int INITIAL_ID = 1;
-    private static final boolean DEBUG = false;
     private static int nextId = INITIAL_ID;
 
     public static final int MAX_LANE_COUNT = 8;
@@ -518,6 +517,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void addVehicle(Vehicle vehicle) {
+        vehicle.setRoadSegment(id, roadLength);
         laneSegments[vehicle.getLane()].addVehicle(vehicle);
     }
 
@@ -527,6 +527,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param vehicle
      */
     public void appendVehicle(Vehicle vehicle) {
+        vehicle.setRoadSegment(id, roadLength);
         laneSegments[vehicle.getLane()].appendVehicle(vehicle);
     }
 
@@ -670,7 +671,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                vehicle.updateAcceleration(dt, laneSegment, leftLaneSegment, alphaT, alphaV0);
+                // TODO hack for testing acceleration behavior to exit 
+                vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment, alphaT, alphaV0);
             }
         }
     }

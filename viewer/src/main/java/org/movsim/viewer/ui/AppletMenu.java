@@ -12,21 +12,28 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvas;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
 public class AppletMenu extends JPanel {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Applet frame;
-    final CanvasPanel canvasPanel;
+    private final CanvasPanel canvasPanel;
+    private final TrafficCanvas trafficCanvas;
+    private final Simulator simulator;
     private final ResourceBundle resourceBundle;
 
     private LogWindow logWindow;
     private StatusPanel statusPanel;
 
-    public AppletMenu(Applet mainFrame, CanvasPanel canvasPanel, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(Applet mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
+        this.trafficCanvas = trafficCanvas;
+        this.simulator = simulator;
         this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
     }
@@ -115,14 +122,12 @@ public class AppletMenu extends JPanel {
     private JMenu scenarioMenu() {
         final JMenu scenarioMenu = new JMenu((String) resourceBundle.getObject("ScenarioMenu"));
         final JMenuItem menuItemOnRamp = new JMenuItem(new AbstractAction(resourceBundle.getString("OnRamp")) {
-
             private static final long serialVersionUID = 7705041304742695628L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("onramp", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("onramp", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -130,14 +135,12 @@ public class AppletMenu extends JPanel {
         scenarioMenu.add(menuItemOnRamp);
 
         final JMenuItem menuItemOffRamp = new JMenuItem(new AbstractAction(resourceBundle.getString("OffRamp")) {
-
             private static final long serialVersionUID = -2548920811907898064L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("offramp", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("offramp", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -146,14 +149,12 @@ public class AppletMenu extends JPanel {
 
         final JMenuItem menuItemFlowConservingBottleNeck = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("FlowConservingBottleNeck")) {
-
             private static final long serialVersionUID = -8349549625085281487L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("flow_conserving_bottleneck", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("flow_conserving_bottleneck", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -161,14 +162,12 @@ public class AppletMenu extends JPanel {
         scenarioMenu.add(menuItemFlowConservingBottleNeck);
 
         final JMenuItem menuItemSpeedLimit = new JMenuItem(new AbstractAction(resourceBundle.getString("SpeedLimit")) {
-
             private static final long serialVersionUID = -1498474459807551133L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("speedlimit", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("speedlimit", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -177,14 +176,12 @@ public class AppletMenu extends JPanel {
 
         final JMenuItem menuItemTrafficLight = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("TrafficLight")) {
-
             private static final long serialVersionUID = 2511854387728111343L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("trafficlight", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("trafficlight", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -193,14 +190,12 @@ public class AppletMenu extends JPanel {
 
         final JMenuItem menuItemLaneClosing = new JMenuItem(
                 new AbstractAction(resourceBundle.getString("LaneClosing")) {
-
                     private static final long serialVersionUID = -5359478839829791298L;
-
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        canvasPanel.simulator.loadScenarioFromXml("laneclosure", "/sim/buildingBlocks/");
-                        canvasPanel.trafficCanvas.reset();
-                        canvasPanel.trafficCanvas.start();
+                        simulator.loadScenarioFromXml("laneclosure", "/sim/buildingBlocks/");
+                        trafficCanvas.reset();
+                        trafficCanvas.start();
                         statusPanel.reset();
                         uiDefaultReset();
                     }
@@ -208,14 +203,12 @@ public class AppletMenu extends JPanel {
         scenarioMenu.add(menuItemLaneClosing);
 
         final JMenuItem menuItemCloverLeaf = new JMenuItem(new AbstractAction(resourceBundle.getString("CloverLeaf")) {
-
             private static final long serialVersionUID = 8504921708742771452L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("cloverleaf", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("cloverleaf", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -223,9 +216,7 @@ public class AppletMenu extends JPanel {
         scenarioMenu.add(menuItemCloverLeaf);
 
         final JMenuItem menuItemRoundAbout = new JMenuItem(new AbstractAction(resourceBundle.getString("RoundAbout")) {
-
             private static final long serialVersionUID = 5468084978732943923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingHelper.notImplemented(canvasPanel);
@@ -235,9 +226,7 @@ public class AppletMenu extends JPanel {
 
         final JMenuItem menuItemCityInterSection = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("CityInterSection")) {
-
             private static final long serialVersionUID = 3606709421278067399L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingHelper.notImplemented(canvasPanel);
@@ -246,14 +235,12 @@ public class AppletMenu extends JPanel {
         scenarioMenu.add(menuItemCityInterSection);
 
         final JMenuItem menuItemRingRoad = new JMenuItem(new AbstractAction(resourceBundle.getString("RingRoad")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("ringroad_1lane", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("ringroad_1lane", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
@@ -262,19 +249,45 @@ public class AppletMenu extends JPanel {
 
         final JMenuItem menuItemRingRoadTwoLanes = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("RingRoad2Lanes")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                canvasPanel.simulator.loadScenarioFromXml("ringroad_2lanes", "/sim/buildingBlocks/");
-                canvasPanel.trafficCanvas.reset();
-                canvasPanel.trafficCanvas.start();
+                simulator.loadScenarioFromXml("ringroad_2lanes", "/sim/buildingBlocks/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
                 statusPanel.reset();
                 uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemRingRoadTwoLanes);
+
+        final JMenuItem menuItemGameRampMetering = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("GameRampMetering")) {
+            private static final long serialVersionUID = 4633365854029111923L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                simulator.loadScenarioFromXml("ramp_metering", "/sim/games/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemGameRampMetering);
+
+        final JMenuItem menuItemGameRouting = new JMenuItem(new AbstractAction(
+                resourceBundle.getString("GameRouting")) {
+            private static final long serialVersionUID = 4633365854029111923L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                simulator.loadScenarioFromXml("routing", "/sim/games/");
+                trafficCanvas.reset();
+                trafficCanvas.start();
+                statusPanel.reset();
+                uiDefaultReset();
+            }
+        });
+        scenarioMenu.add(menuItemGameRouting);
 
         menuItemRoundAbout.setEnabled(false);
         menuItemCityInterSection.setEnabled(false);
@@ -379,10 +392,10 @@ public class AppletMenu extends JPanel {
         cbRoutesSpatioTemporal.setEnabled(false);
         cbRoutesTravelTimes.setEnabled(false);
 
-        cbSpeedLimits.setSelected(canvasPanel.trafficCanvas.isDrawSpeedLimits());
-        cbDrawRoadIds.setSelected(canvasPanel.trafficCanvas.isDrawRoadId());
-        cbSources.setSelected(canvasPanel.trafficCanvas.isDrawSources());
-        cbSinks.setSelected(canvasPanel.trafficCanvas.isDrawSinks());
+        cbSpeedLimits.setSelected(trafficCanvas.isDrawSpeedLimits());
+        cbDrawRoadIds.setSelected(trafficCanvas.isDrawRoadId());
+        cbSources.setSelected(trafficCanvas.isDrawSources());
+        cbSinks.setSelected(trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 
@@ -455,12 +468,6 @@ public class AppletMenu extends JPanel {
         helpMenu.add(language);
 
         return helpMenu;
-    }
-
-    public void startbuttonToPauseAtScenarioChange() {
-        if (canvasPanel.simulator.getSimulationRunnable().isPaused()) {
-            canvasPanel.controller.commandTogglePause();
-        }
     }
 
     private void handleAbout(EventObject event) {
@@ -536,48 +543,31 @@ public class AppletMenu extends JPanel {
 
     protected void handleDrawRoadIds(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawRoadId(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawRoadId(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawRoadId(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSources(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSources(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSources(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawSources(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSinks(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSinks(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSinks(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawSinks(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     protected void handleDrawSpeedLimits(ActionEvent actionEvent) {
         final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cb.isSelected()) {
-            canvasPanel.trafficCanvas.setDrawSpeedLimits(true);
-        } else {
-            canvasPanel.trafficCanvas.setDrawSpeedLimits(false);
-        }
-        canvasPanel.trafficCanvas.forceRepaintBackground();
+        trafficCanvas.setDrawSpeedLimits(cb.isSelected());
+        trafficCanvas.forceRepaintBackground();
     }
 
     public void uiDefaultReset() {
-        startbuttonToPauseAtScenarioChange();
         statusPanel.setWithProgressBar(false);
         statusPanel.reset();
+        trafficCanvas.start();
     }
-
 }

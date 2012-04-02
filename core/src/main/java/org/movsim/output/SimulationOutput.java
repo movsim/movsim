@@ -138,7 +138,7 @@ public class SimulationOutput implements SimulationTimeStep {
         }
         final String ignoreLabel = "Obstacle";  // quick hack
         logger.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
-        for(VehicleInput vehicleInput : vehiclesInput.getVehicleInput()){
+        for(VehicleInput vehicleInput : vehiclesInput.getVehicleInputMap().values()){
             if(!ignoreLabel.equalsIgnoreCase(vehicleInput.getLabel())){
                 FileFundamentalDiagram.writeToFile(simulationTimestep, vehicleInput);
             }

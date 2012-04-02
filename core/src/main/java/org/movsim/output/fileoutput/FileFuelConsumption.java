@@ -129,7 +129,7 @@ public class FileFuelConsumption extends FileOutputBase {
             for (int j = 0; j <= N_POW; j++) {
                 final double pow = powMin + j * dPow;
                 final double dotC = engineModel.getFuelFlow(f, pow);
-                final double indMoment = engineModel.getMoment(pow, f); // + getModelLossMoment(f);
+                final double indMoment = EngineModel.getMoment(pow, f); // + getModelLossMoment(f);
                 final double cSpec = engineModel.cSpecific0ForMechMoment(f, indMoment);
                 // factor 3.6e6 for converting from m^3/s to liter/h
                 writer.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", f * 60, pow / 1000., 3.6e6 * dotC,

@@ -36,6 +36,7 @@ import org.movsim.input.XmlReaderSimInput;
 import org.movsim.input.file.opendrive.OpenDriveReader;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.output.RouteInput;
 import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -144,6 +145,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         reset();
     }
 
+    public VehiclesInput getVehiclesInput(){
+        return inputData.getVehiclesInput();
+    }
+    
     public VehicleGenerator getVehicleGenerator() {
         return vehGenerator;
     }
@@ -469,6 +474,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(),
                 simulationRunnable.iterationCount());
         simulationRunnable.runToCompletion();
+    }
+
+    /**
+     * Returns true if the simulation has finished.
+     */
+    public boolean isFinished() {
+        return false;
     }
 
     @Override

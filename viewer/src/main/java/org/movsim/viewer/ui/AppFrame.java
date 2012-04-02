@@ -38,20 +38,21 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
-public class MainFrame extends JFrame {
+public class AppFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
     private Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
 
-    final StatusPanel statusPanel;
     private final CanvasPanel canvasPanel;
+    final StatusPanel statusPanel;
     private MovSimToolBar toolBar;
 
-    public MainFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
+    public AppFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
         super(resourceBundle.getString("FrameName"));
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
@@ -59,11 +60,12 @@ public class MainFrame extends JFrame {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        canvasPanel = new CanvasPanel(resourceBundle, simulator);
+        final TrafficCanvasScenarios trafficCanvas = new TrafficCanvasScenarios(simulator);
+        canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
-        addToolBar(resourceBundle);
-        addMenu(resourceBundle);
+        addToolBar(resourceBundle, trafficCanvas);
+        addMenu(resourceBundle, simulator, trafficCanvas);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
@@ -77,31 +79,31 @@ public class MainFrame extends JFrame {
         });
 
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        setVisible(true);
 
         // first scenario
         if (projectMetaData.getProjectName().equals("")) {
-            canvasPanel.trafficCanvas.setupTrafficScenario(defaultScenario);
+            trafficCanvas.setupTrafficScenario(defaultScenario);
         } else {
             simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-            canvasPanel.trafficCanvas.reset();
-            canvasPanel.trafficCanvas.start();
+            trafficCanvas.reset();
         }
         statusPanel.reset();
+        trafficCanvas.start();
+        setVisible(true);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addToolBar(ResourceBundle resourceBundle) {
-        toolBar = new MovSimToolBar(statusPanel, canvasPanel, resourceBundle);
+    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
+        toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addMenu(ResourceBundle resourceBundle) {
-        final MovSimMenu trafficMenus = new MovSimMenu(this, canvasPanel, resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
+        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
         trafficMenus.initMenus();
     }
 
@@ -118,7 +120,6 @@ public class MainFrame extends JFrame {
         } catch (final UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
         SwingUtilities.updateComponentTreeUI(this);
     }
 }

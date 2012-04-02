@@ -123,7 +123,7 @@ public abstract class SimulationCanvasBase extends Canvas {
 
     }
 
-    protected void reset() {
+    public void reset() {
         resetScaleAndOffset();
         simulationRunnable.reset();
     }
@@ -320,11 +320,18 @@ public abstract class SimulationCanvasBase extends Canvas {
     }
 
     /**
+     * Function to be overridden for subclass state change handling.
+     */
+    void stateChanged() {
+    }
+
+    /**
      * Start the simulation thread. Called from <code>start()</code> method of main applet class.
      */
     public void start() {
         totalAnimationTime = 0;
         simulationRunnable.start();
+        stateChanged();
     }
 
     /**
@@ -341,6 +348,7 @@ public abstract class SimulationCanvasBase extends Canvas {
      */
     public final void stop() {
         simulationRunnable.stop();
+        stateChanged();
     }
 
     /**
@@ -357,6 +365,7 @@ public abstract class SimulationCanvasBase extends Canvas {
      */
     public void pause() {
         simulationRunnable.pause();
+        stateChanged();
     }
 
     /**
@@ -364,6 +373,6 @@ public abstract class SimulationCanvasBase extends Canvas {
      */
     public final void resume() {
         simulationRunnable.resume();
+        stateChanged();
     }
-
 }

@@ -26,7 +26,6 @@
 package org.movsim.simulator.vehicles.lanechange;
 
 import org.movsim.input.model.vehicle.lanechange.LaneChangeMobilData;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -272,7 +271,7 @@ public class MOBIL {
 
         // MOBIL's incentive formula
 
-        final int biasSign = (changeTo == MovsimConstants.TO_LEFT) ? 1 : -1;
+        final int biasSign = (changeTo == Lane.TO_LEFT) ? 1 : -1;
 
         prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc) - threshold - biasSign
                 * biasRight;
