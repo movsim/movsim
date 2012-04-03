@@ -117,8 +117,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
-        vehGenerator = createVehicleGenerator(simInput);
-
         // Routes
         final RoutesInput routesInput = simInput.getRoutesInput();
         routes = new HashMap<String, Route>();
@@ -133,6 +131,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
         }
 
+        vehGenerator = createVehicleGenerator(simInput);
+        
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
         final Map<String, RoadInput> roadInputMap = simInput.getRoadInput();

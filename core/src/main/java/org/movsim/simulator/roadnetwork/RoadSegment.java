@@ -542,12 +542,42 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        if (trafficLights != null) {
-            trafficLights.update(dt, simulationTime, iterationCount, this);
-        }
+        updateTrafficLights(dt, simulationTime, iterationCount);
+        applyTrafficLights(simulationTime);
         applySpeedLimits();
         applySlopes();
         applyVariableMessageSigns();
+    }
+
+    private void updateTrafficLights(double dt, double simulationTime, long iterationCount) {
+        if (trafficLights != null) {
+            trafficLights.update(dt, simulationTime, iterationCount);
+        }
+    }
+    
+    /**
+     * Apply traffic lights to vehicles.
+     * 
+     * @param simulationTime
+     *            current simulation time, seconds
+     */
+    public void applyTrafficLights(double simulationTime) {
+        if (trafficLights != null) {
+            final Iterator<LaneSegment> laneSegmentIterator = this.laneSegmentIterator();
+            while(laneSegmentIterator.hasNext()){
+                final LaneSegment laneSegment = laneSegmentIterator.next();
+                for (final Vehicle vehicle : laneSegment) {
+                    // quick hack criterion for selecting next downstream traffic light
+                    // assume that trafficLights are sorted with increasing position
+                    for (final TrafficLight trafficLight : trafficLights) {
+                        if(vehicle.getFrontPosition() < trafficLight.position()){
+                            vehicle.updateTrafficLightApproaching(simulationTime, trafficLight);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void applySpeedLimits() {

@@ -33,7 +33,6 @@ import java.util.List;
 
 import org.movsim.input.model.simulation.TrafficLightData;
 import org.movsim.input.model.simulation.TrafficLightsInput;
-import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,36 +99,16 @@ public class TrafficLights implements Iterable<TrafficLight> {
      *            current simulation time, seconds
      * @param iterationCount
      *            the number of iterations that have been executed
-     * @param roadSegment
      */
-    public void update(double dt, double simulationTime, long iterationCount, RoadSegment roadSegment) {
-
-        if (!trafficLights.isEmpty()) {
-            // first update traffic light status
-            for (final TrafficLight trafficLight : trafficLights) {
-                trafficLight.update(simulationTime);
-            }
-            // then update vehicle status approaching traffic lights
-            final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
-            while(laneSegmentIterator.hasNext()){
-                final LaneSegment laneSegment = laneSegmentIterator.next();
-                for (final Vehicle vehicle : laneSegment) {
-                    // quick hack criterion for selecting next downstream traffic light
-                    // assume that trafficLights are sorted with increasing position 
-                    for (final TrafficLight trafficLight : trafficLights) {
-                        if(vehicle.getFrontPosition() < trafficLight.position() ){
-                            vehicle.updateTrafficLight(simulationTime, trafficLight);
-                            break;
-                        }
-                    }
-                }
-            }
+    public void update(double dt, double simulationTime, long iterationCount) {
+        for (final TrafficLight trafficLight : trafficLights) {
+            trafficLight.update(simulationTime);
         }
         if (recordDataCallback != null) {
             recordDataCallback.recordData(simulationTime, iterationCount, trafficLights);
         }
     }
-
+    
     @Override
     public Iterator<TrafficLight> iterator() {
         return trafficLights.iterator();
