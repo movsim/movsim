@@ -192,11 +192,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         simulationRunnable.setUpdateDrawingCallback(this);
         simulationRunnable.setHandleExceptionCallback(this);
 
+        simulationRunnable.addUpdateStatusCallback(this);
+        setStatusControlCallbacks(statusControlCallbacks);
+
         mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
         controller = new TrafficCanvasKeyListener(this);
         addKeyListener(controller);
+
+        final TrafficCanvasMouseWheelListener mousewheel = new TrafficCanvasMouseWheelListener(this);
+        addMouseWheelListener(mousewheel);
     }
 
     /**
