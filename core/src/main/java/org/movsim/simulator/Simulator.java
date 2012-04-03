@@ -103,6 +103,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
 
         projectName = projectMetaData.getProjectName();
+        // TODO temporary handling of Variable Message Sign until added to XML
+        roadNetwork.setHasVariableMessageSign(projectName.equals("routing"));
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
 
@@ -247,7 +249,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
         final String xodrFileName = projectMetaData.getXodrFilename();
-        final String xodrPath = projectMetaData.getXodrPath();
+        final String xodrPath = projectMetaData.getPathToProjectXmlFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
         logger.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);

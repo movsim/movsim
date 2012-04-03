@@ -39,14 +39,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
 public class AppFrame extends JFrame {
     private static final long serialVersionUID = 1L;
-
-    private Scenario defaultScenario = Scenario.CLOVERLEAFFILE;
 
     private final CanvasPanel canvasPanel;
     final StatusPanel statusPanel;
@@ -82,10 +79,9 @@ public class AppFrame extends JFrame {
 
         // first scenario
         if (projectMetaData.getProjectName().equals("")) {
-            trafficCanvas.setupTrafficScenario(defaultScenario);
+            trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RAMPMETERING, "../sim/games/");
         } else {
-            simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-            trafficCanvas.reset();
+            trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
         }
         statusPanel.reset();
         trafficCanvas.start();
