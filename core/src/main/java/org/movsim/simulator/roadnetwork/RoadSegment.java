@@ -567,17 +567,22 @@ public class RoadSegment implements Iterable<Vehicle> {
             while(laneSegmentIterator.hasNext()){
                 final LaneSegment laneSegment = laneSegmentIterator.next();
                 for (final Vehicle vehicle : laneSegment) {
-                    // quick hack criterion for selecting next downstream traffic light
-                    // assume that trafficLights are sorted with increasing position
-                    for (final TrafficLight trafficLight : trafficLights) {
-                        if(vehicle.getFrontPosition() < trafficLight.position()){
-                            vehicle.updateTrafficLightApproaching(simulationTime, trafficLight);
-                            break;
-                        }
-                    }
+                    TrafficLight trafficLight = getNextDownstreamTrafficLight(vehicle);
+                    vehicle.updateTrafficLightApproaching(simulationTime, trafficLight);
                 }
             }
         }
+    }
+
+    private TrafficLight getNextDownstreamTrafficLight(Vehicle vehicle) {
+        // quick hack criterion for selecting next downstream traffic light
+        // assume that trafficLights are sorted with increasing position
+        for (final TrafficLight trafficLight : trafficLights) {
+            if(vehicle.getFrontPosition() < trafficLight.position()){
+                return trafficLight;
+            }
+        }
+        return null;
     }
 
     private void applySpeedLimits() {
