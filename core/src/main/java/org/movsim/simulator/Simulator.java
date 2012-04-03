@@ -213,7 +213,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param simInput
      */
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
-        final List<VehicleTypeInput> vehicleTypeInputs = simInput.getTrafficCompositionInputData();
+        final List<VehicleTypeInput> vehicleTypeInputs = simInput.getVehicleTypeInput();
         final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
                 inputData.getVehiclesInput(), vehicleTypeInputs, fuelConsumptionModelPool, routes);
         return vehGenerator;
