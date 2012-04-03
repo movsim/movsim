@@ -47,7 +47,6 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS.Waves;
 import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
@@ -155,24 +154,20 @@ public class AppMenu extends JPanel {
     private JMenu scenarioMenu() {
         final JMenu scenarioMenu = new JMenu((String) resourceBundle.getObject("ScenarioMenu"));
         final JMenuItem menuItemOnRamp = new JMenuItem(new AbstractAction(resourceBundle.getString("OnRamp")) {
-
             private static final long serialVersionUID = 7705041304742695628L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.ONRAMPFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ONRAMPFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemOnRamp);
 
         final JMenuItem menuItemOffRamp = new JMenuItem(new AbstractAction(resourceBundle.getString("OffRamp")) {
-
             private static final long serialVersionUID = -2548920811907898064L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.OFFRAMPFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.OFFRAMPFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -180,24 +175,20 @@ public class AppMenu extends JPanel {
 
         final JMenuItem menuItemFlowConservingBottleNeck = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("FlowConservingBottleNeck")) {
-
             private static final long serialVersionUID = -8349549625085281487L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.FLOWCONSERVINGBOTTLENECK);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.FLOWCONSERVINGBOTTLENECK, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemFlowConservingBottleNeck);
 
         final JMenuItem menuItemSpeedLimit = new JMenuItem(new AbstractAction(resourceBundle.getString("SpeedLimit")) {
-
             private static final long serialVersionUID = -1498474459807551133L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.SPEEDLIMITFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.SPEEDLIMITFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -205,12 +196,10 @@ public class AppMenu extends JPanel {
 
         final JMenuItem menuItemTrafficLight = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("TrafficLight")) {
-
             private static final long serialVersionUID = 2511854387728111343L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.TRAFFICLIGHTFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.TRAFFICLIGHTFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -218,33 +207,27 @@ public class AppMenu extends JPanel {
 
         final JMenuItem menuItemLaneClosing = new JMenuItem(
                 new AbstractAction(resourceBundle.getString("LaneClosing")) {
-
                     private static final long serialVersionUID = -5359478839829791298L;
-
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        trafficCanvas.setupTrafficScenario(Scenario.LANECLOSINGFILE);
+                        trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.LANECLOSINGFILE, "../sim/buildingBlocks/");
                         uiDefaultReset();
                     }
                 });
         scenarioMenu.add(menuItemLaneClosing);
 
         final JMenuItem menuItemCloverLeaf = new JMenuItem(new AbstractAction(resourceBundle.getString("CloverLeaf")) {
-
             private static final long serialVersionUID = 8504921708742771452L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.CLOVERLEAFFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.CLOVERLEAFFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
         scenarioMenu.add(menuItemCloverLeaf);
 
         final JMenuItem menuItemRoundAbout = new JMenuItem(new AbstractAction(resourceBundle.getString("RoundAbout")) {
-
             private static final long serialVersionUID = 5468084978732943923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingHelper.notImplemented(canvasPanel);
@@ -254,9 +237,7 @@ public class AppMenu extends JPanel {
 
         final JMenuItem menuItemCityInterSection = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("CityInterSection")) {
-
             private static final long serialVersionUID = 3606709421278067399L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingHelper.notImplemented(canvasPanel);
@@ -265,12 +246,10 @@ public class AppMenu extends JPanel {
         scenarioMenu.add(menuItemCityInterSection);
 
         final JMenuItem menuItemRingRoad = new JMenuItem(new AbstractAction(resourceBundle.getString("RingRoad")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.RINGROADONELANEFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADONELANEFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -278,12 +257,10 @@ public class AppMenu extends JPanel {
 
         final JMenuItem menuItemRingRoadTwoLanes = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("RingRoad2Lanes")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.RINGROADTWOLANESFILE);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADTWOLANESFILE, "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -292,12 +269,10 @@ public class AppMenu extends JPanel {
         scenarioMenu.addSeparator();
         final JMenuItem menuItemGameRampMetering = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("GameRampMetering")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.RAMPMETERING);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RAMPMETERING, "../sim/games/");
                 uiDefaultReset();
             }
         });
@@ -310,7 +285,7 @@ public class AppMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.ROUTING);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ROUTING, "../sim/games/");
                 uiDefaultReset();
             }
         });
@@ -323,7 +298,7 @@ public class AppMenu extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.VASALOPPET);
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.VASALOPPET, "../sim/examples/");
                 uiDefaultReset();
                 CCS.setWave(Waves.FOURWAVES);
             }
