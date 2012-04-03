@@ -165,6 +165,8 @@ public class Vehicle {
     private Object colorObject; // color object cache
    
     private final TrafficLightApproaching trafficLightApproaching;
+    private final double maxRangeLookAheadForTrafficlight = 1000;
+    
     private final FuelConsumption fuelModel; // can be null
     private final Route route;
     private int routeIndex;
@@ -649,13 +651,12 @@ public class Vehicle {
                 double accToVehicleInExitLane = longitudinalModel.calcAcc(this, exitLaneSegment.frontVehicle(this));
                 // limit deceleration
                 accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -4.0);
-                logger.error("accToVehicleInExitLane={}, own speed={}", accToVehicleInExitLane, speed);  // TODO
+                logger.debug("accToVehicleInExitLane={}, own speed={}", accToVehicleInExitLane, speed);  // TODO
                 //moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
                 moderatedAcc = Math.min(acc, accToVehicleInExitLane);
                 //}
             }
         }
-        
         
 //        // consider upstream (source) road segment
 //        final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(Lane.MOST_RIGHT_LANE);
@@ -767,9 +768,13 @@ public class Vehicle {
      * @param simulationTime
      *            current simulation time, seconds
      * @param trafficLight
+     * @param distance 
      */
-    public void updateTrafficLightApproaching(double simulationTime, TrafficLight trafficLight) {
-        trafficLightApproaching.update(this, simulationTime, trafficLight, longitudinalModel);
+    public void updateTrafficLightApproaching(double simulationTime, TrafficLight trafficLight, double distance) {
+        if(trafficLight!=null){
+            assert distance >= 0 && distance <= maxRangeLookAheadForTrafficlight : distance;
+            trafficLightApproaching.update(this, simulationTime, trafficLight, distance, longitudinalModel);
+        }
     }
 
     public LaneChangeModel getLaneChangeModel() {
@@ -1068,5 +1073,9 @@ public class Vehicle {
             return -1;  
         }
         return roadSegmentLength - getFrontPosition();
+    }
+
+    public double getMaxRangeLookAheadForTrafficlight() {
+        return maxRangeLookAheadForTrafficlight;
     }
 }
