@@ -532,26 +532,26 @@ public class Vehicle {
         this.vehNumber = vehNumber;
     }
 
-    public double getNetDistance(Vehicle vehFront) {
-        if (vehFront == null) {
+    public double getNetDistance(Vehicle frontVehicle) {
+        if (frontVehicle == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        final double netGap = vehFront.getRearPosition() - getFrontPosition();
+        final double netGap = frontVehicle.getRearPosition() - getFrontPosition();
         return netGap;
     }
 
-    public double getBrutDistance(Vehicle vehFront) {
-        if (vehFront == null) {
+    public double getBrutDistance(Vehicle frontVehicle) {
+        if (frontVehicle == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        return vehFront.getFrontPosition() - getFrontPosition();
+        return frontVehicle.getFrontPosition() - getFrontPosition();
     }
 
-    public final double getRelSpeed(Vehicle vehFront) {
-        if (vehFront == null) {
+    public final double getRelSpeed(Vehicle frontVehicle) {
+        if (frontVehicle == null) {
             return 0;
         }
-        return speed - vehFront.getSpeed();
+        return speed - frontVehicle.getSpeed();
     }
 
     public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaT,
@@ -563,8 +563,8 @@ public class Vehicle {
         if (noise != null) {
             noise.update(dt);
             accError = noise.getAccError();
-            final Vehicle vehFront = laneSegment.frontVehicle(this);
-            if (getNetDistance(vehFront) < MovsimConstants.CRITICAL_GAP) {
+            final Vehicle frontVehicle = laneSegment.frontVehicle(this);
+            if (getNetDistance(frontVehicle) < MovsimConstants.CRITICAL_GAP) {
                 accError = Math.min(accError, 0.); // !!!
             }
         }
