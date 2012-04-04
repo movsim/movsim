@@ -31,18 +31,23 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class MOBIL.
  */
 public class MOBIL {
+    
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(MOBIL.class);
 
     private double politeness;
 
     /** changing threshold */
     private double threshold;
 
-    /** maximum safe braking decel */
+    /** maximum safe braking decelerations */
     private double bSafe;
 
     /** minimum safe (net) distance */
@@ -78,7 +83,13 @@ public class MOBIL {
      *            the lane change MOBIL data
      */
     public MOBIL(Vehicle vehicle, LaneChangeMobilData lcMobilData) {
-        bSafeRef = bSafe = lcMobilData.getSafeDeceleration();
+        if (lcMobilData.getSafeDeceleration() > vehicle.getMaxDeceleration()) {
+            // MOBIL bSafe parameter should be typically chosen well below the physical maximum deceleration
+            logger.error("not consistent modeling input data: MOBIL's bSafe must be <= vehicle's maximum deceleration."
+                    + " Otherwise crashes could occur! Restrict bSafe to maximum deceleration={}",
+                    vehicle.getMaxDeceleration());
+        }
+        bSafeRef = bSafe = Math.min(lcMobilData.getSafeDeceleration(), vehicle.getMaxDeceleration());
         biasRightRef = biasRight = lcMobilData.getRightBiasAcceleration();
         gapMin = lcMobilData.getMinimumGap();
         thresholdRef = threshold = lcMobilData.getThresholdAcceleration();
