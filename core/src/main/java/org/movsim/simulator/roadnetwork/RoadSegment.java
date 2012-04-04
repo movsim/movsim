@@ -542,13 +542,86 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        if (trafficLights != null) {
-            trafficLights.update(dt, simulationTime, iterationCount, this);
-        }
+        updateTrafficLights(dt, simulationTime, iterationCount);
+        applyTrafficLights(simulationTime);
         applySpeedLimits();
         applySlopes();
         applyVariableMessageSigns();
     }
+
+    private void updateTrafficLights(double dt, double simulationTime, long iterationCount) {
+        if (trafficLights != null) {
+            trafficLights.update(dt, simulationTime, iterationCount);
+        }
+    }
+    
+    
+    // ---------------------------------------------------------------
+    
+    /**
+     * Apply traffic lights to vehicles.
+     * 
+     * @param simulationTime
+     *            current simulation time, seconds
+     */
+    private void applyTrafficLights(double simulationTime) {
+        final Iterator<LaneSegment> laneSegmentIterator = this.laneSegmentIterator();
+        while (laneSegmentIterator.hasNext()) {
+            final LaneSegment laneSegment = laneSegmentIterator.next();
+            for (final Vehicle vehicle : laneSegment) {
+                TrafficLight trafficLight = getNextDownstreamTrafficLightOnRoadSegment(vehicle);
+                double distance;
+                if(trafficLight!=null){
+                    distance = trafficLight.position() - vehicle.getFrontPosition();
+                }
+                else{
+                    trafficLight = getNextDownstreamTrafficLightOnSinkSegment(vehicle);
+                    distance = (trafficLight==null) ? -1 : trafficLight.position() + roadLength() - vehicle.getFrontPosition();
+                }
+                vehicle.updateTrafficLightApproaching(simulationTime, trafficLight, distance);
+            }
+        }
+    }
+
+    private TrafficLight getNextDownstreamTrafficLightOnRoadSegment(Vehicle vehicle) {
+        double segmentLength = 0;
+        TrafficLight trafficLight = findTrafficLight(trafficLights(), vehicle, segmentLength);
+        return trafficLight;
+    }
+    
+    private TrafficLight getNextDownstreamTrafficLightOnSinkSegment(Vehicle vehicle) {
+        TrafficLight trafficLight = null;
+        // and also iterate in sink road segment for look ahead
+        final RoadSegment sinkRoadSegment = sinkRoadSegment(vehicle.getLane());
+        if (sinkRoadSegment != null) {
+//            System.out.println("org roadsegment id=" + id() + ", sink roadsegment id=" + sinkRoadSegment.id());
+            double segmentLength = roadLength();
+//            System.out.println("also check downstream segment: with segment length=" + segmentLength);
+            trafficLight = findTrafficLight(sinkRoadSegment.trafficLights(), vehicle, segmentLength);
+        }
+        return trafficLight;
+    }
+
+    private static TrafficLight findTrafficLight(Iterable<TrafficLight> trafficLightIterable, Vehicle vehicle,
+            double segmentLength) {
+        if (trafficLightIterable != null) {
+            final double maxRangeLookAhead = vehicle.getMaxRangeLookAheadForTrafficlight();
+            for (TrafficLight trafficLight : trafficLightIterable) {
+                double distance = trafficLight.position() + segmentLength - vehicle.getFrontPosition();
+//                System.out.println("check traffic light at="+trafficLight.position()+" at distance = "+distance+", veh at="+vehicle.getFrontPosition());
+                if (distance > 0) {
+                    if (distance < maxRangeLookAhead) {
+                        return trafficLight;
+                    }
+                    // assume that traffic lights are sorted with increasing position
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+    
+    // ---------------------------------------------------------------
 
     private void applySpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {

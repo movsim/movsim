@@ -65,19 +65,21 @@ public class TrafficLightApproaching {
      *            the time
      * @param trafficLight
      *            the traffic light
+     * @param distanceToTrafficlight 
      * @param longModel
      *            the long model
      */
-    public void update(Vehicle me, double time, TrafficLight trafficLight, LongitudinalModelBase longModel) {
+    public void update(Vehicle me, double time, TrafficLight trafficLight, double distanceToTrafficlight, LongitudinalModelBase longModel) {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        distanceToTrafficlight = trafficLight.position() - me.getFrontPosition();
+        //distanceToTrafficlight = trafficLight.position() - me.getFrontPosition();
 
-        if (distanceToTrafficlight <= 0) {
-            distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
-            return;
-        }
+        // happened earlier
+//        if (distanceToTrafficlight <= 0) {
+//            distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
+//            return;
+//        }
 
         if (trafficLight.status() != TrafficLight.GREEN_LIGHT) {
             // TODO define it as parameter ("range of sight" or so) ?!

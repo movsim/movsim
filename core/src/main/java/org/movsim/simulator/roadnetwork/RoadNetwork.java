@@ -45,6 +45,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     private String name;
 
     private boolean isWithCrashExit;
+    private boolean hasVariableMessageSign;
 
     /**
      * Sets the name of the road network.
@@ -100,6 +101,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public void clear() {
         name = null;
+        hasVariableMessageSign = false;
         // LaneChangeModel.resetCount();
         // LongitudinalDriverModel.resetNextId();
         RoadSegment.resetNextId();
@@ -232,6 +234,18 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
     }
 
+    public void setWithCrashExit(boolean isWithCrashExit) {
+        this.isWithCrashExit = isWithCrashExit;
+    }
+
+    public void setHasVariableMessageSign(boolean hasVariableMessageSign) {
+        this.hasVariableMessageSign = hasVariableMessageSign;
+    }
+
+    public boolean hasVariableMessageSign() {
+        return hasVariableMessageSign;
+    }
+
     /**
      * Asserts the road network's class invariant. Used for debugging.
      */
@@ -240,9 +254,5 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
             assert roadSegment.assertInvariant();
         }
         return true;
-    }
-
-    public void setWithCrashExit(boolean isWithCrashExit) {
-        this.isWithCrashExit = isWithCrashExit;
     }
 }

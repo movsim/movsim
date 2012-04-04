@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
-<SCENARIO network_filename="/sim/games/ramp_metering.xodr">
+<SCENARIO network_filename="ramp_metering.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="40">
             <LONGITUDINAL_MODEL>

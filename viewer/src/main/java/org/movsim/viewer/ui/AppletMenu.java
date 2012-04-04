@@ -12,9 +12,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios.Scenario;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
@@ -23,17 +21,15 @@ public class AppletMenu extends JPanel {
     private final Applet frame;
     private final CanvasPanel canvasPanel;
     private final TrafficCanvasScenarios trafficCanvas;
-    private final Simulator simulator;
     private final ResourceBundle resourceBundle;
 
     private LogWindow logWindow;
     private StatusPanel statusPanel;
 
-    public AppletMenu(Applet mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(Applet mainFrame, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         this.frame = mainFrame;
         this.canvasPanel = canvasPanel;
         this.trafficCanvas = trafficCanvas;
-        this.simulator = simulator;
         this.statusPanel = statusPanel;
         this.resourceBundle = resourceBundle;
     }
@@ -125,7 +121,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 7705041304742695628L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.OFFRAMPFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ONRAMPFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -135,7 +131,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = -2548920811907898064L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.OFFRAMPFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.OFFRAMPFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -146,7 +142,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = -8349549625085281487L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.FLOWCONSERVINGBOTTLENECK, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.FLOWCONSERVINGBOTTLENECK, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -156,7 +152,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = -1498474459807551133L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.SPEEDLIMITFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.SPEEDLIMITFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -166,7 +162,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 2511854387728111343L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.TRAFFICLIGHTFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.TRAFFICLIGHTFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -176,7 +172,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = -5359478839829791298L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.LANECLOSINGFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.LANECLOSINGFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -186,7 +182,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 8504921708742771452L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.CLOVERLEAFFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.CLOVERLEAFFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -214,7 +210,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 4633365854029111923L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.RINGROADONELANEFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADONELANEFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -224,7 +220,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 4633365854029111923L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.RINGROADTWOLANESFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADTWOLANESFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         });
@@ -234,7 +230,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 4633365854029111923L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.RAMPMETERING, "/sim/games/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RAMPMETERING, "/sim/games/");
                 uiDefaultReset();
             }
         });
@@ -244,7 +240,7 @@ public class AppletMenu extends JPanel {
             private static final long serialVersionUID = 4633365854029111923L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(Scenario.ROUTING, "/sim/games/");
+                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ROUTING, "/sim/games/");
                 uiDefaultReset();
             }
         });

@@ -14,11 +14,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.LocalizationStrings;
 
 public class Applet extends JApplet {
     private static final long serialVersionUID = 1L;
+    private static String DEFAULT_SCENARIO = "/sim/games/routing";
 
     private CanvasPanel canvasPanel;
     private StatusPanel statusPanel;
@@ -31,16 +33,18 @@ public class Applet extends JApplet {
         initializeLogger();
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName());
 
-        final String scenario = getParameter("scenario");
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXmlFromResources(true);
         projectMetaData.setInstantaneousFileOutput(false);
-        projectMetaData.setPathToProjectXmlFile("/sim/buildingBlocks/");
+
+        String scenario = getParameter("scenario");
         if (scenario == null) {
-            projectMetaData.setProjectName("cloverleaf");
-        } else {
-            projectMetaData.setProjectName(scenario);
+            scenario = DEFAULT_SCENARIO;
         }
+        final String scenarioPath = FileUtils.getCanonicalPathWithoutFilename(scenario);
+        projectMetaData.setPathToProjectXmlFile(scenarioPath);
+        final String scenarioName = FileUtils.getName(scenario);
+        projectMetaData.setProjectName(scenarioName);
 
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
@@ -64,8 +68,9 @@ public class Applet extends JApplet {
         canvasPanel.repaint();
 
         statusPanel.setWithProgressBar(false);
-        simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-        trafficCanvas.reset();
+        //simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
+        //trafficCanvas.reset();
+        trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
         trafficCanvas.start();
         statusPanel.reset();
 
@@ -77,7 +82,7 @@ public class Applet extends JApplet {
     }
 
     private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
-        final AppletMenu trafficMenus = new AppletMenu(this, simulator, canvasPanel, trafficCanvas, statusPanel, resourceBundle);
+        final AppletMenu trafficMenus = new AppletMenu(this, canvasPanel, trafficCanvas, statusPanel, resourceBundle);
         trafficMenus.initMenus();
     }
 

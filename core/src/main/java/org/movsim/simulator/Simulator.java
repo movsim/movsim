@@ -103,6 +103,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
 
         projectName = projectMetaData.getProjectName();
+        // TODO temporary handling of Variable Message Sign until added to XML
+        roadNetwork.setHasVariableMessageSign(projectName.equals("routing"));
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
 
@@ -116,8 +118,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setDuration(simInput.getMaxSimTime());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
-
-        vehGenerator = createVehicleGenerator(simInput);
 
         // Routes
         final RoutesInput routesInput = simInput.getRoutesInput();
@@ -133,6 +133,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
         }
 
+        vehGenerator = createVehicleGenerator(simInput);
+        
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
         final Map<String, RoadInput> roadInputMap = simInput.getRoadInput();
@@ -213,7 +215,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param simInput
      */
     private VehicleGenerator createVehicleGenerator(SimulationInput simInput) {
-        final List<VehicleTypeInput> vehicleTypeInputs = simInput.getTrafficCompositionInputData();
+        final List<VehicleTypeInput> vehicleTypeInputs = simInput.getVehicleTypeInput();
         final VehicleGenerator vehGenerator = new VehicleGenerator(simulationRunnable.timeStep(),
                 inputData.getVehiclesInput(), vehicleTypeInputs, fuelConsumptionModelPool, routes);
         return vehGenerator;
@@ -247,7 +249,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
         final String xodrFileName = projectMetaData.getXodrFilename();
-        final String xodrPath = projectMetaData.getXodrPath();
+        final String xodrPath = projectMetaData.getPathToProjectXmlFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
         logger.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);

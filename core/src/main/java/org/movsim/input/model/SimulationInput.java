@@ -177,7 +177,7 @@ public class SimulationInput {
         return withCrashExit;
     }
 
-    public List<VehicleTypeInput> getTrafficCompositionInputData() {
+    public List<VehicleTypeInput> getVehicleTypeInput() {
         return vehicleTypeInputs;
     }
 

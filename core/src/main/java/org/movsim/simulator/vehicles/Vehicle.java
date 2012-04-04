@@ -165,6 +165,8 @@ public class Vehicle {
     private Object colorObject; // color object cache
    
     private final TrafficLightApproaching trafficLightApproaching;
+    private final double maxRangeLookAheadForTrafficlight = 1000;
+    
     private final FuelConsumption fuelModel; // can be null
     private final Route route;
     private int routeIndex;
@@ -633,12 +635,15 @@ public class Vehicle {
      * @return acceleration considering exit
      */
     protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
+        assert roadSegment.id()==roadSegmentId;
+        
         double moderatedAcc = acc;
-        if (exitRoadSegmentId == this.roadSegmentId && getLane() != Lane.LANE1) {
+        if (exitRoadSegmentId == roadSegment.id() && getLane() != Lane.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
             // react to vehicle ahead in exit lane
             final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
             if(exitLaneSegment!=null && exitLaneSegment.type() == Lane.Type.EXIT){
+                // System.out.println("on roadsegment with exit lane. veh id="+id);
                 //final double distanceToExit = getDistanceToRoadSegmentEnd();
                 //if (distanceToExit > 0) { // if negative have passed exit
                 //if (distanceToExit < LaneChangeModel.distanceBeforeExitMustChangeLanes) {
@@ -651,8 +656,25 @@ public class Vehicle {
                 moderatedAcc = Math.min(acc, accToVehicleInExitLane);
                 //}
             }
-            
         }
+        
+//        // consider upstream (source) road segment
+//        final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(Lane.MOST_RIGHT_LANE);
+//        if(sinkRoadSegment!=null && exitRoadSegmentId == sinkRoadSegment.id()){
+//            // consider most upstream vehicle in exit lane downstream
+//            final LaneSegment exitLaneSegmentDownstream = sinkRoadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
+//            if(exitLaneSegmentDownstream!=null && exitLaneSegmentDownstream.type() == Lane.Type.EXIT){
+//                System.out.println("on roadsegment upstream of exit lane. veh id="+id);
+//                double accToVehicleInExitLaneDownstream = longitudinalModel.calcAcc(this, exitLaneSegmentDownstream.rearVehicle());
+//                // limit deceleration
+//                accToVehicleInExitLaneDownstream = Math.max(accToVehicleInExitLaneDownstream, -4.0);
+//                logger.error("accToVehicleInExitLane downstream={}, own speed={}", accToVehicleInExitLaneDownstream, speed);  // TODO
+//                //moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
+//                moderatedAcc = Math.min(acc, accToVehicleInExitLaneDownstream);
+//            }
+//            
+//        }
+        
         return moderatedAcc;
     }
 
@@ -746,9 +768,13 @@ public class Vehicle {
      * @param simulationTime
      *            current simulation time, seconds
      * @param trafficLight
+     * @param distance 
      */
-    public void updateTrafficLight(double simulationTime, TrafficLight trafficLight) {
-        trafficLightApproaching.update(this, simulationTime, trafficLight, longitudinalModel);
+    public void updateTrafficLightApproaching(double simulationTime, TrafficLight trafficLight, double distance) {
+        if(trafficLight!=null){
+            assert distance >= 0 && distance <= maxRangeLookAheadForTrafficlight : distance;
+            trafficLightApproaching.update(this, simulationTime, trafficLight, distance, longitudinalModel);
+        }
     }
 
     public LaneChangeModel getLaneChangeModel() {
@@ -1047,5 +1073,9 @@ public class Vehicle {
             return -1;  
         }
         return roadSegmentLength - getFrontPosition();
+    }
+
+    public double getMaxRangeLookAheadForTrafficlight() {
+        return maxRangeLookAheadForTrafficlight;
     }
 }
