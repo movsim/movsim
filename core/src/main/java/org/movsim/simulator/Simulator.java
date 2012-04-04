@@ -304,7 +304,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // set up the traffic lights
         final TrafficLightsInput trafficLightsInput = roadInput.getTrafficLightsInput();
-        final TrafficLights trafficLights = new TrafficLights(trafficLightsInput);
+        final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
         if (trafficLightsInput.isWithLogging()) {
             final int nDt = trafficLightsInput.getnDtSample();
             trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));

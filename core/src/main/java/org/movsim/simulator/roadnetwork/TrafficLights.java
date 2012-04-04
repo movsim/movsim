@@ -62,10 +62,11 @@ public class TrafficLights implements Iterable<TrafficLight> {
 
     /**
      * Constructor.
+     * @param d 
      * 
      * @param trafficLightsInput
      */
-    public TrafficLights(TrafficLightsInput trafficLightsInput) {
+    public TrafficLights(double roadLength, TrafficLightsInput trafficLightsInput) {
         final List<TrafficLightData> trafficLightData = trafficLightsInput.getTrafficLightData();
         for (final TrafficLightData tlData : trafficLightData) {
             trafficLights.add(new TrafficLight(tlData));
@@ -79,6 +80,15 @@ public class TrafficLights implements Iterable<TrafficLight> {
                 return pos1.compareTo(pos2); // sort with increasing x
             }
         });
+        
+        // consistency check
+        for (TrafficLight trafficLight : trafficLights) {
+            if (trafficLight.position() < 0 || trafficLight.position() >= roadLength) {
+                logger.error("inconsistent input data: position of trafficlight at={} is larger than road length={}",
+                        trafficLight.position(), roadLength);
+                System.exit(-1);
+            }
+        }
     }
 
     /**

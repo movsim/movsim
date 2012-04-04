@@ -117,6 +117,11 @@ public class TrafficLight {
         lightCount = hasGreenRedStatus == false && hasRedGreenStatus == false ? 2 : 3;
         this.phaseShift = phaseShift;
         initialize();
+        
+        if(position<0){
+            logger.error("inconsistent input data: position of trafficlight at={} must be >= 0", position);
+            System.exit(-1); 
+        }
     }
 
     /**
