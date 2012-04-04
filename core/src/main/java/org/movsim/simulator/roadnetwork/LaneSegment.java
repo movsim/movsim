@@ -422,7 +422,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.positon() >
+     * Finds the vehicle immediately in front of the given position. That is a vehicle such that vehicle.position() >
      * vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to be in the rear.
      * 
      * @param vehiclePos
@@ -462,7 +462,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public final Vehicle frontVehicle(Vehicle vehicle) {
         return frontVehicle(vehicle.getRearPosition());
     }
-
+    
     private int positionBinarySearch(double vehiclePos) {
         int low = 0;
         int high = vehicles.size() - 1;
