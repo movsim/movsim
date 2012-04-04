@@ -936,7 +936,7 @@ public class Vehicle {
         FLOATING_CAR
     }
 
-    private Type type;
+    private Type type = Type.VEHICLE;  // init!
 
     /**
      * Returns this vehicle's type.

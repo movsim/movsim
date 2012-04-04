@@ -393,7 +393,9 @@ public class OpenDriveHandler extends DefaultHandler {
                     roadSegment.setLaneType(laneIndex, Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
                     roadSegment.setLaneType(laneIndex, Lane.Type.ENTRANCE);
-                    roadSegment.addObstacle(new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0));
+                    Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
+                    obstacle.setType(Vehicle.Type.OBSTACLE);
+                    roadSegment.addObstacle(obstacle);
                 } else if (lane.type.equals("mwyExit")) {
                     roadSegment.setLaneType(laneIndex, Lane.Type.EXIT);
                 } else if (lane.type.equals("shoulder")) {
@@ -406,7 +408,9 @@ public class OpenDriveHandler extends DefaultHandler {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.ENTRANCE);
-                    roadSegment.addObstacle(new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0));
+                    Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
+                    obstacle.setType(Vehicle.Type.OBSTACLE);
+                    roadSegment.addObstacle(obstacle);
                 } else if (lane.type.equals("mwyExit")) {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.EXIT);
                 } else if (lane.type.equals("shoulder")) {
