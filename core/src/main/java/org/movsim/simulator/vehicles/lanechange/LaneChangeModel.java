@@ -165,6 +165,12 @@ public class LaneChangeModel {
         if (decision.isMandatory()) {
             return decision;
         }
+        
+        decision = checkForLaneChangeForEnteringVehicle(roadSegment);
+        if(decision.isDiscretionary()){
+            return decision;
+        }
+        
 
         // check discretionary lane changes
         decision = determineDiscretionaryLaneChangeDirection(roadSegment);
@@ -331,6 +337,75 @@ public class LaneChangeModel {
                     }
                     return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
                 }
+            }
+        }
+        return LaneChangeDecision.NONE;
+    }
+
+    
+
+    // TODO first drop of cooperative lane-changing behavior
+    private LaneChangeDecision checkForLaneChangeForEnteringVehicle(RoadSegment roadSegment) {
+        final int currentLane = me.getLane();
+        LaneSegment entryLaneSegment = roadSegment.laneSegment(Lane.LANE1);
+        if(currentLane == Lane.LANE2 && entryLaneSegment.type() == Lane.Type.ENTRANCE){
+            if(roadSegment.laneCount()<=2){
+                // change to left not possible
+                return LaneChangeDecision.NONE;
+            }
+            Vehicle frontVehicle = entryLaneSegment.frontVehicle(me);
+            if(frontVehicle==null || frontVehicle.type() == Vehicle.Type.OBSTACLE){
+                return LaneChangeDecision.NONE;
+            }
+            
+            double accToFront = me.getLongitudinalModel().calcAcc(me, frontVehicle);
+            if(accToFront < -lcModelMOBIL.getSafeDeceleration()){
+                // check own disadvantage to change to left to decide to make room
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String
+                            .format("next to entrance lane: pos=%.2f, lane=%d, netGap=%.2f, ownSpeed=%.2f, dv=%.2f, calcAccToFront=%.2f",
+                                    me.getFrontPosition(), currentLane, me.getNetDistance(frontVehicle), me.getSpeed(),
+                                    me.getRelSpeed(frontVehicle), accToFront));
+                }
+                final int newLane = currentLane + Lane.TO_LEFT; 
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
+
+                if (newLaneSegment.type() == Lane.Type.ENTRANCE) {
+                    // never change lane into an entrance lane
+                    return LaneChangeDecision.NONE; 
+                }
+                final Vehicle newFront = newLaneSegment.frontVehicle(me);
+                if (newFront != null) {
+                    if (newFront.inProcessOfLaneChange()) {
+                        return LaneChangeDecision.NONE;
+                    }
+                    final double gapFront = me.getNetDistance(newFront);
+                    if (gapFront < lcModelMOBIL.getMinimumGap()) {
+                        return LaneChangeDecision.NONE;
+                    }
+                }
+                final Vehicle newBack = newLaneSegment.rearVehicle(me);
+                if (newBack != null) {
+                    if (newBack.inProcessOfLaneChange()) {
+                        return LaneChangeDecision.NONE;
+                    }
+                    final double gapRear = newBack.getNetDistance(me);
+                    if (gapRear < lcModelMOBIL.getMinimumGap()) {
+                        return LaneChangeDecision.NONE;
+                    }
+                }
+                me.setLane(newLane);
+                final int index = newLaneSegment.addVehicleTemp(me);
+                final double newBackNewAcc = newBack == null ? 0 : newBack.calcAccModel(newLaneSegment, null);
+                final double meNewAcc = me.calcAccModel(newLaneSegment, null);
+                newLaneSegment.removeVehicle(index);
+                me.setLane(currentLane);
+
+                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc) || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {
+                    return LaneChangeDecision.NONE;
+                }
+                logger.debug("finally change to left to make room for vehicle at entrance lane ...");
+                return LaneChangeDecision.DISCRETIONARY_TO_LEFT;
             }
         }
         return LaneChangeDecision.NONE;

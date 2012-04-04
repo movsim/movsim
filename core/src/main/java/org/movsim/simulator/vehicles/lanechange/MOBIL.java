@@ -105,7 +105,7 @@ public class MOBIL {
         pRef = this.politeness = politeness;
     }
 
-    private boolean safetyCheckAcceleration(double acc) {
+    public boolean safetyCheckAcceleration(double acc) {
         return acc <= -bSafe;
     }
 
