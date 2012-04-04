@@ -40,6 +40,8 @@ public class TrafficLightApproaching {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
+    private final double maxRangeLookAheadForTrafficlight = 1000;
+    
     /** The consider traffic light. */
     private boolean considerTrafficLight;
 
@@ -69,10 +71,15 @@ public class TrafficLightApproaching {
      * @param longModel
      *            the long model
      */
-    public void update(Vehicle me, double time, TrafficLight trafficLight, double distanceToTrafficlight, LongitudinalModelBase longModel) {
+    public void update(Vehicle me, TrafficLight trafficLight, double distanceToTrafficlight, LongitudinalModelBase longModel) {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
+        if (distanceToTrafficlight > maxRangeLookAheadForTrafficlight) {
+            logger.info("traffic light at distance={} to far away -- maxRangeLookAheadForTrafficlight={}", distanceToTrafficlight, maxRangeLookAheadForTrafficlight);
+            return;
+        }
+        
         //distanceToTrafficlight = trafficLight.position() - me.getFrontPosition();
 
         // happened earlier

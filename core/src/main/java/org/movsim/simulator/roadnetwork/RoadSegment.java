@@ -543,7 +543,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
         updateTrafficLights(dt, simulationTime, iterationCount);
-        applyTrafficLights(simulationTime);
         applySpeedLimits();
         applySlopes();
         applyVariableMessageSigns();
@@ -555,73 +554,26 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
     }
     
-    
-    // ---------------------------------------------------------------
-    
     /**
-     * Apply traffic lights to vehicles.
+     * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
+     * traffic light located.
      * 
-     * @param simulationTime
-     *            current simulation time, seconds
+     * @param position
+     * @return the next downstream traffic or null
      */
-    private void applyTrafficLights(double simulationTime) {
-        final Iterator<LaneSegment> laneSegmentIterator = this.laneSegmentIterator();
-        while (laneSegmentIterator.hasNext()) {
-            final LaneSegment laneSegment = laneSegmentIterator.next();
-            for (final Vehicle vehicle : laneSegment) {
-                TrafficLight trafficLight = getNextDownstreamTrafficLightOnRoadSegment(vehicle);
-                double distance;
-                if(trafficLight!=null){
-                    distance = trafficLight.position() - vehicle.getFrontPosition();
-                }
-                else{
-                    trafficLight = getNextDownstreamTrafficLightOnSinkSegment(vehicle);
-                    distance = (trafficLight==null) ? -1 : trafficLight.position() + roadLength() - vehicle.getFrontPosition();
-                }
-                vehicle.updateTrafficLightApproaching(simulationTime, trafficLight, distance);
-            }
-        }
-    }
-
-    private TrafficLight getNextDownstreamTrafficLightOnRoadSegment(Vehicle vehicle) {
-        double segmentLength = 0;
-        TrafficLight trafficLight = findTrafficLight(trafficLights(), vehicle, segmentLength);
-        return trafficLight;
-    }
-    
-    private TrafficLight getNextDownstreamTrafficLightOnSinkSegment(Vehicle vehicle) {
-        TrafficLight trafficLight = null;
-        // and also iterate in sink road segment for look ahead
-        final RoadSegment sinkRoadSegment = sinkRoadSegment(vehicle.getLane());
-        if (sinkRoadSegment != null) {
-//            System.out.println("org roadsegment id=" + id() + ", sink roadsegment id=" + sinkRoadSegment.id());
-            double segmentLength = roadLength();
-//            System.out.println("also check downstream segment: with segment length=" + segmentLength);
-            trafficLight = findTrafficLight(sinkRoadSegment.trafficLights(), vehicle, segmentLength);
-        }
-        return trafficLight;
-    }
-
-    private static TrafficLight findTrafficLight(Iterable<TrafficLight> trafficLightIterable, Vehicle vehicle,
-            double segmentLength) {
-        if (trafficLightIterable != null) {
-            final double maxRangeLookAhead = vehicle.getMaxRangeLookAheadForTrafficlight();
-            for (TrafficLight trafficLight : trafficLightIterable) {
-                double distance = trafficLight.position() + segmentLength - vehicle.getFrontPosition();
-//                System.out.println("check traffic light at="+trafficLight.position()+" at distance = "+distance+", veh at="+vehicle.getFrontPosition());
+    public TrafficLight getNextDownstreamTrafficLightOnRoadSegment(double position) {
+        if (trafficLights != null) {
+            for (TrafficLight trafficLight : trafficLights) {
+                double distance = trafficLight.position() - position;
                 if (distance > 0) {
-                    if (distance < maxRangeLookAhead) {
-                        return trafficLight;
-                    }
-                    // assume that traffic lights are sorted with increasing position
-                    return null;
+                    // !!! assume that traffic lights are sorted with increasing position
+                    // so that first traffic light can be considered as the next downstream one
+                    return trafficLight;
                 }
             }
         }
         return null;
     }
-    
-    // ---------------------------------------------------------------
 
     private void applySpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {

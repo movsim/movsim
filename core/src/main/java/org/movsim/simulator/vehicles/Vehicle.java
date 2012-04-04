@@ -165,7 +165,6 @@ public class Vehicle {
     private Object colorObject; // color object cache
    
     private final TrafficLightApproaching trafficLightApproaching;
-    private final double maxRangeLookAheadForTrafficlight = 1000;
     
     private final FuelConsumption fuelModel; // can be null
     private final Route route;
@@ -608,7 +607,7 @@ public class Vehicle {
         //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
         // }
         if (trafficLightApproaching != null) {
-            moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc);
+            moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc, roadSegment);
         }
         moderatedAcc = accelerationConsideringExit(moderatedAcc, roadSegment);
         return moderatedAcc;
@@ -616,18 +615,37 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's acceleration considering the traffic light.
+     * @param roadSegment 
      * 
      * @return acceleration considering traffic light
      */
-    protected double accelerationConsideringTrafficLight(double acc) {
+    protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        // consider red or amber/yellow traffic light:
-        if (trafficLightApproaching.considerTrafficLight()) {
-            moderatedAcc = Math.min(moderatedAcc, trafficLightApproaching.accApproaching());
+        
+        // first find next downstream traffic light
+        TrafficLight trafficLight = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
+        if(trafficLight!=null){
+            double distance = trafficLight.position() - getFrontPosition();
+            updateTrafficLightApproaching(trafficLight, distance);
+            return trafficLightApproaching.considerTrafficLight() ? Math.min(acc, trafficLightApproaching.accApproaching()) : acc;
         }
+        
+        // check also traffic light on next sink road segment as look-ahead horizon
+        // !!! only one segment is checked ahead which may be too short-sighted in some situations 
+        RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(getLane());
+        if (sinkRoadSegment != null) {
+            trafficLight = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
+            if (trafficLight != null) {
+                double distance = trafficLight.position() + roadSegment.roadLength() - getFrontPosition();
+                updateTrafficLightApproaching(trafficLight, distance);
+                return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
+                        trafficLightApproaching.accApproaching()) : acc;
+            }
+        }
+        
         return moderatedAcc;
     }
-
+    
     /**
      * Returns this vehicle's acceleration considering the exit.
      * @param roadSegment 
@@ -749,10 +767,10 @@ public class Vehicle {
      * @param trafficLight
      * @param distance 
      */
-    public void updateTrafficLightApproaching(double simulationTime, TrafficLight trafficLight, double distance) {
+    public void updateTrafficLightApproaching(TrafficLight trafficLight, double distance) {
         if(trafficLight!=null){
-            assert distance >= 0 && distance <= maxRangeLookAheadForTrafficlight : distance;
-            trafficLightApproaching.update(this, simulationTime, trafficLight, distance, longitudinalModel);
+            assert distance >= 0 : distance;
+            trafficLightApproaching.update(this, trafficLight, distance, longitudinalModel);
         }
     }
 
@@ -1054,7 +1072,4 @@ public class Vehicle {
         return roadSegmentLength - getFrontPosition();
     }
 
-    public double getMaxRangeLookAheadForTrafficlight() {
-        return maxRangeLookAheadForTrafficlight;
-    }
 }
