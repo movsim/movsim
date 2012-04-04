@@ -171,7 +171,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      * @return
      */
     public double getSmoothedTimewarp() {
-        return Math.min(1000, smoothedTimewarp);
+        return smoothedTimewarp;
     }
 
     /**
@@ -315,7 +315,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         actualTimewarp = dt / (0.001 * (timeAfterSim_ms - lastUpdateTime_ms));
         lastUpdateTime_ms = timeAfterSim_ms;
 
-        smoothedTimewarp = smoothedTimewarp == 0.0 ? actualTimewarp : betaTimewarp * smoothedTimewarp
-                + (1.0 - betaTimewarp) * actualTimewarp;
+        smoothedTimewarp = Math.min(1000, smoothedTimewarp == 0.0 ? actualTimewarp : betaTimewarp * smoothedTimewarp
+                + (1.0 - betaTimewarp) * actualTimewarp);
     }
 }
