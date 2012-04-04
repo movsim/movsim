@@ -636,52 +636,31 @@ public class Vehicle {
      */
     protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
         assert roadSegment.id()==roadSegmentId;
-        
-        double moderatedAcc = acc;
         if (exitRoadSegmentId == roadSegment.id() && getLane() != Lane.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
             // react to vehicle ahead in exit lane
+            // TODO this reaction is in same situations too short-sighted so that the vehicle in the exit lane must be considered already in the upstream segment 
             final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
             if(exitLaneSegment!=null && exitLaneSegment.type() == Lane.Type.EXIT){
-                // System.out.println("on roadsegment with exit lane. veh id="+id);
-                //final double distanceToExit = getDistanceToRoadSegmentEnd();
-                //if (distanceToExit > 0) { // if negative have passed exit
-                //if (distanceToExit < LaneChangeModel.distanceBeforeExitMustChangeLanes) {
-                // treat the end of the exit lane as a stopped vehicle
-                double accToVehicleInExitLane = longitudinalModel.calcAcc(this, exitLaneSegment.frontVehicle(this));
-                // limit deceleration
-                accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -4.0);
-                logger.debug("accToVehicleInExitLane={}, own speed={}", accToVehicleInExitLane, speed);  // TODO
-                //moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
-                moderatedAcc = Math.min(acc, accToVehicleInExitLane);
-                //}
+                // this front vehicle could also result in negative net distances
+                // but the deceleration is limited anyway
+                Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);                
+                double accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
+                final double decelLimit = 4.0;
+                accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -decelLimit);
+                if(logger.isDebugEnabled()){
+                    logger.debug(String.format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
+                            exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(), accToVehicleInExitLane, -decelLimit));
+                }
+                return Math.min(acc, accToVehicleInExitLane);
             }
         }
-        
-//        // consider upstream (source) road segment
-//        final RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(Lane.MOST_RIGHT_LANE);
-//        if(sinkRoadSegment!=null && exitRoadSegmentId == sinkRoadSegment.id()){
-//            // consider most upstream vehicle in exit lane downstream
-//            final LaneSegment exitLaneSegmentDownstream = sinkRoadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
-//            if(exitLaneSegmentDownstream!=null && exitLaneSegmentDownstream.type() == Lane.Type.EXIT){
-//                System.out.println("on roadsegment upstream of exit lane. veh id="+id);
-//                double accToVehicleInExitLaneDownstream = longitudinalModel.calcAcc(this, exitLaneSegmentDownstream.rearVehicle());
-//                // limit deceleration
-//                accToVehicleInExitLaneDownstream = Math.max(accToVehicleInExitLaneDownstream, -4.0);
-//                logger.error("accToVehicleInExitLane downstream={}, own speed={}", accToVehicleInExitLaneDownstream, speed);  // TODO
-//                //moderatedAcc = Math.min(acc, this.longitudinalModel.calcAccSimple(distanceToExit, getSpeed(), getSpeed()));
-//                moderatedAcc = Math.min(acc, accToVehicleInExitLaneDownstream);
-//            }
-//            
-//        }
-        
-        return moderatedAcc;
+        return acc;
     }
 
     // TODO this acceleration is the base for MOBIL decision: could consider
     // also noise (for transfering stochasticity to lane-changing) and other
     // relevant traffic situations!
-
     public double calcAccModel(LaneSegment laneSegment, LaneSegment leftLaneSegment) {
         return calcAccModel(laneSegment, leftLaneSegment, 1.0, 1.0, 1.0);
     }
