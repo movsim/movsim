@@ -167,7 +167,7 @@ public class LaneChangeModel {
         }
         
         decision = checkForLaneChangeForEnteringVehicle(roadSegment);
-        if(decision.isDiscretionary()){
+        if(!decision.noDecisionMade()){
             return decision;
         }
         
