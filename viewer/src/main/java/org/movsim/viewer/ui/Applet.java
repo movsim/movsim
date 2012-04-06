@@ -14,7 +14,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.LocalizationStrings;
 
@@ -41,9 +40,9 @@ public class Applet extends JApplet {
         if (scenario == null) {
             scenario = DEFAULT_SCENARIO;
         }
-        final String scenarioPath = FileUtils.getCanonicalPathWithoutFilename(scenario);
+        final String scenarioPath = scenario.substring(0, scenario.lastIndexOf("/")+1);
         projectMetaData.setPathToProjectXmlFile(scenarioPath);
-        final String scenarioName = FileUtils.getName(scenario);
+        final String scenarioName = scenario.substring(scenario.lastIndexOf("/")+1);
         projectMetaData.setProjectName(scenarioName);
 
         final Simulator simulator = new Simulator(projectMetaData);
@@ -68,8 +67,6 @@ public class Applet extends JApplet {
         canvasPanel.repaint();
 
         statusPanel.setWithProgressBar(false);
-        //simulator.loadScenarioFromXml(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-        //trafficCanvas.reset();
         trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
         trafficCanvas.start();
         statusPanel.reset();
