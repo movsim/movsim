@@ -29,8 +29,9 @@ Features:
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
 
 MovSim has two main components: the _core_ and the _viewer_:
-- The _core_ contains the main MovSim library and a console application that can run a traffic simulation and produce _.csv_ output for further processing or graphical display.
-- The _viewer_ displays an animated traffic simulation.
+
+* The _core_ contains the main MovSim library and a console application that can run a traffic simulation and produce _.csv_ output for further processing or graphical display.
+* The _viewer_ displays an animated traffic simulation.
 
 
 Installation
