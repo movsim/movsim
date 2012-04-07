@@ -5,7 +5,8 @@ MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
 http://www.movsim.org
 
-Demonstration: www.verkehrsdynamik.de 
+Demonstration:  www.verkehrsdynamik.de/simulation.shtml (MovSim v1.0)
+                www.movsim.org/app.shtml (MovSim v1.2) 
 
 
 Description
@@ -27,7 +28,9 @@ Features:
   * Kerner-Klenov-Wolf Cellular Automaton
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
 
-MovSim has two main components: the _core_ which contains the main MovSim library and also a console application that can run a traffic simulation and produce .csv output for further processing or graphical display and the _viewer_ which displays an animated traffic simulation.
+MovSim has two main components: the _core_ and the _viewer_:
+- The _core_ contains the main MovSim library and a console application that can run a traffic simulation and produce _.csv_ output for further processing or graphical display.
+- The _viewer_ displays an animated traffic simulation.
 
 
 Installation
