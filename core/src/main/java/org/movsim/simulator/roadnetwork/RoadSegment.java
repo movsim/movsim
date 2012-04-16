@@ -29,6 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import java.util.Iterator;
 
 import org.movsim.output.LoopDetectors;
+import org.movsim.simulator.SimpleRamp;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +95,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     private TrafficSource trafficSource;
     private TrafficSink sink;
     private RoadMapping roadMapping;
+
+    // simple ramp with dropping mechanism
+    private SimpleRamp simpleRamp;
 
     public static class TestCar {
         public double s = 0.0; // distance
@@ -1081,5 +1085,9 @@ public class RoadSegment implements Iterable<Vehicle> {
             laneSegment.assertInvariant();
         }
         return true;
+    }
+
+    public void setSimpleRamp(SimpleRamp simpleRamp) {
+        this.simpleRamp = simpleRamp;
     }
 }

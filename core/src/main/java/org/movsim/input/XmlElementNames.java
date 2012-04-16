@@ -64,7 +64,6 @@ public interface XmlElementNames {
     public final String RoadSpeedLimit = "SPEED_LIMIT";
     public final String RoadSlopes = "SLOPES";
     public final String RoadSlope = "SLOPE";
-    public final String RoadRamps = "SIMPLE_RAMPS";
     public final String RoadSimpleRamp = "SIMPLE_RAMP";
     public final String RoadInflow = "INFLOW";
     public final String Output = "OUTPUT";

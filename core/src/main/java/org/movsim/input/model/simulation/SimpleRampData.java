@@ -40,12 +40,6 @@ public class SimpleRampData {
     /** The inflow time series. */
     private List<InflowDataPoint> inflowTimeSeries;
 
-    /** The center position. */
-    private final double rampStartPosition;
-
-    /** The ramp length. */
-    private final double rampLength;
-
     /** The with logging. */
     private final boolean withLogging;
 
@@ -57,8 +51,6 @@ public class SimpleRampData {
      */
     @SuppressWarnings("unchecked")
     public SimpleRampData(Element elem) {
-        this.rampStartPosition = Double.parseDouble(elem.getAttributeValue("x"));
-        this.rampLength = Double.parseDouble(elem.getAttributeValue("merge_length"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
@@ -95,24 +87,6 @@ public class SimpleRampData {
      */
     public List<InflowDataPoint> getInflowTimeSeries() {
         return inflowTimeSeries;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#getCenterPosition()
-     */
-    public double getRampStartPosition() {
-        return rampStartPosition;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#getRampLength()
-     */
-    public double getRampLength() {
-        return rampLength;
     }
 
     /*

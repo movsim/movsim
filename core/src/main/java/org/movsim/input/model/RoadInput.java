@@ -66,7 +66,7 @@ public class RoadInput {
 
     private List<SpeedLimitDataPoint> speedLimitInputData;
 
-    private List<SimpleRampData> simpleRamps;
+    private SimpleRampData simpleRamp;
 
     private TrafficLightsInput trafficLightsInput;
 
@@ -209,24 +209,12 @@ public class RoadInput {
             });
         }
 
-        // non-physical ramps implementing a drop-down mechanism without
+        // non-physical ramp implementing a drop-down mechanism without
         // lane-changing decisions
-        simpleRamps = new ArrayList<SimpleRampData>();
-
-        final Element rampsElement = elem.getChild(XmlElementNames.RoadRamps);
-        if (rampsElement != null) {
-            final List<Element> simpleRampElems = rampsElement.getChildren(XmlElementNames.RoadSimpleRamp);
-            for (final Element simpleRampElem : simpleRampElems) {
-                simpleRamps.add(new SimpleRampData(simpleRampElem));
-            }
-            Collections.sort(simpleRamps, new Comparator<SimpleRampData>() {
-                @Override
-                public int compare(SimpleRampData o1, SimpleRampData o2) {
-                    final Double pos1 = new Double((o1).getRampStartPosition());
-                    final Double pos2 = new Double((o2).getRampStartPosition());
-                    return pos1.compareTo(pos2); // sort with increasing x
-                }
-            });
+        simpleRamp = null;
+        final Element simpleRampElement = elem.getChild(XmlElementNames.RoadSimpleRamp);
+        if(simpleRampElement!=null){
+              simpleRamp  = new SimpleRampData(simpleRampElement);
         }
 
         // Trafficlights
@@ -277,8 +265,8 @@ public class RoadInput {
         return isWithWriteFundamentalDiagrams;
     }
 
-    public List<SimpleRampData> getSimpleRamps() {
-        return simpleRamps;
+    public SimpleRampData getSimpleRamp() {
+        return simpleRamp;
     }
 
     public DetectorInput getDetectorInput() {

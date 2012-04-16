@@ -41,6 +41,7 @@ import org.movsim.input.model.output.RouteInput;
 import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
+import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
@@ -302,6 +303,19 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             roadSegment.setTrafficSource(trafficSource);
         }
 
+        // set up simple ramp with dropping mechanism
+        if(roadInput.getSimpleRamp()!=null){
+            SimpleRampData simpleRampData = roadInput.getSimpleRamp();
+            if (simpleRampData.getInflowTimeSeries().size() != 0) {
+                final SimpleRamp simpleRamp = new SimpleRamp(roadVehGenerator, roadSegment, simpleRampData.getInflowTimeSeries());
+                // TODO using logging recorder from traffic source
+//                if (simpleRampData.withLogging()) {
+//                    simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+//                }
+                roadSegment.setSimpleRamp(simpleRamp);
+            }
+        }
+            
         // set up the traffic lights
         final TrafficLightsInput trafficLightsInput = roadInput.getTrafficLightsInput();
         final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
