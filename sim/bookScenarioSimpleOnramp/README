@@ -1,20 +1,15 @@
 Aim: reproducing reference results from book and from master branch of movsim's version 1.1.
 
-Workplan: 
+Done: changed xml syntax for simple onramp (see IDM as example)
 
-1. Start with onramp_IDM.xml: 
-* upstream boundary ?
-* simpleOnramp dropping mechanism
-* spatiotemporal output
+Still todo:
 
+implement dropping mechanism in movsim (already done once in movsim v1.0)
+simulate all models
+check output with route feature: collection of three road sections)
 
-2. Simulate IDM model family and other continuous models
-
-3. Simulate iterated maps (Gipps and Krauss)
-
-4. Simulate cellular automata
-* Model input is still in scaled quantities. 
-
+Further still todo:
+check output of CAs: should be in physical and not in scaled quantities.
 
 
 
