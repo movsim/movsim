@@ -121,17 +121,19 @@ public class SwingHelper {
     }
 
     public static Frame getFrame(Component c) {
-        while (c != null && !(c instanceof Frame)) {
-            c = c.getParent();
+        Component ret = c;
+        while (ret != null && !(ret instanceof Frame)) {
+            ret = ret.getParent();
         }
-        return (Frame) c;
+        return (Frame) ret;
     }
 
     public static JFrame getJFrame(Component c) {
-        while (c != null && !(c instanceof JFrame)) {
-            c = c.getParent();
+        Component ret = c;
+        while (ret != null && !(ret instanceof JFrame)) {
+            ret = ret.getParent();
         }
-        return (JFrame) c;
+        return (JFrame) ret;
     }
 
     /**
