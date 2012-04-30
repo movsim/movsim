@@ -247,6 +247,32 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
+     * Returns the number of vehicles on this road network.
+     * 
+     * @return the number of vehicles on this road network
+     */
+    public int vehicleCount() {
+        int vehicleCount = 0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            vehicleCount += roadSegment.totalVehicleCount();
+        }
+        return vehicleCount;
+    }
+
+    /**
+     * Returns the number of obstacles on this road network.
+     * 
+     * @return the number of obstacles on this road network
+     */
+    public int obstacleCount() {
+        int obstacleCount = 0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            obstacleCount += roadSegment.obstacleCount();
+        }
+        return obstacleCount;
+    }
+
+    /**
      * Asserts the road network's class invariant. Used for debugging.
      */
     public boolean assertInvariant() {

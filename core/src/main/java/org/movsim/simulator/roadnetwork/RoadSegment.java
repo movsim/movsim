@@ -440,6 +440,19 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Returns the number of obstacles on this road segment.
+     * 
+     * @return the number of obstacles on this road segment
+     */
+    public int obstacleCount() {
+        int obstacleCount = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            obstacleCount += laneSegment.obstacleCount();
+        }
+        return obstacleCount;
+    }
+
+    /**
      * Returns the number of vehicles in the given lane on this road segment.
      * 
      * @param lane

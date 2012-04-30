@@ -161,6 +161,21 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Returns the number of obstacles on this lane segment.
+     * 
+     * @return the number of obstacles on this lane segment
+     */
+    public final int obstacleCount() {
+        int obstacleCount = 0;
+        for (final Vehicle vehicle : vehicles) {
+            if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                ++obstacleCount;
+            }
+        }
+        return obstacleCount;
+    }
+
+    /**
      * <p>
      * Returns the vehicle at the given index.
      * </p>
