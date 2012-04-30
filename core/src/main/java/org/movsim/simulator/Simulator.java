@@ -88,6 +88,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final RoadNetwork roadNetwork;
     private Map<String, Route> routes;
     private final SimulationRunnable simulationRunnable;
+    private int obstacleCount;
 
     /**
      * Constructor.
@@ -478,6 +479,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     public void reset() {
         simulationRunnable.reset();
         simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(), inputData, roadNetwork, routes);
+        obstacleCount = roadNetwork.obstacleCount();
     }
 
     public void runToCompletion() {
@@ -496,6 +498,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * Returns true if the simulation has finished.
      */
     public boolean isFinished() {
+        if (simulationRunnable.simulationTime() > 60.0 && roadNetwork.vehicleCount() == obstacleCount) {
+            return true;
+        }
         return false;
     }
 
