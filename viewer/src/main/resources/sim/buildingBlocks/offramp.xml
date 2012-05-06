@@ -2,7 +2,7 @@
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
-<SCENARIO network_filename="/sim/buildingBlocks/offramp.xodr">
+<SCENARIO network_filename="offramp.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
@@ -38,6 +38,18 @@
                 <INFLOW t="0" q_per_hour="1200" />
             </TRAFFIC_SOURCE>
         </ROAD>
+        <ROUTES>
+            <ROUTE label="east">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
+            </ROUTE>
+            <ROUTE label="south">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="4" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT />
     </SIMULATION>
 </SCENARIO>

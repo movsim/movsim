@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
-<SCENARIO network_filename="/sim/buildingBlocks/onramp.xodr">
+<SCENARIO network_filename="onramp.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
@@ -42,8 +41,8 @@
         </ROAD>
         <ROAD id="4">
             <TRAFFIC_COMPOSITION>
-                <VEHICLE_TYPE label="ACC1" fraction="0.96" relative_v0_randomization="0.1" />
-                <!-- <VEHICLE_TYPE label="ACC2" fraction="0.04" relative_v0_randomization="0.1" /> -->
+                <VEHICLE_TYPE label="ACC1" fraction="0.98" relative_v0_randomization="0.1" />
+                <VEHICLE_TYPE label="ACC2" fraction="0.02" relative_v0_randomization="0.1" />
             </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE>

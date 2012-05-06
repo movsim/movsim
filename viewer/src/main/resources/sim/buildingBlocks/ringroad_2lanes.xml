@@ -3,7 +3,7 @@
 
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <!-- FCD Output does not work with macroscopic initial conditions -->
-<SCENARIO network_filename="/sim/buildingBlocks/ringroad_2lanes.xodr">
+<SCENARIO network_filename="ringroad_2lanes.xodr">
     <VEHICLES>
         <!-- fast vehicle type (car) -->
         <VEHICLE label="FAST_TYPE" length="6" b_max="9">
