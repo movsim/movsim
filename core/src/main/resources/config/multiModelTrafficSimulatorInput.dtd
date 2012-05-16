@@ -274,7 +274,6 @@ fluct_strength   NMTOKEN #REQUIRED
 
 <!ELEMENT ROAD (TRAFFIC_COMPOSITION?, INITIAL_CONDITIONS?, TRAFFIC_SOURCE?, TRAFFIC_SINK?, FLOW_CONSERVING_INHOMOGENEITIES?, SPEED_LIMITS?, SLOPES?, SIMPLE_RAMP?, TRAFFIC_LIGHTS?, DETECTORS?)>
 
-<!-- for RAMP x and merge_length needed; not necessary for modeling a MAINROAD-->
 <!ATTLIST ROAD
   id               NMTOKEN #REQUIRED
   logging          (false|true) "false" 
@@ -362,17 +361,6 @@ gradient  NMTOKEN #REQUIRED
 <!ATTLIST SIMPLE_RAMP
 logging  (true|false)  "false" 
 > 
-
-
-<!-- real physical ramp with merging area (length) and total length of x_max --> 
-<!-- <!ELEMENT RAMP (TRAFFIC_SOURCE,TRAFFIC_SINK,SPEED_LIMITS,TRAFFIC_LIGHTS)> -->
-<!--<!ATTLIST RAMP-->
-<!--id            NMTOKEN #REQUIRED-->
-<!--x             NMTOKEN #REQUIRED-->
-<!--length        NMTOKEN "1000"-->
-<!--merge_length  NMTOKEN "300"-->
-<!--logging       (true|false)  "false" -->
-<!-->  -->
   
 <!-- traffic lights -->
   
