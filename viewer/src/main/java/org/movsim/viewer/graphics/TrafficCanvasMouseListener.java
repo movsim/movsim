@@ -175,7 +175,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     /*
      * (non-Javadoc)
      * 
-     * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent )
+     * @see java.awt.event.MouseMotionListener#mouseDragged(java.awt.event.MouseEvent)
      */
     @Override
     public void mouseDragged(MouseEvent e) {
