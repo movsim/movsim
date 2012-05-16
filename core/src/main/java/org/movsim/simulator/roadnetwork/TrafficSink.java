@@ -104,22 +104,24 @@ public class TrafficSink implements SimulationTimeStep {
         return dQ;
     }
 
+    /**
+     * Returns the total travel distance of all vehicles that have been removed by this traffic sink.
+     * @return total travel distance
+     */
     public final double totalVehicleTravelDistance() {
         return totalVehicleTravelDistance;
     }
 
     /**
-     * Returns the total time this vehicle has been on the road network.
+     * Returns the total travel time of all vehicles that have been removed by this traffic sink.
      * @return total travel time
-     * 
-     * @return
      */
     public final double totalVehicleTravelTime() {
         return totalVehicleTravelTime;
     }
 
     /**
-     * Returns the total fuel used by this vehicle.
+     * Returns the total fuel used by all vehicles that have been removed by this traffic sink.
      * @return total fuel used
      */
     public final double totalFuelUsedLiters() {
