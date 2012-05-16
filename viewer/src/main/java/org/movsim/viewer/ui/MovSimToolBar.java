@@ -36,7 +36,7 @@ import javax.swing.JToolBar;
 
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvas.StatusControlCallbacks;
-import org.movsim.viewer.graphics.TrafficCanvasKeyListener;
+import org.movsim.viewer.graphics.TrafficCanvasController;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
     final static Logger logger = LoggerFactory.getLogger(MovSimToolBar.class);
 
     protected String newline = "\n";
-    private final TrafficCanvasKeyListener controller;
+    private final TrafficCanvasController controller;
     static final private String START = "toogle start/pause/resume";
     static final private String ZOOM_IN = "zoom in";
     static final private String ZOOM_OUT = "zoom out";

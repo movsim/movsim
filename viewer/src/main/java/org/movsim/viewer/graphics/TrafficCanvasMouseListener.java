@@ -52,6 +52,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
 
     final static Logger logger = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
     private final TrafficCanvas trafficCanvas;
+    private final TrafficCanvasController controller;
     private final RoadNetwork roadNetwork;
     private boolean diversionOn;
     private VariableMessageSignBase variableMessageSign = new VariableMessageSignDiversion();
@@ -65,8 +66,9 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     /**
      * @param trafficCanvas
      */
-    public TrafficCanvasMouseListener(TrafficCanvas trafficCanvas, RoadNetwork roadNetwork) {
+    public TrafficCanvasMouseListener(TrafficCanvas trafficCanvas, TrafficCanvasController controller, RoadNetwork roadNetwork) {
         this.trafficCanvas = trafficCanvas;
+        this.controller = controller;
         this.roadNetwork = roadNetwork;
     }
 
@@ -254,27 +256,13 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
      */
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        String message;
         final int notches = e.getWheelRotation();
         if (notches < 0) {
-            message = "Mouse wheel moved UP " + -notches + " notch(es)";
-            commandZoomIn();
+            logger.info("Mouse wheel moved UP " + -notches + " notch(es)");
+            controller.commandZoomIn();
         } else {
-            message = "Mouse wheel moved DOWN " + notches + " notch(es)";
-            commandZoomOut();
+            logger.info("Mouse wheel moved DOWN " + notches + " notch(es)");
+            controller.commandZoomOut();
         }
-        logger.info(message);
-    }
-
-    private void commandZoomIn() {
-        final double zoomFactor = Math.sqrt(2.0);
-        trafficCanvas.setScale(trafficCanvas.scale() * zoomFactor);
-        trafficCanvas.forceRepaintBackground();
-    }
-
-    private void commandZoomOut() {
-        final double zoomFactor = Math.sqrt(2.0);
-        trafficCanvas.setScale(trafficCanvas.scale() / zoomFactor);
-        trafficCanvas.forceRepaintBackground();
     }
 }

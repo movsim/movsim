@@ -28,126 +28,13 @@ package org.movsim.viewer.graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class TrafficCanvasKeyListener implements KeyListener {
+public class TrafficCanvasKeyListener extends TrafficCanvasController implements KeyListener {
 
-    final static Logger logger = LoggerFactory.getLogger(TrafficCanvasKeyListener.class);
-
-    private final TrafficCanvas trafficCanvas;
-
-    public TrafficCanvasKeyListener(TrafficCanvas trafficCanvas) {
-        this.trafficCanvas = trafficCanvas;
-    }
-    
-    /**
-     * Toggles the pause state.
-     */
-    public void commandTogglePause() {
-        if (trafficCanvas.isPaused()) {
-            if (trafficCanvas.vehicleTipWindow != null) {
-                trafficCanvas.vehicleTipWindow.setVisible(false);
-            }
-            trafficCanvas.resume();
-        } else if (trafficCanvas.isStopped() == false) {
-            trafficCanvas.pause();
-        }
-        if (trafficCanvas.statusControlCallbacks != null) {
-            trafficCanvas.statusControlCallbacks.stateChanged();
-        }
-    }
-
-    public void commandZoomIn() {
-        final double zoomFactor = Math.sqrt(2.0);
-        trafficCanvas.setScale(trafficCanvas.scale() * zoomFactor);
-        trafficCanvas.forceRepaintBackground();
-    }
-
-    public void commandZoomOut() {
-        final double zoomFactor = Math.sqrt(2.0);
-        trafficCanvas.setScale(trafficCanvas.scale() / zoomFactor);
-        trafficCanvas.forceRepaintBackground();
-    }
-
-    public void commandRecenter() {
-        trafficCanvas.resetScaleAndOffset();
-        trafficCanvas.forceRepaintBackground();
-    }
-
-    public void commandFaster() {
-        int sleepTime = trafficCanvas.sleepTime();
-        sleepTime -= sleepTime <= 5 ? 1 : 5;
-        if (sleepTime < 0) {
-            sleepTime = 0;
-        }
-        trafficCanvas.setSleepTime(sleepTime);
-        logger.debug("sleeptime: {}", trafficCanvas.sleepTime());
-    }
-
-    public void commandSlower() {
-        int sleepTime = trafficCanvas.sleepTime();
-        sleepTime += sleepTime < 5 ? 1 : 5;
-        if (sleepTime > 400) {
-            sleepTime = 400;
-        }
-        trafficCanvas.setSleepTime(sleepTime);
-        logger.debug("sleeptime: {}", trafficCanvas.sleepTime());
-    }
-
-    public void commandReset() {
-        trafficCanvas.stop();
-        trafficCanvas.roadNetwork.clear();
-        trafficCanvas.simulator.initialize();
-        trafficCanvas.reset();
-        trafficCanvas.start();
-    }
-
-    public void commandCycleVehicleColors() {
-        if (trafficCanvas.accelerationColors == null) {
-            trafficCanvas.setAccelerationColors();
-        }
-        // Cycle through the first ... vehicle color modes. This is the only place
-        // where the use of an enum for the color mode is somewhat awkward.
-        int vcmOrdinal = trafficCanvas.vehicleColorMode.ordinal() + 1;
-        if (vcmOrdinal > TrafficCanvas.VehicleColorMode.EXIT_COLOR.ordinal()) {
-            vcmOrdinal = 0;
-        }
-        trafficCanvas.vehicleColorMode = VehicleColorMode.values()[vcmOrdinal];
-        logger.info("VehicleColorMode: {}", trafficCanvas.vehicleColorMode);
-        trafficCanvas.repaint();
-    }
-
-    public void commandToggleVehicleColorMode(VehicleColorMode mode) {
-        if (trafficCanvas.accelerationColors == null) {
-            trafficCanvas.setAccelerationColors();
-        }
-        if (trafficCanvas.vehicleColorMode == mode) {
-            trafficCanvas.vehicleColorMode = trafficCanvas.vehicleColorModeSave;
-        } else {
-            trafficCanvas.vehicleColorModeSave = trafficCanvas.vehicleColorMode;
-            trafficCanvas.vehicleColorMode = mode;
-        }
-        logger.debug("VehicleColorMode: {}", trafficCanvas.vehicleColorMode); //$NON-NLS-1$
-        trafficCanvas.repaint();
-    }
-
-    void commandReduceInflow() {
-    }
-
-    void commandIncreaseInflow() {
-    }
-
-    void commandToogleDrawJunctions() {
-        trafficCanvas.drawRoadId = !trafficCanvas.drawRoadId;
-        trafficCanvas.forceRepaintBackground();
-    }
-
-    void commandLowMemory() {
-        trafficCanvas.pause();
-        // roadNetwork.onLowMemory();
-        trafficCanvas.resume();
+    public TrafficCanvasKeyListener(TrafficCanvas trafficCanvas, RoadNetwork roadNetwork) {
+        super(trafficCanvas, roadNetwork);
     }
 
     @Override
