@@ -27,6 +27,7 @@ package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +89,7 @@ public class TrafficLightApproaching {
 //            return;
 //        }
 
-        if (trafficLight.status() != TrafficLight.GREEN_LIGHT) {
+        if (trafficLight.status() != TrafficLightStatus.GREEN) {
             // TODO define it as parameter ("range of sight" or so) ?!
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
@@ -104,7 +105,7 @@ public class TrafficLightApproaching {
                 // ignore traffic light if accTL exceeds two times comfortable
                 // deceleration or if kinematic braking is not possible anymore
 
-                if (trafficLight.status() == TrafficLight.GREEN_RED_LIGHT) {
+                if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
                     final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
                     final double comfortBrakeDecel = 4;
                     final double brakeDist = (speed * speed) / (2 * bKinMax);
@@ -115,7 +116,7 @@ public class TrafficLightApproaching {
                 }
 
                 // traffic light is already red
-                if (trafficLight.status() == TrafficLight.RED_LIGHT) {
+                if (trafficLight.status() == TrafficLightStatus.RED) {
                     final double maxDeceleration = me.getMaxDeceleration();
                     final double minBrakeDist = (speed * speed) / (2 * maxDeceleration);
                     if (accTrafficLight <= -maxDeceleration || minBrakeDist >= distanceToTrafficlight) {

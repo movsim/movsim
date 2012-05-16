@@ -281,7 +281,6 @@ fluct_strength   NMTOKEN #REQUIRED
 
 
 <!-- initial conditions (IC) -->
-
 <!ELEMENT INITIAL_CONDITIONS (IC_MACRO*, IC_MICRO*)>
 <!ATTLIST INITIAL_CONDITIONS 
 > 
@@ -370,7 +369,9 @@ logging  (true|false)  "false"
   logging  (true|false)  "false" 
 >  
 
-  
+<!-- zero time period means that light will not change automatically from that color -->
+<!-- negative time period means that light will not use that color -->
+<!-- ordinal numbers of TrafficLightStatus are GREEN=0, GREEN_RED=1, RED=2, RED_GREEN=3 --> 
 <!ELEMENT TRAFFIC_LIGHT EMPTY>
 <!ATTLIST TRAFFIC_LIGHT
 x                NMTOKEN #REQUIRED
@@ -379,6 +380,7 @@ green_red_time   NMTOKEN #REQUIRED
 red_time         NMTOKEN #REQUIRED
 red_green_time   NMTOKEN #REQUIRED
 phase_shift      NMTOKEN "0"
+init             NMTOKEN "0"
 > 
 
 

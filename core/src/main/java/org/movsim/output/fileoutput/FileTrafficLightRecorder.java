@@ -27,6 +27,7 @@ package org.movsim.output.fileoutput;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.roadnetwork.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 
 /**
@@ -75,7 +76,7 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
         if (writer != null) {
             writer.printf("%8.2f   ", simulationTime);
             for (final TrafficLight trafficLight : trafficLights) {
-                writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status());
+                writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status().ordinal());
             }
             writer.printf("%n");
             writer.flush();
@@ -89,12 +90,10 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
      *            the traffic lights
      */
     private void writeHeader(Iterable<TrafficLight> trafficLights) {
-        // write header:
         writer.printf(COMMENT_CHAR + " number codes for traffic lights status: %n");
-        writer.printf(COMMENT_CHAR + " green         %d %n", TrafficLight.GREEN_LIGHT);
-        writer.printf(COMMENT_CHAR + " green --> red %d %n", TrafficLight.GREEN_RED_LIGHT);
-        writer.printf(COMMENT_CHAR + " red           %d %n", TrafficLight.RED_LIGHT);
-        writer.printf(COMMENT_CHAR + " red --> green %d %n", TrafficLight.RED_GREEN_LIGHT);
+        for(TrafficLightStatus status : TrafficLightStatus.values()){
+            writer.printf(COMMENT_CHAR + " %s --> %d %n", status.toString(), status.ordinal());
+        }
 
         int counter = 1;
         for (final TrafficLight trafficLight : trafficLights) {

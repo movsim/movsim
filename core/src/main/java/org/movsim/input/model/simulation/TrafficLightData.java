@@ -40,7 +40,9 @@ public class TrafficLightData {
     private final double redGreenTimePeriod;
 
     private final double phaseShift;
-
+    
+    private final int initStatus;
+    
     /**
      * Instantiates a new TrafficLightData.
      * 
@@ -54,6 +56,7 @@ public class TrafficLightData {
         this.greenRedTimePeriod = Double.parseDouble(map.get("green_red_time"));
         this.redGreenTimePeriod = Double.parseDouble(map.get("red_green_time"));
         this.phaseShift = Double.parseDouble(map.get("phase_shift"));
+        this.initStatus = Integer.parseInt(map.get("init"));
     }
 
     public double getX() {
@@ -78,5 +81,9 @@ public class TrafficLightData {
 
     public double getPhaseShift() {
         return phaseShift;
+    }
+
+    public int getInitStatus() {
+        return initStatus;
     }
 }
