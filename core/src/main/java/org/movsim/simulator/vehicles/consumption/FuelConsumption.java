@@ -145,13 +145,11 @@ public class FuelConsumption {
 
     // TODO
     public void writeOutput(String keyLabel) {
-        FileFuelConsumption fileOutput = new FileFuelConsumption(keyLabel, this);
+        final FileFuelConsumption fileOutput = new FileFuelConsumption(keyLabel, this);
 
         int gear = 0;
         fileOutput.writeJante(gear, carModel);
-        
         fileOutput.writeZeroAccelerationTest(carModel, engineModel);
-        
         fileOutput.writeSpecificConsumption(engineModel);
         
             // for (int gearIndex = 0; gearIndex < engineModel.getMaxGearIndex(); gearIndex++) {
@@ -161,8 +159,4 @@ public class FuelConsumption {
             // writeJanteDataFields(gear, filename);
             // }
     }
-
-   
-
-
 }
