@@ -104,7 +104,8 @@
             <TRAFFIC_LIGHTS>
                 <!-- zero time period means that light will not change automatically from that color -->
                 <!-- negative time period means that light will not use that color -->
-                <TRAFFIC_LIGHT x="300" green_time="0" green_red_time="-1" red_time="0" red_green_time="-1" phase_shift="0"/>
+                <!-- ordinal numbers of TrafficLightStatus are GREEN=0, GREEN_RED=1, RED=2, RED_GREEN=3 -->
+                <TRAFFIC_LIGHT x="300" green_time="0" green_red_time="-1" red_time="0" red_green_time="-1" phase_shift="0" init="0" />
             </TRAFFIC_LIGHTS>
         </ROAD>
         <ROUTES>
