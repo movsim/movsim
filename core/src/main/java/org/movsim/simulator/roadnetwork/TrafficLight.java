@@ -143,7 +143,7 @@ public class TrafficLight {
      * Initialize.
      */
     private void initialize() {
-        status = RED_LIGHT; // GREEN_LIGHT; // init
+        status = GREEN_LIGHT; // init
         totalCycleTime = redTimePeriod + greenTimePeriod + greenRedTimePeriod + redGreenTimePeriod;
         currentCycleTime = -phaseShift;
         logger.debug("initialize traffic light at pos = {}", position);
