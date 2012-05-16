@@ -115,8 +115,10 @@ public class Vehicle {
     /** The old front position of the vehicle. */
     private double frontPositionOld;
 
-    /** The total distance travelled */
-    private double totalTraveledDistance;
+    /** The total distance traveled */
+    private double totalTravelDistance;
+    private double totalTravelTime;
+    private double totalFuelUsedLiters;
 
     private double speed;
 
@@ -708,11 +710,12 @@ public class Vehicle {
      *            delta-t, simulation time interval, seconds
      */
     public void updatePositionAndSpeed(double dt) {
+        totalTravelTime += dt;
         frontPositionOld = frontPosition;
         if (longitudinalModel != null && longitudinalModel.isCA()) {
             speed = (int) (speed + dt * acc + 0.5);
             final int advance = (int) (frontPosition + dt * speed + 0.5);
-            totalTraveledDistance += (advance - frontPosition);
+            totalTravelDistance += (advance - frontPosition);
             frontPosition = advance;
         } else if (longitudinalModel != null && (longitudinalModel.modelName() == ModelName.NEWELL)) {
             // Newell position update: Different to continuous microscopic models and iterated maps.
@@ -723,7 +726,7 @@ public class Vehicle {
             final double advance = speed * dt + acc * dt * dt;
             speed += dt * acc;
             frontPosition += advance;
-            totalTraveledDistance += advance;
+            totalTravelDistance += advance;
             if (speed < 0) {
                 speed = 0;
                 acc = 0;
@@ -735,11 +738,14 @@ public class Vehicle {
             }
             final double advance = (acc * dt >= -speed) ? speed * dt + 0.5 * acc * dt * dt : -0.5 * speed * speed / acc;
             frontPosition += advance;
-            totalTraveledDistance += advance;
+            totalTravelDistance += advance;
             speed += dt * acc;
             if (speed < 0) {
                 speed = 0;
                 acc = 0;
+            }
+            if (fuelModel != null) {
+                totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
             }
         }
     }
@@ -1057,8 +1063,30 @@ public class Vehicle {
         this.exitRoadSegmentId = exitRoadSegmentId;
     }
 
-    public final double totalTraveledDistance() {
-        return totalTraveledDistance;
+    /**
+     * Returns the total distance this vehicle has traveled.
+     * @return total travel distance
+     */
+    public final double totalTravelDistance() {
+        return totalTravelDistance;
+    }
+
+    /**
+     * Returns the total time this vehicle has been on the road network.
+     * @return total travel time
+     * 
+     * @return
+     */
+    public final double totalTravelTime() {
+        return totalTravelTime;
+    }
+
+    /**
+     * Returns the total fuel used by this vehicle.
+     * @return total fuel used
+     */
+    public final double totalFuelUsedLiters() {
+        return totalFuelUsedLiters;
     }
 
     public double getMaxDeceleration() {
@@ -1071,5 +1099,4 @@ public class Vehicle {
         }
         return roadSegmentLength - getFrontPosition();
     }
-
 }

@@ -143,8 +143,8 @@ public class PhysicalQuantities {
         return xScale * me.getNetDistance(vehFront);
     }
 
-    public final double totalTraveledDistance() {
-        return xScale * me.totalTraveledDistance();
+    public final double totalTravelDistance() {
+        return xScale * me.totalTravelDistance();
     }
 
     /**

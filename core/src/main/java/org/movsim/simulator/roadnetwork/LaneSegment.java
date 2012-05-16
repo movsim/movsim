@@ -161,6 +161,32 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Returns the total travel time of all vehicles on this lane segment.
+     * 
+     * @return the total vehicle travel time
+     */
+    public double totalVehicleTravelTime() {
+        double totalVehicleTravelTime = 0;
+        for (final Vehicle vehicle : vehicles) {
+            totalVehicleTravelTime += vehicle.totalTravelTime();
+        }
+        return totalVehicleTravelTime;
+    }
+
+    /**
+     * Returns the total travel distance of all vehicles on this lane segment.
+     * 
+     * @return the total vehicle travel time
+     */
+    public double totalVehicleTravelDistance() {
+        double totalVehicleTravelDistance = 0;
+        for (final Vehicle vehicle : vehicles) {
+            totalVehicleTravelDistance += vehicle.totalTravelDistance();
+        }
+        return totalVehicleTravelDistance;
+    }
+
+    /**
      * Returns the number of obstacles on this lane segment.
      * 
      * @return the number of obstacles on this lane segment
@@ -228,16 +254,21 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Removes any vehicles that have moved past the end of this road segment.
+     * @return the number of vehicles removed
      */
-    public void removeVehiclesPastEnd() {
+    public int removeVehiclesPastEnd(TrafficSink sink) {
+        int count = 0;
         final double roadLength = roadSegment.roadLength();
         int vehicleCount = vehicles.size();
         // remove any vehicles that have gone past the end of this road segment
         while (vehicleCount > 0 && vehicles.get(0).getRearPosition() > roadLength) {
+            sink.recordRemovedVehicle(vehicles.get(0));
             vehicles.remove(0);
-            removedVehicleCount++;
-            vehicleCount--;
+            ++removedVehicleCount;
+            --vehicleCount;
+            ++count;
         }
+        return count;
     }
 
     /**

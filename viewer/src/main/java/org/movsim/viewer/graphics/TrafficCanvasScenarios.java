@@ -86,7 +86,10 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
             setSleepTime(sleepTimeSave);
         }
         if (simulator.isFinished() && simulationFinished != null) {
-            JOptionPane.showMessageDialog(null, String.format(simulationFinished, (int) simulationTime));
+            final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
+            final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() /1000.0;
+            JOptionPane.showMessageDialog(null, String.format(simulationFinished, (int)simulationTime,
+                    (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance));
             simulationRunnable.stop();
         }
     }

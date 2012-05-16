@@ -157,7 +157,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     private static void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
         final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
         writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(), physicalQuantities.getFrontPosition(),
-                physicalQuantities.totalTraveledDistance(), physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
+                physicalQuantities.totalTravelDistance(), physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
                 physicalQuantities.getRelSpeed(frontVeh),
                 physicalQuantities.getxScale() * veh.getDistanceToTrafficlight(),

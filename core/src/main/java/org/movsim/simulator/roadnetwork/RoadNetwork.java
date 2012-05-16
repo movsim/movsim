@@ -260,6 +260,38 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
+     * Returns the total travel time of all vehicles on this road network, including those that have exited.
+     * 
+     * @return the total vehicle travel time
+     */
+    public double totalVehicleTravelTime() {
+        double totalVehicleTravelTime = 0.0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
+            if (roadSegment.sink() != null) {
+                totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
+            }
+        }
+        return totalVehicleTravelTime;
+    }
+
+    /**
+     * Returns the total travel distance of all vehicles on this road network, including those that have exited.
+     * 
+     * @return the total vehicle travel distance
+     */
+    public double totalVehicleTravelDistance() {
+        double totalVehicleTravelDistance = 0.0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
+            if (roadSegment.sink() != null) {
+                totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();
+            }
+        }
+        return totalVehicleTravelDistance;
+    }
+
+    /**
      * Returns the number of obstacles on this road network.
      * 
      * @return the number of obstacles on this road network

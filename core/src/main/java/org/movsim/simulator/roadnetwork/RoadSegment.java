@@ -440,6 +440,32 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Returns the total travel time of all vehicles on this road segment, all lanes.
+     * 
+     * @return the total vehicle travel time
+     */
+    public double totalVehicleTravelTime() {
+        double totalVehicleTravelTime = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            totalVehicleTravelTime += laneSegment.totalVehicleTravelTime();
+        }
+        return totalVehicleTravelTime;
+    }
+
+    /**
+     * Returns the total travel distance of all vehicles on this road segment, all lanes.
+     * 
+     * @return the total vehicle travel time
+     */
+    public double totalVehicleTravelDistance() {
+        double totalVehicleTravelDistance = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            totalVehicleTravelDistance += laneSegment.totalVehicleTravelDistance();
+        }
+        return totalVehicleTravelDistance;
+    }
+
+    /**
      * Returns the number of obstacles on this road segment.
      * 
      * @return the number of obstacles on this road segment
@@ -510,11 +536,14 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     /**
      * Removes any vehicles that have moved past the end of this road segment.
+     * @return the number of vehicles removed
      */
-    public void removeVehiclesPastEnd() {
+    public int removeVehiclesPastEnd() {
+        int removedVehicleCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
-            laneSegment.removeVehiclesPastEnd();
+            removedVehicleCount += laneSegment.removeVehiclesPastEnd(sink);
         }
+        return removedVehicleCount;
     }
 
     /**
