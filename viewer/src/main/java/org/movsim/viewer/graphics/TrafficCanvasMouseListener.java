@@ -29,6 +29,8 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
@@ -46,7 +48,7 @@ import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TrafficCanvasMouseListener implements MouseListener, MouseMotionListener {
+public class TrafficCanvasMouseListener implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     final static Logger logger = LoggerFactory.getLogger(TrafficCanvasMouseListener.class);
     private final TrafficCanvas trafficCanvas;
@@ -243,5 +245,36 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 }
             }
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.awt.event.MouseWheelListener#mouseWheelMoved(java.awt.event.MouseWheelEvent)
+     */
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        String message;
+        final int notches = e.getWheelRotation();
+        if (notches < 0) {
+            message = "Mouse wheel moved UP " + -notches + " notch(es)";
+            commandZoomIn();
+        } else {
+            message = "Mouse wheel moved DOWN " + notches + " notch(es)";
+            commandZoomOut();
+        }
+        logger.info(message);
+    }
+
+    private void commandZoomIn() {
+        final double zoomFactor = Math.sqrt(2.0);
+        trafficCanvas.setScale(trafficCanvas.scale() * zoomFactor);
+        trafficCanvas.forceRepaintBackground();
+    }
+
+    private void commandZoomOut() {
+        final double zoomFactor = Math.sqrt(2.0);
+        trafficCanvas.setScale(trafficCanvas.scale() / zoomFactor);
+        trafficCanvas.forceRepaintBackground();
     }
 }

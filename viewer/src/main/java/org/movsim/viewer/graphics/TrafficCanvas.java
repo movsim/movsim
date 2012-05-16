@@ -198,11 +198,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         mouseListener = new TrafficCanvasMouseListener(this, roadNetwork);
         addMouseListener(mouseListener);
         addMouseMotionListener(mouseListener);
+        addMouseWheelListener(mouseListener);
+
         controller = new TrafficCanvasKeyListener(this);
         addKeyListener(controller);
-
-        final TrafficCanvasMouseWheelListener mousewheel = new TrafficCanvasMouseWheelListener(this);
-        addMouseWheelListener(mousewheel);
     }
 
     /**
