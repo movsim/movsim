@@ -88,9 +88,9 @@ public class CanvasPanel extends JPanel {
         final int width = this.getSize().width;
         final int height = this.getSize().height;
         trafficCanvas.setPreferredSize(new Dimension(width, height));
-        this.add(trafficCanvas, BorderLayout.CENTER);
+        add(trafficCanvas, BorderLayout.CENTER);
         trafficCanvas.setSize(width, height);
-        this.repaint();
+        repaint();
     }
 
     public void quit() {
