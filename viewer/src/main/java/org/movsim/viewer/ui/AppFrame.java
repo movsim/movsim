@@ -39,7 +39,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
 import org.movsim.viewer.graphics.TrafficCanvas;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
@@ -58,7 +57,7 @@ public class AppFrame extends JFrame {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        final TrafficCanvasScenarios trafficCanvas = new TrafficCanvasScenarios(simulator);
+        final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator);
         canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
@@ -97,14 +96,14 @@ public class AppFrame extends JFrame {
     /**
      * @param resourceBundle
      */
-    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
+    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvas trafficCanvas) {
         toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
     /**
      * @param resourceBundle
      */
-    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas) {
         final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
         trafficMenus.initMenus();
     }

@@ -14,7 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.LocalizationStrings;
 
 public class Applet extends JApplet {
@@ -48,7 +48,7 @@ public class Applet extends JApplet {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        final TrafficCanvasScenarios trafficCanvas = new TrafficCanvasScenarios(simulator);
+        final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator);
         canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
@@ -74,11 +74,11 @@ public class Applet extends JApplet {
         super.init();
     }
 
-    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvas) {
+    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvas trafficCanvas) {
         toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
     }
 
-    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas) {
         final AppletMenu trafficMenus = new AppletMenu(canvasPanel, trafficCanvas, statusPanel, resourceBundle);
         trafficMenus.initMenus(this);
     }

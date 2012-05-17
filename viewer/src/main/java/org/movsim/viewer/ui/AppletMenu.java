@@ -11,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import org.movsim.viewer.graphics.TrafficCanvas;
-import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings({ "synthetic-access", "serial" })
@@ -20,7 +19,7 @@ public class AppletMenu extends MovSimMenuBase {
 
     private StatusPanel statusPanel;
 
-    public AppletMenu(CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
+    public AppletMenu(CanvasPanel canvasPanel, TrafficCanvas trafficCanvas, StatusPanel statusPanel, ResourceBundle resourceBundle) {
         super(canvasPanel, trafficCanvas, resourceBundle);
         this.statusPanel = statusPanel;
     }
@@ -41,7 +40,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("OnRamp")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ONRAMPFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("onramp", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -49,7 +48,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("OffRamp")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.OFFRAMPFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("offramp", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -57,7 +56,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("FlowConservingBottleNeck")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.FLOWCONSERVINGBOTTLENECK, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("flow_conserving_bottleneck", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -65,7 +64,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("SpeedLimit")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.SPEEDLIMITFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("speedlimit", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -73,7 +72,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("TrafficLight")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.TRAFFICLIGHTFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("trafficlight", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -81,7 +80,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("LaneClosing")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.LANECLOSINGFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("laneclosure", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -89,7 +88,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("CloverLeaf")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.CLOVERLEAFFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("cloverleaf", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -111,7 +110,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("RingRoad")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADONELANEFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("ringroad_1lane", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -119,7 +118,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("RingRoad2Lanes")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADTWOLANESFILE, "/sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("ringroad_2lane", "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
@@ -129,7 +128,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("GameRampMetering")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RAMPMETERING, "/sim/games/");
+                trafficCanvas.setupTrafficScenario("ramp_metering", "/sim/games/");
                 trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
                 uiDefaultReset();
             }
@@ -138,7 +137,7 @@ public class AppletMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("GameRouting")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ROUTING, "/sim/games/");
+                trafficCanvas.setupTrafficScenario("routing", "/sim/games/");
                 trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
                 uiDefaultReset();
             }

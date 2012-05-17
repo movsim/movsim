@@ -32,14 +32,14 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.movsim.viewer.graphics.TrafficCanvasScenarios;
+import org.movsim.viewer.graphics.TrafficCanvas;
 
 public class CanvasPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    private TrafficCanvasScenarios trafficCanvas;
+    private TrafficCanvas trafficCanvas;
 
-    public CanvasPanel(final ResourceBundle resourceBundle, final TrafficCanvasScenarios trafficCanvas) {
+    public CanvasPanel(final ResourceBundle resourceBundle, final TrafficCanvas trafficCanvas) {
 
         // TODO check if needed anymore. Seems working fine with linux. Check windows and mac!
         // SwingHelper.makeLightWeightComponentsVisible();
@@ -58,8 +58,8 @@ public class CanvasPanel extends JPanel {
         }
     }
 
-    public void initApp(ResourceBundle resourceBundle, TrafficCanvasScenarios trafficCanvasScenarios) {
-        this.trafficCanvas = trafficCanvasScenarios;
+    public void initApp(ResourceBundle resourceBundle, TrafficCanvas trafficCanvas1) {
+        this.trafficCanvas = trafficCanvas1;
         initStrings(resourceBundle);
         layoutAndAddCanvasToPanel();
     }

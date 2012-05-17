@@ -37,18 +37,18 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.movsim.viewer.graphics.TrafficCanvasScenarios;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("serial")
 public class MovSimMenuBase extends JPanel {
     private static final long serialVersionUID = -2588408479627239336L;
     final CanvasPanel canvasPanel;
-    final TrafficCanvasScenarios trafficCanvas;
+    final TrafficCanvas trafficCanvas;
     final ResourceBundle resourceBundle;
     private LogWindow logWindow;
 
-    public MovSimMenuBase(CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, ResourceBundle resourceBundle) {
+    public MovSimMenuBase(CanvasPanel canvasPanel, TrafficCanvas trafficCanvas, ResourceBundle resourceBundle) {
         this.canvasPanel = canvasPanel;
         this.trafficCanvas = trafficCanvas;
         this.resourceBundle = resourceBundle;
