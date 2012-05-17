@@ -396,28 +396,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the number of vehicles removed from this road segment.
-     * 
-     * @return the number of vehicles removed from this road segment
-     */
-    public int removedVehicleCount() {
-        int removedVehicleCount = 0;
-        for (final LaneSegment laneSegment : laneSegments) {
-            removedVehicleCount += laneSegment.getRemovedVehicleCount();
-        }
-        return removedVehicleCount;
-    }
-
-    /**
-     * Clears the removed vehicle count.
-     */
-    public void clearVehicleRemovedCount() {
-        for (final LaneSegment laneSegment : laneSegments) {
-            laneSegment.clearVehicleRemovedCount();
-        }
-    }
-
-    /**
      * Clears this road segment of any vehicles.
      */
     public void clearVehicles() {
