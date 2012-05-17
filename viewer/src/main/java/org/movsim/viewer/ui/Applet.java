@@ -27,6 +27,7 @@ public class Applet extends JApplet {
 
     @Override
     public void init() {
+        super.init();
 
         setLayout(new BorderLayout());
         initializeLogger();
@@ -67,11 +68,13 @@ public class Applet extends JApplet {
         canvasPanel.repaint();
 
         statusPanel.setWithProgressBar(false);
-        trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
-        trafficCanvas.start();
         statusPanel.reset();
-
-        super.init();
+        trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
+        final String projectName = projectMetaData.getProjectName();
+        if (projectName.equals("routing") || projectName.equals("ramp_metering")) {
+            trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
+        }
+        trafficCanvas.start();
     }
 
     private void addToolBar(ResourceBundle resourceBundle, TrafficCanvas trafficCanvas) {
