@@ -44,7 +44,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.swing.JOptionPane;
+
 import org.movsim.input.ProjectMetaData;
+import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadMapping;
@@ -61,6 +64,8 @@ import org.movsim.utilities.Colors;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -88,9 +93,10 @@ import org.movsim.viewer.util.SwingHelper;
 public class TrafficCanvas extends SimulationCanvasBase implements SimulationRunnable.UpdateDrawingCallback,
         SimulationRunnable.HandleExceptionCallback, SimulationRunnable.UpdateStatusCallback {
 
+    final static Logger logger = LoggerFactory.getLogger(TrafficCanvas.class);
     @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
-    protected static final boolean DEBUG = false;
+    private String simulationFinished;
 
     private static Properties properties;
 
@@ -153,7 +159,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     /**
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
-    protected enum VehicleColorMode {
+    public enum VehicleColorMode {
         VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_LABEL_COLOR, VEHICLE_COLOR, EXIT_COLOR, HIGHLIGHT_VEHICLE
     }
 
@@ -286,6 +292,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         super.reset();
         simulator.reset();
         mouseListener.reset();
+        vehicleToHighlightId = -1;
+        initGraphicSettings();
+        forceRepaintBackground();
     }
 
     @Override
@@ -294,6 +303,44 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         xOffset = Integer.parseInt(properties.getProperty("xOffset", "0"));
         yOffset = Integer.parseInt(properties.getProperty("yOffset", "0"));
         setTransform();
+    }
+
+    /**
+     * Sets up the given traffic scenario.
+     * 
+     * @param scenario
+     */
+    public void setupTrafficScenario(String scenario, String path) {
+        reset();
+        simulator.loadScenarioFromXml(scenario, path);
+        initGraphicSettings();
+        forceRepaintBackground();
+    }
+
+    private void initGraphicSettings() {
+        setProperties(loadProperties());
+        initGraphicConfigFieldsFromProperties();
+        resetScaleAndOffset();
+        for (final RoadSegment roadSegment : roadNetwork) {
+            roadSegment.roadMapping().setRoadColor(roadColor);
+        }
+        VehiclesInput vehiclesInput = simulator.getVehiclesInput();
+        if (vehiclesInput == null) {
+            System.out.println("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
+        } else {
+            for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
+                final int r = (int) (Math.random() * 256);
+                final int g = (int) (Math.random() * 256);
+                final int b = (int) (Math.random() * 256);
+                final Color color = new Color(r, g, b);
+                // final float hue = random.nextFloat();
+                // final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
+                // final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
+                // Color color = Color.getHSBColor(hue, saturation, luminance);
+                logger.info("set color for vehicle label={}", vehicleTypeLabel);
+                labelColors.put(vehicleTypeLabel, color);
+            }
+        }
     }
 
     /**
@@ -316,6 +363,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     public void setMessageStrings(String popupString, String popupStringExitEndRoad) {
         this.popupString = popupString;
         this.popupStringExitEndRoad = popupStringExitEndRoad;
+    }
+
+    public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
+            String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
+        setMessageStrings(popupString, popupStringExitEndRoad);
+        this.simulationFinished = simulationFinished;
     }
 
     void setAccelerationColors() {
@@ -441,6 +494,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             color = SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum(), v);
         }
         return color;
+    }
+
+    public void setVehicleColorMode(VehicleColorMode vehicleColorMode) {
+        this.vehicleColorMode = vehicleColorMode;
     }
 
     /**
@@ -984,6 +1041,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      */
     @Override
     public void updateStatus(double simulationTime) {
-        // overridden in TrafficCanvasScenario
+        if (simulator.isFinished() && simulationFinished != null) {
+            final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
+            final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() /1000.0;
+            JOptionPane.showMessageDialog(null, String.format(simulationFinished, (int)simulationTime,
+                    (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance));
+            simulationRunnable.stop();
+        }
     }
 }

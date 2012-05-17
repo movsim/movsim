@@ -140,16 +140,14 @@ public class TrafficSink implements SimulationTimeStep {
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        final RoadSegment sourceRoad = sourceRoad();
-        vechiclesRemovedInInterval += sourceRoad.removeVehiclesPastEnd();
+        vechiclesRemovedInInterval += sourceRoad().removeVehiclesPastEnd();
         measuredTime += dt;
         if (measuredTime > MEASURING_INTERVAL_S) {
-            measuredOutflow = sourceRoad.removedVehicleCount() / MEASURING_INTERVAL_S; // vehicles per second
-            sourceRoad.clearVehicleRemovedCount();
+            measuredOutflow = vechiclesRemovedInInterval / MEASURING_INTERVAL_S; // vehicles per second
             vechiclesRemovedInInterval = 0;
             measuredTime = 0.0;
             logger.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", 
-                    roadSegment.id(), measuredOutflow*ConversionUtilities.INVS_TO_INVH);
+                    sourceRoad().id(), measuredOutflow*ConversionUtilities.INVS_TO_INVH);
         }
     }
 }
