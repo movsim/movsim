@@ -57,9 +57,7 @@ import org.slf4j.LoggerFactory;
 public class LogWindow extends JFrame {
 
     private static final long serialVersionUID = 7260621844785396283L;
-
     final static Logger logger = LoggerFactory.getLogger(LogWindow.class);
-
     static private JTextArea jTextArea = null;
 
     public LogWindow(ResourceBundle resourceBundle, final JCheckBoxMenuItem cbMenu) {
@@ -91,12 +89,12 @@ public class LogWindow extends JFrame {
         final String off = resourceBundle.getString("LogOff");
         final String warn = resourceBundle.getString("LogWarn");
         final String error = resourceBundle.getString("LogError");
-        final String[] logLevels = { debug, info, warn, error, off};
+        final String[] logLevels = { debug, info, warn, error, off };
         final JComboBox logLevel = new JComboBox(logLevels);
         logLevel.setSelectedItem("info");
         SwingHelper.setComponentSize(logLevel, 120, 22);
-        logLevel.addActionListener(new ActionListener() {
 
+        logLevel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 final JComboBox comboBox = (JComboBox) e.getSource();
@@ -119,7 +117,7 @@ public class LogWindow extends JFrame {
         final JLabel lblLogLevel = new JLabel("LogLevel: ");
         logLevelChooserPanel.add(lblLogLevel);
         logLevelChooserPanel.add(logLevel);
-        
+
         logPanel.add(logLevelChooserPanel, BorderLayout.NORTH);
         logPanel.add(scrollPane, BorderLayout.CENTER);
 
