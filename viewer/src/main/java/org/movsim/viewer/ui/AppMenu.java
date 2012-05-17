@@ -217,7 +217,7 @@ public class AppMenu extends MovSimMenuBase {
         scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("RingRoad2Lanes")) {
             @Override
             public void actionPerformed(ActionEvent e) {
-                trafficCanvas.setupTrafficScenario("ringroad_2lane", "../sim/buildingBlocks/");
+                trafficCanvas.setupTrafficScenario("ringroad_2lanes", "../sim/buildingBlocks/");
                 uiDefaultReset();
             }
         }));
