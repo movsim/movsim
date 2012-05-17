@@ -37,8 +37,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 import org.movsim.simulator.Simulator;
@@ -50,40 +48,26 @@ import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
 @SuppressWarnings("synthetic-access")
-public class AppMenu extends JPanel {
+public class AppMenu extends MovSimMenuBase {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Simulator simulator;
     private final AppFrame frame;
-    private final CanvasPanel canvasPanel;
-    private final TrafficCanvasScenarios trafficCanvas;
-    private final ResourceBundle resourceBundle;
-
-    private LogWindow logWindow;
 
     public AppMenu(AppFrame mainFrame, Simulator simulator, CanvasPanel canvasPanel, TrafficCanvasScenarios trafficCanvas, ResourceBundle resourceBundle) {
+        super(canvasPanel, trafficCanvas, resourceBundle);
         this.frame = mainFrame;
         this.simulator = simulator;
-        this.canvasPanel = canvasPanel;
-        this.trafficCanvas = trafficCanvas;
-        this.resourceBundle = resourceBundle;
     }
 
     public void initMenus() {
         final JMenuBar menuBar = new JMenuBar();
 
-        final JMenu menuFile = fileMenu();
-        final JMenu scenarioMenu = scenarioMenu();
-        final JMenu helpMenu = helpMenu();
-        final JMenu modelMenu = modelMenu();
-        final JMenu viewMenu = viewMenu();
-        final JMenu outputMenu = outputMenu();
-
-        menuBar.add(menuFile);
-        menuBar.add(scenarioMenu);
-        menuBar.add(modelMenu);
-        menuBar.add(outputMenu);
-        menuBar.add(viewMenu);
-        menuBar.add(helpMenu);
+        menuBar.add(fileMenu());
+        menuBar.add(scenarioMenu());
+        menuBar.add(modelMenu());
+        menuBar.add(outputMenu());
+        menuBar.add(viewMenu());
+        menuBar.add(helpMenu());
 
         frame.setJMenuBar(menuBar);
     }
@@ -94,7 +78,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem menuItemTravelTime = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("TravelTime")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleTravelTimeDiagram(actionEvent);
@@ -104,7 +87,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem menuItemDetectors = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("Detectors")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDetectorsDiagram(actionEvent);
@@ -114,7 +96,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem menuItemFloatingCars = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("FloatingCars")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleFloatingCarsDiagram(actionEvent);
@@ -124,7 +105,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem menuItemSpatioTemporalContour = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("SpatioTemporal")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleSpatioTemporalDiagram(actionEvent);
@@ -134,7 +114,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem menuItemFuelConsumption = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("FuelConsumption")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleFuelConsumptionDiagram(actionEvent);
@@ -280,9 +259,7 @@ public class AppMenu extends JPanel {
 
         final JMenuItem menuItemGameRouting = new JMenuItem(new AbstractAction(
                 resourceBundle.getString("GameRouting")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ROUTING, "../sim/games/");
@@ -293,9 +270,7 @@ public class AppMenu extends JPanel {
 
         scenarioMenu.addSeparator();
         final JMenuItem menuItemVasaLoppet = new JMenuItem(new AbstractAction(resourceBundle.getString("Vasaloppet")) {
-
             private static final long serialVersionUID = 4633365854029111923L;
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.VASALOPPET, "../sim/examples/");
@@ -320,16 +295,14 @@ public class AppMenu extends JPanel {
         final JMenuItem menuItemVehicleColorRandom = new JMenuItem(resourceBundle.getString("VehicleColorRandom"));
         colorVehicles.add(menuItemVehicleColorSpeedDependant);
         colorVehicles.add(menuItemVehicleColorRandom);
-
         menuItemVehicleColorSpeedDependant.setEnabled(false);
         menuItemVehicleColorRandom.setEnabled(false);
-
         viewMenu.add(colorVehicles);
+
         viewMenu.addSeparator();
 
         viewMenu.add(new JCheckBoxMenuItem(new AbstractAction((String) resourceBundle.getObject("LogOutput")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleLogOutput(actionEvent);
@@ -337,10 +310,10 @@ public class AppMenu extends JPanel {
                 }));
 
         viewMenu.addSeparator();
+
         final JCheckBoxMenuItem cbDrawRoadIds = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawRoadIds")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawRoadIds(actionEvent);
@@ -351,7 +324,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem cbSources = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawSources")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawSources(actionEvent);
@@ -362,7 +334,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem cbSinks = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawSinks")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawSinks(actionEvent);
@@ -373,7 +344,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem cbSpeedLimits = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawSpeedLimits")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawSpeedLimits(actionEvent);
@@ -384,7 +354,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem cbflowConservingBootleNecks = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawFlowConservingBootleNecks")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                     }
@@ -396,7 +365,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem cbRoutesTravelTimes = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawRoutesTravelTime")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                     }
@@ -406,7 +374,6 @@ public class AppMenu extends JPanel {
         final JCheckBoxMenuItem cbRoutesSpatioTemporal = new JCheckBoxMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("DrawRoutesSpatioTemporal")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                     }
@@ -425,75 +392,16 @@ public class AppMenu extends JPanel {
         return viewMenu;
     }
 
+    @SuppressWarnings("serial")
     private JMenu modelMenu() {
         final JMenu modelMenu = new JMenu((String) resourceBundle.getObject("ModelMenu"));
-        final JMenuItem menuItemModelParameters = new JMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("ModelMenuViewParams")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
-
+        modelMenu.add(new JMenuItem(new AbstractAction(resourceBundle.getString("ModelMenuViewParams")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         SwingHelper.notImplemented(canvasPanel);
                     }
-                });
-        modelMenu.add(menuItemModelParameters);
-
-        menuItemModelParameters.setEnabled(false);
+                })).setEnabled(false);
         return modelMenu;
-    }
-
-    private JMenu helpMenu() {
-        final JMenu helpMenu = new JMenu((String) resourceBundle.getObject("HelpMenu")); //$NON-NLS-1$
-
-        helpMenu.add(new JMenuItem(new AbstractAction((String) resourceBundle.getObject("HelpMenuAbout")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        handleAbout(actionEvent);
-                    }
-                }));
-
-        final JMenuItem menuItemDocumentation = new JMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("HelpMenuDocumentation")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        handleAbout(actionEvent);
-                    }
-                });
-        helpMenu.add(menuItemDocumentation);
-
-        final JMenu language = new JMenu(resourceBundle.getString("LanguageChooser"));
-        final JMenuItem menuItemEnglish = new JMenuItem(new AbstractAction(resourceBundle.getString("English")) {
-
-            private static final long serialVersionUID = -2576202988909465055L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        language.add(menuItemEnglish);
-
-        final JMenuItem menuItemGerman = new JMenuItem(new AbstractAction(resourceBundle.getString("German")) {
-
-            private static final long serialVersionUID = 7733985567454234949L;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        language.add(menuItemGerman);
-
-        menuItemGerman.setEnabled(false);
-        menuItemDocumentation.setEnabled(false);
-
-        helpMenu.add(language);
-
-        return helpMenu;
     }
 
     private JMenu fileMenu() {
@@ -504,7 +412,6 @@ public class AppMenu extends JPanel {
         final JMenuItem menuItemPreferences = new JMenuItem(new AbstractAction(
                 (String) resourceBundle.getObject("FileMenuPreferences")) {//$NON-NLS-1$
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handlePreferences(actionEvent);
@@ -515,7 +422,6 @@ public class AppMenu extends JPanel {
         menuFile.addSeparator();
         menuFile.add(new AbstractAction((String) resourceBundle.getObject("FileMenuExit")) {//$NON-NLS-1$
             private static final long serialVersionUID = 1L;
-
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 handleQuit(actionEvent);
@@ -526,64 +432,8 @@ public class AppMenu extends JPanel {
         return menuFile;
     }
 
-    private void handleAbout(EventObject event) {
-        final String titleString = (String) resourceBundle.getObject("AboutTitle"); //$NON-NLS-1$
-        final String aboutString = (String) resourceBundle.getObject("AboutText"); //$NON-NLS-1$
-        JOptionPane.showMessageDialog(canvasPanel, aboutString, titleString, JOptionPane.INFORMATION_MESSAGE);
-    }
-
     private void handlePreferences(EventObject event) {
         ViewerPreferences viewerPreferences = new ViewerPreferences(resourceBundle);
-    }
-
-    protected void handleTravelTimeDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (trafficUi.getStatusPanel().isWithTravelTimes()) {
-        // if (cb.isSelected()) {
-        // travelTimeDiagram = new TravelTimeDiagram(resourceBundle, cb);
-        // } else {
-        // SwingHelper.closeWindow(travelTimeDiagram);
-        // }
-        // } else {
-        // JOptionPane.showMessageDialog(frame, resourceBundle.getString("NoTravelTime"));
-        // cb.setSelected(false);
-        // }
-
-    }
-
-    protected void handleSpatioTemporalDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (cb.isSelected()) {
-        // spatioTemporalDiagram = new SpatioTemporalView(resourceBundle, cb);
-        // } else {
-        // SwingHelper.closeWindow(spatioTemporalDiagram);
-        // }
-    }
-
-    protected void handleFloatingCarsDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (cb.isSelected()) {
-        // fcAcc = new FloatingCarsAccelerationView();
-        // fcSpeed = new FloatingCarsSpeedView();
-        // fcTrajectories = new FloatingCarsTrajectoriesView();
-        // } else {
-        // SwingHelper.closeWindow(fcAcc);
-        // SwingHelper.closeWindow(fcSpeed);
-        // SwingHelper.closeWindow(fcTrajectories);
-        // }
-    }
-
-    protected void handleDetectorsDiagram(ActionEvent actionEvent) {
-        // final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        // if (cb.isSelected()) {
-        // detectorsDiagram = new DetectorsView(resourceBundle, cb);
-        // } else {
-        // SwingHelper.closeWindow(detectorsDiagram);
-        // }
-    }
-
-    protected void handleFuelConsumptionDiagram(ActionEvent actionEvent) {
-        SwingHelper.notImplemented(canvasPanel);
     }
 
     private void handleQuit(EventObject event) {
@@ -592,36 +442,7 @@ public class AppMenu extends JPanel {
         System.exit(0); // also kills all existing threads
     }
 
-    protected void handleLogOutput(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cbMenu = (JCheckBoxMenuItem) actionEvent.getSource();
-        if (cbMenu.isSelected()) {
-            logWindow = new LogWindow(resourceBundle, cbMenu);
-        } else {
-            SwingHelper.closeWindow(logWindow);
-        }
-    }
-
-    protected void handleDrawRoadIds(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        trafficCanvas.setDrawRoadId(cb.isSelected());
-    }
-
-    protected void handleDrawSources(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        trafficCanvas.setDrawSources(cb.isSelected());
-    }
-
-    protected void handleDrawSinks(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        trafficCanvas.setDrawSinks(cb.isSelected());
-    }
-
-    protected void handleDrawSpeedLimits(ActionEvent actionEvent) {
-        final JCheckBoxMenuItem cb = (JCheckBoxMenuItem) actionEvent.getSource();
-        trafficCanvas.setDrawSpeedLimits(cb.isSelected());
-    }
-
-    public void uiDefaultReset() {
+    private void uiDefaultReset() {
         trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty(
                 "vmaxForColorSpectrum", "140")));
         frame.statusPanel.setWithProgressBar(true);
@@ -652,7 +473,6 @@ public class AppMenu extends JPanel {
                 public boolean accept(File file) {
                     return file.isDirectory() || file.getName().endsWith(".xml"); //$NON-NLS-1$
                 }
-
                 @Override
                 public String getDescription() {
                     return "XML files";

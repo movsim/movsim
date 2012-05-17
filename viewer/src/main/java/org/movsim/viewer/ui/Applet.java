@@ -79,8 +79,8 @@ public class Applet extends JApplet {
     }
 
     private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvasScenarios trafficCanvas) {
-        final AppletMenu trafficMenus = new AppletMenu(this, canvasPanel, trafficCanvas, statusPanel, resourceBundle);
-        trafficMenus.initMenus();
+        final AppletMenu trafficMenus = new AppletMenu(canvasPanel, trafficCanvas, statusPanel, resourceBundle);
+        trafficMenus.initMenus(this);
     }
 
     private void initLookAndFeel() {
