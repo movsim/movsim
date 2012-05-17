@@ -38,6 +38,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -78,10 +79,15 @@ public class AppFrame extends JFrame {
         this.setExtendedState(Frame.MAXIMIZED_BOTH);
 
         // first scenario
-        if (projectMetaData.getProjectName().equals("")) {
-            trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RAMPMETERING, "../sim/games/");
+        String projectName = projectMetaData.getProjectName();
+        if (projectName.equals("")) {
+            projectName = "ramp_metering";
+            trafficCanvas.setupTrafficScenario(projectName, "../sim/games/");
         } else {
-            trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
+            trafficCanvas.setupTrafficScenario(projectName, projectMetaData.getPathToProjectXmlFile());
+        }
+        if (projectName.equals("routing") || projectName.equals("ramp_metering")) {
+            trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
         }
         statusPanel.reset();
         trafficCanvas.start();

@@ -119,9 +119,6 @@ public class TrafficCanvasScenarios extends TrafficCanvas {
     public void setupTrafficScenario(String scenario, String path) {
         reset();
         simulator.loadScenarioFromXml(scenario, path);
-        if (scenario.equals("routing") || scenario.equals("ramp_metering")) {
-            vehicleColorMode = TrafficCanvas.VehicleColorMode.EXIT_COLOR;
-        }
         initGraphicSettings();
         forceRepaintBackground();
     }

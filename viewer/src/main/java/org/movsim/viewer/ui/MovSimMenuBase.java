@@ -54,6 +54,10 @@ public class MovSimMenuBase extends JPanel {
         this.resourceBundle = resourceBundle;
     }
 
+    final String resourceString(String string) {
+        return resourceBundle.getString(string);
+    }
+
     JMenu helpMenu() {
         final JMenu helpMenu = new JMenu(resourceBundle.getString("HelpMenu")); //$NON-NLS-1$
 

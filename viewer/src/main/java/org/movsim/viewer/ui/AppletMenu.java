@@ -10,10 +10,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvasScenarios;
 import org.movsim.viewer.util.SwingHelper;
 
-@SuppressWarnings("synthetic-access")
+@SuppressWarnings({ "synthetic-access", "serial" })
 public class AppletMenu extends MovSimMenuBase {
     private static final long serialVersionUID = -1741830983719200790L;
 
@@ -36,236 +37,167 @@ public class AppletMenu extends MovSimMenuBase {
 
     private JMenu scenarioMenu() {
         final JMenu scenarioMenu = new JMenu((String) resourceBundle.getObject("ScenarioMenu"));
-        final JMenuItem menuItemOnRamp = new JMenuItem(new AbstractAction(resourceBundle.getString("OnRamp")) {
-            private static final long serialVersionUID = 7705041304742695628L;
+
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("OnRamp")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ONRAMPFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemOnRamp);
+        }));
 
-        final JMenuItem menuItemOffRamp = new JMenuItem(new AbstractAction(resourceBundle.getString("OffRamp")) {
-            private static final long serialVersionUID = -2548920811907898064L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("OffRamp")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.OFFRAMPFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemOffRamp);
+        }));
 
-        final JMenuItem menuItemFlowConservingBottleNeck = new JMenuItem(new AbstractAction(
-                resourceBundle.getString("FlowConservingBottleNeck")) {
-            private static final long serialVersionUID = -8349549625085281487L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("FlowConservingBottleNeck")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.FLOWCONSERVINGBOTTLENECK, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemFlowConservingBottleNeck);
+        }));
 
-        final JMenuItem menuItemSpeedLimit = new JMenuItem(new AbstractAction(resourceBundle.getString("SpeedLimit")) {
-            private static final long serialVersionUID = -1498474459807551133L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("SpeedLimit")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.SPEEDLIMITFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemSpeedLimit);
+        }));
 
-        final JMenuItem menuItemTrafficLight = new JMenuItem(new AbstractAction(resourceBundle.getString("TrafficLight")) {
-            private static final long serialVersionUID = 2511854387728111343L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("TrafficLight")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.TRAFFICLIGHTFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemTrafficLight);
+        }));
 
-        final JMenuItem menuItemLaneClosing = new JMenuItem(new AbstractAction(resourceBundle.getString("LaneClosing")) {
-            private static final long serialVersionUID = -5359478839829791298L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("LaneClosing")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.LANECLOSINGFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemLaneClosing);
+        }));
 
-        final JMenuItem menuItemCloverLeaf = new JMenuItem(new AbstractAction(resourceBundle.getString("CloverLeaf")) {
-            private static final long serialVersionUID = 8504921708742771452L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("CloverLeaf")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.CLOVERLEAFFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemCloverLeaf);
+        }));
 
-        final JMenuItem menuItemRoundAbout = new JMenuItem(new AbstractAction(resourceBundle.getString("RoundAbout")) {
-            private static final long serialVersionUID = 5468084978732943923L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("RoundAbout")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingHelper.notImplemented(canvasPanel);
             }
-        });
-        scenarioMenu.add(menuItemRoundAbout);
+        })).setEnabled(false);
 
-        final JMenuItem menuItemCityInterSection = new JMenuItem(new AbstractAction(resourceBundle.getString("CityInterSection")) {
-            private static final long serialVersionUID = 3606709421278067399L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("CityInterSection")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingHelper.notImplemented(canvasPanel);
             }
-        });
-        scenarioMenu.add(menuItemCityInterSection);
+        })).setEnabled(false);
 
-        final JMenuItem menuItemRingRoad = new JMenuItem(new AbstractAction(resourceBundle.getString("RingRoad")) {
-            private static final long serialVersionUID = 4633365854029111923L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("RingRoad")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADONELANEFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemRingRoad);
+        }));
 
-        final JMenuItem menuItemRingRoadTwoLanes = new JMenuItem(new AbstractAction(resourceBundle.getString("RingRoad2Lanes")) {
-            private static final long serialVersionUID = 4633365854029111923L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("RingRoad2Lanes")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RINGROADTWOLANESFILE, "/sim/buildingBlocks/");
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemRingRoadTwoLanes);
+        }));
 
-        final JMenuItem menuItemGameRampMetering = new JMenuItem(new AbstractAction(resourceBundle.getString("GameRampMetering")) {
-            private static final long serialVersionUID = 4633365854029111923L;
+        scenarioMenu.addSeparator();
+
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("GameRampMetering")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.RAMPMETERING, "/sim/games/");
+                trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemGameRampMetering);
+        }));
 
-        final JMenuItem menuItemGameRouting = new JMenuItem(new AbstractAction(resourceBundle.getString("GameRouting")) {
-            private static final long serialVersionUID = 4633365854029111923L;
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("GameRouting")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario(TrafficCanvasScenarios.ROUTING, "/sim/games/");
+                trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
                 uiDefaultReset();
             }
-        });
-        scenarioMenu.add(menuItemGameRouting);
-
-        menuItemRoundAbout.setEnabled(false);
-        menuItemCityInterSection.setEnabled(false);
+        }));
 
         return scenarioMenu;
     }
 
     private JMenu viewMenu() {
         final JMenu viewMenu = new JMenu((String) resourceBundle.getObject("ViewMenu"));
-        // final JMenu colorVehicles = new JMenu(resourceBundle.getString("VehicleColors"));
-        //
-        // final JMenuItem menuItemVehicleColorSpeedDependant = new JMenuItem(
-        // resourceBundle.getString("VehicleColorSpeedDependant"));
-        // final JMenuItem menuItemVehicleColorRandom = new JMenuItem(resourceBundle.getString("VehicleColorRandom"));
-        // colorVehicles.add(menuItemVehicleColorSpeedDependant);
-        // colorVehicles.add(menuItemVehicleColorRandom);
-        //
-        // menuItemVehicleColorSpeedDependant.setEnabled(false);
-        // menuItemVehicleColorRandom.setEnabled(false);
-        //
-        // viewMenu.add(colorVehicles);
-        //
-        // viewMenu.addSeparator();
-        final JCheckBoxMenuItem cbDrawRoadIds = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawRoadIds")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
+
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawRoadIds")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawRoadIds(actionEvent);
                     }
-                });
-        viewMenu.add(cbDrawRoadIds);
+                })).setSelected(trafficCanvas.isDrawRoadId());
 
-        final JCheckBoxMenuItem cbSources = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawSources")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawSources")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawSources(actionEvent);
                     }
-                });
-        viewMenu.add(cbSources);
+                })).setSelected(trafficCanvas.isDrawSources());
 
-        final JCheckBoxMenuItem cbSinks = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawSinks")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
-
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawSinks")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawSinks(actionEvent);
                     }
-                });
-        viewMenu.add(cbSinks);
+                })).setSelected(trafficCanvas.isDrawSinks());
 
-        final JCheckBoxMenuItem cbSpeedLimits = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawSpeedLimits")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawSpeedLimits")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleDrawSpeedLimits(actionEvent);
                     }
-                });
-        viewMenu.add(cbSpeedLimits);
+                })).setSelected(trafficCanvas.isDrawSpeedLimits());
 
-        final JCheckBoxMenuItem cbflowConservingBootleNecks = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawFlowConservingBootleNecks")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawFlowConservingBootleNecks")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                     }
-                });
-        viewMenu.add(cbflowConservingBootleNecks);
+                })).setEnabled(false);
 
         viewMenu.addSeparator();
 
-        final JCheckBoxMenuItem cbRoutesTravelTimes = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawRoutesTravelTime")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawRoutesTravelTime")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                     }
-                });
-        viewMenu.add(cbRoutesTravelTimes);
+                })).setEnabled(false);
 
-        final JCheckBoxMenuItem cbRoutesSpatioTemporal = new JCheckBoxMenuItem(new AbstractAction(
-                (String) resourceBundle.getObject("DrawRoutesSpatioTemporal")) {//$NON-NLS-1$
-                    private static final long serialVersionUID = 1L;
+        viewMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("DrawRoutesSpatioTemporal")) {//$NON-NLS-1$
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                     }
-                });
-        viewMenu.add(cbRoutesSpatioTemporal);
+                })).setEnabled(false);
 
-        cbRoutesSpatioTemporal.setEnabled(false);
-        cbflowConservingBootleNecks.setEnabled(false);
-        cbRoutesSpatioTemporal.setEnabled(false);
-        cbRoutesTravelTimes.setEnabled(false);
-
-        cbSpeedLimits.setSelected(trafficCanvas.isDrawSpeedLimits());
-        cbDrawRoadIds.setSelected(trafficCanvas.isDrawRoadId());
-        cbSources.setSelected(trafficCanvas.isDrawSources());
-        cbSinks.setSelected(trafficCanvas.isDrawSinks());
         return viewMenu;
     }
 

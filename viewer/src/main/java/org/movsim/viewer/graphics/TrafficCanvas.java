@@ -153,7 +153,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     /**
      * Vehicle color support only the first four are used by the button. commandCyclevehicleColors()
      */
-    protected enum VehicleColorMode {
+    public enum VehicleColorMode {
         VELOCITY_COLOR, LANE_CHANGE, ACCELERATION_COLOR, VEHICLE_LABEL_COLOR, VEHICLE_COLOR, EXIT_COLOR, HIGHLIGHT_VEHICLE
     }
 
@@ -441,6 +441,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             color = SwingHelper.getColorAccordingToSpectrum(0, getVmaxForColorSpectrum(), v);
         }
         return color;
+    }
+
+    public void setVehicleColorMode(VehicleColorMode vehicleColorMode) {
+        this.vehicleColorMode = vehicleColorMode;
     }
 
     /**
