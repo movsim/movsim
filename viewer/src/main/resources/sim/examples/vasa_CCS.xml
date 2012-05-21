@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<SCENARIO network_filename="vasa.xodr">
+    <VEHICLES>
+        <VEHICLE label="CCS0" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="250" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1.1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0." bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS1" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.4" b="1.1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0." bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS2" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="70" A="0.7" cw="0.6" friction="0.02" T="0.5" s0="0.7" p0="190" v_c="7" p_herringbone="140" v_c_herringbone="1.3" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS3" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="75" A="0.7" cw="0.6" friction="0.02" T="0.6" s0="0.7" p0="180" v_c="7" p_herringbone="130" v_c_herringbone="1.2" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS4" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="80" A="0.7" cw="0.7" friction="0.02" T="0.6" s0="0.7" p0="170" v_c="6" p_herringbone="130" v_c_herringbone="1.0" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0." bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS5" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="80" A="0.7" cw="0.7" friction="0.02" T="0.6" s0="0.7" p0="160" v_c="6" p_herringbone="120" v_c_herringbone="1.0" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS6" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="80" A="0.7" cw="0.7" friction="0.02" T="0.7" s0="0.7" p0="140" v_c="5" p_herringbone="100" v_c_herringbone="1.0" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS7" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="80" A="0.7" cw="0.7" friction="0.03" T="0.7" s0="0.8" p0="130" v_c="4" p_herringbone="80" v_c_herringbone="0.9" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS8" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="84" A="0.7" cw="0.8" friction="0.03" T="0.8" s0="0.9" p0="115" v_c="4" p_herringbone="70" v_c_herringbone="0.8" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS9" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="84" A="0.7" cw="0.8" friction="0.03" T="1.0" s0="1.2" p0="100" v_c="3" p_herringbone="60" v_c_herringbone="0.7" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+        <VEHICLE label="CCS10" length="2" width="1" b_max="9">
+            <LONGITUDINAL_MODEL>
+                <CCS mass="84" A="0.7" cw="0.8" friction="0.03" T="1.1" s0="1.3" p0="90" v_c="3" p_herringbone="50" v_c_herringbone="0.7" b="1" b_maximal="2" />
+            </LONGITUDINAL_MODEL>
+            <LANE_CHANGE_MODEL eur_rules="false">
+                <MOBIL b_safe="50.0" s_min="1.0" threshold="0.0" bias_right="0" politeness="0.0" />
+            </LANE_CHANGE_MODEL>
+        </VEHICLE>
+    </VEHICLES>
+    <SIMULATION dt="0.2" duration="10000" fixed_seed="true" seed="42" crash_exit="false">
+        <TRAFFIC_COMPOSITION>
+            <VEHICLE_TYPE label="CCS1" fraction="1.0" relative_v0_randomization="0.1" />
+        </TRAFFIC_COMPOSITION>
+        <ROAD id="0">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS0" fraction="1.0" relative_v0_randomization="0.1" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="100" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-1">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS1" fraction="1.0" relative_v0_randomization="0.1" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="200" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-2">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS2" fraction="1.0" relative_v0_randomization="0.1" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="300" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-3">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS3" fraction="1.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-4">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS4" fraction="1.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-5">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS5" fraction="1.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-6">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS6" fraction="1.0" relative_v0_randomization="0.3" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-7">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS7" fraction="1.0" relative_v0_randomization="0.3" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-8">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS8" fraction="1.0" relative_v0_randomization="0.3" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="370" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-9">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS9" fraction="1.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="390" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="-10">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="CCS10" fraction="1.0" relative_v0_randomization="0.2" />
+            </TRAFFIC_COMPOSITION>
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="10" rho_per_km="390" v="0" />
+            </INITIAL_CONDITIONS>
+        </ROAD>
+        <ROAD id="11">
+            <SLOPES>
+                <SLOPE x="10" gradient="0.03" />
+                <SLOPE x="100" gradient="-0.04" />
+                <SLOPE x="140" gradient="0.02" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="13">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.10" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="14">
+            <SLOPES>
+                <SLOPE x="20" gradient="0.12" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="15">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.06" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="16">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.04" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="17">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.03" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="21">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.08" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="30">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.06" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="31">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.04" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="32">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.03" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="33">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.02" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="34">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.02" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="35">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.06" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="36">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="37">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.03" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="38">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.09" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="39">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.02" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="40">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="41">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="42">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.04" />
+            </SLOPES>
+        </ROAD>
+        <ROAD id="43">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.04" />
+            </SLOPES>
+        </ROAD>
+         <ROAD id="44">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+         <ROAD id="45">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+         <ROAD id="46">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+         <ROAD id="47">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.05" />
+            </SLOPES>
+        </ROAD>
+          <ROAD id="48">
+            <SLOPES>
+                <SLOPE x="1" gradient="0.04" />
+            </SLOPES>
+        </ROAD>
+        <OUTPUT />
+    </SIMULATION>
+</SCENARIO>
+
