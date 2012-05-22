@@ -1,4 +1,5 @@
-The simulation scenarios in this directory are used in the applet version of the viewer. Therefore, these simulations are configured *without* file output. 
+The simulation scenarios in this directory are used in the applet version of the viewer currently deployed on thew website movsim.org.
+Therefore, these simulations are configured *without* file output. 
 
-This directory can be accessed in the jar file by "/sim/buildingblocks/".
+This directory can be accessed in the jar file by "/sim".
 
