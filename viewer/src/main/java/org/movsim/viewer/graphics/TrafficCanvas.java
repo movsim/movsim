@@ -1105,7 +1105,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @return the high score table
      */
     private static Vector<String> getHighscores(String filename) {
-        Vector<String> highscores = new Vector<>();
+        Vector<String> highscores = new Vector<String>();
         try {
             BufferedReader hsreader = FileUtils.getReader(filename);
             String entry;
@@ -1123,7 +1123,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             }
         } catch (final Exception e) {
             logger.error("error reading file {} - starting new high score", filename);
-            return new Vector<>();
+            return new Vector<String>();
         }
         return highscores;
     }
