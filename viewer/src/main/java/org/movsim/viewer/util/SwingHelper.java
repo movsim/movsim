@@ -28,6 +28,7 @@ package org.movsim.viewer.util;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Window;
@@ -168,5 +169,14 @@ public class SwingHelper {
 
     public static void notImplemented(Component c) {
         JOptionPane.showMessageDialog(getFrame(c), "Not implemented yet"); //$NON-NLS-1$
+    }
+    
+    public static void showMessage(final String message) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JOptionPane.showMessageDialog(null, message);
+            }
+        });
     }
 }

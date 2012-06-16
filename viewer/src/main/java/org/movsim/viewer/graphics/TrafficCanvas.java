@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -28,6 +28,7 @@ package org.movsim.viewer.graphics;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -131,8 +132,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
          *            the status message
          */
         public void showStatusMessage(String message);
+
         public void stateChanged();
     }
+
     protected StatusControlCallbacks statusControlCallbacks;
 
     // pre-allocate vehicle drawing path
@@ -221,6 +224,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     /**
      * Returns the traffic canvas controller.
+     * 
      * @return the traffic canvas controller
      */
     public TrafficCanvasController controller() {
@@ -486,11 +490,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             break;
         case VEHICLE_COLOR:
             // use vehicle's cache for AWT color object
-            color = (Color)vehicle.colorObject();
-            if(color==null){
+            color = (Color) vehicle.colorObject();
+            if (color == null) {
                 int vehColorInt = vehicle.color();
                 color = new Color(Colors.red(vehColorInt), Colors.green(vehColorInt), Colors.blue(vehColorInt));
-                vehicle.setColorObject(color); 
+                vehicle.setColorObject(color);
             }
             break;
         case VEHICLE_LABEL_COLOR:
@@ -682,17 +686,19 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final double offset = (roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
         final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
-        final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2,
-                size, size * trafficLight.lightCount());
+        final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2, size, size
+                * trafficLight.lightCount());
         return rect;
     }
 
     /**
      * Draw a traffic light that has only one light
+     * 
      * @param g
      * @param trafficLight
      */
-    private static void drawTrafficLight1(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect, double radius) {
+    private static void drawTrafficLight1(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
+            double radius) {
         g.setColor(Color.DARK_GRAY);
         g.fill(trafficLightRect);
         switch (trafficLight.status()) {
@@ -711,15 +717,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
         final double x = trafficLightRect.getCenterX();
         final double y = trafficLightRect.getCenterY();
-        g.fillOval((int)(x-radius), (int)(y-radius), (int)(2*radius), (int)(2*radius));
+        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
     }
 
     /**
      * Draw a traffic light that has two lights
+     * 
      * @param g
      * @param trafficLight
      */
-    private static void drawTrafficLight2(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect, double radius) {
+    private static void drawTrafficLight2(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
+            double radius) {
         g.setColor(Color.DARK_GRAY);
         g.fill(trafficLightRect);
         final Double width = trafficLightRect.getWidth();
@@ -730,22 +738,25 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 2.0);
         double x = rect.getCenterX();
         double y = rect.getCenterY();
-        g.fillOval((int)(x-radius), (int)(y-radius), (int)(2*radius), (int)(2*radius));
+        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
 
         // draw the bottom light
         g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
-        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 2.0, width, height / 2.0);
+        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 2.0, width,
+                height / 2.0);
         x = rect.getCenterX();
         y = rect.getCenterY();
-        g.fillOval((int)(x-radius), (int)(y-radius), (int)(2*radius), (int)(2*radius));
+        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
     }
 
     /**
      * Draw a traffic light that has three lights
+     * 
      * @param g
      * @param trafficLight
      */
-    private static void drawTrafficLight3(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect, double radius) {
+    private static void drawTrafficLight3(Graphics2D g, TrafficLight trafficLight, Rectangle2D trafficLightRect,
+            double radius) {
         g.setColor(Color.DARK_GRAY);
         g.fill(trafficLightRect);
         final Double width = trafficLightRect.getWidth();
@@ -756,7 +767,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         Rectangle2D rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY(), width, height / 3.0);
         double x = rect.getCenterX();
         double y = rect.getCenterY();
-        g.fillOval((int)(x-radius), (int)(y-radius), (int)(2*radius), (int)(2*radius));
+        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
 
         // draw the middle light
         if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
@@ -766,17 +777,19 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         } else {
             g.setColor(Color.LIGHT_GRAY);
         }
-        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 3.0, width, height / 3.0);
+        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + height / 3.0, width,
+                height / 3.0);
         x = rect.getCenterX();
         y = rect.getCenterY();
-        g.fillOval((int)(x-radius), (int)(y-radius), (int)(2*radius), (int)(2*radius));
+        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
 
         // draw the bottom light
         g.setColor(trafficLight.status() == TrafficLightStatus.GREEN ? Color.GREEN : Color.LIGHT_GRAY);
-        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + 2.0 * height / 3.0, width, height / 3.0);
+        rect = new Rectangle2D.Double(trafficLightRect.getX(), trafficLightRect.getY() + 2.0 * height / 3.0, width,
+                height / 3.0);
         x = rect.getCenterX();
         y = rect.getCenterY();
-        g.fillOval((int)(x-radius), (int)(y-radius), (int)(2*radius), (int)(2*radius));
+        g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
     }
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
@@ -786,8 +799,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
 
-        //final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
-        //final int size = (int) (2 * roadMapping.laneWidth());
+        // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
+        // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
         for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
             final Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
@@ -958,14 +971,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(Color.BLACK);
                 StringBuilder inflowStringBuilder = new StringBuilder();
                 inflowStringBuilder.append("set/target inflow: ");
-                inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())));
+                inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource
+                        .getTotalInflow(simulationTime())));
                 inflowStringBuilder.append("/");
                 inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource.measuredInflow()));
                 inflowStringBuilder.append(" veh/h");
                 inflowStringBuilder.append(" (");
                 inflowStringBuilder.append(trafficSource.getQueueLength());
                 inflowStringBuilder.append(")");
-                g.drawString(inflowStringBuilder.toString(), (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
+                g.drawString(inflowStringBuilder.toString(), (int) (posTheta.x) + radius / 2, (int) (posTheta.y)
+                        + radius / 2);
             }
         }
     }
@@ -1051,54 +1066,63 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     public void updateStatus(double simulationTime) {
         if (simulator.isFinished() && simulationFinished != null) {
             final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
-            final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() /1000.0;
-            final double totalVehicleFuelUsedLiters = 0; //TODO sum over vehicles
-            JOptionPane.showMessageDialog(null, String.format(simulationFinished, (int)simulationTime,
-                    (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance, totalVehicleFuelUsedLiters));
-            
-            /*
-             * BEGIN high score
-             * 
-             * Don't be shocked - this code needs some tidying up...
-             */
-            
-            String highscoreFilename = ProjectMetaData.getInstance().getProjectName() + "_highscore.txt";
-            Vector<String> highscores = getHighscores(highscoreFilename);
-            int rank = 1;
-            String username = null;
-            if (highscores.size() > 0) {
-                String scoreString = highscores.elementAt(rank-1);
-                double score;
-                while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(";")))) <= simulationTime) {
-                    if (++rank > highscores.size()) break;
-                    scoreString = highscores.elementAt(rank-1);
-                }
-            }
-            if (rank <= 10) {
-                String[] rankMarker = {"st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th"};
-                //TODO limit input to reasonable number of characters
-                username = JOptionPane.showInputDialog(null, "Please enter your name:", rank + rankMarker[rank-1] + " place - Congratulations!",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-            highscores.insertElementAt((int)simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username, rank-1);
-            
-            PrintWriter hswriter = FileUtils.getWriter(highscoreFilename);
-            for (int i = 0; i < highscores.size();) {
-            	hswriter.println(highscores.elementAt(i++));
-            }
-            hswriter.flush();
-            hswriter.close();
-            
-            displayHighscores(highscoreFilename);
-            
-            /*
-             * END high score
-             */
-            
+            final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() / 1000.0;
+            final double totalVehicleFuelUsedLiters = 0; // TODO sum over vehicles
+            SwingHelper.showMessage(String.format(simulationFinished, (int) simulationTime,
+                    (int) totalVehicleTravelTime, (int) totalVehicleTravelDistance, totalVehicleFuelUsedLiters));
+
+            highscoreForGames(simulationTime, totalVehicleFuelUsedLiters);
+
             simulationRunnable.stop();
         }
     }
-    
+
+    /**
+     * @param simulationTime
+     * @param totalVehicleFuelUsedLiters
+     */
+    private void highscoreForGames(final double simulationTime, final double totalVehicleFuelUsedLiters) {
+        EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+
+                String highscoreFilename = ProjectMetaData.getInstance().getProjectName() + "_highscore.txt";
+                Vector<String> highscores = getHighscores(highscoreFilename);
+                int rank = 1;
+                String username = null;
+                if (highscores.size() > 0) {
+                    String scoreString = highscores.elementAt(rank - 1);
+                    double score;
+                    while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(";")))) <= simulationTime) {
+                        if (++rank > highscores.size())
+                            break;
+                        scoreString = highscores.elementAt(rank - 1);
+                    }
+                }
+                if (rank <= 10) {
+                    final String[] rankMarker = { "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th" };
+                    // TODO limit input to reasonable number of characters
+
+                    username = JOptionPane.showInputDialog(null, "Please enter your name:", rank + rankMarker[rank - 1]
+                            + " place - Congratulations!", JOptionPane.INFORMATION_MESSAGE);
+
+                }
+                highscores.insertElementAt((int) simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username,
+                        rank - 1);
+
+                PrintWriter hswriter = FileUtils.getWriter(highscoreFilename);
+                for (int i = 0; i < highscores.size();) {
+                    hswriter.println(highscores.elementAt(i++));
+                }
+                hswriter.flush();
+                hswriter.close();
+                
+                displayHighscores(highscoreFilename);
+            }
+        });
+    }
+
     /**
      * Reads and validates the high score table
      * 
@@ -1127,17 +1151,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
         return highscores;
     }
-    
+
     /**
      * Displays the high score table
      */
     public static void displayHighscores(String filename) {
         Vector<String> highscores = getHighscores(filename);
-        String[] columnNames = {"Rank", "Name", "Time (seconds)", "Fuel (liters)"};
+        String[] columnNames = { "Rank", "Name", "Time (seconds)", "Fuel (liters)" };
         String[][] rowData = new String[10][4];
-        for (int i=0;(i<highscores.size()) && (i<10);i++) {
+        for (int i = 0; (i < highscores.size()) && (i < 10); i++) {
             String[] entries = highscores.elementAt(i).split(";", 3);
-            rowData[i][0] = Integer.toString(i+1);
+            rowData[i][0] = Integer.toString(i + 1);
             rowData[i][1] = entries[2];
             rowData[i][2] = String.format("%d", Integer.parseInt(entries[0]));
             rowData[i][3] = String.format("%.2f", Double.parseDouble(entries[1]));
@@ -1145,11 +1169,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         JTable highscoreTable = new JTable(rowData, columnNames);
         highscoreTable.setEnabled(false);
         JFrame f = new JFrame();
-        f.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
+        f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         f.add(new JScrollPane(highscoreTable));
         f.pack();
-        //f.setResizable(false);
-        f.setVisible( true );
+        // f.setResizable(false);
+        f.setVisible(true);
     }
 
 }
