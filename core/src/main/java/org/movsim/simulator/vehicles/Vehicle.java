@@ -744,9 +744,9 @@ public class Vehicle {
                 speed = 0;
                 acc = 0;
             }
-            if (fuelModel != null) {
-                totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
-            }
+        }
+        if (fuelModel != null) {
+            totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
         }
     }
 

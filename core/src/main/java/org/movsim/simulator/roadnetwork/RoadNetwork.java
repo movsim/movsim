@@ -292,6 +292,22 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
+     * Returns the total fuel used by all vehicles on this road network, including those that have exited.
+     * 
+     * @return the total vehicle fuel used
+     */
+    public double totalVehicleFuelUsedLiters() {
+        double totalVehicleFuelUsedLiters = 0.0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            totalVehicleFuelUsedLiters += roadSegment.totalVehicleFuelUsedLiters();
+            if (roadSegment.sink() != null) {
+                totalVehicleFuelUsedLiters += roadSegment.sink().totalFuelUsedLiters();
+            }
+        }
+        return totalVehicleFuelUsedLiters;
+    }
+
+    /**
      * Returns the number of obstacles on this road network.
      * 
      * @return the number of obstacles on this road network

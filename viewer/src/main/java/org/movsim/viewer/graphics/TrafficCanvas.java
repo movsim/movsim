@@ -1067,7 +1067,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         if (simulator.isFinished() && simulationFinished != null) {
             final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
             final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() / 1000.0;
-            final double totalVehicleFuelUsedLiters = 0; // TODO sum over vehicles
+            final double totalVehicleFuelUsedLiters = roadNetwork.totalVehicleFuelUsedLiters();
             SwingHelper.showMessage(String.format(simulationFinished, (int) simulationTime,
                     (int) totalVehicleTravelTime, (int) totalVehicleTravelDistance, totalVehicleFuelUsedLiters));
 

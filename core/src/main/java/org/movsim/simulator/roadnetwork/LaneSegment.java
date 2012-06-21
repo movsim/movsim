@@ -176,7 +176,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     /**
      * Returns the total travel distance of all vehicles on this lane segment.
      * 
-     * @return the total vehicle travel time
+     * @return the total vehicle travel distance
      */
     public double totalVehicleTravelDistance() {
         double totalVehicleTravelDistance = 0;
@@ -184,6 +184,19 @@ public class LaneSegment implements Iterable<Vehicle> {
             totalVehicleTravelDistance += vehicle.totalTravelDistance();
         }
         return totalVehicleTravelDistance;
+    }
+
+    /**
+     * Returns the total fuel used by all vehicles on this lane segment.
+     * 
+     * @return the total vehicle fuel used
+     */
+    public double totalVehicleFuelUsedLiters() {
+        double totalVehicleFuelUsedLiters = 0;
+        for (final Vehicle vehicle : vehicles) {
+            totalVehicleFuelUsedLiters += vehicle.totalFuelUsedLiters();
+        }
+        return totalVehicleFuelUsedLiters;
     }
 
     /**
