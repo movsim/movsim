@@ -22,11 +22,10 @@
                     <lane id="-1" type="driving" level="false">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
-                 </right>
+                </right>
             </laneSection>
         </lanes>
     </road>
-
     <road id="2" name="R2" length="100.0" junction="1001">
         <link>
             <predecessor elementType="road" elementId="1" contactPoint="end" />
@@ -54,7 +53,6 @@
             </laneSection>
         </lanes>
     </road>
-
     <road id="3" name="R3" length="280" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
@@ -74,15 +72,13 @@
                         </link>
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
-               </right>
+                </right>
             </laneSection>
         </lanes>
-
         <objects>
             <tunnel s="200.0" length="30.0" id="R3T1" type="underpass" lighting="0.0" daylight="1.0" />
         </objects>
     </road>
-
     <road id="25" name="R25" length="600" junction="-1">
         <link>
             <successor elementType="road" elementId="26" contactPoint="start" />
@@ -195,7 +191,6 @@
             </laneSection>
         </lanes>
     </road>
-
     <road id="37" name="R37" length="314.16" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
@@ -220,16 +215,14 @@
             </laneSection>
         </lanes>
     </road>
-
     <junction id="1001" name="">
         <connection id="0" incomingRoad="37" connectingRoad="2" contactPoint="start">
             <laneLink from="-2" to="-1" />
         </connection>
         <connection id="1" incomingRoad="3" connectingRoad="2" contactPoint="start">
-             <laneLink from="-1" to="-1" />
+            <laneLink from="-1" to="-1" />
         </connection>
     </junction>
-
     <junction id="1012" name="">
         <connection id="0" incomingRoad="37" connectingRoad="26" contactPoint="start">
             <laneLink from="-1" to="-4" />

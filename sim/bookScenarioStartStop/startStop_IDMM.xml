@@ -55,7 +55,7 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
-         <ROUTES>
+        <ROUTES>
             <ROUTE label="main">
                 <ROAD id="1" />
             </ROUTE>

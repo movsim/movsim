@@ -55,7 +55,7 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
-         <ROUTES>
+        <ROUTES>
             <ROUTE label="main">
                 <ROAD id="1" />
             </ROUTE>
@@ -68,7 +68,7 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
-             <TRAJECTORIES dt="1" route="main" />
+            <TRAJECTORIES dt="1" route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
