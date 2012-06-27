@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.vehicles.consumption;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.vehicle.consumption.ConsumptionModelInput;
 import org.movsim.output.fileoutput.FileFuelConsumption;
 import org.slf4j.Logger;
@@ -53,8 +54,10 @@ public class FuelConsumption {
     public FuelConsumption(String keyLabel, ConsumptionModelInput input) {
         carModel = new CarModel(input.getCarData());
         engineModel = new EngineModel(input.getEngineData(), carModel);
-
-        writeOutput(keyLabel);
+        
+        if (ProjectMetaData.getInstance().isInstantaneousFileOutput()) {
+            writeOutput(keyLabel);
+        }
     }
 
     public double fuelflowError() {
