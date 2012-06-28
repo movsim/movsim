@@ -139,7 +139,11 @@ public class XmlReaderSimInput {
     private static void writeInternalXmlToFile(Document localDoc, String outFilename) {
         final PrintWriter writer = FileUtils.getWriter(outFilename);
         final XMLOutputter outputter = new XMLOutputter();
-        outputter.setFormat(Format.getPrettyFormat());
+        Format format = Format.getPrettyFormat();
+        format.setIndent("    ");
+        format.setLineSeparator("\n");
+        outputter.setFormat(format);
+        outputter.setFormat(format);
         try {
             logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
             outputter.output(localDoc, writer);
