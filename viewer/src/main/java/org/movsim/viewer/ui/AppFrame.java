@@ -26,7 +26,6 @@
 package org.movsim.viewer.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ResourceBundle;
@@ -75,7 +74,8 @@ public class AppFrame extends JFrame {
             }
         });
 
-        this.setExtendedState(Frame.MAXIMIZED_BOTH);
+//        this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        setSize(1200, 600);
 
         // first scenario
         String projectName = projectMetaData.getProjectName();
