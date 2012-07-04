@@ -75,7 +75,8 @@ public class AppFrame extends JFrame {
             }
         });
 
-        this.setExtendedState(Frame.MAXIMIZED_BOTH);
+//        this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        setSize(1200, 600);
 
         // first scenario
         String projectName = projectMetaData.getProjectName();
