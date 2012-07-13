@@ -4,7 +4,7 @@ set datafile separator ","
 
 # parameters
 
-if (!exists("project")) project= "test2"
+if (!exists("project")) project= "fuelConsumption_ACC"
 if (!exists("label")) label= "carConsumption"
 
 modelName = project.".".label

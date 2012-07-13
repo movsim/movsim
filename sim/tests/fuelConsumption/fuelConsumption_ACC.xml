@@ -70,13 +70,6 @@
                 <!-- obstacle shifts floating car numbers. Is this still true? -->
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE />
-            <TRAFFIC_SINK />
-            <FLOW_CONSERVING_INHOMOGENEITIES />
-            <SPEED_LIMITS />
-            <SIMPLE_RAMPS />
-            <TRAFFIC_LIGHTS />
-            <DETECTORS />
         </ROAD>
         <OUTPUT>
             <FLOATING_CAR_DATA n_dt="5">
