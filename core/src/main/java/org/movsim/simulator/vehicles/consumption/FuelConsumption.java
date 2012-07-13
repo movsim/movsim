@@ -26,7 +26,7 @@
 package org.movsim.simulator.vehicles.consumption;
 
 import org.movsim.input.model.vehicle.consumption.ConsumptionModelInput;
-import org.movsim.output.fileoutput.FileFuelConsumption;
+import org.movsim.output.fileoutput.FileFuelConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -174,7 +174,7 @@ public class FuelConsumption {
     }
 
     private void writeOutput(String keyLabel) {
-        final FileFuelConsumption fileOutput = new FileFuelConsumption(keyLabel, this);
+        final FileFuelConsumptionModel fileOutput = new FileFuelConsumptionModel(keyLabel, this);
 
         int gear = 0;
         fileOutput.writeJante(gear, carModel);

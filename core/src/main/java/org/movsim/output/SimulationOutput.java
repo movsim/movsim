@@ -26,6 +26,7 @@
 package org.movsim.output;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,11 +35,13 @@ import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.input.model.output.FuelConsumptionOnRouteInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
+import org.movsim.output.fileoutput.FileFuelConsumptionOnRoute;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
@@ -61,18 +64,22 @@ public class SimulationOutput implements SimulationTimeStep {
     private List<FileSpatioTemporal> filesSpatioTemporal;
     private FloatingCars floatingCars;
     private FileFloatingCars fileFloatingCars;
-    private List<FileTrajectories> filesTrajectories;
-    private final RoadNetwork roadNetwork;
-    private TravelTimes travelTimes;
+    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
+    private final Map<Route, FileFuelConsumptionOnRoute> filesFuelConsumptionOnRoute = new HashMap<Route, FileFuelConsumptionOnRoute>();
+    private TravelTimes travelTimes;  // TODO for route
     
+    private final RoadNetwork roadNetwork;
+
     /**
      * Constructor.
-     * @param simulationTimestep 
+     * 
+     * @param simulationTimestep
      * 
      * @param simInput
      *            the sim input
      */
-    public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput, RoadNetwork roadNetwork, Map<String, Route> routes) {
+    public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput,
+            RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
@@ -80,7 +87,7 @@ public class SimulationOutput implements SimulationTimeStep {
             return;
         }
 
-        if(writeOutput){
+        if (writeOutput) {
             writeFundamentalDiagrams(simulationTimestep, simInput.getVehiclesInput());
         }
 
@@ -119,27 +126,43 @@ public class SimulationOutput implements SimulationTimeStep {
             }
         }
 
-        // Trajectories output
         final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
         if (trajInput != null) {
             if (writeOutput) {
-                filesTrajectories = new ArrayList<FileTrajectories>();
                 for (final TrajectoriesInput traj : trajInput) {
-                    final Route route = routes.get(traj.getLabel());
-                    filesTrajectories.add(new FileTrajectories(traj, route));
+                    final Route route = routes.get(traj.getRouteLabel());
+                    if(filesTrajectories.containsKey(route)){
+                        logger.warn("trajectory output for route \"{}\" already defined!", route.getName());
+                        continue;
+                    }
+                    filesTrajectories.put(route, new FileTrajectories(traj, route));
+                }
+            }
+        }
+
+        final List<FuelConsumptionOnRouteInput> fuelInput = outputInput.getFuelInput();
+        if (fuelInput != null) {
+            if (writeOutput) {
+                for (final FuelConsumptionOnRouteInput fuel : fuelInput) {
+                    final Route route = routes.get(fuel.getRouteLabel());
+                    if(filesFuelConsumptionOnRoute.containsKey(route)){
+                        logger.warn("fuel consumption for route \"{}\" already defined!", route.getName());
+                        continue;
+                    }
+                    filesFuelConsumptionOnRoute.put(route, new FileFuelConsumptionOnRoute(fuel, route));
                 }
             }
         }
     }
 
     private static void writeFundamentalDiagrams(double simulationTimestep, VehiclesInput vehiclesInput) {
-        if(!vehiclesInput.isWriteFundamentalDiagrams()){
+        if (!vehiclesInput.isWriteFundamentalDiagrams()) {
             return;
         }
-        final String ignoreLabel = "Obstacle";  // quick hack
+        final String ignoreLabel = "Obstacle"; // quick hack
         logger.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
-        for(VehicleInput vehicleInput : vehiclesInput.getVehicleInputMap().values()){
-            if(!ignoreLabel.equalsIgnoreCase(vehicleInput.getLabel())){
+        for (VehicleInput vehicleInput : vehiclesInput.getVehicleInputMap().values()) {
+            if (!ignoreLabel.equalsIgnoreCase(vehicleInput.getLabel())) {
                 FileFundamentalDiagram.writeToFile(simulationTimestep, vehicleInput);
             }
         }
@@ -158,14 +181,16 @@ public class SimulationOutput implements SimulationTimeStep {
             }
         }
 
-        if (filesTrajectories != null) {
-            for (final FileTrajectories filetraj : filesTrajectories) {
-                filetraj.timeStep(dt, simulationTime, iterationCount);
-            }
+        for (final FileTrajectories filetraj : filesTrajectories.values()) {
+            filetraj.timeStep(dt, simulationTime, iterationCount);
         }
 
         if (travelTimes != null) {
             travelTimes.timeStep(dt, simulationTime, iterationCount);
+        }
+
+        for (final FileFuelConsumptionOnRoute fuel : filesFuelConsumptionOnRoute.values()) {
+            fuel.timeStep(dt, simulationTime, iterationCount);
         }
 
     }

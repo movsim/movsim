@@ -32,6 +32,7 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.input.model.output.FuelConsumptionOnRouteInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
@@ -45,6 +46,8 @@ public class OutputInput {
     private List<TrajectoriesInput> trajectoriesInput;
 
     private List<TravelTimesInput> travelTimesInput;
+    
+    private List<FuelConsumptionOnRouteInput> fuelInput;
 
     /**
      * Instantiates a new output input.
@@ -89,6 +92,15 @@ public class OutputInput {
                 travelTimesInput.add(new TravelTimesInput(element));
             }
         }
+        
+        if (elem.getChild(XmlElementNames.OutputFuel) != null) {
+            fuelInput = new ArrayList<FuelConsumptionOnRouteInput>();
+            @SuppressWarnings("unchecked")
+            List<Element> elements = elem.getChildren(XmlElementNames.OutputFuel);
+            for (Element element : elements) {
+                fuelInput.add(new FuelConsumptionOnRouteInput(element));
+            }
+        }
     }
 
     public FloatingCarInput getFloatingCarInput() {
@@ -101,6 +113,10 @@ public class OutputInput {
 
     public List<TrajectoriesInput> getTrajectoriesInput() {
         return trajectoriesInput;
+    }
+    
+    public List<FuelConsumptionOnRouteInput> getFuelInput() {
+        return fuelInput;
     }
 
     public List<TravelTimesInput> getTravelTimesInput() {

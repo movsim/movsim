@@ -27,20 +27,14 @@ package org.movsim.input.model.output;
 
 import org.jdom.Element;
 
-public class TrajectoriesInput {
+public class FuelConsumptionOnRouteInput {
 
     private double dt;
     private double startTime;
     private double endTime;
     private String routeLabel;
 
-    /**
-     * Instantiates a new trajectories input.
-     * 
-     * @param elem
-     *            the elem
-     */
-    public TrajectoriesInput(Element elem) {
+    public FuelConsumptionOnRouteInput(Element elem) {
         dt = Double.parseDouble(elem.getAttributeValue("dt"));
         startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
         endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
@@ -75,9 +69,9 @@ public class TrajectoriesInput {
     }
 
     /**
-     * Gets the route label.
+     * Gets the route label
      *
-     * @return the route label
+     * @return the routeLabel
      */
     public String getRouteLabel() {
         return routeLabel;

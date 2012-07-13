@@ -412,7 +412,7 @@ label  NMTOKEN #REQUIRED
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*) >
+<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*, FUEL*) >
 
 <!ATTLIST OUTPUT
 >
@@ -451,3 +451,12 @@ number  NMTOKEN #REQUIRED
 <!ATTLIST TRAVELTIMES
   route     NMTOKEN #REQUIRED
 >
+
+<!ELEMENT FUEL EMPTY>
+<!ATTLIST FUEL
+  dt           NMTOKEN "1"
+  start_time   NMTOKEN "0"
+  end_time     NMTOKEN "1e10"
+  route     NMTOKEN #REQUIRED
+>
+

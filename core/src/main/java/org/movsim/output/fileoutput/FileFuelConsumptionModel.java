@@ -9,7 +9,7 @@ import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 
 
 // TODO refactoring of fuel consumption code base and corresponding file output
-public class FileFuelConsumption extends FileOutputBase {
+public class FileFuelConsumptionModel extends FileOutputBase {
 
     private static final String extensionFormatJante = ".jante_%s.csv";
     private static final String extensionFormatZeroAcceleration = ".carConstAccel_%s.csv";
@@ -38,7 +38,7 @@ public class FileFuelConsumption extends FileOutputBase {
      * @param spatioTemporal
      *            the spatio temporal
      */
-    public FileFuelConsumption(String keyLabel, FuelConsumption fuelConsumption) {
+    public FileFuelConsumptionModel(String keyLabel, FuelConsumption fuelConsumption) {
         this.keyLabel = keyLabel;
         this.fuelConsumption = fuelConsumption;
     }

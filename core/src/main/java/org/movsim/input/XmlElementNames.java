@@ -73,6 +73,7 @@ public interface XmlElementNames {
     public final String OutputTrafficlightRecorder = "TRAFFIC_LIGHT_RECORDER";
     public final String OutputTrajectories = "TRAJECTORIES";
     public final String OutputTravelTimes = "TRAVELTIMES";
+    public final String OutputFuel = "FUEL";
     public final String OutputRoutes = "ROUTES";
     public final String OutputRoute = "ROUTE";
     public final String OutputRoadId = "ROAD";

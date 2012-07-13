@@ -1,0 +1,13 @@
+template for developing route-dependent fuel output
+
+DONE xml element for fuel output
+
+
+
+
+
+check also entry line
+   1.00,    0,      801.0,     0.0000,    0.00000,       0.00,   0.000000,  ,            1
+of fuelConsumption_ACC.traj.route_route1.csv
+
+

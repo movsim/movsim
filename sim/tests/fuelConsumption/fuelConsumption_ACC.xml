@@ -2,7 +2,7 @@
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Arne Kesting 2011 -->
-<SCENARIO network_filename="straightRoad.xodr">
+<SCENARIO network_filename="onramp.xodr">
     <FUEL_CONSUMPTION>
         <!-- todo: program a tag read_from_file="filename.xml" -->
         <CONSUMPTION_MODEL label="carConsumption">
@@ -39,7 +39,7 @@
             <VEHICLE_TYPE label="ACC1" fraction="1" />
             <VEHICLE_TYPE label="Obstacle" fraction="0" />
         </TRAFFIC_COMPOSITION>
-        <ROAD id="0">
+        <ROAD id="1">
             <INITIAL_CONDITIONS>
                 <IC_MICRO x="10" v="0" />
                 <IC_MICRO x="20" v="0" />
@@ -71,6 +71,13 @@
                 <IC_MICRO x="1000" v="0" label="Obstacle" />
             </INITIAL_CONDITIONS>
         </ROAD>
+         <ROUTES>
+            <ROUTE label="route1">
+                <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
+            </ROUTE>
+        </ROUTES>
         <OUTPUT>
             <FLOATING_CAR_DATA n_dt="5">
                 <FC number="2" />
@@ -79,6 +86,9 @@
                 <FC number="16" />
                 <FC number="21" />
             </FLOATING_CAR_DATA>
+            <TRAJECTORIES dt="1" route="route1" />
+            <FUEL dt="1" route="route1" />
+                        <FUEL dt="1" route="route1" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
