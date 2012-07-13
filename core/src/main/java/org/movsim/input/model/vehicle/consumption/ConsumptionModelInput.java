@@ -43,10 +43,13 @@ public class ConsumptionModelInput {
     private final ConsumptionEngineModelInput engineData;
 
     private final String label;
+    
+    private final boolean output;
 
     public ConsumptionModelInput(Element elem) {
 
         this.label = elem.getAttributeValue("label");
+        this.output = Boolean.parseBoolean(elem.getAttributeValue("output"));
 
         final Map<String, String> carDataMap = XmlUtils.putAttributesInHash(elem
                 .getChild(XmlElementNames.ConsumptionCarData));
@@ -66,6 +69,10 @@ public class ConsumptionModelInput {
 
     public String getLabel() {
         return label;
+    }
+
+    public boolean isOutput() {
+        return output;
     }
 
 }

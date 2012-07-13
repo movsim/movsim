@@ -50,6 +50,7 @@
 
 <!ATTLIST CONSUMPTION_MODEL
   label   CDATA   #REQUIRED
+  output  (true|false) "false" 
 >
 
 <!ELEMENT CAR EMPTY >
@@ -443,7 +444,6 @@ number  NMTOKEN #REQUIRED
   start_time   NMTOKEN "0"
   end_time     NMTOKEN "1e10"
   route     NMTOKEN #REQUIRED
-  
 >
 
 

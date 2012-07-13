@@ -54,19 +54,38 @@ public class FuelConsumption {
         carModel = new CarModel(input.getCarData());
         engineModel = new EngineModel(input.getEngineData(), carModel);
 
-        writeOutput(keyLabel);
+        if (input.isOutput()) {
+            writeOutput(keyLabel);
+        }
     }
 
     public double fuelflowError() {
         return FUELFLOW_ERROR;
     }
 
-    // Instantaneous fuel consumption (l/(100 km))
+    /**
+     * Gets the instantaneous fuel consumption in liters/100km with a cut-off for v=0.
+     *
+     * @param v
+     * @param acc
+     * @param gear
+     * @param withJante
+     * @return the instantaneous consumption per 100km
+     */
     public double getInstConsumption100km(double v, double acc, int gear, boolean withJante) {
         final int gearIndex = gear - 1;
         return (1e8 * getFuelFlow(v, acc, gearIndex, withJante) / Math.max(v, 0.001));
     }
 
+    /**
+     * Gets the fuel flow in m^3/s and the {code FUEL_ERROR} if the operation point is not possible.  
+     *
+     * @param v 
+     * @param acc
+     * @param gearIndex
+     * @param withJante
+     * @return fuelFlow
+     */
     public double getFuelFlow(double v, double acc, int gearIndex, boolean withJante) {
 
         final double fMot = engineModel.getEngineFrequency(v, gearIndex);
@@ -88,7 +107,7 @@ public class FuelConsumption {
             fuelFlow = engineModel.getFuelFlow(fMot, powMechEl);
         }
 
-        // ### check if motor regime can be reached; otherwise increase fuelFlow prohibitively
+        // check if motor regime can be reached; otherwise increase fuelFlow prohibitively
 
         // indicates that too high power required
         if (powMech > engineModel.getMaxPower()) {
@@ -121,9 +140,14 @@ public class FuelConsumption {
 
     }
 
-    // optimum fuel consumption flow in m^3/s
-    // gives also reference to fuel-optimized gear
-
+    /**
+     * Gets the optimum fuel consumption flow in m^3/s and the used fuel-optimized gear
+     *
+     * @param v
+     * @param acc
+     * @param withJante
+     * @return fuelFlow and gear
+     */
     public double[] getMinFuelFlow(double v, double acc, boolean withJante) {
         int gear = 1;
         double fuelFlow = FUELFLOW_ERROR;
@@ -138,25 +162,31 @@ public class FuelConsumption {
         return retValue;
     }
 
-    // optimum fuel consumption flow in m^3/s
+    /**
+     * Gets the optimum fuel consumption flow in liter per s
+     *
+     * @param v the v
+     * @param acc the acc
+     * @return the fuel flow in liter per s
+     */
     public double getFuelFlowInLiterPerS(double v, double acc) {
         return 1000 * getMinFuelFlow(v, acc, true)[0]; // convert from m^3/s --> liter/s
     }
 
-    // TODO
-    public void writeOutput(String keyLabel) {
+    private void writeOutput(String keyLabel) {
         final FileFuelConsumption fileOutput = new FileFuelConsumption(keyLabel, this);
 
         int gear = 0;
         fileOutput.writeJante(gear, carModel);
         fileOutput.writeZeroAccelerationTest(carModel, engineModel);
         fileOutput.writeSpecificConsumption(engineModel);
-        
-            // for (int gearIndex = 0; gearIndex < engineModel.getMaxGearIndex(); gearIndex++) {
-            // final int gear = gearIndex + 1;
-            // final String strGear = new Integer(gear).toString();
-            // final String filename = projectName + ".Jante" + strGear;
-            // writeJanteDataFields(gear, filename);
-            // }
+
+        // jante output per gear
+        // for (int gearIndex = 0; gearIndex < engineModel.getMaxGearIndex(); gearIndex++) {
+        // final int gear = gearIndex + 1;
+        // final String strGear = new Integer(gear).toString();
+        // final String filename = projectName + ".Jante" + strGear;
+        // writeJanteDataFields(gear, filename);
+        // }
     }
 }
