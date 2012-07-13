@@ -165,8 +165,8 @@ public class FuelConsumption {
     /**
      * Gets the optimum fuel consumption flow in liter per s
      *
-     * @param v the v
-     * @param acc the acc
+     * @param v
+     * @param acc
      * @return the fuel flow in liter per s
      */
     public double getFuelFlowInLiterPerS(double v, double acc) {
