@@ -25,10 +25,16 @@
  */
 package org.movsim.viewer;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.movsim.input.ProjectMetaData;
+import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.ui.LogWindow;
 import org.movsim.viewer.ui.AppFrame;
 import org.movsim.viewer.util.LocalizationStrings;
@@ -47,9 +53,48 @@ public class App {
         LogWindow.setupLog4JAppender();
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        
+        Properties properties = loadProperties();
+        
         // parse the command line, putting the results into projectMetaData
         ViewerCommandLine.parse(projectMetaData, args);
 
-        AppFrame appFrame = new AppFrame(resourceBundle, projectMetaData);
+        AppFrame appFrame = new AppFrame(resourceBundle, projectMetaData, properties);
+    }
+    
+    public static Properties loadProperties() {
+        Properties applicationProps = null;
+        try {
+            // create and load default properties
+            final Properties defaultProperties = new Properties();
+            final InputStream is = TrafficCanvas.class.getResourceAsStream("/config/defaultviewerconfig.properties");
+            defaultProperties.load(is);
+            is.close();
+
+            // create application properties with default
+            applicationProps = new Properties(defaultProperties);
+
+            // now load specific project properties
+            final String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
+            final String projectName = ProjectMetaData.getInstance().getProjectName();
+            if (ProjectMetaData.getInstance().isXmlFromResources()) {
+                final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
+                        + ".properties");
+                if (inputStream != null) {
+                    defaultProperties.load(inputStream);
+                    inputStream.close();
+                }
+            } else {
+                final InputStream in = new FileInputStream(path + projectName + ".properties");
+                applicationProps.load(in);
+                in.close();
+            }
+
+        } catch (FileNotFoundException e) {
+            // ignore exception.
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return applicationProps;
     }
 }

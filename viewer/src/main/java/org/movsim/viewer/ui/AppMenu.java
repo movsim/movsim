@@ -29,6 +29,7 @@ package org.movsim.viewer.ui;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.EventObject;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -51,12 +52,14 @@ public class AppMenu extends MovSimMenuBase {
     private static final long serialVersionUID = -1741830983719200790L;
     private final Simulator simulator;
     private final AppFrame frame;
+    private final Properties properties;
 
     public AppMenu(AppFrame mainFrame, Simulator simulator, CanvasPanel canvasPanel,
-            TrafficCanvas trafficCanvas, ResourceBundle resourceBundle) {
+            TrafficCanvas trafficCanvas, ResourceBundle resourceBundle, Properties properties) {
         super(canvasPanel, trafficCanvas, resourceBundle);
         this.frame = mainFrame;
         this.simulator = simulator;
+        this.properties = properties;
     }
 
     public void initMenus() {
@@ -353,7 +356,7 @@ public class AppMenu extends MovSimMenuBase {
     }
 
     private void uiDefaultReset() {
-        trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(TrafficCanvas.getProperties().getProperty(
+        trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty(
                 "vmaxForColorSpectrum", "140")));
         frame.statusPanel.setWithProgressBar(true);
         frame.statusPanel.reset();

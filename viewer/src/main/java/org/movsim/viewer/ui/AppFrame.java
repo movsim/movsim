@@ -26,8 +26,10 @@
 package org.movsim.viewer.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
@@ -48,7 +50,7 @@ public class AppFrame extends JFrame {
     final StatusPanel statusPanel;
     private MovSimToolBar toolBar;
 
-    public AppFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData) {
+    public AppFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData, Properties properties) {
         super(resourceBundle.getString("FrameName"));
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
@@ -56,12 +58,12 @@ public class AppFrame extends JFrame {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator);
+        final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);
         canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 
         addToolBar(resourceBundle, trafficCanvas);
-        addMenu(resourceBundle, simulator, trafficCanvas);
+        addMenu(resourceBundle, simulator, trafficCanvas, properties);
 
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
@@ -74,8 +76,15 @@ public class AppFrame extends JFrame {
             }
         });
 
-//        this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        setSize(1200, 600);
+        // window size
+        int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow", "-1"));
+        int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow", "-1"));
+        if(xPixSize <0 || yPixSize<0){
+            setExtendedState(Frame.MAXIMIZED_BOTH);
+        }
+        else{
+            setSize(1200, 600);
+        }
 
         // first scenario
         String projectName = projectMetaData.getProjectName();
@@ -102,9 +111,10 @@ public class AppFrame extends JFrame {
 
     /**
      * @param resourceBundle
+     * @param properties 
      */
-    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas) {
-        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas, Properties properties) {
+        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle, properties);
         trafficMenus.initMenus();
     }
 

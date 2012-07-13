@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.net.URL;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.swing.JApplet;
@@ -14,6 +15,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.App;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.LocalizationStrings;
 
@@ -36,6 +38,7 @@ public class Applet extends JApplet {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXmlFromResources(true);
         projectMetaData.setInstantaneousFileOutput(false);
+        Properties properties = App.loadProperties();
 
         String scenario = getParameter("scenario");
         if (scenario == null) {
@@ -49,7 +52,7 @@ public class Applet extends JApplet {
         final Simulator simulator = new Simulator(projectMetaData);
         initLookAndFeel();
 
-        final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator);
+        final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);
         canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
 

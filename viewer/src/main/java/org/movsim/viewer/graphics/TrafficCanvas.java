@@ -38,10 +38,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,15 +103,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     static final long serialVersionUID = 1L;
     private String simulationFinished;
 
-    private static Properties properties;
-
-    public static Properties getProperties() {
-        return properties;
-    }
-
-    public static void setProperties(Properties properties) {
-        TrafficCanvas.properties = properties;
-    }
+    private final Properties properties;
 
     protected final Simulator simulator;
     protected final RoadNetwork roadNetwork;
@@ -196,14 +184,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     protected long lastVehicleViewed = -1;
     protected long vehicleToHighlightId = -1;
 
-    public TrafficCanvas(Simulator simulator) {
+    public TrafficCanvas(Simulator simulator, Properties properties) {
         super(simulator.getSimulationRunnable());
         this.simulator = simulator;
+        this.properties = properties;
         this.roadNetwork = simulator.getRoadNetwork();
 
-        if (getProperties() == null) {
-            setProperties(loadProperties());
-        }
 
         initGraphicConfigFieldsFromProperties();
 
@@ -256,42 +242,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         setSleepTime(Integer.parseInt(properties.getProperty("initial_sleep_time", "26")));
     }
 
-    protected static Properties loadProperties() {
-        Properties applicationProps = null;
-        try {
-            // create and load default properties
-            final Properties defaultProperties = new Properties();
-            final InputStream is = TrafficCanvas.class.getResourceAsStream("/config/defaultviewerconfig.properties");
-            defaultProperties.load(is);
-            is.close();
-
-            // create application properties with default
-            applicationProps = new Properties(defaultProperties);
-
-            // now load specific project properties
-            final String path = ProjectMetaData.getInstance().getPathToProjectXmlFile();
-            final String projectName = ProjectMetaData.getInstance().getProjectName();
-            if (ProjectMetaData.getInstance().isXmlFromResources()) {
-                final InputStream inputStream = TrafficCanvas.class.getResourceAsStream(path + projectName
-                        + ".properties");
-                if (inputStream != null) {
-                    defaultProperties.load(inputStream);
-                    inputStream.close();
-                }
-            } else {
-                final InputStream in = new FileInputStream(path + projectName + ".properties");
-                applicationProps.load(in);
-                in.close();
-            }
-
-        } catch (FileNotFoundException e) {
-            // ignore exception.
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return applicationProps;
-    }
-
     @Override
     void stateChanged() {
         if (statusControlCallbacks != null) {
@@ -330,7 +280,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private void initGraphicSettings() {
-        setProperties(loadProperties());
         initGraphicConfigFieldsFromProperties();
         resetScaleAndOffset();
         for (final RoadSegment roadSegment : roadNetwork) {
