@@ -83,7 +83,7 @@ public class AppFrame extends JFrame {
             setExtendedState(Frame.MAXIMIZED_BOTH);
         }
         else{
-            setSize(1200, 600);
+            setSize(xPixSize, yPixSize);
         }
 
         // first scenario

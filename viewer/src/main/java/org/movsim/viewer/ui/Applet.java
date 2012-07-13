@@ -38,7 +38,7 @@ public class Applet extends JApplet {
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         projectMetaData.setXmlFromResources(true);
         projectMetaData.setInstantaneousFileOutput(false);
-        Properties properties = App.loadProperties();
+        Properties properties = App.loadDefaultProperties();
 
         String scenario = getParameter("scenario");
         if (scenario == null) {
