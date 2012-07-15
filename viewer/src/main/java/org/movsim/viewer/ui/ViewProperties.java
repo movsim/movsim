@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.viewer.App;
-import org.movsim.viewer.graphics.TrafficCanvas;
 
 public class ViewProperties {
 
@@ -24,7 +22,7 @@ public class ViewProperties {
         Properties defaultProperties = new Properties();
         try {
             // create and load default properties
-            final InputStream is = TrafficCanvas.class.getResourceAsStream(defaultPropertyName);
+            final InputStream is = ViewProperties.class.getResourceAsStream(defaultPropertyName);
             defaultProperties.load(is);
             is.close();
             defaultProperties = new Properties(defaultProperties);
@@ -49,7 +47,7 @@ public class ViewProperties {
             final File file = new File(path + projectName + ".properties");
             System.out.println("try to read from file=" + file.getName() + ", path=" + file.getAbsolutePath());
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
-                final InputStream inputStream = App.class.getResourceAsStream(file.toString());
+                final InputStream inputStream = ViewProperties.class.getResourceAsStream(file.toString());
                 if (inputStream != null) {
                     applicationProps.load(inputStream);
                     inputStream.close();
