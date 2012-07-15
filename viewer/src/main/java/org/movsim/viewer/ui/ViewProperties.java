@@ -1,4 +1,4 @@
-package org.movsim.viewer;
+package org.movsim.viewer.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.movsim.input.ProjectMetaData;
+import org.movsim.viewer.App;
 import org.movsim.viewer.graphics.TrafficCanvas;
 
 public class ViewProperties {

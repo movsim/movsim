@@ -15,7 +15,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.log4j.PropertyConfigurator;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
-import org.movsim.viewer.ViewProperties;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.LocalizationStrings;
 

@@ -32,6 +32,7 @@ import java.util.ResourceBundle;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.viewer.ui.AppFrame;
 import org.movsim.viewer.ui.LogWindow;
+import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.LocalizationStrings;
 import org.movsim.viewer.util.ViewerCommandLine;
 
