@@ -12,6 +12,7 @@ import org.movsim.input.ProjectMetaData;
 public class ViewProperties {
 
     final static String defaultPropertyName = "/config/defaultviewerconfig.properties";
+    private static Properties defaultProperties;
 
     /**
      * Load default properties from the {code /config/defaultviewerconfig.properties} path. Needed for applet initialization.
@@ -19,17 +20,19 @@ public class ViewProperties {
      * @return the properties
      */
     public static Properties loadDefaultProperties() {
-        Properties defaultProperties = new Properties();
-        try {
-            // create and load default properties
-            final InputStream is = ViewProperties.class.getResourceAsStream(defaultPropertyName);
-            defaultProperties.load(is);
-            is.close();
-            defaultProperties = new Properties(defaultProperties);
-        } catch (FileNotFoundException e) {
-            // ignore exception.
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (defaultProperties == null) {
+            defaultProperties = new Properties();
+            try {
+                // create and load default properties
+                final InputStream is = ViewProperties.class.getResourceAsStream(defaultPropertyName);
+                defaultProperties.load(is);
+                is.close();
+                defaultProperties = new Properties(defaultProperties);
+            } catch (FileNotFoundException e) {
+                // ignore exception.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return defaultProperties;
     }
