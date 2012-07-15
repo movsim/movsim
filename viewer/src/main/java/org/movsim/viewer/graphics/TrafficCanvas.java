@@ -67,7 +67,7 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.utilities.FileUtils;
-import org.movsim.viewer.App;
+import org.movsim.viewer.ViewProperties;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
@@ -274,7 +274,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     public void setupTrafficScenario(String scenario, String path) {
         reset();
         simulator.loadScenarioFromXml(scenario, path);
-        properties = App.loadProperties(scenario, path);
+        properties = ViewProperties.loadProperties(scenario, path);
         initGraphicSettings();
         forceRepaintBackground();
     }
