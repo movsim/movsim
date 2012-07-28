@@ -28,7 +28,6 @@ package org.movsim.viewer.graphics;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -37,20 +36,10 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
-import java.io.BufferedReader;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.WindowConstants;
-
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
@@ -66,7 +55,6 @@ import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.ConversionUtilities;
-import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
@@ -97,12 +85,11 @@ import org.slf4j.LoggerFactory;
  * 
  */
 public class TrafficCanvas extends SimulationCanvasBase implements SimulationRunnable.UpdateDrawingCallback,
-        SimulationRunnable.HandleExceptionCallback, SimulationRunnable.UpdateStatusCallback {
+        SimulationRunnable.HandleExceptionCallback {
 
     final static Logger logger = LoggerFactory.getLogger(TrafficCanvas.class);
     @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
-    private String simulationFinished;
 
     protected final Simulator simulator;
     protected final RoadNetwork roadNetwork;
@@ -195,7 +182,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         simulationRunnable.setUpdateDrawingCallback(this);
         simulationRunnable.setHandleExceptionCallback(this);
 
-        simulationRunnable.addUpdateStatusCallback(this);
         setStatusControlCallbacks(statusControlCallbacks);
 
         controller = new TrafficCanvasKeyListener(this, roadNetwork);
@@ -329,7 +315,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     public void setMessageStrings(String popupString, String popupStringExitEndRoad, String trafficInflowString,
             String perturbationRampingFinishedString, String perturbationAppliedString, String simulationFinished) {
         setMessageStrings(popupString, popupStringExitEndRoad);
-        this.simulationFinished = simulationFinished;
     }
 
     void setAccelerationColors() {
@@ -1004,125 +989,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         //                System.out.println("  roadSectionId:"); //$NON-NLS-1$
         // }
         // }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.web.appletroad.control.SimulationRun.UpdateStatusCallback#updateStatus(double)
-     */
-    @Override
-    public void updateStatus(double simulationTime) {
-        if (simulator.isFinished() && simulationFinished != null) {
-            final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
-            final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() / 1000.0;
-            final double totalVehicleFuelUsedLiters = roadNetwork.totalVehicleFuelUsedLiters();
-            SwingHelper.showMessage(String.format(simulationFinished, (int) simulationTime,
-                    (int) totalVehicleTravelTime, (int) totalVehicleTravelDistance, totalVehicleFuelUsedLiters));
-
-            highscoreForGames(simulationTime, totalVehicleFuelUsedLiters);
-
-            simulationRunnable.stop();
-        }
-    }
-
-    /**
-     * @param simulationTime
-     * @param totalVehicleFuelUsedLiters
-     */
-    private void highscoreForGames(final double simulationTime, final double totalVehicleFuelUsedLiters) {
-        EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-
-                String highscoreFilename = ProjectMetaData.getInstance().getProjectName() + "_highscore.txt";
-                Vector<String> highscores = getHighscores(highscoreFilename);
-                int rank = 1;
-                String username = null;
-                if (highscores.size() > 0) {
-                    String scoreString = highscores.elementAt(rank - 1);
-                    double score;
-                    while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(";")))) <= simulationTime) {
-                        if (++rank > highscores.size())
-                            break;
-                        scoreString = highscores.elementAt(rank - 1);
-                    }
-                }
-                if (rank <= 10) {
-                    final String[] rankMarker = { "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th" };
-                    // TODO limit input to reasonable number of characters
-
-                    username = JOptionPane.showInputDialog(null, "Please enter your name:", rank + rankMarker[rank - 1]
-                            + " place - Congratulations!", JOptionPane.INFORMATION_MESSAGE);
-
-                }
-                highscores.insertElementAt((int) simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username,
-                        rank - 1);
-
-                PrintWriter hswriter = FileUtils.getWriter(highscoreFilename);
-                for (int i = 0; i < highscores.size();) {
-                    hswriter.println(highscores.elementAt(i++));
-                }
-                hswriter.flush();
-                hswriter.close();
-                
-                displayHighscores(highscoreFilename);
-            }
-        });
-    }
-
-    /**
-     * Reads and validates the high score table
-     * 
-     * @return the high score table
-     */
-    private static Vector<String> getHighscores(String filename) {
-        Vector<String> highscores = new Vector<String>();
-        try {
-            BufferedReader hsreader = FileUtils.getReader(filename);
-            String entry;
-            int bettertime = 0;
-            while ((entry = hsreader.readLine()) != null) {
-                String[] entries = entry.split(";", 3);
-                int worsetime = Integer.parseInt(entries[0]);
-                double fuel = Double.parseDouble(entries[1]);
-                if ((worsetime < bettertime) || (fuel < 0)) {
-                    logger.error("high score file {} contains corrupt data", filename);
-                    throw new Exception();
-                }
-                highscores.addElement(entry);
-                bettertime = worsetime;
-            }
-        } catch (final Exception e) {
-            logger.error("error reading file {} - starting new high score", filename);
-            return new Vector<String>();
-        }
-        return highscores;
-    }
-
-    /**
-     * Displays the high score table
-     */
-    public static void displayHighscores(String filename) {
-        Vector<String> highscores = getHighscores(filename);
-        String[] columnNames = { "Rank", "Name", "Time (seconds)", "Fuel (liters)" };
-        String[][] rowData = new String[10][4];
-        for (int i = 0; (i < highscores.size()) && (i < 10); i++) {
-            String[] entries = highscores.elementAt(i).split(";", 3);
-            rowData[i][0] = Integer.toString(i + 1);
-            rowData[i][1] = entries[2];
-            rowData[i][2] = String.format("%d", Integer.parseInt(entries[0]));
-            rowData[i][3] = String.format("%.2f", Double.parseDouble(entries[1]));
-        }
-        JTable highscoreTable = new JTable(rowData, columnNames);
-        highscoreTable.setEnabled(false);
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        f.add(new JScrollPane(highscoreTable));
-        f.pack();
-        // f.setResizable(false);
-        f.setVisible(true);
     }
 
 }

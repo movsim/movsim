@@ -50,6 +50,8 @@ public class AppFrame extends JFrame {
     final StatusPanel statusPanel;
     private MovSimToolBar toolBar;
 
+    private HighscorePanel highScorePanel;
+
     public AppFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData, Properties properties) {
         super(resourceBundle.getString("FrameName"));
 
@@ -103,7 +105,7 @@ public class AppFrame extends JFrame {
         
         boolean isGame = true; //TODO read from properties
         if (isGame) {
-            HighscorePanel highScorePanel = new HighscorePanel(resourceBundle, simulator);
+            highScorePanel = new HighscorePanel(resourceBundle, simulator);
         }
     }
 
