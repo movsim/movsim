@@ -113,7 +113,7 @@ public class XmlReaderSimInput {
 
                 // write internal xml file to $pwd:
                 if (projectMetaData.isWriteInternalXml()) {
-                    final String outFilename = projectMetaData.getProjectName() + ".internal_xml";
+                    final String outFilename = projectMetaData.getProjectName() + "_internal.xml";
                     writeInternalXmlToFile(doc, outFilename);
                     logger.info("internal xml output written to file {}. Exit.", outFilename);
                     System.exit(0);
@@ -139,7 +139,11 @@ public class XmlReaderSimInput {
     private static void writeInternalXmlToFile(Document localDoc, String outFilename) {
         final PrintWriter writer = FileUtils.getWriter(outFilename);
         final XMLOutputter outputter = new XMLOutputter();
-        outputter.setFormat(Format.getPrettyFormat());
+        Format format = Format.getPrettyFormat();
+        format.setIndent("    ");
+        format.setLineSeparator("\n");
+        outputter.setFormat(format);
+        outputter.setFormat(format);
         try {
             logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
             outputter.output(localDoc, writer);

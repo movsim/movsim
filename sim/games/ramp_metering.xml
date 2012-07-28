@@ -47,6 +47,7 @@
                 <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" bias_right="0.1" politeness="0." />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
+
         <VEHICLE label="Obstacle" length="0">
             <LONGITUDINAL_MODEL>
                 <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />

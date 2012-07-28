@@ -283,7 +283,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         initGraphicConfigFieldsFromProperties();
         resetScaleAndOffset();
         for (final RoadSegment roadSegment : roadNetwork) {
-            roadSegment.roadMapping().setRoadColor(roadColor);
+            roadSegment.roadMapping().setRoadColor(roadColor.getRGB());
         }
         VehiclesInput vehiclesInput = simulator.getVehiclesInput();
         if (vehiclesInput == null) {
@@ -581,7 +581,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final BasicStroke roadStroke = new BasicStroke((float) roadMapping.roadWidth(), BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER);
         g.setStroke(roadStroke);
-        g.setColor(roadMapping.roadColor());
+        g.setColor(new Color(roadMapping.roadColor()));
         PaintRoadMapping.paintRoadMapping(g, roadMapping);
     }
 
