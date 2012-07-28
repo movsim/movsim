@@ -100,6 +100,11 @@ public class AppFrame extends JFrame {
         statusPanel.reset();
         trafficCanvas.start();
         setVisible(true);
+        
+        boolean isGame = true; //TODO read from properties
+        if (isGame) {
+            HighscorePanel highScorePanel = new HighscorePanel(resourceBundle, simulator);
+        }
     }
 
     /**
