@@ -30,46 +30,42 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-// Acceleration noise (white noise OR correlated noise (wiener process)
-// for reference see paper:
-// M. Treiber, A. Kesting, D. Helbing
-// Understanding widely scattered traffic flows, the capacity drop, and platoons as effects of variance-driven time gaps
-// Phys. Rev. E 74, 016123 (2006)
-
 /**
- * The Class NoiseImpl.
+ * Acceleration noise for microscopic traffic models with (random process) models for white noise or correlated noise
+ * (Wiener process).
+ * 
+ * <p>
+ * Paper for reference:
+ * </p>
+ * <p>
+ * <a href="http://arxiv.org/abs/physics/0508222"> M. Treiber, A. Kesting, D. Helbing, Understanding widely scattered traffic flows, the capacity drop, and platoons as
+ * effects of variance-driven time gaps. Phys. Rev. E 74, 016123 (2006).</a>
+ * </p>
  */
+
 public class Noise {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Noise.class);
 
-    /** The Constant SQRT12. */
+    /** constant for uniform distribution calculation. */
     static final double SQRT12 = Math.sqrt(12.);
 
-    // input:
-    /** The is wiener process. */
+    /** Flag variable for wiener process or not. */
     private final boolean isWienerProcess;
 
-    /** The tau relax acc. */
-    private final double tauRelaxAcc; // in s
-
-    /** The fluct strength. */
-    private final double fluctStrength; // fluct. strength (m^2/s^3) of
-                                        // dv/dt=a_det+xi(t), in case of wiener:
-                                        // stand. deviation
-
-    // output: delta-correlated random process, var=Q_acc/dt
-    /** The xi acc. */
-    private double xiAcc = 0;
+    /** The tau relax acc in seconds (parameter). */
+    private final double tauRelaxAcc;
 
     /**
-     * Instantiates a new noise.
-     * 
-     * @param parameters
-     *            the parameters
+     * The fluctuation strength in (m^2/s^3) of dv/dt=a_det+xi(t). In case of Wieder process the standard deviation
+     * (parameter).
      */
+    private final double fluctStrength;
+
+    /** The xi acc as dynamic state variable (output) */
+    private double xiAcc = 0;
+
     public Noise(NoiseInputData parameters) {
 
         fluctStrength = parameters.getFluctStrength();
@@ -78,52 +74,49 @@ public class Noise {
         isWienerProcess = (tauRelaxAcc == 0) ? false : true;
         logger.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
 
-        // init
         xiAcc = 0;
     }
 
-    // #############################################################
-    // update
-    // #############################################################
-
     /**
-     * Update.
+     * Update. Calculates the acceleration noise {code xiAcc} modelled by a Wiener process or as delta-correlated random
+     * process.
      * 
      * @param dt
-     *            delta-t, simulation time interval, seconds
+     *            simulation time interval, seconds
      */
     public void update(double dt) {
 
-        final double randomVar = MyRandom.nextDouble(); // G(0,1)
-        final double randomMu0Sigma1 = SQRT12 * (randomVar - 0.5); // Gleichverteilung
-                                                                   // mit
-                                                                   // mean=0,
-                                                                   // var=1
-
-        // dv(est)=dv + s/ttc*xi_v(t), xi_v(t)= Wiener(1, tau_dv) process
-        // Q_dv such that <(xi_dv)^2> = (stddev_dv)^2
-        // => Q_dv=2*(stddev_dv)^2/tau
+        final double randomMu0Sigma1 = getUniformlyDistributedRealization();
 
         if (isWienerProcess) {
             final double betaAcc = Math.exp(-dt / tauRelaxAcc);
             xiAcc = betaAcc * xiAcc + fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1;
-            // logger.debug("WienerProcess: betaAcc = {}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
-            // betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) *
-            // randomMu0Sigma1));
+            logger.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
+                    betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1));
         } else {
-            // delta-correlated acc noise:
+            // delta-correlated acc noise.
             xiAcc = Math.sqrt(fluctStrength / dt) * randomMu0Sigma1;
         }
 
     }
 
     /**
+     * calculates uniform distribution with mean=0 and variance=1.
+     * 
+     * @return random variable realization
+     */
+    private static double getUniformlyDistributedRealization() {
+        final double randomVar = MyRandom.nextDouble();
+        final double randomMu0Sigma1 = SQRT12 * (randomVar - 0.5);
+        return randomMu0Sigma1;
+    }
+
+    /**
      * Gets the acc error.
      * 
-     * @return the acc error
+     * @return the modelled acc error
      */
     public double getAccError() {
-        // logger.debug("xiAcc = ", xiAcc);
         return xiAcc;
     }
 
