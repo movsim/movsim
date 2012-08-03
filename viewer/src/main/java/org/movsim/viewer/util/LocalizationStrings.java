@@ -189,9 +189,10 @@ public class LocalizationStrings extends ListResourceBundle {
             { "AboutTitle", "About" },
             {
                     "AboutText",
-                    "Version Viewer: 1.0" + " " + "\n" + "Version MovSim.org: 1.2" + " " + "\n"
-                            + "=========================================================================\n"
+                    "MovSim.org -- Multi-model open source vehicular traffic simulator" + "\n"
+                            + "Movsim Viewer Version: 1.0" + " " + "\n" + "Movsim Core Version: 1.2" + " " + "\n"
+                            + "====================================================================\n"
                             + "authors: Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber\n"
                             + "email: movsim.org@gmail.com\n" + "(c) 2010, 2011, 2012\n"
-                            + "=========================================================================\n" } };
+                            + "====================================================================\n" } };
 }
