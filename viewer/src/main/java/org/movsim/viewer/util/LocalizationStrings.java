@@ -41,7 +41,7 @@ public class LocalizationStrings extends ListResourceBundle {
 
     @SuppressWarnings("nls")
     private static final Object[][] contents = {
-            { "FrameName", "MovSim" },
+            { "FrameName", "MovSim.org - Multi-model open-source vehicular traffic Simulator" },
 
             // File Menu
             { "FileMenu", "File" },
