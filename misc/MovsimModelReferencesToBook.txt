@@ -1,0 +1,98 @@
+References of Concepts and Models implemented in Movsim to text book
+====================================================================
+
+English book: 
+"Traffic Flow Dynamics. Data, Models and Simulation"
+by Martin Treiber and Arne Kesting
+2013, 2013, XII, 499 p. 194 illus.
+ISBN 978-3-642-32459-8
+see: http://www.traffic-flow-dynamics.org
+
+German book:
+Verkehrsdynamik und -simulation. Daten, Modelle und Anwendungen der Verkehrsflussdynamik
+by Martin Treiber and Arne Kesting
+1st Edition., 2010, XII, 368 p. 176 illus., 56 in color
+see: http://www.verkehrsdynamik.de
+
+
+------------------------------------------------------------
+Microscopic (car-following) models:
+
+Continuous models
+- Intelligent Driver Model (IDM)
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/IDM.java
+
+- Improved acceleration function for IDM and Model for Adaptive Cruise Control:
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/ACC.java
+
+- Optimal Velocity Model (OVM) and Full Velocity Difference Model (FVDM)
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/OVM_FVDM.java
+
+Iterated maps:
+Gipps Model
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/Gipps.java
+
+Krauss Model
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/Krauss.java
+
+Newell Model
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/Newell.java
+
+Cellular automata:
+Nagel-Schreckenberg Model (NSM) and Barlovic Model
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/NSM.java
+
+Kerner-Klenov-Wolf Model (KKW):
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/acceleration/KKW.java
+
+------------------------------------------------------------
+
+Modeling Estimation Errors:
+* Acceleration Noise Model (Uncorrelated or correlated (Wiener) random process)
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/Noise.java
+
+Local Traffic Context:
+Memory or resignation model:
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/Memory.java
+
+Lane-Changing and Other Discrete Decisions:
+
+General lane-changing model MOBIL:
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/lanechange/MOBIL.java
+
+Approaching a traffic light:
+https://github.com/movsim/movsim/blob/master/core/src/main/java/org/movsim/simulator/vehicles/longitudinalmodel/TrafficLightApproaching.java
+
+------------------------------------------------------------
+Modeling traffic:
+
+Multi-class modeling (Heterogeneity)
+- every driver-vehicle unit has own parameter set
+
+------------------------------------------------------------
+Modeling infrastructure:
+
+Modeling speed limits
+Speed limit (Chap 21, Eq. 21.1). also treat case v > v_0.
+
+Flow-conserving bottleneck
+------------------------------------------------------------
+File OUTPUT
+
+* loop detectors
+* floating cars
+* trajectories
+* travel times
+* Fundamental diagrams
+
+https://github.com/movsim/movsim/tree/master/core/src/main/java/org/movsim/output/fileoutput
+
+------------------------------------------------------------
+Fuel Consumption Model
+
+https://github.com/movsim/movsim/tree/master/core/src/main/java/org/movsim/simulator/vehicles/consumption
+------------------------------------------------------------
+
+
+
+
