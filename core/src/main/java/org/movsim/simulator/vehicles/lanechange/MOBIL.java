@@ -36,9 +36,19 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class MOBIL.
+ * 
+ * <p>
+ * Paper for reference:
+ * </p>
+ * <p>
+ * <a href="http://pubsindex.trb.org/view.aspx?id=801029"> M. Treiber, A. Kesting, D. Helbing, General Lane-Changing
+ * Model MOBIL for Car-Following Models. Transportation Research Record, Volume 1999, Pages 86-94 (2007).</a>
+ * </p>
  */
+
+// TODO needs refactoring and better documentation
 public class MOBIL {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MOBIL.class);
 
