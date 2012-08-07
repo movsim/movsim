@@ -83,7 +83,10 @@ We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
 Demos
 -----
 
-Simulation projects are collected in `movsim/core` directory.
+Simulation projects are collected in `movsim/core` directory. 
+
+Applet demos on the website www.movsim.org
+
 
 Commercial use
 --------------
