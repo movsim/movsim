@@ -26,6 +26,8 @@ Features:
   * Krauss Model
   * Nagel-Schreckenberg Cellular Automaton [Wikipedia] (http://en.wikipedia.org/wiki/Nagel-Schreckenberg_model)
   * Kerner-Klenov-Wolf Cellular Automaton
+- general lane-changing model MOBIL [Paper](http://www.akesting.de/download/MOBIL_TRR_2007.pdf)
+- detailed physics-based model for fuel consumption and emissions
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
 
 MovSim has two main components: the _core_ and the _viewer_:
@@ -76,12 +78,12 @@ Import the project into Eclipse from the _File >> Import_ menu item. In the resu
 
 You can then build and run either the _core_ or _viewer_ Java applications.
 
+We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
+ 
+Demos
+-----
 
-Wiki
-----
-
-The MovSim wiki is at: www.h1451310.stratoserver.net/wiki/
-
+Simulation projects are collected in `movsim/core` directory.
 
 Commercial use
 --------------
