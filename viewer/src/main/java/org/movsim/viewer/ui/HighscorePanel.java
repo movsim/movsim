@@ -18,6 +18,7 @@ import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.utilities.FileUtils;
+//import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,9 +27,15 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
     final static Logger logger = LoggerFactory.getLogger(HighscorePanel.class);
     private static final long serialVersionUID = 1L;
     private Simulator simulator;
+    private String simulationFinished;
+    private String askingForName;
+    
+    private static final int MAX_RANK_FOR_HIGHSCORE = 20;
 
     public HighscorePanel(ResourceBundle resourceBundle, Simulator simulator) {
         this.simulator = simulator;
+        this.simulationFinished = (String) resourceBundle.getObject("SimulationFinished");
+        this.askingForName = (String) resourceBundle.getObject("AskingForName");
 
         simulator.getSimulationRunnable().setCompletionCallback(this);
         simulator.getSimulationRunnable().addUpdateStatusCallback(this);
@@ -38,7 +45,7 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
      * @param simulationTime
      * @param totalVehicleFuelUsedLiters
      */
-    private void highscoreForGames(final double simulationTime, final double totalVehicleFuelUsedLiters) {
+    private void highscoreForGames(final double simulationTime, final double totalVehicleTravelTime, final double totalVehicleTravelDistance, final double totalVehicleFuelUsedLiters) {
         EventQueue.invokeLater(new Runnable() {
 
             @Override
@@ -57,13 +64,12 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
                         scoreString = highscores.elementAt(rank - 1);
                     }
                 }
-                if (rank <= 10) {
-                    final String[] rankMarker = { "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th" };
+                
+                JOptionPane.showMessageDialog(null, (String.format(simulationFinished, (int)simulationTime, (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance, totalVehicleFuelUsedLiters, (highscores.size() + 1), rank)));
+                
+                if (rank <= MAX_RANK_FOR_HIGHSCORE) {
                     // TODO limit input to reasonable number of characters
-
-                    username = JOptionPane.showInputDialog(null, "Please enter your name:", rank + rankMarker[rank - 1]
-                            + " place - Congratulations!", JOptionPane.INFORMATION_MESSAGE);
-
+                    username = JOptionPane.showInputDialog(null, askingForName, "");
                 }
                 highscores.insertElementAt((int) simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username,
                         rank - 1);
@@ -115,8 +121,8 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
     public void displayHighscores(String filename) {
         Vector<String> highscores = getHighscores(filename);
         String[] columnNames = { "Rank", "Name", "Time (seconds)", "Fuel (liters)" };
-        String[][] rowData = new String[10][4];
-        for (int i = 0; (i < highscores.size()) && (i < 10); i++) {
+        String[][] rowData = new String[MAX_RANK_FOR_HIGHSCORE][4];
+        for (int i = 0; (i < highscores.size()) && (i < MAX_RANK_FOR_HIGHSCORE); i++) {
             String[] entries = highscores.elementAt(i).split(";", 3);
             rowData[i][0] = Integer.toString(i + 1);
             rowData[i][1] = entries[2];
@@ -153,8 +159,10 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
     @Override
     public void simulationComplete(double simulationTime) {
         RoadNetwork roadNetwork = simulator.getRoadNetwork();
+        final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
+        final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() / 1000;
         final double totalVehicleFuelUsedLiters = roadNetwork.totalVehicleFuelUsedLiters();
-        highscoreForGames(simulationTime, totalVehicleFuelUsedLiters);
+        highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters);
     }
 
 }
