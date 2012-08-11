@@ -18,7 +18,6 @@ import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.utilities.FileUtils;
-//import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,20 +131,11 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
         JTable highscoreTable = new JTable(rowData, columnNames);
         highscoreTable.setEnabled(false);
         
-        // TODO hold Frame or add HighscorePanel to appFrame or make this a JFrame
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         f.add(new JScrollPane(highscoreTable));
         f.pack();
-        // f.setResizable(false);
         f.setVisible(true);
-        
-//        this.removeAll();
-//        final JScrollPane comp = new JScrollPane(highscoreTable);
-//        this.add(comp, BorderLayout.NORTH);
-//        SwingHelper.setComponentSize(this, 400, 240);
-//        setVisible(true);
-//        appFrame.resize(1200, 800);
     }
 
     @Override
