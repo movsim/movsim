@@ -212,9 +212,9 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         
         vehCumulatedCountOutputAllLanes += vehCountOutputAllLanes;
 
-        meanSpeedAllLanes /= vehCountOutputAllLanes;
-        meanSpeedHarmonicAllLanes /= vehCountOutputAllLanes;
-        meanTimegapHarmonicAllLanes /= vehCountOutputAllLanes;
+        meanSpeedAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanSpeedAllLanes/vehCountOutputAllLanes;
+        meanSpeedHarmonicAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanSpeedHarmonicAllLanes/vehCountOutputAllLanes;
+        meanTimegapHarmonicAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanTimegapHarmonicAllLanes/vehCountOutputAllLanes;
         occupancyAllLanes /= laneCount;
     }
 
