@@ -150,15 +150,15 @@ set out detOutput
 
 
 if (ldm eq "KKW") plot\
- detFile(16000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
- detFile(20000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
- detFile(24000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
- detFile(28000) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-1.5 km" with points linestyle 1,\
+ detFile(16000) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-6.0 km" with points linestyle 6,\
+ detFile(20000) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-4.5 km" with points linestyle 4,\
+ detFile(24000) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-3.0 km" with points linestyle 2,\
+ detFile(28000) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-1.5 km" with points linestyle 1,\
  fundFile using 1:4 title "FD" with lines linestyle 10; else plot\
- detFile(1200) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-6.0 km" with points linestyle 6,\
- detFile(1400) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-4.5 km" with points linestyle 4,\
- detFile(1600) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-3.0 km" with points linestyle 2,\
- detFile(1800) using (rhofun($5, vscale*$2)):(Qfun($5)) title "-1.5 km" with points linestyle 1,\
+ detFile(1200) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-6.0 km" with points linestyle 6,\
+ detFile(1400) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-4.5 km" with points linestyle 4,\
+ detFile(1600) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-3.0 km" with points linestyle 2,\
+ detFile(1800) using (rhofun($6, vscale*$3)):(Qfun($6)) title "-1.5 km" with points linestyle 1,\
  fundFile using 1:4 title "FD" with lines linestyle 10
 
 

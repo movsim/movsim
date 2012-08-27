@@ -26,6 +26,7 @@
 package org.movsim.output.fileoutput;
 
 import org.movsim.output.LoopDetector;
+import org.movsim.utilities.ConversionUtilities;
 import org.movsim.utilities.ObserverInTime;
 
 /**
@@ -36,15 +37,15 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
     private static final String extensionFormat = ".det.road_%s.x_%d.csv";
 
     private static final String outputHeadingTime = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
-    private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,",
-            "nVehTotal[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
-    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,", 
-            "nVeh[1]", "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
+    private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,",
+            "nVehTotal[1]", "nTotalAccum[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
+    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,", 
+            "nVeh[1]", "nAccum[1]", "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
 
     // note: number before decimal point is total width of field, not width of
     // integer part
     private static final String outputFormatTime = "%10.1f, ";
-    private static final String outputFormat = "%10d, %10.3f, %10.1f, %10.7f, %10.3f, %10.5f, ";
+    private static final String outputFormat = "%10d, %10d, %10.3f, %10.1f, %10.7f, %10.3f, %10.5f, ";
 
     private final LoopDetector detector;
     private int laneCount;
@@ -109,8 +110,11 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
      */
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
-            writer.printf(outputFormat, detector.getVehCountOutput(i), 3.6 * detector.getMeanSpeed(i),
-                    3600 * detector.getFlow(i), detector.getOccupancy(i), 3.6 * detector.getMeanSpeedHarmonic(i),
+            writer.printf(outputFormat, detector.getVehCountOutput(i),
+                    detector.getVehCumulatedCountOutput(i),
+                    ConversionUtilities.MS_TO_KMH * detector.getMeanSpeed(i), ConversionUtilities.INVS_TO_INVH
+                            * detector.getFlow(i), detector.getOccupancy(i),
+                    ConversionUtilities.MS_TO_KMH * detector.getMeanSpeedHarmonic(i),
                     detector.getMeanTimegapHarmonic(i));
         }
     }
@@ -121,16 +125,12 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
      * @param time
      */
     private void writeLaneAverages() {
-        writer.printf(outputFormat, detector.getVehCountOutputAllLanes(), 3.6 * detector.getMeanSpeedAllLanes(),
-                3600 * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
-                3.6 * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
+        writer.printf(outputFormat, detector.getVehCountOutputAllLanes(),
+                detector.getVehCumulatedCountOutputAllLanes(), ConversionUtilities.MS_TO_KMH * detector.getMeanSpeedAllLanes(),
+                ConversionUtilities.INVS_TO_INVH * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
+                ConversionUtilities.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.utilities.ObserverInTime#notifyObserver(double)
-     */
     @Override
     public void notifyObserver(double time) {
         writeAggregatedData(time);

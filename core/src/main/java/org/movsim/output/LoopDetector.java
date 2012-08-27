@@ -49,7 +49,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
     private double timeOffset;
 
     private final int[] vehCount;
-
+    
     private final double[] vSum;
 
     private final double[] occTime;
@@ -63,6 +63,8 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
     private final double[] occupancy;
 
     private final int[] vehCountOutput;
+    
+    private final long[] vehCumulatedCountOutput;
 
     private final double[] meanSpeedHarmonic;
 
@@ -72,7 +74,11 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
 
     private double meanSpeedAllLanes;
 
+    /** vehicle count per update aggregation cycle. */
     private int vehCountOutputAllLanes;
+        
+    /** Cumulated vehicle count. */
+    private long vehCumulatedCountOutputAllLanes;
 
     private double occupancyAllLanes;
 
@@ -84,9 +90,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
      * Constructor.
      * 
      * @param detPosition
-     *            the det position
      * @param dtSample
-     *            the dt sample
      * @param laneCount
      */
     public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample) {
@@ -106,11 +110,15 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         vehCountOutput = new int[laneCount];
         meanSpeedHarmonic = new double[laneCount];
         meanTimegapHarmonic = new double[laneCount];
+        
+        vehCumulatedCountOutput = new long[laneCount];
+        vehCumulatedCountOutputAllLanes = 0;
 
         timeOffset = 0;
 
         for (int i = 0; i < laneCount; i++) {
             reset(i);
+            vehCumulatedCountOutput[i] = 0;  // initalization
         }
         resetLaneAverages();
         notifyObservers(0);
@@ -163,6 +171,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
     private void countVehiclesAndDataForLane(LaneSegment laneSegment, int lane, Vehicle veh) {
         // new vehicle crossed detector
         vehCount[lane]++;
+        vehCumulatedCountOutput[lane]++;
         final double speedVeh = veh.getSpeed();
         vSum[lane] += speedVeh;
         occTime[lane] += (speedVeh > 0) ? veh.getLength() / speedVeh : 0;
@@ -183,6 +192,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
         meanSpeed[lane] = (vehCount[lane] == 0) ? 0 : vSum[lane] / vehCount[lane];
         occupancy[lane] = occTime[lane] / dtSample;
         vehCountOutput[lane] = vehCount[lane];
+        vehCumulatedCountOutput[lane] += vehCount[lane];
         meanSpeedHarmonic[lane] = (vehCount[lane] == 0) ? 0 : 1. / (sumInvV[lane] / vehCount[lane]);
         meanTimegapHarmonic[lane] = (vehCount[lane] == 0) ? 0 : sumInvQ[lane] / vehCount[lane];
         reset(lane);
@@ -199,6 +209,8 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
             meanSpeedHarmonicAllLanes += getVehCountOutput(i) * getMeanSpeedHarmonic(i);
             meanTimegapHarmonicAllLanes += getVehCountOutput(i) * getMeanTimegapHarmonic(i);
         }
+        
+        vehCumulatedCountOutputAllLanes += vehCountOutputAllLanes;
 
         meanSpeedAllLanes /= vehCountOutputAllLanes;
         meanSpeedHarmonicAllLanes /= vehCountOutputAllLanes;
@@ -241,7 +253,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
     public int getVehCountOutput(int i) {
         return vehCountOutput[i];
     }
-
+    
     public double getMeanSpeedHarmonic(int i) {
         return meanSpeedHarmonic[i];
     }
@@ -268,5 +280,13 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
 
     public double getMeanTimegapHarmonicAllLanes() {
         return meanTimegapHarmonicAllLanes;
+    }
+
+    public long getVehCumulatedCountOutputAllLanes() {
+        return vehCumulatedCountOutputAllLanes;
+    }
+
+    public long getVehCumulatedCountOutput(int index) {
+        return vehCumulatedCountOutput[index];
     }
 }

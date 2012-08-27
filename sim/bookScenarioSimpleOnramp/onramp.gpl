@@ -133,18 +133,18 @@ set ylabel flowLabel
 set xrange [0:150]
 set out detOutput
 plot\
- detFile(8000)  using 3:4 title "-7 km" with points linestyle 6,\
- detFile(10000) using 3:4 title "-5 km" with points linestyle 4,\
- detFile(12000) using 3:4 title "-3 km" with points linestyle 2,\
- detFile(14000) using 3:4 title "-1 km" with points linestyle 1,\
+ detFile(8000)  using 4:5 title "-7 km" with points linestyle 6,\
+ detFile(10000) using 4:5 title "-5 km" with points linestyle 4,\
+ detFile(12000) using 4:5 title "-3 km" with points linestyle 2,\
+ detFile(14000) using 4:5 title "-1 km" with points linestyle 1,\
  fundFile using 1:4 title "FD" with lines linestyle 10
 
 #set out detmicroOutput
 #plot\
-# detFile(8000)  using ($8*3600/$7):($8*3600) title "-7 km" with points linestyle 6,\
-# detFile(10000) using ($8*3600/$7):($8*3600) title "-5 km" with points linestyle 4,\
-# detFile(12000) using ($8*3600/$7):($8*3600) title "-3 km" with points linestyle 2,\
-# detFile(14000) using ($8*3600/$7):($8*3600) title "-1 km" with points linestyle 1,\
+# detFile(8000)  using ($9*3600/$8):($9*3600) title "-7 km" with points linestyle 6,\
+# detFile(10000) using ($9*3600/$8):($9*3600) title "-5 km" with points linestyle 4,\
+# detFile(12000) using ($9*3600/$8):($9*3600) title "-3 km" with points linestyle 2,\
+# detFile(14000) using ($9*3600/$8):($9*3600) title "-1 km" with points linestyle 1,\
 # fundFile using 1:4 title "FD" with lines linestyle 10
 
 ######################################
