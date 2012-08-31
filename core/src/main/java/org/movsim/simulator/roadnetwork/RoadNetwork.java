@@ -306,6 +306,17 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return totalVehicleFuelUsedLiters;
     }
+    
+    public double totalVehicleElectricEnergyUsed() {
+        double totalVehicleElectricEnergyUsed = 0.0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            totalVehicleElectricEnergyUsed += roadSegment.totalVehicleElectricEnergyUsed();
+            if (roadSegment.sink() != null) {
+                totalVehicleElectricEnergyUsed += roadSegment.sink().totalVehicleElectricEnergyUsed();
+            }
+        }
+        return totalVehicleElectricEnergyUsed;
+    }
 
     /**
      * Returns the number of obstacles on this road network.

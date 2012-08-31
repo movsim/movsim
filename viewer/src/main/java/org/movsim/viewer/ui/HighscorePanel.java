@@ -44,7 +44,7 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
      * @param simulationTime
      * @param totalVehicleFuelUsedLiters
      */
-    private void highscoreForGames(final double simulationTime, final double totalVehicleTravelTime, final double totalVehicleTravelDistance, final double totalVehicleFuelUsedLiters) {
+    private void highscoreForGames(final double simulationTime, final double totalVehicleTravelTime, final double totalVehicleTravelDistance, final double totalVehicleFuelUsedLiters, final double totalVehicleElectricEnergyUsed) {
         EventQueue.invokeLater(new Runnable() {
 
             @Override
@@ -64,7 +64,7 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
                     }
                 }
                 
-                JOptionPane.showMessageDialog(null, (String.format(simulationFinished, (int)simulationTime, (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance, totalVehicleFuelUsedLiters, (highscores.size() + 1), rank)));
+                JOptionPane.showMessageDialog(null, (String.format(simulationFinished, (int)simulationTime, (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed, (highscores.size() + 1), rank)));
                 
                 if (rank <= MAX_RANK_FOR_HIGHSCORE) {
                     // TODO limit input to reasonable number of characters
@@ -152,7 +152,8 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
         final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
         final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() / 1000;
         final double totalVehicleFuelUsedLiters = roadNetwork.totalVehicleFuelUsedLiters();
-        highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters);
+        final double totalVehicleElectricEnergyUsed = roadNetwork.totalVehicleElectricEnergyUsed() / (1000 * 3600);
+        highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed);
     }
 
 }

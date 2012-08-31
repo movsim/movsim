@@ -106,7 +106,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         projectName = projectMetaData.getProjectName();
         // TODO temporary handling of Variable Message Sign until added to XML
-        roadNetwork.setHasVariableMessageSign(projectName.equals("routing"));
+        roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
         final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
 

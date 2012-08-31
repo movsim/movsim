@@ -50,6 +50,7 @@
 
 <!ATTLIST CONSUMPTION_MODEL
   label   CDATA   #REQUIRED
+  type    (fuel|electric) "fuel"
   output  (true|false) "false" 
 >
 

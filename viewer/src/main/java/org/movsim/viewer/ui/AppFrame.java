@@ -96,7 +96,7 @@ public class AppFrame extends JFrame {
         } else {
             trafficCanvas.setupTrafficScenario(projectName, projectMetaData.getPathToProjectXmlFile());
         }
-        if (projectName.equals("routing") || projectName.equals("ramp_metering")) {
+        if (projectName.startsWith("routing") || projectName.startsWith("ramp_metering")) {
             trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
         }
         statusPanel.reset();

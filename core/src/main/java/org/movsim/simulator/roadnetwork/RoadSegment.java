@@ -455,6 +455,14 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return totalVehicleFuelUsedLiters;
     }
+    
+    public double totalVehicleElectricEnergyUsed() {
+        double totalVehicleElectricEnergyUsed = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            totalVehicleElectricEnergyUsed += laneSegment.totalVehicleElectricEnergyUsed();
+        }
+        return totalVehicleElectricEnergyUsed;
+    }
 
     /**
      * Returns the number of obstacles on this road segment.

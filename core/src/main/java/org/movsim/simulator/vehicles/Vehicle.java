@@ -119,6 +119,7 @@ public class Vehicle {
     private double totalTravelDistance;
     private double totalTravelTime;
     private double totalFuelUsedLiters;
+    private double totalElectricEnergyUsed;
 
     private double speed;
 
@@ -746,7 +747,12 @@ public class Vehicle {
             }
         }
         if (fuelModel != null) {
-            totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
+            if (fuelModel.getType().equals("fuel")) {
+                totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
+            }
+            if (fuelModel.getType().equals("electric")) {
+                totalElectricEnergyUsed += fuelModel.getElectricPower(speed, acc, dt) * dt;
+            }
         }
     }
 
@@ -1087,6 +1093,10 @@ public class Vehicle {
      */
     public final double totalFuelUsedLiters() {
         return totalFuelUsedLiters;
+    }
+    
+    public final double totalElectricEnergyUsed() {
+        return totalElectricEnergyUsed;
     }
 
     public double getMaxDeceleration() {
