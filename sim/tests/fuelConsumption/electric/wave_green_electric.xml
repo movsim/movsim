@@ -8,10 +8,9 @@
         <!-- if defining consumption models, don't forget to add them to the VEHICLEs!-->
         <CONSUMPTION_MODEL label="carConsumption" type="electric">
             <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
-			<ENGINE/>
+            <ENGINE />
         </CONSUMPTION_MODEL>
     </FUEL_CONSUMPTION>
-	
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="40" consumption="carConsumption">
             <LONGITUDINAL_MODEL>
@@ -37,7 +36,6 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-	
     <SIMULATION dt="0.2" duration="300" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC1" fraction="1" relative_v0_randomization="0.2" />
@@ -46,7 +44,7 @@
         <ROAD id="1">
             <TRAFFIC_COMPOSITION>
                 <VEHICLE_TYPE label="ACC1" fraction="1" relative_v0_randomization="0.2" />
-            <!-- <VEHICLE_TYPE label="ACC2" fraction="0.3" relative_v0_randomization="0.2" /> -->
+                <!-- <VEHICLE_TYPE label="ACC2" fraction="0.3" relative_v0_randomization="0.2" /> -->
             </TRAFFIC_COMPOSITION>
             <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="450" />
@@ -54,7 +52,7 @@
             <SPEED_LIMITS>
                 <SPEED_LIMIT x="0" speedlimit_kmh="50" />
             </SPEED_LIMITS>
-			<TRAFFIC_LIGHTS>
+            <TRAFFIC_LIGHTS>
                 <!-- zero time period means that light will not change automatically from that color -->
                 <!-- negative time period means that light will not use that color -->
                 <!-- ordinal numbers of TrafficLightStatus are GREEN=0, GREEN_RED=1, RED=2, RED_GREEN=3 -->

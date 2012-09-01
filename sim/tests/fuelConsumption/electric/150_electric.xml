@@ -8,10 +8,9 @@
         <!-- if defining consumption models, don't forget to add them to the VEHICLEs!-->
         <CONSUMPTION_MODEL label="carConsumption" type="electric">
             <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
-            <ENGINE/>
+            <ENGINE />
         </CONSUMPTION_MODEL>
     </FUEL_CONSUMPTION>
-	
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="40" consumption="carConsumption">
             <LONGITUDINAL_MODEL>
@@ -37,7 +36,6 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-	
     <SIMULATION dt="0.2" duration="1000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />

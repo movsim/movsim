@@ -28,7 +28,6 @@
                 <MOBIL b_safe="20.0" s_min="2.0" threshold="0.1" bias_right="0." politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
         <!-- trucks -->
         <VEHICLE label="ACC2" length="16" b_max="40" consumption="carDiesel">
             <LONGITUDINAL_MODEL>
@@ -38,7 +37,6 @@
                 <MOBIL b_safe="20.0" s_min="2.0" threshold="0.2" bias_right="0.0" politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
         <VEHICLE label="Obstacle" length="0">
             <LONGITUDINAL_MODEL>
                 <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
@@ -46,37 +44,27 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-
     <SIMULATION dt="0.2" duration="86400" fixed_seed="true" seed="42" crash_exit="false">
-
         <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
             <VEHICLE_TYPE label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>
- 
         <ROAD id="1">
-
             <TRAFFIC_COMPOSITION>
                 <VEHICLE_TYPE label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
                 <VEHICLE_TYPE label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
             </TRAFFIC_COMPOSITION>
-
             <TRAFFIC_SOURCE logging="false">
                 <INFLOW t="0" q_per_hour="0" />
                 <INFLOW t="60" q_per_hour="1800" />
                 <INFLOW t="120" q_per_hour="1800" />
                 <INFLOW t="180" q_per_hour="0" />
             </TRAFFIC_SOURCE>
-
             <FLOW_CONSERVING_INHOMOGENEITIES>
                 <INHOMOGENEITY x="0" alpha_T="0.8" alpha_v0="1" />
                 <INHOMOGENEITY x="200" alpha_T="1." alpha_v0="1" />
             </FLOW_CONSERVING_INHOMOGENEITIES>
-
         </ROAD>
- 
-
-
         <ROAD id="10">
             <FLOW_CONSERVING_INHOMOGENEITIES>
                 <INHOMOGENEITY x="250" alpha_T="1.5" alpha_v0="0.9" />
@@ -91,7 +79,6 @@
             </SPEED_LIMITS>
         </ROAD>
         <OUTPUT />
-
     </SIMULATION>
 </SCENARIO>
 
