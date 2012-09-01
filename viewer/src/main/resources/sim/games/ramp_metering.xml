@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
+
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <SCENARIO network_filename="ramp_metering.xodr">
- <FUEL_CONSUMPTION>
-        <!-- todo: program a tag read_from_file="filename.xml" -->
-        <CONSUMPTION_MODEL label="carConsumption">
+    <FUEL_CONSUMPTION>
+        <CONSUMPTION_MODEL label="carDiesel" output="false">
             <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
-            <ENGINE max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="280" pe_min_bar="1" pe_max_bar="19" idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000">
+            <ENGINE max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="185" pe_min_bar="1" pe_max_bar="22" idle_rotation_rate_invmin="900" max_rotation_rate_invmin="4500">
                 <GEAR_RATIOS>
                     <GEAR_RATIO phi="16.7" />
                     <GEAR_RATIO phi="10.1" />
@@ -19,106 +19,91 @@
             </ENGINE>
         </CONSUMPTION_MODEL>
     </FUEL_CONSUMPTION>
-    <VEHICLES>
-
-        <VEHICLE label="ACC1" length="6" b_max="40" consumption="carConsumption">
+    <VEHICLES write_fund_diagrams="false">
+        <VEHICLE label="ACC1" length="6" b_max="40" consumption="carDiesel" width="4.4" reaction_time="0">
             <LONGITUDINAL_MODEL>
-                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2"
-		     b="2.0" coolness="1"/>
+                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
                 <!-- b_safe < b_max to avoid crashed -->
-                <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" 
-                       bias_right="0.1" politeness="0."/>
+                <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" bias_right="0.1" politeness="0." />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-        <VEHICLE label="ACC2" length="6" b_max="40" consumption="carConsumption">
+        <VEHICLE label="ACC2" length="6" b_max="40" consumption="carDiesel" width="4.4" reaction_time="0">
             <LONGITUDINAL_MODEL>
-                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="0.8"
-		     b="2.0" coolness="1"/>
+                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
                 <!-- b_safe < b_max to avoid crashed -->
-                <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" 
-                       bias_right="0.1" politeness="0."/>
+                <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" bias_right="0.1" politeness="0." />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-        <VEHICLE label="ACC3" length="6" b_max="40" consumption="carConsumption">
+        <VEHICLE label="ACC3" length="6" b_max="40" consumption="carDiesel" width="4.4" reaction_time="0">
             <LONGITUDINAL_MODEL>
-                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="0.8" 
-                     b="2.0" coolness="1"/>
+                <ACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
                 <!-- b_safe < b_max to avoid crashed -->
-                <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" 
-                       bias_right="0.1" politeness="0."/>
+                <MOBIL b_safe="30.0" s_min="2.0" threshold="0.05" bias_right="0.1" politeness="0." />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-
-        <VEHICLE label="Obstacle" length="0">
+        <VEHICLE label="Obstacle" length="0" width="4.4" b_max="10000" reaction_time="0" consumption="none">
             <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5"/>
+                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" s1="0" delta="4" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL/>
+            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="25" />
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.2" duration="72000" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="ACC1" fraction="1.0" relative_v0_randomization="0.0"/>
+            <VEHICLE_TYPE label="ACC1" fraction="1.0" relative_v0_randomization="0.0" route_label="" />
         </TRAFFIC_COMPOSITION>
-
-
-        <ROAD id="1"> <!-- secondary road -->
+        <ROAD id="1" logging="false">
+            <!-- secondary road -->
             <TRAFFIC_COMPOSITION>
-                <VEHICLE_TYPE label="ACC1" fraction="0.2"
-                      relative_v0_randomization="0.2" route_label="north"/> 
-                <VEHICLE_TYPE label="ACC2" fraction="0.1"
-                      relative_v0_randomization="0.2" route_label="north"/> 
-                <VEHICLE_TYPE label="ACC3" fraction="0.7"
-                      relative_v0_randomization="0.2" route_label="north_then_east"/> 
+                <VEHICLE_TYPE label="ACC1" fraction="0.2" relative_v0_randomization="0.2" route_label="north" />
+                <VEHICLE_TYPE label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="north" />
+                <VEHICLE_TYPE label="ACC3" fraction="0.7" relative_v0_randomization="0.2" route_label="north_then_east" />
             </TRAFFIC_COMPOSITION>
-
-            <INITIAL_CONDITIONS/>
+            <INITIAL_CONDITIONS />
             <TRAFFIC_SOURCE logging="false">
-                <INFLOW t="0" q_per_hour="1900" v="24"/>
-                <INFLOW t="60" q_per_hour="1900" v="24"/>
-                <INFLOW t="180" q_per_hour="1900" v="24"/>
-                <INFLOW t="210" q_per_hour="0" v="24"/>
-           </TRAFFIC_SOURCE>
+                <INFLOW t="0" q_per_hour="1900" v="24" />
+                <INFLOW t="60" q_per_hour="1900" v="24" />
+                <INFLOW t="180" q_per_hour="1900" v="24" />
+                <INFLOW t="210" q_per_hour="0" v="24" />
+            </TRAFFIC_SOURCE>
             <SPEED_LIMITS>
                 <!--   <SPEED_LIMIT x="2600" speedlimit_kmh="80" /> -->
                 <!--   <SPEED_LIMIT x="3600" speedlimit_kmh="200" /> -->
             </SPEED_LIMITS>
-            <TRAFFIC_LIGHTS/>
-            <DETECTORS/>
+            <TRAFFIC_LIGHTS n_dt="1" logging="false" />
+            <DETECTORS dt="60" logging="false" />
         </ROAD>
-
-        <ROAD id="25"> <!-- freeway -->
-            <INITIAL_CONDITIONS/>
-            <TRAFFIC_SOURCE>
-                <INFLOW t="0" q_per_hour="1500" v="24"/>
-                <INFLOW t="50" q_per_hour="1500" v="24"/>
-                <INFLOW t="60" q_per_hour="2000" v="24"/>
-                <INFLOW t="100" q_per_hour="2000" v="24"/>
-                <INFLOW t="100" q_per_hour="200" v="24"/>
-                <INFLOW t="110" q_per_hour="200" v="24"/>
-                <INFLOW t="120" q_per_hour="2000" v="24"/>
-                <INFLOW t="150" q_per_hour="2000" v="24"/>
-                <INFLOW t="150" q_per_hour="200" v="24"/>
-                <INFLOW t="170" q_per_hour="200" v="24"/>
-                <INFLOW t="180" q_per_hour="1500" v="24"/>
-                <INFLOW t="210" q_per_hour="1500" v="24"/>
-                <INFLOW t="210" q_per_hour="0" v="24"/>
+        <ROAD id="25" logging="false">
+            <!-- freeway -->
+            <INITIAL_CONDITIONS />
+            <TRAFFIC_SOURCE logging="false">
+                <INFLOW t="0" q_per_hour="1500" v="24" />
+                <INFLOW t="50" q_per_hour="1500" v="24" />
+                <INFLOW t="60" q_per_hour="2000" v="24" />
+                <INFLOW t="100" q_per_hour="2000" v="24" />
+                <INFLOW t="100" q_per_hour="200" v="24" />
+                <INFLOW t="110" q_per_hour="200" v="24" />
+                <INFLOW t="120" q_per_hour="2000" v="24" />
+                <INFLOW t="150" q_per_hour="2000" v="24" />
+                <INFLOW t="150" q_per_hour="200" v="24" />
+                <INFLOW t="170" q_per_hour="200" v="24" />
+                <INFLOW t="180" q_per_hour="1500" v="24" />
+                <INFLOW t="210" q_per_hour="1500" v="24" />
+                <INFLOW t="210" q_per_hour="0" v="24" />
             </TRAFFIC_SOURCE>
-            <SPEED_LIMITS/>
-            <TRAFFIC_LIGHTS/>
-            <DETECTORS/>
+            <SPEED_LIMITS />
+            <TRAFFIC_LIGHTS n_dt="1" logging="false" />
+            <DETECTORS dt="60" logging="false" />
         </ROAD>
-        <ROAD id="37">
-            <INITIAL_CONDITIONS/>
-            <TRAFFIC_LIGHTS>
+        <ROAD id="37" logging="false">
+            <INITIAL_CONDITIONS />
+            <TRAFFIC_LIGHTS n_dt="1" logging="false">
                 <!-- zero time period means that light will not change automatically from that color -->
                 <!-- negative time period means that light will not use that color -->
                 <!-- ordinal numbers of TrafficLightStatus are GREEN=0, GREEN_RED=1, RED=2, RED_GREEN=3 -->
@@ -127,18 +112,19 @@
         </ROAD>
         <ROUTES>
             <ROUTE label="north">
-                <ROAD id="1" />
-                <ROAD id="2" />
-                <ROAD id="3" />
+                <ROAD id="1" logging="false" />
+                <ROAD id="2" logging="false" />
+                <ROAD id="3" logging="false" />
             </ROUTE>
             <ROUTE label="north_then_east">
-                <ROAD id="1" />
-                <ROAD id="2" />
-                <ROAD id="37" />
-                <ROAD id="26" />
-                <ROAD id="27" />
+                <ROAD id="1" logging="false" />
+                <ROAD id="2" logging="false" />
+                <ROAD id="37" logging="false" />
+                <ROAD id="26" logging="false" />
+                <ROAD id="27" logging="false" />
             </ROUTE>
         </ROUTES>
-        <OUTPUT/>
+        <OUTPUT />
     </SIMULATION>
 </SCENARIO>
+

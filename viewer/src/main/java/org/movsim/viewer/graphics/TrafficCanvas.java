@@ -215,6 +215,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         roadLineColor = new Color(Integer.parseInt(properties.getProperty("roadLineColor", "FFFFFF"), 16));
         sourceColor = new Color(Integer.parseInt(properties.getProperty("sourceColor", "FFFFFF"), 16));
         sinkColor = new Color(Integer.parseInt(properties.getProperty("sinkColor", "000000"), 16));
+        setVehicleColorMode(vehicleColorMode.valueOf(properties.getProperty("vehicleColorMode", "VELOCITY_COLOR")));
 
         setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty("vmaxForColorSpectrum", "140")));
 

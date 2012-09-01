@@ -78,15 +78,7 @@ public class AppFrame extends JFrame {
             }
         });
 
-        // window size
-        int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow", "-1"));
-        int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow", "-1"));
-        if(xPixSize <0 || yPixSize<0){
-            setExtendedState(Frame.MAXIMIZED_BOTH);
-        }
-        else{
-            setSize(xPixSize, yPixSize);
-        }
+        initFrameSize(properties);
 
         // first scenario
         String projectName = projectMetaData.getProjectName();
@@ -96,16 +88,28 @@ public class AppFrame extends JFrame {
         } else {
             trafficCanvas.setupTrafficScenario(projectName, projectMetaData.getPathToProjectXmlFile());
         }
-        if (projectName.startsWith("routing") || projectName.startsWith("ramp_metering")) {
-            trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);
-        }
+        
         statusPanel.reset();
         trafficCanvas.start();
         setVisible(true);
         
-        boolean isGame = true; //TODO read from properties
+        boolean isGame = Boolean.parseBoolean(properties.getProperty("isGame", "false"));
         if (isGame) {
             highScorePanel = new HighscorePanel(resourceBundle, simulator);
+        }
+    }
+
+    /**
+     * @param properties
+     */
+    private void initFrameSize(Properties properties) {
+        int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow", "-1"));
+        int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow", "-1"));
+        if(xPixSize <0 || yPixSize<0){
+            setExtendedState(Frame.MAXIMIZED_BOTH);
+        }
+        else{
+            setSize(xPixSize, yPixSize);
         }
     }
 
