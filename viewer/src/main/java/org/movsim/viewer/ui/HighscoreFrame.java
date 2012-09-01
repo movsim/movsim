@@ -21,9 +21,9 @@ import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HighscorePanel implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
+public class HighscoreFrame implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
 
-    final static Logger logger = LoggerFactory.getLogger(HighscorePanel.class);
+    final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
     private static final long serialVersionUID = 1L;
     private Simulator simulator;
     private String simulationFinished;
@@ -31,7 +31,7 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
     
     private static final int MAX_RANK_FOR_HIGHSCORE = 20;
 
-    public HighscorePanel(ResourceBundle resourceBundle, Simulator simulator) {
+    public HighscoreFrame(ResourceBundle resourceBundle, Simulator simulator) {
         this.simulator = simulator;
         this.simulationFinished = (String) resourceBundle.getObject("SimulationFinished");
         this.askingForName = (String) resourceBundle.getObject("AskingForName");
@@ -156,4 +156,7 @@ public class HighscorePanel implements SimulationRun.CompletionCallback, Simulat
         highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed);
     }
 
+    public static void initialize(ResourceBundle resourceBundle, Simulator simulator) {
+        new HighscoreFrame(resourceBundle, simulator);
+    }
 }

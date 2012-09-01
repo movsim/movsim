@@ -50,8 +50,6 @@ public class AppFrame extends JFrame {
     final StatusPanel statusPanel;
     private MovSimToolBar toolBar;
 
-    private HighscorePanel highScorePanel;
-
     public AppFrame(ResourceBundle resourceBundle, ProjectMetaData projectMetaData, Properties properties) {
         super(resourceBundle.getString("FrameName"));
 
@@ -63,10 +61,9 @@ public class AppFrame extends JFrame {
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);
         canvasPanel = new CanvasPanel(resourceBundle, trafficCanvas);
         statusPanel = new StatusPanel(resourceBundle, simulator);
+        toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
 
-        addToolBar(resourceBundle, trafficCanvas);
         addMenu(resourceBundle, simulator, trafficCanvas, properties);
-
         add(canvasPanel, BorderLayout.CENTER);
         add(toolBar, BorderLayout.NORTH);
 
@@ -95,13 +92,10 @@ public class AppFrame extends JFrame {
 
         boolean isGame = Boolean.parseBoolean(properties.getProperty("isGame", "false"));
         if (isGame) {
-            highScorePanel = new HighscorePanel(resourceBundle, simulator);
+            HighscoreFrame.initialize(resourceBundle, simulator);
         }
     }
 
-    /**
-     * @param properties
-     */
     private void initFrameSize(Properties properties) {
         int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow", "-1"));
         int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow", "-1"));
@@ -112,17 +106,6 @@ public class AppFrame extends JFrame {
         }
     }
 
-    /**
-     * @param resourceBundle
-     */
-    private void addToolBar(ResourceBundle resourceBundle, TrafficCanvas trafficCanvas) {
-        toolBar = new MovSimToolBar(statusPanel, trafficCanvas, resourceBundle);
-    }
-
-    /**
-     * @param resourceBundle
-     * @param properties
-     */
     private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas,
             Properties properties) {
         final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle,
