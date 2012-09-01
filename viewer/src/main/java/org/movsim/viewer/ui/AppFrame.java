@@ -88,11 +88,11 @@ public class AppFrame extends JFrame {
         } else {
             trafficCanvas.setupTrafficScenario(projectName, projectMetaData.getPathToProjectXmlFile());
         }
-        
+
         statusPanel.reset();
         trafficCanvas.start();
         setVisible(true);
-        
+
         boolean isGame = Boolean.parseBoolean(properties.getProperty("isGame", "false"));
         if (isGame) {
             highScorePanel = new HighscorePanel(resourceBundle, simulator);
@@ -105,10 +105,9 @@ public class AppFrame extends JFrame {
     private void initFrameSize(Properties properties) {
         int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow", "-1"));
         int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow", "-1"));
-        if(xPixSize <0 || yPixSize<0){
+        if (xPixSize < 0 || yPixSize < 0) {
             setExtendedState(Frame.MAXIMIZED_BOTH);
-        }
-        else{
+        } else {
             setSize(xPixSize, yPixSize);
         }
     }
@@ -122,10 +121,12 @@ public class AppFrame extends JFrame {
 
     /**
      * @param resourceBundle
-     * @param properties 
+     * @param properties
      */
-    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas, Properties properties) {
-        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle, properties);
+    private void addMenu(ResourceBundle resourceBundle, Simulator simulator, TrafficCanvas trafficCanvas,
+            Properties properties) {
+        final AppMenu trafficMenus = new AppMenu(this, simulator, canvasPanel, trafficCanvas, resourceBundle,
+                properties);
         trafficMenus.initMenus();
     }
 
