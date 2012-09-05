@@ -3,6 +3,7 @@ package org.movsim.viewer.ui;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -29,12 +30,14 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
     private String simulationFinished;
     private String askingForName;
     
-    private static final int MAX_RANK_FOR_HIGHSCORE = 20;
+    private final int MAX_RANK_FOR_HIGHSCORE;
 
-    public HighscoreFrame(ResourceBundle resourceBundle, Simulator simulator) {
+    public HighscoreFrame(ResourceBundle resourceBundle, Simulator simulator, Properties properties) {
         this.simulator = simulator;
         this.simulationFinished = (String) resourceBundle.getObject("SimulationFinished");
         this.askingForName = (String) resourceBundle.getObject("AskingForName");
+        
+        this.MAX_RANK_FOR_HIGHSCORE = Integer.parseInt(properties.getProperty("maxRankForHighscorePrompt", "10"));
 
         simulator.getSimulationRunnable().setCompletionCallback(this);
         simulator.getSimulationRunnable().addUpdateStatusCallback(this);
@@ -156,7 +159,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
         highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed);
     }
 
-    public static void initialize(ResourceBundle resourceBundle, Simulator simulator) {
-        new HighscoreFrame(resourceBundle, simulator);
+    public static void initialize(ResourceBundle resourceBundle, Simulator simulator, Properties properties) {
+        new HighscoreFrame(resourceBundle, simulator, properties);
     }
 }

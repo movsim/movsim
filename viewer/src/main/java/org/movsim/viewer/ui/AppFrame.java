@@ -92,7 +92,7 @@ public class AppFrame extends JFrame {
 
         boolean isGame = Boolean.parseBoolean(properties.getProperty("isGame", "false"));
         if (isGame) {
-            HighscoreFrame.initialize(resourceBundle, simulator);
+            HighscoreFrame.initialize(resourceBundle, simulator, properties);
         }
     }
 
