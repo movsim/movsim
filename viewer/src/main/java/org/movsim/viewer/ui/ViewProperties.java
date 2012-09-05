@@ -8,9 +8,13 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.movsim.input.ProjectMetaData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ViewProperties {
 
+    final static Logger logger = LoggerFactory.getLogger(ViewProperties.class);
+    
     final static String defaultPropertyName = "/config/defaultviewerconfig.properties";
     private static Properties defaultProperties;
 
@@ -24,6 +28,7 @@ public class ViewProperties {
             defaultProperties = new Properties();
             try {
                 // create and load default properties
+                logger.info("read default properties from file "+defaultPropertyName);
                 final InputStream is = ViewProperties.class.getResourceAsStream(defaultPropertyName);
                 defaultProperties.load(is);
                 is.close();
@@ -46,9 +51,9 @@ public class ViewProperties {
      */
     public static Properties loadProperties(String projectName, String path) {
         Properties applicationProps = loadDefaultProperties();
+        final File file = new File(path + projectName + ".properties");
         try {
-            final File file = new File(path + projectName + ".properties");
-            System.out.println("try to read from file=" + file.getName() + ", path=" + file.getAbsolutePath());
+            logger.debug("try to read from file=" + file.getName() + ", path=" + file.getAbsolutePath());
             if (ProjectMetaData.getInstance().isXmlFromResources()) {
                 final InputStream inputStream = ViewProperties.class.getResourceAsStream(file.toString());
                 if (inputStream != null) {
@@ -62,7 +67,7 @@ public class ViewProperties {
             }
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace(); // do not ignore
+            logger.info("cannot find "+file.toString()+". Fall back to default properties.");
         } catch (IOException e) {
             e.printStackTrace();
         }
