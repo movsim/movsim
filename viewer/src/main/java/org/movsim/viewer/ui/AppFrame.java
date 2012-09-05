@@ -90,15 +90,15 @@ public class AppFrame extends JFrame {
         trafficCanvas.start();
         setVisible(true);
 
-        boolean isGame = Boolean.parseBoolean(properties.getProperty("isGame", "false"));
+        boolean isGame = Boolean.parseBoolean(properties.getProperty("isGame"));
         if (isGame) {
             HighscoreFrame.initialize(resourceBundle, simulator, properties);
         }
     }
 
     private void initFrameSize(Properties properties) {
-        int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow", "-1"));
-        int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow", "-1"));
+        int xPixSize = Integer.parseInt(properties.getProperty("xPixSizeWindow"));
+        int yPixSize = Integer.parseInt(properties.getProperty("yPixSizeWindow"));
         if (xPixSize < 0 || yPixSize < 0) {
             setExtendedState(Frame.MAXIMIZED_BOTH);
         } else {

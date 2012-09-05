@@ -356,8 +356,7 @@ public class AppMenu extends MovSimMenuBase {
     }
 
     private void uiDefaultReset() {
-        trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty(
-                "vmaxForColorSpectrum", "140")));
+        trafficCanvas.setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty("vmaxForColorSpectrum")));
         frame.statusPanel.setWithProgressBar(true);
         frame.statusPanel.reset();
         trafficCanvas.start();

@@ -203,29 +203,30 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     protected void initGraphicConfigFieldsFromProperties() {
-        setDrawRoadId(Boolean.parseBoolean(properties.getProperty("drawRoadId", "true")));
-        setDrawSinks(Boolean.parseBoolean(properties.getProperty("drawSinks", "true")));
-        setDrawSources(Boolean.parseBoolean(properties.getProperty("drawSources", "true")));
-        setDrawSlopes(Boolean.parseBoolean(properties.getProperty("drawSlopes", "true")));
-        setDrawSpeedLimits(Boolean.parseBoolean(properties.getProperty("drawSpeedLimits", "true")));
+        setDrawRoadId(Boolean.parseBoolean(properties.getProperty("drawRoadId")));
+        setDrawSinks(Boolean.parseBoolean(properties.getProperty("drawSinks")));
+        setDrawSources(Boolean.parseBoolean(properties.getProperty("drawSources")));
+        setDrawSlopes(Boolean.parseBoolean(properties.getProperty("drawSlopes")));
+        setDrawSpeedLimits(Boolean.parseBoolean(properties.getProperty("drawSpeedLimits")));
 
-        setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundColor", "FFFFFF"), 16)));
-        roadColor = new Color(Integer.parseInt(properties.getProperty("roadColor", "666666"), 16));
-        roadEdgeColor = new Color(Integer.parseInt(properties.getProperty("roadEdgeColor", "000000"), 16));
-        roadLineColor = new Color(Integer.parseInt(properties.getProperty("roadLineColor", "FFFFFF"), 16));
-        sourceColor = new Color(Integer.parseInt(properties.getProperty("sourceColor", "FFFFFF"), 16));
-        sinkColor = new Color(Integer.parseInt(properties.getProperty("sinkColor", "000000"), 16));
-        setVehicleColorMode(vehicleColorMode.valueOf(properties.getProperty("vehicleColorMode", "VELOCITY_COLOR")));
+        final int hexRadix = 16;
+        setBackgroundColor(new Color(Integer.parseInt(properties.getProperty("backgroundColor"), hexRadix)));
+        roadColor = new Color(Integer.parseInt(properties.getProperty("roadColor"), hexRadix));
+        roadEdgeColor = new Color(Integer.parseInt(properties.getProperty("roadEdgeColor"), hexRadix));
+        roadLineColor = new Color(Integer.parseInt(properties.getProperty("roadLineColor"), hexRadix));
+        sourceColor = new Color(Integer.parseInt(properties.getProperty("sourceColor"), hexRadix));
+        sinkColor = new Color(Integer.parseInt(properties.getProperty("sinkColor"), hexRadix));
+        setVehicleColorMode(vehicleColorMode.valueOf(properties.getProperty("vehicleColorMode")));
 
-        setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty("vmaxForColorSpectrum", "140")));
+        setVmaxForColorSpectrum(Double.parseDouble(properties.getProperty("vmaxForColorSpectrum")));
 
-        lineWidth = Float.parseFloat(properties.getProperty("lineWidth", "1.0"));
-        lineLength = Float.parseFloat(properties.getProperty("lineLength", "5.0"));
-        gapLength = Float.parseFloat(properties.getProperty("gapLength", "15.0"));
-        gapLengthExit = Float.parseFloat(properties.getProperty("gapLengthExit", "6.0"));
+        lineWidth = Float.parseFloat(properties.getProperty("lineWidth"));
+        lineLength = Float.parseFloat(properties.getProperty("lineLength"));
+        gapLength = Float.parseFloat(properties.getProperty("gapLength"));
+        gapLengthExit = Float.parseFloat(properties.getProperty("gapLengthExit"));
 
-        scale = Double.parseDouble(properties.getProperty("initialScale", "0.707106781"));
-        setSleepTime(Integer.parseInt(properties.getProperty("initial_sleep_time", "26")));
+        scale = Double.parseDouble(properties.getProperty("initialScale"));
+        setSleepTime(Integer.parseInt(properties.getProperty("initial_sleep_time")));
     }
 
     @Override
@@ -247,9 +248,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     @Override
     public void resetScaleAndOffset() {
-        scale = Double.parseDouble(properties.getProperty("initialScale", "0.707106781"));
-        xOffset = Integer.parseInt(properties.getProperty("xOffset", "0"));
-        yOffset = Integer.parseInt(properties.getProperty("yOffset", "0"));
+        scale = Double.parseDouble(properties.getProperty("initialScale"));
+        xOffset = Integer.parseInt(properties.getProperty("xOffset"));
+        yOffset = Integer.parseInt(properties.getProperty("yOffset"));
         setTransform();
     }
 

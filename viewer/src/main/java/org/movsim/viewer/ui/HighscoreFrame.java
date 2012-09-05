@@ -37,7 +37,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
         this.simulationFinished = (String) resourceBundle.getObject("SimulationFinished");
         this.askingForName = (String) resourceBundle.getObject("AskingForName");
         
-        this.MAX_RANK_FOR_HIGHSCORE = Integer.parseInt(properties.getProperty("maxRankForHighscorePrompt", "10"));
+        this.MAX_RANK_FOR_HIGHSCORE = Integer.parseInt(properties.getProperty("maxRankForHighscorePrompt"));
 
         simulator.getSimulationRunnable().setCompletionCallback(this);
         simulator.getSimulationRunnable().addUpdateStatusCallback(this);
