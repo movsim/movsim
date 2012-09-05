@@ -56,18 +56,18 @@ public class FuelConsumption {
     
     // values to be read from xml BEGIN
     private final double fixedGearRatio;
-    private final double UN;
-    private final double PN;
-    private final double MN;
-    private final double Imax;
-    private final double nmax;
-    private final double kK;
-    private final double tmax;
-    private final double s;
-// values to be read from xml END
-    private final double k;
-    private final double L;
-    private double t;
+    private final double nomVoltage;
+    private final double nomPower;
+    private final double nomTorque;
+    private final double maxCurrent;
+    private final double maxFrequency;
+    private final double shortCircuitCurrentRate;
+    private final double maxOverloadTime;
+    private final double overloadFactor;
+    // values to be read from xml END
+    private final double ROTOR_CONST;
+    private final double STATOR_L;
+    private double overloadTime;
 
     
 ///energy consumption
@@ -81,27 +81,27 @@ public class FuelConsumption {
         
         //values to be read from xml BEGIN
         fixedGearRatio = 2.636;
-        UN = 650;
-        PN = 60 * 1000;
-        MN = 207;
-        Imax = 170;
-        nmax = 13500 / 60;
-        kK = 0.6;
-        tmax = 10;
-        s = 2;
+        nomVoltage = 650;
+        nomPower = 60 * 1000;
+        nomTorque = 207;
+        maxCurrent = 170;
+        maxFrequency = 13500 / 60;
+        shortCircuitCurrentRate = 0.6;
+        maxOverloadTime = 10;
+        overloadFactor = 2;
         //values to be read from xml END
         
-        t = 0;
+        overloadTime = 0;
         
-        final double U1N = UN / Math.sqrt(3);
-        final double I1N = PN / (UN * Math.sqrt(3));
-        final double omegaN = PN / MN;
-        L = U1N / (I1N * kK * omegaN);
+        final double nomPhaseVoltage = nomVoltage / Math.sqrt(3);
+        final double nomPhaseCurrent = nomPower / (nomVoltage * Math.sqrt(3));
+        final double nomOmega = nomPower / nomTorque;
+        STATOR_L = nomPhaseVoltage / (nomPhaseCurrent * shortCircuitCurrentRate * nomOmega);
         
-        final double UpN = Math.sqrt(U1N * U1N + Math.pow(omegaN * L * I1N, 2));
-        k = UpN / omegaN;
+        final double nomRotorVoltage = Math.sqrt(nomPhaseVoltage * nomPhaseVoltage + Math.pow(nomOmega * STATOR_L * nomPhaseCurrent, 2));
+        ROTOR_CONST = nomRotorVoltage / nomOmega;
         
-        logger.info(String.format("L=%f, k=%f", L, k));
+        logger.info(String.format("L=%f, k=%f", STATOR_L, ROTOR_CONST));
         
 ///energy consumption
 
@@ -248,97 +248,98 @@ public class FuelConsumption {
 //energy consumption
     
     public double getElectricPower(double v, double a, double dt) {
-        double Pel = 0;
-        final double P_ERROR = PN;
+        double powerEl = 0;
+        final double P_ERROR = nomPower;
         
         double U1I1cosphi[] = {0, 0, 0};
         
-        final double n = fixedGearRatio * v / carModel.getDynamicWheelCircumfence();
-        final double omega = 2 * Math.PI * n;
-        final double Pmech = v * carModel.getForceMech(v, a); // can be <0
-        final double M = EngineModel.getMoment(Pmech, n);
-        final double Up = k * omega;
-        final double Xd = omega * L;
+        final double frequency = fixedGearRatio * v / carModel.getDynamicWheelCircumfence();
+        final double omega = 2 * Math.PI * frequency;
+        final double powerMech = v * carModel.getForceMech(v, a); // can be <0
+        final double torque = EngineModel.getMoment(powerMech, frequency);
+        final double rotorVoltage = ROTOR_CONST * omega;
+        final double syncReactance = omega * STATOR_L;
         
-        final double U1max = UN / Math.sqrt(3);
-        final boolean tover = (t >= tmax);
-        final double I1max = tover ? Imax : Imax * s;
-        final double Pmechmax = tover ? PN : PN * s;
-        final double Mmax = tover ? MN : MN * s;
+        final double maxPhaseVoltage = nomVoltage / Math.sqrt(3);
         
-        if (n > nmax)           logger.error(String.format("motor frequency %d/min is too high", n * 60));
-        if (Pmech > Pmechmax)   logger.error(String.format("power demand %fkW is too high", Pmechmax / 1000));
-        if (M > Mmax)           logger.error(String.format("moment demand %fNm is too high", M));
+        final boolean isEngineBeyondLimits = (overloadTime >= maxOverloadTime);
+        final double maxPhaseCurrent = isEngineBeyondLimits ? maxCurrent : maxCurrent * overloadFactor;
+        final double maxPowerMech = isEngineBeyondLimits ? nomPower : nomPower * overloadFactor;
+        final double maxTorque = isEngineBeyondLimits ? nomTorque : nomTorque * overloadFactor;
         
-        if (Pmech > 0) { // energy must be taken from battery
+        if (frequency > maxFrequency)   logger.error(String.format("motor frequency %d/min is too high", frequency * 60));
+        if (powerMech > maxPowerMech)   logger.error(String.format("power demand %fkW is too high", powerMech / 1000));
+        if (torque > maxTorque)         logger.error(String.format("torque demand %fNm is too high", torque));
+        
+        if (powerMech > 0) { // energy must be taken from battery
             
-            final double U1min = Pmech * L / (2.7 * k); // theta<=64°
+            final double minPhaseVoltage = powerMech * STATOR_L / (2.7 * ROTOR_CONST); // theta<=64°
             
-            if (Pmech <= 1.5 * Up * k / L) { // cos(phi)=1 is possible
+            if (powerMech <= 1.5 * rotorVoltage * ROTOR_CONST / STATOR_L) { // cos(phi)=1 is possible
                 
-                final double D = 0.25 * Math.pow(Up, 4) - Pmech * Pmech * Xd * Xd / 9;
-                final double x1 = Up * Up / 2 + Math.sqrt(D);
-                final double x2 = Math.max(Up * Up / 2 - Math.sqrt(D), 0);
-                final double U11 = Math.sqrt(x1);
-                final double U12 = Math.sqrt(x2);
-                if (U11 >= U1min) {
-                    if (U11 <= U1max) {
-                        U1I1cosphi[0] = U11;
-                        U1I1cosphi[1] = Pmech / (3 * U11);
+                final double D = 0.25 * Math.pow(rotorVoltage, 4) - powerMech * powerMech * syncReactance * syncReactance / 9;
+                final double x1 = rotorVoltage * rotorVoltage / 2 + Math.sqrt(D);
+                final double x2 = Math.max(rotorVoltage * rotorVoltage / 2 - Math.sqrt(D), 0);
+                final double phaseVoltage1 = Math.sqrt(x1);
+                final double phaseVoltage2 = Math.sqrt(x2);
+                if (phaseVoltage1 >= minPhaseVoltage) {
+                    if (phaseVoltage1 <= maxPhaseVoltage) {
+                        U1I1cosphi[0] = phaseVoltage1;
+                        U1I1cosphi[1] = powerMech / (3 * phaseVoltage1);
                         logger.debug("U1=U11");
-                    } else if (U12 >= U1min) {
-                        if (U12 <= U1max) {
-                            U1I1cosphi[0] = U12;
-                            U1I1cosphi[1] = Pmech / (3 * U12);
+                    } else if (phaseVoltage2 >= minPhaseVoltage) {
+                        if (phaseVoltage2 <= maxPhaseVoltage) {
+                            U1I1cosphi[0] = phaseVoltage2;
+                            U1I1cosphi[1] = powerMech / (3 * phaseVoltage2);
                             logger.debug("U1=U12");
                         } else {
-                            U1I1cosphi[0] = U1max;
-                            U1I1cosphi[1] = getI1(U1max, Pmech, omega);
+                            U1I1cosphi[0] = maxPhaseVoltage;
+                            U1I1cosphi[1] = getI1(maxPhaseVoltage, powerMech, omega);
                             logger.debug("U1=U1max");
                         }
                     } else {
-                        U1I1cosphi = getU1I1phiBest(U1min, Pmech, omega, I1max);
+                        U1I1cosphi = getU1I1phiBest(minPhaseVoltage, powerMech, omega, maxPhaseCurrent);
                         logger.debug("U1=?");
                     }
                 } else {
-                    U1I1cosphi[0] = U1min;
-                    U1I1cosphi[1] = getI1(U1min, Pmech, omega);
+                    U1I1cosphi[0] = minPhaseVoltage;
+                    U1I1cosphi[1] = getI1(minPhaseVoltage, powerMech, omega);
                     logger.debug("U1=U1min");
                 }
                 
-                if (U1I1cosphi[1] > I1max) {
-                    U1I1cosphi = getU1I1phiBest(U1min, Pmech, omega, I1max);
+                if (U1I1cosphi[1] > maxPhaseCurrent) {
+                    U1I1cosphi = getU1I1phiBest(minPhaseVoltage, powerMech, omega, maxPhaseCurrent);
                     logger.debug("I1>I1max");
                 }
                 
             } else {
-                logger.debug(String.format("cos(phi)=1 not possible for %fkW at %fkm/h", Pmech / 1000, v * 3.6));
+                logger.debug(String.format("cos(phi)=1 not possible for %fkW at %fkm/h", powerMech / 1000, v * 3.6));
                 
-                U1I1cosphi = getU1I1phiBest(U1min, Pmech, omega, I1max);
+                U1I1cosphi = getU1I1phiBest(minPhaseVoltage, powerMech, omega, maxPhaseCurrent);
                 
             }
                         
             if (U1I1cosphi[0] == 0) {
-                logger.error(String.format("No possible voltage found between %fV and %fV for power demand %fkW at motor frequency %f/min (t_over = %fs)", U1min, UN / Math.sqrt(3), Pmech / 1000, n * 60, t));
+                logger.error(String.format("No possible voltage found between %fV and %fV for power demand %fkW at motor frequency %f/min (t_over = %fs)", minPhaseVoltage, nomVoltage / Math.sqrt(3), powerMech / 1000, frequency * 60, overloadTime));
                 return P_ERROR;
             }
             
             //is engine working beyond design limits?
-            if ((U1I1cosphi[1] > Imax) || (Pmech > PN) || (M > MN)) {
-                t += dt;
-                logger.debug(String.format("engine working beyond design limits - t_over = %.2f seconds", t));
+            if ((U1I1cosphi[1] > maxCurrent) || (powerMech > nomPower) || (torque > nomTorque)) {
+                overloadTime += dt;
+                logger.debug(String.format("engine working beyond design limits - t_over = %.2f seconds", overloadTime));
             } else {
-                t = 0;
+                overloadTime = 0;
             }
             
-            Pel = 3 * U1I1cosphi[0] * U1I1cosphi[1];
+            powerEl = 3 * U1I1cosphi[0] * U1I1cosphi[1];
             
         } else { // energy can be recouped
             
             if (v > 1 / 3.6) {
-                Pel = 0.7 * Pmech;
+                powerEl = 0.7 * powerMech;
                 
-                logger.debug(String.format("recouping %fkW at %.0fkm/h, decelerating with %.2fm/s²", Pel / (-1000), v * 3.6, -a));
+                logger.debug(String.format("recouping %fkW at %.0fkm/h, decelerating with %.2fm/s²", powerEl / (-1000), v * 3.6, -a));
                 
                 // TODO how well does this really work...?
                 
@@ -346,29 +347,29 @@ public class FuelConsumption {
             
         }
         
-        final double Pconst = carModel.getElectricPower();
+        final double power0 = carModel.getElectricPower();
         
-        return Pel + Pconst; //TODO calculate switching losses (n), Ohm losses (I1)
+        return powerEl + power0; //TODO calculate switching losses (n), Ohm losses (I1)
     }
     
-    private double getI1(double U1, double Pmech, double omega) {
-        double x = Math.sqrt((k * k / (L * L)) - Pmech * Pmech / (9 * U1 * U1));
-        double phi = Math.atan((x - U1 / (omega * L)) * 3 * U1 / Pmech);
-        return Pmech / (3 * U1 * Math.cos(phi));
+    private double getI1(double phaseVoltage, double powerMech, double omega) {
+        double x = Math.sqrt((ROTOR_CONST * ROTOR_CONST / (STATOR_L * STATOR_L)) - powerMech * powerMech / (9 * phaseVoltage * phaseVoltage));
+        double phi = Math.atan((x - phaseVoltage / (omega * STATOR_L)) * 3 * phaseVoltage / powerMech);
+        return powerMech / (3 * phaseVoltage * Math.cos(phi));
     }
     
-    private double[] getU1I1phiBest(double U1min, double Pmech, double omega, double I1max) {
+    private double[] getU1I1phiBest(double minPhaseVoltage, double powerMech, double omega, double maxPhaseCurrent) {
         double U1I1cosphi[] = {0, 0, 0};
-        for (double U1 = UN / Math.sqrt(3); U1 >= U1min; U1 -= 0.5 ) {
-            double I1 = getI1(U1, Pmech, omega);
-            double cosphi = Pmech / (3 * U1 * I1);
-            if ((cosphi > U1I1cosphi[2]) && (I1 <= I1max)) {
-                U1I1cosphi[0] = U1;
-                U1I1cosphi[1] = I1;
+        for (double phaseVoltage = nomVoltage / Math.sqrt(3); phaseVoltage >= minPhaseVoltage; phaseVoltage -= 0.5 ) {
+            double phaseCurrent = getI1(phaseVoltage, powerMech, omega);
+            double cosphi = powerMech / (3 * phaseVoltage * phaseCurrent);
+            if ((cosphi > U1I1cosphi[2]) && (phaseCurrent <= maxPhaseCurrent)) {
+                U1I1cosphi[0] = phaseVoltage;
+                U1I1cosphi[1] = phaseCurrent;
                 U1I1cosphi[2] = cosphi;
             }
         }
-        logger.debug(String.format("best U1 / I1 / cos(phi) for %.2fkW at omega=%.2fHz: %.3fV / %.3fA / %f", Pmech / 1000, omega, U1I1cosphi[0], U1I1cosphi[1], U1I1cosphi[2]));
+        logger.debug(String.format("best U1 / I1 / cos(phi) for %.2fkW at omega=%.2fHz: %.3fV / %.3fA / %f", powerMech / 1000, omega, U1I1cosphi[0], U1I1cosphi[1], U1I1cosphi[2]));
         return U1I1cosphi;
     }
     
