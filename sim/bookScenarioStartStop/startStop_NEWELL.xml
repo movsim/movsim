@@ -10,7 +10,7 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="10" b_max="9">
+        <VEHICLE label="Obstacle" length="5" b_max="9">
             <LONGITUDINAL_MODEL>
                 <NEWELL v0="0" s0="3" />
             </LONGITUDINAL_MODEL>

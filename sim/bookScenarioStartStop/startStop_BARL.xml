@@ -56,14 +56,7 @@
                 <IC_MICRO x="195.0" v="0" label="BARL1" />
                 <!-- obstacle shifts floating car numbers -->
                 <IC_MICRO x="750" v="0" label="Obstacle" />
-            </INITIAL_CONDITIONS>
-            <TRAFFIC_SOURCE />
-            <TRAFFIC_SINK />
-            <FLOW_CONSERVING_INHOMOGENEITIES />
-            <SPEED_LIMITS />
-            <SIMPLE_RAMPS />
-            <TRAFFIC_LIGHTS />
-            <DETECTORS />
+                 </INITIAL_CONDITIONS>
         </ROAD>
         <ROUTES>
             <ROUTE label="main">

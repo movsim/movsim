@@ -11,9 +11,9 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="0" b_max="20">
+        <VEHICLE label="Obstacle" length="8" b_max="20">
             <LONGITUDINAL_MODEL>
-                <OVM_FVDM v0="0" tau="5" s0="2" l_int="8" beta="1.5" lambda="0.6" variant="0" />
+	              	 <OVM_FVDM v0="0" tau="5" s0="2" l_int="8" beta="1.5" lambda="0.6" variant="0" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
