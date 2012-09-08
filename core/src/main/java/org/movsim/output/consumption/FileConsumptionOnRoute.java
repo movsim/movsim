@@ -5,9 +5,9 @@ import org.movsim.output.fileoutput.FileOutputBase;
 /**
  * calculates and writes fuel collective fuel consumption on a route over all vehicles.
  */
-public class FileFuelConsumptionOnRoute extends FileOutputBase {
+public class FileConsumptionOnRoute extends FileOutputBase {
 
-    public FileFuelConsumptionOnRoute() {
+    public FileConsumptionOnRoute() {
         // TODO
     }
 

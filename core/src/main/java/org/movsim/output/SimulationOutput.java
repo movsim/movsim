@@ -40,7 +40,7 @@ import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.input.model.vehicle.VehicleInput;
-import org.movsim.output.consumption.ConsumptionOutput;
+import org.movsim.output.consumption.ConsumptionOnRoute;
 import org.movsim.output.detector.LoopDetector;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
@@ -70,7 +70,7 @@ public class SimulationOutput implements SimulationTimeStep {
     
     private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
     
-    private final List<ConsumptionOutput> fuelConsumptionRoutes = new ArrayList<ConsumptionOutput>();
+    private final List<ConsumptionOnRoute> consumptionOnRoutes = new ArrayList<ConsumptionOnRoute>();
     
     private final List<TravelTimeOnRoute> travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();  
     
@@ -118,7 +118,7 @@ public class SimulationOutput implements SimulationTimeStep {
     private void initConsumption(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
         for (final FuelConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
             final Route route = routes.get(fuelRouteInput.getRouteLabel());
-            fuelConsumptionRoutes.add(new ConsumptionOutput(fuelRouteInput, route, writeOutput));
+            consumptionOnRoutes.add(new ConsumptionOnRoute(fuelRouteInput, route, writeOutput));
         }
     }
     
