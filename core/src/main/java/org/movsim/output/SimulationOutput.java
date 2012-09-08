@@ -48,7 +48,7 @@ import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadworkState;
+import org.movsim.simulator.roadnetwork.RoadNetworkState;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +71,7 @@ public class SimulationOutput implements SimulationTimeStep {
     
     private final RoadNetwork roadNetwork;
     
-    private final RoadworkState roadworkState;
+    private final RoadNetworkState roadworkState;
     
 
     /**
@@ -86,7 +86,7 @@ public class SimulationOutput implements SimulationTimeStep {
             RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
         
-        roadworkState = new RoadworkState(roadNetwork);
+        roadworkState = new RoadNetworkState(roadNetwork);
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
@@ -232,7 +232,7 @@ public class SimulationOutput implements SimulationTimeStep {
         return travelTimes;
     }
 
-    public RoadworkState getRoadworkState() {
+    public RoadNetworkState getRoadworkState() {
         return roadworkState;
     }
 }

@@ -3,11 +3,11 @@ package org.movsim.simulator.roadnetwork;
 import java.util.Iterator;
 
 
-public class RoadworkState {
+public class RoadNetworkState {
 
     private final RoadNetwork roadNetwork;
     
-    public RoadworkState(RoadNetwork roadNetwork){
+    public RoadNetworkState(RoadNetwork roadNetwork){
         this.roadNetwork = roadNetwork;
     }
     
