@@ -42,4 +42,10 @@ public interface ConversionUtilities {
     /** converts from 1/km to 1/m, factor is 1/1000 */
     final double INVKM_TO_INVM = 1./INVM_TO_INVKM;
 
+    /** converts meter to kilometer */
+    final double KM_TO_M = 1000;
+    
+    /** converts kilometer to meter */
+    final double M_TO_KM = 1./KM_TO_M;
+
 }

@@ -69,6 +69,9 @@ public class SimulationOutput implements SimulationTimeStep {
     private TravelTimes travelTimes;  // TODO for route
     
     private final RoadNetwork roadNetwork;
+    
+    private final RoadworkState roadworkState;
+    
 
     /**
      * Constructor.
@@ -81,6 +84,8 @@ public class SimulationOutput implements SimulationTimeStep {
     public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput,
             RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
+        
+        roadworkState = new RoadworkState(roadNetwork);
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
@@ -224,5 +229,9 @@ public class SimulationOutput implements SimulationTimeStep {
 
     public TravelTimes getTravelTimes() {
         return travelTimes;
+    }
+
+    public RoadworkState getRoadworkState() {
+        return roadworkState;
     }
 }

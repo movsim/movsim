@@ -258,66 +258,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return vehicleCount;
     }
-
-    /**
-     * Returns the total travel time of all vehicles on this road network, including those that have exited.
-     * 
-     * @return the total vehicle travel time
-     */
-    public double totalVehicleTravelTime() {
-        double totalVehicleTravelTime = 0.0;
-        for (final RoadSegment roadSegment : roadSegments) {
-            totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
-            if (roadSegment.sink() != null) {
-                totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
-            }
-        }
-        return totalVehicleTravelTime;
-    }
-
-    /**
-     * Returns the total travel distance of all vehicles on this road network, including those that have exited.
-     * 
-     * @return the total vehicle travel distance
-     */
-    public double totalVehicleTravelDistance() {
-        double totalVehicleTravelDistance = 0.0;
-        for (final RoadSegment roadSegment : roadSegments) {
-            totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
-            if (roadSegment.sink() != null) {
-                totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();
-            }
-        }
-        return totalVehicleTravelDistance;
-    }
-
-    /**
-     * Returns the total fuel used by all vehicles on this road network, including those that have exited.
-     * 
-     * @return the total vehicle fuel used
-     */
-    public double totalVehicleFuelUsedLiters() {
-        double totalVehicleFuelUsedLiters = 0.0;
-        for (final RoadSegment roadSegment : roadSegments) {
-            totalVehicleFuelUsedLiters += roadSegment.totalVehicleFuelUsedLiters();
-            if (roadSegment.sink() != null) {
-                totalVehicleFuelUsedLiters += roadSegment.sink().totalFuelUsedLiters();
-            }
-        }
-        return totalVehicleFuelUsedLiters;
-    }
     
-    public double totalVehicleElectricEnergyUsed() {
-        double totalVehicleElectricEnergyUsed = 0.0;
-        for (final RoadSegment roadSegment : roadSegments) {
-            totalVehicleElectricEnergyUsed += roadSegment.totalVehicleElectricEnergyUsed();
-            if (roadSegment.sink() != null) {
-                totalVehicleElectricEnergyUsed += roadSegment.sink().totalVehicleElectricEnergyUsed();
-            }
-        }
-        return totalVehicleElectricEnergyUsed;
-    }
-
     /**
      * Returns the number of obstacles on this road network.
      * 
@@ -331,6 +272,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return obstacleCount;
     }
 
+   
     /**
      * Asserts the road network's class invariant. Used for debugging.
      */

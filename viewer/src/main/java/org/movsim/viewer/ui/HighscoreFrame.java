@@ -14,10 +14,11 @@ import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
 import org.movsim.input.ProjectMetaData;
+import org.movsim.output.SimulationOutput;
 import org.movsim.simulator.SimulationRun;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.utilities.ConversionUtilities;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,11 +152,11 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
     
     @Override
     public void simulationComplete(double simulationTime) {
-        RoadNetwork roadNetwork = simulator.getRoadNetwork();
-        final double totalVehicleTravelTime = roadNetwork.totalVehicleTravelTime();
-        final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() / 1000;
-        final double totalVehicleFuelUsedLiters = roadNetwork.totalVehicleFuelUsedLiters();
-        final double totalVehicleElectricEnergyUsed = roadNetwork.totalVehicleElectricEnergyUsed() / (1000 * 3600);
+        SimulationOutput simOutput = simulator.getSimOutput();
+        final double totalVehicleTravelTime = simOutput.getRoadworkState().totalVehicleTravelTime();
+        final double totalVehicleTravelDistance = simOutput.getRoadworkState().totalVehicleTravelDistance() * ConversionUtilities.M_TO_KM;
+        final double totalVehicleFuelUsedLiters = simOutput.getRoadworkState().totalVehicleFuelUsedLiters();
+        final double totalVehicleElectricEnergyUsed = simOutput.getRoadworkState().totalVehicleElectricEnergyUsed() / (1000 * 3600);
         highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed);
     }
 

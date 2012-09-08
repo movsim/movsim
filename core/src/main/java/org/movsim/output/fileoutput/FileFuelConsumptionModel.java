@@ -7,7 +7,6 @@ import org.movsim.simulator.vehicles.consumption.EngineModel;
 import org.movsim.simulator.vehicles.consumption.FuelConstants;
 import org.movsim.simulator.vehicles.consumption.FuelConsumption;
 
-
 // TODO refactoring of fuel consumption code base and corresponding file output
 public class FileFuelConsumptionModel extends FileOutputBase {
 
@@ -28,16 +27,6 @@ public class FileFuelConsumptionModel extends FileOutputBase {
     private final String keyLabel;
     private final FuelConsumption fuelConsumption;
 
-    /**
-     * Constructor.
-     * 
-     * @param keyLabel
-     * 
-     * @param routeLabel
-     *            the route label
-     * @param spatioTemporal
-     *            the spatio temporal
-     */
     public FileFuelConsumptionModel(String keyLabel, FuelConsumption fuelConsumption) {
         this.keyLabel = keyLabel;
         this.fuelConsumption = fuelConsumption;
@@ -57,7 +46,7 @@ public class FileFuelConsumptionModel extends FileOutputBase {
             final double accFreeWheeling = carModel.getFreeWheelingDecel(v);
             final double acc = 0.0;
             final double[] fuelFlow = fuelConsumption.getMinFuelFlow(v, acc, true);
-            final int optGear = (int) fuelFlow[1]; // !! kein gearIndex
+            final int optGear = (int) fuelFlow[1]; // !! not a gearIndex
             final double c100 = fuelConsumption.getInstConsumption100km(v, 0, optGear, true);
             writer.printf(outputFormatZeroAcceleration, v, accFreeWheeling, 3.6e6 * fuelFlow[0], optGear, c100);
             writer.flush();
