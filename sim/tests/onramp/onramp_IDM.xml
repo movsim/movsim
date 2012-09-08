@@ -3,20 +3,20 @@
 
 <SCENARIO network_filename="onramp.xodr">
     <VEHICLES>
-        <VEHICLE label="IDM1" length="6" b_max="9">
+    <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
-                <IDM v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" />
+                <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.05" politeness="0.1" />
+            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.05" bias_right="0.05" politeness="0.0" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- trucks -->
-        <VEHICLE label="IDM2" length="6" b_max="9">
+        <VEHICLE label="ACC2" length="16" b_max="9">
             <LONGITUDINAL_MODEL>
-                <IDM v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" />
+                <ACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="false" crit_speed_eur="20">
+            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
                 <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1" />
             </LANE_CHANGE_MODEL>
         </VEHICLE>
@@ -27,24 +27,31 @@
             <LANE_CHANGE_MODEL />
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="2400" fixed_seed="true" seed="42" crash_exit="false">
+    <SIMULATION dt="0.2" duration="3600" fixed_seed="true" seed="42" crash_exit="true">
         <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="IDM1" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="1600" v="24" />
+                <INFLOW t="0" q_per_hour="1200" v="24" />
+                <INFLOW t="1800" q_per_hour="1800" v="20" />
+                <INFLOW t="3600" q_per_hour="1200" v="24" />
             </TRAFFIC_SOURCE>
         </ROAD>
         <ROAD id="4">
             <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="300" v="20" />
+                <INFLOW t="0" q_per_hour="550" v="20" />
             </TRAFFIC_SOURCE>
         </ROAD>
         <ROUTES>
-            <ROUTE label="route1">
+            <ROUTE label="main">
                 <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
+            </ROUTE>
+            <ROUTE label="onramp">
+                <ROAD id="4" />
                 <ROAD id="2" />
                 <ROAD id="3" />
             </ROUTE>
@@ -53,8 +60,12 @@
             <FLOATING_CAR_DATA n_dt="1">
                 <FC number="100" />
             </FLOATING_CAR_DATA>
-            <SPATIOTEMPORAL dx="100" dt="40" route="route1" />
-            <TRAJECTORIES dt="1" start_time="0" end_time="120" route="route1" />
+            <SPATIOTEMPORAL dx="100" dt="40" route="main" />
+            <SPATIOTEMPORAL dx="100" dt="40" route="onramp" />
+            <TRAJECTORIES dt="1" route="onramp" /> <!--  start_time="0" end_time="120" -->
+            <TRAVELTIMES route="main" />
+	    <TRAVELTIMES route="onramp" />
+	    <FUEL route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
