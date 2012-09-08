@@ -275,7 +275,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
         VehiclesInput vehiclesInput = simulator.getVehiclesInput();
         if (vehiclesInput == null) {
-            System.out.println("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
+            logger.warn("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
         } else {
             for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
                 final int r = (int) (Math.random() * 256);
