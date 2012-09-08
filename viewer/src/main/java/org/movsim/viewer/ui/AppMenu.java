@@ -126,7 +126,7 @@ public class AppMenu extends MovSimMenuBase {
                         handleSpatioTemporalDiagram(actionEvent);
                     }
                 })).setEnabled(false);
-        outputMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("FuelConsumption")) {
+        outputMenu.add(new JCheckBoxMenuItem(new AbstractAction(resourceString("Consumption")) {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
                         handleFuelConsumptionDiagram(actionEvent);

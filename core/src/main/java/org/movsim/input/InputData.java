@@ -27,7 +27,7 @@ package org.movsim.input;
 
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
-import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
+import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,7 @@ public class InputData {
 
     private VehiclesInput vehiclesInput;
     private SimulationInput simulationInput;
-    private FuelConsumptionInput fuelConsumptionInput;
+    private ConsumptionInput fuelConsumptionInput;
 
     /**
      * Constructor.
@@ -54,11 +54,11 @@ public class InputData {
         this.simulationInput = simulationInput;
     }
 
-    public void setFuelConsumptionInput(FuelConsumptionInput fuelConsumptionInput) {
+    public void setFuelConsumptionInput(ConsumptionInput fuelConsumptionInput) {
         this.fuelConsumptionInput = fuelConsumptionInput;
     }
 
-    public FuelConsumptionInput getFuelConsumptionInput() {
+    public ConsumptionInput getFuelConsumptionInput() {
         return fuelConsumptionInput;
     }
     

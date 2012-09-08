@@ -32,7 +32,7 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.simulator.vehicles.consumption.FuelConsumption;
+import org.movsim.simulator.vehicles.consumption.Consumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
@@ -169,7 +169,7 @@ public class Vehicle {
    
     private final TrafficLightApproaching trafficLightApproaching;
     
-    private final FuelConsumption fuelModel; // can be null
+    private final Consumption fuelModel; // can be null
     private final Route route;
     private int routeIndex;
 
@@ -229,7 +229,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput, Object cyclicBuffer,
-            LaneChangeModel lcModel, FuelConsumption fuelModel, Route route) {
+            LaneChangeModel lcModel, Consumption fuelModel, Route route) {
         this.label = label;
         id = nextId++;
         this.fuelModel = fuelModel;

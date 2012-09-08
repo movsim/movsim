@@ -40,7 +40,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
-import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
+import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,7 +172,7 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final FuelConsumptionInput fuelConsumptionInput = new FuelConsumptionInput(
+        final ConsumptionInput fuelConsumptionInput = new ConsumptionInput(
                 root.getChild(XmlElementNames.Consumption));
 
         inputData.setFuelConsumptionInput(fuelConsumptionInput);

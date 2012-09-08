@@ -33,7 +33,7 @@ import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.vehicles.consumption.FuelConsumption;
+import org.movsim.simulator.vehicles.consumption.Consumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelFactory;
@@ -180,7 +180,7 @@ public class VehicleGenerator {
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
 
         final LaneChangeModel lcModel = new LaneChangeModel(vehInput.getLaneChangeInputData());
-        final FuelConsumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
+        final Consumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
                 .getFuelConsumptionLabel());
         final Vehicle veh = new Vehicle(prototype.getLabel(), longModel, vehInput, null, lcModel, fuelModel, prototype.getRoute());
         return veh;

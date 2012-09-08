@@ -30,10 +30,10 @@ import org.movsim.output.consumption.FileFuelConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FuelConsumption {
+public class Consumption {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(FuelConsumption.class);
+    final static Logger logger = LoggerFactory.getLogger(Consumption.class);
 
     // if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds
     // 900=3-4 times the minimum
@@ -72,7 +72,7 @@ public class FuelConsumption {
     
 ///energy consumption
     
-    public FuelConsumption(String keyLabel, ConsumptionModelInput input) {
+    public Consumption(String keyLabel, ConsumptionModelInput input) {
         carModel = new CarModel(input.getCarData());
         engineModel = new EngineModel(input.getEngineData(), carModel);
         type = input.getType();

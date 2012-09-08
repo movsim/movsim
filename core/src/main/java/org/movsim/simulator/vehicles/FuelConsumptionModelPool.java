@@ -29,8 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.movsim.input.model.vehicle.consumption.ConsumptionModelInput;
-import org.movsim.input.model.vehicle.consumption.FuelConsumptionInput;
-import org.movsim.simulator.vehicles.consumption.FuelConsumption;
+import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
+import org.movsim.simulator.vehicles.consumption.Consumption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,9 +41,9 @@ public class FuelConsumptionModelPool {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FuelConsumptionModelPool.class);
 
-    private final Map<String, FuelConsumption> fuelModelsMap = new HashMap<String, FuelConsumption>();
+    private final Map<String, Consumption> fuelModelsMap = new HashMap<String, Consumption>();
 
-    public FuelConsumptionModelPool(FuelConsumptionInput input) {
+    public FuelConsumptionModelPool(ConsumptionInput input) {
         if (input == null) {
             return;
         }
@@ -55,12 +55,12 @@ public class FuelConsumptionModelPool {
                 final String key = entries.getKey();
                 final ConsumptionModelInput consModelInput = entries.getValue();
                 logger.info("create fuel consumption model with key={}", key);
-                fuelModelsMap.put(key, new FuelConsumption(key, consModelInput));
+                fuelModelsMap.put(key, new Consumption(key, consModelInput));
             }
         }
     }
 
-    public FuelConsumption getFuelConsumptionModel(String key) {
+    public Consumption getFuelConsumptionModel(String key) {
         if (key.equals(DEFAULT_DUMMY_LABEL)) {
             logger.debug("no fuel consumption model specified.");
             return null;

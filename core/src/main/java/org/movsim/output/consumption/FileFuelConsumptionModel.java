@@ -6,7 +6,7 @@ import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.vehicles.consumption.CarModel;
 import org.movsim.simulator.vehicles.consumption.EngineModel;
 import org.movsim.simulator.vehicles.consumption.FuelConstants;
-import org.movsim.simulator.vehicles.consumption.FuelConsumption;
+import org.movsim.simulator.vehicles.consumption.Consumption;
 
 // TODO refactoring of fuel consumption code base and corresponding file output
 public class FileFuelConsumptionModel extends FileOutputBase {
@@ -26,9 +26,9 @@ public class FileFuelConsumptionModel extends FileOutputBase {
     private static final String outputFormatZeroAcceleration = "%.3f, %.8f,  %.8f,  %d,  %.8f%n";
 
     private final String keyLabel;
-    private final FuelConsumption fuelConsumption;
+    private final Consumption fuelConsumption;
 
-    public FileFuelConsumptionModel(String keyLabel, FuelConsumption fuelConsumption) {
+    public FileFuelConsumptionModel(String keyLabel, Consumption fuelConsumption) {
         this.keyLabel = keyLabel;
         this.fuelConsumption = fuelConsumption;
     }

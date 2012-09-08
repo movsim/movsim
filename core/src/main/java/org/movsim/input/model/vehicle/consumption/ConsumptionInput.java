@@ -34,15 +34,15 @@ import org.movsim.input.XmlElementNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FuelConsumptionInput {
+public class ConsumptionInput {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(FuelConsumptionInput.class);
+    final static Logger logger = LoggerFactory.getLogger(ConsumptionInput.class);
 
     private Map<String, ConsumptionModelInput> consumptionModelInput;
 
     @SuppressWarnings("unchecked")
-    public FuelConsumptionInput(Element elem) {
+    public ConsumptionInput(Element elem) {
 
         // fuel consumption element is optional
         if (elem == null) {
