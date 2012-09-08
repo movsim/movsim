@@ -1035,10 +1035,11 @@ public class RoadSegment implements Iterable<Vehicle> {
                         sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
                                 vehFront.getFrontPosition(), vehicle.getLane()));
                     }
-                    sb.append("roadID=" + id);
-                    sb.append(", net distance=" + netDistance);
-                    sb.append(", lane index=" + laneSegment.lane());
-                    sb.append(", container.size=" + laneSegment.vehicleCount());
+                    sb.append("roadID=").append(id);
+                    sb.append(", user roadID=").append(userId);
+                    sb.append(", net distance=").append(netDistance);
+                    sb.append(", lane index=").append(laneSegment.lane());
+                    sb.append(", container.size=").append(laneSegment.vehicleCount());
                     sb.append("\n");
 
                     for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math
