@@ -38,7 +38,6 @@ import javax.swing.SwingConstants;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -157,11 +156,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     }
 
     private int vehicleCount() {
-        int vehicleCount = 0;
-        for (final RoadSegment roadSegment : simulator.getRoadNetwork()) {
-            vehicleCount += roadSegment.totalVehicleCount();
-        }
-        return vehicleCount;
+        return simulator.getRoadNetwork().vehicleCount();
     }
 
     public void addStatusView() {

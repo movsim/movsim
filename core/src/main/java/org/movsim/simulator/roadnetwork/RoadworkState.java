@@ -1,9 +1,7 @@
-package org.movsim.output;
+package org.movsim.simulator.roadnetwork;
 
 import java.util.Iterator;
 
-import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 
 public class RoadworkState {
 

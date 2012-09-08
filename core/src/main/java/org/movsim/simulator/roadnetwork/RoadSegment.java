@@ -409,7 +409,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the total number of vehicles on this road segment
      */
-    public int totalVehicleCount() {
+    protected int totalVehicleCount() {
         int totalVehicleCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             totalVehicleCount += laneSegment.vehicleCount();
@@ -422,7 +422,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the total vehicle travel time
      */
-    public double totalVehicleTravelTime() {
+    protected double totalVehicleTravelTime() {
         double totalVehicleTravelTime = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             totalVehicleTravelTime += laneSegment.totalVehicleTravelTime();
@@ -435,7 +435,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the total vehicle travel distance
      */
-    public double totalVehicleTravelDistance() {
+    protected double totalVehicleTravelDistance() {
         double totalVehicleTravelDistance = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             totalVehicleTravelDistance += laneSegment.totalVehicleTravelDistance();
@@ -448,7 +448,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the total vehicle fuel used
      */
-    public double totalVehicleFuelUsedLiters() {
+    protected double totalVehicleFuelUsedLiters() {
         double totalVehicleFuelUsedLiters = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             totalVehicleFuelUsedLiters += laneSegment.totalVehicleFuelUsedLiters();
@@ -456,7 +456,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return totalVehicleFuelUsedLiters;
     }
     
-    public double totalVehicleElectricEnergyUsed() {
+    protected double totalVehicleElectricEnergyUsed() {
         double totalVehicleElectricEnergyUsed = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             totalVehicleElectricEnergyUsed += laneSegment.totalVehicleElectricEnergyUsed();
@@ -469,7 +469,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the number of obstacles on this road segment
      */
-    public int obstacleCount() {
+    protected int obstacleCount() {
         int obstacleCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             obstacleCount += laneSegment.obstacleCount();

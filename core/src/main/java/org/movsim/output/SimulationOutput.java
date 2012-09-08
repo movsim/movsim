@@ -48,6 +48,7 @@ import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadworkState;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

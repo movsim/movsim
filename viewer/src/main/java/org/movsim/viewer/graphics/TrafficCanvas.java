@@ -88,7 +88,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         SimulationRunnable.HandleExceptionCallback {
 
     final static Logger logger = LoggerFactory.getLogger(TrafficCanvas.class);
-    @SuppressWarnings("hiding")
     static final long serialVersionUID = 1L;
 
     protected final Simulator simulator;
