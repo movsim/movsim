@@ -29,14 +29,14 @@ import org.jdom.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TravelTimesInput {
+public class TravelTimeOnRouteInput {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(TravelTimesInput.class);
+    final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRouteInput.class);
 
     private String routeLabel;
 
-    public TravelTimesInput(Element elem) {
+    public TravelTimeOnRouteInput(Element elem) {
         routeLabel = elem.getAttributeValue("route");
     }
 

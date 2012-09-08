@@ -26,30 +26,35 @@
 package org.movsim.output.traveltime;
 
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.roadnetwork.RoadNetworkState;
 import org.movsim.simulator.roadnetwork.Route;
 
 public class TravelTimeOnRoute implements SimulationTimeStep {
-//
-//    private final List<TravelTimeRoute> traveltimeRoutes;
-//
-//    private final RoadNetwork roadNetwork;
     
     private final Route route;
 
     /** configures update interval. Initial value = 100 */
     private long updateIntervalCount = 100;
+    
+    private final RoadNetworkState roadNetworkState;
+    
+    private final FileTravelTime fileWriter;
 
-    public TravelTimeOnRoute(Route route) {
+    public TravelTimeOnRoute(RoadNetworkState roadNetworkState, Route route, boolean writeOutput) {
+        this.roadNetworkState = roadNetworkState;
         this.route = route;
-//        this.roadNetwork = roadNetwork;
-//        traveltimeRoutes = new LinkedList<TravelTimeRoute>();
-//        for (final TravelTimesInput input : travelTimesInput) {
-//            traveltimeRoutes.add(new TravelTimeRoute(routes.get(input.getRouteLabel())));
-//        }
+        
+        fileWriter = writeOutput ? new FileTravelTime(route) : null; 
     }
 
-//    @Override
-//    public void timeStep(double dt, double simulationTime, long iterationCount) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+
+        final double instantaneousTravelTime = roadNetworkState.instantaneousTravelTime(route);
+        
+        if(fileWriter != null){
+            fileWriter.write(instantaneousTravelTime);
+        }
 //        final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
 //        for (final TravelTimeRoute route : traveltimeRoutes) {
 //            route.update(simulationTime, iterationCount, roadNetwork);
@@ -61,7 +66,7 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
 //        if (doNotificationUpdate) {
 //            notifyObservers(simulationTime);
 //        }
-//    }
+    }
 
 //    public List<List<XYDataPoint>> getTravelTimeEmas() {
 //        final List<List<XYDataPoint>> listOfEmas = new LinkedList<List<XYDataPoint>>();
@@ -96,14 +101,4 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
 //        return ttEMAs;
 //    }
 
-    public void set(FileTravelTime fileTravelTime) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void timeStep(double dt, double simulationTime, long iterationCount) {
-        // TODO Auto-generated method stub
-        
-    }
 }

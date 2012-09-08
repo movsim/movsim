@@ -34,11 +34,11 @@ import org.movsim.input.InputData;
 import org.movsim.input.model.OutputInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
+import org.movsim.input.model.output.ConsumptionOnRouteInput;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.FuelConsumptionOnRouteInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.input.model.output.TravelTimesInput;
+import org.movsim.input.model.output.TravelTimeOnRouteInput;
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.output.consumption.ConsumptionOnRoute;
 import org.movsim.output.detector.LoopDetector;
@@ -46,7 +46,6 @@ import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
 import org.movsim.output.spatiotemporal.SpatioTemporal;
-import org.movsim.output.traveltime.FileTravelTime;
 import org.movsim.output.traveltime.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -65,33 +64,24 @@ public class SimulationOutput implements SimulationTimeStep {
     final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
     private FloatingCars floatingCars;
-    
-    private final List<SpatioTemporal> spatioTemporals = new ArrayList<SpatioTemporal>();
-    
-    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
-    
-    private final List<ConsumptionOnRoute> consumptionOnRoutes = new ArrayList<ConsumptionOnRoute>();
-    
-    private final List<TravelTimeOnRoute> travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();  
-    
-    private final RoadNetwork roadNetwork;
-    
-    private final RoadNetworkState roadworkState;
-    
 
-    /**
-     * Constructor.
-     * 
-     * @param simulationTimestep
-     * 
-     * @param simInput
-     *            the sim input
-     */
+    private final List<SpatioTemporal> spatioTemporals = new ArrayList<SpatioTemporal>();
+
+    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
+
+    private final List<ConsumptionOnRoute> consumptionOnRoutes = new ArrayList<ConsumptionOnRoute>();
+
+    private final List<TravelTimeOnRoute> travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();
+
+    private final RoadNetwork roadNetwork;
+
+    private final RoadNetworkState roadNetworkState;
+
     public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput,
             RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
-        
-        roadworkState = new RoadNetworkState(roadNetwork);
+
+        roadNetworkState = new RoadNetworkState(roadNetwork);
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
@@ -116,12 +106,12 @@ public class SimulationOutput implements SimulationTimeStep {
     }
 
     private void initConsumption(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
-        for (final FuelConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
+        for (final ConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
             final Route route = routes.get(fuelRouteInput.getRouteLabel());
             consumptionOnRoutes.add(new ConsumptionOnRoute(fuelRouteInput, route, writeOutput));
         }
     }
-    
+
     private void initTrajectories(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
         final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
         if (writeOutput) {
@@ -147,13 +137,9 @@ public class SimulationOutput implements SimulationTimeStep {
     }
 
     private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
-        final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
-        for (final TravelTimesInput travelTimeInput : travelTimesInput) {
+        for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
             final Route route = routes.get(travelTimeInput.getRouteLabel());
-            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(route);
-            if (writeOutput) {
-                travelTime.set(new FileTravelTime());
-            }
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(roadNetworkState, route, writeOutput);
             travelTimeOnRoutes.add(travelTime);
         }
     }
@@ -185,17 +171,17 @@ public class SimulationOutput implements SimulationTimeStep {
             floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
 
-            for (final SpatioTemporal sp : spatioTemporals) {
-                sp.timeStep(dt, simulationTime, iterationCount);
-            }
+        for (final SpatioTemporal sp : spatioTemporals) {
+            sp.timeStep(dt, simulationTime, iterationCount);
+        }
 
         for (final FileTrajectories filetraj : filesTrajectories.values()) {
             filetraj.timeStep(dt, simulationTime, iterationCount);
         }
 
-            for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes) {
-                travelTime.timeStep(dt, simulationTime, iterationCount);
-            }
+        for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes) {
+            travelTime.timeStep(dt, simulationTime, iterationCount);
+        }
 
     }
 
@@ -226,7 +212,12 @@ public class SimulationOutput implements SimulationTimeStep {
         return roadSegment.getLoopDetectors().getDetectors();
     }
 
+    /**
+     * Gets the roadwork state.
+     *
+     * @return the roadwork state
+     */
     public RoadNetworkState getRoadworkState() {
-        return roadworkState;
+        return roadNetworkState;
     }
 }

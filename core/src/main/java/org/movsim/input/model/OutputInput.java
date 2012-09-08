@@ -32,10 +32,10 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
 import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.FuelConsumptionOnRouteInput;
+import org.movsim.input.model.output.ConsumptionOnRouteInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.input.model.output.TravelTimesInput;
+import org.movsim.input.model.output.TravelTimeOnRouteInput;
 
 public class OutputInput {
 
@@ -45,9 +45,9 @@ public class OutputInput {
 
     private final List<TrajectoriesInput> trajectoriesInput = new ArrayList<TrajectoriesInput>();
 
-    private final List<TravelTimesInput> travelTimesInput = new ArrayList<TravelTimesInput>();
+    private final List<TravelTimeOnRouteInput> travelTimeOnRouteInput = new ArrayList<TravelTimeOnRouteInput>();
     
-    private final List<FuelConsumptionOnRouteInput> fuelInput = new ArrayList<FuelConsumptionOnRouteInput>();
+    private final List<ConsumptionOnRouteInput> consumptionOnRouteInput = new ArrayList<ConsumptionOnRouteInput>();
 
     /**
      * Instantiates a new output input.
@@ -86,7 +86,7 @@ public class OutputInput {
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputTravelTimes);
             for (Element element : elements) {
-                travelTimesInput.add(new TravelTimesInput(element));
+                travelTimeOnRouteInput.add(new TravelTimeOnRouteInput(element));
             }
         }
         
@@ -94,7 +94,7 @@ public class OutputInput {
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputFuel);
             for (Element element : elements) {
-                fuelInput.add(new FuelConsumptionOnRouteInput(element));
+                consumptionOnRouteInput.add(new ConsumptionOnRouteInput(element));
             }
         }
     }
@@ -111,12 +111,12 @@ public class OutputInput {
         return trajectoriesInput;
     }
     
-    public List<FuelConsumptionOnRouteInput> getFuelInput() {
-        return fuelInput;
+    public List<ConsumptionOnRouteInput> getFuelInput() {
+        return consumptionOnRouteInput;
     }
 
-    public List<TravelTimesInput> getTravelTimesInput() {
-        return travelTimesInput;
+    public List<TravelTimeOnRouteInput> getTravelTimesInput() {
+        return travelTimeOnRouteInput;
     }
 
 }

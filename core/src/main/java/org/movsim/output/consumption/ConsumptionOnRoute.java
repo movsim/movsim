@@ -1,6 +1,6 @@
 package org.movsim.output.consumption;
 
-import org.movsim.input.model.output.FuelConsumptionOnRouteInput;
+import org.movsim.input.model.output.ConsumptionOnRouteInput;
 import org.movsim.simulator.roadnetwork.Route;
 
 public class ConsumptionOnRoute {
@@ -9,7 +9,7 @@ public class ConsumptionOnRoute {
     
     private final FileConsumptionOnRoute fileWriter;
     
-    public ConsumptionOnRoute(FuelConsumptionOnRouteInput fuelRouteInput, Route route, boolean writeOutput){
+    public ConsumptionOnRoute(ConsumptionOnRouteInput fuelRouteInput, Route route, boolean writeOutput){
       this.route = route;
       fileWriter = (writeOutput) ? new FileConsumptionOnRoute() : null;
     }
