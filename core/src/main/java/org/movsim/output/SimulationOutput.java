@@ -40,7 +40,7 @@ import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimesInput;
 import org.movsim.input.model.vehicle.VehicleInput;
-import org.movsim.output.consumption.FileFuelConsumptionOnRoute;
+import org.movsim.output.consumption.ConsumptionOutput;
 import org.movsim.output.detector.LoopDetector;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
@@ -64,12 +64,15 @@ public class SimulationOutput implements SimulationTimeStep {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
-    private List<SpatioTemporal> spatioTemporals;
     private FloatingCars floatingCars;
-    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
-    private final Map<Route, FileFuelConsumptionOnRoute> filesFuelConsumptionOnRoute = new HashMap<Route, FileFuelConsumptionOnRoute>();
     
-    private List<TravelTimeOnRoute> travelTimeOnRoutes;  
+    private final List<SpatioTemporal> spatioTemporals = new ArrayList<SpatioTemporal>();
+    
+    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
+    
+    private final List<ConsumptionOutput> fuelConsumptionRoutes = new ArrayList<ConsumptionOutput>();
+    
+    private final List<TravelTimeOnRoute> travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();  
     
     private final RoadNetwork roadNetwork;
     
@@ -101,64 +104,64 @@ public class SimulationOutput implements SimulationTimeStep {
 
         final OutputInput outputInput = simulationInput.getOutputInput();
 
-        // Floating Car Output
+        initFloatingCars(writeOutput, outputInput);
+
+        initTravelTimes(writeOutput, routes, outputInput);
+
+        initSpatioTemporalOutput(writeOutput, routes, outputInput);
+
+        initTrajectories(writeOutput, routes, outputInput);
+
+        initConsumption(writeOutput, routes, outputInput);
+    }
+
+    private void initConsumption(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+        for (final FuelConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
+            final Route route = routes.get(fuelRouteInput.getRouteLabel());
+            fuelConsumptionRoutes.add(new ConsumptionOutput(fuelRouteInput, route, writeOutput));
+        }
+    }
+    
+    private void initTrajectories(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+        final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
+        if (writeOutput) {
+            for (final TrajectoriesInput traj : trajInput) {
+                final Route route = routes.get(traj.getRouteLabel());
+                if (filesTrajectories.containsKey(route)) {
+                    logger.warn("trajectory output for route \"{}\" already defined!", route.getName());
+                    continue;
+                }
+                filesTrajectories.put(route, new FileTrajectories(traj, route));
+            }
+        }
+    }
+
+    private void initSpatioTemporalOutput(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+        final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
+        for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
+            final Route route = routes.get(spatioTemporalInput.getRouteLabel());
+            final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
+                    spatioTemporalInput.getDt(), route, writeOutput);
+            spatioTemporals.add(spatioTemporal);
+        }
+    }
+
+    private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+        final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
+        for (final TravelTimesInput travelTimeInput : travelTimesInput) {
+            final Route route = routes.get(travelTimeInput.getRouteLabel());
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(route);
+            if (writeOutput) {
+                travelTime.set(new FileTravelTime());
+            }
+            travelTimeOnRoutes.add(travelTime);
+        }
+    }
+
+    private void initFloatingCars(boolean writeOutput, final OutputInput outputInput) {
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput != null) {
             floatingCars = new FloatingCars(floatingCarInput, roadNetwork, writeOutput);
-        }
-
-        // Travel times output
-        final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
-        if (travelTimesInput != null) {
-            travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();
-            for (final TravelTimesInput travelTimeInput : travelTimesInput) {
-                final Route route = routes.get(travelTimeInput.getRouteLabel());
-                final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(route);
-                if (writeOutput) {
-                    travelTime.set(new FileTravelTime());
-                }
-                travelTimeOnRoutes.add(travelTime);
-            }
-        }
-
-        // Spatio temporal output
-        final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
-        if (spatioTemporalInputs != null) {
-            spatioTemporals = new ArrayList<SpatioTemporal>();
-            for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
-                final Route route = routes.get(spatioTemporalInput.getRouteLabel());
-                final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
-                        spatioTemporalInput.getDt(), route, writeOutput);
-                spatioTemporals.add(spatioTemporal);
-            }
-        }
-
-        final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
-        if (trajInput != null) {
-            if (writeOutput) {
-                for (final TrajectoriesInput traj : trajInput) {
-                    final Route route = routes.get(traj.getRouteLabel());
-                    if(filesTrajectories.containsKey(route)){
-                        logger.warn("trajectory output for route \"{}\" already defined!", route.getName());
-                        continue;
-                    }
-                    filesTrajectories.put(route, new FileTrajectories(traj, route));
-                }
-            }
-        }
-
-        final List<FuelConsumptionOnRouteInput> fuelInput = outputInput.getFuelInput();
-        if (fuelInput != null) {
-            if (writeOutput) {
-                for (final FuelConsumptionOnRouteInput fuel : fuelInput) {
-                    final Route route = routes.get(fuel.getRouteLabel());
-                    if(filesFuelConsumptionOnRoute.containsKey(route)){
-                        logger.warn("fuel consumption for route \"{}\" already defined!", route.getName());
-                        continue;
-                    }
-                    filesFuelConsumptionOnRoute.put(route, new FileFuelConsumptionOnRoute(fuel, route));
-                }
-            }
         }
     }
 
@@ -182,25 +185,17 @@ public class SimulationOutput implements SimulationTimeStep {
             floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
 
-        if (spatioTemporals != null) {
             for (final SpatioTemporal sp : spatioTemporals) {
                 sp.timeStep(dt, simulationTime, iterationCount);
             }
-        }
 
         for (final FileTrajectories filetraj : filesTrajectories.values()) {
             filetraj.timeStep(dt, simulationTime, iterationCount);
         }
 
-        if (travelTimeOnRoutes != null) {
             for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes) {
                 travelTime.timeStep(dt, simulationTime, iterationCount);
             }
-        }
-
-        for (final FileFuelConsumptionOnRoute fuel : filesFuelConsumptionOnRoute.values()) {
-            fuel.timeStep(dt, simulationTime, iterationCount);
-        }
 
     }
 

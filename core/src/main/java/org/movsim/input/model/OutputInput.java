@@ -41,13 +41,13 @@ public class OutputInput {
 
     private FloatingCarInput floatingCarInput;
 
-    private List<SpatioTemporalInput> spatioTemporalInput;
+    private final List<SpatioTemporalInput> spatioTemporalInput = new ArrayList<SpatioTemporalInput>();
 
-    private List<TrajectoriesInput> trajectoriesInput;
+    private final List<TrajectoriesInput> trajectoriesInput = new ArrayList<TrajectoriesInput>();
 
-    private List<TravelTimesInput> travelTimesInput;
+    private final List<TravelTimesInput> travelTimesInput = new ArrayList<TravelTimesInput>();
     
-    private List<FuelConsumptionOnRouteInput> fuelInput;
+    private final List<FuelConsumptionOnRouteInput> fuelInput = new ArrayList<FuelConsumptionOnRouteInput>();
 
     /**
      * Instantiates a new output input.
@@ -67,7 +67,6 @@ public class OutputInput {
         }
 
         if (elem.getChild(XmlElementNames.OutputSpatioTemporal) != null) {
-            spatioTemporalInput = new ArrayList<SpatioTemporalInput>();
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputSpatioTemporal);
             for (Element element : elements) {
@@ -76,7 +75,6 @@ public class OutputInput {
         }
 
         if (elem.getChild(XmlElementNames.OutputTrajectories) != null) {
-            trajectoriesInput = new ArrayList<TrajectoriesInput>();
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputTrajectories);
             for (Element element : elements) {
@@ -85,7 +83,6 @@ public class OutputInput {
         }
 
         if (elem.getChild(XmlElementNames.OutputTravelTimes) != null) {
-            travelTimesInput = new ArrayList<TravelTimesInput>();
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputTravelTimes);
             for (Element element : elements) {
@@ -94,7 +91,6 @@ public class OutputInput {
         }
         
         if (elem.getChild(XmlElementNames.OutputFuel) != null) {
-            fuelInput = new ArrayList<FuelConsumptionOnRouteInput>();
             @SuppressWarnings("unchecked")
             List<Element> elements = elem.getChildren(XmlElementNames.OutputFuel);
             for (Element element : elements) {
