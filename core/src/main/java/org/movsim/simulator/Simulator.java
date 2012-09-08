@@ -67,7 +67,7 @@ import org.movsim.simulator.vehicles.FuelConsumptionModelPool;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -394,8 +394,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 if (logger.isDebugEnabled()) {
                     logger.debug(String
                             .format("macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
-                                    roadInput.getId(), position, ConversionUtilities.INVM_TO_INVKM * rhoLocal,
-                                    ConversionUtilities.MS_TO_KMH * speedInit));
+                                    roadInput.getId(), position, Units.INVM_TO_INVKM * rhoLocal,
+                                    Units.MS_TO_KMH * speedInit));
                 }
 
                 if (rhoLocal <= 0) {

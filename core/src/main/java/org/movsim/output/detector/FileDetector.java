@@ -26,7 +26,7 @@
 package org.movsim.output.detector;
 
 import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 import org.movsim.utilities.ObserverInTime;
 
 /**
@@ -112,9 +112,9 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
         for (int i = 0; i < laneCount; i++) {
             writer.printf(outputFormat, detector.getVehCountOutput(i),
                     detector.getVehCumulatedCountOutput(i),
-                    ConversionUtilities.MS_TO_KMH * detector.getMeanSpeed(i), ConversionUtilities.INVS_TO_INVH
+                    Units.MS_TO_KMH * detector.getMeanSpeed(i), Units.INVS_TO_INVH
                             * detector.getFlow(i), detector.getOccupancy(i),
-                    ConversionUtilities.MS_TO_KMH * detector.getMeanSpeedHarmonic(i),
+                    Units.MS_TO_KMH * detector.getMeanSpeedHarmonic(i),
                     detector.getMeanTimegapHarmonic(i));
         }
     }
@@ -126,9 +126,9 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
      */
     private void writeLaneAverages() {
         writer.printf(outputFormat, detector.getVehCountOutputAllLanes(),
-                detector.getVehCumulatedCountOutputAllLanes(), ConversionUtilities.MS_TO_KMH * detector.getMeanSpeedAllLanes(),
-                ConversionUtilities.INVS_TO_INVH * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
-                ConversionUtilities.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
+                detector.getVehCumulatedCountOutputAllLanes(), Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(),
+                Units.INVS_TO_INVH * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
+                Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
     }
 
     @Override

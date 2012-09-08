@@ -78,7 +78,6 @@ public class LoopDetectors implements SimulationTimeStep {
         }
     }
 
-    // for View
     /**
      * Gets the detectors.
      * 

@@ -27,7 +27,7 @@ package org.movsim.input.model.simulation;
 
 import java.util.Map;
 
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 
 public class ICMacroData {
 
@@ -48,7 +48,7 @@ public class ICMacroData {
      */
     public ICMacroData(Map<String, String> map) {
         this.x = Double.parseDouble(map.get("x"));
-        this.rho = ConversionUtilities.INVKM_TO_INVM*Double.parseDouble(map.get("rho_per_km"));
+        this.rho = Units.INVKM_TO_INVM*Double.parseDouble(map.get("rho_per_km"));
         // negative speed value allowed for using equilibrium speed 
         this.speed = Double.parseDouble(map.get("v"));
     }

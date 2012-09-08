@@ -30,7 +30,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelFactory;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
 import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumPropertiesFactory;
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 
 /**
  * The Class FileFundamentalDiagram.
@@ -66,7 +66,7 @@ public class FileFundamentalDiagram extends FileOutputBase {
     private void writeHeader(double timestep, EquilibriumProperties equilibriumProperties) {
         writer.printf("%s rho at max Q = %8.3f%n", FileOutputBase.COMMENT_CHAR,
                 1000 * equilibriumProperties.getRhoQMax());
-        writer.printf("%s max Q        = %8.3f%n", FileOutputBase.COMMENT_CHAR, ConversionUtilities.INVS_TO_INVH
+        writer.printf("%s max Q        = %8.3f%n", FileOutputBase.COMMENT_CHAR, Units.INVS_TO_INVH
                 * equilibriumProperties.getQMax());
         writer.printf("%s simulation timestep (model parameter for iterated map models) = %.3f%n",
                 FileOutputBase.COMMENT_CHAR, timestep);
@@ -79,8 +79,8 @@ public class FileFundamentalDiagram extends FileOutputBase {
             final double rho = equilibriumProperties.getRho(i);
             final double s = equilibriumProperties.getNetDistance(rho);
             final double vEq = equilibriumProperties.getVEq(i);
-            writer.printf(outputFormat, ConversionUtilities.INVM_TO_INVKM * rho, s,
-                    ConversionUtilities.MS_TO_KMH * vEq, ConversionUtilities.INVS_TO_INVH * rho * vEq);
+            writer.printf(outputFormat, Units.INVM_TO_INVKM * rho, s,
+                    Units.MS_TO_KMH * vEq, Units.INVS_TO_INVH * rho * vEq);
         }
     }
 }

@@ -41,7 +41,6 @@ import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimeOnRouteInput;
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.output.consumption.ConsumptionOnRoute;
-import org.movsim.output.detector.LoopDetector;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
@@ -50,7 +49,6 @@ import org.movsim.output.traveltime.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadNetworkState;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,33 +181,6 @@ public class SimulationOutput implements SimulationTimeStep {
             travelTime.timeStep(dt, simulationTime, iterationCount);
         }
 
-    }
-
-    /**
-     * Gets the spatio temporals.
-     * 
-     * @return the spatio temporals
-     */
-    public List<SpatioTemporal> getSpatioTemporals() {
-        return spatioTemporals;
-    }
-
-    /**
-     * Gets the floating cars.
-     * 
-     * @return the floating cars
-     */
-    public FloatingCars getFloatingCars() {
-        return floatingCars;
-    }
-
-    /**
-     * Gets the loop detectors.
-     * 
-     * @return the loop detectors
-     */
-    public static List<LoopDetector> getLoopDetectors(RoadSegment roadSegment) {
-        return roadSegment.getLoopDetectors().getDetectors();
     }
 
     /**

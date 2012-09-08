@@ -25,7 +25,7 @@
  */
 package org.movsim.utilities;
 
-public interface ConversionUtilities {
+public interface Units {
 
     /** converts 1/s to 1/h, factor is 3600 */
     final double INVS_TO_INVH = 3600.;

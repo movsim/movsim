@@ -29,7 +29,7 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -150,7 +150,7 @@ public class TrafficSource implements SimulationTimeStep {
             measuredTime = 0.0;
             measuredInflowCount = 0;
             logger.debug(String.format("source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles", 
-                    roadSegment.id(), measuredInflow*ConversionUtilities.INVS_TO_INVH, getQueueLength()));
+                    roadSegment.id(), measuredInflow*Units.INVS_TO_INVH, getQueueLength()));
         }
         
         if (nWait >= 1.0) {

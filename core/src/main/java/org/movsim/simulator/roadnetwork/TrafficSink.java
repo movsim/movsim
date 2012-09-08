@@ -28,7 +28,7 @@ package org.movsim.simulator.roadnetwork;
 
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,7 +153,7 @@ public class TrafficSink implements SimulationTimeStep {
             vechiclesRemovedInInterval = 0;
             measuredTime = 0.0;
             logger.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", 
-                    sourceRoad().id(), measuredOutflow*ConversionUtilities.INVS_TO_INVH);
+                    sourceRoad().id(), measuredOutflow*Units.INVS_TO_INVH);
         }
     }
 }
