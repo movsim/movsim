@@ -208,10 +208,10 @@ public class XmlReaderSimInput {
      */
     private String checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(String networkFileName) {
         final String fullFilename = projectMetaData.getPathToProjectXmlFile() + networkFileName;
-        System.out.println("check path :" + fullFilename);
+        logger.info("check path : {}", fullFilename);
         boolean exits = FileUtils.fileExists(fullFilename);
         if (exits) {
-            System.out.println("network file exists!");
+            logger.info("etwork file {} exists!", networkFileName);
         } else {
             logger.error("Please provide the corresponding road network file. Either in the same directory as the movsim xml or provide the path and file name in the attribute 'network_filename' in the root tag. If you have done that, check the spelling!");
             System.exit(-1);
