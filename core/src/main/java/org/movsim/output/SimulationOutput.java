@@ -45,10 +45,11 @@ import org.movsim.output.fileoutput.FileFuelConsumptionOnRoute;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
+import org.movsim.output.fileoutput.FileTravelTime;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadNetworkState;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,8 @@ public class SimulationOutput implements SimulationTimeStep {
     private FileFloatingCars fileFloatingCars;
     private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
     private final Map<Route, FileFuelConsumptionOnRoute> filesFuelConsumptionOnRoute = new HashMap<Route, FileFuelConsumptionOnRoute>();
-    private TravelTimes travelTimes;  // TODO for route
+    
+    private List<TravelTimeOnRoute> travelTimeOnRoutes;  
     
     private final RoadNetwork roadNetwork;
     
@@ -111,7 +113,15 @@ public class SimulationOutput implements SimulationTimeStep {
         // Travel times output
         final List<TravelTimesInput> travelTimesInput = outputInput.getTravelTimesInput();
         if (travelTimesInput != null) {
-            travelTimes = new TravelTimes(travelTimesInput, routes, roadNetwork);
+            travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();
+            for (final TravelTimesInput travelTimeInput : travelTimesInput) {
+                final Route route = routes.get(travelTimeInput.getRouteLabel());
+                final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(route);
+                if (writeOutput) {
+                    travelTime.set(new FileTravelTime());
+                }
+                travelTimeOnRoutes.add(travelTime);
+            }
         }
 
         // Spatio temporal output
@@ -191,8 +201,10 @@ public class SimulationOutput implements SimulationTimeStep {
             filetraj.timeStep(dt, simulationTime, iterationCount);
         }
 
-        if (travelTimes != null) {
-            travelTimes.timeStep(dt, simulationTime, iterationCount);
+        if (travelTimeOnRoutes != null) {
+            for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes) {
+                travelTime.timeStep(dt, simulationTime, iterationCount);
+            }
         }
 
         for (final FileFuelConsumptionOnRoute fuel : filesFuelConsumptionOnRoute.values()) {
@@ -226,10 +238,6 @@ public class SimulationOutput implements SimulationTimeStep {
      */
     public static List<LoopDetector> getLoopDetectors(RoadSegment roadSegment) {
         return roadSegment.getLoopDetectors().getDetectors();
-    }
-
-    public TravelTimes getTravelTimes() {
-        return travelTimes;
     }
 
     public RoadNetworkState getRoadworkState() {

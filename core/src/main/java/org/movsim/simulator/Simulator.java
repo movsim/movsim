@@ -177,11 +177,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return simulationRunnable;
     }
 
-    public List<Double> getTravelTimeDataEMAs(double time) {
-        final double tauEMA = 40;
-        return simOutput.getTravelTimes().getTravelTimesEMA(time, tauEMA);
-    }
-
     /**
      * Load scenario from xml.
      * 

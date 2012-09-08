@@ -77,5 +77,18 @@ public class RoadNetworkState {
         }
         return totalVehicleElectricEnergyUsed;
     }
+    
+    public double instantaneousTravelTime(Route route) {
+        double instantaneousTravelTime = 0;
+        for (final RoadSegment roadSegment : route) {
+            
+        }
+        return 0;
+    }
+    
+    public double instantaneousFuelUsedLiters(Route route) {
+        return 0;
+    }
+    
 
 }
