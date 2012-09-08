@@ -42,7 +42,6 @@ public class LoopDetectors implements SimulationTimeStep {
 
     /** The detectors. */
     private final List<LoopDetector> detectors;
-    private List<FileDetector> fileDetectors;
 
     /**
      * Constructor.
@@ -58,15 +57,7 @@ public class LoopDetectors implements SimulationTimeStep {
             final double dtSample = input.getSampleInterval();
             final List<Double> positions = input.getPositions();
             for (final Double detPosition : positions) {
-                detectors.add(new LoopDetector(roadSegment, detPosition, dtSample));
-            }
-
-            if (input.isWithLogging()) {
-                final int laneCount = roadSegment.laneCount();
-                fileDetectors = new ArrayList<FileDetector>();
-                for (final LoopDetector det : detectors) {
-                    fileDetectors.add(new FileDetector(roadSegment.userId(), det, laneCount));
-                }
+                detectors.add(new LoopDetector(roadSegment, detPosition, dtSample, input.isWithLogging()));
             }
         }
     }
@@ -78,16 +69,4 @@ public class LoopDetectors implements SimulationTimeStep {
         }
     }
 
-    /**
-     * Gets the detectors.
-     * 
-     * @return the detectors
-     */
-    public List<LoopDetector> getDetectors() {
-        final List<LoopDetector> loopDetectors = new ArrayList<LoopDetector>();
-        for (final LoopDetector det : detectors) {
-            loopDetectors.add(det);
-        }
-        return loopDetectors;
-    }
 }

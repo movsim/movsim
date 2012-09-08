@@ -30,18 +30,18 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.ObservableImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class LoopDetector.
  */
-public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
+public class LoopDetector implements SimulationTimeStep {
 
     final static Logger logger = LoggerFactory.getLogger(LoopDetector.class);
 
     private final RoadSegment roadSegment;
+    
     private final double dtSample;
 
     private final double detPosition;
@@ -86,6 +86,8 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
 
     private double meanTimegapHarmonicAllLanes;
 
+    private final FileDetector fileDetector;
+    
     /**
      * Constructor.
      * 
@@ -93,7 +95,7 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
      * @param dtSample
      * @param laneCount
      */
-    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample) {
+    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging) {
         this.roadSegment = roadSegment;
         this.detPosition = detPosition;
         this.dtSample = dtSample;
@@ -121,7 +123,11 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
             vehCumulatedCountOutput[i] = 0;  // initalization
         }
         resetLaneAverages();
-        notifyObservers(0);
+        
+        fileDetector = (logging) ? new FileDetector(this, roadSegment.userId(), roadSegment.laneCount()) : null;
+        if(fileDetector != null){
+            fileDetector.writeAggregatedData(0);
+        }
     }
 
     private void resetLaneAverages() {
@@ -158,7 +164,9 @@ public class LoopDetector extends ObservableImpl implements SimulationTimeStep {
                 calculateAveragesForLane(lane);
             }
             calculateAveragesOverAllLanes();
-            notifyObservers(simulationTime);
+            if(fileDetector != null){
+                fileDetector.writeAggregatedData(simulationTime);
+            }
             timeOffset = simulationTime;
         }
     }

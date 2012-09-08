@@ -27,12 +27,11 @@ package org.movsim.output.detector;
 
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.utilities.Units;
-import org.movsim.utilities.ObserverInTime;
 
 /**
  * The Class FileDetector.
  */
-public class FileDetector extends FileOutputBase implements ObserverInTime {
+public class FileDetector extends FileOutputBase {
 
     private static final String extensionFormat = ".det.road_%s.x_%d.csv";
 
@@ -57,7 +56,7 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
      *            the detector
      * @param laneCount
      */
-    public FileDetector(String roadId, LoopDetector detector, int laneCount) {
+    public FileDetector(LoopDetector detector, String roadId, int laneCount) {
         super();
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
@@ -65,7 +64,6 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
 
         writer = createWriter(String.format(extensionFormat, roadId, xDetectorInt));
         writeHeader();
-        detector.registerObserver(this);
     }
 
     /**
@@ -93,7 +91,7 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
      * @param time
      *            the time
      */
-    private void writeAggregatedData(double time) {
+    protected void writeAggregatedData(double time) {
         writer.printf(outputFormatTime, time);
         if (laneCount > 1) {
             writeLaneAverages();
@@ -131,8 +129,4 @@ public class FileDetector extends FileOutputBase implements ObserverInTime {
                 Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
     }
 
-    @Override
-    public void notifyObserver(double time) {
-        writeAggregatedData(time);
-    }
 }
