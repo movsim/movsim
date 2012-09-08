@@ -43,7 +43,6 @@ import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.output.fileoutput.FileFloatingCars;
 import org.movsim.output.fileoutput.FileFuelConsumptionOnRoute;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
-import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.fileoutput.FileTravelTime;
 import org.movsim.simulator.SimulationTimeStep;
@@ -63,7 +62,6 @@ public class SimulationOutput implements SimulationTimeStep {
     final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<SpatioTemporal> spatioTemporals;
-    private List<FileSpatioTemporal> filesSpatioTemporal;
     private FloatingCars floatingCars;
     private FileFloatingCars fileFloatingCars;
     private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
@@ -128,17 +126,11 @@ public class SimulationOutput implements SimulationTimeStep {
         final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
         if (spatioTemporalInputs != null) {
             spatioTemporals = new ArrayList<SpatioTemporal>();
-            if (writeOutput) {
-                filesSpatioTemporal = new ArrayList<FileSpatioTemporal>();
-            }
             for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
                 final Route route = routes.get(spatioTemporalInput.getRouteLabel());
                 final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
-                        spatioTemporalInput.getDt(), route);
+                        spatioTemporalInput.getDt(), route, writeOutput);
                 spatioTemporals.add(spatioTemporal);
-                if (writeOutput) {
-                    filesSpatioTemporal.add(new FileSpatioTemporal(spatioTemporal));
-                }
             }
         }
 

@@ -26,64 +26,35 @@
 package org.movsim.output.fileoutput;
 
 import org.movsim.output.SpatioTemporal;
-import org.movsim.utilities.ObserverInTime;
 
 /**
  * The Class FileSpatioTemporal.
  */
-public class FileSpatioTemporal extends FileOutputBase implements ObserverInTime {
+public class FileSpatioTemporal extends FileOutputBase {
 
     private static final String extensionFormat = ".st.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
 
-    private final SpatioTemporal spatioTemporal;
-
-    /**
-     * Constructor.
-     * 
-     * @param routeLabel
-     *            the route label
-     * @param spatioTemporal
-     *            the spatio temporal
-     */
-    public FileSpatioTemporal(SpatioTemporal spatioTemporal) {
-        this.spatioTemporal = spatioTemporal;
-        String routeLabel = spatioTemporal.getRoute().getName();
-        spatioTemporal.registerObserver(this);
+    public FileSpatioTemporal(String routeLabel) {
         writer = createWriter(String.format(extensionFormat, routeLabel));
         writer.printf(outputHeading);
         writer.flush();
     }
 
-    /**
-     * Write output.
-     * 
-     * @param time
-     *            the time
-     */
-    private void writeOutput(double time) {
+    public void writeOutput(SpatioTemporal spatioTemporal, double simulationTime) {
         final int count = spatioTemporal.size();
         final double dx = spatioTemporal.getDxOut();
         for (int i = 0; i < count; i++) {
             final double x = i * dx;
             // TODO - output acceleration
             // 0.0 is placeholder for acceleration which is not yet implemented
-            writer.printf(outputFormat, time, x, spatioTemporal.getAverageSpeed(i), 0.0,
+            writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i), 0.0,
                     1000 * spatioTemporal.getDensity(i), 3600 * spatioTemporal.getFlow(i));
         }
         writer.printf("%n"); // block ends
         writer.flush();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.utilities.ObserverInTime#notifyObserver(double)
-     */
-    @Override
-    public void notifyObserver(double time) {
-        writeOutput(time);
-    }
 }

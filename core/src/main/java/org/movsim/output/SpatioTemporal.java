@@ -25,13 +25,13 @@
  */
 package org.movsim.output;
 
+import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.ObservableImpl;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class SpatioTemporalImpl.
  */
-public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep {
+public class SpatioTemporal implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
@@ -54,13 +54,9 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
     private final double[] flow;
     private double timeOffset;
 
-    /**
-     * Constructor.
-     * 
-     * @param input
-     * @param routes
-     */
-    public SpatioTemporal(double dxOut, double dtOut, Route route) {
+    private final FileSpatioTemporal fileWriter;
+    
+    public SpatioTemporal(double dxOut, double dtOut, Route route, boolean writeOutput) {
 
         this.dxOut = dxOut;
         this.dtOut = dtOut;
@@ -71,6 +67,8 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
         density = new double[size];
         averageSpeed = new double[size];
         flow = new double[size];
+        
+        fileWriter = writeOutput ? new FileSpatioTemporal(route.getName()) : null;
     }
 
     @Override
@@ -78,7 +76,9 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
         if ((simulationTime - timeOffset) >= dtOut) {
             timeOffset = simulationTime;
             calcData();
-            notifyObservers(simulationTime);
+            if(fileWriter != null){
+                fileWriter.writeOutput(this, simulationTime);
+            }
         }
     }
 
@@ -198,4 +198,5 @@ public class SpatioTemporal extends ObservableImpl implements SimulationTimeStep
     public Route getRoute() {
         return route;
     }
+
 }
