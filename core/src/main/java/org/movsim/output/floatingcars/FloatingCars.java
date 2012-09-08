@@ -29,14 +29,14 @@ import java.util.Collection;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.SimulationTimeStep;
-import org.movsim.utilities.ObservableImpl;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class FloatingCars.
  */
-public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
+public class FloatingCars implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
@@ -44,6 +44,9 @@ public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
     private final Collection<Integer> floatingCarVehicleNumbers;
     private final int nDtOut;
 
+    private final RoadNetwork roadNetwork;
+    
+    private final FileFloatingCars fileWriter;
     /**
      * Constructor.
      * 
@@ -52,17 +55,19 @@ public class FloatingCars extends ObservableImpl implements SimulationTimeStep {
      * @param input
      *            the input
      */
-    public FloatingCars(FloatingCarInput input) {
-        logger.debug("Cstr. FloatingCars");
-
+    public FloatingCars(FloatingCarInput input, RoadNetwork roadNetwork, boolean writeFileOutput) {
+        this.roadNetwork = roadNetwork;
         this.nDtOut = input.getNDt();
         this.floatingCarVehicleNumbers = input.getFloatingCars();
+        fileWriter = (writeFileOutput) ? new FileFloatingCars(this) : null;
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (iterationCount % nDtOut == 0) {
-            notifyObservers(simulationTime);
+            if(fileWriter != null){
+                fileWriter.writeOutput(simulationTime, roadNetwork);
+            }
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
         }
     }

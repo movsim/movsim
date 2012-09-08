@@ -37,7 +37,6 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
-import org.movsim.utilities.ObserverInTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
-public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
+public class FileFloatingCars extends FileOutputBase {
 
     private static final String extensionFormat = ".car.origin_%d.%06d.csv";
     private static final String extensionRegex = "[.]car[.]origin_\\d+[.]\\d+[.]csv";
@@ -59,8 +58,6 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
-    private final RoadNetwork roadNetwork;
-    private final FloatingCars floatingCars;
     private Collection<Integer> fcdNumbers;
     private final Map<Integer, PrintWriter> printWriters = new HashMap<Integer, PrintWriter>(149, 0.75f);
 
@@ -70,15 +67,10 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
      * @param floatingCars
      *            the floating cars
      */
-    public FileFloatingCars(RoadNetwork roadNetwork, FloatingCars floatingCars) {
+    public FileFloatingCars(FloatingCars floatingCars) {
         super();
-        this.roadNetwork = roadNetwork;
-        this.floatingCars = floatingCars;
-        floatingCars.registerObserver(this);
-
         final String regex = baseFilename + extensionRegex;
         FileUtils.deleteFileList(path, regex);
-
         fcdNumbers = floatingCars.getFloatingCarVehicleNumbers();
     }
 
@@ -113,11 +105,10 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
     /**
      * Write output.
      * 
-     * @param updateTime
+     * @param simulationTime
      *            the update time
      */
-    public void writeOutput(double updateTime) {
-
+    public void writeOutput(double simulationTime, RoadNetwork roadNetwork) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final int laneCount = roadSegment.laneCount();
             for (int lane = 0; lane < laneCount; ++lane) {
@@ -135,7 +126,7 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
                     }
                     if (printWriters.containsKey(vehNumber)) {
                         final Vehicle frontVeh = laneSegment.frontVehicle(vehOnLane);
-                        writeData(updateTime, vehOnLane, frontVeh, printWriters.get(vehNumber));
+                        writeData(simulationTime, vehOnLane, frontVeh, printWriters.get(vehNumber));
                     }
                 }
             }
@@ -165,13 +156,4 @@ public class FileFloatingCars extends FileOutputBase implements ObserverInTime {
         writer.flush();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.utilities.ObserverInTime#notifyObserver(double)
-     */
-    @Override
-    public void notifyObserver(double time) {
-        writeOutput(time);
-    }
 }

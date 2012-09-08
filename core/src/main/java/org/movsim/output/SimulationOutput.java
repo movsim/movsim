@@ -44,7 +44,6 @@ import org.movsim.output.consumption.FileFuelConsumptionOnRoute;
 import org.movsim.output.detector.LoopDetector;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
-import org.movsim.output.floatingcars.FileFloatingCars;
 import org.movsim.output.floatingcars.FloatingCars;
 import org.movsim.output.spatiotemporal.SpatioTemporal;
 import org.movsim.output.traveltime.FileTravelTime;
@@ -67,7 +66,6 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private List<SpatioTemporal> spatioTemporals;
     private FloatingCars floatingCars;
-    private FileFloatingCars fileFloatingCars;
     private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
     private final Map<Route, FileFuelConsumptionOnRoute> filesFuelConsumptionOnRoute = new HashMap<Route, FileFuelConsumptionOnRoute>();
     
@@ -106,10 +104,7 @@ public class SimulationOutput implements SimulationTimeStep {
         // Floating Car Output
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput != null) {
-            floatingCars = new FloatingCars(floatingCarInput);
-            if (writeOutput) {
-                fileFloatingCars = new FileFloatingCars(roadNetwork, floatingCars);
-            }
+            floatingCars = new FloatingCars(floatingCarInput, roadNetwork, writeOutput);
         }
 
         // Travel times output
