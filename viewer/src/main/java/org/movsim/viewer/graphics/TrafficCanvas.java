@@ -54,7 +54,7 @@ import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
-import org.movsim.utilities.ConversionUtilities;
+import org.movsim.utilities.Units;
 import org.movsim.viewer.roadmapping.PaintRoadMapping;
 import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
@@ -906,10 +906,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(Color.BLACK);
                 StringBuilder inflowStringBuilder = new StringBuilder();
                 inflowStringBuilder.append("set/target inflow: ");
-                inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource
+                inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource
                         .getTotalInflow(simulationTime())));
                 inflowStringBuilder.append("/");
-                inflowStringBuilder.append((int) (ConversionUtilities.INVS_TO_INVH * trafficSource.measuredInflow()));
+                inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.measuredInflow()));
                 inflowStringBuilder.append(" veh/h");
                 inflowStringBuilder.append(" (");
                 inflowStringBuilder.append(trafficSource.getQueueLength());
@@ -938,7 +938,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                String outflowString = "outflow: " + (int) (ConversionUtilities.INVS_TO_INVH * sink.measuredOutflow())
+                String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow())
                         + " veh/h";
                 g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }
