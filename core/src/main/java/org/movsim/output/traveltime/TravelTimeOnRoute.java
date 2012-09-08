@@ -23,9 +23,8 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output;
+package org.movsim.output.traveltime;
 
-import org.movsim.output.fileoutput.FileTravelTime;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.Route;
 

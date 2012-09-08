@@ -23,14 +23,14 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.movsim.output.FloatingCars;
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;

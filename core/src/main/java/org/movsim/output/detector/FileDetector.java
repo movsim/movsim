@@ -23,9 +23,9 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.output.detector;
 
-import org.movsim.output.LoopDetector;
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.utilities.ConversionUtilities;
 import org.movsim.utilities.ObserverInTime;
 

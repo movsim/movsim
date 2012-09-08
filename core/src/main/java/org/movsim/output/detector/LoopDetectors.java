@@ -23,13 +23,12 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output;
+package org.movsim.output.detector;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.movsim.input.model.simulation.DetectorInput;
-import org.movsim.output.fileoutput.FileDetector;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;

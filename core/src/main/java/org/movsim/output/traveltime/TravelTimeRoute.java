@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output;
+package org.movsim.output.traveltime;
 
 import java.util.HashMap;
 import java.util.Iterator;

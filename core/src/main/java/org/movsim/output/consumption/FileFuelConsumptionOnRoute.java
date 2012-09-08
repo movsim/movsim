@@ -1,6 +1,7 @@
-package org.movsim.output.fileoutput;
+package org.movsim.output.consumption;
 
 import org.movsim.input.model.output.FuelConsumptionOnRouteInput;
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.Route;
 
 /**

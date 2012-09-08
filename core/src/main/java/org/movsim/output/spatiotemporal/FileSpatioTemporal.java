@@ -23,9 +23,9 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.output.spatiotemporal;
 
-import org.movsim.output.SpatioTemporal;
+import org.movsim.output.fileoutput.FileOutputBase;
 
 /**
  * The Class FileSpatioTemporal.

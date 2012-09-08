@@ -23,9 +23,8 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output;
+package org.movsim.output.spatiotemporal;
 
-import org.movsim.output.fileoutput.FileSpatioTemporal;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
