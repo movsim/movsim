@@ -135,12 +135,6 @@ public class NSM extends LongitudinalModelBase {
      */
     private double acc(double s, double v, double dv, double localV0) {
         final int localIntegerV0 = (int) (localV0 + 0.5);
-        if (localIntegerV0 <= 0) {
-            logger.warn(
-                    "local desired speed localVO={} is mapped to CA integer v0={} probably due to a speed limit. Cannot move forward.",
-                    localV0, localIntegerV0);
-        }
-
         final int vLocal = (int) (v + 0.5);
         int vNew = 0;
 
