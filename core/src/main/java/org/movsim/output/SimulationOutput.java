@@ -48,7 +48,6 @@ import org.movsim.output.spatiotemporal.SpatioTemporal;
 import org.movsim.output.traveltime.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.RoadNetworkState;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,13 +72,9 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final RoadNetwork roadNetwork;
 
-    private final RoadNetworkState roadNetworkState;
-
     public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput,
             RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
-
-        roadNetworkState = new RoadNetworkState(roadNetwork);
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
@@ -137,7 +132,7 @@ public class SimulationOutput implements SimulationTimeStep {
     private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
         for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
             final Route route = routes.get(travelTimeInput.getRouteLabel());
-            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(roadNetworkState, route, writeOutput);
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(roadNetwork, route, writeOutput);
             travelTimeOnRoutes.add(travelTime);
         }
     }
@@ -183,12 +178,4 @@ public class SimulationOutput implements SimulationTimeStep {
 
     }
 
-    /**
-     * Gets the roadwork state.
-     *
-     * @return the roadwork state
-     */
-    public RoadNetworkState getRoadworkState() {
-        return roadNetworkState;
-    }
 }

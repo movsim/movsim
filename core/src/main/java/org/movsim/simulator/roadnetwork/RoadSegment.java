@@ -480,14 +480,14 @@ public class RoadSegment implements Iterable<Vehicle> {
     
     private double meanSpeed(){
         double sumSpeed = 0;
+        int vehCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             for(Vehicle veh : laneSegment){
                 sumSpeed += veh.getSpeed();
+                ++vehCount;
             }
         }
-        int vehCount = getVehicleCount(); 
         return (vehCount>0) ? sumSpeed/vehCount : MovsimConstants.FREE_SPEED;
-        
     }
     
     /**
@@ -497,7 +497,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return instantantaneous travel time with adhoc assumed travel time if road is empty
      */
     public double instantaneousTravelTime() {
-        return this.roadLength / meanSpeed();
+        return roadLength / meanSpeed();
     }
 
     /**

@@ -26,7 +26,7 @@
 package org.movsim.output.traveltime;
 
 import org.movsim.simulator.SimulationTimeStep;
-import org.movsim.simulator.roadnetwork.RoadNetworkState;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
 
 public class TravelTimeOnRoute implements SimulationTimeStep {
@@ -36,12 +36,12 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
     /** configures update interval. Initial value = 100 */
     private long updateIntervalCount = 100;
     
-    private final RoadNetworkState roadNetworkState;
+    private final RoadNetwork roadNetwork;
     
     private final FileTravelTime fileWriter;
 
-    public TravelTimeOnRoute(RoadNetworkState roadNetworkState, Route route, boolean writeOutput) {
-        this.roadNetworkState = roadNetworkState;
+    public TravelTimeOnRoute(RoadNetwork roadNetwork, Route route, boolean writeOutput) {
+        this.roadNetwork = roadNetwork;
         this.route = route;
         
         fileWriter = writeOutput ? new FileTravelTime(route) : null; 
@@ -50,10 +50,10 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        final double instantaneousTravelTime = roadNetworkState.instantaneousTravelTime(route);
+        final double instantaneousTravelTime = roadNetwork.instantaneousTravelTime(route);
         
         if(fileWriter != null){
-            fileWriter.write(instantaneousTravelTime);
+            fileWriter.write(simulationTime, instantaneousTravelTime);
         }
 //        final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
 //        for (final TravelTimeRoute route : traveltimeRoutes) {
