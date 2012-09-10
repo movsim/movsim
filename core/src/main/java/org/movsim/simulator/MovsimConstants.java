@@ -25,6 +25,8 @@
  */
 package org.movsim.simulator;
 
+import org.movsim.utilities.Units;
+
 /**
  * The Interface MovsimConstants.
  */
@@ -35,12 +37,14 @@ public interface MovsimConstants {
 
     final double SMALL_VALUE = 1e-7;
 
-    final double MAX_VEHICLE_SPEED = 200 / 3.6;
+    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
 
     final double GAP_INFINITY = 10000;
 
     final double INVALID_GAP = -1;
 
     final double CRITICAL_GAP = 2;
+
+    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition
 
 }

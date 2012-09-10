@@ -29,6 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import java.util.Iterator;
 
 import org.movsim.output.detector.LoopDetectors;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimpleRamp;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -475,6 +476,28 @@ public class RoadSegment implements Iterable<Vehicle> {
             totalVehicleElectricEnergyUsed += laneSegment.totalVehicleElectricEnergyUsed();
         }
         return totalVehicleElectricEnergyUsed;
+    }
+    
+    private double meanSpeed(){
+        double sumSpeed = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            for(Vehicle veh : laneSegment){
+                sumSpeed += veh.getSpeed();
+            }
+        }
+        int vehCount = getVehicleCount(); 
+        return (vehCount>0) ? sumSpeed/vehCount : MovsimConstants.FREE_SPEED;
+        
+    }
+    
+    /**
+     * Returns the instantaneous travel time defined by the road element length and current mean speed of all vehicles.
+     * An adhoc free speed is assumed in case of an empty road.
+     * 
+     * @return instantantaneous travel time with adhoc assumed travel time if road is empty
+     */
+    public double instantaneousTravelTime() {
+        return this.roadLength / meanSpeed();
     }
 
     /**
@@ -1133,4 +1156,5 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setSimpleRamp(SimpleRamp simpleRamp) {
         this.simpleRamp = simpleRamp;
     }
+
 }

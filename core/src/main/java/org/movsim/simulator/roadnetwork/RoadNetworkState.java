@@ -42,7 +42,7 @@ public class RoadNetworkState {
     public double instantaneousTravelTime(Route route) {
         double instantaneousTravelTime = 0;
         for (final RoadSegment roadSegment : route) {
-            instantaneousTravelTime += 1; // TODO
+            instantaneousTravelTime += roadSegment.instantaneousTravelTime();
         }
         return instantaneousTravelTime;
     }
