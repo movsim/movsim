@@ -211,7 +211,7 @@ public class XmlReaderSimInput {
         logger.info("check path : {}", fullFilename);
         boolean exits = FileUtils.fileExists(fullFilename);
         if (exits) {
-            logger.info("etwork file {} exists!", networkFileName);
+            logger.info("network file {} exists!", networkFileName);
         } else {
             logger.error("Please provide the corresponding road network file. Either in the same directory as the movsim xml or provide the path and file name in the attribute 'network_filename' in the root tag. If you have done that, check the spelling!");
             System.exit(-1);
