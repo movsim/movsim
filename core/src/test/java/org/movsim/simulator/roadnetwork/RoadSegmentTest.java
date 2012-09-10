@@ -301,23 +301,23 @@ public class RoadSegmentTest {
         final int laneCount = 2;
         RoadSegment.resetNextId();
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
-        assertEquals(0, roadSegment.totalVehicleCount());
+        assertEquals(0, roadSegment.getVehicleCount());
         roadSegment.addVehicle(newVehicle(900.0, 0.0, Lane.LANE1));
-        assertEquals(1, roadSegment.totalVehicleCount());
+        assertEquals(1, roadSegment.getVehicleCount());
         roadSegment.addVehicle(newVehicle(800.0, 0.0, Lane.LANE2));
-        assertEquals(2, roadSegment.totalVehicleCount());
+        assertEquals(2, roadSegment.getVehicleCount());
         roadSegment.addVehicle(newVehicle(700.0, 0.0, Lane.LANE1));
-        assertEquals(3, roadSegment.totalVehicleCount());
+        assertEquals(3, roadSegment.getVehicleCount());
         roadSegment.addVehicle(newVehicle(600.0, 0.0, Lane.LANE2));
-        assertEquals(4, roadSegment.totalVehicleCount());
+        assertEquals(4, roadSegment.getVehicleCount());
         roadSegment.clearVehicles();
-        assertEquals(0, roadSegment.totalVehicleCount());
+        assertEquals(0, roadSegment.getVehicleCount());
         assertEquals(0, roadSegment.getVehicleCount(Lane.LANE1));
         assertEquals(0, roadSegment.getVehicleCount(Lane.LANE2));
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#totalVehicleCount()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#getVehicleCount()}
      */
     @Test
     public final void testVehicleCount() {
@@ -325,13 +325,13 @@ public class RoadSegmentTest {
         final int laneCount = 1;
         RoadSegment.resetNextId();
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
-        assertEquals(0, roadSegment.totalVehicleCount());
+        assertEquals(0, roadSegment.getVehicleCount());
         roadSegment.addVehicle(newVehicle(1.0, 0.0, Lane.LANE1));
-        assertEquals(1, roadSegment.totalVehicleCount());
+        assertEquals(1, roadSegment.getVehicleCount());
         roadSegment.addVehicle(newVehicle(11.0, 0.0, Lane.LANE1));
-        assertEquals(2, roadSegment.totalVehicleCount());
+        assertEquals(2, roadSegment.getVehicleCount());
         roadSegment.clearVehicles();
-        assertEquals(0, roadSegment.totalVehicleCount());
+        assertEquals(0, roadSegment.getVehicleCount());
     }
 
     /**
@@ -1178,8 +1178,8 @@ public class RoadSegmentTest {
         r0.updateVehiclePositionsAndSpeeds(dt, simulationTime, iterationCount);
         assertEquals(1009.0, v0.getRearPosition(), delta);
         r0.outFlow(dt, simulationTime, iterationCount);
-        assertEquals(0, r0.totalVehicleCount());
-        assertEquals(1, r1.totalVehicleCount());
+        assertEquals(0, r0.getVehicleCount());
+        assertEquals(1, r1.getVehicleCount());
         final Vehicle v = r1.getVehicle(Lane.LANE1, 0);
         assertEquals(9.0, v.getRearPosition(), delta);
     }

@@ -254,7 +254,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public int vehicleCount() {
         int vehicleCount = 0;
         for (final RoadSegment roadSegment : roadSegments) {
-            vehicleCount += roadSegment.totalVehicleCount();
+            vehicleCount += roadSegment.getVehicleCount();
         }
         return vehicleCount;
     }

@@ -405,16 +405,29 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the total number of vehicles on this road segment, all lanes.
+     * Returns the number of vehicles on this road segment, all lanes.
      * 
      * @return the total number of vehicles on this road segment
      */
-    protected int totalVehicleCount() {
-        int totalVehicleCount = 0;
+    protected int getVehicleCount() {
+        int vehicleCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
-            totalVehicleCount += laneSegment.vehicleCount();
+            vehicleCount += laneSegment.vehicleCount();
         }
-        return totalVehicleCount;
+        return vehicleCount;
+    }
+    
+    /**
+     * Returns the number of vehicles in the given lane on this road segment.
+     * 
+     * @param lane
+     * 
+     * @return the number of vehicles in the given lane on this road segment
+     */
+    public int getVehicleCount(int lane) {
+        assert lane >= Lane.LANE1;
+        assert lane < laneCount;
+        return laneSegments[lane].vehicleCount();
     }
 
     /**
@@ -429,7 +442,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return totalVehicleTravelTime;
     }
-
+    
     /**
      * Returns the total travel distance of all vehicles on this road segment, all lanes.
      * 
@@ -477,18 +490,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         return obstacleCount;
     }
 
-    /**
-     * Returns the number of vehicles in the given lane on this road segment.
-     * 
-     * @param lane
-     * 
-     * @return the number of vehicles in the given lane on this road segment
-     */
-    public int getVehicleCount(int lane) {
-        assert lane >= Lane.LANE1;
-        assert lane < laneCount;
-        return laneSegments[lane].vehicleCount();
-    }
 
     /**
      * <p>
@@ -961,7 +962,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                 }
                 ++nextLane;
             }
-            final int vc = totalVehicleCount();
+            final int vc = getVehicleCount();
             if (vc != count) {
                 assert false;
             }
