@@ -139,6 +139,7 @@ public class RoadSegment implements Iterable<Vehicle> {
             laneSegments[i] = new LaneSegment(this, i);
         }
         id = nextId++;
+        assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
     }
@@ -483,6 +484,9 @@ public class RoadSegment implements Iterable<Vehicle> {
         int vehCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             for(Vehicle veh : laneSegment){
+                if (veh.type() == Vehicle.Type.OBSTACLE) {
+                    continue;
+                }
                 sumSpeed += veh.getSpeed();
                 ++vehCount;
             }

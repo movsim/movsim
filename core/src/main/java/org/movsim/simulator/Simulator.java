@@ -121,19 +121,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
-        // Routes
-        final RoutesInput routesInput = simInput.getRoutesInput();
-        routes = new HashMap<String, Route>();
-        if (routesInput != null) {
-            for (final RouteInput routeInput : routesInput.getRoutes()) {
-                final Route route = new Route(routeInput.getName());
-                final List<String> roadIds = routeInput.getRoadIds();
-                for (final String roadId : roadIds) {
-                    route.add(roadNetwork.findByUserId(roadId));
-                }
-                routes.put(route.getName(), route);
-            }
-        }
+        createRoutes(simInput);
 
         vehGenerator = createVehicleGenerator(simInput);
 
@@ -147,6 +135,28 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         reset();
+    }
+
+    private void createRoutes(final SimulationInput simInput) {
+        final RoutesInput routesInput = simInput.getRoutesInput();
+        routes = new HashMap<String, Route>();
+        if (routesInput != null) {
+            for (final RouteInput routeInput : routesInput.getRoutes()) {
+                final Route route = new Route(routeInput.getName());
+                final List<String> roadIds = routeInput.getRoadIds();
+                for (final String roadId : roadIds) {
+                    route.add(roadNetwork.findByUserId(roadId));
+                }
+                if(route.size()==0){
+                    logger.error("route with name \"{}\" does not contain any roadSegments. Ignore route!", route.getName());
+                    continue;
+                }
+                Route r = routes.put(route.getName(), route);
+                if(r!=null){
+                    logger.warn("route with name \"{}\" already defined. Overwrite existing route.", r.getName());
+                }
+            }
+        }
     }
 
     public VehiclesInput getVehiclesInput() {

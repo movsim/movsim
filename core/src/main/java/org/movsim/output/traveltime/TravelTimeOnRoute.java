@@ -28,8 +28,13 @@ package org.movsim.output.traveltime;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TravelTimeOnRoute implements SimulationTimeStep {
+    
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRoute.class);
     
     private final Route route;
 
@@ -43,17 +48,18 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
     public TravelTimeOnRoute(RoadNetwork roadNetwork, Route route, boolean writeOutput) {
         this.roadNetwork = roadNetwork;
         this.route = route;
-        
         fileWriter = writeOutput ? new FileTravelTime(route) : null; 
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
+        //logger.info("iterationCount={} for route={}", iterationCount, route.getName());
         final double instantaneousTravelTime = roadNetwork.instantaneousTravelTime(route);
         
+        final double meanSpeed = route.getLength()/instantaneousTravelTime;
         if(fileWriter != null){
-            fileWriter.write(simulationTime, instantaneousTravelTime);
+            fileWriter.write(simulationTime, instantaneousTravelTime, meanSpeed);
         }
 //        final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
 //        for (final TravelTimeRoute route : traveltimeRoutes) {

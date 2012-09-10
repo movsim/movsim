@@ -68,7 +68,7 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final List<ConsumptionOnRoute> consumptionOnRoutes = new ArrayList<ConsumptionOnRoute>();
 
-    private final List<TravelTimeOnRoute> travelTimeOnRoutes = new ArrayList<TravelTimeOnRoute>();
+    private final Map<Route, TravelTimeOnRoute> travelTimeOnRoutes = new HashMap<Route, TravelTimeOnRoute>();
 
     private final RoadNetwork roadNetwork;
 
@@ -133,7 +133,7 @@ public class SimulationOutput implements SimulationTimeStep {
         for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
             final Route route = routes.get(travelTimeInput.getRouteLabel());
             final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(roadNetwork, route, writeOutput);
-            travelTimeOnRoutes.add(travelTime);
+            travelTimeOnRoutes.put(route, travelTime);
         }
     }
 
@@ -172,7 +172,7 @@ public class SimulationOutput implements SimulationTimeStep {
             filetraj.timeStep(dt, simulationTime, iterationCount);
         }
 
-        for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes) {
+        for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes.values()) {
             travelTime.timeStep(dt, simulationTime, iterationCount);
         }
 
