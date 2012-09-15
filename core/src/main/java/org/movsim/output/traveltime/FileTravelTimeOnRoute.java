@@ -4,7 +4,7 @@ import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Route;
 
-public class FileTravelTime extends FileOutputBase {
+public class FileTravelTimeOnRoute extends FileOutputBase {
     private static final String extensionFormat = ".tt.route_%s.csv";
 
     private static final String outputHeading = String.format("%s%9s, %10s, %10s, %10s%n", COMMENT_CHAR, "t[s]",
@@ -15,7 +15,7 @@ public class FileTravelTime extends FileOutputBase {
 
     private double lastUpdateTime;
 
-    public FileTravelTime(double dtOut, Route route) {
+    public FileTravelTimeOnRoute(double dtOut, Route route) {
         this.dtOutput = dtOut;
         lastUpdateTime = 0;
         writer = createWriter(String.format(extensionFormat, route.getName()));

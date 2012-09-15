@@ -46,7 +46,7 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
 
     private final RoadNetwork roadNetwork;
 
-    private final FileTravelTime fileWriter;
+    private final FileTravelTimeOnRoute fileWriter;
 
     private double instantaneousTravelTime;
 
@@ -61,7 +61,7 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
         this.roadNetwork = roadNetwork;
         this.route = route;
         this.beta = Math.exp(-simulationTimestep / TAU_EMA);
-        fileWriter = writeOutput ? new FileTravelTime(input.getDt(), route) : null;
+        fileWriter = writeOutput ? new FileTravelTimeOnRoute(input.getDt(), route) : null;
     }
 
     @Override
