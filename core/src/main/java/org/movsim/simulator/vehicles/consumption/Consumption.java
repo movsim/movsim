@@ -26,7 +26,7 @@
 package org.movsim.simulator.vehicles.consumption;
 
 import org.movsim.input.model.vehicle.consumption.ConsumptionModelInput;
-import org.movsim.output.consumption.FileFuelConsumptionModel;
+import org.movsim.output.fileoutput.FileFuelConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

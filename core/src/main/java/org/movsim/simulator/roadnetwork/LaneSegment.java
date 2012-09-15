@@ -206,6 +206,14 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         return totalVehicleElectricEnergyUsed;
     }
+    
+    public double instantaneousFuelUsedLitersPerS() {
+        double instFuelUsedLiters = 0;
+        for (final Vehicle vehicle : vehicles) {
+            instFuelUsedLiters += vehicle.getActualFuelFlowLiterPerS();
+        }
+        return instFuelUsedLiters;
+    }
 
     /**
      * Returns the number of obstacles on this lane segment.
@@ -740,4 +748,5 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void clearVehicleRemovedCount() {
         removedVehicleCount = 0;
     }
+
 }

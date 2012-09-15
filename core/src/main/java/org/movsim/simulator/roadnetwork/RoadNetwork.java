@@ -377,7 +377,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public double instantaneousFuelUsedLiters(Route route) {
         double instantaneousConsumption = 0;
         for (final RoadSegment roadSegment : route) {
-            instantaneousConsumption += 1; // TODO
+            instantaneousConsumption += roadSegment.instantaneousConsumptionLitersPerSecond();
         }
         return instantaneousConsumption;
     }

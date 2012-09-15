@@ -479,6 +479,14 @@ public class RoadSegment implements Iterable<Vehicle> {
         return totalVehicleElectricEnergyUsed;
     }
     
+    protected double instantaneousConsumptionLitersPerSecond() {
+        double vehicleFuelUsedLiters = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            vehicleFuelUsedLiters += laneSegment.instantaneousFuelUsedLitersPerS();
+        }
+        return vehicleFuelUsedLiters;
+    }
+    
     private double meanSpeed(){
         double sumSpeed = 0;
         int vehCount = 0;

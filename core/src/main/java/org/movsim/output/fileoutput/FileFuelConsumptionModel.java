@@ -1,8 +1,7 @@
-package org.movsim.output.consumption;
+package org.movsim.output.fileoutput;
 
 import java.util.Locale;
 
-import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.vehicles.consumption.CarModel;
 import org.movsim.simulator.vehicles.consumption.EngineModel;
 import org.movsim.simulator.vehicles.consumption.FuelConstants;

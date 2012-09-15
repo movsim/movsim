@@ -1,4 +1,4 @@
-package org.movsim.output.traveltime;
+package org.movsim.output.route;
 
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.MovsimConstants;

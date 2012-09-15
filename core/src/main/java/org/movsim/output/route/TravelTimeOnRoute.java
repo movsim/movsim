@@ -23,28 +23,22 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.traveltime;
+package org.movsim.output.route;
 
 import org.movsim.input.model.output.TravelTimeOnRouteInput;
-import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TravelTimeOnRoute implements SimulationTimeStep {
+public class TravelTimeOnRoute extends OutputOnRouteBase {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRoute.class);
 
     private static final double TAU_EMA = 30;
-
-    private final Route route;
-
-    /** configures update interval. Initial value = 100 */
-    private long updateIntervalCount = 100;
-
-    private final RoadNetwork roadNetwork;
+    
+    private final double beta;
 
     private final FileTravelTimeOnRoute fileWriter;
 
@@ -54,12 +48,9 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
 
     private double instTravelTimeEMA;
 
-    private double beta;
-
     public TravelTimeOnRoute(double simulationTimestep, TravelTimeOnRouteInput input, RoadNetwork roadNetwork,
             Route route, boolean writeOutput) {
-        this.roadNetwork = roadNetwork;
-        this.route = route;
+        super(roadNetwork, route);
         this.beta = Math.exp(-simulationTimestep / TAU_EMA);
         fileWriter = writeOutput ? new FileTravelTimeOnRoute(input.getDt(), route) : null;
     }
@@ -71,15 +62,11 @@ public class TravelTimeOnRoute implements SimulationTimeStep {
 
         meanSpeed = route.getLength() / instantaneousTravelTime;
 
-        instTravelTimeEMA = calcEMA(instantaneousTravelTime, instTravelTimeEMA);
+        instTravelTimeEMA = calcEMA(beta, instantaneousTravelTime, instTravelTimeEMA);
 
         if (fileWriter != null) {
             fileWriter.write(simulationTime, this);
         }
-    }
-
-    private double calcEMA(double xNew, double xEMA) {
-        return (1-beta) * xNew + beta * xEMA;
     }
 
     public double getInstantaneousTravelTime() {

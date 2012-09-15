@@ -40,12 +40,12 @@ import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimeOnRouteInput;
 import org.movsim.input.model.vehicle.VehicleInput;
-import org.movsim.output.consumption.ConsumptionOnRoute;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
+import org.movsim.output.route.ConsumptionOnRoute;
+import org.movsim.output.route.TravelTimeOnRoute;
 import org.movsim.output.spatiotemporal.SpatioTemporal;
-import org.movsim.output.traveltime.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
@@ -66,7 +66,7 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
 
-    private final List<ConsumptionOnRoute> consumptionOnRoutes = new ArrayList<ConsumptionOnRoute>();
+    private final Map<Route, ConsumptionOnRoute> consumptionOnRoutes = new HashMap<Route, ConsumptionOnRoute>();
 
     private final Map<Route, TravelTimeOnRoute> travelTimeOnRoutes = new HashMap<Route, TravelTimeOnRoute>();
 
@@ -89,19 +89,29 @@ public class SimulationOutput implements SimulationTimeStep {
 
         initFloatingCars(writeOutput, outputInput);
 
+        initConsumption(writeOutput, routes, simulationTimestep, outputInput);
+        
         initTravelTimes(writeOutput, routes, simulationTimestep, outputInput);
 
         initSpatioTemporalOutput(writeOutput, routes, outputInput);
 
         initTrajectories(writeOutput, routes, outputInput);
 
-        initConsumption(writeOutput, routes, outputInput);
     }
 
-    private void initConsumption(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+    private void initConsumption(boolean writeOutput, Map<String, Route> routes, double simulationTimestep, final OutputInput outputInput) {
         for (final ConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
             final Route route = routes.get(fuelRouteInput.getRouteLabel());
-            consumptionOnRoutes.add(new ConsumptionOnRoute(fuelRouteInput, route, writeOutput));
+            final ConsumptionOnRoute consumption = new ConsumptionOnRoute(simulationTimestep, fuelRouteInput, roadNetwork, route, writeOutput);
+            consumptionOnRoutes.put(route, consumption);
+        }
+    }
+    
+    private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, double simulationTimestep, final OutputInput outputInput) {
+        for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
+            final Route route = routes.get(travelTimeInput.getRouteLabel());
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork, route, writeOutput);
+            travelTimeOnRoutes.put(route, travelTime);
         }
     }
 
@@ -126,14 +136,6 @@ public class SimulationOutput implements SimulationTimeStep {
             final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
                     spatioTemporalInput.getDt(), route, writeOutput);
             spatioTemporals.add(spatioTemporal);
-        }
-    }
-
-    private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, double simulationTimestep, final OutputInput outputInput) {
-        for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
-            final Route route = routes.get(travelTimeInput.getRouteLabel());
-            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork, route, writeOutput);
-            travelTimeOnRoutes.put(route, travelTime);
         }
     }
 
@@ -174,6 +176,10 @@ public class SimulationOutput implements SimulationTimeStep {
 
         for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes.values()) {
             travelTime.timeStep(dt, simulationTime, iterationCount);
+        }
+        
+        for (final ConsumptionOnRoute consumption : consumptionOnRoutes.values()){
+            consumption.timeStep(dt, simulationTime, iterationCount);
         }
 
     }
