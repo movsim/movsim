@@ -25,6 +25,7 @@
  */
 package org.movsim.output.traveltime;
 
+import org.movsim.input.model.output.TravelTimeOnRouteInput;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
@@ -32,79 +33,65 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TravelTimeOnRoute implements SimulationTimeStep {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRoute.class);
-    
+
+    private static final double TAU_EMA = 30;
+
     private final Route route;
 
     /** configures update interval. Initial value = 100 */
     private long updateIntervalCount = 100;
-    
+
     private final RoadNetwork roadNetwork;
-    
+
     private final FileTravelTime fileWriter;
 
-    public TravelTimeOnRoute(RoadNetwork roadNetwork, Route route, boolean writeOutput) {
+    private double instantaneousTravelTime;
+
+    private double meanSpeed;
+
+    private double instTravelTimeEMA;
+
+    private double beta;
+
+    public TravelTimeOnRoute(double simulationTimestep, TravelTimeOnRouteInput input, RoadNetwork roadNetwork,
+            Route route, boolean writeOutput) {
         this.roadNetwork = roadNetwork;
         this.route = route;
-        fileWriter = writeOutput ? new FileTravelTime(route) : null; 
+        this.beta = Math.exp(-simulationTimestep / TAU_EMA);
+        fileWriter = writeOutput ? new FileTravelTime(input.getDt(), route) : null;
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        //logger.info("iterationCount={} for route={}", iterationCount, route.getName());
-        final double instantaneousTravelTime = roadNetwork.instantaneousTravelTime(route);
-        
-        final double meanSpeed = route.getLength()/instantaneousTravelTime;
-        if(fileWriter != null){
-            fileWriter.write(simulationTime, instantaneousTravelTime, meanSpeed);
+        instantaneousTravelTime = roadNetwork.instantaneousTravelTime(route);
+
+        meanSpeed = route.getLength() / instantaneousTravelTime;
+
+        instTravelTimeEMA = calcEMA(instantaneousTravelTime, instTravelTimeEMA);
+
+        if (fileWriter != null) {
+            fileWriter.write(simulationTime, this);
         }
-//        final boolean doNotificationUpdate = (iterationCount % updateIntervalCount == 0);
-//        for (final TravelTimeRoute route : traveltimeRoutes) {
-//            route.update(simulationTime, iterationCount, roadNetwork);
-//            if (doNotificationUpdate) {
-//                route.calcEMA(simulationTime);
-//            }
-//        }
-//
-//        if (doNotificationUpdate) {
-//            notifyObservers(simulationTime);
-//        }
     }
 
-//    public List<List<XYDataPoint>> getTravelTimeEmas() {
-//        final List<List<XYDataPoint>> listOfEmas = new LinkedList<List<XYDataPoint>>();
-//        for (final TravelTimeRoute route : traveltimeRoutes) {
-//            listOfEmas.add(route.getEmaPoints());
-//        }
-//        return listOfEmas;
-//    }
-//
-//    public List<List<XYDataPoint>> getTravelTimeDataRoutes() {
-//        final List<List<XYDataPoint>> listOfRoutes = new LinkedList<List<XYDataPoint>>();
-//        for (final TravelTimeRoute route : traveltimeRoutes) {
-//            listOfRoutes.add(route.getDataPoints());
-//        }
-//        return listOfRoutes;
-//    }
-//
-//    public void setUpdateInterval(long updateIntervalCount) {
-//        this.updateIntervalCount = updateIntervalCount;
-//    }
-//
-//    public List<Double> getTravelTimesEMA(double time, double tauEMA) {
-//        final int N_DATA = 10; // cut-off parameter
-//        final ExponentialMovingAverage ema = new ExponentialMovingAverage(tauEMA);
-//
-//        final List<Double> ttEMAs = new LinkedList<Double>();
-//        for (final TravelTimeRoute route : traveltimeRoutes) {
-//            final List<XYDataPoint> routeTravelTimes = route.getDataPoints();
-//            final int size = routeTravelTimes.size();
-//            ttEMAs.add(ema.calcEMA(time, routeTravelTimes.subList(Math.max(0, size - N_DATA), size)));
-//        }
-//        return ttEMAs;
-//    }
+    private double calcEMA(double xNew, double xEMA) {
+        return (1-beta) * xNew + beta * xEMA;
+    }
+
+    public double getInstantaneousTravelTime() {
+        return instantaneousTravelTime;
+    }
+
+    public double getMeanSpeed() {
+        return meanSpeed;
+    }
+    
+    public double getInstantaneousTravelTimeEMA(){
+        return instTravelTimeEMA;
+    }
 
 }

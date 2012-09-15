@@ -89,7 +89,7 @@ public class SimulationOutput implements SimulationTimeStep {
 
         initFloatingCars(writeOutput, outputInput);
 
-        initTravelTimes(writeOutput, routes, outputInput);
+        initTravelTimes(writeOutput, routes, simulationTimestep, outputInput);
 
         initSpatioTemporalOutput(writeOutput, routes, outputInput);
 
@@ -129,10 +129,10 @@ public class SimulationOutput implements SimulationTimeStep {
         }
     }
 
-    private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+    private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, double simulationTimestep, final OutputInput outputInput) {
         for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
             final Route route = routes.get(travelTimeInput.getRouteLabel());
-            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(roadNetwork, route, writeOutput);
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork, route, writeOutput);
             travelTimeOnRoutes.put(route, travelTime);
         }
     }

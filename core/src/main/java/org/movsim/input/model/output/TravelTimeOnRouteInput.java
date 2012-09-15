@@ -34,12 +34,28 @@ public class TravelTimeOnRouteInput {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRouteInput.class);
 
-    private String routeLabel;
+    private final double dt;
+    private final String routeLabel;
 
     public TravelTimeOnRouteInput(Element elem) {
+        dt = Double.parseDouble(elem.getAttributeValue("dt"));
         routeLabel = elem.getAttributeValue("route");
     }
 
+    /**
+     * Gets the dt.
+     * 
+     * @return the dt
+     */
+    public double getDt() {
+        return dt;
+    }
+
+    /**
+     * Gets the route label.
+     *
+     * @return the route label
+     */
     public String getRouteLabel() {
         return routeLabel;
     }
