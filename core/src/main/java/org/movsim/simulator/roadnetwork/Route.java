@@ -101,4 +101,40 @@ public class Route implements Iterable<RoadSegment> {
     public Iterator<RoadSegment> iterator() {
         return roadSegments.iterator();
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        long temp;
+        temp = Double.doubleToLongBits(length);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((roadSegments == null) ? 0 : roadSegments.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Route other = (Route) obj;
+        if (Double.doubleToLongBits(length) != Double.doubleToLongBits(other.length))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (roadSegments == null) {
+            if (other.roadSegments != null)
+                return false;
+        } else if (!roadSegments.equals(other.roadSegments))
+            return false;
+        return true;
+    }
 }
