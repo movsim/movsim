@@ -283,6 +283,20 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return true;
     }
     
+    
+    /**
+     * Returns the number of vehicles on route.
+     * 
+     * @return the number of vehicles on given route.
+     */
+    public int vehicleCount(Route route) {
+        int vehicleCount = 0;
+        for (final RoadSegment roadSegment : route) {
+            vehicleCount += roadSegment.getVehicleCount();
+        }
+        return vehicleCount;
+    }
+    
     /**
      * Returns the total travel time of all vehicles on this road network, including those that have exited.
      * 

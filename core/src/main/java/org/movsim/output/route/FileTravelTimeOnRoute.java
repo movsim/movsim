@@ -3,13 +3,15 @@ package org.movsim.output.route;
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.utilities.Units;
 
 public class FileTravelTimeOnRoute extends FileOutputBase {
     private static final String extensionFormat = ".tt.route_%s.csv";
 
-    private static final String outputHeading = String.format("%s%9s, %10s, %10s, %10s%n", COMMENT_CHAR, "t[s]",
-            "instTraveltime[s]", "instTravelTime EMA[s]", "meanSpeed[m/s]");
-    private static final String outputFormat = "%10.2f, %10.2f, %10.2f, %10.2f %n";
+    private static final String outputHeading = String.format("%s%9s, %10s, %10s, %10s, %10s, %10s %n", COMMENT_CHAR,
+            "t[s]", "instTraveltime[s]", "instTravelTimeEMA[s]", "meanSpeed[km/h]", "cumulatedTravelTime[h]",
+            "numberVehicles");
+    private static final String outputFormat = "%10.2f, %10.2f, %10.2f, %10.2f, %10.4f, %8d %n";
 
     private final double dtOutput;
 
@@ -24,10 +26,11 @@ public class FileTravelTimeOnRoute extends FileOutputBase {
     }
 
     public void write(double simulationTime, TravelTimeOnRoute travelTime) {
-        if (simulationTime - lastUpdateTime + MovsimConstants.SMALL_VALUE >= dtOutput) {
+        if (simulationTime - lastUpdateTime + MovsimConstants.SMALL_VALUE >= dtOutput || simulationTime == 0) {
             lastUpdateTime = simulationTime;
             writer.printf(outputFormat, simulationTime, travelTime.getInstantaneousTravelTime(),
-                    travelTime.getInstantaneousTravelTimeEMA(), travelTime.getMeanSpeed());
+                    travelTime.getInstantaneousTravelTimeEMA(), travelTime.getMeanSpeed() * Units.MS_TO_KMH,
+                    travelTime.getTotalTravelTime() * Units.S_TO_H, travelTime.getNumberOfVehicles());
             writer.flush();
         }
     }

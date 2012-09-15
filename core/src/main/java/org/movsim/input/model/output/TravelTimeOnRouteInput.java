@@ -36,10 +36,12 @@ public class TravelTimeOnRouteInput {
 
     private final double dt;
     private final String routeLabel;
-
+    private final double tauEMA;
+    
     public TravelTimeOnRouteInput(Element elem) {
         dt = Double.parseDouble(elem.getAttributeValue("dt"));
         routeLabel = elem.getAttributeValue("route");
+        tauEMA = Double.parseDouble(elem.getAttributeValue("tauEMA"));
     }
 
     /**
@@ -58,5 +60,14 @@ public class TravelTimeOnRouteInput {
      */
     public String getRouteLabel() {
         return routeLabel;
+    }
+
+     /**
+     * Gets the tau for the exponential moving average
+     *
+     * @return the tau ema
+     */
+    public double getTauEMA() {
+        return tauEMA;
     }
 }

@@ -452,6 +452,7 @@ number  NMTOKEN #REQUIRED
 <!ATTLIST TRAVELTIMES
   route     NMTOKEN #REQUIRED
   dt        NMTOKEN "1"
+  tauEMA    NMTOKEN "20"
 >
 
 <!ELEMENT FUEL EMPTY>
@@ -459,6 +460,7 @@ number  NMTOKEN #REQUIRED
   dt           NMTOKEN "1"
   start_time   NMTOKEN "0"
   end_time     NMTOKEN "1e10"
-  route     NMTOKEN #REQUIRED
+  tauEMA       NMTOKEN "20"
+  route        NMTOKEN #REQUIRED
 >
 

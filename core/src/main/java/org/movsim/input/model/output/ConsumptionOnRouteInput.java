@@ -29,16 +29,18 @@ import org.jdom.Element;
 
 public class ConsumptionOnRouteInput {
 
-    private double dt;
-    private double startTime;
-    private double endTime;
-    private String routeLabel;
+    private final double dt;
+    private final double startTime;
+    private final double endTime;
+    private final String routeLabel;
+    private final double tauEMA;
 
     public ConsumptionOnRouteInput(Element elem) {
         dt = Double.parseDouble(elem.getAttributeValue("dt"));
         startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
         endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
         routeLabel = elem.getAttributeValue("route");
+        tauEMA = Double.parseDouble(elem.getAttributeValue("tauEMA"));
     }
 
     /**
@@ -75,5 +77,14 @@ public class ConsumptionOnRouteInput {
      */
     public String getRouteLabel() {
         return routeLabel;
+    }
+
+    /**
+     * Gets the tau for the exponential moving average
+     *
+     * @return the tau ema
+     */
+    public double getTauEMA() {
+        return tauEMA;
     }
 }

@@ -29,28 +29,31 @@ import java.util.List;
 
 public class ExponentialMovingAverage {
 
-    private final double tau;
-
-    public ExponentialMovingAverage(double tau) {
-        this.tau = tau;
+    private ExponentialMovingAverage() {
+        throw new IllegalStateException();
     }
 
-    public double calcEMA(double time, List<XYDataPoint> timeSeries) {
+    public static double calcEMA(double time, List<XYDataPoint> timeSeries, double tau) {
         if (timeSeries.isEmpty()) {
             return 0;
         }
         double norm = 0;
         double result = 0;
         for (final XYDataPoint dp : timeSeries) {
-            final double phi = weight(time, dp.getX());
+            final double phi = weight(time, dp.getX(), tau);
             norm += phi;
             result += phi * dp.getY();
         }
         return result / norm;
     }
 
-    private double weight(double t1, double t2) {
+    // TODO javadoc
+    private static double weight(double t1, double t2, double tau) {
         return Math.exp(-Math.abs((t1 - t2) / tau));
+    }
+    
+    public static double calc(double xNew, double xEMA, double beta) {
+        return (1-beta) * xNew + beta * xEMA;
     }
 
 }

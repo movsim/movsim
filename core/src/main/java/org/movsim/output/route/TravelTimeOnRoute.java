@@ -28,6 +28,7 @@ package org.movsim.output.route;
 import org.movsim.input.model.output.TravelTimeOnRouteInput;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.utilities.ExponentialMovingAverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,33 +37,44 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TravelTimeOnRoute.class);
 
-    private static final double TAU_EMA = 30;
-    
+    private final double tauEMA;
+
     private final double beta;
 
     private final FileTravelTimeOnRoute fileWriter;
 
     private double instantaneousTravelTime;
 
+    private double totalTravelTime;
+
     private double meanSpeed;
 
     private double instTravelTimeEMA;
+    
+    private int numberOfVehicles;
 
     public TravelTimeOnRoute(double simulationTimestep, TravelTimeOnRouteInput input, RoadNetwork roadNetwork,
             Route route, boolean writeOutput) {
         super(roadNetwork, route);
-        this.beta = Math.exp(-simulationTimestep / TAU_EMA);
+        this.tauEMA = input.getTauEMA();
+        this.beta = Math.exp(-simulationTimestep / tauEMA);
         fileWriter = writeOutput ? new FileTravelTimeOnRoute(input.getDt(), route) : null;
+        totalTravelTime = 0;
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
+        numberOfVehicles = roadNetwork.vehicleCount(route);
+        
         instantaneousTravelTime = roadNetwork.instantaneousTravelTime(route);
+
+        totalTravelTime += instantaneousTravelTime;
 
         meanSpeed = route.getLength() / instantaneousTravelTime;
 
-        instTravelTimeEMA = calcEMA(beta, instantaneousTravelTime, instTravelTimeEMA);
+        instTravelTimeEMA = (simulationTime == 0) ? instantaneousTravelTime : ExponentialMovingAverage.calc(
+                instantaneousTravelTime, instTravelTimeEMA, beta);
 
         if (fileWriter != null) {
             fileWriter.write(simulationTime, this);
@@ -76,9 +88,17 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     public double getMeanSpeed() {
         return meanSpeed;
     }
-    
-    public double getInstantaneousTravelTimeEMA(){
+
+    public double getInstantaneousTravelTimeEMA() {
         return instTravelTimeEMA;
+    }
+
+    public double getTotalTravelTime() {
+        return totalTravelTime;
+    }
+
+    public int getNumberOfVehicles() {
+        return numberOfVehicles;
     }
 
 }

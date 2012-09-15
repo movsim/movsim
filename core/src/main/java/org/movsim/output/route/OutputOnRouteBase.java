@@ -15,8 +15,4 @@ public abstract class OutputOnRouteBase implements SimulationTimeStep {
         this.route = route;
     }
     
-    protected double calcEMA(double beta, double xNew, double xEMA) {
-        return (1-beta) * xNew + beta * xEMA;
-    }
-    
 }
