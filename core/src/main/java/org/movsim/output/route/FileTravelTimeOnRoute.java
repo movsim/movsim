@@ -28,10 +28,9 @@ public class FileTravelTimeOnRoute extends FileOutputBase {
     public void write(double simulationTime, TravelTimeOnRoute travelTime) {
         if (simulationTime - lastUpdateTime + MovsimConstants.SMALL_VALUE >= dtOutput || simulationTime == 0) {
             lastUpdateTime = simulationTime;
-            writer.printf(outputFormat, simulationTime, travelTime.getInstantaneousTravelTime(),
+            writeFormated(outputFormat, simulationTime, travelTime.getInstantaneousTravelTime(),
                     travelTime.getInstantaneousTravelTimeEMA(), travelTime.getMeanSpeed() * Units.MS_TO_KMH,
                     travelTime.getTotalTravelTime() * Units.S_TO_H, travelTime.getNumberOfVehicles());
-            writer.flush();
         }
     }
 

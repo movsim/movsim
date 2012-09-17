@@ -76,10 +76,10 @@ public class FileDetector extends FileOutputBase {
         writer.printf(COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
         writer.printf(outputHeadingTime);
         if (laneCount > 1) {
-            writer.printf(outputHeadingLaneAverage);
+            writeFormated(outputHeadingLaneAverage);
         }
         for (int i = 0; i < laneCount; i++) {
-            writer.printf(outputHeadingLane);
+            writeFormated(outputHeadingLane);
         }
         writer.printf("%n");
         writer.flush();
@@ -98,7 +98,6 @@ public class FileDetector extends FileOutputBase {
         }
         writeQuantitiesPerLane();
         writer.printf("%n");
-        writer.flush();
     }
 
     /**
@@ -108,7 +107,7 @@ public class FileDetector extends FileOutputBase {
      */
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
-            writer.printf(outputFormat, detector.getVehCountOutput(i),
+            writeFormated(outputFormat, detector.getVehCountOutput(i),
                     detector.getVehCumulatedCountOutput(i),
                     Units.MS_TO_KMH * detector.getMeanSpeed(i), Units.INVS_TO_INVH
                             * detector.getFlow(i), detector.getOccupancy(i),
@@ -123,7 +122,7 @@ public class FileDetector extends FileOutputBase {
      * @param time
      */
     private void writeLaneAverages() {
-        writer.printf(outputFormat, detector.getVehCountOutputAllLanes(),
+        writeFormated(outputFormat, detector.getVehCountOutputAllLanes(),
                 detector.getVehCumulatedCountOutputAllLanes(), Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(),
                 Units.INVS_TO_INVH * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
                 Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());

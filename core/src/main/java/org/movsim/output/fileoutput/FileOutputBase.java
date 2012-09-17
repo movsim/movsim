@@ -33,6 +33,9 @@ import org.movsim.utilities.FileUtils;
 
 public class FileOutputBase {
     
+    // TODO check if buffered writing is faster; if so make it tunable 
+    public static final boolean FLUSH_IMMEDIATELY = true; 
+    
     public static final String COMMENT_CHAR = "#";
 
     protected final String path;
@@ -51,5 +54,12 @@ public class FileOutputBase {
     public PrintWriter createWriter(String extension) {
         final String filename = path + File.separator + baseFilename + extension;
         return FileUtils.getWriter(filename);
+    }
+
+    public void writeFormated(String format, Object... args){
+        writer.printf(format, args);
+        if(FLUSH_IMMEDIATELY){
+            writer.flush();
+        }
     }
 }

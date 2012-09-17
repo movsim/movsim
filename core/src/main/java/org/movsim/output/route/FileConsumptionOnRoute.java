@@ -30,10 +30,9 @@ public class FileConsumptionOnRoute extends FileOutputBase {
     public void write(double simulationTime, ConsumptionOnRoute consumption) {
         if (simulationTime - lastUpdateTime + MovsimConstants.SMALL_VALUE >= dtOutput || simulationTime==0) {
             lastUpdateTime = simulationTime;
-            writer.printf(outputFormat, simulationTime, consumption.getInstantaneousConsumptionRate(),
+            writeFormated(outputFormat, simulationTime, consumption.getInstantaneousConsumptionRate(),
                     consumption.getInstantaneousConsumptionEMA(), consumption.getTotalConsumption(),
                     consumption.getNumberOfVehicles());
-            writer.flush();
         }
     }
 }
