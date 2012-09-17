@@ -271,6 +271,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return obstacleCount;
     }
+    
+    public int obstacleCount(Route route) {
+        int obstacleCount = 0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            obstacleCount += roadSegment.obstacleCount();
+        }
+        return obstacleCount;
+    }
 
    
     /**
