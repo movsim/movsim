@@ -74,13 +74,16 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
 
         // write data:
         if (writer != null) {
-            writer.printf("%8.2f   ", simulationTime);
-            for (final TrafficLight trafficLight : trafficLights) {
-                writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status().ordinal());
-            }
-            writer.printf("%n");
-            writer.flush();
+            writeData(simulationTime, trafficLights);
         }
+    }
+
+    private void writeData(double simulationTime, Iterable<TrafficLight> trafficLights) {
+        writer.printf("%8.2f   ", simulationTime);
+        for (final TrafficLight trafficLight : trafficLights) {
+            writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status().ordinal());
+        }
+        write("%n");
     }
 
     /**
