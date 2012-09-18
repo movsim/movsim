@@ -40,6 +40,8 @@ public class DetectorInput {
     private double dtSample;
 
     private boolean withLogging;
+    
+    private boolean loggingLanes;
 
     private final boolean isInitialized;
 
@@ -72,6 +74,7 @@ public class DetectorInput {
 
         this.dtSample = Double.parseDouble(elem.getAttributeValue("dt"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
+        this.loggingLanes = Boolean.parseBoolean(elem.getAttributeValue("logging_lanes"));        
 
         // Detector
         positions = new ArrayList<Double>();
@@ -109,6 +112,10 @@ public class DetectorInput {
 
     public boolean isWithLogging() {
         return withLogging;
+    }
+
+    public boolean isLoggingLanes() {
+        return loggingLanes;
     }
 
 }

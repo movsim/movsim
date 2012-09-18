@@ -95,7 +95,7 @@ public class LoopDetector implements SimulationTimeStep {
      * @param dtSample
      * @param laneCount
      */
-    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging) {
+    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging, boolean loggingLanes) {
         this.roadSegment = roadSegment;
         this.detPosition = detPosition;
         this.dtSample = dtSample;
@@ -124,7 +124,7 @@ public class LoopDetector implements SimulationTimeStep {
         }
         resetLaneAverages();
         
-        fileDetector = (logging) ? new FileDetector(this, roadSegment.userId(), roadSegment.laneCount()) : null;
+        fileDetector = (logging) ? new FileDetector(this, roadSegment.userId(), roadSegment.laneCount(), loggingLanes) : null;
         if(fileDetector != null){
             fileDetector.writeAggregatedData(0);
         }

@@ -48,7 +48,8 @@ public class FileDetector extends FileOutputBase {
 
     private final LoopDetector detector;
     private int laneCount;
-
+    private final boolean loggingLanes; 
+    
     /**
      * Instantiates a new file detector.
      * 
@@ -56,11 +57,12 @@ public class FileDetector extends FileOutputBase {
      *            the detector
      * @param laneCount
      */
-    public FileDetector(LoopDetector detector, String roadId, int laneCount) {
+    public FileDetector(LoopDetector detector, String roadId, int laneCount,  boolean loggingLanes) {
         super();
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
         this.laneCount = laneCount;
+        this.loggingLanes = loggingLanes;
 
         writer = createWriter(String.format(extensionFormat, roadId, xDetectorInt));
         writeHeader();
@@ -74,12 +76,15 @@ public class FileDetector extends FileOutputBase {
         writer.printf(COMMENT_CHAR + " number of lanes = %d. (Numbering starts from the most left lane as 1.)%n",
                 laneCount);
         writer.printf(COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
+        writer.printf(COMMENT_CHAR + " logging lanes = %s%n", loggingLanes);
         writer.printf(outputHeadingTime);
         if (laneCount > 1) {
             writeFormated(outputHeadingLaneAverage);
         }
-        for (int i = 0; i < laneCount; i++) {
-            writeFormated(outputHeadingLane);
+        if (loggingLanes) {
+            for (int i = 0; i < laneCount; i++) {
+                writeFormated(outputHeadingLane);
+            }
         }
         writer.printf("%n");
         writer.flush();
@@ -96,7 +101,9 @@ public class FileDetector extends FileOutputBase {
         if (laneCount > 1) {
             writeLaneAverages();
         }
-        writeQuantitiesPerLane();
+        if(loggingLanes){
+            writeQuantitiesPerLane();
+        }
         writer.printf("%n");
     }
 

@@ -391,7 +391,8 @@ init             NMTOKEN "0"
 <!-- 1 min as default aggregation interval -->
 <!ATTLIST DETECTORS
   dt  NMTOKEN "60" 
-  logging  (true|false)  "false" 
+  logging  (true|false)  "false"
+  logging_lanes  (true|false)  "false" 
 >
 
 <!ELEMENT CROSS_SECTION EMPTY>

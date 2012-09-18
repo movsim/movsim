@@ -57,7 +57,7 @@ public class LoopDetectors implements SimulationTimeStep {
             final double dtSample = input.getSampleInterval();
             final List<Double> positions = input.getPositions();
             for (final Double detPosition : positions) {
-                detectors.add(new LoopDetector(roadSegment, detPosition, dtSample, input.isWithLogging()));
+                detectors.add(new LoopDetector(roadSegment, detPosition, dtSample, input.isWithLogging(), input.isLoggingLanes()));
             }
         }
     }
