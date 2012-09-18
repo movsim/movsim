@@ -53,7 +53,7 @@ public class FileSpatioTemporal extends FileOutputBase {
             writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i), 0.0,
                     1000 * spatioTemporal.getDensity(i), 3600 * spatioTemporal.getFlow(i));
         }
-        writeFormated("%n"); // block ends
+        write("%n"); // block ends
     }
 
 }

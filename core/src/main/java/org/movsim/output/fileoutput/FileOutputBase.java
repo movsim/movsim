@@ -56,7 +56,7 @@ public class FileOutputBase {
         return FileUtils.getWriter(filename);
     }
 
-    public void writeFormated(String format, Object... args){
+    public void write(String format, Object... args){
         writer.printf(format, args);
         if(FLUSH_IMMEDIATELY){
             writer.flush();

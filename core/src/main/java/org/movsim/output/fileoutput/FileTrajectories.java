@@ -135,7 +135,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         final double pos = me.getFrontPosition() + roadStartPos;
         final double s = frontVehicle == null ? 0 : me.getNetDistance(frontVehicle);
         final double dv = frontVehicle == null ? 0 : me.getRelSpeed(frontVehicle);
-        writeFormated(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(),
+        write(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(),
                 me.getId());
     }
 }

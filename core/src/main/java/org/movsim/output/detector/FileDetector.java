@@ -79,11 +79,11 @@ public class FileDetector extends FileOutputBase {
         writer.printf(COMMENT_CHAR + " logging lanes = %s%n", loggingLanes);
         writer.printf(outputHeadingTime);
         if (laneCount > 1) {
-            writeFormated(outputHeadingLaneAverage);
+            write(outputHeadingLaneAverage);
         }
         if (loggingLanes) {
             for (int i = 0; i < laneCount; i++) {
-                writeFormated(outputHeadingLane);
+                write(outputHeadingLane);
             }
         }
         writer.printf("%n");
@@ -114,7 +114,7 @@ public class FileDetector extends FileOutputBase {
      */
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
-            writeFormated(outputFormat, detector.getVehCountOutput(i),
+            write(outputFormat, detector.getVehCountOutput(i),
                     detector.getVehCumulatedCountOutput(i),
                     Units.MS_TO_KMH * detector.getMeanSpeed(i), Units.INVS_TO_INVH
                             * detector.getFlow(i), detector.getOccupancy(i),
@@ -129,7 +129,7 @@ public class FileDetector extends FileOutputBase {
      * @param time
      */
     private void writeLaneAverages() {
-        writeFormated(outputFormat, detector.getVehCountOutputAllLanes(),
+        write(outputFormat, detector.getVehCountOutputAllLanes(),
                 detector.getVehCumulatedCountOutputAllLanes(), Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(),
                 Units.INVS_TO_INVH * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
                 Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
