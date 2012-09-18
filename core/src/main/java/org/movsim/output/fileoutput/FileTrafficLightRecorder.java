@@ -72,7 +72,6 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
             return;
         }
 
-        // write data:
         if (writer != null) {
             writeData(simulationTime, trafficLights);
         }
