@@ -26,6 +26,9 @@ rampSourceFile = inputPath.baseFile.".source.road_4.csv"
 trajectoriesFile = inputPath.baseFile.".traj.route_onramp.csv"
 ttFile= inputPath.baseFile.".tt.route_main.csv"
 ttFileRamp=inputPath.baseFile.".tt.route_onramp.csv"
+consumptionFile= inputPath.baseFile.".consumption.route_main.csv"
+consumptionFileRamp=inputPath.baseFile.".consumption.route_onramp.csv"
+
 
 # output files
 fundOutput = outputPath.baseFile.".fund_".vehicle.".eps"
@@ -40,6 +43,9 @@ v2dallOutputRamp = outputPath.baseFile.".v2d_all_ramp.eps"
 a2dallOutput = outputPath.baseFile.".a2d_all.eps"
 trajectoriesOutput = outputPath.baseFile.".trajectories.eps"
 traveltimeOutput = outputPath.baseFile.".traveltime.eps"
+consumptionOutput = outputPath.baseFile.".consumption.eps"
+cumTraveltimeOutput = outputPath.baseFile.".cumTraveltime.eps"
+cumConsumptionOutput = outputPath.baseFile.".cumConsumption.eps"
 
 
 
@@ -62,7 +68,9 @@ entranceDistanceLabel = "Distance from entrance (km)"
 enteredVehicleLabel = "Number of entered vehicles"
 colorboxLabel = "V (km/h)"
 traveltimeLabel = "Inst. Link Traveltime (min)"
-
+consumptionLabel = "Inst. Consumption (liters/s)"
+cumTraveltimeLabel = "Cumulated Traveltime (h)"
+cumConsumptionLabel = "Cumulated Consumption (liters)"
 
 ########  Line Styles  ###################################
 
@@ -90,22 +98,54 @@ set key box
 
 
 ######################################
-# logging of inflows for testing
+# travel times
 ######################################
 
 set auto x
 set auto y
 set xlabel timeMinuteLabel
+
 set ylabel traveltimeLabel
 set out traveltimeOutput
-
 plot\
  ttFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
  ttFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
- ttFile using ($1/60.0):($3*3.6) title "main route" with lines linestyle 2,\
- ttFileRamp using ($1/60.0):($3*3.6) title "onramp route" with lines linestyle 4
+ ttFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
+ ttFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
+ ttFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ ttFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+ 
+set ylabel cumTraveltimeLabel
+set out cumTraveltimeOutput
+plot\
+ ttFile using ($1/60):($5) title "main route" with lines linestyle 1,\
+ ttFileRamp using ($1/60):($5) title "onramp route" with lines linestyle 3
  
 
+######################################
+# consumption 
+######################################
+
+set auto x
+set auto y
+set xlabel timeMinuteLabel
+
+set ylabel consumptionLabel
+set out consumptionOutput
+plot\
+ consumptionFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
+ consumptionFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
+ consumptionFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
+ consumptionFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
+ consumptionFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
+ consumptionFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+ 
+set ylabel cumConsumptionLabel
+set out cumConsumptionOutput
+plot\
+ consumptionFile using ($1/60.0):4 title "main route" with lines linestyle 1,\
+ consumptionFileRamp using ($1/60.0):4 title "onramp route" with lines linestyle 3
+ 
 
 ######################################
 # logging of inflows for testing

@@ -9,8 +9,8 @@ set datafile separator ","
 # parameters
 if (!exists("inputPath")) inputPath = "./"
 if (!exists("outputPath")) outputPath = "./"
-if (!exists("ldm")) ldm = "ACC"
-if (!exists("baseFile")) baseFile = "onramp_".ldm
+if (!exists("ldm")) ldm = ""
+if (!exists("baseFile")) baseFile = "onramp_example".ldm
 #print "LDM=".ldm
 
 # variables
@@ -22,7 +22,7 @@ stFile = inputPath.baseFile.".st.route_main.csv"  ## spatiotemporal output
 stFileRamp = inputPath.baseFile.".st.route_onramp.csv"  ## spatiotemporal output
 detFile(n) = sprintf(inputPath.baseFile.".det.road_1.x_%d.csv",n)
 roadSourceFile = inputPath.baseFile.".source.road_1.csv"
-rampSourceFile = inputPath.baseFile.".source.road_4.csv"
+rampSourceFile = inputPath.baseFile.".source.road_5.csv"
 trajectoriesFile = inputPath.baseFile.".traj.route_onramp.csv"
 ttFile= inputPath.baseFile.".tt.route_main.csv"
 ttFileRamp=inputPath.baseFile.".tt.route_onramp.csv"
