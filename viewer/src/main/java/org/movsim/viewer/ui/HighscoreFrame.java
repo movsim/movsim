@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 public class HighscoreFrame implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
 
+    private static final String CSV_SEPARATOR = ";";
     final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
     private Simulator simulator;
     private String simulationFinished;
@@ -61,7 +62,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                 if (highscores.size() > 0) {
                     String scoreString = highscores.get(rank - 1);
                     double score;
-                    while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(";")))) <= simulationTime) {
+                    while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(CSV_SEPARATOR)))) <= simulationTime) {
                         if (++rank > highscores.size())
                             break;
                         scoreString = highscores.get(rank - 1);
@@ -74,16 +75,20 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                     // TODO limit input to reasonable number of characters
                     username = JOptionPane.showInputDialog(null, askingForName, "");
                 }
-                highscores.add(rank - 1, (int) simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username);
+                highscores.add(rank - 1, (int) simulationTime + CSV_SEPARATOR + totalVehicleFuelUsedLiters + CSV_SEPARATOR + username);
 
+                writeFile(highscoreFilename, highscores);
+                
+                displayHighscores(highscoreFilename);
+            }
+
+            private void writeFile(String highscoreFilename, LinkedList<String> highscores) {
                 PrintWriter hswriter = FileUtils.getWriter(highscoreFilename);
                 for (int i = 0; i < highscores.size();) {
                     hswriter.println(highscores.get(i++));
                 }
                 hswriter.flush();
                 hswriter.close();
-                
-                displayHighscores(highscoreFilename);
             }
         });
     }
@@ -100,7 +105,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             String entry;
             int bettertime = 0;
             while ((entry = hsreader.readLine()) != null) {
-                String[] entries = entry.split(";", 3);
+                String[] entries = entry.split(CSV_SEPARATOR, 3);
                 int worsetime = Integer.parseInt(entries[0]);
                 double fuel = Double.parseDouble(entries[1]);
                 if ((worsetime < bettertime) || (fuel < 0)) {
@@ -125,7 +130,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
         String[] columnNames = { "Rank", "Name", "Time (seconds)", "Fuel (liters)" };
         String[][] rowData = new String[MAX_RANK_FOR_HIGHSCORE][4];
         for (int i = 0; (i < highscores.size()) && (i < MAX_RANK_FOR_HIGHSCORE); i++) {
-            String[] entries = highscores.get(i).split(";", 3);
+            String[] entries = highscores.get(i).split(CSV_SEPARATOR, 3);
             rowData[i][0] = Integer.toString(i + 1);
             rowData[i][1] = entries[2];
             rowData[i][2] = String.format("%d", Integer.parseInt(entries[0]));
