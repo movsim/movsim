@@ -28,9 +28,9 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
 
     private static final String CSV_SEPARATOR = ";";
     final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
-    private Simulator simulator;
-    private String simulationFinished;
-    private String askingForName;
+    private final Simulator simulator;
+    private final String simulationFinished;
+    private final String askingForName;
     
     private final int MAX_RANK_FOR_HIGHSCORE;
 
@@ -139,6 +139,7 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             rowData[i][0] = Integer.toString(i + 1);
             rowData[i][1] = entries[2];
             rowData[i][2] = String.format("%d", Integer.parseInt(entries[0]));
+            // TODO arne
             rowData[i][3] = String.format("%.2f", Double.parseDouble(entries[1]));
             rowData[i][4] = String.format("%.2f", Double.parseDouble(entries[1]));
         }
