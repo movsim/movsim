@@ -3,9 +3,10 @@ package org.movsim.viewer.ui;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,7 +27,6 @@ import org.slf4j.LoggerFactory;
 public class HighscoreFrame implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
 
     final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
-    private static final long serialVersionUID = 1L;
     private Simulator simulator;
     private String simulationFinished;
     private String askingForName;
@@ -55,16 +55,16 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
             public void run() {
 
                 String highscoreFilename = ProjectMetaData.getInstance().getProjectName() + "_highscore.txt";
-                Vector<String> highscores = getHighscores(highscoreFilename);
+                LinkedList<String> highscores = readHighscores(highscoreFilename);
                 int rank = 1;
                 String username = null;
                 if (highscores.size() > 0) {
-                    String scoreString = highscores.elementAt(rank - 1);
+                    String scoreString = highscores.get(rank - 1);
                     double score;
                     while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(";")))) <= simulationTime) {
                         if (++rank > highscores.size())
                             break;
-                        scoreString = highscores.elementAt(rank - 1);
+                        scoreString = highscores.get(rank - 1);
                     }
                 }
                 
@@ -74,12 +74,11 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                     // TODO limit input to reasonable number of characters
                     username = JOptionPane.showInputDialog(null, askingForName, "");
                 }
-                highscores.insertElementAt((int) simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username,
-                        rank - 1);
+                highscores.add(rank - 1, (int) simulationTime + ";" + totalVehicleFuelUsedLiters + ";" + username);
 
                 PrintWriter hswriter = FileUtils.getWriter(highscoreFilename);
                 for (int i = 0; i < highscores.size();) {
-                    hswriter.println(highscores.elementAt(i++));
+                    hswriter.println(highscores.get(i++));
                 }
                 hswriter.flush();
                 hswriter.close();
@@ -94,8 +93,8 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      * 
      * @return the high score table
      */
-    private Vector<String> getHighscores(String filename) {
-        Vector<String> highscores = new Vector<String>();
+    private LinkedList<String> readHighscores(String filename) {
+        LinkedList<String> highscores = new LinkedList<String>();
         try {
             BufferedReader hsreader = FileUtils.getReader(filename);
             String entry;
@@ -108,12 +107,12 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                     logger.error("high score file {} contains corrupt data", filename);
                     throw new Exception();
                 }
-                highscores.addElement(entry);
+                highscores.add(entry);
                 bettertime = worsetime;
             }
         } catch (final Exception e) {
             logger.error("error reading file {} - starting new high score", filename);
-            return new Vector<String>();
+            return new LinkedList<String>();
         }
         return highscores;
     }
@@ -122,16 +121,17 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      * Displays the high score table
      */
     public void displayHighscores(String filename) {
-        Vector<String> highscores = getHighscores(filename);
+        List<String> highscores = readHighscores(filename);
         String[] columnNames = { "Rank", "Name", "Time (seconds)", "Fuel (liters)" };
         String[][] rowData = new String[MAX_RANK_FOR_HIGHSCORE][4];
         for (int i = 0; (i < highscores.size()) && (i < MAX_RANK_FOR_HIGHSCORE); i++) {
-            String[] entries = highscores.elementAt(i).split(";", 3);
+            String[] entries = highscores.get(i).split(";", 3);
             rowData[i][0] = Integer.toString(i + 1);
             rowData[i][1] = entries[2];
             rowData[i][2] = String.format("%d", Integer.parseInt(entries[0]));
             rowData[i][3] = String.format("%.2f", Double.parseDouble(entries[1]));
         }
+        
         JTable highscoreTable = new JTable(rowData, columnNames);
         highscoreTable.setEnabled(false);
         
