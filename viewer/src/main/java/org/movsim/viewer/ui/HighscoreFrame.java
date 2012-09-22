@@ -47,9 +47,9 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
 
     /**
      * @param simulationTime
-     * @param totalVehicleFuelUsedLiters
+     * @param totalFuelUsedLiters
      */
-    private void highscoreForGames(final double simulationTime, final double totalVehicleTravelTime, final double totalVehicleTravelDistance, final double totalVehicleFuelUsedLiters, final double totalVehicleElectricEnergyUsed) {
+    private void highscoreForGames(final HighscoreEntry highscoreEntry) {
         EventQueue.invokeLater(new Runnable() {
 
             @Override
@@ -62,26 +62,31 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
                 if (highscores.size() > 0) {
                     String scoreString = highscores.get(rank - 1);
                     double score;
-                    while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(CSV_SEPARATOR)))) <= simulationTime) {
+                    while ((score = Double.parseDouble(scoreString.substring(0, scoreString.indexOf(CSV_SEPARATOR)))) <= highscoreEntry.getTotalSimulationTime()) {
                         if (++rank > highscores.size())
                             break;
                         scoreString = highscores.get(rank - 1);
                     }
                 }
                 
-                JOptionPane.showMessageDialog(null, (String.format(simulationFinished, (int)simulationTime, (int)totalVehicleTravelTime, (int)totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed, (highscores.size() + 1), rank)));
+                JOptionPane.showMessageDialog(null, getDialogMessage(highscoreEntry, highscores.size(), rank) );
                 
                 if (rank <= MAX_RANK_FOR_HIGHSCORE) {
                     // TODO limit input to reasonable number of characters
                     username = JOptionPane.showInputDialog(null, askingForName, "");
                 }
-                highscores.add(rank - 1, (int) simulationTime + CSV_SEPARATOR + totalVehicleFuelUsedLiters + CSV_SEPARATOR + username);
+                highscores.add(rank - 1, (int) highscoreEntry.getTotalSimulationTime() + CSV_SEPARATOR + highscoreEntry.getTotalFuelUsedLiters() + CSV_SEPARATOR + username);
 
                 writeFile(highscoreFilename, highscores);
                 
                 displayHighscores(highscoreFilename);
             }
 
+            private String getDialogMessage(HighscoreEntry entry, int highscoreSize, int rank){
+                return String.format(simulationFinished, (int)entry.getTotalSimulationTime(), (int)entry.getTotalTravelTime(), (int)entry.getTotalTravelDistance(), entry.getTotalFuelUsedLiters(), entry.getTotalElectricEnergyUsed(), highscoreSize + 1, rank);
+                
+            }
+            
             private void writeFile(String highscoreFilename, LinkedList<String> highscores) {
                 PrintWriter hswriter = FileUtils.getWriter(highscoreFilename);
                 for (int i = 0; i < highscores.size();) {
@@ -127,14 +132,15 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
      */
     public void displayHighscores(String filename) {
         List<String> highscores = readHighscores(filename);
-        String[] columnNames = { "Rank", "Name", "Time (seconds)", "Fuel (liters)" };
-        String[][] rowData = new String[MAX_RANK_FOR_HIGHSCORE][4];
+        String[] columnNames = { "Rank", "Name", "Time (seconds)", "Total Traveltime (s)", "Fuel (liters)" };
+        String[][] rowData = new String[MAX_RANK_FOR_HIGHSCORE][columnNames.length];
         for (int i = 0; (i < highscores.size()) && (i < MAX_RANK_FOR_HIGHSCORE); i++) {
             String[] entries = highscores.get(i).split(CSV_SEPARATOR, 3);
             rowData[i][0] = Integer.toString(i + 1);
             rowData[i][1] = entries[2];
             rowData[i][2] = String.format("%d", Integer.parseInt(entries[0]));
             rowData[i][3] = String.format("%.2f", Double.parseDouble(entries[1]));
+            rowData[i][4] = String.format("%.2f", Double.parseDouble(entries[1]));
         }
         
         JTable highscoreTable = new JTable(rowData, columnNames);
@@ -162,10 +168,44 @@ public class HighscoreFrame implements SimulationRun.CompletionCallback, Simulat
         final double totalVehicleTravelDistance = roadNetwork.totalVehicleTravelDistance() * Units.M_TO_KM;
         final double totalVehicleFuelUsedLiters = roadNetwork.totalVehicleFuelUsedLiters();
         final double totalVehicleElectricEnergyUsed = roadNetwork.totalVehicleElectricEnergyUsed() / (1000 * 3600);
-        highscoreForGames(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed);
+        
+        highscoreForGames(new HighscoreEntry(simulationTime, totalVehicleTravelTime, totalVehicleTravelDistance, totalVehicleFuelUsedLiters, totalVehicleElectricEnergyUsed));
     }
 
     public static void initialize(ResourceBundle resourceBundle, Simulator simulator, Properties properties) {
         new HighscoreFrame(resourceBundle, simulator, properties);
+    }
+    
+    
+   public final class HighscoreEntry{
+        private final double totalSimulationTime;
+        private final double totalTravelTime;
+        private final double totalTravelDistance;
+        private final double totalFuelUsedLiters;
+        private final double totalElectricEnergyUsed;
+        public HighscoreEntry(double totalSimulationTime, double totalTravelTime, double totalTravelDistance, double totalFuelUsedLiters, double totalElectricEnergyUsed) {
+            this.totalSimulationTime = totalSimulationTime;
+            this.totalTravelTime = totalTravelTime;
+            this.totalTravelDistance = totalTravelDistance;
+            this.totalFuelUsedLiters = totalFuelUsedLiters;
+            this.totalElectricEnergyUsed = totalElectricEnergyUsed;
+        }
+        public double getTotalSimulationTime() {
+            return totalSimulationTime;
+        }
+        public double getTotalTravelTime() {
+            return totalTravelTime;
+        }
+        public double getTotalTravelDistance() {
+            return totalTravelDistance;
+        }
+        public double getTotalFuelUsedLiters() {
+            return totalFuelUsedLiters;
+        }
+        public double getTotalElectricEnergyUsed() {
+            return totalElectricEnergyUsed;
+        }
+        
+        
     }
 }
