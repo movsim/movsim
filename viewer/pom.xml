@@ -3,12 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.movsim</groupId>
-	<name>movsimviewer</name>
+	<artifactId>viewer</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
-
-	<url>http://maven.apache.org</url>
-
+	
+	<name>movsimviewer</name>
+	<description>graphical user interface and visualization frontend to movsim core</description>
+	<url>http://www.movsim.org</url>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -77,6 +79,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<artifactId>viewer</artifactId>
-	<description>graphical user interface and visualization frontend to movsim core</description>
 </project>
