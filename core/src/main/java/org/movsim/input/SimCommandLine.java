@@ -47,6 +47,7 @@ import org.movsim.utilities.FileUtils;
  */
 public class SimCommandLine {
 
+    private static final String MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
     final CommandLineParser parser;
     private Options options;
     protected final ProjectMetaData projectMetaData;
@@ -198,8 +199,8 @@ public class SimCommandLine {
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private static void optWriteDtd() {
-        final String resource = File.separator + "config" + File.separator + "multiModelTrafficSimulatorInput.dtd";
-        final String filename = "multiModelTrafficSimulatorInput.dtd";
+        final String resource = File.separator + "config" + File.separator + MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME;
+        final String filename = MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME;
         FileUtils.resourceToFile(resource, filename);
         System.out.println("dtd file written to " + filename);
 
