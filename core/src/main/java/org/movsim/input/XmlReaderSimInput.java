@@ -72,7 +72,7 @@ public class XmlReaderSimInput {
     private Document doc;
 
     // dtd from resources. do *not* use the File.separator character
-    private final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
+    private final String dtdFilename;
 
     private InputStream appletinputstream;
 
@@ -86,7 +86,8 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(ProjectMetaData projectMetaDataParam, InputData inputData) {
+    public XmlReaderSimInput(String dtdFilename, ProjectMetaData projectMetaDataParam, InputData inputData) {
+        this.dtdFilename = dtdFilename;
         this.projectMetaData = projectMetaDataParam;
         this.inputData = inputData;
         this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
