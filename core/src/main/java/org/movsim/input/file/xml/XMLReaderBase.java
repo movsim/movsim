@@ -56,7 +56,21 @@ public class XMLReaderBase {
      */
     protected static boolean parse(String fullFilename, DefaultHandler handler) {
         logger.info("parsing file: " + fullFilename);
-        if (ProjectMetaData.getInstance().isXmlFromResources()) {
+        ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        if (projectMetaData.isParseFromInputstream()) {
+            InputStream is = projectMetaData.getNetworkXml();
+            try {
+                final SAXParserFactory factory = SAXParserFactory.newInstance();
+                final SAXParser saxParser = factory.newSAXParser();
+                saxParser.parse(is, handler);
+            } catch (final Exception e) {
+                e.printStackTrace();
+                logger.error("parsing failed");
+                logger.error(e.getLocalizedMessage());
+                return false;
+            }
+
+        } else if (projectMetaData.isXmlFromResources()) {
             final InputStream inputstream = XMLReaderBase.class.getResourceAsStream(fullFilename);
             final SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser;

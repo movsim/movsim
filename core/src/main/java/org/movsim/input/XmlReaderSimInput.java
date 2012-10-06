@@ -92,39 +92,31 @@ public class XmlReaderSimInput {
         this.xmlFilename = projectMetaData.getPathToProjectXmlFile() + projectMetaData.getProjectName()
                 + filenameEnding;
 
-        // TODO Remove AccessController: Is not needed anymore
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
+        if (!projectMetaData.isParseFromInputstream() && !projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
+            logger.error("XML file {} does not exist. Exit Simulation.", xmlFilename);
+            System.exit(1);
+        }
 
-            @Override
-            public Object run() {
+        logger.info("Begin parsing: " + xmlFilename);
 
-                if (!projectMetaData.isXmlFromResources() && !FileUtils.fileExists(xmlFilename)) {
-                    logger.error("XML file {} does not exist. Exit Simulation.", xmlFilename);
-                    System.exit(1);
-                }
+        if (projectMetaData.isParseFromInputstream()) {
+            readXmlFromInputstream();
+        } else if (projectMetaData.isXmlFromResources()) {
+            readAndValidateXmlFromResources();
+        } else {
+            readAndValidateXmlFromFileName();
+        }
 
-                logger.info("Begin parsing: " + xmlFilename);
+        // write internal xml file to $pwd:
+        if (projectMetaData.isWriteInternalXml()) {
+            final String outFilename = projectMetaData.getProjectName() + "_internal.xml";
+            writeInternalXmlToFile(doc, outFilename);
+            logger.info("internal xml output written to file {}. Exit.", outFilename);
+            System.exit(0);
+        }
 
-                if (projectMetaData.isXmlFromResources()) {
-                    readAndValidateXmlFromResources();
-                } else {
-                    readAndValidateXmlFromFileName();
-                }
-
-                // write internal xml file to $pwd:
-                if (projectMetaData.isWriteInternalXml()) {
-                    final String outFilename = projectMetaData.getProjectName() + "_internal.xml";
-                    writeInternalXmlToFile(doc, outFilename);
-                    logger.info("internal xml output written to file {}. Exit.", outFilename);
-                    System.exit(0);
-                }
-
-                fromDomToInternalDatastructure();
-                logger.info("End XmlReaderSimInput.");
-
-                return null;
-            }
-        });
+        fromDomToInternalDatastructure();
+        logger.info("End XmlReaderSimInput.");
 
     }
 
@@ -152,13 +144,13 @@ public class XmlReaderSimInput {
         }
     }
 
-    /**
-     * From dom to internal data structure.
-     */
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
+        System.out.println(root);
 
-        parseNetworkFilename(root);
+        if (!projectMetaData.isParseFromInputstream()) {
+            parseNetworkFilename(root);
+        }
 
         // -------------------------------------------------------
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
@@ -172,8 +164,7 @@ public class XmlReaderSimInput {
 
         // -------------------------------------------------------
 
-        final ConsumptionInput fuelConsumptionInput = new ConsumptionInput(
-                root.getChild(XmlElementNames.Consumption));
+        final ConsumptionInput fuelConsumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
 
         inputData.setFuelConsumptionInput(fuelConsumptionInput);
 
@@ -241,27 +232,21 @@ public class XmlReaderSimInput {
         validate(FileUtils.getInputSourceFromFilename(xmlFilename));
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFilename));
     }
+    
+    private void readXmlFromInputstream() {
+        doc = getDocument(new InputSource(projectMetaData.getMovsimXml()));
+    }
 
     /**
      * Validates and reads xml from resources.
      */
     private void readAndValidateXmlFromResources() {
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-            @Override
-            public Object run() {
-
-                appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFilename);
-                appletresource = new InputSource(appletinputstream);
-                validate(appletresource);
-                appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFilename);
-                appletresource = new InputSource(appletinputstream);
-                doc = getDocument(appletresource);
-
-                return null;
-            }
-        });
-
+        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFilename);
+        appletresource = new InputSource(appletinputstream);
+        validate(appletresource);
+        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFilename);
+        appletresource = new InputSource(appletinputstream);
+        doc = getDocument(appletresource);
     }
 
     /**

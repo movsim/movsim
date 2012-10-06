@@ -25,6 +25,8 @@
  */
 package org.movsim.input;
 
+import java.io.InputStream;
+
 public class ProjectMetaData {
 
     private static ProjectMetaData singleton = new ProjectMetaData();
@@ -43,6 +45,17 @@ public class ProjectMetaData {
      * Allows to read the config files from resources instead.
      */
     private boolean xmlFromResources = false;
+    
+    /**
+     * For Android client: xmlFromResources does work, but using the file system is more convenient.
+     */
+    private boolean parseFromInputstream = false;
+
+    private InputStream movsimXml;
+    private InputStream networkXml;
+    private InputStream projectProperties;
+    
+
 
     /**
      * private constructor: singleton pattern.
@@ -177,4 +190,60 @@ public class ProjectMetaData {
     public void setXmlFromResources(boolean xmlFromResources) {
         this.xmlFromResources = xmlFromResources;
     }
+    
+    /**
+     * @return the parseFromInputstream
+     */
+    public boolean isParseFromInputstream() {
+        return parseFromInputstream;
+    }
+
+    /**
+     * @param parseFromInputstream the parseFromInputstream to set
+     */
+    public void setParseFromInputstream(boolean parseFromInputstream) {
+        this.parseFromInputstream = parseFromInputstream;
+    }
+    /**
+     * @return the movsimXml
+     */
+    public InputStream getMovsimXml() {
+        return movsimXml;
+    }
+
+    /**
+     * @param movsimXml the movsimXml to set
+     */
+    public void setMovsimXml(InputStream movsimXml) {
+        this.movsimXml = movsimXml;
+    }
+
+    /**
+     * @return the networkXml
+     */
+    public InputStream getNetworkXml() {
+        return networkXml;
+    }
+
+    /**
+     * @param networkXml the networkXml to set
+     */
+    public void setNetworkXml(InputStream networkXml) {
+        this.networkXml = networkXml;
+    }
+
+    /**
+     * @return the projectProperties
+     */
+    public InputStream getProjectProperties() {
+        return projectProperties;
+    }
+
+    /**
+     * @param projectProperties the projectProperties to set
+     */
+    public void setProjectProperties(InputStream projectProperties) {
+        this.projectProperties = projectProperties;
+    }
+    
 }
