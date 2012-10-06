@@ -273,7 +273,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @return
      */
     private static SimulationInput parseMovSimXml(ProjectMetaData projectMetaData, InputData inputData) {
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(projectMetaData, inputData);
+        final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(dtdFilename, projectMetaData, inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
     }

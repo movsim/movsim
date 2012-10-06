@@ -76,6 +76,8 @@ From with the Eclipse IDE install the m2e(Maven Integration for Eclipse) plugin 
 
 Import the project into Eclipse from the _File >> Import_ menu item. In the resulting Select dialog, choose the _General >> Existing Projects into Workspace_ option. In the resulting dialog select the `movsim/core` directory and import. Repeat for the `movsim/viewer` directory.
 
+Alternatively, create an eclipse configuration from the commandline by typing `mvn eclipse:eclipse` and using the Eclipse _Import..._ dialog for `Existing Maven Project` in the component subdirectories.
+
 You can then build and run either the _core_ or _viewer_ Java applications.
 
 We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
