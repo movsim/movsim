@@ -277,14 +277,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             logger.warn("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
         } else {
             for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
-                final int r = (int) (Math.random() * 256);
-                final int g = (int) (Math.random() * 256);
-                final int b = (int) (Math.random() * 256);
-                final Color color = new Color(r, g, b);
-                // final float hue = random.nextFloat();
-                // final float saturation = 0.9f;// 1.0 for brilliant, 0.0 for dull
-                // final float luminance = 1.0f; // 1.0 for brighter, 0.0 for black
-                // Color color = Color.getHSBColor(hue, saturation, luminance);
+                final Color color = new Color(Colors.randomColor());
                 logger.info("set color for vehicle label={}", vehicleTypeLabel);
                 labelColors.put(vehicleTypeLabel, color);
             }
@@ -409,8 +402,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         case EXIT_COLOR:
             color = Color.BLACK;
             if (vehicle.exitRoadSegmentId() != Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
-                // switch (vehicle.exitRoadSegmentId() % 5) {
-                // case 0:
                 color = Color.WHITE;
             }
             break;
