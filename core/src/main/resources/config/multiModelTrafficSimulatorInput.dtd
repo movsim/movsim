@@ -252,7 +252,7 @@ fluct_strength   NMTOKEN #REQUIRED
 <!ELEMENT SIMULATION (TRAFFIC_COMPOSITION, ROAD*, ROUTES?, OUTPUT)>
 <!ATTLIST SIMULATION
   dt               NMTOKEN #REQUIRED
-  duration         NMTOKEN #REQUIRED
+  duration         NMTOKEN "-1"
   fixed_seed       (true|false) "true" 
   seed             NMTOKEN "42"
   crash_exit       (true|false) "true"
