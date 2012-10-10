@@ -48,17 +48,17 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     private final Simulator simulator;
     private final SimulationRunnable simulationRunnable;
 
-    private boolean isWithProgressBar = true;
-
-    public boolean isWithProgressBar() {
-        return isWithProgressBar;
-    }
-
-    public void setWithProgressBar(boolean isWithProgressBar) {
-        this.isWithProgressBar = isWithProgressBar;
-    }
-
     private JProgressBar progressBar;
+    
+    private boolean withProgressBar = true;
+
+    boolean isWithFiniteDurationAndProgressBar() {
+        return withProgressBar && simulationRunnable.duration() > 0;
+    }
+
+    public void setWithProgressBar(boolean withProgressBar) {
+        this.withProgressBar = withProgressBar;
+    }
 
     private JLabel lblSimTime;
     private JLabel lblTimeDisplay;
@@ -103,7 +103,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblCurrentScenario.setText(simulator.getProjectMetaData().getProjectName());
         lblCurrentScenario.setPreferredSize(new Dimension(100, 22));
 
-        if (isWithProgressBar) {
+        if (isWithFiniteDurationAndProgressBar()) {
             progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
             progressBar.setStringPainted(true);
             progressBar.setVisible(true);
@@ -184,24 +184,24 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
         add(Box.createRigidArea(new Dimension(6, 22)));
 
-        if (isWithProgressBar) {
+        if (isWithFiniteDurationAndProgressBar()) {
             add(progressBar);
         }
     }
 
     protected void setProgressBarDuration() {
-        if (isWithProgressBar) {
-            final int maxSimTime = (int) simulationRunnable.duration();
+        final int maxSimTime = (int) simulationRunnable.duration();
+        if (withProgressBar && maxSimTime > 0) {
             progressBar.setMaximum(maxSimTime);
         }
     }
-
+    
     @SuppressWarnings("hiding")
     public void notifyObserver(double time) {
         if (time != this.time) {
             final int intTime = (int) time;
 
-            if (isWithProgressBar) {
+            if (isWithFiniteDurationAndProgressBar()) {
                 progressBar.setValue(intTime);
             }
             lblTimeDisplay.setText(StringHelper.getTime(time, true, true, true));
