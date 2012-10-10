@@ -117,7 +117,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
 
         simulationRunnable.setTimeStep(simInput.getTimestep());
-        simulationRunnable.setDuration(simInput.getMaxSimTime());
+        simulationRunnable.setDuration(simInput.getSimulationDuration());
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 
