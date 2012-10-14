@@ -23,41 +23,37 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input;
+package org.movsim.simulator.vehicles.longitudinalmodel;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
 
 /**
- * The Class XmlUtils.
+ * The Class ScalingHelper.
  */
-public class XmlUtils {
+public class ScalingHelper {
 
     /**
-     * private constructer.
+     * Instantiates a new scaling helper.
      */
-    private XmlUtils() {
+    private ScalingHelper() {
 
     }
 
     /**
-     * Put all attributes in hash with corresponding values.
+     * Gets the scaling length. Which differs in the cellular automata.
      * 
-     * @param element
-     *            the element
-     * @return the map
+     * @param modelName
+     *            the model name
+     * @return the scaling length
      */
-    public static Map<String, String> putAttributesInHash(Element element) {
-        final Map<String, String> map = new HashMap<String, String>();
-        @SuppressWarnings("unchecked")
-        final List<Attribute> allAttr = element.getAttributes();
-        for (final Attribute currentAttr : allAttr) {
-            map.put(currentAttr.getName(), currentAttr.getValue());
+    public static double getScalingLength(ModelName modelName) {
+        double scalingLengthCA = 1;
+        if (modelName == ModelName.NSM) {
+            scalingLengthCA = 7.5;
+        } else if (modelName == ModelName.KKW) {
+            scalingLengthCA = 0.5;
         }
-        return map;
+        return scalingLengthCA;
     }
 }

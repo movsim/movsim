@@ -471,14 +471,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         return totalVehicleFuelUsedLiters;
     }
     
-    protected double totalVehicleElectricEnergyUsed() {
-        double totalVehicleElectricEnergyUsed = 0;
-        for (final LaneSegment laneSegment : laneSegments) {
-            totalVehicleElectricEnergyUsed += laneSegment.totalVehicleElectricEnergyUsed();
-        }
-        return totalVehicleElectricEnergyUsed;
-    }
-    
     protected double instantaneousConsumptionLitersPerSecond() {
         double vehicleFuelUsedLiters = 0;
         for (final LaneSegment laneSegment : laneSegments) {

@@ -27,8 +27,8 @@ package org.movsim;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.SimCommandLine;
+import org.movsim.logging.MovSimLogFileAppender;
 import org.movsim.simulator.Simulator;
-import org.movsim.utilities.MovSimLogFileAppender;
 
 /**
  * The Class MovsimCoreMain.

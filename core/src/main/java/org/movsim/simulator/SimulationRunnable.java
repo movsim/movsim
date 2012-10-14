@@ -271,7 +271,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         assert updateDrawingCallback != null;
         assert simulation != null;
         while (Thread.currentThread() == thread) {
-            if (duration != 0.0 && simulationTime >= duration) {
+            if (duration > 0.0 && simulationTime >= duration) {
                 stop();
                 if (completionCallback != null) {
                     completionCallback.simulationComplete(simulationTime);

@@ -32,9 +32,9 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.XmlUtils;
 import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.VehicleTypeInput;
+import org.movsim.utilities.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,7 @@ public class SimulationInput {
     private final double timestep;
 
     /** The duration of the simulation. */
-    private final double maxSimTime;
+    private final double duration;
 
     private boolean withFixedSeed;
 
@@ -75,7 +75,7 @@ public class SimulationInput {
      */
     public SimulationInput(Element elem) {
         timestep = Double.parseDouble(elem.getAttributeValue("dt"));
-        maxSimTime = Double.parseDouble(elem.getAttributeValue("duration"));
+        duration = Double.parseDouble(elem.getAttributeValue("duration"));
         randomSeed = Integer.parseInt(elem.getAttributeValue("seed"));
         if (elem.getAttributeValue("fixed_seed").equalsIgnoreCase("true")) {
             withFixedSeed = true;
@@ -148,8 +148,11 @@ public class SimulationInput {
         return timestep;
     }
 
-    public double getMaxSimTime() {
-        return maxSimTime;
+    /**
+     * returns the simulation duration (in seconds). May be <0 if simulation runs infinitely
+     */
+    public double getSimulationDuration() {
+        return duration;
     }
 
     public boolean isWithFixedSeed() {

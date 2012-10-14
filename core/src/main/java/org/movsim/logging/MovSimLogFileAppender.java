@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.utilities;
+package org.movsim.logging;
 
 import java.io.File;
 import java.io.IOException;

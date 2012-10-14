@@ -33,7 +33,6 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.XmlUtils;
 import org.movsim.input.model.simulation.DetectorInput;
 import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -45,6 +44,7 @@ import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSinkData;
 import org.movsim.input.model.simulation.TrafficSourceData;
+import org.movsim.utilities.XmlUtils;
 
 public class RoadInput {
 

@@ -40,7 +40,6 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.movsim.MovsimCoreMain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -324,12 +323,10 @@ public class FileUtils {
      * @param filename
      *            the filename
      */
-    public static void resourceToFile(String res, String filename) {
+    public static void resourceToFile(final InputStream resourceAsStream, String filename) {
         try {
-            final InputStream resourceAsStream = MovsimCoreMain.class.getResourceAsStream(res);
-
             if (resourceAsStream == null) {
-                logger.debug("resource {} not included!", res);
+                logger.debug("resource not included!");
                 return;
             }
 

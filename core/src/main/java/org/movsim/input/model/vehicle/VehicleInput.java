@@ -30,7 +30,6 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.XmlUtils;
 import org.movsim.input.model.vehicle.behavior.MemoryInputData;
 import org.movsim.input.model.vehicle.behavior.NoiseInputData;
 import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
@@ -45,6 +44,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.utilities.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

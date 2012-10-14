@@ -24,7 +24,7 @@
             </LANE_CHANGE_MODEL>
         </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="1000000" fixed_seed="true" seed="42" crash_exit="false">
+    <SIMULATION dt="0.2" fixed_seed="true" seed="42" crash_exit="false">
         <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="FAST_TYPE" fraction="0.8" />
             <VEHICLE_TYPE label="SLOW_TYPE" fraction="0.2" />

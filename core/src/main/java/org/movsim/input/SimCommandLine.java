@@ -26,6 +26,7 @@
 package org.movsim.input;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Locale;
 
@@ -189,9 +190,10 @@ public class SimCommandLine {
     private static void optWriteLoggingProperties() {
         final String resource = File.separator + "config" + File.separator + "log4j.properties";
         final String filename = "log4j.properties";
-        FileUtils.resourceToFile(resource, filename);
+        final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource); 
+        FileUtils.resourceToFile(is, filename);
         System.out.println("logger properties file written to " + filename);
-
+      
         System.exit(0);
     }
 
@@ -201,7 +203,8 @@ public class SimCommandLine {
     private static void optWriteDtd() {
         final String resource = File.separator + "config" + File.separator + MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME;
         final String filename = MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME;
-        FileUtils.resourceToFile(resource, filename);
+        final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
+        FileUtils.resourceToFile(is, filename);
         System.out.println("dtd file written to " + filename);
 
         System.exit(0);

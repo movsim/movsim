@@ -25,65 +25,39 @@
  */
 package org.movsim.utilities;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Layout;
-import org.apache.log4j.spi.LoggingEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jdom.Attribute;
+import org.jdom.Element;
 
 /**
- * The Class NullAppender.
+ * The Class XmlUtils.
  */
-public class NullAppender extends AppenderSkeleton {
+public class XmlUtils {
 
     /**
-     * Instantiates a new null appender.
+     * private constructer.
      */
-    public NullAppender() {
+    private XmlUtils() {
+
     }
 
     /**
-     * Instantiates a new null appender.
+     * Put all attributes in hash with corresponding values.
      * 
-     * @param layout
-     *            the layout
+     * @param element
+     *            the element
+     * @return the map
      */
-    public NullAppender(Layout layout) {
-        this.layout = layout;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.log4j.AppenderSkeleton#doAppend(org.apache.log4j.spi.LoggingEvent )
-     */
-    @Override
-    public synchronized void doAppend(LoggingEvent event) {
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.log4j.AppenderSkeleton#append(org.apache.log4j.spi.LoggingEvent )
-     */
-    @Override
-    public void append(LoggingEvent event) {
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.log4j.AppenderSkeleton#requiresLayout()
-     */
-    @Override
-    public boolean requiresLayout() {
-        return false;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.log4j.AppenderSkeleton#close()
-     */
-    @Override
-    public void close() {
+    public static Map<String, String> putAttributesInHash(Element element) {
+        final Map<String, String> map = new HashMap<String, String>();
+        @SuppressWarnings("unchecked")
+        final List<Attribute> allAttr = element.getAttributes();
+        for (final Attribute currentAttr : allAttr) {
+            map.put(currentAttr.getName(), currentAttr.getValue());
+        }
+        return map;
     }
 }
