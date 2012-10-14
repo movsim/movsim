@@ -19,6 +19,7 @@
         <url>http://movsim.org</url>
     </organization>
     <modules>
+        <module>common</module>
 <!--         <module>consumption</module> -->
         <module>core</module>
         <module>viewer</module>
