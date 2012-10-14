@@ -23,9 +23,10 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.utilities;
+package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+
 
 /**
  * The Class ScalingHelper.
