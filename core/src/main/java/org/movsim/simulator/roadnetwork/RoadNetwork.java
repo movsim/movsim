@@ -383,19 +383,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleFuelUsedLiters;
     }
 
-    // TODO common concept for consumption modeling
-    public double totalVehicleElectricEnergyUsed() {
-        double totalVehicleElectricEnergyUsed = 0.0;
-        for (RoadSegment roadSegment : roadSegments) {
-            totalVehicleElectricEnergyUsed += roadSegment.totalVehicleElectricEnergyUsed();
-            if (roadSegment.sink() != null) {
-                totalVehicleElectricEnergyUsed += roadSegment.sink().totalVehicleElectricEnergyUsed();
-            }
-        }
-        return totalVehicleElectricEnergyUsed;
-    }
-
-    
     public double instantaneousFuelUsedLiters(Route route) {
         double instantaneousConsumption = 0;
         for (final RoadSegment roadSegment : route) {

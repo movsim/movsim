@@ -747,12 +747,7 @@ public class Vehicle {
             }
         }
         if (fuelModel != null) {
-            if (fuelModel.getType().equals("fuel")) {
-                totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
-            }
-            if (fuelModel.getType().equals("electric")) {
-                totalElectricEnergyUsed += fuelModel.getElectricPower(speed, acc, dt) * dt;
-            }
+            totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
         }
     }
 
