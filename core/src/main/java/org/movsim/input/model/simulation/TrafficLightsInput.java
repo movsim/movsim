@@ -33,7 +33,7 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.XmlUtils;
+import org.movsim.utilities.XmlUtils;
 
 public class TrafficLightsInput {
 
