@@ -1,27 +1,23 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.movsim</groupId>
     <artifactId>movsim</artifactId>
     <version>1.2</version>
     <packaging>jar</packaging>
-
     <name>movsimcore</name>
-    <description>multi-model, open-source vehicular-traffic simulator </description>
+    <description>multi-model, open-source vehicular-traffic simulator</description>
     <url>http://www.movsim.org</url>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
-      <dependency>
-	   <groupId>org.movsim</groupId>
-   	   <artifactId>movsimcommon</artifactId>
-	   <version>1.2</version>
-      </dependency> 
-    	<!-- <dependency>
+        <dependency>
+            <groupId>org.movsim</groupId>
+            <artifactId>movsimcommon</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <!-- <dependency>
 			<groupId>org.movsim</groupId>
 			<artifactId>movsimconsumption</artifactId>
 			<version>1.2</version>
@@ -59,10 +55,21 @@
             <version>1.2</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
-
+            <!-- build java source jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- build jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -70,7 +77,6 @@
                 <version>2.3.1</version>
                 <!-- nothing here -->
             </plugin>
-
             <!-- build executable jar with all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -95,7 +101,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <!-- Java 1.6 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -106,8 +111,7 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 </project>
+
