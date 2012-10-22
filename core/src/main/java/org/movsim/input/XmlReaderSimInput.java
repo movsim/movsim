@@ -28,7 +28,6 @@ package org.movsim.input;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -36,8 +35,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
@@ -51,6 +48,8 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import xml.XmlHelpers;
 
 /**
  * The Class XmlReaderSimInput.
@@ -111,7 +110,7 @@ public class XmlReaderSimInput {
         // write internal xml file to $pwd:
         if (projectMetaData.isWriteInternalXml()) {
             final String outFilename = projectMetaData.getProjectName() + "_internal.xml";
-            writeInternalXmlToFile(doc, outFilename);
+            XmlHelpers.writeInternalXmlToFile(doc, outFilename);
             logger.info("internal xml output written to file {}. Exit.", outFilename);
             System.exit(0);
         }
@@ -119,30 +118,6 @@ public class XmlReaderSimInput {
         fromDomToInternalDatastructure();
         logger.info("End XmlReaderSimInput.");
 
-    }
-
-    /**
-     * Writes the internal xml after validation to file.
-     * 
-     * @param localDoc
-     *            the local doc
-     * @param outFilename
-     *            the output file name
-     */
-    private static void writeInternalXmlToFile(Document localDoc, String outFilename) {
-        final PrintWriter writer = FileUtils.getWriter(outFilename);
-        final XMLOutputter outputter = new XMLOutputter();
-        Format format = Format.getPrettyFormat();
-        format.setIndent("    ");
-        format.setLineSeparator("\n");
-        outputter.setFormat(format);
-        outputter.setFormat(format);
-        try {
-            logger.info("  write internal xml after validation to file \"" + outFilename + "\"");
-            outputter.output(localDoc, writer);
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void fromDomToInternalDatastructure() {
