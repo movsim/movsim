@@ -4,5 +4,5 @@
 # please specify your path to the target output folder and the target version
 # 
 #java -jar $HOME/workspace/movsim/viewer/target/viewer-1.0-jar-with-dependencies.jar $@
-java -jar $HOME/workspace/movsim/viewer/target/MovsimViewer-1.3.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar $HOME/workspace/movsim/viewer/target/MovsimViewer-1.3.0-SNAPSHOT-jar-with-dependencies.jar $@
 
