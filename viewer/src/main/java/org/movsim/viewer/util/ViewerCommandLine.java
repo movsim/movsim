@@ -27,10 +27,10 @@ package org.movsim.viewer.util;
 
 import org.apache.commons.cli.CommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.input.SimCommandLine;
+import org.movsim.input.MovsimCommandLine;
 import org.movsim.utilities.FileUtils;
 
-public class ViewerCommandLine extends SimCommandLine {
+public class ViewerCommandLine extends MovsimCommandLine {
 
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
         final ViewerCommandLine commandLine = new ViewerCommandLine(projectMetaData);

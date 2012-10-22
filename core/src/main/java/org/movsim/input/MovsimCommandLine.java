@@ -42,16 +42,16 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.FileUtils;
 
 /**
- * The Class SimCommandLine. MovSim console command line parser. Sets the ProjectMetaData. Initializes the logger.
+ * The Class MovsimCommandLine. MovSim console command line parser. Sets the ProjectMetaData. Initializes the logger.
  */
-public class SimCommandLine {
+public class MovsimCommandLine {
 
     final CommandLineParser parser;
     private Options options;
     protected final ProjectMetaData projectMetaData;
 
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
-        final SimCommandLine commandLine = new SimCommandLine(projectMetaData);
+        final MovsimCommandLine commandLine = new MovsimCommandLine(projectMetaData);
         commandLine.parse(args);
     }
 
@@ -65,7 +65,7 @@ public class SimCommandLine {
      * @param args
      *            the args
      */
-    public SimCommandLine(ProjectMetaData projectMetaData) {
+    public MovsimCommandLine(ProjectMetaData projectMetaData) {
         Logger.initializeLogger();
         this.projectMetaData = projectMetaData;
         createOptions();
