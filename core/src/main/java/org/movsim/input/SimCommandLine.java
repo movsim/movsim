@@ -28,7 +28,6 @@ package org.movsim.input;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Locale;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -48,13 +47,12 @@ import org.movsim.utilities.FileUtils;
  */
 public class SimCommandLine {
 
-    private static final String MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
     final CommandLineParser parser;
     private Options options;
     protected final ProjectMetaData projectMetaData;
 
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
-        final SimCommandLine commandLine = new SimCommandLine(projectMetaData, args);
+        final SimCommandLine commandLine = new SimCommandLine(projectMetaData);
         commandLine.parse(args);
     }
 
@@ -68,9 +66,7 @@ public class SimCommandLine {
      * @param args
      *            the args
      */
-    public SimCommandLine(ProjectMetaData projectMetaData, String[] args) {
-
-        Locale.setDefault(Locale.US);
+    public SimCommandLine(ProjectMetaData projectMetaData) {
         initializeLogger();
         this.projectMetaData = projectMetaData;
         createOptions();
@@ -200,12 +196,12 @@ public class SimCommandLine {
     /**
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
-    private static void optWriteDtd() {
-        final String resource = File.separator + "config" + File.separator + MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME;
-        final String filename = MULTI_MODEL_TRAFFIC_SIMULATOR_INPUT_DTD_FILENAME;
+    private void optWriteDtd() {
+        final String resource = File.separator + projectMetaData.getDtdPath() + File.separator
+                + projectMetaData.getDdtFilename();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
-        FileUtils.resourceToFile(is, filename);
-        System.out.println("dtd file written to " + filename);
+        FileUtils.resourceToFile(is, projectMetaData.getDdtFilename());
+        System.out.println("dtd file written to " + projectMetaData.getDdtFilename());
 
         System.exit(0);
     }

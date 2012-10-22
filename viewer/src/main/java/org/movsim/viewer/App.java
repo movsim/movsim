@@ -43,6 +43,8 @@ public class App {
      */
     public static void main(String[] args) {
 
+        Locale.setDefault(Locale.US);
+        
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(),
                 Locale.getDefault());
 

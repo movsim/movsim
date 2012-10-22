@@ -29,6 +29,10 @@ import java.io.InputStream;
 
 public class ProjectMetaData {
 
+    private static final String MOVSIM_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
+    private static final String MOVSIM_DTD_PATH = "/config/";
+    final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
+    
     private static ProjectMetaData singleton = new ProjectMetaData();
 
     private String projectName = "";
@@ -244,6 +248,18 @@ public class ProjectMetaData {
      */
     public void setProjectProperties(InputStream projectProperties) {
         this.projectProperties = projectProperties;
+    }
+
+    public String getDtdFilenameWithPath() {
+        return MOVSIM_DTD_PATH + MOVSIM_DTD_FILENAME;
+    }
+
+    public String getDtdPath() {
+        return MOVSIM_DTD_PATH;
+    }
+
+    public String getDdtFilename() {
+        return MOVSIM_DTD_FILENAME;
     }
     
 }

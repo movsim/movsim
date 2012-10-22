@@ -42,9 +42,9 @@ import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
-import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
+import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.output.SimulationOutput;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
@@ -67,8 +67,8 @@ import org.movsim.simulator.vehicles.FuelConsumptionModelPool;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
-import org.movsim.utilities.Units;
 import org.movsim.utilities.MyRandom;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -273,8 +273,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @return
      */
     private static SimulationInput parseMovSimXml(ProjectMetaData projectMetaData, InputData inputData) {
-        final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(dtdFilename, projectMetaData, inputData);
+        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(projectMetaData, inputData);
         final SimulationInput simInput = inputData.getSimulationInput();
         return simInput;
     }
