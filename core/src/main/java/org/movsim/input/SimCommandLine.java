@@ -27,7 +27,6 @@ package org.movsim.input;
 
 import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -37,8 +36,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.PropertyConfigurator;
 import org.movsim.MovsimCoreMain;
+import org.movsim.logging.Logger;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.FileUtils;
 
@@ -67,7 +66,7 @@ public class SimCommandLine {
      *            the args
      */
     public SimCommandLine(ProjectMetaData projectMetaData) {
-        initializeLogger();
+        Logger.initializeLogger();
         this.projectMetaData = projectMetaData;
         createOptions();
         parser = new GnuParser();
@@ -272,17 +271,5 @@ public class SimCommandLine {
 
     }
 
-    /**
-     * Initializes the logger.
-     */
-    private static void initializeLogger() {
-        // Log Levels: DEBUG < INFO < WARN < ERROR;
-        final File file = new File("log4j.properties");
-        if (file.exists() && file.isFile()) {
-            PropertyConfigurator.configure("log4j.properties");
-        } else {
-            final URL log4jConfig = MovsimCoreMain.class.getResource("/config/log4j.properties");
-            PropertyConfigurator.configure(log4jConfig);
-        }
-    }
+
 }
