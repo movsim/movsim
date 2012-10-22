@@ -24,11 +24,11 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.input.file.opendrive;
+package org.movsim.input.network.opendrive;
 
 import java.util.ArrayList;
 
-import org.movsim.input.file.xml.XMLWriterBase;
+import org.movsim.input.network.xml.XMLWriterBase;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;

@@ -40,6 +40,7 @@ public class ViewerCommandLine extends SimCommandLine {
     public ViewerCommandLine(ProjectMetaData projectMetaData) {
         super(projectMetaData);
     }
+    
     /**
      * Option simulation.
      * 

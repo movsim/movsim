@@ -24,7 +24,7 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.input.file.xml;
+package org.movsim.input.network.xml;
 
 import java.io.File;
 import java.io.InputStream;

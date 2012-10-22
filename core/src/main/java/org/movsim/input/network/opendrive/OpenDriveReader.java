@@ -24,9 +24,9 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.input.file.opendrive;
+package org.movsim.input.network.opendrive;
 
-import org.movsim.input.file.xml.XMLReaderBase;
+import org.movsim.input.network.xml.XMLReaderBase;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 
 /**

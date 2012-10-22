@@ -24,7 +24,7 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.input.file.opendrive;
+package org.movsim.input.network.opendrive;
 
 import java.util.ArrayList;
 
