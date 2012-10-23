@@ -28,6 +28,16 @@
         <module>core</module>
         <module>viewer</module>
     </modules>
+
+    <scm>
+	<connection>scm:git:git@github.com:movsim/movsim.git</connection>
+	<url>scm:git:git@github.com:movsim/movsim.git</url>
+	<developerConnection>scm:git:git@github.com:movsim/movsim.git</developerConnection>
+    </scm>
+<!--     <scm>
+        <url>https://github.com/movsim/movsim</url>
+    </scm> -->
+
     <build>
         <pluginManagement>
             <plugins>
@@ -53,6 +63,11 @@
                         </classpathContainers>
                     </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.3.2</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -64,8 +79,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <scm>
-        <url>https://github.com/movsim/movsim</url>
-    </scm>
 </project>
 
