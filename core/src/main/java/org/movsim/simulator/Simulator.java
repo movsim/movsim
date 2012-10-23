@@ -257,7 +257,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @return
      */
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
-        final String xodrFileName = projectMetaData.getXodrFilename();
+        final String xodrFileName = projectMetaData.getXodrNetworkFilename();
         final String xodrPath = projectMetaData.getPathToProjectXmlFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
         logger.info("try to load {}", fullXodrFileName);

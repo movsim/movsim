@@ -149,7 +149,7 @@ public class XmlReaderSimInput {
     private void parseNetworkFilename(Element root) {
         String networkFileName = root.getAttributeValue("network_filename");
         if (projectMetaData.isXmlFromResources()) {
-            projectMetaData.setXodrFilename(networkFileName.substring(networkFileName.lastIndexOf("/") + 1));
+            projectMetaData.setXodrNetworkFilename(networkFileName.substring(networkFileName.lastIndexOf("/") + 1));
             projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/") + 1));
         } else {
             String relativePath;
@@ -164,7 +164,7 @@ public class XmlReaderSimInput {
                 System.exit(-1); // TODO check from resources
             }
 
-            projectMetaData.setXodrFilename(FileUtils.getName(networkFileName));
+            projectMetaData.setXodrNetworkFilename(FileUtils.getName(networkFileName));
             projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
         }
     }

@@ -38,7 +38,7 @@ public class ProjectMetaData {
     private String projectName;
     private String pathToProjectXmlFile;
     private String outputPath;
-    private String xodrFileName;
+    private String xodrNetworkFilename;
     private String xodrPath;
     private boolean instantaneousFileOutput = true;
     private boolean onlyValidation = false;
@@ -79,8 +79,8 @@ public class ProjectMetaData {
     }
 
     public String getProjectName() {
-        if(!hasProjectName()){
-            throw new IllegalStateException("project name not set. Please check in advance using \"hasProjectName()\"");
+        if (!hasProjectName()) {
+            throw new IllegalStateException("project name not set. Check in advance using \"hasProjectName()\"");
         }
         return projectName;
     }
@@ -95,7 +95,15 @@ public class ProjectMetaData {
         this.projectName = projectName;
     }
 
+    public boolean hasPathToProjectXmlFile() {
+        return pathToProjectXmlFile != null && !pathToProjectXmlFile.isEmpty();
+    }
+
     public String getPathToProjectXmlFile() {
+        if (!hasPathToProjectXmlFile()) {
+            throw new IllegalStateException(
+                    "path to project file not set. Check in advance using \"hasPathToProjectXmlFile()\"");
+        }
         return pathToProjectXmlFile;
     }
 
@@ -109,7 +117,14 @@ public class ProjectMetaData {
         this.pathToProjectXmlFile = pathToProjectXmlFile;
     }
 
+    public boolean hasOutputPath() {
+        return outputPath != null && !outputPath.isEmpty();
+    }
+
     public String getOutputPath() {
+        if (!hasOutputPath()) {
+            throw new IllegalStateException("output path not set. Check in advance using \"hasOutputPath()\"");
+        }
         return outputPath;
     }
 
@@ -123,12 +138,20 @@ public class ProjectMetaData {
         this.outputPath = outputPath;
     }
 
-    public void setXodrFilename(String xodrFilename) {
-        this.xodrFileName = xodrFilename;
+    public boolean hasNetworkFilename() {
+        return xodrNetworkFilename != null && !xodrNetworkFilename.isEmpty();
     }
 
-    public String getXodrFilename() {
-        return xodrFileName;
+    public String getXodrNetworkFilename() {
+        if (!hasNetworkFilename()) {
+            throw new IllegalStateException(
+                    "network filename not yet set. Check in advance using \"hasNetworkFilename()\"");
+        }
+        return xodrNetworkFilename;
+    }
+
+    public void setXodrNetworkFilename(String xodrFilename) {
+        this.xodrNetworkFilename = xodrFilename;
     }
 
     public void setXodrPath(String xodrPath) {
