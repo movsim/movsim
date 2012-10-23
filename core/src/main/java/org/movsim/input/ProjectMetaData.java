@@ -25,6 +25,7 @@
  */
 package org.movsim.input;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class ProjectMetaData {
@@ -33,6 +34,8 @@ public class ProjectMetaData {
     private static final String MOVSIM_DTD_PATH = "/config/";
     final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
     
+    private static final String MOVSIM_CONFIG_FILE_ENDING = ".xml";
+
     private static ProjectMetaData singleton = new ProjectMetaData();
 
     private String projectName;
@@ -290,5 +293,8 @@ public class ProjectMetaData {
         return MOVSIM_DTD_FILENAME;
     }
 
+    public File getXmlInputFile() {
+        return new File(getPathToProjectXmlFile(), getProjectName() + MOVSIM_CONFIG_FILE_ENDING);
+    }
     
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -44,10 +44,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import xml.XmlHelpers;
 
@@ -56,19 +52,14 @@ import xml.XmlHelpers;
  * traffic composition, traffic sources etc.
  * 
  */
-@SuppressWarnings("synthetic-access")
 public class XmlReaderSimInput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(XmlReaderSimInput.class);
 
-    private boolean isValid;
-
     private final InputData inputData;
 
     private final File xmlFile;
-
-    private final String filenameEnding = ".xml";
 
     private Document doc;
 
@@ -91,6 +82,7 @@ public class XmlReaderSimInput {
             System.exit(0);
         }
     }
+
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
      * 
@@ -101,7 +93,7 @@ public class XmlReaderSimInput {
         this.dtdFilename = projectMetaData.getDtdFilenameWithPath();
         this.projectMetaData = projectMetaData;
         this.inputData = inputData;
-        this.xmlFile = new File(projectMetaData.getPathToProjectXmlFile(), projectMetaData.getProjectName() + filenameEnding);
+        this.xmlFile = projectMetaData.getXmlInputFile();
 
         if (!projectMetaData.isParseFromInputstream() && !projectMetaData.isXmlFromResources() && !xmlFile.exists()) {
             logger.error("XML file {} does not exist. Exit Simulation.", xmlFile.getAbsoluteFile());
@@ -118,6 +110,11 @@ public class XmlReaderSimInput {
             readAndValidateXmlFromFileName();
         }
 
+        if (projectMetaData.isOnlyValidation()) {
+            logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
+            System.exit(0);
+        }
+
         fromDomToInternalDatastructure();
         logger.info("End XmlReaderSimInput.");
 
@@ -130,22 +127,16 @@ public class XmlReaderSimInput {
             parseNetworkFilename(root);
         }
 
-        // -------------------------------------------------------
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
         inputData.setSimulationInput(simInput);
-
-        // -------------------------------------------------------
 
         final Element vehiclesElem = root.getChild(XmlElementNames.DriverVehicleUnits);
         final VehiclesInput vehiclesInput = new VehiclesInput(vehiclesElem);
         inputData.setVehiclesInput(vehiclesInput);
 
-        // -------------------------------------------------------
-
         final ConsumptionInput fuelConsumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
 
         inputData.setFuelConsumptionInput(fuelConsumptionInput);
-
     }
 
     private void parseNetworkFilename(Element root) {
@@ -203,16 +194,27 @@ public class XmlReaderSimInput {
         return relativePath;
     }
 
+    private void validate(InputSource inputSource) {
+        InputStream inputStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+        boolean valid = XmlHelpers.validate(inputSource, inputStream);
+        if (!valid) {
+            logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFile);
+            System.exit(0);
+        }
+    }
+
     /**
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
         validate(FileUtils.getInputSourceFromFilename(xmlFile));
-        doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFile));
+        doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFile), dtdFilename);
     }
-    
+
     private void readXmlFromInputstream() {
-        doc = getDocument(new InputSource(projectMetaData.getMovsimXml()));
+        InputSource inputSource = new InputSource(projectMetaData.getMovsimXml());
+        validate(inputSource);
+        doc = getDocument(inputSource, dtdFilename);
     }
 
     /**
@@ -222,9 +224,7 @@ public class XmlReaderSimInput {
         appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFile.getAbsolutePath());
         appletresource = new InputSource(appletinputstream);
         validate(appletresource);
-        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFile.getAbsolutePath());
-        appletresource = new InputSource(appletinputstream);
-        doc = getDocument(appletresource);
+        doc = getDocument(appletresource, dtdFilename);
     }
 
     /**
@@ -234,7 +234,7 @@ public class XmlReaderSimInput {
      *            the input source
      * @return the document
      */
-    private Document getDocument(final InputSource inputSource) {
+    private static Document getDocument(final InputSource inputSource, final String dtdFilename) {
 
         final Document doc = (Document) AccessController.doPrivileged(new PrivilegedAction<Object>() {
 
@@ -271,119 +271,61 @@ public class XmlReaderSimInput {
         return doc;
     }
 
-    /**
-     * Validates the Inputsource.
-     * 
-     * @param inputSource
-     *            the input source
-     */
-    private void validate(final InputSource inputSource) {
-        // global flag !!! also used in errorHandler
-        isValid = true;
-
-        AccessController.doPrivileged(new PrivilegedAction<Object>() {
-
-            @Override
-            public Object run() {
-
-                try {
-                    logger.debug("validate input ... ");
-                    final XMLReader myXMLReader = XMLReaderFactory.createXMLReader();
-                    myXMLReader.setFeature("http://xml.org/sax/features/validation", true);
-                    final DefaultHandler handler = new MyErrorHandler();
-                    myXMLReader.setErrorHandler(handler);
-
-                    // overriding dtd source from xml file with internal dtd
-                    // from jar
-
-                    myXMLReader.setEntityResolver(new EntityResolver() {
-
-                        @Override
-                        public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
-                                IOException {
-                            final InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-                            final InputSource input = new InputSource(is);
-                            return input;
-                        }
-                    });
-
-                    myXMLReader.parse(inputSource);
-                } catch (final SAXException e) {
-                    isValid = false;
-                    System.out.println(e.getMessage());
-                } catch (final Exception e) {
-                    isValid = false;
-                    System.out.println(e.getMessage());
-                }
-
-                if (!isValid) {
-                    logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFile);
-                    System.exit(0);
-                } else if (projectMetaData.isOnlyValidation()) {
-                    logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
-                    System.exit(0);
-                }
-
-                return null;
-            }
-        });
-    }
-
-    /**
-     * The Inner Class MyErrorHandler.
-     * 
-     * uses global isValid flag
-     */
-    class MyErrorHandler extends DefaultHandler {
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.xml.sax.helpers.DefaultHandler#warning(org.xml.sax.SAXParseException )
-         */
-        @Override
-        public void warning(SAXParseException e) throws SAXException {
-            logger.warn(getInfo(e));
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException )
-         */
-        @Override
-        public void error(SAXParseException e) throws SAXException {
-            logger.error(getInfo(e));
-            isValid = false;
-        }
-
-        /*
-         * (non-Javadoc)
-         * 
-         * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax. SAXParseException)
-         */
-        @Override
-        public void fatalError(SAXParseException e) throws SAXException {
-            logger.error(getInfo(e));
-            isValid = false;
-        }
-
-        /**
-         * Gets the info to the corresponding exception.
-         * 
-         * @param e
-         *            the exception
-         * @return the info
-         */
-        private String getInfo(SAXParseException e) {
-            final StringBuilder stringb = new StringBuilder();
-            stringb.append("   Public ID: " + e.getPublicId());
-            stringb.append("   System ID: " + e.getSystemId());
-            stringb.append("   Line number: " + e.getLineNumber());
-            stringb.append("   Column number: " + e.getColumnNumber());
-            stringb.append("   Message: " + e.getMessage());
-            return stringb.toString();
-        }
-    }
+    // /**
+    // * The Inner Class MyErrorHandler.
+    // *
+    // * uses global isValid flag
+    // */
+    // class MyErrorHandler extends DefaultHandler {
+    //
+    // /*
+    // * (non-Javadoc)
+    // *
+    // * @see org.xml.sax.helpers.DefaultHandler#warning(org.xml.sax.SAXParseException )
+    // */
+    // @Override
+    // public void warning(SAXParseException e) throws SAXException {
+    // logger.warn(getInfo(e));
+    // }
+    //
+    // /*
+    // * (non-Javadoc)
+    // *
+    // * @see org.xml.sax.helpers.DefaultHandler#error(org.xml.sax.SAXParseException )
+    // */
+    // @Override
+    // public void error(SAXParseException e) throws SAXException {
+    // logger.error(getInfo(e));
+    // isValid = false;
+    // }
+    //
+    // /*
+    // * (non-Javadoc)
+    // *
+    // * @see org.xml.sax.helpers.DefaultHandler#fatalError(org.xml.sax. SAXParseException)
+    // */
+    // @Override
+    // public void fatalError(SAXParseException e) throws SAXException {
+    // logger.error(getInfo(e));
+    // isValid = false;
+    // }
+    //
+    // /**
+    // * Gets the info to the corresponding exception.
+    // *
+    // * @param e
+    // * the exception
+    // * @return the info
+    // */
+    // private String getInfo(SAXParseException e) {
+    // final StringBuilder stringb = new StringBuilder();
+    // stringb.append("   Public ID: " + e.getPublicId());
+    // stringb.append("   System ID: " + e.getSystemId());
+    // stringb.append("   Line number: " + e.getLineNumber());
+    // stringb.append("   Column number: " + e.getColumnNumber());
+    // stringb.append("   Message: " + e.getMessage());
+    // return stringb.toString();
+    // }
+    // }
 
 }
