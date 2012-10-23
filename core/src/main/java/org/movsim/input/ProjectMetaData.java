@@ -43,6 +43,10 @@ public class ProjectMetaData {
     private String outputPath;
     private String xodrNetworkFilename;
     private String xodrPath;
+
+    private String consumptionFilename;
+    private String consumptionPath;
+
     private boolean instantaneousFileOutput = true;
     private boolean onlyValidation = false;
     private boolean writeInternalXml = false;
@@ -295,6 +299,29 @@ public class ProjectMetaData {
 
     public File getXmlInputFile() {
         return new File(getPathToProjectXmlFile(), getProjectName() + MOVSIM_CONFIG_FILE_ENDING);
+    }
+
+    public boolean hasConsumptionFilename() {
+        return consumptionFilename != null && !consumptionFilename.isEmpty();
+    }
+
+    public String getConsumptionFilename() {
+        if (!hasConsumptionFilename()) {
+            throw new IllegalStateException("consumption file not set. Check in advance using \"has...()\" method");
+        }
+        return consumptionFilename;
+    }
+
+    public String getConsumptionPath() {
+        return consumptionPath;
+    }
+
+    public void setConsumptionFilename(String consumptionFilename) {
+        this.consumptionFilename = consumptionFilename;
+    }
+
+    public void setConsumptionPath(String consumptionPath) {
+        this.consumptionPath = consumptionPath;
     }
     
 }

@@ -124,7 +124,8 @@ public class XmlReaderSimInput {
         final Element root = doc.getRootElement();
 
         if (!projectMetaData.isParseFromInputstream()) {
-            parseNetworkFilename(root);
+            parseNetworkFilename(root, "network_filename");
+            parseConsumptionFilename(root, "consumption_filename");
         }
 
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
@@ -137,46 +138,71 @@ public class XmlReaderSimInput {
         final ConsumptionInput fuelConsumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
 
         inputData.setFuelConsumptionInput(fuelConsumptionInput);
+
+        if (projectMetaData.hasConsumptionFilename()) {
+            System.out.println("todo: parse consumption  = " + projectMetaData.getConsumptionFilename());
+        }
     }
 
-    private void parseNetworkFilename(Element root) {
-        String networkFileName = root.getAttributeValue("network_filename");
+    // TODO refactor and extract common functions
+    private void parseNetworkFilename(Element root, String attributeName) {
+        String filename = root.getAttributeValue(attributeName);
         if (projectMetaData.isXmlFromResources()) {
-            projectMetaData.setXodrNetworkFilename(networkFileName.substring(networkFileName.lastIndexOf("/") + 1));
-            projectMetaData.setXodrPath(networkFileName.substring(0, networkFileName.lastIndexOf("/") + 1));
+            projectMetaData.setXodrNetworkFilename(filename.substring(filename.lastIndexOf("/") + 1));
+            projectMetaData.setXodrPath(filename.substring(0, filename.lastIndexOf("/") + 1));
         } else {
             String relativePath;
-            relativePath = checkIfAttributeHasPath(networkFileName);
+            relativePath = checkIfAttributeHasPath(filename);
 
             if (relativePath.equals("")) {
-                networkFileName = checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(networkFileName);
+                filename = checkIfFileIsInTheSameDirectoryAsTheMovsimXml(filename);
             }
 
-            if (!FileUtils.fileExists(networkFileName)) {
-                logger.error("Problem with network filename {}. Please check. Exit.", networkFileName);
+            if (!FileUtils.fileExists(filename)) {
+                logger.error("Problem with file {}. Please check. Exit.", filename);
                 System.exit(-1); // TODO check from resources
             }
 
-            projectMetaData.setXodrNetworkFilename(FileUtils.getName(networkFileName));
-            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(networkFileName));
+            projectMetaData.setXodrNetworkFilename(FileUtils.getName(filename));
+            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(filename));
         }
     }
 
-    /**
-     * @param networkFileName
-     * @return networkFileName
-     */
-    private String checkIfNetworkFileIsInTheSameDirectoryAsTheMovsimXml(String networkFileName) {
-        final String fullFilename = projectMetaData.getPathToProjectXmlFile() + networkFileName;
-        logger.info("check path : {}", fullFilename);
-        boolean exits = FileUtils.fileExists(fullFilename);
-        if (exits) {
-            logger.info("network file {} exists!", networkFileName);
+    private void parseConsumptionFilename(Element root, String attributeName) {
+        String filename = root.getAttributeValue(attributeName);
+        if (projectMetaData.isXmlFromResources()) {
+            projectMetaData.setConsumptionFilename(filename.substring(filename.lastIndexOf("/") + 1));
+            projectMetaData.setConsumptionPath(filename.substring(0, filename.lastIndexOf("/") + 1));
         } else {
-            logger.error("Please provide the corresponding road network file. Either in the same directory as the movsim xml or provide the path and file name in the attribute 'network_filename' in the root tag. If you have done that, check the spelling!");
+            String relativePath;
+            relativePath = checkIfAttributeHasPath(filename);
+
+            if (relativePath.equals("")) {
+                filename = checkIfFileIsInTheSameDirectoryAsTheMovsimXml(filename);
+            }
+
+            if (!FileUtils.fileExists(filename)) {
+                logger.error("Problem with file {}. Please check. Exit.", filename);
+                System.exit(-1); // TODO check from resources
+            }
+
+            projectMetaData.setConsumptionFilename(FileUtils.getName(filename));
+            projectMetaData.setConsumptionPath(FileUtils.getCanonicalPathWithoutFilename(filename));
+        }
+    }
+
+    private String checkIfFileIsInTheSameDirectoryAsTheMovsimXml(String filename) {
+        final String fullFile = projectMetaData.getPathToProjectXmlFile() + filename;
+        logger.info("check path : {}", fullFile);
+        if (FileUtils.fileExists(fullFile)) {
+            logger.info("network file {} exists!", filename);
+        } else {
+            logger.error(
+                    "Please provide the corresponding file={}. Either in the same directory as the movsim xml or provide the path and file name in the attribute 'network_filename' in the root tag. If you have done that, check the spelling!",
+                    filename);
             System.exit(-1);
         }
-        return fullFilename;
+        return fullFile;
     }
 
     /**

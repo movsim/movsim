@@ -90,7 +90,7 @@
             <predecessor elementType="road" elementId="3" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="10300.0" y="300.0" hdg="0.0" length="2700.0">
+            <geometry s="0.0" x="10300.0" y="300.0" hdg="0.0" length="3700.0">
                 <line />
             </geometry>
         </planView>
