@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <groupId>org.movsim</groupId>
     <artifactId>Movsim</artifactId>
     <version>1.3.0-SNAPSHOT</version>
+    
     <packaging>pom</packaging>
-    <name>MovSim Parent Project</name>
+    <name>movsim</name>
+    <description>The Movsim parent project -- Movsim stands for multi-model, open-source vehicular-traffic simulator</description>
+    
     <licenses>
         <license>
             <name>GPLv3</name>
             <url>http://www.gnu.org/licenses/gpl.html</url>
         </license>
     </licenses>
+    
     <organization>
         <name>MovSim</name>
         <url>http://movsim.org</url>
     </organization>
+    
     <modules>
         <module>common</module>
         <!--         <module>consumption</module> -->
