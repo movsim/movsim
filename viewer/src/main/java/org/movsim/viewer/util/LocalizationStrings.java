@@ -112,6 +112,7 @@ public class LocalizationStrings extends ListResourceBundle {
 
             // StatusPanel
             { "lblScenario", "scenario: " },
+            { "lblUnspecifiedScenarioName", "not spezified" },
             { "lblSimTime", "time: " },
             { "simTimeTooltip", "The time of the current simulation since start." },
             { "deltaTimeTooltip", "The simulation's numerical update (integration) time step." },

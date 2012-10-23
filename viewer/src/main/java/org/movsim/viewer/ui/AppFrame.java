@@ -77,13 +77,13 @@ public class AppFrame extends JFrame {
 
         initFrameSize(properties);
 
-        // first scenario
-        String projectName = projectMetaData.getProjectName();
-        if (projectName.equals("")) {
-            projectName = "ramp_metering";
-            trafficCanvas.setupTrafficScenario(projectName, "../sim/games/");
+        if (projectMetaData.hasProjectName()) {
+            trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(),
+                    projectMetaData.getPathToProjectXmlFile());
         } else {
-            trafficCanvas.setupTrafficScenario(projectName, projectMetaData.getPathToProjectXmlFile());
+            String projectNameDefault = "ramp_metering";
+            String projectPathDefault = "../sim/games/";
+            trafficCanvas.setupTrafficScenario(projectNameDefault, projectPathDefault);
         }
 
         statusPanel.reset();

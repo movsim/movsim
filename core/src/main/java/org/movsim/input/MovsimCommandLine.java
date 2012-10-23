@@ -37,14 +37,17 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.MovsimCoreMain;
-import org.movsim.logging.Logger;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * The Class MovsimCommandLine. MovSim console command line parser. Sets the ProjectMetaData. Initializes the logger.
+ * MovSim console command line parser. Values from the command line are set to ProjectMetaData.
  */
 public class MovsimCommandLine {
+
+    private static Logger logger = LoggerFactory.getLogger(MovsimCommandLine.class);
 
     final CommandLineParser parser;
     private Options options;
@@ -52,7 +55,12 @@ public class MovsimCommandLine {
 
     public static void parse(ProjectMetaData projectMetaData, String[] args) {
         final MovsimCommandLine commandLine = new MovsimCommandLine(projectMetaData);
-        commandLine.parse(args);
+        try {
+            commandLine.createAndParse(args);
+        } catch (ParseException e) {
+            logger.error("Parsing failed.  Reason: {}", e.getMessage());
+            commandLine.optionHelp();
+        }
     }
 
     /**
@@ -65,8 +73,7 @@ public class MovsimCommandLine {
      * @param args
      *            the args
      */
-    public MovsimCommandLine(ProjectMetaData projectMetaData) {
-        Logger.initializeLogger();
+    private MovsimCommandLine(ProjectMetaData projectMetaData) {
         this.projectMetaData = projectMetaData;
         createOptions();
         parser = new GnuParser();
@@ -77,28 +84,13 @@ public class MovsimCommandLine {
      * 
      * @param args
      *            the args
+     * @throws ParseException
      */
-    public void parse(String[] args) {
-        // create the parser
-        try {
-            // parse the command line arguments
-            final CommandLine cmdline = parser.parse(options, args);
-            parse(cmdline);
-        } catch (final ParseException exp) {
-            // something went wrong
-            System.out.printf("Parsing failed.  Reason: %s %n", exp.getMessage());
-            optHelp();
-        }
-        final String projectName = projectMetaData.getProjectName();
-        if (projectMetaData.isWriteInternalXml() && projectName.isEmpty()) {
-            System.err.println("no xml file for simulation configuration found!");
-            System.exit(-1);
-        }
+    private void createAndParse(String[] args) throws ParseException {
+        final CommandLine cmdline = parser.parse(options, args);
+        parse(cmdline);
     }
 
-    /**
-     * Creates the options.
-     */
     private void createOptions() {
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
@@ -131,38 +123,38 @@ public class MovsimCommandLine {
      */
     private void parse(CommandLine cmdline) {
         if (cmdline.hasOption("h")) {
-            optHelp();
+            optionHelp();
         }
         if (cmdline.hasOption("d")) {
-            optValidation();
+            optionValidation();
         }
         if (cmdline.hasOption("i")) {
-            optInternalXml();
+            optionInternalXml();
         }
         if (cmdline.hasOption("w")) {
-            optWriteDtd();
+            optionWriteDtd();
         }
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
         }
         if (cmdline.hasOption("v")) {
-            optPrintVersion();
+            optionPrintVersion();
         }
-        optOutputPath(cmdline);
-        optSimulation(cmdline);
+        requiredOptionOutputPath(cmdline);
+        requiredOptionSimulation(cmdline);
     }
 
     /**
      * @param cmdline
      */
-    private void optOutputPath(CommandLine cmdline) {
+    private void requiredOptionOutputPath(CommandLine cmdline) {
         String outputPath = cmdline.getOptionValue('o');
 
         if (outputPath == null || outputPath.equals("") || outputPath.isEmpty()) {
             outputPath = ".";
-            System.out.println("No output path provided via option. Set output path to current directory!");
+            logger.info("No output path provided via option. Set output path to current directory!");
         }
-        System.out.println("output path: " + outputPath);
+        logger.info("output path: " + outputPath);
         final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
@@ -173,8 +165,8 @@ public class MovsimCommandLine {
     /**
      * Option: prints the version number of this Movsim release.
      */
-    private static void optPrintVersion() {
-        System.out.println("movsim release version: " + MovsimConstants.RELEASE_VERSION);
+    private static void optionPrintVersion() {
+        logger.info("movsim release version: " + MovsimConstants.RELEASE_VERSION);
 
         System.exit(0);
     }
@@ -187,7 +179,7 @@ public class MovsimCommandLine {
         final String filename = "log4j.properties";
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource); 
         FileUtils.resourceToFile(is, filename);
-        System.out.println("logger properties file written to " + filename);
+        logger.info("logger properties file written to {}", filename);
       
         System.exit(0);
     }
@@ -195,12 +187,12 @@ public class MovsimCommandLine {
     /**
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
-    private void optWriteDtd() {
+    private void optionWriteDtd() {
         final String resource = File.separator + projectMetaData.getDtdPath() + File.separator
                 + projectMetaData.getDdtFilename();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, projectMetaData.getDdtFilename());
-        System.out.println("dtd file written to " + projectMetaData.getDdtFilename());
+        logger.info("dtd file written to {}", projectMetaData.getDdtFilename());
 
         System.exit(0);
     }
@@ -208,14 +200,14 @@ public class MovsimCommandLine {
     /**
      * Option: write internal xml (without simulation).
      */
-    private void optInternalXml() {
+    private void optionInternalXml() {
         projectMetaData.setWriteInternalXml(true);
     }
 
     /**
      * Option: parse xml input file for validation (without simulation).
      */
-    private void optValidation() {
+    private void optionValidation() {
         projectMetaData.setOnlyValidation(true);
     }
 
@@ -225,27 +217,29 @@ public class MovsimCommandLine {
      * @param cmdline
      *            the cmdline
      */
-    public void optSimulation(CommandLine cmdline) {
+    private void requiredOptionSimulation(CommandLine cmdline) {
         final String filename = cmdline.getOptionValue('f');
         if (filename == null || !FileUtils.fileExists(filename)) {
-            System.err.println("No xml configuration file! Please specify via the option -f.");
-            System.exit(-1);
+            logger.error("No xml configuration file! Please specify via the option -f.");
+            return;
+        }
+
+        final boolean isXml = validateSimulationFileName(filename);
+        if (isXml) {
+            final String name = FileUtils.getName(filename);
+            projectMetaData.setProjectName(name.substring(0, name.indexOf(".xml")));
+            projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
         } else {
-            final boolean isXml = validateSimulationFileName(filename);
-            if (isXml) {
-                final String name = FileUtils.getName(filename);
-                projectMetaData.setProjectName(name.substring(0, name.indexOf(".xml")));
-                projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
-            } else {
-                System.exit(-1);
-            }
+            System.err.println("movsim configuration file " + filename + " is not a valid xml.");
+            System.exit(-1);
         }
     }
+
 
     /**
      * Option help.
      */
-    private void optHelp() {
+    private void optionHelp() {
         System.out.println("option -h. Exit Programm");
 
         final HelpFormatter formatter = new HelpFormatter();
@@ -260,7 +254,8 @@ public class MovsimCommandLine {
      *            the filename
      * @return true, if successful
      */
-    protected static boolean validateSimulationFileName(String filename) {
+    // TODO utility method
+    private static boolean validateSimulationFileName(String filename) {
         final int i = filename.lastIndexOf(".xml");
         if (i < 0) {
             System.out

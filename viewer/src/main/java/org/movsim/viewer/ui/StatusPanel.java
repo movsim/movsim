@@ -100,7 +100,9 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblScenario.setFont(font);
         lblCurrentScenario = new JLabel("");
         lblCurrentScenario.setFont(font);
-        lblCurrentScenario.setText(simulator.getProjectMetaData().getProjectName());
+        
+        lblCurrentScenario.setText(simulator.getProjectMetaData().hasProjectName() ? simulator.getProjectMetaData()
+                .getProjectName() : resourceBundle.getString("lblUnspecifiedScenarioName"));
         lblCurrentScenario.setPreferredSize(new Dimension(100, 22));
 
         if (isWithFiniteDurationAndProgressBar()) {

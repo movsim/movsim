@@ -27,8 +27,9 @@ package org.movsim;
 
 import java.util.Locale;
 
-import org.movsim.input.ProjectMetaData;
 import org.movsim.input.MovsimCommandLine;
+import org.movsim.input.ProjectMetaData;
+import org.movsim.logging.Logger;
 import org.movsim.logging.MovSimLogFileAppender;
 import org.movsim.simulator.Simulator;
 
@@ -52,7 +53,14 @@ public class MovsimCoreMain {
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // parse the command line, putting the results into projectMetaData
+        Logger.initializeLogger();
+
         MovsimCommandLine.parse(projectMetaData, args);
+
+        if (!projectMetaData.hasProjectName()) {
+            System.err.println("no xml simulation configuration file provided.");
+            System.exit(-1);
+        }
 
         MovSimLogFileAppender.initialize(projectMetaData);
 

@@ -35,7 +35,7 @@ public class ProjectMetaData {
     
     private static ProjectMetaData singleton = new ProjectMetaData();
 
-    private String projectName = "";
+    private String projectName;
     private String pathToProjectXmlFile;
     private String outputPath;
     private String xodrFileName;
@@ -58,8 +58,6 @@ public class ProjectMetaData {
     private InputStream movsimXml;
     private InputStream networkXml;
     private InputStream projectProperties;
-    
-
 
     /**
      * private constructor: singleton pattern.
@@ -76,7 +74,14 @@ public class ProjectMetaData {
         return singleton;
     }
 
+    public boolean hasProjectName() {
+        return projectName != null && !projectName.isEmpty();
+    }
+
     public String getProjectName() {
+        if(!hasProjectName()){
+            throw new IllegalStateException("project name not set. Please check in advance using \"hasProjectName()\"");
+        }
         return projectName;
     }
 
@@ -261,5 +266,6 @@ public class ProjectMetaData {
     public String getDdtFilename() {
         return MOVSIM_DTD_FILENAME;
     }
+
     
 }
