@@ -52,7 +52,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
 import xml.XmlHelpers;
 
 /**
- * The Class XmlReaderSimInput.
+ * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models,
+ * traffic composition, traffic sources etc.
+ * 
  */
 @SuppressWarnings("synthetic-access")
 public class XmlReaderSimInput {
@@ -79,13 +81,17 @@ public class XmlReaderSimInput {
 
     private final ProjectMetaData projectMetaData;
 
+    public static void parse(ProjectMetaData projectMetaData, InputData inputData) {
+        new XmlReaderSimInput(projectMetaData, inputData);
+
+    }
     /**
      * Instantiates a new xml reader to parse and validate the simulation input.
      * 
      * @param inputData
      *            the input data
      */
-    public XmlReaderSimInput(ProjectMetaData projectMetaData, InputData inputData) {
+    private XmlReaderSimInput(ProjectMetaData projectMetaData, InputData inputData) {
         this.dtdFilename = projectMetaData.getDtdFilenameWithPath();
         this.projectMetaData = projectMetaData;
         this.inputData = inputData;
@@ -122,7 +128,6 @@ public class XmlReaderSimInput {
 
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
-        System.out.println(root);
 
         if (!projectMetaData.isParseFromInputstream()) {
             parseNetworkFilename(root);

@@ -108,7 +108,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // TODO temporary handling of Variable Message Sign until added to XML
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
-        final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
+        XmlReaderSimInput.parse(projectMetaData, inputData);
+
+        final SimulationInput simInput = inputData.getSimulationInput();
 
         fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
 
@@ -264,18 +266,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
         logger.info("done with parsing road network {}. Success: {}", fullXodrFileName, loaded);
         return loaded;
-    }
-
-    /**
-     * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models,
-     * traffic composition, traffic sources etc.
-     * 
-     * @return
-     */
-    private static SimulationInput parseMovSimXml(ProjectMetaData projectMetaData, InputData inputData) {
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(projectMetaData, inputData);
-        final SimulationInput simInput = inputData.getSimulationInput();
-        return simInput;
     }
 
     /**
