@@ -354,6 +354,10 @@ public class FileUtils {
      */
     public static InputSource getInputSourceFromFilename(String filename) {
         final File inputFile = new File(filename);
+        return getInputSourceFromFilename(inputFile);
+    }
+    
+    public static InputSource getInputSourceFromFilename(File inputFile) {
         InputSource inputSource = null;
         try {
             inputSource = new InputSource(new FileInputStream(inputFile));
