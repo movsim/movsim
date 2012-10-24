@@ -1,4 +1,4 @@
-package xml;
+package org.movsim.xml;
 
 import java.io.IOException;
 import java.io.InputStream;

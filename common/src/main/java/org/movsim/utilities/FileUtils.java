@@ -49,7 +49,6 @@ import org.xml.sax.InputSource;
  */
 public class FileUtils {
 
-    /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
     /**
