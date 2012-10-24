@@ -39,13 +39,13 @@ import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
 import org.movsim.utilities.FileUtils;
+import org.movsim.xml.XmlHelpers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import xml.XmlHelpers;
 
 /**
  * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models,

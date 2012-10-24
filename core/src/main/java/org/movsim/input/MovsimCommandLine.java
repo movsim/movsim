@@ -38,6 +38,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.MovsimCoreMain;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,10 +225,11 @@ public class MovsimCommandLine {
             return;
         }
 
-        final boolean isXml = validateSimulationFileName(filename);
+        final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
         if (isXml) {
             final String name = FileUtils.getName(filename);
-            projectMetaData.setProjectName(name.substring(0, name.indexOf(".xml")));
+            projectMetaData
+                    .setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
             projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
         } else {
             System.err.println("movsim configuration file " + filename + " is not a valid xml.");
@@ -246,25 +248,5 @@ public class MovsimCommandLine {
         formatter.printHelp("movsim", options);
         System.exit(0);
     }
-
-    /**
-     * Validate simulation file name.
-     * 
-     * @param filename
-     *            the filename
-     * @return true, if successful
-     */
-    // TODO utility method
-    private static boolean validateSimulationFileName(String filename) {
-        final int i = filename.lastIndexOf(".xml");
-        if (i < 0) {
-            System.out
-                    .println("Please provide simulation file with ending \".xml\" as argument with option -f, exit. ");
-            return false;
-        }
-        return true;
-
-    }
-
 
 }

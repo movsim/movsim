@@ -39,8 +39,7 @@ public class FileNameUtils {
      *            the filename
      * @return true, if successful
      */
-    // TODO utility method
-    private static boolean validateSimulationFileName(String filename, String ending) {
+    public static boolean validateFileName(String filename, String ending) {
         final int i = filename.lastIndexOf(ending);
         if (i < 0) {
             System.out
