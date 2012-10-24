@@ -31,7 +31,9 @@ import java.io.InputStream;
 public class ProjectMetaData {
 
     private static final String MOVSIM_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
-    private static final String MOVSIM_DTD_PATH = "/config/";
+    private static final String MOVSIM_DTD_PATH = "config";
+
+    private static final String LOG4J_FILENAME = "log4j.properties";
 
     private static final String MOVSIM_CONFIG_FILE_ENDING = ".xml";
 
@@ -285,7 +287,7 @@ public class ProjectMetaData {
     }
 
     public String getDtdFilenameWithPath() {
-        return MOVSIM_DTD_PATH + MOVSIM_DTD_FILENAME;
+        return File.separator + MOVSIM_DTD_PATH + File.separator + MOVSIM_DTD_FILENAME;
     }
 
     public String getDtdPath() {
@@ -325,6 +327,14 @@ public class ProjectMetaData {
 
     public static String getMovsimConfigFileEnding() {
         return MOVSIM_CONFIG_FILE_ENDING;
+    }
+
+    public static String getLog4jFilename() {
+        return LOG4J_FILENAME;
+    }
+
+    public static String getLog4jFilenameWithPath() {
+        return File.separator + MOVSIM_DTD_PATH + File.separator + LOG4J_FILENAME;
     }
     
 }

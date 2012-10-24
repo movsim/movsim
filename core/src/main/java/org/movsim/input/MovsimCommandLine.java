@@ -25,7 +25,6 @@
  */
 package org.movsim.input;
 
-import java.io.File;
 import java.io.InputStream;
 
 import org.apache.commons.cli.CommandLine;
@@ -176,11 +175,10 @@ public class MovsimCommandLine {
      * Option: writes log4j.properties to local filesystem
      */
     private static void optWriteLoggingProperties() {
-        final String resource = File.separator + "config" + File.separator + "log4j.properties";
-        final String filename = "log4j.properties";
+        final String resource = ProjectMetaData.getLog4jFilenameWithPath();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource); 
-        FileUtils.resourceToFile(is, filename);
-        logger.info("logger properties file written to {}", filename);
+        FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
+        logger.info("logger properties file written to {}", ProjectMetaData.getLog4jFilename());
       
         System.exit(0);
     }
@@ -189,8 +187,7 @@ public class MovsimCommandLine {
      * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
     private void optionWriteDtd() {
-        final String resource = File.separator + projectMetaData.getDtdPath() + File.separator
-                + projectMetaData.getDtdFilename();
+        final String resource = projectMetaData.getDtdFilenameWithPath();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, projectMetaData.getDtdFilename());
         logger.info("dtd file written to {}", projectMetaData.getDtdFilename());

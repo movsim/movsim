@@ -224,9 +224,8 @@ public class XmlReaderSimInput {
         return relativePath;
     }
 
-    private void validate(InputSource inputSource) {
-        InputStream inputStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-        boolean valid = XmlHelpers.validate(inputSource, inputStream);
+    private void validate(InputSource inputSource, InputStream dtdInputStream) {
+        boolean valid = XmlHelpers.validate(inputSource, dtdInputStream);
         if (!valid) {
             logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFile);
             System.exit(0);
@@ -237,13 +236,15 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        validate(FileUtils.getInputSourceFromFilename(xmlFile));
+        InputStream dtdStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+        validate(FileUtils.getInputSourceFromFilename(xmlFile), dtdStream);
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFile), dtdFilename);
     }
 
     private void readXmlFromInputstream() {
+        InputStream dtdStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
         InputSource inputSource = new InputSource(projectMetaData.getMovsimXml());
-        validate(inputSource);
+        validate(inputSource, dtdStream);
         doc = getDocument(inputSource, dtdFilename);
     }
 
@@ -253,7 +254,8 @@ public class XmlReaderSimInput {
     private void readAndValidateXmlFromResources() {
         appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFile.getAbsolutePath());
         appletresource = new InputSource(appletinputstream);
-        validate(appletresource);
+        InputStream dtdStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+        validate(appletresource, dtdStream);
         doc = getDocument(appletresource, dtdFilename);
     }
 
