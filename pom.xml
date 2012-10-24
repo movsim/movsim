@@ -18,13 +18,13 @@
     </licenses>
     
     <organization>
-        <name>MovSim</name>
+        <name>Movsim</name>
         <url>http://movsim.org</url>
     </organization>
     
     <modules>
         <module>common</module>
-        <!--         <module>consumption</module> -->
+	<module>consumption</module>
         <module>core</module>
         <module>viewer</module>
     </modules>
