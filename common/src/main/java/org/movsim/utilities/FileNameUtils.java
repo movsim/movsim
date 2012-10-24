@@ -25,6 +25,8 @@
  */
 package org.movsim.utilities;
 
+import java.io.File;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,5 +49,10 @@ public class FileNameUtils {
             return false;
         }
         return true;
+    }
+
+    public static String getName(String filename) {
+        final File file = new File(filename);
+        return file.getName();
     }
 }

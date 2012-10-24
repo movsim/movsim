@@ -190,10 +190,10 @@ public class MovsimCommandLine {
      */
     private void optionWriteDtd() {
         final String resource = File.separator + projectMetaData.getDtdPath() + File.separator
-                + projectMetaData.getDdtFilename();
+                + projectMetaData.getDtdFilename();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
-        FileUtils.resourceToFile(is, projectMetaData.getDdtFilename());
-        logger.info("dtd file written to {}", projectMetaData.getDdtFilename());
+        FileUtils.resourceToFile(is, projectMetaData.getDtdFilename());
+        logger.info("dtd file written to {}", projectMetaData.getDtdFilename());
 
         System.exit(0);
     }
@@ -227,7 +227,7 @@ public class MovsimCommandLine {
 
         final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
         if (isXml) {
-            final String name = FileUtils.getName(filename);
+            final String name = FileNameUtils.getName(filename);
             projectMetaData
                     .setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
             projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));

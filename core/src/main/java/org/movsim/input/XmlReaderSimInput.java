@@ -38,6 +38,7 @@ import org.jdom.input.SAXBuilder;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
+import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
 import org.movsim.xml.XmlHelpers;
 import org.slf4j.Logger;
@@ -163,13 +164,16 @@ public class XmlReaderSimInput {
                 System.exit(-1); // TODO check from resources
             }
 
-            projectMetaData.setXodrNetworkFilename(FileUtils.getName(filename));
+            projectMetaData.setXodrNetworkFilename(FileNameUtils.getName(filename));
             projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(filename));
         }
     }
 
     private void parseConsumptionFilename(Element root, String attributeName) {
         String filename = root.getAttributeValue(attributeName);
+        if (filename == null) {
+            return;
+        }
         if (projectMetaData.isXmlFromResources()) {
             projectMetaData.setConsumptionFilename(filename.substring(filename.lastIndexOf("/") + 1));
             projectMetaData.setConsumptionPath(filename.substring(0, filename.lastIndexOf("/") + 1));
@@ -186,7 +190,7 @@ public class XmlReaderSimInput {
                 System.exit(-1); // TODO check from resources
             }
 
-            projectMetaData.setConsumptionFilename(FileUtils.getName(filename));
+            projectMetaData.setConsumptionFilename(FileNameUtils.getName(filename));
             projectMetaData.setConsumptionPath(FileUtils.getCanonicalPathWithoutFilename(filename));
         }
     }

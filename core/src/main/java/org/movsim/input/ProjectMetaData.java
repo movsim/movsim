@@ -33,8 +33,6 @@ public class ProjectMetaData {
     private static final String MOVSIM_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
     private static final String MOVSIM_DTD_PATH = "/config/";
 
-    private final String dtdFilename = MOVSIM_DTD_PATH + MOVSIM_DTD_FILENAME;
-    
     private static final String MOVSIM_CONFIG_FILE_ENDING = ".xml";
 
     private static ProjectMetaData singleton = new ProjectMetaData();
@@ -294,7 +292,7 @@ public class ProjectMetaData {
         return MOVSIM_DTD_PATH;
     }
 
-    public String getDdtFilename() {
+    public String getDtdFilename() {
         return MOVSIM_DTD_FILENAME;
     }
 

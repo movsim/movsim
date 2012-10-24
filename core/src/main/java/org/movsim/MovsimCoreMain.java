@@ -30,7 +30,7 @@ import java.util.Locale;
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.Logger;
-import org.movsim.logging.MovSimLogFileAppender;
+import org.movsim.logging.LogFileAppender;
 import org.movsim.simulator.Simulator;
 
 /**
@@ -62,7 +62,7 @@ public class MovsimCoreMain {
             System.exit(-1);
         }
 
-        MovSimLogFileAppender.initialize(projectMetaData);
+        LogFileAppender.initialize(projectMetaData);
 
         final Simulator simulator = new Simulator(projectMetaData);
         simulator.initialize();

@@ -389,15 +389,6 @@ public class FileUtils {
     }
 
     /**
-     * @param xodrFilename
-     * @return
-     */
-    public static String getName(String xodrFilename) {
-        final File file = new File(xodrFilename);
-        return file.getName();
-    }
-
-    /**
      * @param outputPath
      * @return
      */
