@@ -48,9 +48,20 @@
     <build>
         <plugins>
             <!-- build java source jar -->
-            <plugin>
+            <!-- <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <configuration>
+          <outputDirectory>/absolute/path/to/the/output/directory</outputDirectory> 
+          <finalName>filename-of-generated-jar-file</finalName> 
+        </configuration>
+          <attach>false</attach>
+      </plugin> -->
+     <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                 <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -59,7 +70,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> 
             <!-- build jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

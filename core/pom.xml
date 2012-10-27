@@ -62,6 +62,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -70,7 +71,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>  
             <!-- build jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
