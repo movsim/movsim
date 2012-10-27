@@ -126,7 +126,7 @@ public class XmlReaderSimInput {
 
         if (!projectMetaData.isParseFromInputstream()) {
             parseNetworkFilename(root, "network_filename");
-            parseConsumptionFilename(root, "consumption_filename");
+            // parseConsumptionFilename(root, "consumption_filename");
         }
 
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
