@@ -1,0 +1,22 @@
+Collection of workflows using the build system maven:
+
+Creating the eclipse project configuration:
+===========================================
+
+mvn eclipse:clean eclipse:eclipse
+
+--> first target cleans the .project eclipse file and the second argument generates a new one.
+--> invoke commands in the movsim module directories.
+--> import project as Maven project in eclipse
+
+
+Releasing and incrementing project version number:
+==================================================
+
+mvn release:prepare
+TODO: figure out how to use git scm versioning with maven
+
+
+
+
+

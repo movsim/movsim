@@ -23,28 +23,34 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator;
+package org.movsim.consumption.logging;
 
-import org.movsim.utilities.Units;
+import java.io.File;
+import java.net.URL;
 
-/**
- * The Interface MovsimConstants.
- */
-public interface MovsimConstants {
+import org.apache.log4j.PropertyConfigurator;
+import org.movsim.consumption.ConsumptionMain;
 
-    // TODO: connection with maven version number
-    final String RELEASE_VERSION = "1.3";
+public class ConsumptionLogger {
 
-    final double SMALL_VALUE = 1e-7;
+    private static final String LOG4J_PROPERTIES = "log4j.properties";
 
-    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
+    private static final String LOG4J_PATH = "/config/";
 
-    final double GAP_INFINITY = 10000;
+    private ConsumptionLogger() {
+        throw new IllegalStateException();
+    }
 
-    final double INVALID_GAP = -1;
+    public static void initializeLogger() {
+        // Log Levels: DEBUG < INFO < WARN < ERROR;
+        final File file = new File(LOG4J_PROPERTIES);
+        if (file.exists() && file.isFile()) {
+            PropertyConfigurator.configure(LOG4J_PROPERTIES);
+        } else {
+            final URL log4jConfig = ConsumptionMain.class.getResource(LOG4J_PATH + LOG4J_PROPERTIES);
+            PropertyConfigurator.configure(log4jConfig);
+        }
+    }
 
-    final double CRITICAL_GAP = 2;
-
-    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
 
 }

@@ -29,12 +29,13 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
+import org.movsim.logging.Logger;
 import org.movsim.viewer.ui.AppFrame;
 import org.movsim.viewer.ui.LogWindow;
 import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.LocalizationStrings;
-import org.movsim.viewer.util.ViewerCommandLine;
 
 public class App {
 
@@ -43,6 +44,8 @@ public class App {
      */
     public static void main(String[] args) {
 
+        Locale.setDefault(Locale.US);
+        
         final ResourceBundle resourceBundle = ResourceBundle.getBundle(LocalizationStrings.class.getName(),
                 Locale.getDefault());
 
@@ -50,10 +53,12 @@ public class App {
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         
-        // parse the command line, putting the results into projectMetaData
-        ViewerCommandLine.parse(projectMetaData, args);
+        Logger.initializeLogger();
         
-        Properties properties = ViewProperties.loadProperties(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
+        // parse the command line, putting the results into projectMetaData
+        MovsimCommandLine.parse(projectMetaData, args);
+        
+        Properties properties = ViewProperties.loadProperties(projectMetaData);
 
         AppFrame appFrame = new AppFrame(resourceBundle, projectMetaData, properties);
     }

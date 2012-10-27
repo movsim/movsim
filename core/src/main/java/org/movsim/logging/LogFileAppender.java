@@ -48,13 +48,13 @@ import org.movsim.simulator.Simulator;
  * @author Ralph Germ
  * 
  */
-public class MovSimLogFileAppender {
+public class LogFileAppender {
 
     final static Logger logger = Logger.getLogger(Simulator.class);
     private FileAppender fileAppender;
 
     public static void initialize(ProjectMetaData projectMetaData) {
-        new MovSimLogFileAppender(projectMetaData);
+        new LogFileAppender(projectMetaData);
     }
 
     /**
@@ -65,7 +65,7 @@ public class MovSimLogFileAppender {
      * 
      * Logs to file "[output path]projectname.log".
      */
-    private MovSimLogFileAppender(ProjectMetaData projectMetaData) {
+    private LogFileAppender(ProjectMetaData projectMetaData) {
         Layout layout = new PatternLayout("%r [%t] %-5p (%F:%M:%L) - %m%n");
 
         try {

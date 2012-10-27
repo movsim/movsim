@@ -33,7 +33,6 @@ import java.util.Map;
 import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlReaderSimInput;
-import org.movsim.input.file.opendrive.OpenDriveReader;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
 import org.movsim.input.model.VehiclesInput;
@@ -42,9 +41,10 @@ import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
-import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.movsim.input.model.simulation.TrafficSourceData;
+import org.movsim.input.model.simulation.VehicleTypeInput;
+import org.movsim.input.network.opendrive.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.output.fileoutput.FileTrafficLightRecorder;
@@ -67,8 +67,8 @@ import org.movsim.simulator.vehicles.FuelConsumptionModelPool;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.movsim.simulator.vehicles.VehiclePrototype;
-import org.movsim.utilities.Units;
 import org.movsim.utilities.MyRandom;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,7 +108,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // TODO temporary handling of Variable Message Sign until added to XML
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
-        final SimulationInput simInput = parseMovSimXml(projectMetaData, inputData);
+        XmlReaderSimInput.parse(projectMetaData, inputData);
+
+        final SimulationInput simInput = inputData.getSimulationInput();
 
         fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
 
@@ -257,26 +259,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @return
      */
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
-        final String xodrFileName = projectMetaData.getXodrFilename();
+        final String xodrFileName = projectMetaData.getXodrNetworkFilename();
         final String xodrPath = projectMetaData.getPathToProjectXmlFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
         logger.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
         logger.info("done with parsing road network {}. Success: {}", fullXodrFileName, loaded);
         return loaded;
-    }
-
-    /**
-     * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models,
-     * traffic composition, traffic sources etc.
-     * 
-     * @return
-     */
-    private static SimulationInput parseMovSimXml(ProjectMetaData projectMetaData, InputData inputData) {
-        final String dtdFilename = "/config/multiModelTrafficSimulatorInput.dtd";
-        final XmlReaderSimInput xmlReader = new XmlReaderSimInput(dtdFilename, projectMetaData, inputData);
-        final SimulationInput simInput = inputData.getSimulationInput();
-        return simInput;
     }
 
     /**

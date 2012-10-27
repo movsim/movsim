@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input;
+package org.movsim.consumption.input.xml;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,9 +35,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.VehiclesInput;
-import org.movsim.input.model.vehicle.consumption.ConsumptionInput;
+import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
 import org.movsim.xml.XmlHelpers;
@@ -48,37 +46,23 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
-/**
- * Parse the MovSim XML file to add the simulation components eg network filename, vehicles and vehicle models,
- * traffic composition, traffic sources etc.
- * 
- */
-public class XmlReaderSimInput {
+public class XmlReader {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(XmlReaderSimInput.class);
+    final static Logger logger = LoggerFactory.getLogger(XmlReader.class);
 
-    private final InputData inputData;
-
-    private final File xmlFile;
+    private final ConsumptionInputData inputData;
 
     private Document doc;
 
     // dtd from resources. do *not* use the File.separator character
     private final String dtdFilename;
 
-    private InputStream appletinputstream;
+    public static void parse(ConsumptionMetadata metaData, ConsumptionInputData inputData) {
+        XmlReader xmlReader = new XmlReader(inputData);
 
-    private InputSource appletresource;
-
-    private final ProjectMetaData projectMetaData;
-
-    public static void parse(ProjectMetaData projectMetaData, InputData inputData) {
-        XmlReaderSimInput xmlReaderSimInput = new XmlReaderSimInput(projectMetaData, inputData);
-
-        if (projectMetaData.isWriteInternalXml()) {
-            final String outFilename = projectMetaData.getProjectName() + "_internal.xml";
-            XmlHelpers.writeInternalXmlToFile(xmlReaderSimInput.doc, outFilename);
+        if (metaData.isWriteInternalXml()) {
+            final String outFilename = metaData.getProjectName() + "_internal.xml";
+            XmlHelpers.writeInternalXmlToFile(xmlReader.doc, outFilename);
             logger.info("internal xml output written to file {}. Exit.", outFilename);
             System.exit(0);
         }
@@ -90,113 +74,45 @@ public class XmlReaderSimInput {
      * @param inputData
      *            the input data
      */
-    private XmlReaderSimInput(ProjectMetaData projectMetaData, InputData inputData) {
-        this.dtdFilename = projectMetaData.getDtdFilenameWithPath();
-        this.projectMetaData = projectMetaData;
+    private XmlReader(ConsumptionInputData inputData) {
+        this.dtdFilename = ConsumptionMetadata.getInstance().getDtdFilenameWithPath();
         this.inputData = inputData;
-        this.xmlFile = projectMetaData.getXmlInputFile();
 
-        if (!projectMetaData.isParseFromInputstream() && !projectMetaData.isXmlFromResources() && !xmlFile.exists()) {
+        File xmlFile = ConsumptionMetadata.getInstance().getXmlInputFile();
+        if (!ConsumptionMetadata.getInstance().isParseFromInputstream() && !ConsumptionMetadata.getInstance().isXmlFromResources() && !xmlFile.exists()) {
             logger.error("XML file {} does not exist. Exit Simulation.", xmlFile.getAbsoluteFile());
             System.exit(1);
         }
 
         logger.info("Begin parsing: " + xmlFile);
 
-        if (projectMetaData.isParseFromInputstream()) {
-            readXmlFromInputstream();
-        } else if (projectMetaData.isXmlFromResources()) {
-            readAndValidateXmlFromResources();
+        if (ConsumptionMetadata.getInstance().isParseFromInputstream()) {
+            throw new IllegalStateException("not yet handled");
+        } else if (ConsumptionMetadata.getInstance().isXmlFromResources()) {
+            throw new IllegalStateException("not yet handled");
         } else {
             readAndValidateXmlFromFileName();
         }
 
-        if (projectMetaData.isOnlyValidation()) {
+        if (ConsumptionMetadata.getInstance().isOnlyValidation()) {
             logger.info("xml input file is well-formed and valid. Exit Simulation as requested.");
             System.exit(0);
         }
 
         fromDomToInternalDatastructure();
-        logger.info("End XmlReaderSimInput.");
+        logger.info("End XmlReader.");
 
     }
 
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
-
-        if (!projectMetaData.isParseFromInputstream()) {
-            parseNetworkFilename(root, "network_filename");
-            parseConsumptionFilename(root, "consumption_filename");
-        }
-
-        final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
-        inputData.setSimulationInput(simInput);
-
-        final Element vehiclesElem = root.getChild(XmlElementNames.DriverVehicleUnits);
-        final VehiclesInput vehiclesInput = new VehiclesInput(vehiclesElem);
-        inputData.setVehiclesInput(vehiclesInput);
-
-        final ConsumptionInput fuelConsumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
-
-        inputData.setFuelConsumptionInput(fuelConsumptionInput);
-
-        if (projectMetaData.hasConsumptionFilename()) {
-            System.out.println("todo: parse consumption  = " + projectMetaData.getConsumptionFilename());
-        }
+        final ConsumptionInput consumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
+        inputData.setConsumptionInput(consumptionInput);
     }
 
-    // TODO refactor and extract common functions
-    private void parseNetworkFilename(Element root, String attributeName) {
-        String filename = root.getAttributeValue(attributeName);
-        if (projectMetaData.isXmlFromResources()) {
-            projectMetaData.setXodrNetworkFilename(filename.substring(filename.lastIndexOf("/") + 1));
-            projectMetaData.setXodrPath(filename.substring(0, filename.lastIndexOf("/") + 1));
-        } else {
-            String relativePath;
-            relativePath = checkIfAttributeHasPath(filename);
-
-            if (relativePath.equals("")) {
-                filename = checkIfFileIsInTheSameDirectoryAsTheMovsimXml(filename);
-            }
-
-            if (!FileUtils.fileExists(filename)) {
-                logger.error("Problem with file {}. Please check. Exit.", filename);
-                System.exit(-1); // TODO check from resources
-            }
-
-            projectMetaData.setXodrNetworkFilename(FileNameUtils.getName(filename));
-            projectMetaData.setXodrPath(FileUtils.getCanonicalPathWithoutFilename(filename));
-        }
-    }
-
-    private void parseConsumptionFilename(Element root, String attributeName) {
-        String filename = root.getAttributeValue(attributeName);
-        if (filename == null) {
-            return;
-        }
-        if (projectMetaData.isXmlFromResources()) {
-            projectMetaData.setConsumptionFilename(filename.substring(filename.lastIndexOf("/") + 1));
-            projectMetaData.setConsumptionPath(filename.substring(0, filename.lastIndexOf("/") + 1));
-        } else {
-            String relativePath;
-            relativePath = checkIfAttributeHasPath(filename);
-
-            if (relativePath.equals("")) {
-                filename = checkIfFileIsInTheSameDirectoryAsTheMovsimXml(filename);
-            }
-
-            if (!FileUtils.fileExists(filename)) {
-                logger.error("Problem with file {}. Please check. Exit.", filename);
-                System.exit(-1); // TODO check from resources
-            }
-
-            projectMetaData.setConsumptionFilename(FileNameUtils.getName(filename));
-            projectMetaData.setConsumptionPath(FileUtils.getCanonicalPathWithoutFilename(filename));
-        }
-    }
-
+  
     private String checkIfFileIsInTheSameDirectoryAsTheMovsimXml(String filename) {
-        final String fullFile = projectMetaData.getPathToProjectXmlFile() + filename;
+        final String fullFile = ConsumptionMetadata.getInstance().getPathToConsumptionFile() + filename;
         logger.info("check path : {}", fullFile);
         if (FileUtils.fileExists(fullFile)) {
             logger.info("network file {} exists!", filename);
@@ -209,24 +125,11 @@ public class XmlReaderSimInput {
         return fullFile;
     }
 
-    /**
-     * @param networkFileName
-     * @return relativePath
-     */
-    private static String checkIfAttributeHasPath(String networkFileName) {
-        String relativePath;
-        if (networkFileName.lastIndexOf(File.separator) == -1) {
-            relativePath = "";
-        } else {
-            relativePath = networkFileName.substring(0, networkFileName.lastIndexOf(File.separator));
-            System.out.println("relative path: " + relativePath);
-        }
-        return relativePath;
-    }
-
+    
     private void validate(InputSource inputSource, InputStream dtdInputStream) {
         boolean valid = XmlHelpers.validate(inputSource, dtdInputStream);
         if (!valid) {
+            File xmlFile = ConsumptionMetadata.getInstance().getXmlInputFile();
             logger.error("xml input file {} is not well-formed or invalid ...Exit Simulation.", xmlFile);
             System.exit(0);
         }
@@ -236,28 +139,12 @@ public class XmlReaderSimInput {
      * Read and validate xml.
      */
     private void readAndValidateXmlFromFileName() {
-        InputStream dtdStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+        File xmlFile = ConsumptionMetadata.getInstance().getXmlInputFile();
+        InputStream dtdStream = XmlReader.class.getResourceAsStream(dtdFilename);
         validate(FileUtils.getInputSourceFromFilename(xmlFile), dtdStream);
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFile), dtdFilename);
     }
 
-    private void readXmlFromInputstream() {
-        InputStream dtdStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-        InputSource inputSource = new InputSource(projectMetaData.getMovsimXml());
-        validate(inputSource, dtdStream);
-        doc = getDocument(inputSource, dtdFilename);
-    }
-
-    /**
-     * Validates and reads xml from resources.
-     */
-    private void readAndValidateXmlFromResources() {
-        appletinputstream = XmlReaderSimInput.class.getResourceAsStream(xmlFile.getAbsolutePath());
-        appletresource = new InputSource(appletinputstream);
-        InputStream dtdStream = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
-        validate(appletresource, dtdStream);
-        doc = getDocument(appletresource, dtdFilename);
-    }
 
     /**
      * Gets the Document.
@@ -281,7 +168,7 @@ public class XmlReaderSimInput {
                         @Override
                         public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
                                 IOException {
-                            final InputStream is = XmlReaderSimInput.class.getResourceAsStream(dtdFilename);
+                            final InputStream is = XmlReader.class.getResourceAsStream(dtdFilename);
                             final InputSource input = new InputSource(is);
                             return input;
                         }

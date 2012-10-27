@@ -25,17 +25,29 @@
  */
 package org.movsim.input;
 
+import java.io.File;
 import java.io.InputStream;
 
 public class ProjectMetaData {
 
+    private static final String MOVSIM_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
+    private static final String MOVSIM_DTD_PATH = "config";
+
+    private static final String LOG4J_FILENAME = "log4j.properties";
+
+    private static final String MOVSIM_CONFIG_FILE_ENDING = ".xml";
+
     private static ProjectMetaData singleton = new ProjectMetaData();
 
-    private String projectName = "";
+    private String projectName;
     private String pathToProjectXmlFile;
     private String outputPath;
-    private String xodrFileName;
+    private String xodrNetworkFilename;
     private String xodrPath;
+
+    private String consumptionFilename;
+    private String consumptionPath;
+
     private boolean instantaneousFileOutput = true;
     private boolean onlyValidation = false;
     private boolean writeInternalXml = false;
@@ -54,8 +66,6 @@ public class ProjectMetaData {
     private InputStream movsimXml;
     private InputStream networkXml;
     private InputStream projectProperties;
-    
-
 
     /**
      * private constructor: singleton pattern.
@@ -72,7 +82,14 @@ public class ProjectMetaData {
         return singleton;
     }
 
+    public boolean hasProjectName() {
+        return projectName != null && !projectName.isEmpty();
+    }
+
     public String getProjectName() {
+        if (!hasProjectName()) {
+            throw new IllegalStateException("project name not set. Check in advance using \"hasProjectName()\"");
+        }
         return projectName;
     }
 
@@ -86,7 +103,15 @@ public class ProjectMetaData {
         this.projectName = projectName;
     }
 
+    public boolean hasPathToProjectXmlFile() {
+        return pathToProjectXmlFile != null && !pathToProjectXmlFile.isEmpty();
+    }
+
     public String getPathToProjectXmlFile() {
+        if (!hasPathToProjectXmlFile()) {
+            throw new IllegalStateException(
+                    "path to project file not set. Check in advance using \"hasPathToProjectXmlFile()\"");
+        }
         return pathToProjectXmlFile;
     }
 
@@ -100,7 +125,14 @@ public class ProjectMetaData {
         this.pathToProjectXmlFile = pathToProjectXmlFile;
     }
 
+    public boolean hasOutputPath() {
+        return outputPath != null && !outputPath.isEmpty();
+    }
+
     public String getOutputPath() {
+        if (!hasOutputPath()) {
+            throw new IllegalStateException("output path not set. Check in advance using \"hasOutputPath()\"");
+        }
         return outputPath;
     }
 
@@ -114,12 +146,20 @@ public class ProjectMetaData {
         this.outputPath = outputPath;
     }
 
-    public void setXodrFilename(String xodrFilename) {
-        this.xodrFileName = xodrFilename;
+    public boolean hasNetworkFilename() {
+        return xodrNetworkFilename != null && !xodrNetworkFilename.isEmpty();
     }
 
-    public String getXodrFilename() {
-        return xodrFileName;
+    public String getXodrNetworkFilename() {
+        if (!hasNetworkFilename()) {
+            throw new IllegalStateException(
+                    "network filename not yet set. Check in advance using \"hasNetworkFilename()\"");
+        }
+        return xodrNetworkFilename;
+    }
+
+    public void setXodrNetworkFilename(String xodrFilename) {
+        this.xodrNetworkFilename = xodrFilename;
     }
 
     public void setXodrPath(String xodrPath) {
@@ -244,6 +284,57 @@ public class ProjectMetaData {
      */
     public void setProjectProperties(InputStream projectProperties) {
         this.projectProperties = projectProperties;
+    }
+
+    public String getDtdFilenameWithPath() {
+        return File.separator + MOVSIM_DTD_PATH + File.separator + MOVSIM_DTD_FILENAME;
+    }
+
+    public String getDtdPath() {
+        return MOVSIM_DTD_PATH;
+    }
+
+    public String getDtdFilename() {
+        return MOVSIM_DTD_FILENAME;
+    }
+
+    public File getXmlInputFile() {
+        return new File(getPathToProjectXmlFile(), getProjectName() + MOVSIM_CONFIG_FILE_ENDING);
+    }
+
+    public boolean hasConsumptionFilename() {
+        return consumptionFilename != null && !consumptionFilename.isEmpty();
+    }
+
+    public String getConsumptionFilename() {
+        if (!hasConsumptionFilename()) {
+            throw new IllegalStateException("consumption file not set. Check in advance using \"has...()\" method");
+        }
+        return consumptionFilename;
+    }
+
+    public String getConsumptionPath() {
+        return consumptionPath;
+    }
+
+    public void setConsumptionFilename(String consumptionFilename) {
+        this.consumptionFilename = consumptionFilename;
+    }
+
+    public void setConsumptionPath(String consumptionPath) {
+        this.consumptionPath = consumptionPath;
+    }
+
+    public static String getMovsimConfigFileEnding() {
+        return MOVSIM_CONFIG_FILE_ENDING;
+    }
+
+    public static String getLog4jFilename() {
+        return LOG4J_FILENAME;
+    }
+
+    public static String getLog4jFilenameWithPath() {
+        return File.separator + MOVSIM_DTD_PATH + File.separator + LOG4J_FILENAME;
     }
     
 }

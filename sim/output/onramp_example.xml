@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="onramp_example.xodr">
-
+<SCENARIO network_filename="onramp_example.xodr" consumption_filename="consumption.xml">
+<!--
  <FUEL_CONSUMPTION>
-        <!-- todo: program a tag read_from_file="filename.xml" -->
-        <!-- if defining consumption models, don't forget to add them to the VEHICLEs!-->
         <CONSUMPTION_MODEL label="carConsumption" output="true">
             <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
             <ENGINE max_power_kW="85" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="235" pe_min_bar="1" pe_max_bar="18" idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000">
@@ -21,6 +19,8 @@
             </ENGINE>
         </CONSUMPTION_MODEL>
     </FUEL_CONSUMPTION>
+    
+    -->
 
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9" consumption="carConsumption">

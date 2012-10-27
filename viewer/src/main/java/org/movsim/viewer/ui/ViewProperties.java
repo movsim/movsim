@@ -42,6 +42,14 @@ public class ViewProperties {
         return defaultProperties;
     }
 
+    
+    public static Properties loadProperties(ProjectMetaData projectMetaData) {
+        if (projectMetaData.hasProjectName()) {
+            return loadProperties(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
+        }
+        return loadDefaultProperties();
+    }
+
     /**
      * Load default properties and overwrites them with project specific properties if available
      * 
@@ -73,4 +81,6 @@ public class ViewProperties {
         }
         return applicationProps;
     }
+    
+    
 }

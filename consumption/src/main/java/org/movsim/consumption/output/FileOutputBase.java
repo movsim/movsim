@@ -23,49 +23,42 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim;
+package org.movsim.consumption.output;
 
-import java.util.Locale;
+import java.io.File;
+import java.io.PrintWriter;
 
-import org.movsim.input.MovsimCommandLine;
-import org.movsim.input.ProjectMetaData;
-import org.movsim.logging.Logger;
-import org.movsim.logging.LogFileAppender;
-import org.movsim.simulator.Simulator;
+import org.movsim.consumption.input.ConsumptionMetadata;
+import org.movsim.utilities.FileUtils;
 
-/**
- * The Class MovsimCoreMain.
- * 
- * MovSim core command line interface.
- * 
- */
-public class MovsimCoreMain {
+public class FileOutputBase {
+    
+    // TODO check if buffered writing is faster; if so make it tunable 
+    public static final boolean FLUSH_IMMEDIATELY = true; 
+    
+    public static final String COMMENT_CHAR = "#";
+
+    protected final String path;
+    protected final String baseFilename;
+    protected PrintWriter writer;
 
     /**
-     * The main method.
-     * 
-     * @param args
-     *            the command line arguments
+     * Constructor, sets the path and base filename.
      */
-    public static void main(String[] args) {
+    public FileOutputBase() {
+        path = ConsumptionMetadata.getInstance().getOutputPath();
+        baseFilename = ConsumptionMetadata.getInstance().getProjectName();
+    }
 
-        Locale.setDefault(Locale.US);
+    public PrintWriter createWriter(String extension) {
+        final String filename = path + File.separator + baseFilename + extension;
+        return FileUtils.getWriter(filename);
+    }
 
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
-        // parse the command line, putting the results into projectMetaData
-        Logger.initializeLogger();
-
-        MovsimCommandLine.parse(projectMetaData, args);
-
-        if (!projectMetaData.hasProjectName()) {
-            System.err.println("no xml simulation configuration file provided.");
-            System.exit(-1);
+    public void write(String format, Object... args){
+        writer.printf(format, args);
+        if(FLUSH_IMMEDIATELY){
+            writer.flush();
         }
-
-        LogFileAppender.initialize(projectMetaData);
-
-        final Simulator simulator = new Simulator(projectMetaData);
-        simulator.initialize();
-        simulator.runToCompletion();
     }
 }

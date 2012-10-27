@@ -49,7 +49,6 @@ import org.xml.sax.InputSource;
  */
 public class FileUtils {
 
-    /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
     /**
@@ -354,6 +353,10 @@ public class FileUtils {
      */
     public static InputSource getInputSourceFromFilename(String filename) {
         final File inputFile = new File(filename);
+        return getInputSourceFromFilename(inputFile);
+    }
+    
+    public static InputSource getInputSourceFromFilename(File inputFile) {
         InputSource inputSource = null;
         try {
             inputSource = new InputSource(new FileInputStream(inputFile));
@@ -383,15 +386,6 @@ public class FileUtils {
             e.printStackTrace();
         }
         return string;
-    }
-
-    /**
-     * @param xodrFilename
-     * @return
-     */
-    public static String getName(String xodrFilename) {
-        final File file = new File(xodrFilename);
-        return file.getName();
     }
 
     /**

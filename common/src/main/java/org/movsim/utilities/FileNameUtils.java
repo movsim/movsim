@@ -23,28 +23,36 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator;
+package org.movsim.utilities;
 
-import org.movsim.utilities.Units;
+import java.io.File;
 
-/**
- * The Interface MovsimConstants.
- */
-public interface MovsimConstants {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    // TODO: connection with maven version number
-    final String RELEASE_VERSION = "1.3";
+public class FileNameUtils {
+    
+    private static Logger logger = LoggerFactory.getLogger(FileNameUtils.class);
+    
+    /**
+     * Validate simulation file name.
+     * 
+     * @param filename
+     *            the filename
+     * @return true, if successful
+     */
+    public static boolean validateFileName(String filename, String ending) {
+        final int i = filename.lastIndexOf(ending);
+        if (i < 0) {
+            System.out
+                    .println("Please provide simulation file with ending \""+ending+"\" as argument with option -f, exit. ");
+            return false;
+        }
+        return true;
+    }
 
-    final double SMALL_VALUE = 1e-7;
-
-    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
-
-    final double GAP_INFINITY = 10000;
-
-    final double INVALID_GAP = -1;
-
-    final double CRITICAL_GAP = 2;
-
-    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
-
+    public static String getName(String filename) {
+        final File file = new File(filename);
+        return file.getName();
+    }
 }

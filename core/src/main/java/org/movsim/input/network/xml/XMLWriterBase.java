@@ -24,7 +24,7 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.input.file.xml;
+package org.movsim.input.network.xml;
 
 @SuppressWarnings({ "nls" })
 public class XMLWriterBase {

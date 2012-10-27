@@ -23,28 +23,24 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator;
+package org.movsim.consumption.input.xml;
 
-import org.movsim.utilities.Units;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * The Interface MovsimConstants.
- */
-public interface MovsimConstants {
+public class ConsumptionInputData {
 
-    // TODO: connection with maven version number
-    final String RELEASE_VERSION = "1.3";
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(ConsumptionInputData.class);
 
-    final double SMALL_VALUE = 1e-7;
+    private ConsumptionInput consumptionInput;
 
-    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
+    public void setConsumptionInput(ConsumptionInput fuelConsumptionInput) {
+        this.consumptionInput = fuelConsumptionInput;
+    }
 
-    final double GAP_INFINITY = 10000;
-
-    final double INVALID_GAP = -1;
-
-    final double CRITICAL_GAP = 2;
-
-    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
-
+    public ConsumptionInput getConsumptionInput() {
+        return consumptionInput;
+    }
+    
 }

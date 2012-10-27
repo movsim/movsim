@@ -23,28 +23,18 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator;
-
-import org.movsim.utilities.Units;
+package org.movsim.consumption.input.xml;
 
 /**
- * The Interface MovsimConstants.
+ * The Interface XmlElementNames.
  */
-public interface MovsimConstants {
+public interface XmlElementNames {
 
-    // TODO: connection with maven version number
-    final String RELEASE_VERSION = "1.3";
-
-    final double SMALL_VALUE = 1e-7;
-
-    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
-
-    final double GAP_INFINITY = 10000;
-
-    final double INVALID_GAP = -1;
-
-    final double CRITICAL_GAP = 2;
-
-    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
+    public final String Consumption = "CONSUMPTION";
+    public final String ConsumptionModel = "MODEL";
+    public final String ConsumptionCarData = "CAR";
+    public final String ConsumptionEngineData = "ENGINE";
+    public final String ConsumptionEngineGears = "GEAR_RATIOS";
+    public final String ConsumptionEngineGear = "GEAR_RATIO";
 
 }

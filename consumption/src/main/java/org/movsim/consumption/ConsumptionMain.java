@@ -23,28 +23,34 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator;
+package org.movsim.consumption;
 
-import org.movsim.utilities.Units;
+import java.util.Locale;
 
-/**
- * The Interface MovsimConstants.
- */
-public interface MovsimConstants {
+import org.movsim.consumption.input.ConsumptionCommandLine;
+import org.movsim.consumption.input.ConsumptionMetadata;
+import org.movsim.consumption.input.xml.ConsumptionInputData;
+import org.movsim.consumption.input.xml.XmlReader;
+import org.movsim.consumption.logging.ConsumptionLogger;
 
-    // TODO: connection with maven version number
-    final String RELEASE_VERSION = "1.3";
 
-    final double SMALL_VALUE = 1e-7;
+public class ConsumptionMain {
 
-    final double MAX_VEHICLE_SPEED = 200 * Units.KMH_TO_MS;
+    public static void main(String[] args) {
 
-    final double GAP_INFINITY = 10000;
+        Locale.setDefault(Locale.US);
+        
+        System.out.println("Movsim Consumption Model. (c) Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden");
+        
+        ConsumptionLogger.initializeLogger();
+        
+        ConsumptionCommandLine.parse(ConsumptionMetadata.getInstance(), args);
 
-    final double INVALID_GAP = -1;
-
-    final double CRITICAL_GAP = 2;
-
-    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
-
+        ConsumptionInputData inputData = new ConsumptionInputData();
+        XmlReader.parse(ConsumptionMetadata.getInstance(), inputData);
+        
+        
+        
+    }
+    
 }
