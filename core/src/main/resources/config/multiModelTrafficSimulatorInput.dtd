@@ -33,6 +33,7 @@
 
 <!ATTLIST SCENARIO
   network_filename CDATA #REQUIRED
+  consumption_filename CDATA ""
 >
 
 

@@ -126,7 +126,7 @@ public class XmlReaderSimInput {
 
         if (!projectMetaData.isParseFromInputstream()) {
             parseNetworkFilename(root, "network_filename");
-            parseConsumptionFilename(root, "consumption_filename");
+            // parseConsumptionFilename(root, "consumption_filename");
         }
 
         final SimulationInput simInput = new SimulationInput(root.getChild(XmlElementNames.Simulation));
@@ -199,7 +199,7 @@ public class XmlReaderSimInput {
         final String fullFile = projectMetaData.getPathToProjectXmlFile() + filename;
         logger.info("check path : {}", fullFile);
         if (FileUtils.fileExists(fullFile)) {
-            logger.info("network file {} exists!", filename);
+            logger.info("file {} exists!", filename);
         } else {
             logger.error(
                     "Please provide the corresponding file={}. Either in the same directory as the movsim xml or provide the path and file name in the attribute 'network_filename' in the root tag. If you have done that, check the spelling!",
