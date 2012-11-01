@@ -29,8 +29,8 @@ import java.util.Locale;
 
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.logging.Logger;
 import org.movsim.logging.LogFileAppender;
+import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
 
 /**
@@ -53,7 +53,7 @@ public class MovsimCoreMain {
 
         final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // parse the command line, putting the results into projectMetaData
-        Logger.initializeLogger();
+        Logger.initializeLogger(MovsimCoreMain.class.getResource(Logger.getLog4jPropertyName()));
 
         MovsimCommandLine.parse(projectMetaData, args);
 
