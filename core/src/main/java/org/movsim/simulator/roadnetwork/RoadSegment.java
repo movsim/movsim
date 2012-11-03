@@ -829,6 +829,9 @@ public class RoadSegment implements Iterable<Vehicle> {
             trafficSource.timeStep(dt, simulationTime, iterationCount);
             assert assertInvariant();
         }
+        if (simpleRamp != null) {
+            simpleRamp.timeStep(dt, simulationTime, iterationCount);
+        }
     }
 
     /**

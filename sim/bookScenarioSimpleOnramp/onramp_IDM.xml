@@ -54,7 +54,7 @@
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="0" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>
-            <SIMPLE_RAMP logging="true">
+            <SIMPLE_RAMP relative_speed="0.5" relative_gap="0.5" logging="true">
                 <INFLOW t="0" q_per_hour="550" />
             </SIMPLE_RAMP>
             <DETECTORS dt="60" logging="true">

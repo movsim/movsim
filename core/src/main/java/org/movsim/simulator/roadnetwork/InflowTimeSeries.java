@@ -70,7 +70,10 @@ public class InflowTimeSeries {
     private void generateTimeSeriesData(List<InflowDataPoint> inflowTimeSeries) {
         final int size = inflowTimeSeries.size();
 
-        logger.info(" inflowDataPoint.size = {} (if ==0. no inflow)", size);
+        logger.info(" inflowDataPoint.size = {}", size);
+        if (inflowTimeSeries.isEmpty()) {
+            logger.info("no inflow data points --> no inflow.");
+        }
         timeValues = new double[size];
         flowValues = new double[size];
         speedValues = new double[size];

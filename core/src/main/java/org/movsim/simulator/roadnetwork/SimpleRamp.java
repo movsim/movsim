@@ -1,25 +1,39 @@
 package org.movsim.simulator.roadnetwork;
 
-import java.util.List;
-
-import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SimpleRamp {
+public class SimpleRamp extends AbstractTrafficSource {
 
     final static Logger logger = LoggerFactory.getLogger(SimpleRamp.class);
 
-    private final List<InflowDataPoint> inflowTimeSeries;
+    private final double relativeGapToLeader;
 
-    public SimpleRamp(VehicleGenerator roadVehGenerator, RoadSegment roadSegment, SimpleRampData simpleRampData) {
-        inflowTimeSeries = simpleRampData.getInflowTimeSeries();
-        if (inflowTimeSeries.isEmpty()) {
-            logger.info("no inflow data for onramp. Do nothing.");
-        }
+    private final double relativeSpeedToLeader;
+
+    public SimpleRamp(VehicleGenerator vehGenerator, RoadSegment roadSegment, SimpleRampData simpleRampData,
+            InflowTimeSeries inflowTimeSeries) {
+        super(vehGenerator, roadSegment, inflowTimeSeries);
+        this.relativeSpeedToLeader = simpleRampData.getRelativeSpeedToLeader();
+        this.relativeGapToLeader = simpleRampData.getRelativeGapToLeader();
     }
 
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+        logger.debug("simple ramp timestep={}", simulationTime);
+        System.out.println("simple ramp timestep=" + simulationTime + ", current inflow="
+                + (int) (getTotalInflow(simulationTime) * Units.INVS_TO_INVH) + ", waiting vehicles="
+                + getQueueLength());
+
+        final double totalInflow = getTotalInflow(simulationTime);
+        nWait += totalInflow * dt;
+
+        if (recordDataCallback != null) {
+            recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast, totalInflow,
+                    enteringVehCounter, 0);
+        }
+    }
 
 }

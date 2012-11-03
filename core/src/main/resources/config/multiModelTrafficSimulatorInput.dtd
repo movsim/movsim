@@ -360,7 +360,9 @@ gradient  NMTOKEN #REQUIRED
   
 <!ELEMENT SIMPLE_RAMP (INFLOW*)>
 <!ATTLIST SIMPLE_RAMP
-logging  (true|false)  "false" 
+relative_speed NMTOKEN "0.5"
+relative_gap   NMTOKEN "0.5"
+logging        (true|false)  "false" 
 > 
   
 <!-- traffic lights -->
