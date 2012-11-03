@@ -1131,4 +1131,11 @@ public class Vehicle {
         }
         return roadSegmentLength - getFrontPosition();
     }
+
+    @Override
+    public String toString() {
+        return "Vehicle [label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
+                + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
+                + acc + ", accOld=" + accOld + ", id=" + id + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
+    }
 }
