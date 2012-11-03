@@ -1,6 +1,8 @@
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.simulator.vehicles.VehiclePrototype;
 
 
 public class AbstractTrafficSource {
@@ -90,6 +92,23 @@ public class AbstractTrafficSource {
 
     public double getFlowPerLane(double time) {
         return inflowTimeSeries.getFlowPerLane(time);
+    }
+
+    /**
+     * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed.
+     */
+    void addVehicle(LaneSegment laneSegment, VehiclePrototype vehPrototype, double frontPosition, double speed) {
+        final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
+        vehicle.setFrontPosition(frontPosition);
+        vehicle.setSpeed(speed);
+        vehicle.setLane(laneSegment.lane());
+        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
+        laneSegment.addVehicle(vehicle);
+        // status variables of entering vehicle for logging
+        enteringVehCounter++;
+        xEnterLast = frontPosition;
+        vEnterLast = speed;
+        laneEnterLast = laneSegment.lane();
     }
 
 }

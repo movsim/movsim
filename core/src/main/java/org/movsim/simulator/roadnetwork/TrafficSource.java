@@ -210,32 +210,6 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
         addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
     }
 
-    /**
-     * Adds the vehicle.
-     * 
-     * @param vehContainer
-     *            the veh container
-     * @param vehPrototype
-     *            the veh prototype
-     * @param xEnter
-     *            the x enter
-     * @param vEnter
-     *            the v enter
-     */
-    private void addVehicle(LaneSegment laneSegment, VehiclePrototype vehPrototype, double xEnter, double vEnter) {
-        final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
-        vehicle.setFrontPosition(xEnter);
-        vehicle.setSpeed(vEnter);
-        vehicle.setLane(laneSegment.lane());
-        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
-        laneSegment.addVehicle(vehicle);
-        // status variables of entering vehicle for logging
-        enteringVehCounter++;
-        xEnterLast = xEnter;
-        vEnterLast = vEnter;
-        laneEnterLast = laneSegment.lane();
-    }
-
     public void setFlowPerLane(double newFlowPerLane) {
         logger.info("set new flow per lane={} per second and reset queue of waiting vehicles={}", newFlowPerLane, nWait);
         inflowTimeSeries.setConstantFlowPerLane(newFlowPerLane);
