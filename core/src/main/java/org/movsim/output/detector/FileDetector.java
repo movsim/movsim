@@ -101,7 +101,7 @@ public class FileDetector extends FileOutputBase {
         if (laneCount > 1) {
             writeLaneAverages();
         }
-        if(loggingLanes){
+        if (laneCount == 1 || loggingLanes) {
             writeQuantitiesPerLane();
         }
         writer.printf("%n");
