@@ -304,15 +304,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set up simple ramp with dropping mechanism
         if (roadInput.getSimpleRamp() != null) {
             SimpleRampData simpleRampData = roadInput.getSimpleRamp();
-            if (simpleRampData.getInflowTimeSeries().size() != 0) {
-                final SimpleRamp simpleRamp = new SimpleRamp(roadVehGenerator, roadSegment,
-                        simpleRampData.getInflowTimeSeries());
+                final SimpleRamp simpleRamp = new SimpleRamp(roadVehGenerator, roadSegment, simpleRampData);
                 // TODO using logging recorder from traffic source
                 // if (simpleRampData.withLogging()) {
                 // simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
                 // }
                 roadSegment.setSimpleRamp(simpleRamp);
-            }
         }
 
         // set up the traffic lights
