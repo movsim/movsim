@@ -119,7 +119,6 @@ public class Vehicle {
     private double totalTravelDistance;
     private double totalTravelTime;
     private double totalFuelUsedLiters;
-    private double totalElectricEnergyUsed;
 
     private double speed;
 
@@ -1117,10 +1116,6 @@ public class Vehicle {
         return totalFuelUsedLiters;
     }
     
-    public final double totalElectricEnergyUsed() {
-        return totalElectricEnergyUsed;
-    }
-
     public double getMaxDeceleration() {
         return maxDeceleration;
     }

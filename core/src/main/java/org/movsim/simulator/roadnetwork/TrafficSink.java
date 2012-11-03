@@ -52,7 +52,6 @@ public class TrafficSink implements SimulationTimeStep {
     private double totalVehicleTravelDistance;
     private double totalVehicleTravelTime;
     private double totalVehicleFuelUsedLiters;
-    private double totalVehicleElectricEnergyUsed;
 
     /**
      * Constructor.
@@ -129,15 +128,10 @@ public class TrafficSink implements SimulationTimeStep {
         return totalVehicleFuelUsedLiters;
     }
     
-    public final double totalVehicleElectricEnergyUsed() {
-        return totalVehicleElectricEnergyUsed;
-    }
-
     void recordRemovedVehicle(Vehicle vehicle) {
         totalVehicleTravelDistance += vehicle.totalTravelDistance();
         totalVehicleTravelTime += vehicle.totalTravelTime();
         totalVehicleFuelUsedLiters += vehicle.totalFuelUsedLiters();
-        totalVehicleElectricEnergyUsed += vehicle.totalElectricEnergyUsed();
         ++totalVehiclesRemoved;
     }
 
