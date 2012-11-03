@@ -1,10 +1,9 @@
-package org.movsim.simulator;
+package org.movsim.simulator.roadnetwork;
 
 import java.util.List;
 
 import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.input.model.simulation.SimpleRampData;
-import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

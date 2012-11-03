@@ -30,7 +30,6 @@ import java.util.Iterator;
 
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.SimpleRamp;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
