@@ -100,10 +100,7 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
                 if (isEntered) {
                     nWait--;
                     measuredInflowCount++;
-                    if (recordDataCallback != null) {
-                        recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
-                                totalInflow, enteringVehCounter, nWait);
-                    }
+                    recordData(simulationTime, totalInflow);
                     return; // only one insert per simulation update
                 }
             }

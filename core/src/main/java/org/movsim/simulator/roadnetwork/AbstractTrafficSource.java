@@ -16,6 +16,13 @@ public class AbstractTrafficSource {
 
     RecordDataCallback recordDataCallback;
 
+    void recordData(double simulationTime, final double totalInflow) {
+        if (recordDataCallback != null) {
+            recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast, totalInflow,
+                    enteringVehCounter, nWait);
+        }
+    }
+
     int enteringVehCounter;
 
     /** The x enter last. status of last merging vehicle for logging to file */

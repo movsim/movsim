@@ -30,10 +30,18 @@ public class SimpleRamp extends AbstractTrafficSource {
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
 
-        if (recordDataCallback != null) {
-            recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast, totalInflow,
-                    enteringVehCounter, 0);
+        boolean isEntered = false;
+        if (nWait >= 1.0) {
+            // try to insert vehicle
         }
+
+        if (isEntered) {
+            nWait--;
+            recordData(simulationTime, totalInflow);
+            return; // only one insert per simulation update
+        }
+
+
     }
 
 }
