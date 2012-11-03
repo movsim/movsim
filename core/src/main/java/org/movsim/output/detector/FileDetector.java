@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -37,9 +37,10 @@ public class FileDetector extends FileOutputBase {
 
     private static final String outputHeadingTime = String.format("%s%10s,", COMMENT_CHAR, "t[s]");
     private static final String outputHeadingLaneAverage = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,",
-            "nVehTotal[1]", "nTotalAccum[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
-    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,", 
-            "nVeh[1]", "nAccum[1]", "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
+            "nVehTotal[1]", "nTotalAccum[1]", "V[km/h]", "flow[1/h/lane]", "occup[1]", "1/<1/v>[km/h]",
+            "<1/Tbrut>[1/s]");
+    private static final String outputHeadingLane = String.format("%10s,%10s,%10s,%10s,%10s,%10s,%10s,", "nVeh[1]",
+            "nAccum[1]", "V[km/h]", "flow[1/h]", "occup[1]", "1/<1/v>[km/h]", "<1/Tbrut>[1/s]");
 
     // note: number before decimal point is total width of field, not width of
     // integer part
@@ -48,8 +49,8 @@ public class FileDetector extends FileOutputBase {
 
     private final LoopDetector detector;
     private int laneCount;
-    private final boolean loggingLanes; 
-    
+    private final boolean loggingLanes;
+
     /**
      * Instantiates a new file detector.
      * 
@@ -57,12 +58,12 @@ public class FileDetector extends FileOutputBase {
      *            the detector
      * @param laneCount
      */
-    public FileDetector(LoopDetector detector, String roadId, int laneCount,  boolean loggingLanes) {
+    public FileDetector(LoopDetector detector, String roadId, int laneCount, boolean loggingLanes) {
         super();
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
         this.laneCount = laneCount;
-        this.loggingLanes = loggingLanes;
+        this.loggingLanes = (loggingLanes || laneCount == 1) ? true : false;
 
         writer = createWriter(String.format(extensionFormat, roadId, xDetectorInt));
         writeHeader();
@@ -101,7 +102,7 @@ public class FileDetector extends FileOutputBase {
         if (laneCount > 1) {
             writeLaneAverages();
         }
-        if (laneCount == 1 || loggingLanes) {
+        if (loggingLanes) {
             writeQuantitiesPerLane();
         }
         writer.printf("%n");
@@ -114,12 +115,9 @@ public class FileDetector extends FileOutputBase {
      */
     private void writeQuantitiesPerLane() {
         for (int i = 0; i < laneCount; i++) {
-            write(outputFormat, detector.getVehCountOutput(i),
-                    detector.getVehCumulatedCountOutput(i),
-                    Units.MS_TO_KMH * detector.getMeanSpeed(i), Units.INVS_TO_INVH
-                            * detector.getFlow(i), detector.getOccupancy(i),
-                    Units.MS_TO_KMH * detector.getMeanSpeedHarmonic(i),
-                    detector.getMeanTimegapHarmonic(i));
+            write(outputFormat, detector.getVehCountOutput(i), detector.getVehCumulatedCountOutput(i), Units.MS_TO_KMH
+                    * detector.getMeanSpeed(i), Units.INVS_TO_INVH * detector.getFlow(i), detector.getOccupancy(i),
+                    Units.MS_TO_KMH * detector.getMeanSpeedHarmonic(i), detector.getMeanTimegapHarmonic(i));
         }
     }
 
@@ -129,10 +127,10 @@ public class FileDetector extends FileOutputBase {
      * @param time
      */
     private void writeLaneAverages() {
-        write(outputFormat, detector.getVehCountOutputAllLanes(),
-                detector.getVehCumulatedCountOutputAllLanes(), Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(),
-                Units.INVS_TO_INVH * detector.getFlowAllLanes(), detector.getOccupancyAllLanes(),
-                Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(), detector.getMeanTimegapHarmonicAllLanes());
+        write(outputFormat, detector.getVehCountOutputAllLanes(), detector.getVehCumulatedCountOutputAllLanes(),
+                Units.MS_TO_KMH * detector.getMeanSpeedAllLanes(), Units.INVS_TO_INVH * detector.getFlowAllLanes(),
+                detector.getOccupancyAllLanes(), Units.MS_TO_KMH * detector.getMeanSpeedHarmonicAllLanes(),
+                detector.getMeanTimegapHarmonicAllLanes());
     }
 
 }
