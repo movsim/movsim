@@ -1,5 +1,19 @@
 Collection of workflows using the build system maven:
 
+
+Livecycle goals:
+
+mvn clean
+mvn compile
+mvn test
+mvn install
+mvn install -Dmaven.test.skip=true
+
+Dependency goals:
+mvn dependency:resolve
+mvn dependency:tree
+mvn dependency:analyze
+
 Creating the eclipse project configuration:
 ===========================================
 
@@ -10,11 +24,20 @@ mvn eclipse:clean eclipse:eclipse
 --> import project as Maven project in eclipse
 
 
+mvn site
+generates javadoc etc 
+
 Releasing and incrementing project version number:
 ==================================================
 
 mvn release:prepare
 TODO: figure out how to use git scm versioning with maven
+
+mvn site:deploy 
+
+
+
+
 
 
 
