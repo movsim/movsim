@@ -441,10 +441,10 @@ dn        NMTOKEN "0"
 number  NMTOKEN #REQUIRED
 >
 
-<!-- example: <TRAJECTORIES dt_s="1" t_start_min="0" t_end_min="7" />  -->
 <!ELEMENT TRAJECTORIES EMPTY>
 <!ATTLIST TRAJECTORIES
   dt           NMTOKEN "1"
+  dn           NMTOKEN "1"
   start_time   NMTOKEN "0"
   end_time     NMTOKEN "1e10"
   route     NMTOKEN #REQUIRED
