@@ -67,6 +67,7 @@ import org.slf4j.LoggerFactory;
  * it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its gradient.
  * </p>
  */
+// TODO avoid iterating also over Vehicle.Type.OBSTACLE at lane ends.
 public class RoadSegment implements Iterable<Vehicle> {
 
     final static Logger logger = LoggerFactory.getLogger(RoadSegment.class);
