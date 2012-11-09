@@ -77,7 +77,8 @@ public class TrafficLightApproaching {
         considerTrafficLight = false;
 
         if (distanceToTrafficlight > maxRangeLookAheadForTrafficlight) {
-            logger.info("traffic light at distance={} to far away -- maxRangeLookAheadForTrafficlight={}", distanceToTrafficlight, maxRangeLookAheadForTrafficlight);
+            logger.debug("traffic light at distance={} to far away -- maxRangeLookAheadForTrafficlight={}",
+                    distanceToTrafficlight, maxRangeLookAheadForTrafficlight);
             return;
         }
         
