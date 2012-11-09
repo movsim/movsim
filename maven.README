@@ -1,7 +1,16 @@
+How to solve “Unsupported IClasspathEntry kind=4 Eclipse Scala” in Eclipse:
+
+Right-click on your project, select Maven -> Remove Maven Nature.
+Open you terminal, go to your project folder and do “mvn eclipse:clean”
+Right click on your Project and select “Configure -> Convert into Maven Project”
+Now you got “Unsupported IClasspathEntry kind=4 Eclipse Scala” disappear.
+
+
+
+
 Collection of workflows using the build system maven:
 
-
-Livecycle goals:
+Lifecycle goals:
 
 mvn clean
 mvn compile
