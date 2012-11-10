@@ -40,6 +40,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.Mod
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
 import org.movsim.utilities.Colors;
+import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,8 +140,11 @@ public class Vehicle {
     /** The max deceleration . */
     private final double maxDeceleration;
 
-    /** The unique id of the vehicle */
+    /** The unique id of the vehicle. */
     final long id;
+
+    /** Final random number between 0 and 1 used for random output selections */
+    final double randomFix;
 
     /** The vehicle number. */
     private int vehNumber = VEHICLE_NUMBER_NOT_SET;
@@ -231,6 +235,7 @@ public class Vehicle {
             LaneChangeModel lcModel, Consumption fuelModel, Route route) {
         this.label = label;
         id = nextId++;
+        randomFix = MyRandom.nextDouble();
         this.fuelModel = fuelModel;
 
         length = vehInput.getLength();
@@ -270,6 +275,7 @@ public class Vehicle {
         assert rearPosition >= 0.0;
         assert speed >= 0.0;
         id = nextId++;
+        randomFix = MyRandom.nextDouble();
         this.length = length;
         setRearPosition(rearPosition);
         this.speed = speed;
@@ -296,7 +302,8 @@ public class Vehicle {
      * @param source
      */
     public Vehicle(Vehicle source) {
-        id = source.id;  // TODO id not unique in this case 
+        id = source.id; // TODO id not unique in this case
+        randomFix = source.randomFix;
         type = source.type;
         frontPosition = source.frontPosition;
         speed = source.speed;
@@ -322,6 +329,7 @@ public class Vehicle {
      */
     public Vehicle(LongitudinalModelBase ldm, Object lcm, double length, double width) {
         id = nextId++;
+        randomFix = MyRandom.nextDouble();
         this.length = length;
         setRearPosition(0.0);
         this.speed = 0.0;
@@ -1132,5 +1140,9 @@ public class Vehicle {
         return "Vehicle [label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
                 + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
                 + acc + ", accOld=" + accOld + ", id=" + id + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
+    }
+
+    public double getRandomFix() {
+        return randomFix;
     }
 }
