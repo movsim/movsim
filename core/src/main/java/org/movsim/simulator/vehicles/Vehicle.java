@@ -119,7 +119,6 @@ public class Vehicle {
     private double totalTravelDistance;
     private double totalTravelTime;
     private double totalFuelUsedLiters;
-    private double totalElectricEnergyUsed;
 
     private double speed;
 
@@ -535,19 +534,46 @@ public class Vehicle {
         this.vehNumber = vehNumber;
     }
 
+    /**
+     * returns the net distance (from front bumper to rear bumper) to the front vehicle, returns infinity gap if front
+     * vehicle is null.
+     * 
+     * @param frontVehicle
+     * @return
+     */
     public double getNetDistance(Vehicle frontVehicle) {
         if (frontVehicle == null) {
             return MovsimConstants.GAP_INFINITY;
         }
-        final double netGap = frontVehicle.getRearPosition() - getFrontPosition();
-        return netGap;
+        return frontVehicle.getRearPosition() - getFrontPosition();
     }
 
+    /**
+     * returns the brut distance (net distance plus vehicle length of front vehicle) to the front vehicle, returns
+     * infinity gap if front vehicle is null.
+     * 
+     * @param frontVehicle
+     * @return
+     */
     public double getBrutDistance(Vehicle frontVehicle) {
         if (frontVehicle == null) {
             return MovsimConstants.GAP_INFINITY;
         }
         return frontVehicle.getFrontPosition() - getFrontPosition();
+    }
+
+    /**
+     * returns the net distance (from rear bumper to front bumper) to the rear vehicle, returns infinity gap if front
+     * vehicle is null.
+     * 
+     * @param rearVehicle
+     * @return
+     */
+    public double getNetDistanceToRearVehicle(Vehicle rearVehicle) {
+        if (rearVehicle == null) {
+            return MovsimConstants.GAP_INFINITY;
+        }
+        return getRearPosition() - rearVehicle.getFrontPosition();
     }
 
     public final double getRelSpeed(Vehicle frontVehicle) {
@@ -1090,10 +1116,6 @@ public class Vehicle {
         return totalFuelUsedLiters;
     }
     
-    public final double totalElectricEnergyUsed() {
-        return totalElectricEnergyUsed;
-    }
-
     public double getMaxDeceleration() {
         return maxDeceleration;
     }
@@ -1103,5 +1125,12 @@ public class Vehicle {
             return -1;  
         }
         return roadSegmentLength - getFrontPosition();
+    }
+
+    @Override
+    public String toString() {
+        return "Vehicle [label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
+                + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
+                + acc + ", accOld=" + accOld + ", id=" + id + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
     }
 }

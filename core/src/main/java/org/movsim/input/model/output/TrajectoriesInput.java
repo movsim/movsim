@@ -30,6 +30,7 @@ import org.jdom.Element;
 public class TrajectoriesInput {
 
     private double dt;
+    private int dn;
     private double startTime;
     private double endTime;
     private String routeLabel;
@@ -42,6 +43,7 @@ public class TrajectoriesInput {
      */
     public TrajectoriesInput(Element elem) {
         dt = Double.parseDouble(elem.getAttributeValue("dt"));
+        dn = Integer.parseInt(elem.getAttributeValue("dn"));
         startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
         endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
         routeLabel = elem.getAttributeValue("route");
@@ -54,6 +56,15 @@ public class TrajectoriesInput {
      */
     public double getDt() {
         return dt;
+    }
+
+    /**
+     * Gets the dn.
+     * 
+     * @return the dn
+     */
+    public int getDn() {
+        return dn;
     }
 
     /**

@@ -49,6 +49,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
     private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 
     private final double dtOut;
+    private final int dnOut;
     private final double t_start_interval;
     private final double t_end_interval;
     private final double x_start_interval;
@@ -67,6 +68,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         super();
 
         dtOut = trajectoriesInput.getDt();
+        dnOut = trajectoriesInput.getDn();
         t_start_interval = trajectoriesInput.getStartTime();
         t_end_interval = trajectoriesInput.getEndTime();
         x_start_interval = 0;
@@ -114,8 +116,18 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
                 final int vehicleCount = laneSegment.vehicleCount();
                 for (int i = 0; i < vehicleCount; ++i) {
                     final Vehicle me = laneSegment.getVehicle(i);
-                    if ((me.getFrontPosition() >= x_start_interval && me.getFrontPosition() <= x_end_interval)) {
-                        final Vehicle frontVehicle = laneSegment.frontVehicle(me);
+                    if (me.getId() % dnOut != 0) {
+                        // TODO the selection of every n'th vehicle is only correct if the incremental id-count is per
+                        // inputsource. need a vehicle-number set by the inflow
+                        continue;
+                    }
+                    if ((me.getFrontPosition() >= x_start_interval && me.getFrontPosition() <= x_end_interval && me
+                            .type() != Vehicle.Type.OBSTACLE)) {
+                        Vehicle frontVehicle = laneSegment.frontVehicle(me);
+                        if (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE) {
+                            // TODO avoid hack here
+                            frontVehicle = null;
+                        }
                         writeVehicleData(me, roadStartPos, frontVehicle);
                     }
                 }

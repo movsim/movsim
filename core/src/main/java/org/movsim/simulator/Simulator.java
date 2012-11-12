@@ -59,6 +59,7 @@ import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.SimpleRamp;
 import org.movsim.simulator.roadnetwork.Slopes;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
@@ -304,15 +305,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set up simple ramp with dropping mechanism
         if (roadInput.getSimpleRamp() != null) {
             SimpleRampData simpleRampData = roadInput.getSimpleRamp();
-            if (simpleRampData.getInflowTimeSeries().size() != 0) {
-                final SimpleRamp simpleRamp = new SimpleRamp(roadVehGenerator, roadSegment,
-                        simpleRampData.getInflowTimeSeries());
-                // TODO using logging recorder from traffic source
-                // if (simpleRampData.withLogging()) {
-                // simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
-                // }
-                roadSegment.setSimpleRamp(simpleRamp);
+            InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(simpleRampData.getInflowTimeSeries());
+            SimpleRamp simpleRamp = new SimpleRamp(roadVehGenerator, roadSegment, simpleRampData, inflowTimeSeries);
+            if (simpleRampData.withLogging()) {
+                simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
             }
+            roadSegment.setSimpleRamp(simpleRamp);
         }
 
         // set up the traffic lights

@@ -287,7 +287,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     /**
      * Sets the status callback functions.
      * 
-     * @param statusControlCallbacks
+     * @param statusCallbacks
      */
     public void setStatusControlCallbacks(StatusControlCallbacks statusCallbacks) {
         this.statusControlCallbacks = statusCallbacks;

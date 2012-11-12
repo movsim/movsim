@@ -40,8 +40,13 @@ public class SimpleRampData {
     /** The inflow time series. */
     private List<InflowDataPoint> inflowTimeSeries;
 
+    private final double relativeGap;
+
+    private final double relativeSpeed;
+
     /** The with logging. */
     private final boolean withLogging;
+
 
     /**
      * Instantiates a new simple ramp data impl.
@@ -51,6 +56,8 @@ public class SimpleRampData {
      */
     @SuppressWarnings("unchecked")
     public SimpleRampData(Element elem) {
+        this.relativeGap = Double.parseDouble(elem.getAttributeValue("relative_gap"));
+        this.relativeSpeed = Double.parseDouble(elem.getAttributeValue("relative_speed"));
         this.withLogging = Boolean.parseBoolean(elem.getAttributeValue("logging"));
 
         final List<Element> inflowElems = elem.getChildren(XmlElementNames.RoadInflow);
@@ -80,22 +87,20 @@ public class SimpleRampData {
         });
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#getInflowTimeSeries()
-     */
     public List<InflowDataPoint> getInflowTimeSeries() {
         return inflowTimeSeries;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.movsim.input.model.simulation.SimpleRampData#withLogging()
-     */
     public boolean withLogging() {
         return withLogging;
+    }
+
+    public double getRelativeSpeedToLeader() {
+        return relativeSpeed;
+    }
+
+    public double getRelativeGapToLeader() {
+        return relativeGap;
     }
 
 }
