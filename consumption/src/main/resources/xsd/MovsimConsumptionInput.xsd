@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+            jxb:version="2.0">
+
+<xsd:element name="Greetings" type="GreetingListType"/>
+
+<xsd:complexType name="GreetingListType">
+  <xsd:sequence>
+    <xsd:element name="Greeting" type="GreetingType"
+                 maxOccurs="unbounded"/>
+  </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="GreetingType">
+  <xsd:sequence>
+    <xsd:element name="Text" type="xsd:string"/>
+  </xsd:sequence>
+  <xsd:attribute name="language" type="xsd:language"/>
+</xsd:complexType>
+
+</xsd:schema>
+

@@ -30,7 +30,6 @@ import java.util.Iterator;
 
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.SimpleRamp;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +67,7 @@ import org.slf4j.LoggerFactory;
  * it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its gradient.
  * </p>
  */
+// TODO avoid iterating also over Vehicle.Type.OBSTACLE at lane ends.
 public class RoadSegment implements Iterable<Vehicle> {
 
     final static Logger logger = LoggerFactory.getLogger(RoadSegment.class);
@@ -829,6 +829,9 @@ public class RoadSegment implements Iterable<Vehicle> {
         if (trafficSource != null) {
             trafficSource.timeStep(dt, simulationTime, iterationCount);
             assert assertInvariant();
+        }
+        if (simpleRamp != null) {
+            simpleRamp.timeStep(dt, simulationTime, iterationCount);
         }
     }
 

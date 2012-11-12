@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class TrafficSource.
  */
-public class TrafficSource implements SimulationTimeStep {
+public class TrafficSource extends AbstractTrafficSource implements SimulationTimeStep {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(TrafficSource.class);
@@ -49,34 +49,6 @@ public class TrafficSource implements SimulationTimeStep {
     
     private int measuredInflowCount;
 
-    private double nWait;
-
-    private final VehicleGenerator vehGenerator;
-
-    private final RoadSegment roadSegment;
-
-    private final InflowTimeSeries inflowTimeSeries;
-
-    private int enteringVehCounter;
-
-    /** The x enter last. status of last merging vehicle for logging to file */
-    private double xEnterLast;
-
-    private double vEnterLast;
-
-    private int laneEnterLast;
-
-    public interface RecordDataCallback {
-        /**
-         * Callback to allow the application to process or record the traffic source data.
-         * 
-         */
-        public void recordData(double simulationTime, int laneEnter, double xEnter, double vEnter, double totalInflow,
-                int enteringVehCounter, double nWait);
-    }
-
-    private RecordDataCallback recordDataCallback;
-
     /**
      * Instantiates a new upstream boundary .
      * 
@@ -84,33 +56,10 @@ public class TrafficSource implements SimulationTimeStep {
      *            the vehicle generator
      */
     public TrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment, InflowTimeSeries inflowTimeSeries) {
-        this.vehGenerator = vehGenerator;
-        this.roadSegment = roadSegment;
-        nWait = 0;
+        super(vehGenerator, roadSegment, inflowTimeSeries);
         measuredInflow = 0;
         measuredTime = 0;
         measuredInflowCount = 0;
-
-        this.inflowTimeSeries = inflowTimeSeries;
-    }
-
-    /**
-     * Sets the traffic source recorder.
-     * 
-     * @param recordDataCallback
-     */
-    public void setRecorder(RecordDataCallback recordDataCallback) {
-        enteringVehCounter = 1;
-        this.recordDataCallback = recordDataCallback;
-    }
-
-    /**
-     * Gets the entering veh counter.
-     * 
-     * @return the entering veh counter
-     */
-    public int getEnteringVehCounter() {
-        return enteringVehCounter;
     }
 
     /**
@@ -124,23 +73,8 @@ public class TrafficSource implements SimulationTimeStep {
         return iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1;
     }
 
-    /**
-     * Gets the total inflow.
-     * 
-     * @param time
-     *            the time
-     * @return the total inflow
-     */
-    public double getTotalInflow(double time) {
-        // inflow over all lanes
-        final double qBC = inflowTimeSeries.getFlowPerLane(time);
-        final int nLanes = roadSegment.laneCount();
-        return nLanes * qBC;
-    }
-
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        // integrate inflow demand
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
         
@@ -166,10 +100,7 @@ public class TrafficSource implements SimulationTimeStep {
                 if (isEntered) {
                     nWait--;
                     measuredInflowCount++;
-                    if (recordDataCallback != null) {
-                        recordDataCallback.recordData(simulationTime, laneEnterLast, xEnterLast, vEnterLast,
-                                totalInflow, enteringVehCounter, nWait);
-                    }
+                    recordData(simulationTime, totalInflow);
                     return; // only one insert per simulation update
                 }
             }
@@ -279,42 +210,12 @@ public class TrafficSource implements SimulationTimeStep {
         addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
     }
 
-    /**
-     * Adds the vehicle.
-     * 
-     * @param vehContainer
-     *            the veh container
-     * @param vehPrototype
-     *            the veh prototype
-     * @param xEnter
-     *            the x enter
-     * @param vEnter
-     *            the v enter
-     */
-    private void addVehicle(LaneSegment laneSegment, VehiclePrototype vehPrototype, double xEnter, double vEnter) {
-        final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
-        vehicle.setFrontPosition(xEnter);
-        vehicle.setSpeed(vEnter);
-        vehicle.setLane(laneSegment.lane());
-        vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
-        laneSegment.addVehicle(vehicle);
-        // status variables of entering vehicle for logging
-        enteringVehCounter++;
-        xEnterLast = xEnter;
-        vEnterLast = vEnter;
-        laneEnterLast = laneSegment.lane();
-    }
-
     public void setFlowPerLane(double newFlowPerLane) {
         logger.info("set new flow per lane={} per second and reset queue of waiting vehicles={}", newFlowPerLane, nWait);
         inflowTimeSeries.setConstantFlowPerLane(newFlowPerLane);
         nWait = 0;
     }
 
-    public double getFlowPerLane(double time) {
-        return inflowTimeSeries.getFlowPerLane(time);
-    }
-    
     /**
      * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
      * 
@@ -323,15 +224,6 @@ public class TrafficSource implements SimulationTimeStep {
      */
     public double measuredInflow() {
         return measuredInflow;
-    }
-
-    /**
-     * Returns the number of vehicles in the queue.
-     * 
-     * @return integer queue length over all lanes
-     */
-    public int getQueueLength() {
-        return (int)nWait;
     }
 
 }

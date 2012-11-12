@@ -1,82 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
     <groupId>org.movsim</groupId>
     <artifactId>Movsim</artifactId>
     <version>1.3.1-SNAPSHOT</version>
-    
     <packaging>pom</packaging>
     <name>movsim</name>
+    <url>http://movsim.org</url>
+    <inceptionYear>2011</inceptionYear>
     <description>The Movsim parent project -- Movsim stands for multi-model, open-source vehicular-traffic simulator</description>
-    
-     <properties>
+    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <projectVersion>${project.version}</projectVersion>
     </properties>
-    
     <licenses>
         <license>
             <name>GPLv3</name>
             <url>http://www.gnu.org/licenses/gpl.html</url>
         </license>
     </licenses>
-    
     <organization>
         <name>Movsim</name>
         <url>http://movsim.org</url>
     </organization>
-    
+    <developers>
+        <developer>
+            <id>arne</id>
+            <name>Arne Kesting</name>
+            <email>mail@akesting.de</email>
+            <url>http://www.akesting.de</url>
+        </developer>
+        <developer>
+            <id>ralph</id>
+            <name>Ralph Germ</name>
+        </developer>
+        <developer>
+            <id>martinB</id>
+            <name>Martin Budden</name>
+        </developer>
+        <developer>
+            <id>martinT</id>
+            <name>Martin Treiber</name>
+            <email>treiber@vwi.tu-dresden.de</email>
+            <url>http://www.mtreiber.de</url>
+            <organization>TU Dresden</organization>
+        </developer>
+    </developers>
     <modules>
         <module>common</module>
-	<module>consumption</module>
+        <module>consumption</module>
         <module>core</module>
         <module>viewer</module>
     </modules>
-
     <scm>
-	<connection>scm:git:git@github.com:movsim/movsim.git</connection>
-	<url>scm:git:git@github.com:movsim/movsim.git</url>
-	<developerConnection>scm:git:git@github.com:movsim/movsim.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
-<!--     <scm>
-        <url>https://github.com/movsim/movsim</url>
-    </scm> -->
-
+        <connection>scm:git:git@github.com:movsim/movsim.git</connection>
+        <url>scm:git:git@github.com:movsim/movsim.git</url>
+        <developerConnection>scm:git:git@github.com:movsim/movsim.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     <build>
         <pluginManagement>
             <plugins>
-                 <!-- Java 1.6 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.5.1</version>
-                    <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
-                    </configuration>
+ <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
                 </plugin>
-                 <!-- build jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <!-- nothing here -->
-            </plugin>
-                 <!-- build java source jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>  
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
@@ -95,12 +106,39 @@
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.3.2</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.2</version>
+                    <dependencies>
+                        <dependency>
+                            <!-- add support for ssh/scp -->
+                            <groupId>org.apache.maven.wagon</groupId>
+                            <artifactId>wagon-ssh</artifactId>
+                            <version>1.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-    
-    
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -108,5 +146,33 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <reporting>
+        <plugins>
+            <!-- Default Site Pages -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <!-- Java Documentation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9</version>
+            </plugin>
+            <!-- Source Code Cross-Reference -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    <distributionManagement>
+        <site>
+            <id>movsim-server</id>
+            <url>scp://h2063376.stratoserver.net/home/movsim/www/version/${project.version}</url>
+        </site>
+    </distributionManagement>
 </project>
 
