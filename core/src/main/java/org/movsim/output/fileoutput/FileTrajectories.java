@@ -112,22 +112,21 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         for (final RoadSegment roadSegment : route) {
             final int laneCount = roadSegment.laneCount();
             for (int lane = 0; lane < laneCount; ++lane) {
-                final LaneSegment laneSegment = roadSegment.laneSegment(lane);
-                final int vehicleCount = laneSegment.vehicleCount();
-                for (int i = 0; i < vehicleCount; ++i) {
-                    final Vehicle me = laneSegment.getVehicle(i);
-                    // selection of n'th vehicle is only correct in absense of lane changes
-                    if (i % dnOut == 0) {
-                        if ((me.getFrontPosition() >= x_start_interval && me.getFrontPosition() <= x_end_interval && me
-                                .type() != Vehicle.Type.OBSTACLE)) {
-                            Vehicle frontVehicle = laneSegment.frontVehicle(me);
-                            if (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE) {
-                                // TODO avoid hack here
-                                frontVehicle = null;
-                            }
-                            writeVehicleData(me, roadStartPos, frontVehicle);
+                LaneSegment laneSegment = roadSegment.laneSegment(lane);
+                int vehicleCounter = 0;
+                for (final Vehicle vehicle : laneSegment) {
+                    if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                        continue;
+                    }
+                    if (vehicleCounter % dnOut == 0) {
+                        // selection of n'th vehicle is only correct in absense of lane changes
+                        // TODO base selection on some vehicle index quantity, eq sequential number at inflow
+                        if (vehicle.getFrontPosition() >= x_start_interval
+                                && vehicle.getFrontPosition() <= x_end_interval) {
+                            writeVehicleData(vehicle, roadStartPos, laneSegment.frontVehicle(vehicle));
                         }
                     }
+                    ++vehicleCounter;
                 }
             }
             roadStartPos += roadSegment.roadLength();
@@ -143,8 +142,10 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      */
     private void writeVehicleData(Vehicle me, double roadStartPos, Vehicle frontVehicle) {
         final double pos = me.getFrontPosition() + roadStartPos;
-        final double s = frontVehicle == null ? 0 : me.getNetDistance(frontVehicle);
-        final double dv = frontVehicle == null ? 0 : me.getRelSpeed(frontVehicle);
+        final double s = ( frontVehicle == null || (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE)) ? 0
+                : me.getNetDistance(frontVehicle);
+        final double dv = (frontVehicle == null || (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE)) ? 0
+                : me.getRelSpeed(frontVehicle);
         write(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(),
                 me.getId());
     }
