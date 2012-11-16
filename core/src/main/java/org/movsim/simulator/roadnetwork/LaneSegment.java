@@ -477,7 +477,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the front vehicle.
+     * Returns the front vehicle which is the most downstream vehicle in the {@link LaneSegment}.
      * 
      * @return the front vehicle
      */
@@ -526,6 +526,12 @@ public class LaneSegment implements Iterable<Vehicle> {
         return null;
     }
 
+    /**
+     * Returns the vehicle in front of the given vehicle.
+     * 
+     * @param vehicle
+     * @return the next downstream vehicle
+     */
     public final Vehicle frontVehicle(Vehicle vehicle) {
         return frontVehicle(vehicle.getRearPosition());
     }
