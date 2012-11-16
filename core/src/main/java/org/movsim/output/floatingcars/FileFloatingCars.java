@@ -28,6 +28,7 @@ package org.movsim.output.floatingcars;
 import java.io.PrintWriter;
 
 import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
@@ -43,8 +44,8 @@ public class FileFloatingCars extends FileOutputBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
-    private static final String extensionFormat = ".car.origin_%d.%06d.csv";
-    private static final String extensionRegex = "[.]car[.]origin_\\d+[.]\\d+[.]csv";
+    private static final String extensionFormat = ".car.route_%s.origin_%d.%06d.csv";
+    private static final String extensionRegex = "[.]car[.]route_\\s*[.]origin_\\d+[.]\\d+[.]csv";
 
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],    roadId,      lane,      x[m], totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID";
@@ -64,8 +65,9 @@ public class FileFloatingCars extends FileOutputBase {
         FileUtils.deleteFileList(path, regex);
     }
 
-    PrintWriter createWriter(Vehicle vehicle) {
-        return createWriter(String.format(extensionFormat, vehicle.originRoadSegmentId(), vehicle.getVehNumber()));
+    PrintWriter createWriter(Vehicle vehicle, Route route) {
+        return createWriter(String.format(extensionFormat, route.getName(), vehicle.originRoadSegmentId(),
+                vehicle.getVehNumber()));
     }
 
     static void writeHeader(PrintWriter writer, Vehicle veh) {

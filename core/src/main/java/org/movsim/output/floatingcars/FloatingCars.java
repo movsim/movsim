@@ -35,6 +35,7 @@ import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,8 @@ public class FloatingCars implements SimulationTimeStep {
 
     private final double randomFraction;
 
+    private final Route route;
+
     private final RoadNetwork roadNetwork;
 
     private final FileFloatingCars fileWriter;
@@ -66,11 +69,12 @@ public class FloatingCars implements SimulationTimeStep {
      * @param input
      *            the input
      */
-    public FloatingCars(FloatingCarInput input, RoadNetwork roadNetwork, boolean writeFileOutput) {
+    public FloatingCars(FloatingCarInput input, RoadNetwork roadNetwork, Route route, boolean writeFileOutput) {
         this.roadNetwork = roadNetwork;
         this.nDtOut = input.getNDt();
         this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
                 .getRandomFraction();
+        this.route = route;
         floatingCarVehicleNumbers = new ArrayList<Integer>();
         floatingCarVehicleNumbers.addAll(input.getFloatingCars());
         fileWriter = (writeFileOutput) ? new FileFloatingCars() : null;
@@ -86,7 +90,7 @@ public class FloatingCars implements SimulationTimeStep {
     }
 
     private void writeOutput(double simulationTime) {
-        for (final RoadSegment roadSegment : roadNetwork) {
+        for (final RoadSegment roadSegment : route) {
             for (Vehicle vehicle : roadSegment) {
                 PrintWriter writer = checkFloatingCar(vehicle);
                 if (writer != null) {
@@ -105,7 +109,7 @@ public class FloatingCars implements SimulationTimeStep {
         final int vehNumber = vehicle.getVehNumber();
         if (floatingCarVehicleNumbers.contains(vehNumber) || vehicle.getRandomFix() < randomFraction) {
             floatingCarVehicleNumbers.remove(vehNumber);
-            final PrintWriter writer = fileWriter.createWriter(vehicle);
+            final PrintWriter writer = fileWriter.createWriter(vehicle, route);
             FileFloatingCars.writeHeader(writer, vehicle);
             writer.flush();
             printWriters.put(vehicle, writer);

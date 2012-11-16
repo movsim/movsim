@@ -421,7 +421,6 @@ label  NMTOKEN #REQUIRED
 <!ATTLIST OUTPUT
 >
 
-<!-- output of spatio-temporal fields -->
 <!ELEMENT SPATIOTEMPORAL EMPTY>
 <!ATTLIST SPATIOTEMPORAL
   dt NMTOKEN "60"
@@ -429,11 +428,11 @@ label  NMTOKEN #REQUIRED
   route NMTOKEN #REQUIRED
 >
 
-<!-- possible output: dn and/or list  -->
 <!ELEMENT FLOATING_CAR_DATA (FC*)>
 <!ATTLIST FLOATING_CAR_DATA 
 n_dt      NMTOKEN "1"
 random_fraction   NMTOKEN "0"
+route NMTOKEN ""
 >
 
 <!ELEMENT FC EMPTY>

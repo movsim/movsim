@@ -26,7 +26,7 @@ c0 = 1
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
 if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
-carFile(n) = sprintf(inputPath.baseFile.".car.origin_1.%06d.csv",c0+n)
+carFile(n) = sprintf(inputPath.baseFile.".car.route_none.origin_1.%06d.csv",c0+n)
 carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
 trajectoriesFile = inputPath.baseFile.".traj.route_main.csv"
 

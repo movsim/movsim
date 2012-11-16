@@ -40,6 +40,7 @@ public class FloatingCarInput {
 
     private int nDt;
     private double randomFraction;
+    private String routeLabel;
     private Collection<Integer> floatingCars;
 
     /**
@@ -51,6 +52,7 @@ public class FloatingCarInput {
     public FloatingCarInput(Element elem) {
         this.nDt = Integer.parseInt(elem.getAttributeValue("n_dt"));
         this.randomFraction = Double.parseDouble(elem.getAttributeValue("random_fraction"));
+        routeLabel = elem.getAttributeValue("route");
         floatingCars = new HashSet<Integer>();
         @SuppressWarnings("unchecked")
         final List<Element> fcElems = elem.getChildren("FC");
@@ -73,5 +75,9 @@ public class FloatingCarInput {
 
     public double getRandomFraction() {
         return randomFraction;
+    }
+
+    public String getRouteLabel() {
+        return routeLabel;
     }
 }

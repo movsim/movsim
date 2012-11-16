@@ -48,6 +48,7 @@ import org.movsim.output.route.TravelTimeOnRoute;
 import org.movsim.output.spatiotemporal.SpatioTemporal;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +88,7 @@ public class SimulationOutput implements SimulationTimeStep {
 
         final OutputInput outputInput = simulationInput.getOutputInput();
 
-        initFloatingCars(writeOutput, outputInput);
+        initFloatingCars(writeOutput, routes, outputInput);
 
         initConsumption(writeOutput, routes, simulationTimestep, outputInput);
         
@@ -139,10 +140,17 @@ public class SimulationOutput implements SimulationTimeStep {
         }
     }
 
-    private void initFloatingCars(boolean writeOutput, final OutputInput outputInput) {
+    private void initFloatingCars(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
         final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
         if (floatingCarInput != null) {
-            floatingCars = new FloatingCars(floatingCarInput, roadNetwork, writeOutput);
+            Route route = routes.get(floatingCarInput.getRouteLabel());
+            if (route == null) {
+                route = new Route("none");
+                for (RoadSegment roadSegment : roadNetwork) {
+                    route.add(roadSegment);
+                }
+            }
+            floatingCars = new FloatingCars(floatingCarInput, roadNetwork, route, writeOutput);
         }
     }
 
