@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,11 +25,17 @@
  */
 package org.movsim.output.floatingcars;
 
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +50,14 @@ public class FloatingCars implements SimulationTimeStep {
     private final Collection<Integer> floatingCarVehicleNumbers;
     private final int nDtOut;
 
+    private final double randomFraction;
+
     private final RoadNetwork roadNetwork;
-    
+
     private final FileFloatingCars fileWriter;
+
+    private final Map<Vehicle, PrintWriter> printWriters;
+
     /**
      * Constructor.
      * 
@@ -58,21 +69,49 @@ public class FloatingCars implements SimulationTimeStep {
     public FloatingCars(FloatingCarInput input, RoadNetwork roadNetwork, boolean writeFileOutput) {
         this.roadNetwork = roadNetwork;
         this.nDtOut = input.getNDt();
-        this.floatingCarVehicleNumbers = input.getFloatingCars();
-        fileWriter = (writeFileOutput) ? new FileFloatingCars(this) : null;
+        this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
+                .getRandomFraction();
+        floatingCarVehicleNumbers = new ArrayList<Integer>();
+        floatingCarVehicleNumbers.addAll(input.getFloatingCars());
+        fileWriter = (writeFileOutput) ? new FileFloatingCars() : null;
+        printWriters = new HashMap<Vehicle, PrintWriter>(149, 0.75f);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (iterationCount % nDtOut == 0) {
-            if(fileWriter != null){
-                fileWriter.writeOutput(simulationTime, roadNetwork);
-            }
+        if (fileWriter != null && iterationCount % nDtOut == 0) {
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
+            writeOutput(simulationTime);
         }
     }
 
-    public Collection<Integer> getFloatingCarVehicleNumbers() {
-        return floatingCarVehicleNumbers;
+    private void writeOutput(double simulationTime) {
+        for (final RoadSegment roadSegment : roadNetwork) {
+            for (Vehicle vehicle : roadSegment) {
+                PrintWriter writer = checkFloatingCar(vehicle);
+                if (writer != null) {
+                    final Vehicle frontVeh = roadSegment.frontVehicleOnLane(vehicle);
+                    FileFloatingCars.writeData(simulationTime, vehicle, frontVeh, writer);
+                }
+            }
+        }
     }
+
+    private PrintWriter checkFloatingCar(Vehicle vehicle) {
+        PrintWriter printWriter = printWriters.get(vehicle);
+        if (printWriter != null) {
+            return printWriter;
+        }
+        final int vehNumber = vehicle.getVehNumber();
+        if (floatingCarVehicleNumbers.contains(vehNumber) || vehicle.getRandomFix() < randomFraction) {
+            floatingCarVehicleNumbers.remove(vehNumber);
+            final PrintWriter writer = fileWriter.createWriter(vehicle);
+            FileFloatingCars.writeHeader(writer, vehicle);
+            writer.flush();
+            printWriters.put(vehicle, writer);
+            return writer;
+        }
+        return null;
+    }
+
 }

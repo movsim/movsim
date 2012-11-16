@@ -433,7 +433,7 @@ label  NMTOKEN #REQUIRED
 <!ELEMENT FLOATING_CAR_DATA (FC*)>
 <!ATTLIST FLOATING_CAR_DATA 
 n_dt      NMTOKEN "1"
-dn        NMTOKEN "0"
+random_fraction   NMTOKEN "0"
 >
 
 <!ELEMENT FC EMPTY>
@@ -448,6 +448,7 @@ number  NMTOKEN #REQUIRED
   start_time   NMTOKEN "0"
   end_time     NMTOKEN "1e10"
   route     NMTOKEN #REQUIRED
+  random_fraction   NMTOKEN "0"
 >
 
 
