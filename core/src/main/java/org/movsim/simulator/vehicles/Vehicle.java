@@ -143,7 +143,7 @@ public class Vehicle {
     /** The unique id of the vehicle. */
     final long id;
 
-    /** Final random number between 0 and 1 used for random output selections */
+    /** constant random number between 0 and 1 used for random output selections */
     final double randomFix;
 
     /** The vehicle number. */
@@ -184,6 +184,7 @@ public class Vehicle {
     private int roadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     private double roadSegmentLength;
     private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+    private int originRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
     /**
      * The type of numerical integration.
@@ -1037,6 +1038,9 @@ public class Vehicle {
      * 
      */
     public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
+        if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {
+            originRoadSegmentId = roadSegmentId;
+        }
         this.roadSegmentId = roadSegmentId;
         this.roadSegmentLength = roadSegmentLength;
         // assume this vehicle does not exit on this road segment
@@ -1071,6 +1075,15 @@ public class Vehicle {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the id of the first road segment occupied by this vehicle.
+     * 
+     * @return id of the first road segment occupied by this vehicle
+     */
+    public final int originRoadSegmentId() {
+        return originRoadSegmentId;
     }
 
     /**
@@ -1142,6 +1155,7 @@ public class Vehicle {
                 + acc + ", accOld=" + accOld + ", id=" + id + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
     }
 
+    /** returns a constant random number between 0 and 1 */
     public double getRandomFix() {
         return randomFix;
     }
