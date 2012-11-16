@@ -33,7 +33,6 @@ import java.util.Map;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.SimulationTimeStep;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -49,15 +48,14 @@ public class FloatingCars implements SimulationTimeStep {
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
 
     private final Collection<Integer> floatingCarVehicleNumbers;
+
     private final int nDtOut;
 
     private final double randomFraction;
 
     private final Route route;
 
-    private final RoadNetwork roadNetwork;
-
-    private final FileFloatingCars fileWriter;
+    private final FileFloatingCars fileFloatingCars;
 
     private final Map<Vehicle, PrintWriter> printWriters;
 
@@ -69,21 +67,20 @@ public class FloatingCars implements SimulationTimeStep {
      * @param input
      *            the input
      */
-    public FloatingCars(FloatingCarInput input, RoadNetwork roadNetwork, Route route, boolean writeFileOutput) {
-        this.roadNetwork = roadNetwork;
+    public FloatingCars(FloatingCarInput input, Route route, boolean writeFileOutput) {
         this.nDtOut = input.getNDt();
         this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
                 .getRandomFraction();
         this.route = route;
         floatingCarVehicleNumbers = new ArrayList<Integer>();
         floatingCarVehicleNumbers.addAll(input.getFloatingCars());
-        fileWriter = (writeFileOutput) ? new FileFloatingCars() : null;
+        fileFloatingCars = (writeFileOutput) ? new FileFloatingCars() : null;
         printWriters = new HashMap<Vehicle, PrintWriter>(149, 0.75f);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (fileWriter != null && iterationCount % nDtOut == 0) {
+        if (fileFloatingCars != null && iterationCount % nDtOut == 0) {
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
             writeOutput(simulationTime);
         }
@@ -109,7 +106,7 @@ public class FloatingCars implements SimulationTimeStep {
         final int vehNumber = vehicle.getVehNumber();
         if (floatingCarVehicleNumbers.contains(vehNumber) || vehicle.getRandomFix() < randomFraction) {
             floatingCarVehicleNumbers.remove(vehNumber);
-            final PrintWriter writer = fileWriter.createWriter(vehicle, route);
+            final PrintWriter writer = fileFloatingCars.createWriter(vehicle, route);
             FileFloatingCars.writeHeader(writer, vehicle);
             writer.flush();
             printWriters.put(vehicle, writer);

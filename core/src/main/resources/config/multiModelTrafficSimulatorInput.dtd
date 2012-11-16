@@ -416,7 +416,7 @@ label  NMTOKEN #REQUIRED
 <!--                           OUTPUT                                      -->
 <!-- ##################################################################### -->
 
-<!ELEMENT OUTPUT (FLOATING_CAR_DATA?, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*, FUEL*) >
+<!ELEMENT OUTPUT (FLOATING_CAR_DATA*, SPATIOTEMPORAL*, TRAJECTORIES*, TRAVELTIMES*, FUEL*) >
 
 <!ATTLIST OUTPUT
 >
@@ -428,11 +428,12 @@ label  NMTOKEN #REQUIRED
   route NMTOKEN #REQUIRED
 >
 
+<!-- route label is not required and default is "none" -->
 <!ELEMENT FLOATING_CAR_DATA (FC*)>
 <!ATTLIST FLOATING_CAR_DATA 
 n_dt      NMTOKEN "1"
 random_fraction   NMTOKEN "0"
-route NMTOKEN ""
+route NMTOKEN "none"
 >
 
 <!ELEMENT FC EMPTY>

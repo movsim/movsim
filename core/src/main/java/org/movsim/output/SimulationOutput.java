@@ -61,7 +61,7 @@ public class SimulationOutput implements SimulationTimeStep {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
-    private FloatingCars floatingCars;
+    private List<FloatingCars> floatingCarOutputs = new ArrayList<FloatingCars>();
 
     private final List<SpatioTemporal> spatioTemporals = new ArrayList<SpatioTemporal>();
 
@@ -141,16 +141,19 @@ public class SimulationOutput implements SimulationTimeStep {
     }
 
     private void initFloatingCars(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
-        final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
-        if (floatingCarInput != null) {
+        final List<FloatingCarInput> floatingCarInputs = outputInput.getFloatingCarInputs();
+        for(FloatingCarInput floatingCarInput : floatingCarInputs){
             Route route = routes.get(floatingCarInput.getRouteLabel());
-            if (route == null) {
-                route = new Route("none");
+            if (route == null && "none".equals(floatingCarInput.getRouteLabel())) {
+                // TODO check for consistency if route is existing and not the default (--> user input error)
+                logger.info("no route is given. fallback to whole roadnetwork with default label={}",
+                        floatingCarInput.getRouteLabel());
+                route = new Route(floatingCarInput.getRouteLabel());
                 for (RoadSegment roadSegment : roadNetwork) {
                     route.add(roadSegment);
                 }
             }
-            floatingCars = new FloatingCars(floatingCarInput, roadNetwork, route, writeOutput);
+            floatingCarOutputs.add(new FloatingCars(floatingCarInput, route, writeOutput));
         }
     }
 
@@ -170,7 +173,7 @@ public class SimulationOutput implements SimulationTimeStep {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        if (floatingCars != null) {
+        for (FloatingCars floatingCars : floatingCarOutputs) {
             floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
 

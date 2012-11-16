@@ -31,15 +31,15 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.input.XmlElementNames;
-import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.ConsumptionOnRouteInput;
+import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.input.model.output.SpatioTemporalInput;
 import org.movsim.input.model.output.TrajectoriesInput;
 import org.movsim.input.model.output.TravelTimeOnRouteInput;
 
 public class OutputInput {
 
-    private FloatingCarInput floatingCarInput;
+    private final List<FloatingCarInput> floatingCarInputs = new ArrayList<FloatingCarInput>();
 
     private final List<SpatioTemporalInput> spatioTemporalInput = new ArrayList<SpatioTemporalInput>();
 
@@ -63,7 +63,11 @@ public class OutputInput {
         }
 
         if (elem.getChild(XmlElementNames.OutputFloatingCarData) != null) {
-            floatingCarInput = new FloatingCarInput(elem.getChild(XmlElementNames.OutputFloatingCarData));
+            @SuppressWarnings("unchecked")
+            List<Element> elements = elem.getChildren(XmlElementNames.OutputFloatingCarData);
+            for (Element element : elements) {
+                floatingCarInputs.add(new FloatingCarInput(element));
+            }
         }
 
         if (elem.getChild(XmlElementNames.OutputSpatioTemporal) != null) {
@@ -99,8 +103,8 @@ public class OutputInput {
         }
     }
 
-    public FloatingCarInput getFloatingCarInput() {
-        return floatingCarInput;
+    public List<FloatingCarInput> getFloatingCarInputs() {
+        return floatingCarInputs;
     }
 
     public List<SpatioTemporalInput> getSpatioTemporalInput() {
