@@ -890,6 +890,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane].frontVehicle();
     }
 
+
+    /**
+     * Returns the vehicle in front of the given vehicle in its lane.
+     * 
+     * @param vehicle
+     * @return the next downstream vehicle in the lane
+     */
+    public Vehicle frontVehicleOnLane(Vehicle vehicle) {
+        return laneSegments[vehicle.getLane()].frontVehicle(vehicle);
+    }
+
     /**
      * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
      * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
