@@ -124,7 +124,7 @@ public class SimpleRamp extends AbstractTrafficSource {
             SortedSet<GapCandidate> gapCandidates) {
         if (vehicle.getRearPosition() < prototype.length() + MINIMUM_GAP_BOUNDARY) {
             // available upstream road segment too small
-            System.out.println("no sufficient upstream gap: rearPosition=" + vehicle.getRearPosition());
+            logger.debug("no sufficient upstream gap: rearPosition={}", vehicle.getRearPosition());
             return;
         }
         Vehicle rearVehicle = laneSegment.rearVehicle(vehicle.getRearPosition() - 1); // TODO finds not rear vehicle but
