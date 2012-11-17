@@ -8,7 +8,6 @@
     </parent>
     
     
-<!--     <groupId>org.movsim</groupId> -->
     <artifactId>MovsimConsumption</artifactId>
     <packaging>jar</packaging>
 
@@ -40,6 +39,13 @@
             <artifactId>jaxb-api</artifactId>
             <version>2.1</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-runtime</artifactId>
+            <version>0.6.2</version>
+        </dependency>
+        
     </dependencies>
 
     <build>
@@ -64,26 +70,81 @@
 
  -->
 
-        <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>1.5</version>
+<!--         <plugin> -->
+<!--                 <groupId>org.codehaus.mojo</groupId> -->
+<!--                 <artifactId>jaxb2-maven-plugin</artifactId> -->
+<!--                 <version>1.5</version> -->
+<!--                 <executions> -->
+<!--                     <execution> -->
+<!--                         <id>xjc</id> -->
+<!--                         <goals> -->
+<!--                             <goal>xjc</goal> -->
+<!--                         </goals> -->
+<!--                     </execution> -->
+<!--                 </executions> -->
+<!--                 <configuration> -->
+<!--                     <packageName>org.movsim.consumption.autogen</packageName> -->
+<!--                       <outputDirectory>${project.build.directory}/generated-source/jaxb</outputDirectory> -->
+<!--                     <schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory> -->
+<!--                     <schemaFiles>MovsimConsumptionInput.xsd</schemaFiles>  -->
+<!--                 </configuration> -->
+<!--             </plugin> -->
+            
+            
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.8.2</version>
+                
+                <configuration>
+                    <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
+                    <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory>
+                    <generatePackage>org.movsim.consumption.jaxb</generatePackage>
+                    <strict>false</strict>
+                    <extension>true</extension>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                            <artifactId>jaxb2-basics</artifactId>
+                            <version>0.6.2</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                            <artifactId>jaxb2-basics-annotate</artifactId>
+                            <version>0.6.2</version>
+                        </plugin>
+                    </plugins>
+                    <args>
+                        <arg>-Xannotate</arg>
+                        <arg>-XtoString</arg>
+<!--                          <arg>-no-header</arg> -->
+<!--                     <arg>-Xfluent-api</arg> -->
+<!--                     <arg>-Xinheritance</arg>    -->
+<!--                     <arg>-Xequals</arg> -->
+<!--                     <arg>-XhashCode</arg> -->
+<!--                     <arg>-Xcopyable</arg> -->
+
+                    </args>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>xjc</id>
+                        <id>generate</id>
                         <goals>
-                            <goal>xjc</goal>
+                            <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <forceRegenerate>true</forceRegenerate>
+<!--                             <schemaIncludes> -->
+<!--                                 <schemaInclude>${basedir}/src/main/resources/schema/consumptionSchema.xsd</schemaInclude> -->
+<!--                             </schemaIncludes> -->
+<!--                             <bindingIncludes> -->
+<!--                                 <bindingInclude>${basedir}/src/main/resources/schema/binding.xjc</bindingInclude> -->
+<!--                             </bindingIncludes> -->
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <packageName>org.movsim.consumption.autogen</packageName>
-                    <!--   <outputDirectory>${project.build.directory}/generated-source/jaxb</outputDirectory> -->
-                    <schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
-                    <schemaFiles>MovsimConsumptionInput.xsd</schemaFiles> 
-                </configuration>
             </plugin>
-          
+
             
             <!-- Build helper plugin adds the sources generated by the JAXB to the compile path -->
             <!--  <plugin>

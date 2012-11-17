@@ -5,34 +5,34 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.movsim.consumption.autogen.GreetingListType;
-import org.movsim.consumption.autogen.GreetingType;
-import org.movsim.consumption.autogen.ObjectFactory;
+import org.movsim.consumption.jaxb.Car;
+import org.movsim.consumption.jaxb.Consumption;
+import org.movsim.consumption.jaxb.ObjectFactory;
+
 
 public class TestJabx {
 
     private ObjectFactory of;
 
-    private GreetingListType grList;
+    private Consumption consumption;
 
     public TestJabx() {
         of = new ObjectFactory();
-        grList = of.createGreetingListType();
+        consumption = of.createConsumption();
     }
 
     public void make(String t, String l) {
-        GreetingType g = of.createGreetingType();
-        g.setText(t);
-        g.setLanguage(l);
-        grList.getGreeting().add(g);
+        Car car = of.createCar();
+        car.setCdValue("0.3");
+        //grList.getCONSUMPTIONMODEL().a.getGreeting().add(g);
     }
 
     public void marshal() {
         try {
-            JAXBElement<GreetingListType> gl = of.createGreetings(grList);
+            //JAXBElement<Consumption> consumption = of.createConsumption();
             JAXBContext jc = JAXBContext.newInstance("hello");
             Marshaller m = jc.createMarshaller();
-            m.marshal(gl, System.out);
+            m.marshal(consumption, System.out);
         } catch (JAXBException jbe) {
             // ...
         }
