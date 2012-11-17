@@ -26,14 +26,9 @@
 package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.simulator.roadnetwork.LaneSegment;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
@@ -45,10 +40,12 @@ import org.slf4j.LoggerFactory;
  */
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
-public class FileFloatingCars extends FileOutputBase {
+class FileFloatingCars extends FileOutputBase {
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
-    private static final String extensionFormat = ".car.origin_%d.%06d.csv";
-    private static final String extensionRegex = "[.]car[.]origin_\\d+[.]\\d+[.]csv";
+    private static final String extensionFormat = ".car.route_%s.%06d.csv";
+    private static final String extensionRegex = "[.]car[.]route_.*[.]\\d+[.]csv";
 
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],    roadId,      lane,      x[m], totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID";
@@ -56,81 +53,38 @@ public class FileFloatingCars extends FileOutputBase {
     // note: number before decimal point is total width of field, not width of integer part
     private static final String outputFormat = "%10.2f,%10d,%10d,%10.1f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d%n";
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
-    private Collection<Integer> fcdNumbers;
-    private final Map<Integer, PrintWriter> printWriters = new HashMap<Integer, PrintWriter>(149, 0.75f);
-
     /**
      * Instantiates a new FileFloatingCars.
      * 
      * @param floatingCars
      *            the floating cars
      */
-    public FileFloatingCars(FloatingCars floatingCars) {
+    FileFloatingCars() {
         super();
-        final String regex = baseFilename + extensionRegex;
+        String regex = baseFilename + extensionRegex;
         FileUtils.deleteFileList(path, regex);
-        fcdNumbers = floatingCars.getFloatingCarVehicleNumbers();
     }
 
-    /**
-     * Adds the fcd.
-     * 
-     * @param vehNumber
-     *            the vehicle number
-     */
-    private void addFloatingCar(Vehicle veh, int vehNumber) {
-        final long originId = veh.roadSegmentId();
-        final PrintWriter writer = createWriter(String.format(extensionFormat, originId, vehNumber));
-        printWriters.put(vehNumber, writer);
-        writeHeader(writer, veh);
-        writer.flush();
+    PrintWriter createWriter(Vehicle vehicle, Route route) {
+        return createWriter(String.format(extensionFormat, route.getName(), vehicle.getVehNumber()));
     }
 
-    private static void writeHeader(PrintWriter writer, Vehicle veh) {
-        writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
-        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
-        writer.println(String.format("%s model category = %s", COMMENT_CHAR, veh.getLongitudinalModel().modelName()
+    static void writeHeader(PrintWriter writer, Vehicle vehicle, Route route) {
+        writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, vehicle.getId()));
+        writer.println(String.format("%s random fix= %.8f", COMMENT_CHAR, vehicle.getRandomFix()));
+        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, vehicle.getLabel()));
+        writer.println(String.format("%s model category = %s", COMMENT_CHAR, vehicle.getLongitudinalModel().modelName()
                 .getCategory().toString()));
-        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, veh.getLongitudinalModel()
-                .modelName().getDetailedName(), veh.getLongitudinalModel().modelName().getShortName()));
-        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities()
+        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle.getLongitudinalModel()
+                .modelName().getDetailedName(), vehicle.getLongitudinalModel().modelName().getShortName()));
+        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, vehicle.physicalQuantities()
                 .getLength()));
         writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)",
                 COMMENT_CHAR));
+        writer.println(String.format("%s origin roadsegment id= %d, exit roadsegment id= %d (not set=%d)",
+                COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(), Vehicle.ROAD_SEGMENT_ID_NOT_SET));
+        writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
         writer.println(outputHeading);
-    }
-
-    /**
-     * Write output.
-     * 
-     * @param simulationTime
-     *            the update time
-     */
-    public void writeOutput(double simulationTime, RoadNetwork roadNetwork) {
-        for (final RoadSegment roadSegment : roadNetwork) {
-            final int laneCount = roadSegment.laneCount();
-            for (int lane = 0; lane < laneCount; ++lane) {
-                final LaneSegment laneSegment = roadSegment.laneSegment(lane);
-                for (final Vehicle vehOnLane : laneSegment) {
-                    final int vehNumber = vehOnLane.getVehNumber();
-                    // logger.info("vehNumber={}", vehNumber);
-                    if (fcdNumbers != null && fcdNumbers.contains(vehNumber)) {
-                        // System.out.println("vehOnLane: " + vehOnLane + "      vehNumber: " + vehNumber);
-                        addFloatingCar(vehOnLane, vehNumber);
-                        fcdNumbers.remove(vehNumber);
-                        if (fcdNumbers.isEmpty()) {
-                            fcdNumbers = null;
-                        }
-                    }
-                    if (printWriters.containsKey(vehNumber)) {
-                        final Vehicle frontVeh = laneSegment.frontVehicle(vehOnLane);
-                        writeData(simulationTime, vehOnLane, frontVeh, printWriters.get(vehNumber));
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -145,7 +99,7 @@ public class FileFloatingCars extends FileOutputBase {
      * @param writer
      *            the writer
      */
-    private static void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
+    static void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
         final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
         writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(), physicalQuantities.getFrontPosition(),
                 physicalQuantities.totalTravelDistance(), physicalQuantities.getSpeed(), physicalQuantities.getAcc(),

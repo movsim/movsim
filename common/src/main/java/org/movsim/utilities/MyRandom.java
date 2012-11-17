@@ -32,13 +32,14 @@ import java.util.Random;
  */
 public class MyRandom {
 
-    private static Random rand;
+    /** Initialized to avoid NP exceptions. */
+    private static Random rand = new Random();
+    
 
     /**
-     * Instantiates a new my random.
+     * enforce singleton property with private constructor.
      */
     private MyRandom() {
-        // enforce singleton property with private constructor
     }
 
     /**

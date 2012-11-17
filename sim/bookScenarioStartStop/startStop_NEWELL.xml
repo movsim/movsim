@@ -60,7 +60,7 @@
             </ROUTE>
         </ROUTES>
         <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="5">
+            <FLOATING_CAR_DATA n_dt="5" route="main">
                 <FC number="2" />
                 <FC number="6" />
                 <FC number="11" />

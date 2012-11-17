@@ -161,6 +161,21 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Returns the number of obstacles on this lane segment.
+     * 
+     * @return the number of obstacles on this lane segment
+     */
+    public final int obstacleCount() {
+        int obstacleCount = 0;
+        for (final Vehicle vehicle : vehicles) {
+            if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                ++obstacleCount;
+            }
+        }
+        return obstacleCount;
+    }
+
+    /**
      * Returns the total travel time of all vehicles on this lane segment.
      * 
      * @return the total vehicle travel time
@@ -205,21 +220,6 @@ public class LaneSegment implements Iterable<Vehicle> {
             instFuelUsedLiters += vehicle.getActualFuelFlowLiterPerS();
         }
         return instFuelUsedLiters;
-    }
-
-    /**
-     * Returns the number of obstacles on this lane segment.
-     * 
-     * @return the number of obstacles on this lane segment
-     */
-    public final int obstacleCount() {
-        int obstacleCount = 0;
-        for (final Vehicle vehicle : vehicles) {
-            if (vehicle.type() == Vehicle.Type.OBSTACLE) {
-                ++obstacleCount;
-            }
-        }
-        return obstacleCount;
     }
 
     /**
@@ -477,7 +477,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the front vehicle.
+     * Returns the front vehicle which is the most downstream vehicle in the {@link LaneSegment}.
      * 
      * @return the front vehicle
      */
@@ -526,6 +526,12 @@ public class LaneSegment implements Iterable<Vehicle> {
         return null;
     }
 
+    /**
+     * Returns the vehicle in front of the given vehicle.
+     * 
+     * @param vehicle
+     * @return the next downstream vehicle
+     */
     public final Vehicle frontVehicle(Vehicle vehicle) {
         return frontVehicle(vehicle.getRearPosition());
     }
@@ -739,6 +745,12 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     public void clearVehicleRemovedCount() {
         removedVehicleCount = 0;
+    }
+
+    @Override
+    public String toString() {
+        return "LaneSegment [sinkLaneSegment=" + sinkLaneSegment + ", sourceLaneSegment=" + sourceLaneSegment
+                + ", lane=" + lane + ", type=" + type + ", removedVehicleCount=" + removedVehicleCount + "]";
     }
 
 }

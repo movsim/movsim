@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 // TODO: Auto-generated Javadoc
 // Resignation or Memory effect, see paper:
 // M. Treiber, D. Helbing:
-// Memory effects in microscopic traffic models and wide scattering in flow-density data
+// Memory effects in microscopic traffic models and wide scattering in flow-localDensity data
 // Physical Review E 68, 046119 (2003)
 
 /**

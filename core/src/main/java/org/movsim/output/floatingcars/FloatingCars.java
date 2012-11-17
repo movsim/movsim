@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,13 +25,21 @@
  */
 package org.movsim.output.floatingcars;
 
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.movsim.input.model.output.FloatingCarInput;
 import org.movsim.simulator.SimulationTimeStep;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * The Class FloatingCars.
@@ -42,11 +50,17 @@ public class FloatingCars implements SimulationTimeStep {
     final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
 
     private final Collection<Integer> floatingCarVehicleNumbers;
+
     private final int nDtOut;
 
-    private final RoadNetwork roadNetwork;
-    
-    private final FileFloatingCars fileWriter;
+    private final double randomFraction;
+
+    private final Route route;
+
+    private final FileFloatingCars fileFloatingCars;
+
+    private final Map<Vehicle, PrintWriter> printWriters;
+
     /**
      * Constructor.
      * 
@@ -55,24 +69,57 @@ public class FloatingCars implements SimulationTimeStep {
      * @param input
      *            the input
      */
-    public FloatingCars(FloatingCarInput input, RoadNetwork roadNetwork, boolean writeFileOutput) {
-        this.roadNetwork = roadNetwork;
+    public FloatingCars(FloatingCarInput input, Route route, boolean writeFileOutput) {
+        Preconditions.checkNotNull(route);
         this.nDtOut = input.getNDt();
-        this.floatingCarVehicleNumbers = input.getFloatingCars();
-        fileWriter = (writeFileOutput) ? new FileFloatingCars(this) : null;
+        this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
+                .getRandomFraction();
+        this.route = route;
+        floatingCarVehicleNumbers = new ArrayList<Integer>();
+        floatingCarVehicleNumbers.addAll(input.getFloatingCars());
+        fileFloatingCars = (writeFileOutput) ? new FileFloatingCars() : null;
+        printWriters = new HashMap<Vehicle, PrintWriter>(149, 0.75f);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (iterationCount % nDtOut == 0) {
-            if(fileWriter != null){
-                fileWriter.writeOutput(simulationTime, roadNetwork);
-            }
+        if (fileFloatingCars != null && iterationCount % nDtOut == 0) {
             logger.debug("update FloatingCars: iterationCount={}", iterationCount);
+            writeOutput(simulationTime);
         }
     }
 
-    public Collection<Integer> getFloatingCarVehicleNumbers() {
-        return floatingCarVehicleNumbers;
+    private void writeOutput(double simulationTime) {
+        for (final RoadSegment roadSegment : route) {
+            for (Vehicle vehicle : roadSegment) {
+                PrintWriter writer = checkFloatingCar(vehicle);
+                if (writer != null) {
+                    final Vehicle frontVeh = roadSegment.frontVehicleOnLane(vehicle);
+                    FileFloatingCars.writeData(simulationTime, vehicle, frontVeh, writer);
+                }
+            }
+        }
     }
+
+    private PrintWriter checkFloatingCar(Vehicle vehicle) {
+        PrintWriter printWriter = printWriters.get(vehicle);
+        if (printWriter != null) {
+            return printWriter;
+        }
+        final int vehNumber = vehicle.getVehNumber();
+        if (floatingCarVehicleNumbers.contains(vehNumber) || selectRandomPercentage(vehicle)) {
+            floatingCarVehicleNumbers.remove(vehNumber);
+            final PrintWriter writer = fileFloatingCars.createWriter(vehicle, route);
+            FileFloatingCars.writeHeader(writer, vehicle, route);
+            writer.flush();
+            printWriters.put(vehicle, writer);
+            return writer;
+        }
+        return null;
+    }
+
+    private boolean selectRandomPercentage(Vehicle vehicle) {
+        return (vehicle.getRandomFix() < randomFraction) && (vehicle.roadSegmentId() == route.getOrigin().id());
+    }
+
 }

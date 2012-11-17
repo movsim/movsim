@@ -32,7 +32,7 @@ output=project.".traj.route_".route.outputEnding
 ######################################
 
 tmin=0
-tmax=30
+tmax=20
 xref=6.5
 set palette defined ( 0 "#cc0022", 0.1  "red", 0.2 "orange", 0.4 "yellow", 0.6 "green", 0.8 "blue", 1 "#2200aa")
 

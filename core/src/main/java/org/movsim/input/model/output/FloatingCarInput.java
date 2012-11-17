@@ -39,7 +39,8 @@ public class FloatingCarInput {
     final static Logger logger = LoggerFactory.getLogger(FloatingCarInput.class);
 
     private int nDt;
-    private int dn;
+    private double randomFraction;
+    private String routeLabel;
     private Collection<Integer> floatingCars;
 
     /**
@@ -49,15 +50,9 @@ public class FloatingCarInput {
      *            the elem
      */
     public FloatingCarInput(Element elem) {
-
         this.nDt = Integer.parseInt(elem.getAttributeValue("n_dt"));
-
-        this.dn = Integer.parseInt(elem.getAttributeValue("dn"));
-        if (dn != 0) {
-            logger.error("dn = {} not yet implemented. exit.", dn);
-            System.exit(-1);
-        }
-
+        this.randomFraction = Double.parseDouble(elem.getAttributeValue("random_fraction"));
+        routeLabel = elem.getAttributeValue("route");
         floatingCars = new HashSet<Integer>();
         @SuppressWarnings("unchecked")
         final List<Element> fcElems = elem.getChildren("FC");
@@ -70,15 +65,19 @@ public class FloatingCarInput {
 
     }
 
-    public int getDn() {
-        return dn;
-    }
-
     public int getNDt() {
         return nDt;
     }
 
     public Collection<Integer> getFloatingCars() {
         return floatingCars;
+    }
+
+    public double getRandomFraction() {
+        return randomFraction;
+    }
+
+    public String getRouteLabel() {
+        return routeLabel;
     }
 }

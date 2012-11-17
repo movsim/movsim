@@ -30,7 +30,7 @@ import java.util.Locale;
 import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.consumption.input.xml.ConsumptionInputData;
-import org.movsim.consumption.input.xml.XmlReader;
+import org.movsim.consumption.input.xml.ConsumptionXmlReader;
 import org.movsim.consumption.logging.ConsumptionLogger;
 
 
@@ -47,7 +47,7 @@ public class ConsumptionMain {
         ConsumptionCommandLine.parse(ConsumptionMetadata.getInstance(), args);
 
         ConsumptionInputData inputData = new ConsumptionInputData();
-        XmlReader.parse(ConsumptionMetadata.getInstance(), inputData);
+        ConsumptionXmlReader.parse(ConsumptionMetadata.getInstance(), inputData);
         
         
         

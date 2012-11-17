@@ -78,7 +78,7 @@ public class EquilibriumKrauss extends EquilibriumProperties {
             final double rho = rhoMax * ir / vEqTab.length;
             final double s = 1. / rho - 1. / rhoMax;
 
-            // start iteration with equilibrium speed for previous density
+            // start iteration with equilibrium speed for previous localDensity
             v_it = vEqTab[ir - 1];
             for (int it = 1; it <= itmax; it++) {
                 final double acc = model.calcAccSimple(s, v_it, 0.);

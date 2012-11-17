@@ -46,9 +46,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 
-public class XmlReader {
+public class ConsumptionXmlReader {
 
-    final static Logger logger = LoggerFactory.getLogger(XmlReader.class);
+    final static Logger logger = LoggerFactory.getLogger(ConsumptionXmlReader.class);
 
     private final ConsumptionInputData inputData;
 
@@ -58,7 +58,7 @@ public class XmlReader {
     private final String dtdFilename;
 
     public static void parse(ConsumptionMetadata metaData, ConsumptionInputData inputData) {
-        XmlReader xmlReader = new XmlReader(inputData);
+        ConsumptionXmlReader xmlReader = new ConsumptionXmlReader(inputData);
 
         if (metaData.isWriteInternalXml()) {
             final String outFilename = metaData.getProjectName() + "_internal.xml";
@@ -74,7 +74,7 @@ public class XmlReader {
      * @param inputData
      *            the input data
      */
-    private XmlReader(ConsumptionInputData inputData) {
+    private ConsumptionXmlReader(ConsumptionInputData inputData) {
         this.dtdFilename = ConsumptionMetadata.getInstance().getDtdFilenameWithPath();
         this.inputData = inputData;
 
@@ -100,7 +100,7 @@ public class XmlReader {
         }
 
         fromDomToInternalDatastructure();
-        logger.info("End XmlReader.");
+        logger.info("End ConsumptionXmlReader.");
 
     }
 
@@ -140,7 +140,7 @@ public class XmlReader {
      */
     private void readAndValidateXmlFromFileName() {
         File xmlFile = ConsumptionMetadata.getInstance().getXmlInputFile();
-        InputStream dtdStream = XmlReader.class.getResourceAsStream(dtdFilename);
+        InputStream dtdStream = ConsumptionXmlReader.class.getResourceAsStream(dtdFilename);
         validate(FileUtils.getInputSourceFromFilename(xmlFile), dtdStream);
         doc = getDocument(FileUtils.getInputSourceFromFilename(xmlFile), dtdFilename);
     }
@@ -168,7 +168,7 @@ public class XmlReader {
                         @Override
                         public InputSource resolveEntity(String publicId, String systemId) throws SAXException,
                                 IOException {
-                            final InputStream is = XmlReader.class.getResourceAsStream(dtdFilename);
+                            final InputStream is = ConsumptionXmlReader.class.getResourceAsStream(dtdFilename);
                             final InputSource input = new InputSource(is);
                             return input;
                         }
