@@ -107,7 +107,7 @@ public class FloatingCars implements SimulationTimeStep {
         if (floatingCarVehicleNumbers.contains(vehNumber) || vehicle.getRandomFix() < randomFraction) {
             floatingCarVehicleNumbers.remove(vehNumber);
             final PrintWriter writer = fileFloatingCars.createWriter(vehicle, route);
-            FileFloatingCars.writeHeader(writer, vehicle);
+            FileFloatingCars.writeHeader(writer, vehicle, route);
             writer.flush();
             printWriters.put(vehicle, writer);
             return writer;

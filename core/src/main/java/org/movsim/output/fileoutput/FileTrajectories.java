@@ -79,10 +79,11 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
 
         logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
         writer = createWriter(String.format(extensionFormat, route.getName()));
-        writeHeader();
+        writeHeader(route);
     }
 
-    private void writeHeader() {
+    private void writeHeader(Route route) {
+        writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
         writer.println(outputHeading);
         writer.flush();
     }

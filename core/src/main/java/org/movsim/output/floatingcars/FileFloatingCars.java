@@ -70,20 +70,21 @@ public class FileFloatingCars extends FileOutputBase {
                 vehicle.getVehNumber()));
     }
 
-    static void writeHeader(PrintWriter writer, Vehicle veh) {
-        writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, veh.getId()));
-        writer.println(String.format("%s random fix= %.8f", COMMENT_CHAR, veh.getRandomFix()));
-        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, veh.getLabel()));
-        writer.println(String.format("%s model category = %s", COMMENT_CHAR, veh.getLongitudinalModel().modelName()
+    static void writeHeader(PrintWriter writer, Vehicle vehicle, Route route) {
+        writer.println(String.format("%s vehicle id = %d", COMMENT_CHAR, vehicle.getId()));
+        writer.println(String.format("%s random fix= %.8f", COMMENT_CHAR, vehicle.getRandomFix()));
+        writer.println(String.format("%s model label  = %s", COMMENT_CHAR, vehicle.getLabel()));
+        writer.println(String.format("%s model category = %s", COMMENT_CHAR, vehicle.getLongitudinalModel().modelName()
                 .getCategory().toString()));
-        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, veh.getLongitudinalModel()
-                .modelName().getDetailedName(), veh.getLongitudinalModel().modelName().getShortName()));
-        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, veh.physicalQuantities()
+        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle.getLongitudinalModel()
+                .modelName().getDetailedName(), vehicle.getLongitudinalModel().modelName().getShortName()));
+        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, vehicle.physicalQuantities()
                 .getLength()));
         writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)",
                 COMMENT_CHAR));
         writer.println(String.format("%s origin roadsegment id= %d, exit roadsegment id= %d (not set=%d)",
-                COMMENT_CHAR, veh.originRoadSegmentId(), veh.exitRoadSegmentId(), Vehicle.ROAD_SEGMENT_ID_NOT_SET));
+                COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(), Vehicle.ROAD_SEGMENT_ID_NOT_SET));
+        writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
         writer.println(outputHeading);
     }
 
