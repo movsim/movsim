@@ -25,9 +25,10 @@
  */
 package org.movsim.output.spatiotemporal;
 
-import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.output.route.OutputOnRouteBase;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -38,14 +39,13 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class SpatioTemporalImpl.
  */
-public class SpatioTemporal implements SimulationTimeStep {
+public class SpatioTemporal extends OutputOnRouteBase {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
 
     private final double dxOut;
     private final double dtOut;
-    private final Route route;
 
     private final int size;
     private final double[] density;
@@ -55,11 +55,10 @@ public class SpatioTemporal implements SimulationTimeStep {
 
     private final FileSpatioTemporal fileWriter;
     
-    public SpatioTemporal(double dxOut, double dtOut, Route route, boolean writeOutput) {
-
+    public SpatioTemporal(double dxOut, double dtOut, RoadNetwork roadNetwork, Route route, boolean writeOutput) {
+        super(roadNetwork, route);
         this.dxOut = dxOut;
         this.dtOut = dtOut;
-        this.route = route;
 
         timeOffset = 0;
         size = (int) (route.getLength() / dxOut) + 1;
