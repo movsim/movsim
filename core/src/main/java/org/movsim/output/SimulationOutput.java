@@ -104,6 +104,12 @@ public class SimulationOutput implements SimulationTimeStep {
 
     }
 
+    private Route getCheckedRoute(final String routeLabel) {
+        Preconditions
+                .checkArgument(routes.containsKey(routeLabel), "route with label=" + routeLabel + " not defined. ");
+        return routes.get(routeLabel);
+    }
+
     private void initConsumption(boolean writeOutput, double simulationTimestep, final OutputInput outputInput) {
         for (final ConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
             final Route route = getCheckedRoute(fuelRouteInput.getRouteLabel());
@@ -142,11 +148,6 @@ public class SimulationOutput implements SimulationTimeStep {
                     spatioTemporalInput.getDt(), roadNetwork, route, writeOutput);
             spatioTemporals.add(spatioTemporal);
         }
-    }
-
-    private Route getCheckedRoute(final String routeLabel) {
-        Preconditions.checkArgument(routes.containsKey(routeLabel), "route with label=" + routeLabel + "not defined. ");
-        return routes.get(routeLabel);
     }
 
     private void initFloatingCars(boolean writeOutput, final OutputInput outputInput) {

@@ -44,8 +44,8 @@ public class FileFloatingCars extends FileOutputBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
-    private static final String extensionFormat = ".car.route_%s.origin_%d.%06d.csv";
-    private static final String extensionRegex = "[.]car[.]route_.*[.]origin_\\d+[.]\\d+[.]csv";
+    private static final String extensionFormat = ".car.route_%s.%06d.csv";
+    private static final String extensionRegex = "[.]car[.]route_.*[.]\\d+[.]csv";
 
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],    roadId,      lane,      x[m], totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID";
@@ -66,8 +66,7 @@ public class FileFloatingCars extends FileOutputBase {
     }
 
     PrintWriter createWriter(Vehicle vehicle, Route route) {
-        return createWriter(String.format(extensionFormat, route.getName(), vehicle.originRoadSegmentId(),
-                vehicle.getVehNumber()));
+        return createWriter(String.format(extensionFormat, route.getName(), vehicle.getVehNumber()));
     }
 
     static void writeHeader(PrintWriter writer, Vehicle vehicle, Route route) {

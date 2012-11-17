@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class SpatioTemporalImpl.
+ * The Class SpatioTemporal.
  */
 public class SpatioTemporal extends OutputOnRouteBase {
 

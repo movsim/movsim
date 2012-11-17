@@ -39,6 +39,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class FloatingCars.
  */
@@ -68,6 +70,7 @@ public class FloatingCars implements SimulationTimeStep {
      *            the input
      */
     public FloatingCars(FloatingCarInput input, Route route, boolean writeFileOutput) {
+        Preconditions.checkNotNull(route);
         this.nDtOut = input.getNDt();
         this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
                 .getRandomFraction();
@@ -104,7 +107,7 @@ public class FloatingCars implements SimulationTimeStep {
             return printWriter;
         }
         final int vehNumber = vehicle.getVehNumber();
-        if (floatingCarVehicleNumbers.contains(vehNumber) || vehicle.getRandomFix() < randomFraction) {
+        if (floatingCarVehicleNumbers.contains(vehNumber) || selectRandomPercentage(vehicle)) {
             floatingCarVehicleNumbers.remove(vehNumber);
             final PrintWriter writer = fileFloatingCars.createWriter(vehicle, route);
             FileFloatingCars.writeHeader(writer, vehicle, route);
@@ -113,6 +116,10 @@ public class FloatingCars implements SimulationTimeStep {
             return writer;
         }
         return null;
+    }
+
+    private boolean selectRandomPercentage(Vehicle vehicle) {
+        return (vehicle.getRandomFix() < randomFraction) && (vehicle.roadSegmentId() == route.getOrigin().id());
     }
 
 }
