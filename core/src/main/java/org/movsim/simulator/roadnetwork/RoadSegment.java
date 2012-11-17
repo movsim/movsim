@@ -1194,7 +1194,8 @@ public class RoadSegment implements Iterable<Vehicle> {
     public boolean isDownstreamLink(RoadSegment upstreamRoadSegment) {
         Preconditions.checkNotNull(upstreamRoadSegment);
         for (final LaneSegment laneSegment : laneSegments) {
-            if (upstreamRoadSegment.equals(laneSegment.sourceLaneSegment().roadSegment())) {
+            if (laneSegment.sourceLaneSegment() != null
+                    && upstreamRoadSegment.equals(laneSegment.sourceLaneSegment().roadSegment())) {
                 return true;
             }
         }
