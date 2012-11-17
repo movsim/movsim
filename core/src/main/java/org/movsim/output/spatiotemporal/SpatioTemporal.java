@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,13 +25,15 @@
  */
 package org.movsim.output.spatiotemporal;
 
+import java.util.Comparator;
+import java.util.TreeSet;
+
 import org.movsim.output.route.OutputOnRouteBase;
-import org.movsim.simulator.roadnetwork.Lane;
-import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,37 +46,39 @@ public class SpatioTemporal extends OutputOnRouteBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
 
-    private final double dxOut;
-    private final double dtOut;
+    private final double dxOutput;
+    private final double dtOutput;
 
-    private final int size;
-    private final double[] density;
-    private final double[] averageSpeed;
-    private final double[] flow;
+    private final double[] macroDensity;
+    private final double[] macroSpeed;
+    private final double[] macroFlow;
+    private final double[] macroAcceleration;
+
     private double lastTimeOutput;
 
     private final FileSpatioTemporal fileWriter;
-    
+
     public SpatioTemporal(double dxOut, double dtOut, RoadNetwork roadNetwork, Route route, boolean writeOutput) {
         super(roadNetwork, route);
-        this.dxOut = dxOut;
-        this.dtOut = dtOut;
+        this.dxOutput = dxOut;
+        this.dtOutput = dtOut;
 
         lastTimeOutput = 0;
-        size = (int) (route.getLength() / dxOut) + 1;
-        density = new double[size];
-        averageSpeed = new double[size];
-        flow = new double[size];
-        
+        int size = (int) (route.getLength() / dxOut) + 1;
+        macroDensity = new double[size];
+        macroSpeed = new double[size];
+        macroFlow = new double[size];
+        macroAcceleration = new double[size];
+
         fileWriter = writeOutput ? new FileSpatioTemporal(route.getName()) : null;
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if ((simulationTime - lastTimeOutput) >= dtOut) {
+        if ((simulationTime - lastTimeOutput) >= dtOutput) {
             lastTimeOutput = simulationTime;
             calcData();
-            if(fileWriter != null){
+            if (fileWriter != null) {
                 fileWriter.writeOutput(this, simulationTime);
             }
         }
@@ -84,46 +88,74 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * Calculate data.
      */
     private void calcData() {
-        // TODO - deal with multiple lanes in a road segment
-        int vehicleCount = 0;
-        for (final RoadSegment roadSegment : route) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
-            vehicleCount += laneSegment.vehicleCount();
-        }
-        if (vehicleCount == 0) {
-            return;
-        }
-        final double[] localDensity = new double[vehicleCount];
-        final double[] vMicro = new double[vehicleCount];
-        final double[] xMicro = new double[vehicleCount];
-        final double[] lengths = new double[vehicleCount];
 
-        int i = 0;
-        for (final RoadSegment roadSegment : route) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
-            final int laneVehicleCount = laneSegment.vehicleCount();
-            for (int j = 0; j < laneVehicleCount; ++j) {
-                final Vehicle vehicle = laneSegment.getVehicle(j);
-                vMicro[i] = vehicle.getSpeed();
-                xMicro[i] = vehicle.getFrontPosition();
-                lengths[i] = vehicle.getLength();
-                ++i;
+        TreeSet<SpatialTemporal> dataPoints = gatherData();
+
+        if (!dataPoints.isEmpty()) {
+            interpolateGridData(dataPoints);
+        }
+    }
+
+    private void interpolateGridData(TreeSet<SpatialTemporal> dataPoints) {
+        int size = dataPoints.size();
+        final double[] localDensity = new double[size];
+        final double[] xMicro = new double[size];
+        final double[] vMicro = new double[size];
+        final double[] aMicro = new double[size];
+        int j = 0;
+        for (SpatialTemporal dp : dataPoints) {
+            // logger.debug("data point for interpolation={}", dp.toString());
+            localDensity[j] = dp.localDensity;
+            vMicro[j] = dp.speed;
+            xMicro[j] = dp.position;
+            aMicro[j] = dp.acceleration;
+            ++j;
+        }
+
+        for (int i = 0; i < macroFlow.length; ++i) {
+            final double x = i * dxOutput;
+            macroDensity[i] = Tables.intpextp(xMicro, localDensity, x);
+            macroSpeed[i] = Tables.intpextp(xMicro, vMicro, x);
+            macroAcceleration[i] = Tables.intpextp(xMicro, aMicro, x);
+            macroFlow[i] = macroDensity[i] * macroSpeed[i];
+        }
+    }
+
+    /** Returns sorted set with increasing vehicle positions along the route. Not efficient but robust. */
+    private TreeSet<SpatialTemporal> gatherData() {
+        TreeSet<SpatialTemporal> dataPoints = new TreeSet<SpatialTemporal>(new Comparator<SpatialTemporal>() {
+            @Override
+            public int compare(SpatialTemporal o1, SpatialTemporal o2) {
+                return (new Double(o1.position)).compareTo(new Double(o2.position));
             }
+        });
+
+        double positionOnRoute = 0;
+        for (final RoadSegment roadSegment : route) {
+            for (Vehicle veh : roadSegment) {
+                if (veh.type() == Type.OBSTACLE) {
+                    continue;
+                }
+                double position = positionOnRoute + veh.getFrontPosition();
+                dataPoints.add(new SpatialTemporal(position, veh.getSpeed(), veh.getLength(), veh.getAcc()));
+            }
+            positionOnRoute += roadSegment.roadLength();
         }
 
-        // calculate density
-        localDensity[0] = 0;
-        for (i = 1; i < vehicleCount; ++i) {
-            final double dist = xMicro[i - 1] - xMicro[i];
-            final double length = lengths[i - 1];
-            localDensity[i] = (dist > length) ? 1.0 / dist : 1.0 / length;
-        }
+        calculateMicroDensities(dataPoints);
 
-        for (i = 0; i < size; ++i) {
-            final double x = i * dxOut;
-            density[i] = Tables.intpextp(xMicro, localDensity, x, true);
-            averageSpeed[i] = Tables.intpextp(xMicro, vMicro, x, true);
-            flow[i] = density[i] * averageSpeed[i];
+        return dataPoints;
+    }
+
+    private static void calculateMicroDensities(TreeSet<SpatialTemporal> dataPoints) {
+        SpatialTemporal previous = null;
+        for (SpatialTemporal dp : dataPoints) {
+            if (previous != null) {
+                double dist = previous.position - dp.position;
+                double length = previous.length;
+                dp.localDensity = (dist > length) ? 1.0 / dist : 1.0 / length;
+            }
+            previous = dp;
         }
     }
 
@@ -132,8 +164,8 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * 
      * @return the dt out
      */
-    public double getDtOut() {
-        return dtOut;
+    public double getDtOutput() {
+        return dtOutput;
     }
 
     /**
@@ -141,8 +173,8 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * 
      * @return the dx out
      */
-    public double getDxOut() {
-        return dxOut;
+    public double getDxOutput() {
+        return dxOutput;
     }
 
     /**
@@ -151,16 +183,16 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * @return the size of the arrays
      */
     public int size() {
-        return size;
+        return macroFlow.length;
     }
 
     /**
-     * Gets the density.
+     * Gets the localDensity.
      * 
-     * @return the density
+     * @return the localDensity
      */
     public double getDensity(int index) {
-        return density[index];
+        return macroDensity[index];
     }
 
     /**
@@ -169,16 +201,20 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * @return the average speed
      */
     public double getAverageSpeed(int index) {
-        return averageSpeed[index];
+        return macroSpeed[index];
     }
 
     /**
-     * Gets the flow.
+     * Gets the macroFlow.
      * 
-     * @return the flow
+     * @return the macroFlow
      */
     public double getFlow(int index) {
-        return flow[index];
+        return macroFlow[index];
+    }
+
+    public double getAverageAcceleration(int index) {
+        return macroAcceleration[index];
     }
 
     /**
@@ -191,10 +227,27 @@ public class SpatioTemporal extends OutputOnRouteBase {
     }
 
     /**
-     * @return the route
+     * convenience class of one spatio-temporal data point
      */
-    public Route getRoute() {
-        return route;
+    final class SpatialTemporal {
+        final double position;
+        final double speed;
+        final double length;
+        final double acceleration;
+        double localDensity = 0;
+
+        SpatialTemporal(double position, double speed, double length, double acceleration) {
+            this.position = position;
+            this.speed = speed;
+            this.length = length;
+            this.acceleration = acceleration;
+        }
+
+        @Override
+        public String toString() {
+            return "SpatialTemporal [position=" + position + ", speed=" + speed + ", length=" + length
+                    + ", acceleration=" + acceleration + ", localDensity=" + localDensity + "]";
+        }
     }
 
 }

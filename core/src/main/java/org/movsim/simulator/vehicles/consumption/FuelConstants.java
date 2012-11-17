@@ -34,8 +34,8 @@ public class FuelConstants {
 
     public static double RHO_AIR = 1.29; // 1.29 (kg/m^3) @ 0 cels, 1014 hPa
 
-    public static double RHO_FUEL = 760; // density of "Benzin" (kg/m^3)
-    public static double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.; // density of "Benzin" (kg/l)
+    public static double RHO_FUEL = 760; // localDensity of "Benzin" (kg/m^3)
+    public static double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.; // localDensity of "Benzin" (kg/l)
 
     public static double CALORIC_DENS = 44e6;// "Benzin": 44 MJ/kg (--> 0.76*44 JM/liter)
 

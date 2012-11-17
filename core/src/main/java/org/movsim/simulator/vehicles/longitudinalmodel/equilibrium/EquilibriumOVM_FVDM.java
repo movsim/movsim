@@ -67,7 +67,7 @@ public class EquilibriumOVM_FVDM extends EquilibriumProperties {
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
 
-            // start iteration with equilibrium velocity for the previous density
+            // start iteration with equilibrium velocity for the previous localDensity
             vIterate = vEqTab[ir - 1];
             for (int it = 1; it <= iterMax; it++) {
                 final double acc = model.calcAccSimple(s, vIterate, 0);

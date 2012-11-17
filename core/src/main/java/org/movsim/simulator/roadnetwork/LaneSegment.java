@@ -161,6 +161,21 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     /**
+     * Returns the number of obstacles on this lane segment.
+     * 
+     * @return the number of obstacles on this lane segment
+     */
+    public final int obstacleCount() {
+        int obstacleCount = 0;
+        for (final Vehicle vehicle : vehicles) {
+            if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                ++obstacleCount;
+            }
+        }
+        return obstacleCount;
+    }
+
+    /**
      * Returns the total travel time of all vehicles on this lane segment.
      * 
      * @return the total vehicle travel time
@@ -205,21 +220,6 @@ public class LaneSegment implements Iterable<Vehicle> {
             instFuelUsedLiters += vehicle.getActualFuelFlowLiterPerS();
         }
         return instFuelUsedLiters;
-    }
-
-    /**
-     * Returns the number of obstacles on this lane segment.
-     * 
-     * @return the number of obstacles on this lane segment
-     */
-    public final int obstacleCount() {
-        int obstacleCount = 0;
-        for (final Vehicle vehicle : vehicles) {
-            if (vehicle.type() == Vehicle.Type.OBSTACLE) {
-                ++obstacleCount;
-            }
-        }
-        return obstacleCount;
     }
 
     /**

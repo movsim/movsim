@@ -368,7 +368,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void setMacroInitialConditions(RoadSegment roadSegment, RoadInput roadInput,
             VehicleGenerator vehGenerator, final List<ICMacroData> icMacroData) {
 
-        logger.info("choose macro initial conditions: generate vehicles from macro-density ");
+        logger.info("choose macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(icMacroData);
 
         final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
@@ -398,7 +398,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 }
 
                 if (rhoLocal <= 0) {
-                    logger.debug("no vehicle added at x={} for vanishing initial density={}.", position, rhoLocal);
+                    logger.debug("no vehicle added at x={} for vanishing initial localDensity={}.", position, rhoLocal);
                     position -= 50; // move on in upstream direction
                     continue;
                 }

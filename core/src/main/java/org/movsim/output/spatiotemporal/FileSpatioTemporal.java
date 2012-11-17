@@ -26,6 +26,7 @@
 package org.movsim.output.spatiotemporal;
 
 import org.movsim.output.fileoutput.FileOutputBase;
+import org.movsim.utilities.Units;
 
 /**
  * The Class FileSpatioTemporal.
@@ -47,13 +48,12 @@ class FileSpatioTemporal extends FileOutputBase {
 
     void writeOutput(SpatioTemporal spatioTemporal, double simulationTime) {
         final int count = spatioTemporal.size();
-        final double dx = spatioTemporal.getDxOut();
+        final double dx = spatioTemporal.getDxOutput();
         for (int i = 0; i < count; i++) {
             final double x = i * dx;
-            // TODO - output acceleration
-            // 0.0 is placeholder for acceleration which is not yet implemented
-            writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i), 0.0,
-                    1000 * spatioTemporal.getDensity(i), 3600 * spatioTemporal.getFlow(i));
+            writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i),
+                    spatioTemporal.getAverageAcceleration(i), Units.INVM_TO_INVKM
+                    * spatioTemporal.getDensity(i), Units.INVS_TO_INVH * spatioTemporal.getFlow(i));
         }
         write("%n"); // block ends
     }

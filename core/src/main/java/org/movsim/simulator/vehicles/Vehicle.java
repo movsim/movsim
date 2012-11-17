@@ -513,6 +513,12 @@ public class Vehicle {
         return slope;
     }
 
+    /**
+     * Returns the actual acceleration. This is the acceleration calculated by the LDM moderated by other
+     * factors, such as traffic lights
+     * 
+     * @return the vehicle acceleration
+     */
     public double getAcc() {
         return acc;
     }
