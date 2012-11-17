@@ -747,4 +747,10 @@ public class LaneSegment implements Iterable<Vehicle> {
         removedVehicleCount = 0;
     }
 
+    @Override
+    public String toString() {
+        return "LaneSegment [sinkLaneSegment=" + sinkLaneSegment + ", sourceLaneSegment=" + sourceLaneSegment
+                + ", lane=" + lane + ", type=" + type + ", removedVehicleCount=" + removedVehicleCount + "]";
+    }
+
 }

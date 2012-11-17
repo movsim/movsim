@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -150,13 +150,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 for (final String roadId : roadIds) {
                     route.add(roadNetwork.findByUserId(roadId));
                 }
-                if(route.size()==0){
-                    logger.error("route with name \"{}\" does not contain any roadSegments. Ignore route!", route.getName());
+                if (route.size() == 0) {
+                    logger.error("route with name \"{}\" does not contain any roadSegments. Ignore route!",
+                            route.getName());
                     continue;
                 }
                 Route r = routes.put(route.getName(), route);
-                if(r!=null){
-                    logger.warn("route with name \"{}\" already defined. Overwrite existing route.", r.getName());
+                if (r != null) {
+                    logger.error("route with name \"{}\" already defined. Overwrite existing route.", r.getName());
                 }
             }
         }
@@ -392,8 +393,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 if (logger.isDebugEnabled()) {
                     logger.debug(String
                             .format("macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
-                                    roadInput.getId(), position, Units.INVM_TO_INVKM * rhoLocal,
-                                    Units.MS_TO_KMH * speedInit));
+                                    roadInput.getId(), position, Units.INVM_TO_INVKM * rhoLocal, Units.MS_TO_KMH
+                                            * speedInit));
                 }
 
                 if (rhoLocal <= 0) {
@@ -405,7 +406,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
                 final double meanDistanceInLane = 1. / (rhoLocal + MovsimConstants.SMALL_VALUE);
                 // TODO icMacro for ca
-                // final double minimumGap = veh.getLongitudinalModel().isCA() ? veh.getLength() : veh.getLength() + veh.getLongitudinalModel().getS0();
+                // final double minimumGap = veh.getLongitudinalModel().isCA() ? veh.getLength() : veh.getLength() +
+                // veh.getLongitudinalModel().getS0();
                 final double minimumGap = veh.getLength() + veh.getLongitudinalModel().getS0();
                 final double posDecrement = Math.max(meanDistanceInLane, minimumGap);
                 position -= posDecrement;
@@ -488,8 +490,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         startTimeMillis = System.currentTimeMillis();
         // TODO check if first output update has to be called in update for external call!!
         // TODO FloatingCars do not need this call. First output line for t=0 is written twice to file
-//        simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(),
-//                simulationRunnable.iterationCount());
+        // simOutput.timeStep(simulationRunnable.timeStep(), simulationRunnable.simulationTime(),
+        // simulationRunnable.iterationCount());
         simulationRunnable.runToCompletion();
     }
 

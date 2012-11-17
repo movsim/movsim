@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,14 +25,16 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Iterable collection of the road segments that form a route that can be take through the road network.
  */
 public class Route implements Iterable<RoadSegment> {
-    private final ArrayList<RoadSegment> roadSegments;
+    private final LinkedList<RoadSegment> roadSegments;
     private String name;
     private double length;
 
@@ -40,9 +42,30 @@ public class Route implements Iterable<RoadSegment> {
      * Constructor.
      */
     public Route(String name) {
-        assert !name.isEmpty();
-        roadSegments = new ArrayList<RoadSegment>();
+        Preconditions.checkArgument(!name.isEmpty(), "route without name");
+        roadSegments = new LinkedList<RoadSegment>();
         this.name = name;
+    }
+
+    /**
+     * Adds a road segment to the road route.
+     * 
+     * @param roadSegment
+     * @return roadSegment for convenience
+     */
+    public RoadSegment add(RoadSegment roadSegment) {
+        Preconditions.checkNotNull(roadSegment);
+        Preconditions.checkArgument(!roadSegments.contains(roadSegment), "roadSegment=" + roadSegment
+                + " already added to route.");
+
+        if (!roadSegments.isEmpty()) {
+            Preconditions.checkState(roadSegment.isDownstreamLink(roadSegments.getLast()), "roadSegment=" + roadSegment
+                    + " not connected to upstream roadSegment=" + roadSegments.getLast());
+        }
+
+        roadSegments.add(roadSegment);
+        length += roadSegment.roadLength();
+        return roadSegment;
     }
 
     /**
@@ -73,24 +96,20 @@ public class Route implements Iterable<RoadSegment> {
     }
 
     /**
-     * Adds a road segment to the road route.
-     * 
-     * @param roadSegment
-     * @return roadSegment for convenience
-     */
-    public RoadSegment add(RoadSegment roadSegment) {
-        // TODO - check that the roadSegment is contiguous with the previous roadSegment
-        assert roadSegment != null;
-        roadSegments.add(roadSegment);
-        length += roadSegment.roadLength();
-        return roadSegment;
-    }
-
-    /**
      * Gets the road segment of the given index
      */
     public RoadSegment get(int index) {
         return roadSegments.get(index);
+    }
+
+    /**
+     * Returns the first {@code RoadSegment} of the {@code Route}.
+     * 
+     * @return first {@code RoadSegment} of the {@code Route}
+     */
+    public RoadSegment getOrigin() {
+        Preconditions.checkArgument(!roadSegments.isEmpty(), "route without any roadSegments.");
+        return roadSegments.getFirst();
     }
 
     /**
@@ -101,6 +120,11 @@ public class Route implements Iterable<RoadSegment> {
     @Override
     public Iterator<RoadSegment> iterator() {
         return roadSegments.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return "Route [roadSegments=" + roadSegments + ", name=" + name + ", length=" + length + "]";
     }
 
     @Override
@@ -146,4 +170,5 @@ public class Route implements Iterable<RoadSegment> {
         }
         return true;
     }
+
 }

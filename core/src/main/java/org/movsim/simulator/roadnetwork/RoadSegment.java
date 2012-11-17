@@ -34,6 +34,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * <p>
  * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of
@@ -1175,4 +1177,27 @@ public class RoadSegment implements Iterable<Vehicle> {
         this.simpleRamp = simpleRamp;
     }
 
+    @Override
+    public String toString() {
+        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadLength=" + roadLength + ", laneCount="
+                + laneCount + "]";
+    }
+
+    
+    /**
+     * Returns true if the {@code RoadSegment} is connected in downstream direction to the provided argument and false
+     * otherwise. Connection exists if at least one {@code LaneSegment} is connected.
+     * 
+     * @param upstreamRoadSegment
+     * @return
+     */
+    public boolean isDownstreamLink(RoadSegment upstreamRoadSegment) {
+        Preconditions.checkNotNull(upstreamRoadSegment);
+        for (final LaneSegment laneSegment : laneSegments) {
+            if (upstreamRoadSegment.equals(laneSegment.sourceLaneSegment().roadSegment())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
