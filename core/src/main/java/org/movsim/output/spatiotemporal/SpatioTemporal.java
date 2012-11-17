@@ -51,7 +51,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
     private final double[] density;
     private final double[] averageSpeed;
     private final double[] flow;
-    private double timeOffset;
+    private double lastTimeOutput;
 
     private final FileSpatioTemporal fileWriter;
     
@@ -60,7 +60,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
         this.dxOut = dxOut;
         this.dtOut = dtOut;
 
-        timeOffset = 0;
+        lastTimeOutput = 0;
         size = (int) (route.getLength() / dxOut) + 1;
         density = new double[size];
         averageSpeed = new double[size];
@@ -71,8 +71,8 @@ public class SpatioTemporal extends OutputOnRouteBase {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if ((simulationTime - timeOffset) >= dtOut) {
-            timeOffset = simulationTime;
+        if ((simulationTime - lastTimeOutput) >= dtOut) {
+            lastTimeOutput = simulationTime;
             calcData();
             if(fileWriter != null){
                 fileWriter.writeOutput(this, simulationTime);
@@ -187,7 +187,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * @return the time offset
      */
     public double getTimeOffset() {
-        return timeOffset;
+        return lastTimeOutput;
     }
 
     /**

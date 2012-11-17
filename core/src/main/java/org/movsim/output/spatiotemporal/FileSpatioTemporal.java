@@ -30,20 +30,22 @@ import org.movsim.output.fileoutput.FileOutputBase;
 /**
  * The Class FileSpatioTemporal.
  */
-public class FileSpatioTemporal extends FileOutputBase {
+class FileSpatioTemporal extends FileOutputBase {
 
     private static final String extensionFormat = ".st.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
             + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
 
-    public FileSpatioTemporal(String routeLabel) {
+    FileSpatioTemporal(String routeLabel) {
+        super();
         writer = createWriter(String.format(extensionFormat, routeLabel));
         writer.printf(outputHeading);
         writer.flush();
     }
 
-    public void writeOutput(SpatioTemporal spatioTemporal, double simulationTime) {
+
+    void writeOutput(SpatioTemporal spatioTemporal, double simulationTime) {
         final int count = spatioTemporal.size();
         final double dx = spatioTemporal.getDxOut();
         for (int i = 0; i < count; i++) {

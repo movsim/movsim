@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
-public class FileFloatingCars extends FileOutputBase {
+class FileFloatingCars extends FileOutputBase {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
@@ -59,7 +59,7 @@ public class FileFloatingCars extends FileOutputBase {
      * @param floatingCars
      *            the floating cars
      */
-    public FileFloatingCars() {
+    FileFloatingCars() {
         super();
         String regex = baseFilename + extensionRegex;
         FileUtils.deleteFileList(path, regex);
