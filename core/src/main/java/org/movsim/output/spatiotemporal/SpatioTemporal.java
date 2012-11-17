@@ -49,9 +49,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
     private final double dxOutput;
     private final double dtOutput;
 
-    private final double[] macroDensity;
     private final double[] macroSpeed;
-    private final double[] macroFlow;
     private final double[] macroAcceleration;
 
     private double lastTimeOutput;
@@ -65,9 +63,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
 
         lastTimeOutput = 0;
         int size = (int) (route.getLength() / dxOut) + 1;
-        macroDensity = new double[size];
         macroSpeed = new double[size];
-        macroFlow = new double[size];
         macroAcceleration = new double[size];
 
         fileWriter = writeOutput ? new FileSpatioTemporal(route.getName()) : null;
@@ -98,26 +94,22 @@ public class SpatioTemporal extends OutputOnRouteBase {
 
     private void interpolateGridData(TreeSet<SpatialTemporal> dataPoints) {
         int size = dataPoints.size();
-        final double[] localDensity = new double[size];
         final double[] xMicro = new double[size];
         final double[] vMicro = new double[size];
         final double[] aMicro = new double[size];
         int j = 0;
         for (SpatialTemporal dp : dataPoints) {
             // logger.debug("data point for interpolation={}", dp.toString());
-            localDensity[j] = dp.localDensity;
             vMicro[j] = dp.speed;
             xMicro[j] = dp.position;
             aMicro[j] = dp.acceleration;
             ++j;
         }
 
-        for (int i = 0; i < macroFlow.length; ++i) {
+        for (int i = 0; i < macroSpeed.length; ++i) {
             final double x = i * dxOutput;
-            macroDensity[i] = Tables.intpextp(xMicro, localDensity, x);
             macroSpeed[i] = Tables.intpextp(xMicro, vMicro, x);
             macroAcceleration[i] = Tables.intpextp(xMicro, aMicro, x);
-            macroFlow[i] = macroDensity[i] * macroSpeed[i];
         }
     }
 
@@ -141,22 +133,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
             }
             positionOnRoute += roadSegment.roadLength();
         }
-
-        calculateMicroDensities(dataPoints);
-
         return dataPoints;
-    }
-
-    private static void calculateMicroDensities(TreeSet<SpatialTemporal> dataPoints) {
-        SpatialTemporal previous = null;
-        for (SpatialTemporal dp : dataPoints) {
-            if (previous != null) {
-                double dist = previous.position - dp.position;
-                double length = previous.length;
-                dp.localDensity = (dist > length) ? 1.0 / dist : 1.0 / length;
-            }
-            previous = dp;
-        }
     }
 
     /**
@@ -183,16 +160,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
      * @return the size of the arrays
      */
     public int size() {
-        return macroFlow.length;
-    }
-
-    /**
-     * Gets the localDensity.
-     * 
-     * @return the localDensity
-     */
-    public double getDensity(int index) {
-        return macroDensity[index];
+        return macroSpeed.length;
     }
 
     /**
@@ -202,15 +170,6 @@ public class SpatioTemporal extends OutputOnRouteBase {
      */
     public double getAverageSpeed(int index) {
         return macroSpeed[index];
-    }
-
-    /**
-     * Gets the macroFlow.
-     * 
-     * @return the macroFlow
-     */
-    public double getFlow(int index) {
-        return macroFlow[index];
     }
 
     public double getAverageAcceleration(int index) {
@@ -234,7 +193,6 @@ public class SpatioTemporal extends OutputOnRouteBase {
         final double speed;
         final double length;
         final double acceleration;
-        double localDensity = 0;
 
         SpatialTemporal(double position, double speed, double length, double acceleration) {
             this.position = position;
@@ -246,7 +204,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
         @Override
         public String toString() {
             return "SpatialTemporal [position=" + position + ", speed=" + speed + ", length=" + length
-                    + ", acceleration=" + acceleration + ", localDensity=" + localDensity + "]";
+                    + ", acceleration=" + acceleration + "]";
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -26,7 +26,6 @@
 package org.movsim.output.spatiotemporal;
 
 import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.utilities.Units;
 
 /**
  * The Class FileSpatioTemporal.
@@ -34,9 +33,8 @@ import org.movsim.utilities.Units;
 class FileSpatioTemporal extends FileOutputBase {
 
     private static final String extensionFormat = ".st.route_%s.csv";
-    private static final String outputHeading = COMMENT_CHAR
-            + "     t[s],       x[m],     v[m/s],   a[m/s^2],  rho[1/km],     Q[1/h]\n";
-    private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f, %10.4f, %10.4f%n";
+    private static final String outputHeading = COMMENT_CHAR + "     t[s],       x[m],     v[m/s],   a[m/s^2]\n";
+    private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f%n";
 
     FileSpatioTemporal(String routeLabel) {
         super();
@@ -45,15 +43,13 @@ class FileSpatioTemporal extends FileOutputBase {
         writer.flush();
     }
 
-
     void writeOutput(SpatioTemporal spatioTemporal, double simulationTime) {
         final int count = spatioTemporal.size();
         final double dx = spatioTemporal.getDxOutput();
         for (int i = 0; i < count; i++) {
             final double x = i * dx;
             writer.printf(outputFormat, simulationTime, x, spatioTemporal.getAverageSpeed(i),
-                    spatioTemporal.getAverageAcceleration(i), Units.INVM_TO_INVKM
-                    * spatioTemporal.getDensity(i), Units.INVS_TO_INVH * spatioTemporal.getFlow(i));
+                    spatioTemporal.getAverageAcceleration(i));
         }
         write("%n"); // block ends
     }
