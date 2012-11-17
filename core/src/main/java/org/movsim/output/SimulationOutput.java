@@ -139,7 +139,7 @@ public class SimulationOutput implements SimulationTimeStep {
         for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
             final Route route = getCheckedRoute(spatioTemporalInput.getRouteLabel());
             final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
-                    spatioTemporalInput.getDt(), route, writeOutput);
+                    spatioTemporalInput.getDt(), roadNetwork, route, writeOutput);
             spatioTemporals.add(spatioTemporal);
         }
     }
