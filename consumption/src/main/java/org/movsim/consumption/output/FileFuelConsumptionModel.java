@@ -44,7 +44,7 @@ public class FileFuelConsumptionModel extends FileOutputBase {
         while (v <= vMax) {
             final double accFreeWheeling = carModel.getFreeWheelingDecel(v);
             final double acc = 0.0;
-            final double[] fuelFlow = fuelConsumption.getMinFuelFlow(v, acc, true);
+            final double[] fuelFlow = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
             final int optGear = (int) fuelFlow[1]; // !! not a gearIndex
             final double c100 = fuelConsumption.getInstConsumption100km(v, 0, optGear, true);
             writer.printf(outputFormatZeroAcceleration, v, accFreeWheeling, 3.6e6 * fuelFlow[0], optGear, c100);
@@ -74,18 +74,18 @@ public class FileFuelConsumptionModel extends FileOutputBase {
                 final double v_kmh = vmin_kmh + iv * dv_kmh;
                 final double v = v_kmh / 3.6;
                 final double acc = 0.01 * (int) (100 * (accmin + iacc * dacc));
-                final double forceMech = carModel.getForceMech(v, acc);
+                final double forceMech = carModel.getForceMech(v, acc, 0);
                 final double powMechEl = Math.max(v * forceMech + carModel.getElectricPower(), 0.);
                 double fuelFlow = 100000;
                 int gear = gearTest;
                 if (determineOptimalGear) {
                     // v=const => min(consump)=min(fuelFlow)
-                    final double[] res = fuelConsumption.getMinFuelFlow(v, acc, true);
+                    final double[] res = fuelConsumption.getMinFuelFlow(v, acc, 0, true);
                     fuelFlow = res[0];
                     gear = (int) res[1];
                 } else {
                     final int gearIndex = gear - 1;
-                    fuelFlow = fuelConsumption.getFuelFlow(v, acc, gearIndex, true);
+                    fuelFlow = fuelConsumption.getFuelFlow(v, acc, 0, gearIndex, true);
                 }
                 final double consump_100km = 1e8 * fuelFlow / Math.max(v, 0.001);
                 final double fuelFlow_lh = 3.6e6 * fuelFlow;
