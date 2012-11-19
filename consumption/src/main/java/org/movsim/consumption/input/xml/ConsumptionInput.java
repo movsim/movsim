@@ -34,20 +34,19 @@ import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 public class ConsumptionInput {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionInput.class);
 
-    private Map<String, ConsumptionModelInput> consumptionModelInput;
+    private final Map<String, ConsumptionModelInput> consumptionModelInput;
 
     @SuppressWarnings("unchecked")
     public ConsumptionInput(Element elem) {
-
-        // fuel consumption element is optional
-        if (elem == null) {
-            return;
-        }
+        Preconditions.checkNotNull(elem);
+        System.out.println("parse " + elem.toString());
 
         consumptionModelInput = new HashMap<String, ConsumptionModelInput>();
 
@@ -55,6 +54,7 @@ public class ConsumptionInput {
 
         for (final Element fuelModelElem : fuelvehicleElements) {
             final ConsumptionModelInput consModel = new ConsumptionModelInput(fuelModelElem);
+            System.out.println("parse=" + fuelModelElem.toString() + " and add model=" + consModel.getLabel());
             consumptionModelInput.put(consModel.getLabel(), consModel);
         }
     }

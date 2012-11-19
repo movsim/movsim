@@ -62,7 +62,7 @@
             </ROUTE>
         </ROUTES>
         <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="1" dn="0">
+            <FLOATING_CAR_DATA n_dt="1" dn="0" route="main">
                 <!-- FC 1 is obstacle -->
                 <FC number="2" />
                 <FC number="6" />

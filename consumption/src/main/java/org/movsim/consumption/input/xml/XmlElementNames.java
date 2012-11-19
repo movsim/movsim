@@ -30,6 +30,7 @@ package org.movsim.consumption.input.xml;
  */
 public interface XmlElementNames {
 
+    // root MOVSIM
     public final String Consumption = "CONSUMPTION";
     public final String ConsumptionModel = "MODEL";
     public final String ConsumptionCarData = "CAR";

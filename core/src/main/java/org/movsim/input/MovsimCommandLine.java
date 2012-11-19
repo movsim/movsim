@@ -36,18 +36,13 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.MovsimCoreMain;
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * MovSim console command line parser. Values from the command line are set to ProjectMetaData.
  */
 public class MovsimCommandLine {
-
-    private static Logger logger = LoggerFactory.getLogger(MovsimCommandLine.class);
 
     final CommandLineParser parser;
     private Options options;
@@ -58,7 +53,7 @@ public class MovsimCommandLine {
         try {
             commandLine.createAndParse(args);
         } catch (ParseException e) {
-            logger.error("Parsing failed.  Reason: {}", e.getMessage());
+            System.err.println("Parsing failed.  Reason: " + e.getMessage());
             commandLine.optionHelp();
         }
     }
@@ -100,7 +95,6 @@ public class MovsimCommandLine {
         options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
-        options.addOption("v", "version", false, "prints version number of this movsim release");
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
@@ -137,9 +131,6 @@ public class MovsimCommandLine {
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
         }
-        if (cmdline.hasOption("v")) {
-            optionPrintVersion();
-        }
         requiredOptionOutputPath(cmdline);
         requiredOptionSimulation(cmdline);
     }
@@ -152,23 +143,13 @@ public class MovsimCommandLine {
 
         if (outputPath == null || outputPath.equals("") || outputPath.isEmpty()) {
             outputPath = ".";
-            logger.info("No output path provided via option. Set output path to current directory!");
+            System.out.println("No output path provided via option. Set output path to current directory!");
         }
-        logger.info("output path: " + outputPath);
         final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
         }
         projectMetaData.setOutputPath(FileUtils.getCanonicalPath(outputPath));
-    }
-
-    /**
-     * Option: prints the version number of this Movsim release.
-     */
-    private static void optionPrintVersion() {
-        logger.info("movsim release version: " + MovsimConstants.RELEASE_VERSION);
-
-        System.exit(0);
     }
 
     /**
@@ -178,7 +159,7 @@ public class MovsimCommandLine {
         final String resource = ProjectMetaData.getLog4jFilenameWithPath();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource); 
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
-        logger.info("logger properties file written to {}", ProjectMetaData.getLog4jFilename());
+        System.out.println("logger properties file written to " + ProjectMetaData.getLog4jFilename());
       
         System.exit(0);
     }
@@ -190,7 +171,7 @@ public class MovsimCommandLine {
         final String resource = projectMetaData.getDtdFilenameWithPath();
         final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, projectMetaData.getDtdFilename());
-        logger.info("dtd file written to {}", projectMetaData.getDtdFilename());
+        System.out.println("dtd file written to " + projectMetaData.getDtdFilename());
 
         System.exit(0);
     }
@@ -218,7 +199,7 @@ public class MovsimCommandLine {
     private void requiredOptionSimulation(CommandLine cmdline) {
         final String filename = cmdline.getOptionValue('f');
         if (filename == null || !FileUtils.fileExists(filename)) {
-            logger.error("No xml configuration file! Please specify via the option -f.");
+            System.err.println("No xml configuration file! Please specify via the option -f.");
             return;
         }
 

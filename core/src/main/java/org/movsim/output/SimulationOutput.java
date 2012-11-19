@@ -52,6 +52,8 @@ import org.movsim.simulator.roadnetwork.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class SimulationOutput.
  */
@@ -60,7 +62,7 @@ public class SimulationOutput implements SimulationTimeStep {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
-    private FloatingCars floatingCars;
+    private List<FloatingCars> floatingCarOutputs = new ArrayList<FloatingCars>();
 
     private final List<SpatioTemporal> spatioTemporals = new ArrayList<SpatioTemporal>();
 
@@ -72,9 +74,12 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final RoadNetwork roadNetwork;
 
+    private final Map<String, Route> routes;
+
     public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput,
             RoadNetwork roadNetwork, Map<String, Route> routes) {
         this.roadNetwork = roadNetwork;
+        this.routes = routes;
 
         final SimulationInput simulationInput = simInput.getSimulationInput();
         if (simulationInput == null) {
@@ -89,37 +94,43 @@ public class SimulationOutput implements SimulationTimeStep {
 
         initFloatingCars(writeOutput, outputInput);
 
-        initConsumption(writeOutput, routes, simulationTimestep, outputInput);
+        initConsumption(writeOutput, simulationTimestep, outputInput);
         
-        initTravelTimes(writeOutput, routes, simulationTimestep, outputInput);
+        initTravelTimes(writeOutput, simulationTimestep, outputInput);
 
-        initSpatioTemporalOutput(writeOutput, routes, outputInput);
+        initSpatioTemporalOutput(writeOutput, outputInput);
 
-        initTrajectories(writeOutput, routes, outputInput);
+        initTrajectories(writeOutput, outputInput);
 
     }
 
-    private void initConsumption(boolean writeOutput, Map<String, Route> routes, double simulationTimestep, final OutputInput outputInput) {
+    private Route getCheckedRoute(final String routeLabel) {
+        Preconditions
+                .checkArgument(routes.containsKey(routeLabel), "route with label=" + routeLabel + " not defined. ");
+        return routes.get(routeLabel);
+    }
+
+    private void initConsumption(boolean writeOutput, double simulationTimestep, final OutputInput outputInput) {
         for (final ConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
-            final Route route = routes.get(fuelRouteInput.getRouteLabel());
+            final Route route = getCheckedRoute(fuelRouteInput.getRouteLabel());
             final ConsumptionOnRoute consumption = new ConsumptionOnRoute(simulationTimestep, fuelRouteInput, roadNetwork, route, writeOutput);
             consumptionOnRoutes.put(route, consumption);
         }
     }
     
-    private void initTravelTimes(boolean writeOutput, Map<String, Route> routes, double simulationTimestep, final OutputInput outputInput) {
+    private void initTravelTimes(boolean writeOutput, double simulationTimestep, final OutputInput outputInput) {
         for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
-            final Route route = routes.get(travelTimeInput.getRouteLabel());
+            final Route route = getCheckedRoute(travelTimeInput.getRouteLabel());
             final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork, route, writeOutput);
             travelTimeOnRoutes.put(route, travelTime);
         }
     }
 
-    private void initTrajectories(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+    private void initTrajectories(boolean writeOutput, final OutputInput outputInput) {
         final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
         if (writeOutput) {
             for (final TrajectoriesInput traj : trajInput) {
-                final Route route = routes.get(traj.getRouteLabel());
+                final Route route = getCheckedRoute(traj.getRouteLabel());
                 if (filesTrajectories.containsKey(route)) {
                     logger.warn("trajectory output for route \"{}\" already defined!", route.getName());
                     continue;
@@ -129,20 +140,21 @@ public class SimulationOutput implements SimulationTimeStep {
         }
     }
 
-    private void initSpatioTemporalOutput(boolean writeOutput, Map<String, Route> routes, final OutputInput outputInput) {
+    private void initSpatioTemporalOutput(boolean writeOutput, final OutputInput outputInput) {
         final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
         for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
-            final Route route = routes.get(spatioTemporalInput.getRouteLabel());
+            final Route route = getCheckedRoute(spatioTemporalInput.getRouteLabel());
             final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
-                    spatioTemporalInput.getDt(), route, writeOutput);
+                    spatioTemporalInput.getDt(), roadNetwork, route, writeOutput);
             spatioTemporals.add(spatioTemporal);
         }
     }
 
     private void initFloatingCars(boolean writeOutput, final OutputInput outputInput) {
-        final FloatingCarInput floatingCarInput = outputInput.getFloatingCarInput();
-        if (floatingCarInput != null) {
-            floatingCars = new FloatingCars(floatingCarInput, roadNetwork, writeOutput);
+        final List<FloatingCarInput> floatingCarInputs = outputInput.getFloatingCarInputs();
+        for(FloatingCarInput floatingCarInput : floatingCarInputs){
+            Route route = getCheckedRoute(floatingCarInput.getRouteLabel());
+            floatingCarOutputs.add(new FloatingCars(floatingCarInput, route, writeOutput));
         }
     }
 
@@ -162,7 +174,7 @@ public class SimulationOutput implements SimulationTimeStep {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        if (floatingCars != null) {
+        for (FloatingCars floatingCars : floatingCarOutputs) {
             floatingCars.timeStep(dt, simulationTime, iterationCount);
         }
 

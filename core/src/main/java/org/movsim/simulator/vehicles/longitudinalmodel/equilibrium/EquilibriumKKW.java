@@ -65,7 +65,7 @@ public class EquilibriumKKW extends EquilibriumProperties {
         for (int ir = 1; ir < length; ir++) {
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
-            // start iteration with equilibrium velocity for the previous density
+            // start iteration with equilibrium velocity for the previous localDensity
             vIter = vEqTab[ir - 1];
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIter, 0.);

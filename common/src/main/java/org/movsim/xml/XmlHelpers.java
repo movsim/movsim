@@ -117,6 +117,7 @@ public class XmlHelpers {
                 @Override
                 public void error(SAXParseException e) throws SAXException {
                     logger.error(getInfo(e));
+                    System.exit(-1);
                     // isValid = false;
                 }
 
@@ -128,6 +129,7 @@ public class XmlHelpers {
                 @Override
                 public void fatalError(SAXParseException e) throws SAXException {
                     logger.error(getInfo(e));
+                    System.exit(-1);
                     // isValid = false;
                 }
 

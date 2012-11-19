@@ -26,7 +26,7 @@ c0 = 1
 # input files
 fundFile = inputPath.baseFile.".fund_".vehicle.".csv"
 if (ldm eq "IDM_w_noise") fundFile = inputPath.baseFile.".fund_IDM1.csv"
-carFile(n) = sprintf(inputPath.baseFile.".car.origin_1.%06d.csv",c0+n)
+carFile(n) = sprintf(inputPath.baseFile.".car.route_main.%06d.csv",c0+n)
 carLsaFile(n) = sprintf(inputPath.baseFile."LSA.car%d.csv",c0+n)
 trajectoriesFile = inputPath.baseFile.".traj.route_main.csv"
 
@@ -195,5 +195,4 @@ set xrange [0:tmax]
 set xtics auto
 set ytics auto
 set out trajectoriesOutput
-plot trajectoriesFile using 1:($3):(int($9) % 5 + 1) title "" with points lt 7 ps 0.3 lc variable
-
+plot trajectoriesFile using 1:3:(int($9) % 5 + 1) title "" with points lt 7 ps 0.3 lc variable

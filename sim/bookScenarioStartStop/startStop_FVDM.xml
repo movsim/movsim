@@ -61,7 +61,7 @@
         </ROUTES>
         <OUTPUT>
             <!-- output grid absorbs some information in acceleration -->
-            <FLOATING_CAR_DATA n_dt="5">
+            <FLOATING_CAR_DATA n_dt="5" route="main">
                 <!-- FC 1 is obstacle -->
                 <FC number="2" />
                 <FC number="6" />

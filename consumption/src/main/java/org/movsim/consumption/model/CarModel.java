@@ -61,15 +61,18 @@ public class CarModel {
     }
 
     public double getFreeWheelingDecel(double v) {
+        // TODO consider slope gradient
         return -(gravConstant * consFrictionCoefficient + gravConstant * vFrictionCoefficient * v + cwValue * rhoAir
                 * crossSectionSurface * v * v / (2 * mass));
     }
 
-    public double getForceMech(double v, double acc) {
-        final double c = mass * gravConstant * consFrictionCoefficient;
+    public double getForceMech(double v, double acc, double slopeGrade) {
+        final double c = mass * gravConstant * (consFrictionCoefficient + slopeGrade);
         final double d = mass * gravConstant * vFrictionCoefficient;
         final double e = 0.5 * rhoAir * cwValue * crossSectionSurface;
-        return c + d * v + e * v * v + mass * acc;
+        // System.out.println("v=" + v + ", acc=" + acc + ", slope gradient=" + slopeGrade + ", c=" + c + ", d=" + d
+        // + ", e=" + e);
+        return mass * acc + c + d * v + e * v * v;
     }
 
     public double getMass() {

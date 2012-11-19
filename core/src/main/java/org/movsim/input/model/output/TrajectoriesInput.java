@@ -26,11 +26,15 @@
 package org.movsim.input.model.output;
 
 import org.jdom.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TrajectoriesInput {
+    /** The Constant logger. */
+    final static Logger logger = LoggerFactory.getLogger(TrajectoriesInput.class);
 
     private double dt;
-    private int dn;
+    private double randomFraction;
     private double startTime;
     private double endTime;
     private String routeLabel;
@@ -43,7 +47,7 @@ public class TrajectoriesInput {
      */
     public TrajectoriesInput(Element elem) {
         dt = Double.parseDouble(elem.getAttributeValue("dt"));
-        dn = Integer.parseInt(elem.getAttributeValue("dn"));
+        this.randomFraction = Double.parseDouble(elem.getAttributeValue("random_fraction"));
         startTime = Double.parseDouble(elem.getAttributeValue("start_time"));
         endTime = Double.parseDouble(elem.getAttributeValue("end_time"));
         routeLabel = elem.getAttributeValue("route");
@@ -56,15 +60,6 @@ public class TrajectoriesInput {
      */
     public double getDt() {
         return dt;
-    }
-
-    /**
-     * Gets the dn.
-     * 
-     * @return the dn
-     */
-    public int getDn() {
-        return dn;
     }
 
     /**
@@ -92,5 +87,9 @@ public class TrajectoriesInput {
      */
     public String getRouteLabel() {
         return routeLabel;
+    }
+
+    public double getRandomFraction() {
+        return randomFraction;
     }
 }

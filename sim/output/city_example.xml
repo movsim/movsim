@@ -27,7 +27,7 @@
                 <ACC v0="20" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.05" bias_right="0.05" politeness="0.0" />
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.05" bias_right="0.05" politeness="0.0" /> 
             </LANE_CHANGE_MODEL>
         </VEHICLE>
         <!-- trucks -->
@@ -36,20 +36,14 @@
                 <ACC v0="15" T="1.4" s0="2" s1="2" delta="4" a="0.6" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1" />
+                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1" /> 
             </LANE_CHANGE_MODEL>
         </VEHICLE>
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
     </VEHICLES>
-    <SIMULATION dt="0.2" duration="3600" fixed_seed="true" seed="42" crash_exit="true">
+    <SIMULATION dt="0.2" duration="1200" fixed_seed="true" seed="42" crash_exit="true">
         <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
+            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.3" />
+            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.3" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
             <TRAFFIC_SOURCE logging="true">
@@ -79,7 +73,7 @@
 
         <ROAD id="5">
             <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="520" v="20" />
+                <INFLOW t="0" q_per_hour="200" v="20" />
             </TRAFFIC_SOURCE>
         </ROAD>
         <ROUTES>
@@ -87,7 +81,7 @@
             <ROUTE label="main">
                 <ROAD id="2" />
                 <ROAD id="3" />
-                <ROAD id="4" />
+                <ROAD id="4" /> 
             </ROUTE>
             <ROUTE label="onramp">
                 <ROAD id="5" />
@@ -102,7 +96,7 @@
             <SPATIOTEMPORAL dx="100" dt="40" route="main" />
             <SPATIOTEMPORAL dx="100" dt="40" route="onramp" />
             <TRAJECTORIES dt="1" route="onramp" />
-            <TRAJECTORIES dt="1" route="main" dn="2"/>
+            <TRAJECTORIES dt="1" route="main" dn="1"/>
             <!--  start_time="0" end_time="120" -->
             <TRAVELTIMES route="main" dt="0" tauEMA="40"/>
             <TRAVELTIMES route="onramp" dt="0"/>

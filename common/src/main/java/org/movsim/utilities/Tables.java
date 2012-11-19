@@ -100,7 +100,6 @@ public class Tables {
         return (intp_value);
     }
 
-    // interpolation taken from mic-code
     // Version using only the index range imin ... imax and extrapolating
     // constant values otherwise; reverse=true means that the array x
     // has x values in decreasing order. NOT TIME OPTIMIZED

@@ -10,13 +10,6 @@
             </LONGITUDINAL_MODEL>
             <LANE_CHANGE_MODEL />
         </VEHICLE>
-        <!-- Obstacle is system type. Do not change. -->
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="0.4" duration="7200" fixed_seed="true" seed="42">
         <TRAFFIC_COMPOSITION>
@@ -38,11 +31,6 @@
                 <INHOMOGENEITY x="2000" alpha_T="1" />
             </FLOW_CONSERVING_INHOMOGENEITIES>
             <SPEED_LIMITS />
-            <SIMPLE_RAMPS>
-                <SIMPLE_RAMP x="15000" merge_length="1000" logging="true">
-                    <INFLOW t="0" q_per_hour="550" />
-                </SIMPLE_RAMP>
-            </SIMPLE_RAMPS>
             <TRAFFIC_LIGHTS />
             <DETECTORS dt="60" logging="true">
                 <CROSS_SECTION x="1000" />
@@ -53,14 +41,31 @@
                 <CROSS_SECTION x="11000" />
                 <CROSS_SECTION x="12000" />
                 <CROSS_SECTION x="13000" />
-                <CROSS_SECTION x="14000" />
-                <CROSS_SECTION x="15000" />
-                <CROSS_SECTION x="16000" />
             </DETECTORS>
+        </ROAD>
+         <ROAD id="2">
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="0" rho_per_km="2" v="30" />
+            </INITIAL_CONDITIONS>
+            <SIMPLE_RAMP relative_speed="0.5" relative_gap="0.5" logging="true">
+                <INFLOW t="0" q_per_hour="550" />
+            </SIMPLE_RAMP>
+            <DETECTORS dt="60" logging="true">
+                <CROSS_SECTION x="0" />
+                <CROSS_SECTION x="1000" />
+                <CROSS_SECTION x="2000" />
+            </DETECTORS>
+        </ROAD>
+        <ROAD id="3">
+            <INITIAL_CONDITIONS>
+                <IC_MACRO x="0" rho_per_km="2" v="30" />
+            </INITIAL_CONDITIONS>
         </ROAD>
         <ROUTES>
             <ROUTE label="main">
                 <ROAD id="1" />
+                <ROAD id="2" />
+                <ROAD id="3" />
             </ROUTE>
         </ROUTES>
         <OUTPUT>

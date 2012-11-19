@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -28,6 +28,8 @@ package org.movsim.consumption.input.xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 public class ConsumptionInputData {
 
     /** The Constant logger. */
@@ -36,11 +38,12 @@ public class ConsumptionInputData {
     private ConsumptionInput consumptionInput;
 
     public void setConsumptionInput(ConsumptionInput fuelConsumptionInput) {
+        Preconditions.checkNotNull(fuelConsumptionInput);
         this.consumptionInput = fuelConsumptionInput;
     }
 
     public ConsumptionInput getConsumptionInput() {
         return consumptionInput;
     }
-    
+
 }

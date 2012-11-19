@@ -34,6 +34,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * <p>
  * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of
@@ -411,7 +413,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the total number of vehicles on this road segment
      */
-    protected int getVehicleCount() {
+    public int getVehicleCount() {
         int vehicleCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
             vehicleCount += laneSegment.vehicleCount();
@@ -419,6 +421,19 @@ public class RoadSegment implements Iterable<Vehicle> {
         return vehicleCount;
     }
     
+    /**
+     * Returns the number of obstacle vehicles on this road segment, all lanes.
+     * 
+     * @return the total number of vehicles on this road segment
+     */
+    public int getObstacleCount() {
+        int obstacleCount = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            obstacleCount += laneSegment.obstacleCount();
+        }
+        return obstacleCount;
+    }
+
     /**
      * Returns the number of vehicles in the given lane on this road segment.
      * 
@@ -890,6 +905,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane].frontVehicle();
     }
 
+
+    /**
+     * Returns the vehicle in front of the given vehicle in its lane.
+     * 
+     * @param vehicle
+     * @return the next downstream vehicle in the lane
+     */
+    public Vehicle frontVehicleOnLane(Vehicle vehicle) {
+        return laneSegments[vehicle.getLane()].frontVehicle(vehicle);
+    }
+
     /**
      * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
      * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
@@ -1164,4 +1190,28 @@ public class RoadSegment implements Iterable<Vehicle> {
         this.simpleRamp = simpleRamp;
     }
 
+    @Override
+    public String toString() {
+        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadLength=" + roadLength + ", laneCount="
+                + laneCount + "]";
+    }
+
+    
+    /**
+     * Returns true if the {@code RoadSegment} is connected in downstream direction to the provided argument and false
+     * otherwise. Connection exists if at least one {@code LaneSegment} is connected.
+     * 
+     * @param upstreamRoadSegment
+     * @return
+     */
+    public boolean isDownstreamLink(RoadSegment upstreamRoadSegment) {
+        Preconditions.checkNotNull(upstreamRoadSegment);
+        for (final LaneSegment laneSegment : laneSegments) {
+            if (laneSegment.sourceLaneSegment() != null
+                    && upstreamRoadSegment.equals(laneSegment.sourceLaneSegment().roadSegment())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
