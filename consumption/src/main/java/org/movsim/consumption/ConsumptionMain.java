@@ -25,7 +25,6 @@
  */
 package org.movsim.consumption;
 
-import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,6 +33,7 @@ import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.consumption.input.xml.ConsumptionInputData;
 import org.movsim.consumption.input.xml.ConsumptionXmlReader;
+import org.movsim.consumption.input.xml.batch.BatchDataInput;
 import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.Consumption;
@@ -74,30 +74,22 @@ public class ConsumptionMain {
             System.exit(-1);
         }
 
-
         System.out.println("size of model input=" + consumptionModelInput.size());
 
         Consumption model = new Consumption(label, consumptionModelInput.get(label));
         
-        // QUICK HACK: develop parsing of offline trajectory data
-        System.out.println("MovismInput parser ");
+        System.out.println("size of batches = " + inputData.getConsumptionInput().getBatchInput());
+        for (BatchDataInput batch : inputData.getConsumptionInput().getBatchInput()) {
+            InputReader reader = InputReader
+                    .create(batch, ConsumptionMetadata.getInstance().getPathToConsumptionFile());
+            List<ConsumptionDataRecord> records = reader.getRecords();
 
-        // String filename = "Seesen_GPS.csv";
-        String filename = "Torfhaus_GPS.csv";
-        File input = new File("/home/kesting/workspace/consumption/data", filename);
-        // String outFilename = "Seesen_GPS_modeled.csv";
-        String outFilename = "Torfhaus_GPS_modeled.csv";
-        File output = new File("/home/kesting/tomtom/consumption/testdaten_harz", outFilename);
+            ConsumptionCalculation calculation = new ConsumptionCalculation(model);
+            calculation.process(records);
 
-        InputReader reader = new InputReader(input);
-        List<ConsumptionDataRecord> records = reader.getRecords();
-        
-
-        ConsumptionCalculation calculation = new ConsumptionCalculation(model);
-        calculation.process(records);
-
-        OutputWriter writer = new OutputWriter(output);
-        writer.write(records);
+            OutputWriter writer = OutputWriter.create(batch, ConsumptionMetadata.getInstance().getOutputPath());
+            writer.write(records);
+        }
 
         System.out.println("done.");
         

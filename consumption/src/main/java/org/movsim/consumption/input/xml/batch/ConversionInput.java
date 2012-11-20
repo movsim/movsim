@@ -5,6 +5,8 @@ import java.util.Map;
 import org.jdom.Element;
 import org.movsim.utilities.XmlUtils;
 
+import com.google.common.base.Preconditions;
+
 public class ConversionInput {
 
     // <CONVERSION time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
@@ -13,6 +15,7 @@ public class ConversionInput {
     private final double gradientConversionFactor;
 
     public ConversionInput(Element element) {
+        Preconditions.checkNotNull(element);
         Map<String, String> attributeMap = XmlUtils.putAttributesInHash(element);
         this.timeFormat = attributeMap.get("time");
         this.speedConversionFactor = Double.parseDouble((attributeMap.get("speed")));

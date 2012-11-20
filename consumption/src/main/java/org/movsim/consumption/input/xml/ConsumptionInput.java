@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -32,7 +32,6 @@ import java.util.Map;
 
 import org.jdom.Element;
 import org.movsim.consumption.input.xml.batch.BatchDataInput;
-import org.movsim.consumption.input.xml.batch.BatchInput;
 import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,41 +44,43 @@ public class ConsumptionInput {
     final static Logger logger = LoggerFactory.getLogger(ConsumptionInput.class);
 
     private final Map<String, ConsumptionModelInput> consumptionModelInput;
-    
-    private final List<BatchInput> batchInput;
 
-    /**
-	 * @return the batchInput
-	 */
-	public List<BatchInput> getBatchInput() {
-		return batchInput;
-	}
+    private final List<BatchDataInput> batchInput;
 
-	@SuppressWarnings("unchecked")
-    public ConsumptionInput(Element elem) {
-        Preconditions.checkNotNull(elem);
-        System.out.println("parse " + elem.toString());
+    @SuppressWarnings("unchecked")
+    public ConsumptionInput(Element rootElement) {
+        Preconditions.checkNotNull(rootElement);
+        System.out.println("parse " + rootElement.toString());
 
         consumptionModelInput = new HashMap<String, ConsumptionModelInput>();
+        parseConsumptionModelInput(rootElement.getChild(XmlElementNames.Consumption));
 
-        final List<Element> fuelvehicleElements = elem.getChildren(XmlElementNames.ConsumptionModel);
+        batchInput = new ArrayList<BatchDataInput>();
+        parseBatchInput(rootElement.getChild(XmlElementNames.BatchElement));
+    }
 
-        for (final Element fuelModelElem : fuelvehicleElements) {
+    private void parseConsumptionModelInput(Element consumptionElement) {
+        List<Element> modelElements = consumptionElement.getChildren(XmlElementNames.ConsumptionModel);
+        for (final Element fuelModelElem : modelElements) {
             final ConsumptionModelInput consModel = new ConsumptionModelInput(fuelModelElem);
             System.out.println("parse=" + fuelModelElem.toString() + " and add model=" + consModel.getLabel());
             consumptionModelInput.put(consModel.getLabel(), consModel);
         }
-        
-        batchInput = new ArrayList<BatchInput>();
-        final List<Element> batchElements = elem.getChildren(XmlElementNames.BatchElement);
-        for (final Element batchElem : batchElements) {
-            batchInput.add(new BatchDataInput(batchElem));
+    }
+
+    private void parseBatchInput(Element batchElement) {
+        List<Element> batchDataElements = batchElement.getChildren(XmlElementNames.BatchDataElement);
+        for (final Element dataElement : batchDataElements) {
+            batchInput.add(new BatchDataInput(dataElement));
         }
-        
-        
     }
 
     public Map<String, ConsumptionModelInput> getConsumptionModelInput() {
         return consumptionModelInput;
     }
+
+    public List<BatchDataInput> getBatchInput() {
+        return batchInput;
+    }
+
 }

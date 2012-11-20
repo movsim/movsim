@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import org.movsim.consumption.input.xml.batch.BatchDataInput;
+
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.google.common.base.Preconditions;
@@ -14,14 +16,26 @@ public class OutputWriter {
     private static final char SEPARATOR_CHARACTER = ',';
     private static final char QUOTE_CHARACTER = CSVWriter.NO_QUOTE_CHARACTER;
     private final File output;
-    
-    public OutputWriter(File output) {
+
+    public static OutputWriter create(BatchDataInput batch, String outputPath) {
+        String filename = "test.csv"; // TODO determine from batch.getFile() inputfile
+        File outputFile = new File(outputPath, filename);
+        return new OutputWriter(outputFile);
+    }
+
+    public static OutputWriter create(File outputFile) {
+        return new OutputWriter(outputFile);
+    }
+
+    private OutputWriter(File output) {
         Preconditions.checkNotNull(output);
         if (output.exists()) {
             System.out.println("overwrites " + output.getAbsolutePath());
         }
+        System.out.println("writes output to " + output.getAbsolutePath());
         this.output = output;
     }
+
 
     public void write(List<ConsumptionDataRecord> records) {
         CSVWriter writer = null;

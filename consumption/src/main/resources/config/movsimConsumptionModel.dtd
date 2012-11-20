@@ -29,7 +29,7 @@
 <!-- general remarks: -->
 <!-- all parameter values are expected in SI units. Otherwise the attribute's name is indicating the unit explicitely -->
 
-<!ELEMENT MOVSIM (BATCH?,CONSUMPTION?) >
+<!ELEMENT MOVSIM (BATCH?, CONSUMPTION?) >
 
 
 <!-- ##################################################################### -->
@@ -39,9 +39,9 @@
 <!ATTLIST BATCH
 >
 
-<!ELEMENT DATA (COLUMNS?, CONVERSIONS?) >
+<!ELEMENT DATA (COLUMNS, CONVERSIONS) >
 <!ATTLIST DATA
-file  CDATA   #REQUIRED
+inputfile  CDATA   #REQUIRED
 >
 
 <!ELEMENT COLUMNS EMPTY >
