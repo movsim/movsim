@@ -37,5 +37,8 @@ public interface XmlElementNames {
     public final String ConsumptionEngineData = "ENGINE";
     public final String ConsumptionEngineGears = "GEAR_RATIOS";
     public final String ConsumptionEngineGear = "GEAR_RATIO";
+	public final String BatchElement = "BATCH";
+	public final String ColumnDataElement = "COLUMNS";
+	public final String ConversionDataElement = "CONVERSION";
 
 }
