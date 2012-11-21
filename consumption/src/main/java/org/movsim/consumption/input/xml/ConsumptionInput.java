@@ -25,11 +25,14 @@
  */
 package org.movsim.consumption.input.xml;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.jdom.Element;
+import org.movsim.consumption.input.xml.batch.BatchDataInput;
+import org.movsim.consumption.input.xml.batch.BatchInput;
 import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +45,17 @@ public class ConsumptionInput {
     final static Logger logger = LoggerFactory.getLogger(ConsumptionInput.class);
 
     private final Map<String, ConsumptionModelInput> consumptionModelInput;
+    
+    private final List<BatchInput> batchInput;
 
-    @SuppressWarnings("unchecked")
+    /**
+	 * @return the batchInput
+	 */
+	public List<BatchInput> getBatchInput() {
+		return batchInput;
+	}
+
+	@SuppressWarnings("unchecked")
     public ConsumptionInput(Element elem) {
         Preconditions.checkNotNull(elem);
         System.out.println("parse " + elem.toString());
@@ -57,6 +69,14 @@ public class ConsumptionInput {
             System.out.println("parse=" + fuelModelElem.toString() + " and add model=" + consModel.getLabel());
             consumptionModelInput.put(consModel.getLabel(), consModel);
         }
+        
+        batchInput = new ArrayList<BatchInput>();
+        final List<Element> batchElements = elem.getChildren(XmlElementNames.BatchElement);
+        for (final Element batchElem : batchElements) {
+            batchInput.add(new BatchDataInput(batchElem));
+        }
+        
+        
     }
 
     public Map<String, ConsumptionModelInput> getConsumptionModelInput() {

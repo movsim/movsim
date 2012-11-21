@@ -84,7 +84,7 @@ public class ConsumptionMain {
 
         // String filename = "Seesen_GPS.csv";
         String filename = "Torfhaus_GPS.csv";
-        File input = new File("/home/kesting/tomtom/consumption/testdaten_harz", filename);
+        File input = new File("/home/kesting/workspace/consumption/data", filename);
         // String outFilename = "Seesen_GPS_modeled.csv";
         String outFilename = "Torfhaus_GPS_modeled.csv";
         File output = new File("/home/kesting/tomtom/consumption/testdaten_harz", outFilename);

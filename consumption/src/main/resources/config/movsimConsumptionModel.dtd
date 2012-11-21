@@ -29,7 +29,37 @@
 <!-- general remarks: -->
 <!-- all parameter values are expected in SI units. Otherwise the attribute's name is indicating the unit explicitely -->
 
-<!ELEMENT MOVSIM (CONSUMPTION?) >
+<!ELEMENT MOVSIM (BATCH?,CONSUMPTION?) >
+
+
+<!-- ##################################################################### -->
+<!-- Batch                                                                 -->
+<!-- ##################################################################### -->
+<!ELEMENT BATCH (DATA+) >
+<!ATTLIST BATCH
+>
+
+<!ELEMENT DATA (COLUMNS?, CONVERSIONS?) >
+<!ATTLIST DATA
+file  CDATA   #REQUIRED
+>
+
+<!ELEMENT COLUMNS EMPTY >
+<!ATTLIST COLUMNS
+time  NMTOKEN   #REQUIRED
+speed NMTOKEN   #REQUIRED
+acceleration  NMTOKEN   #REQUIRED
+gradient  NMTOKEN   #REQUIRED
+>
+
+<!ELEMENT CONVERSIONS EMPTY >
+<!ATTLIST CONVERSIONS
+time CDATA  ""
+speed NMTOKEN "1"
+acceleration  NMTOKEN  "1"
+gradient  NMTOKEN "1"
+>
+
 
 <!-- ##################################################################### -->
 <!-- Consumption Model                                                -->
