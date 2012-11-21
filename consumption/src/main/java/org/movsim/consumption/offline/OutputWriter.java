@@ -18,8 +18,7 @@ public class OutputWriter {
     private final File output;
 
     public static OutputWriter create(BatchDataInput batch, String outputPath) {
-        String filename = "test.csv"; // TODO determine from batch.getFile() inputfile
-        File outputFile = new File(outputPath, filename);
+        File outputFile = new File(outputPath, batch.getOutputFile());
         return new OutputWriter(outputFile);
     }
 

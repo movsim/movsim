@@ -42,6 +42,8 @@
 <!ELEMENT DATA (COLUMNS, CONVERSIONS) >
 <!ATTLIST DATA
 inputfile  CDATA   #REQUIRED
+outputfile  CDATA   #REQUIRED
+model  CDATA   #REQUIRED
 >
 
 <!ELEMENT COLUMNS EMPTY >
@@ -75,7 +77,6 @@ gradient  NMTOKEN "1"
 
 <!ATTLIST MODEL
   label   CDATA   #REQUIRED
-  type    (fuel|electric) "fuel"
   output  (true|false) "false" 
 >
 

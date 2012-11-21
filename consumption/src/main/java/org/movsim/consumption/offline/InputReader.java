@@ -35,8 +35,8 @@ public class InputReader {
 
     private InputReader(File inputFile) {
         Preconditions.checkNotNull(inputFile);
-        Preconditions.checkArgument(inputFile.exists() && inputFile.isFile());
-
+        Preconditions.checkArgument(inputFile.exists() && inputFile.isFile(), "file=" + inputFile.getAbsolutePath()
+                + " does not exist!");
         records = new LinkedList<ConsumptionDataRecord>();
         process(inputFile);
     }

@@ -11,6 +11,8 @@ import com.google.common.base.Preconditions;
 public class BatchDataInput {
 
     private final String inputFile;
+    private final String outputFile;
+    private final String modelLabel;
 
     private final ColumnInput columnData;
     private final ConversionInput conversionInput;
@@ -19,6 +21,8 @@ public class BatchDataInput {
         Preconditions.checkNotNull(element);
         Map<String, String> batchInputDataMap = XmlUtils.putAttributesInHash(element);
         this.inputFile = batchInputDataMap.get("inputfile");
+        this.outputFile = batchInputDataMap.get("outputfile");
+        this.modelLabel = batchInputDataMap.get("model");
         this.columnData = new ColumnInput(element.getChild(XmlElementNames.ColumnDataElement));
         this.conversionInput = new ConversionInput(element.getChild(XmlElementNames.ColumnDataElement));
     }
@@ -42,6 +46,14 @@ public class BatchDataInput {
      */
     public String getInputFile() {
         return inputFile;
+    }
+
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    public String getModelLabel() {
+        return modelLabel;
     }
 
 }

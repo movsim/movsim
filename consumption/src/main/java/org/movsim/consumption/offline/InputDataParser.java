@@ -14,8 +14,10 @@ public class InputDataParser {
     final int accelerationColum = 26 - 1;
     final int gradeColumn = 24 - 1; // in [%]
 
+    final static int MIN_COLUMNS = 4;
+
     public ConsumptionDataRecord parse(String[] line) throws NumberFormatException {
-        if (line.length <= 1) {
+        if (line.length <= MIN_COLUMNS) {
             throw new NumberFormatException();
         }
 
