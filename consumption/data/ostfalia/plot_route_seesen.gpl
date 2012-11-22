@@ -1,0 +1,3 @@
+# gnuplot command file
+baseName = "route-Seesen"
+load "plot_route_consumption_template.gpl"

@@ -6,16 +6,23 @@ import org.jdom.Element;
 import org.movsim.consumption.input.xml.XmlElementNames;
 import org.movsim.utilities.XmlUtils;
 
-public class BatchDataInput extends BatchInput {
+import com.google.common.base.Preconditions;
 
-    private final String file;
+public class BatchDataInput {
+
+    private final String inputFile;
+    private final String outputFile;
+    private final String modelLabel;
 
     private final ColumnInput columnData;
     private final ConversionInput conversionInput;
 
     public BatchDataInput(Element element) {
+        Preconditions.checkNotNull(element);
         Map<String, String> batchInputDataMap = XmlUtils.putAttributesInHash(element);
-        this.file = batchInputDataMap.get("file");
+        this.inputFile = batchInputDataMap.get("inputfile");
+        this.outputFile = batchInputDataMap.get("outputfile");
+        this.modelLabel = batchInputDataMap.get("model");
         this.columnData = new ColumnInput(element.getChild(XmlElementNames.ColumnDataElement));
         this.conversionInput = new ConversionInput(element.getChild(XmlElementNames.ColumnDataElement));
     }
@@ -35,10 +42,18 @@ public class BatchDataInput extends BatchInput {
     }
 
     /**
-     * @return the file
+     * @return the inputFile
      */
-    public String getFile() {
-        return file;
+    public String getInputFile() {
+        return inputFile;
+    }
+
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    public String getModelLabel() {
+        return modelLabel;
     }
 
 }

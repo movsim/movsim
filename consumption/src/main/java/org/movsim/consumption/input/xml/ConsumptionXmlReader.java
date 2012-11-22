@@ -107,7 +107,7 @@ public class ConsumptionXmlReader {
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
         System.out.println("root=" + root.toString());
-        final ConsumptionInput consumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
+        final ConsumptionInput consumptionInput = new ConsumptionInput(root);
 
         inputData.setConsumptionInput(consumptionInput);
     }

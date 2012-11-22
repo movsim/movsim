@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.consumption.input.xml.batch.BatchDataInput;
+
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Preconditions;
@@ -20,14 +22,25 @@ public class InputReader {
 
     private final List<ConsumptionDataRecord> records;
 
-    public InputReader(File inputFile) {
-        Preconditions.checkNotNull(inputFile);
-        Preconditions.checkArgument(inputFile.exists() && inputFile.isFile() );
+    public static InputReader create(BatchDataInput batchInput, String path) {
+        File inputFile = new File(path, batchInput.getInputFile());
+        System.out.println("read input from " + inputFile.getAbsolutePath());
+        return new InputReader(inputFile);
+    }
 
+    public static InputReader create(File inputFile) {
+        System.out.println("read input from " + inputFile.getAbsolutePath());
+        return new InputReader(inputFile);
+    }
+
+    private InputReader(File inputFile) {
+        Preconditions.checkNotNull(inputFile);
+        Preconditions.checkArgument(inputFile.exists() && inputFile.isFile(), "file=" + inputFile.getAbsolutePath()
+                + " does not exist!");
         records = new LinkedList<ConsumptionDataRecord>();
         process(inputFile);
     }
-    
+
     public List<ConsumptionDataRecord> getRecords() {
         return records;
     }

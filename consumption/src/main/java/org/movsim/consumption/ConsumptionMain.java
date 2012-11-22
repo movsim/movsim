@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption;
 
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,6 +34,7 @@ import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.consumption.input.xml.ConsumptionInputData;
 import org.movsim.consumption.input.xml.ConsumptionXmlReader;
+import org.movsim.consumption.input.xml.batch.BatchDataInput;
 import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.Consumption;
@@ -42,8 +43,13 @@ import org.movsim.consumption.offline.ConsumptionDataRecord;
 import org.movsim.consumption.offline.InputReader;
 import org.movsim.consumption.offline.OutputWriter;
 
+import com.google.common.base.Preconditions;
+
 
 public class ConsumptionMain {
+
+    static final Map<String, Consumption> consumptionModelPool = new HashMap<String, Consumption>();
+    static ConsumptionInputData inputData;
 
     public static void main(String[] args) {
 
@@ -55,52 +61,38 @@ public class ConsumptionMain {
         
         ConsumptionCommandLine.parse(ConsumptionMetadata.getInstance(), args);
 
-        ConsumptionInputData inputData = new ConsumptionInputData();
+        inputData = new ConsumptionInputData();
         ConsumptionXmlReader.parse(ConsumptionMetadata.getInstance(), inputData);
         
-        // create model
+        System.out.println("size of batches = " + inputData.getConsumptionInput().getBatchInput().size());
+        for (BatchDataInput batch : inputData.getConsumptionInput().getBatchInput()) {
+            InputReader reader = InputReader
+                    .create(batch, ConsumptionMetadata.getInstance().getPathToConsumptionFile());
+            List<ConsumptionDataRecord> records = reader.getRecords();
 
-        Map<String, ConsumptionModelInput> consumptionModelInput = inputData.getConsumptionInput()
-                .getConsumptionModelInput();
-        
-        for (String s : consumptionModelInput.keySet()) {
-            System.out.println("parsed models: key = " + s);
-            System.out.println(consumptionModelInput.get(s).toString());
+            Consumption model = getModel(batch.getModelLabel());
+
+            ConsumptionCalculation calculation = new ConsumptionCalculation(model);
+            calculation.process(records);
+
+            OutputWriter writer = OutputWriter.create(batch, ConsumptionMetadata.getInstance().getOutputPath());
+            writer.write(records);
         }
 
-        final String label = "car";
-        if (!consumptionModelInput.containsKey(label)) {
-            System.err.println("xml does not provide model for label="+label);
-            System.exit(-1);
-        }
-
-
-        System.out.println("size of model input=" + consumptionModelInput.size());
-
-        Consumption model = new Consumption(label, consumptionModelInput.get(label));
-        
-        // QUICK HACK: develop parsing of offline trajectory data
-        System.out.println("MovismInput parser ");
-
-        // String filename = "Seesen_GPS.csv";
-        String filename = "Torfhaus_GPS.csv";
-        File input = new File("/home/kesting/workspace/consumption/data", filename);
-        // String outFilename = "Seesen_GPS_modeled.csv";
-        String outFilename = "Torfhaus_GPS_modeled.csv";
-        File output = new File("/home/kesting/tomtom/consumption/testdaten_harz", outFilename);
-
-        InputReader reader = new InputReader(input);
-        List<ConsumptionDataRecord> records = reader.getRecords();
-        
-
-        ConsumptionCalculation calculation = new ConsumptionCalculation(model);
-        calculation.process(records);
-
-        OutputWriter writer = new OutputWriter(output);
-        writer.write(records);
-
-        System.out.println("done.");
+        System.out.println(inputData.getConsumptionInput().getBatchInput().size() + " batches done.");
         
     }
     
+    private static Consumption getModel(String label) {
+        System.out.println("request model with key = " + label);
+        if (!consumptionModelPool.containsKey(label)) {
+            Preconditions.checkArgument(inputData.getConsumptionInput().getConsumptionModelInput().containsKey(label),
+                    "cannot find model with label=" + label + " in input.");
+            ConsumptionModelInput consumptionModelInput = inputData.getConsumptionInput().getConsumptionModelInput()
+                    .get(label);
+
+            consumptionModelPool.put(label, new Consumption(label, consumptionModelInput));
+        }
+        return consumptionModelPool.get(label);
+    }
 }
