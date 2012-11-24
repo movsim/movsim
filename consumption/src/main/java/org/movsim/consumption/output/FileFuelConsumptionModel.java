@@ -10,7 +10,7 @@ import org.movsim.consumption.model.EngineModel;
 public class FileFuelConsumptionModel extends FileOutputBase {
 
     private static final String extensionFormatJante = ".jante_%s.csv";
-    private static final String extensionFormatZeroAcceleration = ".carConstAccel_%s.csv";
+    private static final String extensionFormatZeroAcceleration = ".constAccel_%s.csv";
     private static final String extensionFormatSpecificConsumption = ".specCons_%s.csv";
 
     private static final String outputHeadingJante = COMMENT_CHAR
