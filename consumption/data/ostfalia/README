@@ -1,0 +1,17 @@
+# Arne Kesting, November 2012 
+# compile source code, e.g. in path movsim/consumption: 
+mvn clean install
+
+# do calculation:
+# Hint: put symlink to movsim/consumption/runmovsimconsumption in your bin search path
+runmovsimconsumption -f consumption_ostfalia.xml
+
+# do plotting of trajectory data
+gnuplot plot_route_seesen.gpl
+gnuplot plot_route_torfhaus.gpl
+
+# do plotting of consumption model output 
+gnuplot plot_consumption_models.gpl
+
+# clean csv and eps data in directory (script from movsim/core)
+cleanmovsim

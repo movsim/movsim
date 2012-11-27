@@ -1,3 +1,13 @@
 # gnuplot command file
+
+projectName="consumption_ostfalia"
+consumptionModelName="AudiA3"
 baseName = "route-Torfhaus"
+consumptionModel="AudiA3"
+load "plot_route_consumption_template.gpl"
+
+consumptionModelName="CarGasoline"
+load "plot_route_consumption_template.gpl"
+
+consumptionModelName="CarDiesel"
 load "plot_route_consumption_template.gpl"

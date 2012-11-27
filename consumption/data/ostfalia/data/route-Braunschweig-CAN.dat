@@ -6,7 +6,7 @@
 #,,UPM,Drehmoment,Kraftstoffverbr,Drehmoment,,Drehzahl,Bin/Bits,Last,Bin/Bits,,,Zeitschritte,Zeit,Zeit,Weg,Geschwindigkeit,Beschleunigung,Verbrauch VAGCOM,,,
 #,,UPM,Torque,Fuel Consumption,Torque,,number of rotations,Bin/Bits,Load,Bin/Bits,,,Timestep,Time,Time,Position,Speed,Acceleration,Consumption VAGCOM,,,,,,,,,,,,,,,,,,,,
 #,TIME,,,,,TIME,,,,,TIME,,dt,t,t,s,v,a,bs,,v,v
-#MARKER,STAMP, /min, Nm, l/h, Nm,STAMP, km/h,,%,,STAMP,,s,h,min,km,km/h,m/s2,l,,km/h,m/s
+#MARKER, STAMP, /min, Nm, l/h, Nm,STAMP, km/h,,%,,STAMP,,s,h,min,km,km/h,m/s2,l,,km/h,m/s
 ,12.72,1008,63.4,1.4,53.7,12.94,3,1100,7.1,0,,,0.45,0.00,0.00,0.00,3,0.60,0.00,,2.94,0.82
 ,13.17,1029,63.4,1.4,56.1,13.39,4,1100,9.4,0,,,0.45,0.00,0.01,0.00,4,0.92,0.00,,3.92,1.09
 ,13.62,1071,68.3,1.6,70.8,13.84,5,1100,11.4,0,,,0.45,0.00,0.02,0.00,5,0.92,0.00,,4.9,1.36
