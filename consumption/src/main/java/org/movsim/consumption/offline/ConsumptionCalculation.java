@@ -2,15 +2,15 @@ package org.movsim.consumption.offline;
 
 import java.util.List;
 
-import org.movsim.consumption.model.Consumption;
+import org.movsim.consumption.model.EnergyFlowModel;
 
 import com.google.common.base.Preconditions;
 
 public class ConsumptionCalculation {
 
-    private final Consumption model;
+    private final EnergyFlowModel model;
 
-    public ConsumptionCalculation(Consumption model) {
+    public ConsumptionCalculation(EnergyFlowModel model) {
         Preconditions.checkNotNull(model);
         this.model = model;
     }

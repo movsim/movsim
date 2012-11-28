@@ -211,7 +211,7 @@ public class ConsumptionCommandLine{
         System.out.println("option -h. Exit Programm");
 
         final HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("Movsim's Consumption Model", options);
+        formatter.printHelp("Movsim's EnergyFlowModelImpl Model", options);
         System.exit(0);
     }
 

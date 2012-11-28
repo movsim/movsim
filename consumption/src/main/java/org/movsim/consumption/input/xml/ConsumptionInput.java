@@ -47,7 +47,6 @@ public class ConsumptionInput {
 
     private final List<BatchDataInput> batchInput;
 
-    @SuppressWarnings("unchecked")
     public ConsumptionInput(Element rootElement) {
         Preconditions.checkNotNull(rootElement);
         System.out.println("parse " + rootElement.toString());

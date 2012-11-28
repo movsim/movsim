@@ -29,33 +29,33 @@
 <!-- general remarks: -->
 <!-- all parameter values are expected in SI units. Otherwise the attribute's name is indicating the unit explicitely -->
 
-<!ELEMENT Movsim (Batch?, Consumption) >
+<!ELEMENT movsim (batch?, consumption) >
 
 
 <!-- ##################################################################### -->
 <!-- Batch                                                                 -->
 <!-- ##################################################################### -->
-<!ELEMENT Batch (Data+) >
-<!ATTLIST Batch
+<!ELEMENT batch (data+) >
+<!ATTLIST batch
 >
 
-<!ELEMENT Data (Columns, Conversions) >
-<!ATTLIST Data
+<!ELEMENT data (columns, conversions) >
+<!ATTLIST data
 inputfile  CDATA   #REQUIRED
 outputfile  CDATA   #REQUIRED
 model  CDATA   #REQUIRED
 >
 
-<!ELEMENT Columns EMPTY >
-<!ATTLIST Columns
+<!ELEMENT columns EMPTY >
+<!ATTLIST columns
 time  NMTOKEN   #REQUIRED
 speed NMTOKEN   #REQUIRED
 acceleration  NMTOKEN   #REQUIRED
 gradient  NMTOKEN   #REQUIRED
 >
 
-<!ELEMENT Conversions EMPTY >
-<!ATTLIST Conversions
+<!ELEMENT conversions EMPTY >
+<!ATTLIST conversions
 time CDATA  ""
 speed NMTOKEN "1"
 acceleration  NMTOKEN  "1"
@@ -67,48 +67,48 @@ gradient  NMTOKEN "1"
 <!-- Consumption Model                                                -->
 <!-- ##################################################################### -->
 
-<!ELEMENT Consumption (Model+) >
+<!ELEMENT consumption (model+) >
 
-<!ATTLIST Consumption
+<!ATTLIST consumption
 >
 
-<!ELEMENT Model (Car,Engine) >
+<!ELEMENT model (vehicle,engine,rotationModel) >
 
 
-<!ATTLIST Model
+<!ATTLIST model
   label   CDATA   #REQUIRED
   output  (true|false) "false" 
 >
 
-<!ELEMENT Car EMPTY >
-<!ATTLIST Car
+<!ELEMENT vehicle EMPTY >
+<!ATTLIST vehicle
   mass                    NMTOKEN "1500"
   cross_section_surface   NMTOKEN "2.2"
   cd_value                NMTOKEN "0.32"
   electric_power          NMTOKEN "2000"
   const_friction          NMTOKEN "0.0145"
   v_friction              NMTOKEN "0"
-  dynamic_tyre_radius     NMTOKEN "0.3113"
 >
 
-<!ELEMENT Engine (GearRatios?) >
-<!ATTLIST Engine
+<!ELEMENT engine EMPTY >
+<!ATTLIST engine
   max_power_kW  NMTOKEN "90"
   cylinder_vol_l  NMTOKEN "1.4"
   idle_cons_rate_linvh NMTOKEN "0.6"
   cspec_min_g_per_kwh NMTOKEN "212"
   pe_min_bar NMTOKEN "1"
   pe_max_bar NMTOKEN "19" 
+>
+
+<!ELEMENT rotationModel (gearRatio+) >
+<!ATTLIST rotationModel
   idle_rotation_rate_invmin NMTOKEN "1000"
   max_rotation_rate_invmin NMTOKEN "6000"
+  dynamic_tyre_radius     NMTOKEN "0.3113"
 >
 
-<!ELEMENT GearRatios (GearRatio+) >
-<!ATTLIST GearRatios
->
-
-<!ELEMENT GearRatio EMPTY >
-<!ATTLIST GearRatio
+<!ELEMENT gearRatio EMPTY >
+<!ATTLIST gearRatio
   phi   NMTOKEN  #REQUIRED
 >
 

@@ -23,25 +23,28 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.consumption.output;
+package org.movsim.consumption.model;
 
-public class FuelConstants {
+public interface ConsumptionConstants {
 
-    private FuelConstants() {
-    } // prevents instantiation
+    /** grav. acceleration (m/s^2) */
+    double GRAVITATION = 9.81;
 
-    public static double GRAVITATION = 9.81;// grav. acceleration (m/s^2)
+    /** 1.29 (kg/m^3) at 0 degress celsius, 1014 hPa */
+    double RHO_AIR = 1.29;
 
-    public static double RHO_AIR = 1.29; // 1.29 (kg/m^3) @ 0 cels, 1014 hPa
+    /** density of gasoline (kg/m^3) */
+    double RHO_FUEL = 760;
 
-    public static double RHO_FUEL = 760; // density of "Benzin" (kg/m^3)
-    public static double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.; // density of "Benzin" (kg/l)
+    /** density of gasoline (kg/l) */
+    double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.;
 
-    public static double CALORIC_DENS = 44e6;// "Benzin": 44 MJ/kg (--> 0.76*44 JM/liter)
+    /** caloric density of gasoline: 44 MJ/kg (--> 0.76*44 JM/liter) */
+    double CALORIC_DENSITY = 44e6;
 
-    // Tranform g/kWh => m^3/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9)
-    public static double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / (RHO_FUEL * 3.6e9);
+    /** tranforming factor g/kWh => m^3/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
+    double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / (RHO_FUEL * 3.6e9);
 
-    public static double CONVERSION_BAR_TO_PASCAL = 1e5;
+    double CONVERSION_BAR_TO_PASCAL = 1e5;
 
 }

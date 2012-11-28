@@ -27,37 +27,41 @@ package org.movsim.consumption.model;
 
 import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
 import org.movsim.consumption.output.FileFuelConsumptionModel;
-import org.movsim.consumption.output.FuelConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-public class Consumption {
+// TODO Fix output after refactoring
+class EnergyFlowModelImpl implements EnergyFlowModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Consumption.class);
+    final static Logger logger = LoggerFactory.getLogger(EnergyFlowModelImpl.class);
 
-    // if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds
-    // 900=3-4 times the minimum
-    private final double LIMIT_SPEC_CONS = 900 * FuelConstants.CONVERSION_GRAMM_PER_KWH_TO_SI;
+    /** if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds 900=3-4 times the minimum */
+    private final double LIMIT_SPEC_CONS = 900 * ConsumptionConstants.CONVERSION_GRAMM_PER_KWH_TO_SI;
 
-    // extremely high flow in motor regimes that cannot be reached
-    private final double POW_ERROR = 1e7; // 10000 KW
+    /** extremely high flow in motor regimes that cannot be reached. Set to 10000 KW */
+    private final double POW_ERROR = 1e7;
 
     private final double FUELFLOW_ERROR = POW_ERROR * LIMIT_SPEC_CONS;
 
-    // ###############################
+    private final InstantaneousPowerModel carPowerModel;
 
-    private final CarModel carModel;
+    private final EngineEfficienyModel engineModel;
 
-    private final EngineModel engineModel;
+    private final EngineRotationModel engineRotationModel;
 
-    public Consumption(String keyLabel, ConsumptionModelInput input) {
+    private final VehicleAttributes vehicle;
+
+    public EnergyFlowModelImpl(String keyLabel, ConsumptionModelInput input) {
         Preconditions.checkNotNull(input);
-        carModel = new CarModel(input.getCarData());
-        engineModel = new EngineModel(input.getEngineData(), carModel);
+        vehicle = new VehicleAttributes(input.getCarData());
+        carPowerModel = new InstantaneousPowerModelImpl(vehicle);
+        engineRotationModel = new EngineRotationModel(input.getRotationModelInput());
+        engineModel = new EngineEfficiencyModelAnalyticImpl(input.getEngineData(), engineRotationModel);
 
+        // TODO
         if (input.isOutput()) {
             writeOutput(keyLabel);
         }
@@ -92,22 +96,21 @@ public class Consumption {
      */
     public double getFuelFlow(double v, double acc, double grade, int gearIndex, boolean withJante) {
 
-        final double fMot = engineModel.getEngineFrequency(v, gearIndex);
+        final double fMot = engineRotationModel.getEngineFrequency(v, gearIndex);
 
-        // final double forceMech=getForceMech(v,acc); // can be <0
-        final double powMech = v * carModel.getForceMech(v, acc, grade); // can be <0
+        final double powMech = carPowerModel.getMechanicalPower(v, acc, grade);
 
         // electric generator is not active near or at in standstill (v<1*3.6km/h)
         // resulting in idle fuel consumption from engine specification
         // modeling assumption becomes invalid if lot of standstills are considered
         // electric consumption is active and no electric energy is provided by generator
-        final double elecPower = (v < 1) ? 0 : carModel.getElectricPower();
+        final double elecPower = (v < 1) ? 0 : vehicle.electricPower();
 
         final double powMechEl = powMech + elecPower;// can be <0
 
         double fuelFlow = FUELFLOW_ERROR;
 
-        if (engineModel.isFrequencyPossible(v, gearIndex) || gearIndex == 0) {
+        if (engineRotationModel.isFrequencyPossible(v, gearIndex) || gearIndex == 0) {
             fuelFlow = engineModel.getFuelFlow(fMot, powMechEl);
         }
 
@@ -119,7 +122,7 @@ public class Consumption {
         }
 
         // indicates that too high motor frequency
-        if (withJante && (fMot > engineModel.getMaxFrequency())) {
+        if (withJante && (fMot > engineRotationModel.getMaxFrequency())) {
             if (logger.isDebugEnabled()) {
                 logger.debug(String
                         .format("v_kmh=%f, acc=%f, gear=%d, motor frequency=%d/min too high -- > return fuelErrorConsumption: %.2f",
@@ -129,9 +132,9 @@ public class Consumption {
         }
 
         // indicates too low motor frequency
-        if (withJante && (fMot < engineModel.getMinFrequency())) {
+        if (withJante && (fMot < engineRotationModel.getMinFrequency())) {
             if (gearIndex == 0) {
-                fuelFlow = carModel.getElectricPower() * LIMIT_SPEC_CONS;
+                fuelFlow = vehicle.electricPower() * LIMIT_SPEC_CONS;
                 if (logger.isDebugEnabled()) {
                     logger.debug(String.format("v=%f, gear=%d, fuelFlow=%f %n", v, gearIndex + 1, fuelFlow));
                 }
@@ -157,7 +160,7 @@ public class Consumption {
     public double[] getMinFuelFlow(double v, double acc, double grade, boolean withJante) {
         int gear = 1;
         double fuelFlow = FUELFLOW_ERROR;
-        for (int testGearIndex = engineModel.getMaxGearIndex(); testGearIndex >= 0; testGearIndex--) {
+        for (int testGearIndex = engineRotationModel.getMaxGearIndex(); testGearIndex >= 0; testGearIndex--) {
             final double fuelFlowGear = getFuelFlow(v, acc, grade, testGearIndex, withJante);
             if (fuelFlowGear < fuelFlow) {
                 gear = testGearIndex + 1;
@@ -191,16 +194,20 @@ public class Consumption {
         return 1000 * getMinFuelFlow(v, acc, grade, true)[0]; // convert from m^3/s --> liter/s
     }
 
+    // TODO draw out
     private void writeOutput(String keyLabel) {
         final FileFuelConsumptionModel fileOutput = new FileFuelConsumptionModel(keyLabel, this);
 
-        int gear = 0;
-        fileOutput.writeJante(gear, carModel);
-        fileOutput.writeZeroAccelerationTest(carModel, engineModel);
-        fileOutput.writeSpecificConsumption(engineModel);
+        fileOutput.writeJanteOptimalGear(vehicle, carPowerModel);
+
+        fileOutput.writeZeroAccelerationTest(vehicle, carPowerModel, engineRotationModel);
+
+        if(engineModel instanceof EngineEfficiencyModelAnalyticImpl){
+            fileOutput.writeSpecificConsumption(engineRotationModel, (EngineEfficiencyModelAnalyticImpl) engineModel);
+        }
 
         // jante output per gear
-        // for (int gearIndex = 0; gearIndex < engineModel.getMaxGearIndex(); gearIndex++) {
+        // for (int gearIndex = 0; gearIndex < engineRotationModel.getMaxGearIndex(); gearIndex++) {
         // final int gear = gearIndex + 1;
         // final String strGear = new Integer(gear).toString();
         // final String filename = projectName + ".Jante" + strGear;
