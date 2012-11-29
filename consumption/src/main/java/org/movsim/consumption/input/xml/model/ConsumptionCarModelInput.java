@@ -41,7 +41,6 @@ public class ConsumptionCarModelInput {
     private final double electricPower; // in Watt
     private final double consFrictionCoefficient; // unitless
     private final double vFrictionCoefficient;
-    private final double dynamicTyreRadius; // in m
 
     public ConsumptionCarModelInput(Map<String, String> map) {
         this.vehicleMass = Double.parseDouble(map.get("mass"));
@@ -50,7 +49,6 @@ public class ConsumptionCarModelInput {
         this.electricPower = Double.parseDouble(map.get("electric_power"));
         this.consFrictionCoefficient = Double.parseDouble(map.get("const_friction"));
         this.vFrictionCoefficient = Double.parseDouble(map.get("v_friction"));
-        this.dynamicTyreRadius = Double.parseDouble(map.get("dynamic_tyre_radius"));
     }
 
     public double getVehicleMass() {
@@ -75,9 +73,5 @@ public class ConsumptionCarModelInput {
 
     public double getvFrictionCoefficient() {
         return vFrictionCoefficient;
-    }
-
-    public double getDynamicTyreRadius() {
-        return dynamicTyreRadius;
     }
 }
