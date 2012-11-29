@@ -64,6 +64,7 @@ set style line 99 lt 7 lw 1 linecolor rgb "#000000" #black
 select(x,xmin,xmax)=((x>=xmin)&&(x<=xmax)) ? 0 : 1/0  #-1000
 
 set title "Consumption for zero acceleration, model ".consumptionModelName
+set xlabel "Speed (km/h)"
 set ylabel "Consumption (l/100km)"
 set out constAccOutput
 print "plot ".constAccOutput
