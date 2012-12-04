@@ -24,7 +24,7 @@ public class BatchDataInput {
         this.outputFile = batchInputDataMap.get("outputfile");
         this.modelLabel = batchInputDataMap.get("model");
         this.columnData = new ColumnInput(element.getChild(XmlElementNames.ColumnDataElement));
-        this.conversionInput = new ConversionInput(element.getChild(XmlElementNames.ColumnDataElement));
+        this.conversionInput = new ConversionInput(element.getChild(XmlElementNames.ConversionDataElement));
     }
 
     /**

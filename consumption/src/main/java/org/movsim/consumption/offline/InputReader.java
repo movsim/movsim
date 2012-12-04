@@ -21,23 +21,24 @@ public class InputReader {
     private final char separator = ',';
 
     private final List<ConsumptionDataRecord> records;
+    
+    private final BatchDataInput batchInput;
 
     public static InputReader create(BatchDataInput batchInput, String path) {
         File inputFile = new File(path, batchInput.getInputFile());
         System.out.println("read input from " + inputFile.getAbsolutePath());
-        return new InputReader(inputFile);
+        
+        return new InputReader(inputFile, batchInput);
     }
 
-    public static InputReader create(File inputFile) {
-        System.out.println("read input from " + inputFile.getAbsolutePath());
-        return new InputReader(inputFile);
-    }
-
-    private InputReader(File inputFile) {
+    private InputReader(File inputFile, BatchDataInput batchInput) {
         Preconditions.checkNotNull(inputFile);
+        Preconditions.checkNotNull(batchInput);
         Preconditions.checkArgument(inputFile.exists() && inputFile.isFile(), "file=" + inputFile.getAbsolutePath()
                 + " does not exist!");
+        this.batchInput = batchInput;
         records = new LinkedList<ConsumptionDataRecord>();
+        
         process(inputFile);
     }
 
@@ -59,7 +60,7 @@ public class InputReader {
 
     private void parseInputData(List<String[]> input) {
        
-        InputDataParser parser = new InputDataParser();
+        InputDataParser parser = new InputDataParser(batchInput.getColumnData(), batchInput.getConversionInput());
         
         int index = 0;
         for (String[] line : input) {
