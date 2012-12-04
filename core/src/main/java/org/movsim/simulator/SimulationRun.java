@@ -187,6 +187,7 @@ public class SimulationRun {
     public void runToCompletion() {
         assert dt != 0.0;
         assert duration != 0.0;
+        assert duration > 0.0;
         reset();
         final long timeBeforeSim_ms = System.currentTimeMillis();
         final double timeLimit = duration + dt / 2.0; // allow for rounding errors

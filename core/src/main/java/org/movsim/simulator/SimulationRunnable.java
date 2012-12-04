@@ -318,4 +318,8 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
         smoothedTimewarp = Math.min(1000, smoothedTimewarp == 0.0 ? actualTimewarp : betaTimewarp * smoothedTimewarp
                 + (1.0 - betaTimewarp) * actualTimewarp);
     }
+
+    public boolean isFiniteDuration() {
+        return duration < Double.MAX_VALUE;
+    }
 }

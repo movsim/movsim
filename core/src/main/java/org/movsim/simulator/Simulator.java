@@ -120,7 +120,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
 
         simulationRunnable.setTimeStep(simInput.getTimestep());
-        simulationRunnable.setDuration(simInput.getSimulationDuration());
+        double duration = simInput.getSimulationDuration();
+        if (duration < 0) {
+            logger.info("simulation duration set to infinity");
+        }
+        simulationRunnable.setDuration(duration < 0 ? Double.MAX_VALUE : duration);
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
 

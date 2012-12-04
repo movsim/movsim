@@ -53,7 +53,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     private boolean withProgressBar = true;
 
     boolean isWithFiniteDurationAndProgressBar() {
-        return withProgressBar && simulationRunnable.duration() > 0;
+        return withProgressBar && simulationRunnable.isFiniteDuration();
     }
 
     public void setWithProgressBar(boolean withProgressBar) {
