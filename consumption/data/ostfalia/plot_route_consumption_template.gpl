@@ -73,7 +73,7 @@ set xzeroaxis lt -1
 
 ########  Plot Diagrams  #####################
 
-set title "Route: ".baseName
+set title "Route: ".baseName.", model=".consumptionModelName
 set xlabel "Time (min)"
 
 set ylabel "Kinematic Quantities"
@@ -102,7 +102,7 @@ plot\
 
 fuel100(cLiterPerH,vKMH) = (vKMH<5) ? 1.0 : cLiterPerH/3600.*100*1000/(vKMH/3.6)
 
-set title "Route: ".baseName
+set title "Route: ".baseName.", model=".consumptionModelName
 set xlabel "Time (min)"
 
 set ylabel "CAN Quantities"
