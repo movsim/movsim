@@ -102,7 +102,7 @@ plot\
 
 fuel100(cLiterPerH,vKMH) = (vKMH<5) ? 1.0 : cLiterPerH/3600.*100*1000/(vKMH/3.6)
 
-set title "Route: ".baseName.", model=".consumptionModelName
+set title "Route: ".baseName
 set xlabel "Time (min)"
 
 set ylabel "CAN Quantities"
@@ -112,7 +112,17 @@ plot\
   canFile u ($2/60.):($19*10) t "10*acceleration [m/s^2]" w l ls 3,\
   canFile u ($2/60.):($5*10) t "10*consumption [l/h]" w l ls 4,\
   canFile u ($2/60.):(fuel100($5,$18)) t "consumption [l/100km]" w l ls 5
+
   
+set ylabel "CAN Quantities"
+set out speedCanOutput
+print "plot".speedCanOutput
+plot\
+  canFile u ($2/60.):18 t "speed [km/h]" w l ls 1,\
+  canFile u ($2/60.):($19*10) t "10*acceleration [m/s^2]" w l ls 3
+
+  
+set title "Route: ".baseName.", model=".consumptionModelName
 set ylabel "Model Quantities"
 set out fuelModelOutput
 print "plot".fuelModelOutput
@@ -128,13 +138,6 @@ print "plot".fuelCompareOutput
 plot\
   canFile u ($2/60.):20 t "CAN data" w l ls 1,\
   modelFile u ($1/60.):7 t "model" w l ls 3
-  
-set ylabel "CAN Quantities"
-set out speedCanOutput
-print "plot".speedCanOutput
-plot\
-  canFile u ($2/60.):18 t "speed [km/h]" w l ls 1,\
-  canFile u ($2/60.):($19*10) t "10*acceleration [m/s^2]" w l ls 3
   
 
 ############################################################################
