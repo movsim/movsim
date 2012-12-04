@@ -43,8 +43,8 @@
     <consumption>
         <model label="AudiA3" output="true">
             <vehicle mass="1000" cross_section_surface="2.13" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
-            <engine max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="18" />
-            <rotationModel idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000" dynamic_tyre_radius="0.31">
+            <engine max_power_kW="100" cylinder_vol_l="1.8" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="22" />
+            <rotationModel idle_rotation_rate_invmin="700" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
                 <!-- gear box with 7 gears -->
                 <gearRatio phi="16.7" />
                 <gearRatio phi="10.1" />
