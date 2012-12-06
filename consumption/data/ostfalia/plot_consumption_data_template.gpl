@@ -1,0 +1,107 @@
+# movsim.org -- gnuplot command file for example data movsim/consumption/data/ostfalia
+
+# invoke using -e option to set parameters, eg: 
+# gnuplot -e "var='value'" gnuplotfile.gpl
+
+set datafile separator ","
+
+# set the output type
+set terminal postscript eps enhanced color solid font "Helvetica" 26
+
+# parameters
+inputPathData = "./data/"
+inputPathSim = "./"
+outputPath = "./"
+#print "please make sure that output directory ".outputPath." already exists"
+
+print "input parameter: baseName=".baseName
+
+# variables
+inputFileEndingData=".dat"  # empiric data (input)
+outputFileEnding=".eps"
+
+canInput="-CAN"
+specCons=".specCons_"
+
+# input files
+canFile=inputPathData.baseName.canInput.inputFileEndingData
+
+print "empiric CAN data input file = ".canFile
+
+# plot output files
+specConsPressureOutput = outputPath.baseName.specCons."pressure_emp".outputFileEnding
+specConsPowerOutput = outputPath.baseName.specCons."power_emp".outputFileEnding
+########  Line Styles  ###################################
+
+set style line 1 linetype 1 linewidth 2 pointtype 7 pointsize 1
+set style line 2 linetype 2 linewidth 2 pointtype 5 pointsize 0.5
+set style line 3 linetype 3 linewidth 2 pointtype 9 pointsize 1.5
+set style line 4 linetype 4 linewidth 2 pointtype 11 pointsize 1.5
+set style line 5 linetype 7 linewidth 2 pointtype 13 pointsize 1.5
+
+set style line 10 linetype 1 linewidth 2 pointtype 7 pointsize 1.5
+set style line 11 linetype 1 linewidth 2 pointtype 7 pointsize 1.5
+set style line 12 linetype 7 linewidth 2 pointtype 5 pointsize 1.5
+set style line 13 linetype 3 linewidth 2 pointtype 7 pointsize 1.5
+
+#set nogrid
+set grid
+set size 1.2,1
+set xzeroaxis lt -1
+
+
+############################################################################
+set style line 99 lt 7 lw 1 linecolor rgb "#000000" #black
+
+#################################
+# Definition of Contour lines   (line style=line style indicated at splot)
+#################################
+
+#unset contour              # no contour lines
+#set contour surface     
+#set cntrparam bspline 
+unset clabel 
+unset key
+unset grid
+
+#################################
+# Definition of used color-coding
+#################################
+set pm3d map
+#set pm3d; set pm3d map # gnuplot bug; set pm3d  map alone
+
+
+set palette defined ( 0 "#dd00ff",  5 "#9933ff", 12 "#6666ff", 20 "#00eeee",\
+      25 "green", 30 "#aaff00", 40 "yellow", 70 "orange", 100 "red") 
+
+set xlabel "Frequency [rpm]"
+set xrange [800:6000]
+
+set ylabel "Torque [Nm]"
+set yrange [0:230]
+
+set title "Specific consumption(f,pressure) [g/kWh] of data"
+set zrange [200:500]
+unset ztics 
+
+#set cntrparam levels discrete 200,210,220,230,240,250,260,270,280,290,300 # freely set lines
+
+const=300
+set out specConsPressureOutput
+splot canFile u 3:4:(300) t "CAN data" w p palette
+
+## specConsInput u 1:4:5  w pm3d,\ 
+## TODO l/h --> g/kWh
+ 
+#########################################
+
+powerFuncFromM(torque,f)=2*pi*torque*f/60.
+print "power=",powerFuncFromM(50,2000)
+
+set title "specific consumption (f,power) [g/kWh] of data"
+set ylabel "Power [kW]"
+set yrange [0:95]
+
+set out specConsPowerOutput
+splot canFile u 3:(powerFuncFromM($4,$3)/1000.):(300) t "CAN data" w p palette
+
