@@ -81,7 +81,7 @@
             </ROUTE>
         </ROUTES>
         <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="1">
+            <FLOATING_CAR_DATA n_dt="1" route="main">
                 <FC number="100" />
             </FLOATING_CAR_DATA>
             <SPATIOTEMPORAL dx="100" dt="40" route="main" />
