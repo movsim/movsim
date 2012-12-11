@@ -10,7 +10,7 @@ public class ConsumptionDataRecord {
     private final double speed;
     /** in m/s^2 */
     private final double acceleration;
-    /** in radians */
+    /** in radian */
     private final double grade;
 
     /** liter per second ? */
