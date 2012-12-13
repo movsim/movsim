@@ -102,4 +102,11 @@ public class ConsumptionDataRecord {
     public void setGear(int gear) {
         this.gear = gear;
     }
+
+    @Override
+    public String toString() {
+	return "ConsumptionDataRecord [index=" + index + ", time=" + time + ", speed=" + speed + ", acceleration="
+	        + acceleration + ", grade=" + grade + ", consumptionRate=" + consumptionRate
+	        + ", cumulatedConsumption=" + cumulatedConsumption + ", gear=" + gear + "]";
+    }
 }

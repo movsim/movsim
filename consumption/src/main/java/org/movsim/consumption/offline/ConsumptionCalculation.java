@@ -22,7 +22,11 @@ public class ConsumptionCalculation {
             double[] minFuelFlow = model.getMinFuelFlow(record.getSpeed(), record.getAcceleration(),
                     record.getGrade(), true);
             double fuelFlow = 1000 * minFuelFlow[0];// conversion from m^3/s to liter/s
-            record.setConsumptionRate(1000 * minFuelFlow[0]);
+            if(fuelFlow > 0.3){
+        	fuelFlow = 0;
+        	System.out.println("  !!! Ignore unrealistic consumption, set to 0. Inputdata="+record.toString());
+            }
+            record.setConsumptionRate(fuelFlow);
             record.setGear((int) minFuelFlow[1]);
             if (previous != null) {
                 // set cumulated value from previous step
