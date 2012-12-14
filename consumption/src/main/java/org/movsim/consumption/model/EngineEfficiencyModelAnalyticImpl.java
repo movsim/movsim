@@ -70,7 +70,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
         cylinderVolume = engineInput.getCylinderVolume();
 
-        minEffPressure = engineInput.getEffectivePressureMinimum();
+        minEffPressure = engineInput.getEffectivePressureMinimum(); // TODO not used!
         maxEffPressure = engineInput.getEffectivePressureMaximum();
 
         maxMoment = getMaxMoment();
@@ -105,7 +105,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     }
 
     // consumption rate (m^3/s) as function of frequency and output power
-    private double consRateAnalyticModel(double frequency, double mechPower) {
+    private double calcConsumptionRate(double frequency, double mechPower) {
         final double indMoment = Moments.getMoment(mechPower, frequency) + Moments.getModelLossMoment(frequency);
         final double totalPower = mechPower + Moments.getLossPower(frequency);
         final double dotCInLiterPerSecond = 1. / ConsumptionConstants.RHO_FUEL_PER_LITER * totalPower
@@ -132,7 +132,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     @Override
     public double getFuelFlow(double frequency, double power) {
-        return consRateAnalyticModel(frequency, power); // returns m^3/s !!
+        return calcConsumptionRate(frequency, power);
     }
 
     @Override

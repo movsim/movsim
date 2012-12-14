@@ -60,9 +60,9 @@ public class ConsumptionModelInput {
                 .getChild(XmlElementNames.ConsumptionCarData));
         carData = new ConsumptionCarModelInput(carDataMap);
 
-        engineData = new ConsumptionEngineModelInput(elem.getChild(XmlElementNames.ConsumptionEngineData));
+        engineData = new ConsumptionEngineModelInput(elem.getChild(XmlElementNames.ConsumptionEngineDataCombustionModel));
         
-        rotationModelInput = new RotationModelInput(elem.getChild(XmlElementNames.ConsumptionRotatiionModel));
+        rotationModelInput = new RotationModelInput(elem.getChild(XmlElementNames.ConsumptionRotationModel));
 
     }
 

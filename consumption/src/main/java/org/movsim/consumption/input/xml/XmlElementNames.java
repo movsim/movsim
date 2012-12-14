@@ -33,8 +33,9 @@ public interface XmlElementNames {
     public final String Consumption = "consumption";
     public final String ConsumptionModel = "model";
     public final String ConsumptionCarData = "vehicle";
-    public final String ConsumptionEngineData = "engine";
-    public final String ConsumptionRotatiionModel = "rotationModel";
+    public final String ConsumptionEngineDataCombustionModel = "engineCombustionMap";
+    public final String ConsumptionEngineDataConstantModel = "engineConstantMap";
+    public final String ConsumptionRotationModel = "rotationModel";
     public final String ConsumptionEngineGear = "gearRatio";
     public final String BatchElement = "batch";
     public final String BatchDataElement = "data";

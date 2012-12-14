@@ -72,7 +72,7 @@ gradient  NMTOKEN "1"
 <!ATTLIST consumption
 >
 
-<!ELEMENT model (vehicle,engine,rotationModel) >
+<!ELEMENT model (vehicle,(engineCombustionMap|engineConstantMap),rotationModel) >
 
 
 <!ATTLIST model
@@ -90,14 +90,21 @@ gradient  NMTOKEN "1"
   v_friction              NMTOKEN "0"
 >
 
-<!ELEMENT engine EMPTY >
-<!ATTLIST engine
+<!ELEMENT engineCombustionMap EMPTY >
+<!ATTLIST engineCombustionMap
   max_power_kW  NMTOKEN "90"
   cylinder_vol_l  NMTOKEN "1.4"
   idle_cons_rate_linvh NMTOKEN "0.6"
   cspec_min_g_per_kwh NMTOKEN "212"
   pe_min_bar NMTOKEN "1"
   pe_max_bar NMTOKEN "19" 
+>
+
+<!ELEMENT engineConstantMap EMPTY >
+<!ATTLIST engine
+  max_power_kW  NMTOKEN "90"
+  idle_cons_rate_linvh NMTOKEN "0.6"
+  cspec_min_g_per_kwh NMTOKEN "212"
 >
 
 <!ELEMENT rotationModel (gearRatio+) >
