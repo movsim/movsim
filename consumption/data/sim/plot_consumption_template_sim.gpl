@@ -1,0 +1,103 @@
+# movsim.org -- gnuplot command file for plotting movsim floating car input and consumption output data
+
+# invoke using -e option to set parameters, eg: 
+# gnuplot -e "var='value'" gnuplotfile.gpl
+
+set datafile separator ","
+
+# set the output type
+#set terminal postscript eps enhanced color solid font "Helvetica" 26
+set terminal postscript eps color solid font "Helvetica" 26
+
+
+# parameters
+inputPathData = "./"
+inputPathSim = "./"
+outputPath = "./"
+#print "please make sure that output directory ".outputPath." already exists"
+
+#baseName="city_example.car.route_main.000002"
+#consumptionModelName="AudiA3"
+
+print "input parameter: baseName=".baseName
+print "input parameter: consumptionModelName=".consumptionModelName
+
+
+# variables
+inputFileEnding=".dat"  # empiric data (input)
+inputFileEndingSim=".csv"   # movsim consumption output
+outputFileEnding=".eps"
+
+# input files
+inputFile=baseName.inputFileEnding  # fc/trajectory input
+modelFile=baseName.".".consumptionModelName.inputFileEndingSim   # movsim consumption output
+
+print "input file=".inputFile
+print "consumption output file for input=".modelFile
+
+# plot output files
+speedPlot = outputPath.baseName.".speed".outputFileEnding
+heightPlot = outputPath.baseName.".height".outputFileEnding
+
+fuelPlot = outputPath.baseName.".fuel".outputFileEnding
+fuelCumPlot = outputPath.baseName.".cumFuel".outputFileEnding
+
+########  Line Styles  ###################################
+
+set style line 1 linetype 1 linewidth 4 pointtype 7 pointsize 1
+set style line 2 linetype 2 linewidth 4 pointtype 5 pointsize 0.5
+set style line 3 linetype 3 linewidth 4 pointtype 9 pointsize 1.5
+set style line 4 linetype 4 linewidth 4 pointtype 11 pointsize 1.5
+set style line 5 linetype 7 linewidth 4 pointtype 13 pointsize 1.5
+
+set style line 10 linetype 1 linewidth 2 pointtype 7 pointsize 1.5
+set style line 11 linetype 1 linewidth 2 pointtype 7 pointsize 1.5
+set style line 12 linetype 7 linewidth 2 pointtype 5 pointsize 1.5
+set style line 13 linetype 3 linewidth 2 pointtype 7 pointsize 1.5
+
+#set nogrid
+set grid
+set size 1.2,1
+set xzeroaxis lt -1
+
+########  Plot Diagrams  #####################
+
+set title baseName
+set xlabel "Time (min)"
+
+set ylabel "Kinematic Quantities"
+set out speedPlot
+print "plot".speedPlot
+plot\
+  inputFile u ($1/60.):($6*3.6) t "speed [km/h]" w l ls 1,\
+  inputFile u ($1/60.):($7*10) t "10*acceleration [m/s^2]" w l ls 3
+
+#####
+  
+set ylabel "Topographic Quantities"
+set out heightPlot
+print "plot".heightPlot
+plot\
+  inputFile u ($1/60.):($14*10) t "10*grade [\%]" w l ls 3
+  
+##################################################################
+
+fuel100(cLiterPerH,vKMH) = (vKMH<5) ? 1.0 : cLiterPerH/3600.*100*1000/(vKMH/3.6)
+
+set xlabel "Time (min)"
+set ylabel "Model Quantities"
+set out fuelPlot
+print "plot".fuelPlot
+plot\
+  modelFile u ($1/60.):($6*3600*10) t "10*consumption [l/h]" w l ls 4,\
+  modelFile u ($1/60.):(fuel100($6*3600,$3*3.6)) t "consumption [l/100km]" w l ls 5
+
+##  modelFile u ($1/60.):($8*10) t "10*gear" w l ls 6
+
+set key left
+set ylabel "Cumulated Consumption (liter)"
+set out fuelCumPlot
+print "plot".fuelCumPlot
+plot\
+  modelFile u ($2/60.):7 t "model" w l ls 3
+

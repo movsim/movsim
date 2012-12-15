@@ -1,0 +1,15 @@
+# gnuplot command file
+consumptionModelName="AudiA3"
+
+
+baseName = "city_example.car.route_main.000002"
+load "plot_consumption_template_sim.gpl"
+
+baseName = "city_example.car.route_main.000003"
+load "plot_consumption_template_sim.gpl"
+
+baseName = "city_example.car.route_main.000004"
+load "plot_consumption_template_sim.gpl"
+
+
+

@@ -30,11 +30,15 @@ package org.movsim.consumption.input.xml;
  */
 public interface XmlElementNames {
 
-    public final String Consumption = "CONSUMPTION";
-    public final String ConsumptionModel = "MODEL";
-    public final String ConsumptionCarData = "CAR";
-    public final String ConsumptionEngineData = "ENGINE";
-    public final String ConsumptionEngineGears = "GEAR_RATIOS";
-    public final String ConsumptionEngineGear = "GEAR_RATIO";
+    public final String Consumption = "consumption";
+    public final String ConsumptionModel = "model";
+    public final String ConsumptionCarData = "vehicle";
+    public final String ConsumptionEngineData = "engine";
+    public final String ConsumptionRotatiionModel = "rotationModel";
+    public final String ConsumptionEngineGear = "gearRatio";
+    public final String BatchElement = "batch";
+    public final String BatchDataElement = "data";
+    public final String ColumnDataElement = "columns";
+    public final String ConversionDataElement = "conversions";
 
 }

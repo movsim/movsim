@@ -36,7 +36,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.movsim.consumption.input.ConsumptionMetadata;
-import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
 import org.movsim.xml.XmlHelpers;
 import org.slf4j.Logger;
@@ -66,6 +65,7 @@ public class ConsumptionXmlReader {
             logger.info("internal xml output written to file {}. Exit.", outFilename);
             System.exit(0);
         }
+
     }
 
     /**
@@ -80,7 +80,7 @@ public class ConsumptionXmlReader {
 
         File xmlFile = ConsumptionMetadata.getInstance().getXmlInputFile();
         if (!ConsumptionMetadata.getInstance().isParseFromInputstream() && !ConsumptionMetadata.getInstance().isXmlFromResources() && !xmlFile.exists()) {
-            logger.error("XML file {} does not exist. Exit Simulation.", xmlFile.getAbsoluteFile());
+            logger.error("XML file {} does not exist. ", xmlFile.getAbsoluteFile());
             System.exit(1);
         }
 
@@ -106,7 +106,9 @@ public class ConsumptionXmlReader {
 
     private void fromDomToInternalDatastructure() {
         final Element root = doc.getRootElement();
-        final ConsumptionInput consumptionInput = new ConsumptionInput(root.getChild(XmlElementNames.Consumption));
+        System.out.println("root=" + root.toString());
+        final ConsumptionInput consumptionInput = new ConsumptionInput(root);
+
         inputData.setConsumptionInput(consumptionInput);
     }
 

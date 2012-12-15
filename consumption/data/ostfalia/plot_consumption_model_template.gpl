@@ -1,0 +1,149 @@
+# movsim.org -- gnuplot command file for consumption models
+
+# invoke using -e option to set parameters, eg: 
+# gnuplot -e "var='value'" gnuplotfile.gpl
+
+set datafile separator ","
+
+# set the output type
+set terminal postscript eps enhanced color solid font "Helvetica" 26
+
+# parameters
+inputPath = "./"
+outputPath = "./"
+
+#print "please make sure that output directory ".outputPath." already exists"
+
+print "input parameter: projectName=".projectName
+print "input parameter: consumptionModelName=".consumptionModelName
+
+# variables
+inputFileEnding=".csv"   # movsim output ending
+outputFileEnding=".eps"
+
+# consumption_ostfalia.specCons_CarGasoline.csv
+# consumption_ostfalia.jante_CarGasoline.csv
+# consumption_ostfalia.constAccel_CarGasoline.csv
+
+specCons=".specCons_"
+constAcc=".constAccel_"
+jante=".jante_"
+
+# input files
+specConsInput=inputPath.projectName.specCons.consumptionModelName.inputFileEnding
+constAccInput=inputPath.projectName.constAcc.consumptionModelName.inputFileEnding
+janteInput=inputPath.projectName.jante.consumptionModelName.inputFileEnding
+
+print "plot input files:"
+print "specConsFile=".specConsInput
+print "constAccFile=".constAccInput
+print "janteFile=".janteInput
+
+# plot output files
+specConsPressureOutput = outputPath.projectName.specCons."pressure_".consumptionModelName.outputFileEnding
+specConsPowerOutput = outputPath.projectName.specCons."power_".consumptionModelName.outputFileEnding
+constAccOutput = outputPath.projectName.constAcc.consumptionModelName.outputFileEnding
+janteOutput = outputPath.projectName.jante.consumptionModelName.outputFileEnding
+
+############################################################################
+
+set style line 1 lt 7 lw 4 pt 5 ps 1.5 #sw
+set style line 2 lt 1 lw 7 pt 5 ps 1.5 #rot
+set style line 3 lt 8 lw 5 pt 5 ps 1.5 #blassrot
+set style line 4 lt 6 lw 5 pt 5 ps 1.5 #gelb  (screen: tausche mit lt 1=orange-ocker)
+set style line 5 lt 2 lw 5 pt 5 ps 1.5 #gruen
+set style line 6 lt 9 lw 8 pt 5 ps 1.5 #blasstuerkisblau
+set style line 7 lt 7 lw 12 pt 5 ps 1.5 #sw
+set style line 8 lt 4 lw 3 pt 5 ps 1.5 #lila
+
+set style line 99 lt 7 lw 1 linecolor rgb "#000000" #black
+
+
+###################################
+
+select(x,xmin,xmax)=((x>=xmin)&&(x<=xmax)) ? 0 : 1/0  #-1000
+
+set title "Consumption for zero acceleration, model ".consumptionModelName
+set xlabel "Speed (km/h)"
+set ylabel "Consumption (l/100km)"
+set out constAccOutput
+print "plot ".constAccOutput
+set xrange [1:]
+set yrange [0:60]  ## fix it here
+plot\
+ constAccInput u ($1*3.6):($5+select($4,0.9,1.1)) t "Gear 1" w p ls 1,\
+ constAccInput u ($1*3.6):($5+select($4,1.9,2.1)) t "Gear 2" w p ls 2,\
+ constAccInput u ($1*3.6):($5+select($4,2.9,3.1)) t "Gear 3" w p ls 3,\
+ constAccInput u ($1*3.6):($5+select($4,3.9,4.1)) t "Gear 4" w p ls 4,\
+ constAccInput u ($1*3.6):($5+select($4,4.9,5.1)) t "Gear 5" w p ls 5,\
+ constAccInput u ($1*3.6):($5+select($4,5.9,6.1)) t "Gear 6" w p ls 6,\
+ constAccInput u ($1*3.6):($5+select($4,6.9,7.1)) t "Gear 7" w p ls 8
+
+
+#################################
+# Definition of Contour lines   (line style=line style indicated at splot)
+#################################
+
+unset contour              # no contour lines
+set contour surface     
+set cntrparam bspline 
+unset clabel 
+unset key
+unset grid
+
+#################################
+# Definition of used color-coding
+#################################
+
+set pm3d; set pm3d map # gnuplot bug; set pm3d  map alone
+
+set palette defined ( 0 "#dd00ff",  13 "#9933ff", 20 "#6666ff", 30 "#00eeee",\
+      40 "green", 45 "#aaff00", 60 "yellow", 80 "orange", 100 "red") 
+
+#########################################
+#set term post eps enhanced color solid "Helvetica" 20
+
+set xlabel "V [km/h]"
+set xrange [10:140]
+
+set ylabel "acc [m/s^{2}]"
+set yrange [-1:1]
+
+set title "C100 [liters/100 km] for model ".consumptionModelName
+set zrange [0:20]
+unset ztics 
+
+set cntrparam levels discrete 2, 4, 6, 8, 10 # freely set lines
+
+set out janteOutput
+splot janteInput u 1:2:6  w pm3d
+
+#########################################
+set palette defined ( 0 "#dd00ff",  5 "#9933ff", 12 "#6666ff", 20 "#00eeee",\
+      25 "green", 30 "#aaff00", 40 "yellow", 70 "orange", 100 "red") 
+
+set xlabel "Frequency [rpm]"
+set xrange [800:6000]
+
+set ylabel "Torque [Nm]"
+set yrange [0:230]
+
+set title "Specific consumption(f,pressure) [g/kWh] for model ".consumptionModelName
+set zrange [200:500]
+unset ztics 
+
+set cntrparam levels discrete 200,210,220,230,240,250,260,270,280,290,300 # freely set lines
+
+set out specConsPressureOutput
+splot specConsInput u 1:4:5  w pm3d
+
+#########################################
+
+set title "specific consumption (f,power) [g/kWh] for model ".consumptionModelName
+set ylabel "Power [kW]"
+set yrange [0:95]
+
+set out specConsPowerOutput
+splot specConsInput u 1:2:5  w pm3d
+
+reset

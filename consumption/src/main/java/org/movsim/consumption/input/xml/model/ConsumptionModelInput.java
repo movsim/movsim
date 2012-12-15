@@ -42,6 +42,8 @@ public class ConsumptionModelInput {
 
     private final ConsumptionEngineModelInput engineData;
 
+    private final RotationModelInput rotationModelInput;
+
     private final String label;
     
     private final String type;
@@ -59,6 +61,8 @@ public class ConsumptionModelInput {
         carData = new ConsumptionCarModelInput(carDataMap);
 
         engineData = new ConsumptionEngineModelInput(elem.getChild(XmlElementNames.ConsumptionEngineData));
+        
+        rotationModelInput = new RotationModelInput(elem.getChild(XmlElementNames.ConsumptionRotatiionModel));
 
     }
 
@@ -80,6 +84,10 @@ public class ConsumptionModelInput {
 
     public boolean isOutput() {
         return output;
+    }
+
+    public RotationModelInput getRotationModelInput() {
+        return rotationModelInput;
     }
 
 }

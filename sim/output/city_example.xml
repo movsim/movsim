@@ -90,7 +90,13 @@
             </ROUTE>
         </ROUTES>
         <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="1">
+            <FLOATING_CAR_DATA n_dt="1" route="main">
+<!-- check NPException       <FC number="1" /> -->
+                <FC number="2" />
+                <FC number="3" />               
+                <FC number="4" />               
+                <FC number="5" />                              
+                <FC number="20" />
                 <FC number="100" />
             </FLOATING_CAR_DATA>
             <SPATIOTEMPORAL dx="100" dt="40" route="main" />

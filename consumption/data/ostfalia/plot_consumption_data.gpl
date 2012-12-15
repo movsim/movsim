@@ -1,0 +1,11 @@
+# gnuplot command file
+
+baseName = "route-Seesen"
+load "plot_consumption_data_template.gpl"
+
+baseName = "route-Torfhaus"
+load "plot_consumption_data_template.gpl"
+
+baseName = "route-Braunschweig"
+load "plot_consumption_data_template.gpl"
+
