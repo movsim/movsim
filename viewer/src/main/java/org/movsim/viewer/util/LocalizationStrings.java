@@ -116,13 +116,13 @@ public class LocalizationStrings extends ListResourceBundle {
             { "lblSimTime", "time: " },
             { "simTimeTooltip", "The time of the current simulation since start." },
             { "deltaTimeTooltip", "The simulation's numerical update (integration) time step." },
-            { "lblDeltaTime", "update time: " },
+            { "lblDeltaTime", "update time [s]:" },
             { "timeWarpTooltip", "The speed-up of the simulation against the simulation time." },
             { "lblTimeWarp", "time warp:" },
             { "vehicleCountTooltip", "The total number of vehicles in the current simulation." },
             { "lblVehicleCount", "vehicles:" },
-            { "vehiclesMeanSpeedTooltip", "The mean speed of all vehicles in the current simulation." },
-            { "lblVehiclesMeanSpeed", "mean speed:" },
+            { "vehiclesMeanSpeedTooltip", "The mean speed over all vehicles in the current simulation." },
+            { "lblVehiclesMeanSpeed", "speed [km/h]:" },
 
             // Buttons
             { "SimulationComplete", "Simulaton complete" },

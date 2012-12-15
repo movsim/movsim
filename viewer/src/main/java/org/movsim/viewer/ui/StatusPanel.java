@@ -38,6 +38,7 @@ import javax.swing.SwingConstants;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
+import org.movsim.utilities.Units;
 import org.movsim.viewer.util.StringHelper;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -132,7 +133,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblDeltaTime.setFont(font);
         lblDeltaTime.setToolTipText(deltaTimeTooltip);
 
-        lblDeltaTimeDisplay = new JLabel(simulationRunnable.timeStep() + " s");
+        lblDeltaTimeDisplay = new JLabel();
         lblDeltaTimeDisplay.setFont(font);
         lblDeltaTimeDisplay.setToolTipText(deltaTimeTooltip);
         SwingHelper.setComponentSize(lblDeltaTimeDisplay, 38, 22);
@@ -163,9 +164,9 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         final String vehiclesSpeedTooltip = resourceBundle.getString("vehiclesMeanSpeedTooltip");
         lblVehiclesMeanSpeed = new JLabel(resourceBundle.getString("lblVehiclesMeanSpeed"));
         lblVehiclesMeanSpeed.setFont(font);
-        lblVehiclesMeanSpeed.setToolTipText(vehicleCountTooltip);
+        lblVehiclesMeanSpeed.setToolTipText(vehiclesSpeedTooltip);
 
-        lblVehiclesMeanSpeedDisplay = new JLabel(String.valueOf(vehiclesMeanSpeed()));
+        lblVehiclesMeanSpeedDisplay = new JLabel();
         lblVehiclesMeanSpeedDisplay.setFont(font);
         lblVehiclesMeanSpeedDisplay.setToolTipText(vehiclesSpeedTooltip);
         lblVehiclesMeanSpeedDisplay.setPreferredSize(new Dimension(36, 22));
@@ -176,8 +177,8 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         return simulator.getRoadNetwork().vehicleCount();
     }
     
-    private double vehiclesMeanSpeed() {
-        return simulator.getRoadNetwork().vehiclesMeanSpeed();
+    private int vehiclesMeanSpeedInKmh() {
+        return (int)Math.round(Units.MS_TO_KMH*simulator.getRoadNetwork().vehiclesMeanSpeed());
     }
 
     public void addStatusView() {
@@ -231,11 +232,11 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
                 progressBar.setValue(intTime);
             }
             lblTimeDisplay.setText(StringHelper.getTime(time, true, true, true));
-            lblDeltaTimeDisplay.setText(String.valueOf(simulationRunnable.timeStep()) + " s");
+            lblDeltaTimeDisplay.setText(String.valueOf(String.format("%.1f", simulationRunnable.timeStep())));
             lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f", simulationRunnable.getSmoothedTimewarp())));
 
             lblVehicleCountDisplay.setText(String.valueOf(vehicleCount()));
-            lblVehiclesMeanSpeedDisplay.setText(String.valueOf(String.format("%.1f", vehiclesMeanSpeed())));
+            lblVehiclesMeanSpeedDisplay.setText(String.valueOf(vehiclesMeanSpeedInKmh()));
 
             this.time = time;
         }
