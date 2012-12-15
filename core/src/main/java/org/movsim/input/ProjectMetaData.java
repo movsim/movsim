@@ -286,15 +286,19 @@ public class ProjectMetaData {
         this.projectProperties = projectProperties;
     }
 
-    public String getDtdFilenameWithPath() {
+    public static String getDtdFilenameWithPath() {
         return File.separator + MOVSIM_DTD_PATH + File.separator + MOVSIM_DTD_FILENAME;
     }
 
-    public String getDtdPath() {
+    public static String getDtdURL() {
+        return "/" + MOVSIM_DTD_PATH + "/" + MOVSIM_DTD_FILENAME;
+    }
+
+    public static String getDtdPath() {
         return MOVSIM_DTD_PATH;
     }
 
-    public String getDtdFilename() {
+    public static String getDtdFilename() {
         return MOVSIM_DTD_FILENAME;
     }
 

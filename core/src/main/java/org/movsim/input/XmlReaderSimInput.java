@@ -91,7 +91,7 @@ public class XmlReaderSimInput {
      *            the input data
      */
     private XmlReaderSimInput(ProjectMetaData projectMetaData, InputData inputData) {
-        this.dtdFilename = projectMetaData.getDtdFilenameWithPath();
+        this.dtdFilename = ProjectMetaData.getDtdURL();
         this.projectMetaData = projectMetaData;
         this.inputData = inputData;
         this.xmlFile = projectMetaData.getXmlInputFile();

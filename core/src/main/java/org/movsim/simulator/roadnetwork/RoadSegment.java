@@ -494,7 +494,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return vehicleFuelUsedLiters;
     }
     
-    private double meanSpeed(){
+    public double meanSpeed() {
         double sumSpeed = 0;
         int vehCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {

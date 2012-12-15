@@ -259,6 +259,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return vehicleCount;
     }
     
+    public double vehiclesMeanSpeed() {
+        double averageSpeed = 0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            averageSpeed += roadSegment.meanSpeed();
+        }
+        return averageSpeed / roadSegments.size();
+    }
+
     /**
      * Returns the number of obstacles on this road network.
      * 
