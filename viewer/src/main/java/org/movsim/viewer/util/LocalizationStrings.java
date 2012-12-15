@@ -121,6 +121,8 @@ public class LocalizationStrings extends ListResourceBundle {
             { "lblTimeWarp", "time warp:" },
             { "vehicleCountTooltip", "The total number of vehicles in the current simulation." },
             { "lblVehicleCount", "vehicles:" },
+            { "vehiclesMeanSpeedTooltip", "The mean speed of all vehicles in the current simulation." },
+            { "lblVehiclesMeanSpeed", "mean speed:" },
 
             // Buttons
             { "SimulationComplete", "Simulaton complete" },

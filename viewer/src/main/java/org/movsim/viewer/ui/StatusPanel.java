@@ -79,6 +79,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
     private JLabel lblVehicleCountDisplay;
 
+    private JLabel lblVehiclesMeanSpeed;
+
+    private JLabel lblVehiclesMeanSpeedDisplay;
+
     public StatusPanel(ResourceBundle resourceBundle, Simulator simulator) {
         this.resourceBundle = resourceBundle;
         this.simulator = simulator;
@@ -131,7 +135,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblDeltaTimeDisplay = new JLabel(simulationRunnable.timeStep() + " s");
         lblDeltaTimeDisplay.setFont(font);
         lblDeltaTimeDisplay.setToolTipText(deltaTimeTooltip);
-        SwingHelper.setComponentSize(lblDeltaTimeDisplay, 40, 22);
+        SwingHelper.setComponentSize(lblDeltaTimeDisplay, 38, 22);
 
         // timewarp
         final String timeWarpTooltip = resourceBundle.getString("timeWarpTooltip");
@@ -142,7 +146,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblTimeWarpDisplay = new JLabel(String.valueOf(String.format("%.1f", simulationRunnable.getSmoothedTimewarp())));
         lblTimeWarpDisplay.setFont(font);
         lblTimeWarpDisplay.setToolTipText(timeWarpTooltip);
-        lblTimeWarpDisplay.setPreferredSize(new Dimension(42, 22));
+        lblTimeWarpDisplay.setPreferredSize(new Dimension(36, 22));
 
         // vehicle count
         final String vehicleCountTooltip = resourceBundle.getString("vehicleCountTooltip");
@@ -153,38 +157,58 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblVehicleCountDisplay = new JLabel(String.valueOf(vehicleCount()));
         lblVehicleCountDisplay.setFont(font);
         lblVehicleCountDisplay.setToolTipText(vehicleCountTooltip);
-        lblVehicleCountDisplay.setPreferredSize(new Dimension(42, 22));
+        lblVehicleCountDisplay.setPreferredSize(new Dimension(36, 22));
+        
+        // average speed of vehicles
+        final String vehiclesSpeedTooltip = resourceBundle.getString("vehiclesMeanSpeedTooltip");
+        lblVehiclesMeanSpeed = new JLabel(resourceBundle.getString("lblVehiclesMeanSpeed"));
+        lblVehiclesMeanSpeed.setFont(font);
+        lblVehiclesMeanSpeed.setToolTipText(vehicleCountTooltip);
 
+        lblVehiclesMeanSpeedDisplay = new JLabel(String.valueOf(vehiclesMeanSpeed()));
+        lblVehiclesMeanSpeedDisplay.setFont(font);
+        lblVehiclesMeanSpeedDisplay.setToolTipText(vehiclesSpeedTooltip);
+        lblVehiclesMeanSpeedDisplay.setPreferredSize(new Dimension(36, 22));
+        
     }
 
     private int vehicleCount() {
         return simulator.getRoadNetwork().vehicleCount();
+    }
+    
+    private double vehiclesMeanSpeed() {
+        return simulator.getRoadNetwork().vehiclesMeanSpeed();
     }
 
     public void addStatusView() {
         add(lblScenario);
         add(lblCurrentScenario);
 
-        add(Box.createRigidArea(new Dimension(6, 22)));
+        add(Box.createRigidArea(new Dimension(4, 22)));
 
         add(lblSimTime);
         add(lblTimeDisplay);
 
-        add(Box.createRigidArea(new Dimension(6, 22)));
+        add(Box.createRigidArea(new Dimension(4, 22)));
         add(lblTimeWarp);
         add(lblTimeWarpDisplay);
 
-        add(Box.createRigidArea(new Dimension(6, 22)));
+        add(Box.createRigidArea(new Dimension(4, 22)));
 
         add(lblDeltaTime);
         add(lblDeltaTimeDisplay);
 
-        add(Box.createRigidArea(new Dimension(6, 22)));
+        add(Box.createRigidArea(new Dimension(4, 22)));
 
         add(lblVehicleCount);
         add(lblVehicleCountDisplay);
 
-        add(Box.createRigidArea(new Dimension(6, 22)));
+        add(Box.createRigidArea(new Dimension(4, 22)));
+        
+        add(lblVehiclesMeanSpeed);
+        add(lblVehiclesMeanSpeedDisplay);
+
+        add(Box.createRigidArea(new Dimension(4, 22)));
 
         if (isWithFiniteDurationAndProgressBar()) {
             add(progressBar);
@@ -211,6 +235,7 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
             lblTimeWarpDisplay.setText(String.valueOf(String.format("%.1f", simulationRunnable.getSmoothedTimewarp())));
 
             lblVehicleCountDisplay.setText(String.valueOf(vehicleCount()));
+            lblVehiclesMeanSpeedDisplay.setText(String.valueOf(String.format("%.1f", vehiclesMeanSpeed())));
 
             this.time = time;
         }
