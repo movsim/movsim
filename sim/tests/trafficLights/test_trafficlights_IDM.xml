@@ -56,7 +56,7 @@
             </TRAFFIC_LIGHTS>
         </ROAD>
         <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="5" dn="0">
+           <!--  <FLOATING_CAR_DATA n_dt="5" dn="0">
                 <FC number="1" />
                 <FC number="4" />
                 <FC number="8" />
@@ -68,7 +68,7 @@
                 <FC number="32" />
                 <FC number="36" />
                 <FC number="40" />
-            </FLOATING_CAR_DATA>
+            </FLOATING_CAR_DATA> -->
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
