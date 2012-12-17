@@ -259,6 +259,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return vehicleCount;
     }
     
+    public int getStoppedVehicleCount() {
+        int stoppedVehicleCount = 0;
+        for (final RoadSegment roadSegment : roadSegments) {
+            stoppedVehicleCount += roadSegment.getStoppedVehicleCount();
+        }
+        return stoppedVehicleCount;
+    }
+
     public double vehiclesMeanSpeed() {
         double averageSpeed = 0;
         for (final RoadSegment roadSegment : roadSegments) {
@@ -280,6 +288,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return obstacleCount;
     }
     
+    /**
+     * Returns the number of obstacles for the given route.
+     * 
+     * @return the number of obstacles on the given route
+     */
     public int obstacleCount(Route route) {
         int obstacleCount = 0;
         for (final RoadSegment roadSegment : roadSegments) {

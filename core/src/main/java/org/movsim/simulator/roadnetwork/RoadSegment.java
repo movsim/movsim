@@ -421,6 +421,14 @@ public class RoadSegment implements Iterable<Vehicle> {
         return vehicleCount;
     }
     
+    public int getStoppedVehicleCount() {
+        int stoppedVehicleCount = 0;
+        for (final LaneSegment laneSegment : laneSegments) {
+            stoppedVehicleCount += laneSegment.stoppedVehicleCount();
+        }
+        return stoppedVehicleCount;
+    }
+
     /**
      * Returns the number of obstacle vehicles on this road segment, all lanes.
      * 
@@ -1214,4 +1222,5 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return false;
     }
+
 }

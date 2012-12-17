@@ -83,6 +83,10 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
     private JLabel lblVehiclesMeanSpeed;
 
     private JLabel lblVehiclesMeanSpeedDisplay;
+    
+    private JLabel lblVehiclesStopped;
+
+    private JLabel lblVehiclesStoppedDisplay;
 
     public StatusPanel(ResourceBundle resourceBundle, Simulator simulator) {
         this.resourceBundle = resourceBundle;
@@ -165,16 +169,30 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         lblVehiclesMeanSpeed = new JLabel(resourceBundle.getString("lblVehiclesMeanSpeed"));
         lblVehiclesMeanSpeed.setFont(font);
         lblVehiclesMeanSpeed.setToolTipText(vehiclesSpeedTooltip);
-
+        
         lblVehiclesMeanSpeedDisplay = new JLabel();
         lblVehiclesMeanSpeedDisplay.setFont(font);
         lblVehiclesMeanSpeedDisplay.setToolTipText(vehiclesSpeedTooltip);
         lblVehiclesMeanSpeedDisplay.setPreferredSize(new Dimension(36, 22));
         
+        // number of stopped vehicles
+        final String vehiclesStopppedTooltip = resourceBundle.getString("vehiclesStoppedTooltip");
+        lblVehiclesStopped = new JLabel(resourceBundle.getString("lblVehiclesStopped"));
+        lblVehiclesStopped.setFont(font);
+        lblVehiclesStopped.setToolTipText(vehiclesStopppedTooltip);
+        lblVehiclesStoppedDisplay = new JLabel();
+        lblVehiclesStoppedDisplay.setFont(font);
+        lblVehiclesStoppedDisplay.setToolTipText(vehiclesStopppedTooltip);
+        lblVehiclesStoppedDisplay.setPreferredSize(new Dimension(36, 22));
+        
     }
 
     private int vehicleCount() {
         return simulator.getRoadNetwork().vehicleCount();
+    }
+    
+    private int stoppedVehicleCount() {
+        return simulator.getRoadNetwork().getStoppedVehicleCount();
     }
     
     private int vehiclesMeanSpeedInKmh() {
@@ -210,6 +228,11 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
         add(lblVehiclesMeanSpeedDisplay);
 
         add(Box.createRigidArea(new Dimension(4, 22)));
+        
+        add(lblVehiclesStopped);
+        add(lblVehiclesStoppedDisplay);
+
+        add(Box.createRigidArea(new Dimension(4, 22)));
 
         if (isWithFiniteDurationAndProgressBar()) {
             add(progressBar);
@@ -237,6 +260,8 @@ public class StatusPanel extends JPanel implements SimulationRunnable.UpdateStat
 
             lblVehicleCountDisplay.setText(String.valueOf(vehicleCount()));
             lblVehiclesMeanSpeedDisplay.setText(String.valueOf(vehiclesMeanSpeedInKmh()));
+            
+            lblVehiclesStoppedDisplay.setText(String.valueOf(stoppedVehicleCount()));
 
             this.time = time;
         }
