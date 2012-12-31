@@ -62,6 +62,7 @@ public class StringHelper {
         final StringBuilder stringBuilder = new StringBuilder();
         final Formatter formatter = new Formatter(stringBuilder);
         formatter.format("%02d:%02d:%02d", hours, min, intTime);
+        formatter.close();
         return stringBuilder.toString();
     }
 }
