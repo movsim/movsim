@@ -41,7 +41,7 @@ To build the MovSim viewer, type `mvn install` from the MovSim viewer directory.
 
 The MovSim viewer can be run directly from the command-line. To see the MovSim options, type:
 
-    java -jar viewer/target/viewer-1.0-jar-with-dependencies.jar -h
+    java -jar viewer/target/MovsimViewer-1.3.1-SNAPSHOT-jar-with-dependencies.jar -h
 
 
 Logging output
@@ -61,7 +61,7 @@ For commercial use, please contact the copyright holders at movsim.org@gmail.com
 Copyright
 ---------
 
-MovSim is Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 

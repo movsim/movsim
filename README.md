@@ -5,8 +5,15 @@ MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
 http://www.movsim.org
 
-Demonstration:  www.verkehrsdynamik.de/simulation.shtml (MovSim v1.0)
-                www.movsim.org/app.shtml (MovSim v1.2) 
+Demonstration:
+
+(MovSim v1.0) www.verkehrsdynamik.de/simulation.shtml
+
+(MovSim v1.2) www.movsim.org/app.shtml
+
+(Routing game) TODO
+
+(Android client) coming soon
 
 
 Description
@@ -76,7 +83,7 @@ From with the Eclipse IDE install the m2e(Maven Integration for Eclipse) plugin 
 
 Import the project into Eclipse from the _File >> Import_ menu item. In the resulting Select dialog, choose the _General >> Existing Projects into Workspace_ option. In the resulting dialog select the `movsim/core` directory and import. Repeat for the `movsim/viewer` directory.
 
-Alternatively, create an eclipse configuration from the commandline by typing `mvn eclipse:eclipse` and using the Eclipse _Import..._ dialog for `Existing Maven Project` in the component subdirectories.
+Alternatively, create an eclipse configuration from the commandline by typing `mvn eclipse:eclipse` and using the Eclipse _Import..._ dialog for `Existing Maven Project`. Attention: this method leads to bug in eclipse. See [maven.README](https://github.com/movsim/movsim/blob/master/maven.README).
 
 You can then build and run either the _core_ or _viewer_ Java applications.
 
@@ -85,7 +92,7 @@ We use the source code formatter _movsim/codestyle/eclipse_movsim_profile.xml_.
 Demos
 -----
 
-Simulation projects are collected in `movsim/core` directory. 
+There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim).
 
 Applet demos on the website www.movsim.org
 
@@ -99,7 +106,7 @@ For commercial use, please contact the copyright holders at movsim.org@gmail.com
 Copyright
 ---------
 
-MovSim is Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
+MovSim is Copyright (C) 2010, 2011, 2012, 2013 by Arne Kesting, Martin Treiber, Ralph Germ, and Martin Budden.
 
 MovSim is licensed under [GPL version 3](https://github.com/movsim/movsim/blob/master/COPYING).
 
