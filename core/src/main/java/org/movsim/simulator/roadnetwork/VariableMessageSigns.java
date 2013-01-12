@@ -28,6 +28,7 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class VariableMessageSigns {
      */
     public void add(VariableMessageSignBase variableMessageSign) {
         if (variableMessageSigns == null) {
-            variableMessageSigns = new ArrayList<VariableMessageSignBase>();
+            variableMessageSigns = Collections.synchronizedCollection(new ArrayList<VariableMessageSignBase>());
         }
         variableMessageSigns.add(variableMessageSign);
     }
