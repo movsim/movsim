@@ -11,13 +11,15 @@ public class NetworkMain {
 	 */
 	public static void main(String[] args) {
 		
-		File network = new File("/home/kesting/workspace/movsim/sim/games", "routing.xodr");
+		File networkFile = new File("/home/kesting/workspace/movsim/sim/games", "routing.xodr");
 		
-		System.out.println("Hello world");
+		OpenDriveNetwork network = new OpenDriveNetwork();
 		
-		NetworkUnMarshaller unMarshaller = new NetworkUnMarshaller();
-		unMarshaller.marshall();
-		unMarshaller.unMarshall(network);
+		System.out.println("Marshall: ");
+		network.marshall();
+		
+		System.out.println("Unmarshall: ");
+		network.unMarshall(networkFile);
 
 	}
 
