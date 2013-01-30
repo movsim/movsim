@@ -593,7 +593,7 @@
                     <xsd:attribute name="d" type="xsd:double" />
                 </xsd:complexType>
             </xsd:element>
-<!--            <xsd:element name="roadMark" minOccurs="0" maxOccurs="unbounded">
+           <!--   <xsd:element name="roadMark" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="type" minOccurs="0" maxOccurs="1">
@@ -624,7 +624,7 @@
                     <xsd:attribute name="laneChange" type="xsd:string" />
                 </xsd:complexType>
             </xsd:element>
--->
+             -->
             <xsd:element name="material" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -708,7 +708,7 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-<!--            <xsd:element name="roadMark" minOccurs="0" maxOccurs="unbounded">
+            <!--  <xsd:element name="roadMark" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="type" minOccurs="0" maxOccurs="1">
@@ -738,8 +738,7 @@
                     <xsd:attribute name="width" type="xsd:double" />
                     <xsd:attribute name="laneChange" type="xsd:string" />
                 </xsd:complexType>
-            </xsd:element>
--->
+            </xsd:element> -->
             <xsd:element name="userData" type="userData" minOccurs="0" maxOccurs="unbounded" />
             <xsd:element name="include" type="include" minOccurs="0" maxOccurs="unbounded" />
         </xsd:sequence>

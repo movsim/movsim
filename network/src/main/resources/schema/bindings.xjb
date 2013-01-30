@@ -12,9 +12,7 @@
        </jaxb:globalBindings> -->
         <jaxb:schemaBindings>
           <jaxb:package name="org.opendrive.jaxb" />
-          <jaxb:nameXmlTransform>
-            <jaxb:elementName suffix="Element" />
-          </jaxb:nameXmlTransform>
+          <!-- <jaxb:nameXmlTransform>            <jaxb:elementName suffix="Element" />           </jaxb:nameXmlTransform> -->
         </jaxb:schemaBindings>
 </jaxb:bindings>
    

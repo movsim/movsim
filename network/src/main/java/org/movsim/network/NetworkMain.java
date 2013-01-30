@@ -11,7 +11,7 @@ public class NetworkMain {
 	 */
 	public static void main(String[] args) {
 		
-		File networkFile = new File("/home/kesting/workspace/movsim/sim/games", "routing.xodr");
+		File networkFile = new File("routing.xodr");
 		
 		OpenDriveNetwork network = new OpenDriveNetwork();
 		
