@@ -8,8 +8,9 @@
 <!-- Annotate the following classes with XmlRootElement -->
 
 <jaxb:bindings schemaLocation="OpenDRIVE_1.3.xsd" node="/xs:schema">
-      <!--  <jaxb:globalBindings bindingStyle="modelGroupBinding">
-       </jaxb:globalBindings> -->
+       <jaxb:globalBindings generateIsSetMethod="true">
+       </jaxb:globalBindings>
+       
         <jaxb:schemaBindings>
           <jaxb:package name="org.opendrive.jaxb" />
           <!-- <jaxb:nameXmlTransform>            <jaxb:elementName suffix="Element" />           </jaxb:nameXmlTransform> -->
