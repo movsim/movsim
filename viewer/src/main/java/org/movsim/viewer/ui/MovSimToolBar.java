@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.xml.bind.JAXBException;
 
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.graphics.TrafficCanvas.StatusControlCallbacks;
@@ -40,6 +41,7 @@ import org.movsim.viewer.graphics.TrafficCanvasController;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 public class MovSimToolBar extends JToolBar implements ActionListener {
 
@@ -158,7 +160,15 @@ public class MovSimToolBar extends JToolBar implements ActionListener {
             controller.commandCycleVehicleColors();
         } else if (e.getActionCommand().equals(RESET)) {
             statusPanel.reset();
-            controller.commandReset();
+            try {
+                controller.commandReset();
+            } catch (JAXBException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (SAXException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             statusCallbacks.stateChanged();
         }
     }

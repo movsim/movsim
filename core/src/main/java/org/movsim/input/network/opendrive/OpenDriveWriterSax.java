@@ -52,15 +52,15 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
  * </p>
  */
 @SuppressWarnings({ "nls", "boxing" })
-public class OpenDriveWriter extends XMLWriterBase {
+public class OpenDriveWriterSax extends XMLWriterBase {
 
-    static class Junction {
+    private static class Junction {
         static final String NOT_JUNCTION = "-1";
         static int nextId = 1001;
         String id;
         String name;
 
-        static class Connection {
+        private static class Connection {
             String id;
             String incomingRoadId;
             String connectingRoadId;
@@ -71,7 +71,7 @@ public class OpenDriveWriter extends XMLWriterBase {
 
             ContactPoint contactPoint = ContactPoint.START;
 
-            static class LaneLink {
+            private static class LaneLink {
                 int from;
                 int to;
 
@@ -103,7 +103,7 @@ public class OpenDriveWriter extends XMLWriterBase {
 
     ArrayList<Junction> junctions = new ArrayList<Junction>();
 
-    private OpenDriveWriter() {
+    private OpenDriveWriterSax() {
     }
 
     private static final String geometryFormat = "s=\"%f\" x=\"%f\" y=\"%f\" hdg=\"%f\" length=\"%f\"";
@@ -116,7 +116,7 @@ public class OpenDriveWriter extends XMLWriterBase {
      * @param roadNetwork
      */
     public static void saveRoadNetwork(RoadNetwork roadNetwork) {
-        final OpenDriveWriter writer = new OpenDriveWriter();
+        final OpenDriveWriterSax writer = new OpenDriveWriterSax();
         write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>");
         writer.startTag("OpenDRIVE");
         writer.writeTag(

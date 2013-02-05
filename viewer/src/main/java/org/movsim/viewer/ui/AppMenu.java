@@ -39,6 +39,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileFilter;
+import javax.xml.bind.JAXBException;
 
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
@@ -46,6 +47,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS.Waves;
 import org.movsim.utilities.FileUtils;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
+import org.xml.sax.SAXException;
 
 @SuppressWarnings({ "synthetic-access", "serial" })
 public class AppMenu extends MovSimMenuBase {
@@ -396,8 +398,16 @@ public class AppMenu extends MovSimMenuBase {
                 final File file = fileChooser.getSelectedFile();
                 if (file != null && file.isFile()) {
                     // if the user has selected a file, then load it
-                    simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
-                            FileUtils.getCanonicalPathWithoutFilename(file));
+                    try {
+                        simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
+                                FileUtils.getCanonicalPathWithoutFilename(file));
+                    } catch (JAXBException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (SAXException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     uiDefaultReset();
                     trafficCanvas.forceRepaintBackground();
                 }

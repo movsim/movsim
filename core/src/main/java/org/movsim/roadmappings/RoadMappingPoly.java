@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.simulator.roadnetwork.RoadMapping;
+import org.opendrive.jaxb.OpenDRIVE.Road.PlanView.Geometry;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.
@@ -136,6 +137,10 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         roadMappings.add(roadMapping);
     }
 
+    public void addLine(Geometry geometry) {
+        addLine(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength());
+    }
+
     public void addArc(double s, double x0, double y0, double theta, double length, double curvature) {
         // final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
         // final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
@@ -146,6 +151,11 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         final RoadMappingArc roadMapping = new RoadMappingArc(laneCount, s, x0, y0, theta, length, curvature);
         roadLength += length;
         roadMappings.add(roadMapping);
+    }
+
+    public void addArc(Geometry geometry) {
+        addArc(geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(), geometry.getLength(), geometry
+                .getArc().getCurvature());
     }
 
     public void addSpiral(double s, double x0, double y0, double theta, double length, double startCurvature,
@@ -162,4 +172,6 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         roadLength += length;
         roadMappings.add(roadMapping);
     }
+
+
 }

@@ -27,11 +27,14 @@ package org.movsim;
 
 import java.util.Locale;
 
+import javax.xml.bind.JAXBException;
+
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.logging.Logger;
 import org.movsim.logging.LogFileAppender;
+import org.movsim.logging.Logger;
 import org.movsim.simulator.Simulator;
+import org.xml.sax.SAXException;
 
 /**
  * The Class MovsimCoreMain.
@@ -46,8 +49,10 @@ public class MovsimCoreMain {
      * 
      * @param args
      *            the command line arguments
+     * @throws SAXException
+     * @throws JAXBException
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JAXBException, SAXException {
 
         Locale.setDefault(Locale.US);
 

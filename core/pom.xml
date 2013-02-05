@@ -19,6 +19,11 @@
             <artifactId>MovsimCommon</artifactId>
 	    <version>${project.version}</version> 
         </dependency>
+         <dependency>
+            <groupId>org.movsim</groupId>
+            <artifactId>MovsimNetwork</artifactId>
+	    <version>${project.version}</version> 
+        </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>

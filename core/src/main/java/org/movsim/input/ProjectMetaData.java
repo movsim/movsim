@@ -100,6 +100,7 @@ public class ProjectMetaData {
      *            the new project name
      */
     public void setProjectName(String projectName) {
+        System.out.println("projectname = " + projectName);
         this.projectName = projectName;
     }
 

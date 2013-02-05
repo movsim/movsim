@@ -27,6 +27,7 @@
 package org.movsim.roadmappings;
 
 import org.movsim.simulator.roadnetwork.RoadMapping;
+import org.opendrive.jaxb.OpenDRIVE.Road.PlanView.Geometry;
 
 /**
  * Maps a road segment onto straight line.
@@ -35,6 +36,11 @@ public class RoadMappingLine extends RoadMapping {
 
     protected double x1;
     protected double y1;
+
+    public static RoadMapping create(int laneCount, Geometry geometry, double laneWidth) {
+        return new RoadMappingLine(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
+                geometry.getLength(), laneWidth);
+    }
 
     /**
      * Constructor.
@@ -90,6 +96,8 @@ public class RoadMappingLine extends RoadMapping {
      */
     protected RoadMappingLine(int laneCount, double x0, double y0) {
         super(laneCount, x0, y0);
+        this.x1 = 0;
+        this.y1 = 0;
     }
 
     /**
@@ -138,4 +146,5 @@ public class RoadMappingLine extends RoadMapping {
         posTheta.y = y0 - roadPos * posTheta.sinTheta + lateralOffset * posTheta.cosTheta;
         return posTheta;
     }
+
 }

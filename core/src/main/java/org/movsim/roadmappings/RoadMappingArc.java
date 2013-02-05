@@ -26,6 +26,8 @@
 
 package org.movsim.roadmappings;
 
+import org.opendrive.jaxb.OpenDRIVE.Road.PlanView.Geometry;
+
 /**
  * Maps a road segment onto an arc of a circle. Angles are interpreted as in the Argand diagram, that is 0 is at the 3
  * o'clock position. A positive angle indicates a counter-clockwise rotation while a negative angle indicates a
@@ -35,6 +37,11 @@ public class RoadMappingArc extends RoadMappingCircle {
 
     protected double startAngle;
     protected double arcAngle;
+
+    public static RoadMappingArc create(int laneCount, Geometry geometry, double laneWidth) {
+        return new RoadMappingArc(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
+                geometry.getLength(), geometry.getArc().getCurvature(), laneWidth);
+    }
 
     /**
      * The arc begins at startAngle and extends for arcAngle radians.
@@ -88,6 +95,7 @@ public class RoadMappingArc extends RoadMappingCircle {
         centerY = y0 + radius * Math.sin(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
     }
 
+
     protected RoadMappingArc(int laneCount, double x0, double y0, double radius, boolean clockwise) {
         super(laneCount, x0, y0, radius, clockwise);
     }
@@ -132,4 +140,5 @@ public class RoadMappingArc extends RoadMappingCircle {
     public double arcAngle() {
         return arcAngle;
     }
+   
 }

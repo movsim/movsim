@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
  *                                   <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
@@ -59,9 +58,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * SAX XML handler for OpenDRIVE format file, see: http://www.opendrive.org/docs/OpenDRIVEFormatSpecRev1.3D.pdf
  */
 @SuppressWarnings("nls")
-public class OpenDriveHandler extends DefaultHandler {
+public class OpenDriveHandlerSax extends DefaultHandler {
 
-    final static Logger logger = LoggerFactory.getLogger(OpenDriveHandler.class);
+    final static Logger logger = LoggerFactory.getLogger(OpenDriveHandlerSax.class);
 
     private final ArrayList<String> stack = new ArrayList<String>();
     private int elementIndex = 0;
@@ -70,7 +69,7 @@ public class OpenDriveHandler extends DefaultHandler {
 
     private final RoadNetwork roadNetwork;
 
-    static class Road {
+    private static class Road {
         String id;
         String name;
         String junction;
@@ -165,7 +164,7 @@ public class OpenDriveHandler extends DefaultHandler {
         String id;
         String name;
 
-        static class Connection {
+        private static class Connection {
             int id;
             String incomingRoad;
             String connectingRoad;
@@ -187,22 +186,13 @@ public class OpenDriveHandler extends DefaultHandler {
     private Road.PlanView.Geometry geometry;
     private ArrayList<Road> roads;
 
-    private static Road findByUserId(ArrayList<Road> roads, String id) {
-        for (final Road road : roads) {
-            if (road.id.equals(id)) {
-                return road;
-            }
-        }
-        return null;
-    }
-
     private Junction junction;
     private Junction.Connection connection;
     private Junction.Connection.LaneLink laneLink;
     private ArrayList<Junction> junctions;
     private Road.Objects.Tunnel tunnel;
 
-    OpenDriveHandler(RoadNetwork roadNetwork) {
+    OpenDriveHandlerSax(RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
     }
 
@@ -388,7 +378,7 @@ public class OpenDriveHandler extends DefaultHandler {
             final RoadSegment roadSegment = new RoadSegment(roadMapping);
             roadSegment.setUserId(road.id);
             for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
-                final int laneIndex = leftLaneIdToLaneIndex(roadSegment, lane.id);
+                final int laneIndex = OpenDriveHandlerUtils.leftLaneIdToLaneIndex(roadSegment, lane.id);
                 if (lane.type.equals("driving")) {
                     roadSegment.setLaneType(laneIndex, Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
@@ -403,7 +393,7 @@ public class OpenDriveHandler extends DefaultHandler {
                 }
             }
             for (final Road.Lanes.Lane lane : road.lanes.laneSection.right) {
-                final int laneIndex = rightLaneIdToLaneIndex(roadSegment, lane.id);
+                final int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, lane.id);
                 if (lane.type.equals("driving")) {
                     roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.TRAFFIC);
                 } else if (lane.type.equals("mwyEntry")) {
@@ -469,15 +459,17 @@ public class OpenDriveHandler extends DefaultHandler {
                         }
                         for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
                             if (lane.link != null) {
-                                final int fromLane = laneIdToLaneIndex(sourceRoadSegment, lane.link.predecessorId);
-                                final int toLane = laneIdToLaneIndex(roadSegment, lane.id);
+                                final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sourceRoadSegment,
+                                        lane.link.predecessorId);
+                                final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.id);
                                 Link.addLanePair(fromLane, sourceRoadSegment, toLane, roadSegment);
                             }
                         }
                         for (final Road.Lanes.Lane lane : road.lanes.laneSection.right) {
                             if (lane.link != null) {
-                                final int fromLane = laneIdToLaneIndex(sourceRoadSegment, lane.link.predecessorId);
-                                final int toLane = laneIdToLaneIndex(roadSegment, lane.id);
+                                final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sourceRoadSegment,
+                                        lane.link.predecessorId);
+                                final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.id);
                                 Link.addLanePair(fromLane, sourceRoadSegment, toLane, roadSegment);
                             }
                         }
@@ -486,15 +478,17 @@ public class OpenDriveHandler extends DefaultHandler {
                         final RoadSegment sinkRoadSegment = roadNetwork.findByUserId(road.link.successorId);
                         for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
                             if (lane.link != null) {
-                                final int fromLane = laneIdToLaneIndex(roadSegment, lane.id);
-                                final int toLane = laneIdToLaneIndex(sinkRoadSegment, lane.link.successorId);
+                                final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.id);
+                                final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sinkRoadSegment,
+                                        lane.link.successorId);
                                 Link.addLanePair(fromLane, roadSegment, toLane, sinkRoadSegment);
                             }
                         }
                         for (final Road.Lanes.Lane lane : road.lanes.laneSection.right) {
                             if (lane.link != null) {
-                                final int fromLane = laneIdToLaneIndex(roadSegment, lane.id);
-                                final int toLane = laneIdToLaneIndex(sinkRoadSegment, lane.link.successorId);
+                                final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.id);
+                                final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sinkRoadSegment,
+                                        lane.link.successorId);
                                 Link.addLanePair(fromLane, roadSegment, toLane, sinkRoadSegment);
                             }
                         }
@@ -516,15 +510,19 @@ public class OpenDriveHandler extends DefaultHandler {
                     final Road road = findByUserId(roads, connection.connectingRoad);
                     if (road.link.predecessorType.equals("junction") && road.link.predecessorId.equals(junction.id)) {
                         for (final Junction.Connection.LaneLink laneLink : connection.laneLinks) {
-                            final int fromLane = laneIdToLaneIndex(incomingRoadSegment, laneLink.from);
-                            final int toLane = laneIdToLaneIndex(connenctingRoadSegment, laneLink.to);
+                            final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(incomingRoadSegment,
+                                    laneLink.from);
+                            final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(connenctingRoadSegment,
+                                    laneLink.to);
                             // logger.debug("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
                             Link.addLanePair(fromLane, incomingRoadSegment, toLane, connenctingRoadSegment);
                         }
                     } else if (road.link.successorType.equals("junction") && road.link.successorId.equals(junction.id)) {
                         for (final Junction.Connection.LaneLink laneLink : connection.laneLinks) {
-                            final int fromLane = laneIdToLaneIndex(connenctingRoadSegment, laneLink.from);
-                            final int toLane = laneIdToLaneIndex(incomingRoadSegment, laneLink.to);
+                            final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(connenctingRoadSegment,
+                                    laneLink.from);
+                            final int toLane = OpenDriveHandlerUtils
+                                    .laneIdToLaneIndex(incomingRoadSegment, laneLink.to);
                             // logger.debug("lanepair from:" + laneLink.from + ",to:" + laneLink.to);
                             Link.addLanePair(fromLane, connenctingRoadSegment, toLane, incomingRoadSegment);
                         }
@@ -551,12 +549,6 @@ public class OpenDriveHandler extends DefaultHandler {
         }
     }
 
-    // @Override
-    // public void characters(char ch[], int start, int length) throws SAXException {
-    // final String string = new String(ch, start, length);
-    // logger.debug("characters:" + string);
-    // }
-
     private static double getDouble(Attributes attributes, String qName) throws SAXException {
         final String value = attributes.getValue(qName);
         if (value == null) {
@@ -564,11 +556,6 @@ public class OpenDriveHandler extends DefaultHandler {
         }
         return Double.parseDouble(value);
     }
-
-    // private double getDouble(Attributes attributes, String qName, double defaultValue) {
-    // final String value = attributes.getValue(qName);
-    // return value == null ? defaultValue : Double.parseDouble(value);
-    // }
 
     private static int getInt(Attributes attributes, String qName) throws SAXException {
         final String value = attributes.getValue(qName);
@@ -578,42 +565,13 @@ public class OpenDriveHandler extends DefaultHandler {
         return Integer.parseInt(value);
     }
 
-    // private int getInt(Attributes attributes, String qName, int defaultValue) {
-    // final String value = attributes.getValue(qName);
-    // return value == null ? defaultValue : Integer.parseInt(value);
-    // }
-
-    // private boolean getBoolean(Attributes attributes, String qName, boolean defaultValue) throws SAXException {
-    // final String value = attributes.getValue(qName);
-    // if (value == null) {
-    // return defaultValue;
-    // } else if (value.equals("true")) {
-    // return true;
-    // } else if (value.equals("false")) {
-    // return false;
-    // } else {
-    // throw new SAXException("Invalid boolean value for attribute " + qName);
-    // }
-    // }
-
-    static int rightLaneIdToLaneIndex(RoadSegment roadSegment, int rightLaneId) {
-        assert rightLaneId < 0;
-        final int lane = roadSegment.laneCount() + rightLaneId;
-        assert lane >= org.movsim.simulator.roadnetwork.Lane.LANE1;
-        return lane;
-    }
-
-    static int leftLaneIdToLaneIndex(RoadSegment roadSegment, int leftLaneId) {
-        assert leftLaneId >= 0;
-        final int lane = leftLaneId;
-        assert lane >= org.movsim.simulator.roadnetwork.Lane.LANE1;
-        return lane;
-    }
-
-    static int laneIdToLaneIndex(RoadSegment roadSegment, int laneId) {
-        if (laneId >= 0) {
-            return laneId;
+    private static Road findByUserId(ArrayList<Road> roads, String id) {
+        for (final Road road : roads) {
+            if (road.id.equals(id)) {
+                return road;
+            }
         }
-        return roadSegment.laneCount() + laneId;
+        return null;
     }
+
 }

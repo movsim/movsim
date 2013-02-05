@@ -40,6 +40,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.xml.bind.JAXBException;
+
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
@@ -60,6 +62,7 @@ import org.movsim.viewer.ui.ViewProperties;
 import org.movsim.viewer.util.SwingHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 /**
  * <p>
@@ -257,10 +260,20 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Sets up the given traffic scenario.
      * 
      * @param scenario
+     * @throws SAXException 
+     * @throws JAXBException 
      */
     public void setupTrafficScenario(String scenario, String path) {
         reset();
-        simulator.loadScenarioFromXml(scenario, path);
+        try {
+            simulator.loadScenarioFromXml(scenario, path);
+        } catch (JAXBException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         properties = ViewProperties.loadProperties(scenario, path);
         initGraphicSettings();
         forceRepaintBackground();

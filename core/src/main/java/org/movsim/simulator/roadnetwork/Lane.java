@@ -61,30 +61,41 @@ public class Lane {
      * Lane type.
      */
     public static enum Type {
+
         /**
          * Lane for normal traffic.
          */
-        TRAFFIC,
+        TRAFFIC("driving"),
         /**
          * Entrance (acceleration) lane.
          */
-        ENTRANCE,
+        ENTRANCE("mwentry"),
         /**
          * Exit (deceleration) lane.
          */
-        EXIT,
+        EXIT("ewyexit"),
         /**
          * Shoulder lane.
          */
-        SHOULDER,
+        SHOULDER("shoulder"),
         /**
          * Restricted lane, eg bus or multiple-occupancy vehicle lane.
          */
-        RESTRICTED,
+        RESTRICTED("restricted"),
         /**
          * Bicycle lane.
          */
-        BICYCLE,
+        BICYCLE("biking");
+
+        private final String openDriveIdentifier;
+
+        Type(String keyword) {
+            this.openDriveIdentifier = keyword;
+        }
+
+        public String getOpenDriveIdentifier() {
+            return openDriveIdentifier;
+        }
     }
     
 }

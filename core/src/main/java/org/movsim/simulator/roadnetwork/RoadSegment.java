@@ -81,10 +81,16 @@ public class RoadSegment implements Iterable<Vehicle> {
     public static final int MAX_LANE_COUNT = 8;
     public static final int MAX_LANE_PAIR_COUNT = 12;
 
-    private final int id; // the id is an internally used unique identifier for the road
-    private String userId; // the userId is the id specified in the .xodr and .xml files
+    /** the id is an internally used unique identifier for the road. */
+    private final int id;
+    /** the userId is the id specified in the .xodr and .xml files. */
+    private String userId;
+    /** road name specified in the openDrive .xodr network file. */
+    private String roadName;
+
     private final double roadLength;
-    private final double cumulativeRoadLength = -1.0; // total length of road up to start of segment
+    /** total length of road up to start of segment. */
+    private final double cumulativeRoadLength = -1.0;
     private final int laneCount;
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
@@ -99,7 +105,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private TrafficSink sink;
     private RoadMapping roadMapping;
 
-    // simple ramp with dropping mechanism
+    /** simple ramp with dropping mechanism */
     private SimpleRamp simpleRamp;
 
     public static class TestCar {
@@ -157,6 +163,8 @@ public class RoadSegment implements Iterable<Vehicle> {
         assert roadMapping.trafficLaneMax() == laneCount;
         this.roadMapping = roadMapping;
     }
+
+
 
     /**
      * Sets a default sink for this road segment.
@@ -1221,6 +1229,11 @@ public class RoadSegment implements Iterable<Vehicle> {
             }
         }
         return false;
+    }
+
+    // TODO not yet used
+    public void setUserRoadname(String name) {
+        this.roadName = name;
     }
 
 }

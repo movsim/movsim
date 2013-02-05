@@ -30,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+
 import org.movsim.input.InputData;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.XmlReaderSimInput;
@@ -72,6 +74,7 @@ import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
 public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
@@ -102,7 +105,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setCompletionCallback(this);
     }
 
-    public void initialize() {
+    public void initialize() throws JAXBException, SAXException {
         logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
 
         projectName = projectMetaData.getProjectName();
@@ -198,11 +201,17 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Load scenario from xml.
      * 
-     * @param scenario
+     * @param scenarioWithEnding
      *            the scenario
+     * @throws SAXException
+     * @throws JAXBException
      */
-    public void loadScenarioFromXml(String scenario, String path) {
+    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
+        
+//        String scenario = scenarioWithEnding.substring(0, scenarioWithEnding.length() - 4);
+//        System.out.println("scenario = " + scenario);
+        
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
         initialize();
@@ -263,8 +272,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @param projectMetaData
      * @return
+     * @throws SAXException
+     * @throws JAXBException
      */
-    private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData) {
+    private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData)
+            throws JAXBException, SAXException {
         final String xodrFileName = projectMetaData.getXodrNetworkFilename();
         final String xodrPath = projectMetaData.getPathToProjectXmlFile();
         final String fullXodrFileName = xodrPath + xodrFileName;

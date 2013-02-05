@@ -29,6 +29,8 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.net.URL;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -39,6 +41,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.Simulator;
+import org.movsim.viewer.App;
 import org.movsim.viewer.graphics.TrafficCanvas;
 import org.movsim.viewer.util.SwingHelper;
 
@@ -81,11 +84,16 @@ public class AppFrame extends JFrame {
             trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(),
                     projectMetaData.getPathToProjectXmlFile());
         } else {
-            String projectNameDefault = "ramp_metering";
-            String projectPathDefault = "../sim/games/";
-            trafficCanvas.setupTrafficScenario(projectNameDefault, projectPathDefault);
+            System.out.println("try to load default");
+            final String path = "sim/buildingBlocks/";
+            URL project = App.class.getClassLoader().getResource(path+"onramp.xml");
+            URL projectPath = App.class.getClassLoader().getResource(path);
+            File file = new File(project.getFile());  // TODO use file, working in applet?
+            System.out.println("file exists = "+file.exists());
+            System.out.println("project = "+project.getFile());
+            trafficCanvas.setupTrafficScenario(file.getName(), projectPath.getFile());
         }
-
+        
         statusPanel.reset();
         trafficCanvas.start();
         setVisible(true);
