@@ -96,12 +96,8 @@ public class OpenDriveHandlerJaxb {
         if (road.getPlanView().getGeometry().size() == 1) {
             Geometry geometry = road.getPlanView().getGeometry().get(0);
             if (geometry.isSetLine()) {
-                // roadMapping = new RoadMappingLine(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-                // geometry.length, laneWidth);
                 roadMapping = RoadMappingLine.create(laneCount, geometry, laneWidth);
             } else if (geometry.isSetArc()) {
-                // roadMapping = new RoadMappingArc(laneCount, geometry.s, geometry.x, geometry.y, geometry.hdg,
-                // geometry.length, geometry.curvature, laneWidth);
                 roadMapping = RoadMappingArc.create(laneCount, geometry, laneWidth);
             } else if (geometry.isSetPoly3()) {
                 throw new IllegalArgumentException("POLY3 geometry not yet supported (in road: " + road + " )");
@@ -115,11 +111,8 @@ public class OpenDriveHandlerJaxb {
             final RoadMappingPoly roadMappingPoly = (RoadMappingPoly) roadMapping;
             for (Geometry geometry : road.getPlanView().getGeometry()) {
                 if (geometry.isSetLine()) {
-                    // roadMappingPoly.addLine(geometry.s, geometry.x, geometry.y, geometry.hdg, geometry.length);
                     roadMappingPoly.addLine(geometry);
                 } else if (geometry.isSetArc()) {
-                    // roadMappingPoly.addArc(geometry.s, geometry.x, geometry.y, geometry.hdg, geometry.length,
-                    // geometry.curvature);
                     roadMappingPoly.addArc(geometry);
                 } else if (geometry.isSetPoly3()) {
                     throw new IllegalArgumentException("POLY3 geometry not yet supported (in road: " + road + " )");
