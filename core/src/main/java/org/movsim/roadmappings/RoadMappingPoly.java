@@ -172,6 +172,4 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         roadLength += length;
         roadMappings.add(roadMapping);
     }
-
-
 }

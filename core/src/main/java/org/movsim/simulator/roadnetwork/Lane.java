@@ -69,11 +69,11 @@ public class Lane {
         /**
          * Entrance (acceleration) lane.
          */
-        ENTRANCE("mwentry"),
+        ENTRANCE("mwyEntry"),
         /**
          * Exit (deceleration) lane.
          */
-        EXIT("ewyexit"),
+        EXIT("mwyExit"),
         /**
          * Shoulder lane.
          */

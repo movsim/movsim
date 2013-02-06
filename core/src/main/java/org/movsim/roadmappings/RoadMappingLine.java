@@ -95,9 +95,7 @@ public class RoadMappingLine extends RoadMapping {
      * @param y0
      */
     protected RoadMappingLine(int laneCount, double x0, double y0) {
-        super(laneCount, x0, y0);
-        this.x1 = 0;
-        this.y1 = 0;
+        super(laneCount, x0, y0);   
     }
 
     /**
