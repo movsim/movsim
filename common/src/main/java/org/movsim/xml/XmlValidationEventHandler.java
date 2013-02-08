@@ -1,13 +1,14 @@
-package org.movsim.network;
+package org.movsim.xml;
 
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
-public class MyValidationEventHandler implements ValidationEventHandler {
+public class XmlValidationEventHandler implements ValidationEventHandler {
 
     @Override
     public boolean handleEvent(ValidationEvent event) {
-        System.out.println("\nEVENT");
+	System.out.println("# XML SCHEMA VALIDATION FAILED: ");
+	System.out.println("EVENT");
         System.out.println("SEVERITY:  " + event.getSeverity());
         System.out.println("MESSAGE:  " + event.getMessage());
         System.out.println("LINKED EXCEPTION:  " + event.getLinkedException());

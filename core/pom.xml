@@ -12,17 +12,17 @@
     <packaging>jar</packaging>
     <name>MovsimCore</name>
     <description>Movsim core simulation component.</description>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimCommon</artifactId>
-	    <version>${project.version}</version> 
+	    <version>${project.version}</version>
         </dependency>
          <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimNetwork</artifactId>
-	    <version>${project.version}</version> 
+	    <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
@@ -34,12 +34,6 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-       <dependency>
-	<groupId>com.google.guava</groupId>
-	<artifactId>guava-base</artifactId>
-	<version>r03</version>
-</dependency>
-            
     </dependencies>
     <build>
         <plugins>

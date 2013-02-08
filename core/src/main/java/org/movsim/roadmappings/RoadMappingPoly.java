@@ -29,8 +29,8 @@ package org.movsim.roadmappings;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.simulator.roadnetwork.RoadMapping;
-import org.opendrive.jaxb.OpenDRIVE.Road.PlanView.Geometry;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.

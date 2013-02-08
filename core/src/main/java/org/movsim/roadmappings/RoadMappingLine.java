@@ -26,8 +26,8 @@
 
 package org.movsim.roadmappings;
 
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.simulator.roadnetwork.RoadMapping;
-import org.opendrive.jaxb.OpenDRIVE.Road.PlanView.Geometry;
 
 /**
  * Maps a road segment onto straight line.

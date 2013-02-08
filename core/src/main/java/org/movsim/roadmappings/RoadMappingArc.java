@@ -26,7 +26,8 @@
 
 package org.movsim.roadmappings;
 
-import org.opendrive.jaxb.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+
 
 /**
  * Maps a road segment onto an arc of a circle. Angles are interpreted as in the Argand diagram, that is 0 is at the 3
