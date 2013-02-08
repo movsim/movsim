@@ -113,7 +113,7 @@
                 <configuration>
                     <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
                     <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory>
-                    <generatePackage>org.movsim.consumption.jaxb</generatePackage>
+                    <generatePackage>org.movsim.consumption.autogen</generatePackage>
                     <strict>false</strict>
                     <extension>true</extension>
                     <plugins>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:annotation>
+        <xsd:documentation>XML Schema Definition for Movsim Consumption Model XML files, (c)2013 by movsim.org</xsd:documentation>
+    </xsd:annotation>
+
+ <xsd:element name='movsim'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='batch' minOccurs='0' maxOccurs='1'/>
+    <xsd:element ref='consumption'/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='batch'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='data' maxOccurs='unbounded'/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='data'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='columns'/>
+    <xsd:element ref='conversions'/>
+   </xsd:sequence>
+   <xsd:attribute name='inputfile' type='xsd:string' use='required'/>
+   <xsd:attribute name='outputfile' type='xsd:string' use='required'/>
+   <xsd:attribute name='model' type='xsd:string' use='required'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='columns'>
+  <xsd:complexType>
+   <xsd:attribute name='time' type='xsd:NMTOKEN' use='required'/>
+   <xsd:attribute name='speed' type='xsd:NMTOKEN' use='required'/>
+   <xsd:attribute name='acceleration' type='xsd:NMTOKEN' use='required'/>
+   <xsd:attribute name='gradient' type='xsd:NMTOKEN' use='required'/>
+   <xsd:attribute name='position' type='xsd:NMTOKEN' use='default' value='-1'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='conversions'>
+  <xsd:complexType>
+   <xsd:attribute name='time' type='xsd:string' use='default' value=''/>
+   <xsd:attribute name='speed' type='xsd:NMTOKEN' use='default' value='1'/>
+   <xsd:attribute name='acceleration' type='xsd:NMTOKEN' use='default' value='1'/>
+   <xsd:attribute name='gradient' type='xsd:NMTOKEN' use='default' value='1'/>
+   <xsd:attribute name='position' type='xsd:NMTOKEN' use='default' value='1'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='consumption'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='model' maxOccurs='unbounded'/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='model'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='vehicle'/>
+    <xsd:choice>
+     <xsd:element ref='engineCombustionMap'/>
+     <xsd:element ref='engineConstantMap'/>
+    </xsd:choice>
+    <xsd:element ref='rotationModel'/>
+   </xsd:sequence>
+   <xsd:attribute name='label' type='xsd:string' use='required'/>
+   <xsd:attribute name='output' use='default' value='false'>
+    <xsd:simpleType>
+     <xsd:restriction base='xsd:string'>
+      <xsd:enumeration value='true'/>
+      <xsd:enumeration value='false'/>
+     </xsd:restriction>
+    </xsd:simpleType>
+   </xsd:attribute>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='vehicle'>
+  <xsd:complexType>
+   <xsd:attribute name='mass' type='xsd:NMTOKEN' use='default' value='1500'/>
+   <xsd:attribute name='cross_section_surface' type='xsd:NMTOKEN' use='default' value='2.2'/>
+   <xsd:attribute name='cd_value' type='xsd:NMTOKEN' use='default' value='0.32'/>
+   <xsd:attribute name='electric_power' type='xsd:NMTOKEN' use='default' value='2000'/>
+   <xsd:attribute name='const_friction' type='xsd:NMTOKEN' use='default' value='0.0145'/>
+   <xsd:attribute name='v_friction' type='xsd:NMTOKEN' use='default' value='0'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='engineCombustionMap'>
+  <xsd:complexType>
+   <xsd:attribute name='max_power_kW' type='xsd:NMTOKEN' use='default' value='90'/>
+   <xsd:attribute name='cylinder_vol_l' type='xsd:NMTOKEN' use='default' value='1.4'/>
+   <xsd:attribute name='idle_cons_rate_linvh' type='xsd:NMTOKEN' use='default' value='0.6'/>
+   <xsd:attribute name='cspec_min_g_per_kwh' type='xsd:NMTOKEN' use='default' value='212'/>
+   <xsd:attribute name='pe_min_bar' type='xsd:NMTOKEN' use='default' value='1'/>
+   <xsd:attribute name='pe_max_bar' type='xsd:NMTOKEN' use='default' value='19'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='engineConstantMap'>
+  <xsd:complexType/>
+ </xsd:element>
+
+ <xsd:element name='rotationModel'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='gearRatio' maxOccurs='unbounded'/>
+   </xsd:sequence>
+   <xsd:attribute name='idle_rotation_rate_invmin' type='xsd:NMTOKEN' use='default' value='1000'/>
+   <xsd:attribute name='max_rotation_rate_invmin' type='xsd:NMTOKEN' use='default' value='6000'/>
+   <xsd:attribute name='dynamic_tyre_radius' type='xsd:NMTOKEN' use='default' value='0.3113'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='gearRatio'>
+  <xsd:complexType>
+   <xsd:attribute name='phi' type='xsd:NMTOKEN' use='required'/>
+  </xsd:complexType>
+ </xsd:element>
+</xsd:schema>
+
