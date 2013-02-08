@@ -15,12 +15,13 @@ import org.movsim.consumption.input.xml.batch.BatchDataInput;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 public class InputReader {
 
     private final char separator = ',';
 
-    private final List<ConsumptionDataRecord> records;
+    private List<ConsumptionDataRecord> records;
     
     private final BatchDataInput batchInput;
 
@@ -56,17 +57,44 @@ public class InputReader {
 
         parseInputData(inputDataLines);
 
+        // TODO make this configurable
+        records = calcAccelerationFromSpeed();
+
+        // do this after post processing
+        addNormalizedTime();
     }
 
+    private void addNormalizedTime() {
+        if (!records.isEmpty()) {
+            final double startTime = records.get(0).getTime();
+            System.out.println("add normalized time with startTime=" + startTime);
+            for (ConsumptionDataRecord record : records) {
+                record.setNormalizedTime(record.getTime() - startTime);
+            }
+        }
+    }
+
+    private List<ConsumptionDataRecord> calcAccelerationFromSpeed() {
+        List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
+        for (int i = 0, N = records.size() - 1; i <= N; i++) {
+            ConsumptionDataRecord recordFwd = records.get(Math.min(i + 1, N));
+            ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
+            double speedDiff = recordFwd.getSpeed() - recordBwd.getSpeed();
+            double timeDiff = recordFwd.getTime() - recordBwd.getTime();
+            ConsumptionDataRecord record = records.get(i);
+            double acceleration = speedDiff / timeDiff;
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getSpeed(),
+                    acceleration, record.getGrade()));
+        }
+        return newRecords;
+    }
+    
     private void parseInputData(List<String[]> input) {
-       
         InputDataParser parser = new InputDataParser(batchInput.getColumnData(), batchInput.getConversionInput());
-        
         int index = 0;
         for (String[] line : input) {
             try{
-                ConsumptionDataRecord record = parser.parse(line);
-                record.setIndex(index);
+                ConsumptionDataRecord record = parser.parse(index, line);
                 records.add(record);
                 ++index;
             } catch (NumberFormatException e) {
@@ -81,7 +109,7 @@ public class InputReader {
     private List<String[]> readData(File file){
         System.out.println("using input file " + file.getAbsolutePath());
         
-        List<String[]> myEntries = null;
+        List<String[]> myEntries = Lists.newArrayList();
         CSVReader reader = null;
         try {
             reader = new CSVReader(new FileReader(file), separator);
@@ -104,7 +132,5 @@ public class InputReader {
         }
         return myEntries;
     }
-    
-
 
 }

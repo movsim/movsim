@@ -45,13 +45,11 @@
             <artifactId>jaxb2-basics-runtime</artifactId>
             <version>0.6.2</version>
         </dependency>
-        
-         <dependency>
-	<groupId>com.google.guava</groupId>
-	<artifactId>guava-base</artifactId>
-	<version>r03</version>
-	</dependency>	
-
+	<dependency>
+	  <groupId>com.google.guava</groupId>
+	  <artifactId>guava</artifactId>
+	  <version>12.0-rc1</version>
+    </dependency>
 	<dependency>
 	<groupId>net.sf.opencsv</groupId>
 	<artifactId>opencsv</artifactId>

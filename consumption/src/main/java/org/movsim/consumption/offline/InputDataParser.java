@@ -13,16 +13,13 @@ public class InputDataParser {
     private final double accelerationConversionFactor = 1;
     private final double slopeConversionFactor;
 
-    private final int timeColumn; // = 3 - 1;
-    private final int speedColumn; // = 12 - 1; // km/h
-    private final int accelerationColum;// = 26 - 1;
-    private final int gradeColumn;// = 24 - 1; // in [%]
+    private final int timeColumn; 
+    private final int speedColumn;
+    private final int accelerationColum;
+    private final int gradeColumn;
 
     final static int MIN_COLUMNS = 4;
 
-    private double speedPrevious;
-    private double timePrevious;
-   
     public InputDataParser(ColumnInput columnData, ConversionInput conversionInput) {
         // consider shift from column count to array index
         this.timeColumn = columnData.getTimeColumn() - 1;
@@ -35,28 +32,25 @@ public class InputDataParser {
         this.slopeConversionFactor = conversionInput.getGradientConversionFactor();
     }
 
-    public ConsumptionDataRecord parse(String[] line) throws NumberFormatException {
+    public ConsumptionDataRecord parse(int index, String[] line) throws NumberFormatException {
         if (line.length <= MIN_COLUMNS) {
             throw new NumberFormatException();
         }
-
         // System.out.println("parse = " + Arrays.toString(line));
         double speed = speedConversionFactor * Double.parseDouble(line[speedColumn]);
         double time = convertToSeconds(line[timeColumn]);
-        double acceleration = (accelerationColum<0) ? calcAcceleration(time, speed) : accelerationConversionFactor * Double.parseDouble(line[accelerationColum]);
+        double acceleration = (accelerationColum<0) ? Double.NaN : accelerationConversionFactor * Double.parseDouble(line[accelerationColum]);
         double grade = (gradeColumn<0) ? 0 : slopeConversionFactor * Double.parseDouble(line[gradeColumn]);
-        speedPrevious = speed;
-        timePrevious = time;
-        return new ConsumptionDataRecord(time, speed, acceleration, grade);
+        return new ConsumptionDataRecord(index, time, speed, acceleration, grade);
     }
 
-    private double calcAcceleration(double time, double speed) {
-        double estimatedAcceleration = (speed-speedPrevious)/(time-timePrevious);
-        if(Math.abs(estimatedAcceleration)>4){
-            System.out.println("estimated acc="+estimatedAcceleration+ ", time="+time+", timePrev="+timePrevious+", speed*3.6="+speed*3.6+ ",prevSpeed="+speedPrevious*3.6);
-        }
-       return (timePrevious==0) ? 0 : Math.min(6, estimatedAcceleration);  // TODO better smoothed acceleration from diff
-    }
+//    private double calcAcceleration(double time, double speed) {
+//        double estimatedAcceleration = (speed-speedPrevious)/(time-timePrevious);
+//        if(Math.abs(estimatedAcceleration)>4){
+//            System.out.println("estimated acc="+estimatedAcceleration+ ", time="+time+", timePrev="+timePrevious+", speed*3.6="+speed*3.6+ ",prevSpeed="+speedPrevious*3.6);
+//        }
+//       return (timePrevious==0) ? 0 : Math.min(6, estimatedAcceleration);  // TODO better smoothed acceleration from diff
+//    }
 
     private double convertToSeconds(String time) throws NumberFormatException {
         if (timeInputPattern.isEmpty()) {
