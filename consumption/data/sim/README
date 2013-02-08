@@ -1,3 +1,4 @@
-sim project
+runmovsimconsumption -f consumption_sim.xml
 
-movsim/sim/output
+gnuplot plot_city_sim.gpl
+

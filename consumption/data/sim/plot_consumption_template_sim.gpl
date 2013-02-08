@@ -1,6 +1,6 @@
 # movsim.org -- gnuplot command file for plotting movsim floating car input and consumption output data
 
-# invoke using -e option to set parameters, eg: 
+# invoke using -e option to set parameters, eg:
 # gnuplot -e "var='value'" gnuplotfile.gpl
 
 set datafile separator ","
@@ -67,19 +67,19 @@ set xlabel "Time (min)"
 
 set ylabel "Kinematic Quantities"
 set out speedPlot
-print "plot".speedPlot
+print "plot ".speedPlot
 plot\
   inputFile u ($1/60.):($6*3.6) t "speed [km/h]" w l ls 1,\
   inputFile u ($1/60.):($7*10) t "10*acceleration [m/s^2]" w l ls 3
 
 #####
-  
+
 set ylabel "Topographic Quantities"
 set out heightPlot
-print "plot".heightPlot
+print "plot ".heightPlot
 plot\
   inputFile u ($1/60.):($14*10) t "10*grade [\%]" w l ls 3
-  
+
 ##################################################################
 
 fuel100(cLiterPerH,vKMH) = (vKMH<5) ? 1.0 : cLiterPerH/3600.*100*1000/(vKMH/3.6)
@@ -87,17 +87,17 @@ fuel100(cLiterPerH,vKMH) = (vKMH<5) ? 1.0 : cLiterPerH/3600.*100*1000/(vKMH/3.6)
 set xlabel "Time (min)"
 set ylabel "Model Quantities"
 set out fuelPlot
-print "plot".fuelPlot
+print "plot ".fuelPlot
 plot\
-  modelFile u ($1/60.):($6*3600*10) t "10*consumption [l/h]" w l ls 4,\
-  modelFile u ($1/60.):(fuel100($6*3600,$3*3.6)) t "consumption [l/100km]" w l ls 5
+  modelFile u ($1/60.):($7*3600*10) t "10*consumption [l/h]" w l ls 4,\
+  modelFile u ($1/60.):(fuel100($7*3600,$4*3.6)) t "consumption [l/100km]" w l ls 5
 
-##  modelFile u ($1/60.):($8*10) t "10*gear" w l ls 6
+##  modelFile u ($1/60.):($9*10) t "10*gear" w l ls 6
 
 set key left
 set ylabel "Cumulated Consumption (liter)"
 set out fuelCumPlot
-print "plot".fuelCumPlot
+print "plot ".fuelCumPlot
 plot\
-  modelFile u ($2/60.):7 t "model" w l ls 3
+  modelFile u ($2/60.):8 t "model" w l ls 3
 
