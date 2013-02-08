@@ -13,6 +13,7 @@ public class ConversionInput {
     private final String timeFormat;
     private final double speedConversionFactor;
     private final double gradientConversionFactor;
+    private final double positionConversionFactor;
 
     public ConversionInput(Element element) {
         Preconditions.checkNotNull(element);
@@ -20,6 +21,7 @@ public class ConversionInput {
         this.timeFormat = attributeMap.get("time");
         this.speedConversionFactor = Double.parseDouble((attributeMap.get("speed")));
         this.gradientConversionFactor = Double.parseDouble((attributeMap.get("gradient")));
+        this.positionConversionFactor = Double.parseDouble((attributeMap.get("position")));
     }
 
     /**
@@ -41,6 +43,10 @@ public class ConversionInput {
      */
     public double getGradientConversionFactor() {
         return gradientConversionFactor;
+    }
+
+    public double getPositionConversionFactor() {
+        return positionConversionFactor;
     }
 
 }

@@ -11,11 +11,13 @@ public class InputDataParser {
     private final double speedConversionFactor;
     private final double accelerationConversionFactor = 1;
     private final double slopeConversionFactor;
+    private final double positionConversionFactor;
 
     private final int timeColumn;
     private final int speedColumn;
     private final int accelerationColum;
     private final int gradeColumn;
+    private final int positionColumn;
 
     final static int MIN_COLUMNS = 4;
 
@@ -25,35 +27,45 @@ public class InputDataParser {
         this.speedColumn = columnData.getSpeedColumn() - 1;
         this.accelerationColum = columnData.getAccelerationColumn() - 1;
         this.gradeColumn = columnData.getGradientColumn() - 1;
+        this.positionColumn = columnData.getPositionColumn() - 1;
 
         this.timeInputPattern = conversionInput.getTimeFormat();
         this.speedConversionFactor = conversionInput.getSpeedConversionFactor();
         this.slopeConversionFactor = conversionInput.getGradientConversionFactor();
+        this.positionConversionFactor = conversionInput.getPositionConversionFactor();
     }
 
-    public ConsumptionDataRecord parse(int index, String[] line) throws NumberFormatException {
+    public ConsumptionDataRecord parse(int index, String[] line) throws NumberFormatException, IllegalArgumentException {
         if (line.length <= MIN_COLUMNS) {
             throw new NumberFormatException();
         }
         // System.out.println("parse = " + Arrays.toString(line));
-        double speed = speedConversionFactor * Double.parseDouble(line[speedColumn]);
+        double speed = isInputQuantity(speedColumn) ? speedConversionFactor * Double.parseDouble(line[speedColumn])
+                : Double.NaN;
         double time = convertToSeconds(line[timeColumn]);
 
-        double acceleration = (accelerationColum < 0) ? Double.NaN : accelerationConversionFactor
-                * Double.parseDouble(line[accelerationColum]);
+        double acceleration = isInputQuantity(accelerationColum) ? accelerationConversionFactor
+                * Double.parseDouble(line[accelerationColum]) : Double.NaN;
 
-        double grade = (gradeColumn < 0) ? 0 : slopeConversionFactor * Double.parseDouble(line[gradeColumn]);
-        return new ConsumptionDataRecord(index, time, speed, acceleration, grade);
+        double grade = isInputQuantity(gradeColumn) ? slopeConversionFactor * Double.parseDouble(line[gradeColumn]) : 0;
+        double position = isInputQuantity(positionColumn) ? positionConversionFactor
+                * Double.parseDouble(line[positionColumn]) : Double.NaN;
+
+        return new ConsumptionDataRecord(index, time, position, speed, acceleration, grade);
     }
 
-    private double convertToSeconds(String time) throws NumberFormatException {
+    private double convertToSeconds(String time) throws NumberFormatException, IllegalArgumentException {
         if (timeInputPattern.isEmpty()) {
             return Double.parseDouble(time);
         }
-        // System.out.println("timeInputPattern="+timeInputPattern+ ", time="+time);
+        // System.out.println("timeInputPattern=" + timeInputPattern + ", time=" + time);
         DateTime dateTime = DateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern));
         // System.out.println(time + "--> dateTime=" + dateTime);
         return dateTime.getSecondOfDay();
+    }
+
+    private boolean isInputQuantity(int column) {
+        return column >= 0;
     }
 
 }

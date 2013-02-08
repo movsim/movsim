@@ -56,16 +56,27 @@ public class InputReader {
 
         parseInputData(inputDataLines);
 
+        if (!hasSpeed()) {
+            records = calculateSpeeds();
+        }
         if (!hasAcceleration()) {
-            records = calcAccelerationFromSpeed();
+            records = calculateAccelerations();
         }
 
         // do this after post processing
         addNormalizedTime();
     }
 
+    private boolean hasSpeed() {
+        return !records.isEmpty() && records.get(0).hasSpeed();
+    }
+
     private boolean hasAcceleration() {
         return !records.isEmpty() && records.get(0).hasAcceleration();
+    }
+
+    private boolean hasPosition() {
+        return !records.isEmpty() && records.get(0).hasPosition();
     }
 
     private void addNormalizedTime() {
@@ -78,6 +89,42 @@ public class InputReader {
         }
     }
 
+    private List<ConsumptionDataRecord> calculateSpeeds() {
+        Preconditions.checkArgument(hasPosition(), "cannot calculate speeds without positions.");
+        System.out.println("calculate speeds numerically.");
+        List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
+        for (int i = 0, N = records.size() - 1; i <= N; i++) {
+            ConsumptionDataRecord record = records.get(i);
+            ConsumptionDataRecord recordFwd = records.get(Math.min(i + 1, N));
+            ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
+            double speed = calcDerivate(recordFwd.getPosition() - recordBwd.getPosition(),
+                    recordFwd.getTime() - recordBwd.getTime());
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), speed,
+                    record.getAcceleration(), record.getGrade()));
+        }
+        return newRecords;
+    }
+
+    private List<ConsumptionDataRecord> calculateAccelerations() {
+        Preconditions.checkArgument(hasSpeed(), "cannot calculate accelerations without speeds.");
+        System.out.println("calculate accelerations numerically.");
+        List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
+        for (int i = 0, N = records.size() - 1; i <= N; i++) {
+            ConsumptionDataRecord record = records.get(i);
+            ConsumptionDataRecord recordFwd = records.get(Math.min(i + 1, N));
+            ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
+            double acceleration = calcDerivate(recordFwd.getSpeed() - recordBwd.getSpeed(), recordFwd.getTime()
+                    - recordBwd.getTime());
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), record
+                    .getSpeed(), acceleration, record.getGrade()));
+        }
+        return newRecords;
+    }
+
+    private double calcDerivate(double dx, double dy) {
+        return (dy == 0) ? Double.NaN : dx / dy;
+    }
+
     private List<ConsumptionDataRecord> calcAccelerationFromSpeed() {
         System.out.println("no acceleration provided, calculated from speeds.");
         List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
@@ -88,11 +135,12 @@ public class InputReader {
             double timeDiff = recordFwd.getTime() - recordBwd.getTime();
             ConsumptionDataRecord record = records.get(i);
             double acceleration = speedDiff / timeDiff;
-            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getSpeed(),
-                    acceleration, record.getGrade()));
+            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), record
+                    .getSpeed(), acceleration, record.getGrade()));
         }
         return newRecords;
     }
+
 
     private void parseInputData(List<String[]> input) {
         InputDataParser parser = new InputDataParser(batchInput.getColumnData(), batchInput.getConversionInput());
@@ -103,6 +151,8 @@ public class InputReader {
                 records.add(record);
                 ++index;
             } catch (NumberFormatException e) {
+                System.out.println("cannot parse data. Ignore line=" + Arrays.toString(line));
+            } catch (IllegalArgumentException e) {
                 System.out.println("cannot parse data. Ignore line=" + Arrays.toString(line));
             }
         }

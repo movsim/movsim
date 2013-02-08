@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ##################################################################### -->
 <!-- DTD Validation Grammar for Movsim Consumption Model                   -->
@@ -52,6 +52,7 @@ time  NMTOKEN   #REQUIRED
 speed NMTOKEN   #REQUIRED
 acceleration  NMTOKEN   #REQUIRED
 gradient  NMTOKEN   #REQUIRED
+position NMTOKEN "-1"
 >
 
 <!ELEMENT conversions EMPTY >
@@ -60,6 +61,7 @@ time CDATA  ""
 speed NMTOKEN "1"
 acceleration  NMTOKEN  "1"
 gradient  NMTOKEN "1"
+position NMTOKEN "1"
 >
 
 
@@ -77,7 +79,7 @@ gradient  NMTOKEN "1"
 
 <!ATTLIST model
   label   CDATA   #REQUIRED
-  output  (true|false) "false" 
+  output  (true|false) "false"
 >
 
 <!ELEMENT vehicle EMPTY >
@@ -97,7 +99,7 @@ gradient  NMTOKEN "1"
   idle_cons_rate_linvh NMTOKEN "0.6"
   cspec_min_g_per_kwh NMTOKEN "212"
   pe_min_bar NMTOKEN "1"
-  pe_max_bar NMTOKEN "19" 
+  pe_max_bar NMTOKEN "19"
 >
 
 <!ELEMENT engineConstantMap EMPTY >
@@ -119,4 +121,3 @@ gradient  NMTOKEN "1"
   phi   NMTOKEN  #REQUIRED
 >
 
-     

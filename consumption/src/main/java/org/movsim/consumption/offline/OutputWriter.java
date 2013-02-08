@@ -40,10 +40,12 @@ public class OutputWriter {
         CSVWriter writer = null;
         try {
             writer = new CSVWriter(new FileWriter(output), SEPARATOR_CHARACTER, QUOTE_CHARACTER);
-            writer.writeNext(ConsumptionDataRecord.csvHeader(String.valueOf(SEPARATOR_CHARACTER)));
+            if (!records.isEmpty()) {
+                writer.writeNext(records.get(0).csvHeader(String.valueOf(SEPARATOR_CHARACTER)));
             for(ConsumptionDataRecord record : records){
                 // feed in your array (or convert your data to an array)
                 writer.writeNext(record.toCsv(String.valueOf(SEPARATOR_CHARACTER)));
+            }
             }
         } catch (IOException e) {
             e.printStackTrace();

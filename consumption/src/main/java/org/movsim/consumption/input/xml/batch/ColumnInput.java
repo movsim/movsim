@@ -13,6 +13,7 @@ public class ColumnInput {
 	private final int speedColumn;
 	private final int accelerationColumn;
 	private final int gradientColumn;
+    private final int positionColumn;
 	
 	public ColumnInput(Element element) {
         Preconditions.checkNotNull(element);
@@ -21,6 +22,7 @@ public class ColumnInput {
 		this.speedColumn = Integer.parseInt(attributeMap.get("speed"));
 		this.accelerationColumn = Integer.parseInt(attributeMap.get("acceleration"));
 		this.gradientColumn = Integer.parseInt(attributeMap.get("gradient"));
+        this.positionColumn = Integer.parseInt(attributeMap.get("position"));
 	}
 
     public int getTimeColumn() {
@@ -37,6 +39,10 @@ public class ColumnInput {
 
     public int getGradientColumn() {
         return gradientColumn;
+    }
+
+    public int getPositionColumn() {
+        return positionColumn;
     }
 
 }

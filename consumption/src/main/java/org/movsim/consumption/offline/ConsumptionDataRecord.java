@@ -4,6 +4,8 @@ public class ConsumptionDataRecord {
 
     /** index counter for convenience */
     private final int index;
+    /** in meters */
+    private final double position;
     /** in seconds */
     private final double time;
     /** in m/s */
@@ -24,9 +26,11 @@ public class ConsumptionDataRecord {
     /** chosen gear */
     private int gear;
 
-    public ConsumptionDataRecord(int index, double time, double speed, double acceleration, double grade) {
+    public ConsumptionDataRecord(int index, double time, double position, double speed, double acceleration,
+            double grade) {
         this.index = index;
         this.time = time;
+        this.position = position;
         this.speed = speed;
         this.acceleration = acceleration;
         this.grade = grade;
@@ -41,12 +45,20 @@ public class ConsumptionDataRecord {
         return speed;
     }
 
+    public boolean hasSpeed() {
+        return !Double.isNaN(speed);
+    }
+
     public double getAcceleration() {
         return acceleration;
     }
 
     public boolean hasAcceleration() {
         return !Double.isNaN(acceleration);
+    }
+
+    public boolean hasPosition() {
+        return !Double.isNaN(position);
     }
 
     public double getGrade() {
@@ -61,7 +73,7 @@ public class ConsumptionDataRecord {
         this.consumptionRate = consumptionRate;
     }
 
-    public static String[] csvHeader(final String separator) {
+    public String[] csvHeader(final String separator) {
         StringBuilder sb = new StringBuilder();
         sb.append("#Index").append(separator);
         sb.append("time(s)").append(separator);
@@ -72,6 +84,9 @@ public class ConsumptionDataRecord {
         sb.append("rate(l/s)").append(separator);
         sb.append("cumRate(l)").append(separator);
         sb.append("gear").append(separator);
+        if (hasPosition()) {
+            sb.append("position(m)").append(separator);
+        }
         return sb.toString().split(separator);
     }
 
@@ -86,6 +101,9 @@ public class ConsumptionDataRecord {
         sb.append(String.format("%.6f", consumptionRate)).append(separator);
         sb.append(String.format("%.6f", cumulatedConsumption)).append(separator);
         sb.append(String.format("%d", gear)).append(separator);
+        if (hasPosition()) {
+            sb.append(String.format("%.2f", position)).append(separator);
+        }
         return sb.toString().split(separator);
     }
 
@@ -109,12 +127,6 @@ public class ConsumptionDataRecord {
         this.gear = gear;
     }
 
-    @Override
-    public String toString() {
-        return "ConsumptionDataRecord [index=" + index + ", time=" + time + ", speed=" + speed + ", acceleration="
-                + acceleration + ", grade=" + grade + ", consumptionRate=" + consumptionRate
-                + ", cumulatedConsumption=" + cumulatedConsumption + ", gear=" + gear + "]";
-    }
 
     public double getNormalizedTime() {
         return normalizedTime;
@@ -122,6 +134,18 @@ public class ConsumptionDataRecord {
 
     public void setNormalizedTime(double normalizedTime) {
         this.normalizedTime = normalizedTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ConsumptionDataRecord [index=" + index + ", position=" + position + ", time=" + time + ", speed="
+                + speed + ", acceleration=" + acceleration + ", grade=" + grade + ", consumptionRate="
+                + consumptionRate + ", normalizedTime=" + normalizedTime + ", cumulatedConsumption="
+                + cumulatedConsumption + ", gear=" + gear + "]";
+    }
+
+    public double getPosition() {
+        return position;
     }
 
 }
