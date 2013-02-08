@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.consumption.input.xml.batch.ColumnInput;
 import org.movsim.consumption.input.xml.batch.ConversionInput;
-import org.movsim.utilities.Units;
 
 public class InputDataParser {
 
@@ -13,7 +12,7 @@ public class InputDataParser {
     private final double accelerationConversionFactor = 1;
     private final double slopeConversionFactor;
 
-    private final int timeColumn; 
+    private final int timeColumn;
     private final int speedColumn;
     private final int accelerationColum;
     private final int gradeColumn;
@@ -39,18 +38,13 @@ public class InputDataParser {
         // System.out.println("parse = " + Arrays.toString(line));
         double speed = speedConversionFactor * Double.parseDouble(line[speedColumn]);
         double time = convertToSeconds(line[timeColumn]);
-        double acceleration = (accelerationColum<0) ? Double.NaN : accelerationConversionFactor * Double.parseDouble(line[accelerationColum]);
-        double grade = (gradeColumn<0) ? 0 : slopeConversionFactor * Double.parseDouble(line[gradeColumn]);
+
+        double acceleration = (accelerationColum < 0) ? Double.NaN : accelerationConversionFactor
+                * Double.parseDouble(line[accelerationColum]);
+
+        double grade = (gradeColumn < 0) ? 0 : slopeConversionFactor * Double.parseDouble(line[gradeColumn]);
         return new ConsumptionDataRecord(index, time, speed, acceleration, grade);
     }
-
-//    private double calcAcceleration(double time, double speed) {
-//        double estimatedAcceleration = (speed-speedPrevious)/(time-timePrevious);
-//        if(Math.abs(estimatedAcceleration)>4){
-//            System.out.println("estimated acc="+estimatedAcceleration+ ", time="+time+", timePrev="+timePrevious+", speed*3.6="+speed*3.6+ ",prevSpeed="+speedPrevious*3.6);
-//        }
-//       return (timePrevious==0) ? 0 : Math.min(6, estimatedAcceleration);  // TODO better smoothed acceleration from diff
-//    }
 
     private double convertToSeconds(String time) throws NumberFormatException {
         if (timeInputPattern.isEmpty()) {

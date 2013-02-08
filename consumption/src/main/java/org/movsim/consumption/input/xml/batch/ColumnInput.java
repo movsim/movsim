@@ -9,7 +9,6 @@ import com.google.common.base.Preconditions;
 
 public class ColumnInput {
 	
-	//time="3" speed="12" acceleration="26" gradient="24"
 	private final int timeColumn;
 	private final int speedColumn;
 	private final int accelerationColumn;

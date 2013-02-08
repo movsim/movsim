@@ -1,5 +1,5 @@
-# Arne Kesting, November 2012 
-# compile source code, e.g. in path movsim/consumption: 
+# Arne Kesting, November 2012
+# compile source code, e.g. in path movsim/consumption:
 mvn clean install
 
 # do calculation:
@@ -10,8 +10,10 @@ runmovsimconsumption -f consumption_ostfalia.xml
 gnuplot plot_route_seesen.gpl
 gnuplot plot_route_torfhaus.gpl
 
-# do plotting of consumption model output 
+# do plotting of consumption model output
 gnuplot plot_consumption_models.gpl
 
 # clean csv and eps data in directory (script from movsim/core)
+# all static files should not use csv as ending since this indicates temporary/reproducable output
 cleanmovsim
+

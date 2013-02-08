@@ -19,12 +19,12 @@ public class ConsumptionCalculation {
         double timestep = 0; // seconds
         ConsumptionDataRecord previous = null;
         for (ConsumptionDataRecord record : records) {
-            double[] minFuelFlow = model.getMinFuelFlow(record.getSpeed(), record.getAcceleration(),
-                    record.getGrade(), true);
+            double[] minFuelFlow = model.getMinFuelFlow(record.getSpeed(), record.getAcceleration(), record.getGrade(),
+                    true);
             double fuelFlow = 1000 * minFuelFlow[0];// conversion from m^3/s to liter/s
-            if(fuelFlow > 0.3){
-        	fuelFlow = 0;
-        	System.out.println("  !!! Ignore unrealistic consumption, set to 0. Inputdata="+record.toString());
+            if (fuelFlow > 0.3) {
+                fuelFlow = 0;
+                System.out.println("  !!! Ignore unrealistic consumption, set to 0. Inputdata=" + record.toString());
             }
             record.setConsumptionRate(fuelFlow);
             record.setGear((int) minFuelFlow[1]);

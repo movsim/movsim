@@ -45,6 +45,10 @@ public class ConsumptionDataRecord {
         return acceleration;
     }
 
+    public boolean hasAcceleration() {
+        return !Double.isNaN(acceleration);
+    }
+
     public double getGrade() {
         return grade;
     }

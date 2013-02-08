@@ -1,6 +1,5 @@
 package org.movsim.consumption.offline;
 
-
 // http://opencsv.sourceforge.net/#how-to-read
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,13 +21,13 @@ public class InputReader {
     private final char separator = ',';
 
     private List<ConsumptionDataRecord> records;
-    
+
     private final BatchDataInput batchInput;
 
     public static InputReader create(BatchDataInput batchInput, String path) {
         File inputFile = new File(path, batchInput.getInputFile());
         System.out.println("read input from " + inputFile.getAbsolutePath());
-        
+
         return new InputReader(inputFile, batchInput);
     }
 
@@ -39,7 +38,7 @@ public class InputReader {
                 + " does not exist!");
         this.batchInput = batchInput;
         records = new LinkedList<ConsumptionDataRecord>();
-        
+
         process(inputFile);
     }
 
@@ -47,9 +46,9 @@ public class InputReader {
         return records;
     }
 
-    private void process(File inputFile){
+    private void process(File inputFile) {
         List<String[]> inputDataLines = readData(inputFile);
-        
+
         if (inputDataLines == null || inputDataLines.isEmpty()) {
             System.out.println("no input read");
             return;
@@ -57,11 +56,16 @@ public class InputReader {
 
         parseInputData(inputDataLines);
 
-        // TODO make this configurable
-        records = calcAccelerationFromSpeed();
+        if (!hasAcceleration()) {
+            records = calcAccelerationFromSpeed();
+        }
 
         // do this after post processing
         addNormalizedTime();
+    }
+
+    private boolean hasAcceleration() {
+        return !records.isEmpty() && records.get(0).hasAcceleration();
     }
 
     private void addNormalizedTime() {
@@ -75,6 +79,7 @@ public class InputReader {
     }
 
     private List<ConsumptionDataRecord> calcAccelerationFromSpeed() {
+        System.out.println("no acceleration provided, calculated from speeds.");
         List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
         for (int i = 0, N = records.size() - 1; i <= N; i++) {
             ConsumptionDataRecord recordFwd = records.get(Math.min(i + 1, N));
@@ -88,12 +93,12 @@ public class InputReader {
         }
         return newRecords;
     }
-    
+
     private void parseInputData(List<String[]> input) {
         InputDataParser parser = new InputDataParser(batchInput.getColumnData(), batchInput.getConversionInput());
         int index = 0;
         for (String[] line : input) {
-            try{
+            try {
                 ConsumptionDataRecord record = parser.parse(index, line);
                 records.add(record);
                 ++index;
@@ -106,9 +111,9 @@ public class InputReader {
                 + " input lines");
     }
 
-    private List<String[]> readData(File file){
+    private List<String[]> readData(File file) {
         System.out.println("using input file " + file.getAbsolutePath());
-        
+
         List<String[]> myEntries = Lists.newArrayList();
         CSVReader reader = null;
         try {
@@ -120,8 +125,7 @@ public class InputReader {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        finally{
+        } finally {
             if (reader != null) {
                 try {
                     reader.close();
