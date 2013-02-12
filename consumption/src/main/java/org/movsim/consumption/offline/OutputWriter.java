@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.movsim.consumption.input.xml.batch.BatchDataInput;
+import org.movsim.consumption.autogen.BatchData;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -17,8 +17,8 @@ public class OutputWriter {
     private static final char QUOTE_CHARACTER = CSVWriter.NO_QUOTE_CHARACTER;
     private final File output;
 
-    public static OutputWriter create(BatchDataInput batch, String outputPath) {
-        File outputFile = new File(outputPath, batch.getOutputFile());
+    public static OutputWriter create(BatchData batch, String outputPath) {
+        File outputFile = new File(outputPath, batch.getOutputfile());
         return new OutputWriter(outputFile);
     }
 

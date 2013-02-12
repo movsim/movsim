@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
+import org.movsim.consumption.autogen.Model;
 import org.movsim.consumption.output.FileFuelConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,15 +54,15 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
     private final VehicleAttributes vehicle;
 
-    public EnergyFlowModelImpl(String keyLabel, ConsumptionModelInput input) {
-        Preconditions.checkNotNull(input);
-        vehicle = new VehicleAttributes(input.getCarData());
+    public EnergyFlowModelImpl(String keyLabel, Model modelInput) {
+        Preconditions.checkNotNull(modelInput);
+        vehicle = new VehicleAttributes(modelInput.getVehicleData());
         carPowerModel = new InstantaneousPowerModelImpl(vehicle);
-        engineRotationModel = new EngineRotationModel(input.getRotationModelInput());
-        engineModel = new EngineEfficiencyModelAnalyticImpl(input.getEngineData(), engineRotationModel);
+        engineRotationModel = new EngineRotationModel(modelInput.getRotationModel());
+        engineModel = new EngineEfficiencyModelAnalyticImpl(modelInput.getEngineCombustionMap(), engineRotationModel);
 
-        // TODO
-        if (input.isOutput()) {
+        // TODO boolean type
+        if (modelInput.isOutput()) {
             writeOutput(keyLabel);
         }
     }

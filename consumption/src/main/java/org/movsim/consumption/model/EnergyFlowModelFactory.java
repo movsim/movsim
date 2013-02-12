@@ -1,10 +1,10 @@
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
+import org.movsim.consumption.autogen.Model;
 
 public class EnergyFlowModelFactory {
 
-    public static EnergyFlowModel create(String keyLabel, ConsumptionModelInput consumptionModelInput) {
-        return new EnergyFlowModelImpl(keyLabel, consumptionModelInput);
+    public static EnergyFlowModel create(String keyLabel, Model modelInput) {
+        return new EnergyFlowModelImpl(keyLabel, modelInput);
     }
 }

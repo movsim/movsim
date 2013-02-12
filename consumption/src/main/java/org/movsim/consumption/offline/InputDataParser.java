@@ -2,11 +2,12 @@ package org.movsim.consumption.offline;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.movsim.consumption.input.xml.batch.ColumnInput;
-import org.movsim.consumption.input.xml.batch.ConversionInput;
+import org.movsim.consumption.autogen.Columns;
+import org.movsim.consumption.autogen.Conversions;
 
 public class InputDataParser {
 
+    // <CONVERSION time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
     private final String timeInputPattern; // = "HH:mm:ss"; // 10:23:21 AM
     private final double speedConversionFactor;
     private final double accelerationConversionFactor = 1;
@@ -21,18 +22,18 @@ public class InputDataParser {
 
     final static int MIN_COLUMNS = 4;
 
-    public InputDataParser(ColumnInput columnData, ConversionInput conversionInput) {
+    public InputDataParser(Columns columns, Conversions conversions) {
         // consider shift from column count to array index
-        this.timeColumn = columnData.getTimeColumn() - 1;
-        this.speedColumn = columnData.getSpeedColumn() - 1;
-        this.accelerationColum = columnData.getAccelerationColumn() - 1;
-        this.gradeColumn = columnData.getGradientColumn() - 1;
-        this.positionColumn = columnData.getPositionColumn() - 1;
+        this.timeColumn = columns.getTime() - 1;
+        this.speedColumn = columns.getSpeed() - 1;
+        this.accelerationColum = columns.getAcceleration() - 1;
+        this.gradeColumn = columns.getGradient() - 1;
+        this.positionColumn = columns.getPosition() - 1;
 
-        this.timeInputPattern = conversionInput.getTimeFormat();
-        this.speedConversionFactor = conversionInput.getSpeedConversionFactor();
-        this.slopeConversionFactor = conversionInput.getGradientConversionFactor();
-        this.positionConversionFactor = conversionInput.getPositionConversionFactor();
+        this.timeInputPattern = conversions.getTime();
+        this.speedConversionFactor = conversions.getSpeed();
+        this.slopeConversionFactor = conversions.getGradient();
+        this.positionConversionFactor = conversions.getPosition();
     }
 
     public ConsumptionDataRecord parse(int index, String[] line) throws NumberFormatException, IllegalArgumentException {

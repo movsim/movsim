@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.input.xml.model.ConsumptionEngineModelInput;
+import org.movsim.consumption.autogen.EngineCombustionMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +33,19 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
+
+    // /** in kW */
+    // private final double maxPower;
+    // /** in liter */
+    // private final double cylinderVolume;
+    // /** in liter per second */
+    // private final double idleConsumptionRateLiterPerSecond;
+    // /** in kg/Ws */
+    // private final double minSpecificConsumption;
+    // /** in Pascal */
+    // private final double effectivePressureMinimum;
+    // /** in Pascal */
+    // private final double effectivePressureMaximum;
 
     private double idleConsumptionRate; // idling consumption rate (Liter/s)
 
@@ -46,7 +59,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     private double idleMoment;
 
-    private double maxMoment;
+    // private double maxMoment;
 
     public double cSpec0Idle;
 
@@ -54,26 +67,33 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     private final EngineRotationModel engineRotationsModel;
 
-    public EngineEfficiencyModelAnalyticImpl(ConsumptionEngineModelInput engineInput, EngineRotationModel engineRotationsModel) {
+    public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
+            EngineRotationModel engineRotationsModel) {
 
         this.engineRotationsModel = engineRotationsModel;
 
-        initialize(engineInput);
+        initialize(engineCombustionMap);
 
     }
 
-    private void initialize(ConsumptionEngineModelInput engineInput) {
-        maxPower = engineInput.getMaxPower();
-
-        idleConsumptionRate = engineInput.getIdleConsumptionRateLiterPerSecond();
-        minSpecificConsumption = engineInput.getMinSpecificConsumption();
-
-        cylinderVolume = engineInput.getCylinderVolume();
-
-        minEffPressure = engineInput.getEffectivePressureMinimum(); // TODO not used!
-        maxEffPressure = engineInput.getEffectivePressureMaximum();
-
-        maxMoment = getMaxMoment();
+    //
+    // final Map<String, String> engineDataMap = XmlUtils.putAttributesInHash(elem);
+    // this.maxPower = 1000 * Double.parseDouble(engineDataMap.get("max_power_kW"));
+    // this.cylinderVolume = 0.001 * Double.parseDouble(engineDataMap.get("cylinder_vol_l")); // in liter
+    // this.idleConsumptionRateLiterPerSecond = Double.parseDouble(engineDataMap.get("idle_cons_rate_linvh")) / 3600.;
+    // this.minSpecificConsumption = Double.parseDouble(engineDataMap.get("cspec_min_g_per_kwh")) / 3.6e9;
+    // this.effectivePressureMinimum = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL
+    // * Double.parseDouble(engineDataMap.get("pe_min_bar"));
+    // this.effectivePressureMaximum = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL
+    // * Double.parseDouble(engineDataMap.get("pe_max_bar"));
+    private void initialize(EngineCombustionMap engineCombustionMap) {
+        maxPower = 1000 * engineCombustionMap.getMaxPowerKW();
+        idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() / 3600.;
+        minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh() / 3.6e9;
+        cylinderVolume = 0.001 * engineCombustionMap.getCylinderVolL();
+        minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar(); // .getEffectivePressureMinimum();
+        maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar(); // .getEffectivePressureMaximum();
+        // maxMoment = getMaxMoment();
         idleMoment = Moments.getModelLossMoment(engineRotationsModel.getIdleFrequency());
 
         double powerIdle = Moments.getLossPower(engineRotationsModel.getIdleFrequency());
@@ -116,7 +136,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     // model output 1: specific consumption per power as function of moment
     public double cSpecific0ForMechMoment(double frequency, double mechMoment) {
         final double indMoment = mechMoment + Moments.getModelLossMoment(frequency);
-        return (mechMoment <= 0 || mechMoment > maxMoment) ? 0 : cSpecific0(frequency, indMoment,
+        return (mechMoment <= 0 || mechMoment > getMaxMoment()) ? 0 : cSpecific0(frequency, indMoment,
                 minSpecificConsumption) * (indMoment / mechMoment);
     }
 
@@ -125,7 +145,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         return minCSpec0
                 + (cSpec0Idle - minCSpec0)
                 * (Math.exp(1 - indMoment / idleMoment) + Math.exp(1
-                        - (maxMoment + Moments.getModelLossMoment(frequency) - indMoment) / idleMoment));
+                        - (getMaxMoment() + Moments.getModelLossMoment(frequency) - indMoment) / idleMoment));
     }
 
     // --------------------------------------------------------

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.consumption.input.xml.batch.BatchDataInput;
+import org.movsim.consumption.autogen.BatchData;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -22,21 +22,21 @@ public class InputReader {
 
     private List<ConsumptionDataRecord> records;
 
-    private final BatchDataInput batchInput;
+    private final BatchData batchInput;
 
-    public static InputReader create(BatchDataInput batchInput, String path) {
-        File inputFile = new File(path, batchInput.getInputFile());
+    public static InputReader create(BatchData batch, String path) {
+        File inputFile = new File(path, batch.getInputfile());
         System.out.println("read input from " + inputFile.getAbsolutePath());
 
-        return new InputReader(inputFile, batchInput);
+        return new InputReader(inputFile, batch);
     }
 
-    private InputReader(File inputFile, BatchDataInput batchInput) {
+    private InputReader(File inputFile, BatchData batch) {
         Preconditions.checkNotNull(inputFile);
-        Preconditions.checkNotNull(batchInput);
+        Preconditions.checkNotNull(batch);
         Preconditions.checkArgument(inputFile.exists() && inputFile.isFile(), "file=" + inputFile.getAbsolutePath()
                 + " does not exist!");
-        this.batchInput = batchInput;
+        this.batchInput = batch;
         records = new LinkedList<ConsumptionDataRecord>();
 
         process(inputFile);
@@ -143,7 +143,7 @@ public class InputReader {
 
 
     private void parseInputData(List<String[]> input) {
-        InputDataParser parser = new InputDataParser(batchInput.getColumnData(), batchInput.getConversionInput());
+        InputDataParser parser = new InputDataParser(batchInput.getColumns(), batchInput.getConversions());
         int index = 0;
         for (String[] line : input) {
             try {

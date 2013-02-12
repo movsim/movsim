@@ -1,6 +1,6 @@
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.input.xml.model.ConsumptionCarModelInput;
+import org.movsim.consumption.autogen.VehicleData;
 
 public class VehicleAttributes {
 
@@ -22,13 +22,13 @@ public class VehicleAttributes {
     /** power for electrical consumption (W) */
     private final double electricPower;
 
-    public VehicleAttributes(ConsumptionCarModelInput carInput) {
-        mass = carInput.getVehicleMass();
-        cdValue = carInput.getCwValue();
-        crossSectionSurface = carInput.getCrossSectionSurface();
-        constantFrictionCoefficient = carInput.getConsFrictionCoefficient();
-        speedFrictionCoefficient = carInput.getvFrictionCoefficient();
-        electricPower = carInput.getElectricPower();
+    public VehicleAttributes(VehicleData vehicle) {
+        mass = vehicle.getMass();
+        cdValue = vehicle.getCdValue();
+        crossSectionSurface = vehicle.getCrossSectionSurface();
+        constantFrictionCoefficient = vehicle.getConstFriction();
+        speedFrictionCoefficient = vehicle.getVFriction();
+        electricPower = vehicle.getElectricPower();
     }
 
     public double electricPower() {

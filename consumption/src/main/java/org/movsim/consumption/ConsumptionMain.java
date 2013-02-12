@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,17 +25,20 @@
  */
 package org.movsim.consumption;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.xml.bind.JAXBException;
+
+import org.movsim.consumption.autogen.BatchData;
+import org.movsim.consumption.autogen.Model;
+import org.movsim.consumption.autogen.MovsimConsumption;
 import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.input.ConsumptionMetadata;
-import org.movsim.consumption.input.xml.ConsumptionInputData;
-import org.movsim.consumption.input.xml.ConsumptionXmlReader;
-import org.movsim.consumption.input.xml.batch.BatchDataInput;
-import org.movsim.consumption.input.xml.model.ConsumptionModelInput;
+import org.movsim.consumption.input.ConsumptionXmlLoader;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
@@ -43,57 +46,80 @@ import org.movsim.consumption.offline.ConsumptionCalculation;
 import org.movsim.consumption.offline.ConsumptionDataRecord;
 import org.movsim.consumption.offline.InputReader;
 import org.movsim.consumption.offline.OutputWriter;
+import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
-
 
 public class ConsumptionMain {
 
     static final Map<String, EnergyFlowModel> consumptionModelPool = new HashMap<String, EnergyFlowModel>();
-    static ConsumptionInputData inputData;
 
-    public static void main(String[] args) {
+    // static ConsumptionInputData inputData;
+
+    public static void main(String[] args) throws JAXBException, SAXException {
 
         Locale.setDefault(Locale.US);
-        
-        System.out.println("Movsim EnergyFlowModelImpl Model. (c) Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden");
-        
+
+        System.out
+                .println("Movsim Energy-Flow Model (Consumption). (c) Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden, see: www.movsim.org");
+
         ConsumptionLogger.initializeLogger();
-        
+
         ConsumptionCommandLine.parse(ConsumptionMetadata.getInstance(), args);
 
-        inputData = new ConsumptionInputData();
-        ConsumptionXmlReader.parse(ConsumptionMetadata.getInstance(), inputData);
-        
-        System.out.println("size of batches = " + inputData.getConsumptionInput().getBatchInput().size());
-        for (BatchDataInput batch : inputData.getConsumptionInput().getBatchInput()) {
+        // inputData = new ConsumptionInputData();
+        // ConsumptionXmlReader.parse(ConsumptionMetadata.getInstance(), inputData);
+
+        ConsumptionXmlLoader xmlInputLoader = new ConsumptionXmlLoader();
+        String consumptionFilename = ConsumptionMetadata.getInstance().getConsumptionFilename();
+        MovsimConsumption inputData = xmlInputLoader
+                .validateAndLoadOpenConsumptionInput(new File(consumptionFilename));
+
+        createConsumptionModels(inputData);
+
+        // System.out.println("size of batches = " + inputData.getConsumptionInput().getBatchInput().size());
+        System.out.println("size of batches = " + inputData.getBatchJobs().getBatchData().size());
+        // for (BatchDataInput batch : inputData.getConsumptionInput().getBatchInput()) {
+        for (BatchData batch : inputData.getBatchJobs().getBatchData()) {
             InputReader reader = InputReader
                     .create(batch, ConsumptionMetadata.getInstance().getPathToConsumptionFile());
             List<ConsumptionDataRecord> records = reader.getRecords();
 
-            EnergyFlowModel model = getModel(batch.getModelLabel());
-
+            EnergyFlowModel model = consumptionModelPool.get(batch.getModel());
+            Preconditions.checkNotNull(model, "model not available with name=" + batch.getModel());
             ConsumptionCalculation calculation = new ConsumptionCalculation(model);
+
             calculation.process(records);
 
             OutputWriter writer = OutputWriter.create(batch, ConsumptionMetadata.getInstance().getOutputPath());
             writer.write(records);
         }
 
-        System.out.println(inputData.getConsumptionInput().getBatchInput().size() + " batches done.");
-        
-    }
-    
-    private static EnergyFlowModel getModel(String label) {
-        System.out.println("request model with key = " + label);
-        if (!consumptionModelPool.containsKey(label)) {
-            Preconditions.checkArgument(inputData.getConsumptionInput().getConsumptionModelInput().containsKey(label),
-                    "cannot find model with label=" + label + " in input.");
-            ConsumptionModelInput consumptionModelInput = inputData.getConsumptionInput().getConsumptionModelInput()
-                    .get(label);
+        System.out.println(inputData.getBatchJobs().getBatchData().size() + " batches done.");
 
-            consumptionModelPool.put(label, EnergyFlowModelFactory.create(label, consumptionModelInput));
-        }
-        return consumptionModelPool.get(label);
     }
+
+    // private static EnergyFlowModel getModel(String label, Movsim movsim) {
+    // System.out.println("request model with key = " + label);
+    // if (!consumptionModelPool.containsKey(label)) {
+    // Preconditions.checkArgument(movsim.getConsumption().getModel().contains(label),
+    // "cannot find model with label=" + label + " in input.");
+    // // ConsumptionModelInput consumptionModelInput = inputData.getConsumptionInput().getConsumptionModelInput()
+    // // .get(label);
+    //
+    // consumptionModelPool.put(label, EnergyFlowModelFactory.create(label, consumptionModelInput));
+    // }
+    // return consumptionModelPool.get(label);
+    // }
+
+    private static void createConsumptionModels(MovsimConsumption movsimInput) {
+        for (Model modelInput : movsimInput.getConsumptionModels().getModel()) {
+//            final ConsumptionModelInput consModel = new ConsumptionModelInput(modelInput);
+//            System.out.println("parse=" + consModel + " and add model=" + consModel.getLabel());
+//            consumptionModels.put(consModel.getLabel(), consModel);
+            consumptionModelPool.put(modelInput.getLabel(),
+                    EnergyFlowModelFactory.create(modelInput.getLabel(), modelInput));
+        }
+    }
+
 }
