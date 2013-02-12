@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -31,8 +31,7 @@ import org.slf4j.LoggerFactory;
 
 public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
 
     private static final double HOUR_TO_SECOND = 1 / 3600.;
 
@@ -40,58 +39,37 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     private static final double LITER_TO_MILLILITER = 1 / 1000.;
 
-    // /** in kW */
-    // private final double maxPower;
-    // /** in liter */
-    // private final double cylinderVolume;
-    // /** in liter per second */
-    // private final double idleConsumptionRateLiterPerSecond;
-    // /** in kg/Ws */
-    // private final double minSpecificConsumption;
-    // /** in Pascal */
-    // private final double effectivePressureMinimum;
-    // /** in Pascal */
-    // private final double effectivePressureMaximum;
+    /** idling consumption rate (liter/s) */
+    private double idleConsumptionRate; //
 
-    private double idleConsumptionRate; // idling consumption rate (Liter/s)
+    /** max. effective mechanical engine power in Watts (W) */
+    public double maxPower; //
 
-    public double maxPower; // max. effective mechanical engine power (W)
+    /** effective volume of the cylinders of the engine (in milliliters, SI) */
+    private double cylinderVolume; //
 
-    private double cylinderVolume; // effective volume of the cylinders of the engine
+    /** effective part of pe lost by gear and engine friction, in Pascal (N/m^2) */
+    private double minEffPressure;
 
-    private double minEffPressure; // in Pascal, effective part of pe lost by gear and engine friction (N/m^2)
+    /** in Pascal */
+    private double maxEffPressure;
 
-    private double maxEffPressure; // in Pascal
-
+    /** */
     private double idleMoment;
-
-    // private double maxMoment;
 
     public double cSpec0Idle;
 
-    private double minSpecificConsumption; // (kg/Ws)
+    /** in (kg/Ws) */
+    private double minSpecificConsumption;
 
     private final EngineRotationModel engineRotationsModel;
 
     public EngineEfficiencyModelAnalyticImpl(EngineCombustionMap engineCombustionMap,
             EngineRotationModel engineRotationsModel) {
-
         this.engineRotationsModel = engineRotationsModel;
-
         initialize(engineCombustionMap);
-
     }
 
-    //
-    // final Map<String, String> engineDataMap = XmlUtils.putAttributesInHash(elem);
-    // this.maxPower = 1000 * Double.parseDouble(engineDataMap.get("max_power_kW"));
-    // this.cylinderVolume = 0.001 * Double.parseDouble(engineDataMap.get("cylinder_vol_l")); // in liter
-    // this.idleConsumptionRateLiterPerSecond = Double.parseDouble(engineDataMap.get("idle_cons_rate_linvh")) / 3600.;
-    // this.minSpecificConsumption = Double.parseDouble(engineDataMap.get("cspec_min_g_per_kwh")) / 3.6e9;
-    // this.effectivePressureMinimum = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL
-    // * Double.parseDouble(engineDataMap.get("pe_min_bar"));
-    // this.effectivePressureMaximum = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL
-    // * Double.parseDouble(engineDataMap.get("pe_max_bar"));
     private void initialize(EngineCombustionMap engineCombustionMap) {
         maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
         idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
@@ -99,32 +77,30 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
         minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
         maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
-        // maxMoment = getMaxMoment();
         idleMoment = Moments.getModelLossMoment(engineRotationsModel.getIdleFrequency());
 
         double powerIdle = Moments.getLossPower(engineRotationsModel.getIdleFrequency());
         cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; // in kg/(Ws)
 
-        // if (logger.isDebugEnabled()) {
-        // logger.debug(String.format("powerIdle=%f W", getLossPower(getIdleFrequency())));
-        // logger.debug(String.format("maxMoment=%f Nm", maxMoment));
-        // logger.debug(String.format("idleMoment=%f Nm", idleMoment));
+        // if (LOG.isDebugEnabled()) {
+        // LOG.debug(String.format("powerIdle=%f W", getLossPower(getIdleFrequency())));
+        // LOG.debug(String.format("maxMoment=%f Nm", maxMoment));
+        // LOG.debug(String.format("idleMoment=%f Nm", idleMoment));
         //
-        // logger.debug(String.format(
-        // "cSpez0Idle=%f kg/kWh=%f l/kWh\n minimumSpecificConsumption=%e kg/Ws=%f kg/kWh \n"
+        // LOG.debug(String.format("cSpez0Idle=%f kg/kWh=%f l/kWh\n minimumSpecificConsumption=%e kg/Ws=%f kg/kWh \n"
         // + "cSpez0(fIdle,M=160Nm)=%f g/kWh", 3.6e6 * cSpec0Idle, 3.6e6 * cSpec0Idle
         // / ConsumptionConstants.RHO_FUEL_PER_LITER, minSpecificConsumption, 3.6e6 * minSpecificConsumption,
         // cSpecific0(getIdleFrequency(), 160, minSpecificConsumption) * 3.6e9));
         //
-        // logger.debug(String.format("Test: dotC(f_idle,0)=%f l/h",
-        // 3.6e6 * consRateAnalyticModel(getIdleFrequency(), 0)));
+        // LOG.debug(String
+        // .format("Test: dotC(f_idle,0)=%f l/h", 3.6e6 * consRateAnalyticModel(getIdleFrequency(), 0)));
         //
-        // logger.debug(String.format("dotC(0.5*fmax,0.5*Pmax)=%f l/h",
+        // LOG.debug(String.format("dotC(0.5*fmax,0.5*Pmax)=%f l/h",
         // 3.6e6 * consRateAnalyticModel(0.5 * getMaxFrequency(), 0.5 * getMaxPower())));
         //
-        // logger.debug(String.format("cSpecific(f=3000/min, M=160Nm)=%f g/kWh",
+        // LOG.debug(String.format("cSpecific(f=3000/min, M=160Nm)=%f g/kWh",
         // 3.6e9 * cSpecific0ForMechMoment(3000 / 60., 160)));
-        // logger.debug(String.format("cSpecific(f=5000/min, M=200Nm)=%f g/kWh",
+        // LOG.debug(String.format("cSpecific(f=5000/min, M=200Nm)=%f g/kWh",
         // 3.6e9 * cSpecific0ForMechMoment(5000 / 60., 200)));
         // }
 
@@ -174,6 +150,5 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     public double getMaxMoment() {
         return cylinderVolume * maxEffPressure / (4 * Math.PI);
     }
-
 
 }

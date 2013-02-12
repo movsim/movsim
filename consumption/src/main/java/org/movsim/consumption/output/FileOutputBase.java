@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -32,10 +32,7 @@ import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.utilities.FileUtils;
 
 public class FileOutputBase {
-    
-    // TODO check if buffered writing is faster; if so make it tunable 
-    public static final boolean FLUSH_IMMEDIATELY = true; 
-    
+
     public static final String COMMENT_CHAR = "#";
 
     protected final String path;
@@ -55,10 +52,8 @@ public class FileOutputBase {
         return FileUtils.getWriter(filename);
     }
 
-    public void write(String format, Object... args){
+    public void write(String format, Object... args) {
         writer.printf(format, args);
-        if(FLUSH_IMMEDIATELY){
-            writer.flush();
-        }
+        writer.flush();
     }
 }

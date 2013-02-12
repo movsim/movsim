@@ -67,11 +67,11 @@ public class ConsumptionMain {
 
         ConsumptionXmlLoader xmlInputLoader = new ConsumptionXmlLoader();
         String consumptionFilename = ConsumptionMetadata.getInstance().getConsumptionFilename();
-        
+
         MovsimConsumption inputData = null;
-        try{
+        try {
             inputData = xmlInputLoader.validateAndLoadOpenConsumptionInput(new File(consumptionFilename));
-        } catch (JAXBException e){
+        } catch (JAXBException e) {
             System.err.println(e);
         } catch (SAXException e) {
             System.err.println(e);
