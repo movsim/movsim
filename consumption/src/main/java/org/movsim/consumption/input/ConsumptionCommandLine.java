@@ -25,7 +25,6 @@
  */
 package org.movsim.consumption.input;
 
-import java.io.File;
 import java.io.InputStream;
 
 import org.apache.commons.cli.CommandLine;

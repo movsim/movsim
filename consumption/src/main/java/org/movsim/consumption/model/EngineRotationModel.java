@@ -23,7 +23,7 @@ public class EngineRotationModel {
     /** maximum rotation rate of engine (1/s) */
     public final double maxFrequency;
 
-    /** dynamic tire radius (<static r) (m) */
+    /** dynamic tire radius (m) */
     private final double dynamicRadius;
 
     private final List<Double> gears;

@@ -34,6 +34,12 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
 
+    private static final double HOUR_TO_SECOND = 1 / 3600.;
+
+    private static final double KW_TO_W = 1000.;
+
+    private static final double LITER_TO_MILLILITER = 1 / 1000.;
+
     // /** in kW */
     // private final double maxPower;
     // /** in liter */
@@ -87,12 +93,12 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
     // this.effectivePressureMaximum = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL
     // * Double.parseDouble(engineDataMap.get("pe_max_bar"));
     private void initialize(EngineCombustionMap engineCombustionMap) {
-        maxPower = 1000 * engineCombustionMap.getMaxPowerKW();
-        idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() / 3600.;
+        maxPower = engineCombustionMap.getMaxPowerKW() * KW_TO_W;
+        idleConsumptionRate = engineCombustionMap.getIdleConsRateLinvh() * HOUR_TO_SECOND;
         minSpecificConsumption = engineCombustionMap.getCspecMinGPerKwh() / 3.6e9;
-        cylinderVolume = 0.001 * engineCombustionMap.getCylinderVolL();
-        minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar(); // .getEffectivePressureMinimum();
-        maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar(); // .getEffectivePressureMaximum();
+        cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
+        minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
+        maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
         // maxMoment = getMaxMoment();
         idleMoment = Moments.getModelLossMoment(engineRotationsModel.getIdleFrequency());
 
