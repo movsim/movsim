@@ -26,7 +26,6 @@
 package org.movsim.consumption.model;
 
 import org.movsim.consumption.autogen.Model;
-import org.movsim.consumption.output.FileFuelConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,7 @@ import com.google.common.base.Preconditions;
 class EnergyFlowModelImpl implements EnergyFlowModel {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(EnergyFlowModelImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(EnergyFlowModelImpl.class);
 
     /** if cons(m^3/(Ws)) higher, point (f,pe) out of Bounds 900=3-4 times the minimum */
     private final double LIMIT_SPEC_CONS = 900 * ConsumptionConstants.CONVERSION_GRAMM_PER_KWH_TO_SI;
@@ -54,7 +53,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
     private final VehicleAttributes vehicle;
 
-    public EnergyFlowModelImpl(String keyLabel, Model modelInput) {
+    EnergyFlowModelImpl(String keyLabel, Model modelInput) {
         Preconditions.checkNotNull(modelInput);
         vehicle = new VehicleAttributes(modelInput.getVehicleData());
         carPowerModel = new InstantaneousPowerModelImpl(vehicle);
@@ -67,7 +66,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
         }
     }
 
-    public double fuelflowError() {
+    double fuelflowError() {
         return FUELFLOW_ERROR;
     }
 
@@ -80,6 +79,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      * @param withJante
      * @return the instantaneous consumption per 100km
      */
+    @Override
     public double getInstConsumption100km(double v, double acc, int gear, boolean withJante) {
         final int gearIndex = gear - 1;
         return (1e8 * getFuelFlow(v, acc, 0, gearIndex, withJante) / Math.max(v, 0.001));
@@ -94,6 +94,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      * @param withJante
      * @return fuelFlow
      */
+    @Override
     public double getFuelFlow(double v, double acc, double grade, int gearIndex, boolean withJante) {
 
         final double fMot = engineRotationModel.getEngineFrequency(v, gearIndex);
@@ -157,6 +158,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      * @param withJante
      * @return fuelFlow and gear
      */
+    @Override
     public double[] getMinFuelFlow(double v, double acc, double grade, boolean withJante) {
         int gear = 1;
         double fuelFlow = FUELFLOW_ERROR;
@@ -178,6 +180,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      * @param acc
      * @return the fuel flow in liter per s
      */
+    @Override
     public double getFuelFlowInLiterPerS(double v, double acc) {
         return 1000 * getMinFuelFlow(v, acc, 0, true)[0]; // convert from m^3/s --> liter/s
     }
@@ -190,6 +193,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
      * @param grade
      * @return
      */
+    @Override
     public double getFuelFlowInLiterPerS(double v, double acc, double grade) {
         return 1000 * getMinFuelFlow(v, acc, grade, true)[0]; // convert from m^3/s --> liter/s
     }

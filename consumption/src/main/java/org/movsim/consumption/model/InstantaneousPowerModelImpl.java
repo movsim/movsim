@@ -35,7 +35,7 @@ class InstantaneousPowerModelImpl implements InstantaneousPowerModel {
 
     private final VehicleAttributes vehicle;
 
-    public InstantaneousPowerModelImpl(VehicleAttributes vehicleAttributes) {
+    InstantaneousPowerModelImpl(VehicleAttributes vehicleAttributes) {
         this.vehicle = vehicleAttributes;
     }
 

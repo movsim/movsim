@@ -23,37 +23,21 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.consumption.output;
+package org.movsim.consumption.model;
 
-import java.io.File;
-import java.io.PrintWriter;
+import org.movsim.consumption.autogen.Model;
 
-import org.movsim.consumption.input.ConsumptionMetadata;
-import org.movsim.utilities.FileUtils;
+/**
+ * TODO javadoc for central creation of models
+ */
+public final class EnergyFlowModels {
 
-public class FileOutputBase {
-
-    public static final String COMMENT_CHAR = "#";
-
-    protected final String path;
-    protected final String baseFilename;
-    protected PrintWriter writer;
-
-    /**
-     * Constructor, sets the path and base filename.
-     */
-    public FileOutputBase() {
-        path = ConsumptionMetadata.getInstance().getOutputPath();
-        baseFilename = ConsumptionMetadata.getInstance().getProjectName();
+    private EnergyFlowModels() {
+        // Suppresses default constructor, ensuring non-instantiability.
     }
 
-    public PrintWriter createWriter(String extension) {
-        final String filename = path + File.separator + baseFilename + extension;
-        return FileUtils.getWriter(filename);
+    public static EnergyFlowModel newModel(String keyLabel, Model modelInput) {
+        return new EnergyFlowModelImpl(keyLabel, modelInput);
     }
 
-    public void write(String format, Object... args) {
-        writer.printf(format, args);
-        writer.flush();
-    }
 }

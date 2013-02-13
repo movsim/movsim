@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-public class EngineRotationModel {
+class EngineRotationModel {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(EngineRotationModel.class);

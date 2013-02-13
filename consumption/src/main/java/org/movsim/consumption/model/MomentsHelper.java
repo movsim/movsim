@@ -25,9 +25,13 @@
  */
 package org.movsim.consumption.model;
 
-public class Moments {
+final class MomentsHelper {
 
-    public static double getMoment(double power, double frequency) {
+    private MomentsHelper() {
+        // Suppresses default constructor, ensuring non-instantiability.
+    }
+
+    static double getMoment(double power, double frequency) {
         return power / (2 * Math.PI * frequency);
     }
 
@@ -38,17 +42,17 @@ public class Moments {
      * @param frequency
      * @return physical power
      */
-    public static double getPower(double moment, double frequency) {
+    static double getPower(double moment, double frequency) {
         return 2 * Math.PI * frequency * moment;
     }
 
     /** model for loss moment */
-    public static double getLossPower(double frequency) {
+    static double getLossPower(double frequency) {
         return getPower(getModelLossMoment(frequency), frequency);
     }
 
     /** heuristic parameters, assume constant coefficient for *all* gears */
-    public static double getModelLossMoment(double frequency) {
+    static double getModelLossMoment(double frequency) {
         final double a = 0.003;
         final double b = 0.03;
         final double c = 12;

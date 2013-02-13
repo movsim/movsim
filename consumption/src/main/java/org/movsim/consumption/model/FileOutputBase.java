@@ -25,11 +25,35 @@
  */
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.autogen.Model;
+import java.io.File;
+import java.io.PrintWriter;
 
-public class EnergyFlowModelFactory {
+import org.movsim.consumption.input.ConsumptionMetadata;
+import org.movsim.utilities.FileUtils;
 
-    public static EnergyFlowModel create(String keyLabel, Model modelInput) {
-        return new EnergyFlowModelImpl(keyLabel, modelInput);
+class FileOutputBase {
+
+    static final String COMMENT_CHAR = "#";
+
+    protected final String path;
+    protected final String baseFilename;
+    protected PrintWriter writer;
+
+    /**
+     * Constructor, sets the path and base filename.
+     */
+    public FileOutputBase() {
+        path = ConsumptionMetadata.getInstance().getOutputPath();
+        baseFilename = ConsumptionMetadata.getInstance().getProjectName();
+    }
+
+    public PrintWriter createWriter(String extension) {
+        final String filename = path + File.separator + baseFilename + extension;
+        return FileUtils.getWriter(filename);
+    }
+
+    public void write(String format, Object... args) {
+        writer.printf(format, args);
+        writer.flush();
     }
 }

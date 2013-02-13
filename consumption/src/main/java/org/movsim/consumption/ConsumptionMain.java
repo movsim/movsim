@@ -41,7 +41,7 @@ import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.consumption.input.ConsumptionXmlLoader;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.EnergyFlowModel;
-import org.movsim.consumption.model.EnergyFlowModelFactory;
+import org.movsim.consumption.model.EnergyFlowModels;
 import org.movsim.consumption.offline.ConsumptionCalculation;
 import org.movsim.consumption.offline.ConsumptionDataRecord;
 import org.movsim.consumption.offline.InputReader;
@@ -106,8 +106,7 @@ public class ConsumptionMain {
 
     private static void createConsumptionModels(MovsimConsumption movsimInput) {
         for (Model modelInput : movsimInput.getConsumptionModels().getModel()) {
-            consumptionModelPool.put(modelInput.getLabel(),
-                    EnergyFlowModelFactory.create(modelInput.getLabel(), modelInput));
+            consumptionModelPool.put(modelInput.getLabel(), EnergyFlowModels.newModel(modelInput.getLabel(), modelInput));
         }
     }
 

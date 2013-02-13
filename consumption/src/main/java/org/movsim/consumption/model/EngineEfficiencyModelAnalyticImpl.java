@@ -29,7 +29,7 @@ import org.movsim.consumption.autogen.EngineCombustionMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
+class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     private static final Logger LOG = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
 
@@ -77,9 +77,9 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         cylinderVolume = engineCombustionMap.getCylinderVolL() * LITER_TO_MILLILITER;
         minEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMinBar();
         maxEffPressure = ConsumptionConstants.CONVERSION_BAR_TO_PASCAL * engineCombustionMap.getPeMaxBar();
-        idleMoment = Moments.getModelLossMoment(engineRotationsModel.getIdleFrequency());
+        idleMoment = MomentsHelper.getModelLossMoment(engineRotationsModel.getIdleFrequency());
 
-        double powerIdle = Moments.getLossPower(engineRotationsModel.getIdleFrequency());
+        double powerIdle = MomentsHelper.getLossPower(engineRotationsModel.getIdleFrequency());
         cSpec0Idle = idleConsumptionRate * ConsumptionConstants.RHO_FUEL_PER_LITER / powerIdle; // in kg/(Ws)
 
         // if (LOG.isDebugEnabled()) {
@@ -108,8 +108,8 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     // consumption rate (m^3/s) as function of frequency and output power
     private double calcConsumptionRate(double frequency, double mechPower) {
-        final double indMoment = Moments.getMoment(mechPower, frequency) + Moments.getModelLossMoment(frequency);
-        final double totalPower = mechPower + Moments.getLossPower(frequency);
+        final double indMoment = MomentsHelper.getMoment(mechPower, frequency) + MomentsHelper.getModelLossMoment(frequency);
+        final double totalPower = mechPower + MomentsHelper.getLossPower(frequency);
         final double dotCInLiterPerSecond = 1. / ConsumptionConstants.RHO_FUEL_PER_LITER * totalPower
                 * cSpecific0(frequency, indMoment, minSpecificConsumption);
         return Math.max(0, dotCInLiterPerSecond / 1000.);
@@ -117,7 +117,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
 
     // model output 1: specific consumption per power as function of moment
     public double cSpecific0ForMechMoment(double frequency, double mechMoment) {
-        final double indMoment = mechMoment + Moments.getModelLossMoment(frequency);
+        final double indMoment = mechMoment + MomentsHelper.getModelLossMoment(frequency);
         return (mechMoment <= 0 || mechMoment > getMaxMoment()) ? 0 : cSpecific0(frequency, indMoment,
                 minSpecificConsumption) * (indMoment / mechMoment);
     }
@@ -127,7 +127,7 @@ public class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
         return minCSpec0
                 + (cSpec0Idle - minCSpec0)
                 * (Math.exp(1 - indMoment / idleMoment) + Math.exp(1
-                        - (getMaxMoment() + Moments.getModelLossMoment(frequency) - indMoment) / idleMoment));
+                        - (getMaxMoment() + MomentsHelper.getModelLossMoment(frequency) - indMoment) / idleMoment));
     }
 
     // --------------------------------------------------------

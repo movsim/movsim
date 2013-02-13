@@ -25,6 +25,10 @@
  */
 package org.movsim.consumption.model;
 
+/**
+ * TODO javadoc for central API interface
+ * 
+ */
 public interface EnergyFlowModel {
 
     double getInstConsumption100km(double v, double acc, int gear, boolean withJante);

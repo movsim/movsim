@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-public interface EngineEfficienyModel {
+interface EngineEfficienyModel {
 
     /**
      * @param frequency

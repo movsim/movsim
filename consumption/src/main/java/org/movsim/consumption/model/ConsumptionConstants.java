@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,26 +25,30 @@
  */
 package org.movsim.consumption.model;
 
-public interface ConsumptionConstants {
+final class ConsumptionConstants {
+
+    private ConsumptionConstants() {
+        // Suppresses default constructor, ensuring non-instantiability.
+    }
 
     /** grav. acceleration (m/s^2) */
-    double GRAVITATION = 9.81;
+    static final double GRAVITATION = 9.81;
 
     /** 1.29 (kg/m^3) at 0 degress celsius, 1014 hPa */
-    double RHO_AIR = 1.29;
+    static final double RHO_AIR = 1.29;
 
     /** density of gasoline (kg/m^3) */
-    double RHO_FUEL = 760;
+    static final double RHO_FUEL = 760;
 
     /** density of gasoline (kg/l) */
-    double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.;
+    static final double RHO_FUEL_PER_LITER = RHO_FUEL / 1000.;
 
     /** caloric density of gasoline: 44 MJ/kg (--> 0.76*44 JM/liter) */
-    double CALORIC_DENSITY = 44e6;
+    static final double CALORIC_DENSITY = 44e6;
 
     /** tranforming factor g/kWh => m^3/(Ws): 0.001 kg/(1000W*3600s) = 1/(3.6e9) */
-    double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / (RHO_FUEL * 3.6e9);
+    static final double CONVERSION_GRAMM_PER_KWH_TO_SI = 1. / (RHO_FUEL * 3.6e9);
 
-    double CONVERSION_BAR_TO_PASCAL = 1e5;
+    static final double CONVERSION_BAR_TO_PASCAL = 1e5;
 
 }

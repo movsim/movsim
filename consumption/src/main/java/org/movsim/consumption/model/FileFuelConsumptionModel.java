@@ -1,17 +1,10 @@
-package org.movsim.consumption.output;
+package org.movsim.consumption.model;
 
 import java.util.Locale;
 
-import org.movsim.consumption.model.ConsumptionConstants;
-import org.movsim.consumption.model.EnergyFlowModel;
-import org.movsim.consumption.model.EngineEfficiencyModelAnalyticImpl;
-import org.movsim.consumption.model.EngineRotationModel;
-import org.movsim.consumption.model.InstantaneousPowerModel;
-import org.movsim.consumption.model.Moments;
-import org.movsim.consumption.model.VehicleAttributes;
 
 // TODO refactoring of fuel consumption code base and corresponding file output
-public class FileFuelConsumptionModel extends FileOutputBase {
+class FileFuelConsumptionModel extends FileOutputBase {
 
     private static final String extensionFormatJante = ".jante_%s.csv";
     private static final String extensionFormatZeroAcceleration = ".constAccel_%s.csv";
@@ -30,7 +23,7 @@ public class FileFuelConsumptionModel extends FileOutputBase {
     private final String keyLabel;
     private final EnergyFlowModel fuelConsumption;
 
-    public FileFuelConsumptionModel(String keyLabel, EnergyFlowModel fuelConsumption) {
+    FileFuelConsumptionModel(String keyLabel, EnergyFlowModel fuelConsumption) {
         this.keyLabel = keyLabel;
         this.fuelConsumption = fuelConsumption;
     }
@@ -128,7 +121,7 @@ public class FileFuelConsumptionModel extends FileOutputBase {
             for (int j = 0; j <= N_POW; j++) {
                 final double pow = powMin + j * dPow;
                 final double dotC = engineModel.getFuelFlow(f, pow);
-                final double indMoment = Moments.getMoment(pow, f); // + getModelLossMoment(f);
+                final double indMoment = MomentsHelper.getMoment(pow, f); // + getModelLossMoment(f);
                 final double cSpec = engineModel.cSpecific0ForMechMoment(f, indMoment);
                 // factor 3.6e6 for converting from m^3/s to liter/h
                 writer.printf(Locale.US, "%.1f, %.3f, %.9f, %.9f, %.9f%n", f * 60, pow / 1000., 3.6e6 * dotC,
