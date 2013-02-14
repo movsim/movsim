@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,10 +36,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class Gipps.
  */
-public class Gipps extends LongitudinalModelBase {
+class Gipps extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Gipps.class);
+    private static final Logger logger = LoggerFactory.getLogger(Gipps.class);
 
     /**
      * The T. results from update timestep dt dt = T = Tr = tau_relax
@@ -59,7 +58,7 @@ public class Gipps extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public Gipps(double dt, LongitudinalModelInputDataGipps parameters) {
+    Gipps(double dt, LongitudinalModelInputDataGipps parameters) {
         super(ModelName.GIPPS, parameters);
         this.T = dt;
         logger.debug("init model parameters");

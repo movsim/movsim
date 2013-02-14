@@ -23,20 +23,19 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumPropertiesImpl.
  */
-public class EquilibriumProperties {
+class EquilibriumPropertiesImpl implements EquilibriumProperties {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(EquilibriumProperties.class);
+    private static final Logger logger = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
     /** The Constant NRHO. */
     final static int NRHO = 51; // time critical
@@ -62,7 +61,7 @@ public class EquilibriumProperties {
      * @param length
      *            the length
      */
-    public EquilibriumProperties(double length) {
+    EquilibriumPropertiesImpl(double length) {
         this.length = length;
         vEqTab = new double[NRHO];
         rhoMax = 1.0 / length;
@@ -73,6 +72,7 @@ public class EquilibriumProperties {
      * 
      * @return the q max
      */
+    @Override
     public double getQMax() {
         return qMax;
     }
@@ -82,6 +82,7 @@ public class EquilibriumProperties {
      * 
      * @return the rho max
      */
+    @Override
     public double getRhoMax() {
         return rhoMax;
     }
@@ -91,6 +92,7 @@ public class EquilibriumProperties {
      * 
      * @return the rho q max
      */
+    @Override
     public double getRhoQMax() {
         return rhoQMax;
     }
@@ -102,6 +104,7 @@ public class EquilibriumProperties {
      *            the rho
      * @return the net distance
      */
+    @Override
     public double getNetDistance(double rho) {
         return rho != 0.0 ? (1.0 / rho - 1.0 / rhoMax) : 0.0;
     }
@@ -128,6 +131,7 @@ public class EquilibriumProperties {
      *            the rho
      * @return the v eq
      */
+    @Override
     public double getVEq(double rho) {
         return Tables.intp(vEqTab, Math.min(rho, rhoMax), 0, rhoMax);
     }
@@ -139,14 +143,17 @@ public class EquilibriumProperties {
      *            the i
      * @return the rho
      */
+    @Override
     public double getRho(int i) {
         return rhoMax * i / (vEqTab.length - 1);
     }
 
+    @Override
     public double getVEq(int i) {
         return vEqTab[i];
     }
 
+    @Override
     public int getVEqCount() {
         return vEqTab.length;
     }

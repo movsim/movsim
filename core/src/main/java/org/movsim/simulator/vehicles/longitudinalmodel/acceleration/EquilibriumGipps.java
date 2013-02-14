@@ -23,15 +23,13 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Gipps;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumGipps.
  */
-public class EquilibriumGipps extends EquilibriumProperties {
+class EquilibriumGipps extends EquilibriumPropertiesImpl {
 
     /**
      * Instantiates a new equilibrium gipps.
@@ -41,7 +39,7 @@ public class EquilibriumGipps extends EquilibriumProperties {
      * @param model
      *            the gipps model
      */
-    public EquilibriumGipps(double length, Gipps model) {
+    EquilibriumGipps(double length, Gipps model) {
         super(length);
 
         calcEquilibrium(model);

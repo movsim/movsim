@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class NSM.
  */
-public class NSM extends LongitudinalModelBase {
+class NSM extends LongitudinalModelBase {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(NSM.class);
@@ -58,7 +57,7 @@ public class NSM extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public NSM(LongitudinalModelInputDataNSM parameters) {
+    NSM(LongitudinalModelInputDataNSM parameters) {
         super(ModelName.NSM, parameters);
         logger.debug("init model parameters");
         this.v0 = parameters.getV0();

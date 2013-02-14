@@ -2,7 +2,7 @@ package org.movsim.input.model.vehicle.longitudinalmodel;
 
 import java.util.Map;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 
 /**
  * <CCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="1" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximal="2" />

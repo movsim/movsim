@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 
 
 /**

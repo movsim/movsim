@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,10 +42,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class ACC.
  */
-public class ACC extends LongitudinalModelBase {
+class ACC extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(ACC.class);
+    private static final Logger logger = LoggerFactory.getLogger(ACC.class);
 
     /**
      * The T. time headway (s)
@@ -83,7 +82,7 @@ public class ACC extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public ACC(LongitudinalModelInputDataACC parameters) {
+    ACC(LongitudinalModelInputDataACC parameters) {
         super(ModelName.ACC, parameters);
         this.v0 = parameters.getV0();
         this.T = parameters.getT();

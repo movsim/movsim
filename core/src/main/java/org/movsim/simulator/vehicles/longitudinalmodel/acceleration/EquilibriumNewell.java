@@ -17,14 +17,13 @@
  * 
  * ----------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Newell;
 
 /**
  * The Class EquilibriumNewell.
  */
-public class EquilibriumNewell extends EquilibriumProperties {
+class EquilibriumNewell extends EquilibriumPropertiesImpl {
 
     /**
      * Instantiates a new equilibrium newell.
@@ -34,7 +33,7 @@ public class EquilibriumNewell extends EquilibriumProperties {
      * @param model
      *            the newell model
      */
-    public EquilibriumNewell(double length, Newell model) {
+    EquilibriumNewell(double length, Newell model) {
         super(length);
 
         calcEquilibrium(model);

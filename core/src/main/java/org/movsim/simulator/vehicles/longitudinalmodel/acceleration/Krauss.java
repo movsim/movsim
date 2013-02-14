@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Martin Treiber, Ralph Germ
  */
-public class Krauss extends LongitudinalModelBase {
+class Krauss extends LongitudinalModelBase {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);
@@ -68,7 +67,7 @@ public class Krauss extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public Krauss(double dt, LongitudinalModelInputDataKrauss parameters) {
+    Krauss(double dt, LongitudinalModelInputDataKrauss parameters) {
         super(ModelName.KRAUSS, parameters);
         this.T = dt;
         logger.debug("init model parameters");

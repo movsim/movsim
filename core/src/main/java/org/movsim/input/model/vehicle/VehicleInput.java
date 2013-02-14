@@ -43,7 +43,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.movsim.utilities.XmlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +37,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class KKW.
  */
-public class KKW extends LongitudinalModelBase {
+class KKW extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(KKW.class);
+    private static final Logger logger = LoggerFactory.getLogger(KKW.class);
 
     /**
      * The Constant dtCA. constant update timestep for CA
@@ -89,7 +88,7 @@ public class KKW extends LongitudinalModelBase {
      * @param length
      *            the length
      */
-    public KKW(LongitudinalModelInputDataKKW parameters, double length) {
+    KKW(LongitudinalModelInputDataKKW parameters, double length) {
         super(ModelName.KKW, parameters);
         this.length = length; // model parameter!
         logger.debug("init model parameters");

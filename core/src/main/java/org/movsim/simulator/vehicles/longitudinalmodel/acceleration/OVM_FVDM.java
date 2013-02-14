@@ -28,17 +28,16 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class OVM_FVDM. OVM = Optimal-Velocity Model and FVDM = Full-Velocity-Difference Model
  */
-public class OVM_FVDM extends LongitudinalModelBase {
+class OVM_FVDM extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(OVM_FVDM.class);
+    private static final Logger logger = LoggerFactory.getLogger(OVM_FVDM.class);
 
     /** The tau. Speed adaptation time */
     private final double tau;
@@ -64,7 +63,7 @@ public class OVM_FVDM extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public OVM_FVDM(LongitudinalModelInputDataOVM_FVDM parameters) {
+    OVM_FVDM(LongitudinalModelInputDataOVM_FVDM parameters) {
         super(ModelName.OVM_FVDM, parameters);
         logger.debug("init model parameters");
         this.s0 = parameters.getS0();

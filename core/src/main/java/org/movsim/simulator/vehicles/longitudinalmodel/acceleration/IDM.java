@@ -27,7 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +44,11 @@ import org.slf4j.LoggerFactory;
  * Traffic States in Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
  */
+// TODO reduce visibility
 public class IDM extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(IDM.class);
+    private static final Logger logger = LoggerFactory.getLogger(IDM.class);
 
     /** safe time headway (s). */
     private final double T;
@@ -71,7 +71,7 @@ public class IDM extends LongitudinalModelBase {
      * @param parameters
      *            the parameters: v0, T, s0, s1, a, b, delta
      */
-    public IDM(LongitudinalModelInputDataIDM parameters) {
+    IDM(LongitudinalModelInputDataIDM parameters) {
         super(ModelName.IDM, parameters);
         logger.debug("init model parameters");
         this.v0 = parameters.getV0();

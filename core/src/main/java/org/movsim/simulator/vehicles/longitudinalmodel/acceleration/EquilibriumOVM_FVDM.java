@@ -23,28 +23,25 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class EquilibriumIDM.
+ * The Class EquilibriumOVM_FVDM.
  */
-public class EquilibriumIDM extends EquilibriumProperties {
+class EquilibriumOVM_FVDM extends EquilibriumPropertiesImpl {
 
     /**
-     * Instantiates a new equilibrium idm.
+     * Instantiates a new equilibrium OVM or FVDM .
      * 
      * @param length
      *            the length
-     * @param model
-     *            the idm model
+     * @param vDiffModel
+     *            the velocity difference model
      */
-    public EquilibriumIDM(double length, IDM model) {
+    EquilibriumOVM_FVDM(double length, OVM_FVDM vDiffModel) {
         super(length);
-
-        calcEquilibrium(model);
+        calcEquilibrium(vDiffModel);
         calcRhoQMax();
     }
 
@@ -54,36 +51,34 @@ public class EquilibriumIDM extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    private void calcEquilibrium(IDM model) {
-        // Find equilibrium velocities vEqTab[ir] with simple relaxation
-        // method: Just model for homogeneous traffic solved for
-        // the velocity v_it of one arbitrary vehicle
-        // (no brain, but stable and simple method...)
+    private void calcEquilibrium(OVM_FVDM model) {
 
-        double vIter = model.getDesiredSpeed(); // variable of the relaxation equation
-        final int itMax = 100; // number of iteration steps in each relaxation
-        final double dtMax = 2; // iteration time step (in s) changes from
-        final double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
+        double vIterate = model.getDesiredSpeed(); // variable of the relaxation equation
+        final int iterMax = 100; // number of iteration steps in each relaxation
+        final double dtMax = 0.3 * model.getTau(); // iteration time step (in s) changes from
+        final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to dtMax (rho=0)
 
         vEqTab[0] = model.getDesiredSpeed(); // start with rho=0
-        final int length = vEqTab.length;
 
+        final int length = vEqTab.length;
         for (int ir = 1; ir < length; ir++) {
+
             final double rho = getRho(ir);
             final double s = getNetDistance(rho);
+
             // start iteration with equilibrium velocity for the previous localDensity
-            vIter = vEqTab[ir - 1];
-            for (int it = 1; it <= itMax; it++) {
-                final double acc = model.calcAccSimple(s, vIter, 0.);
+            vIterate = vEqTab[ir - 1];
+            for (int it = 1; it <= iterMax; it++) {
+                final double acc = model.calcAccSimple(s, vIterate, 0);
                 // interation step in [dtmin, dtmax]
-                final double dtloc = dtMax * vIter / model.getDesiredSpeed() + dtMin;
+                final double dtLoc = dtMax * vIterate / model.getDesiredSpeed() + dtMin;
                 // actual relaxation
-                vIter += dtloc * acc;
-                if ((vIter < 0) || (s < model.getS0())) {
-                    vIter = 0;
+                vIterate += dtLoc * acc;
+                if ((vIterate < 0) || (s < model.getS0())) {
+                    vIterate = 0;
                 }
             }
-            vEqTab[ir] = vIter;
+            vEqTab[ir] = vIterate;
         }
     }
 }

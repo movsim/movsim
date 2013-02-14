@@ -23,15 +23,13 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Krauss;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumKrauss.
  */
-public class EquilibriumKrauss extends EquilibriumProperties {
+class EquilibriumKrauss extends EquilibriumPropertiesImpl {
 
     /**
      * Instantiates a new equilibrium gipps.
@@ -41,7 +39,7 @@ public class EquilibriumKrauss extends EquilibriumProperties {
      * @param model
      *            the model
      */
-    public EquilibriumKrauss(double length, Krauss model) {
+    EquilibriumKrauss(double length, Krauss model) {
         super(length);
 
         calcEquilibrium(model);

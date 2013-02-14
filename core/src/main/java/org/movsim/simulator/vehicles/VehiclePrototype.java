@@ -28,8 +28,8 @@ package org.movsim.simulator.vehicles;
 import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
-import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 
 // TODO: Auto-generated Javadoc
 /**

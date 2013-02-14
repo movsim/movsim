@@ -1,8 +1,7 @@
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
 
-public class EquilibriumCCS extends EquilibriumProperties {
+class EquilibriumCCS extends EquilibriumPropertiesImpl {
 
     public EquilibriumCCS(double length, CCS model) {
         super(length);

@@ -21,14 +21,13 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class Newell.
  */
-public class Newell extends LongitudinalModelBase {
+class Newell extends LongitudinalModelBase {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(Newell.class);
@@ -42,7 +41,7 @@ public class Newell extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    public Newell(double dt, LongitudinalModelInputDataNewell parameters) {
+    Newell(double dt, LongitudinalModelInputDataNewell parameters) {
         super(ModelName.NEWELL, parameters);
         this.dt = dt;
         logger.debug("init model parameters");

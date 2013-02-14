@@ -26,10 +26,10 @@
 package org.movsim.output.fileoutput;
 
 import org.movsim.input.model.vehicle.VehicleInput;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelFactory;
-import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumProperties;
-import org.movsim.simulator.vehicles.longitudinalmodel.equilibrium.EquilibriumPropertiesFactory;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesFactory;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelFactory;
 import org.movsim.utilities.Units;
 
 /**

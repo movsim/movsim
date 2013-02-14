@@ -2,14 +2,14 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataCCS;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO reduce visibility to package private
 public class CCS extends LongitudinalModelBase {
 
-    final static Logger logger = LoggerFactory.getLogger(CCS.class);
+    private static final Logger logger = LoggerFactory.getLogger(CCS.class);
 
     final static private double DENSITY_AIR = 1.3;
     final static private double EARTH_GRAVITY = 9.81;
@@ -58,7 +58,7 @@ public class CCS extends LongitudinalModelBase {
      *            the parameters
      * @param vehLength
      */
-    public CCS(LongitudinalModelInputDataCCS parameters, double vehLength) {
+    CCS(LongitudinalModelInputDataCCS parameters, double vehLength) {
         super(ModelName.CCS, parameters);
         lenght = vehLength;
         mass = parameters.getMass();

@@ -23,15 +23,14 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel.equilibrium;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.NSM;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class EquilibriumNSM.
  */
-public class EquilibriumNSM extends EquilibriumProperties {
+class EquilibriumNSM extends EquilibriumPropertiesImpl {
 
     /**
      * Instantiates a new equilibrium nsm.
@@ -41,7 +40,7 @@ public class EquilibriumNSM extends EquilibriumProperties {
      * @param model
      *            the nsm model
      */
-    public EquilibriumNSM(double length, NSM model) {
+    EquilibriumNSM(double length, NSM model) {
         super(length);
 
         calcEquilibrium(model);

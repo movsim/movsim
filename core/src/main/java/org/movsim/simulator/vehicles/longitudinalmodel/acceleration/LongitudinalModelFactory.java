@@ -24,7 +24,7 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.simulator.vehicles.longitudinalmodel;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
@@ -36,16 +36,7 @@ import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDa
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.simulator.vehicles.longitudinalmodel.LongitudinalModelBase.ModelName;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ACC;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.CCS;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Gipps;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.KKW;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Krauss;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.NSM;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Newell;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.OVM_FVDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
