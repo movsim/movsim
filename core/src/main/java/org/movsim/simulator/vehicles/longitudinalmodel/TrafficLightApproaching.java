@@ -64,14 +64,9 @@ public class TrafficLightApproaching {
      * Update.
      * 
      * @param me
-     *            the me
-     * @param time
-     *            the time
      * @param trafficLight
-     *            the traffic light
-     * @param distanceToTrafficlight 
+     * @param distanceToTrafficlight
      * @param longModel
-     *            the long model
      */
     public void update(Vehicle me, TrafficLight trafficLight, double distanceToTrafficlight, LongitudinalModelBase longModel) {
         accTrafficLight = 0;

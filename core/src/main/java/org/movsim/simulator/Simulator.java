@@ -201,10 +201,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     /**
      * Load scenario from xml.
      * 
-     * @param scenarioWithEnding
-     *            the scenario
-     * @throws SAXException
+     * @param scenario
+     * @param path
      * @throws JAXBException
+     * @throws SAXException
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();

@@ -89,11 +89,13 @@ public class LoopDetector implements SimulationTimeStep {
     private final FileDetector fileDetector;
     
     /**
-     * Constructor.
+     * Constructor
      * 
+     * @param roadSegment
      * @param detPosition
      * @param dtSample
-     * @param laneCount
+     * @param logging
+     * @param loggingLanes
      */
     public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging, boolean loggingLanes) {
         this.roadSegment = roadSegment;

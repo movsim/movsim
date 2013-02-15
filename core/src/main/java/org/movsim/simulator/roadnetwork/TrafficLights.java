@@ -62,8 +62,8 @@ public class TrafficLights implements Iterable<TrafficLight> {
 
     /**
      * Constructor.
-     * @param d 
      * 
+     * @param roadLength
      * @param trafficLightsInput
      */
     public TrafficLights(double roadLength, TrafficLightsInput trafficLightsInput) {
