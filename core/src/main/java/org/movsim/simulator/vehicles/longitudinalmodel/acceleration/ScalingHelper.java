@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles.longitudinalmodel;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 
@@ -31,7 +31,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Longitudinal
 /**
  * The Class ScalingHelper.
  */
-public class ScalingHelper {
+class ScalingHelper {
 
     /**
      * Instantiates a new scaling helper.
@@ -47,7 +47,7 @@ public class ScalingHelper {
      *            the model name
      * @return the scaling length
      */
-    public static double getScalingLength(ModelName modelName) {
+    static double getScalingLength(ModelName modelName) {
         double scalingLengthCA = 1;
         if (modelName == ModelName.NSM) {
             scalingLengthCA = 7.5;
