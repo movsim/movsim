@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel;
 
-import org.movsim.input.model.vehicle.behavior.MemoryInputData;
+import org.movsim.core.autogen.MemoryParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,13 +48,13 @@ public class Memory {
      */
     private final double tau;
 
-    /** The resignation min alpha a. */
+    /** The resignation min alpha a. Unitless. */
     private final double resignationMinAlphaA;
 
-    /** The resignation min alpha v0. */
+    /** The resignation min alpha v0. Unitless. */
     private final double resignationMinAlphaV0;
 
-    /** The resignation max alpha t. */
+    /** The resignation max alpha t. Unitless. */
     private final double resignationMaxAlphaT;
 
     /**
@@ -78,12 +78,12 @@ public class Memory {
      * @param parameters
      *            the parameters
      */
-    public Memory(MemoryInputData parameters) {
+    public Memory(MemoryParameter parameters) {
         // parameters
         tau = parameters.getTau();
-        resignationMaxAlphaT = parameters.getResignationMaxAlphaT();
-        resignationMinAlphaV0 = parameters.getResignationMinAlphaV0();
-        resignationMinAlphaA = parameters.getResignationMinAlphaA();
+        resignationMaxAlphaT = parameters.getAlphaT();
+        resignationMinAlphaV0 = parameters.getAlphaV0();
+        resignationMinAlphaA = parameters.getAlphaA();
 
         // initialize dynamic state variables
         alphaA = 1;

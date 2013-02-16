@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="city_example.xodr" consumption_filename="consumption.xml">
-
+<MovsimScenario network_filename="city_example.xodr" consumption_filename="consumption.xml">
+<!-- 
  <FUEL_CONSUMPTION>
         <CONSUMPTION_MODEL label="carConsumption" output="true">
             <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
@@ -19,7 +18,7 @@
             </ENGINE>
         </CONSUMPTION_MODEL>
     </FUEL_CONSUMPTION>
-    
+    -->
 
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9" consumption="carConsumption">
@@ -111,4 +110,3 @@
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>
-

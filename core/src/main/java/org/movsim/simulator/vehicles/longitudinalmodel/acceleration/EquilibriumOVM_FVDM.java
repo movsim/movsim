@@ -55,8 +55,8 @@ class EquilibriumOVM_FVDM extends EquilibriumPropertiesImpl {
 
         double vIterate = model.getDesiredSpeed(); // variable of the relaxation equation
         final int iterMax = 100; // number of iteration steps in each relaxation
-        final double dtMax = 0.3 * model.getTau(); // iteration time step (in s) changes from
-        final double dtMin = 0.1 * model.getTau(); // dtmin (rho=rhoMax) to dtMax (rho=0)
+        final double dtMax = 0.3 * model.getParameter().getTau(); // iteration time step (in s) changes from
+        final double dtMin = 0.1 * model.getParameter().getTau(); // dtmin (rho=rhoMax) to dtMax (rho=0)
 
         vEqTab[0] = model.getDesiredSpeed(); // start with rho=0
 
@@ -74,7 +74,7 @@ class EquilibriumOVM_FVDM extends EquilibriumPropertiesImpl {
                 final double dtLoc = dtMax * vIterate / model.getDesiredSpeed() + dtMin;
                 // actual relaxation
                 vIterate += dtLoc * acc;
-                if ((vIterate < 0) || (s < model.getS0())) {
+                if ((vIterate < 0) || (s < model.getMinimumGap())) {
                     vIterate = 0;
                 }
             }

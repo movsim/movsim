@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.vehicle.behavior.NoiseInputData;
+import org.movsim.core.autogen.NoiseParameter;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public class Noise {
     /** The xi acc as dynamic state variable (output) */
     private double xiAcc = 0;
 
-    public Noise(NoiseInputData parameters) {
+    public Noise(NoiseParameter parameters) {
 
         fluctStrength = parameters.getFluctStrength();
         tauRelaxAcc = parameters.getTau();

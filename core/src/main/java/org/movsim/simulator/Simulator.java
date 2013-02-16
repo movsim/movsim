@@ -424,7 +424,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 // TODO icMacro for ca
                 // final double minimumGap = veh.getLongitudinalModel().isCA() ? veh.getLength() : veh.getLength() +
                 // veh.getLongitudinalModel().getS0();
-                final double minimumGap = veh.getLength() + veh.getLongitudinalModel().getS0();
+                final double minimumGap = veh.getLength() + veh.getLongitudinalModel().getMinimumGap();
                 final double posDecrement = Math.max(meanDistanceInLane, minimumGap);
                 position -= posDecrement;
 

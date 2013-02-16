@@ -51,6 +51,8 @@
                     <args>
                         <arg>-Xannotate</arg>
                         <arg>-XtoString</arg>
+                        <arg>-Xinheritance</arg>
+                        <arg>-Xfluent-api</arg>
                         <!-- <arg>-Xequals</arg> -->
                         <!-- <arg>-XhashCode</arg> -->
                         <!-- <arg>-Xcopyable</arg> -->
@@ -65,6 +67,11 @@
                             <groupId>org.jvnet.jaxb2_commons</groupId>
                             <artifactId>jaxb2-basics-annotate</artifactId>
                             <version>0.6.2</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>net.java.dev.jaxb2-commons</groupId>
+                            <artifactId>jaxb-fluent-api</artifactId>
+                            <version>2.1.8</version>
                         </plugin>
                     </plugins>
                    

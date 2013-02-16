@@ -31,7 +31,6 @@ import java.util.Map;
 
 import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.simulation.VehicleTypeInput;
-import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.consumption.Consumption;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;

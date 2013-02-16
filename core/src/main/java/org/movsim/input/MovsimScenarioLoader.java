@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -23,48 +23,29 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input.model.vehicle.behavior;
+package org.movsim.input;
 
-import java.util.Map;
+import java.io.File;
+import java.net.URL;
 
-/**
- * The Class NoiseInputData.
- */
-public class NoiseInputData {
+import javax.xml.bind.JAXBException;
 
-    /** The fluct strength. */
-    private final double fluctStrength;
+import org.movsim.MovsimCoreMain;
+import org.movsim.core.autogen.MovsimScenario;
+import org.movsim.xml.FileUnmarshaller;
+import org.xml.sax.SAXException;
 
-    /** The tau. */
-    private final double tau;
+public class MovsimScenarioLoader {
 
-    /**
-     * Instantiates a new noise input data impl.
-     * 
-     * @param map
-     *            the map
-     */
-    public NoiseInputData(Map<String, String> map) {
-        fluctStrength = Double.parseDouble(map.get("fluct_strength"));
-        tau = Double.parseDouble(map.get("tau"));
-    }
+    private static final Class<?> SCENARIO_FACTORY = org.movsim.core.autogen.MovsimScenario.class;
 
-    /**
-     * Gets the fluct strength.
-     * 
-     * @return the fluct strength
-     */
-    public double getFluctStrength() {
-        return fluctStrength;
-    }
+    private static final String SCENARIO_XML_SCHEMA = "/schema/MovsimScenario.xsd";
 
-    /**
-     * Gets the tau.
-     * 
-     * @return the tau
-     */
-    public double getTau() {
-        return tau;
+    private static final URL SCENARIO_XSD_URL = MovsimCoreMain.class.getResource(SCENARIO_XML_SCHEMA);
+
+    public static MovsimScenario validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
+        return new FileUnmarshaller<MovsimScenario>().load(xmlFile, MovsimScenario.class, SCENARIO_FACTORY,
+                SCENARIO_XSD_URL);
     }
 
 }

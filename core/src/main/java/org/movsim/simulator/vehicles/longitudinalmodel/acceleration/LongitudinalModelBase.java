@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
@@ -92,18 +92,11 @@ public abstract class LongitudinalModelBase {
 
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(LongitudinalModelBase.class);
-    private final ModelName modelName;
+    protected final ModelName modelName;
     private final double scalingLength;
-    protected final LongitudinalModelInputData parameters;
-    protected long id;
-    /**
-     * The desired speed (m/s)
-     */
-    protected double v0;
-    /**
-     * Minimum bumper-to-bumper distance (m)
-     */
-    protected double s0;
+    protected double v0RandomizationFactor = 1;
+
+    // protected long id;
 
     /**
      * Constructor.
@@ -113,9 +106,8 @@ public abstract class LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    protected LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
+    protected LongitudinalModelBase(ModelName modelName) {
         this.modelName = modelName;
-        this.parameters = parameters;
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
     }
 
@@ -165,47 +157,47 @@ public abstract class LongitudinalModelBase {
     }
 
     /**
-     * Sets the vehicle's desired speed (m/s).
+     * Returns the desired speed.
      * 
-     * @param v0
-     *            desired speed (m/s)
-     */
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    /**
-     * Returns the desired speed in free traffic.
+     * <br>
+     * Overwrite {@link setRelativeRandomizationV0} if model is not able to handle such randomization. <br>
+     * Remark: CCS is the only model without a desired speed, so that this method cannot be final :(
      * 
      * @return the desired speed (m/s)
      */
     public double getDesiredSpeed() {
-        return v0;
+        return v0RandomizationFactor * getParameter().getV0();
     }
 
     /**
+     * Returns the minimum gap in a standstill.
+     * 
+     * <br>
+     * Can be overwritten if model does not contain such a parameter.
+     * 
+     * @return the minimum gap (m)
+     */
+    public double getMinimumGap() {
+        return getParameter().getS0();
+    }
+
+    protected abstract ModelParameter getParameter();
+
+    /**
      * Sets the relative randomization v0.
+     * 
+     * <br>
+     * Needs to be overwritten if not applicable to model.
      * 
      * @param relRandomizationFactor
      *            the new relative randomization v0
      */
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
-        final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
-        final double newV0 = getDesiredSpeed() * (1 + relRandomizationFactor * equalRandom);
-        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeed(), newV0);
-        setDesiredSpeed(newV0);
+        v0RandomizationFactor = MyRandom.getRandomizedFactor(relRandomizationFactor);
+        logger.debug("randomization of desired speeds with randomization factor=", v0RandomizationFactor);
     }
 
-    /**
-     * Gets the minimum bumper-to-bumper distance.
-     * 
-     * @return the minimum bumper-to-bumper distance
-     */
-    public double getS0() {
-        return s0;
-    }
-
-    protected static double calcSmoothFraction(double speedMe, double speedFront) {
+    final static double calcSmoothFraction(double speedMe, double speedFront) {
         final double widthDeltaSpeed = 1; // parameter
         double x = 0; // limiting case: consider only acceleration in vehicle's lane
         if (speedFront >= 0) {
@@ -317,4 +309,15 @@ public abstract class LongitudinalModelBase {
      * @return the calculated acceleration
      */
     public abstract double calcAccSimple(double s, double v, double dv);
+
+    public abstract boolean hasValidParameters();
+
+    protected boolean isValidDesiredSpeed() {
+        return getDesiredSpeed() > 0 && getDesiredSpeed() <= MovsimConstants.MAX_VEHICLE_SPEED;
+    }
+
+    protected boolean isValidMinimumGap() {
+        return getMinimumGap() >= 0;
+    }
+
 }

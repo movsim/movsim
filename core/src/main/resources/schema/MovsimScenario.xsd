@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema 
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.0">
+  xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.1"
+  xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
+  jxb:extensionBindingPrefixes="inheritance"   >
 
 <xs:annotation>
 	<xs:documentation>XML Schema Definition for Movsim simulation files, (c) 2013 by movsim.org</xs:documentation>
@@ -73,7 +75,7 @@
    <xs:sequence>
     <xs:element ref="LongitudinalModel"/>
     <xs:element ref="LaneChangeModel"/>
-    <xs:element ref="Noise" minOccurs="0" maxOccurs="1"/>
+    <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1"/>
    </xs:sequence>
    <xs:attribute name="label" type="xs:string" use="required"/>
    <xs:attribute name="length" type="xs:string" use="required"/>
@@ -100,100 +102,136 @@
    </xs:sequence>
   </xs:complexType>
  </xs:element>
-
- <xs:element name="ModelParameterIDM">
-  <xs:complexType>
+ 
+  <xs:complexType name="BasicModelParameter">
+		 	  <xs:annotation>
+			<xs:appinfo>
+				<inheritance:extends>org.movsim.simulator.vehicles.longitudinalmodel.acceleration.ModelParameter</inheritance:extends>  
+			</xs:appinfo>
+		</xs:annotation>
    <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
+  </xs:complexType>
+
+ 
+
+<!-- TODO extract v0 and s0 as basis of all models -->
+ <xs:element name="ModelParameterIDM">
+	 <xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="s1" type="nonNegativeDouble" default="0"/>
    <xs:attribute name="T" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="a" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="b" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="delta" type="nonNegativeDouble" default="4"/>
+    </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
  <xs:element name="ModelParameterACC">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
+	 <xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="s1" type="nonNegativeDouble" default="0"/>
    <xs:attribute name="T" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="a" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="b" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="delta" type="nonNegativeDouble" default="4"/>
    <xs:attribute name="coolness" type="nonNegativeDouble" use="required"/>
+     </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
  <xs:element name="ModelParameterOVM_FVDM">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
+	<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="tau" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="l_int" type="nonNegativeDouble" use="required"/>
+   <xs:attribute name="transition_width" type="nonNegativeDouble" use="required"/> <!-- l_int changed to transition_width -->
    <xs:attribute name="beta" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="lambda" type="nonNegativeDouble" default="0"/>
-   <xs:attribute name="optimal_speed_function" default="bando">
-    <xs:simpleType>
+   <xs:attribute name="gamma" type="nonNegativeDouble" default="0"/><!-- lambda changed to gamma according to book notation -->
+   <xs:attribute name="optimal_speed_function" type="OptimalVelocityFunctionEnum" default="bando" />
+     </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+ </xs:element>
+ 
+ <!-- TODO bind this to an Enum in Java -->
+     <xs:simpleType name="OptimalVelocityFunctionEnum">
      <xs:restriction base="xs:string">
 	   <xs:enumeration value="bando"></xs:enumeration>  
        <xs:enumeration value="triangular"></xs:enumeration>  
        <xs:enumeration value="threephase"></xs:enumeration>        
      </xs:restriction>
     </xs:simpleType>
-   </xs:attribute>
-  </xs:complexType>
- </xs:element>
+
 
  <xs:element name="ModelParameterGipps">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
+	<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="a" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="b" type="nonNegativeDouble" use="required"/>
+     </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
  <xs:element name="ModelParameterKrauss">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
+	<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="a" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="b" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="epsilon" type="nonNegativeDouble" use="required"/>
+     </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
  <xs:element name="ModelParameterNewell">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
+	<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
+		   </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
+<!-- TODO check which parameters are double and which are integer in CA -->
  <xs:element name="ModelParameterNSM">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeInteger" use="required"/>
+	<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="p_slowdown" type="probability" use="required"/>
    <xs:attribute name="p_slow_start" type="probability" use="required"/>
+     </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
  <xs:element name="ModelParameterKKW">
-  <xs:complexType>
-   <xs:attribute name="v0" type="nonNegativeDouble" use="required"/>
+	<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="k" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="pb0" type="probability" use="required"/>
    <xs:attribute name="pb1" type="probability" use="required"/>
    <xs:attribute name="pa1" type="probability" use="required"/>
    <xs:attribute name="pa2" type="probability" use="required"/>
    <xs:attribute name="vp" type="nonNegativeDouble" use="required"/>
+     </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
 <xs:element name="ModelParameterCCS">
-  <xs:complexType>
+<xs:complexType>
+	 <xs:complexContent>
+	 <xs:extension base="BasicModelParameter">
    <xs:attribute name="mass" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="cw" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="A" type="nonNegativeDouble" use="required"/>
@@ -203,15 +241,16 @@
    <xs:attribute name="p_herringbone" type="probability" use="required"/>
    <xs:attribute name="v_c_herringbone" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="T" type="nonNegativeDouble" use="required"/>
-   <xs:attribute name="s0" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="b" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="b_maximal" type="nonNegativeDouble" use="required"/>
+     </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
  </xs:element>
 
 
  <xs:element name="MemoryParameter">
-  <xs:complexType>
+	 <xs:complexType>
    <xs:attribute name="tau" type="nonNegativeDouble" use="required"/>
    <xs:attribute name="alpha_T" type="positiveDouble" use="required"/>
    <xs:attribute name="alpha_v0" type="positiveDouble" use="required"/>
@@ -239,7 +278,7 @@
   </xs:complexType>
  </xs:element>
 
- <xs:element name="Noise">
+ <xs:element name="NoiseParameter">
   <xs:complexType>
    <xs:attribute name="tau" type="nonNegativeDouble" default="0"/>
    <xs:attribute name="fluct_strength" type="nonNegativeDouble" use="required"/>

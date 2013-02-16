@@ -36,10 +36,8 @@ public class MyRandom {
     private static Random rand = new Random();
     
 
-    /**
-     * enforce singleton property with private constructor.
-     */
     private MyRandom() {
+        // enforce singleton property with private constructor.
     }
 
     /**
@@ -74,6 +72,19 @@ public class MyRandom {
      */
     public static double nextDouble() {
         return rand.nextDouble();
+    }
+    
+    /**
+     * returns a realization of a uniformly distributed random variable in [-1, 1] 
+     * 
+     * @return a uniformly distributed realization in [-1, 1]
+     */
+    public static double getUniformDistribution(){
+        return 2 * MyRandom.nextDouble() - 1;
+    }
+    
+    public static double getRandomizedFactor(double randomizationStrength) {
+        return 1 + randomizationStrength * getUniformDistribution(); 
     }
 
 }

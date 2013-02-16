@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
+import org.movsim.core.autogen.ModelParameterIDM;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class IDM.
  * <p>
- * Implementation of the 'intelligent driver model'(IDM).
- * <a href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
+ * Implementation of the 'intelligent driver model'(IDM). <a
+ * href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
  * </p>
  * <p>
  * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
@@ -43,6 +43,26 @@ import org.slf4j.LoggerFactory;
  * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested
  * Traffic States in Empirical Observations and Microscopic Simulations, Phys. Rev. E 62, 1805 (2000)].</a>
  * </p>
+ * 
+ * Model parameters:
+ * <ul>
+ * <li>safe time headway T (s)</li>
+ * <li>minimum gap in standstill s0 (m)</li>
+ * <li>maximum desired acceleration a (m/s^2)</li>
+ * <li>comfortable (desired) deceleration (m/s^2)</li>
+ * <li>acceleration exponent delta (1)</li>
+ * <li>gap parameter s1 (m).</li>
+ * </ul>
+ * 
+ * 
+ * Model parameters:
+ * <ul>
+ * <li></li>
+ * <li></li>
+ * <li></li>
+ * <li></li>
+ * <li></li>
+ * </ul>
  */
 // TODO reduce visibility
 public class IDM extends LongitudinalModelBase {
@@ -50,37 +70,11 @@ public class IDM extends LongitudinalModelBase {
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(IDM.class);
 
-    /** safe time headway (s). */
-    private final double T;
+    private final ModelParameterIDM param;
 
-    /** gap parameter (m). */
-    private final double s1;
-
-    /** acceleration (m/s^2). */
-    private final double a;
-
-    /** comfortable (desired) deceleration (braking), (m/s^2). */
-    private final double b;
-
-    /** acceleration exponent. */
-    private final double delta;
-
-    /**
-     * Instantiates a new IDM.
-     * 
-     * @param parameters
-     *            the parameters: v0, T, s0, s1, a, b, delta
-     */
-    IDM(LongitudinalModelInputDataIDM parameters) {
-        super(ModelName.IDM, parameters);
-        logger.debug("init model parameters");
-        this.v0 = parameters.getV0();
-        this.T = parameters.getT();
-        this.s0 = parameters.getS0();
-        this.s1 = parameters.getS1();
-        this.a = parameters.getA();
-        this.b = parameters.getB();
-        this.delta = parameters.getDelta();
+    IDM(ModelParameterIDM parameters) {
+        super(ModelName.IDM);
+        this.param = parameters;
     }
 
     /**
@@ -100,59 +94,15 @@ public class IDM extends LongitudinalModelBase {
      *            gap parameter, meters
      */
     public IDM(double v0, double a, double b, double T, double s0, double s1) {
-        super(ModelName.IDM, null);
-        this.v0 = v0;
-        this.a = a;
-        this.b = b;
-        this.T = T;
-        this.s0 = s0;
-        this.s1 = s1;
-        this.delta = 4.0;
-    }
-
-    /**
-     * Gets the s1.
-     * 
-     * @return the s1
-     */
-    public double getS1() {
-        return s1;
-    }
-
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    public double getT() {
-        return T;
-    }
-
-    /**
-     * Gets the delta.
-     * 
-     * @return the delta
-     */
-    public double getDelta() {
-        return delta;
-    }
-
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    public double getA() {
-        return a;
-    }
-
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    public double getB() {
-        return b;
+        super(ModelName.IDM);
+        this.param = new ModelParameterIDM();
+        param.setV0(v0);
+        param.setA(a);
+        param.setB(b);
+        param.setT(T);
+        param.setS0(s0);
+        param.setS1(s1);
+        param.setDelta(param.getDelta());
     }
 
     @Override
@@ -165,22 +115,22 @@ public class IDM extends LongitudinalModelBase {
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double localT = alphaT * T;
+        final double localT = alphaT * param.getT();
         // consider external speedlimit
         final double localV0;
         if (me.getSpeedlimit() != 0.0) {
-            localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit());
+            localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
         } else {
-            localV0 = alphaV0 * v0;
+            localV0 = alphaV0 * getDesiredSpeed();
         }
-        final double localA = alphaA * a;
+        final double localA = alphaA * param.getA();
 
         return acc(s, v, dv, localT, localV0, localA);
     }
 
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, T, v0, a);
+        return acc(s, v, dv, param.getT(), param.getV0(), param.getA());
     }
 
     /**
@@ -206,16 +156,29 @@ public class IDM extends LongitudinalModelBase {
             return 0.0;
         }
 
-        double sstar = s0 + TLocal * v + s1 * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
-                / Math.sqrt(aLocal * b);
+        final double s0 = getMinimumGap();
+        double sstar = s0 + TLocal * v + param.getS1() * Math.sqrt((v + 0.0001) / v0Local) + (0.5 * v * dv)
+                / Math.sqrt(aLocal * param.getB());
 
         if (sstar < s0) {
             sstar = s0;
         }
 
-        final double aWanted = aLocal * (1.0 - Math.pow((v / v0Local), delta) - (sstar / s) * (sstar / s));
+        final double aWanted = aLocal * (1.0 - Math.pow((v / v0Local), param.getDelta()) - (sstar / s) * (sstar / s));
 
         logger.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
     }
+
+    @Override
+    public boolean hasValidParameters() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    protected ModelParameterIDM getParameter() {
+        return param;
+    }
+
 }

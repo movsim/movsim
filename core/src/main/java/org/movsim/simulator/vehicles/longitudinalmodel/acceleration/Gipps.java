@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
+import org.movsim.core.autogen.ModelParameterGipps;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,74 +35,34 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class Gipps.
+ * 
+ * 
+ * Model parameters:
+ * <ul>
+ * <li>T, results from update timestep dt dt = T = Tr = tau_relax</li>
+ * <li>a</li>
+ * <li>b</li>
+ * </ul>
  */
 class Gipps extends LongitudinalModelBase {
 
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(Gipps.class);
 
-    /**
-     * The T. results from update timestep dt dt = T = Tr = tau_relax
-     */
-    private final double T;
+    private final ModelParameterGipps param;
 
-    /** The a. */
-    private final double a;
+    private final double parameterT;
 
-    /** The b. */
-    private final double b;
-
-    /**
-     * Instantiates a new gipps.
-     * 
-     * @param parameters
-     *            the parameters
-     */
-    Gipps(double dt, LongitudinalModelInputDataGipps parameters) {
-        super(ModelName.GIPPS, parameters);
-        this.T = dt;
-        logger.debug("init model parameters");
-        this.v0 = parameters.getV0();
-        this.a = parameters.getA();
-        this.b = parameters.getB();
-        this.s0 = parameters.getS0();
+    Gipps(double simulationTimestep, ModelParameterGipps modelParameter) {
+        super(ModelName.GIPPS);
+        this.parameterT = simulationTimestep;
+        this.param = modelParameter;
     }
+
 
     @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    @Override
-    public double getDesiredSpeed() {
-        return v0;
-    }
-
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    public double getT() {
-        return T;
-    }
-
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    public double getA() {
-        return a;
-    }
-
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    public double getB() {
-        return b;
+    public void setRelativeRandomizationV0(double relRandomizationFactor) {
+        // no modification of desired speed by randomization.
     }
 
     @Override
@@ -116,14 +76,14 @@ class Gipps extends LongitudinalModelBase {
         // space dependencies modeled by speedlimits, alpha's
 
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
 
         // #############################################################
         // space dependencies modelled by alpha_T
         // (!!! watch for alpha_T: dt unchanged, possibly inconsistent!)
         // #############################################################
 
-        final double TLocal = alphaT * T;
+        final double TLocal = alphaT * parameterT;
 
         // actual Gipps formula
         return acc(s, v, dv, v0Local, TLocal);
@@ -131,7 +91,7 @@ class Gipps extends LongitudinalModelBase {
 
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, v0, T);
+        return acc(s, v, dv, getDesiredSpeed(), parameterT);
     }
 
     /**
@@ -152,9 +112,37 @@ class Gipps extends LongitudinalModelBase {
     private double acc(double s, double v, double dv, double v0Local, double TLocal) {
         final double vp = v - dv;
         // safe speed
-        final double vSafe = -b * TLocal + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - s0, 0.));
+        final double a = param.getA();
+        final double b = param.getB();
+        final double vSafe = -b * TLocal
+                + Math.sqrt(b * b * TLocal * TLocal + vp * vp + 2 * b * Math.max(s - getMinimumGap(), 0.));
         final double vNew = Math.min(vSafe, Math.min(v + a * TLocal, v0Local));
         final double aWanted = (vNew - v) / TLocal;
         return aWanted;
+    }
+
+    @Override
+    protected ModelParameterGipps getParameter() {
+        return param;
+    }
+
+    @Override
+    public boolean hasValidParameters() {
+        return isValidDesiredSpeed() && isValidMinimumGap() && isValidParameters();
+    }
+
+    private boolean isValidParameters() {
+        if (param.getA() < 0 || param.getB() < 0) {
+            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
+                    modelName());
+            System.exit(-1);
+        }
+
+        if (param.getA() == 0 || param.getB() == 0) {
+            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
+                    modelName());
+            System.exit(-1);
+        }
+        return true;
     }
 }

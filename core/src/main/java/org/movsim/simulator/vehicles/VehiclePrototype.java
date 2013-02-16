@@ -25,7 +25,6 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.vehicle.VehicleInput;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
