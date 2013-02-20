@@ -29,9 +29,7 @@ import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.core.autogen.MovsimScenario;
 import org.movsim.input.MovsimCommandLine;
-import org.movsim.input.MovsimScenarioLoader;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.logging.LogFileAppender;
 import org.movsim.logging.Logger;
@@ -70,23 +68,6 @@ public class MovsimCoreMain {
         }
 
         LogFileAppender.initialize(projectMetaData);
-
-        // testwise jaxb unmarshalling
-        MovsimScenarioLoader xmlLoader = new MovsimScenarioLoader();
-        MovsimScenario inputData = null;
-        try {
-            inputData = MovsimScenarioLoader.validateAndLoadScenarioInput(projectMetaData.getXmlInputFile());
-        } catch (JAXBException e) {
-            System.err.println(e);
-        } catch (SAXException e) {
-            System.err.println(e);
-        }
-
-        if (inputData == null) {
-            System.out.println("input not valid. exit.");
-            System.exit(-1);
-        }
-        // -------------------------------
 
         final Simulator simulator = new Simulator(projectMetaData);
         simulator.initialize();

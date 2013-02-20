@@ -32,12 +32,10 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.input.InputData;
+import org.movsim.core.autogen.MovsimScenario;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.input.XmlReaderSimInput;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.VehiclesInput;
 import org.movsim.input.model.output.RouteInput;
 import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
@@ -85,7 +83,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private final ProjectMetaData projectMetaData;
     private String projectName;
-    private final InputData inputData;
+    private MovsimScenario inputData; // cannot be final, parsing in init TODO
     private FuelConsumptionModelPool fuelConsumptionModelPool;
     private VehicleGenerator vehGenerator;
     private SimulationOutput simOutput;
@@ -99,7 +97,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public Simulator(ProjectMetaData projectMetaData) {
         this.projectMetaData = projectMetaData;
-        inputData = new InputData();
+        // inputData = projectMetaData.getInputData();
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -112,21 +110,25 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // TODO temporary handling of Variable Message Sign until added to XML
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
-        XmlReaderSimInput.parse(projectMetaData, inputData);
+        inputData = projectMetaData.getInputData();
+        // XmlReaderSimInput.parse(projectMetaData, inputData);
 
-        final SimulationInput simInput = inputData.getSimulationInput();
+        // final SimulationInput simInput = inputData.getSimulationInput();
 
         fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
-        roadNetwork.setWithCrashExit(simInput.isWithCrashExit());
+        roadNetwork.setWithCrashExit(inputData.getSimulation().isCrashExit());
 
-        simulationRunnable.setTimeStep(simInput.getTimestep());
-        double duration = simInput.getSimulationDuration();
-        if (duration < 0) {
-            logger.info("simulation duration set to infinity");
-        }
+        simulationRunnable.setTimeStep(inputData.getSimulation().getTimestep());
+        
+        // TODO better handling of case "duration = INFINITY"
+        double duration = (inputData.getSimulation().isSetDuration() ? inputData.getSimulation().getDuration() : -1; 
+//        if (duration < 0) {
+//            logger.info("simulation duration set to infinity");
+//        }
+        
         simulationRunnable.setDuration(duration < 0 ? Double.MAX_VALUE : duration);
 
         MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());

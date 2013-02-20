@@ -35,13 +35,16 @@ import org.movsim.core.autogen.MovsimScenario;
 import org.movsim.xml.FileUnmarshaller;
 import org.xml.sax.SAXException;
 
-public class MovsimScenarioLoader {
+public final class MovsimScenarioLoader {
 
     private static final Class<?> SCENARIO_FACTORY = org.movsim.core.autogen.MovsimScenario.class;
 
     private static final String SCENARIO_XML_SCHEMA = "/schema/MovsimScenario.xsd";
 
     private static final URL SCENARIO_XSD_URL = MovsimCoreMain.class.getResource(SCENARIO_XML_SCHEMA);
+
+    private MovsimScenarioLoader() {
+    }
 
     public static MovsimScenario validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
         return new FileUnmarshaller<MovsimScenario>().load(xmlFile, MovsimScenario.class, SCENARIO_FACTORY,

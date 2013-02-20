@@ -297,8 +297,8 @@
     <xs:element ref="Routes" minOccurs="0" maxOccurs="1"/>
     <xs:element ref="Output"/>
    </xs:sequence>
-   <xs:attribute name="dt" type="positiveDouble" use="required"/>
-   <xs:attribute name="duration" type="xs:double" default="-1"/> <!-- todo check default handling, isSet ?-->
+   <xs:attribute name="timestep" type="positiveDouble" use="required"/> <!-- renamed: dt - timestep -->
+   <xs:attribute name="duration" type="xs:double" default="-1"/> <!-- todo check default handling, now checked by "isSet", so if not set then infinity-->
    <xs:attribute name="fixed_seed" type="xs:boolean" default="true"/>
    <xs:attribute name="seed" type="xs:double" default="42"/>
    <xs:attribute name="crash_exit" type="xs:boolean" default="true"/>
