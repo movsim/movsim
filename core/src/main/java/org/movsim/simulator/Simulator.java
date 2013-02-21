@@ -33,11 +33,11 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 
 import org.movsim.core.autogen.MovsimScenario;
+import org.movsim.core.autogen.Routes;
+import org.movsim.core.autogen.Simulation;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.model.RoadInput;
 import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.output.RouteInput;
-import org.movsim.input.model.output.RoutesInput;
 import org.movsim.input.model.simulation.ICMacroData;
 import org.movsim.input.model.simulation.ICMicroData;
 import org.movsim.input.model.simulation.SimpleRampData;
@@ -111,6 +111,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
         inputData = projectMetaData.getInputData();
+        Simulation simulationInput = inputData.getSimulation();
         // XmlReaderSimInput.parse(projectMetaData, inputData);
 
         // final SimulationInput simInput = inputData.getSimulationInput();
@@ -119,21 +120,23 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
-        roadNetwork.setWithCrashExit(inputData.getSimulation().isCrashExit());
+        roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
-        simulationRunnable.setTimeStep(inputData.getSimulation().getTimestep());
+        simulationRunnable.setTimeStep(simulationInput.getTimestep());
+        
         
         // TODO better handling of case "duration = INFINITY"
-        double duration = (inputData.getSimulation().isSetDuration() ? inputData.getSimulation().getDuration() : -1; 
-//        if (duration < 0) {
-//            logger.info("simulation duration set to infinity");
-//        }
+        double duration = simulationInput.isSetDuration() ? simulationInput.getDuration() : -1;
         
         simulationRunnable.setDuration(duration < 0 ? Double.MAX_VALUE : duration);
 
-        MyRandom.initialize(simInput.isWithFixedSeed(), simInput.getRandomSeed());
+        if (simulationInput.isSetSeed()) {
+            MyRandom.initialize(simulationInput.getSeed());
+        } else {
+            MyRandom.initialize();
+        }
 
-        createRoutes(simInput);
+        createRoutes(simulationInput.getRoutes());
 
         vehGenerator = createVehicleGenerator(simInput);
 
@@ -149,11 +152,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         reset();
     }
 
-    private void createRoutes(final SimulationInput simInput) {
-        final RoutesInput routesInput = simInput.getRoutesInput();
+    private void createRoutes(Routes routesInput) {
         routes = new HashMap<String, Route>();
         if (routesInput != null) {
-            for (final RouteInput routeInput : routesInput.getRoutes()) {
+            for (org.movsim.core.autogen.Route routeInput : routesInput.getRoute()) {
                 final Route route = new Route(routeInput.getName());
                 final List<String> roadIds = routeInput.getRoadIds();
                 for (final String roadId : roadIds) {

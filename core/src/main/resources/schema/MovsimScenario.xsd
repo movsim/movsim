@@ -299,8 +299,8 @@
    </xs:sequence>
    <xs:attribute name="timestep" type="positiveDouble" use="required"/> <!-- renamed: dt - timestep -->
    <xs:attribute name="duration" type="xs:double" default="-1"/> <!-- todo check default handling, now checked by "isSet", so if not set then infinity-->
-   <xs:attribute name="fixed_seed" type="xs:boolean" default="true"/>
-   <xs:attribute name="seed" type="xs:double" default="42"/>
+   <!--  <xs:attribute name="fixed_seed" type="xs:boolean" default="true"/> --> <!-- Not needed anymore, checked by "isSet" -->
+   <xs:attribute name="seed" type="xs:int" default="42"/>
    <xs:attribute name="crash_exit" type="xs:boolean" default="true"/>
   </xs:complexType>
  </xs:element>
