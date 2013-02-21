@@ -27,29 +27,31 @@ package org.movsim.utilities;
 
 import java.util.Random;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class MyRandom.
  */
 public class MyRandom {
 
-    /** Initialized to avoid NP exceptions. */
-    private static Random rand = new Random();
-    
+    private static Random rand; 
 
     private MyRandom() {
         // enforce singleton property with private constructor.
     }
 
-    /**
-     * Initialize.
-     * 
-     * @param withDefinedSeed
-     *            the with defined seed
-     * @param randomSeed
-     *            the random seed
-     */
-    public static void initialize(boolean withDefinedSeed, long randomSeed) {
-        rand = (withDefinedSeed) ? new Random(randomSeed) : new Random();
+    public static void initialize(long randomSeed) {
+        Preconditions.checkArgument(!isInitialized(), "random generator already initialized");
+        rand = new Random(randomSeed);
+    }
+    
+    public static void initialize() {
+        Preconditions.checkArgument(!isInitialized(), "random generator already initialized");
+        rand = new Random();
+    }
+    
+    public static boolean isInitialized(){
+        return rand != null;
     }
 
     /**
