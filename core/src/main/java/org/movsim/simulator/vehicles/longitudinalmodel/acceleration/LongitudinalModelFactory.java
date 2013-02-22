@@ -47,33 +47,33 @@ public class LongitudinalModelFactory {
      * Long model factory with vehicle length vehicle length is only needed for KKW (explicit model parameter).
      * 
      * @param vehLength
-     * @param modelParameter
+     * @param longitudinalModelParameter
      * @param simulationTimestep
      * @return
      */
-    public static LongitudinalModelBase create(double vehLength, ModelParameter modelParameter,
+    public static LongitudinalModelBase create(double vehLength, ModelParameter longitudinalModelParameter,
             double simulationTimestep) {
         LongitudinalModelBase longModel = null;
-        if (modelParameter instanceof ModelParameterIDM) {
-            longModel = new IDM((ModelParameterIDM) modelParameter);
-        } else if (modelParameter instanceof ModelParameterACC) {
-            longModel = new ACC((ModelParameterACC) modelParameter);
-        } else if (modelParameter instanceof ModelParameterOVMFVDM) {
-            longModel = new OVM_FVDM((ModelParameterOVMFVDM) modelParameter);
-        } else if (modelParameter instanceof ModelParameterGipps) {
-            longModel = new Gipps(simulationTimestep, (ModelParameterGipps) modelParameter);
-        } else if (modelParameter instanceof ModelParameterKrauss) {
-            longModel = new Krauss(simulationTimestep, (ModelParameterKrauss) modelParameter);
-        } else if (modelParameter instanceof ModelParameterNewell) {
-            return new Newell(simulationTimestep, (ModelParameterNewell) modelParameter);
-        } else if (modelParameter instanceof ModelParameterNSM) {
-            longModel = new NSM((ModelParameterNSM) modelParameter);
-        } else if (modelParameter instanceof ModelParameterKKW) {
-            longModel = new KKW((ModelParameterKKW) modelParameter, vehLength);
-        } else if (modelParameter instanceof ModelParameterCCS) {
-            longModel = new CCS((ModelParameterCCS) modelParameter, vehLength);
+        if (longitudinalModelParameter instanceof ModelParameterIDM) {
+            longModel = new IDM((ModelParameterIDM) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterACC) {
+            longModel = new ACC((ModelParameterACC) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterOVMFVDM) {
+            longModel = new OVM_FVDM((ModelParameterOVMFVDM) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterGipps) {
+            longModel = new Gipps(simulationTimestep, (ModelParameterGipps) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterKrauss) {
+            longModel = new Krauss(simulationTimestep, (ModelParameterKrauss) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterNewell) {
+            return new Newell(simulationTimestep, (ModelParameterNewell) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterNSM) {
+            longModel = new NSM((ModelParameterNSM) longitudinalModelParameter);
+        } else if (longitudinalModelParameter instanceof ModelParameterKKW) {
+            longModel = new KKW((ModelParameterKKW) longitudinalModelParameter, vehLength);
+        } else if (longitudinalModelParameter instanceof ModelParameterCCS) {
+            longModel = new CCS((ModelParameterCCS) longitudinalModelParameter, vehLength);
         } else {
-            logger.error("model input unknown: ", modelParameter.toString());
+            logger.error("model input unknown: ", longitudinalModelParameter.toString());
             System.exit(0); // TODO throw exception
         }
         return longModel;

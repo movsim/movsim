@@ -26,12 +26,12 @@
 package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.core.autogen.FloatingCarOutput;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -64,20 +64,23 @@ public class FloatingCars implements SimulationTimeStep {
     /**
      * Constructor.
      * 
-     * @param input
+     * @param floatingCarOutput
      * @param route
      * @param writeFileOutput
      */
-    public FloatingCars(FloatingCarInput input, Route route, boolean writeFileOutput) {
+    public FloatingCars(FloatingCarOutput floatingCarOutput, Route route, boolean writeFileOutput) {
         Preconditions.checkNotNull(route);
-        this.nDtOut = input.getNDt();
-        this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
+        this.nDtOut = floatingCarOutput.getNDt().intValue();
+        this.randomFraction = (floatingCarOutput.getRandomFraction() < 0 || floatingCarOutput.getRandomFraction() > 1) ? 0
+                : floatingCarOutput
                 .getRandomFraction();
         this.route = route;
-        floatingCarVehicleNumbers = new ArrayList<Integer>();
-        floatingCarVehicleNumbers.addAll(input.getFloatingCars());
+        floatingCarVehicleNumbers = new HashSet<Integer>();
+        for( org.movsim.core.autogen.FloatingCar fc : floatingCarOutput.getFloatingCar()){
+            floatingCarVehicleNumbers.add(Integer.valueOf(fc.getNumber()));
+        }
         fileFloatingCars = (writeFileOutput) ? new FileFloatingCars() : null;
-        printWriters = new HashMap<Vehicle, PrintWriter>(149, 0.75f);
+        printWriters = new HashMap<>(149, 0.75f);
     }
 
     @Override

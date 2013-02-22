@@ -30,16 +30,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.input.InputData;
-import org.movsim.input.model.OutputInput;
-import org.movsim.input.model.SimulationInput;
-import org.movsim.input.model.VehiclesInput;
-import org.movsim.input.model.output.ConsumptionOnRouteInput;
-import org.movsim.input.model.output.FloatingCarInput;
-import org.movsim.input.model.output.SpatioTemporalInput;
-import org.movsim.input.model.output.TrajectoriesInput;
-import org.movsim.input.model.output.TravelTimeOnRouteInput;
-import org.movsim.input.model.vehicle.VehicleInput;
+import org.movsim.core.autogen.ConsumptionCalculation;
+import org.movsim.core.autogen.FloatingCarOutput;
+import org.movsim.core.autogen.MovsimScenario;
+import org.movsim.core.autogen.OutputConfiguration;
+import org.movsim.core.autogen.SpatioTemporalConfiguration;
+import org.movsim.core.autogen.Trajectories;
+import org.movsim.core.autogen.TravelTimes;
+import org.movsim.core.autogen.VehicleParameter;
+import org.movsim.core.autogen.VehicleTypes;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
@@ -60,47 +59,44 @@ import com.google.common.base.Preconditions;
 public class SimulationOutput implements SimulationTimeStep {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
+    private final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
-    private List<FloatingCars> floatingCarOutputs = new ArrayList<FloatingCars>();
+    private List<FloatingCars> floatingCarOutputs = new ArrayList<>();
 
-    private final List<SpatioTemporal> spatioTemporals = new ArrayList<SpatioTemporal>();
+    private final List<SpatioTemporal> spatioTemporals = new ArrayList<>();
 
-    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<Route, FileTrajectories>();
+    private final Map<Route, FileTrajectories> filesTrajectories = new HashMap<>();
 
-    private final Map<Route, ConsumptionOnRoute> consumptionOnRoutes = new HashMap<Route, ConsumptionOnRoute>();
+    private final Map<Route, ConsumptionOnRoute> consumptionOnRoutes = new HashMap<>();
 
-    private final Map<Route, TravelTimeOnRoute> travelTimeOnRoutes = new HashMap<Route, TravelTimeOnRoute>();
+    private final Map<Route, TravelTimeOnRoute> travelTimeOnRoutes = new HashMap<>();
 
     private final RoadNetwork roadNetwork;
 
     private final Map<String, Route> routes;
 
-    public SimulationOutput(double simulationTimestep, boolean writeOutput, InputData simInput,
+    public SimulationOutput(double simulationTimestep, boolean writeOutput, MovsimScenario simInput,
             RoadNetwork roadNetwork, Map<String, Route> routes) {
+
+        Preconditions.checkNotNull(simInput);
+        Preconditions.checkNotNull(simInput.getSimulation());
+
         this.roadNetwork = roadNetwork;
         this.routes = routes;
 
-        final SimulationInput simulationInput = simInput.getSimulationInput();
-        if (simulationInput == null) {
-            return;
-        }
-
         if (writeOutput) {
-            writeFundamentalDiagrams(simulationTimestep, simInput.getVehiclesInput());
+            writeFundamentalDiagrams(simulationTimestep, simInput.getVehicleTypes());
         }
 
-        final OutputInput outputInput = simulationInput.getOutputInput();
+        initFloatingCars(writeOutput, simInput.getOutputConfiguration());
 
-        initFloatingCars(writeOutput, outputInput);
-
-        initConsumption(writeOutput, simulationTimestep, outputInput);
+        initConsumption(writeOutput, simulationTimestep, simInput.getOutputConfiguration());
         
-        initTravelTimes(writeOutput, simulationTimestep, outputInput);
+        initTravelTimes(writeOutput, simulationTimestep, simInput.getOutputConfiguration());
 
-        initSpatioTemporalOutput(writeOutput, outputInput);
+        initSpatioTemporalOutput(writeOutput, simInput.getOutputConfiguration());
 
-        initTrajectories(writeOutput, outputInput);
+        initTrajectories(writeOutput, simInput.getOutputConfiguration());
 
     }
 
@@ -110,27 +106,28 @@ public class SimulationOutput implements SimulationTimeStep {
         return routes.get(routeLabel);
     }
 
-    private void initConsumption(boolean writeOutput, double simulationTimestep, final OutputInput outputInput) {
-        for (final ConsumptionOnRouteInput fuelRouteInput : outputInput.getFuelInput()) {
-            final Route route = getCheckedRoute(fuelRouteInput.getRouteLabel());
+    private void initConsumption(boolean writeOutput, double simulationTimestep,
+            final OutputConfiguration outputConfiguration) {
+        for (final ConsumptionCalculation fuelRouteInput : outputConfiguration.getConsumptionCalculation()) {
+            final Route route = getCheckedRoute(fuelRouteInput.getRoute());
             final ConsumptionOnRoute consumption = new ConsumptionOnRoute(simulationTimestep, fuelRouteInput, roadNetwork, route, writeOutput);
             consumptionOnRoutes.put(route, consumption);
         }
     }
     
-    private void initTravelTimes(boolean writeOutput, double simulationTimestep, final OutputInput outputInput) {
-        for (final TravelTimeOnRouteInput travelTimeInput : outputInput.getTravelTimesInput()) {
-            final Route route = getCheckedRoute(travelTimeInput.getRouteLabel());
+    private void initTravelTimes(boolean writeOutput, double simulationTimestep,
+            final OutputConfiguration outputConfiguration) {
+        for (final TravelTimes travelTimeInput : outputConfiguration.getTravelTimes()) {
+            final Route route = getCheckedRoute(travelTimeInput.getRoute());
             final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork, route, writeOutput);
             travelTimeOnRoutes.put(route, travelTime);
         }
     }
 
-    private void initTrajectories(boolean writeOutput, final OutputInput outputInput) {
-        final List<TrajectoriesInput> trajInput = outputInput.getTrajectoriesInput();
+    private void initTrajectories(boolean writeOutput, final OutputConfiguration outputConfiguration) {
         if (writeOutput) {
-            for (final TrajectoriesInput traj : trajInput) {
-                final Route route = getCheckedRoute(traj.getRouteLabel());
+            for (final Trajectories traj : outputConfiguration.getTrajectories()) {
+                final Route route = getCheckedRoute(traj.getRoute());
                 if (filesTrajectories.containsKey(route)) {
                     logger.warn("trajectory output for route \"{}\" already defined!", route.getName());
                     continue;
@@ -140,33 +137,32 @@ public class SimulationOutput implements SimulationTimeStep {
         }
     }
 
-    private void initSpatioTemporalOutput(boolean writeOutput, final OutputInput outputInput) {
-        final List<SpatioTemporalInput> spatioTemporalInputs = outputInput.getSpatioTemporalInput();
-        for (final SpatioTemporalInput spatioTemporalInput : spatioTemporalInputs) {
-            final Route route = getCheckedRoute(spatioTemporalInput.getRouteLabel());
+    private void initSpatioTemporalOutput(boolean writeOutput, final OutputConfiguration outputConfiguration) {
+        for (final SpatioTemporalConfiguration spatioTemporalInput : outputConfiguration
+                .getSpatioTemporalConfiguration()) {
+            final Route route = getCheckedRoute(spatioTemporalInput.getRoute());
             final SpatioTemporal spatioTemporal = new SpatioTemporal(spatioTemporalInput.getDx(),
                     spatioTemporalInput.getDt(), roadNetwork, route, writeOutput);
             spatioTemporals.add(spatioTemporal);
         }
     }
 
-    private void initFloatingCars(boolean writeOutput, final OutputInput outputInput) {
-        final List<FloatingCarInput> floatingCarInputs = outputInput.getFloatingCarInputs();
-        for(FloatingCarInput floatingCarInput : floatingCarInputs){
-            Route route = getCheckedRoute(floatingCarInput.getRouteLabel());
-            floatingCarOutputs.add(new FloatingCars(floatingCarInput, route, writeOutput));
+    private void initFloatingCars(boolean writeOutput, OutputConfiguration outputInput) {
+        for (FloatingCarOutput floatingCarOutput : outputInput.getFloatingCarOutput()) {
+            Route route = getCheckedRoute(floatingCarOutput.getRoute());
+            floatingCarOutputs.add(new FloatingCars(floatingCarOutput, route, writeOutput));
         }
     }
 
-    private static void writeFundamentalDiagrams(double simulationTimestep, VehiclesInput vehiclesInput) {
-        if (!vehiclesInput.isWriteFundamentalDiagrams()) {
+    private static void writeFundamentalDiagrams(double simulationTimestep, VehicleTypes vehicleTypes) {
+        if (!vehicleTypes.isWriteFundDiagrams()) {
             return;
         }
-        final String ignoreLabel = "Obstacle"; // quick hack
+        final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
         logger.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
-        for (VehicleInput vehicleInput : vehiclesInput.getVehicleInputMap().values()) {
-            if (!ignoreLabel.equalsIgnoreCase(vehicleInput.getLabel())) {
-                FileFundamentalDiagram.writeToFile(simulationTimestep, vehicleInput);
+        for (VehicleParameter vehicleParameter : vehicleTypes.getVehicleParameter()) {
+            if (!ignoreLabel.equalsIgnoreCase(vehicleParameter.getLabel())) {
+                FileFundamentalDiagram.writeToFile(simulationTimestep, vehicleParameter);
             }
         }
     }

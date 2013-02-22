@@ -52,8 +52,11 @@
  <xs:element name="MovsimScenario">
   <xs:complexType>
    <xs:sequence>
-    <xs:element ref="Vehicles"/>
+    <xs:element ref="VehicleTypes"/>
     <xs:element ref="Simulation"/>
+    <!-- pulled out Routes and Output from Simulation --> 
+    <xs:element ref="Routes" minOccurs="0" maxOccurs="1"/>
+    <xs:element ref="OutputConfiguration"/>
    </xs:sequence>
    <xs:attribute name="network_filename" type="xs:string" use="required"/> 
   </xs:complexType>
@@ -61,34 +64,35 @@
 
  
  <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
- <xs:element name="Vehicles">
+ <xs:element name="VehicleTypes"> <!-- renamed -->
   <xs:complexType>
    <xs:sequence>
-    <xs:element ref="Vehicle" maxOccurs="unbounded"/>
+    <xs:element ref="VehicleParameter" maxOccurs="unbounded"/>
    </xs:sequence>
    <xs:attribute name="write_fund_diagrams" type="xs:boolean" default="false"/>
   </xs:complexType>
  </xs:element>
 
- <xs:element name="Vehicle">
+ <xs:element name="VehicleParameter"> <!-- renamed -->
   <xs:complexType>
    <xs:sequence>
-    <xs:element ref="LongitudinalModel"/>
+    <xs:element ref="LongitudinalModelType"/>
     <xs:element ref="LaneChangeModel"/>
     <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1"/>
    </xs:sequence>
    <xs:attribute name="label" type="xs:string" use="required"/>
-   <xs:attribute name="length" type="xs:string" use="required"/>
-   <xs:attribute name="width" type="xs:string" default="4.4"/>
-   <xs:attribute name="b_max" type="xs:string" default="10000"/>
-   <xs:attribute name="reaction_time" type="xs:string" default="0"/>
+   <xs:attribute name="length" type="nonNegativeDouble" use="required"/>
+   <xs:attribute name="width" type="nonNegativeDouble" default="4.4"/>
+   <xs:attribute name="b_max" type="nonNegativeDouble" default="10000"/>
+   <xs:attribute name="reaction_time" type="nonNegativeDouble" default="0"/>
    <xs:attribute name="consumption" type="xs:string" default="none"/>
   </xs:complexType>
  </xs:element>
 
- <xs:element name="LongitudinalModel">
+ <xs:element name="LongitudinalModelType"> <!-- renamed -->
   <xs:complexType>
    <xs:sequence>
+	   <!-- TODO: Auswahl, kann nur einen typ haben-->
     <xs:element ref="ModelParameterIDM" minOccurs="0" maxOccurs="1"/>
     <xs:element ref="ModelParameterACC" minOccurs="0" maxOccurs="1"/>
     <xs:element ref="ModelParameterOVM_FVDM" minOccurs="0" maxOccurs="1"/>
@@ -294,8 +298,6 @@
    <xs:sequence>
     <xs:element ref="TrafficComposition"/>
     <xs:element ref="Road" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:element ref="Routes" minOccurs="0" maxOccurs="1"/>
-    <xs:element ref="Output"/>
    </xs:sequence>
    <xs:attribute name="timestep" type="positiveDouble" use="required"/> <!-- renamed: dt - timestep -->
    <xs:attribute name="duration" type="xs:double" default="-1"/> <!-- todo check default handling, now checked by "isSet", so if not set then infinity-->
@@ -322,6 +324,7 @@
   </xs:complexType>
  </xs:element>
 
+<!-- Road also used in Routes definition without subelements. -->
  <xs:element name="Road">
   <xs:complexType>
    <xs:sequence>
@@ -488,6 +491,9 @@
   </xs:complexType>
  </xs:element>
 
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
  <xs:element name="Routes">
   <xs:complexType>
    <xs:sequence>
@@ -506,19 +512,20 @@
  </xs:element>
 
 <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
- <xs:element name="Output">
+ <xs:element name="OutputConfiguration"> <!-- renamed -->
   <xs:complexType>
    <xs:sequence>
-    <xs:element ref="FloatingCarData" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:element ref="SpatioTemporal" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element ref="FloatingCarOutput" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element ref="SpatioTemporalConfiguration" minOccurs="0" maxOccurs="unbounded"/>
     <xs:element ref="Trajectories" minOccurs="0" maxOccurs="unbounded"/>
     <xs:element ref="TravelTimes" minOccurs="0" maxOccurs="unbounded"/>
-    <xs:element ref="Fuel" minOccurs="0" maxOccurs="unbounded"/>
+    <xs:element ref="ConsumptionCalculation" minOccurs="0" maxOccurs="unbounded"/>
    </xs:sequence>
   </xs:complexType>
  </xs:element>
 
- <xs:element name="SpatioTemporal">
+<!-- renamed: SpatioTemporal -->
+ <xs:element name="SpatioTemporalConfiguration">
   <xs:complexType>
    <xs:attribute name="dt" type="nonNegativeDouble" default="60"/>
    <xs:attribute name="dx" type="nonNegativeDouble" default="100"/>
@@ -526,7 +533,8 @@
   </xs:complexType>
  </xs:element>
 
- <xs:element name="FloatingCarData">
+<!-- renamed: FloatingCarData  -->
+ <xs:element name="FloatingCarOutput">
   <xs:complexType>
    <xs:sequence>
     <xs:element ref="FloatingCar" minOccurs="0" maxOccurs="unbounded"/>
@@ -562,13 +570,13 @@
   </xs:complexType>
  </xs:element>
 
- <xs:element name="Fuel">
+ <xs:element name="ConsumptionCalculation"> <!-- renamed -->
   <xs:complexType>
+   <xs:attribute name="route" type="xs:string" use="required"/>
    <xs:attribute name="dt" type="nonNegativeDouble" default="1"/>
    <xs:attribute name="start_time" type="nonNegativeDouble" default="0"/>
    <xs:attribute name="end_time" type="nonNegativeDouble" default="1e10"/>
    <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20"/>
-   <xs:attribute name="route" type="xs:string" use="required"/>
   </xs:complexType>
  </xs:element>
 </xs:schema>

@@ -1,6 +1,6 @@
 package org.movsim.output.route;
 
-import org.movsim.input.model.output.ConsumptionOnRouteInput;
+import org.movsim.core.autogen.ConsumptionCalculation;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
@@ -26,12 +26,13 @@ public class ConsumptionOnRoute extends OutputOnRouteBase {
 
     private int numberOfVehicles;
 
-    public ConsumptionOnRoute(double simulationTimestep, ConsumptionOnRouteInput input, RoadNetwork roadNetwork,
+    public ConsumptionOnRoute(double simulationTimestep, ConsumptionCalculation fuelRouteInput,
+            RoadNetwork roadNetwork,
             Route route, boolean writeOutput) {
         super(roadNetwork, route);
-        this.tauEMA = input.getTauEMA();
+        this.tauEMA = fuelRouteInput.getTauEMA();
         this.beta = Math.exp(-simulationTimestep / tauEMA);
-        fileWriter = (writeOutput) ? new FileConsumptionOnRoute(input.getDt(), route) : null;
+        fileWriter = (writeOutput) ? new FileConsumptionOnRoute(fuelRouteInput.getDt(), route) : null;
         totalConsumption = 0;
     }
 

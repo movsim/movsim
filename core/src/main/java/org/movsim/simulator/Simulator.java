@@ -153,13 +153,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     private void createRoutes(Routes routesInput) {
-        routes = new HashMap<String, Route>();
+        routes = new HashMap<>();
         if (routesInput != null) {
             for (org.movsim.core.autogen.Route routeInput : routesInput.getRoute()) {
-                final Route route = new Route(routeInput.getName());
-                final List<String> roadIds = routeInput.getRoadIds();
-                for (final String roadId : roadIds) {
-                    route.add(roadNetwork.findByUserId(roadId));
+                final Route route = new Route(routeInput.getLabel());
+                for (org.movsim.core.autogen.Road roadInput : routeInput.getRoad()) {
+                    route.add(roadNetwork.findByUserId(roadInput.getId()));
                 }
                 if (route.size() == 0) {
                     logger.error("route with name \"{}\" does not contain any roadSegments. Ignore route!",
@@ -174,9 +173,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
     }
 
-    public VehiclesInput getVehiclesInput() {
-        return inputData.getVehiclesInput();
-    }
+    // public VehiclesInput getVehiclesInput() {
+    // return inputData.getVehiclesInput();
+    // }
 
     public VehicleGenerator getVehicleGenerator() {
         return vehGenerator;
@@ -186,9 +185,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return projectMetaData;
     }
 
-    public InputData getSimInput() {
-        return inputData;
-    }
+    // public InputData getSimInput() {
+    // return inputData;
+    // }
 
     public SimulationOutput getSimOutput() {
         return simOutput;

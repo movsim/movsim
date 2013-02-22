@@ -25,7 +25,7 @@
  */
 package org.movsim.output.route;
 
-import org.movsim.input.model.output.TravelTimeOnRouteInput;
+import org.movsim.core.autogen.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
@@ -53,12 +53,12 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     
     private int numberOfVehicles;
 
-    public TravelTimeOnRoute(double simulationTimestep, TravelTimeOnRouteInput input, RoadNetwork roadNetwork,
+    public TravelTimeOnRoute(double simulationTimestep, TravelTimes travelTimeInput, RoadNetwork roadNetwork,
             Route route, boolean writeOutput) {
         super(roadNetwork, route);
-        this.tauEMA = input.getTauEMA();
+        this.tauEMA = travelTimeInput.getTauEMA();
         this.beta = Math.exp(-simulationTimestep / tauEMA);
-        fileWriter = writeOutput ? new FileTravelTimeOnRoute(input.getDt(), route) : null;
+        fileWriter = writeOutput ? new FileTravelTimeOnRoute(travelTimeInput.getDt(), route) : null;
         totalTravelTime = 0;
     }
 
