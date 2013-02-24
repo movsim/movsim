@@ -32,12 +32,13 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class IDM.
+ * 
  * <p>
  * Implementation of the 'intelligent driver model'(IDM). <a
  * href="http://en.wikipedia.org/wiki/Intelligent_Driver_Model">Wikipedia article IDM.</a>
  * </p>
  * <p>
- * Treiber/Kesting: Verkehrsdynamik und -simulation, 2010, chapter 11.3
+ * Treiber/Kesting: Traffic Flow Dynamics, 2013, chapter 11.3
  * </p>
  * <p>
  * see <a href="http://xxx.uni-augsburg.de/abs/cond-mat/0002177"> M. Treiber, A. Hennecke, and D. Helbing, Congested
@@ -68,7 +69,7 @@ import org.slf4j.LoggerFactory;
 public class IDM extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(IDM.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IDM.class);
 
     private final ModelParameterIDM param;
 
@@ -166,14 +167,8 @@ public class IDM extends LongitudinalModelBase {
 
         final double aWanted = aLocal * (1.0 - Math.pow((v / v0Local), param.getDelta()) - (sstar / s) * (sstar / s));
 
-        logger.debug("aWanted = {}", aWanted);
+        LOG.debug("aWanted = {}", aWanted);
         return aWanted; // limit to -bMax in Vehicle
-    }
-
-    @Override
-    public boolean hasValidParameters() {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     @Override

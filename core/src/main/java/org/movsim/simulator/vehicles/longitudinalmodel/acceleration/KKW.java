@@ -149,21 +149,4 @@ class KKW extends LongitudinalModelBase {
         return param;
     }
 
-    @Override
-    public boolean hasValidParameters() {
-        return isValidDesiredSpeed() && isValidMinimumGap() && isValidParameter();
-    }
-
-    private boolean isValidParameter() {
-        if (param.getK() < 0 || !ModelParameters.isValidProbabilityRange(param.getPb0())
-                || !ModelParameters.isValidProbabilityRange(param.getPb1())
-                || !ModelParameters.isValidProbabilityRange(param.getPa1())
-                || !ModelParameters.isValidProbabilityRange(param.getPa2())
-                || !ModelParameters.isValidProbabilityRange(param.getVp())) {
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName().name());
-            System.exit(-1);
-        }
-        return true;
-    }
 }

@@ -174,17 +174,4 @@ class OVM_FVDM extends LongitudinalModelBase {
         return param;
     }
 
-    @Override
-    public boolean hasValidParameters() {
-        return isValidDesiredSpeed() && isValidMinimumGap() && isValidParameter();
-    }
-
-    private boolean isValidParameter() {
-        if ( param.getTau() <= 0 || param.getTransitionWidth() < 0 || param.getBeta() < 0 || param.getGamma() < 0 ) {
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName().name());
-            System.exit(-1);
-        }
-        return true;
-    }
 }

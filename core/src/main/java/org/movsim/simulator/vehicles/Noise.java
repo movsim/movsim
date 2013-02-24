@@ -43,6 +43,8 @@ import org.slf4j.LoggerFactory;
  * </p>
  */
 
+// TODO formulate noise in more general terms. not only applicable to acceleration noise. Standard wiener with
+// fluctStrenth 1
 public class Noise {
 
     /** The Constant logger. */
@@ -64,17 +66,15 @@ public class Noise {
     private final double fluctStrength;
 
     /** The xi acc as dynamic state variable (output) */
-    private double xiAcc = 0;
+    private double xiAcc;
 
     public Noise(NoiseParameter parameters) {
-
+        xiAcc = 0;
         fluctStrength = parameters.getFluctStrength();
         tauRelaxAcc = parameters.getTau();
 
-        isWienerProcess = (tauRelaxAcc == 0) ? false : true;
+        isWienerProcess = (tauRelaxAcc != 0) ? true : false;
         logger.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
-
-        xiAcc = 0;
     }
 
     /**

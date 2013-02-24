@@ -28,7 +28,6 @@ package org.movsim.simulator.roadnetwork;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.movsim.input.model.simulation.SimpleRampData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleGenerator;
@@ -55,11 +54,12 @@ public class SimpleRamp extends AbstractTrafficSource {
 
     private final double relativeSpeedToLeader;
 
-    public SimpleRamp(VehicleGenerator vehGenerator, RoadSegment roadSegment, SimpleRampData simpleRampData,
+    public SimpleRamp(VehicleGenerator vehGenerator, RoadSegment roadSegment,
+            org.movsim.core.autogen.SimpleRamp simpleRampData,
             InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment, inflowTimeSeries);
-        this.relativeSpeedToLeader = simpleRampData.getRelativeSpeedToLeader();
-        this.relativeGapToLeader = simpleRampData.getRelativeGapToLeader();
+        this.relativeSpeedToLeader = simpleRampData.getRelativeSpeed();
+        this.relativeGapToLeader = simpleRampData.getRelativeGap();
 
     }
 

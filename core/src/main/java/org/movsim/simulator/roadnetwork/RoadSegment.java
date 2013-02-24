@@ -877,7 +877,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the number of iterations that have been executed
      */
     public void updateDetectors(double dt, double simulationTime, long iterationCount) {
-        if (this.loopDetectors != null) {
+        if (loopDetectors != null) {
             loopDetectors.timeStep(dt, simulationTime, iterationCount);
         }
     }

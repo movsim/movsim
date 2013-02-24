@@ -149,27 +149,4 @@ class ACC extends LongitudinalModelBase {
 
         return accACC_IIDM;
     }
-
-    @Override
-    public boolean hasValidParameters() {
-        return isValidDesiredSpeed() && isValidMinimumGap() && isValidParameters();
-    }
-
-    private boolean isValidParameters() {
-        if (param.getCoolness() < 0 || param.getCoolness() > 1) {
-            logger.error(" coolness parameter = {} not well defined in input. please choose value within [0,1].");
-            return false;
-        }
-        if (getDesiredSpeed() < 0 || param.getT() < 0 || getMinimumGap() < 0 || param.getS1() < 0
-                || param.getDelta() < 0 || param.getA() < 0 || param.getB() < 0) {
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values.");
-            return false;
-        }
-        if (param.getT() == 0 || param.getA() == 0 || param.getB() == 0) {
-            logger.error(" zero parameter values for {} not defined in input. please choose positive values. ");
-            return false;
-        }
-        return true;
-    }
-
 }

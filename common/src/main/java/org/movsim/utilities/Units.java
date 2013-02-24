@@ -30,6 +30,9 @@ public interface Units {
     /** converts 1/s to 1/h, factor is 3600 */
     final double INVS_TO_INVH = 3600.;
 
+	/** converts 1/h to 1/s, factor is 1/3600 */
+	final double INVH_TO_INVS = 1 / INVS_TO_INVH;
+
     /** converts m/s to km/h, factor is 3.6 */
     final double MS_TO_KMH = 3.6;
 

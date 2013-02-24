@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,25 +25,24 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import org.movsim.input.model.simulation.TrafficLightData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class TrafficLight.
  */
+// TODO refactor. Use jaxb input class for members.
 public class TrafficLight {
 
     public enum TrafficLightStatus {
         GREEN, GREEN_RED, RED, RED_GREEN;
 
-        
         @Override
         public String toString() {
             return name();
         }
     }
-    
+
     /** The Constant logger. */
     public static final Logger logger = LoggerFactory.getLogger(TrafficLight.class);
 
@@ -126,17 +125,10 @@ public class TrafficLight {
     /**
      * Constructor.
      * 
-     * @param inputData
-     *            the input data
      */
-    public TrafficLight(TrafficLightData inputData) {
-        this(inputData.getX(), 
-            inputData.getGreenTime(),
-            inputData.getGreenRedTimePeriod(),
-            inputData.getRedTime(),
-            inputData.getRedGreenTimePeriod(),
-            inputData.getPhaseShift(),
-            inputData.getInitStatus());
+    public TrafficLight(org.movsim.core.autogen.TrafficLight tlData) {
+        this(tlData.getPosition(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
+                .getRedGreenTime(), tlData.getPhaseShift(), tlData.getInit().intValue());
     }
 
     /**
@@ -151,11 +143,13 @@ public class TrafficLight {
 
     /**
      * Return the number of lights this traffic light has, can be 1, 2 or 3.
+     * 
      * @return
      */
     public int lightCount() {
         return lightCount;
     }
+
     /**
      * Update.
      * 

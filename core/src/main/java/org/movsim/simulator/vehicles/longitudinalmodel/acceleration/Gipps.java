@@ -126,23 +126,4 @@ class Gipps extends LongitudinalModelBase {
         return param;
     }
 
-    @Override
-    public boolean hasValidParameters() {
-        return isValidDesiredSpeed() && isValidMinimumGap() && isValidParameters();
-    }
-
-    private boolean isValidParameters() {
-        if (param.getA() < 0 || param.getB() < 0) {
-            logger.error(" negative parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName());
-            System.exit(-1);
-        }
-
-        if (param.getA() == 0 || param.getB() == 0) {
-            logger.error(" zero parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName());
-            System.exit(-1);
-        }
-        return true;
-    }
 }

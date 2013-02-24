@@ -25,12 +25,12 @@
  */
 package org.movsim.simulator.vehicles;
 
+import org.movsim.core.autogen.VehicleParameter;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class VehiclePrototype.
  */
@@ -54,10 +54,11 @@ public class VehiclePrototype {
     /** The equi properties. */
     private final EquilibriumProperties equiProperties;
 
-    /** The vehicle input. */
-    private final VehicleInput vehicleInput;
+    /** The vehicle parameter. */
+    private final VehicleParameter vehicleParameter;
 
     private final double relativeRandomizationV0;
+
     private final Route route;
 
     /**
@@ -71,20 +72,21 @@ public class VehiclePrototype {
      *            the long model
      * @param equilProperties
      *            the equil properties
-     * @param vehicleInput
+     * @param vehicleParameter
      *            the vehicle input
      * @param relativeRandomizationV0
      *            the relative randomization v0
      */
     public VehiclePrototype(String label, double fraction, LongitudinalModelBase longModel,
-            EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0, Route route) {
+            EquilibriumProperties equilProperties, VehicleParameter vehicleParameter, double relativeRandomizationV0,
+            Route route) {
         this.label = label;
-        this.length = vehicleInput.getLength();
-        this.reactionTime = vehicleInput.getReactionTime();
+        this.length = vehicleParameter.getLength();
+        this.reactionTime = vehicleParameter.getReactionTime();
         this.fraction = fraction;
         this.longModel = longModel;
         this.equiProperties = equilProperties;
-        this.vehicleInput = vehicleInput;
+        this.vehicleParameter = vehicleParameter;
         this.relativeRandomizationV0 = relativeRandomizationV0;
         this.route = route;
     }
@@ -183,12 +185,12 @@ public class VehiclePrototype {
     }
 
     /**
-     * Gets the vehicle input.
+     * Gets the vehicle parameter.
      * 
-     * @return the vehicle input
+     * @return the vehicle parameter
      */
-    public VehicleInput getVehicleInput() {
-        return vehicleInput;
+    public VehicleParameter getVehicleParameter() {
+        return vehicleParameter;
     }
 
     /**

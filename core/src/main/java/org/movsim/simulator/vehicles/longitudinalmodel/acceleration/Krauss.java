@@ -141,18 +141,4 @@ class Krauss extends LongitudinalModelBase {
         return param;
     }
 
-    @Override
-    public boolean hasValidParameters() {
-        return isValidDesiredSpeed() && isValidMinimumGap() && isValidParameter();
-    }
-
-    private boolean isValidParameter() {
-        if (param.getA() <= 0 || param.getB() <= 0) {
-            logger.error(
-                    " non-positive parameter values for {} not defined in input. please choose positive values. exit",
-                    modelName().name());
-            System.exit(-1);
-        }
-        return true;
-    }
 }

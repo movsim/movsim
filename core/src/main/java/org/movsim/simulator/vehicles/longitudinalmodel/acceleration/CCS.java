@@ -147,9 +147,4 @@ public class CCS extends LongitudinalModelBase {
         return param;
     }
 
-    @Override
-    public boolean hasValidParameters() {
-        // TODO Auto-generated method stub
-        return false;
-    }
 }

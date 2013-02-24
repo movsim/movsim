@@ -25,10 +25,14 @@
  */
 package org.movsim.simulator.roadnetwork;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-import org.movsim.input.model.simulation.InflowDataPoint;
+import org.movsim.core.autogen.Inflow;
 import org.movsim.utilities.Tables;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +61,8 @@ public class InflowTimeSeries {
      * @param inflowTimeSeries
      *            the inflow time series
      */
-    public InflowTimeSeries(List<InflowDataPoint> inflowTimeSeries) {
-        generateTimeSeriesData(inflowTimeSeries);
+    public InflowTimeSeries(List<Inflow> inflow) {
+        generateTimeSeriesData(inflow);
     }
 
     /**
@@ -67,23 +71,41 @@ public class InflowTimeSeries {
      * @param inflowTimeSeries
      *            the inflow time series
      */
-    private void generateTimeSeriesData(List<InflowDataPoint> inflowTimeSeries) {
-        final int size = inflowTimeSeries.size();
+    private void generateTimeSeriesData(List<Inflow> inflow) {
+        List<InflowDataPoint> sortedInflowDataPoints = getSortedInflowDataPoints(inflow);
+
+        final int size = sortedInflowDataPoints.size();
 
         logger.info(" inflowDataPoint.size = {}", size);
-        if (inflowTimeSeries.isEmpty()) {
+        if (sortedInflowDataPoints.isEmpty()) {
             logger.info("no inflow data points --> no inflow.");
         }
         timeValues = new double[size];
         flowValues = new double[size];
         speedValues = new double[size];
         for (int i = 0; i < size; i++) {
-            final InflowDataPoint inflowDataPoint = inflowTimeSeries.get(i);
+            final InflowDataPoint inflowDataPoint = sortedInflowDataPoints.get(i);
             timeValues[i] = inflowDataPoint.getTime();
             flowValues[i] = inflowDataPoint.getFlow();
             speedValues[i] = inflowDataPoint.getSpeed();
             logger.debug("add data: flow={}, speed={}", flowValues[i], speedValues[i]);
         }
+    }
+
+    private List<InflowDataPoint> getSortedInflowDataPoints(List<Inflow> inflow) {
+        List<InflowDataPoint> dataPoints = new ArrayList<>();
+        for (final Inflow inflowDataPoint : inflow) {
+            dataPoints.add(new InflowDataPoint(inflowDataPoint));
+        }
+        Collections.sort(dataPoints, new Comparator<InflowDataPoint>() {
+            @Override
+            public int compare(InflowDataPoint o1, InflowDataPoint o2) {
+                final Double pos1 = new Double((o1).getTime());
+                final Double pos2 = new Double((o2).getTime());
+                return pos1.compareTo(pos2); // sort with increasing t
+            }
+        });
+        return dataPoints;
     }
 
     /**
@@ -119,4 +141,47 @@ public class InflowTimeSeries {
         assert newFlowPerLane >= 0;
         this.constantFlowPerLane = newFlowPerLane;
     }
+
+    private final class InflowDataPoint {
+
+        /** The time in seconds */
+        private final double time;
+
+        /** The flow in 1/s. */
+        private final double flow;
+
+        /** The speed in m/s. */
+        private final double speed;
+
+        public InflowDataPoint(Inflow inflowDataPoint) {
+            this(inflowDataPoint.getT(), inflowDataPoint.getQPerHour(), inflowDataPoint.getV());
+        }
+
+        /**
+         * Constructor.
+         * 
+         * @param time
+         * @param flowPerHour
+         * @param speed
+         */
+        public InflowDataPoint(double time, double flowPerHour, double speed) {
+            this.time = time;
+            this.flow = flowPerHour * Units.INVH_TO_INVS;
+            this.speed = speed; // given in m/s
+        }
+
+        public double getTime() {
+            return time;
+        }
+
+        public double getFlow() {
+            return flow;
+        }
+
+        public double getSpeed() {
+            return speed;
+        }
+
+    }
+
 }

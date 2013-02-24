@@ -25,7 +25,6 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.MyRandom;
@@ -61,7 +60,8 @@ public abstract class LongitudinalModelBase {
                 "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
                 ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
                 "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model");
+                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model"), PTM(
+                ModelCategory.TIME_CONTINUOUS_MODEL, "Prospect-Theory Model");
 
         private final ModelCategory modelCategory;
 
@@ -309,15 +309,5 @@ public abstract class LongitudinalModelBase {
      * @return the calculated acceleration
      */
     public abstract double calcAccSimple(double s, double v, double dv);
-
-    public abstract boolean hasValidParameters();
-
-    protected boolean isValidDesiredSpeed() {
-        return getDesiredSpeed() > 0 && getDesiredSpeed() <= MovsimConstants.MAX_VEHICLE_SPEED;
-    }
-
-    protected boolean isValidMinimumGap() {
-        return getMinimumGap() >= 0;
-    }
 
 }

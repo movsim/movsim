@@ -33,7 +33,6 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.movsim.input.model.simulation.InflowDataPoint;
 import org.movsim.simulator.vehicles.VehicleGenerator;
 
 /**

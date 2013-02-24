@@ -25,7 +25,6 @@
  */
 package org.movsim.simulator.vehicles.lanechange;
 
-import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -80,18 +79,16 @@ public class LaneChangeModel {
 
     }
 
-    private final boolean withEuropeanRules;
-
-    /** critical speed for kicking in European rules (in m/s) */
-    private final double vCritEur;
+    // private final boolean withEuropeanRules;
+    //
+    // /** critical speed for kicking in European rules (in m/s) */
+    // private final double vCritEur;
 
     private Vehicle me;
 
-    private final boolean isInitialized;
-
     private MOBIL lcModelMOBIL;
 
-    private final LaneChangeInputData lcInputData;
+    private final org.movsim.core.autogen.LaneChangeModel parameter;
 
     // Exit Handling
     // distance at which driver should think about changing lanes for exit
@@ -102,27 +99,25 @@ public class LaneChangeModel {
     /**
      * Instantiates a new lane changing model.
      * 
-     * @param lcInputData
+     * @param laneChangeModelParameter
      *            the lc input data
      */
-    public LaneChangeModel(LaneChangeInputData lcInputData) {
-
-        this.lcInputData = lcInputData;
-        this.withEuropeanRules = lcInputData.isWithEuropeanRules();
-        this.vCritEur = lcInputData.getCritSpeedEuroRules();
-
+    public LaneChangeModel(org.movsim.core.autogen.LaneChangeModel laneChangeModelParameter) {
+        this.parameter = laneChangeModelParameter;
+        // this.withEuropeanRules = laneChangeModelParameter.isWithEuropeanRules();
+        // this.vCritEur = laneChangeModelParameter.getCritSpeedEuroRules();
         // TODO valid lane change model only if configured by xml
-        isInitialized = lcInputData.isInitializedMobilData();
+        // isInitialized = laneChangeModelParameter.isInitializedMobilData();
     }
 
-    public LaneChangeModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
-        this.lcModelMOBIL = lcModelMOBIL;
-        this.me = vehicle;
-        this.withEuropeanRules = true;
-        this.vCritEur = 5.0;
-        this.lcInputData = null;
-        isInitialized = true;
-    }
+    // public LaneChangeModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
+    // this.lcModelMOBIL = lcModelMOBIL;
+    // this.me = vehicle;
+    // this.withEuropeanRules = true;
+    // this.vCritEur = 5.0;
+    // this.parameter = null;
+    // isInitialized = true;
+    // }
 
     /**
      * Initialize.
@@ -132,7 +127,9 @@ public class LaneChangeModel {
      */
     public void initialize(Vehicle vehicle) {
         this.me = vehicle;
-        lcModelMOBIL = (isInitialized) ? new MOBIL(me, lcInputData.getLcMobilData()) : new MOBIL(me);
+        if (parameter != null && vehicle != null) {
+            lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
+        }
     }
 
     /**
@@ -141,15 +138,15 @@ public class LaneChangeModel {
      * @return true, if is initialized
      */
     public boolean isInitialized() {
-        return isInitialized;
+        return parameter != null && lcModelMOBIL != null;
     }
 
     public boolean withEuropeanRules() {
-        return withEuropeanRules;
+        return parameter.isEuropeanRules();
     }
 
     public double vCritEurRules() {
-        return vCritEur;
+        return parameter.getCritSpeedEur();
     }
 
     public LaneChangeDecision makeDecision(RoadSegment roadSegment) {
@@ -187,11 +184,11 @@ public class LaneChangeModel {
 
     private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh) {
 
-        final double safeDeceleration = lcModelMOBIL.getSafeDeceleration();
+        final double safeDeceleration = lcModelMOBIL.getParameter().getSafeDeceleration();
 
         // check distance to front vehicle
         final double gapFront = me.getNetDistance(frontVeh);
-        if (gapFront < lcModelMOBIL.getMinimumGap()) {
+        if (gapFront < lcModelMOBIL.parameter.getMinimumGap()) {
             logger.debug("gapFront={}", gapFront);
             return false;
         }
@@ -380,7 +377,7 @@ public class LaneChangeModel {
                         return LaneChangeDecision.NONE;
                     }
                     final double gapFront = me.getNetDistance(newFront);
-                    if (gapFront < lcModelMOBIL.getMinimumGap()) {
+                    if (gapFront < lcModelMOBIL.getParameter().getMinimumGap()) {
                         return LaneChangeDecision.NONE;
                     }
                 }
@@ -390,7 +387,7 @@ public class LaneChangeModel {
                         return LaneChangeDecision.NONE;
                     }
                     final double gapRear = newBack.getNetDistance(me);
-                    if (gapRear < lcModelMOBIL.getMinimumGap()) {
+                    if (gapRear < lcModelMOBIL.getParameter().getMinimumGap()) {
                         return LaneChangeDecision.NONE;
                     }
                 }

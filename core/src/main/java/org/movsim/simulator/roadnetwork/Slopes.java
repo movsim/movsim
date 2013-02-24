@@ -31,7 +31,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.input.model.simulation.SlopeDataPoint;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -51,9 +50,9 @@ public class Slopes implements Iterable<Slope> {
     /**
      * Constructor.
      */
-    public Slopes(List<SlopeDataPoint> slopesInputDataPoints) {
+    public Slopes(List<org.movsim.core.autogen.Slope> slopeInput) {
         slopes = new LinkedList<Slope>();
-        generateSpaceSeriesData(slopesInputDataPoints);
+        generateSpaceSeriesData(slopeInput);
     }
 
     /**
@@ -62,7 +61,7 @@ public class Slopes implements Iterable<Slope> {
      * @param data
      *            the data
      */
-    private void generateSpaceSeriesData(List<SlopeDataPoint> data) {
+    private void generateSpaceSeriesData(List<org.movsim.core.autogen.Slope> data) {
         final int size = data.size() + 1;
         positions = new double[size];
         gradients = new double[size];

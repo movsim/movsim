@@ -70,7 +70,7 @@ public class ConsumptionMain {
 
         MovsimConsumption inputData = null;
         try {
-            inputData = xmlInputLoader.validateAndLoadOpenConsumptionInput(new File(consumptionFilename));
+            inputData = xmlInputLoader.validateAndLoadConsumptionInput(new File(consumptionFilename));
         } catch (JAXBException e) {
             System.err.println(e);
         } catch (SAXException e) {

@@ -43,7 +43,7 @@ public class ConsumptionXmlLoader {
 
     private static final URL CONSUMPTION_XSD_URL = ConsumptionMain.class.getResource(CONSUMPTION_XML_SCHEMA);
 
-    public MovsimConsumption validateAndLoadOpenConsumptionInput(final File xmlFile) throws JAXBException, SAXException {
+    public MovsimConsumption validateAndLoadConsumptionInput(final File xmlFile) throws JAXBException, SAXException {
         return new FileUnmarshaller<MovsimConsumption>().load(xmlFile, MovsimConsumption.class, CONSUMPTION_FACTORY,
                 CONSUMPTION_XSD_URL);
     }

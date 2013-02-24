@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -27,17 +27,25 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.List;
 
-import org.movsim.input.model.simulation.ICMacroData;
+import org.movsim.core.autogen.MacroIC;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.Tables;
+import org.movsim.utilities.Units;
+
+import com.google.common.base.Preconditions;
 
 /**
  * The Class InitialConditionsMacro.
  */
 public class InitialConditionsMacro {
 
+    /** the positions along the road segment in m */
     double[] pos;
+
+    /** The density profile in 1/m */
     double[] rho;
+
+    /** the speeds along the road segment in m/s. Only initialized when initial speeds are provided. */
     double[] speed;
 
     /**
@@ -46,43 +54,65 @@ public class InitialConditionsMacro {
      * @param icData
      *            the ic data
      */
-    public InitialConditionsMacro(List<ICMacroData> icData) {
+    public InitialConditionsMacro(List<MacroIC> macroIC) {
 
-        final int size = icData.size();
+        final int size = macroIC.size();
 
         pos = new double[size];
         rho = new double[size];
-        speed = new double[size];
-
+if(useUserDefinedSpeeds(macroIC)){
+    speed = new double[size];
+}
         // case speed = 0 --> set vehicle ast equilibrium speed
 
         // generateMacroFields: rho guaranteed to be > RHOMIN, v to be < VMAX
 
         for (int i = 0; i < size; i++) {
-            final double rhoLocal = icData.get(i).getRho();
+            MacroIC localMacroIC = macroIC.get(i);
+            final double rhoLocal = localMacroIC.getDensityPerKm() * Units.INVKM_TO_INVM;
             if (rhoLocal > MovsimConstants.SMALL_VALUE) {
-                pos[i] = icData.get(i).getX();
+                pos[i] = localMacroIC.getPosition();
                 rho[i] = rhoLocal;
-                final double speedLocal = icData.get(i).getSpeed();
-                // negative speed value will be replaced by equilibrium speed
-                speed[i] = (speedLocal <= MovsimConstants.MAX_VEHICLE_SPEED) ? speedLocal : 0;
+                if (hasUserDefinedSpeeds()) {
+                    speed[i] = Math.min(localMacroIC.getSpeed(), MovsimConstants.MAX_VEHICLE_SPEED);
+                }
             }
         }
     }
 
+    private boolean useUserDefinedSpeeds(List<MacroIC> macroIC) {
+        boolean userDefinedSpeed = true;
+        for (int i = 0, N = macroIC.size(); i < N; i++) {
+            if (i == 0) {
+                // set initial value
+                userDefinedSpeed = macroIC.get(i).isSetSpeed();
+            }
+            if (macroIC.get(i).isSetSpeed() != userDefinedSpeed) {
+                throw new IllegalArgumentException(
+                        "decide whether equilibrium speed or user-defined speeds should be used. Do not mix the speed input!");
+            }
+        }
+        return userDefinedSpeed;
+    }
+
+    public boolean hasUserDefinedSpeeds() {
+        return speed != null;
+    }
+
     /**
-     * V init.
+     * initial speed.
      * 
      * @param x
      *            the x
      * @return the double
      */
     public double vInit(double x) {
+        Preconditions.checkNotNull(speed, "expected usage of equilibrium speeds, check with hasUserDefinedSpeeds");
         return Tables.intpextp(pos, speed, x);
     }
 
     /**
-     * Rho.
+     * Density
      * 
      * @param x
      *            the x

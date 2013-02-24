@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.vehicle.VehicleInput;
+import org.movsim.core.autogen.VehicleParameter;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -232,7 +232,8 @@ public class Vehicle {
         return nextId - INITIAL_ID;
     }
 
-    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput, Object cyclicBuffer,
+    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleParameter vehInput,
+            Object cyclicBuffer,
             LaneChangeModel lcModel, Consumption fuelModel, Route route) {
         this.label = label;
         id = nextId++;
@@ -242,7 +243,7 @@ public class Vehicle {
         length = vehInput.getLength();
         width = vehInput.getWidth();
         reactionTime = vehInput.getReactionTime();
-        maxDeceleration = vehInput.getMaxDeceleration();
+        maxDeceleration = vehInput.getMaximumDeceleration();
 
         initialize();
         this.longitudinalModel = longitudinalModel;

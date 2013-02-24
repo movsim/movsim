@@ -29,7 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.input.model.VehiclesInput;
+import org.movsim.core.autogen.TrafficComposition;
+import org.movsim.core.autogen.VehicleParameter;
+import org.movsim.core.autogen.VehicleTypes;
 import org.movsim.input.model.simulation.VehicleTypeInput;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.consumption.Consumption;
@@ -63,8 +65,8 @@ public class VehicleGenerator {
      * instantaneousFileOutput is true.
      * 
      */
-    public VehicleGenerator(double simulationTimestep, VehiclesInput vehiclesInput,
-            List<VehicleTypeInput> vehicleTypeInputs, FuelConsumptionModelPool fuelConsumptionModelPool,
+    public VehicleGenerator(double simulationTimestep, VehicleTypes vehicleTypes,
+            TrafficComposition trafficComposition, FuelConsumptionModelPool fuelConsumptionModelPool,
             Map<String, Route> routes) {
         this.simulationTimestep = simulationTimestep;
 
@@ -172,15 +174,14 @@ public class VehicleGenerator {
      * @return the vehicle
      */
     public Vehicle createVehicle(VehiclePrototype prototype) {
-        final VehicleInput vehInput = prototype.getVehicleInput();
-        final LongitudinalModelBase longModel = LongitudinalModelFactory.create(prototype.length(),
-                vehInput.getAccelerationModelInputData(), simulationTimestep);
+        VehicleParameter vehInput = prototype.getVehicleParameter();
+        final LongitudinalModelBase longModel = LongitudinalModelFactory.create(prototype.length(), vehInput
+.getLongitudinalModelType(), simulationTimestep);
 
         longModel.setRelativeRandomizationV0(prototype.getRelativeRandomizationV0());
 
-        final LaneChangeModel lcModel = new LaneChangeModel(vehInput.getLaneChangeInputData());
-        final Consumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput
-                .getFuelConsumptionLabel());
+        final LaneChangeModel lcModel = new LaneChangeModel(vehInput.getLaneChangeModel());
+        final Consumption fuelModel = fuelConsumptionModels.getFuelConsumptionModel(vehInput.getConsumptionModelName());
         final Vehicle veh = new Vehicle(prototype.getLabel(), longModel, vehInput, null, lcModel, fuelModel, prototype.getRoute());
         return veh;
     }

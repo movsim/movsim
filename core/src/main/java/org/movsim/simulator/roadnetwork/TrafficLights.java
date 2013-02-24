@@ -31,8 +31,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.movsim.input.model.simulation.TrafficLightData;
-import org.movsim.input.model.simulation.TrafficLightsInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,9 +64,8 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * @param roadLength
      * @param trafficLightsInput
      */
-    public TrafficLights(double roadLength, TrafficLightsInput trafficLightsInput) {
-        final List<TrafficLightData> trafficLightData = trafficLightsInput.getTrafficLightData();
-        for (final TrafficLightData tlData : trafficLightData) {
+    public TrafficLights(double roadLength, org.movsim.core.autogen.TrafficLights trafficLightsInput) {
+        for (final org.movsim.core.autogen.TrafficLight tlData : trafficLightsInput.getTrafficLight()) {
             trafficLights.add(new TrafficLight(tlData));
         }
         
