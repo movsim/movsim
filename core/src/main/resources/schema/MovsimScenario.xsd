@@ -64,7 +64,7 @@
         <!-- renamed -->
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="LongitudinalModelType" />
+                <xs:element ref="AccelerationModelType" />
                 <!-- renamed LaneChangeModel -->
                 <xs:element ref="LaneChangeModelType" />
                 <!-- MemoryParameter now separate element after LaneChangeType -->
@@ -81,7 +81,7 @@
             <xs:attribute name="consumption_model_name" type="xs:string" default="none" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="LongitudinalModelType">
+    <xs:element name="AccelerationModelType">
         <!-- renamed -->
         <xs:complexType>
             <xs:sequence>

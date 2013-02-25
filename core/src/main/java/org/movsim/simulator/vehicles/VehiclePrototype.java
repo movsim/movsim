@@ -61,7 +61,7 @@ public class VehiclePrototype {
     }
 
     public LongitudinalModelBase createAccelerationModel() {
-        return LongitudinalModelFactory.create(getLength(), configuration.getLongitudinalModelType(),
+        return LongitudinalModelFactory.create(getLength(), configuration.getAccelerationModelType(),
                 simulationTimestep);
     }
 

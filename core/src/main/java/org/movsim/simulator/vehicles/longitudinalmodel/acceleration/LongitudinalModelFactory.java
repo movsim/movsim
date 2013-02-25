@@ -26,7 +26,7 @@
 
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.LongitudinalModelType;
+import org.movsim.core.autogen.AccelerationModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class LongitudinalModelFactory {
      * @param simulationTimestep
      * @return
      */
-    public static LongitudinalModelBase create(double vehLength, LongitudinalModelType longitudinalModelType,
+    public static LongitudinalModelBase create(double vehLength, AccelerationModelType longitudinalModelType,
             double simulationTimestep) {
         LongitudinalModelBase longModel = null;
         if (longitudinalModelType.isSetModelParameterIDM()) {
