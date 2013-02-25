@@ -12,9 +12,13 @@
                 <right>
                     <lane id="-1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+			<speed sOffset="700" max="13.89" /> <!-- 50 km/h -->
+			<speed sOffset="1200" max="200" /> <!-- unlimited -->
                     </lane>
                     <lane id="-2" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+			<speed sOffset="700" max="13.89" /> <!-- 50 km/h -->
+			<speed sOffset="1200" max="200" /> <!-- unlimited -->
                     </lane>
                 </right>
             </laneSection>

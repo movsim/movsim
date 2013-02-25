@@ -126,42 +126,6 @@ public class OpenDriveHandlerJaxb {
     }
 
     private static RoadSegment createRoadSegment(RoadMapping roadMapping, Road road) {
-        // for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
-        // final int laneIndex = leftLaneIdToLaneIndex(roadSegment, lane.id);
-        // if (lane.type.equals("driving")) {
-        // roadSegment.setLaneType(laneIndex, Lane.Type.TRAFFIC);
-        // } else if (lane.type.equals("mwyEntry")) {
-        // roadSegment.setLaneType(laneIndex, Lane.Type.ENTRANCE);
-        // Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
-        // obstacle.setType(Vehicle.Type.OBSTACLE);
-        // roadSegment.addObstacle(obstacle);
-        // } else if (lane.type.equals("mwyExit")) {
-        // roadSegment.setLaneType(laneIndex, Lane.Type.EXIT);
-        // } else if (lane.type.equals("shoulder")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
-        // }
-        // }
-        // for (final Road.Lanes.Lane lane : road.lanes.laneSection.right) {
-        // final int laneIndex = rightLaneIdToLaneIndex(roadSegment, lane.id);
-        // if (lane.type.equals("driving")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.TRAFFIC);
-        // } else if (lane.type.equals("mwyEntry")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.ENTRANCE);
-        // Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
-        // obstacle.setType(Vehicle.Type.OBSTACLE);
-        // roadSegment.addObstacle(obstacle);
-        // } else if (lane.type.equals("mwyExit")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.EXIT);
-        // } else if (lane.type.equals("shoulder")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
-        // }
-        // }
-        // if (road.objects != null) {
-        // for (final Road.Objects.Tunnel tunnel : road.objects.tunnels) {
-        // roadMapping.addClippingRegion(tunnel.s, tunnel.length);
-        // }
-        // }
-
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
 
         roadSegment.setUserId(road.getId());
@@ -172,12 +136,18 @@ public class OpenDriveHandlerJaxb {
                 for (final org.movsim.network.autogen.opendrive.Lane leftLane : laneSection.getLeft().getLane()) {
                     final int laneIndex = OpenDriveHandlerUtils.leftLaneIdToLaneIndex(roadSegment, leftLane.getId());
                     setLaneType(laneIndex, leftLane, roadSegment);
+                    if (leftLane.isSetSpeed()) {
+                        roadSegment.setSpeedLimits(leftLane.getSpeed());
+                    }
                 }
             }
             if (laneSection.isSetRight()) {
                 for (final org.movsim.network.autogen.opendrive.Lane rightLane : laneSection.getRight().getLane()) {
                     final int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, rightLane.getId());
                     setLaneType(laneIndex, rightLane, roadSegment);
+                    if (rightLane.isSetSpeed()) {
+                        roadSegment.setSpeedLimits(rightLane.getSpeed());
+                    }
                 }
             }
         }

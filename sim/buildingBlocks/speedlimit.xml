@@ -30,10 +30,7 @@
             <TrafficSource logging="false">
                 <Inflow t="0" q_per_hour="1700" />
             </TrafficSource>
-            <SpeedLimits>
-                <SpeedLimit position="700" speedlimit_kmh="50" />
-                <SpeedLimit position="1200" speedlimit_kmh="200" />
-            </SpeedLimits>
+<!-- speedlimits defined in xodr -->
             <Detectors />
         </Road>
     </Simulation>

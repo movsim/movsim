@@ -27,7 +27,9 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.Iterator;
+import java.util.List;
 
+import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -948,10 +950,10 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Sets the speed limits for this road segment.
      * 
-     * @param speedLimits
+     * @param list
      */
-    public void setSpeedLimits(SpeedLimits speedLimits) {
-        this.speedLimits = speedLimits;
+    public void setSpeedLimits(List<Speed> list) {
+        this.speedLimits = new SpeedLimits(list);
     }
 
     /**

@@ -57,7 +57,6 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
 import org.movsim.simulator.roadnetwork.Slopes;
-import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.TestVehicle;
@@ -342,10 +341,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         // set up the speed limits
-        if (roadInput.isSetSpeedLimits()) {
-        final SpeedLimits speedLimits = new SpeedLimits(roadInput.getSpeedLimits().getSpeedLimit());
-        roadSegment.setSpeedLimits(speedLimits);
-        }
+        // if (roadInput.isSetSpeedLimits()) {
+        // final SpeedLimits speedLimits = new SpeedLimits(roadInput.getSpeedLimits().getSpeedLimit());
+        // roadSegment.setSpeedLimits(speedLimits);
+        // }
 
         // set up the slopes
         if (roadInput.isSetSlopes()) {

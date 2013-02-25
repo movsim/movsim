@@ -34,7 +34,6 @@ import java.util.List;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Tables;
-import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,11 +56,11 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @param speedLimits
      *            the speed limit input data points
      */
-    public SpeedLimits(List<org.movsim.core.autogen.SpeedLimit> speedLimitInput) {
-        Preconditions.checkNotNull(speedLimitInput);
+    public SpeedLimits(List<org.movsim.network.autogen.opendrive.Lane.Speed> speed) {
+        Preconditions.checkNotNull(speed);
 
         speedLimits = new LinkedList<>();
-        generateSpaceSeriesData(speedLimitInput);
+        generateSpaceSeriesData(speed);
     }
 
     /**
@@ -70,7 +69,7 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @param data
      *            the data
      */
-    private void generateSpaceSeriesData(List<org.movsim.core.autogen.SpeedLimit> data) {
+    private void generateSpaceSeriesData(List<org.movsim.network.autogen.opendrive.Lane.Speed> data) {
         final int size = data.size() + 1;
         positions = new double[size];
         speeds = new double[size];
@@ -78,9 +77,9 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
         positions[0] = 0;
         speeds[0] = MovsimConstants.MAX_VEHICLE_SPEED;
         for (int i = 1; i < size; i++) {
-            final double pos = data.get(i - 1).getPosition();
+            final double pos = data.get(i - 1).getSOffset(); // .getPosition();
             positions[i] = pos;
-            final double speed = data.get(i - 1).getSpeedlimitKmh() * Units.KMH_TO_MS;
+            final double speed = data.get(i - 1).getMax(); // given in m/s * Units.KMH_TO_MS;
             speeds[i] = speed;
             speedLimits.add(new SpeedLimit(pos, speed));
         }
