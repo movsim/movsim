@@ -25,8 +25,8 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterKrauss;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterKrauss;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ class Krauss extends LongitudinalModelBase {
      */
     private final double T;
 
-    private final ModelParameterKrauss param;
+    private final IModelParameterKrauss param;
 
     /**
      * The dimensionless epsilon has similar effects as the braking probability of the Nagel-Schreckenberg cellular
@@ -62,7 +62,7 @@ class Krauss extends LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    Krauss(double simulationTimestep, ModelParameterKrauss parameters) {
+    Krauss(double simulationTimestep, IModelParameterKrauss parameters) {
         super(ModelName.KRAUSS);
         this.T = simulationTimestep;
         this.param = parameters;
@@ -137,7 +137,7 @@ class Krauss extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterKrauss getParameter() {
+    protected IModelParameterKrauss getParameter() {
         return param;
     }
 

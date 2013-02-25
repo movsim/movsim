@@ -1,4 +1,4 @@
-package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
 
 import org.movsim.core.autogen.ModelParameterACC;
 import org.movsim.core.autogen.ModelParameterCCS;
@@ -53,11 +53,11 @@ public final class ModelParameters {
     }
 
     // TODO check implementation!!! not yet tested/used
-    public static boolean isValidDesiredSpeed(ModelParameter param) {
+    public static boolean isValidDesiredSpeed(IModelParameter param) {
         return param.getV0() >= 0 && param.getV0() <= MovsimConstants.MAX_VEHICLE_SPEED;
     }
 
-    public static boolean isValidMinimumGap(ModelParameter param) {
+    public static boolean isValidMinimumGap(IModelParameter param) {
         return param.getS0() >= 0;
     }
 

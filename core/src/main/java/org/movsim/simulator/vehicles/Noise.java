@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 public class Noise {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Noise.class);
+    private static final Logger logger = LoggerFactory.getLogger(Noise.class);
 
     /** constant for uniform distribution calculation. */
     static final double SQRT12 = Math.sqrt(12.);

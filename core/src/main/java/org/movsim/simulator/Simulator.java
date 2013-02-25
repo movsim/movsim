@@ -60,10 +60,10 @@ import org.movsim.simulator.roadnetwork.Slopes;
 import org.movsim.simulator.roadnetwork.SpeedLimits;
 import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.TrafficSource;
-import org.movsim.simulator.vehicles.FuelConsumptionModelPool;
+import org.movsim.simulator.vehicles.TestVehicle;
+import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.simulator.vehicles.VehicleFactory;
 import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
@@ -82,8 +82,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final ProjectMetaData projectMetaData;
     private String projectName;
     private MovsimScenario inputData; // cannot be final, parsing in init TODO
-    private FuelConsumptionModelPool fuelConsumptionModelPool;
-    private VehicleGenerator vehGenerator;
+    // private FuelConsumptionModelPool fuelConsumptionModelPool; TODO
+
+    private VehicleFactory vehicleFactory;
+    private TrafficCompositionGenerator defaultTrafficComposition;
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
     private Map<String, Route> routes;
@@ -110,11 +112,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         inputData = projectMetaData.getInputData();
         Simulation simulationInput = inputData.getSimulation();
-        // XmlReaderSimInput.parse(projectMetaData, inputData);
 
-        // final SimulationInput simInput = inputData.getSimulationInput();
-
-        fuelConsumptionModelPool = new FuelConsumptionModelPool(inputData.getFuelConsumptionInput());
+        // TODO one level higher?
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes());
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
@@ -136,7 +136,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         createRoutes(inputData.getRoutes());
 
-        vehGenerator = createVehicleGenerator();
+        defaultTrafficComposition = new TrafficCompositionGenerator(simulationInput.getTrafficComposition(),
+                vehicleFactory);
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
@@ -175,8 +176,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     // return inputData.getVehiclesInput();
     // }
 
-    public VehicleGenerator getVehicleGenerator() {
-        return vehGenerator;
+    public TrafficCompositionGenerator getVehicleGenerator() {
+        return defaultTrafficComposition;
     }
 
     public ProjectMetaData getProjectMetaData() {
@@ -225,7 +226,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         for (final Road roadInput : roads) {
             final RoadSegment roadSegment = roadNetwork.findByUserId(roadInput.getId());
             if (roadSegment != null) {
-                addInputToRoadSegment(roadSegment, roadInput, vehGenerator);
+                addInputToRoadSegment(roadSegment, roadInput);
             } else {
                 // at least warn user that roadId cannot be matched to xodr roadnetwork
                 // TODO add option to exit here if user sets option. Such input errors are just annoying.
@@ -235,17 +236,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
     }
 
-    /**
-     * This is the default vehGenerator for all roadSegments as long as no individual vehicle composition of a
-     * roadSegment is defined
-     * 
-     * @param inputData2
-     */
-    private VehicleGenerator createVehicleGenerator() {
-        Preconditions.checkNotNull(inputData);
-        return new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehicleTypes(), inputData
-                .getSimulation().getTrafficComposition(), fuelConsumptionModelPool, routes);
-    }
+    // /**
+    // * This is the default defaultTrafficComposition for all roadSegments as long as no individual vehicle composition
+    // of a
+    // * roadSegment is defined
+    // *
+    // * @param inputData2
+    // */
+    // private VehicleGeneratorOld createVehicleGenerator() {
+    // Preconditions.checkNotNull(inputData);
+    // return new VehicleGeneratorOld(simulationRunnable.timeStep(), inputData.getVehiclePrototypes(), inputData
+    // .getSimulation().getTrafficComposition(), fuelConsumptionModelPool, routes);
+    // }
 
     /**
      * There was no xodr file and there is only one road segment in the MovSimXML file so set up a default s-shaped road
@@ -259,7 +261,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final double roadLength = 1500;
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
-        addInputToRoadSegment(roadSegment, roadInput, vehGenerator);
+        addInputToRoadSegment(roadSegment, roadInput);
         roadSegment.setUserId("1");
         roadSegment.addDefaultSink();
         roadNetwork.add(roadSegment);
@@ -293,16 +295,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param roadSegment
      * @param roadInput
      */
-    private void addInputToRoadSegment(RoadSegment roadSegment, Road roadInput,
-            VehicleGenerator defaultVehGenerator) {
-
-        VehicleGenerator roadVehGenerator = defaultVehGenerator;
-        // set up vehicle generator for roadElement
-        // final List<VehicleTypeInput> roadVehicleTypeInputs = roadInput.getTrafficCompositionInputData();
+    private void addInputToRoadSegment(RoadSegment roadSegment, Road roadInput) {
+        // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
+        TrafficCompositionGenerator composition = roadInput.isSetTrafficComposition() ? new TrafficCompositionGenerator(
+                roadInput.getTrafficComposition(), vehicleFactory) : defaultTrafficComposition;
         if (roadInput.isSetTrafficComposition()) {
-            // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
-            roadVehGenerator = new VehicleGenerator(simulationRunnable.timeStep(), inputData.getVehicleTypes(),
-                    roadInput.getTrafficComposition(), fuelConsumptionModelPool, routes);
             logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
         }
 
@@ -311,19 +308,20 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             final org.movsim.core.autogen.TrafficSource trafficSourceData = roadInput.getTrafficSource();
             if (trafficSourceData.isSetInflow()) {
                 final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
-            final TrafficSource trafficSource = new TrafficSource(roadVehGenerator, roadSegment, inflowTimeSeries);
+                final TrafficSource trafficSource = new TrafficSource(composition, roadSegment, inflowTimeSeries);
                 if (trafficSourceData.isLogging()) {
-                trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+                    trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
+                }
+                roadSegment.setTrafficSource(trafficSource);
             }
-            roadSegment.setTrafficSource(trafficSource);
-        }
         }
 
         // set up simple ramp with dropping mechanism
         if (roadInput.isSetSimpleRamp()) {
             org.movsim.core.autogen.SimpleRamp simpleRampData = roadInput.getSimpleRamp();
             InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(simpleRampData.getInflow());
-            SimpleRamp simpleRamp = new SimpleRamp(roadVehGenerator, roadSegment, simpleRampData, inflowTimeSeries);
+            SimpleRamp simpleRamp = new SimpleRamp(defaultTrafficComposition, roadSegment, simpleRampData,
+                    inflowTimeSeries);
             if (simpleRampData.isLogging()) {
                 simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
             }
@@ -358,14 +356,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         if (roadInput.isSetInitialConditions()) {
-            initialConditions(roadSegment, roadInput.getInitialConditions(), roadVehGenerator);
+            initialConditions(roadSegment, roadInput.getInitialConditions(), defaultTrafficComposition);
         }
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
 
     private static void initialConditions(RoadSegment roadSegment, InitialConditions initialConditions,
-            VehicleGenerator vehGenerator) {
+            TrafficCompositionGenerator vehGenerator) {
         Preconditions.checkNotNull(initialConditions);
 
         if (initialConditions.isSetMacroIC()) {
@@ -385,11 +383,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @param roadSegment
      * @param roadInput
-     * @param vehGenerator
+     * @param defaultTrafficComposition
      * @param icMacroData
      */
     private static void setMacroInitialConditions(RoadSegment roadSegment, List<MacroIC> macroInitialConditions,
-            VehicleGenerator vehGenerator) {
+            TrafficCompositionGenerator vehGenerator) {
 
         logger.info("choose macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(macroInitialConditions);
@@ -404,10 +402,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
             double position = roadSegment.roadLength(); // start at end of segment
             while (position > 0) {
-                final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+                final TestVehicle testVehicle = vehGenerator.getTestVehicle();
 
                 final double rhoLocal = icMacro.rho(position);
-                double speedInit =  icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : vehPrototype.getEquilibriumSpeed(rhoLocal);
+                double speedInit =  icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : testVehicle.getEquilibriumSpeed(rhoLocal);
                 if (logger.isDebugEnabled() && !icMacro.hasUserDefinedSpeeds()) {
                     logger.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
                 }
@@ -425,7 +423,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                     continue;
                 }
 
-                final Vehicle veh = vehGenerator.createVehicle(vehPrototype);
+                final Vehicle veh = vehGenerator.createVehicle(testVehicle);
                 final double meanDistanceInLane = 1. / (rhoLocal + MovsimConstants.SMALL_VALUE);
                 // TODO icMacro for ca
                 // final double minimumGap = veh.getLongitudinalModel().isCA() ? veh.getLength() : veh.getLength() +
@@ -467,7 +465,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private static void setMicroInitialConditions(RoadSegment roadSegment,
  List<MicroIC> initialMicroConditions,
-            VehicleGenerator vehGenerator) {
+            TrafficCompositionGenerator vehGenerator) {
         logger.debug(("choose micro initial conditions"));
         int vehicleNumber = 1;
         for (final MicroIC ic : initialMicroConditions) {

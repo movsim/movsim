@@ -26,9 +26,9 @@
 package org.movsim.simulator.roadnetwork;
 
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.vehicles.TestVehicle;
+import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,8 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
      * @param vehGenerator
      *            the vehicle generator
      */
-    public TrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment, InflowTimeSeries inflowTimeSeries) {
+    public TrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
+            InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment, inflowTimeSeries);
         measuredInflow = 0;
         measuredTime = 0;
@@ -135,25 +136,25 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
     private boolean tryEnteringNewVehicle(LaneSegment laneSegment, double time, double qBC) {
 
         // type of new vehicle
-        final VehiclePrototype vehPrototype = vehGenerator.getVehiclePrototype();
+        final TestVehicle testVehicle = vehGenerator.getTestVehicle();
         final Vehicle leader = laneSegment.rearVehicle();
 
         // (1) empty road
         if (leader == null) {
-            enterVehicleOnEmptyRoad(laneSegment, time, vehPrototype);
+            enterVehicleOnEmptyRoad(laneSegment, time, testVehicle);
             return true;
         }
         // (2) check if gap to leader is sufficiently large origin of road section is assumed to be zero
         final double netGapToLeader = leader.getRearPosition(); 
-        final double gapAtQMax = 1. / vehPrototype.getRhoQMax();
+        final double gapAtQMax = 1. / testVehicle.getRhoQMax();
 
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
         double minRequiredGap = 0.8 * gapAtQMax;
-        if (vehPrototype.getLongModel().isCA()) {
+        if (testVehicle.getLongModel().isCA()) {
             minRequiredGap = leader.getSpeed();
         }
         if (netGapToLeader > minRequiredGap) {
-            enterVehicle(laneSegment, time, minRequiredGap, vehPrototype, leader);
+            enterVehicle(laneSegment, time, minRequiredGap, testVehicle, leader);
             return true;
         }
         // no entering possible
@@ -169,10 +170,10 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
      * @param vehPrototype
      *            the vehicle prototype
      */
-    private void enterVehicleOnEmptyRoad(LaneSegment laneSegment, double time, VehiclePrototype vehPrototype) {
+    private void enterVehicleOnEmptyRoad(LaneSegment laneSegment, double time, TestVehicle testVehicle) {
         final double xEnter = 0;
         final double vEnter = inflowTimeSeries.getSpeed(time);
-        addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
+        addVehicle(laneSegment, testVehicle, xEnter, vEnter);
         logger.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
@@ -185,7 +186,7 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
      * @param vehPrototype
      * @param leader
      */
-    private void enterVehicle(LaneSegment laneSegment, double time, double sFreeMin, VehiclePrototype vehPrototype,
+    private void enterVehicle(LaneSegment laneSegment, double time, double sFreeMin, TestVehicle testVehicle,
             Vehicle leader) {
 
         final double speedDefault = inflowTimeSeries.getSpeed(time);
@@ -201,13 +202,13 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
         final double qBC = inflowTimeSeries.getFlowPerLane(time);
         final double xEnter = Math.min(vEnterTest * nWait / Math.max(qBC, 0.001), xLast - sFreeMin - lengthLast);
         final double rhoEnter = 1. / (xLast - xEnter);
-        final double vMaxEq = vehPrototype.getEquilibriumSpeed(0.5 * rhoEnter);
+        final double vMaxEq = testVehicle.getEquilibriumSpeed(0.5 * rhoEnter);
         final double bMax = 4; // max. kinematic deceleration at boundary
         final double bEff = Math.max(0.1, bMax + aLast);
         final double vMaxKin = vLast + Math.sqrt(2 * sFree * bEff);
         final double vEnter = Math.min(Math.min(vEnterTest, vMaxEq), vMaxKin);
 
-        addVehicle(laneSegment, vehPrototype, xEnter, vEnter);
+        addVehicle(laneSegment, testVehicle, xEnter, vEnter);
     }
 
     public void setFlowPerLane(double newFlowPerLane) {

@@ -19,8 +19,8 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterNewell;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNewell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +35,7 @@ class Newell extends LongitudinalModelBase {
     /** The simulation timepstep as parameter */
     private final double dt;
 
-    private final ModelParameterNewell param;
+    private final IModelParameterNewell param;
 
     /**
      * Instantiates a new Newell car-following model.
@@ -43,7 +43,7 @@ class Newell extends LongitudinalModelBase {
      * @param simulationTimestep
      * @param modelParameter
      */
-    public Newell(double simulationTimestep, ModelParameterNewell modelParameter) {
+    public Newell(double simulationTimestep, IModelParameterNewell modelParameter) {
         super(ModelName.NEWELL);
         this.dt = simulationTimestep;
         this.param = modelParameter;
@@ -96,7 +96,7 @@ class Newell extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterNewell getParameter() {
+    protected IModelParameterNewell getParameter() {
         return param;
     }
 

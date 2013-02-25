@@ -37,8 +37,8 @@ import org.movsim.core.autogen.OutputConfiguration;
 import org.movsim.core.autogen.SpatioTemporalConfiguration;
 import org.movsim.core.autogen.Trajectories;
 import org.movsim.core.autogen.TravelTimes;
-import org.movsim.core.autogen.VehicleParameter;
-import org.movsim.core.autogen.VehicleTypes;
+import org.movsim.core.autogen.VehiclePrototypeConfiguration;
+import org.movsim.core.autogen.VehiclePrototypes;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
@@ -84,8 +84,9 @@ public class SimulationOutput implements SimulationTimeStep {
         this.roadNetwork = roadNetwork;
         this.routes = routes;
 
+        // TODO move this functionality to VehiclePrototypes
         if (writeOutput) {
-            writeFundamentalDiagrams(simulationTimestep, simInput.getVehicleTypes());
+            writeFundamentalDiagrams(simulationTimestep, simInput.getVehiclePrototypes());
         }
 
         initFloatingCars(writeOutput, simInput.getOutputConfiguration());
@@ -154,15 +155,15 @@ public class SimulationOutput implements SimulationTimeStep {
         }
     }
 
-    private static void writeFundamentalDiagrams(double simulationTimestep, VehicleTypes vehicleTypes) {
+    private static void writeFundamentalDiagrams(double simulationTimestep, VehiclePrototypes vehicleTypes) {
         if (!vehicleTypes.isWriteFundDiagrams()) {
             return;
         }
         final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
         logger.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
-        for (VehicleParameter vehicleParameter : vehicleTypes.getVehicleParameter()) {
-            if (!ignoreLabel.equalsIgnoreCase(vehicleParameter.getLabel())) {
-                FileFundamentalDiagram.writeToFile(simulationTimestep, vehicleParameter);
+        for (VehiclePrototypeConfiguration vehiclePrototype : vehicleTypes.getVehiclePrototypeConfiguration()) {
+            if (!ignoreLabel.equalsIgnoreCase(vehiclePrototype.getLabel())) {
+                FileFundamentalDiagram.writeToFile(simulationTimestep, vehiclePrototype);
             }
         }
     }

@@ -27,6 +27,7 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.core.autogen.ModelParameterIDM;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterIDM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,9 +72,9 @@ public class IDM extends LongitudinalModelBase {
     /** The Constant logger. */
     private static final Logger LOG = LoggerFactory.getLogger(IDM.class);
 
-    private final ModelParameterIDM param;
+    private final IModelParameterIDM param;
 
-    IDM(ModelParameterIDM parameters) {
+    IDM(IModelParameterIDM parameters) {
         super(ModelName.IDM);
         this.param = parameters;
     }
@@ -96,14 +97,18 @@ public class IDM extends LongitudinalModelBase {
      */
     public IDM(double v0, double a, double b, double T, double s0, double s1) {
         super(ModelName.IDM);
-        this.param = new ModelParameterIDM();
-        param.setV0(v0);
-        param.setA(a);
-        param.setB(b);
-        param.setT(T);
-        param.setS0(s0);
-        param.setS1(s1);
-        param.setDelta(param.getDelta());
+        this.param = create(v0, a, b, T, s0, s1);
+    }
+
+    private static ModelParameterIDM create(double v0, double a, double b, double T, double s0, double s1) {
+        ModelParameterIDM modelParameterIDM = new ModelParameterIDM();
+        modelParameterIDM.setV0(v0);
+        modelParameterIDM.setA(a);
+        modelParameterIDM.setB(b);
+        modelParameterIDM.setT(T);
+        modelParameterIDM.setS0(s0);
+        modelParameterIDM.setS1(s1);
+        return modelParameterIDM;
     }
 
     @Override
@@ -172,7 +177,7 @@ public class IDM extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterIDM getParameter() {
+    protected IModelParameterIDM getParameter() {
         return param;
     }
 

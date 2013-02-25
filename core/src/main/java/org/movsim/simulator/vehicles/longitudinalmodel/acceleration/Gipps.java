@@ -25,8 +25,8 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterGipps;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterGipps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,11 +49,11 @@ class Gipps extends LongitudinalModelBase {
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(Gipps.class);
 
-    private final ModelParameterGipps param;
+    private final IModelParameterGipps param;
 
     private final double parameterT;
 
-    Gipps(double simulationTimestep, ModelParameterGipps modelParameter) {
+    Gipps(double simulationTimestep, IModelParameterGipps modelParameter) {
         super(ModelName.GIPPS);
         this.parameterT = simulationTimestep;
         this.param = modelParameter;
@@ -122,7 +122,7 @@ class Gipps extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterGipps getParameter() {
+    protected IModelParameterGipps getParameter() {
         return param;
     }
 

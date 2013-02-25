@@ -88,7 +88,7 @@ public class LaneChangeModel {
 
     private MOBIL lcModelMOBIL;
 
-    private final org.movsim.core.autogen.LaneChangeModel parameter;
+    private final org.movsim.core.autogen.LaneChangeModelType parameter;
 
     // Exit Handling
     // distance at which driver should think about changing lanes for exit
@@ -102,7 +102,7 @@ public class LaneChangeModel {
      * @param laneChangeModelParameter
      *            the lc input data
      */
-    public LaneChangeModel(org.movsim.core.autogen.LaneChangeModel laneChangeModelParameter) {
+    public LaneChangeModel(org.movsim.core.autogen.LaneChangeModelType laneChangeModelParameter) {
         this.parameter = laneChangeModelParameter;
         // this.withEuropeanRules = laneChangeModelParameter.isWithEuropeanRules();
         // this.vCritEur = laneChangeModelParameter.getCritSpeedEuroRules();
@@ -110,14 +110,11 @@ public class LaneChangeModel {
         // isInitialized = laneChangeModelParameter.isInitializedMobilData();
     }
 
-    // public LaneChangeModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
-    // this.lcModelMOBIL = lcModelMOBIL;
-    // this.me = vehicle;
-    // this.withEuropeanRules = true;
-    // this.vCritEur = 5.0;
-    // this.parameter = null;
-    // isInitialized = true;
-    // }
+    // used in tests
+    public LaneChangeModel(Vehicle vehicle, org.movsim.core.autogen.LaneChangeModelType laneChangeModelParameter) {
+        this.parameter = laneChangeModelParameter;
+        initialize(vehicle);
+    }
 
     /**
      * Initialize.
@@ -188,7 +185,7 @@ public class LaneChangeModel {
 
         // check distance to front vehicle
         final double gapFront = me.getNetDistance(frontVeh);
-        if (gapFront < lcModelMOBIL.parameter.getMinimumGap()) {
+        if (gapFront < lcModelMOBIL.getParameter().getMinimumGap()) {
             logger.debug("gapFront={}", gapFront);
             return false;
         }
@@ -196,7 +193,7 @@ public class LaneChangeModel {
         // check distance to vehicle at behind
         if (backVeh != null) {
             final double gapBack = backVeh.getNetDistance(me);
-            if (gapBack < lcModelMOBIL.getMinimumGap()) {
+            if (gapBack < lcModelMOBIL.getParameter().getMinimumGap()) {
                 logger.debug("gapBack={}", gapBack);
                 return false;
             }
@@ -356,7 +353,7 @@ public class LaneChangeModel {
             }
             
             double accToFront = me.getLongitudinalModel().calcAcc(me, frontVehicle);
-            if(accToFront < -lcModelMOBIL.getSafeDeceleration()){
+            if (accToFront < -lcModelMOBIL.getParameter().getSafeDeceleration()) {
                 // check own disadvantage to change to left to decide to make room
                 if (logger.isDebugEnabled()) {
                     logger.debug(String

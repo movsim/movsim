@@ -4,6 +4,7 @@ import org.movsim.core.autogen.ModelParameterPTM;
 import org.movsim.core.autogen.NoiseParameter;
 import org.movsim.simulator.vehicles.Noise;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
 import org.movsim.utilities.ProbabilityUtils;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -63,7 +64,7 @@ class PTM extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameter getParameter() {
+    protected IModelParameter getParameter() {
         return param;
     }
 

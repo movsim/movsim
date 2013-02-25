@@ -31,9 +31,10 @@ import static org.junit.Assert.assertEquals;
 import java.util.Iterator;
 
 import org.junit.Test;
+import org.movsim.core.autogen.LaneChangeModelType;
+import org.movsim.core.autogen.ModelParameterMOBIL;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
-import org.movsim.simulator.vehicles.lanechange.MOBIL;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
 
 /**
@@ -91,9 +92,25 @@ public class RoadSegmentTest {
     }
 
     private LaneChangeModel newLaneChangeModel(Vehicle vehicle) {
-        final MOBIL mobil = new MOBIL(vehicle, GAP_MIN_FRONT_CAR, MAX_SAFE_BRAKING_CAR, POLITENESS_CAR, THRESHOLD_CAR,
-                BIAS_INSIDE_LANE_CAR);
-        return new LaneChangeModel(vehicle, mobil);
+        return new LaneChangeModel(vehicle, createLaneChangeModelType());
+    }
+
+    private static LaneChangeModelType createLaneChangeModelType() {
+        LaneChangeModelType lcType = new LaneChangeModelType();
+        lcType.setModelParameterMOBIL(createModelParameterMOBIL());
+        lcType.setEuropeanRules(true);
+        lcType.setCritSpeedEur(5);
+        return lcType;
+    }
+
+    private static ModelParameterMOBIL createModelParameterMOBIL() {
+        ModelParameterMOBIL param = new ModelParameterMOBIL();
+        param.setMinimumGap(GAP_MIN_FRONT_CAR);
+        param.setSafeDeceleration(MAX_SAFE_BRAKING_CAR);
+        param.setPoliteness(POLITENESS_CAR);
+        param.setThresholdAcceleration(THRESHOLD_CAR);
+        param.setRightBiasAcceleration(BIAS_INSIDE_LANE_CAR);
+        return param;
     }
 
     /**

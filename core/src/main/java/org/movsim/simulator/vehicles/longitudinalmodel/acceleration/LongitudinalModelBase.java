@@ -27,6 +27,7 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -181,7 +182,7 @@ public abstract class LongitudinalModelBase {
         return getParameter().getS0();
     }
 
-    protected abstract ModelParameter getParameter();
+    protected abstract IModelParameter getParameter();
 
     /**
      * Sets the relative randomization v0.

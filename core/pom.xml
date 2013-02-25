@@ -21,6 +21,11 @@
         </dependency>
          <dependency>
             <groupId>org.movsim</groupId>
+            <artifactId>MovsimConsumption</artifactId>
+	    <version>${project.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.movsim</groupId>
             <artifactId>MovsimNetwork</artifactId>
 	    <version>${project.version}</version>
         </dependency>
@@ -49,9 +54,9 @@
                     <strict>true</strict>
                     <extension>true</extension>
                     <args>
+						<arg>-Xinheritance</arg>
                         <arg>-Xannotate</arg>
-                        <arg>-XtoString</arg>
-                        <arg>-Xinheritance</arg>
+                        <!-- <arg>-XtoString</arg> -->
                         <arg>-Xfluent-api</arg>
                         <!-- <arg>-Xequals</arg> -->
                         <!-- <arg>-XhashCode</arg> -->

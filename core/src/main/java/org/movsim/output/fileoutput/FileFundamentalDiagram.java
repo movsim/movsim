@@ -25,7 +25,7 @@
  */
 package org.movsim.output.fileoutput;
 
-import org.movsim.core.autogen.VehicleParameter;
+import org.movsim.core.autogen.VehiclePrototypeConfiguration;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesFactory;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
@@ -42,12 +42,12 @@ public class FileFundamentalDiagram extends FileOutputBase {
             "rho[1/km]", "s[m]", "vEq[km/h]", "Q[veh/h]");
     private static final String outputFormat = "%8.2f, %8.2f, %8.2f, %8.2f%n";
 
-    public static void writeToFile(double simulationTimestep, VehicleParameter vehicleParameter) {
+    public static void writeToFile(double simulationTimestep, VehiclePrototypeConfiguration vehicleParameter) {
         new FileFundamentalDiagram(simulationTimestep, vehicleParameter);
     }
 
     /** Simulation timestep is model parameter for iterated map models (and cellular automata) */
-    private FileFundamentalDiagram(double simulationTimestep, VehicleParameter vehicleParameter) {
+    private FileFundamentalDiagram(double simulationTimestep, VehiclePrototypeConfiguration vehicleParameter) {
         super();
         final String label = vehicleParameter.getLabel();
 

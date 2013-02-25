@@ -1,6 +1,6 @@
-package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
 
-public abstract class ModelParameter {
+public interface IModelParameter {
 
     /**
      * Returns the desired speed in free traffic.

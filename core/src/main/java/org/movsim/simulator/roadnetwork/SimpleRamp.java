@@ -29,9 +29,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.vehicles.TestVehicle;
+import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ public class SimpleRamp extends AbstractTrafficSource {
 
     private final double relativeSpeedToLeader;
 
-    public SimpleRamp(VehicleGenerator vehGenerator, RoadSegment roadSegment,
+    public SimpleRamp(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
             org.movsim.core.autogen.SimpleRamp simpleRampData,
             InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment, inflowTimeSeries);
@@ -74,12 +74,12 @@ public class SimpleRamp extends AbstractTrafficSource {
 
         if (nWait >= 1.0) {
             // try to insert vehicle
-            final VehiclePrototype prototype = vehGenerator.getVehiclePrototype();
-            SortedSet<GapCandidate> gapCandidates = findLargestPossibleGap(prototype); // only one insert per timestep
+            final TestVehicle testVehicle = vehGenerator.getTestVehicle();
+            SortedSet<GapCandidate> gapCandidates = findLargestPossibleGap(testVehicle); // only one insert per timestep
 
             if (!gapCandidates.isEmpty()) {
                 GapCandidate gap = gapCandidates.first();
-                addVehicle(roadSegment.laneSegment(gap.laneIndex), prototype, gap.enterPosition, gap.enterSpeed);
+                addVehicle(roadSegment.laneSegment(gap.laneIndex), testVehicle, gap.enterPosition, gap.enterSpeed);
                 // TODO testwise adding, check for accidents
                 nWait--;
                 recordData(simulationTime, totalInflow);
@@ -87,23 +87,23 @@ public class SimpleRamp extends AbstractTrafficSource {
         }
     }
 
-    private SortedSet<GapCandidate> findLargestPossibleGap(VehiclePrototype prototype) {
-        SortedSet<GapCandidate> gapCandidates = new TreeSet<GapCandidate>();
+    private SortedSet<GapCandidate> findLargestPossibleGap(TestVehicle testVehicle) {
+        SortedSet<GapCandidate> gapCandidates = new TreeSet<>();
 
         for (int i = 0, nLane = roadSegment.laneCount(); i < nLane; i++) {
             LaneSegment laneSegment = roadSegment.laneSegment(i);
             for (Vehicle vehicle : laneSegment) {
-                evaluateVehicle(vehicle, laneSegment, prototype, gapCandidates);
+                evaluateVehicle(vehicle, laneSegment, testVehicle, gapCandidates);
             }
 
             // check also rear vehicles of next downstream segment
             Vehicle rearVehicleNextLaneSegment = laneSegment.sinkLaneSegment().rearVehicle();
             if (rearVehicleNextLaneSegment != null) {
-                evaluateVehicle(rearVehicleNextLaneSegment, laneSegment, prototype, gapCandidates);
+                evaluateVehicle(rearVehicleNextLaneSegment, laneSegment, testVehicle, gapCandidates);
             }
             if (rearVehicleNextLaneSegment == null && laneSegment.vehicleCount() == 0) {
                 gapCandidates.add(new GapCandidate(MovsimConstants.GAP_INFINITY, laneSegment.lane(), 0.5
-                        * roadSegment.roadLength() - prototype.length(), prototype.getRelativeRandomizationV0()));
+                        * roadSegment.roadLength() - testVehicle.length(), testVehicle.getRelativeRandomizationV0()));
             }
         }
 
@@ -120,9 +120,9 @@ public class SimpleRamp extends AbstractTrafficSource {
 
     }
 
-    private void evaluateVehicle(Vehicle vehicle, LaneSegment laneSegment, VehiclePrototype prototype,
+    private void evaluateVehicle(Vehicle vehicle, LaneSegment laneSegment, TestVehicle testVehicle,
             SortedSet<GapCandidate> gapCandidates) {
-        if (vehicle.getRearPosition() < prototype.length() + MINIMUM_GAP_BOUNDARY) {
+        if (vehicle.getRearPosition() < testVehicle.length() + MINIMUM_GAP_BOUNDARY) {
             // available upstream road segment too small
             logger.debug("no sufficient upstream gap: rearPosition={}", vehicle.getRearPosition());
             return;
@@ -133,15 +133,15 @@ public class SimpleRamp extends AbstractTrafficSource {
         // System.out.println("!!! rear vehicle is identical to vehicle!");
         // }
         final double gap = vehicle.getNetDistanceToRearVehicle(rearVehicle);
-        if (gap < prototype.length() + 2 * MINIMUM_GAP_BOUNDARY) {
+        if (gap < testVehicle.length() + 2 * MINIMUM_GAP_BOUNDARY) {
             // gap too small
             // System.out.println("gap too small, gap=" + gap + ", vehicle=" + vehicle.toString() + ", rearVehicle="
             // + rearVehicle.toString());
             return;
         }
 
-        double enterFrontPosition = Math.max(prototype.length(), vehicle.getRearPosition() - relativeGapToLeader * gap
-                + 0.5 * prototype.length());
+        double enterFrontPosition = Math.max(testVehicle.length(), vehicle.getRearPosition() - relativeGapToLeader * gap
+                + 0.5 * testVehicle.length());
         final double gapToLeader = vehicle.getRearPosition() - enterFrontPosition;
         double speed = relativeSpeedToLeader * vehicle.getSpeed();
         gapCandidates.add(new GapCandidate(gapToLeader, laneSegment.lane(), enterFrontPosition, speed));

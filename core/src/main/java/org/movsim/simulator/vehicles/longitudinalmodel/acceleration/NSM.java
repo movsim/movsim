@@ -25,8 +25,8 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterNSM;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNSM;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,14 +45,14 @@ class NSM extends LongitudinalModelBase {
     /** The constant unit time */
     private static final double dtCA = 1;
 
-    private final ModelParameterNSM param;
+    private final IModelParameterNSM param;
 
     /**
      * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
      * 
      * @param modelParameter
      */
-    public NSM(ModelParameterNSM modelParameter) {
+    public NSM(IModelParameterNSM modelParameter) {
         super(ModelName.NSM);
         this.param = modelParameter;
     }
@@ -126,7 +126,7 @@ class NSM extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterNSM getParameter() {
+    protected IModelParameterNSM getParameter() {
         return param;
     }
 

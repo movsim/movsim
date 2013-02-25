@@ -25,9 +25,9 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterOVMFVDM;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterOVMFVDM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,14 +52,14 @@ class OVM_FVDM extends LongitudinalModelBase {
         BANDO, TRIANGULAR, THREEPHASE
     }
 
-    private final ModelParameterOVMFVDM param;
+    private final IModelParameterOVMFVDM param;
 
     /**
      * Instantiates a new OVM = Optimal-Velocity Model or FVDM = Full-Velocity-Difference Model
      * 
      * @param modelParameter
      */
-    public OVM_FVDM(ModelParameterOVMFVDM modelParameter) {
+    public OVM_FVDM(IModelParameterOVMFVDM modelParameter) {
         super(ModelName.OVM_FVDM);
         this.param = modelParameter;
 
@@ -170,7 +170,7 @@ class OVM_FVDM extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterOVMFVDM getParameter() {
+    protected IModelParameterOVMFVDM getParameter() {
         return param;
     }
 

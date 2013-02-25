@@ -34,7 +34,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.movsim.input.model.simulation.InflowDataPoint;
+import org.movsim.core.autogen.Inflow;
 
 public class InflowTimeSeriesTest {
     private static final double delta = 0.00001;
@@ -42,13 +42,21 @@ public class InflowTimeSeriesTest {
 
 	@Before
 	public void setUp() throws Exception {
-		final List<InflowDataPoint> inflowDataPoints = new ArrayList<InflowDataPoint>();
+        final List<Inflow> inflowDataPoints = new ArrayList<>();
 		// time, flowPerHour, speed
-		inflowDataPoints.add(new InflowDataPoint(0.0, 0.0, 24.0));
-		inflowDataPoints.add(new InflowDataPoint(600.0, 1200.0, 24.0));
-		inflowDataPoints.add(new InflowDataPoint(900.0, 1800.0, 12.0));
+        inflowDataPoints.add(createInflowDataPoint(0.0, 0.0, 24.0));
+        inflowDataPoints.add(createInflowDataPoint(600.0, 1200.0, 24.0));
+        inflowDataPoints.add(createInflowDataPoint(900.0, 1800.0, 12.0));
 		inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
 	}
+
+    private static Inflow createInflowDataPoint(double time, double flow, double speed) {
+        Inflow inflow = new Inflow();
+        inflow.setQPerHour(flow);
+        inflow.setT(time);
+        inflow.setV(speed);
+        return inflow;
+    }
 
 	@After
 	public void tearDown() throws Exception {

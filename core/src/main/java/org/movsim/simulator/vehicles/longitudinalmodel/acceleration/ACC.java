@@ -27,6 +27,7 @@ package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.core.autogen.ModelParameterACC;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterACC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +53,7 @@ class ACC extends LongitudinalModelBase {
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(ACC.class);
 
-    private final ModelParameterACC param;
+    private final IModelParameterACC param;
 
     public ACC(ModelParameterACC modelParameter) {
         super(ModelName.ACC);
@@ -61,7 +62,7 @@ class ACC extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterACC getParameter() {
+    protected IModelParameterACC getParameter() {
         return param;
     }
 
