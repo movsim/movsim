@@ -45,7 +45,7 @@
                 <xs:element ref="Simulation" />
                 <!-- pulled out Routes and Output from Simulation -->
                 <xs:element ref="Routes" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="OutputConfiguration" />
+                <xs:element ref="OutputConfiguration" minOccurs="0" maxOccurs="1"  />
             </xs:sequence>
             <xs:attribute name="network_filename" type="xs:string" use="required" />
         </xs:complexType>
