@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="onramp_example.xodr" consumption_filename="consumption.xml">
+<MovsimScenario network_filename="onramp_example.xodr" >
 
- <FUEL_CONSUMPTION>
+<!--
+consumption_model_name_filename="consumption_model_name.xml"
+ <ConsumptionCalculation_CONSUMPTION>
         <CONSUMPTION_MODEL label="carConsumption" output="true">
             <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
             <ENGINE max_power_kW="85" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="235" pe_min_bar="1" pe_max_bar="18" idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000">
@@ -18,81 +19,82 @@
                 </GEAR_RATIOS>
             </ENGINE>
         </CONSUMPTION_MODEL>
-    </FUEL_CONSUMPTION>
-    
+    </ConsumptionCalculation_CONSUMPTION>
+    -->
 
-    <VEHICLES>
-        <VEHICLE label="ACC1" length="6" b_max="9" consumption="carConsumption">
-            <LONGITUDINAL_MODEL>
-                <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.05" bias_right="0.05" politeness="0.0" />
-            </LANE_CHANGE_MODEL>
-        </VEHICLE>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9" consumption_model_name="carConsumption">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.05" right_bias_acceleration="0.05" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
         <!-- trucks -->
-        <VEHICLE label="ACC2" length="16" b_max="9" consumption="carConsumption">
-            <LONGITUDINAL_MODEL>
-                <ACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL eur_rules="true" crit_speed_eur="20">
-                <MOBIL b_safe="5.0" s_min="2.0" threshold="0.1" bias_right="0.3" politeness="0.1" />
-            </LANE_CHANGE_MODEL>
-        </VEHICLE>
-        <VEHICLE label="Obstacle" length="0">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-    </VEHICLES>
-    <SIMULATION dt="0.2" duration="3600" fixed_seed="true" seed="42" crash_exit="true">
-        <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
-            <VEHICLE_TYPE label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
-        </TRAFFIC_COMPOSITION>
-        <ROAD id="1">
-            <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="1200" v="24" />
-                <INFLOW t="1800" q_per_hour="1800" v="20" />
-                <INFLOW t="3600" q_per_hour="0" v="24" />
-            </TRAFFIC_SOURCE>
-        </ROAD>
-        <ROAD id="3">
-            <DETECTORS dt="60" logging="true">
-                <CROSS_SECTION x="200" />
-            </DETECTORS>
-        </ROAD>
-        <ROAD id="5">
-            <TRAFFIC_SOURCE logging="true">
-                <INFLOW t="0" q_per_hour="520" v="20" />
-            </TRAFFIC_SOURCE>
-        </ROAD>
-        <ROUTES>
-            <ROUTE label="main">
-                <ROAD id="2" />
-                <ROAD id="3" />
-                <ROAD id="4" />
-            </ROUTE>
-            <ROUTE label="onramp">
-                <ROAD id="5" />
-                <ROAD id="3" />
-                <ROAD id="4" />
-            </ROUTE>
-        </ROUTES>
-        <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="1" route="main">
-                <FC number="100" />
-            </FLOATING_CAR_DATA>
-            <SPATIOTEMPORAL dx="100" dt="40" route="main" />
-            <SPATIOTEMPORAL dx="100" dt="40" route="onramp" />
-            <TRAJECTORIES dt="1" route="onramp" />
+        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9" consumption_model_name="carConsumption">
+            <AccelerationModelType>
+                <ModelParameterACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.3" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="0">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Simulation timestep="0.2" duration="3600"  seed="42" crash_exit="true">
+        <TrafficComposition>
+            <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
+            <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
+        </TrafficComposition>
+        <Road id="1">
+            <TrafficSource logging="true">
+                <Inflow t="0" q_per_hour="1200" v="24" />
+                <Inflow t="1800" q_per_hour="1800" v="20" />
+                <Inflow t="3600" q_per_hour="0" v="24" />
+            </TrafficSource>
+        </Road>
+        <Road id="3">
+            <Detectors sample_interval="60" logging="true">
+                <CrossSection position="200" />
+            </Detectors>
+        </Road>
+        <Road id="5">
+            <TrafficSource logging="true">
+                <Inflow t="0" q_per_hour="520" v="20" />
+            </TrafficSource>
+        </Road>
+    </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="2" />
+                <Road id="3" />
+                <Road id="4" />
+            </Route>
+            <Route label="onramp">
+                <Road id="5" />
+                <Road id="3" />
+                <Road id="4" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main">
+                <FloatingCar number="100" />
+            </FloatingCarOutput>
+            <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
+            <SpatioTemporalConfiguration dx="100" dt="40" route="onramp" />
+            <Trajectories dt="1" route="onramp" />
             <!--  start_time="0" end_time="120" -->
-            <TRAVELTIMES route="main" dt="0" tauEMA="40"/>
-            <TRAVELTIMES route="onramp" dt="0"/>
-            <FUEL route="main" tauEMA="30" />
-            <FUEL route="onramp" />
-        </OUTPUT>
-    </SIMULATION>
-</SCENARIO>
+            <TravelTimes route="main" dt="0" tauEMA="40"/>
+            <TravelTimes route="onramp" dt="0"/>
+            <ConsumptionCalculation route="main" tauEMA="30" />
+            <ConsumptionCalculation route="onramp" />
+        </OutputConfiguration>
+
+</MovsimScenario>
 

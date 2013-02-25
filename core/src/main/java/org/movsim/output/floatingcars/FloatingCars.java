@@ -46,8 +46,7 @@ import com.google.common.base.Preconditions;
  */
 public class FloatingCars implements SimulationTimeStep {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FloatingCars.class);
 
     private final Collection<Integer> floatingCarVehicleNumbers;
 
@@ -70,12 +69,12 @@ public class FloatingCars implements SimulationTimeStep {
      */
     public FloatingCars(FloatingCarOutput floatingCarOutput, Route route, boolean writeFileOutput) {
         Preconditions.checkNotNull(route);
-        this.nDtOut = floatingCarOutput.getNDt().intValue();
+        this.nDtOut = floatingCarOutput.getNTimestep().intValue();
         this.randomFraction = (floatingCarOutput.getRandomFraction() < 0 || floatingCarOutput.getRandomFraction() > 1) ? 0
                 : floatingCarOutput
                 .getRandomFraction();
         this.route = route;
-        floatingCarVehicleNumbers = new HashSet<Integer>();
+        floatingCarVehicleNumbers = new HashSet<>();
         for( org.movsim.core.autogen.FloatingCar fc : floatingCarOutput.getFloatingCar()){
             floatingCarVehicleNumbers.add(Integer.valueOf(fc.getNumber()));
         }
@@ -86,7 +85,7 @@ public class FloatingCars implements SimulationTimeStep {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (fileFloatingCars != null && iterationCount % nDtOut == 0) {
-            logger.debug("update FloatingCars: iterationCount={}", iterationCount);
+            LOG.debug("update FloatingCars: iterationCount={}", iterationCount);
             writeOutput(simulationTime);
         }
     }

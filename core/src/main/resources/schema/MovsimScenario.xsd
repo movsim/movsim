@@ -587,7 +587,7 @@
             <xs:sequence>
                 <xs:element ref="FloatingCar" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="n_dt" type="positiveInteger" default="1" />
+            <xs:attribute name="n_timestep" type="positiveInteger" default="1" />
             <xs:attribute name="random_fraction" type="probability" default="0" />
             <xs:attribute name="route" type="xs:string" use="required" />
         </xs:complexType>
