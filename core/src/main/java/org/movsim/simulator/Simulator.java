@@ -543,6 +543,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
         }
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
-        simOutput.timeStep(dt, simulationTime, iterationCount);
+        if (simOutput != null) {
+            simOutput.timeStep(dt, simulationTime, iterationCount);
+        }
     }
 }
