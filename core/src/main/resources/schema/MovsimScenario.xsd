@@ -52,7 +52,6 @@
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="VehiclePrototypes">
-        <!-- renamed -->
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehiclePrototypeConfiguration" maxOccurs="unbounded" />
@@ -61,31 +60,23 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="VehiclePrototypeConfiguration">
-        <!-- renamed -->
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="AccelerationModelType" />
-                <!-- renamed LaneChangeModel -->
                 <xs:element ref="LaneChangeModelType" />
-                <!-- MemoryParameter now separate element after LaneChangeType -->
                 <xs:element ref="MemoryParameter" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="label" type="xs:string" use="required" />
             <xs:attribute name="length" type="nonNegativeDouble" use="required" />
             <xs:attribute name="width" type="nonNegativeDouble" default="4.4" />
-            <!-- renamed: b_max -->
             <xs:attribute name="maximum_deceleration" type="nonNegativeDouble" default="10000" />
-            <!-- removed reaction_time -->
-            <!-- renamed: consumption -->
             <xs:attribute name="consumption_model_name" type="xs:string" default="none" />
         </xs:complexType>
     </xs:element>
     <xs:element name="AccelerationModelType">
-        <!-- renamed -->
         <xs:complexType>
-            <xs:sequence>
-                <!-- TODO: Auswahl, kann nur einen typ haben. memory addon-->
+            <xs:choice>
                 <xs:element ref="ModelParameterIDM" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="ModelParameterACC" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="ModelParameterOVM_FVDM" minOccurs="0" maxOccurs="1" />
@@ -96,7 +87,7 @@
                 <xs:element ref="ModelParameterKKW" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="ModelParameterCCS" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="ModelParameterPTM" minOccurs="0" maxOccurs="1" />
-            </xs:sequence>
+            </xs:choice>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="BasicModelParameter">
@@ -108,7 +99,6 @@
         <xs:attribute name="v0" type="nonNegativeDouble" use="required" />
         <xs:attribute name="s0" type="nonNegativeDouble" use="required" />
     </xs:complexType>
-    <!-- TODO extract v0 and s0 as basis of all models -->
     <xs:element name="ModelParameterIDM">
         <xs:complexType>
             <xs:annotation>
@@ -158,10 +148,8 @@
                 <xs:extension base="BasicModelParameter">
                     <xs:attribute name="tau" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="transition_width" type="nonNegativeDouble" use="required" />
-                    <!-- l_int changed to transition_width -->
                     <xs:attribute name="beta" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="gamma" type="nonNegativeDouble" default="0" />
-                    <!-- lambda changed to gamma according to book notation -->
                     <xs:attribute name="optimal_speed_function" type="OptimalVelocityFunctionEnum" default="bando" />
                 </xs:extension>
             </xs:complexContent>
@@ -323,20 +311,16 @@
             <xs:sequence>
                 <xs:element ref="ModelParameterMOBIL" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
-            <!-- renamed: eur_rules -->
             <xs:attribute name="european_rules" type="xs:boolean" default="false" />
             <xs:attribute name="crit_speed_eur" type="nonNegativeDouble" default="25" />
         </xs:complexType>
     </xs:element>
     <xs:element name="ModelParameterMOBIL">
         <xs:complexType>
-            <!-- renamed: b_safe, must be smaller than the maximum deceleration of a vehicle -->
+            <!-- parameter value must be smaller than the maximum deceleration of a vehicle -->
             <xs:attribute name="safe_deceleration" type="nonNegativeDouble" default="4.0" />
-            <!-- renamed: s_0-->
             <xs:attribute name="minimum_gap" type="nonNegativeDouble" default="2.0" />
-            <!-- renamed: threshold -->
             <xs:attribute name="threshold_acceleration" type="xs:double" default="0.2" />
-            <!-- renamed: bias_right -->
             <xs:attribute name="right_bias_acceleration" type="xs:double" default="0.25" />
             <xs:attribute name="politeness" type="xs:double" default="0.1" />
         </xs:complexType>
@@ -356,11 +340,7 @@
                 <xs:element ref="Road" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="timestep" type="positiveDouble" use="required" />
-            <!-- renamed: dt - timestep -->
             <xs:attribute name="duration" type="xs:double" default="-1" />
-            <!-- todo check default handling, now checked by "isSet", so if not set then infinity-->
-            <!--  <xs:attribute name="fixed_seed" type="xs:boolean" default="true"/> -->
-            <!-- Not needed anymore, checked by "isSet" -->
             <xs:attribute name="seed" type="xs:int" default="42" />
             <xs:attribute name="crash_exit" type="xs:boolean" default="true" />
         </xs:complexType>
@@ -369,7 +349,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehicleType" minOccurs="1" maxOccurs="unbounded" />
-                <!-- changed: at least one occurance -->
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -403,29 +382,23 @@
     </xs:element>
     <xs:element name="InitialConditions">
         <xs:complexType>
-            <xs:sequence>
-                <!-- TODO alternative -->
+            <xs:choice>
                 <xs:element ref="MacroIC" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element ref="MicroIC" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
+            </xs:choice>
         </xs:complexType>
     </xs:element>
     <xs:element name="MacroIC">
         <xs:complexType>
-            <!--  renamed: x  -->
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!-- renamed rho -->
             <xs:attribute name="density_per_km" type="nonNegativeDouble" use="required" />
-            <!-- renamed: v -->
+            <!-- changed: negative speeds not allowed as hack for equilibrium speed-->
             <xs:attribute name="speed" type="nonNegativeDouble" use="optional" />
-            <!-- changed: do not allow negative speeds as hack for equilibrium speed-->
         </xs:complexType>
     </xs:element>
     <xs:element name="MicroIC">
         <xs:complexType>
-            <!-- renamed: x -->
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!-- renamed: v -->
             <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
             <xs:attribute name="lane" type="xs:integer" default="1" />
             <xs:attribute name="label" type="xs:string" default="" />
@@ -435,7 +408,6 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Inflow" maxOccurs="unbounded" />
-                <!-- renamed from Inflow -->
             </xs:sequence>
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
@@ -462,7 +434,6 @@
     <xs:element name="Inhomogeneity">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!-- renamed: x -->
             <xs:attribute name="alpha_T" type="nonNegativeDouble" default="1" />
             <xs:attribute name="alpha_v0" type="nonNegativeDouble" default="1" />
         </xs:complexType>
@@ -477,7 +448,6 @@
     <xs:element name="SpeedLimit">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!--renamed from x-->
             <xs:attribute name="speedlimit_kmh" type="nonNegativeDouble" use="required" />
         </xs:complexType>
     </xs:element>
@@ -491,7 +461,6 @@
     <xs:element name="Slope">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!-- renamed from x -->
             <xs:attribute name="gradient" type="xs:double" use="required" />
         </xs:complexType>
     </xs:element>
@@ -517,7 +486,6 @@
     <xs:element name="TrafficLight">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!-- renamed: x -->
             <xs:attribute name="green_time" type="nonNegativeDouble" use="required" />
             <xs:attribute name="green_red_time" type="nonNegativeDouble" use="required" />
             <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
@@ -533,7 +501,6 @@
                 <xs:element ref="CrossSection" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="sample_interval" type="positiveDouble" default="60" />
-            <!-- renamed: dt -->
             <xs:attribute name="logging" type="xs:boolean" default="false" />
             <xs:attribute name="logging_lanes" type="xs:boolean" default="false" />
         </xs:complexType>
@@ -541,7 +508,6 @@
     <xs:element name="CrossSection">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <!-- renamed: x -->
         </xs:complexType>
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
@@ -562,7 +528,6 @@
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="OutputConfiguration">
-        <!-- renamed -->
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="FloatingCarOutput" minOccurs="0" maxOccurs="unbounded" />
@@ -573,7 +538,6 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <!-- renamed: SpatioTemporal -->
     <xs:element name="SpatioTemporalConfiguration">
         <xs:complexType>
             <xs:attribute name="dt" type="nonNegativeDouble" default="60" />
@@ -581,7 +545,6 @@
             <xs:attribute name="route" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
-    <!-- renamed: FloatingCarData  -->
     <xs:element name="FloatingCarOutput">
         <xs:complexType>
             <xs:sequence>
@@ -615,7 +578,6 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="ConsumptionCalculation">
-        <!-- renamed -->
         <xs:complexType>
             <xs:attribute name="route" type="xs:string" use="required" />
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
