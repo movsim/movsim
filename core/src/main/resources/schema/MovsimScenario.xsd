@@ -371,7 +371,7 @@
                 <xs:element ref="TrafficSink" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="FlowConservingInhomogeneities" minOccurs="0" maxOccurs="1" />
 <!--                 <xs:element ref="SpeedLimits" minOccurs="0" maxOccurs="1" /> -->
-                <xs:element ref="Slopes" minOccurs="0" maxOccurs="1" />
+<!--                 <xs:element ref="Slopes" minOccurs="0" maxOccurs="1" /> -->
                 <xs:element ref="SimpleRamp" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Detectors" minOccurs="0" maxOccurs="1" />
@@ -453,7 +453,7 @@
         </xs:complexType>
     </xs:element>
 -->
-    <xs:element name="Slopes">
+    <!-- <xs:element name="Slopes">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Slope" minOccurs="0" maxOccurs="unbounded" />
@@ -466,6 +466,7 @@
             <xs:attribute name="gradient" type="xs:double" use="required" />
         </xs:complexType>
     </xs:element>
+-->
     <xs:element name="SimpleRamp">
         <xs:complexType>
             <xs:sequence>
