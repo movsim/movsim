@@ -379,7 +379,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         } else if (initialConditions.isSetMicroIC()) {
             setMicroInitialConditions(roadSegment, initialConditions.getMicroIC(), vehGenerator);
         } else {
-            throw new IllegalStateException();
+            // throw new IllegalStateException();
+            logger.warn("no initial conditions defined");
         }
     }
 
