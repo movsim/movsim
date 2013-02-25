@@ -43,7 +43,6 @@ import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.opendrive.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
 import org.movsim.output.detector.LoopDetectors;
-import org.movsim.output.fileoutput.FileTrafficLightRecorder;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
@@ -56,7 +55,6 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
-import org.movsim.simulator.roadnetwork.TrafficLights;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
@@ -124,10 +122,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
         simulationRunnable.setTimeStep(simulationInput.getTimestep());
-        
+
         // TODO better handling of case "duration = INFINITY"
         double duration = simulationInput.isSetDuration() ? simulationInput.getDuration() : -1;
-        
+
         simulationRunnable.setDuration(duration < 0 ? Double.MAX_VALUE : duration);
 
         if (simulationInput.isSetSeed()) {
@@ -210,10 +208,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
-        
-//        String scenario = scenarioWithEnding.substring(0, scenarioWithEnding.length() - 4);
-//        System.out.println("scenario = " + scenario);
-        
+
+        // String scenario = scenarioWithEnding.substring(0, scenarioWithEnding.length() - 4);
+        // System.out.println("scenario = " + scenario);
+
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
         initialize();
@@ -320,8 +318,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (roadInput.isSetSimpleRamp()) {
             org.movsim.core.autogen.SimpleRamp simpleRampData = roadInput.getSimpleRamp();
             InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(simpleRampData.getInflow());
-            SimpleRamp simpleRamp = new SimpleRamp(defaultTrafficComposition, roadSegment, simpleRampData,
-                    inflowTimeSeries);
+            SimpleRamp simpleRamp = new SimpleRamp(composition, roadSegment, simpleRampData, inflowTimeSeries);
             if (simpleRampData.isLogging()) {
                 simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
             }
@@ -329,15 +326,15 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         // set up the traffic lights
-        if (roadInput.isSetTrafficLights()) {
-            final org.movsim.core.autogen.TrafficLights trafficLightsInput = roadInput.getTrafficLights();
-            final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
-            if (trafficLightsInput.isLogging()) {
-                final int nDt = trafficLightsInput.getNDt().intValue();
-                trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));
-            }
-            roadSegment.setTrafficLights(trafficLights);
-        }
+        // if (roadInput.isSetTrafficLights()) {
+        // final org.movsim.core.autogen.TrafficLights trafficLightsInput = roadInput.getTrafficLights();
+        // final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
+        // if (trafficLightsInput.isLogging()) {
+        // final int nDt = trafficLightsInput.getNDt().intValue();
+        // trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));
+        // }
+        // roadSegment.setTrafficLights(trafficLights);
+        // }
 
         // set up the detectors
         if (roadInput.isSetDetectors()) {
@@ -350,7 +347,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         if (roadInput.isSetInitialConditions()) {
-            initialConditions(roadSegment, roadInput.getInitialConditions(), defaultTrafficComposition);
+            initialConditions(roadSegment, roadInput.getInitialConditions(), composition);
         }
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
@@ -376,9 +373,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * and other segments are not considered.
      * 
      * @param roadSegment
-     * @param roadInput
-     * @param defaultTrafficComposition
-     * @param icMacroData
+     * @param macroInitialConditions
+     * @param vehGenerator
      */
     private static void setMacroInitialConditions(RoadSegment roadSegment, List<MacroIC> macroInitialConditions,
             TrafficCompositionGenerator vehGenerator) {
@@ -399,7 +395,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final TestVehicle testVehicle = vehGenerator.getTestVehicle();
 
                 final double rhoLocal = icMacro.rho(position);
-                double speedInit =  icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : testVehicle.getEquilibriumSpeed(rhoLocal);
+                double speedInit = icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : testVehicle
+                        .getEquilibriumSpeed(rhoLocal);
                 if (logger.isDebugEnabled() && !icMacro.hasUserDefinedSpeeds()) {
                     logger.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
                 }
@@ -457,8 +454,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
     }
 
-    private static void setMicroInitialConditions(RoadSegment roadSegment,
- List<MicroIC> initialMicroConditions,
+    private static void setMicroInitialConditions(RoadSegment roadSegment, List<MicroIC> initialMicroConditions,
             TrafficCompositionGenerator vehGenerator) {
         logger.debug(("choose micro initial conditions"));
         int vehicleNumber = 1;

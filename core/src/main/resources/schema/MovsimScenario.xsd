@@ -44,6 +44,7 @@
                 <xs:element ref="VehiclePrototypes" />
                 <xs:element ref="Simulation" />
                 <!-- pulled out Routes and Output from Simulation -->
+                <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Routes" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="OutputConfiguration" minOccurs="0" maxOccurs="1"  />
             </xs:sequence>
@@ -63,7 +64,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="AccelerationModelType" />
-                <xs:element ref="LaneChangeModelType" />
+                <xs:element ref="LaneChangeModelType"  minOccurs="0" maxOccurs="1" />
                 <xs:element ref="MemoryParameter" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
@@ -215,6 +216,7 @@
                 </xs:appinfo>
             </xs:annotation>
             <xs:complexContent>
+       	        <!-- NSM does not have s0. Define s0="0" in input. -->
                 <xs:extension base="BasicModelParameter">
                     <xs:attribute name="p_slowdown" type="probability" use="required" />
                     <xs:attribute name="p_slow_start" type="probability" use="required" />
@@ -254,13 +256,13 @@
                     <xs:attribute name="cw" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="A" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="friction" type="nonNegativeDouble" use="required" />
-                    <xs:attribute name="p0" type="probability" use="required" />
+                    <xs:attribute name="p0" type="nonNegativeDouble" use="required" /> <!-- power ? consider renaming -->
                     <xs:attribute name="v_c" type="nonNegativeDouble" use="required" />
-                    <xs:attribute name="p_herringbone" type="probability" use="required" />
-                    <xs:attribute name="v_c_herringbone" type="nonNegativeDouble" use="required" />
+                    <xs:attribute name="p_herringbone" type="nonNegativeDouble" use="required" />
+                    <xs:attribute name="v_c_herringbone" type="nonNegativeDouble" use="required" /> <!-- power ? consider renaming -->
                     <xs:attribute name="T" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="b" type="nonNegativeDouble" use="required" />
-                    <xs:attribute name="b_maximal" type="nonNegativeDouble" use="required" />
+                    <xs:attribute name="b_maximum" type="nonNegativeDouble" use="required" />
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
@@ -373,7 +375,6 @@
 <!--                 <xs:element ref="SpeedLimits" minOccurs="0" maxOccurs="1" /> -->
 <!--                 <xs:element ref="Slopes" minOccurs="0" maxOccurs="1" /> -->
                 <xs:element ref="SimpleRamp" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Detectors" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
@@ -477,27 +478,6 @@
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="TrafficLights">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="TrafficLight" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-            <xs:attribute name="n_dt" type="positiveInteger" default="1" />
-            <xs:attribute name="logging" type="xs:boolean" default="false" />
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="TrafficLight">
-        <xs:complexType>
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="green_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="green_red_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="red_green_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="phase_shift" type="xs:double" default="0" />
-            <xs:attribute name="init" type="nonNegativeInteger" default="0" />
-            <!-- todo: enum type -->
-        </xs:complexType>
-    </xs:element>
     <xs:element name="Detectors">
         <xs:complexType>
             <xs:sequence>
@@ -513,6 +493,30 @@
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
         </xs:complexType>
     </xs:element>
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <xs:element name="TrafficLights">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="TrafficLight" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="n_dt" type="positiveInteger" default="1" />
+            <xs:attribute name="logging" type="xs:boolean" default="false" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TrafficLight">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <xs:attribute name="green_time" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="green_red_time" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="red_green_time" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="phase_shift" type="xs:double" default="0" />
+            <xs:attribute name="init" type="nonNegativeInteger" default="0" />
+            <!-- todo: enum type -->
+        </xs:complexType>
+    </xs:element>
+
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Routes">
         <xs:complexType>

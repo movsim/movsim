@@ -80,6 +80,7 @@ public class TrafficCompositionGenerator {
         for (final org.movsim.core.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
             sumFractions += typeConfig.getFraction();
         }
+        Preconditions.checkArgument(sumFractions > 0, "vehicle type fractions sum up to 0. Check configuration.");
         for (final org.movsim.core.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
             typeConfig.setFraction(typeConfig.getFraction() / sumFractions);
         }

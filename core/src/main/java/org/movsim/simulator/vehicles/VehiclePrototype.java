@@ -52,10 +52,6 @@ public class VehiclePrototype {
         return configuration.getMaximumDeceleration();
     }
 
-    public static double getReactionTime() {
-        throw new IllegalStateException("reaction time not yet implemented.");
-    }
-
     public VehiclePrototypeConfiguration getConfiguration() {
         return configuration;
     }
@@ -66,7 +62,10 @@ public class VehiclePrototype {
     }
 
     public LaneChangeModel createLaneChangeModel() {
-        return new LaneChangeModel(configuration.getLaneChangeModelType());
+        return configuration.isSetLaneChangeModelType()
+                && configuration.getLaneChangeModelType().isSetModelParameterMOBIL() ? new LaneChangeModel(
+                configuration.getLaneChangeModelType())
+                : null;
     }
 
     public Noise createAccNoiseModel() {

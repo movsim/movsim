@@ -19,6 +19,9 @@
                 </right>
             </laneSection>
         </lanes>
+        <signals>
+	  <signal s="1000" id="tl_1" name="Ampel XY"/>
+        </signals>
     </road>
 </OpenDRIVE>
 

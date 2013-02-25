@@ -47,7 +47,9 @@ public class TrafficLight {
     public static final Logger logger = LoggerFactory.getLogger(TrafficLight.class);
 
     /** The position. */
-    private final double position;
+    // private final double position;
+
+    private final String id;
 
     /** The status. */
     private TrafficLightStatus status;
@@ -88,9 +90,10 @@ public class TrafficLight {
     /**
      * Constructor.
      */
-    public TrafficLight(double position, double greenTime, double greenRedTime, double redTime, double redGreenTime,
+    public TrafficLight(String id, double greenTime, double greenRedTime, double redTime, double redGreenTime,
             double phaseShift, int initStatusOrdinal) {
-        this.position = position;
+        // this.position = position;
+        this.id = id;
         this.greenTimePeriod = greenTime;
         this.redTimePeriod = redTime;
         this.greenRedTimePeriod = greenRedTime;
@@ -116,10 +119,10 @@ public class TrafficLight {
                 : TrafficLightStatus.values()[initStatusOrdinal];
         initialize(initStatus);
 
-        if (position < 0) {
-            logger.error("inconsistent input data: position of trafficlight at={} must be >= 0", position);
-            System.exit(-1);
-        }
+        // if (position < 0) {
+        // logger.error("inconsistent input data: position of trafficlight at={} must be >= 0", position);
+        // System.exit(-1);
+        // }
     }
 
     /**
@@ -127,7 +130,7 @@ public class TrafficLight {
      * 
      */
     public TrafficLight(org.movsim.core.autogen.TrafficLight tlData) {
-        this(tlData.getPosition(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
+        this(tlData.getId(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
                 .getRedGreenTime(), tlData.getPhaseShift(), tlData.getInit().intValue());
     }
 
@@ -138,7 +141,7 @@ public class TrafficLight {
         status = initStatus;
         totalCycleTime = redTimePeriod + greenTimePeriod + greenRedTimePeriod + redGreenTimePeriod;
         currentCycleTime = -phaseShift;
-        logger.debug("initialize traffic light at pos = {} with status {}", position, status.toString());
+        logger.debug("initialize traffic light id={} with status={}", id, status.toString());
     }
 
     /**
@@ -219,7 +222,8 @@ public class TrafficLight {
      * @return the double
      */
     public double position() {
-        return position;
+        // TODO
+        return 0; // position;
     }
 
     /**

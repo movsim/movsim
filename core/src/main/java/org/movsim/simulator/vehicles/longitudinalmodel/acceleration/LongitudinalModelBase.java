@@ -91,8 +91,8 @@ public abstract class LongitudinalModelBase {
         }
     }
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelBase.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(LongitudinalModelBase.class);
     protected final ModelName modelName;
     private final double scalingLength;
     protected double v0RandomizationFactor = 1;
@@ -195,7 +195,7 @@ public abstract class LongitudinalModelBase {
      */
     public void setRelativeRandomizationV0(double relRandomizationFactor) {
         v0RandomizationFactor = MyRandom.getRandomizedFactor(relRandomizationFactor);
-        logger.debug("randomization of desired speeds with randomization factor=", v0RandomizationFactor);
+        LOG.debug("randomization of desired speeds with randomization factor=", v0RandomizationFactor);
     }
 
     final static double calcSmoothFraction(double speedMe, double speedFront) {
@@ -251,7 +251,7 @@ public abstract class LongitudinalModelBase {
         final double accResult = frac * Math.min(accInOwnLane, accLeft) + (1 - frac) * accInOwnLane;
 
         // if (speedFront != -1) {
-        // logger.debug(String
+        // LOG.debug(String
         // .format("pos=%.4f, accLeft: frac=%.4f, acc=%.4f, accLeft=%.4f, accResult=%.4f, meSpeed=%.2f, frontLeftSpeed=%.2f\n",
         // me.getPosition(), frac, accInOwnLane, accLeft, accResult, me.getSpeed(), speedFront));
         // }

@@ -39,11 +39,13 @@
             <TrafficSource logging="false">
                 <Inflow t="0" q_per_hour="500" />
             </TrafficSource>
-            <TrafficLights>
-                <TrafficLight position="1000" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" />
-            </TrafficLights>
             <Detectors />
         </Road>
     </Simulation>
+
+    <TrafficLights>
+      <TrafficLight id="tl_1" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" />
+    </TrafficLights>
+
 </MovsimScenario>
 

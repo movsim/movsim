@@ -25,6 +25,8 @@
  */
 package org.movsim.simulator.vehicles;
 
+import javax.annotation.Nullable;
+
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.core.autogen.VehiclePrototypeConfiguration;
 import org.movsim.simulator.MovsimConstants;
@@ -43,6 +45,8 @@ import org.movsim.utilities.Colors;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * <p>
@@ -231,21 +235,25 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            LaneChangeModel lcModel, Route route) {
+            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
+        Preconditions.checkNotNull(longitudinalModel);
+        Preconditions.checkNotNull(vehInput);
         this.label = label;
+        this.length = vehInput.getLength();
+        this.width = vehInput.getWidth();
+        this.maxDeceleration = vehInput.getMaximumDeceleration();
+
         id = nextId++;
         randomFix = MyRandom.nextDouble();
-
-        length = vehInput.getLength();
-        width = vehInput.getWidth();
-        maxDeceleration = vehInput.getMaximumDeceleration();
 
         initialize();
         this.longitudinalModel = longitudinalModel;
         physQuantities = new PhysicalQuantities(this);
 
         this.laneChangeModel = lcModel;
-        laneChangeModel.initialize(this);
+        if (laneChangeModel != null) {
+            laneChangeModel.initialize(this);
+        }
 
         trafficLightApproaching = new TrafficLightApproaching();
         this.route = route;

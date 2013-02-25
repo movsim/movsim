@@ -1,74 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
-<SCENARIO network_filename="startStop.xodr">
-    <VEHICLES write_fund_diagrams="true">
-        <VEHICLE label="IDM1" length="8" b_max="9">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="15" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-        <VEHICLE label="Obstacle" length="8" b_max="9">
-            <LONGITUDINAL_MODEL>
-                <IDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-    </VEHICLES>
-    <SIMULATION dt="0.2" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="IDM1" fraction="1" />
-            <VEHICLE_TYPE label="Obstacle" fraction="0" />
-        </TRAFFIC_COMPOSITION>
-        <ROAD id="1">
-            <INITIAL_CONDITIONS>
-                <IC_MICRO x="10" v="0" />
-                <IC_MICRO x="20" v="0" />
-                <IC_MICRO x="30" v="0" />
-                <IC_MICRO x="40" v="0" />
-                <IC_MICRO x="50" v="0" />
-                <IC_MICRO x="60" v="0" />
-                <IC_MICRO x="70" v="0" />
-                <IC_MICRO x="80" v="0" />
-                <IC_MICRO x="90" v="0" />
-                <IC_MICRO x="100" v="0" />
-                <IC_MICRO x="110" v="0" />
-                <IC_MICRO x="120" v="0" />
-                <IC_MICRO x="130" v="0" />
-                <IC_MICRO x="140" v="0" />
-                <IC_MICRO x="150" v="0" />
-                <IC_MICRO x="160" v="0" />
-                <IC_MICRO x="170" v="0" />
-                <IC_MICRO x="180" v="0" />
-                <IC_MICRO x="190" v="0" />
-                <IC_MICRO x="200" v="0" />
-                <IC_MICRO x="210" v="0" />
-                <IC_MICRO x="220" v="0" />
-                <IC_MICRO x="230" v="0" />
-                <IC_MICRO x="240" v="0" />
-                <IC_MICRO x="250" v="0" />
-                <IC_MICRO x="260" v="0" />
+<MovsimScenario network_filename="startStop.xodr">
+    <VehiclePrototypes write_fund_diagrams="true">
+        <VehiclePrototypeConfiguration label="IDM1" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="15" T="1" s0="2" a="1.0" b="1.5" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Simulation timestep="0.2" duration="360"  seed="42">
+        <TrafficComposition>
+            <VehicleType label="IDM1" fraction="1" />
+            <VehicleType label="Obstacle" fraction="0" />
+        </TrafficComposition>
+        <Road id="1">
+            <InitialConditions>
+                <MicroIC position="10" speed="0" />
+                <MicroIC position="20" speed="0" />
+                <MicroIC position="30" speed="0" />
+                <MicroIC position="40" speed="0" />
+                <MicroIC position="50" speed="0" />
+                <MicroIC position="60" speed="0" />
+                <MicroIC position="70" speed="0" />
+                <MicroIC position="80" speed="0" />
+                <MicroIC position="90" speed="0" />
+                <MicroIC position="100" speed="0" />
+                <MicroIC position="110" speed="0" />
+                <MicroIC position="120" speed="0" />
+                <MicroIC position="130" speed="0" />
+                <MicroIC position="140" speed="0" />
+                <MicroIC position="150" speed="0" />
+                <MicroIC position="160" speed="0" />
+                <MicroIC position="170" speed="0" />
+                <MicroIC position="180" speed="0" />
+                <MicroIC position="190" speed="0" />
+                <MicroIC position="200" speed="0" />
+                <MicroIC position="210" speed="0" />
+                <MicroIC position="220" speed="0" />
+                <MicroIC position="230" speed="0" />
+                <MicroIC position="240" speed="0" />
+                <MicroIC position="250" speed="0" />
+                <MicroIC position="260" speed="0" />
                 <!-- obstacle shifts floating car numbers -->
-                <IC_MICRO x="1000" v="0" label="Obstacle" />
-            </INITIAL_CONDITIONS>
-        </ROAD>
-        <ROUTES>
-            <ROUTE label="main">
-                <ROAD id="1" />
-            </ROUTE>
-        </ROUTES>
-        <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="5" route="main">
-                <FC number="2" />
-                <FC number="6" />
-                <FC number="11" />
-                <FC number="16" />
-                <FC number="21" />
-            </FLOATING_CAR_DATA>
-            <TRAJECTORIES dt="1" route="main" />
-        </OUTPUT>
-    </SIMULATION>
-</SCENARIO>
+                <MicroIC position="1000" speed="0" label="Obstacle" />
+            </InitialConditions>
+        </Road>
+    </Simulation>
+  <Routes>
+            <Route label="main">
+                <Road id="1" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="5" route="main">
+                <FloatingCar number="2" />
+                <FloatingCar number="6" />
+                <FloatingCar number="11" />
+                <FloatingCar number="16" />
+                <FloatingCar number="21" />
+            </FloatingCarOutput>
+            <Trajectories dt="1" route="main" />
+        </OutputConfiguration>
+</MovsimScenario>
 

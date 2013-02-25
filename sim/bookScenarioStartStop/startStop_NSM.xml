@@ -1,80 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
 <!-- (c) Martin Treiber, Arne Kesting 2010 -->
-<SCENARIO network_filename="startStop.xodr">
-    <VEHICLES write_fund_diagrams="true">
+<MovsimScenario network_filename="startStop.xodr">
+    <VehiclePrototypes write_fund_diagrams="true">
         <!-- vehicle length ==> cell units -->
-        <VEHICLE label="NSM1" length="1">
-            <!-- b_max not limited -->
-            <LONGITUDINAL_MODEL>
-                <!-- BARL variant : p0 != p possible -->
-                <NSM v0="2" p_slowdown="0.1" p_slow_start="0.1" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-        <VEHICLE label="Obstacle" length="1">
-            <!-- b_max not limited -->
-            <LONGITUDINAL_MODEL>
-                <NSM v0="0" p_slowdown="0" p_slow_start="0" />
-            </LONGITUDINAL_MODEL>
-            <LANE_CHANGE_MODEL />
-        </VEHICLE>
-    </VEHICLES>
-    <SIMULATION dt="1" duration="360" fixed_seed="true" seed="42">
-        <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="NSM1" fraction="1" />
-            <VEHICLE_TYPE label="Obstacle" fraction="0" />
-        </TRAFFIC_COMPOSITION>
-        <ROAD id="1">
-            <INITIAL_CONDITIONS>
+        <VehiclePrototypeConfiguration label="NSM1" length="1">
+            <!-- maximum_deceleration not limited -->
+            <AccelerationModelType>
+                <!-- BARL optimal_speed_function : p0 != p possible -->
+		<!-- NSM has no s0 parameter, use s0="0" here for compatibility-->
+                <ModelParameterNSM v0="2" p_slowdown="0.1" p_slow_start="0.1" s0="0"/>
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="1">
+            <!-- maximum_deceleration not limited -->
+            <AccelerationModelType>
+                <ModelParameterNSM v0="0" p_slowdown="0" p_slow_start="0" s0="0"/>
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Simulation timestep="1" duration="360"  seed="42">
+        <TrafficComposition>
+            <VehicleType label="NSM1" fraction="1" />
+            <VehicleType label="Obstacle" fraction="0" />
+        </TrafficComposition>
+        <Road id="1">
+            <InitialConditions>
                 <!-- in physical quantities (meter and m/s) -->
-                <IC_MICRO x="7.5" v="0" label="NSM1" />
-                <IC_MICRO x="15.0" v="0" label="NSM1" />
-                <IC_MICRO x="22.5" v="0" label="NSM1" />
-                <IC_MICRO x="30.0" v="0" label="NSM1" />
-                <IC_MICRO x="37.5" v="0" label="NSM1" />
-                <IC_MICRO x="45.0" v="0" label="NSM1" />
-                <IC_MICRO x="52.5" v="0" label="NSM1" />
-                <IC_MICRO x="60.0" v="0" label="NSM1" />
-                <IC_MICRO x="67.5" v="0" label="NSM1" />
-                <IC_MICRO x="75.0" v="0" label="NSM1" />
-                <IC_MICRO x="82.5" v="0" label="NSM1" />
-                <IC_MICRO x="90.0" v="0" label="NSM1" />
-                <IC_MICRO x="97.5" v="0" label="NSM1" />
-                <IC_MICRO x="105.0" v="0" label="NSM1" />
-                <IC_MICRO x="112.5" v="0" label="NSM1" />
-                <IC_MICRO x="120.0" v="0" label="NSM1" />
-                <IC_MICRO x="127.5" v="0" label="NSM1" />
-                <IC_MICRO x="135.0" v="0" label="NSM1" />
-                <IC_MICRO x="142.5" v="0" label="NSM1" />
-                <IC_MICRO x="150.0" v="0" label="NSM1" />
-                <IC_MICRO x="157.5" v="0" label="NSM1" />
-                <IC_MICRO x="165.0" v="0" label="NSM1" />
-                <IC_MICRO x="172.5" v="0" label="NSM1" />
-                <IC_MICRO x="180.0" v="0" label="NSM1" />
-                <IC_MICRO x="187.5" v="0" label="NSM1" />
-                <IC_MICRO x="195.0" v="0" label="NSM1" />
+                <MicroIC position="7.5" speed="0" label="NSM1" />
+                <MicroIC position="15.0" speed="0" label="NSM1" />
+                <MicroIC position="22.5" speed="0" label="NSM1" />
+                <MicroIC position="30.0" speed="0" label="NSM1" />
+                <MicroIC position="37.5" speed="0" label="NSM1" />
+                <MicroIC position="45.0" speed="0" label="NSM1" />
+                <MicroIC position="52.5" speed="0" label="NSM1" />
+                <MicroIC position="60.0" speed="0" label="NSM1" />
+                <MicroIC position="67.5" speed="0" label="NSM1" />
+                <MicroIC position="75.0" speed="0" label="NSM1" />
+                <MicroIC position="82.5" speed="0" label="NSM1" />
+                <MicroIC position="90.0" speed="0" label="NSM1" />
+                <MicroIC position="97.5" speed="0" label="NSM1" />
+                <MicroIC position="105.0" speed="0" label="NSM1" />
+                <MicroIC position="112.5" speed="0" label="NSM1" />
+                <MicroIC position="120.0" speed="0" label="NSM1" />
+                <MicroIC position="127.5" speed="0" label="NSM1" />
+                <MicroIC position="135.0" speed="0" label="NSM1" />
+                <MicroIC position="142.5" speed="0" label="NSM1" />
+                <MicroIC position="150.0" speed="0" label="NSM1" />
+                <MicroIC position="157.5" speed="0" label="NSM1" />
+                <MicroIC position="165.0" speed="0" label="NSM1" />
+                <MicroIC position="172.5" speed="0" label="NSM1" />
+                <MicroIC position="180.0" speed="0" label="NSM1" />
+                <MicroIC position="187.5" speed="0" label="NSM1" />
+                <MicroIC position="195.0" speed="0" label="NSM1" />
                 <!-- obstacle shifts floating car numbers -->
-                <IC_MICRO x="750" v="0" label="Obstacle" />
-            </INITIAL_CONDITIONS>
-        </ROAD>
-        <ROUTES>
-            <ROUTE label="main">
-                <ROAD id="1" />
-            </ROUTE>
-        </ROUTES>
-        <OUTPUT>
-            <FLOATING_CAR_DATA n_dt="1" route="main">
-                <!-- FC 1 is obstacle -->
-                <FC number="2" />
-                <FC number="6" />
-                <FC number="11" />
-                <FC number="16" />
-                <FC number="21" />
-            </FLOATING_CAR_DATA>
-            <TRAJECTORIES dt="1" route="main" />
-        </OUTPUT>
-    </SIMULATION>
-</SCENARIO>
+                <MicroIC position="750" speed="0" label="Obstacle" />
+            </InitialConditions>
+        </Road>
+    </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main">
+                <!-- FloatingCar 1 is obstacle -->
+                <FloatingCar number="2" />
+                <FloatingCar number="6" />
+                <FloatingCar number="11" />
+                <FloatingCar number="16" />
+                <FloatingCar number="21" />
+            </FloatingCarOutput>
+            <Trajectories dt="1" route="main" />
+        </OutputConfiguration>
+
+</MovsimScenario>
 
