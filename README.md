@@ -56,8 +56,8 @@ or
        
     git clone https://github.com/movsim/movsim.git
               
-Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 6
-of Java (JRE 1.6 or higher).
+Install [Java](http://www.java.com/en/download/manual.jsp), if you do not already have it. You need at least version 7
+of Java (JRE 1.7).
 
 Install [Apache Maven] (http://maven.apache.org/download.html). Maven is the software build and management tool that is used to build MovSim.
 
