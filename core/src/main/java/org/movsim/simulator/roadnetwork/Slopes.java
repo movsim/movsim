@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile.Elevation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -41,42 +42,61 @@ import com.google.common.base.Preconditions;
 /**
  * The Class Slopes.
  */
+
+// TODO refactoring, usage for car models
 public class Slopes implements Iterable<Slope> {
 
-    final static Logger logger = LoggerFactory.getLogger(Slopes.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Slopes.class);
 
     private double[] positions;
+    private double[] elevations;
     private double[] gradients;
     private final Collection<Slope> slopes;
 
     /**
      * Constructor.
      */
-    public Slopes(List<org.movsim.core.autogen.Slope> slopeInput) {
-        Preconditions.checkNotNull(slopeInput);
+    public Slopes(List<Elevation> elevationRecords) {
+        Preconditions.checkNotNull(elevationRecords);
         slopes = new LinkedList<>();
-        generateSpaceSeriesData(slopeInput);
+        generateSpaceSeriesData(elevationRecords);
     }
 
     /**
      * Generate space series data.
      * 
-     * @param data
+     * @param elevationRecords
      *            the data
      */
-    private void generateSpaceSeriesData(List<org.movsim.core.autogen.Slope> data) {
-        final int size = data.size() + 1;
+    private void generateSpaceSeriesData(List<Elevation> elevationRecords) {
+        final int size = elevationRecords.size() + 1;
         positions = new double[size];
         gradients = new double[size];
+        elevations = new double[size];
         positions[0] = 0;
+        elevations[0] = 0;
         gradients[0] = 0;
         for (int i = 1; i < size; i++) {
-            final double pos = data.get(i - 1).getPosition();
+            final double pos = elevationRecords.get(i - 1).getS(); // position in m
             positions[i] = pos;
-            final double gradient = data.get(i - 1).getGradient();
-            gradients[i] = gradient;
-            slopes.add(new Slope(pos, gradient));
+            Preconditions.checkArgument(i > 0 && positions[i] >= positions[i - 1],
+                    "road elevation not given in increasing order");
+
+            final double roadElevation = elevationRecords.get(i - 1).getA(); // elevation in m
+            elevations[i] = roadElevation;
+            
+            double deltaElevation = roadElevation - elevations[i - 1];
+            double deltaPosition = pos - positions[i-1];
+            final double gradient = (deltaPosition > 0) ? deltaElevation / deltaPosition : 0;
+            // if(LOG.isDebugEnabled()){
+            LOG.info(String.format("calculated gradient from=%.2fm to %.2fm: gradient=%.5f.", pos,
+                        positions[i - 1], gradient));
+            // }
+            gradients[i - 1] = gradient; // !!!
+            slopes.add(new Slope(positions[i - 1], gradients[i - 1]));
         }
+        // add last point
+        slopes.add(new Slope(positions[size - 1], 0));
     }
 
     /**
@@ -96,7 +116,7 @@ public class Slopes implements Iterable<Slope> {
         final double pos = vehicle.getFrontPosition();
         final double slope = calcSlope(pos);
         vehicle.setSlope(slope);
-        logger.debug("pos={} --> slope gradient={}", pos, slope);
+        LOG.debug("pos={} --> slope gradient={}", pos, slope);
     }
 
     public double calcSlope(double position) {

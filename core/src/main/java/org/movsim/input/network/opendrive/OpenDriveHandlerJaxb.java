@@ -131,11 +131,18 @@ public class OpenDriveHandlerJaxb {
         roadSegment.setUserId(road.getId());
         roadSegment.setUserRoadname(road.getName());
 
+        if (road.isSetElevationProfile()) {
+            roadSegment.setElevationProfile(road.getElevationProfile());
+        }
+
+        // TODO reduce redunancy here
         for (final LaneSection laneSection : road.getLanes().getLaneSection()) {
             if (laneSection.isSetLeft()) {
                 for (final org.movsim.network.autogen.opendrive.Lane leftLane : laneSection.getLeft().getLane()) {
                     final int laneIndex = OpenDriveHandlerUtils.leftLaneIdToLaneIndex(roadSegment, leftLane.getId());
                     setLaneType(laneIndex, leftLane, roadSegment);
+                    // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
+                    // entries overwrite previous entry
                     if (leftLane.isSetSpeed()) {
                         roadSegment.setSpeedLimits(leftLane.getSpeed());
                     }
@@ -145,6 +152,8 @@ public class OpenDriveHandlerJaxb {
                 for (final org.movsim.network.autogen.opendrive.Lane rightLane : laneSection.getRight().getLane()) {
                     final int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, rightLane.getId());
                     setLaneType(laneIndex, rightLane, roadSegment);
+                    // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
+                    // entries overwrite previous entry
                     if (rightLane.isSetSpeed()) {
                         roadSegment.setSpeedLimits(rightLane.getSpeed());
                     }

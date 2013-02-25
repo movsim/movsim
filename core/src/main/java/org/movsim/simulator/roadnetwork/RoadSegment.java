@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.movsim.network.autogen.opendrive.Lane.Speed;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -948,7 +949,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Sets the speed limits for this road segment.
+     * Sets the speed limits for this road segment for all lanes (openDrive defines speed limits per lane)
      * 
      * @param list
      */
@@ -970,10 +971,10 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param slopes
      */
-    public void setSlopes(Slopes slopes) {
-        this.slopes = slopes;
-    }
+    public void setElevationProfile(ElevationProfile elevationProfile) {
+        this.slopes = new Slopes(elevationProfile.getElevation());
 
+    }
     /**
      * Returns an iterable over all the slopes in the road segment.
      * 

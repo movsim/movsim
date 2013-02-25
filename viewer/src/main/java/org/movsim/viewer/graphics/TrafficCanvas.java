@@ -840,29 +840,29 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping.PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
 
             final double gradient = slope.getGradient() * 100;
-            if (gradient != 0) {
+            //if (gradient != 0) {
                 g.setColor(Color.BLACK);
                 final String text = String.valueOf((int) (gradient)) + " %";
                 final int textWidth = fontMetrics.stringWidth(text);
                 g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
 
-            } else {
-                // Draw a line between points (x1,y1) and (x2,y2)
-                // draw speed limit clearing
-                g.setColor(Color.BLACK);
-                g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
-                g.setColor(Color.WHITE);
-                g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
-                        2 * whiteRadius2);
-                g.setColor(Color.BLACK);
-                final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
-                final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
-                final Graphics2D g2 = g;
-                final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
-                        (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
-                g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
-                g2.draw(line);
-            }
+//            } else {
+//                // Draw a line between points (x1,y1) and (x2,y2)
+//                // draw speed limit clearing
+//                g.setColor(Color.BLACK);
+//                g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
+//                g.setColor(Color.WHITE);
+//                g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
+//                        2 * whiteRadius2);
+//                g.setColor(Color.BLACK);
+//                final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
+//                final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
+//                final Graphics2D g2 = g;
+//                final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
+//                        (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
+//                g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
+//                g2.draw(line);
+//            }
         }
     }
 

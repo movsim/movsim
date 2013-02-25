@@ -77,11 +77,11 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
         positions[0] = 0;
         speeds[0] = MovsimConstants.MAX_VEHICLE_SPEED;
         for (int i = 1; i < size; i++) {
-            final double pos = data.get(i - 1).getSOffset(); // .getPosition();
-            positions[i] = pos;
-            final double speed = data.get(i - 1).getMax(); // given in m/s * Units.KMH_TO_MS;
-            speeds[i] = speed;
-            speedLimits.add(new SpeedLimit(pos, speed));
+            positions[i] = data.get(i - 1).getSOffset();
+            Preconditions.checkArgument(i > 0 && positions[i] >= positions[i - 1],
+                    "speed limits not given in increasing order");
+            speeds[i] = data.get(i - 1).getMax(); // given in m/s
+            speedLimits.add(new SpeedLimit(positions[i], speeds[i]));
         }
     }
 
