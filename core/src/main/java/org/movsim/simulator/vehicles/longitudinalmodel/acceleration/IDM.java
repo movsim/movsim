@@ -108,6 +108,7 @@ public class IDM extends LongitudinalModelBase {
         modelParameterIDM.setT(T);
         modelParameterIDM.setS0(s0);
         modelParameterIDM.setS1(s1);
+        modelParameterIDM.setDelta(modelParameterIDM.getDelta());
         return modelParameterIDM;
     }
 

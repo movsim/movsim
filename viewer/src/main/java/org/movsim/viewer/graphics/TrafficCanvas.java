@@ -42,7 +42,6 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadMapping;
@@ -285,15 +284,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             roadSegment.roadMapping().setRoadColor(roadColor.getRGB());
         }
-        VehiclesInput vehiclesInput = simulator.getVehiclesInput();
-        if (vehiclesInput == null) {
-            logger.warn("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
-        } else {
-            for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
-                final Color color = new Color(Colors.randomColor());
-                logger.info("set color for vehicle label={}", vehicleTypeLabel);
-                labelColors.put(vehicleTypeLabel, color);
-            }
+        for (String vehicleTypeLabel : simulator.getVehiclePrototypeLabels()) {
+            final Color color = new Color(Colors.randomColor());
+            logger.info("set color for vehicle label={}", vehicleTypeLabel);
+            labelColors.put(vehicleTypeLabel, color);
         }
     }
 

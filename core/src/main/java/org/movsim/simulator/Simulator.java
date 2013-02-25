@@ -129,9 +129,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setDuration(duration < 0 ? Double.MAX_VALUE : duration);
 
         if (simulationInput.isSetSeed()) {
-            MyRandom.initialize(simulationInput.getSeed());
-        } else {
-            MyRandom.initialize();
+            MyRandom.initializeWithSeed(simulationInput.getSeed());
         }
 
         createRoutes(inputData.getRoutes());
@@ -172,9 +170,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
     }
 
-    // public VehiclesInput getVehiclesInput() {
-    // return inputData.getVehiclesInput();
-    // }
+    public Iterable<String> getVehiclePrototypeLabels() {
+        return vehicleFactory.getLabels();
+    }
 
     public TrafficCompositionGenerator getVehicleGenerator() {
         return defaultTrafficComposition;

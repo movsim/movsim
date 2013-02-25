@@ -34,20 +34,14 @@ import com.google.common.base.Preconditions;
  */
 public class MyRandom {
 
-    private static Random rand; 
+    private static Random rand = new Random(); 
 
     private MyRandom() {
         // enforce singleton property with private constructor.
     }
 
-    public static void initialize(long randomSeed) {
-        Preconditions.checkArgument(!isInitialized(), "random generator already initialized");
+    public static void initializeWithSeed(long randomSeed) {
         rand = new Random(randomSeed);
-    }
-    
-    public static void initialize() {
-        Preconditions.checkArgument(!isInitialized(), "random generator already initialized");
-        rand = new Random();
     }
     
     public static boolean isInitialized(){

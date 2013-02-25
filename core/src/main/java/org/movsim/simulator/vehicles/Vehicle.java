@@ -273,7 +273,7 @@ public class Vehicle {
         this.color = 0;
         fuelModel = null;
         trafficLightApproaching = null;
-        maxDeceleration = 0.0;
+        maxDeceleration = 10.0;
         laneChangeModel = null;
         longitudinalModel = null;
         label = "";

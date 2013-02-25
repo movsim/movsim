@@ -1,5 +1,6 @@
 package org.movsim.simulator.vehicles;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,10 @@ public final class VehicleFactory {
                     + label);
         }
         return vehiclePrototypes.get(label);
+    }
+
+    public Iterable<String> getLabels() {
+        return Collections.unmodifiableCollection(vehiclePrototypes.keySet());
     }
 
 }

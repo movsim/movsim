@@ -34,6 +34,8 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Longitudinal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class MOBIL.
  * 
@@ -52,39 +54,8 @@ public class MOBIL {
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(MOBIL.class);
 
-    private double politeness;
-
-    // /** changing threshold */
-    // private double threshold;
-    //
-    /** maximum safe braking decelerations */
-    private double bSafe;
-    //
-    // /** minimum safe (net) distance */
-    // private double gapMin;
-    //
-    // /** bias (m/s^2) to drive */
-    // private double biasRight;
-    //
-    // // private double thresholdRef;
-    //
-    // private double biasRightRef;
-    //
-    // // private double bSafeRef;
-    //
-    // // private double pRef;
 
     private ModelParameterMOBIL param;
-
-    // /**
-    // * Instantiates a new MOBIL.
-    // *
-    // * @param vehicle
-    // * the vehicle
-    // */
-    // public MOBIL(Vehicle vehicle) {
-    // // TODO handle this case with *no* <MOBIL> xml element
-    // }
 
     /**
      * Instantiates a new MOBIL.
@@ -95,28 +66,22 @@ public class MOBIL {
      *            the lane change MOBIL data
      */
     public MOBIL(Vehicle vehicle, ModelParameterMOBIL modelParameterMOBIL) {
+        Preconditions.checkNotNull(modelParameterMOBIL);
         this.param = modelParameterMOBIL;
 
-        if (modelParameterMOBIL.getSafeDeceleration() > vehicle.getMaxDeceleration()) {
+        if (vehicle != null && modelParameterMOBIL.getSafeDeceleration() > vehicle.getMaxDeceleration()) {
             // MOBIL bSafe parameter should be typically chosen well below the physical maximum deceleration
             logger.error("not consistent modeling input data: MOBIL's bSafe must be <= vehicle's maximum deceleration."
                     + " Otherwise crashes could occur! Restrict bSafe to maximum deceleration={}",
                     vehicle.getMaxDeceleration());
+            throw new IllegalStateException("Inconsistent input configuration: MOBIL max. deceleration="
+                    + modelParameterMOBIL.getSafeDeceleration() + " is larger than vehicle's max. deceleration="
+                    + vehicle.getMaxDeceleration());
         }
-        bSafe = Math.min(modelParameterMOBIL.getSafeDeceleration(), vehicle.getMaxDeceleration());
     }
 
-    // public MOBIL(Vehicle vehicle, double minimumGap, double safeDeceleration, double politeness,
-    // double thresholdAcceleration, double rightBiasAcceleration) {
-    // bSafeRef = bSafe = safeDeceleration;
-    // biasRightRef = biasRight = rightBiasAcceleration;
-    // gapMin = minimumGap;
-    // thresholdRef = threshold = thresholdAcceleration;
-    // pRef = this.politeness = politeness;
-    // }
-
     public boolean safetyCheckAcceleration(double acc) {
-        return acc <= -bSafe;
+        return acc <= -param.getSafeDeceleration();
     }
 
     public double calcAccelerationBalance(Vehicle me, int direction, RoadSegment roadSegment) {
@@ -230,7 +195,7 @@ public class MOBIL {
             // assume increasing lane index from right to left
             bias = +2 * biasNormal / (laneCount - 1) * (currentLane - (0.5 * (laneCount - 1)));
 
-            prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc)
+            prospectiveBalance = meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc)
                     - param.getThresholdAcceleration() - bias * direction;
 
             // ###########################################################
@@ -296,7 +261,7 @@ public class MOBIL {
 
         final int biasSign = (changeTo == Lane.TO_LEFT) ? 1 : -1;
 
-        prospectiveBalance = meDiffAcc + politeness * (oldBackDiffAcc + newBackDiffAcc)
+        prospectiveBalance = meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc)
                 - param.getThresholdAcceleration() - biasSign * param.getRightBiasAcceleration();
 
         return prospectiveBalance;

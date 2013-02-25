@@ -32,6 +32,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class LaneChangeModel.
  */
@@ -112,6 +114,7 @@ public class LaneChangeModel {
 
     // used in tests
     public LaneChangeModel(Vehicle vehicle, org.movsim.core.autogen.LaneChangeModelType laneChangeModelParameter) {
+        Preconditions.checkNotNull(laneChangeModelParameter);
         this.parameter = laneChangeModelParameter;
         initialize(vehicle);
     }
@@ -123,10 +126,9 @@ public class LaneChangeModel {
      *            the vehicle
      */
     public void initialize(Vehicle vehicle) {
+        Preconditions.checkNotNull(vehicle);
         this.me = vehicle;
-        if (parameter != null && vehicle != null) {
-            lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
-        }
+        lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
     }
 
     /**
@@ -165,7 +167,6 @@ public class LaneChangeModel {
             return decision;
         }
         
-
         // check discretionary lane changes
         decision = determineDiscretionaryLaneChangeDirection(roadSegment);
 
