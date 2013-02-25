@@ -99,7 +99,6 @@ public class TrafficCanvasController {
     public void commandReset() throws JAXBException, SAXException {
         trafficCanvas.stop();
         trafficCanvas.roadNetwork.clear();
-        trafficCanvas.simulator.initialize();
         trafficCanvas.reset();
         trafficCanvas.start();
     }

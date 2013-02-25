@@ -352,11 +352,12 @@ public class ProjectMetaData {
         // testwise jaxb unmarshalling
         MovsimScenario inputData = null;
         try {
+            System.out.println("try to open file = " + getXmlInputFile());
             inputData = MovsimScenarioLoader.validateAndLoadScenarioInput(getXmlInputFile());
         } catch (JAXBException e) {
-            System.err.println(e);
+            throw new IllegalArgumentException(e.toString());
         } catch (SAXException e) {
-            System.err.println(e);
+            throw new IllegalArgumentException(e.toString());
         }
         if (inputData == null) {
             System.out.println("input not valid. exit.");

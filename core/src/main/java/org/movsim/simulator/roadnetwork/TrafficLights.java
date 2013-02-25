@@ -34,6 +34,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class TrafficLights.
  */
@@ -65,6 +67,7 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * @param trafficLightsInput
      */
     public TrafficLights(double roadLength, org.movsim.core.autogen.TrafficLights trafficLightsInput) {
+        Preconditions.checkNotNull(trafficLightsInput);
         for (final org.movsim.core.autogen.TrafficLight tlData : trafficLightsInput.getTrafficLight()) {
             trafficLights.add(new TrafficLight(tlData));
         }

@@ -1182,6 +1182,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public void setFlowConservingBottlenecks(FlowConservingBottlenecks flowConservingBottlenecks) {
+        Preconditions.checkNotNull(flowConservingBottlenecks);
         this.flowConservingBottlenecks = flowConservingBottlenecks;
     }
 

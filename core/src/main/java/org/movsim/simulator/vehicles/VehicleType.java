@@ -27,6 +27,9 @@ public class VehicleType {
         return configuration.getLabel();
     }
 
+    public boolean hasRouteLabel() {
+        return configuration.isSetRouteLabel();
+    }
     public String getRouteLabel() {
         return configuration.getRouteLabel();
     }

@@ -32,14 +32,10 @@ import java.util.Map;
 
 import org.movsim.core.autogen.ConsumptionCalculation;
 import org.movsim.core.autogen.FloatingCarOutput;
-import org.movsim.core.autogen.MovsimScenario;
 import org.movsim.core.autogen.OutputConfiguration;
 import org.movsim.core.autogen.SpatioTemporalConfiguration;
 import org.movsim.core.autogen.Trajectories;
 import org.movsim.core.autogen.TravelTimes;
-import org.movsim.core.autogen.VehiclePrototypeConfiguration;
-import org.movsim.core.autogen.VehiclePrototypes;
-import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
 import org.movsim.output.route.ConsumptionOnRoute;
@@ -48,6 +44,7 @@ import org.movsim.output.spatiotemporal.SpatioTemporal;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.vehicles.VehicleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +56,7 @@ import com.google.common.base.Preconditions;
 public class SimulationOutput implements SimulationTimeStep {
 
     /** The Constant logger. */
-    private final static Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
+    private static final Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<FloatingCars> floatingCarOutputs = new ArrayList<>();
 
@@ -75,29 +72,30 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final Map<String, Route> routes;
 
-    public SimulationOutput(double simulationTimestep, boolean writeOutput, MovsimScenario simInput,
-            RoadNetwork roadNetwork, Map<String, Route> routes) {
+    public SimulationOutput(double simulationTimestep, boolean writeOutput, OutputConfiguration outputConfiguration,
+            RoadNetwork roadNetwork, Map<String, Route> routes, VehicleFactory vehicleFactory) {
 
-        Preconditions.checkNotNull(simInput);
-        Preconditions.checkNotNull(simInput.getSimulation());
+        Preconditions.checkNotNull(outputConfiguration);
+        Preconditions.checkNotNull(roadNetwork);
+        Preconditions.checkNotNull(routes);
 
         this.roadNetwork = roadNetwork;
         this.routes = routes;
 
         // TODO move this functionality to VehiclePrototypes
         if (writeOutput) {
-            writeFundamentalDiagrams(simulationTimestep, simInput.getVehiclePrototypes());
+            vehicleFactory.writeFundamentalDiagrams(simulationTimestep);
         }
 
-        initFloatingCars(writeOutput, simInput.getOutputConfiguration());
+        initFloatingCars(writeOutput, outputConfiguration);
 
-        initConsumption(writeOutput, simulationTimestep, simInput.getOutputConfiguration());
+        initConsumption(writeOutput, simulationTimestep, outputConfiguration);
         
-        initTravelTimes(writeOutput, simulationTimestep, simInput.getOutputConfiguration());
+        initTravelTimes(writeOutput, simulationTimestep, outputConfiguration);
 
-        initSpatioTemporalOutput(writeOutput, simInput.getOutputConfiguration());
+        initSpatioTemporalOutput(writeOutput, outputConfiguration);
 
-        initTrajectories(writeOutput, simInput.getOutputConfiguration());
+        initTrajectories(writeOutput, outputConfiguration);
 
     }
 
@@ -152,19 +150,6 @@ public class SimulationOutput implements SimulationTimeStep {
         for (FloatingCarOutput floatingCarOutput : outputInput.getFloatingCarOutput()) {
             Route route = getCheckedRoute(floatingCarOutput.getRoute());
             floatingCarOutputs.add(new FloatingCars(floatingCarOutput, route, writeOutput));
-        }
-    }
-
-    private static void writeFundamentalDiagrams(double simulationTimestep, VehiclePrototypes vehicleTypes) {
-        if (!vehicleTypes.isWriteFundDiagrams()) {
-            return;
-        }
-        final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
-        logger.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
-        for (VehiclePrototypeConfiguration vehiclePrototype : vehicleTypes.getVehiclePrototypeConfiguration()) {
-            if (!ignoreLabel.equalsIgnoreCase(vehiclePrototype.getLabel())) {
-                FileFundamentalDiagram.writeToFile(simulationTimestep, vehiclePrototype);
-            }
         }
     }
 

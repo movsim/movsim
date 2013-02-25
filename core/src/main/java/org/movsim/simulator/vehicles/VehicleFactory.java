@@ -7,28 +7,38 @@ import java.util.Map;
 
 import org.movsim.core.autogen.VehiclePrototypeConfiguration;
 import org.movsim.core.autogen.VehiclePrototypes;
+import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 // singleton property
 public final class VehicleFactory {
-
+    private static final Logger LOG = LoggerFactory.getLogger(VehicleFactory.class);
+    
     private final Map<String, VehiclePrototype> vehiclePrototypes = new HashMap<>();
 
     private Map<String, Route> routes;
 
+    private final boolean writeFundamentalDiagrams;
+
     public VehicleFactory(double simulationTimestep, VehiclePrototypes prototypes) {
+        this.writeFundamentalDiagrams = prototypes.isWriteFundDiagrams();
         initialize(simulationTimestep, prototypes.getVehiclePrototypeConfiguration());
     }
     
-    public Vehicle create(VehicleType vehicleType) {
+    public boolean isWriteFundamentalDiagrams() {
+        return writeFundamentalDiagrams;
+    }
 
+    public Vehicle create(VehicleType vehicleType) {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
         
         // route
-        Route route = routes.get(vehicleType.getRouteLabel());
+        Route route = vehicleType.hasRouteLabel() ? routes.get(vehicleType.getRouteLabel()) : null;
         
         // acceleration model
         LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
@@ -68,6 +78,21 @@ public final class VehicleFactory {
 
     public Iterable<String> getLabels() {
         return Collections.unmodifiableCollection(vehiclePrototypes.keySet());
+    }
+    
+    public void writeFundamentalDiagrams(double simulationTimestep) {
+        if (!isWriteFundamentalDiagrams()) {
+            return;
+        }
+        
+        final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
+        
+        LOG.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
+        for (VehiclePrototype vehiclePrototype : vehiclePrototypes.values()) {
+            if (!ignoreLabel.equalsIgnoreCase(vehiclePrototype.getLabel())) {
+                FileFundamentalDiagram.writeToFile(simulationTimestep, vehiclePrototype);
+            }
+        }
     }
 
 }

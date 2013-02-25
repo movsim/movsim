@@ -36,6 +36,8 @@ import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class Slopes.
  */
@@ -51,7 +53,8 @@ public class Slopes implements Iterable<Slope> {
      * Constructor.
      */
     public Slopes(List<org.movsim.core.autogen.Slope> slopeInput) {
-        slopes = new LinkedList<Slope>();
+        Preconditions.checkNotNull(slopeInput);
+        slopes = new LinkedList<>();
         generateSpaceSeriesData(slopeInput);
     }
 

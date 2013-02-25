@@ -36,6 +36,9 @@
     </xs:simpleType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="MovsimScenario">
+ <xs:annotation>
+	<xs:documentation>Defines a MovSim simulation configuration.</xs:documentation>
+ </xs:annotation>
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehiclePrototypes" />
@@ -283,7 +286,7 @@
             </xs:annotation>
             <xs:complexContent>
                 <xs:extension base="BasicModelParameter">
-                    <!--  velocity relaxation time (s) of the freeflow part (or use a) -->
+	              <!--  velocity relaxation time (s) of the freeflow part (or use a) -->
                     <xs:attribute name="tau" type="nonNegativeDouble" default="0" />
                     <!--  weighting factor of negative PT generalized utilities  -->
                     <xs:attribute name="weightMinus" type="positiveDouble" default="2" />
@@ -327,7 +330,7 @@
     </xs:element>
     <xs:element name="ModelParameterMOBIL">
         <xs:complexType>
-            <!-- renamed: b_safe -->
+            <!-- renamed: b_safe, must be smaller than the maximum deceleration of a vehicle -->
             <xs:attribute name="safe_deceleration" type="nonNegativeDouble" default="4.0" />
             <!-- renamed: s_0-->
             <xs:attribute name="minimum_gap" type="nonNegativeDouble" default="2.0" />

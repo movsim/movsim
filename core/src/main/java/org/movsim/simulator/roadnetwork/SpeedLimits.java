@@ -38,6 +38,8 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class SpeedLimits.
  */
@@ -56,6 +58,8 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      *            the speed limit input data points
      */
     public SpeedLimits(List<org.movsim.core.autogen.SpeedLimit> speedLimitInput) {
+        Preconditions.checkNotNull(speedLimitInput);
+
         speedLimits = new LinkedList<>();
         generateSpaceSeriesData(speedLimitInput);
     }

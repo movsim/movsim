@@ -240,6 +240,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     @Override
     public void reset() {
         super.reset();
+        try {
+            simulator.initialize();
+        } catch (JAXBException | SAXException e) {
+            throw new RuntimeException("Jaxb exception:"+e.toString());
+        }
         simulator.reset();
         mouseListener.reset();
         vehicleToHighlightId = -1;

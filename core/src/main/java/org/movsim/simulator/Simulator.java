@@ -94,6 +94,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     /**
      * Constructor.
+     * 
+     * @throws SAXException
+     * @throws JAXBException
      */
     public Simulator(ProjectMetaData projectMetaData) {
         this.projectMetaData = projectMetaData;
@@ -111,6 +114,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
         inputData = projectMetaData.getInputData();
+        projectMetaData.setXodrNetworkFilename(inputData.getNetworkFilename()); // TODO
+
         Simulation simulationInput = inputData.getSimulation();
 
         // TODO one level higher?
@@ -121,7 +126,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
         simulationRunnable.setTimeStep(simulationInput.getTimestep());
-        
         
         // TODO better handling of case "duration = INFINITY"
         double duration = simulationInput.isSetDuration() ? simulationInput.getDuration() : -1;
@@ -186,9 +190,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     // return inputData;
     // }
 
-    public SimulationOutput getSimOutput() {
-        return simOutput;
-    }
+    // public SimulationOutput getSimOutput() {
+    // return simOutput;
+    // }
 
     public RoadNetwork getRoadNetwork() {
         return roadNetwork;
@@ -241,7 +245,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     // *
     // * @param inputData2
     // */
-    // private VehicleGeneratorOld createVehicleGenerator() {
+    // private VehicleGeneratorOld crea)teVehicleGenerator() {
     // Preconditions.checkNotNull(inputData);
     // return new VehicleGeneratorOld(simulationRunnable.timeStep(), inputData.getVehiclePrototypes(), inputData
     // .getSimulation().getTrafficComposition(), fuelConsumptionModelPool, routes);
@@ -327,21 +331,27 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         }
 
         // set up the traffic lights
-        final org.movsim.core.autogen.TrafficLights trafficLightsInput = roadInput.getTrafficLights();
-        final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
-        if (trafficLightsInput.isLogging()) {
-            final int nDt = trafficLightsInput.getNDt().intValue();
-            trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));
+        if (roadInput.isSetTrafficLights()) {
+            final org.movsim.core.autogen.TrafficLights trafficLightsInput = roadInput.getTrafficLights();
+            final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
+            if (trafficLightsInput.isLogging()) {
+                final int nDt = trafficLightsInput.getNDt().intValue();
+                trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));
+            }
+            roadSegment.setTrafficLights(trafficLights);
         }
-        roadSegment.setTrafficLights(trafficLights);
 
         // set up the speed limits
+        if (roadInput.isSetSpeedLimits()) {
         final SpeedLimits speedLimits = new SpeedLimits(roadInput.getSpeedLimits().getSpeedLimit());
         roadSegment.setSpeedLimits(speedLimits);
+        }
 
         // set up the slopes
-        final Slopes slopes = new Slopes(roadInput.getSlopes().getSlope());
-        roadSegment.setSlopes(slopes);
+        if (roadInput.isSetSlopes()) {
+            final Slopes slopes = new Slopes(roadInput.getSlopes().getSlope());
+            roadSegment.setSlopes(slopes);
+        }
 
         // set up the detectors
         if (roadInput.isSetDetectors()) {
@@ -368,8 +378,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             setMacroInitialConditions(roadSegment, initialConditions.getMacroIC(), vehGenerator);
         } else if (initialConditions.isSetMicroIC()) {
             setMicroInitialConditions(roadSegment, initialConditions.getMicroIC(), vehGenerator);
-        }
- else {
+        } else {
             throw new IllegalStateException();
         }
     }
@@ -499,7 +508,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     public void reset() {
         simulationRunnable.reset();
         simOutput = new SimulationOutput(simulationRunnable.timeStep(), projectMetaData.isInstantaneousFileOutput(),
-                inputData, roadNetwork, routes);
+                inputData.getOutputConfiguration(), roadNetwork, routes, vehicleFactory);
         obstacleCount = roadNetwork.obstacleCount();
     }
 
