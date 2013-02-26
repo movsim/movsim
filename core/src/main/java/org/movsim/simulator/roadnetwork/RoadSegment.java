@@ -26,6 +26,9 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,6 +36,7 @@ import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +102,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
-    private TrafficLights trafficLights;
+    private List<TrafficLightLocation> trafficLightLocations = new ArrayList<>();
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
@@ -649,18 +653,11 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        updateTrafficLights(dt, simulationTime, iterationCount);
         applySpeedLimits();
         applySlopes();
         applyVariableMessageSigns();
     }
 
-    private void updateTrafficLights(double dt, double simulationTime, long iterationCount) {
-        if (trafficLights != null) {
-            trafficLights.update(dt, simulationTime, iterationCount);
-        }
-    }
-    
     /**
      * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
      * traffic light located.
@@ -668,18 +665,16 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param position
      * @return the next downstream traffic or null
      */
-    public TrafficLight getNextDownstreamTrafficLightOnRoadSegment(double position) {
-        if (trafficLights != null) {
-            for (TrafficLight trafficLight : trafficLights) {
-                double distance = trafficLight.position() - position;
-                if (distance > 0) {
-                    // !!! assume that traffic lights are sorted with increasing position
-                    // so that first traffic light can be considered as the next downstream one
-                    return trafficLight;
-                }
+    public String getNextDownstreamTrafficLightOnRoadSegment(double position) {
+        for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
+            double distance = trafficLightLocation.getPosition() - position;
+            if (distance > 0) {
+                // !!! assume that traffic lights are sorted with increasing position
+                // so that first traffic light can be considered as the next downstream one
+                return trafficLightLocation.getId();
             }
         }
-        return null;
+        return MovsimConstants.EMPTY_STRING;
     }
 
     private void applySpeedLimits() {
@@ -975,6 +970,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         this.slopes = new Slopes(elevationProfile.getElevation());
 
     }
+   
     /**
      * Returns an iterable over all the slopes in the road segment.
      * 
@@ -984,23 +980,23 @@ public class RoadSegment implements Iterable<Vehicle> {
         return slopes == null ? null : slopes;
     }
 
-    /**
-     * Sets the traffic lights for this road segment.
-     * 
-     * @param trafficLights
-     */
-    public void setTrafficLights(TrafficLights trafficLights) {
-        this.trafficLights = trafficLights;
-    }
+    // /**
+    // * Sets the traffic lights for this road segment.
+    // *
+    // * @param trafficLights
+    // */
+    // public void setTrafficLights(TrafficLights trafficLights) {
+    // this.trafficLights = trafficLights;
+    // }
 
-    /**
-     * Returns an iterable over all the traffic lights in the road segment.
-     * 
-     * @return an iterable over all the traffic lights in the road segment
-     */
-    public Iterable<TrafficLight> trafficLights() {
-        return trafficLights == null ? null : trafficLights;
-    }
+    // /**
+    // * Returns an iterable over all the traffic lights in the road segment.
+    // *
+    // * @return an iterable over all the traffic lights in the road segment
+    // */
+    // public Iterable<TrafficLight> trafficLights() {
+    // return trafficLights == null ? null : trafficLights;
+    // }
 
     /**
      * Returns true if each lane in the vehicle array is sorted.
@@ -1238,6 +1234,34 @@ public class RoadSegment implements Iterable<Vehicle> {
     // TODO not yet used
     public void setUserRoadname(String name) {
         this.roadName = name;
+    }
+
+    /**
+     * Adds the {@code TrafficLightLocation} to the {@code RoadSegment} and performs a sorting to assure ascending order
+     * of positions along the road stretch.
+     * <p>
+     * The caller has to assure that traffic light id is unique in the whole network.
+     * </p>
+     * 
+     * @param trafficLightLocation
+     */
+    public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
+        trafficLightLocations.add(trafficLightLocation);
+        
+        // consistency check
+        if (trafficLightLocation.getPosition() < 0 || trafficLightLocation.getPosition() >= roadLength) {
+            throw new IllegalArgumentException("inconsistent input data: traffic light position="+trafficLightLocation.getPosition()+" does not fit onto road-id="+id()+" with lenght="+roadLength());
+        }
+        
+        Collections.sort(trafficLightLocations, new Comparator<TrafficLightLocation>() {
+            @Override
+            public int compare(TrafficLightLocation o1, TrafficLightLocation o2) {
+                final Double pos1 = new Double(o1.getPosition());
+                final Double pos2 = new Double(o2.getPosition());
+                return pos1.compareTo(pos2); // sort with increasing x
+            }
+        });
+
     }
 
 }

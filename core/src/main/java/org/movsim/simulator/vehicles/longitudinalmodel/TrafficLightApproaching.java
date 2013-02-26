@@ -26,8 +26,8 @@
 package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.simulator.roadnetwork.TrafficLight.TrafficLightStatus;
+import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.slf4j.Logger;

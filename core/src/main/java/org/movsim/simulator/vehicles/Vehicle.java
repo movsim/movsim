@@ -34,7 +34,8 @@ import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.roadnetwork.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -62,8 +63,8 @@ import com.google.common.base.Preconditions;
  * </p>
  * 
  * <p>
- * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the
- * position of the front of the vehicle on the road segment and also by the vehicle's lane.
+ * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the position of the front
+ * of the vehicle on the road segment and also by the vehicle's lane.
  * </p>
  * 
  * <p>
@@ -176,6 +177,7 @@ public class Vehicle {
     private Object colorObject;
 
     private final TrafficLightApproaching trafficLightApproaching;
+    private TrafficLights trafficLightsInNetwork = null;
 
     /** can be null */
     private EnergyFlowModel fuelModel;
@@ -241,7 +243,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
+            @Nullable LaneChangeModel lcModel, @Nullable Route route, @Nullable TrafficLights trafficLights) {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
@@ -260,9 +262,10 @@ public class Vehicle {
         if (laneChangeModel != null) {
             laneChangeModel.initialize(this);
         }
+        this.route = route;
 
         trafficLightApproaching = new TrafficLightApproaching();
-        this.route = route;
+        this.trafficLightsInNetwork = trafficLights;
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
@@ -663,23 +666,28 @@ public class Vehicle {
      * @return acceleration considering traffic light
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
+        if (trafficLightsInNetwork == null) {
+            return acc;
+        }
+
         double moderatedAcc = acc;
 
         // first find next downstream traffic light
-        TrafficLight trafficLight = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
-        if (trafficLight != null) {
+        String trafficLightId = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
+        if (trafficLightId != MovsimConstants.EMPTY_STRING) {
+            TrafficLight trafficLight = trafficLightsInNetwork.get(trafficLightId);
             double distance = trafficLight.position() - getFrontPosition();
             updateTrafficLightApproaching(trafficLight, distance);
             return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
                     trafficLightApproaching.accApproaching()) : acc;
         }
-
         // check also traffic light on next sink road segment as look-ahead horizon
         // !!! only one segment is checked ahead which may be too short-sighted in some situations
         RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(getLane());
         if (sinkRoadSegment != null) {
-            trafficLight = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
-            if (trafficLight != null) {
+            trafficLightId = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
+            if (trafficLightId != MovsimConstants.EMPTY_STRING) {
+                TrafficLight trafficLight = trafficLightsInNetwork.get(trafficLightId);
                 double distance = trafficLight.position() + roadSegment.roadLength() - getFrontPosition();
                 updateTrafficLightApproaching(trafficLight, distance);
                 return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
@@ -1011,9 +1019,8 @@ public class Vehicle {
      * Called when vehicle changes road segments (and possibly also lanes) at a link or junction.
      * </p>
      * <p>
-     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and
-     * <code>timeAtWhichLastChangedLanes</code> are used to interpolate this vehicle's lateral position and so give the
-     * appearance of a smooth lane change.
+     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and <code>timeAtWhichLastChangedLanes</code> are
+     * used to interpolate this vehicle's lateral position and so give the appearance of a smooth lane change.
      * </p>
      * 
      * @param newLane

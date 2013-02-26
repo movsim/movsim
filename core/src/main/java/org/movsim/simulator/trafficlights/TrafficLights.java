@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -23,14 +23,12 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.trafficlights;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.movsim.simulator.SimulationTimeStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,12 +37,12 @@ import com.google.common.base.Preconditions;
 /**
  * The Class TrafficLights.
  */
-public class TrafficLights implements Iterable<TrafficLight> {
+public class TrafficLights implements SimulationTimeStep {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(TrafficLights.class);
+    private static final Logger logger = LoggerFactory.getLogger(TrafficLights.class);
 
-    private final List<TrafficLight> trafficLights = new ArrayList<TrafficLight>();
+    private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
     public interface RecordDataCallback {
         /**
@@ -66,27 +64,13 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * @param roadLength
      * @param trafficLightsInput
      */
-    public TrafficLights(double roadLength, org.movsim.core.autogen.TrafficLights trafficLightsInput) {
+    public TrafficLights(org.movsim.core.autogen.TrafficLights trafficLightsInput) {
         Preconditions.checkNotNull(trafficLightsInput);
         for (final org.movsim.core.autogen.TrafficLight tlData : trafficLightsInput.getTrafficLight()) {
-            trafficLights.add(new TrafficLight(tlData));
-        }
-        
-        Collections.sort(trafficLights, new Comparator<TrafficLight>() {
-            @Override
-            public int compare(TrafficLight o1, TrafficLight o2) {
-                final Double pos1 = new Double(o1.position());
-                final Double pos2 = new Double(o2.position());
-                return pos1.compareTo(pos2); // sort with increasing x
-            }
-        });
-        
-        // consistency check
-        for (TrafficLight trafficLight : trafficLights) {
-            if (trafficLight.position() < 0 || trafficLight.position() >= roadLength) {
-                logger.error("inconsistent input data: position of trafficlight at={} is larger than road length={}",
-                        trafficLight.position(), roadLength);
-                System.exit(-1);
+            TrafficLight put = trafficLights.put(tlData.getId(), new TrafficLight(tlData));
+            if (put != null) {
+                throw new IllegalArgumentException("traffic light with id=" + tlData.getId()
+                        + " already exists. Check your input configuration.");
             }
         }
     }
@@ -100,6 +84,13 @@ public class TrafficLights implements Iterable<TrafficLight> {
         this.recordDataCallback = recordDataCallback;
     }
 
+    public TrafficLight get(String id) {
+        if (!trafficLights.containsKey(id)) {
+            throw new IllegalStateException("traffic light with id=" + id + " requested but not configured in input.");
+        }
+        return trafficLights.get(id);
+    }
+
     /**
      * Update.
      * 
@@ -110,17 +101,18 @@ public class TrafficLights implements Iterable<TrafficLight> {
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void update(double dt, double simulationTime, long iterationCount) {
-        for (final TrafficLight trafficLight : trafficLights) {
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+        for (final TrafficLight trafficLight : trafficLights.values()) {
             trafficLight.update(simulationTime);
         }
         if (recordDataCallback != null) {
-            recordDataCallback.recordData(simulationTime, iterationCount, trafficLights);
+            recordDataCallback.recordData(simulationTime, iterationCount, trafficLights.values());
         }
     }
-    
-    @Override
-    public Iterator<TrafficLight> iterator() {
-        return trafficLights.iterator();
-    }
+
+    // @Override
+    // public Iterator<TrafficLight> iterator() {
+    // return trafficLights.iterator();
+    // }
 }

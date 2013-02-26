@@ -26,9 +26,9 @@
 package org.movsim.output.fileoutput;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.simulator.roadnetwork.TrafficLight.TrafficLightStatus;
-import org.movsim.simulator.roadnetwork.TrafficLights;
+import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLights;
+import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
 
 /**
  * The Class FileTrafficLightRecorder.

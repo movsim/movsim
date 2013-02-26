@@ -56,6 +56,7 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
 import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -82,6 +83,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private VehicleFactory vehicleFactory;
     private TrafficCompositionGenerator defaultTrafficComposition;
+    private TrafficLights trafficLights;
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
     private Map<String, Route> routes;
@@ -113,8 +115,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         Simulation simulationInput = inputData.getSimulation();
 
-        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData);
-
+        if (inputData.isSetTrafficLights()) {
+            trafficLights = new TrafficLights(inputData.getTrafficLights());
+        }
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData, trafficLights);
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
@@ -537,6 +541,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                         simulationTime, simulationTime / 3600, dt, projectName));
             }
         }
+
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);

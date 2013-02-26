@@ -2,6 +2,8 @@ package org.movsim.input.network.opendrive;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -22,6 +24,7 @@ import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficSink;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +35,10 @@ import com.google.common.base.Preconditions;
 public class OpenDriveHandlerJaxb {
     final static Logger logger = LoggerFactory.getLogger(OpenDriveHandlerJaxb.class);
 
-    private OpenDriveHandlerJaxb() {
+    /** Set for checking uniqueness of signal id for whole network. */
+    private final Set<String> trafficLightIds = new HashSet<>();
+
+    OpenDriveHandlerJaxb() {
     }
 
     /**
@@ -47,10 +53,11 @@ public class OpenDriveHandlerJaxb {
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException {
         File networkFile = new File(filename);
         OpenDRIVE openDriveNetwork = OpenDriveNetwork.loadNetwork(networkFile);
-        return create(filename, openDriveNetwork, roadNetwork);
+        OpenDriveHandlerJaxb openDriveHandlerJaxb = new OpenDriveHandlerJaxb();
+        return openDriveHandlerJaxb.create(filename, openDriveNetwork, roadNetwork);
     }
 
-    private static boolean create(String filename, OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork)
+    private boolean create(String filename, OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork)
             throws IllegalArgumentException {
         for (Road road : openDriveNetwork.getRoad()) {
             final RoadMapping roadMapping = createRoadMapping(road);
@@ -125,7 +132,7 @@ public class OpenDriveHandlerJaxb {
         return roadMapping;
     }
 
-    private static RoadSegment createRoadSegment(RoadMapping roadMapping, Road road) {
+    private RoadSegment createRoadSegment(RoadMapping roadMapping, Road road) {
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
 
         roadSegment.setUserId(road.getId());
@@ -135,7 +142,7 @@ public class OpenDriveHandlerJaxb {
             roadSegment.setElevationProfile(road.getElevationProfile());
         }
 
-        // TODO reduce redunancy here
+        // TODO reduce redundancy here
         for (final LaneSection laneSection : road.getLanes().getLaneSection()) {
             if (laneSection.isSetLeft()) {
                 for (final org.movsim.network.autogen.opendrive.Lane leftLane : laneSection.getLeft().getLane()) {
@@ -160,6 +167,20 @@ public class OpenDriveHandlerJaxb {
                 }
             }
         }
+
+        if (road.isSetSignals()) {
+            for (OpenDRIVE.Road.Signals.Signal signal : road.getSignals().getSignal()) {
+                // assure uniqueness of signal id for whole network
+                TrafficLightLocation trafficLightLocation = new TrafficLightLocation(signal);
+                boolean added = trafficLightIds.add(trafficLightLocation.getId());
+                if (!added) {
+                    throw new IllegalArgumentException("traffic light signal with id=" + trafficLightLocation.getId()
+                            + " is not unique in xodr network definition.");
+                }
+                roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal));
+            }
+        }
+
         if (road.isSetObjects()) {
             for (final OpenDRIVE.Road.Objects.Tunnel tunnel : road.getObjects().getTunnel()) {
                 roadMapping.addClippingRegion(tunnel.getS(), tunnel.getLength());
