@@ -1,7 +1,7 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterCCS;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterCCS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class CCS extends LongitudinalModelBase {
 
     private final double length;
 
-    private final ModelParameterCCS param;
+    private final IModelParameterCCS param;
 
     /**
      * Instantiates a new CCS (cross country skiing).
@@ -47,7 +47,7 @@ public class CCS extends LongitudinalModelBase {
      * @param modelParameter
      * @param vehLength
      */
-    public CCS(ModelParameterCCS modelParameter, double vehLength) {
+    public CCS(IModelParameterCCS modelParameter, double vehLength) {
         super(ModelName.CCS);
         this.param = modelParameter;
         this.length = vehLength;
@@ -143,7 +143,7 @@ public class CCS extends LongitudinalModelBase {
     }
 
     @Override
-    protected ModelParameterCCS getParameter() {
+    protected IModelParameterCCS getParameter() {
         return param;
     }
 

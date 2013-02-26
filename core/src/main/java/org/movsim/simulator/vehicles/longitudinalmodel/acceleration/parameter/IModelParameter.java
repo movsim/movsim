@@ -10,9 +10,9 @@ public interface IModelParameter {
     public abstract double getV0();
 
     /**
-     * Gets the minimum bumper-to-bumper distance.
+     * Returns the minimum bumper-to-bumper distance in a standstill.
      * 
-     * @return the minimum bumper-to-bumper distance
+     * @return the minimum bumper-to-bumper distance (m)
      */
     public abstract double getS0();
 
