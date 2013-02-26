@@ -36,6 +36,7 @@ import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -989,14 +990,14 @@ public class RoadSegment implements Iterable<Vehicle> {
     // this.trafficLights = trafficLights;
     // }
 
-    // /**
-    // * Returns an iterable over all the traffic lights in the road segment.
-    // *
-    // * @return an iterable over all the traffic lights in the road segment
-    // */
-    // public Iterable<TrafficLight> trafficLights() {
-    // return trafficLights == null ? null : trafficLights;
-    // }
+    /**
+     * Returns an iterable over all the traffic lights in the road segment.
+     * 
+     * @return an iterable over all the traffic lights in the road segment
+     */
+    public Iterable<TrafficLight> trafficLights() {
+        return trafficLights == null ? null : trafficLights;
+    }
 
     /**
      * Returns true if each lane in the vehicle array is sorted.
