@@ -43,10 +43,9 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class ACC.
  * 
- * <li>safe time headway T (s)</li> <li>minimum gap in standstill s0 (m)</li> <li>maximum desired acceleration a (m/s^2)
- * </li> <li>comfortable (desired) deceleration (m/s^2)</li> <li>acceleration exponent delta (1)</li> <li>gap parameter
- * s1 (m).</li> <li>The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH
- * factor in range [0, 1]</li> </ul>
+ * <p>
+ * See {@link IModelParameterACC} for the model parameters.
+ * </p>
  */
 class ACC extends LongitudinalModelBase {
 
