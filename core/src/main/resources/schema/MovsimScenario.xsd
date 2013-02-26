@@ -42,6 +42,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehiclePrototypes" />
+		<!-- testwise, later with include -->
                 <xs:element ref="Simulation" />
                 <!-- pulled out Routes and Output from Simulation -->
                 <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
@@ -593,5 +594,10 @@
             <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
         </xs:complexType>
     </xs:element>
+
+
+
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 -->
+
 </xs:schema>
 

@@ -96,7 +96,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public Simulator(ProjectMetaData projectMetaData) {
         this.projectMetaData = projectMetaData;
-        // inputData = projectMetaData.getInputData();
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);
@@ -114,8 +113,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         Simulation simulationInput = inputData.getSimulation();
 
-        // TODO one level higher?
-        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes());
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData);
+
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 

@@ -47,8 +47,8 @@ import org.slf4j.LoggerFactory;
 // fluctStrenth 1
 public class Noise {
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(Noise.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(Noise.class);
 
     /** constant for uniform distribution calculation. */
     static final double SQRT12 = Math.sqrt(12.);
@@ -74,7 +74,7 @@ public class Noise {
         tauRelaxAcc = parameters.getTau();
 
         isWienerProcess = (tauRelaxAcc != 0) ? true : false;
-        logger.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
+        LOG.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Noise {
         if (isWienerProcess) {
             final double betaAcc = Math.exp(-dt / tauRelaxAcc);
             xiAcc = betaAcc * xiAcc + fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1;
-            logger.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
+            LOG.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
                     betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1));
         } else {
             // delta-correlated acc noise.

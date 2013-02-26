@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 public class LongitudinalModelFactory {
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(LongitudinalModelFactory.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(LongitudinalModelFactory.class);
 
     /**
      * Long model factory with vehicle length vehicle length is only needed for KKW (explicit model parameter).
@@ -67,11 +67,9 @@ public class LongitudinalModelFactory {
         } else if (longitudinalModelType.isSetModelParameterPTM()) {
             longModel = new PTM(simulationTimestep, longitudinalModelType.getModelParameterPTM());
         } else {
-            logger.error("model input unknown: ", longitudinalModelType.toString());
-            System.exit(0); // TODO throw exception
+            throw new IllegalArgumentException("unknown acceleration model=" + longitudinalModelType.toString());
         }
         return longModel;
-
     }
 
 }

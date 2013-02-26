@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.movsim.consumption.model.EnergyFlowModel;
+import org.movsim.consumption.model.EnergyFlowModelFactory;
+import org.movsim.core.autogen.MovsimScenario;
 import org.movsim.core.autogen.VehiclePrototypeConfiguration;
-import org.movsim.core.autogen.VehiclePrototypes;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -14,6 +16,7 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Longitudinal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 
 // singleton property
 public final class VehicleFactory {
@@ -25,9 +28,17 @@ public final class VehicleFactory {
 
     private final boolean writeFundamentalDiagrams;
 
-    public VehicleFactory(double simulationTimestep, VehiclePrototypes prototypes) {
-        this.writeFundamentalDiagrams = prototypes.isWriteFundDiagrams();
-        initialize(simulationTimestep, prototypes.getVehiclePrototypeConfiguration());
+    EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
+
+    public VehicleFactory(double simulationTimestep, MovsimScenario inputData) {
+        Preconditions.checkNotNull(inputData);
+        Preconditions.checkNotNull(inputData.getVehiclePrototypes());
+
+        this.writeFundamentalDiagrams = inputData.getVehiclePrototypes().isWriteFundDiagrams();
+        initialize(simulationTimestep, inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration());
+
+        // TODO
+        // fuelModelFactory.add(models);
     }
     
     public boolean isWriteFundamentalDiagrams() {
@@ -46,15 +57,15 @@ public final class VehicleFactory {
         
         LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
         
-        // TODO
-        // final Consumption fuelModel =
-        // fuelConsumptionModels.getFuelConsumptionModel(vehParameter.getConsumptionModelName());
-
         Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
                 laneChangeModel, route);
 
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
+        EnergyFlowModel energyFlowModel = fuelModelFactory.get(prototype.getLabel());
+        if (energyFlowModel != null) {
+            vehicle.setFuelModel(energyFlowModel);
+        }
         return vehicle;
     }
 

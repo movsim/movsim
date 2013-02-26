@@ -36,8 +36,12 @@ public final class EnergyFlowModels {
         // Suppresses default constructor, ensuring non-instantiability.
     }
 
-    public static EnergyFlowModel newModel(String keyLabel, Model modelInput) {
-        return new EnergyFlowModelImpl(keyLabel, modelInput);
+    // public static EnergyFlowModel newModel(String keyLabel, Model modelInput) {
+    // return new EnergyFlowModelImpl(keyLabel, modelInput);
+    // }
+
+    public static EnergyFlowModel create(Model model) {
+        return new EnergyFlowModelImpl(model.getLabel(), model);
     }
 
 }

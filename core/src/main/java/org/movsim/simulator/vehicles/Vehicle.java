@@ -163,19 +163,25 @@ public class Vehicle {
     private double slope;
 
     private LongitudinalModelBase longitudinalModel;
+    /** can be null */
     private LaneChangeModel laneChangeModel;
 
-    // no effect if model is not configured with memory effect
+    /** can be null */
     private Memory memory = null;
+    /** Acceleration noise model. Can be null */
     private Noise noise = null;
 
     private int color;
-    private Object colorObject; // color object cache
+    /** color object cache */
+    private Object colorObject;
 
     private final TrafficLightApproaching trafficLightApproaching;
 
-    private EnergyFlowModel fuelModel; // can be null
+    /** can be null */
+    private EnergyFlowModel fuelModel;
+    /** can be null */
     private final Route route;
+
     private int routeIndex;
 
     private boolean isBrakeLightOn;

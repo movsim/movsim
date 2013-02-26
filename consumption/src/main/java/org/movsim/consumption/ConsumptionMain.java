@@ -106,7 +106,7 @@ public class ConsumptionMain {
 
     private static void createConsumptionModels(MovsimConsumption movsimInput) {
         for (Model modelInput : movsimInput.getConsumptionModels().getModel()) {
-            consumptionModelPool.put(modelInput.getLabel(), EnergyFlowModels.newModel(modelInput.getLabel(), modelInput));
+            consumptionModelPool.put(modelInput.getLabel(), EnergyFlowModels.create(modelInput));
         }
     }
 
