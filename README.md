@@ -37,10 +37,11 @@ Features:
 - detailed physics-based model for fuel consumption and emissions
 - text-file output of detectors, spatiotemporal fields, floating-car data etc.
 
-MovSim has two main components: the _core_ and the _viewer_:
+MovSim has several main components: 
 
 * The _core_ contains the main MovSim library and a console application that can run a traffic simulation and produce _.csv_ output for further processing or graphical display.
 * The _viewer_ displays an animated traffic simulation.
+* The _consumption_ comprises a physics-based fuel consumption model which can also be fed by csv data.
 
 
 Installation
