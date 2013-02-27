@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+
+<xsd:simpleType name="nonNegativeDouble">
+  <xsd:restriction base="xsd:double">
+    <xsd:minInclusive value="0"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="positiveDouble">
+  <xsd:restriction base="xsd:double">
+    <xsd:minExclusive value="0"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+</xsd:schema>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"      >
+    <xsd:annotation>
+        <xsd:documentation>XML Schema Definition for Movsim Consumption Models, (c) 2013 by movsim.org</xsd:documentation>
+    </xsd:annotation>
+    
+    <xsd:include schemaLocation="./MovsimConsumptionCommons.xsd"/>
+    
+ <xsd:element name='consumptionModels'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='model' maxOccurs='unbounded'/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='model'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='vehicleData'/>
+    <xsd:choice>
+     <xsd:element ref='engineCombustionMap'/>
+     <xsd:element ref='engineConstantMap'/>
+    </xsd:choice>
+    <xsd:element ref='rotationModel'/>
+   </xsd:sequence>
+   <xsd:attribute name='label' type='xsd:string' use='required'/>
+   <xsd:attribute name='output' type='xsd:boolean' default='false'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='vehicleData'>
+  <xsd:complexType>
+   <xsd:attribute name='mass' type='nonNegativeDouble' default='1500'/>
+   <xsd:attribute name='cross_section_surface' type='nonNegativeDouble' default='2.2'/>
+   <xsd:attribute name='cd_value' type='nonNegativeDouble' default='0.32'/>
+   <xsd:attribute name='electric_power' type='nonNegativeDouble' default='2000'/>
+   <xsd:attribute name='const_friction' type='nonNegativeDouble' default='0.0145'/>
+   <xsd:attribute name='v_friction' type='nonNegativeDouble' default='0'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='engineCombustionMap'>
+  <xsd:complexType>
+   <xsd:attribute name='max_power_kW' type='nonNegativeDouble' default='90'/>
+   <xsd:attribute name='cylinder_vol_l' type='nonNegativeDouble' default='1.4'/>
+   <xsd:attribute name='idle_cons_rate_linvh' type='nonNegativeDouble' default='0.6'/>
+   <xsd:attribute name='cspec_min_g_per_kwh' type='nonNegativeDouble' default='212'/>
+   <xsd:attribute name='pe_min_bar' type='nonNegativeDouble' default='1'/>
+   <xsd:attribute name='pe_max_bar' type='nonNegativeDouble' default='19'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='engineConstantMap'>
+  <xsd:complexType/>
+ </xsd:element>
+
+ <xsd:element name='rotationModel'>
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref='gearRatio' maxOccurs='unbounded'/>
+   </xsd:sequence>
+   <xsd:attribute name='idle_rotation_rate_invmin' type='nonNegativeDouble' default='1000'/>
+   <xsd:attribute name='max_rotation_rate_invmin' type='nonNegativeDouble' default='6000'/>
+   <xsd:attribute name='dynamic_tyre_radius' type='nonNegativeDouble' default='0.3113'/>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name='gearRatio'>
+  <xsd:complexType>
+   <xsd:attribute name='phi' type='positiveDouble' use='required'/>
+  </xsd:complexType>
+ </xsd:element>
+</xsd:schema>
+
