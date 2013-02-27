@@ -64,10 +64,9 @@ public class FloatingCars implements SimulationTimeStep {
     /**
      * Constructor.
      * 
-     * @param roadSegment
-     *            the road segment
      * @param input
-     *            the input
+     * @param route
+     * @param writeFileOutput
      */
     public FloatingCars(FloatingCarInput input, Route route, boolean writeFileOutput) {
         Preconditions.checkNotNull(route);

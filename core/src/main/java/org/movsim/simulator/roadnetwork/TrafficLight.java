@@ -187,12 +187,6 @@ public class TrafficLight {
         lastUpdateTime = simulationTime;
     }
 
-    /**
-     * Set the traffic light to its next state.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     */
     public void nextState() {
         oldStatus = status;
         switch (status) {
