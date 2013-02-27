@@ -172,9 +172,9 @@ public class OpenDriveHandlerJaxb {
             for (OpenDRIVE.Road.Signals.Signal signal : road.getSignals().getSignal()) {
                 // assure uniqueness of signal id for whole network
                 TrafficLightLocation trafficLightLocation = new TrafficLightLocation(signal);
-                boolean added = trafficLightIds.add(trafficLightLocation.getId());
+                boolean added = trafficLightIds.add(trafficLightLocation.id());
                 if (!added) {
-                    throw new IllegalArgumentException("traffic light signal with id=" + trafficLightLocation.getId()
+                    throw new IllegalArgumentException("traffic light signal with id=" + trafficLightLocation.id()
                             + " is not unique in xodr network definition.");
                 }
                 roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal));

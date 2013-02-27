@@ -53,6 +53,7 @@ import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.Units;
@@ -620,12 +621,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
+    public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLightLocation trafficLightLocation) {
         final double offset = (roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
-        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
+        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLightLocation.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2, size, size
-                * trafficLight.lightCount());
+                * trafficLightLocation.getTrafficLight().lightCount());
         return rect;
     }
 
@@ -731,7 +732,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        if (roadSegment.trafficLights() == null) {
+        if (roadSegment.trafficLightLocations() == null) {
             return;
         }
         final RoadMapping roadMapping = roadSegment.roadMapping();
@@ -740,17 +741,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
-        for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-            final Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
-            switch (trafficLight.lightCount()) {
+        for (final TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
+            final Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLightLocation);
+            switch (trafficLightLocation.getTrafficLight().lightCount()) {
             case 1:
-                drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
+                drawTrafficLight1(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);
                 break;
             case 2:
-                drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
+                drawTrafficLight2(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);
                 break;
             default:
-                drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
+                drawTrafficLight3(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);
                 break;
             }
         }

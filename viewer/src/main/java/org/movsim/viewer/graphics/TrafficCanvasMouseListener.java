@@ -39,9 +39,9 @@ import java.awt.geom.Rectangle2D;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.TrafficLight;
 import org.movsim.simulator.roadnetwork.VariableMessageSignBase;
 import org.movsim.simulator.roadnetwork.VariableMessageSignDiversion;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
@@ -102,10 +102,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 }
                 trafficCanvas.repaint();
             }
-            if (roadSegment.trafficLights() != null) {
+            if (roadSegment.trafficLightLocations() != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
-                for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-                    final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
+                for (final TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
+                    final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLightLocation);
                     // check if the user has clicked on a traffic light, if they have then change the
                     // traffic light to the next color
                     final Point point = e.getPoint();
@@ -119,7 +119,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                         return;
                     }
                     if (trafficLightRect.contains(transformedPoint)) {
-                        trafficLight.nextState();
+                        trafficLightLocation.getTrafficLight().nextState();
                         trafficCanvas.repaint();
                     }
                 }

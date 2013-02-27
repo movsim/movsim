@@ -39,8 +39,8 @@ import com.google.common.base.Preconditions;
  */
 public class TrafficLights implements SimulationTimeStep {
 
-    /** The Constant logger. */
-    private static final Logger logger = LoggerFactory.getLogger(TrafficLights.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficLights.class);
 
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
@@ -58,18 +58,12 @@ public class TrafficLights implements SimulationTimeStep {
 
     private RecordDataCallback recordDataCallback;
 
-    /**
-     * Constructor.
-     * 
-     * @param roadLength
-     * @param trafficLightsInput
-     */
     public TrafficLights(org.movsim.core.autogen.TrafficLights trafficLightsInput) {
         Preconditions.checkNotNull(trafficLightsInput);
-        for (final org.movsim.core.autogen.TrafficLight tlData : trafficLightsInput.getTrafficLight()) {
-            TrafficLight put = trafficLights.put(tlData.getId(), new TrafficLight(tlData));
+        for (final org.movsim.core.autogen.TrafficLight trafficLightInput : trafficLightsInput.getTrafficLight()) {
+            TrafficLight put = trafficLights.put(trafficLightInput.getId(), new TrafficLight(trafficLightInput));
             if (put != null) {
-                throw new IllegalArgumentException("traffic light with id=" + tlData.getId()
+                throw new IllegalArgumentException("traffic light with id=" + trafficLightInput.getId()
                         + " already exists. Check your input configuration.");
             }
         }
@@ -111,8 +105,4 @@ public class TrafficLights implements SimulationTimeStep {
         }
     }
 
-    // @Override
-    // public Iterator<TrafficLight> iterator() {
-    // return trafficLights.iterator();
-    // }
 }

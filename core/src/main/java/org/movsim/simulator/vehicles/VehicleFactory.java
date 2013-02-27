@@ -5,15 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
-import org.movsim.core.autogen.MovsimScenario;
 import org.movsim.core.autogen.VehiclePrototypeConfiguration;
+import org.movsim.core.autogen.VehiclePrototypes;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -33,16 +30,11 @@ public final class VehicleFactory {
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
-    private final TrafficLights trafficLights;
+    public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes) {
+        Preconditions.checkNotNull(vehPrototypes);
 
-    public VehicleFactory(double simulationTimestep, MovsimScenario inputData, @Nullable TrafficLights trafficLights) {
-        Preconditions.checkNotNull(inputData);
-        Preconditions.checkNotNull(inputData.getVehiclePrototypes());
-
-        this.trafficLights = trafficLights;
-
-        this.writeFundamentalDiagrams = inputData.getVehiclePrototypes().isWriteFundDiagrams();
-        initialize(simulationTimestep, inputData.getVehiclePrototypes().getVehiclePrototypeConfiguration());
+        this.writeFundamentalDiagrams = vehPrototypes.isWriteFundDiagrams();
+        initialize(simulationTimestep, vehPrototypes.getVehiclePrototypeConfiguration());
 
         // TODO
         // fuelModelFactory.add(models);
@@ -65,7 +57,7 @@ public final class VehicleFactory {
         LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
         
         Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
-                laneChangeModel, route, trafficLights);
+                laneChangeModel, route);
 
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());

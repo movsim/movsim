@@ -35,7 +35,7 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.trafficlights.TrafficLight;
-import org.movsim.simulator.trafficlights.TrafficLights;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -177,7 +177,6 @@ public class Vehicle {
     private Object colorObject;
 
     private final TrafficLightApproaching trafficLightApproaching;
-    private TrafficLights trafficLightsInNetwork = null;
 
     /** can be null */
     private EnergyFlowModel fuelModel;
@@ -243,7 +242,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            @Nullable LaneChangeModel lcModel, @Nullable Route route, @Nullable TrafficLights trafficLights) {
+            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
@@ -265,7 +264,6 @@ public class Vehicle {
         this.route = route;
 
         trafficLightApproaching = new TrafficLightApproaching();
-        this.trafficLightsInNetwork = trafficLights;
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
@@ -666,17 +664,14 @@ public class Vehicle {
      * @return acceleration considering traffic light
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
-        if (trafficLightsInNetwork == null) {
-            return acc;
-        }
-
         double moderatedAcc = acc;
 
         // first find next downstream traffic light
-        String trafficLightId = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
-        if (trafficLightId != MovsimConstants.EMPTY_STRING) {
-            TrafficLight trafficLight = trafficLightsInNetwork.get(trafficLightId);
-            double distance = trafficLight.position() - getFrontPosition();
+        TrafficLightLocation trafficLightLocation = roadSegment
+                .getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
+        if (trafficLightLocation != null) {
+            TrafficLight trafficLight = trafficLightLocation.getTrafficLight();
+            double distance = trafficLightLocation.position() - getFrontPosition();
             updateTrafficLightApproaching(trafficLight, distance);
             return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
                     trafficLightApproaching.accApproaching()) : acc;
@@ -685,10 +680,10 @@ public class Vehicle {
         // !!! only one segment is checked ahead which may be too short-sighted in some situations
         RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(getLane());
         if (sinkRoadSegment != null) {
-            trafficLightId = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
-            if (trafficLightId != MovsimConstants.EMPTY_STRING) {
-                TrafficLight trafficLight = trafficLightsInNetwork.get(trafficLightId);
-                double distance = trafficLight.position() + roadSegment.roadLength() - getFrontPosition();
+            trafficLightLocation = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
+            if (trafficLightLocation != null) {
+                TrafficLight trafficLight = trafficLightLocation.getTrafficLight();
+                double distance = trafficLightLocation.position() + roadSegment.roadLength() - getFrontPosition();
                 updateTrafficLightApproaching(trafficLight, distance);
                 return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
                         trafficLightApproaching.accApproaching()) : acc;
@@ -823,7 +818,7 @@ public class Vehicle {
      * @param trafficLight
      * @param distance
      */
-    public void updateTrafficLightApproaching(TrafficLight trafficLight, double distance) {
+    private void updateTrafficLightApproaching(TrafficLight trafficLight, double distance) {
         if (trafficLight != null) {
             assert distance >= 0 : distance;
             trafficLightApproaching.update(this, trafficLight, distance, longitudinalModel);

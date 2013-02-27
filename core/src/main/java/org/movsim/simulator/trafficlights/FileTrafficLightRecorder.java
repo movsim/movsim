@@ -23,11 +23,10 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.simulator.trafficlights;
 
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.trafficlights.TrafficLight;
-import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
 
 /**

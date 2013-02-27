@@ -28,6 +28,8 @@ package org.movsim.simulator.trafficlights;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class TrafficLight.
  */
@@ -43,13 +45,8 @@ public class TrafficLight {
         }
     }
 
-    /** The Constant logger. */
-    public static final Logger logger = LoggerFactory.getLogger(TrafficLight.class);
-
-    /** The position. */
-    // private final double position;
-
-    private final String id;
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficLight.class);
 
     /** The status. */
     private TrafficLightStatus status;
@@ -87,12 +84,27 @@ public class TrafficLight {
     /** The last update time. */
     private double lastUpdateTime = 0;
 
+    private final String id;
+    // member not elegant but needed for traffic light recorder. Information is coded in infrastructure file and must be
+    // set from outside.
+    private double position = Double.NaN;
+
+    /**
+     * Constructor.
+     * 
+     */
+    public TrafficLight(org.movsim.core.autogen.TrafficLight tlData) {
+        this(tlData.getId(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
+                .getRedGreenTime(), tlData
+                .getPhaseShift(), tlData.getInit().intValue());
+    }
+
     /**
      * Constructor.
      */
-    public TrafficLight(String id, double greenTime, double greenRedTime, double redTime, double redGreenTime,
+    private TrafficLight(String id, double greenTime, double greenRedTime, double redTime, double redGreenTime,
             double phaseShift, int initStatusOrdinal) {
-        // this.position = position;
+        Preconditions.checkArgument(!id.isEmpty());
         this.id = id;
         this.greenTimePeriod = greenTime;
         this.redTimePeriod = redTime;
@@ -119,19 +131,6 @@ public class TrafficLight {
                 : TrafficLightStatus.values()[initStatusOrdinal];
         initialize(initStatus);
 
-        // if (position < 0) {
-        // logger.error("inconsistent input data: position of trafficlight at={} must be >= 0", position);
-        // System.exit(-1);
-        // }
-    }
-
-    /**
-     * Constructor.
-     * 
-     */
-    public TrafficLight(org.movsim.core.autogen.TrafficLight tlData) {
-        this(tlData.getId(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
-                .getRedGreenTime(), tlData.getPhaseShift(), tlData.getInit().intValue());
     }
 
     /**
@@ -141,7 +140,7 @@ public class TrafficLight {
         status = initStatus;
         totalCycleTime = redTimePeriod + greenTimePeriod + greenRedTimePeriod + redGreenTimePeriod;
         currentCycleTime = -phaseShift;
-        logger.debug("initialize traffic light id={} with status={}", id, status.toString());
+        LOG.debug("initialize traffic light with status={}", status.toString());
     }
 
     /**
@@ -163,8 +162,8 @@ public class TrafficLight {
         oldStatus = status;
         currentCycleTime += simulationTime - lastUpdateTime;
 
-        // logger.debug("update at time = {}, status = {}", time, status);
-        // logger.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
+        // LOG.debug("update at time = {}, status = {}", time, status);
+        // LOG.debug("   actualCycleTime = {}, lastUpdateTime={}", currentCycleTime, lastUpdateTime);
 
         // if any color time period is zero then the light will not automatically change from that color
         if (greenTimePeriod > 0.0 && currentCycleTime > greenTimePeriod) {
@@ -214,16 +213,6 @@ public class TrafficLight {
             currentCycleTime = 0.0;
             break;
         }
-    }
-
-    /**
-     * Position.
-     * 
-     * @return the double
-     */
-    public double position() {
-        // TODO
-        return 0; // position;
     }
 
     /**
@@ -331,6 +320,15 @@ public class TrafficLight {
 
     public double getRelativeRedPhase() {
         return redTimePeriod / (redTimePeriod + greenTimePeriod);
+    }
+
+    double position() {
+        Preconditions.checkArgument(Double.isNaN(position), "traffic light with id=" + id);
+        return position;
+    }
+
+    public void setPosition(double position) {
+        this.position = position;
     }
 
 }

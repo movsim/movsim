@@ -118,7 +118,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (inputData.isSetTrafficLights()) {
             trafficLights = new TrafficLights(inputData.getTrafficLights());
         }
-        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData, trafficLights);
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes());
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
 
@@ -185,14 +185,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         return projectMetaData;
     }
 
-    // public InputData getSimInput() {
-    // return inputData;
-    // }
-
-    // public SimulationOutput getSimOutput() {
-    // return simOutput;
-    // }
-
     public RoadNetwork getRoadNetwork() {
         return roadNetwork;
     }
@@ -230,25 +222,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 addInputToRoadSegment(roadSegment, roadInput);
             } else {
                 // at least warn user that roadId cannot be matched to xodr roadnetwork
-                // TODO add option to exit here if user sets option. Such input errors are just annoying.
-                logger.warn("cannot find roadId={} from input in constructed roadNetwork. IGNORE DATA!!!",
-                        roadInput.getId());
+                throw new IllegalArgumentException("cannot find roadId=" + roadInput.getId()
+                        + " from input in constructed roadNetwork. IGNORE DATA!!!");
             }
         }
     }
-
-    // /**
-    // * This is the default defaultTrafficComposition for all roadSegments as long as no individual vehicle composition
-    // of a
-    // * roadSegment is defined
-    // *
-    // * @param inputData2
-    // */
-    // private VehicleGeneratorOld crea)teVehicleGenerator() {
-    // Preconditions.checkNotNull(inputData);
-    // return new VehicleGeneratorOld(simulationRunnable.timeStep(), inputData.getVehiclePrototypes(), inputData
-    // .getSimulation().getTrafficComposition(), fuelConsumptionModelPool, routes);
-    // }
 
     /**
      * There was no xodr file and there is only one road segment in the MovSimXML file so set up a default s-shaped road
@@ -328,17 +306,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             roadSegment.setSimpleRamp(simpleRamp);
         }
 
-        // set up the traffic lights
-        // if (roadInput.isSetTrafficLights()) {
-        // final org.movsim.core.autogen.TrafficLights trafficLightsInput = roadInput.getTrafficLights();
-        // final TrafficLights trafficLights = new TrafficLights(roadSegment.roadLength(), trafficLightsInput);
-        // if (trafficLightsInput.isLogging()) {
-        // final int nDt = trafficLightsInput.getNDt().intValue();
-        // trafficLights.setRecorder(new FileTrafficLightRecorder(nDt, trafficLights, roadSegment));
-        // }
-        // roadSegment.setTrafficLights(trafficLights);
-        // }
-
         // set up the detectors
         if (roadInput.isSetDetectors()) {
             roadSegment.setLoopDetectors(new LoopDetectors(roadSegment, roadInput.getDetectors()));
@@ -352,6 +319,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (roadInput.isSetInitialConditions()) {
             initialConditions(roadSegment, roadInput.getInitialConditions(), composition);
         }
+
+        // set up the traffic lights: connect dynamic traffic lights with locations on the road segment
+        roadSegment.setTrafficLights(trafficLights);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
@@ -542,6 +512,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
         }
 
+        trafficLights.timeStep(dt, simulationTime, iterationCount);
         roadNetwork.timeStep(dt, simulationTime, iterationCount);
         if (simOutput != null) {
             simOutput.timeStep(dt, simulationTime, iterationCount);
