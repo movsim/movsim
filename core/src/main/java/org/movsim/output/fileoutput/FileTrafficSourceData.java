@@ -25,6 +25,7 @@
  */
 package org.movsim.output.fileoutput;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class FileTrafficSourceData extends FileOutputBase implements TrafficSour
      * 
      */
     public FileTrafficSourceData(String roadId) {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         writer = createWriter(String.format(extensionFormat, roadId));
         writer.printf(outputHeading);
     }

@@ -26,6 +26,7 @@
 package org.movsim.output.fileoutput;
 
 import org.movsim.core.autogen.Trajectories;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -65,7 +66,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      *            the trajectories input
      */
     public FileTrajectories(Trajectories traj, Route route) {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
 
         dtOut = traj.getDt();
         randomFraction = (traj.getRandomFraction() < 0 || traj.getRandomFraction() > 1) ? 0 : traj.getRandomFraction();

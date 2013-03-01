@@ -1,5 +1,6 @@
 package org.movsim.output.route;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Route;
@@ -20,6 +21,7 @@ public class FileConsumptionOnRoute extends FileOutputBase {
     private double lastUpdateTime;
 
     public FileConsumptionOnRoute(double dtOut, Route route) {
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         this.dtOutput = dtOut;
         lastUpdateTime = 0;
         writer = createWriter(String.format(extensionFormat, route.getName()));

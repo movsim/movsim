@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.trafficlights;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
@@ -46,7 +47,7 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
      *            the traffic lights
      */
     public FileTrafficLightRecorder(int nDt, Iterable<TrafficLight> trafficLights, RoadSegment roadSegment) {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         this.nDt = nDt;
 
         writer = createWriter(String.format(extensionFormat, roadSegment.userId()));

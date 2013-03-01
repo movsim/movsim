@@ -25,6 +25,7 @@
  */
 package org.movsim.output.fileoutput;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.utilities.Units;
@@ -45,7 +46,7 @@ public class FileFundamentalDiagram extends FileOutputBase {
 
     /** Simulation timestep is model parameter for iterated map models (and cellular automata) */
     private FileFundamentalDiagram(double simulationTimestep, VehiclePrototype vehiclePrototype) {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         final String label = vehiclePrototype.getLabel();
         final EquilibriumProperties eqProperties = vehiclePrototype.getEquiProperties();
         writer = createWriter(String.format(extensionFormat, label));

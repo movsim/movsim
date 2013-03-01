@@ -24,16 +24,6 @@
             <xs:maxInclusive value="1" />
         </xs:restriction>
     </xs:simpleType>
-    <xs:simpleType name="nonNegativeInteger">
-        <xs:restriction base="xs:integer">
-            <xs:minInclusive value="0" />
-        </xs:restriction>
-    </xs:simpleType>
-    <xs:simpleType name="positiveInteger">
-        <xs:restriction base="xs:integer">
-            <xs:minExclusive value="0" />
-        </xs:restriction>
-    </xs:simpleType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="MovsimScenario">
  <xs:annotation>
@@ -501,7 +491,7 @@
             <xs:sequence>
                 <xs:element ref="TrafficLight" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="n_dt" type="positiveInteger" default="1" />
+            <xs:attribute name="n_dt" type="xs:positiveInteger" default="1" />
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
@@ -513,7 +503,7 @@
             <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
             <xs:attribute name="red_green_time" type="nonNegativeDouble" use="required" />
             <xs:attribute name="phase_shift" type="xs:double" default="0" />
-            <xs:attribute name="init" type="nonNegativeInteger" default="0" />
+            <xs:attribute name="init" type="xs:nonNegativeInteger" default="0" />
             <!-- todo: enum type -->
         </xs:complexType>
     </xs:element>
@@ -558,7 +548,7 @@
             <xs:sequence>
                 <xs:element ref="FloatingCar" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="n_timestep" type="positiveInteger" default="1" />
+            <xs:attribute name="n_timestep" type="xs:positiveInteger" default="1" />
             <xs:attribute name="random_fraction" type="probability" default="0" />
             <xs:attribute name="route" type="xs:string" use="required" />
         </xs:complexType>
@@ -571,7 +561,7 @@
     <xs:element name="Trajectories">
         <xs:complexType>
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
-            <xs:attribute name="dn" type="positiveInteger" default="1" />
+            <xs:attribute name="dn" type="xs:positiveInteger" default="1" />
             <xs:attribute name="start_time" type="nonNegativeDouble" default="0" />
             <xs:attribute name="end_time" type="nonNegativeDouble" default="1e10" />
             <xs:attribute name="route" type="xs:string" use="required" />
