@@ -23,6 +23,10 @@ public class VehicleType {
         return configuration.getRelativeV0Randomization();
     }
 
+    public String getV0DistributionType() {
+        return configuration.getV0DistributionType();
+    }
+
     public String getVehiclePrototypeLabel() {
         return configuration.getLabel();
     }

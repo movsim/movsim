@@ -350,9 +350,20 @@
             <xs:attribute name="label" type="xs:string" use="required" />
             <xs:attribute name="fraction" type="nonNegativeDouble" use="required" />
             <xs:attribute name="relative_v0_randomization" type="nonNegativeDouble" default="0.0" />
+            <xs:attribute name="v0_distribution_type" type="DistributionTypeEnum" default="uniform" />
             <xs:attribute name="route_label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
+    
+    <!-- TODO bind this to an Enum in Java -->
+    <xs:simpleType name="DistributionTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="uniform" />
+            <xs:enumeration value="gaussian" />
+        </xs:restriction>
+    </xs:simpleType>
+    
+    
     <!-- Road also used in Routes definition without subelements. -->
     <xs:element name="Road">
         <xs:complexType>

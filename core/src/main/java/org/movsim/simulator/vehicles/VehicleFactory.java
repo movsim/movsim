@@ -52,7 +52,8 @@ public final class VehicleFactory {
         
         // acceleration model
         LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
-        accelerationModel.setRelativeRandomizationV0(vehicleType.getRelativeV0Randomization());
+        accelerationModel.setRelativeRandomizationV0(vehicleType.getRelativeV0Randomization(),
+                vehicleType.getV0DistributionType());
         
         LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
         

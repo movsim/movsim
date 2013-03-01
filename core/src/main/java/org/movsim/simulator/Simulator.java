@@ -115,9 +115,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         Simulation simulationInput = inputData.getSimulation();
 
-        if (inputData.isSetTrafficLights()) {
-            trafficLights = new TrafficLights(inputData.getTrafficLights());
-        }
+        trafficLights = new TrafficLights(inputData.getTrafficLights());
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes());
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);

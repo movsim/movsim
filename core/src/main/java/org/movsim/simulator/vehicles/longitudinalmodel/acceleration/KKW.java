@@ -72,7 +72,7 @@ class KKW extends LongitudinalModelBase {
     }
 
     @Override
-    public void setRelativeRandomizationV0(double relRandomizationFactor) {
+    public void setRelativeRandomizationV0(double relRandomizationFactor, String distributionType) {
         // no modification of desired speed by randomization.
     }
 

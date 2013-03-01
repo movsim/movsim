@@ -32,6 +32,8 @@ import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
  */
@@ -193,9 +195,15 @@ public abstract class LongitudinalModelBase {
      * @param relRandomizationFactor
      *            the new relative randomization v0
      */
-    public void setRelativeRandomizationV0(double relRandomizationFactor) {
-        v0RandomizationFactor = MyRandom.getRandomizedFactor(relRandomizationFactor);
-        LOG.debug("randomization of desired speeds with randomization factor=", v0RandomizationFactor);
+    public void setRelativeRandomizationV0(double relRandomizationFactor, String distributionType) {
+        if (distributionType.equals("gaussian")) {
+            v0RandomizationFactor = MyRandom.getGaussiansDistributedRandomizedFactor(relRandomizationFactor, 3);
+        }else {
+            v0RandomizationFactor = MyRandom.getUniformlyDistributedRandomizedFactor(relRandomizationFactor);
+        }
+        Preconditions.checkArgument(v0RandomizationFactor > 0, "relative v0 randomization factor must be > 0");
+        LOG.debug("randomization (of type={}) of desired speeds with randomization factor=", distributionType,
+                v0RandomizationFactor);
     }
 
     final static double calcSmoothFraction(double speedMe, double speedFront) {

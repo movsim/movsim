@@ -27,6 +27,10 @@ package org.movsim.utilities;
 
 import java.util.Random;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -79,8 +83,12 @@ public class MyRandom {
         return 2 * MyRandom.nextDouble() - 1;
     }
     
-    public static double getRandomizedFactor(double randomizationStrength) {
+    public static double getUniformlyDistributedRandomizedFactor(double randomizationStrength) {
         return 1 + randomizationStrength * getUniformDistribution(); 
     }
-
+    
+    public static double getGaussiansDistributedRandomizedFactor(double sigma, double nSigmaCutoff) {
+        return 1 + Math.max(-nSigmaCutoff*sigma, Math.min(nSigmaCutoff, sigma * rand.nextGaussian())); 
+    }
+    
 }
