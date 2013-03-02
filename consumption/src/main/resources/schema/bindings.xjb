@@ -7,14 +7,12 @@
 
 <!-- Annotate the following classes with XmlRootElement -->
 
-<jaxb:bindings schemaLocation="MovsimConsumption.xsd" node="/xs:schema">
+<!-- <jaxb:bindings schemaLocation="MovsimConsumption.xsd" node="/xs:schema">
        <jaxb:globalBindings generateIsSetMethod="true">
        </jaxb:globalBindings>
         <jaxb:schemaBindings>
-<!--          <jaxb:package name="org.movsim.consumption.autogen" /> -->
-          <!-- <jaxb:nameXmlTransform>            <jaxb:elementName suffix="Element" />           </jaxb:nameXmlTransform> -->
         </jaxb:schemaBindings>
-</jaxb:bindings>
+</jaxb:bindings> -->
 
 <!--    <jaxb:bindings schemaLocation="schema.xsd" node="/xsd:schema">
        <jaxb:bindings node="xsd:complexType[@name='Consumption']">

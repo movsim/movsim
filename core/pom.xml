@@ -49,7 +49,7 @@
                 <version>0.8.2</version>
                 <configuration>
                     <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
-                    <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory>
+                    <!-- <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory> -->
                     <generatePackage>org.movsim.core.autogen</generatePackage>
                     <strict>true</strict>
                     <extension>true</extension>
