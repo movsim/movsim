@@ -8,7 +8,8 @@
     </xs:annotation>
     
     <xs:include schemaLocation="./MovsimCoreCommons.xsd"/> 
-   <!-- <xs:include schemaLocation="../../../../../consumption/src/main/resources/schema/MovsimConsumptionModels.xsd"/>  -->
+<!--    <xs:include schemaLocation="../../../../../consumption/src/main/resources/schema/MovsimConsumptionModels.xsd"/>  -->
+   
     <xs:element name="MovsimScenario">
  <xs:annotation>
 	<xs:documentation>Defines a MovSim simulation configuration.</xs:documentation>
@@ -28,6 +29,7 @@
         </xs:complexType>
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    
     <xs:element name="VehiclePrototypes">
         <xs:complexType>
             <xs:sequence>

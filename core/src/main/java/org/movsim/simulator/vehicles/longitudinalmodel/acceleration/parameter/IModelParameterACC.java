@@ -27,7 +27,7 @@ public interface IModelParameterACC extends IModelParameter {
     double getT();
 
     /**
-     * Returns the <i>maximim acceleration</i> parameter value in m/s^2.<br>
+     * Returns the <i>maximum acceleration</i> parameter value in m/s^2.<br>
      * 
      * Typical values are in the range of 1-2 m/s^2.
      * 
