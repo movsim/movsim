@@ -1,7 +1,5 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
 
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
-
 /**
  * A read-only interface of the model .... extension of the {@link IDM} ... TODO
  * 

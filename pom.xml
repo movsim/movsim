@@ -47,9 +47,9 @@
         </developer>
     </developers>
     <modules>
+		<module>xsd</module>
         <module>common</module>
         <module>consumption</module>
-        <module>network</module>
         <module>core</module>
         <module>viewer</module>
     </modules>

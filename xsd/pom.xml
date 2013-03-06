@@ -14,12 +14,12 @@
     <description>Movsim xsd resources and autogeneration.</description>
 
     <dependencies>
-        <dependency>
+            <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimCommon</artifactId>
 	    <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+        </dependency>   
+     </dependencies>
     <build>
         <plugins>
 			 <plugin>
@@ -28,8 +28,6 @@
                 <version>0.8.2</version>
                 <configuration>
                     <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
-                    <!-- <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory> -->
-                    <generatePackage>org.movsim.core.autogen</generatePackage>
                     <strict>true</strict>
                     <extension>true</extension>
                     <args>
@@ -58,18 +56,38 @@
                             <version>2.1.8</version>
                         </plugin>
                     </plugins>
-                   
                 </configuration>
+                
                 <executions>
-                    <execution>
-                        <id>generate</id>
+                   <execution>
+                        <id>movsim</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
                             <forceRegenerate>true</forceRegenerate>
+                            <schemaIncludes>
+								<schemaInclude>MovsimScenario.xsd</schemaInclude>
+							</schemaIncludes>
+							 <generatePackage>org.movsim.core.autogen</generatePackage>
                         </configuration>
-                    </execution>
+                    </execution> 
+					<execution>
+						<id>opendrive</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>true</forceRegenerate>
+							<schemaIncludes>
+								<schemaInclude>OpenDRIVE_1.3.xsd</schemaInclude>
+							</schemaIncludes>
+							<generatePackage>org.movsim.network.autogen.opendrive</generatePackage>
+						<bindingIncludes>
+								<bindingInclude>globalBinding.xjc</bindingInclude>
+							</bindingIncludes> 
+						 </configuration>
+					</execution> 
                 </executions>
             </plugin>
 			

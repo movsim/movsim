@@ -1,4 +1,4 @@
-package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
+package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.core.autogen.ModelParameterACC;
 import org.movsim.core.autogen.ModelParameterCCS;
@@ -11,6 +11,7 @@ import org.movsim.core.autogen.ModelParameterNewell;
 import org.movsim.core.autogen.ModelParameterOVMFVDM;
 import org.movsim.core.autogen.ModelParameterPTM;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

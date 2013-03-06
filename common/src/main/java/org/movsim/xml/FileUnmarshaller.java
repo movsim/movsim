@@ -24,6 +24,13 @@ public class FileUnmarshaller<T> {
     public final T load(StreamSource source, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException, SAXException {
         T result;
         synchronized (SYNC_OBJECT) {
+            // TODO check if <xi:include href="test2/b.xml"> could work
+            // SAXParserFactory spf = SAXParserFactory.newInstance();
+            // spf.setXIncludeAware(true);
+            // spf.setNamespaceAware(true);
+            // XMLReader xr = spf.newSAXParser().getXMLReader();
+            // SAXSource src = new SAXSource(xr, new InputSource("test.xml"));
+
             // TODO creating a JaxbContext is expensive, consider pooling.
             Unmarshaller unmarshaller = createUnmarshaller(factory, xsdFile);
             unmarshaller.setEventHandler(new XmlValidationEventHandler());

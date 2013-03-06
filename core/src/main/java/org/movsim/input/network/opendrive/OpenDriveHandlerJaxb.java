@@ -7,7 +7,6 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.network.OpenDriveNetwork;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction.Connection;
