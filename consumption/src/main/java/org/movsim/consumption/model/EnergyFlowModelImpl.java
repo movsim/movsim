@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-import org.movsim.autogen.Model;
+import org.movsim.autogen.ConsumptionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +53,7 @@ class EnergyFlowModelImpl implements EnergyFlowModel {
 
     private final VehicleAttributes vehicle;
 
-    EnergyFlowModelImpl(String keyLabel, Model modelInput) {
+    EnergyFlowModelImpl(String keyLabel, ConsumptionModel modelInput) {
         Preconditions.checkNotNull(modelInput);
         vehicle = new VehicleAttributes(modelInput.getVehicleData());
         carPowerModel = new InstantaneousPowerModelImpl(vehicle);

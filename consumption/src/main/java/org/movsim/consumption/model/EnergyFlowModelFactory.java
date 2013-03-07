@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.movsim.autogen.ConsumptionModel;
 import org.movsim.autogen.ConsumptionModels;
-import org.movsim.autogen.Model;
 
 import com.google.common.base.Preconditions;
 
@@ -26,8 +26,8 @@ public class EnergyFlowModelFactory {
 
     private void initialize(ConsumptionModels models) {
         Preconditions.checkNotNull(models);
-        Preconditions.checkArgument(models.isSetModel());
-        addModels(models.getModel());
+        Preconditions.checkArgument(models.isSetConsumptionModel());
+        addModels(models.getConsumptionModel());
     }
 
     /**
@@ -40,8 +40,8 @@ public class EnergyFlowModelFactory {
         return energyFlowModels.get(label);
     }
 
-    private void addModels(List<Model> models) {
-        for (Model model : models) {
+    private void addModels(List<ConsumptionModel> models) {
+        for (ConsumptionModel model : models) {
             if (energyFlowModels.containsKey(model.getLabel())) {
                 throw new IllegalArgumentException("consumption models do not have unique names (labels)!");
             }

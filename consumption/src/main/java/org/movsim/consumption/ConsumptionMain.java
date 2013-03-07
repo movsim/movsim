@@ -31,9 +31,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.movsim.autogen.BatchData;
-import org.movsim.autogen.Model;
+import org.movsim.autogen.Consumption;
+import org.movsim.autogen.ConsumptionModel;
 import org.movsim.autogen.Movsim;
-import org.movsim.autogen.MovsimConsumption;
 import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.consumption.logging.ConsumptionLogger;
@@ -64,16 +64,15 @@ public class ConsumptionMain {
 
         Movsim inputData = MovsimInputLoader.getInputData(ConsumptionMetadata.getInstance().getXmlInputFile());
 
-        if (!inputData.isSetMovsimConsumption()) {
+        if (!inputData.isSetConsumption()) {
             System.err.println("no consumption element configured in input file");
             System.exit(1);
         }
 
-        createConsumptionModels(inputData.getMovsimConsumption());
+        createConsumptionModels(inputData.getConsumption());
 
-        System.out
-                .println("size of batches = " + inputData.getMovsimConsumption().getBatchJobs().getBatchData().size());
-        for (BatchData batch : inputData.getMovsimConsumption().getBatchJobs().getBatchData()) {
+        System.out.println("size of batches = " + inputData.getConsumption().getBatchJobs().getBatchData().size());
+        for (BatchData batch : inputData.getConsumption().getBatchJobs().getBatchData()) {
             InputReader reader = InputReader
                     .create(batch, ConsumptionMetadata.getInstance().getPathToConsumptionFile());
             List<ConsumptionDataRecord> records = reader.getRecords();
@@ -88,12 +87,12 @@ public class ConsumptionMain {
             writer.write(records);
         }
 
-        System.out.println(inputData.getMovsimConsumption().getBatchJobs().getBatchData().size() + " batches done.");
+        System.out.println(inputData.getConsumption().getBatchJobs().getBatchData().size() + " batches done.");
 
     }
 
-    private static void createConsumptionModels(MovsimConsumption movsimInput) {
-        for (Model modelInput : movsimInput.getConsumptionModels().getModel()) {
+    private static void createConsumptionModels(Consumption movsimInput) {
+        for (ConsumptionModel modelInput : movsimInput.getConsumptionModels().getConsumptionModel()) {
             consumptionModelPool.put(modelInput.getLabel(), EnergyFlowModels.create(modelInput));
         }
     }

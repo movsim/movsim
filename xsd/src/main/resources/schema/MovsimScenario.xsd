@@ -26,7 +26,7 @@
     <xs:element name="Movsim">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="MovsimConsumption" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="Consumption" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="VehiclePrototypes" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="MovsimScenario" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
@@ -34,7 +34,7 @@
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <!-- Movsim Consumption -->
-    <xs:element name="MovsimConsumption">
+    <xs:element name="Consumption">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="BatchJobs" minOccurs="0" maxOccurs="1" />
@@ -81,11 +81,11 @@
     <xs:element name="ConsumptionModels">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="Model" maxOccurs="unbounded" />
+                <xs:element ref="ConsumptionModel" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:element name="Model">
+    <xs:element name="ConsumptionModel">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehicleData" />
