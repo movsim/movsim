@@ -60,15 +60,15 @@ public class TrafficLights implements SimulationTimeStep {
 
     private RecordDataCallback recordDataCallback;
 
-    public TrafficLights(@Nullable org.movsim.core.autogen.TrafficLights trafficLightsInput) {
+    public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput) {
         if (trafficLightsInput != null) {
             initializeInput(trafficLightsInput);
         }
     }
 
-    private void initializeInput(org.movsim.core.autogen.TrafficLights trafficLightsInput) {
+    private void initializeInput(org.movsim.autogen.TrafficLights trafficLightsInput) {
         Preconditions.checkNotNull(trafficLightsInput);
-        for (final org.movsim.core.autogen.TrafficLight trafficLightInput : trafficLightsInput.getTrafficLight()) {
+        for (final org.movsim.autogen.TrafficLight trafficLightInput : trafficLightsInput.getTrafficLight()) {
             TrafficLight put = trafficLights.put(trafficLightInput.getId(), new TrafficLight(trafficLightInput));
             if (put != null) {
                 throw new IllegalArgumentException("traffic light with id=" + trafficLightInput.getId()

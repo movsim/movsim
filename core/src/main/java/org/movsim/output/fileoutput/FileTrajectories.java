@@ -25,7 +25,7 @@
  */
 package org.movsim.output.fileoutput;
 
-import org.movsim.core.autogen.Trajectories;
+import org.movsim.autogen.Trajectories;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;

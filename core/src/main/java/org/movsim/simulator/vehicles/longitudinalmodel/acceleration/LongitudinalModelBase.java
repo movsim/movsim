@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
+import org.movsim.autogen.DistributionTypeEnum;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
@@ -195,8 +196,8 @@ public abstract class LongitudinalModelBase {
      * @param relRandomizationFactor
      *            the new relative randomization v0
      */
-    public void setRelativeRandomizationV0(double relRandomizationFactor, String distributionType) {
-        if (distributionType.equals("gaussian")) {
+    public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
+        if (distributionType == DistributionTypeEnum.GAUSSIAN) {
             v0RandomizationFactor = MyRandom.getGaussiansDistributedRandomizedFactor(relRandomizationFactor, 3);
         }else {
             v0RandomizationFactor = MyRandom.getUniformlyDistributedRandomizedFactor(relRandomizationFactor);

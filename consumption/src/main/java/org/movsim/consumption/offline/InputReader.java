@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.consumption.autogen.BatchData;
+import org.movsim.autogen.BatchData;
 
 import au.com.bytecode.opencsv.CSVReader;
 

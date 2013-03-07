@@ -29,8 +29,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.movsim.consumption.autogen.GearRatio;
-import org.movsim.consumption.autogen.RotationModel;
+import org.movsim.autogen.GearRatio;
+import org.movsim.autogen.RotationModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

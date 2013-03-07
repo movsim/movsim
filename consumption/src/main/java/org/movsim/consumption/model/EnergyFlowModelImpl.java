@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.autogen.Model;
+import org.movsim.autogen.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

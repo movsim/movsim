@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.movsim.autogen.VehiclePrototypeConfiguration;
+import org.movsim.autogen.VehiclePrototypes;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
-import org.movsim.core.autogen.VehiclePrototypeConfiguration;
-import org.movsim.core.autogen.VehiclePrototypes;
 import org.movsim.output.fileoutput.FileFundamentalDiagram;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;

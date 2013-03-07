@@ -32,13 +32,13 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.core.autogen.InitialConditions;
-import org.movsim.core.autogen.MacroIC;
-import org.movsim.core.autogen.MicroIC;
-import org.movsim.core.autogen.MovsimScenario;
-import org.movsim.core.autogen.Road;
-import org.movsim.core.autogen.Routes;
-import org.movsim.core.autogen.Simulation;
+import org.movsim.autogen.InitialConditions;
+import org.movsim.autogen.MacroIC;
+import org.movsim.autogen.MicroIC;
+import org.movsim.autogen.Movsim;
+import org.movsim.autogen.Road;
+import org.movsim.autogen.Routes;
+import org.movsim.autogen.Simulation;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.opendrive.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
@@ -63,6 +63,7 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.VehicleFactory;
 import org.movsim.utilities.MyRandom;
 import org.movsim.utilities.Units;
+import org.movsim.xml.MovsimInputLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -78,7 +79,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private final ProjectMetaData projectMetaData;
     private String projectName;
-    private MovsimScenario inputData; // cannot be final, parsing in init TODO
+    private Movsim inputData; // cannot be final, parsing in init TODO
     // private FuelConsumptionModelPool fuelConsumptionModelPool; TODO
 
     private VehicleFactory vehicleFactory;
@@ -110,12 +111,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // TODO temporary handling of Variable Message Sign until added to XML
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
-        inputData = projectMetaData.getInputData();
-        projectMetaData.setXodrNetworkFilename(inputData.getNetworkFilename()); // TODO
+        inputData = MovsimInputLoader.getInputData(projectMetaData.getXmlInputFile());
+        projectMetaData.setXodrNetworkFilename(inputData.getMovsimScenario().getNetworkFilename()); // TODO
 
-        Simulation simulationInput = inputData.getSimulation();
+        Simulation simulationInput = inputData.getMovsimScenario().getSimulation();
 
-        trafficLights = new TrafficLights(inputData.getTrafficLights());
+        trafficLights = new TrafficLights(inputData.getMovsimScenario().getTrafficLights());
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes());
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
@@ -133,7 +134,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             MyRandom.initializeWithSeed(simulationInput.getSeed());
         }
 
-        createRoutes(inputData.getRoutes());
+        createRoutes(inputData.getMovsimScenario().getRoutes());
 
         defaultTrafficComposition = new TrafficCompositionGenerator(simulationInput.getTrafficComposition(),
                 vehicleFactory);
@@ -153,9 +154,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private void createRoutes(Routes routesInput) {
         routes = new HashMap<>();
         if (routesInput != null) {
-            for (org.movsim.core.autogen.Route routeInput : routesInput.getRoute()) {
+            for (org.movsim.autogen.Route routeInput : routesInput.getRoute()) {
                 final Route route = new Route(routeInput.getLabel());
-                for (org.movsim.core.autogen.Road roadInput : routeInput.getRoad()) {
+                for (org.movsim.autogen.Road roadInput : routeInput.getRoad()) {
                     route.add(roadNetwork.findByUserId(roadInput.getId()));
                 }
                 if (route.size() == 0) {
@@ -282,7 +283,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // set up the traffic source
         if (roadInput.isSetTrafficSource()) {
-            final org.movsim.core.autogen.TrafficSource trafficSourceData = roadInput.getTrafficSource();
+            final org.movsim.autogen.TrafficSource trafficSourceData = roadInput.getTrafficSource();
             if (trafficSourceData.isSetInflow()) {
                 final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
                 final TrafficSource trafficSource = new TrafficSource(composition, roadSegment, inflowTimeSeries);
@@ -295,7 +296,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // set up simple ramp with dropping mechanism
         if (roadInput.isSetSimpleRamp()) {
-            org.movsim.core.autogen.SimpleRamp simpleRampData = roadInput.getSimpleRamp();
+            org.movsim.autogen.SimpleRamp simpleRampData = roadInput.getSimpleRamp();
             InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(simpleRampData.getInflow());
             SimpleRamp simpleRamp = new SimpleRamp(composition, roadSegment, simpleRampData, inflowTimeSeries);
             if (simpleRampData.isLogging()) {
@@ -461,9 +462,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public void reset() {
         simulationRunnable.reset();
-        if (inputData.isSetOutputConfiguration()) {
+        if (inputData.getMovsimScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
-                    projectMetaData.isInstantaneousFileOutput(), inputData.getOutputConfiguration(), roadNetwork,
+                    projectMetaData.isInstantaneousFileOutput(),
+                    inputData.getMovsimScenario().getOutputConfiguration(), roadNetwork,
                     routes, vehicleFactory);
         }
         obstacleCount = roadNetwork.obstacleCount();

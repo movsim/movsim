@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.movsim.core.autogen.Inflow;
+import org.movsim.autogen.Inflow;
 import org.movsim.utilities.Tables;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;

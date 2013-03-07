@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
+import org.movsim.autogen.OptimalVelocityFunctionEnum;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterOVMFVDM;
@@ -111,19 +112,19 @@ class OVM_FVDM extends LongitudinalModelBase {
 
         final double s0 = getMinimumGap();
 
-        OptimalVelocityFunction variant = getModelVariant(param.getOptimalSpeedFunction());
+        OptimalVelocityFunctionEnum variant = param.getOptimalSpeedFunction();
 
-        if (variant == OptimalVelocityFunction.BANDO) {
+        if (variant == OptimalVelocityFunctionEnum.BANDO) {
             // standard OVM function (Bando model)
             // scale OVM/VDIFF so that v0 represents actual desired speed
             final double v0Prev = v0Local / (1.0 + Math.tanh(betaLoc));
             vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
-        } else if (variant == OptimalVelocityFunction.TRIANGULAR) {
+        } else if (variant == OptimalVelocityFunctionEnum.TRIANGULAR) {
             // triangular OVM function
             final double T = param.getBeta(); // interpret this as "time headway"
             vOptimal = Math.max(Math.min((s - s0) / T, v0Local), 0.0);
-        } else if (variant == OptimalVelocityFunction.THREEPHASE) {
+        } else if (variant == OptimalVelocityFunctionEnum.THREEPHASE) {
             // "Three-phase" OVM function
             final double diffT = 0.0 * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
             final double Tmin = transitionWidthLoc + diffT; // minimum time headway
@@ -131,18 +132,21 @@ class OVM_FVDM extends LongitudinalModelBase {
             final double Tdyn = (s - s0) / Math.max(v, MovsimConstants.SMALL_VALUE);
             vOptimal = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v, v0Local)
                     : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0Local) : 0;
+        } else {
+            logger.error("cannot map to optimal velocity variant = {}", param.getOptimalSpeedFunction());
+            // System.exit(-1); // TODO throw exception
         }
 
         // calc acceleration
         double aWanted = 0; // return value
         final double tau = param.getTau();
         final double gamma = param.getGamma();
-        if (variant == OptimalVelocityFunction.BANDO) {
+        if (variant == OptimalVelocityFunctionEnum.BANDO) {
             // original VDIFF model, OVM: lambda == 0
             aWanted = (vOptimal - v) / tau - gamma * dv;
-        } else if (variant == OptimalVelocityFunction.TRIANGULAR) {
+        } else if (variant == OptimalVelocityFunctionEnum.TRIANGULAR) {
             aWanted = (vOptimal - v) / tau - gamma * v * dv / Math.max(s - 1.0 * s0, MovsimConstants.SMALL_VALUE);
-        } else if (variant == OptimalVelocityFunction.THREEPHASE) {
+        } else if (variant == OptimalVelocityFunctionEnum.THREEPHASE) {
             aWanted = (vOptimal - v) / tau - gamma * ((dv > 0) ? dv : 0);
         }
 
@@ -153,20 +157,6 @@ class OVM_FVDM extends LongitudinalModelBase {
             System.exit(-1);
         }
         return aWanted;
-    }
-
-    private OptimalVelocityFunction getModelVariant(String optimalSpeedFunction) {
-        if (optimalSpeedFunction.equalsIgnoreCase(OptimalVelocityFunction.BANDO.toString())) {
-            return OptimalVelocityFunction.BANDO;
-        } else if (optimalSpeedFunction.equalsIgnoreCase(OptimalVelocityFunction.TRIANGULAR.toString())) {
-            return OptimalVelocityFunction.TRIANGULAR;
-        } else if (optimalSpeedFunction.equalsIgnoreCase(OptimalVelocityFunction.THREEPHASE.toString())) {
-            return OptimalVelocityFunction.THREEPHASE;
-        } else {
-            logger.error("cannot map to optimal velocity variant = {}", param.getOptimalSpeedFunction());
-            System.exit(-1); // TODO throw exception
-        }
-        return null; // not reached
     }
 
     @Override

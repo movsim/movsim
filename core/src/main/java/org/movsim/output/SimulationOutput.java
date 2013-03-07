@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.core.autogen.ConsumptionCalculation;
-import org.movsim.core.autogen.FloatingCarOutput;
-import org.movsim.core.autogen.OutputConfiguration;
-import org.movsim.core.autogen.SpatioTemporalConfiguration;
-import org.movsim.core.autogen.Trajectories;
-import org.movsim.core.autogen.TravelTimes;
+import org.movsim.autogen.ConsumptionCalculation;
+import org.movsim.autogen.FloatingCarOutput;
+import org.movsim.autogen.OutputConfiguration;
+import org.movsim.autogen.SpatioTemporalConfiguration;
+import org.movsim.autogen.Trajectories;
+import org.movsim.autogen.TravelTimes;
 import org.movsim.output.fileoutput.FileTrajectories;
 import org.movsim.output.floatingcars.FloatingCars;
 import org.movsim.output.route.ConsumptionOnRoute;

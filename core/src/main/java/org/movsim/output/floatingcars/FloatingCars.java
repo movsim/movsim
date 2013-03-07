@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.movsim.core.autogen.FloatingCarOutput;
+import org.movsim.autogen.FloatingCarOutput;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -75,7 +75,7 @@ public class FloatingCars implements SimulationTimeStep {
                 .getRandomFraction();
         this.route = route;
         floatingCarVehicleNumbers = new HashSet<>();
-        for( org.movsim.core.autogen.FloatingCar fc : floatingCarOutput.getFloatingCar()){
+        for (org.movsim.autogen.FloatingCar fc : floatingCarOutput.getFloatingCar()) {
             floatingCarVehicleNumbers.add(Integer.valueOf(fc.getNumber()));
         }
         fileFloatingCars = (writeFileOutput) ? new FileFloatingCars() : null;

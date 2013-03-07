@@ -27,7 +27,7 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.List;
 
-import org.movsim.core.autogen.MacroIC;
+import org.movsim.autogen.MacroIC;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.Tables;
 import org.movsim.utilities.Units;

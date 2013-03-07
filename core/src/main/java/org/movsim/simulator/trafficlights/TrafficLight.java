@@ -93,7 +93,7 @@ public class TrafficLight {
      * Constructor.
      * 
      */
-    public TrafficLight(org.movsim.core.autogen.TrafficLight tlData) {
+    public TrafficLight(org.movsim.autogen.TrafficLight tlData) {
         this(tlData.getId(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
                 .getRedGreenTime(), tlData
                 .getPhaseShift(), tlData.getInit().intValue());

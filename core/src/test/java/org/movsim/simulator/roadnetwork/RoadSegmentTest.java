@@ -31,8 +31,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Iterator;
 
 import org.junit.Test;
-import org.movsim.core.autogen.LaneChangeModelType;
-import org.movsim.core.autogen.ModelParameterMOBIL;
+import org.movsim.autogen.LaneChangeModelType;
+import org.movsim.autogen.ModelParameterMOBIL;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;

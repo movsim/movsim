@@ -27,8 +27,8 @@ package org.movsim.simulator.vehicles;
 
 import javax.annotation.Nullable;
 
+import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
-import org.movsim.core.autogen.VehiclePrototypeConfiguration;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;

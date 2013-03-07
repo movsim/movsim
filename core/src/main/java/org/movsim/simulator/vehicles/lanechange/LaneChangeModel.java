@@ -90,7 +90,7 @@ public class LaneChangeModel {
 
     private MOBIL lcModelMOBIL;
 
-    private final org.movsim.core.autogen.LaneChangeModelType parameter;
+    private final org.movsim.autogen.LaneChangeModelType parameter;
 
     // Exit Handling
     // distance at which driver should think about changing lanes for exit
@@ -104,7 +104,7 @@ public class LaneChangeModel {
      * @param laneChangeModelParameter
      *            the lc input data
      */
-    public LaneChangeModel(org.movsim.core.autogen.LaneChangeModelType laneChangeModelParameter) {
+    public LaneChangeModel(org.movsim.autogen.LaneChangeModelType laneChangeModelParameter) {
         this.parameter = laneChangeModelParameter;
         // this.withEuropeanRules = laneChangeModelParameter.isWithEuropeanRules();
         // this.vCritEur = laneChangeModelParameter.getCritSpeedEuroRules();
@@ -113,7 +113,7 @@ public class LaneChangeModel {
     }
 
     // used in tests
-    public LaneChangeModel(Vehicle vehicle, org.movsim.core.autogen.LaneChangeModelType laneChangeModelParameter) {
+    public LaneChangeModel(Vehicle vehicle, org.movsim.autogen.LaneChangeModelType laneChangeModelParameter) {
         Preconditions.checkNotNull(laneChangeModelParameter);
         this.parameter = laneChangeModelParameter;
         initialize(vehicle);

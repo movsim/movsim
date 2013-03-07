@@ -33,7 +33,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.movsim.core.autogen.Inflow;
+import org.movsim.autogen.Inflow;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 
 /**

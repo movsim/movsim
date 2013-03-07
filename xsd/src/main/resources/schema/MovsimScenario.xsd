@@ -1,42 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-           xmlns:jxb="http://java.sun.com/xml/ns/jaxb" 
-           xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance" 
-           jxb:version="2.1" 
-           jxb:extensionBindingPrefixes="inheritance">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance" jxb:version="2.1" jxb:extensionBindingPrefixes="inheritance">
     <xs:annotation>
-        <xs:documentation>XML Schema Definition for Movsim simulation files, (c) 2013 by movsim.org</xs:documentation>
-        <xs:appinfo>
-            <jxb:globalBindings fixedAttributeAsConstantProperty="false" typesafeEnumBase="xs:NCName" generateIsSetMethod="true" />
-             <jxb:schemaBindings>
-      <jxb:package name="org.acme.foo"/>
-    </jxb:schemaBindings>
-        </xs:appinfo>
+        <xs:documentation>XML Schema Definition for Movsim simulation files, (c) 2013 by MovSim.org</xs:documentation>
     </xs:annotation>
-    
-    <xs:include schemaLocation="./MovsimCoreCommons.xsd"/> 
-<!--    <xs:include schemaLocation="../../../../../consumption/src/main/resources/schema/MovsimConsumptionModels.xsd"/>  -->
-   
-    <xs:element name="MovsimScenario">
- <xs:annotation>
-	<xs:documentation>Defines a MovSim simulation configuration.</xs:documentation>
- </xs:annotation>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- own definition -->
+    <xs:simpleType name="nonNegativeDouble">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="positiveDouble">
+        <xs:restriction base="xs:double">
+            <xs:minExclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="probability">
+        <xs:restriction base="xs:double">
+            <xs:minInclusive value="0" />
+            <xs:maxInclusive value="1" />
+        </xs:restriction>
+    </xs:simpleType>
+    <!--     <xs:include schemaLocation="./MovsimSimpleTypes.xsd"/>  -->
+    <!-- root element -->
+    <xs:element name="Movsim">
         <xs:complexType>
             <xs:sequence>
-				 <!-- <xs:element ref="consumptionModels" minOccurs="0" maxOccurs="1"/> -->
-                <xs:element ref="VehiclePrototypes" />
-		<!-- testwise, later with include -->
-                <xs:element ref="Simulation" />
-                <!-- pulled out Routes and Output from Simulation -->
-                <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="Routes" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="OutputConfiguration" minOccurs="0" maxOccurs="1"  />
+                <xs:element ref="MovsimConsumption" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="VehiclePrototypes" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="MovsimScenario" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
-            <xs:attribute name="network_filename" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
-    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
-    
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- Movsim Consumption -->
+    <xs:element name="MovsimConsumption">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="BatchJobs" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="ConsumptionModels" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="BatchJobs">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="BatchData" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="BatchData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Columns" />
+                <xs:element ref="Conversions" />
+            </xs:sequence>
+            <xs:attribute name="inputfile" type="xs:string" use="required" />
+            <xs:attribute name="outputfile" type="xs:string" use="required" />
+            <xs:attribute name="model" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Columns">
+        <xs:complexType>
+            <xs:attribute name="time" type="xs:int" use="required" />
+            <xs:attribute name="speed" type="xs:int" default="-1" />
+            <xs:attribute name="acceleration" type="xs:int" default="-1" />
+            <xs:attribute name="gradient" type="xs:int" default="-1" />
+            <xs:attribute name="position" type="xs:int" default="-1" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Conversions">
+        <xs:complexType>
+            <xs:attribute name="time" type="xs:string" default="" />
+            <xs:attribute name="speed" type="positiveDouble" default="1" />
+            <xs:attribute name="acceleration" type="positiveDouble" default="1" />
+            <xs:attribute name="gradient" type="positiveDouble" default="1" />
+            <xs:attribute name="position" type="positiveDouble" default="1" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ConsumptionModels">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Model" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Model">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="VehicleData" />
+                <xs:choice>
+                    <xs:element ref="EngineCombustionMap" />
+                    <xs:element ref="EngineConstantMap" />
+                </xs:choice>
+                <xs:element ref="RotationModel" />
+            </xs:sequence>
+            <xs:attribute name="label" type="xs:string" use="required" />
+            <xs:attribute name="output" type="xs:boolean" default="false" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="VehicleData">
+        <xs:complexType>
+            <xs:attribute name="mass" type="nonNegativeDouble" default="1500" />
+            <xs:attribute name="cross_section_surface" type="nonNegativeDouble" default="2.2" />
+            <xs:attribute name="cd_value" type="nonNegativeDouble" default="0.32" />
+            <xs:attribute name="electric_power" type="nonNegativeDouble" default="2000" />
+            <xs:attribute name="const_friction" type="nonNegativeDouble" default="0.0145" />
+            <xs:attribute name="v_friction" type="nonNegativeDouble" default="0" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EngineCombustionMap">
+        <xs:complexType>
+            <xs:attribute name="max_power_kW" type="nonNegativeDouble" default="90" />
+            <xs:attribute name="cylinder_vol_l" type="nonNegativeDouble" default="1.4" />
+            <xs:attribute name="idle_cons_rate_linvh" type="nonNegativeDouble" default="0.6" />
+            <xs:attribute name="cspec_min_g_per_kwh" type="nonNegativeDouble" default="212" />
+            <xs:attribute name="pe_min_bar" type="nonNegativeDouble" default="1" />
+            <xs:attribute name="pe_max_bar" type="nonNegativeDouble" default="19" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="EngineConstantMap">
+        <xs:complexType />
+    </xs:element>
+    <xs:element name="RotationModel">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="GearRatio" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="idle_rotation_rate_invmin" type="nonNegativeDouble" default="1000" />
+            <xs:attribute name="max_rotation_rate_invmin" type="nonNegativeDouble" default="6000" />
+            <xs:attribute name="dynamic_tyre_radius" type="nonNegativeDouble" default="0.3113" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="GearRatio">
+        <xs:complexType>
+            <xs:attribute name="phi" type="positiveDouble" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="VehiclePrototypes">
         <xs:complexType>
             <xs:sequence>
@@ -49,7 +150,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="AccelerationModelType" />
-                <xs:element ref="LaneChangeModelType"  minOccurs="0" maxOccurs="1" />
+                <xs:element ref="LaneChangeModelType" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="MemoryParameter" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="NoiseParameter" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
@@ -201,7 +302,7 @@
                 </xs:appinfo>
             </xs:annotation>
             <xs:complexContent>
-       	        <!-- NSM does not have s0. Define s0="0" in input. -->
+                <!-- NSM does not have s0. Define s0="0" in input. -->
                 <xs:extension base="BasicModelParameter">
                     <xs:attribute name="p_slowdown" type="probability" use="required" />
                     <xs:attribute name="p_slow_start" type="probability" use="required" />
@@ -241,10 +342,12 @@
                     <xs:attribute name="cw" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="A" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="friction" type="nonNegativeDouble" use="required" />
-                    <xs:attribute name="p0" type="nonNegativeDouble" use="required" /> <!-- power ? consider renaming -->
+                    <xs:attribute name="p0" type="nonNegativeDouble" use="required" />
+                    <!-- power ? consider renaming -->
                     <xs:attribute name="v_c" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="p_herringbone" type="nonNegativeDouble" use="required" />
-                    <xs:attribute name="v_c_herringbone" type="nonNegativeDouble" use="required" /> <!-- power ? consider renaming -->
+                    <xs:attribute name="v_c_herringbone" type="nonNegativeDouble" use="required" />
+                    <!-- power ? consider renaming -->
                     <xs:attribute name="T" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="b" type="nonNegativeDouble" use="required" />
                     <xs:attribute name="b_maximum" type="nonNegativeDouble" use="required" />
@@ -261,7 +364,7 @@
             </xs:annotation>
             <xs:complexContent>
                 <xs:extension base="BasicModelParameter">
-	              <!--  velocity relaxation time (s) of the freeflow part (or use a) -->
+                    <!--  velocity relaxation time (s) of the freeflow part (or use a) -->
                     <xs:attribute name="tau" type="nonNegativeDouble" default="0" />
                     <!--  weighting factor of negative PT generalized utilities  -->
                     <xs:attribute name="weightMinus" type="positiveDouble" default="2" />
@@ -320,6 +423,21 @@
         </xs:complexType>
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <xs:element name="MovsimScenario">
+        <xs:annotation>
+            <xs:documentation>Defines a MovSim simulation configuration.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Simulation" />
+                <xs:element ref="TrafficLights" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="Routes" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="OutputConfiguration" minOccurs="0" maxOccurs="1" />
+            </xs:sequence>
+            <xs:attribute name="network_filename" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Simulation">
         <xs:complexType>
             <xs:sequence>
@@ -348,7 +466,6 @@
             <xs:attribute name="route_label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
-    
     <!-- TODO bind this to an Enum in Java -->
     <xs:simpleType name="DistributionTypeEnum">
         <xs:restriction base="xs:string">
@@ -356,8 +473,6 @@
             <xs:enumeration value="gaussian" />
         </xs:restriction>
     </xs:simpleType>
-    
-    
     <!-- Road also used in Routes definition without subelements. -->
     <xs:element name="Road">
         <xs:complexType>
@@ -368,8 +483,8 @@
                 <xs:element ref="TrafficSource" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="TrafficSink" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="FlowConservingInhomogeneities" minOccurs="0" maxOccurs="1" />
-<!--                 <xs:element ref="SpeedLimits" minOccurs="0" maxOccurs="1" /> -->
-<!--                 <xs:element ref="Slopes" minOccurs="0" maxOccurs="1" /> -->
+                <!--                 <xs:element ref="SpeedLimits" minOccurs="0" maxOccurs="1" /> -->
+                <!--                 <xs:element ref="Slopes" minOccurs="0" maxOccurs="1" /> -->
                 <xs:element ref="SimpleRamp" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Detectors" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
@@ -435,7 +550,7 @@
             <xs:attribute name="alpha_v0" type="nonNegativeDouble" default="1" />
         </xs:complexType>
     </xs:element>
-<!-- 
+    <!-- 
     <xs:element name="SpeedLimits">
         <xs:complexType>
             <xs:sequence>
@@ -489,7 +604,6 @@
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
         </xs:complexType>
     </xs:element>
-
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="TrafficLights">
         <xs:complexType>
@@ -512,7 +626,6 @@
             <!-- todo: enum type -->
         </xs:complexType>
     </xs:element>
-
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Routes">
         <xs:complexType>
@@ -589,10 +702,6 @@
             <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
         </xs:complexType>
     </xs:element>
-
-
-
-<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 -->
-
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 -->
 </xs:schema>
 

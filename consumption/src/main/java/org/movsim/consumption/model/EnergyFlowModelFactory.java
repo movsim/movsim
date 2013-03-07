@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.consumption.autogen.ConsumptionModels;
-import org.movsim.consumption.autogen.Model;
+import org.movsim.autogen.ConsumptionModels;
+import org.movsim.autogen.Model;
 
 import com.google.common.base.Preconditions;
 

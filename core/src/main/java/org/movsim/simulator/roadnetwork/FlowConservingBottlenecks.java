@@ -28,8 +28,8 @@ package org.movsim.simulator.roadnetwork;
 import java.util.List;
 import java.util.Map;
 
-import org.movsim.core.autogen.FlowConservingInhomogeneities;
-import org.movsim.core.autogen.Inhomogeneity;
+import org.movsim.autogen.FlowConservingInhomogeneities;
+import org.movsim.autogen.Inhomogeneity;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

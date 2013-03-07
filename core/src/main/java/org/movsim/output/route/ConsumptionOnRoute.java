@@ -1,6 +1,6 @@
 package org.movsim.output.route;
 
-import org.movsim.core.autogen.ConsumptionCalculation;
+import org.movsim.autogen.ConsumptionCalculation;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.utilities.ExponentialMovingAverage;

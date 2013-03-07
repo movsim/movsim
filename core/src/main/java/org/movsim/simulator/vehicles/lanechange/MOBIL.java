@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.lanechange;
 
-import org.movsim.core.autogen.ModelParameterMOBIL;
+import org.movsim.autogen.ModelParameterMOBIL;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;

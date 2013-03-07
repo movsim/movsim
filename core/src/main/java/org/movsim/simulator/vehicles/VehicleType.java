@@ -1,14 +1,16 @@
 package org.movsim.simulator.vehicles;
 
+import org.movsim.autogen.DistributionTypeEnum;
+
 import com.google.common.base.Preconditions;
 
 public class VehicleType {
 
-    private final org.movsim.core.autogen.VehicleType configuration;
+    private final org.movsim.autogen.VehicleType configuration;
 
     private final TestVehicle testVehicle;
 
-    public VehicleType(org.movsim.core.autogen.VehicleType configuration, VehiclePrototype vehiclePrototype) {
+    public VehicleType(org.movsim.autogen.VehicleType configuration, VehiclePrototype vehiclePrototype) {
         Preconditions.checkNotNull(configuration);
         Preconditions.checkNotNull(vehiclePrototype);
         this.configuration = configuration;
@@ -23,7 +25,7 @@ public class VehicleType {
         return configuration.getRelativeV0Randomization();
     }
 
-    public String getV0DistributionType() {
+    public DistributionTypeEnum getV0DistributionType() {
         return configuration.getV0DistributionType();
     }
 

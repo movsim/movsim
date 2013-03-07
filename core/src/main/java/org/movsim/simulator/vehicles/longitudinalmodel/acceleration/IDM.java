@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterIDM;
+import org.movsim.autogen.ModelParameterIDM;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterIDM;
 import org.slf4j.Logger;

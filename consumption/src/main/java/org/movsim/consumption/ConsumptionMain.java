@@ -25,20 +25,17 @@
  */
 package org.movsim.consumption;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.xml.bind.JAXBException;
-
-import org.movsim.consumption.autogen.BatchData;
-import org.movsim.consumption.autogen.Model;
-import org.movsim.consumption.autogen.MovsimConsumption;
+import org.movsim.autogen.BatchData;
+import org.movsim.autogen.Model;
+import org.movsim.autogen.Movsim;
+import org.movsim.autogen.MovsimConsumption;
 import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.input.ConsumptionMetadata;
-import org.movsim.consumption.input.ConsumptionXmlLoader;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModels;
@@ -46,7 +43,7 @@ import org.movsim.consumption.offline.ConsumptionCalculation;
 import org.movsim.consumption.offline.ConsumptionDataRecord;
 import org.movsim.consumption.offline.InputReader;
 import org.movsim.consumption.offline.OutputWriter;
-import org.xml.sax.SAXException;
+import org.movsim.xml.MovsimInputLoader;
 
 import com.google.common.base.Preconditions;
 
@@ -65,27 +62,18 @@ public class ConsumptionMain {
 
         ConsumptionCommandLine.parse(ConsumptionMetadata.getInstance(), args);
 
-        ConsumptionXmlLoader xmlInputLoader = new ConsumptionXmlLoader();
-        String consumptionFilename = ConsumptionMetadata.getInstance().getConsumptionFilename();
+        Movsim inputData = MovsimInputLoader.getInputData(ConsumptionMetadata.getInstance().getXmlInputFile());
 
-        MovsimConsumption inputData = null;
-        try {
-            inputData = xmlInputLoader.validateAndLoadConsumptionInput(new File(consumptionFilename));
-        } catch (JAXBException e) {
-            System.err.println(e);
-        } catch (SAXException e) {
-            System.err.println(e);
+        if (!inputData.isSetMovsimConsumption()) {
+            System.err.println("no consumption element configured in input file");
+            System.exit(1);
         }
 
-        if (inputData == null) {
-            System.out.println("input not valid. exit.");
-            System.exit(-1);
-        }
+        createConsumptionModels(inputData.getMovsimConsumption());
 
-        createConsumptionModels(inputData);
-
-        System.out.println("size of batches = " + inputData.getBatchJobs().getBatchData().size());
-        for (BatchData batch : inputData.getBatchJobs().getBatchData()) {
+        System.out
+                .println("size of batches = " + inputData.getMovsimConsumption().getBatchJobs().getBatchData().size());
+        for (BatchData batch : inputData.getMovsimConsumption().getBatchJobs().getBatchData()) {
             InputReader reader = InputReader
                     .create(batch, ConsumptionMetadata.getInstance().getPathToConsumptionFile());
             List<ConsumptionDataRecord> records = reader.getRecords();
@@ -100,7 +88,7 @@ public class ConsumptionMain {
             writer.write(records);
         }
 
-        System.out.println(inputData.getBatchJobs().getBatchData().size() + " batches done.");
+        System.out.println(inputData.getMovsimConsumption().getBatchJobs().getBatchData().size() + " batches done.");
 
     }
 

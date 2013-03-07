@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings xmlns:jxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema" jxb:version="2.0">
+    <jxb:bindings schemaLocation="MovsimScenario.xsd" node="/xs:schema">
+        <jxb:schemaBindings>
+            <jxb:package name="org.movsim.autogen" />
+        </jxb:schemaBindings>
+    </jxb:bindings>
+</jxb:bindings>

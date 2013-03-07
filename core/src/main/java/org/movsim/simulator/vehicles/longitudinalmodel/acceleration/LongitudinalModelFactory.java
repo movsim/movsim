@@ -26,7 +26,7 @@
 
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.AccelerationModelType;
+import org.movsim.autogen.AccelerationModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.movsim.core.autogen.TrafficComposition;
+import org.movsim.autogen.TrafficComposition;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class TrafficCompositionGenerator {
     /** The Constant logger. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficCompositionGenerator.class);
 
-    private final org.movsim.core.autogen.TrafficComposition configuration;
+    private final org.movsim.autogen.TrafficComposition configuration;
 
     private final Map<String, VehicleType> vehicleTypes = new HashMap<>();
 
@@ -69,7 +69,7 @@ public class TrafficCompositionGenerator {
     }
 
     private void addVehicleTypes() {
-        for (final org.movsim.core.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
+        for (final org.movsim.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
             String label = typeConfig.getLabel();
             vehicleTypes.put(label, new VehicleType(typeConfig, vehicleFactory.getPrototype(label)));
         }
@@ -77,18 +77,18 @@ public class TrafficCompositionGenerator {
 
     private void normalizeFractions() {
         double sumFractions = 0;
-        for (final org.movsim.core.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
+        for (final org.movsim.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
             sumFractions += typeConfig.getFraction();
         }
         Preconditions.checkArgument(sumFractions > 0, "vehicle type fractions sum up to 0. Check configuration.");
-        for (final org.movsim.core.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
+        for (final org.movsim.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
             typeConfig.setFraction(typeConfig.getFraction() / sumFractions);
         }
     }
 
     private void checkUniqueness() {
         Set<String> labels = new HashSet<>();
-        for (final org.movsim.core.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
+        for (final org.movsim.autogen.VehicleType typeConfig : configuration.getVehicleType()) {
             boolean added = labels.add(typeConfig.getLabel());
             if (!added) {
                 throw new IllegalArgumentException("ambigous traffic composition input: vehicle type=\""

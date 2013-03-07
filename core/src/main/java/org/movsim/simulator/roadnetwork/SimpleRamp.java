@@ -55,7 +55,7 @@ public class SimpleRamp extends AbstractTrafficSource {
     private final double relativeSpeedToLeader;
 
     public SimpleRamp(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
-            org.movsim.core.autogen.SimpleRamp simpleRampData,
+            org.movsim.autogen.SimpleRamp simpleRampData,
             InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment, inflowTimeSeries);
         this.relativeSpeedToLeader = simpleRampData.getRelativeSpeed();

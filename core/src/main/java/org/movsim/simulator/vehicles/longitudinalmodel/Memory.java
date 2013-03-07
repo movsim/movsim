@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel;
 
-import org.movsim.core.autogen.MemoryParameter;
+import org.movsim.autogen.MemoryParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

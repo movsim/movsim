@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.movsim.core.autogen.CrossSection;
+import org.movsim.autogen.CrossSection;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
@@ -53,7 +53,7 @@ public class LoopDetectors implements SimulationTimeStep {
      * @param detectorInput
      *            the input
      */
-    public LoopDetectors(RoadSegment roadSegment, org.movsim.core.autogen.Detectors detectorInput) {
+    public LoopDetectors(RoadSegment roadSegment, org.movsim.autogen.Detectors detectorInput) {
         Preconditions.checkNotNull(detectorInput);
         final double dtSample = detectorInput.getSampleInterval();
         for (final Double detPosition : getSortedPositions(detectorInput.getCrossSection())) {

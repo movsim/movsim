@@ -25,6 +25,7 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
+import org.movsim.autogen.DistributionTypeEnum;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNSM;
 import org.movsim.utilities.MyRandom;
@@ -58,7 +59,7 @@ class NSM extends LongitudinalModelBase {
     }
 
     @Override
-    public void setRelativeRandomizationV0(double relRandomizationFactor, String distributionType) {
+    public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
         // no modification of desired speed by randomization.
     }
 

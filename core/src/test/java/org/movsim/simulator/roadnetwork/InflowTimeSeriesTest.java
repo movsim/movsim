@@ -34,7 +34,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.movsim.core.autogen.Inflow;
+import org.movsim.autogen.Inflow;
 
 public class InflowTimeSeriesTest {
     private static final double delta = 0.00001;

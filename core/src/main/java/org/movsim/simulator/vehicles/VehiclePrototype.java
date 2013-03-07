@@ -1,7 +1,7 @@
 package org.movsim.simulator.vehicles;
 
+import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
-import org.movsim.core.autogen.VehiclePrototypeConfiguration;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;

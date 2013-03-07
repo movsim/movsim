@@ -23,32 +23,48 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.input;
+package org.movsim.xml;
 
 import java.io.File;
 import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.MovsimCoreMain;
-import org.movsim.core.autogen.MovsimScenario;
-import org.movsim.xml.FileUnmarshaller;
+import org.movsim.autogen.Movsim;
 import org.xml.sax.SAXException;
 
-public final class MovsimScenarioLoader {
+// TODO rename
+public final class MovsimInputLoader {
 
-    private static final Class<?> SCENARIO_FACTORY = org.movsim.core.autogen.MovsimScenario.class;
+    private static final Class<?> SCENARIO_FACTORY = Movsim.class;
 
     private static final String SCENARIO_XML_SCHEMA = "/schema/MovsimScenario.xsd";
 
-    private static final URL SCENARIO_XSD_URL = MovsimCoreMain.class.getResource(SCENARIO_XML_SCHEMA);
+    private static final URL SCENARIO_XSD_URL = MovsimInputLoader.class.getResource(SCENARIO_XML_SCHEMA);
 
-    private MovsimScenarioLoader() {
+    private MovsimInputLoader() {
     }
 
-    public static MovsimScenario validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
-        return new FileUnmarshaller<MovsimScenario>().load(xmlFile, MovsimScenario.class, SCENARIO_FACTORY,
+    public static Movsim validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
+        return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY,
                 SCENARIO_XSD_URL);
     }
 
+    public static Movsim getInputData(File xmlFile) {
+        // testwise jaxb unmarshalling
+        Movsim inputData = null;
+        try {
+            System.out.println("try to open file = " + xmlFile.getName());
+            inputData = MovsimInputLoader.validateAndLoadScenarioInput(xmlFile);
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException(e.toString());
+        } catch (SAXException e) {
+            throw new IllegalArgumentException(e.toString());
+        }
+        if (inputData == null) {
+            System.out.println("input not valid. exit.");
+            System.exit(-1);
+        }
+        return inputData;
+    }
 }

@@ -1,10 +1,10 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterPTM;
-import org.movsim.core.autogen.NoiseParameter;
+import org.movsim.autogen.NoiseParameter;
 import org.movsim.simulator.vehicles.Noise;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterPTM;
 import org.movsim.utilities.ProbabilityUtils;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ class PTM extends LongitudinalModelBase {
     /** The Constant logger. */
     private static final Logger LOG = LoggerFactory.getLogger(IDM.class);
 
-    private final ModelParameterPTM param;
+    private final IModelParameterPTM param;
 
     private double delta; // 0.5*(1-gamma)
     private double dw; // 1-wm
@@ -42,7 +42,7 @@ class PTM extends LongitudinalModelBase {
     // double dvref=0;
     // double delta_dv=(dvmax-dvmin)/(n-1);
 
-    PTM(double simulationTimestep, ModelParameterPTM parameters) {
+    PTM(double simulationTimestep, IModelParameterPTM parameters) {
         super(ModelName.PTM);
         this.param = parameters;
         this.dt = simulationTimestep;

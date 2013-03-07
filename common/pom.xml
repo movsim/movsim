@@ -15,6 +15,11 @@
     <description>Common utilities used in movsim.</description>
     
     <dependencies>
+		<dependency>
+            <groupId>org.movsim</groupId>
+            <artifactId>MovsimXsd</artifactId>
+	    <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>

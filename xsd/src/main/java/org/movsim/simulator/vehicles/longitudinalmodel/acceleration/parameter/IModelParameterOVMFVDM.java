@@ -1,5 +1,7 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter;
 
+import org.movsim.autogen.OptimalVelocityFunctionEnum;
+
 /**
  *
  */
@@ -8,7 +10,7 @@ public interface IModelParameterOVMFVDM extends IModelParameter {
 
     double getTransitionWidth();
 
-    String getOptimalSpeedFunction();
+    OptimalVelocityFunctionEnum getOptimalSpeedFunction();
 
     double getBeta();
 

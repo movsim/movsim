@@ -28,11 +28,6 @@ package org.movsim.input;
 import java.io.File;
 import java.io.InputStream;
 
-import javax.xml.bind.JAXBException;
-
-import org.movsim.core.autogen.MovsimScenario;
-import org.xml.sax.SAXException;
-
 public class ProjectMetaData {
 
     private static final String MOVSIM_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
@@ -347,23 +342,4 @@ public class ProjectMetaData {
         return File.separator + MOVSIM_DTD_PATH + File.separator + LOG4J_FILENAME;
     }
     
-    // TODO
-    public MovsimScenario getInputData() {
-        // testwise jaxb unmarshalling
-        MovsimScenario inputData = null;
-        try {
-            System.out.println("try to open file = " + getXmlInputFile());
-            inputData = MovsimScenarioLoader.validateAndLoadScenarioInput(getXmlInputFile());
-        } catch (JAXBException e) {
-            throw new IllegalArgumentException(e.toString());
-        } catch (SAXException e) {
-            throw new IllegalArgumentException(e.toString());
-        }
-        if (inputData == null) {
-            System.out.println("input not valid. exit.");
-            System.exit(-1);
-        }
-        return inputData;
-    }
-
 }

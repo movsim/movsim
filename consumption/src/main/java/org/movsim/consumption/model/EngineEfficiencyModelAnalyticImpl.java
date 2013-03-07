@@ -25,7 +25,7 @@
  */
 package org.movsim.consumption.model;
 
-import org.movsim.consumption.autogen.EngineCombustionMap;
+import org.movsim.autogen.EngineCombustionMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

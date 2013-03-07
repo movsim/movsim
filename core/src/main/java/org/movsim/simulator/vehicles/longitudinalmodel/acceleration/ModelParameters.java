@@ -1,17 +1,18 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.core.autogen.ModelParameterACC;
-import org.movsim.core.autogen.ModelParameterCCS;
-import org.movsim.core.autogen.ModelParameterGipps;
-import org.movsim.core.autogen.ModelParameterIDM;
-import org.movsim.core.autogen.ModelParameterKKW;
-import org.movsim.core.autogen.ModelParameterKrauss;
-import org.movsim.core.autogen.ModelParameterNSM;
-import org.movsim.core.autogen.ModelParameterNewell;
-import org.movsim.core.autogen.ModelParameterOVMFVDM;
-import org.movsim.core.autogen.ModelParameterPTM;
+import org.movsim.autogen.ModelParameterIDM;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterACC;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterCCS;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterGipps;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterIDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterKKW;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterKrauss;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNSM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNewell;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterOVMFVDM;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterPTM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +70,7 @@ public final class ModelParameters {
 
     // overloading isValid Methods for different models
 
-    public static boolean isValidParameters(ModelParameterACC param) {
+    public static boolean isValidParameters(IModelParameterACC param) {
         if (param.getCoolness() < 0 || param.getCoolness() > 1) {
             throw new IllegalStateException("Invalid parameter for ACC coolness parameter= " + param.getCoolness()
                     + ". Choose value within [0,1].");
@@ -81,7 +82,7 @@ public final class ModelParameters {
         return true;
     }
     
-    public static boolean isValidParameters(ModelParameterIDM param) {
+    public static boolean isValidParameters(IModelParameterIDM param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param) || param.getT() <= 0 || param.getS1() < 0
                 || param.getDelta() <= 0 || param.getA() <= 0 || param.getB() <= 0) {
             throw new IllegalStateException("invalid parameters for IDM model");
@@ -89,7 +90,7 @@ public final class ModelParameters {
         return true;
     }
 
-    public static boolean isValidParameter(ModelParameterOVMFVDM param) {
+    public static boolean isValidParameter(IModelParameterOVMFVDM param) {
         if (!isValidDesiredSpeed(param) || !isValidMinimumGap(param) || param.getTau() <= 0
                 || param.getTransitionWidth() < 0 || param.getBeta() < 0 || param.getGamma() < 0) {
             throw new IllegalStateException("invalid parameters for OVM/FVDM.");
@@ -97,14 +98,14 @@ public final class ModelParameters {
         return true;
     }
 
-    public static boolean isValidParameters(ModelParameterGipps param) {
+    public static boolean isValidParameters(IModelParameterGipps param) {
         if (!isValidDesiredSpeed(param) || !isValidMinimumGap(param) || param.getA() <= 0 || param.getB() <= 0) {
             throw new IllegalStateException("invalid parameters for Gipps model");
         }
         return true;
     }
 
-    public static boolean isValidParameter(ModelParameterKrauss param) {
+    public static boolean isValidParameter(IModelParameterKrauss param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param) || param.getA() <= 0 || param.getB() <= 0) {
             throw new IllegalStateException("invalid parameters for Krauss model");
         }
@@ -112,14 +113,14 @@ public final class ModelParameters {
     }
 
 
-    public static boolean isValidParameter(ModelParameterNewell param) {
+    public static boolean isValidParameter(IModelParameterNewell param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param)) {
             throw new IllegalStateException("invalid parameters for Newell model");
         }
         return true;
     }
 
-    public static boolean isValidParameter(ModelParameterNSM param) {
+    public static boolean isValidParameter(IModelParameterNSM param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param)
                 || !ModelParameters.isValidProbabilityRange(param.getPSlowdown())
                 || !ModelParameters.isValidProbabilityRange(param.getPSlowdown())) {
@@ -128,7 +129,7 @@ public final class ModelParameters {
         return true;
     }
 
-    public static boolean isValidParameter(ModelParameterKKW param) {
+    public static boolean isValidParameter(IModelParameterKKW param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param) || param.getK() < 0
                 || !ModelParameters.isValidProbabilityRange(param.getPb0())
                 || !ModelParameters.isValidProbabilityRange(param.getPb1())
@@ -140,12 +141,12 @@ public final class ModelParameters {
         return true;
     }
 
-    public static boolean issValidParameters(ModelParameterPTM param) {
+    public static boolean isValidParameters(IModelParameterPTM param) {
         // TODO implement method
         return false;
     }
 
-    public static boolean isValidParameters(ModelParameterCCS param) {
+    public static boolean isValidParameters(IModelParameterCCS param) {
         // TODO implement method
         return false;
     }

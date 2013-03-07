@@ -27,8 +27,8 @@ package org.movsim.consumption.offline;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.movsim.consumption.autogen.Columns;
-import org.movsim.consumption.autogen.Conversions;
+import org.movsim.autogen.Columns;
+import org.movsim.autogen.Conversions;
 
 public class InputDataParser {
 
