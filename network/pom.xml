@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.movsim</groupId>
         <artifactId>Movsim</artifactId>
-        <version>1.3.1-SNAPSHOT</version>
+        <version>1.4.0</version>
     </parent>
 
 
@@ -214,5 +214,9 @@
         </plugins>
     </build>
 
+
+  <scm>
+    <tag>beforeJaxb</tag>
+  </scm>
 </project>
 
