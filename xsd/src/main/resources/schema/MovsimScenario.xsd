@@ -53,7 +53,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="Columns" />
-                <xs:element ref="Conversions" />
+                <xs:element ref="Conversions" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
             <xs:attribute name="inputfile" type="xs:string" use="required" />
             <xs:attribute name="outputfile" type="xs:string" use="required" />
