@@ -92,7 +92,6 @@ public class MovsimCommandLine {
         options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
         options.addOption("i", "internal_xml", false,
                 "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
-        options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
 
@@ -124,9 +123,6 @@ public class MovsimCommandLine {
         }
         if (cmdline.hasOption("i")) {
             optionInternalXml();
-        }
-        if (cmdline.hasOption("w")) {
-            optionWriteDtd();
         }
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
@@ -161,18 +157,6 @@ public class MovsimCommandLine {
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
         System.out.println("logger properties file written to " + ProjectMetaData.getLog4jFilename());
       
-        System.exit(0);
-    }
-
-    /**
-     * Option: writes multiModelTrafficSimulatirInput.dtd to file system
-     */
-    private void optionWriteDtd() {
-        final String resource = projectMetaData.getDtdFilenameWithPath();
-        final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource);
-        FileUtils.resourceToFile(is, projectMetaData.getDtdFilename());
-        System.out.println("dtd file written to " + projectMetaData.getDtdFilename());
-
         System.exit(0);
     }
 
