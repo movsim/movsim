@@ -56,7 +56,7 @@ public class InputDataParser {
         this.positionColumn = columns.getPosition() - 1;
 
         if (conversions != null) {
-            this.timeInputPattern = conversions.getTime();s
+            this.timeInputPattern = conversions.getTime();
             this.speedConversionFactor = conversions.getSpeed();
             this.slopeConversionFactor = conversions.getGradient();
             this.positionConversionFactor = conversions.getPosition();
