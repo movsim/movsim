@@ -42,7 +42,7 @@ import com.google.common.base.Preconditions;
 /**
  * The Class SpeedLimits.
  */
-public class SpeedLimits implements Iterable<SpeedLimit> {
+class SpeedLimits implements Iterable<SpeedLimit> {
 
     final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
 
@@ -56,7 +56,7 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @param speedLimits
      *            the speed limit input data points
      */
-    public SpeedLimits(List<org.movsim.network.autogen.opendrive.Lane.Speed> speed) {
+    SpeedLimits(List<org.movsim.network.autogen.opendrive.Lane.Speed> speed) {
         Preconditions.checkNotNull(speed);
 
         speedLimits = new LinkedList<>();
@@ -112,8 +112,8 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @return the double
      */
     public double calcSpeedLimit(double position) {
-        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED :
-            Tables.stepExtrapolation(positions, speeds, position);
+        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(positions, speeds,
+                position);
     }
 
     @Override

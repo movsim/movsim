@@ -44,7 +44,7 @@ import com.google.common.base.Preconditions;
  */
 
 // TODO refactoring, usage for car models
-public class Slopes implements Iterable<Slope> {
+class Slopes implements Iterable<Slope> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Slopes.class);
 
@@ -56,7 +56,7 @@ public class Slopes implements Iterable<Slope> {
     /**
      * Constructor.
      */
-    public Slopes(List<Elevation> elevationRecords) {
+    Slopes(List<Elevation> elevationRecords) {
         Preconditions.checkNotNull(elevationRecords);
         slopes = new LinkedList<>();
         generateSpaceSeriesData(elevationRecords);
