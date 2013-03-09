@@ -33,6 +33,7 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
  * Reads an OpenDRIVE format file and uses it to create a road network, see:
  * http://www.opendrive.org/docs/OpenDRIVEFormatSpecRev1.3D.pdf
  */
+@Deprecated
 public class OpenDriveReaderSax extends XMLReaderBase {
     /**
      * Reads an OpenDrive format file, creating a road network.
@@ -41,6 +42,7 @@ public class OpenDriveReaderSax extends XMLReaderBase {
      * @param filename
      * @return true if the road network file exists and was successfully parsed, false otherwise.
      */
+    @Deprecated
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) {
         final OpenDriveHandlerSax handler = new OpenDriveHandlerSax(roadNetwork);
         return parse(filename, handler);

@@ -25,6 +25,7 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.xml.NetworkLoadAndValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -50,8 +51,7 @@ public class OpenDriveHandlerJaxb {
      * @throws SAXException
      */
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException {
-        File networkFile = new File(filename);
-        OpenDRIVE openDriveNetwork = OpenDriveNetwork.loadNetwork(networkFile);
+        OpenDRIVE openDriveNetwork = NetworkLoadAndValidation.validateAndLoadOpenDriveNetwork(new File(filename));
         OpenDriveHandlerJaxb openDriveHandlerJaxb = new OpenDriveHandlerJaxb();
         return openDriveHandlerJaxb.create(filename, openDriveNetwork, roadNetwork);
     }
