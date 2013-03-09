@@ -112,14 +112,16 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
         inputData = MovsimInputLoader.getInputData(projectMetaData.getXmlInputFile());
-        projectMetaData.setXodrNetworkFilename(inputData.getMovsimScenario().getNetworkFilename()); // TODO
+        projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
 
-        Simulation simulationInput = inputData.getMovsimScenario().getSimulation();
-
-        trafficLights = new TrafficLights(inputData.getMovsimScenario().getTrafficLights());
-        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes());
+        Simulation simulationInput = inputData.getScenario().getSimulation();
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
+        createRoutes(inputData.getScenario().getRoutes());
+
+        trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights());
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(), routes);
+
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
@@ -133,8 +135,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (simulationInput.isSetSeed()) {
             MyRandom.initializeWithSeed(simulationInput.getSeed());
         }
-
-        createRoutes(inputData.getMovsimScenario().getRoutes());
 
         defaultTrafficComposition = new TrafficCompositionGenerator(simulationInput.getTrafficComposition(),
                 vehicleFactory);
@@ -462,10 +462,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     public void reset() {
         simulationRunnable.reset();
-        if (inputData.getMovsimScenario().isSetOutputConfiguration()) {
+        if (inputData.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
                     projectMetaData.isInstantaneousFileOutput(),
-                    inputData.getMovsimScenario().getOutputConfiguration(), roadNetwork,
+ inputData.getScenario().getOutputConfiguration(),
+                    roadNetwork,
                     routes, vehicleFactory);
         }
         obstacleCount = roadNetwork.obstacleCount();

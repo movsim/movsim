@@ -30,9 +30,11 @@ public final class VehicleFactory {
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
-    public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes) {
+    public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes, Map<String, Route> routes) {
         Preconditions.checkNotNull(vehPrototypes);
+        Preconditions.checkNotNull(routes);
 
+        this.routes = routes;
         this.writeFundamentalDiagrams = vehPrototypes.isWriteFundDiagrams();
         initialize(simulationTimestep, vehPrototypes.getVehiclePrototypeConfiguration());
 
@@ -48,7 +50,14 @@ public final class VehicleFactory {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
         
         // route
-        Route route = vehicleType.hasRouteLabel() ? routes.get(vehicleType.getRouteLabel()) : null;
+        Route route = null;
+        if(vehicleType.hasRouteLabel()){
+            route = routes.get(vehicleType.getRouteLabel());
+            if (route == null) {
+                throw new IllegalArgumentException("route for label=" + vehicleType.getRouteLabel()
+                        + " not defined in input!");
+            }
+        }
         
         // acceleration model
         LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
