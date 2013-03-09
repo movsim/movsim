@@ -41,8 +41,13 @@ Releasing and incrementing project version number:
 
 mvn release:prepare
 TODO: figure out how to use git scm versioning with maven
+# release without site deploy
+mvn release:perform -Dgoals=deploy
+
+mvn release:rollback
 
 mvn site:deploy 
+
 
 
 
