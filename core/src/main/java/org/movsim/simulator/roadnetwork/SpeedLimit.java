@@ -25,6 +25,8 @@
  */
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.utilities.Units;
+
 public class SpeedLimit {
 
     private final double position;
@@ -41,6 +43,6 @@ public class SpeedLimit {
     }
 
     public double getSpeedLimitKmh() {
-        return speed * 3.6;
+        return Math.round(speed * Units.MS_TO_KMH);
     }
 }
