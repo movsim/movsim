@@ -23,10 +23,10 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.fileoutput;
+package org.movsim.simulator.vehicles;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.simulator.vehicles.VehiclePrototype;
+import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.utilities.Units;
 

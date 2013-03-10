@@ -120,7 +120,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         createRoutes(inputData.getScenario().getRoutes());
 
         trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights());
-        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(), routes);
+        vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
+                inputData.getConsumption(), routes);
 
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());

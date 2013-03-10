@@ -40,6 +40,10 @@ public class EnergyFlowModelFactory {
         return energyFlowModels.get(label);
     }
 
+    public boolean hasModel(String label) {
+        return energyFlowModels.containsKey(label);
+    }
+
     private void addModels(List<ConsumptionModel> models) {
         for (ConsumptionModel model : models) {
             if (energyFlowModels.containsKey(model.getLabel())) {
