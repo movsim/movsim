@@ -46,7 +46,7 @@
                 <CROSS_SECTION x="13000" />
             </DETECTORS>
         </ROAD>
-         <ROAD id="2">
+        <ROAD id="2">
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="0" rho_per_km="2" v="30" />
             </INITIAL_CONDITIONS>

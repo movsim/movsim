@@ -2,8 +2,7 @@
 <!DOCTYPE SCENARIO SYSTEM "sim/multiModelTrafficSimulatorInput.dtd">
 
 <SCENARIO network_filename="onramp.xodr">
-
- <FUEL_CONSUMPTION>
+    <FUEL_CONSUMPTION>
         <!-- todo: program a tag read_from_file="filename.xml" -->
         <!-- if defining consumption models, don't forget to add them to the VEHICLEs!-->
         <CONSUMPTION_MODEL label="carConsumption" output="true">
@@ -21,7 +20,6 @@
             </ENGINE>
         </CONSUMPTION_MODEL>
     </FUEL_CONSUMPTION>
-
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9" consumption="carConsumption">
             <LONGITUDINAL_MODEL>
@@ -75,7 +73,7 @@
                 <ROAD id="2" />
                 <ROAD id="3" />
             </ROUTE>
-             <ROUTE label="main">
+            <ROUTE label="main">
                 <ROAD id="1" />
                 <ROAD id="2" />
                 <ROAD id="3" />
@@ -94,8 +92,8 @@
             <SPATIOTEMPORAL dx="100" dt="40" route="onramp" />
             <TRAJECTORIES dt="1" route="onramp" />
             <!--  start_time="0" end_time="120" -->
-            <TRAVELTIMES route="main" dt="0" tauEMA="40"/>
-            <TRAVELTIMES route="onramp" dt="0"/>
+            <TRAVELTIMES route="main" dt="0" tauEMA="40" />
+            <TRAVELTIMES route="onramp" dt="0" />
             <FUEL route="main" tauEMA="30" />
             <FUEL route="onramp" />
         </OUTPUT>

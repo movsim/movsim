@@ -48,7 +48,6 @@
                 <MicroIC position="240" speed="0" />
                 <MicroIC position="250" speed="0" />
                 <MicroIC position="260" speed="0" />
-                <!-- obstacle shifts floating car numbers -->
                 <MicroIC position="1000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>
@@ -60,11 +59,11 @@
     </Routes>
     <OutputConfiguration>
         <FloatingCarOutput n_timestep="5" route="main">
-            <FloatingCar number="2" />
-            <FloatingCar number="6" />
-            <FloatingCar number="11" />
-            <FloatingCar number="16" />
-            <FloatingCar number="21" />
+            <FloatingCar number="1" />
+            <FloatingCar number="5" />
+            <FloatingCar number="10" />
+            <FloatingCar number="15" />
+            <FloatingCar number="20" />
         </FloatingCarOutput>
         <Trajectories dt="1" start_time="0" end_time="120" route="main" />
     </OutputConfiguration>

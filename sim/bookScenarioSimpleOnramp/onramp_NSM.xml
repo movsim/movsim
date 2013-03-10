@@ -21,7 +21,7 @@
         <!-- scaled units for time and space -->
         <ROAD id="1">
             <INITIAL_CONDITIONS>
-<!--                <IC_MACRO x="2000" rho_per_km="2" v="3" /> -->
+                <!--                <IC_MACRO x="2000" rho_per_km="2" v="3" /> -->
             </INITIAL_CONDITIONS>
             <TRAFFIC_SOURCE logging="true">
                 <INFLOW t="0" q_per_hour="100" v="11" />
@@ -31,7 +31,7 @@
             <!-- improve vehicle performance at inflow -->
             <FLOW_CONSERVING_INHOMOGENEITIES />
             <SPEED_LIMITS />
-<!--            <SIMPLE_RAMPS>
+            <!--            <SIMPLE_RAMPS>
                 <SIMPLE_RAMP x="2000" merge_length="100" logging="true">
                     <INFLOW t="0" q_per_hour="550" />
                 </SIMPLE_RAMP>
@@ -46,9 +46,9 @@
                 <CROSS_SECTION x="1800" />
             </DETECTORS>
         </ROAD>
-         <ROAD id="2">
+        <ROAD id="2">
             <INITIAL_CONDITIONS>
-<!--                 <IC_MACRO x="0" rho_per_km="2" v="30" /> -->
+                <!--                 <IC_MACRO x="0" rho_per_km="2" v="30" /> -->
             </INITIAL_CONDITIONS>
             <SIMPLE_RAMP relative_speed="0.5" relative_gap="0.5" logging="true">
                 <INFLOW t="0" q_per_hour="550" />
@@ -61,7 +61,7 @@
         </ROAD>
         <ROAD id="3">
             <INITIAL_CONDITIONS>
-<!--                 <IC_MACRO x="0" rho_per_km="2" v="30" />-->
+                <!--                 <IC_MACRO x="0" rho_per_km="2" v="30" />-->
             </INITIAL_CONDITIONS>
         </ROAD>
         <ROUTES>

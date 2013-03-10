@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- (c) Movsim, Arne Kesting 2012 -->
 <MovsimScenario network_filename="startStop_all_iteratedmaps.xodr">
     <VehiclePrototypes write_fund_diagrams="false">
-    <VehiclePrototypeConfiguration label="GIPPS1" length="8" maximum_deceleration="20">
+        <VehiclePrototypeConfiguration label="GIPPS1" length="8" maximum_deceleration="20">
             <AccelerationModelType>
                 <ModelParameterGipps v0="15" a="1.5" b="1.0" s0="2" />
             </AccelerationModelType>
@@ -28,16 +27,16 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Simulation timestep="0.2" duration="360"  seed="42" crash_exit="false">
+    <Simulation timestep="0.2" duration="360" seed="42" crash_exit="false">
         <TrafficComposition>
             <VehicleType label="GIPPS1" fraction="1" />
         </TrafficComposition>
-                <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="GIPPS">
-          <TrafficComposition>
-            <VehicleType label="GIPPS1" fraction="1" />
-           <VehicleType label="Obstacle" fraction="0" /> 
-        </TrafficComposition>
+            <TrafficComposition>
+                <VehicleType label="GIPPS1" fraction="1" />
+                <VehicleType label="Obstacle" fraction="0" />
+            </TrafficComposition>
             <InitialConditions>
                 <MicroIC position="10" speed="0" />
                 <MicroIC position="20" speed="0" />
@@ -68,14 +67,14 @@
                 <!-- obstacle shifts floating car numbers -->
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
-                 </Road>
-                                 <!-- ############################ -->
-                         <Road id="KRAUSS">
-                          <TrafficComposition>
-            <VehicleType label="KRAUSS1" fraction="1" />
-           <VehicleType label="Obstacle" fraction="0" /> 
-        </TrafficComposition>
-                          <InitialConditions>
+        </Road>
+        <!-- ############################ -->
+        <Road id="KRAUSS">
+            <TrafficComposition>
+                <VehicleType label="KRAUSS1" fraction="1" />
+                <VehicleType label="Obstacle" fraction="0" />
+            </TrafficComposition>
+            <InitialConditions>
                 <MicroIC position="10" speed="0" />
                 <MicroIC position="20" speed="0" />
                 <MicroIC position="30" speed="0" />
@@ -105,15 +104,12 @@
                 <!-- obstacle shifts floating car numbers -->
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
-                 </Road>
-                 
-                 
-            
+        </Road>
         <Road id="NEWELL">
-               <TrafficComposition>
-            <VehicleType label="NEWELL1" fraction="1" />
-            <VehicleType label="Obstacle" fraction="0" />
-        </TrafficComposition>
+            <TrafficComposition>
+                <VehicleType label="NEWELL1" fraction="1" />
+                <VehicleType label="Obstacle" fraction="0" />
+            </TrafficComposition>
             <InitialConditions>
                 <MicroIC position="10" speed="0" />
                 <MicroIC position="20" speed="0" />

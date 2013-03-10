@@ -4,7 +4,7 @@
     <VehiclePrototypes write_fund_diagrams="true">
         <VehiclePrototypeConfiguration label="CCS1" length="8" maximum_deceleration="9">
             <AccelerationModelType>
-		<!-- v0 only set for compatibility reasons -->
+                <!-- v0 only set for compatibility reasons -->
                 <ModelParameterCCS mass="80" A="1" cw="0.7" friction="0.02" T="1.2" s0="2" p0="200" v_c="5" p_herringbone="150" v_c_herringbone="1.5" b="1" b_maximum="2" v0="0" />
             </AccelerationModelType>
             <LaneChangeModelType />
@@ -49,7 +49,6 @@
                 <MicroIC position="240" speed="0" />
                 <MicroIC position="250" speed="0" />
                 <MicroIC position="260" speed="0" />
-                <!-- obstacle shifts floating car numbers -->
                 <MicroIC position="1000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>

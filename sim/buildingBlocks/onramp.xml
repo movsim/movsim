@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <MovsimScenario network_filename="onramp.xodr">
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
@@ -26,7 +25,7 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Simulation timestep="0.2"  seed="42" crash_exit="false">
+    <Simulation timestep="0.2" seed="42" crash_exit="false">
         <TrafficComposition>
             <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.1" />
             <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.1" />
@@ -54,6 +53,6 @@
             <Detectors />
         </Road>
     </Simulation>
-        <OutputConfiguration />
+    <OutputConfiguration />
 </MovsimScenario>
 

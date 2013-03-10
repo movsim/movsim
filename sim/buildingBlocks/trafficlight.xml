@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <MovsimScenario network_filename="trafficlight.xodr">
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="IDM1" length="6" maximum_deceleration="9">
@@ -42,10 +41,8 @@
             <Detectors />
         </Road>
     </Simulation>
-
     <TrafficLights>
-      <TrafficLight id="tl_1" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" />
+        <TrafficLight id="tl_1" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" />
     </TrafficLights>
-
 </MovsimScenario>
 

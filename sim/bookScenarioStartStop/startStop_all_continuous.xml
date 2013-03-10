@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- (c) Movsim, Arne Kesting 2012 -->
 <MovsimScenario network_filename="startStop_all_continous.xodr">
     <VehiclePrototypes write_fund_diagrams="false">
@@ -23,7 +22,7 @@
             <AccelerationModelType>
                 <ModelParameterIDM v0="15" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
             </AccelerationModelType>
-                <MemoryParameter tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" />
+            <MemoryParameter tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" />
         </VehiclePrototypeConfiguration>
         <VehiclePrototypeConfiguration label="IDM1_noise" length="8" maximum_deceleration="9">
             <AccelerationModelType>
@@ -47,11 +46,11 @@
             </AccelerationModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Simulation timestep="0.2" duration="780"  seed="42">
+    <Simulation timestep="0.2" duration="780" seed="42">
         <TrafficComposition>
             <VehicleType label="ACC1" fraction="1" />
         </TrafficComposition>
-                <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="IDM">
             <TrafficComposition>
                 <VehicleType label="IDM1" fraction="1" />
@@ -125,7 +124,7 @@
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>
-              <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="ACC">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="1" />
@@ -162,11 +161,11 @@
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>
-              <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="IDMM">
             <TrafficComposition>
                 <VehicleType label="IDMM1" fraction="1" />
-                                <VehicleType label="Obstacle" fraction="0" />
+                <VehicleType label="Obstacle" fraction="0" />
             </TrafficComposition>
             <InitialConditions>
                 <MicroIC position="10" speed="0" />
@@ -199,7 +198,7 @@
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>
-               <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="IDM_noise">
             <TrafficComposition>
                 <VehicleType label="IDM1_noise" fraction="1" />
@@ -236,13 +235,11 @@
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>
-        
-        
-              <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="FVDM">
             <TrafficComposition>
                 <VehicleType label="FVDM1" fraction="1" />
-                                <VehicleType label="Obstacle" fraction="0" />
+                <VehicleType label="Obstacle" fraction="0" />
             </TrafficComposition>
             <InitialConditions>
                 <MicroIC position="10" speed="0" />
@@ -275,13 +272,11 @@
                 <MicroIC position="2000" speed="0" label="Obstacle" />
             </InitialConditions>
         </Road>
-        
-        
-              <!-- ############################ -->
+        <!-- ############################ -->
         <Road id="OVM">
             <TrafficComposition>
                 <VehicleType label="OVM1" fraction="1" />
-                                <VehicleType label="Obstacle" fraction="0" />
+                <VehicleType label="Obstacle" fraction="0" />
             </TrafficComposition>
             <InitialConditions>
                 <MicroIC position="10" speed="0" />

@@ -3,7 +3,7 @@
 
 <SCENARIO network_filename="onramp.xodr">
     <VEHICLES>
-    <VEHICLE label="ACC1" length="6" b_max="9">
+        <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>
                 <ACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </LONGITUDINAL_MODEL>
@@ -62,10 +62,11 @@
             </FLOATING_CAR_DATA>
             <SPATIOTEMPORAL dx="100" dt="40" route="main" />
             <SPATIOTEMPORAL dx="100" dt="40" route="onramp" />
-            <TRAJECTORIES dt="1" route="onramp" /> <!--  start_time="0" end_time="120" -->
+            <TRAJECTORIES dt="1" route="onramp" />
+            <!--  start_time="0" end_time="120" -->
             <TRAVELTIMES route="main" />
-	    <TRAVELTIMES route="onramp" />
-	    <FUEL route="main" />
+            <TRAVELTIMES route="onramp" />
+            <FUEL route="main" />
         </OUTPUT>
     </SIMULATION>
 </SCENARIO>

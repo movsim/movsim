@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <MovsimScenario network_filename="gradient.xodr">
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
@@ -33,6 +32,6 @@
             <Detectors />
         </Road>
     </Simulation>
-   <OutputConfiguration />
+    <OutputConfiguration />
 </MovsimScenario>
 

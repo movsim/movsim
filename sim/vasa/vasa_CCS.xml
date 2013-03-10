@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <MovsimScenario network_filename="vasa.xodr">
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="CCS0" length="2" width="1" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterCCS v0="0"  mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="250" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1.1" b_maximum="2" />
+                <ModelParameterCCS v0="0" mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="250" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1.1" b_maximum="2" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="false">
                 <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0." right_bias_acceleration="0" politeness="0.0" />
@@ -162,7 +161,7 @@
         </Road>
         <Road id="-8">
             <TrafficComposition>
-                <VehicleType label="CCS8" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian"  />
+                <VehicleType label="CCS8" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
             </TrafficComposition>
             <InitialConditions>
                 <MacroIC position="10" density_per_km="370" speed="0" />
@@ -185,138 +184,139 @@
             </InitialConditions>
         </Road>
         <Road id="11">
-<!--             <Slopes> -->
-<!--                 <Slope position="10" gradient="0.03" /> -->
-<!--                 <Slope position="100" gradient="-0.04" /> -->
-<!--                 <Slope position="140" gradient="0.02" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="10" gradient="0.03" /> -->
+            <!--                 <Slope position="100" gradient="-0.04" /> -->
+            <!--                 <Slope position="140" gradient="0.02" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="13">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.10" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.10" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="14">
-<!--             <Slopes> -->
-<!--                 <Slope position="20" gradient="0.12" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="20" gradient="0.12" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="15">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.06" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.06" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="16">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.04" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.04" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="17">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.03" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.03" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="21">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.08" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.08" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="30">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.06" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.06" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="31">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.04" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.04" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="32">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.03" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.03" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="33">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.02" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.02" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="34">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.02" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.02" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="35">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.06" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.06" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="36">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="37">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.03" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.03" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="38">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.09" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.09" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="39">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.02" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.02" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="40">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="41">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="42">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.04" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.04" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="43">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.04" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.04" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="44">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="45">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="46">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="47">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.05" /> -->
-<!--             </Slopes> -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.05" /> -->
+            <!--             </Slopes> -->
         </Road>
         <Road id="48">
-<!--             <Slopes> -->
-<!--                 <Slope position="1" gradient="0.04" /> -->
-<!--             </Slopes> -->
-  <Detectors sample_interval="10" logging="true" logging_lanes="false" >
-                <CrossSection position="200" /> <!-- length 400 m -->
+            <!--             <Slopes> -->
+            <!--                 <Slope position="1" gradient="0.04" /> -->
+            <!--             </Slopes> -->
+            <Detectors sample_interval="10" logging="true" logging_lanes="false">
+                <CrossSection position="200" />
+                <!-- length 400 m -->
             </Detectors>
         </Road>
     </Simulation>

@@ -13,7 +13,7 @@
             <!-- fluctuation strength needed for traffic flow breakdown if simulating only with one vehicle type -->
             <NOISE tau="5" fluct_strength="0.07" />
         </VEHICLE>
-         <VEHICLE label="IDMa" length="8" b_max="9">
+        <VEHICLE label="IDMa" length="8" b_max="9">
             <LONGITUDINAL_MODEL>
                 <IDM v0="20" T="1.2" s0="2" s1="0" delta="4" a="0.8" b="2.0" />
             </LONGITUDINAL_MODEL>
@@ -21,7 +21,7 @@
             <!-- fluctuation strength needed for traffic flow breakdown if simulating only with one vehicle type -->
             <NOISE tau="5" fluct_strength="0.07" />
         </VEHICLE>
-         <VEHICLE label="KKW1" length="20">
+        <VEHICLE label="KKW1" length="20">
             <LONGITUDINAL_MODEL>
                 <KKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" />
             </LONGITUDINAL_MODEL>
@@ -37,39 +37,38 @@
         </VEHICLE>
     </VEHICLES>
     <SIMULATION dt="1" duration="100000" fixed_seed="true" seed="42">
-          <TRAFFIC_COMPOSITION>
+        <TRAFFIC_COMPOSITION>
             <VEHICLE_TYPE label="IDM" fraction="1" />
             <VEHICLE_TYPE label="IDMa" fraction="1" />
             <VEHICLE_TYPE label="KKW1" fraction="1" />
             <VEHICLE_TYPE label="NSM1" fraction="1" />
         </TRAFFIC_COMPOSITION>
         <ROAD id="1">
-          <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="IDM" fraction="1" />
-        </TRAFFIC_COMPOSITION>
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="IDM" fraction="1" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km per lane -->
                 <IC_MACRO x="1" rho_per_km="36" v="20" />
             </INITIAL_CONDITIONS>
         </ROAD>
-         <ROAD id="3">
-           <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="KKW1" fraction="1" />
-        </TRAFFIC_COMPOSITION>
+        <ROAD id="3">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="KKW1" fraction="1" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="1" rho_per_km="36" v="20" />
             </INITIAL_CONDITIONS>
         </ROAD>
-          <ROAD id="2">
-           <TRAFFIC_COMPOSITION>
-            <VEHICLE_TYPE label="NSM1" fraction="1" />
-        </TRAFFIC_COMPOSITION>
+        <ROAD id="2">
+            <TRAFFIC_COMPOSITION>
+                <VEHICLE_TYPE label="NSM1" fraction="1" />
+            </TRAFFIC_COMPOSITION>
             <INITIAL_CONDITIONS>
                 <IC_MACRO x="1" rho_per_km="36" v="20" />
             </INITIAL_CONDITIONS>
         </ROAD>
-        <OUTPUT>
-        </OUTPUT>
+        <OUTPUT />
     </SIMULATION>
 </SCENARIO>
 

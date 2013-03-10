@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <MovsimScenario network_filename="speedlimit.xodr">
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
@@ -30,10 +29,10 @@
             <TrafficSource logging="false">
                 <Inflow t="0" q_per_hour="1700" />
             </TrafficSource>
-<!-- speedlimits defined in xodr -->
+            <!-- speedlimits defined in xodr -->
             <Detectors />
         </Road>
     </Simulation>
-   <OutputConfiguration />
+    <OutputConfiguration />
 </MovsimScenario>
 

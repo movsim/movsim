@@ -27,8 +27,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-        <road id="2" name="R2" length="1000" junction="-1">
+    <road id="2" name="R2" length="1000" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
             <successor elementType="road" elementId="2" contactPoint="start" />
@@ -54,8 +53,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-            <road id="3" name="R3" length="1000" junction="-1">
+    <road id="3" name="R3" length="1000" junction="-1">
         <link>
             <predecessor elementType="road" elementId="3" contactPoint="end" />
             <successor elementType="road" elementId="3" contactPoint="start" />

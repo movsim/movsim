@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- (c) Movsim, Arne Kesting 2012 -->
 <MovsimScenario network_filename="startStop_all_ca.xodr">
     <VehiclePrototypes write_fund_diagrams="false">
@@ -35,7 +34,7 @@
             <LaneChangeModelType />
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Simulation timestep="1" duration="150"  seed="42" crash_exit="false">
+    <Simulation timestep="1" duration="150" seed="42" crash_exit="false">
         <TrafficComposition>
             <VehicleType label="NSM1" fraction="1" />
             <VehicleType label="BARL1" fraction="1" />
