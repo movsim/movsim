@@ -95,8 +95,6 @@
             <ConsumptionCalculation route="main" tauEMA="30" />
             <ConsumptionCalculation route="onramp" />
         </OutputConfiguration>
-         <xs:element name="ConsumptionCalculation">
-    </xs:element>
     </Scenario>
 </Movsim>
 
