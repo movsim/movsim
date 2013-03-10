@@ -21,14 +21,11 @@ public class VehiclePrototype {
 
     private final double simulationTimestep;
     
-    private final TestVehicle testVehicle;
-
     // TODO simulation timestep handling
     public VehiclePrototype(double simulationTimestep, VehiclePrototypeConfiguration configuration) {
         Preconditions.checkNotNull(configuration);
         this.configuration = configuration;
         this.simulationTimestep = simulationTimestep; // TODO
-        testVehicle = null;
         energyFlowModel = null; // TODO
         equiProperties = EquilibriumPropertiesFactory.create(getLength(), createAccelerationModel());
     }
@@ -83,10 +80,6 @@ public class VehiclePrototype {
 
     public double getSimulationTimestep() {
         return simulationTimestep;
-    }
-
-    public TestVehicle getTestVehicle() {
-        return testVehicle;
     }
 
 }
