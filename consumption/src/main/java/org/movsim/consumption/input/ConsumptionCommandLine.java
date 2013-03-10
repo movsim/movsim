@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -36,22 +36,22 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.movsim.consumption.ConsumptionMain;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class ConsumptionCommandLine{
+// TODO reuse core commandline also here
+public class ConsumptionCommandLine {
 
     private static Logger logger = LoggerFactory.getLogger(ConsumptionCommandLine.class);
 
     private final CommandLineParser parser;
     private Options options;
-    private final ConsumptionMetadata metaData;
-    
+    private final ProjectMetaData metaData;
 
-    public static void parse(ConsumptionMetadata metaData, String[] args) {
+    public static void parse(ProjectMetaData metaData, String[] args) {
         final ConsumptionCommandLine commandLine = new ConsumptionCommandLine(metaData);
         try {
             commandLine.createAndParse(args);
@@ -61,7 +61,7 @@ public class ConsumptionCommandLine{
         }
     }
 
-    private ConsumptionCommandLine(ConsumptionMetadata metaData) {
+    private ConsumptionCommandLine(ProjectMetaData metaData) {
         this.metaData = metaData;
         createOptions();
         parser = new GnuParser();
@@ -75,12 +75,8 @@ public class ConsumptionCommandLine{
     private void createOptions() {
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
-        options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
-        options.addOption("i", "internal_xml", false,
-                "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
-        options.addOption("w", "write dtd", false, "writes dtd file to file");
-        options.addOption("l", "log", false, "writes the file " + ConsumptionMetadata.getLog4jFilename() +
-                "\" to file to adjust the logging properties on an individual level");
+        options.addOption("l", "log", false, "writes the file " + ProjectMetaData.getLog4jFilename()
+                + "\" to file to adjust the logging properties on an individual level");
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
@@ -105,19 +101,10 @@ public class ConsumptionCommandLine{
         if (cmdline.hasOption("h")) {
             optionHelp();
         }
-        if (cmdline.hasOption("d")) {
-            optionValidation();
-        }
-        if (cmdline.hasOption("i")) {
-            optionInternalXml();
-        }
-        if (cmdline.hasOption("w")) {
-            optionWriteDtd();
-        }
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
         }
-        
+
         optionOutputPath(cmdline);
         requiredOptionSimulation(cmdline);
     }
@@ -144,38 +131,12 @@ public class ConsumptionCommandLine{
      * Option: writes log4j.properties to local filesystem
      */
     private static void optWriteLoggingProperties() {
-        final String resource = ConsumptionMetadata.getLog4jFilenameWithPath();
-        final InputStream is = ConsumptionMain.class.getResourceAsStream(resource); 
-        FileUtils.resourceToFile(is, ConsumptionMetadata.getLog4jFilename());
-        logger.info("logger properties file written to {}", ConsumptionMetadata.getLog4jFilename());
-      
-        System.exit(0);
-    }
-
-    /**
-     * Option: writes multiModelTrafficSimulatirInput.dtd to file system
-     */
-    private void optionWriteDtd() {
-        final String resource = metaData.getDtdFilenameWithPath();
+        final String resource = ProjectMetaData.getLog4jFilenameWithPath();
         final InputStream is = ConsumptionMain.class.getResourceAsStream(resource);
-        FileUtils.resourceToFile(is, metaData.getDtdFilename());
-        logger.info("dtd file written to {}", metaData.getDtdFilenameWithPath());
+        FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
+        logger.info("logger properties file written to {}", ProjectMetaData.getLog4jFilename());
 
         System.exit(0);
-    }
-
-    /**
-     * Option: write internal xml (without simulation).
-     */
-    private void optionInternalXml() {
-        metaData.setWriteInternalXml(true);
-    }
-
-    /**
-     * Option: parse xml input file for validation (without simulation).
-     */
-    private void optionValidation() {
-        metaData.setOnlyValidation(true);
     }
 
     /**
@@ -191,17 +152,16 @@ public class ConsumptionCommandLine{
             return;
         }
 
-        final boolean isXml = FileNameUtils.validateFileName(filename, ConsumptionMetadata.getConfigFileEnding());
+        final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
         if (isXml) {
             final String name = FileNameUtils.getName(filename);
-            metaData.setProjectName(name.substring(0, name.indexOf(ConsumptionMetadata.getConfigFileEnding())));
-            metaData.setPathToConsumptionFile(FileUtils.getCanonicalPathWithoutFilename(filename));
+            metaData.setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
+            metaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
         } else {
             System.err.println("movsim consumption configuration file " + filename + " is not a valid xml.");
             System.exit(-1);
         }
     }
-
 
     /**
      * Option help.
@@ -214,6 +174,4 @@ public class ConsumptionCommandLine{
         System.exit(0);
     }
 
-   
 }
-

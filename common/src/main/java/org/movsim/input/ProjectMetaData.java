@@ -35,9 +35,10 @@ import java.io.InputStream;
  * created: Mar 9, 2013<br>
  * 
  */
-public class ProjectMetaData {
+// TODO this class deperately needs a throughout refactoring !!!
+public final class ProjectMetaData {
 
-    private static final String MOVSIM_LOG_PATH = "config";
+    private static final String MOVSIM_COMMON_LOG_PATH = "config";
 
     private static final String LOG4J_FILENAME = "log4j.properties";
 
@@ -55,8 +56,7 @@ public class ProjectMetaData {
     private String consumptionPath;
 
     private boolean instantaneousFileOutput = true;
-    private boolean onlyValidation = false;
-    private boolean writeInternalXml = false;
+    // private boolean onlyValidation = false;
 
     /**
      * Needed for Applet. Change to true, if you cannot access the file system.
@@ -191,38 +191,24 @@ public class ProjectMetaData {
         this.instantaneousFileOutput = instantaneousFileOutput;
     }
 
-    /**
-     * Commandline option 'only validation' of input xml file against dtd.
-     * 
-     * @return
-     */
-    public boolean isOnlyValidation() {
-        return onlyValidation;
-    }
-
-    /**
-     * Sets the only validation. Commandline option 'only validation' of input xml file against dtd.
-     * 
-     * @param onlyValidation
-     *            the new only validation
-     */
-    public void setOnlyValidation(boolean onlyValidation) {
-        this.onlyValidation = onlyValidation;
-    }
-
-    public boolean isWriteInternalXml() {
-        return writeInternalXml;
-    }
-
-    /**
-     * Sets the write internal xml.
-     * 
-     * @param writeInternalXml
-     *            the new write internal xml
-     */
-    public void setWriteInternalXml(boolean writeInternalXml) {
-        this.writeInternalXml = writeInternalXml;
-    }
+//    /**
+//     * Commandline option 'only validation' of input xml file against dtd.
+//     * 
+//     * @return
+//     */
+//    public boolean isOnlyValidation() {
+//        return onlyValidation;
+//    }
+//
+//    /**
+//     * Sets the only validation. Commandline option 'only validation' of input xml file against dtd.
+//     * 
+//     * @param onlyValidation
+//     *            the new only validation
+//     */
+//    public void setOnlyValidation(boolean onlyValidation) {
+//        this.onlyValidation = onlyValidation;
+//    }
 
     public boolean isXmlFromResources() {
         return xmlFromResources;
@@ -329,7 +315,7 @@ public class ProjectMetaData {
     }
 
     public static String getLog4jFilenameWithPath() {
-        return File.separator + MOVSIM_LOG_PATH + File.separator + LOG4J_FILENAME;
+        return File.separator + MOVSIM_COMMON_LOG_PATH + File.separator + LOG4J_FILENAME;
     }
     
 }
