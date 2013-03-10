@@ -82,11 +82,6 @@ public class SimulationOutput implements SimulationTimeStep {
         this.roadNetwork = roadNetwork;
         this.routes = routes;
 
-        // TODO move this functionality to VehiclePrototypes
-        if (writeOutput) {
-            vehicleFactory.writeFundamentalDiagrams(simulationTimestep);
-        }
-
         initFloatingCars(writeOutput, outputConfiguration);
 
         initConsumption(writeOutput, simulationTimestep, outputConfiguration);

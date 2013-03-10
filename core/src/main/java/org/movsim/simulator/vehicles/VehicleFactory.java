@@ -26,8 +26,6 @@ public final class VehicleFactory {
 
     private Map<String, Route> routes;
 
-    private final boolean writeFundamentalDiagrams;
-
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
     public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes, Map<String, Route> routes) {
@@ -35,17 +33,15 @@ public final class VehicleFactory {
         Preconditions.checkNotNull(routes);
 
         this.routes = routes;
-        this.writeFundamentalDiagrams = vehPrototypes.isWriteFundDiagrams();
         initialize(simulationTimestep, vehPrototypes.getVehiclePrototypeConfiguration());
-
         // TODO
         // fuelModelFactory.add(models);
+
+        if (vehPrototypes.isSetWriteFundDiagrams() && vehPrototypes.isWriteFundDiagrams()) {
+            writeFundamentalDiagrams(simulationTimestep);
+        }
     }
     
-    public boolean isWriteFundamentalDiagrams() {
-        return writeFundamentalDiagrams;
-    }
-
     public Vehicle create(VehicleType vehicleType) {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
         
@@ -100,13 +96,8 @@ public final class VehicleFactory {
         return Collections.unmodifiableCollection(vehiclePrototypes.keySet());
     }
     
-    public void writeFundamentalDiagrams(double simulationTimestep) {
-        if (!isWriteFundamentalDiagrams()) {
-            return;
-        }
-        
+    private void writeFundamentalDiagrams(double simulationTimestep) {
         final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
-        
         LOG.info("write fundamental diagrams but ignore label {}.", ignoreLabel);
         for (VehiclePrototype vehiclePrototype : vehiclePrototypes.values()) {
             if (!ignoreLabel.equalsIgnoreCase(vehiclePrototype.getLabel())) {

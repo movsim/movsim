@@ -28,12 +28,9 @@ public class VehiclePrototype {
         Preconditions.checkNotNull(configuration);
         this.configuration = configuration;
         this.simulationTimestep = simulationTimestep; // TODO
-
         testVehicle = null;
         energyFlowModel = null; // TODO
-        
         equiProperties = EquilibriumPropertiesFactory.create(getLength(), createAccelerationModel());
-
     }
 
     public double getLength() {
