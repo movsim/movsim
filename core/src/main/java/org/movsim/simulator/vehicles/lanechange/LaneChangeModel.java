@@ -25,13 +25,14 @@
  */
 package org.movsim.simulator.vehicles.lanechange;
 
-import org.movsim.input.model.vehicle.lanechange.LaneChangeInputData;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * The Class LaneChangeModel.
@@ -80,18 +81,16 @@ public class LaneChangeModel {
 
     }
 
-    private final boolean withEuropeanRules;
-
-    /** critical speed for kicking in European rules (in m/s) */
-    private final double vCritEur;
+    // private final boolean withEuropeanRules;
+    //
+    // /** critical speed for kicking in European rules (in m/s) */
+    // private final double vCritEur;
 
     private Vehicle me;
 
-    private final boolean isInitialized;
-
     private MOBIL lcModelMOBIL;
 
-    private final LaneChangeInputData lcInputData;
+    private final org.movsim.autogen.LaneChangeModelType parameter;
 
     // Exit Handling
     // distance at which driver should think about changing lanes for exit
@@ -102,26 +101,22 @@ public class LaneChangeModel {
     /**
      * Instantiates a new lane changing model.
      * 
-     * @param lcInputData
+     * @param laneChangeModelParameter
      *            the lc input data
      */
-    public LaneChangeModel(LaneChangeInputData lcInputData) {
-
-        this.lcInputData = lcInputData;
-        this.withEuropeanRules = lcInputData.isWithEuropeanRules();
-        this.vCritEur = lcInputData.getCritSpeedEuroRules();
-
+    public LaneChangeModel(org.movsim.autogen.LaneChangeModelType laneChangeModelParameter) {
+        this.parameter = laneChangeModelParameter;
+        // this.withEuropeanRules = laneChangeModelParameter.isWithEuropeanRules();
+        // this.vCritEur = laneChangeModelParameter.getCritSpeedEuroRules();
         // TODO valid lane change model only if configured by xml
-        isInitialized = lcInputData.isInitializedMobilData();
+        // isInitialized = laneChangeModelParameter.isInitializedMobilData();
     }
 
-    public LaneChangeModel(Vehicle vehicle, MOBIL lcModelMOBIL) {
-        this.lcModelMOBIL = lcModelMOBIL;
-        this.me = vehicle;
-        this.withEuropeanRules = true;
-        this.vCritEur = 5.0;
-        this.lcInputData = null;
-        isInitialized = true;
+    // used in tests
+    public LaneChangeModel(Vehicle vehicle, org.movsim.autogen.LaneChangeModelType laneChangeModelParameter) {
+        Preconditions.checkNotNull(laneChangeModelParameter);
+        this.parameter = laneChangeModelParameter;
+        initialize(vehicle);
     }
 
     /**
@@ -131,8 +126,9 @@ public class LaneChangeModel {
      *            the vehicle
      */
     public void initialize(Vehicle vehicle) {
+        Preconditions.checkNotNull(vehicle);
         this.me = vehicle;
-        lcModelMOBIL = (isInitialized) ? new MOBIL(me, lcInputData.getLcMobilData()) : new MOBIL(me);
+        lcModelMOBIL = new MOBIL(me, parameter.getModelParameterMOBIL());
     }
 
     /**
@@ -141,15 +137,15 @@ public class LaneChangeModel {
      * @return true, if is initialized
      */
     public boolean isInitialized() {
-        return isInitialized;
+        return parameter != null && lcModelMOBIL != null;
     }
 
     public boolean withEuropeanRules() {
-        return withEuropeanRules;
+        return parameter.isEuropeanRules();
     }
 
     public double vCritEurRules() {
-        return vCritEur;
+        return parameter.getCritSpeedEur();
     }
 
     public LaneChangeDecision makeDecision(RoadSegment roadSegment) {
@@ -171,7 +167,6 @@ public class LaneChangeModel {
             return decision;
         }
         
-
         // check discretionary lane changes
         decision = determineDiscretionaryLaneChangeDirection(roadSegment);
 
@@ -187,11 +182,11 @@ public class LaneChangeModel {
 
     private boolean checkSafetyCriterion(Vehicle frontVeh, Vehicle backVeh) {
 
-        final double safeDeceleration = lcModelMOBIL.getSafeDeceleration();
+        final double safeDeceleration = lcModelMOBIL.getParameter().getSafeDeceleration();
 
         // check distance to front vehicle
         final double gapFront = me.getNetDistance(frontVeh);
-        if (gapFront < lcModelMOBIL.getMinimumGap()) {
+        if (gapFront < lcModelMOBIL.getParameter().getMinimumGap()) {
             logger.debug("gapFront={}", gapFront);
             return false;
         }
@@ -199,7 +194,7 @@ public class LaneChangeModel {
         // check distance to vehicle at behind
         if (backVeh != null) {
             final double gapBack = backVeh.getNetDistance(me);
-            if (gapBack < lcModelMOBIL.getMinimumGap()) {
+            if (gapBack < lcModelMOBIL.getParameter().getMinimumGap()) {
                 logger.debug("gapBack={}", gapBack);
                 return false;
             }
@@ -359,7 +354,7 @@ public class LaneChangeModel {
             }
             
             double accToFront = me.getLongitudinalModel().calcAcc(me, frontVehicle);
-            if(accToFront < -lcModelMOBIL.getSafeDeceleration()){
+            if (accToFront < -lcModelMOBIL.getParameter().getSafeDeceleration()) {
                 // check own disadvantage to change to left to decide to make room
                 if (logger.isDebugEnabled()) {
                     logger.debug(String
@@ -380,7 +375,7 @@ public class LaneChangeModel {
                         return LaneChangeDecision.NONE;
                     }
                     final double gapFront = me.getNetDistance(newFront);
-                    if (gapFront < lcModelMOBIL.getMinimumGap()) {
+                    if (gapFront < lcModelMOBIL.getParameter().getMinimumGap()) {
                         return LaneChangeDecision.NONE;
                     }
                 }
@@ -390,7 +385,7 @@ public class LaneChangeModel {
                         return LaneChangeDecision.NONE;
                     }
                     final double gapRear = newBack.getNetDistance(me);
-                    if (gapRear < lcModelMOBIL.getMinimumGap()) {
+                    if (gapRear < lcModelMOBIL.getParameter().getMinimumGap()) {
                         return LaneChangeDecision.NONE;
                     }
                 }

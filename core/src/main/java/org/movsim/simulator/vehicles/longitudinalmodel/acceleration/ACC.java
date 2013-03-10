@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,8 +25,8 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterACC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,111 +41,26 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Class ACC.
+ * 
+ * <p>
+ * See {@link IModelParameterACC} for the model parameters.
+ * </p>
  */
 class ACC extends LongitudinalModelBase {
 
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(ACC.class);
 
-    /**
-     * The T. time headway (s)
-     */
-    private double T;
+    private final IModelParameterACC param;
 
-    /** The s1. */
-    private double s1;
-
-    /**
-     * The a. acceleration (m/s^2)
-     */
-    private double a;
-
-    /**
-     * The b. comfortable (desired) deceleration (m/s^2)
-     */
-    private double b;
-
-    /**
-     * The delta. acceleration exponent (1)
-     */
-    private double delta;
-
-    /**
-     * The coolness. coolness=0: acc1=IIDM (without constant-acceleration heuristic, CAH), coolness=1 CAH factor in
-     * range [0, 1]
-     */
-    private double coolness;
-
-    /**
-     * Instantiates a new aCC.
-     * 
-     * @param parameters
-     *            the parameters
-     */
-    ACC(LongitudinalModelInputDataACC parameters) {
-        super(ModelName.ACC, parameters);
-        this.v0 = parameters.getV0();
-        this.T = parameters.getT();
-        this.s0 = parameters.getS0();
-        this.s1 = parameters.getS1();
-        this.a = parameters.getA();
-        this.b = parameters.getB();
-        this.delta = parameters.getDelta();
-        this.coolness = parameters.getCoolness();
+    public ACC(IModelParameterACC modelParameter) {
+        super(ModelName.ACC);
+        this.param = modelParameter;
     }
 
-    /**
-     * Gets the s1.
-     * 
-     * @return the s1
-     */
-    public double getS1() {
-        return s1;
-    }
-
-    /**
-     * Gets the t.
-     * 
-     * @return the t
-     */
-    public double getT() {
-        return T;
-    }
-
-    /**
-     * Gets the delta.
-     * 
-     * @return the delta
-     */
-    public double getDelta() {
-        return delta;
-    }
-
-    /**
-     * Gets the a.
-     * 
-     * @return the a
-     */
-    public double getA() {
-        return a;
-    }
-
-    /**
-     * Gets the b.
-     * 
-     * @return the b
-     */
-    public double getB() {
-        return b;
-    }
-
-    /**
-     * Gets the coolness.
-     * 
-     * @return the coolness
-     */
-    public double getCoolness() {
-        return coolness;
+    @Override
+    protected IModelParameterACC getParameter() {
+        return param;
     }
 
     @Override
@@ -160,21 +75,21 @@ class ACC extends LongitudinalModelBase {
 
         // space dependencies modeled by speedlimits, alpha's
 
-        final double Tlocal = alphaT * T;
+        final double Tlocal = alphaT * param.getT();
         // if(alphaT!=1){
         // System.out.printf("calcAcc: pos=%.2f, speed=%.2f, alphaT=%.3f, alphaV0=%.3f, T=%.3f, Tlocal=%.3f \n",
         // me.getPosition(), me.getSpeed(), alphaT, alphaV0, T, Tlocal);
         // }
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
-        final double aLocal = alphaA * a;
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
+        final double aLocal = alphaA * param.getA();
 
         return acc(s, v, dv, aLead, Tlocal, v0Local, aLocal);
     }
 
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, 0, T, v0, a);
+        return acc(s, v, dv, 0, param.getT(), getDesiredSpeed(), param.getA());
     }
 
     // Implementation of ACC model with improved IDM (IIDM)
@@ -203,12 +118,13 @@ class ACC extends LongitudinalModelBase {
             return 0;
         }
 
-        final double sstar = s0
-                + Math.max(TLocal * v + s1 * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv / Math.sqrt(aLocal * b),
-                        0.);
+        final double sstar = getMinimumGap()
+                + Math.max(
+                        TLocal * v + param.getS1() * Math.sqrt((v + 0.00001) / v0Local) + 0.5 * v * dv
+                                / Math.sqrt(aLocal * param.getB()), 0.);
         final double z = sstar / Math.max(s, 0.01);
-        final double accEmpty = (v <= v0Local) ? aLocal * (1 - Math.pow((v / v0Local), delta)) : -b
-                * (1 - Math.pow((v0Local / v), aLocal * delta / b));
+        final double accEmpty = (v <= v0Local) ? aLocal * (1 - Math.pow((v / v0Local), param.getDelta())) : -param
+                .getB() * (1 - Math.pow((v0Local / v), aLocal * param.getDelta() / param.getB()));
         final double accPos = accEmpty * (1. - Math.pow(z, Math.min(2 * aLocal / accEmpty, 100.)));
         final double accInt = aLocal * (1 - z * z);
 
@@ -226,8 +142,8 @@ class ACC extends LongitudinalModelBase {
 
         // ACC with IIDM
 
-        final double accACC_IIDM = (accIIDM > accCAH) ? accIIDM : (1 - coolness) * accIIDM + coolness
-                * (accCAH + b * Math.tanh((accIIDM - accCAH) / b));
+        final double accACC_IIDM = (accIIDM > accCAH) ? accIIDM : (1 - param.getCoolness()) * accIIDM
+                + param.getCoolness() * (accCAH + param.getB() * Math.tanh((accIIDM - accCAH) / param.getB()));
 
         return accACC_IIDM;
     }

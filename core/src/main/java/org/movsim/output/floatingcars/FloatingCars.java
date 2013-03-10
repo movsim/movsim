@@ -26,12 +26,12 @@
 package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
-import org.movsim.input.model.output.FloatingCarInput;
+import org.movsim.autogen.FloatingCarOutput;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -46,8 +46,7 @@ import com.google.common.base.Preconditions;
  */
 public class FloatingCars implements SimulationTimeStep {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(FloatingCars.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FloatingCars.class);
 
     private final Collection<Integer> floatingCarVehicleNumbers;
 
@@ -64,26 +63,29 @@ public class FloatingCars implements SimulationTimeStep {
     /**
      * Constructor.
      * 
-     * @param input
+     * @param floatingCarOutput
      * @param route
      * @param writeFileOutput
      */
-    public FloatingCars(FloatingCarInput input, Route route, boolean writeFileOutput) {
+    public FloatingCars(FloatingCarOutput floatingCarOutput, Route route, boolean writeFileOutput) {
         Preconditions.checkNotNull(route);
-        this.nDtOut = input.getNDt();
-        this.randomFraction = (input.getRandomFraction() < 0 || input.getRandomFraction() > 1) ? 0 : input
+        this.nDtOut = floatingCarOutput.getNTimestep().intValue();
+        this.randomFraction = (floatingCarOutput.getRandomFraction() < 0 || floatingCarOutput.getRandomFraction() > 1) ? 0
+                : floatingCarOutput
                 .getRandomFraction();
         this.route = route;
-        floatingCarVehicleNumbers = new ArrayList<Integer>();
-        floatingCarVehicleNumbers.addAll(input.getFloatingCars());
+        floatingCarVehicleNumbers = new HashSet<>();
+        for (org.movsim.autogen.FloatingCar fc : floatingCarOutput.getFloatingCar()) {
+            floatingCarVehicleNumbers.add(Integer.valueOf(fc.getNumber()));
+        }
         fileFloatingCars = (writeFileOutput) ? new FileFloatingCars() : null;
-        printWriters = new HashMap<Vehicle, PrintWriter>(149, 0.75f);
+        printWriters = new HashMap<>(149, 0.75f);
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (fileFloatingCars != null && iterationCount % nDtOut == 0) {
-            logger.debug("update FloatingCars: iterationCount={}", iterationCount);
+            LOG.debug("update FloatingCars: iterationCount={}", iterationCount);
             writeOutput(simulationTime);
         }
     }

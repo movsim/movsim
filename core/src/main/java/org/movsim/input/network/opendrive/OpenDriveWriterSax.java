@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -52,6 +52,7 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
  * </p>
  */
 @SuppressWarnings({ "nls", "boxing" })
+@Deprecated
 public class OpenDriveWriterSax extends XMLWriterBase {
 
     private static class Junction {
@@ -115,6 +116,7 @@ public class OpenDriveWriterSax extends XMLWriterBase {
      * 
      * @param roadNetwork
      */
+    @Deprecated
     public static void saveRoadNetwork(RoadNetwork roadNetwork) {
         final OpenDriveWriterSax writer = new OpenDriveWriterSax();
         write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>");

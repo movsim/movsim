@@ -1,0 +1,9 @@
+
+Push local branch to remote repo:
+
+git push origin mybranch
+git push origin HEAD:mybranch
+
+Checkout branch:
+git checkout -b test origin/test
+

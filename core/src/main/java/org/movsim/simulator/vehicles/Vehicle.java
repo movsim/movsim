@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,24 +25,29 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.vehicle.VehicleInput;
+import javax.annotation.Nullable;
+
+import org.movsim.autogen.VehiclePrototypeConfiguration;
+import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.simulator.vehicles.consumption.Consumption;
+import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * <p>
@@ -58,8 +63,8 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * <p>
- * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the
- * position of the front of the vehicle on the road segment and also by the vehicle's lane.
+ * A vehicle has the kinematic attributes of position, velocity and acceleration. A vehicle's position is given by the position of the front
+ * of the vehicle on the road segment and also by the vehicle's lane.
  * </p>
  * 
  * <p>
@@ -90,7 +95,7 @@ public class Vehicle {
     public static final int ID_NOT_SET = -1;
     private static final int VEHICLE_NUMBER_NOT_SET = -1;
     private static final int LANE_NOT_SET = -1;
-    
+
     /**
      * 'Not Set' road segment id value, guaranteed not to be used by any vehicles.
      */
@@ -134,9 +139,6 @@ public class Vehicle {
 
     private double accOld;
 
-    /** The reaction time. */
-    private final double reactionTime;
-
     /** The max deceleration . */
     private final double maxDeceleration;
 
@@ -162,18 +164,25 @@ public class Vehicle {
     private double slope;
 
     private LongitudinalModelBase longitudinalModel;
+    /** can be null */
     private LaneChangeModel laneChangeModel;
 
+    /** can be null */
     private Memory memory = null;
+    /** Acceleration noise model. Can be null */
     private Noise noise = null;
 
     private int color;
-    private Object colorObject; // color object cache
-   
+    /** color object cache */
+    private Object colorObject;
+
     private final TrafficLightApproaching trafficLightApproaching;
-    
-    private final Consumption fuelModel; // can be null
+
+    /** can be null */
+    private EnergyFlowModel fuelModel;
+    /** can be null */
     private final Route route;
+
     private int routeIndex;
 
     private boolean isBrakeLightOn;
@@ -232,36 +241,29 @@ public class Vehicle {
         return nextId - INITIAL_ID;
     }
 
-    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehicleInput vehInput, Object cyclicBuffer,
-            LaneChangeModel lcModel, Consumption fuelModel, Route route) {
+    public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
+            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
+        Preconditions.checkNotNull(longitudinalModel);
+        Preconditions.checkNotNull(vehInput);
         this.label = label;
+        this.length = vehInput.getLength();
+        this.width = vehInput.getWidth();
+        this.maxDeceleration = vehInput.getMaximumDeceleration();
+
         id = nextId++;
         randomFix = MyRandom.nextDouble();
-        this.fuelModel = fuelModel;
-
-        length = vehInput.getLength();
-        width = vehInput.getWidth();
-        reactionTime = vehInput.getReactionTime();
-        maxDeceleration = vehInput.getMaxDeceleration();
 
         initialize();
         this.longitudinalModel = longitudinalModel;
         physQuantities = new PhysicalQuantities(this);
 
         this.laneChangeModel = lcModel;
-        laneChangeModel.initialize(this);
-
-        // no effect if model is not configured with memory effect
-        if (vehInput.isWithMemory()) {
-            memory = new Memory(vehInput.getMemoryInputData());
+        if (laneChangeModel != null) {
+            laneChangeModel.initialize(this);
         }
-
-        if (vehInput.isWithNoise()) {
-            noise = new Noise(vehInput.getNoiseInputData());
-        }
+        this.route = route;
 
         trafficLightApproaching = new TrafficLightApproaching();
-        this.route = route;
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
@@ -286,8 +288,7 @@ public class Vehicle {
         this.color = 0;
         fuelModel = null;
         trafficLightApproaching = null;
-        reactionTime = 0.0;
-        maxDeceleration = 0.0;
+        maxDeceleration = 10.0;
         laneChangeModel = null;
         longitudinalModel = null;
         label = "";
@@ -313,9 +314,7 @@ public class Vehicle {
         length = source.length;
         width = source.width;
         color = source.color;
-        fuelModel = source.fuelModel;
         trafficLightApproaching = source.trafficLightApproaching;
-        reactionTime = source.reactionTime;
         maxDeceleration = source.maxDeceleration;
         laneChangeModel = source.laneChangeModel;
         longitudinalModel = source.longitudinalModel;
@@ -328,27 +327,26 @@ public class Vehicle {
     /**
      * Constructor.
      */
-    public Vehicle(LongitudinalModelBase ldm, Object lcm, double length, double width) {
-        id = nextId++;
-        randomFix = MyRandom.nextDouble();
-        this.length = length;
-        setRearPosition(0.0);
-        this.speed = 0.0;
-        this.lane = Lane.NONE;
-        this.laneOld = Lane.NONE;
-        this.width = width;
-        this.color = 0;
-        fuelModel = null;
-        trafficLightApproaching = null;
-        reactionTime = 0.0;
-        maxDeceleration = 0.0;
-        laneChangeModel = null;
-        longitudinalModel = ldm;
-        label = "";
-        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
-        slope = 0;
-        route = null;
-    }
+    // public Vehicle(LongitudinalModelBase ldm, Object lcm, double length, double width) {
+    // id = nextId++;
+    // randomFix = MyRandom.nextDouble();
+    // this.length = length;
+    // setRearPosition(0.0);
+    // this.speed = 0.0;
+    // this.lane = Lane.NONE;
+    // this.laneOld = Lane.NONE;
+    // this.width = width;
+    // this.color = 0;
+    // fuelModel = null;
+    // trafficLightApproaching = null;
+    // maxDeceleration = 0.0;
+    // laneChangeModel = null;
+    // longitudinalModel = ldm;
+    // label = "";
+    // speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+    // slope = 0;
+    // route = null;
+    // }
 
     private void initialize() {
         frontPositionOld = 0;
@@ -598,8 +596,8 @@ public class Vehicle {
         return speed - frontVehicle.getSpeed();
     }
 
-    public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment, LaneSegment leftLaneSegment, double alphaT,
-            double alphaV0) {
+    public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment,
+            LaneSegment leftLaneSegment, double alphaT, double alphaV0) {
 
         accOld = acc;
         // acceleration noise:
@@ -635,6 +633,7 @@ public class Vehicle {
 
         acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
     }
+
     /**
      * Moderates this vehicle's acceleration according to factors other than the LDM. For
      * example, the presence of traffic lights, motorway exits or tactical considerations (say,
@@ -642,7 +641,7 @@ public class Vehicle {
      * 
      * @param acc
      *            acceleration as calculated by LDM
-     * @param roadSegment 
+     * @param roadSegment
      * @return moderated acceleration
      */
     protected final double moderateAcceleration(double acc, RoadSegment roadSegment) {
@@ -659,60 +658,68 @@ public class Vehicle {
 
     /**
      * Returns this vehicle's acceleration considering the traffic light.
-     * @param roadSegment 
+     * 
+     * @param roadSegment
      * 
      * @return acceleration considering traffic light
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        
+
         // first find next downstream traffic light
-        TrafficLight trafficLight = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
-        if(trafficLight!=null){
-            double distance = trafficLight.position() - getFrontPosition();
+        TrafficLightLocation trafficLightLocation = roadSegment
+                .getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
+        if (trafficLightLocation != null) {
+            TrafficLight trafficLight = trafficLightLocation.getTrafficLight();
+            double distance = trafficLightLocation.position() - getFrontPosition();
             updateTrafficLightApproaching(trafficLight, distance);
-            return trafficLightApproaching.considerTrafficLight() ? Math.min(acc, trafficLightApproaching.accApproaching()) : acc;
+            return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
+                    trafficLightApproaching.accApproaching()) : acc;
         }
-        
         // check also traffic light on next sink road segment as look-ahead horizon
-        // !!! only one segment is checked ahead which may be too short-sighted in some situations 
+        // !!! only one segment is checked ahead which may be too short-sighted in some situations
         RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(getLane());
         if (sinkRoadSegment != null) {
-            trafficLight = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
-            if (trafficLight != null) {
-                double distance = trafficLight.position() + roadSegment.roadLength() - getFrontPosition();
+            trafficLightLocation = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
+            if (trafficLightLocation != null) {
+                TrafficLight trafficLight = trafficLightLocation.getTrafficLight();
+                double distance = trafficLightLocation.position() + roadSegment.roadLength() - getFrontPosition();
                 updateTrafficLightApproaching(trafficLight, distance);
                 return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
                         trafficLightApproaching.accApproaching()) : acc;
             }
         }
-        
+
         return moderatedAcc;
     }
-    
+
     /**
      * Returns this vehicle's acceleration considering the exit.
-     * @param roadSegment 
+     * 
+     * @param roadSegment
      * 
      * @return acceleration considering exit
      */
     protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
-        assert roadSegment.id()==roadSegmentId;
+        assert roadSegment.id() == roadSegmentId;
         if (exitRoadSegmentId == roadSegment.id() && getLane() != Lane.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
             // react to vehicle ahead in exit lane
-            // TODO this reaction is in same situations too short-sighted so that the vehicle in the exit lane must be considered already in the upstream segment 
+            // TODO this reaction is in same situations too short-sighted so that the vehicle in the exit lane must be
+            // considered already in the upstream segment
             final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
-            if(exitLaneSegment!=null && exitLaneSegment.type() == Lane.Type.EXIT){
+            if (exitLaneSegment != null && exitLaneSegment.type() == Lane.Type.EXIT) {
                 // this front vehicle could also result in negative net distances
                 // but the deceleration is limited anyway
-                Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);                
+                Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);
                 double accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
                 final double decelLimit = 4.0;
                 accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -decelLimit);
-                if(logger.isDebugEnabled()){
-                    logger.debug(String.format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
-                            exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(), accToVehicleInExitLane, -decelLimit));
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String
+                            .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
+                                    exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
+                                    accToVehicleInExitLane, -decelLimit));
                 }
                 return Math.min(acc, accToVehicleInExitLane);
             }
@@ -788,7 +795,7 @@ public class Vehicle {
             }
         }
         if (fuelModel != null) {
-            totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) *dt;
+            totalFuelUsedLiters += fuelModel.getFuelFlowInLiterPerS(speed, acc) * dt;
         }
     }
 
@@ -803,20 +810,16 @@ public class Vehicle {
         targetLane = Lane.NONE;
     }
 
-    public boolean hasReactionTime() {
-        return (reactionTime + MovsimConstants.SMALL_VALUE > 0);
-    }
-
     /**
      * Update.
      * 
      * @param simulationTime
      *            current simulation time, seconds
      * @param trafficLight
-     * @param distance 
+     * @param distance
      */
-    public void updateTrafficLightApproaching(TrafficLight trafficLight, double distance) {
-        if(trafficLight!=null){
+    private void updateTrafficLightApproaching(TrafficLight trafficLight, double distance) {
+        if (trafficLight != null) {
             assert distance >= 0 : distance;
             trafficLightApproaching.update(this, trafficLight, distance, longitudinalModel);
         }
@@ -984,7 +987,7 @@ public class Vehicle {
         FLOATING_CAR
     }
 
-    private Type type = Type.VEHICLE;  // init!
+    private Type type = Type.VEHICLE; // init!
 
     /**
      * Returns this vehicle's type.
@@ -1011,9 +1014,8 @@ public class Vehicle {
      * Called when vehicle changes road segments (and possibly also lanes) at a link or junction.
      * </p>
      * <p>
-     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and
-     * <code>timeAtWhichLastChangedLanes</code> are used to interpolate this vehicle's lateral position and so give the
-     * appearance of a smooth lane change.
+     * Although the change of lanes is immediate, <code>lane</code>, <code>prevLane</code> and <code>timeAtWhichLastChangedLanes</code> are
+     * used to interpolate this vehicle's lateral position and so give the appearance of a smooth lane change.
      * </p>
      * 
      * @param newLane
@@ -1119,6 +1121,7 @@ public class Vehicle {
 
     /**
      * Returns the total distance this vehicle has traveled.
+     * 
      * @return total travel distance
      */
     public final double totalTravelDistance() {
@@ -1127,6 +1130,7 @@ public class Vehicle {
 
     /**
      * Returns the total time this vehicle has been on the road network.
+     * 
      * @return total travel time
      * 
      * @return
@@ -1137,19 +1141,20 @@ public class Vehicle {
 
     /**
      * Returns the total fuel used by this vehicle.
+     * 
      * @return total fuel used
      */
     public final double totalFuelUsedLiters() {
         return totalFuelUsedLiters;
     }
-    
+
     public double getMaxDeceleration() {
         return maxDeceleration;
     }
-    
-    public double getDistanceToRoadSegmentEnd(){
-        if(roadSegmentLength<=0){
-            return -1;  
+
+    public double getDistanceToRoadSegmentEnd() {
+        if (roadSegmentLength <= 0) {
+            return -1;
         }
         return roadSegmentLength - getFrontPosition();
     }
@@ -1164,5 +1169,17 @@ public class Vehicle {
     /** returns a constant random number between 0 and 1 */
     public double getRandomFix() {
         return randomFix;
+    }
+
+    public void setMemory(Memory memory) {
+        this.memory = memory;
+    }
+
+    public void setNoise(Noise noise) {
+        this.noise = noise;
+    }
+
+    public void setFuelModel(EnergyFlowModel fuelModel) {
+        this.fuelModel = fuelModel;
     }
 }

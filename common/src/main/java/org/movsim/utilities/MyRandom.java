@@ -27,31 +27,29 @@ package org.movsim.utilities;
 
 import java.util.Random;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
+import com.google.common.base.Preconditions;
+
 /**
  * The Class MyRandom.
  */
 public class MyRandom {
 
-    /** Initialized to avoid NP exceptions. */
-    private static Random rand = new Random();
-    
+    private static Random rand = new Random(); 
 
-    /**
-     * enforce singleton property with private constructor.
-     */
     private MyRandom() {
+        // enforce singleton property with private constructor.
     }
 
-    /**
-     * Initialize.
-     * 
-     * @param withDefinedSeed
-     *            the with defined seed
-     * @param randomSeed
-     *            the random seed
-     */
-    public static void initialize(boolean withDefinedSeed, long randomSeed) {
-        rand = (withDefinedSeed) ? new Random(randomSeed) : new Random();
+    public static void initializeWithSeed(long randomSeed) {
+        rand = new Random(randomSeed);
+    }
+    
+    public static boolean isInitialized(){
+        return rand != null;
     }
 
     /**
@@ -75,5 +73,22 @@ public class MyRandom {
     public static double nextDouble() {
         return rand.nextDouble();
     }
-
+    
+    /**
+     * returns a realization of a uniformly distributed random variable in [-1, 1] 
+     * 
+     * @return a uniformly distributed realization in [-1, 1]
+     */
+    public static double getUniformDistribution(){
+        return 2 * MyRandom.nextDouble() - 1;
+    }
+    
+    public static double getUniformlyDistributedRandomizedFactor(double randomizationStrength) {
+        return 1 + randomizationStrength * getUniformDistribution(); 
+    }
+    
+    public static double getGaussiansDistributedRandomizedFactor(double sigma, double nSigmaCutoff) {
+        return 1 + Math.max(-nSigmaCutoff*sigma, Math.min(nSigmaCutoff, sigma * rand.nextGaussian())); 
+    }
+    
 }

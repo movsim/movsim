@@ -1,4 +1,5 @@
 /.settings
+**/.settings/
 /.classpath
 target/
 bin/
@@ -6,9 +7,17 @@ figs/
 csv/
 *.csv
 *.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+._*
 *.internal_xml
 *.log
 *.log.*
 *.eps
 *~
 /.project
+

@@ -25,6 +25,7 @@
  */
 package org.movsim.output.detector;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.utilities.Units;
 
@@ -59,7 +60,7 @@ public class FileDetector extends FileOutputBase {
      * @param laneCount
      */
     public FileDetector(LoopDetector detector, String roadId, int laneCount, boolean loggingLanes) {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         final int xDetectorInt = (int) detector.getDetPosition();
         this.detector = detector;
         this.laneCount = laneCount;

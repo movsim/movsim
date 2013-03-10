@@ -26,13 +26,14 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.List;
+import java.util.Map;
 
-import org.movsim.input.model.simulation.FlowConservingBottleneckDataPoint;
+import org.movsim.autogen.FlowConservingInhomogeneities;
+import org.movsim.autogen.Inhomogeneity;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FlowConservingBottlenecksImpl.
  */
@@ -52,28 +53,28 @@ public class FlowConservingBottlenecks {
     /**
      * Instantiates a new flow conserving bottlenecks impl.
      * 
-     * @param flowConsDataPoints
+     * @param flowConservingInhomogeneities
      *            the flow cons data points
      */
-    public FlowConservingBottlenecks(List<FlowConservingBottleneckDataPoint> flowConsDataPoints) {
-        generateSpaceSeriesData(flowConsDataPoints);
+    public FlowConservingBottlenecks(FlowConservingInhomogeneities flowConservingInhomogeneities) {
+        generateSpaceSeriesData(flowConservingInhomogeneities.getInhomogeneity());
     }
 
     /**
      * Generate space series data.
      * 
-     * @param data
+     * @param list
      *            the data
      */
-    private void generateSpaceSeriesData(List<FlowConservingBottleneckDataPoint> data) {
-        final int size = data.size();
+    private void generateSpaceSeriesData(List<Inhomogeneity> list) {
+        final int size = list.size();
         posValues = new double[size];
         alphaTValues = new double[size];
         alphaV0Values = new double[size];
         for (int i = 0; i < size; i++) {
-            posValues[i] = data.get(i).getPosition();
-            alphaTValues[i] = data.get(i).getAlphaT();
-            alphaV0Values[i] = data.get(i).getAlphaV0();
+            posValues[i] = list.get(i).getPosition();
+            alphaTValues[i] = list.get(i).getAlphaT();
+            alphaV0Values[i] = list.get(i).getAlphaV0();
             // logger.debug("add data: alphaT={}, alphaV0={}", alphaTValues[i],
             // alphaV0Values[i]);
         }
@@ -99,6 +100,42 @@ public class FlowConservingBottlenecks {
      */
     public double alphaV0(double x) {
         return (alphaV0Values.length == 0) ? 1 : Tables.intpextp(posValues, alphaV0Values, x);
+    }
+
+    private final class FlowConservingBottleneckDataPoint {
+
+        /** The position in m */
+        private final double x;
+
+        /** The alpha t. */
+        private final double alphaT;
+
+        /** The alpha v0. */
+        private final double alphaV0;
+
+        /**
+         * Instantiates a new flow conserving bottleneck data point impl.
+         * 
+         * @param map
+         *            the map
+         */
+        public FlowConservingBottleneckDataPoint(Map<String, String> map) {
+            this.x = Double.parseDouble(map.get("x"));
+            this.alphaT = Double.parseDouble(map.get("alpha_T"));
+            this.alphaV0 = Double.parseDouble(map.get("alpha_v0"));
+        }
+
+        public double getPosition() {
+            return x;
+        }
+
+        public double getAlphaT() {
+            return alphaT;
+        }
+
+        public double getAlphaV0() {
+            return alphaV0;
+        }
     }
 
 }

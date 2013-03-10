@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <OpenDRIVE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="OpenDRIVE_1.3.xsd">
     <header revMajor="1" revMinor="2" name="" version="1.00" date="Thu Sep 2 20:31:10 2010" north="0.0" south="0.0" east="0.0" west="0.0" />
-
     <road name="" length="800.0" id="NSM" junction="-1">
         <planView>
             <geometry s="0.0" x="50.0" y="50.0" hdg="0.0" length="2500.0">
@@ -18,8 +17,7 @@
             </laneSection>
         </lanes>
     </road>
-    
-        <road name="" length="800.0" id="BARL" junction="-1">
+    <road name="" length="800.0" id="BARL" junction="-1">
         <planView>
             <geometry s="0.0" x="50.0" y="100.0" hdg="0.0" length="2500.0">
                 <line />
@@ -35,7 +33,6 @@
             </laneSection>
         </lanes>
     </road>
-
     <road name="" length="800.0" id="KKW" junction="-1">
         <planView>
             <geometry s="0.0" x="50.0" y="150.0" hdg="0.0" length="2500.0">
@@ -52,6 +49,5 @@
             </laneSection>
         </lanes>
     </road>
-        
 </OpenDRIVE>
 

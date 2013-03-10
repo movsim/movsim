@@ -76,7 +76,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public LaneSegment(RoadSegment roadSegment, int lane) {
         this.roadSegment = roadSegment;
         this.lane = lane;
-        vehicles = new ArrayList<Vehicle>(VEHICLES_PER_LANE_INITIAL_SIZE);
+        vehicles = new ArrayList<>(VEHICLES_PER_LANE_INITIAL_SIZE);
         type = Lane.Type.TRAFFIC;
     }
 

@@ -256,7 +256,7 @@ public class SimulationRunnable extends SimulationRun implements Runnable {
      * </p>
      * 
      * <p>
-     * This method is must be synchronized (using <code>dataLock</code>) (normally with the <code>drawForeground</code>
+     * This method must be synchronized (using <code>dataLock</code>) (normally with the <code>drawForeground</code>
      * method), so that elements are not updated, added or removed from the simulation while they are being drawn.
      * </p>
      * 

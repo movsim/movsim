@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -26,10 +26,19 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
+import org.movsim.network.autogen.opendrive.Lane.Speed;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
+import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,7 +104,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
-    private TrafficLights trafficLights;
+    private List<TrafficLightLocation> trafficLightLocations = new ArrayList<>();
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
@@ -163,8 +172,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         assert roadMapping.trafficLaneMax() == laneCount;
         this.roadMapping = roadMapping;
     }
-
-
 
     /**
      * Sets a default sink for this road segment.
@@ -428,7 +435,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return vehicleCount;
     }
-    
+
     public int getStoppedVehicleCount() {
         int stoppedVehicleCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
@@ -475,7 +482,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return totalVehicleTravelTime;
     }
-    
+
     /**
      * Returns the total travel distance of all vehicles on this road segment, all lanes.
      * 
@@ -501,7 +508,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return totalVehicleFuelUsedLiters;
     }
-    
+
     protected double instantaneousConsumptionLitersPerSecond() {
         double vehicleFuelUsedLiters = 0;
         for (final LaneSegment laneSegment : laneSegments) {
@@ -509,12 +516,12 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return vehicleFuelUsedLiters;
     }
-    
+
     public double meanSpeed() {
         double sumSpeed = 0;
         int vehCount = 0;
         for (final LaneSegment laneSegment : laneSegments) {
-            for(Vehicle veh : laneSegment){
+            for (Vehicle veh : laneSegment) {
                 if (veh.type() == Vehicle.Type.OBSTACLE) {
                     continue;
                 }
@@ -522,9 +529,9 @@ public class RoadSegment implements Iterable<Vehicle> {
                 ++vehCount;
             }
         }
-        return (vehCount>0) ? sumSpeed/vehCount : MovsimConstants.FREE_SPEED;
+        return (vehCount > 0) ? sumSpeed / vehCount : MovsimConstants.FREE_SPEED;
     }
-    
+
     /**
      * Returns the instantaneous travel time defined by the road element length and current mean speed of all vehicles.
      * An adhoc free speed is assumed in case of an empty road.
@@ -547,7 +554,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
         return obstacleCount;
     }
-
 
     /**
      * <p>
@@ -594,6 +600,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     /**
      * Removes any vehicles that have moved past the end of this road segment.
+     * 
      * @return the number of vehicles removed
      */
     public int removeVehiclesPastEnd() {
@@ -646,18 +653,11 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        updateTrafficLights(dt, simulationTime, iterationCount);
         applySpeedLimits();
         applySlopes();
         applyVariableMessageSigns();
     }
 
-    private void updateTrafficLights(double dt, double simulationTime, long iterationCount) {
-        if (trafficLights != null) {
-            trafficLights.update(dt, simulationTime, iterationCount);
-        }
-    }
-    
     /**
      * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
      * traffic light located.
@@ -665,15 +665,13 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param position
      * @return the next downstream traffic or null
      */
-    public TrafficLight getNextDownstreamTrafficLightOnRoadSegment(double position) {
-        if (trafficLights != null) {
-            for (TrafficLight trafficLight : trafficLights) {
-                double distance = trafficLight.position() - position;
-                if (distance > 0) {
-                    // !!! assume that traffic lights are sorted with increasing position
-                    // so that first traffic light can be considered as the next downstream one
-                    return trafficLight;
-                }
+    public TrafficLightLocation getNextDownstreamTrafficLightOnRoadSegment(double position) {
+        for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
+            double distance = trafficLightLocation.position() - position;
+            if (distance > 0) {
+                // !!! assume that traffic lights are sorted with increasing position
+                // so that first traffic light can be considered as the next downstream one
+                return trafficLightLocation;
             }
         }
         return null;
@@ -800,7 +798,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
                 // logger.debug("i={}, x_pos={}", i, x);
                 // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                // TODO hack for testing acceleration behavior to exit 
+                // TODO hack for testing acceleration behavior to exit
                 vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment, alphaT, alphaV0);
             }
         }
@@ -877,7 +875,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the number of iterations that have been executed
      */
     public void updateDetectors(double dt, double simulationTime, long iterationCount) {
-        if (this.loopDetectors != null) {
+        if (loopDetectors != null) {
             loopDetectors.timeStep(dt, simulationTime, iterationCount);
         }
     }
@@ -921,7 +919,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane].frontVehicle();
     }
 
-
     /**
      * Returns the vehicle in front of the given vehicle in its lane.
      * 
@@ -946,12 +943,12 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Sets the speed limits for this road segment.
+     * Sets the speed limits for this road segment for all lanes (openDrive defines speed limits per lane)
      * 
-     * @param speedLimits
+     * @param list
      */
-    public void setSpeedLimits(SpeedLimits speedLimits) {
-        this.speedLimits = speedLimits;
+    public void setSpeedLimits(List<Speed> list) {
+        this.speedLimits = new SpeedLimits(list);
     }
 
     /**
@@ -968,8 +965,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @param slopes
      */
-    public void setSlopes(Slopes slopes) {
-        this.slopes = slopes;
+    public void setElevationProfile(ElevationProfile elevationProfile) {
+        this.slopes = new Slopes(elevationProfile.getElevation());
+
     }
 
     /**
@@ -982,12 +980,18 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Sets the traffic lights for this road segment.
+     * Sets the traffic lights for this road segment by connecting the dynamic traffic lights with the road segment
+     * locations parsed from the infrastructure input.
      * 
      * @param trafficLights
      */
     public void setTrafficLights(TrafficLights trafficLights) {
-        this.trafficLights = trafficLights;
+        for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
+            TrafficLight trafficLight = trafficLights.get(trafficLightLocation.id());
+            trafficLightLocation.setTrafficLight(trafficLight);
+            // not elegant but needed for traffic light recorder
+            trafficLight.setPosition(trafficLightLocation.position());
+        }
     }
 
     /**
@@ -995,8 +999,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return an iterable over all the traffic lights in the road segment
      */
-    public Iterable<TrafficLight> trafficLights() {
-        return trafficLights == null ? null : trafficLights;
+    public Iterable<TrafficLightLocation> trafficLightLocations() {
+        return trafficLightLocations;
     }
 
     /**
@@ -1182,6 +1186,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public void setFlowConservingBottlenecks(FlowConservingBottlenecks flowConservingBottlenecks) {
+        Preconditions.checkNotNull(flowConservingBottlenecks);
         this.flowConservingBottlenecks = flowConservingBottlenecks;
     }
 
@@ -1212,7 +1217,6 @@ public class RoadSegment implements Iterable<Vehicle> {
                 + laneCount + "]";
     }
 
-    
     /**
      * Returns true if the {@code RoadSegment} is connected in downstream direction to the provided argument and false
      * otherwise. Connection exists if at least one {@code LaneSegment} is connected.
@@ -1234,6 +1238,36 @@ public class RoadSegment implements Iterable<Vehicle> {
     // TODO not yet used
     public void setUserRoadname(String name) {
         this.roadName = name;
+    }
+
+    /**
+     * Adds the {@code TrafficLightLocation} to the {@code RoadSegment} and performs a sorting to assure ascending order
+     * of positions along the road stretch.
+     * <p>
+     * The caller has to assure that traffic light id is unique in the whole network.
+     * </p>
+     * 
+     * @param trafficLightLocation
+     */
+    public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
+        trafficLightLocations.add(trafficLightLocation);
+
+        // consistency check
+        if (trafficLightLocation.position() < 0 || trafficLightLocation.position() >= roadLength) {
+            throw new IllegalArgumentException("inconsistent input data: traffic light position="
+                    + trafficLightLocation.position() + " does not fit onto road-id=" + id() + " with lenght="
+                    + roadLength());
+        }
+
+        Collections.sort(trafficLightLocations, new Comparator<TrafficLightLocation>() {
+            @Override
+            public int compare(TrafficLightLocation o1, TrafficLightLocation o2) {
+                final Double pos1 = new Double(o1.position());
+                final Double pos2 = new Double(o2.position());
+                return pos1.compareTo(pos2); // sort with increasing x
+            }
+        });
+
     }
 
 }

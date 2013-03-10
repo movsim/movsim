@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -25,144 +25,61 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
+import org.movsim.autogen.DistributionTypeEnum;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterKKW;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO: Auto-generated Javadoc
 // paper reference / Kerner book
-// TODO consider also external speed limits 
+// TODO consider also external speed limits
 /**
  * The Class KKW.
+ * 
+ * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
+ * The pb0. "Troedelwahrsch." for standing vehicles
+ * The pb1. "Troedelwahrsch." for moving vehicles
+ * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v<vp
+ * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v>=vp
+ * The vp. Geschw., ab der weniger "anti-getroedelt" wird
  */
 class KKW extends LongitudinalModelBase {
 
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(KKW.class);
 
+    private final IModelParameterKKW param;
+
     /**
      * The Constant dtCA. constant update timestep for CA
      */
-    private static final double dtCA = 1; //
-
-    /**
-     * The k. Multiplikator fuer sync-Abstand D=lveh+k*v*tau
-     */
-    private final double k;
-
-    /**
-     * The pb0. "Troedelwahrsch." for standing vehicles
-     */
-    private final double pb0;
-
-    /**
-     * The pb1. "Troedelwahrsch." for moving vehicles
-     */
-    private final double pb1;
-
-    /**
-     * The pa1. "Beschl.=Anti-Troedelwahrsch." falls v<vp
-     */
-    private final double pa1;
-
-    /**
-     * The pa2. "Beschl.=Anti-Troedelwahrsch." falls v>=vp
-     */
-    private final double pa2;
-
-    /**
-     * The vp. Geschw., ab der weniger "anti-getroedelt" wird
-     */
-    private final double vp;
+    private static final double dtCA = 1;
 
     /** The vehicle length. */
     private final double length;
 
     /**
-     * Instantiates a new kCA.
+     * Instantiates a new KKW model
      * 
-     * @param parameters
-     *            the parameters
-     * @param length
-     *            the length
+     * @param modelParameter
+     * @param vehLength
      */
-    KKW(LongitudinalModelInputDataKKW parameters, double length) {
-        super(ModelName.KKW, parameters);
-        this.length = length; // model parameter!
-        logger.debug("init model parameters");
-        this.v0 = parameters.getV0();
-        this.k = parameters.getK();
-        this.pb0 = parameters.getPb0();
-        this.pb1 = parameters.getPb1();
-        this.pa1 = parameters.getPa1();
-        this.pa2 = parameters.getPa2();
-        this.vp = parameters.getVp();
+    public KKW(IModelParameterKKW modelParameter, double vehLength) {
+        super(ModelName.KKW);
+        this.length = vehLength; // model parameter!
+        this.param = modelParameter;
     }
 
     @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = (int) v0;
+    public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
+        // no modification of desired speed by randomization.
     }
 
     @Override
-    public double getS0() {
+    public double getMinimumGap() {
         throw new UnsupportedOperationException("getS0 not applicable for KKW model.");
-    }
-
-    /**
-     * Gets the k.
-     * 
-     * @return the k
-     */
-    public double getK() {
-        return k;
-    }
-
-    /**
-     * Gets the pb0.
-     * 
-     * @return the pb0
-     */
-    public double getPb0() {
-        return pb0;
-    }
-
-    /**
-     * Gets the pb1.
-     * 
-     * @return the pb1
-     */
-    public double getPb1() {
-        return pb1;
-    }
-
-    /**
-     * Gets the pa1.
-     * 
-     * @return the pa1
-     */
-    public double getPa1() {
-        return pa1;
-    }
-
-    /**
-     * Gets the pa2.
-     * 
-     * @return the pa2
-     */
-    public double getPa2() {
-        return pa2;
-    }
-
-    /**
-     * Gets the vp.
-     * 
-     * @return the vp
-     */
-    public double getVp() {
-        return vp;
     }
 
     @Override
@@ -197,20 +114,19 @@ class KKW extends LongitudinalModelBase {
      */
     private double acc(double s, double v, double dv, double alphaT, double alphaV0) {
 
-        final int v0Loc = (int) (alphaV0 * v0 + 0.5); // adapt v0 spatially
+        final int v0Loc = (int) (alphaV0 * getDesiredSpeed() + 0.5); // adapt v0 spatially
         final int vLoc = (int) (v + 0.5);
 
-        final double kLoc = alphaT * k;
+        final double kLoc = alphaT * param.getK();
         // cell length/dt^2 with dt=1 s and length 0.5 m => 0.5 m/s^2
         final int a = 1;
 
-        final double pa = (vLoc < vp) ? pa1 : pa2;
-        final double pb = (vLoc < 1) ? pb0 : pb1;
-        // double bei Kerner, da k reelle Zahl
+        final double pa = (vLoc < param.getVp()) ? param.getPa1() : param.getPa2();
+        final double pb = (vLoc < 1) ? param.getPb0() : param.getPb1();
+        // double in Kerner's book since k is float
         final double D = length + kLoc * vLoc * dtCA;
 
-        // dynamic part
-        // (Delta x-d)/tau mit s=Delta x-d und tau=1 (s)
+        // dynamic part: (Delta x-d)/tau mit s=Delta x-d und tau=1 (s)
         final int vSafe = (int) s;
         final int dvSign = (dv < -0.5) ? 1 : (dv > 0.5) ? -1 : 0;
         final int vC = (s > D - length) ? vLoc + a * (int) dtCA : vLoc + a * (int) dtCA * dvSign;
@@ -228,4 +144,10 @@ class KKW extends LongitudinalModelBase {
 
         return ((vNew - vLoc) / dtCA);
     }
+
+    @Override
+    protected IModelParameterKKW getParameter() {
+        return param;
+    }
+
 }

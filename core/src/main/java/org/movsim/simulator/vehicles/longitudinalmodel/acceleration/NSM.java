@@ -25,72 +25,47 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
+import org.movsim.autogen.DistributionTypeEnum;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNSM;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
-// Nagel-Schreckenberg or Barlovic-Model
-// paper reference
 /**
- * The Class NSM.
+ * The Class NSM: Nagel-Schreckenberg or Barlovic-Model
+ * Parameters:
+ * The p slowdown.
+ * slow-to-start rule for Barlovic model
  */
 class NSM extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(NSM.class);
+    private static final Logger logger = LoggerFactory.getLogger(NSM.class);
 
     /** The constant unit time */
     private static final double dtCA = 1;
 
-    /** The p slowdown. */
-    private final double pSlowdown;
-
-    /** slow-to-start rule for Barlovic model */
-    private final double pSlowToStart;
+    private final IModelParameterNSM param;
 
     /**
      * Instantiates a new Nagel-Schreckenberg or Barlovic cellular automaton.
      * 
-     * @param parameters
-     *            the parameters
+     * @param modelParameter
      */
-    NSM(LongitudinalModelInputDataNSM parameters) {
-        super(ModelName.NSM, parameters);
-        logger.debug("init model parameters");
-        this.v0 = parameters.getV0();
-        this.pSlowdown = parameters.getSlowdown();
-        this.pSlowToStart = parameters.getSlowToStart();
+    public NSM(IModelParameterNSM modelParameter) {
+        super(ModelName.NSM);
+        this.param = modelParameter;
     }
 
     @Override
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = (int) v0;
+    public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
+        // no modification of desired speed by randomization.
     }
 
     @Override
-    public double getS0() {
-        throw new UnsupportedOperationException("getS0 not applicable for NSM model.");
-    }
-
-    /**
-     * Gets the slowdown.
-     * 
-     * @return the slowdown
-     */
-    public double getSlowdown() {
-        return pSlowdown;
-    }
-
-    /**
-     * Gets the slow to start.
-     * 
-     * @return the slow to start
-     */
-    public double getSlowToStart() {
-        return pSlowToStart;
+    public double getMinimumGap() {
+        throw new UnsupportedOperationException("minimum gap not applicable for NSM model.");
     }
 
     @Override
@@ -101,10 +76,12 @@ class NSM extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle);
 
         // consider external speedlimit
-        final double localV0 = Math.min(alphaV0 * v0, me.getSpeedlimit() / me.physicalQuantities().getvScale());
+        final double localV0 = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit()
+                / me.physicalQuantities().getvScale());
         if (logger.isDebugEnabled()) {
-            if (localV0 < v0) {
-                logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n", v0,
+            if (localV0 < getDesiredSpeed()) {
+                logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n",
+                        getDesiredSpeed(),
                         localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
             }
         }
@@ -114,7 +91,7 @@ class NSM extends LongitudinalModelBase {
 
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, v0);
+        return acc(s, v, dv, getDesiredSpeed());
     }
 
     /**
@@ -138,7 +115,7 @@ class NSM extends LongitudinalModelBase {
         int vNew = 0;
 
         final double r1 = MyRandom.nextDouble();
-        final double pb = (vLocal < 1) ? pSlowToStart : pSlowdown;
+        final double pb = (vLocal < 1) ? param.getPSlowStart() : param.getPSlowdown();
         final int slowdown = (r1 < pb) ? 1 : 0;
 
         final int sLoc = (int) (s + 0.5);
@@ -148,4 +125,10 @@ class NSM extends LongitudinalModelBase {
 
         return (vNew - vLocal) / dtCA;
     }
+
+    @Override
+    protected IModelParameterNSM getParameter() {
+        return param;
+    }
+
 }

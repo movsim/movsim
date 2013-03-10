@@ -7,7 +7,7 @@ import org.xml.sax.SAXException;
 
 public class OpenDriveReader {
 
-    final static boolean useJaxb = false; // true still for testing!
+    final static boolean useJaxb = true; // true still for testing!
 
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String fullXodrFileName) throws JAXBException,
             SAXException {

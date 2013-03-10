@@ -25,7 +25,8 @@
  */
 package org.movsim.output.fileoutput;
 
-import org.movsim.input.model.output.TrajectoriesInput;
+import org.movsim.autogen.Trajectories;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
@@ -61,17 +62,16 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
     /**
      * Instantiates a new trajectories.
      * 
-     * @param trajectoriesInput
+     * @param traj
      *            the trajectories input
      */
-    public FileTrajectories(TrajectoriesInput trajectoriesInput, Route route) {
-        super();
+    public FileTrajectories(Trajectories traj, Route route) {
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
 
-        dtOut = trajectoriesInput.getDt();
-        randomFraction = (trajectoriesInput.getRandomFraction() < 0 || trajectoriesInput.getRandomFraction() > 1) ? 0
-                : trajectoriesInput.getRandomFraction();
-        t_start_interval = trajectoriesInput.getStartTime();
-        t_end_interval = trajectoriesInput.getEndTime();
+        dtOut = traj.getDt();
+        randomFraction = (traj.getRandomFraction() < 0 || traj.getRandomFraction() > 1) ? 0 : traj.getRandomFraction();
+        t_start_interval = traj.getStartTime();
+        t_end_interval = traj.getEndTime();
         x_start_interval = 0;
         x_end_interval = route.getLength();
 

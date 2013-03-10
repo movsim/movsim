@@ -27,17 +27,17 @@ package org.movsim.consumption.offline;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.movsim.consumption.autogen.Columns;
-import org.movsim.consumption.autogen.Conversions;
+import org.movsim.autogen.Columns;
+import org.movsim.autogen.Conversions;
 
 public class InputDataParser {
 
     // <CONVERSION time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
-    private final String timeInputPattern; // = "HH:mm:ss"; // 10:23:21 AM
-    private final double speedConversionFactor;
+    private String timeInputPattern = ""; // = "HH:mm:ss"; // 10:23:21 AM
+    private double speedConversionFactor = 1;
     private final double accelerationConversionFactor = 1;
-    private final double slopeConversionFactor;
-    private final double positionConversionFactor;
+    private double slopeConversionFactor = 1;
+    private double positionConversionFactor = 1;
 
     private final int timeColumn;
     private final int speedColumn;
@@ -55,10 +55,12 @@ public class InputDataParser {
         this.gradeColumn = columns.getGradient() - 1;
         this.positionColumn = columns.getPosition() - 1;
 
-        this.timeInputPattern = conversions.getTime();
-        this.speedConversionFactor = conversions.getSpeed();
-        this.slopeConversionFactor = conversions.getGradient();
-        this.positionConversionFactor = conversions.getPosition();
+        if (conversions != null) {
+            this.timeInputPattern = conversions.getTime();
+            this.speedConversionFactor = conversions.getSpeed();
+            this.slopeConversionFactor = conversions.getGradient();
+            this.positionConversionFactor = conversions.getPosition();
+        }
     }
 
     public ConsumptionDataRecord parse(int index, String[] line) throws NumberFormatException, IllegalArgumentException {

@@ -25,11 +25,9 @@
  */
 package org.movsim.output.fileoutput;
 
-import org.movsim.input.model.vehicle.VehicleInput;
+import org.movsim.input.ProjectMetaData;
+import org.movsim.simulator.vehicles.VehiclePrototype;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesFactory;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelFactory;
 import org.movsim.utilities.Units;
 
 /**
@@ -42,21 +40,15 @@ public class FileFundamentalDiagram extends FileOutputBase {
             "rho[1/km]", "s[m]", "vEq[km/h]", "Q[veh/h]");
     private static final String outputFormat = "%8.2f, %8.2f, %8.2f, %8.2f%n";
 
-    public static void writeToFile(double simulationTimestep, VehicleInput vehicleInput) {
-        new FileFundamentalDiagram(simulationTimestep, vehicleInput);
+    public static void writeToFile(double simulationTimestep, VehiclePrototype vehiclePrototype) {
+        new FileFundamentalDiagram(simulationTimestep, vehiclePrototype);
     }
 
     /** Simulation timestep is model parameter for iterated map models (and cellular automata) */
-    private FileFundamentalDiagram(double simulationTimestep, VehicleInput vehicleInput) {
-        super();
-        final String label = vehicleInput.getLabel();
-
-        final double vehicleLength = vehicleInput.getLength();
-
-        final LongitudinalModelBase longModel = LongitudinalModelFactory.create(vehicleLength,
-                vehicleInput.getAccelerationModelInputData(), simulationTimestep);
-        final EquilibriumProperties eqProperties = EquilibriumPropertiesFactory.create(vehicleLength, longModel);
-
+    private FileFundamentalDiagram(double simulationTimestep, VehiclePrototype vehiclePrototype) {
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
+        final String label = vehiclePrototype.getLabel();
+        final EquilibriumProperties eqProperties = vehiclePrototype.getEquiProperties();
         writer = createWriter(String.format(extensionFormat, label));
         writeHeader(simulationTimestep, eqProperties);
         writeFundamentalDiagram(eqProperties);

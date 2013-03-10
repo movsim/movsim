@@ -25,6 +25,7 @@
  */
 package org.movsim.output.spatiotemporal;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 
 /**
@@ -37,7 +38,7 @@ class FileSpatioTemporal extends FileOutputBase {
     private static final String outputFormat = "%10.2f, %10.1f, %10.4f, %10.4f%n";
 
     FileSpatioTemporal(String routeLabel) {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         writer = createWriter(String.format(extensionFormat, routeLabel));
         writer.printf(outputHeading);
         writer.flush();

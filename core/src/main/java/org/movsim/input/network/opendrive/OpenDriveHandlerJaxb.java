@@ -2,10 +2,11 @@ package org.movsim.input.network.opendrive;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.network.OpenDriveNetwork;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction.Connection;
@@ -22,7 +23,9 @@ import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficSink;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.xml.NetworkLoadAndValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -32,7 +35,10 @@ import com.google.common.base.Preconditions;
 public class OpenDriveHandlerJaxb {
     final static Logger logger = LoggerFactory.getLogger(OpenDriveHandlerJaxb.class);
 
-    private OpenDriveHandlerJaxb() {
+    /** Set for checking uniqueness of signal id for whole network. */
+    private final Set<String> trafficLightIds = new HashSet<>();
+
+    OpenDriveHandlerJaxb() {
     }
 
     /**
@@ -45,12 +51,12 @@ public class OpenDriveHandlerJaxb {
      * @throws SAXException
      */
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException {
-        File networkFile = new File(filename);
-        OpenDRIVE openDriveNetwork = OpenDriveNetwork.loadNetwork(networkFile);
-        return create(filename, openDriveNetwork, roadNetwork);
+        OpenDRIVE openDriveNetwork = NetworkLoadAndValidation.validateAndLoadOpenDriveNetwork(new File(filename));
+        OpenDriveHandlerJaxb openDriveHandlerJaxb = new OpenDriveHandlerJaxb();
+        return openDriveHandlerJaxb.create(filename, openDriveNetwork, roadNetwork);
     }
 
-    private static boolean create(String filename, OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork)
+    private boolean create(String filename, OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork)
             throws IllegalArgumentException {
         for (Road road : openDriveNetwork.getRoad()) {
             final RoadMapping roadMapping = createRoadMapping(road);
@@ -125,62 +131,55 @@ public class OpenDriveHandlerJaxb {
         return roadMapping;
     }
 
-    private static RoadSegment createRoadSegment(RoadMapping roadMapping, Road road) {
-        // for (final Road.Lanes.Lane lane : road.lanes.laneSection.left) {
-        // final int laneIndex = leftLaneIdToLaneIndex(roadSegment, lane.id);
-        // if (lane.type.equals("driving")) {
-        // roadSegment.setLaneType(laneIndex, Lane.Type.TRAFFIC);
-        // } else if (lane.type.equals("mwyEntry")) {
-        // roadSegment.setLaneType(laneIndex, Lane.Type.ENTRANCE);
-        // Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
-        // obstacle.setType(Vehicle.Type.OBSTACLE);
-        // roadSegment.addObstacle(obstacle);
-        // } else if (lane.type.equals("mwyExit")) {
-        // roadSegment.setLaneType(laneIndex, Lane.Type.EXIT);
-        // } else if (lane.type.equals("shoulder")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
-        // }
-        // }
-        // for (final Road.Lanes.Lane lane : road.lanes.laneSection.right) {
-        // final int laneIndex = rightLaneIdToLaneIndex(roadSegment, lane.id);
-        // if (lane.type.equals("driving")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.TRAFFIC);
-        // } else if (lane.type.equals("mwyEntry")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.ENTRANCE);
-        // Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
-        // obstacle.setType(Vehicle.Type.OBSTACLE);
-        // roadSegment.addObstacle(obstacle);
-        // } else if (lane.type.equals("mwyExit")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.EXIT);
-        // } else if (lane.type.equals("shoulder")) {
-        // roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
-        // }
-        // }
-        // if (road.objects != null) {
-        // for (final Road.Objects.Tunnel tunnel : road.objects.tunnels) {
-        // roadMapping.addClippingRegion(tunnel.s, tunnel.length);
-        // }
-        // }
-
+    private RoadSegment createRoadSegment(RoadMapping roadMapping, Road road) {
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
 
         roadSegment.setUserId(road.getId());
         roadSegment.setUserRoadname(road.getName());
 
+        if (road.isSetElevationProfile()) {
+            roadSegment.setElevationProfile(road.getElevationProfile());
+        }
+
+        // TODO reduce redundancy here
         for (final LaneSection laneSection : road.getLanes().getLaneSection()) {
             if (laneSection.isSetLeft()) {
                 for (final org.movsim.network.autogen.opendrive.Lane leftLane : laneSection.getLeft().getLane()) {
                     final int laneIndex = OpenDriveHandlerUtils.leftLaneIdToLaneIndex(roadSegment, leftLane.getId());
                     setLaneType(laneIndex, leftLane, roadSegment);
+                    // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
+                    // entries overwrite previous entry
+                    if (leftLane.isSetSpeed()) {
+                        roadSegment.setSpeedLimits(leftLane.getSpeed());
+                    }
                 }
             }
             if (laneSection.isSetRight()) {
                 for (final org.movsim.network.autogen.opendrive.Lane rightLane : laneSection.getRight().getLane()) {
                     final int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, rightLane.getId());
                     setLaneType(laneIndex, rightLane, roadSegment);
+                    // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
+                    // entries overwrite previous entry
+                    if (rightLane.isSetSpeed()) {
+                        roadSegment.setSpeedLimits(rightLane.getSpeed());
+                    }
                 }
             }
         }
+
+        if (road.isSetSignals()) {
+            for (OpenDRIVE.Road.Signals.Signal signal : road.getSignals().getSignal()) {
+                // assure uniqueness of signal id for whole network
+                TrafficLightLocation trafficLightLocation = new TrafficLightLocation(signal);
+                boolean added = trafficLightIds.add(trafficLightLocation.id());
+                if (!added) {
+                    throw new IllegalArgumentException("traffic light signal with id=" + trafficLightLocation.id()
+                            + " is not unique in xodr network definition.");
+                }
+                roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal));
+            }
+        }
+
         if (road.isSetObjects()) {
             for (final OpenDRIVE.Road.Objects.Tunnel tunnel : road.getObjects().getTunnel()) {
                 roadMapping.addClippingRegion(tunnel.getS(), tunnel.getLength());

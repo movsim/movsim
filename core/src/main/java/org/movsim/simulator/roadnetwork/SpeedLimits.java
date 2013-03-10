@@ -31,17 +31,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.movsim.input.model.simulation.SpeedLimitDataPoint;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Tables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class SpeedLimits.
  */
-public class SpeedLimits implements Iterable<SpeedLimit> {
+class SpeedLimits implements Iterable<SpeedLimit> {
 
     final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
 
@@ -52,12 +53,14 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
     /**
      * Constructor.
      * 
-     * @param speedLimitInputDataPoints
+     * @param speedLimits
      *            the speed limit input data points
      */
-    public SpeedLimits(List<SpeedLimitDataPoint> speedLimitInputDataPoints) {
-        speedLimits = new LinkedList<SpeedLimit>();
-        generateSpaceSeriesData(speedLimitInputDataPoints);
+    SpeedLimits(List<org.movsim.network.autogen.opendrive.Lane.Speed> speed) {
+        Preconditions.checkNotNull(speed);
+
+        speedLimits = new LinkedList<>();
+        generateSpaceSeriesData(speed);
     }
 
     /**
@@ -66,7 +69,7 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @param data
      *            the data
      */
-    private void generateSpaceSeriesData(List<SpeedLimitDataPoint> data) {
+    private void generateSpaceSeriesData(List<org.movsim.network.autogen.opendrive.Lane.Speed> data) {
         final int size = data.size() + 1;
         positions = new double[size];
         speeds = new double[size];
@@ -74,11 +77,11 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
         positions[0] = 0;
         speeds[0] = MovsimConstants.MAX_VEHICLE_SPEED;
         for (int i = 1; i < size; i++) {
-            final double pos = data.get(i - 1).getPosition();
-            positions[i] = pos;
-            final double speed = data.get(i - 1).getSpeedlimit();
-            speeds[i] = speed;
-            speedLimits.add(new SpeedLimit(pos, speed));
+            positions[i] = data.get(i - 1).getSOffset();
+            Preconditions.checkArgument(i > 0 && positions[i] >= positions[i - 1],
+                    "speed limits not given in increasing order");
+            speeds[i] = data.get(i - 1).getMax(); // given in m/s
+            speedLimits.add(new SpeedLimit(positions[i], speeds[i]));
         }
     }
 
@@ -109,8 +112,8 @@ public class SpeedLimits implements Iterable<SpeedLimit> {
      * @return the double
      */
     public double calcSpeedLimit(double position) {
-        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED :
-            Tables.stepExtrapolation(positions, speeds, position);
+        return speeds.length == 0 ? MovsimConstants.MAX_VEHICLE_SPEED : Tables.stepExtrapolation(positions, speeds,
+                position);
     }
 
     @Override

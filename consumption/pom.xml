@@ -1,26 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.movsim</groupId>
         <artifactId>Movsim</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.5.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>MovsimConsumption</artifactId>
     <packaging>jar</packaging>
-
     <name>MovsimConsumption</name>
     <description>Movsim's load-based consumption/emission model. See: http://www.traffic-flow-dynamics.org</description>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
-     	<dependency>
+        <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimCommon</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.movsim</groupId>
+            <artifactId>MovsimXsd</artifactId>
 	    <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -43,151 +44,24 @@
             <artifactId>jaxb2-basics-runtime</artifactId>
             <version>0.6.2</version>
         </dependency>
-	<dependency>
-	<groupId>net.sf.opencsv</groupId>
-	<artifactId>opencsv</artifactId>
-	<version>2.0</version>
-	</dependency>
-	<dependency>
-	<groupId>commons-io</groupId>
-	<artifactId>commons-io</artifactId>
-	<version>2.4</version>
-</dependency>
-
-<dependency>
-	<groupId>joda-time</groupId>
-	<artifactId>joda-time</artifactId>
-	<version>2.1</version>
-</dependency>
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
-        <!--
-        <plugin>
-    <groupId>org.jvnet.jaxb2.maven2</groupId>
-    <artifactId>maven-jaxb2-plugin</artifactId>
-    <version>0.8.2</version>
-    <executions>
-        <execution>
-            <goals>
-                <goal>generate</goal>
-            </goals>
-        </execution>
-    </executions>
-     <packageName>org.movsim.consumption.autogen</packageName>
-                    <outputDirectory>${project.build.directory}/generated-source/jaxb</outputDirectory>
-                    <schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
-                    <schemaFiles>MovsimConsumptionInput.xsd</schemaFiles>
-</plugin>
-
- -->
-
-<!--         <plugin> -->
-<!--                 <groupId>org.codehaus.mojo</groupId> -->
-<!--                 <artifactId>jaxb2-maven-plugin</artifactId> -->
-<!--                 <version>1.5</version> -->
-<!--                 <executions> -->
-<!--                     <execution> -->
-<!--                         <id>xjc</id> -->
-<!--                         <goals> -->
-<!--                             <goal>xjc</goal> -->
-<!--                         </goals> -->
-<!--                     </execution> -->
-<!--                 </executions> -->
-<!--                 <configuration> -->
-<!--                     <packageName>org.movsim.consumption.autogen</packageName> -->
-<!--                       <outputDirectory>${project.build.directory}/generated-source/jaxb</outputDirectory> -->
-<!--                     <schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory> -->
-<!--                     <schemaFiles>MovsimConsumptionInput.xsd</schemaFiles>  -->
-<!--                 </configuration> -->
-<!--             </plugin> -->
-
-
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.2</version>
-
-                <configuration>
-                    <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
-                   <!-- <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory> -->
-                    <generatePackage>org.movsim.consumption.autogen</generatePackage>
-                    <strict>false</strict>
-                    <extension>true</extension>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                            <artifactId>jaxb2-basics</artifactId>
-                            <version>0.6.2</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                            <artifactId>jaxb2-basics-annotate</artifactId>
-                            <version>0.6.2</version>
-                        </plugin>
-                    </plugins>
-                    <args>
-                        <arg>-Xannotate</arg>
-                        <arg>-XtoString</arg>
-<!--                          <arg>-no-header</arg> -->
-<!--                     <arg>-Xfluent-api</arg> -->
-<!--                     <arg>-Xinheritance</arg>    -->
-<!--                     <arg>-Xequals</arg> -->
-<!--                     <arg>-XhashCode</arg> -->
-<!--                     <arg>-Xcopyable</arg> -->
-
-                    </args>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <forceRegenerate>true</forceRegenerate>
-<!--                             <schemaIncludes> -->
-<!--                                 <schemaInclude>${basedir}/src/main/resources/schema/consumptionSchema.xsd</schemaInclude> -->
-<!--                             </schemaIncludes> -->
-<!--                             <bindingIncludes> -->
-<!--                                 <bindingInclude>${basedir}/src/main/resources/schema/binding.xjc</bindingInclude> -->
-<!--                             </bindingIncludes> -->
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <!-- Build helper plugin adds the sources generated by the JAXB to the compile path -->
-            <!--  <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/jaxb</source>
-                            </sources>
-                        </configuration>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-             -->
-
-            <!-- build jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <!-- nothing here -->
-            </plugin>
-
             <!-- build executable jar with all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -212,20 +86,7 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Java 1.6 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
-
 </project>
 

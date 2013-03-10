@@ -30,7 +30,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import org.movsim.consumption.autogen.BatchData;
+import org.movsim.autogen.BatchData;
 
 import au.com.bytecode.opencsv.CSVWriter;
 

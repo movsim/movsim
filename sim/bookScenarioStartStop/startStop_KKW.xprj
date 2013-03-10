@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="true">
+        <!-- vehicle length ==> cell units -->
+        <VehiclePrototypeConfiguration label="KKW1" length="20">
+            <AccelerationModelType>
+                <!-- s0 not a parameter, needed for compatibility -->
+                <ModelParameterKKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="20">
+            <AccelerationModelType>
+                <ModelParameterKKW v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="startStop.xodr">
+        <!-- depends strongly on randomness resp. seed ! -->
+        <Simulation timestep="1" duration="360" seed="50">
+            <TrafficComposition>
+                <VehicleType label="KKW1" fraction="1" />
+                <VehicleType label="Obstacle" fraction="0" />
+            </TrafficComposition>
+            <Road id="1">
+                <InitialConditions>
+                    <!-- in physical quantities (meter and m/s) -->
+                    <MicroIC position="10" speed="0" label="KKW1" />
+                    <MicroIC position="20" speed="0" label="KKW1" />
+                    <MicroIC position="30" speed="0" label="KKW1" />
+                    <MicroIC position="40" speed="0" label="KKW1" />
+                    <MicroIC position="50" speed="0" label="KKW1" />
+                    <MicroIC position="60" speed="0" label="KKW1" />
+                    <MicroIC position="70" speed="0" label="KKW1" />
+                    <MicroIC position="80" speed="0" label="KKW1" />
+                    <MicroIC position="90" speed="0" label="KKW1" />
+                    <MicroIC position="100" speed="0" label="KKW1" />
+                    <MicroIC position="110" speed="0" label="KKW1" />
+                    <MicroIC position="120" speed="0" label="KKW1" />
+                    <MicroIC position="130" speed="0" label="KKW1" />
+                    <MicroIC position="140" speed="0" label="KKW1" />
+                    <MicroIC position="150" speed="0" label="KKW1" />
+                    <MicroIC position="160" speed="0" label="KKW1" />
+                    <MicroIC position="170" speed="0" label="KKW1" />
+                    <MicroIC position="180" speed="0" label="KKW1" />
+                    <MicroIC position="190" speed="0" label="KKW1" />
+                    <MicroIC position="200" speed="0" label="KKW1" />
+                    <MicroIC position="210" speed="0" label="KKW1" />
+                    <MicroIC position="220" speed="0" label="KKW1" />
+                    <MicroIC position="230" speed="0" label="KKW1" />
+                    <MicroIC position="240" speed="0" label="KKW1" />
+                    <MicroIC position="250" speed="0" label="KKW1" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="1000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main">
+                <!-- FloatingCar 1 is obstacle -->
+                <FloatingCar number="2" />
+                <FloatingCar number="6" />
+                <FloatingCar number="11" />
+                <FloatingCar number="16" />
+                <FloatingCar number="21" />
+            </FloatingCarOutput>
+            <Trajectories dt="1" route="main" />
+        </OutputConfiguration>
+    </Scenario>
+</Movsim>
+

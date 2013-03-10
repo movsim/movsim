@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.movsim</groupId>
         <artifactId>Movsim</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.5.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>MovsimCore</artifactId>
@@ -20,7 +20,12 @@
         </dependency>
          <dependency>
             <groupId>org.movsim</groupId>
-            <artifactId>MovsimNetwork</artifactId>
+            <artifactId>MovsimXsd</artifactId>
+	    <version>${project.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.movsim</groupId>
+            <artifactId>MovsimConsumption</artifactId>
 	    <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -35,52 +40,7 @@
         </dependency>
     </dependencies>
     <build>
-        <plugins>
-			
-			 <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.2</version>
-                <configuration>
-                    <schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
-                    <bindingDirectory>${basedir}/src/main/resources/schema</bindingDirectory>
-                    <generatePackage>org.movsim.core.autogen</generatePackage>
-                    <strict>true</strict>
-                    <extension>true</extension>
-                    <args>
-                        <arg>-Xannotate</arg>
-                        <arg>-XtoString</arg>
-                        <!-- <arg>-Xequals</arg> -->
-                        <!-- <arg>-XhashCode</arg> -->
-                        <!-- <arg>-Xcopyable</arg> -->
-                    </args>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                            <artifactId>jaxb2-basics</artifactId>
-                            <version>0.6.2</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                            <artifactId>jaxb2-basics-annotate</artifactId>
-                            <version>0.6.2</version>
-                        </plugin>
-                    </plugins>
-                   
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <forceRegenerate>true</forceRegenerate>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-			
+        <plugins>		
             <!-- build executable jar with all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

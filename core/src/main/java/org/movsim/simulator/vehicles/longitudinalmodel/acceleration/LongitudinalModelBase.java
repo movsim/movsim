@@ -25,12 +25,15 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
+import org.movsim.autogen.DistributionTypeEnum;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Abstract base class for a general microscopic traffic longitudinal driver model.
@@ -61,7 +64,8 @@ public abstract class LongitudinalModelBase {
                 "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
                 ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
                 "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
-                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model");
+                "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model"), PTM(
+                ModelCategory.TIME_CONTINUOUS_MODEL, "Prospect-Theory Model");
 
         private final ModelCategory modelCategory;
 
@@ -90,20 +94,13 @@ public abstract class LongitudinalModelBase {
         }
     }
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelBase.class);
-    private final ModelName modelName;
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(LongitudinalModelBase.class);
+    protected final ModelName modelName;
     private final double scalingLength;
-    protected final LongitudinalModelInputData parameters;
-    protected long id;
-    /**
-     * The desired speed (m/s)
-     */
-    protected double v0;
-    /**
-     * Minimum bumper-to-bumper distance (m)
-     */
-    protected double s0;
+    protected double v0RandomizationFactor = 1;
+
+    // protected long id;
 
     /**
      * Constructor.
@@ -113,9 +110,8 @@ public abstract class LongitudinalModelBase {
      * @param parameters
      *            the parameters
      */
-    protected LongitudinalModelBase(ModelName modelName, LongitudinalModelInputData parameters) {
+    protected LongitudinalModelBase(ModelName modelName) {
         this.modelName = modelName;
-        this.parameters = parameters;
         this.scalingLength = ScalingHelper.getScalingLength(modelName);
     }
 
@@ -165,47 +161,53 @@ public abstract class LongitudinalModelBase {
     }
 
     /**
-     * Sets the vehicle's desired speed (m/s).
+     * Returns the desired speed.
      * 
-     * @param v0
-     *            desired speed (m/s)
-     */
-    protected void setDesiredSpeed(double v0) {
-        this.v0 = v0;
-    }
-
-    /**
-     * Returns the desired speed in free traffic.
+     * <br>
+     * Overwrite {@link setRelativeRandomizationV0} if model is not able to handle such randomization. <br>
+     * Remark: CCS is the only model without a desired speed, so that this method cannot be final :(
      * 
      * @return the desired speed (m/s)
      */
     public double getDesiredSpeed() {
-        return v0;
+        return v0RandomizationFactor * getParameter().getV0();
     }
+
+    /**
+     * Returns the minimum gap in a standstill.
+     * 
+     * <br>
+     * Can be overwritten if model does not contain such a parameter.
+     * 
+     * @return the minimum gap (m)
+     */
+    public double getMinimumGap() {
+        return getParameter().getS0();
+    }
+
+    protected abstract IModelParameter getParameter();
 
     /**
      * Sets the relative randomization v0.
      * 
+     * <br>
+     * Needs to be overwritten if not applicable to model.
+     * 
      * @param relRandomizationFactor
      *            the new relative randomization v0
      */
-    public void setRelativeRandomizationV0(double relRandomizationFactor) {
-        final double equalRandom = 2 * MyRandom.nextDouble() - 1; // in [-1,1]
-        final double newV0 = getDesiredSpeed() * (1 + relRandomizationFactor * equalRandom);
-        logger.debug("randomization of desired speeds: v0={}, new v0={}", getDesiredSpeed(), newV0);
-        setDesiredSpeed(newV0);
+    public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
+        if (distributionType == DistributionTypeEnum.GAUSSIAN) {
+            v0RandomizationFactor = MyRandom.getGaussiansDistributedRandomizedFactor(relRandomizationFactor, 3);
+        }else {
+            v0RandomizationFactor = MyRandom.getUniformlyDistributedRandomizedFactor(relRandomizationFactor);
+        }
+        Preconditions.checkArgument(v0RandomizationFactor > 0, "relative v0 randomization factor must be > 0");
+        LOG.debug("randomization (of type={}) of desired speeds with randomization factor=", distributionType,
+                v0RandomizationFactor);
     }
 
-    /**
-     * Gets the minimum bumper-to-bumper distance.
-     * 
-     * @return the minimum bumper-to-bumper distance
-     */
-    public double getS0() {
-        return s0;
-    }
-
-    protected static double calcSmoothFraction(double speedMe, double speedFront) {
+    final static double calcSmoothFraction(double speedMe, double speedFront) {
         final double widthDeltaSpeed = 1; // parameter
         double x = 0; // limiting case: consider only acceleration in vehicle's lane
         if (speedFront >= 0) {
@@ -258,7 +260,7 @@ public abstract class LongitudinalModelBase {
         final double accResult = frac * Math.min(accInOwnLane, accLeft) + (1 - frac) * accInOwnLane;
 
         // if (speedFront != -1) {
-        // logger.debug(String
+        // LOG.debug(String
         // .format("pos=%.4f, accLeft: frac=%.4f, acc=%.4f, accLeft=%.4f, accResult=%.4f, meSpeed=%.2f, frontLeftSpeed=%.2f\n",
         // me.getPosition(), frac, accInOwnLane, accLeft, accResult, me.getSpeed(), speedFront));
         // }
@@ -317,4 +319,5 @@ public abstract class LongitudinalModelBase {
      * @return the calculated acceleration
      */
     public abstract double calcAccSimple(double s, double v, double dv);
+
 }

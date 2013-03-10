@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -50,18 +50,16 @@ public class Lane {
     public static final int LANE8 = 7;
     public static final int HARD_SHOULDER = -1;
     public static final int NONE = -2;
-    
-    
+
     public final static int TO_LEFT = 1;
     public final static int TO_RIGHT = -1;
     public final static int NO_CHANGE = 0;
-    public final static int MOST_RIGHT_LANE = LANE1; 
+    public final static int MOST_RIGHT_LANE = LANE1;
 
     /**
      * Lane type.
      */
     public static enum Type {
-
         /**
          * Lane for normal traffic.
          */
@@ -97,5 +95,5 @@ public class Lane {
             return openDriveIdentifier;
         }
     }
-    
+
 }

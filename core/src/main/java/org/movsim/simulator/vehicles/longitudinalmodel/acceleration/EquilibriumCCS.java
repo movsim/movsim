@@ -41,7 +41,7 @@ class EquilibriumCCS extends EquilibriumPropertiesImpl {
                 final double dtloc = dtMax * vIter / model.getDesiredSpeed() + dtMin;
                 // actual relaxation
                 vIter += dtloc * acc;
-                if ((vIter < 0) || (s < model.getS0())) {
+                if ((vIter < 0) || (s < model.getMinimumGap())) {
                     vIter = 0;
                 }
             }

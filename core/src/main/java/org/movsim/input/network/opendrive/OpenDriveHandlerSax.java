@@ -55,9 +55,11 @@ import org.xml.sax.helpers.DefaultHandler;
 // }
 
 /**
+ * NOT USED ANYMORE
  * SAX XML handler for OpenDRIVE format file, see: http://www.opendrive.org/docs/OpenDRIVEFormatSpecRev1.3D.pdf
  */
 @SuppressWarnings("nls")
+@Deprecated
 public class OpenDriveHandlerSax extends DefaultHandler {
 
     final static Logger logger = LoggerFactory.getLogger(OpenDriveHandlerSax.class);
@@ -192,6 +194,7 @@ public class OpenDriveHandlerSax extends DefaultHandler {
     private ArrayList<Junction> junctions;
     private Road.Objects.Tunnel tunnel;
 
+    @Deprecated
     OpenDriveHandlerSax(RoadNetwork roadNetwork) {
         this.roadNetwork = roadNetwork;
     }

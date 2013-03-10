@@ -44,4 +44,6 @@ public interface MovsimConstants {
 
     final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
 
+    final String EMPTY_STRING = "";
+
 }

@@ -25,99 +25,45 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
+import org.movsim.autogen.OptimalVelocityFunctionEnum;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterOVMFVDM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The Class OVM_FVDM. OVM = Optimal-Velocity Model and FVDM = Full-Velocity-Difference Model
+ * 
+ * Model parameters:
+ * The tau. Speed adaptation time.
+ * The transition width
+ * The form factor beta.
+ * The sensitivity gamma
+ * 
+ * The choice opt function variant. Variants: 0=fullVD original, 1=fullVD,secBased, 2=threePhase.
+ * 
  */
 class OVM_FVDM extends LongitudinalModelBase {
 
     /** The Constant logger. */
     private static final Logger logger = LoggerFactory.getLogger(OVM_FVDM.class);
 
-    /** The tau. Speed adaptation time */
-    private final double tau;
+    enum OptimalVelocityFunction {
+        BANDO, TRIANGULAR, THREEPHASE
+    }
 
-    /** The transition width */
-    private final double transitionWidth;
-
-    /** The beta. Form factor */
-    private final double beta;
-
-    /** The lambda. Sensitivity. */
-    // TODO rg 12/19/2011: called gamma in the book
-    private final double lambda;
-
-    /**
-     * The choice opt function variant. Variants: 0=fullVD original, 1=fullVD,secBased, 2=threePhase.
-     */
-    private final int choiceOptFuncVariant;
+    private final IModelParameterOVMFVDM param;
 
     /**
      * Instantiates a new OVM = Optimal-Velocity Model or FVDM = Full-Velocity-Difference Model
      * 
-     * @param parameters
-     *            the parameters
+     * @param modelParameter
      */
-    OVM_FVDM(LongitudinalModelInputDataOVM_FVDM parameters) {
-        super(ModelName.OVM_FVDM, parameters);
-        logger.debug("init model parameters");
-        this.s0 = parameters.getS0();
-        this.v0 = parameters.getV0();
-        this.tau = parameters.getTau();
-        this.transitionWidth = parameters.getTransitionWidth();
-        this.beta = parameters.getBeta();
-        this.lambda = parameters.getLambda();
-        choiceOptFuncVariant = parameters.getVariant();
-    }
+    public OVM_FVDM(IModelParameterOVMFVDM modelParameter) {
+        super(ModelName.OVM_FVDM);
+        this.param = modelParameter;
 
-    /**
-     * Gets the tau.
-     * 
-     * @return the tau
-     */
-    public double getTau() {
-        return tau;
-    }
-
-    /**
-     * Gets the len interaction.
-     * 
-     * @return the len interaction
-     */
-    public double getTransitionWidth() {
-        return transitionWidth;
-    }
-
-    /**
-     * Gets the beta.
-     * 
-     * @return the beta
-     */
-    public double getBeta() {
-        return beta;
-    }
-
-    /**
-     * Gets the lambda.
-     * 
-     * @return the lambda
-     */
-    public double getLambda() {
-        return lambda;
-    }
-
-    /**
-     * Gets the opt func variant.
-     * 
-     * @return the opt func variant
-     */
-    public int getOptFuncVariant() {
-        return choiceOptFuncVariant;
     }
 
     @Override
@@ -129,7 +75,7 @@ class OVM_FVDM extends LongitudinalModelBase {
         final double dv = me.getRelSpeed(frontVehicle); // only needed for VDIFF
 
         // speed limit: OVM causes accidents due to immediate braking reaction
-        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
         // System.out.println("Test: accSimple(...)="+accSimple(700.,3.6664,3.6664));System.exit(1);
         return acc(s, v, dv, alphaT, v0Local);
     }
@@ -137,7 +83,7 @@ class OVM_FVDM extends LongitudinalModelBase {
     @Override
     public double calcAccSimple(double s, double v, double dv) {
         final double alphaT = 1;
-        return acc(s, v, dv, alphaT, v0);
+        return acc(s, v, dv, alphaT, getDesiredSpeed());
     }
 
     /**
@@ -157,24 +103,28 @@ class OVM_FVDM extends LongitudinalModelBase {
      */
     private double acc(double s, double v, double dv, double alphaT, double v0Local) {
 
-        final double transitionWidthLoc = Math.max(1e-6, transitionWidth * alphaT);
+        final double transitionWidthLoc = Math.max(1e-6, param.getTransitionWidth() * alphaT);
 
         // final double betaLoc=beta*alpha_T;
-        final double betaLoc = beta;
+        final double betaLoc = param.getBeta();
 
         double vOptimal = 0;// optimal velocity
 
-        if (choiceOptFuncVariant == 0 || choiceOptFuncVariant == 3) {
+        final double s0 = getMinimumGap();
+
+        OptimalVelocityFunctionEnum variant = param.getOptimalSpeedFunction();
+
+        if (variant == OptimalVelocityFunctionEnum.BANDO) {
             // standard OVM function (Bando model)
             // scale OVM/VDIFF so that v0 represents actual desired speed
             final double v0Prev = v0Local / (1.0 + Math.tanh(betaLoc));
             vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // logger.debug("s = {}, vOpt = {}", s, vOpt);
-        } else if (choiceOptFuncVariant == 1) {
+        } else if (variant == OptimalVelocityFunctionEnum.TRIANGULAR) {
             // triangular OVM function
-            final double T = beta; // "time headway"
+            final double T = param.getBeta(); // interpret this as "time headway"
             vOptimal = Math.max(Math.min((s - s0) / T, v0Local), 0.0);
-        } else if (choiceOptFuncVariant == 2) {
+        } else if (variant == OptimalVelocityFunctionEnum.THREEPHASE) {
             // "Three-phase" OVM function
             final double diffT = 0.0 * Math.pow(Math.max(1 - v / v0Local, 0.0001), 0.5);
             final double Tmin = transitionWidthLoc + diffT; // minimum time headway
@@ -183,27 +133,35 @@ class OVM_FVDM extends LongitudinalModelBase {
             vOptimal = (Tdyn > Tmax) ? Math.min((s - s0) / Tmax, v0Local) : (Tdyn > Tmin) ? Math.min(v, v0Local)
                     : (Tdyn > 0) ? Math.min((s - s0) / Tmin, v0Local) : 0;
         } else {
-            logger.error("optimal velocity variant = {} not implemented. exit.", choiceOptFuncVariant);
-            System.exit(-1);
+            logger.error("cannot map to optimal velocity variant = {}", param.getOptimalSpeedFunction());
+            // System.exit(-1); // TODO throw exception
         }
 
         // calc acceleration
         double aWanted = 0; // return value
-        if (choiceOptFuncVariant <= 1) {
+        final double tau = param.getTau();
+        final double gamma = param.getGamma();
+        if (variant == OptimalVelocityFunctionEnum.BANDO) {
             // original VDIFF model, OVM: lambda == 0
-            aWanted = (vOptimal - v) / tau - lambda * dv;
-        } else if (choiceOptFuncVariant == 2) {
-            aWanted = (vOptimal - v) / tau - lambda * v * dv / Math.max(s - 1.0 * s0, MovsimConstants.SMALL_VALUE);
-        } else if (choiceOptFuncVariant == 3) {
-            aWanted = (vOptimal - v) / tau - lambda * ((dv > 0) ? dv : 0);
+            aWanted = (vOptimal - v) / tau - gamma * dv;
+        } else if (variant == OptimalVelocityFunctionEnum.TRIANGULAR) {
+            aWanted = (vOptimal - v) / tau - gamma * v * dv / Math.max(s - 1.0 * s0, MovsimConstants.SMALL_VALUE);
+        } else if (variant == OptimalVelocityFunctionEnum.THREEPHASE) {
+            aWanted = (vOptimal - v) / tau - gamma * ((dv > 0) ? dv : 0);
         }
 
         if (aWanted > 100) {
             logger.error(" acc > 100! vopt = {}, v = {}", vOptimal, v);
             logger.error(" tau = {}, dv = {}", tau, dv);
-            logger.error(" lambda = {} ", lambda);
+            logger.error(" lambda = {} ", gamma);
             System.exit(-1);
         }
         return aWanted;
     }
+
+    @Override
+    protected IModelParameterOVMFVDM getParameter() {
+        return param;
+    }
+
 }

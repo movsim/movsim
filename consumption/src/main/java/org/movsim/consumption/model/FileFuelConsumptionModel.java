@@ -2,6 +2,8 @@ package org.movsim.consumption.model;
 
 import java.util.Locale;
 
+import org.movsim.consumption.input.ConsumptionMetadata;
+import org.movsim.output.fileoutput.FileOutputBase;
 
 // TODO refactoring of fuel consumption code base and corresponding file output
 class FileFuelConsumptionModel extends FileOutputBase {
@@ -24,6 +26,7 @@ class FileFuelConsumptionModel extends FileOutputBase {
     private final EnergyFlowModel fuelConsumption;
 
     FileFuelConsumptionModel(String keyLabel, EnergyFlowModel fuelConsumption) {
+        super(ConsumptionMetadata.getInstance().getOutputPath(), ConsumptionMetadata.getInstance().getProjectName());
         this.keyLabel = keyLabel;
         this.fuelConsumption = fuelConsumption;
     }

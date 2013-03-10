@@ -33,8 +33,8 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.movsim.input.model.simulation.InflowDataPoint;
-import org.movsim.simulator.vehicles.VehicleGenerator;
+import org.movsim.autogen.Inflow;
+import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 
 /**
  *
@@ -49,9 +49,9 @@ public class TrafficSourceTest {
      */
     @Before
     public void setUp() throws Exception {
-		final VehicleGenerator vehicleGenerator = null;
+        final TrafficCompositionGenerator vehicleGenerator = null;
 		final RoadSegment roadSegment = new RoadSegment(1000.0, 1);
-		final List<InflowDataPoint> inflowDataPoints = new ArrayList<InflowDataPoint>();
+        final List<Inflow> inflowDataPoints = new ArrayList<>();
 		final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
 		trafficSource = new TrafficSource(vehicleGenerator, roadSegment, inflowTimeSeries);
     }
@@ -65,7 +65,7 @@ public class TrafficSourceTest {
     }
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#TrafficSource(org.movsim.simulator.vehicles.VehicleGenerator, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.InflowTimeSeries)}
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#TrafficSource(org.movsim.simulator.vehicles.VehicleGeneratorOld, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.InflowTimeSeries)}
 	 */
 	@Test
 	public final void testTrafficSource() {

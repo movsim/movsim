@@ -1,8 +1,8 @@
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.simulator.vehicles.TestVehicle;
+import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.VehicleGenerator;
-import org.movsim.simulator.vehicles.VehiclePrototype;
 
 
 public class AbstractTrafficSource {
@@ -37,13 +37,13 @@ public class AbstractTrafficSource {
     /** number of vehicles in the queue as result from integration over demand minus inserted vehicles. */
     double nWait;
 
-    final VehicleGenerator vehGenerator;
+    final TrafficCompositionGenerator vehGenerator;
 
     final RoadSegment roadSegment;
 
     final InflowTimeSeries inflowTimeSeries;
 
-    public AbstractTrafficSource(VehicleGenerator vehGenerator, RoadSegment roadSegment,
+    public AbstractTrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
             InflowTimeSeries inflowTimeSeries) {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
@@ -97,8 +97,8 @@ public class AbstractTrafficSource {
     /**
      * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed.
      */
-    void addVehicle(LaneSegment laneSegment, VehiclePrototype vehPrototype, double frontPosition, double speed) {
-        final Vehicle vehicle = vehGenerator.createVehicle(vehPrototype);
+    void addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
+        final Vehicle vehicle = vehGenerator.createVehicle(testVehicle);
         vehicle.setFrontPosition(frontPosition);
         vehicle.setSpeed(speed);
         vehicle.setLane(laneSegment.lane());

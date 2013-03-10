@@ -214,6 +214,9 @@
                 </right>
             </laneSection>
         </lanes>
+        <signals>
+            <signal s="300" id="TL_1" name="Name of trafficlight" />
+        </signals>
     </road>
     <junction id="1001" name="">
         <connection id="0" incomingRoad="37" connectingRoad="2" contactPoint="start">

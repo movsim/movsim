@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.vehicle.behavior.NoiseInputData;
+import org.movsim.autogen.NoiseParameter;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +43,12 @@ import org.slf4j.LoggerFactory;
  * </p>
  */
 
+// TODO formulate noise in more general terms. not only applicable to acceleration noise. Standard wiener with
+// fluctStrenth 1
 public class Noise {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Noise.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(Noise.class);
 
     /** constant for uniform distribution calculation. */
     static final double SQRT12 = Math.sqrt(12.);
@@ -64,17 +66,15 @@ public class Noise {
     private final double fluctStrength;
 
     /** The xi acc as dynamic state variable (output) */
-    private double xiAcc = 0;
+    private double xiAcc;
 
-    public Noise(NoiseInputData parameters) {
-
+    public Noise(NoiseParameter parameters) {
+        xiAcc = 0;
         fluctStrength = parameters.getFluctStrength();
         tauRelaxAcc = parameters.getTau();
 
-        isWienerProcess = (tauRelaxAcc == 0) ? false : true;
-        logger.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
-
-        xiAcc = 0;
+        isWienerProcess = (tauRelaxAcc != 0) ? true : false;
+        LOG.debug("tauRelaxAcc = {}, isWienerProcess = {}", tauRelaxAcc, isWienerProcess);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Noise {
         if (isWienerProcess) {
             final double betaAcc = Math.exp(-dt / tauRelaxAcc);
             xiAcc = betaAcc * xiAcc + fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1;
-            logger.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
+            LOG.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
                     betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1));
         } else {
             // delta-correlated acc noise.

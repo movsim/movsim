@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<!-- FloatingCarD Output does not work with macroscopic initial conditions -->
+<Movsim>
+    <VehiclePrototypes>
+        <!-- fast vehicle type (car) -->
+        <VehiclePrototypeConfiguration label="FAST_TYPE" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="35" T="1" s0="3" s1="0" delta="4" a="0.7" b="3.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="6.0" minimum_gap="2.0" threshold_acceleration="0.15" right_bias_acceleration="0.3" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <!-- slow vehicle type (truck) -->
+        <VehiclePrototypeConfiguration label="SLOW_TYPE" length="15" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="25" T="1.2" s0="3" s1="0" delta="4" a="0.5" b="3.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="6.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.3" politeness="0.2" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="ringroad_2lanes.xodr">
+        <Simulation timestep="0.2" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="FAST_TYPE" fraction="0.8" />
+                <VehicleType label="SLOW_TYPE" fraction="0.2" />
+            </TrafficComposition>
+            <Road id="43">
+                <InitialConditions>
+                    <MacroIC position="1" density_per_km="30" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+    </Scenario>
+</Movsim>
+

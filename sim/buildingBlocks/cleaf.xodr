@@ -156,10 +156,6 @@
                 <line />
             </geometry>
         </planView>
-        <objects>
-            <tunnel s="25.0" length="30.0" id="R5T1" type="underpass" lighting="0.0" daylight="1.0" />
-            <tunnel s="70.0" length="30.0" id="R5T2" type="underpass" lighting="0.0" daylight="1.0" />
-        </objects>
         <lanes>
             <laneSection s="0.0">
                 <right>
@@ -187,6 +183,10 @@
                 </right>
             </laneSection>
         </lanes>
+        <objects>
+            <tunnel s="25.0" length="30.0" id="R5T1" type="underpass" lighting="0.0" daylight="1.0" />
+            <tunnel s="70.0" length="30.0" id="R5T2" type="underpass" lighting="0.0" daylight="1.0" />
+        </objects>
     </road>
     <road id="6" name="R6" length="120.0" junction="1003">
         <link>
@@ -494,10 +494,6 @@
                 <line />
             </geometry>
         </planView>
-        <objects>
-            <tunnel s="25.0" length="30.0" id="R14T1" type="underpass" lighting="0.0" daylight="1.0" />
-            <tunnel s="70.0" length="30.0" id="R14T2" type="underpass" lighting="0.0" daylight="1.0" />
-        </objects>
         <lanes>
             <laneSection s="0.0">
                 <right>
@@ -525,6 +521,10 @@
                 </right>
             </laneSection>
         </lanes>
+        <objects>
+            <tunnel s="25.0" length="30.0" id="R14T1" type="underpass" lighting="0.0" daylight="1.0" />
+            <tunnel s="70.0" length="30.0" id="R14T2" type="underpass" lighting="0.0" daylight="1.0" />
+        </objects>
     </road>
     <road id="15" name="R15" length="120.0" junction="1007">
         <link>

@@ -1,212 +1,92 @@
-/*
- * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
- * -----------------------------------------------------------------------------------------
- * 
- * This file is part of
- * 
- * MovSim - the multi-model open-source vehicular-traffic simulator.
- * 
- * MovSim is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * MovSim is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with MovSim. If not, see <http://www.gnu.org/licenses/>
- * or <http://www.movsim.org>.
- * 
- * -----------------------------------------------------------------------------------------
- */
 package org.movsim.simulator.vehicles;
 
-import org.movsim.input.model.vehicle.VehicleInput;
-import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.autogen.VehiclePrototypeConfiguration;
+import org.movsim.consumption.model.EnergyFlowModel;
+import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
+import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesFactory;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelFactory;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class VehiclePrototype.
- */
+import com.google.common.base.Preconditions;
+
 public class VehiclePrototype {
 
-    /** The label. */
-    private final String label;
+    private final VehiclePrototypeConfiguration configuration;
 
-    /** The length. */
-    private final double length;
+    private final EnergyFlowModel energyFlowModel; // TODO pooling
 
-    /** The fraction. */
-    private double fraction;
-
-    /** The reaction time. */
-    private final double reactionTime;
-
-    /** The long model. */
-    private final LongitudinalModelBase longModel;
-
-    /** The equi properties. */
     private final EquilibriumProperties equiProperties;
 
-    /** The vehicle input. */
-    private final VehicleInput vehicleInput;
+    private final double simulationTimestep;
+    
+    private final TestVehicle testVehicle;
 
-    private final double relativeRandomizationV0;
-    private final Route route;
-
-    /**
-     * Instantiates a new vehicle prototype.
-     * 
-     * @param label
-     *            the label
-     * @param fraction
-     *            the fraction
-     * @param longModel
-     *            the long model
-     * @param equilProperties
-     *            the equil properties
-     * @param vehicleInput
-     *            the vehicle input
-     * @param relativeRandomizationV0
-     *            the relative randomization v0
-     */
-    public VehiclePrototype(String label, double fraction, LongitudinalModelBase longModel,
-            EquilibriumProperties equilProperties, VehicleInput vehicleInput, double relativeRandomizationV0, Route route) {
-        this.label = label;
-        this.length = vehicleInput.getLength();
-        this.reactionTime = vehicleInput.getReactionTime();
-        this.fraction = fraction;
-        this.longModel = longModel;
-        this.equiProperties = equilProperties;
-        this.vehicleInput = vehicleInput;
-        this.relativeRandomizationV0 = relativeRandomizationV0;
-        this.route = route;
+    // TODO simulation timestep handling
+    public VehiclePrototype(double simulationTimestep, VehiclePrototypeConfiguration configuration) {
+        Preconditions.checkNotNull(configuration);
+        this.configuration = configuration;
+        this.simulationTimestep = simulationTimestep; // TODO
+        testVehicle = null;
+        energyFlowModel = null; // TODO
+        equiProperties = EquilibriumPropertiesFactory.create(getLength(), createAccelerationModel());
     }
 
-    /**
-     * Label.
-     * 
-     * @return the String
-     */
+    public double getLength() {
+        return configuration.getLength();
+    }
+
+    public double getWidth() {
+        return configuration.getWidth();
+    }
+
     public String getLabel() {
-        return label;
+        return configuration.getLabel();
     }
 
-    /**
-     * Length.
-     * 
-     * @return the double
-     */
-    public double length() {
-        return length;
+    public double getMaximumDeceleration() {
+        return configuration.getMaximumDeceleration();
     }
 
-    /**
-     * Reaction time.
-     * 
-     * @return the double
-     */
-    public double reactionTime() {
-        return reactionTime;
+    public VehiclePrototypeConfiguration getConfiguration() {
+        return configuration;
     }
 
-    /**
-     * Checks for reaction time.
-     * 
-     * @return true, if successful
-     */
-    public boolean hasReactionTime() {
-        return (reactionTime + MovsimConstants.SMALL_VALUE > 0);
+    public LongitudinalModelBase createAccelerationModel() {
+        return LongitudinalModelFactory.create(getLength(), configuration.getAccelerationModelType(),
+                simulationTimestep);
     }
 
-    /**
-     * Fraction.
-     * 
-     * @return the double
-     */
-    public double fraction() {
-        return fraction;
+    public LaneChangeModel createLaneChangeModel() {
+        return configuration.isSetLaneChangeModelType()
+                && configuration.getLaneChangeModelType().isSetModelParameterMOBIL() ? new LaneChangeModel(
+                configuration.getLaneChangeModelType())
+                : null;
     }
 
-    /**
-     * Sets the fraction.
-     * 
-     * @param normFraction
-     *            the new fraction
-     */
-    public void setFraction(double normFraction) {
-        this.fraction = normFraction;
+    public Noise createAccNoiseModel() {
+        return configuration.isSetNoiseParameter() ? new Noise(configuration.getNoiseParameter()) : null;
     }
 
-    /**
-     * Gets the long model.
-     * 
-     * @return the long model
-     */
-    public LongitudinalModelBase getLongModel() {
-        return longModel;
+    public Memory createMemoryModel() {
+        return configuration.isSetMemoryParameter() ? new Memory(configuration.getMemoryParameter()) : null;
     }
 
-    /**
-     * Gets the equilibrium properties.
-     * 
-     * @return the equilibrium properties
-     */
-    public EquilibriumProperties getEquilibriumProperties() {
+    public EnergyFlowModel getEnergyFlowModel() {
+        return energyFlowModel;
+    }
+
+    public EquilibriumProperties getEquiProperties() {
         return equiProperties;
     }
 
-    /**
-     * Gets the rho q max.
-     * 
-     * @return the rho q max
-     */
-    public double getRhoQMax() {
-        return equiProperties.getRhoQMax();
+    public double getSimulationTimestep() {
+        return simulationTimestep;
     }
 
-    /**
-     * Gets the equilibrium speed.
-     * 
-     * @param rho
-     *            the rho
-     * @return the equilibrium speed
-     */
-    public double getEquilibriumSpeed(double rho) {
-        return equiProperties.getVEq(rho);
+    public TestVehicle getTestVehicle() {
+        return testVehicle;
     }
 
-    /**
-     * Gets the vehicle input.
-     * 
-     * @return the vehicle input
-     */
-    public VehicleInput getVehicleInput() {
-        return vehicleInput;
-    }
-
-    /**
-     * Gets the relative randomization v0.
-     * 
-     * @return the relative randomization v0
-     */
-    public double getRelativeRandomizationV0() {
-        return relativeRandomizationV0;
-    }
-
-    /**
-     * Gets the route.
-     * 
-     * @return the route
-     */
-    public Route getRoute() {
-        return route;
-    }
 }

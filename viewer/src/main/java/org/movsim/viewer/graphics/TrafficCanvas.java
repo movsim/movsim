@@ -42,7 +42,6 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
-import org.movsim.input.model.VehiclesInput;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.RoadMapping;
@@ -50,10 +49,11 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Slope;
 import org.movsim.simulator.roadnetwork.SpeedLimit;
-import org.movsim.simulator.roadnetwork.TrafficLight;
-import org.movsim.simulator.roadnetwork.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.trafficlights.TrafficLight;
+import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
+import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
 import org.movsim.utilities.Units;
@@ -241,6 +241,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     @Override
     public void reset() {
         super.reset();
+        try {
+            simulator.initialize();
+        } catch (JAXBException | SAXException e) {
+            throw new RuntimeException("Jaxb exception:"+e.toString());
+        }
         simulator.reset();
         mouseListener.reset();
         vehicleToHighlightId = -1;
@@ -285,15 +290,10 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             roadSegment.roadMapping().setRoadColor(roadColor.getRGB());
         }
-        VehiclesInput vehiclesInput = simulator.getVehiclesInput();
-        if (vehiclesInput == null) {
-            logger.warn("vehiclesInput is null. cannot set vehicles' labelColors."); //$NON-NLS-1$
-        } else {
-            for (String vehicleTypeLabel : vehiclesInput.getVehicleInputMap().keySet()) {
-                final Color color = new Color(Colors.randomColor());
-                logger.info("set color for vehicle label={}", vehicleTypeLabel);
-                labelColors.put(vehicleTypeLabel, color);
-            }
+        for (String vehicleTypeLabel : simulator.getVehiclePrototypeLabels()) {
+            final Color color = new Color(Colors.randomColor());
+            logger.info("set color for vehicle label={}", vehicleTypeLabel);
+            labelColors.put(vehicleTypeLabel, color);
         }
     }
 
@@ -621,12 +621,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
     }
 
-    public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLight trafficLight) {
+    public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLightLocation trafficLightLocation) {
         final double offset = (roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
-        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
+        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLightLocation.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2, size, size
-                * trafficLight.lightCount());
+                * trafficLightLocation.getTrafficLight().lightCount());
         return rect;
     }
 
@@ -732,7 +732,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        if (roadSegment.trafficLights() == null) {
+        if (roadSegment.trafficLightLocations() == null) {
             return;
         }
         final RoadMapping roadMapping = roadSegment.roadMapping();
@@ -741,17 +741,17 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
-        for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-            final Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
-            switch (trafficLight.lightCount()) {
+        for (final TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
+            final Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLightLocation);
+            switch (trafficLightLocation.getTrafficLight().lightCount()) {
             case 1:
-                drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
+                drawTrafficLight1(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);
                 break;
             case 2:
-                drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
+                drawTrafficLight2(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);
                 break;
             default:
-                drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
+                drawTrafficLight3(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);
                 break;
             }
         }
@@ -841,29 +841,29 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping.PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
 
             final double gradient = slope.getGradient() * 100;
-            if (gradient != 0) {
+            //if (gradient != 0) {
                 g.setColor(Color.BLACK);
                 final String text = String.valueOf((int) (gradient)) + " %";
                 final int textWidth = fontMetrics.stringWidth(text);
                 g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
 
-            } else {
-                // Draw a line between points (x1,y1) and (x2,y2)
-                // draw speed limit clearing
-                g.setColor(Color.BLACK);
-                g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
-                g.setColor(Color.WHITE);
-                g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
-                        2 * whiteRadius2);
-                g.setColor(Color.BLACK);
-                final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
-                final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
-                final Graphics2D g2 = g;
-                final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
-                        (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
-                g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
-                g2.draw(line);
-            }
+//            } else {
+//                // Draw a line between points (x1,y1) and (x2,y2)
+//                // draw speed limit clearing
+//                g.setColor(Color.BLACK);
+//                g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
+//                g.setColor(Color.WHITE);
+//                g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
+//                        2 * whiteRadius2);
+//                g.setColor(Color.BLACK);
+//                final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
+//                final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
+//                final Graphics2D g2 = g;
+//                final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
+//                        (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
+//                g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
+//                g2.draw(line);
+//            }
         }
     }
 

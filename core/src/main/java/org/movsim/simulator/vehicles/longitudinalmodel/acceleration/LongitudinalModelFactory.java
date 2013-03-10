@@ -26,60 +26,48 @@
 
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputData;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataACC;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataCCS;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataGipps;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataIDM;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKKW;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataKrauss;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNSM;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataOVM_FVDM;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
+import org.movsim.autogen.AccelerationModelType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class LongitudinalModelFactory {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(LongitudinalModelFactory.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(LongitudinalModelFactory.class);
 
     /**
      * Long model factory with vehicle length vehicle length is only needed for KKW (explicit model parameter).
      * 
-     * @param modelInputData
-     *            the model input data
      * @param vehLength
-     *            the vehicle length
-     * @return the longitudinal model
+     * @param longitudinalModelType
+     * @param simulationTimestep
+     * @return
      */
-    public static LongitudinalModelBase create(double vehLength,
-            LongitudinalModelInputData modelInputData, double simulationTimestep) {
-        final ModelName modelName = modelInputData.getModelName();
+    public static LongitudinalModelBase create(double vehLength, AccelerationModelType longitudinalModelType,
+            double simulationTimestep) {
         LongitudinalModelBase longModel = null;
-        logger.debug("modelName = {}", modelName);
-        if (modelName == ModelName.IDM) {
-            longModel = new IDM((LongitudinalModelInputDataIDM) modelInputData);
-        } else if (modelName == ModelName.ACC) {
-            longModel = new ACC((LongitudinalModelInputDataACC) modelInputData);
-        } else if (modelName == ModelName.OVM_FVDM) {
-            longModel = new OVM_FVDM((LongitudinalModelInputDataOVM_FVDM) modelInputData);
-        } else if (modelName == ModelName.GIPPS) {
-            longModel = new Gipps(simulationTimestep, (LongitudinalModelInputDataGipps) modelInputData);
-        } else if (modelName == ModelName.KRAUSS) {
-            longModel = new Krauss(simulationTimestep, (LongitudinalModelInputDataKrauss) modelInputData);
-        } else if (modelName == ModelName.NEWELL) {
-            return new Newell(simulationTimestep, (LongitudinalModelInputDataNewell) modelInputData);
-        } else if (modelName == ModelName.NSM) {
-            longModel = new NSM((LongitudinalModelInputDataNSM) modelInputData);
-        } else if (modelName == ModelName.KKW) {
-            longModel = new KKW((LongitudinalModelInputDataKKW) modelInputData, vehLength);
-        } else if (modelName == ModelName.CCS) {
-            longModel = new CCS((LongitudinalModelInputDataCCS) modelInputData, vehLength);
+        if (longitudinalModelType.isSetModelParameterIDM()) {
+            longModel = new IDM(longitudinalModelType.getModelParameterIDM());
+        } else if (longitudinalModelType.isSetModelParameterACC()) {
+            longModel = new ACC(longitudinalModelType.getModelParameterACC());
+        } else if (longitudinalModelType.isSetModelParameterOVMFVDM()) {
+            longModel = new OVM_FVDM(longitudinalModelType.getModelParameterOVMFVDM());
+        } else if (longitudinalModelType.isSetModelParameterGipps()) {
+            longModel = new Gipps(simulationTimestep, longitudinalModelType.getModelParameterGipps());
+        } else if (longitudinalModelType.isSetModelParameterKrauss()) {
+            longModel = new Krauss(simulationTimestep, longitudinalModelType.getModelParameterKrauss());
+        } else if (longitudinalModelType.isSetModelParameterNewell()) {
+            return new Newell(simulationTimestep, longitudinalModelType.getModelParameterNewell());
+        } else if (longitudinalModelType.isSetModelParameterNSM()) {
+            longModel = new NSM(longitudinalModelType.getModelParameterNSM());
+        } else if (longitudinalModelType.isSetModelParameterKKW()) {
+            longModel = new KKW(longitudinalModelType.getModelParameterKKW(), vehLength);
+        } else if (longitudinalModelType.isSetModelParameterCCS()) {
+            longModel = new CCS(longitudinalModelType.getModelParameterCCS(), vehLength);
+        } else if (longitudinalModelType.isSetModelParameterPTM()) {
+            longModel = new PTM(simulationTimestep, longitudinalModelType.getModelParameterPTM());
         } else {
-            logger.error("create model by inputParameter: Model {} not known !", modelName);
-            System.exit(0);
+            throw new IllegalArgumentException("unknown acceleration model=" + longitudinalModelType.toString());
         }
         return longModel;
     }

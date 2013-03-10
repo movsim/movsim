@@ -28,14 +28,20 @@ package org.movsim.input;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * Container for some shared information. Singleton pattern.
+ * 
+ * <br>
+ * created: Mar 9, 2013<br>
+ * 
+ */
 public class ProjectMetaData {
 
-    private static final String MOVSIM_DTD_FILENAME = "multiModelTrafficSimulatorInput.dtd";
-    private static final String MOVSIM_DTD_PATH = "config";
+    private static final String MOVSIM_LOG_PATH = "config";
 
     private static final String LOG4J_FILENAME = "log4j.properties";
 
-    private static final String MOVSIM_CONFIG_FILE_ENDING = ".xml";
+    private static final String MOVSIM_CONFIG_FILE_ENDING = ".xprj";
 
     private static ProjectMetaData singleton = new ProjectMetaData();
 
@@ -287,22 +293,6 @@ public class ProjectMetaData {
         this.projectProperties = projectProperties;
     }
 
-    public static String getDtdFilenameWithPath() {
-        return File.separator + MOVSIM_DTD_PATH + File.separator + MOVSIM_DTD_FILENAME;
-    }
-
-    public static String getDtdURL() {
-        return "/" + MOVSIM_DTD_PATH + "/" + MOVSIM_DTD_FILENAME;
-    }
-
-    public static String getDtdPath() {
-        return MOVSIM_DTD_PATH;
-    }
-
-    public static String getDtdFilename() {
-        return MOVSIM_DTD_FILENAME;
-    }
-
     public File getXmlInputFile() {
         return new File(getPathToProjectXmlFile(), getProjectName() + MOVSIM_CONFIG_FILE_ENDING);
     }
@@ -339,7 +329,7 @@ public class ProjectMetaData {
     }
 
     public static String getLog4jFilenameWithPath() {
-        return File.separator + MOVSIM_DTD_PATH + File.separator + LOG4J_FILENAME;
+        return File.separator + MOVSIM_LOG_PATH + File.separator + LOG4J_FILENAME;
     }
     
 }

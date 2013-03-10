@@ -27,6 +27,7 @@ package org.movsim.output.floatingcars;
 
 import java.io.PrintWriter;
 
+import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
@@ -60,7 +61,7 @@ class FileFloatingCars extends FileOutputBase {
      *            the floating cars
      */
     FileFloatingCars() {
-        super();
+        super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         String regex = baseFilename + extensionRegex;
         FileUtils.deleteFileList(path, regex);
     }

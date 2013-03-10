@@ -16,6 +16,10 @@
                 </right>
             </laneSection>
         </lanes>
+        <signals>
+            <signal s="700" id="tl_1" name="Trafficlight 1" />
+            <signal s="1200" id="tl_2" name="Trafficlight 2" />
+        </signals>
     </road>
 </OpenDRIVE>
 

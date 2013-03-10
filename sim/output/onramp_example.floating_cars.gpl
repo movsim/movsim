@@ -1,0 +1,72 @@
+
+set pointsize 1. #VOR definition der ls! 
+
+#set style line 1 lt 4 lw 6 #lila
+set style line 1 lt 7 lw 6 ps 0.5 lc rgb "#000000" #schwarz
+set style line 11 lt palette lw 6 pt 1 ps 0.5 # Regenbogen
+set style line 2 lt 1 lw 6 pt 10 #rot
+set style line 3 lt 8 lw 6 lc rgb "#ff6600" #orange
+set style line 4 lt 6 lw 6 lc rgb "#ffbb00" #orangegelb 
+set style line 5 lt 2 lw 6 pt 14 ps 0.6 #gruen
+set style line 6 lt 3 lw 6 pt 12 #blau
+set style line 7 lt 4 lw 6 #lila
+
+
+set style line 12 lt 1 lw 1 pt 12 #rot
+set style line 13 lt 4 lw 1  lc rgb "#ff6600" #orange
+set style line 14 lt 1 lw 1 lc rgb "#ffbb00" #orangegelb 
+set style line 15 lt 2 lw 1 pt 15
+set style line 16 lt 3 lw 1 pt 15
+set style line 17 lt 4 lw 1 pt 15
+
+######################################
+
+project = "city_example"
+
+
+#rm city_example.car.all.csv
+#cat city_example.car.origin*.csv >> city_example.car.all.csv
+
+
+route = ""
+inputEnding = ".csv"
+input=project.".car.all".route.inputEnding
+
+outputEnding=".eps"
+output=project.".car.all".route.outputEnding
+
+######################################
+
+tmin=0
+tmax=20
+xref=6.5
+set palette defined ( 0 "#cc0022", 0.1  "red", 0.2 "orange", 0.4 "yellow", 0.6 "green", 0.8 "blue", 1 "#2200aa")
+
+set term post eps enhanced color solid "Helvetica" 24
+set nogrid
+set nokey
+
+set size 1.8,2
+
+set xlabel "t (min)" offset 0.5,0
+set xtics 2
+set xrange [tmin:tmax]
+
+set ylabel "x (km)"
+
+set zlabel "V (km/h)" offset 0,0.5
+set zrange [0:140]
+set ztics 50
+
+################################
+
+
+set surface; unset pm3d;
+set view map
+
+set label 1 "V (km/h)" at screen 1.8,1.8
+
+print "plotting ".output
+set out output
+splot input u ($1/60.0):($4/1000):6 w p pt 7 ps 0.2 lt palette lw 1
+ 

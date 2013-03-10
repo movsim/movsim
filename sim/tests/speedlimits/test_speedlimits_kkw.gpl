@@ -1,0 +1,74 @@
+# gnuplot command file
+
+# parameterised startStop command file
+# invoke using -e option to set parameters, eg:
+# gnuplot -e "lang='de'" test_speedlimits.gpl
+
+set datafile separator ","
+
+# set the output type and size
+set terminal postscript eps enhanced color solid font "Helvetica" 26
+set size 1,1
+
+## test_speedlimits_iteratedMaps.car.origin_1.000001.csv
+
+
+# parameters
+if (!exists("inputPath")) inputPath = ""
+if (!exists("outputPath")) outputPath = "./" # old: "figs/"
+if (!exists("lang")) lang = "en"
+#print "lang=".lang
+
+# variables
+baseFile = "test_speedlimits_kkw"
+
+# input files
+carFile(origin, n) = sprintf(inputPath.baseFile.".car.route_main.%06d.csv",origin,n)
+
+# output files
+trajectoryOutput = outputPath.baseFile.".trajectories.eps"
+
+
+########  Labels etc   #####################################
+
+positionLabel = "Position (km)"
+speedLabel = "Speed (km/h)"
+accelerationLabel = "Acceleration (m/s^2)"
+car(n) = sprintf("Car %d",n)
+
+
+########  Line Styles  ###################################
+
+#set style line 1 linetype 7 linewidth 3 pointtype 7 pointsize 1.5
+#set style line 1 linetype 1 linewidth 3 pointtype 5 pointsize 1.5
+
+set style line 1 linetype 1 linewidth 7 pointtype 7 pointsize 1.5 lc rgb "#000000"
+set style line 2 linetype 7 linewidth 5 pointtype 5 pointsize 1.5 lc rgb "#dd0000"
+set style line 3 linetype 1 linewidth 2 pointtype 9 pointsize 1.5 lc rgb "#ff8800"
+set style line 4 linetype 3 linewidth 1 pointtype 11 pointsize 1.5 lc rgb "#00aa44"
+set style line 5 linetype 5 linewidth 7 pointtype 13 pointsize 1.5 lc rgb "#220099"
+
+########  Plot  ##########################################
+set grid
+
+#set xrange [100:120]
+set xlabel positionLabel
+set ylabel speedLabel
+#unset key
+
+
+origin=1
+set out outputPath.baseFile.".floating_cars_speed.eps"
+plot\
+ carFile(origin, 1) using ($4/1000):(3.6*$6) title "car(1). KKW" with lines linestyle 1  
+  
+set key bottom right
+set autoscale y
+set ylabel accelerationLabel
+
+set out outputPath.baseFile.".floating_cars_acc.eps"
+plot\
+  carFile(origin, 1) using ($4/1000):7 title "car(1). KKW" with lines linestyle 1
+  
+  
+  

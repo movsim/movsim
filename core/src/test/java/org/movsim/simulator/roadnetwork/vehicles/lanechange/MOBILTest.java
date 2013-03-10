@@ -31,6 +31,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.movsim.autogen.LaneChangeModelType;
+import org.movsim.autogen.ModelParameterMOBIL;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Link;
@@ -115,15 +117,17 @@ public class MOBILTest {
 
         // set up a vehicle in lane 1, right lane
         final Vehicle v1 = newVehicle(900.0, 0.0, Lane.LANE1, lengthCar);
-        final MOBIL m1 = new MOBIL(v1, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
-        final LaneChangeModel lcm1 = new LaneChangeModel(v1, m1);
+        final MOBIL m1 = new MOBIL(v1, createModelParameterMOBIL(minimumGap, safeDeceleration, politeness,
+                thresholdAcceleration, rightBiasAcceleration));
+        final LaneChangeModel lcm1 = new LaneChangeModel(v1, createLaneChangeModelType(m1.getParameter()));
         v1.setLaneChangeModel(lcm1);
         roadSegment.addVehicle(v1);
 
         // set up a vehicle in lane 2, left lane
         final Vehicle v2 = newVehicle(900.0 - lengthCar - tooSmallGap, 0.0, Lane.LANE2, lengthCar);
-        final MOBIL m2 = new MOBIL(v2, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
-        final LaneChangeModel lcm2 = new LaneChangeModel(v2, m2);
+        final MOBIL m2 = new MOBIL(v2, createModelParameterMOBIL(minimumGap, safeDeceleration, politeness,
+                thresholdAcceleration, rightBiasAcceleration));
+        final LaneChangeModel lcm2 = new LaneChangeModel(v2, createLaneChangeModelType(m2.getParameter()));
         v2.setLaneChangeModel(lcm2);
         roadSegment.addVehicle(v2);
 
@@ -184,7 +188,8 @@ public class MOBILTest {
         r0.addVehicle(v1);
 
         final Vehicle v2 = newVehicle(6.3, 5.589, Lane.LANE1, lengthCar);
-        final MOBIL m2 = new MOBIL(v2, minimumGap, safeDeceleration, politeness, thresholdAcceleration, rightBiasAcceleration);
+        final MOBIL m2 = new MOBIL(v2, createModelParameterMOBIL(minimumGap, safeDeceleration, politeness,
+                thresholdAcceleration, rightBiasAcceleration));
         r1.addVehicle(v2);
         final LaneSegment sls = r1.sourceLaneSegment(Lane.LANE2);
         assertEquals(1, sls.vehicleCount());
@@ -206,8 +211,8 @@ public class MOBILTest {
     @Test
     public final void testGetMinimumGap() {
         final double minimumGap = 2.1;
-        final MOBIL mobil = new MOBIL(null, minimumGap, 0.0, 0.0, 0.0, 0.0);
-        assertEquals(minimumGap, mobil.getMinimumGap(), delta);
+        final MOBIL mobil = new MOBIL(null, createModelParameterMOBIL(minimumGap, 0.0, 0.0, 0.0, 0.0));
+        assertEquals(minimumGap, mobil.getParameter().getMinimumGap(), delta);
     }
 
     /**
@@ -216,7 +221,27 @@ public class MOBILTest {
     @Test
     public final void testGetSafeDeceleration() {
         final double safeDeceleration = 4.3;
-        final MOBIL mobil = new MOBIL(null, 0.0, safeDeceleration, 0.0, 0.0, 0.0);
-        assertEquals(safeDeceleration, mobil.getSafeDeceleration(), delta);
+        final MOBIL mobil = new MOBIL(null, createModelParameterMOBIL(0.0, safeDeceleration, 0.0, 0.0, 0.0));
+        assertEquals(safeDeceleration, mobil.getParameter().getSafeDeceleration(), delta);
     }
+
+    private static ModelParameterMOBIL createModelParameterMOBIL(double minimumGap, double safeDeceleration,
+            double politeness, double thresholdAcceleration, double rightBiasAcceleration) {
+        ModelParameterMOBIL param = new ModelParameterMOBIL();
+        param.setMinimumGap(minimumGap);
+        param.setSafeDeceleration(safeDeceleration);
+        param.setPoliteness(politeness);
+        param.setThresholdAcceleration(thresholdAcceleration);
+        param.setRightBiasAcceleration(rightBiasAcceleration);
+        return param;
+    }
+
+    private static LaneChangeModelType createLaneChangeModelType(ModelParameterMOBIL mobilParameter) {
+        LaneChangeModelType lcType = new LaneChangeModelType();
+        lcType.setModelParameterMOBIL(mobilParameter);
+        lcType.setEuropeanRules(true);
+        lcType.setCritSpeedEur(5);
+        return lcType;
+    }
+
 }

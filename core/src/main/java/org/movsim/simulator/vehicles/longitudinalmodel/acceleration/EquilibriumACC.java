@@ -70,12 +70,13 @@ class EquilibriumACC extends EquilibriumPropertiesImpl {
      */
     private void calcEquilibrium(ACC model) {
 
-        double vIter = model.getDesiredSpeed(); // variable of the relaxation equation
+        double v0 = model.getDesiredSpeed();
+        double vIter = v0; // variable of the relaxation equation
         final int itMax = 100; // number of iteration steps in each relaxation
         final double dtMax = 2; // iteration time step (in s) changes from
         final double dtMin = 0.01; // dtmin (rho=rhomax) to dtmax (rho=0)
 
-        vEqTab[0] = model.getDesiredSpeed(); // start with rho=0
+        vEqTab[0] = v0; // start with rho=0
         final int length = vEqTab.length;
 
         for (int ir = 1; ir < length; ir++) {
@@ -86,7 +87,7 @@ class EquilibriumACC extends EquilibriumPropertiesImpl {
             for (int it = 1; it <= itMax; it++) {
                 final double acc = model.calcAccSimple(s, vIter, 0.);
                 // interation step in [dtmin, dtmax]
-                final double dtloc = dtMax * vIter / model.getDesiredSpeed() + dtMin;
+                final double dtloc = dtMax * vIter / v0 + dtMin;
                 // TODO: direkter source code
                 // for (int it=1; it<=itmax; it++){
                 // double dtloc = dtmax*v_it/v0 + dtmin; // it. step in
@@ -101,7 +102,7 @@ class EquilibriumACC extends EquilibriumPropertiesImpl {
 
                 // actual relaxation
                 vIter += dtloc * acc;
-                if ((vIter < 0) || (s < model.getS0())) {
+                if ((vIter < 0) || (s < model.getMinimumGap())) {
                     vIter = 0;
                 }
             }

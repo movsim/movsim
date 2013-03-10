@@ -1,6 +1,0 @@
-# gnuplot command file
-
-ldm = "ACC"
-lang = "en"
-load "join.gpl"
-

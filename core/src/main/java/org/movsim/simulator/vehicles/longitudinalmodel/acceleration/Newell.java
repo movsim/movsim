@@ -19,8 +19,8 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-import org.movsim.input.model.vehicle.longitudinalmodel.LongitudinalModelInputDataNewell;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterNewell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,23 +30,23 @@ import org.slf4j.LoggerFactory;
 class Newell extends LongitudinalModelBase {
 
     /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Newell.class);
+    private static final Logger logger = LoggerFactory.getLogger(Newell.class);
 
-    /** The dt. */
+    /** The simulation timepstep as parameter */
     private final double dt;
 
+    private final IModelParameterNewell param;
+
     /**
-     * Instantiates a new newell.
+     * Instantiates a new Newell car-following model.
      * 
-     * @param parameters
-     *            the parameters
+     * @param simulationTimestep
+     * @param modelParameter
      */
-    Newell(double dt, LongitudinalModelInputDataNewell parameters) {
-        super(ModelName.NEWELL, parameters);
-        this.dt = dt;
-        logger.debug("init model parameters");
-        this.v0 = parameters.getV0();
-        this.s0 = parameters.getS0();
+    public Newell(double simulationTimestep, IModelParameterNewell modelParameter) {
+        super(ModelName.NEWELL);
+        this.dt = simulationTimestep;
+        this.param = modelParameter;
     }
 
     @Override
@@ -60,7 +60,7 @@ class Newell extends LongitudinalModelBase {
         // TODO check modeling of parameter dt=T (dt is the constant update time and cannot be changed)
         final double dtLocal = alphaT * dt;
         // consider external speedlimit
-        final double v0Local = Math.min(alphaV0 * v0, me.getSpeedlimit());
+        final double v0Local = Math.min(alphaV0 * getDesiredSpeed(), me.getSpeedlimit());
 
         // actual Newell formula
         return acc(s, v, dv, dtLocal, v0Local);
@@ -68,7 +68,7 @@ class Newell extends LongitudinalModelBase {
 
     @Override
     public double calcAccSimple(double s, double v, double dv) {
-        return acc(s, v, dv, dt, v0);
+        return acc(s, v, dv, dt, getDesiredSpeed());
     }
 
     /**
@@ -88,10 +88,16 @@ class Newell extends LongitudinalModelBase {
      */
     private double acc(double s, double v, double dv, double dtLocal, double v0Local) {
 
-        final double vNew = Math.min(Math.max((s - s0) / dtLocal, 0), v0Local);
+        final double vNew = Math.min(Math.max((s - getMinimumGap()) / dtLocal, 0), v0Local);
 
         double aWanted = (vNew - v) / dtLocal;
 
         return aWanted;
     }
+
+    @Override
+    protected IModelParameterNewell getParameter() {
+        return param;
+    }
+
 }

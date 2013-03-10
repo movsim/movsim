@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<Movsim>
+    <!-- 
+ <ConsumptionCalculation_CONSUMPTION>
+        <CONSUMPTION_MODEL label="carDiesel">
+            <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
+            <ENGINE max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="185" pe_min_bar="1" pe_max_bar="22" idle_rotation_rate_invmin="900" max_rotation_rate_invmin="4500">
+                <GEAR_RATIOS>
+                    <GEAR_RATIO phi="16.7" />
+                    <GEAR_RATIO phi="10.1" />
+                    <GEAR_RATIO phi="6.8" />
+                    <GEAR_RATIO phi="5.0" />
+                    <GEAR_RATIO phi="3.8" />
+                    <GEAR_RATIO phi="3.1" />
+                    <GEAR_RATIO phi="2.6" />
+                </GEAR_RATIOS>
+            </ENGINE>
+        </CONSUMPTION_MODEL>
+    </ConsumptionCalculation_CONSUMPTION>
+-->
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="40" consumption_model_name="carDiesel">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <!-- safe_deceleration < maximum_deceleration to avoid crashed -->
+                <ModelParameterMOBIL safe_deceleration="30.0" minimum_gap="2.0" threshold_acceleration="0.05" right_bias_acceleration="0.1" politeness="0." />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ACC2" length="6" maximum_deceleration="40" consumption_model_name="carDiesel">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <!-- safe_deceleration < maximum_deceleration to avoid crashed -->
+                <ModelParameterMOBIL safe_deceleration="30.0" minimum_gap="2.0" threshold_acceleration="0.05" right_bias_acceleration="0.1" politeness="0." />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ACC3" length="6" maximum_deceleration="40" consumption_model_name="carDiesel">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="3" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <!-- safe_deceleration < maximum_deceleration to avoid crashed -->
+                <ModelParameterMOBIL safe_deceleration="30.0" minimum_gap="2.0" threshold_acceleration="0.05" right_bias_acceleration="0.1" politeness="0." />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="0">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="ramp_metering.xodr">
+        <Simulation timestep="0.2" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="1.0" relative_v0_randomization="0.0" />
+            </TrafficComposition>
+            <Road id="1">
+                <!-- secondary road -->
+                <TrafficComposition>
+                    <VehicleType label="ACC1" fraction="0.2" relative_v0_randomization="0.2" route_label="north" />
+                    <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="north" />
+                    <VehicleType label="ACC3" fraction="0.7" relative_v0_randomization="0.2" route_label="north_then_east" />
+                </TrafficComposition>
+                <InitialConditions />
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="1900" v="24" />
+                    <Inflow t="60" q_per_hour="1900" v="24" />
+                    <Inflow t="180" q_per_hour="1900" v="24" />
+                    <Inflow t="210" q_per_hour="0" v="24" />
+                </TrafficSource>
+            </Road>
+            <Road id="25">
+                <!-- freeway -->
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="1500" v="24" />
+                    <Inflow t="50" q_per_hour="1500" v="24" />
+                    <Inflow t="60" q_per_hour="2000" v="24" />
+                    <Inflow t="100" q_per_hour="2000" v="24" />
+                    <Inflow t="100" q_per_hour="200" v="24" />
+                    <Inflow t="110" q_per_hour="200" v="24" />
+                    <Inflow t="120" q_per_hour="2000" v="24" />
+                    <Inflow t="150" q_per_hour="2000" v="24" />
+                    <Inflow t="150" q_per_hour="200" v="24" />
+                    <Inflow t="170" q_per_hour="200" v="24" />
+                    <Inflow t="180" q_per_hour="1500" v="24" />
+                    <Inflow t="210" q_per_hour="1500" v="24" />
+                    <Inflow t="210" q_per_hour="0" v="24" />
+                </TrafficSource>
+            </Road>
+            <Road id="37">
+                <!-- traffic light defined in network file -->
+            </Road>
+        </Simulation>
+        <TrafficLights>
+            <!-- zero time period means that light will not change automatically from that color -->
+            <!-- negative time period means that light will not use that color -->
+            <!-- ordinal numbers of TrafficLightStatus are GREEN=0, GREEN_RED=1, RED=2, RED_GREEN=3 -->
+            <TrafficLight id="TL_1" green_time="0" red_time="0" phase_shift="0" init="0" />
+        </TrafficLights>
+        <Routes>
+            <Route label="north">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="3" />
+            </Route>
+            <Route label="north_then_east">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="37" />
+                <Road id="26" />
+                <Road id="27" />
+            </Route>
+        </Routes>
+    </Scenario>
+</Movsim>
+
