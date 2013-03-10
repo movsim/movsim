@@ -2,7 +2,7 @@
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <!DOCTYPE SCENARIO SYSTEM "multiModelTrafficSimulatorInput.dtd">
 
-<SCENARIO network_filename="flow_conserving_bottleneck.xodr">
+<SCENARIO network_filename="ruralroad.xodr">
     <VEHICLES>
         <VEHICLE label="ACC1" length="6" b_max="9">
             <LONGITUDINAL_MODEL>

@@ -23,7 +23,7 @@ if (!exists("lang")) lang = "en"
 baseFile = "test_speedlimits_ca"
 
 # input files
-carFile(origin, n) = sprintf(inputPath.baseFile.".car.origin_%d.%06d.csv",origin,n)
+carFile(origin, n) = sprintf(inputPath.baseFile.".car.route_main.%06d.csv",origin,n)
 
 # output files
 trajectoryOutput = outputPath.baseFile.".trajectories.eps"

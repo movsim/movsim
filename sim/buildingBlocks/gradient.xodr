@@ -8,8 +8,10 @@
             </geometry>
         </planView>
         <elevationProfile>
-             <elevation s="500" a="0"/>  <!-- start level: no elevation -->
-             <elevation s="1500" a="100"/> <!-- gradient of 10% over 1000m -->
+            <elevation s="500" a="0" />
+            <!-- start level: no elevation -->
+            <elevation s="1500" a="100" />
+            <!-- gradient of 10% over 1000m -->
         </elevationProfile>
         <lanes>
             <laneSection s="0.0">

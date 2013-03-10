@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="CCS0" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="250" v_c="8" p_herringbone="150" v_c_herringbone="1.5" b="1.1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0." right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS1" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="70" A="0.7" cw="0.5" friction="0.01" T="0.5" s0="0.6" p0="200" v_c="8" p_herringbone="150" v_c_herringbone="1.4" b="1.1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0." right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS2" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="70" A="0.7" cw="0.6" friction="0.02" T="0.5" s0="0.7" p0="190" v_c="7" p_herringbone="140" v_c_herringbone="1.3" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS3" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="75" A="0.7" cw="0.6" friction="0.02" T="0.6" s0="0.7" p0="180" v_c="7" p_herringbone="130" v_c_herringbone="1.2" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS4" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="80" A="0.7" cw="0.7" friction="0.02" T="0.6" s0="0.7" p0="170" v_c="6" p_herringbone="130" v_c_herringbone="1.0" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0." right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS5" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="80" A="0.7" cw="0.7" friction="0.02" T="0.6" s0="0.7" p0="160" v_c="6" p_herringbone="120" v_c_herringbone="1.0" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS6" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="80" A="0.7" cw="0.7" friction="0.02" T="0.7" s0="0.7" p0="140" v_c="5" p_herringbone="100" v_c_herringbone="1.0" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS7" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="80" A="0.7" cw="0.7" friction="0.03" T="0.7" s0="0.8" p0="130" v_c="4" p_herringbone="80" v_c_herringbone="0.9" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS8" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="84" A="0.7" cw="0.8" friction="0.03" T="0.8" s0="0.9" p0="115" v_c="4" p_herringbone="70" v_c_herringbone="0.8" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS9" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="84" A="0.7" cw="0.8" friction="0.03" T="1.0" s0="1.2" p0="100" v_c="3" p_herringbone="60" v_c_herringbone="0.7" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="CCS10" length="2" width="1" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterCCS v0="0" mass="84" A="0.7" cw="0.8" friction="0.03" T="1.1" s0="1.3" p0="90" v_c="3" p_herringbone="50" v_c_herringbone="0.7" b="1" b_maximum="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="false">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="1.0" threshold_acceleration="0.0" right_bias_acceleration="0" politeness="0.0" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="vasa.xodr">
+        <Simulation timestep="0.2" duration="10000" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="CCS1" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
+            </TrafficComposition>
+            <Road id="0">
+                <TrafficComposition>
+                    <VehicleType label="CCS0" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="100" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-1">
+                <TrafficComposition>
+                    <VehicleType label="CCS1" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="200" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-2">
+                <TrafficComposition>
+                    <VehicleType label="CCS2" fraction="1.0" relative_v0_randomization="0.1" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="300" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-3">
+                <TrafficComposition>
+                    <VehicleType label="CCS3" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="370" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-4">
+                <TrafficComposition>
+                    <VehicleType label="CCS4" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="370" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-5">
+                <TrafficComposition>
+                    <VehicleType label="CCS5" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="370" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-6">
+                <TrafficComposition>
+                    <VehicleType label="CCS6" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="370" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-7">
+                <TrafficComposition>
+                    <VehicleType label="CCS7" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="370" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-8">
+                <TrafficComposition>
+                    <VehicleType label="CCS8" fraction="1.0" relative_v0_randomization="0.3" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="370" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-9">
+                <TrafficComposition>
+                    <VehicleType label="CCS9" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="390" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="-10">
+                <TrafficComposition>
+                    <VehicleType label="CCS10" fraction="1.0" relative_v0_randomization="0.2" v0_distribution_type="gaussian" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="10" density_per_km="390" speed="0" />
+                </InitialConditions>
+            </Road>
+            <Road id="11">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="10" gradient="0.03" /> -->
+                <!--                 <Slope position="100" gradient="-0.04" /> -->
+                <!--                 <Slope position="140" gradient="0.02" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="13">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.10" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="14">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="20" gradient="0.12" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="15">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.06" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="16">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.04" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="17">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.03" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="21">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.08" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="30">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.06" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="31">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.04" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="32">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.03" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="33">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.02" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="34">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.02" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="35">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.06" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="36">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="37">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.03" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="38">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.09" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="39">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.02" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="40">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="41">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="42">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.04" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="43">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.04" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="44">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="45">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="46">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="47">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.05" /> -->
+                <!--             </Slopes> -->
+            </Road>
+            <Road id="48">
+                <!--             <Slopes> -->
+                <!--                 <Slope position="1" gradient="0.04" /> -->
+                <!--             </Slopes> -->
+                <Detectors sample_interval="10" logging="true" logging_lanes="false">
+                    <CrossSection position="200" />
+                    <!-- length 400 m -->
+                </Detectors>
+            </Road>
+        </Simulation>
+        <OutputConfiguration />
+    </Scenario>
+</Movsim>
+

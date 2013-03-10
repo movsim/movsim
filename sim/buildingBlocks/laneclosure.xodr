@@ -18,6 +18,10 @@
                         <!-- Watch out! type="mwyEntry" may not have any <link> entry, not -->
                         <!-- even empty one, otherwise blocking occurs! -->
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                        <speed sOffset="600" max="27.78" />
+                        <!-- given in m/s, here: 100 km/h -->
+                        <speed sOffset="900" max="22.22" />
+                        <!-- 80 km/h -->
                     </lane>
                     <lane id="-2" type="driving" level="0">
                         <link>
@@ -53,12 +57,12 @@
             </laneSection>
         </lanes>
     </road>
-    <road name="R3" length="200.0" id="3" junction="-1">
+    <road name="R3" id="3" junction="-1">
         <link>
             <predecessor elementType="road" elementId="2" contactPoint="end" />
         </link>
         <planView>
-            <geometry s="0.0" x="1200.0" y="300.0" hdg="0.0" length="200.0">
+            <geometry s="0.0" x="1200.0" y="300.0" hdg="0.0" length="500.0">
                 <line />
             </geometry>
         </planView>
@@ -68,6 +72,8 @@
                     <lane id="-1" type="driving" level="0">
                         <link />
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                        <speed sOffset="0" max="36.11" />
+                        <!-- given in m/s, here: 130 km/h -->
                     </lane>
                     <lane id="-2" type="driving" level="0">
                         <link>

@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+## perl -i -p -e 's/MovsimScenario/Scenario/g' *.xprj
 
 use warnings;
 use strict;
@@ -24,7 +25,7 @@ open(OUT,">$infile")
 for(my $i=0;$i<=$#file;$i++){
 #  print $file[$i];
   $_ = $file[$i];
-  $_ = replace("SCENARIO", "MovsimScenario", $_);
+  $_ = replace("SCENARIO", "Scenario", $_);
   $_ = replace("<VEHICLE_TYPE", "<VehicleType", $_);
   $_ = replace("VEHICLES", "VehiclePrototypes", $_);
   $_ = replace("VEHICLE", "VehiclePrototypeConfiguration", $_);
