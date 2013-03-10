@@ -37,7 +37,7 @@ import java.io.InputStream;
  */
 public class ProjectMetaData {
 
-    private static final String MOVSIM_LOG_PATH = "config";
+    private static final String MOVSIM_COMMON_LOG_PATH = "config";
 
     private static final String LOG4J_FILENAME = "log4j.properties";
 
@@ -329,7 +329,7 @@ public class ProjectMetaData {
     }
 
     public static String getLog4jFilenameWithPath() {
-        return File.separator + MOVSIM_LOG_PATH + File.separator + LOG4J_FILENAME;
+        return File.separator + MOVSIM_COMMON_LOG_PATH + File.separator + LOG4J_FILENAME;
     }
     
 }

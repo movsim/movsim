@@ -135,10 +135,8 @@ set out consumptionOutput
 plot\
  consumptionFile using ($1/60.0):2 title "main route" with lines linestyle 1,\
  consumptionFileRamp using ($1/60.0):2 title "onramp route" with lines linestyle 3,\
- consumptionFile using ($1/60.0):($3) title "EMA" with lines linestyle 2,\
- consumptionFileRamp using ($1/60.0):($3) title "EMA" with lines linestyle 4,\
- consumptionFile using ($1/60.0):($4*3.6) title "Mean speed on main route" with lines linestyle 5,\
- consumptionFileRamp using ($1/60.0):($4*3.6) title "Mean speed on onramp route" with lines linestyle 6
+ consumptionFile using ($1/60.0):3 title "EMA" with lines linestyle 2,\
+ consumptionFileRamp using ($1/60.0):3 title "EMA" with lines linestyle 4
  
 set ylabel cumConsumptionLabel
 set out cumConsumptionOutput

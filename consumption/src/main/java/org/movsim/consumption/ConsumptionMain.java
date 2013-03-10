@@ -35,7 +35,6 @@ import org.movsim.autogen.Consumption;
 import org.movsim.autogen.ConsumptionModel;
 import org.movsim.autogen.Movsim;
 import org.movsim.consumption.input.ConsumptionCommandLine;
-import org.movsim.consumption.input.ConsumptionMetadata;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModels;
@@ -43,6 +42,7 @@ import org.movsim.consumption.offline.ConsumptionCalculation;
 import org.movsim.consumption.offline.ConsumptionDataRecord;
 import org.movsim.consumption.offline.InputReader;
 import org.movsim.consumption.offline.OutputWriter;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.xml.MovsimInputLoader;
 
 import com.google.common.base.Preconditions;
@@ -60,9 +60,9 @@ public class ConsumptionMain {
 
         ConsumptionLogger.initializeLogger();
 
-        ConsumptionCommandLine.parse(ConsumptionMetadata.getInstance(), args);
+        ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
 
-        Movsim inputData = MovsimInputLoader.getInputData(ConsumptionMetadata.getInstance().getXmlInputFile());
+        Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getXmlInputFile());
 
         if (!inputData.isSetConsumption()) {
             System.err.println("no consumption element configured in input file");
@@ -73,8 +73,7 @@ public class ConsumptionMain {
 
         System.out.println("size of batches = " + inputData.getConsumption().getBatchJobs().getBatchData().size());
         for (BatchData batch : inputData.getConsumption().getBatchJobs().getBatchData()) {
-            InputReader reader = InputReader
-                    .create(batch, ConsumptionMetadata.getInstance().getPathToConsumptionFile());
+            InputReader reader = InputReader.create(batch, ProjectMetaData.getInstance().getPathToProjectXmlFile());
             List<ConsumptionDataRecord> records = reader.getRecords();
 
             EnergyFlowModel model = consumptionModelPool.get(batch.getModel());
@@ -83,7 +82,7 @@ public class ConsumptionMain {
 
             calculation.process(records);
 
-            OutputWriter writer = OutputWriter.create(batch, ConsumptionMetadata.getInstance().getOutputPath());
+            OutputWriter writer = OutputWriter.create(batch, ProjectMetaData.getInstance().getOutputPath());
             writer.write(records);
         }
 
