@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Movsim, Arne Kesting 2012 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="false">
+        <!-- models -->
+        <VehiclePrototypeConfiguration label="IDM1" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="15" T="1" s0="2" a="1.0" b="1.5" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IIDM1" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="15" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" coolness="0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ACC1" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="1" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IDMM1" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="15" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+            </AccelerationModelType>
+            <MemoryParameter tau="600" alpha_v0="1" alpha_T="1.7" alpha_a="1" />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="IDM1_noise" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="15" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" />
+            </AccelerationModelType>
+            <NoiseParameter tau="5" fluct_strength="0.1" />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="FVDM1" length="8" maximum_deceleration="100">
+            <AccelerationModelType>
+                <ModelParameterOVM_FVDM v0="15" tau="5" s0="0" transition_width="8" beta="1.5" gamma="0.6" optimal_speed_function="bando" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="OVM1" length="8" maximum_deceleration="20">
+            <AccelerationModelType>
+                <ModelParameterOVM_FVDM v0="15" tau="0.65" s0="0 " transition_width="8" beta="1.5" gamma="0" optimal_speed_function="bando" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="0" T="1.2" s0="2" s1="0" delta="4" a="1.5" b="1.5" coolness="1" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="startStop_all_continous.xodr">
+        <Simulation timestep="0.2" duration="780" seed="42">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="1" />
+            </TrafficComposition>
+            <!-- ############################ -->
+            <Road id="IDM">
+                <TrafficComposition>
+                    <VehicleType label="IDM1" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+            <!-- ############################ -->
+            <Road id="IIDM">
+                <TrafficComposition>
+                    <VehicleType label="IIDM1" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+            <!-- ############################ -->
+            <Road id="ACC">
+                <TrafficComposition>
+                    <VehicleType label="ACC1" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+            <!-- ############################ -->
+            <Road id="IDMM">
+                <TrafficComposition>
+                    <VehicleType label="IDMM1" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+            <!-- ############################ -->
+            <Road id="IDM_noise">
+                <TrafficComposition>
+                    <VehicleType label="IDM1_noise" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+            <!-- ############################ -->
+            <Road id="FVDM">
+                <TrafficComposition>
+                    <VehicleType label="FVDM1" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+            <!-- ############################ -->
+            <Road id="OVM">
+                <TrafficComposition>
+                    <VehicleType label="OVM1" fraction="1" />
+                    <VehicleType label="Obstacle" fraction="0" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="2000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+    </Scenario>
+</Movsim>
+

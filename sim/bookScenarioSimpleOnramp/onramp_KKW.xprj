@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Martin Treiber, Arne Kesting 2011 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="true">
+        <!-- vehicle length ==> cell units -->
+        <VehiclePrototypeConfiguration label="KKW1" length="15">
+            <!-- maximum_deceleration not limited -->
+            <AccelerationModelType>
+                <!-- s0 not a model parameter -->
+                <ModelParameterKKW v0="67" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="28" s0="0" />
+            </AccelerationModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="simple_onramp.xodr">
+        <Simulation timestep="1" duration="7200" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="KKW1" fraction="1" />
+            </TrafficComposition>
+            <!-- scaled units for time and space -->
+            <Road id="1">
+                <InitialConditions>
+                    <!--                 <MacroIC position="2000" density_per_km_per_km="2" v="3" /> -->
+                </InitialConditions>
+                <TrafficSource logging="true">
+                    <Inflow t="0" q_per_hour="100" v="110" />
+                    <Inflow t="600" q_per_hour="2000" v="90" />
+                </TrafficSource>
+                <TrafficSink />
+                <!-- improve vehicle performance at inflow -->
+                <FlowConservingInhomogeneities />
+                <!--             <SimpleRampS>
+                <SimpleRamp position="30000" merge_length="1000" logging="true">
+                    <Inflow t="0" q_per_hour="550" />
+                </SimpleRamp>
+            </SimpleRampS> -->
+                <Detectors sample_interval="60" logging="true">
+                    <CrossSection position="16000" />
+                    <CrossSection position="18000" />
+                    <CrossSection position="20000" />
+                    <CrossSection position="22000" />
+                    <CrossSection position="24000" />
+                    <CrossSection position="26000" />
+                </Detectors>
+            </Road>
+            <Road id="2">
+                <InitialConditions>
+                    <!--                 <MacroIC position="0" density_per_km_per_km="2" v="30" /> -->
+                </InitialConditions>
+                <SimpleRamp relative_speed="0.5" relative_gap="0.5" logging="true">
+                    <Inflow t="0" q_per_hour="550" />
+                </SimpleRamp>
+                <Detectors sample_interval="60" logging="true">
+                    <CrossSection position="0" />
+                    <CrossSection position="1000" />
+                    <CrossSection position="2000" />
+                </Detectors>
+            </Road>
+            <Road id="3">
+                <InitialConditions>
+                    <!--                 <MacroIC position="0" density_per_km_per_km="2" v="30" />-->
+                </InitialConditions>
+            </Road>
+        </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="3" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
+            <Trajectories dt="1" start_time="0" end_time="120" route="main" />
+        </OutputConfiguration>
+    </Scenario>
+</Movsim>
+

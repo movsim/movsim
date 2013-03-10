@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="IDM" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="30" T="1.2" s0="2" s1="0" delta="4" a="0.5" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+            <!-- fluctuation strength needed for traffic flow breakdown if simulating only with one vehicle type -->
+            <NoiseParameter tau="5" fluct_strength="0.07" />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="ringroad.xodr">
+        <Simulation timestep="0.2" seed="42">
+            <TrafficComposition>
+                <VehicleType label="IDM" fraction="1" />
+            </TrafficComposition>
+            <Road id="1">
+                <InitialConditions>
+                    <!-- critical density for emerging stop-and-go wave about >= 33 vehicles per km per lane -->
+                    <MacroIC position="1" density_per_km="36" speed="20" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+    </Scenario>
+</Movsim>
+

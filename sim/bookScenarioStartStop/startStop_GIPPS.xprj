@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Martin Treiber, Arne Kesting 2010 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="true">
+        <VehiclePrototypeConfiguration label="GIPPS1" length="8" maximum_deceleration="20">
+            <AccelerationModelType>
+                <ModelParameterGipps v0="15" a="1.5" b="1.0" s0="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="0" maximum_deceleration="20">
+            <AccelerationModelType>
+                <ModelParameterGipps v0="0" a="1.5" b="1.0" s0="2" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="startStop.xodr">
+        <Simulation timestep="1.1" duration="360" seed="42">
+            <TrafficComposition>
+                <VehicleType label="GIPPS1" fraction="1" />
+                <VehicleType label="Obstacle" fraction="0" />
+            </TrafficComposition>
+            <Road id="1">
+                <InitialConditions>
+                    <MicroIC position="10" speed="0" />
+                    <MicroIC position="20" speed="0" />
+                    <MicroIC position="30" speed="0" />
+                    <MicroIC position="40" speed="0" />
+                    <MicroIC position="50" speed="0" />
+                    <MicroIC position="60" speed="0" />
+                    <MicroIC position="70" speed="0" />
+                    <MicroIC position="80" speed="0" />
+                    <MicroIC position="90" speed="0" />
+                    <MicroIC position="100" speed="0" />
+                    <MicroIC position="110" speed="0" />
+                    <MicroIC position="120" speed="0" />
+                    <MicroIC position="130" speed="0" />
+                    <MicroIC position="140" speed="0" />
+                    <MicroIC position="150" speed="0" />
+                    <MicroIC position="160" speed="0" />
+                    <MicroIC position="170" speed="0" />
+                    <MicroIC position="180" speed="0" />
+                    <MicroIC position="190" speed="0" />
+                    <MicroIC position="200" speed="0" />
+                    <MicroIC position="210" speed="0" />
+                    <MicroIC position="220" speed="0" />
+                    <MicroIC position="230" speed="0" />
+                    <MicroIC position="240" speed="0" />
+                    <MicroIC position="250" speed="0" />
+                    <MicroIC position="260" speed="0" />
+                    <!-- obstacle shifts floating car numbers -->
+                    <MicroIC position="1000" speed="0" label="Obstacle" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+            </Route>
+        </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main">
+                <!-- FloatingCar 1 is obstacle -->
+                <FloatingCar number="2" />
+                <FloatingCar number="6" />
+                <FloatingCar number="11" />
+                <FloatingCar number="16" />
+                <FloatingCar number="21" />
+            </FloatingCarOutput>
+            <Trajectories dt="1" route="main" />
+        </OutputConfiguration>
+    </Scenario>
+</Movsim>
+

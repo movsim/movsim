@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<Movsim>
+    <!-- <ConsumptionCalculation_CONSUMPTION>
+        <CONSUMPTION_MODEL label="carDiesel">
+            <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
+            <ENGINE max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="185" pe_min_bar="1" pe_max_bar="22" idle_rotation_rate_invmin="900" max_rotation_rate_invmin="4500">
+                <GEAR_RATIOS>
+                    <GEAR_RATIO phi="16.7" />
+                    <GEAR_RATIO phi="10.1" />
+                    <GEAR_RATIO phi="6.8" />
+                    <GEAR_RATIO phi="5.0" />
+                    <GEAR_RATIO phi="3.8" />
+                    <GEAR_RATIO phi="3.1" />
+                    <GEAR_RATIO phi="2.6" />
+                </GEAR_RATIOS>
+            </ENGINE>
+        </CONSUMPTION_MODEL> 
+    </ConsumptionCalculation_CONSUMPTION>
+    -->
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="40" consumption_model_name="carDiesel">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0." politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <!-- trucks -->
+        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="40" consumption_model_name="carDiesel">
+            <AccelerationModelType>
+                <ModelParameterACC v0="25" T="1.4" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="20.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.0" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="Obstacle" length="0">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="0" T="1" s0="2" a="1.0" b="1.5" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="routing.xodr">
+        <Simulation timestep="0.2" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+            <Road id="1">
+                <TrafficComposition>
+                    <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.2" />
+                    <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
+                </TrafficComposition>
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="0" />
+                    <Inflow t="60" q_per_hour="1800" />
+                    <Inflow t="120" q_per_hour="1800" />
+                    <Inflow t="180" q_per_hour="0" />
+                </TrafficSource>
+                <FlowConservingInhomogeneities>
+                    <Inhomogeneity position="0" alpha_T="0.8" alpha_v0="1" />
+                    <Inhomogeneity position="200" alpha_T="1." alpha_v0="1" />
+                </FlowConservingInhomogeneities>
+            </Road>
+            <Road id="10">
+                <FlowConservingInhomogeneities>
+                    <Inhomogeneity position="250" alpha_T="1.5" alpha_v0="0.9" />
+                    <Inhomogeneity position="250" alpha_T="3.5" alpha_v0="0.4" />
+                    <Inhomogeneity position="370" alpha_T="3.5" alpha_v0="0.4" />
+                    <Inhomogeneity position="370" alpha_T="1.5" alpha_v0="0.9" />
+                </FlowConservingInhomogeneities>
+            </Road>
+        </Simulation>
+    </Scenario>
+</Movsim>
+

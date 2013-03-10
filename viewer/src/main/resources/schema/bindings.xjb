@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:annox="http://annox.dev.java.net" xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd" version="2.0">
+    
+  <!--   -->
+
+<!-- Annotate the following classes with XmlRootElement -->
+
+<jaxb:bindings schemaLocation="OpenDRIVE_1.3.xsd" node="/xs:schema">
+       <jaxb:globalBindings generateIsSetMethod="true">
+       </jaxb:globalBindings>
+       
+        <jaxb:schemaBindings>
+          <jaxb:package name="org.opendrive.jaxb" />
+          <!-- <jaxb:nameXmlTransform>            <jaxb:elementName suffix="Element" />           </jaxb:nameXmlTransform> -->
+        </jaxb:schemaBindings>
+</jaxb:bindings>
+   
+<!--    <jaxb:bindings schemaLocation="schema.xsd" node="/xsd:schema"> 
+       <jaxb:bindings node="xsd:complexType[@name='Consumption']"> 
+            <annox:annotate> 
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="Consumption" /> 
+            </annox:annotate> 
+        </jaxb:bindings> 
+    </jaxb:bindings>  -->
+
+ <!-- rename the value element -->
+<!--        <bindings node="//xsd:complexType[@name='Type']">
+            <bindings node=".//xsd:attribute[@name='Value']">
+                <property name="ValueAttribute"/>
+            </bindings>
+        </bindings>
+-->
+</jaxb:bindings>
+

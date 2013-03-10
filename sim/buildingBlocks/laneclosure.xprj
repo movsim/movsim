@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="5" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="35" T="1.2" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.1" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="25" T="1.5" s0="2" s1="2" delta="4" a="0.8" b="2.0" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.1" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="laneclosure.xodr">
+        <Simulation timestep="0.2" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+            <Road id="1">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="1400" v="24" />
+                </TrafficSource>
+            </Road>
+        </Simulation>
+    </Scenario>
+</Movsim>
+

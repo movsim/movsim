@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Movsim, Arne Kesting 2012 -->
+<Movsim>
+    <VehiclePrototypes write_fund_diagrams="false">
+        <!-- vehicle length ==> cell units -->
+        <VehiclePrototypeConfiguration label="NSM1" length="1">
+            <AccelerationModelType>
+                <ModelParameterNSM v0="2" p_slowdown="0.1" p_slow_start="0.1" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="BARL1" length="1">
+            <AccelerationModelType>
+                <ModelParameterNSM v0="2" p_slowdown="0.1" p_slow_start="0.2" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="KKW1" length="20">
+            <AccelerationModelType>
+                <ModelParameterKKW v0="28" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ObstacleNSM" length="1">
+            <AccelerationModelType>
+                <ModelParameterNSM v0="0" p_slowdown="0" p_slow_start="0" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ObstacleKKW" length="20">
+            <AccelerationModelType>
+                <ModelParameterKKW v0="0" k="2.55" pb0="0.425" pb1="0.04" pa1="0.2" pa2="0.052" vp="14" s0="0" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="startStop_all_ca.xodr">
+        <Simulation timestep="1" duration="150" seed="42" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="NSM1" fraction="1" />
+                <VehicleType label="BARL1" fraction="1" />
+                <VehicleType label="KKW1" fraction="1" />
+                <!-- KKW and NSM not compatible. Obstacle works only for same model -->
+                <VehicleType label="ObstacleNSM" fraction="0" />
+                <VehicleType label="ObstacleKKW" fraction="0" />
+            </TrafficComposition>
+            <Road id="NSM">
+                <InitialConditions>
+                    <!-- in physical quantities (meter and m/s) -->
+                    <MicroIC position="7.5" speed="0" label="NSM1" />
+                    <MicroIC position="15.0" speed="0" label="NSM1" />
+                    <MicroIC position="22.5" speed="0" label="NSM1" />
+                    <MicroIC position="30.0" speed="0" label="NSM1" />
+                    <MicroIC position="37.5" speed="0" label="NSM1" />
+                    <MicroIC position="45.0" speed="0" label="NSM1" />
+                    <MicroIC position="52.5" speed="0" label="NSM1" />
+                    <MicroIC position="60.0" speed="0" label="NSM1" />
+                    <MicroIC position="67.5" speed="0" label="NSM1" />
+                    <MicroIC position="75.0" speed="0" label="NSM1" />
+                    <MicroIC position="82.5" speed="0" label="NSM1" />
+                    <MicroIC position="90.0" speed="0" label="NSM1" />
+                    <MicroIC position="97.5" speed="0" label="NSM1" />
+                    <MicroIC position="105.0" speed="0" label="NSM1" />
+                    <MicroIC position="112.5" speed="0" label="NSM1" />
+                    <MicroIC position="120.0" speed="0" label="NSM1" />
+                    <MicroIC position="127.5" speed="0" label="NSM1" />
+                    <MicroIC position="135.0" speed="0" label="NSM1" />
+                    <MicroIC position="142.5" speed="0" label="NSM1" />
+                    <MicroIC position="150.0" speed="0" label="NSM1" />
+                    <MicroIC position="157.5" speed="0" label="NSM1" />
+                    <MicroIC position="165.0" speed="0" label="NSM1" />
+                    <MicroIC position="172.5" speed="0" label="NSM1" />
+                    <MicroIC position="180.0" speed="0" label="NSM1" />
+                    <MicroIC position="187.5" speed="0" label="NSM1" />
+                    <MicroIC position="195.0" speed="0" label="NSM1" />
+                    <MicroIC position="1000" speed="0" label="ObstacleNSM" />
+                </InitialConditions>
+            </Road>
+            <Road id="BARL">
+                <InitialConditions>
+                    <!-- in physical quantities (meter and m/s) -->
+                    <MicroIC position="7.5" speed="0" label="BARL1" />
+                    <MicroIC position="15.0" speed="0" label="BARL1" />
+                    <MicroIC position="22.5" speed="0" label="BARL1" />
+                    <MicroIC position="30.0" speed="0" label="BARL1" />
+                    <MicroIC position="37.5" speed="0" label="BARL1" />
+                    <MicroIC position="45.0" speed="0" label="BARL1" />
+                    <MicroIC position="52.5" speed="0" label="BARL1" />
+                    <MicroIC position="60.0" speed="0" label="BARL1" />
+                    <MicroIC position="67.5" speed="0" label="BARL1" />
+                    <MicroIC position="75.0" speed="0" label="BARL1" />
+                    <MicroIC position="82.5" speed="0" label="BARL1" />
+                    <MicroIC position="90.0" speed="0" label="BARL1" />
+                    <MicroIC position="97.5" speed="0" label="BARL1" />
+                    <MicroIC position="105.0" speed="0" label="BARL1" />
+                    <MicroIC position="112.5" speed="0" label="BARL1" />
+                    <MicroIC position="120.0" speed="0" label="BARL1" />
+                    <MicroIC position="127.5" speed="0" label="BARL1" />
+                    <MicroIC position="135.0" speed="0" label="BARL1" />
+                    <MicroIC position="142.5" speed="0" label="BARL1" />
+                    <MicroIC position="150.0" speed="0" label="BARL1" />
+                    <MicroIC position="157.5" speed="0" label="BARL1" />
+                    <MicroIC position="165.0" speed="0" label="BARL1" />
+                    <MicroIC position="172.5" speed="0" label="BARL1" />
+                    <MicroIC position="180.0" speed="0" label="BARL1" />
+                    <MicroIC position="187.5" speed="0" label="BARL1" />
+                    <MicroIC position="195.0" speed="0" label="BARL1" />
+                    <MicroIC position="1000" speed="0" label="ObstacleNSM" />
+                </InitialConditions>
+            </Road>
+            <Road id="KKW">
+                <InitialConditions>
+                    <!-- in physical quantities (meter and m/s) -->
+                    <MicroIC position="10" speed="0" label="KKW1" />
+                    <MicroIC position="20" speed="0" label="KKW1" />
+                    <MicroIC position="30" speed="0" label="KKW1" />
+                    <MicroIC position="40" speed="0" label="KKW1" />
+                    <MicroIC position="50" speed="0" label="KKW1" />
+                    <MicroIC position="60" speed="0" label="KKW1" />
+                    <MicroIC position="70" speed="0" label="KKW1" />
+                    <MicroIC position="80" speed="0" label="KKW1" />
+                    <MicroIC position="90" speed="0" label="KKW1" />
+                    <MicroIC position="100" speed="0" label="KKW1" />
+                    <MicroIC position="110" speed="0" label="KKW1" />
+                    <MicroIC position="120" speed="0" label="KKW1" />
+                    <MicroIC position="130" speed="0" label="KKW1" />
+                    <MicroIC position="140" speed="0" label="KKW1" />
+                    <MicroIC position="150" speed="0" label="KKW1" />
+                    <MicroIC position="160" speed="0" label="KKW1" />
+                    <MicroIC position="170" speed="0" label="KKW1" />
+                    <MicroIC position="180" speed="0" label="KKW1" />
+                    <MicroIC position="190" speed="0" label="KKW1" />
+                    <MicroIC position="200" speed="0" label="KKW1" />
+                    <MicroIC position="210" speed="0" label="KKW1" />
+                    <MicroIC position="220" speed="0" label="KKW1" />
+                    <MicroIC position="230" speed="0" label="KKW1" />
+                    <MicroIC position="240" speed="0" label="KKW1" />
+                    <MicroIC position="250" speed="0" label="KKW1" />
+                    <MicroIC position="1000" speed="0" label="ObstacleKKW" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+    </Scenario>
+</Movsim>
+
