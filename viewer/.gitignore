@@ -5,3 +5,5 @@
 /sim/*.internal_xml
 *.log
 *.log.*
+/.classpath
+/.project

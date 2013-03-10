@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Movsim>
+<Consumption>
+
+    <BatchJobs>
+        <BatchData inputfile="city_example.car.route_main.000002.dat" outputfile="city_example.car.route_main.000002.AudiA3.csv" model="AudiA3">
+            <Columns time="1" speed="6" acceleration="7" gradient="14"/>
+        </BatchData>
+
+        <BatchData inputfile="city_example.car.route_main.000003.dat" outputfile="city_example.car.route_main.000003.AudiA3.csv" model="AudiA3">
+            <Columns time="1" speed="6" acceleration="7" gradient="14"/>
+        </BatchData>
+
+        <BatchData inputfile="city_example.car.route_main.000004.dat" outputfile="city_example.car.route_main.000004.AudiA3.csv" model="AudiA3">
+            <Columns time="1" speed="6" acceleration="7" gradient="14"/>
+        </BatchData>
+    </BatchJobs>
+
+
+    <ConsumptionModels>
+        <ConsumptionModel label="AudiA3" output="true">
+            <VehicleData mass="1000" cross_section_surface="2.13" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
+            <EngineCombustionMap max_power_kW="100" cylinder_vol_l="1.8" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="22" />
+            <RotationModel idle_rotation_rate_invmin="700" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
+                <!-- gear box with 7 gears -->
+                <GearRatio phi="16.7" />
+                <GearRatio phi="10.1" />
+                <GearRatio phi="6.8" />
+                <GearRatio phi="5.0" />
+                <GearRatio phi="3.8" />
+                <GearRatio phi="3.1" />
+                <GearRatio phi="2.6" />
+            </RotationModel>
+        </ConsumptionModel>
+    </ConsumptionModels>
+</Consumption>
+
+</Movsim>

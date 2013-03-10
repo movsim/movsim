@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+<Consumption>
+    <BatchJobs>
+        <BatchData inputfile="data/route-Seesen-GPS.dat" outputfile="route-Seesen-MODEL_AudiA3.csv" model="AudiA3">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Seesen-GPS.dat" outputfile="route-Seesen-MODEL_AudiA3Gasoline.csv" model="AudiA3Gasoline">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Seesen-GPS.dat" outputfile="route-Seesen-MODEL_AudiA3HeavierAndLarger.csv" model="AudiA3HeavierAndLarger">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Seesen-GPS.dat" outputfile="route-Seesen-MODEL_CarDiesel.csv" model="CarDiesel">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Seesen-GPS.dat" outputfile="route-Seesen-MODEL_CarGasoline.csv" model="CarGasoline">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Torfhaus-GPS.dat" outputfile="route-Torfhaus-MODEL_AudiA3.csv" model="AudiA3">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Torfhaus-GPS.dat" outputfile="route-Torfhaus-MODEL_AudiA3Gasoline.csv" model="AudiA3Gasoline">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Torfhaus-GPS.dat" outputfile="route-Torfhaus-MODEL_AudiA3HeavierAndLarger.csv" model="AudiA3HeavierAndLarger">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Torfhaus-GPS.dat" outputfile="route-Torfhaus-MODEL_CarDiesel.csv" model="CarDiesel">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Torfhaus-GPS.dat" outputfile="route-Torfhaus-MODEL_CarGasoline.csv" model="CarGasoline">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Braunschweig-GPS.dat" outputfile="route-Braunschweig-MODEL_AudiA3.csv" model="AudiA3">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Braunschweig-GPS.dat" outputfile="route-Braunschweig-MODEL_CarDiesel.csv" model="CarDiesel">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+        <BatchData inputfile="data/route-Braunschweig-GPS.dat" outputfile="route-Braunschweig-MODEL_CarGasoline.csv" model="CarGasoline">
+            <Columns time="3" speed="12" acceleration="26" gradient="24" />
+            <Conversions time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
+        </BatchData>
+    </BatchJobs>
+    <ConsumptionModels>
+        <ConsumptionModel label="AudiA3" output="true">
+            <VehicleData mass="1000" cross_section_surface="2.13" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
+            <EngineCombustionMap max_power_kW="100" cylinder_vol_l="1.8" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="22" />
+            <RotationModel idle_rotation_rate_invmin="700" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
+                <!-- gear box with 7 gears -->
+                <GearRatio phi="16.7" />
+                <GearRatio phi="10.1" />
+                <GearRatio phi="6.8" />
+                <GearRatio phi="5.0" />
+                <GearRatio phi="3.8" />
+                <GearRatio phi="3.1" />
+                <GearRatio phi="2.6" />
+            </RotationModel>
+        </ConsumptionModel>
+        <!-- same parameters except EngineCombustionMap -->
+        <ConsumptionModel label="AudiA3Gasoline" output="true">
+            <VehicleData mass="1000" cross_section_surface="2.13" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
+            <EngineCombustionMap max_power_kW="75" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="235" pe_min_bar="1" pe_max_bar="18" />
+            <RotationModel idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000" dynamic_tyre_radius="0.31">
+                <!-- gear box with 5 gears -->
+                <GearRatio phi="13.9" />
+                <GearRatio phi="7.8" />
+                <GearRatio phi="5.26" />
+                <GearRatio phi="3.79" />
+                <GearRatio phi="3.09" />
+            </RotationModel>
+        </ConsumptionModel>
+        <!-- same EngineCombustionMap, but higher mass and larger cross-section -->
+        <ConsumptionModel label="AudiA3HeavierAndLarger" output="true">
+            <VehicleData mass="1600" cross_section_surface="2.3" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
+            <EngineCombustionMap max_power_kW="100" cylinder_vol_l="1.8" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="22" />
+            <RotationModel idle_rotation_rate_invmin="700" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
+                <!-- gear box with 7 gears -->
+                <GearRatio phi="16.7" />
+                <GearRatio phi="10.1" />
+                <GearRatio phi="6.8" />
+                <GearRatio phi="5.0" />
+                <GearRatio phi="3.8" />
+                <GearRatio phi="3.1" />
+                <GearRatio phi="2.6" />
+            </RotationModel>
+        </ConsumptionModel>
+        <ConsumptionModel label="CarDiesel" output="true">
+            <VehicleData mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" />
+            <EngineCombustionMap max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="185" pe_min_bar="1" pe_max_bar="22" />
+            <RotationModel idle_rotation_rate_invmin="900" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
+                <!-- gear box with 5 gears -->
+                <GearRatio phi="13.9" />
+                <GearRatio phi="7.8" />
+                <GearRatio phi="5.26" />
+                <GearRatio phi="3.79" />
+                <GearRatio phi="3.09" />
+            </RotationModel>
+        </ConsumptionModel>
+        <ConsumptionModel label="CarGasoline" output="true">
+            <VehicleData mass="1500" cross_section_surface="2.2" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="3000" />
+            <EngineCombustionMap max_power_kW="75" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="235" pe_min_bar="1" pe_max_bar="18" />
+            <RotationModel idle_rotation_rate_invmin="1000" max_rotation_rate_invmin="6000" dynamic_tyre_radius="0.31">
+                <!-- gear box with 5 gears -->
+                <GearRatio phi="13.9" />
+                <GearRatio phi="7.8" />
+                <GearRatio phi="5.26" />
+                <GearRatio phi="3.79" />
+                <GearRatio phi="3.09" />
+            </RotationModel>
+        </ConsumptionModel>
+    </ConsumptionModels>
+</Consumption>
+
+</Movsim>

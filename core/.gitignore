@@ -8,3 +8,5 @@ csv/
 *.log
 *.log.*
 *.eps
+/.classpath
+/.project
