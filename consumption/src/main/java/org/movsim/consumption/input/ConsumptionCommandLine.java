@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -42,15 +42,14 @@ import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-public class ConsumptionCommandLine{
+// TODO reuse core commandline also here
+public class ConsumptionCommandLine {
 
     private static Logger logger = LoggerFactory.getLogger(ConsumptionCommandLine.class);
 
     private final CommandLineParser parser;
     private Options options;
     private final ProjectMetaData metaData;
-    
 
     public static void parse(ProjectMetaData metaData, String[] args) {
         final ConsumptionCommandLine commandLine = new ConsumptionCommandLine(metaData);
@@ -76,13 +75,8 @@ public class ConsumptionCommandLine{
     private void createOptions() {
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
-        options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
-        options.addOption("i", "internal_xml", false,
-                "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
-        options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false, "writes the file " + ProjectMetaData.getLog4jFilename()
-                +
-                "\" to file to adjust the logging properties on an individual level");
+                + "\" to file to adjust the logging properties on an individual level");
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
@@ -107,13 +101,10 @@ public class ConsumptionCommandLine{
         if (cmdline.hasOption("h")) {
             optionHelp();
         }
-        if (cmdline.hasOption("d")) {
-            optionValidation();
-        }
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
         }
-        
+
         optionOutputPath(cmdline);
         requiredOptionSimulation(cmdline);
     }
@@ -141,25 +132,11 @@ public class ConsumptionCommandLine{
      */
     private static void optWriteLoggingProperties() {
         final String resource = ProjectMetaData.getLog4jFilenameWithPath();
-        final InputStream is = ConsumptionMain.class.getResourceAsStream(resource); 
+        final InputStream is = ConsumptionMain.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
         logger.info("logger properties file written to {}", ProjectMetaData.getLog4jFilename());
-      
+
         System.exit(0);
-    }
-
-    /**
-     * Option: write internal xml (without simulation).
-     */
-    private void optionInternalXml() {
-        metaData.setWriteInternalXml(true);
-    }
-
-    /**
-     * Option: parse xml input file for validation (without simulation).
-     */
-    private void optionValidation() {
-        metaData.setOnlyValidation(true);
     }
 
     /**
@@ -186,7 +163,6 @@ public class ConsumptionCommandLine{
         }
     }
 
-
     /**
      * Option help.
      */
@@ -198,6 +174,4 @@ public class ConsumptionCommandLine{
         System.exit(0);
     }
 
-   
 }
-

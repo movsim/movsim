@@ -91,8 +91,9 @@ public class MovsimCommandLine {
     private void createOptions() {
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
-        options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
-        options.addOption("w", "write dtd", false, "writes dtd file to file");
+        options.addOption("v", "validate", false, "parses xml input file for validation (without simulation)");
+        options.addOption("w", "write xsd", false,
+                "writes xsd file to output (for convenience/lookup schema definitions)");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
 
@@ -119,7 +120,7 @@ public class MovsimCommandLine {
         if (cmdline.hasOption("h")) {
             optionHelp();
         }
-        if (cmdline.hasOption("d")) {
+        if (cmdline.hasOption("v")) {
             optionValidation();
         }
         if (cmdline.hasOption("w")) {
@@ -177,7 +178,8 @@ public class MovsimCommandLine {
      * Option: parse xml input file for validation (without simulation).
      */
     private void optionValidation() {
-        projectMetaData.setOnlyValidation(true);
+        System.out.println("Not working currently. Needs to be implemented!!!");
+        System.exit(0);
     }
 
     /**
