@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.consumption.input;
+package org.movsim.consumption;
 
 import java.io.InputStream;
 
@@ -35,7 +35,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.movsim.consumption.ConsumptionMain;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
@@ -43,7 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 // TODO reuse core commandline also here
-public class ConsumptionCommandLine {
+class ConsumptionCommandLine {
 
     private static Logger logger = LoggerFactory.getLogger(ConsumptionCommandLine.class);
 
@@ -51,7 +50,7 @@ public class ConsumptionCommandLine {
     private Options options;
     private final ProjectMetaData metaData;
 
-    public static void parse(ProjectMetaData metaData, String[] args) {
+    static void parse(ProjectMetaData metaData, String[] args) {
         final ConsumptionCommandLine commandLine = new ConsumptionCommandLine(metaData);
         try {
             commandLine.createAndParse(args);

@@ -34,7 +34,6 @@ import org.movsim.autogen.BatchData;
 import org.movsim.autogen.Consumption;
 import org.movsim.autogen.ConsumptionModel;
 import org.movsim.autogen.Movsim;
-import org.movsim.consumption.input.ConsumptionCommandLine;
 import org.movsim.consumption.logging.ConsumptionLogger;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.consumption.model.EnergyFlowModels;
