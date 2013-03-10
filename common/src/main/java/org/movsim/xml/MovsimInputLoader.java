@@ -26,15 +26,22 @@
 package org.movsim.xml;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
 import org.movsim.autogen.Movsim;
+import org.movsim.utilities.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 // TODO rename
 public final class MovsimInputLoader {
+    
+    /** The Constant logger. */
+    private final static Logger LOG = LoggerFactory.getLogger(MovsimInputLoader.class);
 
     private static final Class<?> SCENARIO_FACTORY = Movsim.class;
 
@@ -44,7 +51,7 @@ public final class MovsimInputLoader {
 
     private MovsimInputLoader() {
     }
-
+    
     public static Movsim validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
         return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY,
                 SCENARIO_XSD_URL);
@@ -67,4 +74,16 @@ public final class MovsimInputLoader {
         }
         return inputData;
     }
+    
+    /**
+     * writes the movsim xsd to the current working directory.
+     * 
+     * @throws IOException 
+     */
+    public static void writeXsdToFile() throws IOException {
+        String filename = new File(SCENARIO_XML_SCHEMA).getName();
+        FileUtils.writeStreamToFile(filename, SCENARIO_XSD_URL.openStream());
+        LOG.info("wrote file={}", filename);
+    }
+
 }

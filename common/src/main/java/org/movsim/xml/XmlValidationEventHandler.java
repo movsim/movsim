@@ -3,7 +3,7 @@ package org.movsim.xml;
 import javax.xml.bind.ValidationEvent;
 import javax.xml.bind.ValidationEventHandler;
 
-public class XmlValidationEventHandler implements ValidationEventHandler {
+public final class XmlValidationEventHandler implements ValidationEventHandler {
 
     @Override
     public boolean handleEvent(ValidationEvent event) {

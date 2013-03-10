@@ -25,6 +25,7 @@
  */
 package org.movsim.input;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.cli.CommandLine;
@@ -38,6 +39,7 @@ import org.apache.commons.cli.ParseException;
 import org.movsim.MovsimCoreMain;
 import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
+import org.movsim.xml.MovsimInputLoader;
 
 /**
  * MovSim console command line parser. Values from the command line are set to ProjectMetaData.
@@ -90,8 +92,7 @@ public class MovsimCommandLine {
         options = new Options();
         options.addOption("h", "help", false, "prints this message");
         options.addOption("d", "validate", false, "parses xml input file for validation (without simulation)");
-        options.addOption("i", "internal_xml", false,
-                "Writes internal xml (the simulation configuration) after validation from dtd. No simulation");
+        options.addOption("w", "write dtd", false, "writes dtd file to file");
         options.addOption("l", "log", false,
                 "writes the file \"log4j.properties\" to file to adjust the logging properties on an individual level");
 
@@ -121,8 +122,8 @@ public class MovsimCommandLine {
         if (cmdline.hasOption("d")) {
             optionValidation();
         }
-        if (cmdline.hasOption("i")) {
-            optionInternalXml();
+        if (cmdline.hasOption("w")) {
+            optionWriteXsd();
         }
         if (cmdline.hasOption("l")) {
             optWriteLoggingProperties();
@@ -161,10 +162,15 @@ public class MovsimCommandLine {
     }
 
     /**
-     * Option: write internal xml (without simulation).
+     * Option: writes multiModelTrafficSimulatirInput.dtd to file system
      */
-    private void optionInternalXml() {
-        projectMetaData.setWriteInternalXml(true);
+    private static void optionWriteXsd() {
+        try {
+            MovsimInputLoader.writeXsdToFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
     /**

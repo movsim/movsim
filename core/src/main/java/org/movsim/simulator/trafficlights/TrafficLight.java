@@ -85,8 +85,9 @@ public class TrafficLight {
     private double lastUpdateTime = 0;
 
     private final String id;
-    // member not elegant but needed for traffic light recorder. Information is coded in infrastructure file and must be
-    // set from outside.
+
+    // position not elegant but needed for traffic light recorder. Information is coded in infrastructure file and must
+    // be set from outside.
     private double position = Double.NaN;
 
     /**
@@ -94,43 +95,30 @@ public class TrafficLight {
      * 
      */
     public TrafficLight(org.movsim.autogen.TrafficLight tlData) {
-        this(tlData.getId(), tlData.getGreenTime(), tlData.getGreenRedTime(), tlData.getRedTime(), tlData
-                .getRedGreenTime(), tlData
-                .getPhaseShift(), tlData.getInit().intValue());
-    }
+        Preconditions.checkNotNull(tlData);
+        Preconditions.checkArgument(tlData.isSetId() && !tlData.getId().isEmpty(), "traffic light id not set");
+        this.id = tlData.getId();
+        this.greenTimePeriod = tlData.getGreenTime();
+        this.redTimePeriod = tlData.getRedTime();
 
-    /**
-     * Constructor.
-     */
-    private TrafficLight(String id, double greenTime, double greenRedTime, double redTime, double redGreenTime,
-            double phaseShift, int initStatusOrdinal) {
-        Preconditions.checkArgument(!id.isEmpty());
-        this.id = id;
-        this.greenTimePeriod = greenTime;
-        this.redTimePeriod = redTime;
-        this.greenRedTimePeriod = greenRedTime;
+        hasGreenRedStatus = tlData.isSetGreenRedTime();
+        this.greenRedTimePeriod = hasGreenRedStatus ? tlData.getRedGreenTime() : 0;
+
+        hasRedGreenStatus = tlData.isSetRedGreenTime();
+        this.redGreenTimePeriod = hasRedGreenStatus ? tlData.getRedGreenTime() : 0;
+
         greenTimePeriodInit = greenTimePeriod;
         redTimePeriodInit = redTimePeriod;
         greenRedTimePeriodInit = greenRedTimePeriod;
         redGreenTimePeriodInit = redGreenTimePeriod;
-        hasGreenRedStatus = true;
-        if (greenRedTimePeriod < 0.0) {
-            greenRedTimePeriod = 0.0;
-            hasGreenRedStatus = false;
-        }
-        hasRedGreenStatus = true;
-        this.redGreenTimePeriod = redGreenTime;
-        if (redGreenTimePeriod < 0.0) {
-            redGreenTimePeriod = 0.0;
-            hasRedGreenStatus = false;
-        }
-        lightCount = hasGreenRedStatus == false && hasRedGreenStatus == false ? 2 : 3;
-        this.phaseShift = phaseShift;
 
+        lightCount = hasGreenRedStatus == false && hasRedGreenStatus == false ? 2 : 3;
+        this.phaseShift = tlData.getPhaseShift();
+
+        int initStatusOrdinal = tlData.getInit().intValue();
         TrafficLightStatus initStatus = (initStatusOrdinal < 0 || initStatusOrdinal >= TrafficLightStatus.values().length) ? TrafficLightStatus.GREEN
                 : TrafficLightStatus.values()[initStatusOrdinal];
         initialize(initStatus);
-
     }
 
     /**
@@ -223,9 +211,6 @@ public class TrafficLight {
      * @return the crit time for next main phase
      */
     public double getCritTimeForNextMainPhase(double alpha) {
-        // Zeit bis zum naechsten rot bzw. gruen
-        // periode startet bei gruen
-        // restliche period time + alpha*yellowPhase
         if (status == TrafficLightStatus.GREEN || status == TrafficLightStatus.GREEN_RED) {
             return (greenTimePeriod + alpha * greenRedTimePeriod - currentCycleTime);
         }

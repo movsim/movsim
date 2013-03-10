@@ -20,7 +20,7 @@ public class FileUnmarshaller<T> {
 
     /** Assure that only one loading/jaxb operation is active. */
     private static final Object SYNC_OBJECT = new Object();
-
+    
     public final T load(StreamSource source, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException, SAXException {
         T result;
         synchronized (SYNC_OBJECT) {
@@ -56,7 +56,6 @@ public class FileUnmarshaller<T> {
     }
 
     private static Schema getSchema(final URL xsdFile) throws SAXException {
-        // TODO schema factory could be created once, put into pool if expensive
         SchemaFactory sf = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
         return sf.newSchema(xsdFile);
     }

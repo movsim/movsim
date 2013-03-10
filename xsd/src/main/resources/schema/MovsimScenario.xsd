@@ -28,7 +28,7 @@
             <xs:sequence>
                 <xs:element ref="Consumption" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="VehiclePrototypes" minOccurs="0" maxOccurs="1" />
-                <xs:element ref="MovsimScenario" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="Scenario" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -423,7 +423,7 @@
         </xs:complexType>
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
-    <xs:element name="MovsimScenario">
+    <xs:element name="Scenario">
         <xs:annotation>
             <xs:documentation>Defines a MovSim simulation configuration.</xs:documentation>
         </xs:annotation>
@@ -504,7 +504,6 @@
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
             <xs:attribute name="density_per_km" type="nonNegativeDouble" use="required" />
-            <!-- changed: negative speeds not allowed as hack for equilibrium speed-->
             <xs:attribute name="speed" type="nonNegativeDouble" use="optional" />
         </xs:complexType>
     </xs:element>
@@ -618,10 +617,10 @@
         <xs:complexType>
             <xs:attribute name="id" type="xs:string" use="required" />
             <xs:attribute name="green_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="green_red_time" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="green_red_time" type="nonNegativeDouble" />
             <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="red_green_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="phase_shift" type="xs:double" default="0" />
+            <xs:attribute name="red_green_time" type="nonNegativeDouble" />
+            <xs:attribute name="phase_shift" type="nonNegativeDouble" default="0" />
             <xs:attribute name="init" type="xs:nonNegativeInteger" default="0" />
             <!-- todo: enum type -->
         </xs:complexType>
