@@ -136,12 +136,6 @@ public class InflowTimeSeries {
         return Tables.intpextp(timeValues, speedValues, time);
     }
 
-    public void setConstantFlowPerLane(double newFlowPerLane) {
-        logger.debug("set new flow per lane value={} per second", newFlowPerLane);
-        assert newFlowPerLane >= 0;
-        this.constantFlowPerLane = newFlowPerLane;
-    }
-
     private final class InflowDataPoint {
 
         /** The time in seconds */

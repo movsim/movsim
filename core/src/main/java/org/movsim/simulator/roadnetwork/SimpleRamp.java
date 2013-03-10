@@ -41,12 +41,10 @@ import org.slf4j.LoggerFactory;
  * 
  * Ignores the initial speed settings from input.
  * 
- * @author kesting
- * 
  */
 public class SimpleRamp extends AbstractTrafficSource {
 
-    final static Logger logger = LoggerFactory.getLogger(SimpleRamp.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleRamp.class);
 
     private static final double MINIMUM_GAP_BOUNDARY = 3;
 
@@ -54,18 +52,22 @@ public class SimpleRamp extends AbstractTrafficSource {
 
     private final double relativeSpeedToLeader;
 
+    private final InflowTimeSeries inflowTimeSeries;
+
     public SimpleRamp(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
             org.movsim.autogen.SimpleRamp simpleRampData,
             InflowTimeSeries inflowTimeSeries) {
-        super(vehGenerator, roadSegment, inflowTimeSeries);
+        super(vehGenerator, roadSegment);
+        this.inflowTimeSeries = inflowTimeSeries;
         this.relativeSpeedToLeader = simpleRampData.getRelativeSpeed();
         this.relativeGapToLeader = simpleRampData.getRelativeGap();
 
     }
 
+    @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (logger.isDebugEnabled()) {
-            logger.debug(String.format("simple ramp timestep=%.2f, current inflow=%d, waiting vehicles=%d",
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(String.format("simple ramp timestep=%.2f, current inflow=%d, waiting vehicles=%d",
                     simulationTime, +(int) (getTotalInflow(simulationTime) * Units.INVS_TO_INVH), getQueueLength()));
         }
 
@@ -107,14 +109,14 @@ public class SimpleRamp extends AbstractTrafficSource {
             }
         }
 
-        if (false) {
-        int counter = 0;
-        System.out.println("gap candidated size=" + gapCandidates.size());
-        for (GapCandidate gap : gapCandidates) {
-            ++counter;
-            System.out.println("candidate " + counter + ":" + gap.toString());
-        }
-        }
+        // if (false) {
+        // int counter = 0;
+        // System.out.println("gap candidated size=" + gapCandidates.size());
+        // for (GapCandidate gap : gapCandidates) {
+        // ++counter;
+        // System.out.println("candidate " + counter + ":" + gap.toString());
+        // }
+        // }
 
         return gapCandidates;
 
@@ -124,7 +126,7 @@ public class SimpleRamp extends AbstractTrafficSource {
             SortedSet<GapCandidate> gapCandidates) {
         if (vehicle.getRearPosition() < testVehicle.length() + MINIMUM_GAP_BOUNDARY) {
             // available upstream road segment too small
-            logger.debug("no sufficient upstream gap: rearPosition={}", vehicle.getRearPosition());
+            LOG.debug("no sufficient upstream gap: rearPosition={}", vehicle.getRearPosition());
             return;
         }
         Vehicle rearVehicle = laneSegment.rearVehicle(vehicle.getRearPosition() - 1); // TODO finds not rear vehicle but
@@ -145,6 +147,17 @@ public class SimpleRamp extends AbstractTrafficSource {
         final double gapToLeader = vehicle.getRearPosition() - enterFrontPosition;
         double speed = relativeSpeedToLeader * vehicle.getSpeed();
         gapCandidates.add(new GapCandidate(gapToLeader, laneSegment.lane(), enterFrontPosition, speed));
+    }
+
+    @Override
+    public double getTotalInflow(double time) {
+        return inflowTimeSeries.getFlowPerLane(time) * roadSegment.laneCount();
+    }
+
+    @Override
+    public double measuredInflow() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
     final class GapCandidate implements Comparable<GapCandidate> {

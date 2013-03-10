@@ -1,11 +1,12 @@
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 
 
-public class AbstractTrafficSource {
+public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     public interface RecordDataCallback {
         /**
@@ -41,13 +42,9 @@ public class AbstractTrafficSource {
 
     final RoadSegment roadSegment;
 
-    final InflowTimeSeries inflowTimeSeries;
-
-    public AbstractTrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
-            InflowTimeSeries inflowTimeSeries) {
+    public AbstractTrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
-        this.inflowTimeSeries = inflowTimeSeries;
         nWait = 0;
     }
 
@@ -71,15 +68,13 @@ public class AbstractTrafficSource {
     }
 
     /**
-     * Gets the total inflow over all lanes
+     * Gets the total inflow over all lanes.
      * 
      * @param time
      *            the time
      * @return the total inflow over all lanes
      */
-    public double getTotalInflow(double time) {
-        return inflowTimeSeries.getFlowPerLane(time) * roadSegment.laneCount();
-    }
+    public abstract double getTotalInflow(double time);
 
     /**
      * Returns the number of vehicles in the queue.
@@ -90,9 +85,9 @@ public class AbstractTrafficSource {
         return (int) nWait;
     }
 
-    public double getFlowPerLane(double time) {
-        return inflowTimeSeries.getFlowPerLane(time);
-    }
+    // public double getFlowPerLane(double time) {
+    // return inflowTimeSeries.getFlowPerLane(time);
+    // }
 
     /**
      * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed.
@@ -110,5 +105,7 @@ public class AbstractTrafficSource {
         vEnterLast = speed;
         laneEnterLast = laneSegment.lane();
     }
+
+    public abstract double measuredInflow();
 
 }

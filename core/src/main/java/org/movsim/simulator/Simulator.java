@@ -45,6 +45,7 @@ import org.movsim.output.SimulationOutput;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
 import org.movsim.roadmappings.RoadMappingPolyS;
+import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
@@ -287,7 +288,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             final org.movsim.autogen.TrafficSource trafficSourceData = roadInput.getTrafficSource();
             if (trafficSourceData.isSetInflow()) {
                 final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
-                final TrafficSource trafficSource = new TrafficSource(composition, roadSegment, inflowTimeSeries);
+                final AbstractTrafficSource trafficSource = new TrafficSource(composition, roadSegment,
+                        inflowTimeSeries);
                 if (trafficSourceData.isLogging()) {
                     trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
                 }

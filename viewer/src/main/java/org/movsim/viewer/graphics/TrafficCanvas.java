@@ -44,13 +44,13 @@ import javax.xml.bind.JAXBException;
 
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
+import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Slope;
 import org.movsim.simulator.roadnetwork.SpeedLimit;
 import org.movsim.simulator.roadnetwork.TrafficSink;
-import org.movsim.simulator.roadnetwork.TrafficSource;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
@@ -902,7 +902,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping.PosTheta posTheta;
 
             // draw the road segment source, if there is one
-            final TrafficSource trafficSource = roadSegment.getTrafficSource();
+            final AbstractTrafficSource trafficSource = roadSegment.getTrafficSource();
             if (trafficSource != null) {
                 g.setColor(sourceColor);
                 posTheta = roadMapping.startPos();

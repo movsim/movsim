@@ -25,7 +25,6 @@
  */
 package org.movsim.simulator.roadnetwork;
 
-import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -36,10 +35,10 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class TrafficSource.
  */
-public class TrafficSource extends AbstractTrafficSource implements SimulationTimeStep {
+public class TrafficSource extends AbstractTrafficSource {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(TrafficSource.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficSource.class);
     
     private static final double MEASURING_INTERVAL_S = 60.0;
     
@@ -49,6 +48,8 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
     
     private int measuredInflowCount;
 
+    private final InflowTimeSeries inflowTimeSeries;
+
     /**
      * Instantiates a new upstream boundary .
      * 
@@ -57,7 +58,8 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
      */
     public TrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
             InflowTimeSeries inflowTimeSeries) {
-        super(vehGenerator, roadSegment, inflowTimeSeries);
+        super(vehGenerator, roadSegment);
+        this.inflowTimeSeries = inflowTimeSeries;
         measuredInflow = 0;
         measuredTime = 0;
         measuredInflowCount = 0;
@@ -84,7 +86,7 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
             measuredInflow = measuredInflowCount /MEASURING_INTERVAL_S; // vehicles per second 
             measuredTime = 0.0;
             measuredInflowCount = 0;
-            logger.debug(String.format("source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles", 
+            LOG.debug(String.format("source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles", 
                     roadSegment.id(), measuredInflow*Units.INVS_TO_INVH, getQueueLength()));
         }
         
@@ -97,7 +99,9 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
                 // final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
                 // lane index is identical to vehicle's lane number
-                final boolean isEntered = tryEnteringNewVehicle(laneSegment, simulationTime, totalInflow);
+                // type of new vehicle
+                final TestVehicle testVehicle = vehGenerator.getTestVehicle();
+                final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
                     measuredInflowCount++;
@@ -116,8 +120,8 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
      * <p>
      * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as possible. Otherwise, one
      * would activate an "inflow bottleneck", and less vehicles can be entered as one would like to. The crux is that
-     * vehicles can be introduced only at times given by the simulation time step which is generalaly incommensurate
-     * with the inverse of the inflow. For example, if the simulation time step is 0.4s, capacity is 2400 veh/h, and the
+     * vehicles can be introduced only at times given by the simulation time step which is generally incommensurate with
+     * the inverse of the inflow. For example, if the simulation time step is 0.4s, capacity is 2400 veh/h, and the
      * prescribed inflow is 2260 veh/h or one vehicle every 1.59s, you insert one vehicle every 1.6s, most of the time.
      * However, at some instances, two vehicles are inserted at time headway of 1.2s corresponding macroscopically to
      * 3000 veh/h, far above capacity. Typical time gaps for this situation are 1.2s most of the time but 0.8s
@@ -133,10 +137,8 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
      *            the q bc
      * @return true, if successful
      */
-    private boolean tryEnteringNewVehicle(LaneSegment laneSegment, double time, double qBC) {
+    private boolean tryEnteringNewVehicle(TestVehicle testVehicle, LaneSegment laneSegment, double time, double qBC) {
 
-        // type of new vehicle
-        final TestVehicle testVehicle = vehGenerator.getTestVehicle();
         final Vehicle leader = laneSegment.rearVehicle();
 
         // (1) empty road
@@ -174,7 +176,7 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
         final double xEnter = 0;
         final double vEnter = inflowTimeSeries.getSpeed(time);
         addVehicle(laneSegment, testVehicle, xEnter, vEnter);
-        logger.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
+        LOG.debug("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
     /**
@@ -211,12 +213,6 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
         addVehicle(laneSegment, testVehicle, xEnter, vEnter);
     }
 
-    public void setFlowPerLane(double newFlowPerLane) {
-        logger.info("set new flow per lane={} per second and reset queue of waiting vehicles={}", newFlowPerLane, nWait);
-        inflowTimeSeries.setConstantFlowPerLane(newFlowPerLane);
-        nWait = 0;
-    }
-
     /**
      * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
      * 
@@ -227,4 +223,8 @@ public class TrafficSource extends AbstractTrafficSource implements SimulationTi
         return measuredInflow;
     }
 
+    @Override
+    public double getTotalInflow(double time) {
+        return inflowTimeSeries.getFlowPerLane(time) * roadSegment.laneCount();
+    }
 }

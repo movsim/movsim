@@ -110,7 +110,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     private VariableMessageSigns variableMessageSigns;
 
     // Sources and Sinks
-    private TrafficSource trafficSource;
+    private AbstractTrafficSource trafficSource;
     private TrafficSink sink;
     private RoadMapping roadMapping;
 
@@ -232,7 +232,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the traffic source
      */
-    public final TrafficSource getTrafficSource() {
+    public final AbstractTrafficSource getTrafficSource() {
         return trafficSource;
     }
 
@@ -242,7 +242,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param trafficSource
      *            the traffic source
      */
-    public final void setTrafficSource(TrafficSource trafficSource) {
+    public final void setTrafficSource(AbstractTrafficSource trafficSource) {
         assert trafficSource != null;
         this.trafficSource = trafficSource;
     }

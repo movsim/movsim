@@ -85,13 +85,4 @@ public class InflowTimeSeriesTest {
         assertEquals(12.0, inflowTimeSeries.getSpeed(900.0), delta);
 	}
 
-	@Test
-	public final void testSetConstantFlowPerLane() {
-		inflowTimeSeries.setConstantFlowPerLane(0.5);
-        assertEquals(0.5, inflowTimeSeries.getFlowPerLane(0.0), delta);
-        assertEquals(0.5, inflowTimeSeries.getFlowPerLane(300.0), delta);
-        assertEquals(0.5, inflowTimeSeries.getFlowPerLane(600.0), delta);
-        assertEquals(0.5, inflowTimeSeries.getFlowPerLane(750.0), delta);
-        assertEquals(0.5, inflowTimeSeries.getFlowPerLane(900.0), delta);
-	}
 }

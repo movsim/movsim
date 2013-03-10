@@ -46,7 +46,6 @@ public class TrafficCompositionGenerator {
     }
 
     public TestVehicle getTestVehicle() {
-        // return vehicleFactory.getTestVehicle(determineVehicleType());
         return determineVehicleType().getTestVehicle();
     }
 
