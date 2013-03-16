@@ -65,17 +65,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         measuredInflowCount = 0;
     }
 
-    /**
-     * Gets the new cyclic lane index for entering.
-     * 
-     * @param iLane
-     *            the i lane
-     * @return the new cyclic lane index for entering
-     */
-    private int getNewCyclicLaneIndexForEntering(int iLane) {
-        return iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1;
-    }
-
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         final double totalInflow = getTotalInflow(simulationTime);
@@ -219,6 +208,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
      * @return measured inflow over all lanes in vehicles per seconds
      * 
      */
+    @Override
     public double measuredInflow() {
         return measuredInflow;
     }

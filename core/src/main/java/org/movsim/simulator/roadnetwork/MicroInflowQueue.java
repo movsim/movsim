@@ -169,6 +169,7 @@ public final class MicroInflowQueue {
     }
 
     private static MicroInflowRecord parse(String[] data, InflowFromFile config) throws IllegalArgumentException {
+        trim(data);
         Preconditions.checkArgument(config.isSetColumnVehicleType() && config.isSetColumnTime());
         double time = convertTime(data[config.getColumnTime() - 1], config.getFormatTime());
         String typeLabel = data[config.getColumnVehicleType() - 1];
@@ -187,6 +188,12 @@ public final class MicroInflowQueue {
             record.setSpeed(formatFactor * Double.parseDouble(data[config.getColumnSpeed() - 1]));
         }
         return record;
+    }
+
+    private static void trim(String[] data) {
+        for (int i = 0, N = data.length; i < N; i++) {
+            data[i] = data[i].trim();
+        }
     }
 
     private static double convertTime(String time, String timeInputPattern) {

@@ -4,9 +4,14 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public abstract class AbstractTrafficSource implements SimulationTimeStep {
+
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractTrafficSource.class);
 
     public interface RecordDataCallback {
         /**
@@ -107,5 +112,16 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     }
 
     public abstract double measuredInflow();
+
+    /**
+     * Gets the new cyclic lane index for entering.
+     * 
+     * @param iLane
+     *            the i lane
+     * @return the new cyclic lane index for entering
+     */
+    protected int getNewCyclicLaneIndexForEntering(int iLane) {
+        return iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1;
+    }
 
 }
