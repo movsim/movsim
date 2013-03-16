@@ -38,6 +38,10 @@ public class TrafficCompositionGenerator {
         return vehicleFactory.create(testVehicle.getVehicleType());
     }
 
+    public boolean hasVehicle(String label) {
+        return vehicleTypes.containsKey(label);
+    }
+
     public Vehicle createVehicle(String label) {
         if (!vehicleTypes.containsKey(label)) {
             throw new IllegalArgumentException("cannot create vehicle with label=" + label);
