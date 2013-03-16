@@ -100,9 +100,9 @@ public class InflowTimeSeries {
         Collections.sort(dataPoints, new Comparator<InflowDataPoint>() {
             @Override
             public int compare(InflowDataPoint o1, InflowDataPoint o2) {
-                final Double pos1 = new Double((o1).getTime());
-                final Double pos2 = new Double((o2).getTime());
-                return pos1.compareTo(pos2); // sort with increasing t
+                final Double time1 = new Double((o1).getTime());
+                final Double time2 = new Double((o2).getTime());
+                return time1.compareTo(time2); // sort with increasing t
             }
         });
         return dataPoints;
