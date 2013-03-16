@@ -254,7 +254,6 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
-    <!-- TODO bind this to an Enum in Java -->
     <xs:simpleType name="OptimalVelocityFunctionEnum">
         <xs:restriction base="xs:string">
             <xs:enumeration value="bando" />
@@ -463,6 +462,9 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="TrafficComposition">
+		  <xs:annotation>
+        <xs:documentation>Defines the composition of vehicle types for the whole simulation or for a specific road boundary.</xs:documentation>
+    </xs:annotation>
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="VehicleType" minOccurs="1" maxOccurs="unbounded" />
@@ -470,7 +472,11 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="VehicleType">
+		  <xs:annotation>
+        <xs:documentation>Defines the vehicle type used in the initial or boundary conditions.</xs:documentation>
+    </xs:annotation>
         <xs:complexType>
+			<!-- prototype label-->
             <xs:attribute name="label" type="xs:string" use="required" />
             <xs:attribute name="fraction" type="nonNegativeDouble" use="required" />
             <xs:attribute name="relative_v0_randomization" type="nonNegativeDouble" default="0.0" />
@@ -478,7 +484,6 @@
             <xs:attribute name="route_label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>
-    <!-- TODO bind this to an Enum in Java -->
     <xs:simpleType name="DistributionTypeEnum">
         <xs:restriction base="xs:string">
             <xs:enumeration value="uniform" />
@@ -542,6 +547,9 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="Inflow">
+		 <xs:annotation>
+        <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
+    </xs:annotation>
         <xs:complexType>
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />
             <xs:attribute name="q_per_hour" type="nonNegativeDouble" use="required" />
@@ -549,10 +557,13 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="InflowFromFile">
+     <xs:annotation>
+        <xs:documentation>Time-dependent microscopic boundary conditions. The vehicle type refers to the type defined in the vehicle composition. Optionally a route etc. can be set to overrule the settings in the composition definition.</xs:documentation>
+    </xs:annotation>
         <xs:complexType>
 			<xs:attribute name="filename" type="xs:string" use="required" />
             <xs:attribute name="column_time" type="positiveInteger" use="required" />
-            <xs:attribute name="column_prototype" type="positiveInteger" use="required" />
+            <xs:attribute name="column_vehicle_type" type="positiveInteger" use="required" />
             <xs:attribute name="column_route" type="positiveInteger" />
             <!-- Notation for JodaTime.DateTimeFormatter, eg "HH:mm:ss" -->
             <xs:attribute name="format_time" type="xs:string" default="" /> 

@@ -1,0 +1,223 @@
+package org.movsim.simulator.roadnetwork;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.movsim.autogen.InflowFromFile;
+import org.movsim.input.ProjectMetaData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import au.com.bytecode.opencsv.CSVReader;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+
+public final class MicroInflowQueue {
+
+    static final Logger LOG = LoggerFactory.getLogger(MicroInflowQueue.class);
+
+    private MicroInflowQueue() {
+        // private constructor
+    }
+
+    public static class MicroInflowRecord {
+        private final double time;
+        private final String typeLabel;
+        private String route = "";
+        private double speed = Double.NaN;
+        private int lane = Integer.MAX_VALUE;
+        private String comment = "";
+
+        public MicroInflowRecord(double time, String typeLabel) {
+            this.time = time;
+            this.typeLabel = typeLabel;
+        }
+
+        public boolean hasSpeed() {
+            return !Double.isNaN(speed);
+        }
+
+        public boolean hasLane() {
+            return lane != Integer.MAX_VALUE;
+        }
+
+        public double getTime() {
+            return time;
+        }
+
+        public String getTypeLabel() {
+            return typeLabel;
+        }
+
+        public double getSpeed() {
+            return speed;
+        }
+
+        public int getLane() {
+            return lane;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        void setSpeed(double speed) {
+            this.speed = speed;
+        }
+
+        void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        void setLane(int lane) {
+            this.lane = lane;
+        }
+
+        public String getRoute() {
+            return route;
+        }
+
+        public void setRoute(String route) {
+            Preconditions.checkArgument(!route.isEmpty());
+            this.route = route;
+        }
+
+        @Override
+        public String toString() {
+            return "MicroInflowRecord [time=" + time + ", typeLabel=" + typeLabel + ", route=" + route + ", speed="
+                    + speed + ", lane=" + lane + ", comment=" + comment + "]";
+        }
+
+    }
+
+    public static List<MicroInflowRecord> readData(InflowFromFile config) {
+        Preconditions.checkNotNull(config);
+        File file = getFilename(config.getFilename());
+        List<MicroInflowRecord> inflowQueue = new LinkedList<>();
+        Preconditions.checkArgument(config.getColumnSeparator().length() == 1,
+                "column separator character with length=1 expected but got=" + config.getColumnSeparator());
+        List<String[]> inputDataLines = readData(file, config.getColumnSeparator().charAt(0));
+        if (inputDataLines == null || inputDataLines.isEmpty()) {
+            LOG.warn("no input read from file={}", file.getAbsolutePath());
+            return inflowQueue;
+        }
+        parseInputData(inputDataLines, config, inflowQueue);
+        Collections.sort(inflowQueue, new Comparator<MicroInflowRecord>() {
+            @Override
+            public int compare(MicroInflowRecord o1, MicroInflowRecord o2) {
+                final Double time1 = new Double((o1).getTime());
+                final Double time2 = new Double((o2).getTime());
+                return time1.compareTo(time2); // sort with increasing t
+            }
+        });
+        return inflowQueue;
+    }
+
+    private static File getFilename(String filename) {
+        File file = new File(filename);
+        if (!file.exists() && ProjectMetaData.getInstance().hasPathToProjectXmlFile()) {
+            file = new File(ProjectMetaData.getInstance().getPathToProjectXmlFile(), filename);
+        }
+        if (!file.exists() || !file.isFile()) {
+            throw new IllegalArgumentException("cannot find input file = " + file.getAbsolutePath());
+        }
+        return file;
+    }
+
+    private static void parseInputData(List<String[]> input, InflowFromFile config, List<MicroInflowRecord> inflowQueue) {
+        int maxColumn = determineMaximumColumn(config);
+        for (String[] line : input) {
+            if (line.length < maxColumn) {
+                LOG.info("expected {} columns, cannot parse data. Ignore line={}", maxColumn, Arrays.toString(line));
+            }
+            try {
+                MicroInflowRecord record = parse(line, config);
+                inflowQueue.add(record);
+            } catch (IllegalArgumentException e) {
+                LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
+            }
+        }
+        LOG.info("parsed successfully {} from {} lines in input file.", inflowQueue.size(), input.size());
+    }
+
+    private static int determineMaximumColumn(InflowFromFile config) {
+        int maxColumn = config.getColumnTime();
+        maxColumn = Math.max(maxColumn, config.getColumnVehicleType());
+        if (config.isSetColumnComment()) {
+            maxColumn = Math.max(maxColumn, config.getColumnComment());
+        }
+        if (config.isSetColumnLane()) {
+            maxColumn = Math.max(maxColumn, config.getColumnLane());
+        }
+        if (config.isSetColumnRoute()) {
+            maxColumn = Math.max(maxColumn, config.getColumnRoute());
+        }
+        if (config.isSetColumnSpeed()) {
+            maxColumn = Math.max(maxColumn, config.getColumnSpeed());
+        }
+        return maxColumn;
+    }
+
+    private static MicroInflowRecord parse(String[] data, InflowFromFile config) throws IllegalArgumentException {
+        Preconditions.checkArgument(config.isSetColumnVehicleType() && config.isSetColumnTime());
+        double time = convertTime(data[config.getColumnTime() - 1], config.getFormatTime());
+        String typeLabel = data[config.getColumnVehicleType() - 1];
+        MicroInflowRecord record = new MicroInflowRecord(time, typeLabel);
+        if (config.isSetColumnComment()) {
+            record.setComment(data[config.getColumnComment() - 1]);
+        }
+        if (config.isSetColumnLane()) {
+            record.setLane(Integer.parseInt(data[config.getColumnLane() - 1]));
+        }
+        if (config.isSetColumnRoute()) {
+            record.setRoute(data[config.getColumnRoute() - 1]);
+        }
+        if (config.isSetColumnSpeed()) {
+            double formatFactor = config.isSetFormatSpeed() ? config.getFormatSpeed() : 1;
+            record.setSpeed(formatFactor * Double.parseDouble(data[config.getColumnSpeed() - 1]));
+        }
+        return record;
+    }
+
+    private static double convertTime(String time, String timeInputPattern) {
+        if (timeInputPattern.isEmpty()) {
+            return Double.parseDouble(time);
+        }
+        DateTime dateTime = DateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern));
+        LOG.info("time={} --> dateTime={}", time, dateTime);
+        return dateTime.getSecondOfDay();
+    }
+
+    private static List<String[]> readData(File file, char separator) {
+        LOG.info("read data from file={}", file.getAbsolutePath());
+        List<String[]> myEntries = Lists.newArrayList();
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(file), separator);
+            myEntries = reader.readAll();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+        return myEntries;
+    }
+}
