@@ -69,7 +69,7 @@ public class FloatingCars implements SimulationTimeStep {
      */
     public FloatingCars(FloatingCarOutput floatingCarOutput, Route route, boolean writeFileOutput) {
         Preconditions.checkNotNull(route);
-        this.nDtOut = floatingCarOutput.getNTimestep().intValue();
+        this.nDtOut = floatingCarOutput.getNTimestep();
         this.randomFraction = (floatingCarOutput.getRandomFraction() < 0 || floatingCarOutput.getRandomFraction() > 1) ? 0
                 : floatingCarOutput
                 .getRandomFraction();

@@ -115,7 +115,7 @@ public class TrafficLight {
         lightCount = hasGreenRedStatus == false && hasRedGreenStatus == false ? 2 : 3;
         this.phaseShift = tlData.getPhaseShift();
 
-        int initStatusOrdinal = tlData.getInit().intValue();
+        int initStatusOrdinal = tlData.getInit();
         TrafficLightStatus initStatus = (initStatusOrdinal < 0 || initStatusOrdinal >= TrafficLightStatus.values().length) ? TrafficLightStatus.GREEN
                 : TrafficLightStatus.values()[initStatusOrdinal];
         initialize(initStatus);

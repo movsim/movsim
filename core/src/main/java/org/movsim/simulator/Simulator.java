@@ -51,12 +51,15 @@ import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.MicroInflowQueue;
+import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
 import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.roadnetwork.TrafficSourceMicro;
 import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
@@ -286,10 +289,16 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set up the traffic source
         if (roadInput.isSetTrafficSource()) {
             final org.movsim.autogen.TrafficSource trafficSourceData = roadInput.getTrafficSource();
+            AbstractTrafficSource trafficSource = null;
             if (trafficSourceData.isSetInflow()) {
-                final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
-                final AbstractTrafficSource trafficSource = new TrafficSource(composition, roadSegment,
-                        inflowTimeSeries);
+                InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
+                trafficSource = new TrafficSource(composition, roadSegment, inflowTimeSeries);
+            }
+            else if(trafficSourceData.isSetInflowFromFile()){
+                List<MicroInflowRecord> inflowQueue = MicroInflowQueue.readData(trafficSourceData.getInflowFromFile());
+                trafficSource = new TrafficSourceMicro(composition, roadSegment, inflowQueue);
+            }
+            if (trafficSource != null) {
                 if (trafficSourceData.isLogging()) {
                     trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
                 }

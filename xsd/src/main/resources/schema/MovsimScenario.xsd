@@ -21,6 +21,18 @@
             <xs:maxInclusive value="1" />
         </xs:restriction>
     </xs:simpleType>
+    <!-- define own integer types based on xs:int because they are bound to Integer -->
+    <xs:simpleType name="positiveInteger">
+        <xs:restriction base="xs:int">
+        <xs:minExclusive value="0"/>
+     </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="nonNegativeInteger">
+        <xs:restriction base="xs:int">
+        <xs:minInclusive value="0"/>
+     </xs:restriction>
+    </xs:simpleType>
+    
     <!--     <xs:include schemaLocation="./MovsimSimpleTypes.xsd"/>  -->
     <!-- root element -->
     <xs:element name="Movsim">
@@ -517,9 +529,10 @@
     </xs:element>
     <xs:element name="TrafficSource">
         <xs:complexType>
-            <xs:sequence>
+			<xs:choice>
                 <xs:element ref="Inflow" maxOccurs="unbounded" />
-            </xs:sequence>
+                <xs:element ref="InflowFromFile" minOccurs="1" maxOccurs="1" />
+            </xs:choice>
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
@@ -533,6 +546,21 @@
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />
             <xs:attribute name="q_per_hour" type="nonNegativeDouble" use="required" />
             <xs:attribute name="v" type="nonNegativeDouble" default="20" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="InflowFromFile">
+        <xs:complexType>
+			<xs:attribute name="filename" type="xs:string" use="required" />
+            <xs:attribute name="column_time" type="positiveInteger" use="required" />
+            <xs:attribute name="column_prototype" type="positiveInteger" use="required" />
+            <xs:attribute name="column_route" type="positiveInteger" />
+            <!-- Notation for JodaTime.DateTimeFormatter, eg "HH:mm:ss" -->
+            <xs:attribute name="format_time" type="xs:string" default="" /> 
+            <xs:attribute name="column_speed" type="positiveInteger"  />
+            <xs:attribute name="format_speed" type="positiveDouble" default="1" />
+            <xs:attribute name="column_lane" type="positiveInteger" />
+            <xs:attribute name="column_comment" type="positiveInteger" />
+            <xs:attribute name="column_separator" type="xs:string" default=";" />
         </xs:complexType>
     </xs:element>
     <xs:element name="FlowConservingInhomogeneities">
@@ -549,35 +577,6 @@
             <xs:attribute name="alpha_v0" type="nonNegativeDouble" default="1" />
         </xs:complexType>
     </xs:element>
-    <!-- 
-    <xs:element name="SpeedLimits">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="SpeedLimit" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="SpeedLimit">
-        <xs:complexType>
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="speedlimit_kmh" type="nonNegativeDouble" use="required" />
-        </xs:complexType>
-    </xs:element>
--->
-    <!-- <xs:element name="Slopes">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="Slope" minOccurs="0" maxOccurs="unbounded" />
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Slope">
-        <xs:complexType>
-            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="gradient" type="xs:double" use="required" />
-        </xs:complexType>
-    </xs:element>
--->
     <xs:element name="SimpleRamp">
         <xs:complexType>
             <xs:sequence>
@@ -609,7 +608,7 @@
             <xs:sequence>
                 <xs:element ref="TrafficLight" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="n_dt" type="xs:positiveInteger" default="1" />
+            <xs:attribute name="n_dt" type="positiveInteger" default="1" />
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
@@ -621,7 +620,7 @@
             <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
             <xs:attribute name="red_green_time" type="nonNegativeDouble" />
             <xs:attribute name="phase_shift" type="nonNegativeDouble" default="0" />
-            <xs:attribute name="init" type="xs:nonNegativeInteger" default="0" />
+            <xs:attribute name="init" type="nonNegativeInteger" default="0" />
             <!-- todo: enum type -->
         </xs:complexType>
     </xs:element>
@@ -665,7 +664,7 @@
             <xs:sequence>
                 <xs:element ref="FloatingCar" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="n_timestep" type="xs:positiveInteger" default="1" />
+            <xs:attribute name="n_timestep" type="positiveInteger" default="1" />
             <xs:attribute name="random_fraction" type="probability" default="0" />
             <xs:attribute name="route" type="xs:string" use="required" />
         </xs:complexType>
@@ -678,7 +677,7 @@
     <xs:element name="Trajectories">
         <xs:complexType>
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
-            <xs:attribute name="dn" type="xs:positiveInteger" default="1" />
+            <xs:attribute name="dn" type="positiveInteger" default="1" />
             <xs:attribute name="start_time" type="nonNegativeDouble" default="0" />
             <xs:attribute name="end_time" type="nonNegativeDouble" default="1e10" />
             <xs:attribute name="route" type="xs:string" use="required" />
