@@ -26,7 +26,7 @@
 package org.movsim.output.fileoutput;
 
 import org.movsim.input.ProjectMetaData;
-import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.roadnetwork.TrafficSourceMacro;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * The Class FileTrafficSourceData.
  * 
  */
-public class FileTrafficSourceData extends FileOutputBase implements TrafficSource.RecordDataCallback {
+public class FileTrafficSourceData extends FileOutputBase implements TrafficSourceMacro.RecordDataCallback {
 
     final static Logger logger = LoggerFactory.getLogger(FileTrafficSourceData.class);
 

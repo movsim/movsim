@@ -194,7 +194,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setTrafficSource(org.movsim.simulator.roadnetwork.TrafficSource)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setTrafficSource(org.movsim.simulator.roadnetwork.TrafficSourceMacro)}
      */
     @Test
     public final void testSetTrafficSource() {

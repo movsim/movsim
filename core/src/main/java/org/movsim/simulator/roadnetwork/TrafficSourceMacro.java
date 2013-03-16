@@ -33,12 +33,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The Class TrafficSource.
+ * The Class TrafficSourceMacro.
  */
-public class TrafficSource extends AbstractTrafficSource {
+public class TrafficSourceMacro extends AbstractTrafficSource {
 
     /** The Constant LOG. */
-    private static final Logger LOG = LoggerFactory.getLogger(TrafficSource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMacro.class);
     
     private static final double MEASURING_INTERVAL_S = 60.0;
     
@@ -56,7 +56,7 @@ public class TrafficSource extends AbstractTrafficSource {
      * @param vehGenerator
      *            the vehicle generator
      */
-    public TrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
+    public TrafficSourceMacro(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
             InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment);
         this.inflowTimeSeries = inflowTimeSeries;

@@ -58,7 +58,7 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
-import org.movsim.simulator.roadnetwork.TrafficSource;
+import org.movsim.simulator.roadnetwork.TrafficSourceMacro;
 import org.movsim.simulator.roadnetwork.TrafficSourceMicro;
 import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.TestVehicle;
@@ -292,7 +292,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             AbstractTrafficSource trafficSource = null;
             if (trafficSourceData.isSetInflow()) {
                 InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
-                trafficSource = new TrafficSource(composition, roadSegment, inflowTimeSeries);
+                trafficSource = new TrafficSourceMacro(composition, roadSegment, inflowTimeSeries);
             }
             else if(trafficSourceData.isSetInflowFromFile()){
                 List<MicroInflowRecord> inflowQueue = MicroInflowQueue.readData(trafficSourceData.getInflowFromFile());

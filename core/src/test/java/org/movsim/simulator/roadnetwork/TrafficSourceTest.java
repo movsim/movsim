@@ -41,7 +41,7 @@ import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
  */
 public class TrafficSourceTest {
 
-	private TrafficSource trafficSource;
+	private TrafficSourceMacro trafficSource;
 
     /**
      * Sets up the test fixture. 
@@ -53,7 +53,7 @@ public class TrafficSourceTest {
 		final RoadSegment roadSegment = new RoadSegment(1000.0, 1);
         final List<Inflow> inflowDataPoints = new ArrayList<>();
 		final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
-		trafficSource = new TrafficSource(vehicleGenerator, roadSegment, inflowTimeSeries);
+		trafficSource = new TrafficSourceMacro(vehicleGenerator, roadSegment, inflowTimeSeries);
     }
 
     /**
@@ -65,7 +65,7 @@ public class TrafficSourceTest {
     }
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#TrafficSource(org.movsim.simulator.vehicles.VehicleGeneratorOld, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.InflowTimeSeries)}
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSourceMacro#TrafficSource(org.movsim.simulator.vehicles.VehicleGeneratorOld, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.InflowTimeSeries)}
 	 */
 	@Test
 	public final void testTrafficSource() {
@@ -73,7 +73,7 @@ public class TrafficSourceTest {
 	}
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#setRecorder(org.movsim.simulator.roadnetwork.TrafficSource.RecordDataCallback)}
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSourceMacro#setRecorder(org.movsim.simulator.roadnetwork.TrafficSourceMacro.RecordDataCallback)}
 	 */
 	@Test
 	public final void testSetRecorder() {
@@ -81,7 +81,7 @@ public class TrafficSourceTest {
 	}
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#getEnteringVehCounter()}
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSourceMacro#getEnteringVehCounter()}
 	 */
 	@Test
 	public final void testGetEnteringVehCounter() {
@@ -89,7 +89,7 @@ public class TrafficSourceTest {
 	}
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#timeStep(double, double, long)}.
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSourceMacro#timeStep(double, double, long)}.
 	 */
 	@Test
 	public final void testTimeStep() {
@@ -97,7 +97,7 @@ public class TrafficSourceTest {
 	}
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#setFlowPerLane(double)}.
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSourceMacro#setFlowPerLane(double)}.
 	 */
 	@Test
 	public final void testSetFlowPerLane() {
@@ -105,7 +105,7 @@ public class TrafficSourceTest {
 	}
 
 	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSource#getFlowPerLane(double)}.
+	 * Test method for {@link org.movsim.simulator.roadnetwork.TrafficSourceMacro#getFlowPerLane(double)}.
 	 */
 	@Test
 	public final void testGetFlowPerLane() {
