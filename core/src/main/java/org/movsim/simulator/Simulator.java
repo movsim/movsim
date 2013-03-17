@@ -297,7 +297,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             else if(trafficSourceData.isSetInflowFromFile()){
                 List<MicroInflowRecord> inflowQueue = MicroInflowQueue.readData(trafficSourceData.getInflowFromFile(),
                         roadSegment.laneCount() - 1);
-                trafficSource = new TrafficSourceMicro(composition, roadSegment, inflowQueue);
+                trafficSource = new TrafficSourceMicro(composition, routes, roadSegment, inflowQueue);
             }
             if (trafficSource != null) {
                 if (trafficSourceData.isLogging()) {

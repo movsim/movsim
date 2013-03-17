@@ -1,6 +1,7 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.List;
+import java.util.Map;
 
 import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
 import org.movsim.simulator.vehicles.TestVehicle;
@@ -17,9 +18,12 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
 
     private MicroInflowRecord nextInflowRecord;
 
-    public TrafficSourceMicro(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
-            List<MicroInflowRecord> inflowQueue) {
+    private Map<String, Route> routes;
+
+    public TrafficSourceMicro(TrafficCompositionGenerator vehGenerator, Map<String, Route> routes,
+            RoadSegment roadSegment, List<MicroInflowRecord> inflowQueue) {
         super(vehGenerator, roadSegment);
+        this.routes = routes;
         this.inflowQueue = inflowQueue;
         checkInput();
     }
@@ -30,6 +34,10 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
                 throw new IllegalArgumentException(
                         "vehicle type in microscopic boundary input (from file) not defined in traffic composition="
                                 + record.getTypeLabel());
+            }
+            if (record.hasRoute() && routes.containsKey(record.getRoute())) {
+                throw new IllegalArgumentException("route in microscopic boundary input (from file) not defined="
+                        +record.getRoute());
             }
         }
     }
@@ -105,8 +113,13 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
      */
     private void enterVehicle(LaneSegment laneSegment, double vEnter, TestVehicle testVehicle) {
         final double xEnter = 0;
-        addVehicle(laneSegment, testVehicle, xEnter, vEnter);
+        Vehicle addedVehicle = addVehicle(laneSegment, testVehicle, xEnter, vEnter);
         LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
+        if (nextInflowRecord.hasRoute()) {
+            addedVehicle.setRoute(routes.get(nextInflowRecord.getRoute()));
+            LOG.info("overwrote vehicle's default route (from composition) by route from input file: route={}",
+                    nextInflowRecord.getRoute());
+        }
     }
 
     @Override

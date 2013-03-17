@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
 import org.movsim.utilities.FileUtils;
@@ -81,6 +83,10 @@ public final class MicroInflowQueue {
 
         void setLane(int lane) {
             this.lane = lane;
+        }
+
+        public boolean hasRoute() {
+            return route != null && !route.isEmpty();
         }
 
         public String getRoute() {
@@ -204,7 +210,9 @@ public final class MicroInflowQueue {
         if (timeInputPattern.isEmpty()) {
             return Double.parseDouble(time);
         }
-        DateTime dateTime = DateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern));
+        DateTime dateTime = LocalDateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern)).toDateTime(
+                DateTimeZone.UTC);
+
         LOG.info("time={} --> dateTime={}", time, dateTime);
         return dateTime.getSecondOfDay();
     }

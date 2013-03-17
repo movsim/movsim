@@ -67,8 +67,9 @@ public final class VehicleFactory {
         LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
         
         Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
-                laneChangeModel, route);
+                laneChangeModel);
 
+        vehicle.setRoute(route);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
         vehicle.setFuelModel(prototype.getEnergyFlowModel());

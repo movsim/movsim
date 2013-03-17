@@ -97,7 +97,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     /**
      * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed.
      */
-    void addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
+    Vehicle addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
         final Vehicle vehicle = vehGenerator.createVehicle(testVehicle);
         vehicle.setFrontPosition(frontPosition);
         vehicle.setSpeed(speed);
@@ -109,6 +109,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         xEnterLast = frontPosition;
         vEnterLast = speed;
         laneEnterLast = laneSegment.lane();
+        return vehicle;
     }
 
     public abstract double measuredInflow();

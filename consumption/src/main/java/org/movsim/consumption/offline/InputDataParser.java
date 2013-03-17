@@ -25,7 +25,11 @@
  */
 package org.movsim.consumption.offline;
 
+import java.util.Arrays;
+
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.Columns;
 import org.movsim.autogen.Conversions;
@@ -72,7 +76,9 @@ public class InputDataParser {
             throw new NumberFormatException();
         }
         trim(line);
-        // System.out.println("parse = " + Arrays.toString(line));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("parse={}", Arrays.toString(line));
+        }
         double speed = isInputQuantity(speedColumn) ? speedConversionFactor * Double.parseDouble(line[speedColumn])
                 : Double.NaN;
         double time = convertToSeconds(line[timeColumn]);
@@ -97,9 +103,10 @@ public class InputDataParser {
         if (timeInputPattern.isEmpty()) {
             return Double.parseDouble(time);
         }
-        // System.out.println("timeInputPattern=" + timeInputPattern + ", time=" + time);
-        DateTime dateTime = DateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern));
-        // System.out.println(time + "--> dateTime=" + dateTime);
+        LOG.debug("timeInputPattern={}, time={}", timeInputPattern, time);
+        DateTime dateTime = LocalDateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern)).toDateTime(
+                DateTimeZone.UTC);
+        LOG.debug("{} --> {}", time, dateTime);
         return dateTime.getSecondOfDay();
     }
 

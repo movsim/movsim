@@ -181,7 +181,7 @@ public class Vehicle {
     /** can be null */
     private EnergyFlowModel fuelModel;
     /** can be null */
-    private final Route route;
+    private Route route;
 
     private int routeIndex;
 
@@ -242,7 +242,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
+            @Nullable LaneChangeModel lcModel) {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
@@ -261,7 +261,6 @@ public class Vehicle {
         if (laneChangeModel != null) {
             laneChangeModel.initialize(this);
         }
-        this.route = route;
 
         trafficLightApproaching = new TrafficLightApproaching();
 
@@ -1181,5 +1180,9 @@ public class Vehicle {
 
     public void setFuelModel(EnergyFlowModel fuelModel) {
         this.fuelModel = fuelModel;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
     }
 }
