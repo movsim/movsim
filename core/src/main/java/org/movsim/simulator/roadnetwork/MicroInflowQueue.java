@@ -100,7 +100,7 @@ public final class MicroInflowQueue {
 
     }
 
-    public static List<MicroInflowRecord> readData(InflowFromFile config) {
+    public static List<MicroInflowRecord> readData(InflowFromFile config, int maxLane) {
         Preconditions.checkNotNull(config);
         File file = getFilename(config.getFilename());
         List<MicroInflowRecord> inflowQueue = new LinkedList<>();
@@ -111,7 +111,7 @@ public final class MicroInflowQueue {
             LOG.warn("no input read from file={}", file.getAbsolutePath());
             return inflowQueue;
         }
-        parseInputData(inputDataLines, config, inflowQueue);
+        parseInputData(inputDataLines, config, maxLane, inflowQueue);
         Collections.sort(inflowQueue, new Comparator<MicroInflowRecord>() {
             @Override
             public int compare(MicroInflowRecord o1, MicroInflowRecord o2) {
@@ -120,6 +120,13 @@ public final class MicroInflowQueue {
                 return time1.compareTo(time2); // sort with increasing t
             }
         });
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("n={} micro inflow data records after parsing and sorting:", inflowQueue.size());
+            for (MicroInflowRecord record : inflowQueue) {
+                LOG.debug(record.toString());
+            }
+        }
         return inflowQueue;
     }
 
@@ -134,14 +141,15 @@ public final class MicroInflowQueue {
         return file;
     }
 
-    private static void parseInputData(List<String[]> input, InflowFromFile config, List<MicroInflowRecord> inflowQueue) {
+    private static void parseInputData(List<String[]> input, InflowFromFile config, int maxLane,
+            List<MicroInflowRecord> inflowQueue) {
         int maxColumn = determineMaximumColumn(config);
         for (String[] line : input) {
             if (line.length < maxColumn) {
                 LOG.info("expected {} columns, cannot parse data. Ignore line={}", maxColumn, Arrays.toString(line));
             }
             try {
-                MicroInflowRecord record = parse(line, config);
+                MicroInflowRecord record = parse(line, config, maxLane);
                 inflowQueue.add(record);
             } catch (IllegalArgumentException e) {
                 LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
@@ -168,7 +176,8 @@ public final class MicroInflowQueue {
         return maxColumn;
     }
 
-    private static MicroInflowRecord parse(String[] data, InflowFromFile config) throws IllegalArgumentException {
+    private static MicroInflowRecord parse(String[] data, InflowFromFile config, int maxLane)
+            throws IllegalArgumentException {
         trim(data);
         Preconditions.checkArgument(config.isSetColumnVehicleType() && config.isSetColumnTime());
         double time = convertTime(data[config.getColumnTime() - 1], config.getFormatTime());
@@ -178,7 +187,13 @@ public final class MicroInflowQueue {
             record.setComment(data[config.getColumnComment() - 1]);
         }
         if (config.isSetColumnLane()) {
-            record.setLane(Integer.parseInt(data[config.getColumnLane() - 1]));
+            int lane = Integer.parseInt(data[config.getColumnLane() - 1]);
+            if (lane > maxLane) {
+                LOG.warn("Parsed lane={} not available on road with max laneIndex={}. Set lane to max laneIndex", lane,
+                        maxLane);
+                lane = maxLane;
+            }
+            record.setLane(lane);
         }
         if (config.isSetColumnRoute()) {
             record.setRoute(data[config.getColumnRoute() - 1]);
