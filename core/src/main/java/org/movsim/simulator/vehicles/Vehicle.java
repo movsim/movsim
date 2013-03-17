@@ -181,9 +181,7 @@ public class Vehicle {
     /** can be null */
     private EnergyFlowModel fuelModel;
     /** can be null */
-    private Route route;
-
-    private int routeIndex;
+    private final Route route;
 
     private boolean isBrakeLightOn;
 
@@ -242,7 +240,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            @Nullable LaneChangeModel lcModel) {
+            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
@@ -261,7 +259,7 @@ public class Vehicle {
         if (laneChangeModel != null) {
             laneChangeModel.initialize(this);
         }
-
+        this.route = route;
         trafficLightApproaching = new TrafficLightApproaching();
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
@@ -322,30 +320,6 @@ public class Vehicle {
         slope = source.slope;
         route = source.route;
     }
-
-    /**
-     * Constructor.
-     */
-    // public Vehicle(LongitudinalModelBase ldm, Object lcm, double length, double width) {
-    // id = nextId++;
-    // randomFix = MyRandom.nextDouble();
-    // this.length = length;
-    // setRearPosition(0.0);
-    // this.speed = 0.0;
-    // this.lane = Lane.NONE;
-    // this.laneOld = Lane.NONE;
-    // this.width = width;
-    // this.color = 0;
-    // fuelModel = null;
-    // trafficLightApproaching = null;
-    // maxDeceleration = 0.0;
-    // laneChangeModel = null;
-    // longitudinalModel = ldm;
-    // label = "";
-    // speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
-    // slope = 0;
-    // route = null;
-    // }
 
     private void initialize() {
         frontPositionOld = 0;
@@ -718,7 +692,7 @@ public class Vehicle {
                     logger.debug(String
                             .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
                                     exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
-                                    accToVehicleInExitLane, -decelLimit));
+                                    accToVehicleInExitLane));
                 }
                 return Math.min(acc, accToVehicleInExitLane);
             }
@@ -1044,16 +1018,60 @@ public class Vehicle {
      * @param roadSegmentLength
      * 
      */
+    
+    int routeIndex = 0;
+
     public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
         if (originRoadSegmentId == ROAD_SEGMENT_ID_NOT_SET) {
             originRoadSegmentId = roadSegmentId;
         }
         this.roadSegmentId = roadSegmentId;
         this.roadSegmentLength = roadSegmentLength;
+
         // assume this vehicle does not exit on this road segment
         if (roadSegmentId != exitRoadSegmentId) {
             exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
         }
+        if (route != null && routeIndex < route.size()) {
+            final RoadSegment routeRoadSegment = route.get(routeIndex);
+            ++routeIndex;
+            if (routeRoadSegment.id() == roadSegmentId) {
+                // this vehicle is on the route
+                if (routeIndex < route.size()) {
+                    // there is another roadSegment on the route
+                    // so check if the next roadSegment is joined to an exit lane
+                    // of the current roadSegment
+                    final RoadSegment nextRouteRoadSegment = route.get(routeIndex);
+                    if (routeRoadSegment.exitsOnto(nextRouteRoadSegment.id())) {
+                        // this vehicle needs to exit on this roadSegment
+                        exitRoadSegmentId = roadSegmentId;
+                    } else {
+                        if (routeIndex + 1 < route.size()) {
+                            // there is another roadSegment on the route
+                            // so check if the next roadSegment is joined to an exit lane
+                            // of the current roadSegment
+                            final RoadSegment nextNextRouteRoadSegment = route.get(routeIndex + 1);
+                            if (nextRouteRoadSegment.exitsOnto(nextNextRouteRoadSegment.id())) {
+                                // this vehicle needs to exit on this roadSegment
+                                exitRoadSegmentId = roadSegmentId;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // determineExitRoadSegmentId();
+    }
+
+    private void determineExitRoadSegmentId() {
+        Preconditions.checkArgument(originRoadSegmentId != ROAD_SEGMENT_ID_NOT_SET);
+        Preconditions.checkArgument(roadSegmentId != ROAD_SEGMENT_ID_NOT_SET);
+        // assume this vehicle does not exit on this road segment
+        if (roadSegmentId != exitRoadSegmentId) {
+            exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
+        }
+
+        int routeIndex = 0;
         if (route != null && routeIndex < route.size()) {
             final RoadSegment routeRoadSegment = route.get(routeIndex);
             ++routeIndex;
@@ -1180,9 +1198,5 @@ public class Vehicle {
 
     public void setFuelModel(EnergyFlowModel fuelModel) {
         this.fuelModel = fuelModel;
-    }
-
-    public void setRoute(Route route) {
-        this.route = route;
     }
 }

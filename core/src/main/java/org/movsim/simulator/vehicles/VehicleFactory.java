@@ -47,10 +47,25 @@ public final class VehicleFactory {
         }
     }
     
-    public Vehicle create(VehicleType vehicleType) {
+    // set route explicitely, e.g. in microscopic initial or boundary conditions
+    public Vehicle create(VehicleType vehicleType, @Nullable Route route) {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
+        LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
+        accelerationModel.setRelativeRandomizationV0(vehicleType.getRelativeV0Randomization(),
+                vehicleType.getV0DistributionType());
+        LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
         
-        // route
+        Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
+                laneChangeModel, route);
+
+        vehicle.setMemory(prototype.createMemoryModel());
+        vehicle.setNoise(prototype.createAccNoiseModel());
+        vehicle.setFuelModel(prototype.getEnergyFlowModel());
+        return vehicle;
+    }
+    
+    // route is determined via the traffic composition
+    public Vehicle create(VehicleType vehicleType) {
         Route route = null;
         if(vehicleType.hasRouteLabel()){
             route = routes.get(vehicleType.getRouteLabel());
@@ -59,21 +74,7 @@ public final class VehicleFactory {
                         + " not defined in input!");
             }
         }
-        
-        LongitudinalModelBase accelerationModel = prototype.createAccelerationModel();
-        accelerationModel.setRelativeRandomizationV0(vehicleType.getRelativeV0Randomization(),
-                vehicleType.getV0DistributionType());
-        
-        LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
-        
-        Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
-                laneChangeModel);
-
-        vehicle.setRoute(route);
-        vehicle.setMemory(prototype.createMemoryModel());
-        vehicle.setNoise(prototype.createAccNoiseModel());
-        vehicle.setFuelModel(prototype.getEnergyFlowModel());
-        return vehicle;
+        return create(vehicleType, route);
     }
 
     private void initialize(double simulationTimestep, List<VehiclePrototypeConfiguration> configurations,

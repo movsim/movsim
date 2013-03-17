@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficComposition;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,10 @@ public class TrafficCompositionGenerator {
         return vehicleFactory.create(testVehicle.getVehicleType());
     }
 
+    public Vehicle createVehicle(TestVehicle testVehicle, Route route) {
+        return vehicleFactory.create(testVehicle.getVehicleType(), route);
+    }
+
     public boolean hasVehicle(String label) {
         return vehicleTypes.containsKey(label);
     }
@@ -47,6 +52,10 @@ public class TrafficCompositionGenerator {
             throw new IllegalArgumentException("cannot create vehicle with label=" + label);
         }
         return vehicleFactory.create(vehicleTypes.get(label));
+    }
+
+    public TestVehicle getTestVehicle(String label) {
+        return vehicleTypes.get(label).getTestVehicle();
     }
 
     public TestVehicle getTestVehicle() {

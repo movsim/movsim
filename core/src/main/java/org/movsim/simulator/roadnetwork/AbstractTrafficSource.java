@@ -7,6 +7,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 
 public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
@@ -59,7 +61,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
      * @param recordDataCallback
      */
     public void setRecorder(RecordDataCallback recordDataCallback) {
-        enteringVehCounter = 1;
+        enteringVehCounter = 0;
         this.recordDataCallback = recordDataCallback;
     }
 
@@ -90,15 +92,25 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         return (int) nWait;
     }
 
-    // public double getFlowPerLane(double time) {
-    // return inflowTimeSeries.getFlowPerLane(time);
-    // }
-
     /**
      * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed.
      */
-    Vehicle addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
+    protected void addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
         final Vehicle vehicle = vehGenerator.createVehicle(testVehicle);
+        initVehicle(laneSegment, frontPosition, speed, vehicle);
+    }
+
+    /**
+     * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed and a predefined route.
+     */
+    protected void addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed,
+            Route route) {
+        Preconditions.checkNotNull(route);
+        final Vehicle vehicle = vehGenerator.createVehicle(testVehicle, route);
+        initVehicle(laneSegment, frontPosition, speed, vehicle);
+    }
+
+    private void initVehicle(LaneSegment laneSegment, double frontPosition, double speed, final Vehicle vehicle) {
         vehicle.setFrontPosition(frontPosition);
         vehicle.setSpeed(speed);
         vehicle.setLane(laneSegment.lane());
@@ -109,9 +121,8 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         xEnterLast = frontPosition;
         vEnterLast = speed;
         laneEnterLast = laneSegment.lane();
-        return vehicle;
     }
-
+    
     public abstract double measuredInflow();
 
     /**

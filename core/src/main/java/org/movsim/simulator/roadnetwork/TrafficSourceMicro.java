@@ -55,7 +55,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
                 testLane = roadSegment.laneCount() - 1;
             }
             LaneSegment laneSegment = roadSegment.laneSegment(testLane);
-            TestVehicle testVehicle = vehGenerator.getTestVehicle();
+            TestVehicle testVehicle = vehGenerator.getTestVehicle(nextInflowRecord.getTypeLabel());
             final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment);
             if (isEntered) {
                 nextInflowRecord = null;
@@ -113,13 +113,15 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
      */
     private void enterVehicle(LaneSegment laneSegment, double vEnter, TestVehicle testVehicle) {
         final double xEnter = 0;
-        Vehicle addedVehicle = addVehicle(laneSegment, testVehicle, xEnter, vEnter);
-        LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
         if (nextInflowRecord.hasRoute()) {
-            addedVehicle.setRoute(routes.get(nextInflowRecord.getRoute()));
-            LOG.info("overwrote vehicle's default route (from composition) by route from input file: route={}",
+            Route route = routes.get(nextInflowRecord.getRoute());
+            LOG.info("overwrites vehicle's default route (from composition) by route from input file: route={}",
                     nextInflowRecord.getRoute());
+            addVehicle(laneSegment, testVehicle, xEnter, vEnter, route);
+        } else {
+            addVehicle(laneSegment, testVehicle, xEnter, vEnter);
         }
+        LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }
 
     @Override
