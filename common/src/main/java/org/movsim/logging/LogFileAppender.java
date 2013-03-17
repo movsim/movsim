@@ -33,7 +33,6 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.simulator.Simulator;
 
 /**
  * Logs to file "[output path]projectname.log".
@@ -50,7 +49,7 @@ import org.movsim.simulator.Simulator;
  */
 public class LogFileAppender {
 
-    final static Logger logger = Logger.getLogger(Simulator.class);
+    private static final Logger LOG= Logger.getLogger(LogFileAppender.class);
     private FileAppender fileAppender;
 
     public static void initialize(ProjectMetaData projectMetaData) {
@@ -75,6 +74,6 @@ public class LogFileAppender {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.addAppender(fileAppender);
+        LOG.addAppender(fileAppender);
     }
 }
