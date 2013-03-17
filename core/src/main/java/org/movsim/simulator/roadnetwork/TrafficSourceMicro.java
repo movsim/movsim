@@ -35,9 +35,9 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
                         "vehicle type in microscopic boundary input (from file) not defined in traffic composition="
                                 + record.getTypeLabel());
             }
-            if (record.hasRoute() && routes.containsKey(record.getRoute())) {
-                throw new IllegalArgumentException("route in microscopic boundary input (from file) not defined="
-                        +record.getRoute());
+            if (record.hasRoute() && !routes.containsKey(record.getRoute())) {
+                throw new IllegalArgumentException("route=" + record.getRoute()
+                        + " in microscopic boundary input on roadSegment=" + roadSegment.id() + " not defined!");
             }
         }
     }

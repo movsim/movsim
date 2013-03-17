@@ -27,7 +27,7 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="true">
-                    <InflowFromFile filename="example_micro_bc.dat" column_time="1" format_time="HH:mm:ss" column_vehicle_type="2" column_route="5" column_speed="3" format_speed="0.27777" column_lane="4" column_comment="6" column_separator=","/>
+                    <InflowFromFile filename="example_micro_bc.dat" column_time="1" format_time="HH:mm:ss" column_vehicle_type="2" column_speed="3" format_speed="0.27777" column_lane="4" column_comment="5" column_separator=","/>
                     <!-- format_time column_comment column separator -->
                 </TrafficSource>
             </Road>

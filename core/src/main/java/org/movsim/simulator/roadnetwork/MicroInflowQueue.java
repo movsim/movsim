@@ -142,6 +142,7 @@ public final class MicroInflowQueue {
         for (String[] line : input) {
             if (line.length < maxColumn) {
                 LOG.info("expected {} columns, cannot parse data. Ignore line={}", maxColumn, Arrays.toString(line));
+                continue;
             }
             try {
                 MicroInflowRecord record = parse(line, config, maxLane);
