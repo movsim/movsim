@@ -29,8 +29,12 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.Columns;
 import org.movsim.autogen.Conversions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InputDataParser {
+
+    static final Logger LOG = LoggerFactory.getLogger(InputDataParser.class);
 
     // <CONVERSION time="HH:mm:ss" speed="0.2777777" gradient="0.01" />
     private String timeInputPattern = ""; // = "HH:mm:ss"; // 10:23:21 AM
@@ -67,6 +71,7 @@ public class InputDataParser {
         if (line.length <= MIN_COLUMNS) {
             throw new NumberFormatException();
         }
+        trim(line);
         // System.out.println("parse = " + Arrays.toString(line));
         double speed = isInputQuantity(speedColumn) ? speedConversionFactor * Double.parseDouble(line[speedColumn])
                 : Double.NaN;
@@ -80,6 +85,12 @@ public class InputDataParser {
                 * Double.parseDouble(line[positionColumn]) : Double.NaN;
 
         return new ConsumptionDataRecord(index, time, position, speed, acceleration, grade);
+    }
+
+    private static void trim(String[] data) {
+        for (int i = 0, N = data.length; i < N; i++) {
+            data[i] = data[i].trim();
+        }
     }
 
     private double convertToSeconds(String time) throws NumberFormatException, IllegalArgumentException {

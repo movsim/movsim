@@ -25,7 +25,6 @@
  */
 package org.movsim.consumption.offline;
 
-// http://opencsv.sourceforge.net/#how-to-read
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -35,6 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.autogen.BatchData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -42,6 +43,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 public class InputReader {
+
+    static final Logger LOG = LoggerFactory.getLogger(InputReader.class);
 
     private final char separator = ',';
 
@@ -51,8 +54,7 @@ public class InputReader {
 
     public static InputReader create(BatchData batch, String path) {
         File inputFile = new File(path, batch.getInputfile());
-        System.out.println("read input from " + inputFile.getAbsolutePath());
-
+        LOG.info("inputfile={}", inputFile.getAbsolutePath());
         return new InputReader(inputFile, batch);
     }
 
@@ -75,7 +77,7 @@ public class InputReader {
         List<String[]> inputDataLines = readData(inputFile);
 
         if (inputDataLines == null || inputDataLines.isEmpty()) {
-            System.out.println("no input read");
+            LOG.warn("no input read");
             return;
         }
 
@@ -116,7 +118,7 @@ public class InputReader {
 
     private List<ConsumptionDataRecord> calculateSpeeds() {
         Preconditions.checkArgument(hasPosition(), "cannot calculate speeds without positions.");
-        System.out.println("calculate speeds numerically.");
+        LOG.info("calculate speeds numerically.");
         List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
         for (int i = 0, N = records.size() - 1; i <= N; i++) {
             ConsumptionDataRecord record = records.get(i);
@@ -132,7 +134,7 @@ public class InputReader {
 
     private List<ConsumptionDataRecord> calculateAccelerations() {
         Preconditions.checkArgument(hasSpeed(), "cannot calculate accelerations without speeds.");
-        System.out.println("calculate accelerations numerically.");
+        LOG.info("calculate accelerations numerically.");
         List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
         for (int i = 0, N = records.size() - 1; i <= N; i++) {
             ConsumptionDataRecord record = records.get(i);
@@ -150,22 +152,6 @@ public class InputReader {
         return (dy == 0) ? Double.NaN : dx / dy;
     }
 
-    private List<ConsumptionDataRecord> calcAccelerationFromSpeed() {
-        System.out.println("no acceleration provided, calculated from speeds.");
-        List<ConsumptionDataRecord> newRecords = Lists.newArrayList();
-        for (int i = 0, N = records.size() - 1; i <= N; i++) {
-            ConsumptionDataRecord recordFwd = records.get(Math.min(i + 1, N));
-            ConsumptionDataRecord recordBwd = records.get(Math.max(0, i - 1));
-            double speedDiff = recordFwd.getSpeed() - recordBwd.getSpeed();
-            double timeDiff = recordFwd.getTime() - recordBwd.getTime();
-            ConsumptionDataRecord record = records.get(i);
-            double acceleration = speedDiff / timeDiff;
-            newRecords.add(new ConsumptionDataRecord(record.getIndex(), record.getTime(), record.getPosition(), record
-                    .getSpeed(), acceleration, record.getGrade()));
-        }
-        return newRecords;
-    }
-
     private void parseInputData(List<String[]> input) {
         InputDataParser parser = new InputDataParser(batchInput.getColumns(), batchInput.getConversions());
         int index = 0;
@@ -175,20 +161,20 @@ public class InputReader {
                 records.add(record);
                 ++index;
             } catch (NumberFormatException e) {
-                System.out.println("cannot parse data. Ignore line=" + Arrays.toString(line));
+                LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
             } catch (IllegalArgumentException e) {
-                System.out.println("cannot parse data. Ignore line=" + Arrays.toString(line));
+                LOG.info("cannot parse data. Ignore line=", Arrays.toString(line));
             }
         }
 
-        System.out.println("parsed " + records.size() + "(index=" + index + ")" + " from " + input.size()
-                + " input lines");
+        LOG.info("parsed={} from={} input lines", records.size(), input.size());
     }
 
     private List<String[]> readData(File file) {
-        System.out.println("using input file " + file.getAbsolutePath());
-
+        LOG.info("using input file={}", file.getAbsolutePath());
         List<String[]> myEntries = Lists.newArrayList();
+
+        // see http://opencsv.sourceforge.net/#how-to-read
         CSVReader reader = null;
         try {
             reader = new CSVReader(new FileReader(file), separator);
