@@ -82,7 +82,7 @@ public class AppFrame extends JFrame {
 
         if (projectMetaData.hasProjectName()) {
             trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(),
-                    projectMetaData.getPathToProjectXmlFile());
+                    projectMetaData.getPathToProjectFile());
         } else {
             System.out.println("try to load default");
             final String path = "sim/buildingBlocks/";

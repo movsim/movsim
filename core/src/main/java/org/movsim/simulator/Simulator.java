@@ -115,7 +115,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // TODO temporary handling of Variable Message Sign until added to XML
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
-        inputData = MovsimInputLoader.getInputData(projectMetaData.getXmlInputFile());
+        inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
         projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
 
         Simulation simulationInput = inputData.getScenario().getSimulation();
@@ -261,7 +261,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData)
             throws JAXBException, SAXException {
         final String xodrFileName = projectMetaData.getXodrNetworkFilename();
-        final String xodrPath = projectMetaData.getPathToProjectXmlFile();
+        final String xodrPath = projectMetaData.getPathToProjectFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
         logger.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);

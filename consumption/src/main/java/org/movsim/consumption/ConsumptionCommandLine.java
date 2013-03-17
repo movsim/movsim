@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 // TODO reuse core commandline also here
 class ConsumptionCommandLine {
 
-    private static Logger logger = LoggerFactory.getLogger(ConsumptionCommandLine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConsumptionCommandLine.class);
 
     private final CommandLineParser parser;
     private Options options;
@@ -55,7 +55,7 @@ class ConsumptionCommandLine {
         try {
             commandLine.createAndParse(args);
         } catch (ParseException e) {
-            logger.error("Parsing failed.  Reason: {}", e.getMessage());
+            LOG.error("Parsing failed.  Reason: {}", e.getMessage());
             commandLine.optionHelp();
         }
     }
@@ -116,9 +116,9 @@ class ConsumptionCommandLine {
 
         if (outputPath == null || outputPath.equals("") || outputPath.isEmpty()) {
             outputPath = ".";
-            logger.info("No output path provided via option. Set output path to current directory!");
+            LOG.info("No output path provided via option. Set output path to current directory!");
         }
-        logger.info("output path: " + outputPath);
+        LOG.info("output path: " + outputPath);
         final boolean outputPathExits = FileUtils.dirExists(outputPath, "dir exits");
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
@@ -133,7 +133,7 @@ class ConsumptionCommandLine {
         final String resource = ProjectMetaData.getLog4jFilenameWithPath();
         final InputStream is = ConsumptionMain.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
-        logger.info("logger properties file written to {}", ProjectMetaData.getLog4jFilename());
+        LOG.info("LOG properties file written to {}", ProjectMetaData.getLog4jFilename());
 
         System.exit(0);
     }
@@ -145,9 +145,13 @@ class ConsumptionCommandLine {
      *            the cmdline
      */
     private void requiredOptionSimulation(CommandLine cmdline) {
-        final String filename = cmdline.getOptionValue('f');
+        String filename = cmdline.getOptionValue('f');
+        if (!FileUtils.fileExists(filename)) {
+            filename = filename + ProjectMetaData.getMovsimConfigFileEnding();
+        }
+
         if (filename == null || !FileUtils.fileExists(filename)) {
-            logger.error("No xml configuration file! Please specify via the option -f.");
+            LOG.error("No xml configuration file found! Please specify via the option -f.");
             return;
         }
 

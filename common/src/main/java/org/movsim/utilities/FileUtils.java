@@ -40,6 +40,7 @@ import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.movsim.input.ProjectMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -49,8 +50,28 @@ import org.xml.sax.InputSource;
  */
 public class FileUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(FileUtils.class);
+    private static Logger LOG = LoggerFactory.getLogger(FileUtils.class);
 
+    
+    /**
+     * Searches a file first in given location {@code filename} and second in path of the inputfile.
+     * 
+     * @param filename
+     * @return the file if it exists 
+     * @throws IllegalArgumentException
+     */
+    public static File lookupFilename(String filename) throws IllegalArgumentException{
+        File file = new File(filename);
+        if (!file.exists() && ProjectMetaData.getInstance().hasPathToProjectFile()) {
+            file = new File(ProjectMetaData.getInstance().getPathToProjectFile(), filename);
+        }
+        if (!file.exists() || !file.isFile()) {
+            throw new IllegalArgumentException("cannot find input file = " + file.getAbsolutePath());
+        }
+        return file;
+    }
+
+    
     /**
      * Gets the writer.
      * 
@@ -60,11 +81,11 @@ public class FileUtils {
      */
     public static PrintWriter getWriter(String filename) {
         try {
-            logger.info("open file {} for writing", filename);
+            LOG.info("open file {} for writing", filename);
             final PrintWriter fstr = new PrintWriter(new BufferedWriter(new FileWriter(filename, false)));
             return fstr;
         } catch (final java.io.IOException e) {
-            logger.error("cannot open file {} for writing", filename);
+            LOG.error("cannot open file {} for writing", filename);
         }
         return null;
     }
@@ -78,11 +99,11 @@ public class FileUtils {
      */
     public static BufferedReader getReader(String filename) {
         try {
-            logger.debug("open file {} for reading", filename);
+            LOG.debug("open file {} for reading", filename);
             final BufferedReader reader = new BufferedReader(new FileReader(filename));
             return reader;
         } catch (final Exception e) {
-            logger.error("cannot open file {} for reading", filename);
+            LOG.error("cannot open file {} for reading", filename);
         }
         return null;
     }
@@ -135,7 +156,7 @@ public class FileUtils {
     public static boolean fileExists(String filename) {
         final File file = new File(filename);
         if (file.exists() && file.isFile()) {
-            logger.debug("{} file exists!", filename);
+            LOG.debug("{} file exists!", filename);
             return (true);
         }
         return (false);
@@ -153,7 +174,7 @@ public class FileUtils {
     public static boolean dirExists(String path, String msg) {
         final File file = new File(path);
         if (file.exists() && file.isDirectory()) {
-            logger.info("{}: {} exists!", msg, file.getName());
+            LOG.info("{}: {} exists!", msg, file.getName());
             return (true);
         }
         return (false);
@@ -174,7 +195,7 @@ public class FileUtils {
         }
         final boolean success = file.mkdir();
         if (!success) {
-            logger.error("createDir: cannot create directory {}. Exit.", path);
+            LOG.error("createDir: cannot create directory {}. Exit.", path);
             System.exit(-5);
         }
     }
@@ -190,10 +211,10 @@ public class FileUtils {
     public static void deleteFile(String filename, String msg) {
         final File file = new File(filename);
         if (file.exists()) {
-            logger.info(msg + ": file\"" + file.getName() + "\" exists!");
+            LOG.info(msg + ": file\"" + file.getName() + "\" exists!");
             final boolean success = file.delete();
             if (success) {
-                logger.info("file " + filename + " successfully deleted ...");
+                LOG.info("file " + filename + " successfully deleted ...");
             }
         }
     }
@@ -285,8 +306,8 @@ public class FileUtils {
     public static void deleteFileList(String path, String regex) {
         final String[] files = getFileList(path + File.separator, regex);
         for (int i = 0; i < files.length; i++) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("filename to delete = " + files[i]);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("filename to delete = " + files[i]);
             }
             deleteFile(files[i], "deleteFileList with regexExpression = " + regex);
         }
@@ -325,7 +346,7 @@ public class FileUtils {
     public static void resourceToFile(final InputStream resourceAsStream, String filename) {
         try {
             if (resourceAsStream == null) {
-                logger.debug("resource not included!");
+                LOG.debug("resource not included!");
                 return;
             }
 

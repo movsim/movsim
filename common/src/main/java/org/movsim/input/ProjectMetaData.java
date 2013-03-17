@@ -110,12 +110,12 @@ public final class ProjectMetaData {
         this.projectName = projectName;
     }
 
-    public boolean hasPathToProjectXmlFile() {
+    public boolean hasPathToProjectFile() {
         return pathToProjectXmlFile != null && !pathToProjectXmlFile.isEmpty();
     }
 
-    public String getPathToProjectXmlFile() {
-        if (!hasPathToProjectXmlFile()) {
+    public String getPathToProjectFile() {
+        if (!hasPathToProjectFile()) {
             throw new IllegalStateException(
                     "path to project file not set. Check in advance using \"hasPathToProjectXmlFile()\"");
         }
@@ -279,8 +279,8 @@ public final class ProjectMetaData {
         this.projectProperties = projectProperties;
     }
 
-    public File getXmlInputFile() {
-        return new File(getPathToProjectXmlFile(), getProjectName() + MOVSIM_CONFIG_FILE_ENDING);
+    public File getInputFile() {
+        return new File(getPathToProjectFile(), getProjectName() + MOVSIM_CONFIG_FILE_ENDING);
     }
 
     public boolean hasConsumptionFilename() {

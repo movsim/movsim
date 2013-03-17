@@ -61,7 +61,7 @@ public class ConsumptionMain {
 
         ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
 
-        Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getXmlInputFile());
+        Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
 
         if (!inputData.isSetConsumption()) {
             System.err.println("no consumption element configured in input file");
@@ -72,7 +72,7 @@ public class ConsumptionMain {
 
         System.out.println("size of batches = " + inputData.getConsumption().getBatchJobs().getBatchData().size());
         for (BatchData batch : inputData.getConsumption().getBatchJobs().getBatchData()) {
-            InputReader reader = InputReader.create(batch, ProjectMetaData.getInstance().getPathToProjectXmlFile());
+            InputReader reader = InputReader.create(batch);
             List<ConsumptionDataRecord> records = reader.getRecords();
 
             EnergyFlowModel model = consumptionModelPool.get(batch.getModel());

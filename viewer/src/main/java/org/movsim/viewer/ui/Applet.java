@@ -71,7 +71,7 @@ public class Applet extends JApplet {
 
         statusPanel.setWithProgressBar(false);
         statusPanel.reset();
-        trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectXmlFile());
+        trafficCanvas.setupTrafficScenario(projectMetaData.getProjectName(), projectMetaData.getPathToProjectFile());
         final String projectName = projectMetaData.getProjectName();
         if (projectName.equals("routing") || projectName.equals("ramp_metering")) {
             trafficCanvas.setVehicleColorMode(TrafficCanvas.VehicleColorMode.EXIT_COLOR);

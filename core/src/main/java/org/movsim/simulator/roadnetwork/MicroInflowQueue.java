@@ -13,7 +13,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
-import org.movsim.input.ProjectMetaData;
+import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +102,7 @@ public final class MicroInflowQueue {
 
     public static List<MicroInflowRecord> readData(InflowFromFile config, int maxLane) {
         Preconditions.checkNotNull(config);
-        File file = getFilename(config.getFilename());
+        File file = FileUtils.lookupFilename(config.getFilename());
         List<MicroInflowRecord> inflowQueue = new LinkedList<>();
         Preconditions.checkArgument(config.getColumnSeparator().length() == 1,
                 "column separator character with length=1 expected but got=" + config.getColumnSeparator());
@@ -128,17 +128,6 @@ public final class MicroInflowQueue {
             }
         }
         return inflowQueue;
-    }
-
-    private static File getFilename(String filename) {
-        File file = new File(filename);
-        if (!file.exists() && ProjectMetaData.getInstance().hasPathToProjectXmlFile()) {
-            file = new File(ProjectMetaData.getInstance().getPathToProjectXmlFile(), filename);
-        }
-        if (!file.exists() || !file.isFile()) {
-            throw new IllegalArgumentException("cannot find input file = " + file.getAbsolutePath());
-        }
-        return file;
     }
 
     private static void parseInputData(List<String[]> input, InflowFromFile config, int maxLane,

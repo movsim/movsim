@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.movsim.autogen.BatchData;
+import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +53,8 @@ public class InputReader {
 
     private final BatchData batchInput;
 
-    public static InputReader create(BatchData batch, String path) {
-        File inputFile = new File(path, batch.getInputfile());
+    public static InputReader create(BatchData batch) {
+        File inputFile = FileUtils.lookupFilename(batch.getInputfile());
         LOG.info("inputfile={}", inputFile.getAbsolutePath());
         return new InputReader(inputFile, batch);
     }
