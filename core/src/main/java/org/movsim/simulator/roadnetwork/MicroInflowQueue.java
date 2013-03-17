@@ -106,7 +106,7 @@ public final class MicroInflowQueue {
 
     }
 
-    public static List<MicroInflowRecord> readData(InflowFromFile config, int maxLane) {
+    public static List<MicroInflowRecord> readData(InflowFromFile config, int maxLane, long timeOffsetMillis) {
         Preconditions.checkNotNull(config);
         File file = FileUtils.lookupFilename(config.getFilename());
         List<MicroInflowRecord> inflowQueue = new LinkedList<>();
@@ -117,7 +117,7 @@ public final class MicroInflowQueue {
             LOG.warn("no input read from file={}", file.getAbsolutePath());
             return inflowQueue;
         }
-        parseInputData(inputDataLines, config, maxLane, inflowQueue);
+        parseInputData(inputDataLines, config, maxLane, timeOffsetMillis, inflowQueue);
         Collections.sort(inflowQueue, new Comparator<MicroInflowRecord>() {
             @Override
             public int compare(MicroInflowRecord o1, MicroInflowRecord o2) {
@@ -136,7 +136,7 @@ public final class MicroInflowQueue {
         return inflowQueue;
     }
 
-    private static void parseInputData(List<String[]> input, InflowFromFile config, int maxLane,
+    private static void parseInputData(List<String[]> input, InflowFromFile config, int maxLane, long timeOffsetMillis,
             List<MicroInflowRecord> inflowQueue) {
         int maxColumn = determineMaximumColumn(config);
         for (String[] line : input) {
@@ -145,7 +145,7 @@ public final class MicroInflowQueue {
                 continue;
             }
             try {
-                MicroInflowRecord record = parse(line, config, maxLane);
+                MicroInflowRecord record = parse(line, config, maxLane, timeOffsetMillis);
                 inflowQueue.add(record);
             } catch (IllegalArgumentException e) {
                 LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
@@ -172,11 +172,11 @@ public final class MicroInflowQueue {
         return maxColumn;
     }
 
-    private static MicroInflowRecord parse(String[] data, InflowFromFile config, int maxLane)
+    private static MicroInflowRecord parse(String[] data, InflowFromFile config, int maxLane, long timeOffsetMillis)
             throws IllegalArgumentException {
         trim(data);
         Preconditions.checkArgument(config.isSetColumnVehicleType() && config.isSetColumnTime());
-        double time = convertTime(data[config.getColumnTime() - 1], config.getFormatTime());
+        double time = convertTimeToSeconds(data[config.getColumnTime() - 1], config.getFormatTime(), timeOffsetMillis);
         String typeLabel = data[config.getColumnVehicleType() - 1];
         MicroInflowRecord record = new MicroInflowRecord(time, typeLabel);
         if (config.isSetColumnComment()) {
@@ -207,15 +207,16 @@ public final class MicroInflowQueue {
         }
     }
 
-    private static double convertTime(String time, String timeInputPattern) {
+    private static double convertTimeToSeconds(String time, String timeInputPattern, long timeOffsetMillis) {
         if (timeInputPattern.isEmpty()) {
             return Double.parseDouble(time);
         }
         DateTime dateTime = LocalDateTime.parse(time, DateTimeFormat.forPattern(timeInputPattern)).toDateTime(
                 DateTimeZone.UTC);
 
-        LOG.info("time={} --> dateTime={}", time, dateTime);
-        return dateTime.getSecondOfDay();
+        double timeInSeconds = (dateTime.getMillis() - timeOffsetMillis) / 1000L;
+        LOG.info("time={} --> dateTime={} --> seconds with offset=" + timeInSeconds, time, dateTime);
+        return timeInSeconds;
     }
 
     private static List<String[]> readData(File file, char separator) {

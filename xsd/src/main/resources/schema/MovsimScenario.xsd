@@ -459,6 +459,8 @@
             <xs:attribute name="duration" type="xs:double" default="-1" />
             <xs:attribute name="seed" type="xs:int" default="42" />
             <xs:attribute name="crash_exit" type="xs:boolean" default="true" />
+            <!-- "YYYY-MM-dd'T'HH:mm:ss" -->
+            <xs:attribute name="time_offset" type="xs:string" />
         </xs:complexType>
     </xs:element>
     <xs:element name="TrafficComposition">

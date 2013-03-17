@@ -32,6 +32,10 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InitialConditions;
 import org.movsim.autogen.MacroIC;
 import org.movsim.autogen.MicroIC;
@@ -95,6 +99,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private final SimulationRunnable simulationRunnable;
     private int obstacleCount;
 
+    private long timeOffsetMillis;
+
     /**
      * Constructor.
      * 
@@ -116,6 +122,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadNetwork.setHasVariableMessageSign(projectName.startsWith("routing"));
 
         inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
+
+        if (inputData.getScenario().getSimulation().isSetTimeOffset()) {
+            DateTime dateTime = LocalDateTime.parse(inputData.getScenario().getSimulation().getTimeOffset(),
+                    DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss")).toDateTime(DateTimeZone.UTC);
+            timeOffsetMillis = dateTime.getMillis();
+            logger.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
+        }
         projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
 
         Simulation simulationInput = inputData.getScenario().getSimulation();
@@ -296,7 +309,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
             else if(trafficSourceData.isSetInflowFromFile()){
                 List<MicroInflowRecord> inflowQueue = MicroInflowQueue.readData(trafficSourceData.getInflowFromFile(),
-                        roadSegment.laneCount() - 1);
+                        roadSegment.laneCount() - 1, timeOffsetMillis);
                 trafficSource = new TrafficSourceMicro(composition, routes, roadSegment, inflowQueue);
             }
             if (trafficSource != null) {
