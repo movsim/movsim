@@ -7,3 +7,8 @@ git push origin HEAD:mybranch
 Checkout branch:
 git checkout -b test origin/test
 
+#delete branch:
+#from HEAD
+git branch -d delete_branch
+git branch -D delete_branch
+
