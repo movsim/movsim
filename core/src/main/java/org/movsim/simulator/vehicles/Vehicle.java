@@ -193,6 +193,9 @@ public class Vehicle {
     private int exitRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
     private int originRoadSegmentId = ROAD_SEGMENT_ID_NOT_SET;
 
+    // information handling
+    private String infoComment = "";
+
     /**
      * The type of numerical integration.
      */
@@ -1199,4 +1202,20 @@ public class Vehicle {
     public void setFuelModel(EnergyFlowModel fuelModel) {
         this.fuelModel = fuelModel;
     }
+
+    /**
+     * @return the infoComment
+     */
+    public String getInfoComment() {
+        return infoComment;
+    }
+
+    /**
+     * @param infoComment
+     *            the infoComment to set
+     */
+    public void setInfoComment(String infoComment) {
+        this.infoComment = infoComment;
+    }
+
 }

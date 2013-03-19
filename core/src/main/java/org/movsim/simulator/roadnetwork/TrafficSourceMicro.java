@@ -113,13 +113,17 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
      */
     private void enterVehicle(LaneSegment laneSegment, double vEnter, TestVehicle testVehicle) {
         final double xEnter = 0;
+        Vehicle vehicle;
         if (nextInflowRecord.hasRoute()) {
             Route route = routes.get(nextInflowRecord.getRoute());
             LOG.info("overwrites vehicle's default route (from composition) by route from input file: route={}",
                     nextInflowRecord.getRoute());
-            addVehicle(laneSegment, testVehicle, xEnter, vEnter, route);
+            vehicle = addVehicle(laneSegment, testVehicle, xEnter, vEnter, route);
         } else {
-            addVehicle(laneSegment, testVehicle, xEnter, vEnter);
+            vehicle = addVehicle(laneSegment, testVehicle, xEnter, vEnter);
+        }
+        if (nextInflowRecord.hasComment()) {
+            vehicle.setInfoComment(nextInflowRecord.getComment());
         }
         LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }

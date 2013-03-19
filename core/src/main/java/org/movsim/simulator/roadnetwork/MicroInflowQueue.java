@@ -38,7 +38,7 @@ public final class MicroInflowQueue {
         private String route = "";
         private double speed = Double.NaN;
         private int lane = Integer.MAX_VALUE;
-        private String comment = "";
+        private String comment = null;
 
         public MicroInflowRecord(double time, String typeLabel) {
             this.time = time;
@@ -71,6 +71,10 @@ public final class MicroInflowQueue {
 
         public String getComment() {
             return comment;
+        }
+
+        public boolean hasComment() {
+            return comment != null;
         }
 
         void setSpeed(double speed) {

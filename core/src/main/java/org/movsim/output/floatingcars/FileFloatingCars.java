@@ -84,6 +84,7 @@ class FileFloatingCars extends FileOutputBase {
                 COMMENT_CHAR));
         writer.println(String.format("%s origin roadsegment id= %d, exit roadsegment id= %d (not set=%d)",
                 COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(), Vehicle.ROAD_SEGMENT_ID_NOT_SET));
+        writer.println(String.format("%s %s", COMMENT_CHAR, vehicle.getInfoComment()));
         writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
         writer.println(outputHeading);
     }

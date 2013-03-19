@@ -43,8 +43,8 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
 
     private static final String extensionFormat = ".traj.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
-            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId";
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d%n";
+            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s%n";
 
     /** The Constant logger. */
     private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
@@ -145,6 +145,6 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         final double dv = (frontVehicle == null || (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE)) ? 0
                 : me.getRelSpeed(frontVehicle);
         write(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
-                me.roadSegmentId(), me.originRoadSegmentId());
+                me.roadSegmentId(), me.originRoadSegmentId(), me.getInfoComment());
     }
 }

@@ -95,19 +95,21 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     /**
      * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed.
      */
-    protected void addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
+    protected Vehicle addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed) {
         final Vehicle vehicle = vehGenerator.createVehicle(testVehicle);
         initVehicle(laneSegment, frontPosition, speed, vehicle);
+        return vehicle;
     }
 
     /**
      * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed and a predefined route.
      */
-    protected void addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed,
+    protected Vehicle addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed,
             Route route) {
         Preconditions.checkNotNull(route);
         final Vehicle vehicle = vehGenerator.createVehicle(testVehicle, route);
         initVehicle(laneSegment, frontPosition, speed, vehicle);
+        return vehicle;
     }
 
     private void initVehicle(LaneSegment laneSegment, double frontPosition, double speed, final Vehicle vehicle) {
