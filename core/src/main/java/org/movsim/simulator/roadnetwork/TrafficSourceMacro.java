@@ -28,7 +28,6 @@ package org.movsim.simulator.roadnetwork;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,14 +39,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMacro.class);
     
-    private static final double MEASURING_INTERVAL_S = 60.0;
-    
-    private double measuredInflow;
-    
-    private double measuredTime;
-    
-    private int measuredInflowCount;
-
     private final InflowTimeSeries inflowTimeSeries;
 
     /**
@@ -60,9 +51,6 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
             InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment);
         this.inflowTimeSeries = inflowTimeSeries;
-        measuredInflow = 0;
-        measuredTime = 0;
-        measuredInflowCount = 0;
     }
 
     @Override
@@ -70,14 +58,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
         
-        measuredTime += dt;
-        if (measuredTime > MEASURING_INTERVAL_S) {
-            measuredInflow = measuredInflowCount /MEASURING_INTERVAL_S; // vehicles per second 
-            measuredTime = 0.0;
-            measuredInflowCount = 0;
-            LOG.debug(String.format("source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles", 
-                    roadSegment.id(), measuredInflow*Units.INVS_TO_INVH, getQueueLength()));
-        }
+        calcApproximateInflow(dt);
         
         if (nWait >= 1.0) {
             // try to insert new vehicle at inflow
@@ -93,7 +74,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
                 final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
                     nWait--;
-                    measuredInflowCount++;
+                    incrementInflowCount(1);
                     recordData(simulationTime, totalInflow);
                     return; // only one insert per simulation update
                 }
@@ -202,19 +183,9 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         addVehicle(laneSegment, testVehicle, xEnter, vEnter);
     }
 
-    /**
-     * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
-     * 
-     * @return measured inflow over all lanes in vehicles per seconds
-     * 
-     */
-    @Override
-    public double measuredInflow() {
-        return measuredInflow;
-    }
-
     @Override
     public double getTotalInflow(double time) {
         return inflowTimeSeries.getFlowPerLane(time) * roadSegment.laneCount();
     }
+
 }

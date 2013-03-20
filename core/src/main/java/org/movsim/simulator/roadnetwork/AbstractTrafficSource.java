@@ -4,6 +4,7 @@ import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,11 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         }
     }
 
+    protected static final double MEASURING_INTERVAL_S = 60.0;
+    private double measuredTime;
+    private int measuredInflowCount;
+    protected double measuredInflow;
+
     int enteringVehCounter;
 
     /** The x enter last. status of last merging vehicle for logging to file */
@@ -45,6 +51,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     /** number of vehicles in the queue as result from integration over demand minus inserted vehicles. */
     double nWait;
 
+
     final TrafficCompositionGenerator vehGenerator;
 
     final RoadSegment roadSegment;
@@ -53,6 +60,9 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         this.vehGenerator = vehGenerator;
         this.roadSegment = roadSegment;
         nWait = 0;
+        measuredInflow = 0;
+        measuredTime = 0;
+        measuredInflowCount = 0;
     }
 
     /**
@@ -125,8 +135,6 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         laneEnterLast = laneSegment.lane();
     }
     
-    public abstract double measuredInflow();
-
     /**
      * Gets the new cyclic lane index for entering.
      * 
@@ -136,6 +144,32 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
      */
     protected int getNewCyclicLaneIndexForEntering(int iLane) {
         return iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1;
+    }
+
+    /**
+     * Returns the measured inflow in vehicles per second, averaged over the measuring interval.
+     * 
+     * @return measured inflow over all lanes in vehicles per seconds
+     * 
+     */
+    public double measuredInflow() {
+        return measuredInflow;
+    }
+
+    protected void incrementInflowCount(int incr) {
+        measuredInflowCount += incr;
+    }
+
+    protected void calcApproximateInflow(double dt) {
+        measuredTime += dt;
+        if (measuredTime > MEASURING_INTERVAL_S) {
+            measuredInflow = measuredInflowCount / MEASURING_INTERVAL_S; // vehicles per second
+            measuredTime = 0.0;
+            measuredInflowCount = 0;
+            LOG.debug(String.format(
+                    "source=%d with measured inflow Q=%.1f/h over all lanes and queue length %d of waiting vehicles",
+                    roadSegment.id(), measuredInflow * Units.INVS_TO_INVH, getQueueLength()));
+        }
     }
 
 }
