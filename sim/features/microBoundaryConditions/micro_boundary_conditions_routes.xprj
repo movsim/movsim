@@ -45,5 +45,12 @@
                 <Road id="4" />
             </Route>
         </Routes>
+        <OutputConfiguration>
+            <FloatingCarOutput n_timestep="1" route="main">
+                <FloatingCar number="2" />
+            </FloatingCarOutput>
+            <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
+            <Trajectories dt="1" route="main" dn="1" />
+        </OutputConfiguration>
     </Scenario>
 </Movsim>
