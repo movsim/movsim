@@ -4,4 +4,7 @@
 2013-02-01T00:00:40, ACC1, 0, exit, car2 with comment
 2013-02-01T00:01:00, ACC2, 50, main, car3
 2013-02-01T00:01:20, ACC2, 0, exit, 
-
+2013-02-01T00:01:30, ACC2, 0, exit, comment
+2013-02-01T00:01:40, ACC2, 0, exit, comment
+2013-02-01T00:01:50, ACC2, 0, exit, comment
+2013-02-01T00:02:10, ACC2, 0, exit, comment

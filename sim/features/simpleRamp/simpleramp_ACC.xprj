@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) Martin Treiber, Arne Kesting 2011 -->
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="ACC1" length="8" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="33.33" T="1" s0="2" s1="0" delta="4" a="1.0" b="1.5" coolness="1" />
+            </AccelerationModelType>
+            <LaneChangeModelType />
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="simple_onramp.xodr">
+        <Simulation timestep="0.4" duration="2000" seed="42">
+            <TrafficComposition>
+                <VehicleType label="ACC1" fraction="1" />
+            </TrafficComposition>
+            <Road id="1">
+                <TrafficComposition>
+                    <VehicleType label="ACC1" fraction="1" />
+                </TrafficComposition>
+                <InitialConditions>
+                    <MacroIC position="100" density_per_km="2" speed="30" />
+                </InitialConditions>
+                <TrafficSource logging="true">
+                    <Inflow t="0" q_per_hour="200" v="30" />
+                    <Inflow t="1500" q_per_hour="2200" v="22" />
+                    <Inflow t="10800" q_per_hour="1000" v="30" />
+                </TrafficSource>
+                <TrafficSink />
+                <!-- improve vehicle performance at inflow -->
+                <FlowConservingInhomogeneities>
+                    <Inhomogeneity position="0" alpha_T="0.8" />
+                    <Inhomogeneity position="1500" alpha_T="1" />
+                </FlowConservingInhomogeneities>
+            </Road>
+            <Road id="2">
+                <InitialConditions>
+                    <MacroIC position="0" density_per_km="2" speed="30" />
+                </InitialConditions>
+                <SimpleRamp relative_speed="0.5" relative_gap="0.5" logging="true">
+                    <Inflow t="0" q_per_hour="550" />
+                </SimpleRamp>
+            </Road>
+            <Road id="3">
+                <InitialConditions>
+                    <MacroIC position="0" density_per_km="2" speed="30" />
+                </InitialConditions>
+            </Road>
+        </Simulation>
+        <Routes>
+            <Route label="main">
+                <Road id="1" />
+                <Road id="2" />
+                <Road id="3" />
+            </Route>
+        </Routes>
+    </Scenario>
+</Movsim>
+

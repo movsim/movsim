@@ -44,6 +44,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
+        calcApproximateInflow(dt);
         nextInflowRecord = getNextVehicleRecord(simulationTime);
         if (nextInflowRecord != null) {
             int testLane = nextInflowRecord.hasLane() ? nextInflowRecord.getLane()
@@ -59,7 +60,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
             final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment);
             if (isEntered) {
                 nextInflowRecord = null;
-                // measuredInflowCount++;
+                incrementInflowCount(1);
                 recordData(simulationTime, 0);
             }
         }
@@ -130,14 +131,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
 
     @Override
     public double getTotalInflow(double time) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public double measuredInflow() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 0; // no flow-based input
     }
 
 }

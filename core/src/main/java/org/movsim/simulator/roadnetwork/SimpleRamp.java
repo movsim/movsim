@@ -74,6 +74,8 @@ public class SimpleRamp extends AbstractTrafficSource {
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
 
+        calcApproximateInflow(dt);
+
         if (nWait >= 1.0) {
             // try to insert vehicle
             final TestVehicle testVehicle = vehGenerator.getTestVehicle();
@@ -84,6 +86,7 @@ public class SimpleRamp extends AbstractTrafficSource {
                 addVehicle(roadSegment.laneSegment(gap.laneIndex), testVehicle, gap.enterPosition, gap.enterSpeed);
                 // TODO testwise adding, check for accidents
                 nWait--;
+                incrementInflowCount(1);
                 recordData(simulationTime, totalInflow);
             }
         }
@@ -152,12 +155,6 @@ public class SimpleRamp extends AbstractTrafficSource {
     @Override
     public double getTotalInflow(double time) {
         return inflowTimeSeries.getFlowPerLane(time) * roadSegment.laneCount();
-    }
-
-    @Override
-    public double measuredInflow() {
-        // TODO Auto-generated method stub
-        return 0;
     }
 
     final class GapCandidate implements Comparable<GapCandidate> {
