@@ -711,9 +711,9 @@
         <xs:complexType>
             <xs:attribute name="route" type="xs:string" use="required" />
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
+            <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
             <xs:attribute name="start_time" type="nonNegativeDouble"  />
             <xs:attribute name="end_time" type="nonNegativeDouble" />
-            <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
         </xs:complexType>
     </xs:element>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55 -->

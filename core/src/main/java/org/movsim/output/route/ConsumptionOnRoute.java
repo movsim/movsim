@@ -27,12 +27,11 @@ public class ConsumptionOnRoute extends OutputOnRouteBase {
     private int numberOfVehicles;
 
     public ConsumptionOnRoute(double simulationTimestep, ConsumptionCalculation fuelRouteInput,
-            RoadNetwork roadNetwork,
-            Route route, boolean writeOutput) {
+            RoadNetwork roadNetwork, Route route, boolean writeOutput) {
         super(roadNetwork, route);
         this.tauEMA = fuelRouteInput.getTauEMA();
         this.beta = Math.exp(-simulationTimestep / tauEMA);
-        fileWriter = (writeOutput) ? new FileConsumptionOnRoute(fuelRouteInput.getDt(), route) : null;
+        fileWriter = (writeOutput) ? new FileConsumptionOnRoute(fuelRouteInput, route) : null;
         totalConsumption = 0;
     }
 
