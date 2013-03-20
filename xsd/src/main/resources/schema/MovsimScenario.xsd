@@ -690,11 +690,14 @@
     <xs:element name="Trajectories">
         <xs:complexType>
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
-            <xs:attribute name="dn" type="positiveInteger" default="1" />
-            <xs:attribute name="start_time" type="nonNegativeDouble" default="0" />
-            <xs:attribute name="end_time" type="nonNegativeDouble" default="1e10" />
+            <!-- selection of every n'th vehicle not yet implemented -->
+			<!-- <xs:attribute name="dn" type="positiveInteger" default="1" /> -->
+            <xs:attribute name="start_time" type="nonNegativeDouble" />
+            <xs:attribute name="end_time" type="nonNegativeDouble"  />
             <xs:attribute name="route" type="xs:string" use="required" />
-            <xs:attribute name="random_fraction" type="nonNegativeDouble" default="0" />
+            <xs:attribute name="random_fraction" type="probability"  />
+            <!-- convenience offset in additional column -->
+            <xs:attribute name="offset_position" type="nonNegativeDouble" default="0" />
         </xs:complexType>
     </xs:element>
     <xs:element name="TravelTimes">
@@ -708,8 +711,8 @@
         <xs:complexType>
             <xs:attribute name="route" type="xs:string" use="required" />
             <xs:attribute name="dt" type="nonNegativeDouble" default="1" />
-            <xs:attribute name="start_time" type="nonNegativeDouble" default="0" />
-            <xs:attribute name="end_time" type="nonNegativeDouble" default="1e10" />
+            <xs:attribute name="start_time" type="nonNegativeDouble"  />
+            <xs:attribute name="end_time" type="nonNegativeDouble" />
             <xs:attribute name="tauEMA" type="nonNegativeDouble" default="20" />
         </xs:complexType>
     </xs:element>

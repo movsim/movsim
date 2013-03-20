@@ -50,7 +50,7 @@
                 <FloatingCar number="2" />
             </FloatingCarOutput>
             <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
-            <Trajectories dt="1" route="main" dn="1" />
+            <Trajectories dt="1" route="main" offset_position="1000" />
         </OutputConfiguration>
     </Scenario>
 </Movsim>

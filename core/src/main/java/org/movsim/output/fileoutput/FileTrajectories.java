@@ -36,6 +36,8 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+
 /**
  * The Class FileTrajectories.
  */
@@ -43,21 +45,19 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
 
     private static final String extensionFormat = ".traj.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
-            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment";
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s%n";
+            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment, xWithOffset[m]";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %10.4f%n";
 
     /** The Constant logger. */
     private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 
-    private final double dtOut;
-    private final double randomFraction;
-    private final double t_start_interval;
-    private final double t_end_interval;
-    private final double x_start_interval;
-    private final double x_end_interval;
-    private double time = 0;
+    private final double positionIntervalStart;
+    private final double positionIntervalEnd;
+    private double time;
     private double lastUpdateTime = 0;
     private final Route route;
+
+    private final Trajectories traj;
 
     /**
      * Instantiates a new trajectories.
@@ -67,17 +67,13 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      */
     public FileTrajectories(Trajectories traj, Route route) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
+        this.traj = Preconditions.checkNotNull(traj);
+        this.route = Preconditions.checkNotNull(route);
+        positionIntervalStart = 0;
+        positionIntervalEnd = route.getLength();
 
-        dtOut = traj.getDt();
-        randomFraction = (traj.getRandomFraction() < 0 || traj.getRandomFraction() > 1) ? 0 : traj.getRandomFraction();
-        t_start_interval = traj.getStartTime();
-        t_end_interval = traj.getEndTime();
-        x_start_interval = 0;
-        x_end_interval = route.getLength();
-
-        this.route = route;
-
-        logger.info("interval for output: timeStart={}, timeEnd={}", t_start_interval, t_end_interval);
+        logger.info("interval for output: timeStart=" + (traj.isSetStartTime() ? traj.getStartTime() : "--")
+                + ", timeEnd=" + (traj.isSetEndTime() ? traj.getEndTime() : "--"));
         writer = createWriter(String.format(extensionFormat, route.getName()));
         writeHeader(route);
     }
@@ -90,18 +86,30 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-
         this.time = simulationTime;
-        // check time interval for output:
-        if (time >= t_start_interval && time <= t_end_interval) {
+        if (isLargerThanStartTimeInterval() && isSmallerThanEndTimeInterval()) {
             if (iterationCount % 1000 == 0) {
                 logger.info("time = {}, timestep= {}", time, dt);
             }
-            if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= dtOut) {
+            if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= traj.getDt()) {
                 lastUpdateTime = time;
                 writeTrajectories();
             }
         }
+    }
+
+    private boolean isSmallerThanEndTimeInterval() {
+        if (!traj.isSetStartTime()) {
+            return true;
+        }
+        return time >= traj.getStartTime();
+    }
+
+    private boolean isLargerThanStartTimeInterval() {
+        if (!traj.isSetEndTime()) {
+            return true;
+        }
+        return time <= traj.getEndTime();
     }
 
     /**
@@ -119,9 +127,9 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
                     if (vehicle.type() == Vehicle.Type.OBSTACLE) {
                         continue;
                     }
-                    if (randomFraction == 0 || vehicle.getRandomFix() < randomFraction) {
-                        if (vehicle.getFrontPosition() >= x_start_interval
-                                && vehicle.getFrontPosition() <= x_end_interval) {
+                    if (!traj.isSetRandomFraction() || vehicle.getRandomFix() < traj.getRandomFraction()) {
+                        if (vehicle.getFrontPosition() >= positionIntervalStart
+                                && vehicle.getFrontPosition() <= positionIntervalEnd) {
                             writeVehicleData(vehicle, positionOnRoute, laneSegment.frontVehicle(vehicle));
                         }
                     }
@@ -140,11 +148,11 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      */
     private void writeVehicleData(Vehicle me, double positionOnRoute, Vehicle frontVehicle) {
         final double pos = me.getFrontPosition() + positionOnRoute;
-        final double s = (frontVehicle == null || (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE)) ? 0
-                : me.getNetDistance(frontVehicle);
-        final double dv = (frontVehicle == null || (frontVehicle != null && frontVehicle.type() == Vehicle.Type.OBSTACLE)) ? 0
-                : me.getRelSpeed(frontVehicle);
+        final double s = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ? 0 : me
+                .getNetDistance(frontVehicle);
+        final double dv = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ? 0 : me
+                .getRelSpeed(frontVehicle);
         write(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
-                me.roadSegmentId(), me.originRoadSegmentId(), me.getInfoComment());
+                me.roadSegmentId(), me.originRoadSegmentId(), me.getInfoComment(), pos + traj.getOffsetPosition());
     }
 }
