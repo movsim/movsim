@@ -23,12 +23,11 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.spatiotemporal;
+package org.movsim.output.route;
 
 import java.util.Comparator;
 import java.util.TreeSet;
 
-import org.movsim.output.route.OutputOnRouteBase;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;

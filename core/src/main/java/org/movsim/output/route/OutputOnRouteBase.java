@@ -6,17 +6,15 @@ import org.movsim.simulator.roadnetwork.Route;
 
 import com.google.common.base.Preconditions;
 
-public abstract class OutputOnRouteBase implements SimulationTimeStep {
+abstract class OutputOnRouteBase implements SimulationTimeStep {
 
     protected final Route route;
 
     protected final RoadNetwork roadNetwork;
 
-    public OutputOnRouteBase(RoadNetwork roadNetwork, Route route) {
-        Preconditions.checkNotNull(roadNetwork);
-        Preconditions.checkNotNull(route);
-        this.roadNetwork = roadNetwork;
-        this.route = route;
+    OutputOnRouteBase(RoadNetwork roadNetwork, Route route) {
+        this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
+        this.route = Preconditions.checkNotNull(route);
     }
     
 }
