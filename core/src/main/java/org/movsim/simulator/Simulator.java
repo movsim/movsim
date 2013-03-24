@@ -530,7 +530,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        if (iterationCount % 100 == 0) {
+        if (iterationCount % 200 == 0) {
             if (logger.isInfoEnabled()) {
                 logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
                         simulationTime, simulationTime / 3600, dt, projectName));
