@@ -152,7 +152,7 @@ public final class MicroInflowQueue {
                 MicroInflowRecord record = parse(line, config, maxLane, timeOffsetMillis);
                 inflowQueue.add(record);
             } catch (IllegalArgumentException e) {
-                LOG.info("cannot parse data. Ignore line={}", Arrays.toString(line));
+                LOG.info("cannot parse data or data is invalid. Ignore line={}", Arrays.toString(line));
             }
         }
         LOG.info("parsed successfully {} from {} lines in input file.", inflowQueue.size(), input.size());
@@ -181,6 +181,9 @@ public final class MicroInflowQueue {
         trim(data);
         Preconditions.checkArgument(config.isSetColumnVehicleType() && config.isSetColumnTime());
         double time = convertTimeToSeconds(data[config.getColumnTime() - 1], config.getFormatTime(), timeOffsetMillis);
+        if (time < 0) {
+            throw new IllegalArgumentException("negative entry time.");
+        }
         String typeLabel = data[config.getColumnVehicleType() - 1];
         MicroInflowRecord record = new MicroInflowRecord(time, typeLabel);
         if (config.isSetColumnComment()) {
@@ -220,6 +223,9 @@ public final class MicroInflowQueue {
 
         double timeInSeconds = (dateTime.getMillis() - timeOffsetMillis) / 1000L;
         LOG.info("time={} --> dateTime={} --> seconds with offset=" + timeInSeconds, time, dateTime);
+        if (timeInSeconds < 0) {
+            LOG.warn("negative entry time!");
+        }
         return timeInSeconds;
     }
 
