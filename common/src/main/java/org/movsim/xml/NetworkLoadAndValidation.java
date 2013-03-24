@@ -17,9 +17,9 @@ public final class NetworkLoadAndValidation {
 
     private static final URL OPEN_DRIVE_XSD_URL = NetworkLoadAndValidation.class.getResource(OPEN_DRIVE_XML_SCHEMA);
 
-    private NetworkLoadAndValidation(){
+    private NetworkLoadAndValidation() {
     }
-    
+
     public static OpenDRIVE validateAndLoadOpenDriveNetwork(final File xmlFile) throws JAXBException, SAXException {
         return new FileUnmarshaller<OpenDRIVE>().load(xmlFile, OpenDRIVE.class, OPEN_DRIVE_FACTORY, OPEN_DRIVE_XSD_URL);
     }

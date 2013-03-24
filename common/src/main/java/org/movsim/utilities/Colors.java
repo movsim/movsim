@@ -34,11 +34,11 @@ public class Colors {
         return (rgba >> 0) & 0xFF;
     }
 
-    public static int randomColor(){
+    public static int randomColor() {
         int r = (int) (Math.random() * 256);
         int g = (int) (Math.random() * 256);
         int b = (int) (Math.random() * 256);
-        return color(r,g,b);
+        return color(r, g, b);
     }
 
 }

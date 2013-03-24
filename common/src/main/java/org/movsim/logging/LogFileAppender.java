@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -49,7 +49,7 @@ import org.movsim.input.ProjectMetaData;
  */
 public class LogFileAppender {
 
-    private static final Logger LOG= Logger.getLogger(LogFileAppender.class);
+    private static final Logger LOG = Logger.getLogger(LogFileAppender.class);
     private FileAppender fileAppender;
 
     public static void initialize(ProjectMetaData projectMetaData) {

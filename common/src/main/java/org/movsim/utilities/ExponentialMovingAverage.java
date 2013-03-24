@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -51,9 +51,9 @@ public class ExponentialMovingAverage {
     private static double weight(double t1, double t2, double tau) {
         return Math.exp(-Math.abs((t1 - t2) / tau));
     }
-    
+
     public static double calc(double xNew, double xEMA, double beta) {
-        return (1-beta) * xNew + beta * xEMA;
+        return (1 - beta) * xNew + beta * xEMA;
     }
 
 }

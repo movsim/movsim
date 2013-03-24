@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -54,7 +54,7 @@ public class Tables {
             intp_value = (1 - rest) * tab[i] + rest * tab[i + 1];
         } else if (i == n - 1) {
             intp_value = tab[n - 1];
-        } else if( i== n){
+        } else if (i == n) {
             intp_value = xmax;
         } else {
             logger.error("intp: index i = " + i + " (ir=" + ir + ") out of range\n");

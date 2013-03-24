@@ -21,10 +21,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public class XmlHelpers {
-    
+
     /** The Constant logger. */
     final static Logger logger = LoggerFactory.getLogger(XmlHelpers.class);
-    
+
     /**
      * Writes the internal xml after validation to file.
      * 
@@ -48,8 +48,7 @@ public class XmlHelpers {
             e.printStackTrace();
         }
     }
-    
-    
+
     /**
      * Validates the Inputsource.
      * 

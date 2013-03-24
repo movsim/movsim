@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -32,7 +32,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
 
-
 /**
  * Container for some shared information. Singleton pattern.
  * 
@@ -62,7 +61,7 @@ public final class ProjectMetaData {
 
     private boolean instantaneousFileOutput = true;
     // private boolean onlyValidation = false;
-    
+
     private long timeOffsetMillis = 0;
 
     /**
@@ -70,7 +69,7 @@ public final class ProjectMetaData {
      * Allows to read the config files from resources instead.
      */
     private boolean xmlFromResources = false;
-    
+
     /**
      * For Android client: xmlFromResources does work, but using the file system is more convenient.
      */
@@ -211,7 +210,7 @@ public final class ProjectMetaData {
     public void setXmlFromResources(boolean xmlFromResources) {
         this.xmlFromResources = xmlFromResources;
     }
-    
+
     /**
      * @return the parseFromInputstream
      */
@@ -220,11 +219,13 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param parseFromInputstream the parseFromInputstream to set
+     * @param parseFromInputstream
+     *            the parseFromInputstream to set
      */
     public void setParseFromInputstream(boolean parseFromInputstream) {
         this.parseFromInputstream = parseFromInputstream;
     }
+
     /**
      * @return the movsimXml
      */
@@ -233,7 +234,8 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param movsimXml the movsimXml to set
+     * @param movsimXml
+     *            the movsimXml to set
      */
     public void setMovsimXml(InputStream movsimXml) {
         this.movsimXml = movsimXml;
@@ -247,7 +249,8 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param networkXml the networkXml to set
+     * @param networkXml
+     *            the networkXml to set
      */
     public void setNetworkXml(InputStream networkXml) {
         this.networkXml = networkXml;
@@ -261,7 +264,8 @@ public final class ProjectMetaData {
     }
 
     /**
-     * @param projectProperties the projectProperties to set
+     * @param projectProperties
+     *            the projectProperties to set
      */
     public void setProjectProperties(InputStream projectProperties) {
         this.projectProperties = projectProperties;
@@ -313,7 +317,7 @@ public final class ProjectMetaData {
     public void setTimeOffsetMillis(long timeOffsetMillis) {
         this.timeOffsetMillis = timeOffsetMillis;
     }
-    
+
     public String getFormatedTimeWithOffset(double simulationTime) {
         DateTime dateTime = new DateTime(timeOffsetMillis + Math.round(1000 * simulationTime), DateTimeZone.UTC);
         return ISODateTimeFormat.dateTimeNoMillis().print(dateTime);

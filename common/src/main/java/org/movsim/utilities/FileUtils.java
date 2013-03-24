@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -52,15 +52,14 @@ public class FileUtils {
 
     private static Logger LOG = LoggerFactory.getLogger(FileUtils.class);
 
-    
     /**
      * Searches a file first in given location {@code filename} and second in path of the inputfile.
      * 
      * @param filename
-     * @return the file if it exists 
+     * @return the file if it exists
      * @throws IllegalArgumentException
      */
-    public static File lookupFilename(String filename) throws IllegalArgumentException{
+    public static File lookupFilename(String filename) throws IllegalArgumentException {
         File file = new File(filename);
         if (!file.exists() && ProjectMetaData.getInstance().hasPathToProjectFile()) {
             file = new File(ProjectMetaData.getInstance().getPathToProjectFile(), filename);
@@ -71,7 +70,6 @@ public class FileUtils {
         return file;
     }
 
-    
     /**
      * Gets the writer.
      * 
@@ -117,34 +115,17 @@ public class FileUtils {
         return System.getProperty("user.dir");
     }
 
-    /**
-     * Home directory.
-     * 
-     * @return the string
-     */
-    public static String homeDirectory() {
-        final String home = System.getProperty("user.home");
-        if (home.equalsIgnoreCase("?")) {
-        }
-        return home;
-    }
-
-    /**
-     * File exists.
-     * 
-     * @param filename
-     *            the filename
-     * @param msg
-     *            the msg
-     * @return true, if successful
-     */
-    public static boolean fileExists(String filename, String msg) {
-        final File file = new File(filename);
-        if (file.exists() && file.isFile()) {
-            return (true);
-        }
-        return (false);
-    }
+    // /**
+    // * Home directory.
+    // *
+    // * @return the string
+    // */
+    // public static String homeDirectory() {
+    // final String home = System.getProperty("user.home");
+    // // if (home.equalsIgnoreCase("?")) {
+    // // }
+    // return home;
+    // }
 
     /**
      * File exists.
@@ -376,7 +357,7 @@ public class FileUtils {
         final File inputFile = new File(filename);
         return getInputSourceFromFilename(inputFile);
     }
-    
+
     public static InputSource getInputSourceFromFilename(File inputFile) {
         InputSource inputSource = null;
         try {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -154,10 +154,10 @@ public class MovsimCommandLine {
      */
     private static void optWriteLoggingProperties() {
         final String resource = ProjectMetaData.getLog4jFilenameWithPath();
-        final InputStream is = MovsimCommandLine.class.getResourceAsStream(resource); 
+        final InputStream is = MovsimCommandLine.class.getResourceAsStream(resource);
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
         System.out.println("logger properties file written to " + ProjectMetaData.getLog4jFilename());
-      
+
         System.exit(0);
     }
 
@@ -200,7 +200,8 @@ public class MovsimCommandLine {
         // final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
         File file = new File(filename);
         final String name = file.getName();
-        ProjectMetaData.getInstance().setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
+        ProjectMetaData.getInstance().setProjectName(
+                name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
         ProjectMetaData.getInstance().setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
     }
 

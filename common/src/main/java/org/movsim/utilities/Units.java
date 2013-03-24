@@ -30,8 +30,8 @@ public interface Units {
     /** converts 1/s to 1/h, factor is 3600 */
     final double INVS_TO_INVH = 3600.;
 
-	/** converts 1/h to 1/s, factor is 1/3600 */
-	final double INVH_TO_INVS = 1 / INVS_TO_INVH;
+    /** converts 1/h to 1/s, factor is 1/3600 */
+    final double INVH_TO_INVS = 1 / INVS_TO_INVH;
 
     /** converts m/s to km/h, factor is 3.6 */
     final double MS_TO_KMH = 3.6;
@@ -41,20 +41,20 @@ public interface Units {
 
     /** converts from 1/m to 1/km, factor is 1000 */
     final double INVM_TO_INVKM = 1000.;
-    
+
     /** converts from 1/km to 1/m, factor is 1/1000 */
-    final double INVKM_TO_INVM = 1./INVM_TO_INVKM;
+    final double INVKM_TO_INVM = 1. / INVM_TO_INVKM;
 
     /** converts meter to kilometer. Factor is 1000. */
     final double KM_TO_M = 1000;
-    
+
     /** converts kilometer to meter. Factor is 1/1000. */
-    final double M_TO_KM = 1./KM_TO_M;
+    final double M_TO_KM = 1. / KM_TO_M;
 
     /** converts hours to seconds. Factor is 3600. */
     final double H_TO_S = 3600;
-    
+
     /** converts seconds to hours. Factor is 1/3600. */
-    final double S_TO_H = 1/H_TO_S;
+    final double S_TO_H = 1 / H_TO_S;
 
 }

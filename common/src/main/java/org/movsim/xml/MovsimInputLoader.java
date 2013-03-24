@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
 
 // TODO rename
 public final class MovsimInputLoader {
-    
+
     /** The Constant logger. */
     private final static Logger LOG = LoggerFactory.getLogger(MovsimInputLoader.class);
 
@@ -51,10 +51,9 @@ public final class MovsimInputLoader {
 
     private MovsimInputLoader() {
     }
-    
+
     public static Movsim validateAndLoadScenarioInput(final File xmlFile) throws JAXBException, SAXException {
-        return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY,
-                SCENARIO_XSD_URL);
+        return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY, SCENARIO_XSD_URL);
     }
 
     public static Movsim getInputData(File xmlFile) {
@@ -74,11 +73,11 @@ public final class MovsimInputLoader {
         }
         return inputData;
     }
-    
+
     /**
      * writes the movsim xsd to the current working directory.
      * 
-     * @throws IOException 
+     * @throws IOException
      */
     public static void writeXsdToFile() throws IOException {
         String filename = new File(SCENARIO_XML_SCHEMA).getName();

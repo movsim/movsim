@@ -20,8 +20,9 @@ public class FileUnmarshaller<T> {
 
     /** Assure that only one loading/jaxb operation is active. */
     private static final Object SYNC_OBJECT = new Object();
-    
-    public final T load(StreamSource source, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException, SAXException {
+
+    public final T load(StreamSource source, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException,
+            SAXException {
         T result;
         synchronized (SYNC_OBJECT) {
             // TODO check if <xi:include href="test2/b.xml"> could work
@@ -44,8 +45,8 @@ public class FileUnmarshaller<T> {
         return load(new StreamSource(file), clazz, factory, xsdFile);
     }
 
-    private final Unmarshaller createUnmarshaller(final Class<?> objectFactoryClass, final URL xsdFile) throws JAXBException,
-            SAXException {
+    private final Unmarshaller createUnmarshaller(final Class<?> objectFactoryClass, final URL xsdFile)
+            throws JAXBException, SAXException {
         JAXBContext context = JAXBContext.newInstance(objectFactoryClass);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         if (unmarshaller == null) {

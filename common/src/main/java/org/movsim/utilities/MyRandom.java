@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -38,7 +38,7 @@ import com.google.common.base.Preconditions;
  */
 public class MyRandom {
 
-    private static Random rand = new Random(); 
+    private static Random rand = new Random();
 
     private MyRandom() {
         // enforce singleton property with private constructor.
@@ -47,8 +47,8 @@ public class MyRandom {
     public static void initializeWithSeed(long randomSeed) {
         rand = new Random(randomSeed);
     }
-    
-    public static boolean isInitialized(){
+
+    public static boolean isInitialized() {
         return rand != null;
     }
 
@@ -73,22 +73,22 @@ public class MyRandom {
     public static double nextDouble() {
         return rand.nextDouble();
     }
-    
+
     /**
-     * returns a realization of a uniformly distributed random variable in [-1, 1] 
+     * returns a realization of a uniformly distributed random variable in [-1, 1]
      * 
      * @return a uniformly distributed realization in [-1, 1]
      */
-    public static double getUniformDistribution(){
+    public static double getUniformDistribution() {
         return 2 * MyRandom.nextDouble() - 1;
     }
-    
+
     public static double getUniformlyDistributedRandomizedFactor(double randomizationStrength) {
-        return 1 + randomizationStrength * getUniformDistribution(); 
+        return 1 + randomizationStrength * getUniformDistribution();
     }
-    
+
     public static double getGaussiansDistributedRandomizedFactor(double sigma, double nSigmaCutoff) {
-        return 1 + Math.max(-nSigmaCutoff*sigma, Math.min(nSigmaCutoff, sigma * rand.nextGaussian())); 
+        return 1 + Math.max(-nSigmaCutoff * sigma, Math.min(nSigmaCutoff, sigma * rand.nextGaussian()));
     }
-    
+
 }
