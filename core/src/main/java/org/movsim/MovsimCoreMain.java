@@ -56,20 +56,20 @@ public class MovsimCoreMain {
 
         Locale.setDefault(Locale.US);
 
-        final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
+        // final ProjectMetaData projectMetaData = ProjectMetaData.getInstance();
         // parse the command line, putting the results into projectMetaData
         Logger.initializeLogger();
 
-        MovsimCommandLine.parse(projectMetaData, args);
+        MovsimCommandLine.parse(args);
 
-        if (!projectMetaData.hasProjectName()) {
+        if (!ProjectMetaData.getInstance().hasProjectName()) {
             System.err.println("no xml simulation configuration file provided.");
             System.exit(-1);
         }
 
-        LogFileAppender.initialize(projectMetaData);
+        LogFileAppender.initialize(ProjectMetaData.getInstance());
 
-        final Simulator simulator = new Simulator(projectMetaData);
+        final Simulator simulator = new Simulator();
         simulator.initialize();
         simulator.runToCompletion();
     }

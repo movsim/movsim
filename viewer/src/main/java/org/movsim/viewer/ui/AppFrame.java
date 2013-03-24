@@ -58,7 +58,7 @@ public class AppFrame extends JFrame {
 
         SwingHelper.activateWindowClosingAndSystemExitButton(this);
 
-        final Simulator simulator = new Simulator(projectMetaData);
+        final Simulator simulator = new Simulator();
         initLookAndFeel();
 
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);

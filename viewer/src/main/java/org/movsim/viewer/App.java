@@ -68,7 +68,7 @@ public class App {
         Logger.initializeLogger();
         
         // parse the command line, putting the results into projectMetaData
-        MovsimCommandLine.parse(projectMetaData, args);
+        MovsimCommandLine.parse(args);
         
         Properties properties = ViewProperties.loadProperties(projectMetaData);
 

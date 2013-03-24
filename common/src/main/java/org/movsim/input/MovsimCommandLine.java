@@ -25,6 +25,7 @@
  */
 package org.movsim.input;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,8 +37,6 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.movsim.MovsimCoreMain;
-import org.movsim.utilities.FileNameUtils;
 import org.movsim.utilities.FileUtils;
 import org.movsim.xml.MovsimInputLoader;
 
@@ -48,10 +47,9 @@ public class MovsimCommandLine {
 
     final CommandLineParser parser;
     private Options options;
-    protected final ProjectMetaData projectMetaData;
 
-    public static void parse(ProjectMetaData projectMetaData, String[] args) {
-        final MovsimCommandLine commandLine = new MovsimCommandLine(projectMetaData);
+    public static void parse(String[] args) {
+        final MovsimCommandLine commandLine = new MovsimCommandLine();
         try {
             commandLine.createAndParse(args);
         } catch (ParseException e) {
@@ -70,8 +68,7 @@ public class MovsimCommandLine {
      * @param args
      *            the args
      */
-    private MovsimCommandLine(ProjectMetaData projectMetaData) {
-        this.projectMetaData = projectMetaData;
+    private MovsimCommandLine() {
         createOptions();
         parser = new GnuParser();
     }
@@ -99,7 +96,9 @@ public class MovsimCommandLine {
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
-        OptionBuilder.withDescription("argument has to be a xml file specifing the configuration of the simulation");
+        OptionBuilder.withDescription("movsim main configuration file (ending \""
+                + ProjectMetaData.getInstance().getMovsimConfigFileEnding()
+                + "\" will be added automatically if not provided.");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);
 
@@ -147,7 +146,7 @@ public class MovsimCommandLine {
         if (!outputPathExits) {
             FileUtils.createDir(outputPath, "");
         }
-        projectMetaData.setOutputPath(FileUtils.getCanonicalPath(outputPath));
+        ProjectMetaData.getInstance().setOutputPath(FileUtils.getCanonicalPath(outputPath));
     }
 
     /**
@@ -155,7 +154,7 @@ public class MovsimCommandLine {
      */
     private static void optWriteLoggingProperties() {
         final String resource = ProjectMetaData.getLog4jFilenameWithPath();
-        final InputStream is = MovsimCoreMain.class.getResourceAsStream(resource); 
+        final InputStream is = MovsimCommandLine.class.getResourceAsStream(resource); 
         FileUtils.resourceToFile(is, ProjectMetaData.getLog4jFilename());
         System.out.println("logger properties file written to " + ProjectMetaData.getLog4jFilename());
       
@@ -174,11 +173,8 @@ public class MovsimCommandLine {
         System.exit(0);
     }
 
-    /**
-     * Option: parse xml input file for validation (without simulation).
-     */
     private void optionValidation() {
-        System.out.println("Not working currently. Needs to be implemented!!!");
+        System.out.println("Not working implemented!");
         System.exit(0);
     }
 
@@ -189,24 +185,24 @@ public class MovsimCommandLine {
      *            the cmdline
      */
     private void requiredOptionSimulation(CommandLine cmdline) {
-        final String filename = cmdline.getOptionValue('f');
-        if (filename == null || !FileUtils.fileExists(filename)) {
-            System.err.println("No xml configuration file! Please specify via the option -f.");
-            return;
-        }
-
-        final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
-        if (isXml) {
-            final String name = FileNameUtils.getName(filename);
-            projectMetaData
-                    .setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
-            projectMetaData.setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
-        } else {
-            System.err.println("movsim configuration file " + filename + " is not a valid xml.");
+        String filename = cmdline.getOptionValue('f');
+        if (filename == null || filename.isEmpty()) {
+            System.err.println("No configuration file provided! Please specify a file via the option -f.");
             System.exit(-1);
         }
+        if (!filename.endsWith(ProjectMetaData.getMovsimConfigFileEnding())) {
+            filename = filename + ProjectMetaData.getMovsimConfigFileEnding();
+        }
+        if (!FileUtils.fileExists(filename)) {
+            System.err.println("Configuration file \"" + filename + "\" not found!");
+            System.exit(-1);
+        }
+        // final boolean isXml = FileNameUtils.validateFileName(filename, ProjectMetaData.getMovsimConfigFileEnding());
+        File file = new File(filename);
+        final String name = file.getName();
+        ProjectMetaData.getInstance().setProjectName(name.substring(0, name.indexOf(ProjectMetaData.getMovsimConfigFileEnding())));
+        ProjectMetaData.getInstance().setPathToProjectXmlFile(FileUtils.getCanonicalPathWithoutFilename(filename));
     }
-
 
     /**
      * Option help.

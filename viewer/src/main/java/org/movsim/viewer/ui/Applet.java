@@ -48,7 +48,7 @@ public class Applet extends JApplet {
         final String scenarioName = scenario.substring(scenario.lastIndexOf("/")+1);
         projectMetaData.setProjectName(scenarioName);
 
-        final Simulator simulator = new Simulator(projectMetaData);
+        final Simulator simulator = new Simulator();
         initLookAndFeel();
 
         final TrafficCanvas trafficCanvas = new TrafficCanvas(simulator, properties);

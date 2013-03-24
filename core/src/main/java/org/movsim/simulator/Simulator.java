@@ -105,8 +105,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @throws SAXException
      * @throws JAXBException
      */
-    public Simulator(ProjectMetaData projectMetaData) {
-        this.projectMetaData = projectMetaData;
+    public Simulator() {
+        this.projectMetaData = ProjectMetaData.getInstance();
         roadNetwork = new RoadNetwork();
         simulationRunnable = new SimulationRunnable(this);
         simulationRunnable.setCompletionCallback(this);

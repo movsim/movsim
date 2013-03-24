@@ -41,6 +41,7 @@ import org.movsim.consumption.offline.ConsumptionCalculation;
 import org.movsim.consumption.offline.ConsumptionDataRecord;
 import org.movsim.consumption.offline.InputReader;
 import org.movsim.consumption.offline.OutputWriter;
+import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.xml.MovsimInputLoader;
 
@@ -59,7 +60,8 @@ public class ConsumptionMain {
 
         ConsumptionLogger.initializeLogger();
 
-        ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
+        // ConsumptionCommandLine.parse(ProjectMetaData.getInstance(), args);
+        MovsimCommandLine.parse(args);
 
         Movsim inputData = MovsimInputLoader.getInputData(ProjectMetaData.getInstance().getInputFile());
 
