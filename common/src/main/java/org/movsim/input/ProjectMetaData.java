@@ -27,6 +27,17 @@ package org.movsim.input;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.TimeZone;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
+
+import org.apache.log4j.helpers.ISO8601DateFormat;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 
 /**
  * Container for some shared information. Singleton pattern.
@@ -57,6 +68,8 @@ public final class ProjectMetaData {
 
     private boolean instantaneousFileOutput = true;
     // private boolean onlyValidation = false;
+    
+    private long timeOffsetMillis = 0;
 
     /**
      * Needed for Applet. Change to true, if you cannot access the file system.
@@ -191,25 +204,6 @@ public final class ProjectMetaData {
         this.instantaneousFileOutput = instantaneousFileOutput;
     }
 
-//    /**
-//     * Commandline option 'only validation' of input xml file against dtd.
-//     * 
-//     * @return
-//     */
-//    public boolean isOnlyValidation() {
-//        return onlyValidation;
-//    }
-//
-//    /**
-//     * Sets the only validation. Commandline option 'only validation' of input xml file against dtd.
-//     * 
-//     * @param onlyValidation
-//     *            the new only validation
-//     */
-//    public void setOnlyValidation(boolean onlyValidation) {
-//        this.onlyValidation = onlyValidation;
-//    }
-
     public boolean isXmlFromResources() {
         return xmlFromResources;
     }
@@ -317,5 +311,17 @@ public final class ProjectMetaData {
     public static String getLog4jFilenameWithPath() {
         return File.separator + MOVSIM_COMMON_LOG_PATH + File.separator + LOG4J_FILENAME;
     }
+
+    public long getTimeOffsetMillis() {
+        return timeOffsetMillis;
+    }
+
+    public void setTimeOffsetMillis(long timeOffsetMillis) {
+        this.timeOffsetMillis = timeOffsetMillis;
+    }
     
+    public String getFormatedTimeWithOffset(double simulationTime) {
+        DateTime dateTime = new DateTime(timeOffsetMillis + Math.round(1000 * simulationTime), DateTimeZone.UTC);
+        return ISODateTimeFormat.dateTimeNoMillis().print(dateTime);
+    }
 }

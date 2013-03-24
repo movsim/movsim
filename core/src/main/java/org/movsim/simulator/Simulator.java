@@ -98,9 +98,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private Map<String, Route> routes;
     private final SimulationRunnable simulationRunnable;
     private int obstacleCount;
-
-    private long timeOffsetMillis;
-
+    long timeOffsetMillis;
     /**
      * Constructor.
      * 
@@ -123,11 +121,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         inputData = MovsimInputLoader.getInputData(projectMetaData.getInputFile());
 
+        timeOffsetMillis = 0;
         if (inputData.getScenario().getSimulation().isSetTimeOffset()) {
             DateTime dateTime = LocalDateTime.parse(inputData.getScenario().getSimulation().getTimeOffset(),
-                    DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ss")).toDateTime(DateTimeZone.UTC);
+                    DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ")).toDateTime(DateTimeZone.UTC);
             timeOffsetMillis = dateTime.getMillis();
             logger.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
+            ProjectMetaData.getInstance().setTimeOffsetMillis(timeOffsetMillis);
         }
         projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
 
@@ -490,10 +490,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.reset();
         if (inputData.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
-                    projectMetaData.isInstantaneousFileOutput(),
- inputData.getScenario().getOutputConfiguration(),
-                    roadNetwork,
-                    routes, vehicleFactory);
+                    projectMetaData.isInstantaneousFileOutput(), inputData.getScenario().getOutputConfiguration(),
+                    roadNetwork, routes, vehicleFactory);
         }
         obstacleCount = roadNetwork.obstacleCount();
     }

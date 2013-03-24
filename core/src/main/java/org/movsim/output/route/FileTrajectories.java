@@ -46,8 +46,8 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
 
     private static final String extensionFormat = ".traj.route_%s.csv";
     private static final String outputHeading = COMMENT_CHAR
-            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment, xWithOffset[m]";
-    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %10.4f%n";
+            + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment, absTime, xWithOffset[m]";
+    private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %s, %10.4f%n";
 
     /** The Constant logger. */
     private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
@@ -94,7 +94,8 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
             }
             if ((time - lastUpdateTime + MovsimConstants.SMALL_VALUE) >= traj.getDt()) {
                 lastUpdateTime = time;
-                writeTrajectories();
+                String formattedTime = ProjectMetaData.getInstance().getFormatedTimeWithOffset(simulationTime);
+                writeTrajectories(formattedTime);
             }
         }
     }
@@ -119,7 +120,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      * 
      * @param roadSegment
      */
-    private void writeTrajectories() {
+    private void writeTrajectories(String formattedTime) {
         double positionOnRoute = 0.0;
         for (final RoadSegment roadSegment : route) {
             final int laneCount = roadSegment.laneCount();
@@ -132,7 +133,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
                     if (!traj.isSetRandomFraction() || vehicle.getRandomFix() < traj.getRandomFraction()) {
                         if (vehicle.getFrontPosition() >= positionIntervalStart
                                 && vehicle.getFrontPosition() <= positionIntervalEnd) {
-                            writeVehicleData(vehicle, positionOnRoute, laneSegment.frontVehicle(vehicle));
+                            writeVehicleData(vehicle, positionOnRoute, laneSegment.frontVehicle(vehicle), formattedTime);
                         }
                     }
                 }
@@ -148,13 +149,14 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
      * @param positionOnRoute
      * @param frontVehicle
      */
-    private void writeVehicleData(Vehicle me, double positionOnRoute, Vehicle frontVehicle) {
+    private void writeVehicleData(Vehicle me, double positionOnRoute, Vehicle frontVehicle, String formattedTime) {
         final double pos = me.getFrontPosition() + positionOnRoute;
         final double s = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ? 0 : me
                 .getNetDistance(frontVehicle);
         final double dv = (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) ? 0 : me
                 .getRelSpeed(frontVehicle);
         write(outputFormat, time, me.getLane(), pos, me.getSpeed(), me.getAcc(), s, dv, me.getLabel(), me.getId(),
-                me.roadSegmentId(), me.originRoadSegmentId(), me.getInfoComment(), pos + traj.getOffsetPosition());
+                me.roadSegmentId(), me.originRoadSegmentId(), me.getInfoComment(), formattedTime,
+                pos + traj.getOffsetPosition());
     }
 }

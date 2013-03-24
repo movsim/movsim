@@ -144,6 +144,11 @@
             <version>1.2.16</version>
             <type>jar</type>
         </dependency>
+          <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
+        </dependency>
         <dependency>
         <groupId>com.google.guava</groupId>
 	  <artifactId>guava</artifactId>
