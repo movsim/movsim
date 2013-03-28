@@ -16,13 +16,13 @@
     <dependencies>
         <dependency>
             <groupId>org.movsim</groupId>
-            <artifactId>MovsimCommon</artifactId>
-            <version>${project.version}</version>
+            <artifactId>MovsimXsd</artifactId>
+	    <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.movsim</groupId>
-            <artifactId>MovsimXsd</artifactId>
-	    <version>${project.version}</version>
+            <artifactId>MovsimCommon</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
