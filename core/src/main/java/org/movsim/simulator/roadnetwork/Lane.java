@@ -39,8 +39,13 @@ package org.movsim.simulator.roadnetwork;
  * <p>
  * </p>
  */
-public class Lane {
-    public static final int LANE1 = 0;
+public final class Lane {
+
+    private Lane() {
+        // private constructor
+    }
+
+    public static final int LANE1 = 0; // NOT DRIVABLE TODO avoid lane index 0, opendrive reserves this for middlelane
     public static final int LANE2 = 1;
     public static final int LANE3 = 2;
     public static final int LANE4 = 3;
@@ -48,16 +53,19 @@ public class Lane {
     public static final int LANE6 = 5;
     public static final int LANE7 = 6;
     public static final int LANE8 = 7;
-    public static final int HARD_SHOULDER = -1;
-    public static final int NONE = -2;
+    public static final int HARD_SHOULDER = -1; // NOT DRIVABLE
+    public static final int NONE = -2; // NOT DRIVABLE
 
-    public final static int TO_LEFT = 1;
-    public final static int TO_RIGHT = -1;
+    public final static int TO_LEFT = 1; // TODO decrease index
+    public final static int TO_RIGHT = -1; // TODO increase index
     public final static int NO_CHANGE = 0;
     public final static int MOST_RIGHT_LANE = LANE1;
 
     /**
      * Lane type.
+     * 
+     * <p>
+     * Mapping of OpenDRIVE lane types.
      */
     public static enum Type {
         /**

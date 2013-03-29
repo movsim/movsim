@@ -2,7 +2,7 @@ package org.movsim.input.network.opendrive;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
-public class OpenDriveHandlerUtils {
+public final class OpenDriveHandlerUtils {
 
     private OpenDriveHandlerUtils() {
         throw new IllegalStateException("do not invoke.");
