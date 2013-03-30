@@ -3,6 +3,7 @@ package org.movsim.input.network.opendrive;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.JAXBException;
@@ -18,6 +19,7 @@ import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingLine;
 import org.movsim.roadmappings.RoadMappingPoly;
 import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Lane.LaneSectionType;
 import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -60,14 +62,32 @@ public class OpenDriveHandlerJaxb {
             throws IllegalArgumentException {
         for (Road road : openDriveNetwork.getRoad()) {
             final RoadMapping roadMapping = createRoadMapping(road);
-            final RoadSegment roadSegment = createRoadSegment(roadMapping, road);
-            roadNetwork.add(roadSegment);
+            for (Lane.LaneSectionType laneType : LaneSectionType.values()) {
+                if (hasLaneSectionType(road, laneType)) {
+                    RoadSegment roadSegmentRight = createRoadSegment(laneType, roadMapping, road);
+                    roadNetwork.add(roadSegmentRight);
+                }
+            }
         }
+        logger.info("created {} roadSegments.", roadNetwork.size());
 
         joinRoads(openDriveNetwork, roadNetwork);
         handleJunctions(openDriveNetwork, roadNetwork);
         addDefaultSinksForUnconnectedRoad(roadNetwork);
         return true;
+    }
+
+    private static boolean hasLaneSectionType(Road road, LaneSectionType laneType) {
+        if (!road.isSetLanes()) {
+            return false;
+        }
+        if (laneType == Lane.LaneSectionType.LEFT) {
+            return road.getLanes().getLaneSection().get(0).isSetLeft();
+        }
+        if (laneType == Lane.LaneSectionType.RIGHT) {
+            return road.getLanes().getLaneSection().get(0).isSetRight();
+        }
+        return false; // CENTER lane not supported
     }
 
     private static Road findByUserId(Collection<Road> roads, String id) {
@@ -79,16 +99,16 @@ public class OpenDriveHandlerJaxb {
         return null;
     }
 
-    public static RoadMapping createRoadMapping(Road road) throws IllegalArgumentException {
+    private static RoadMapping createRoadMapping(Road road) throws IllegalArgumentException {
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
-                "exactly one <laneSection> needs to be defined!");
+                "exactly one <laneSection> needs to be defined, more <laneSection>s cannot be handled!");
 
-        int laneCount = 0;
+        int roadLaneCount = 0; // total number of lanes in both driving directions
         if (road.getLanes().getLaneSection().get(0).isSetRight()) {
-            laneCount += road.getLanes().getLaneSection().get(0).getRight().getLane().size();
+            roadLaneCount += road.getLanes().getLaneSection().get(0).getRight().getLane().size();
         }
         if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
-            laneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
+            roadLaneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
         }
         double laneWidth = 0.0;
         if (!road.getLanes().getLaneSection().get(0).getRight().getLane().isEmpty()) {
@@ -101,9 +121,9 @@ public class OpenDriveHandlerJaxb {
         if (road.getPlanView().getGeometry().size() == 1) {
             Geometry geometry = road.getPlanView().getGeometry().get(0);
             if (geometry.isSetLine()) {
-                roadMapping = RoadMappingLine.create(laneCount, geometry, laneWidth);
+                roadMapping = RoadMappingLine.create(roadLaneCount, geometry, laneWidth);
             } else if (geometry.isSetArc()) {
-                roadMapping = RoadMappingArc.create(laneCount, geometry, laneWidth);
+                roadMapping = RoadMappingArc.create(roadLaneCount, geometry, laneWidth);
             } else if (geometry.isSetPoly3()) {
                 throw new IllegalArgumentException("POLY3 geometry not yet supported (in road: " + road + " )");
             } else if (geometry.isSetSpiral()) {
@@ -112,7 +132,7 @@ public class OpenDriveHandlerJaxb {
                 throw new IllegalArgumentException("Unknown geometry for road: " + road);
             }
         } else {
-            roadMapping = new RoadMappingPoly(laneCount, laneWidth);
+            roadMapping = new RoadMappingPoly(roadLaneCount, laneWidth);
             final RoadMappingPoly roadMappingPoly = (RoadMappingPoly) roadMapping;
             for (Geometry geometry : road.getPlanView().getGeometry()) {
                 if (geometry.isSetLine()) {
@@ -131,9 +151,20 @@ public class OpenDriveHandlerJaxb {
         return roadMapping;
     }
 
-    private RoadSegment createRoadSegment(RoadMapping roadMapping, Road road) {
+    private RoadSegment createRoadSegment(LaneSectionType laneType, RoadMapping roadMapping, Road road) {
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
 
+        // one one laneSection can be handled
+        List<org.movsim.network.autogen.opendrive.Lane> lanes = (laneType == Lane.LaneSectionType.LEFT) ? road
+                .getLanes().getLaneSection().get(0).getLeft().getLane() : road.getLanes().getLaneSection().get(0)
+                .getRight().getLane();
+        Preconditions.checkNotNull(lanes);
+
+        if (laneType == Lane.LaneSectionType.LEFT) {
+            logger.error("left lane section not yet impl.");
+            System.exit(0);
+        }
+        // TODO Left/right handling
         roadSegment.setUserId(road.getId());
         roadSegment.setUserRoadname(road.getName());
 
@@ -141,29 +172,15 @@ public class OpenDriveHandlerJaxb {
             roadSegment.setElevationProfile(road.getElevationProfile());
         }
 
-        // TODO reduce redundancy here
-        for (final LaneSection laneSection : road.getLanes().getLaneSection()) {
-            if (laneSection.isSetLeft()) {
-                for (final org.movsim.network.autogen.opendrive.Lane leftLane : laneSection.getLeft().getLane()) {
-                    final int laneIndex = OpenDriveHandlerUtils.leftLaneIdToLaneIndex(roadSegment, leftLane.getId());
-                    setLaneType(laneIndex, leftLane, roadSegment);
-                    // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
-                    // entries overwrite previous entry
-                    if (leftLane.isSetSpeed()) {
-                        roadSegment.setSpeedLimits(leftLane.getSpeed());
-                    }
-                }
-            }
-            if (laneSection.isSetRight()) {
-                for (final org.movsim.network.autogen.opendrive.Lane rightLane : laneSection.getRight().getLane()) {
-                    final int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, rightLane.getId());
-                    setLaneType(laneIndex, rightLane, roadSegment);
-                    // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
-                    // entries overwrite previous entry
-                    if (rightLane.isSetSpeed()) {
-                        roadSegment.setSpeedLimits(rightLane.getSpeed());
-                    }
-                }
+        checkLaneIndexConventions(laneType, road.getId(), lanes);
+
+        for (final org.movsim.network.autogen.opendrive.Lane lane : lanes) {
+            final int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, lane.getId());
+            setLaneType(laneIndex, lane, roadSegment);
+            // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
+            // entries overwrite previous entry
+            if (lane.isSetSpeed()) {
+                roadSegment.setSpeedLimits(lane.getSpeed());
             }
         }
 
@@ -188,6 +205,34 @@ public class OpenDriveHandlerJaxb {
         return roadSegment;
     }
 
+    private static void checkLaneIndexConventions(LaneSectionType laneType, String roadId,
+            List<org.movsim.network.autogen.opendrive.Lane> lanes) {
+        int minIndex = Integer.MAX_VALUE;
+        int maxIndex = Integer.MIN_VALUE;
+        for (org.movsim.network.autogen.opendrive.Lane lane : lanes) {
+            minIndex = Math.min(minIndex, lane.getId());
+            maxIndex = Math.max(maxIndex, lane.getId());
+            if (lane.getId() == 0) {
+                throw new IllegalArgumentException(
+                        "usage of the lane index={} for a normal lane in xodr. 0 is reserved for a <center> lane-section. roadId="
+                                + roadId);
+            }
+            if (laneType == Lane.LaneSectionType.LEFT && lane.getId() < 0) {
+                throw new IllegalArgumentException("lane indices of a <laneSection><left> must be positive in roadId="
+                        + roadId);
+            }
+            if (laneType == Lane.LaneSectionType.RIGHT && lane.getId() > 0) {
+                logger.warn("lane indices of a <laneSection><right> must be negative in roadId=" + roadId);
+            }
+        }
+
+        if (Math.abs(Math.abs(maxIndex) - Math.abs(minIndex)) != lanes.size() - 1) {
+            logger.info("minIndex={}, maxIndex={}", minIndex, maxIndex);
+            logger.info("lanes.size={}", lanes.size());
+            throw new IllegalArgumentException("lane indices not continuous in road id=" + roadId);
+        }
+    }
+
     private static void setLaneType(int laneIndex, org.movsim.network.autogen.opendrive.Lane lane,
             RoadSegment roadSegment) {
         if (lane.getType().equals(Lane.Type.TRAFFIC.getOpenDriveIdentifier())) {
@@ -202,7 +247,7 @@ public class OpenDriveHandlerJaxb {
         } else if (lane.getType().equals(Lane.Type.SHOULDER.getOpenDriveIdentifier())) {
             roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lane.Type.SHOULDER);
         } else {
-            logger.warn("lane type " + lane + " not (yet) supported.");
+            logger.warn("lane type " + lane + " not supported.");
         }
     }
 

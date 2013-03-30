@@ -67,7 +67,7 @@ public final class Lane {
      * <p>
      * Mapping of OpenDRIVE lane types.
      */
-    public static enum Type {
+    public enum Type {
         /**
          * Lane for normal traffic.
          */
@@ -102,6 +102,18 @@ public final class Lane {
         public String getOpenDriveIdentifier() {
             return openDriveIdentifier;
         }
+    }
+
+    /**
+     * center laneSection not supported
+     * 
+     * <br>
+     * created: Mar 30, 2013<br>
+     * 
+     */
+    public enum LaneSectionType {
+
+        LEFT, RIGHT;
     }
 
 }
