@@ -1,4 +1,4 @@
-package org.movsim.input.network.opendrive;
+package org.movsim.input.network;
 
 import java.io.File;
 import java.util.Collection;

@@ -44,7 +44,7 @@ import org.movsim.autogen.Road;
 import org.movsim.autogen.Routes;
 import org.movsim.autogen.Simulation;
 import org.movsim.input.ProjectMetaData;
-import org.movsim.input.network.opendrive.OpenDriveReader;
+import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
