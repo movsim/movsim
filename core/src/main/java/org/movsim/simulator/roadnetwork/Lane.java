@@ -45,6 +45,7 @@ public final class Lane {
         // private constructor
     }
 
+    // from inner to outer lanes
     public static final int LANE1 = 0; // NOT DRIVABLE TODO avoid lane index 0, opendrive reserves this for middlelane
     public static final int LANE2 = 1;
     public static final int LANE3 = 2;
@@ -56,6 +57,7 @@ public final class Lane {
     public static final int HARD_SHOULDER = -1; // NOT DRIVABLE
     public static final int NONE = -2; // NOT DRIVABLE
 
+    // TODO renaming: TO_OUTER, TO_INNER
     public final static int TO_LEFT = 1; // TODO decrease index
     public final static int TO_RIGHT = -1; // TODO increase index
     public final static int NO_CHANGE = 0;
@@ -114,6 +116,27 @@ public final class Lane {
     public enum LaneSectionType {
 
         LEFT, RIGHT;
+    }
+
+    /**
+     * 
+     * 
+     * <br>
+     * created: Mar 30, 2013<br>
+     * 
+     */
+    public enum RoadLinkElementType {
+        ROAD("road"), JUNCTION("junction");
+
+        private final String openDriveIdentifier;
+
+        RoadLinkElementType(String keyword) {
+            this.openDriveIdentifier = keyword;
+        }
+
+        public String xodrIdentifier() {
+            return openDriveIdentifier;
+        }
     }
 
 }
