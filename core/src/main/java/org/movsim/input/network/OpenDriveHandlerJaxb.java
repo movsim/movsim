@@ -15,6 +15,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction.Connection.LaneLi
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Lanes.LaneSection;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingLine;
 import org.movsim.roadmappings.RoadMappingPoly;
@@ -22,7 +23,6 @@ import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.Lane.LaneSectionType;
 import org.movsim.simulator.roadnetwork.Lane.RoadLinkElementType;
 import org.movsim.simulator.roadnetwork.Link;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.TrafficSink;
@@ -153,6 +153,7 @@ public class OpenDriveHandlerJaxb {
     }
 
     private RoadSegment createRoadSegment(LaneSectionType laneType, RoadMapping roadMapping, Road road) {
+        // TODO cstr not working for bidirectional case !!
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
 
         // only one laneSection can be handled
@@ -267,24 +268,18 @@ public class OpenDriveHandlerJaxb {
             if (hasRoadPredecessor(road)) {
                 RoadSegment sourceRoadSegment = getSourceRoadSegment(roadNetwork, road);
                 for (LaneSection laneSection : road.getLanes().getLaneSection()) {
-                    if (laneSection.isSetLeft()) {
-                        for (org.movsim.network.autogen.opendrive.Lane lane : laneSection.getLeft().getLane()) {
-                            if (lane.isSetLink() && lane.getLink().isSetPredecessor()) {
-                                int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sourceRoadSegment, lane
-                                        .getLink().getPredecessor().getId());
-                                int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.getId());
-                                Link.addLanePair(fromLane, sourceRoadSegment, toLane, roadSegment);
-                            }
-                        }
+                    if (laneSection.isSetCenter()) {
+                        logger.warn("cannot handle center lane");
+                        continue;
                     }
-                    if (laneSection.isSetRight()) {
-                        for (org.movsim.network.autogen.opendrive.Lane lane : laneSection.getRight().getLane()) {
-                            if (lane.isSetLink() && lane.getLink().isSetPredecessor()) {
-                                int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sourceRoadSegment, lane
-                                        .getLink().getPredecessor().getId());
-                                int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.getId());
-                                Link.addLanePair(fromLane, sourceRoadSegment, toLane, roadSegment);
-                            }
+                    List<org.movsim.network.autogen.opendrive.Lane> lanes = laneSection.isSetLeft() ? laneSection
+                            .getLeft().getLane() : laneSection.getRight().getLane();
+                    for (org.movsim.network.autogen.opendrive.Lane lane : lanes) {
+                        if (lane.isSetLink() && lane.getLink().isSetPredecessor()) {
+                            int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sourceRoadSegment, lane.getLink()
+                                    .getPredecessor().getId());
+                            int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.getId());
+                            Link.addLanePair(fromLane, sourceRoadSegment, toLane, roadSegment);
                         }
                     }
                 }
@@ -293,6 +288,10 @@ public class OpenDriveHandlerJaxb {
             if (hasRoadSuccessor(road)) {
                 RoadSegment sinkRoadSegment = getRoadSuccessor(roadNetwork, road);
                 for (LaneSection laneSection : road.getLanes().getLaneSection()) {
+                    if (laneSection.isSetCenter()) {
+                        logger.warn("cannot handle center lane");
+                        continue;
+                    }
                     List<org.movsim.network.autogen.opendrive.Lane> lanes = laneSection.isSetLeft() ? laneSection
                             .getLeft().getLane() : laneSection.getRight().getLane();
                     addLaneLinkage(roadSegment, sinkRoadSegment, lanes);
@@ -302,8 +301,8 @@ public class OpenDriveHandlerJaxb {
     }
 
     private static void addLaneLinkage(RoadSegment roadSegment, RoadSegment sinkRoadSegment,
-            List<org.movsim.network.autogen.opendrive.Lane> lane2) {
-        for (org.movsim.network.autogen.opendrive.Lane lane : lane2) {
+            List<org.movsim.network.autogen.opendrive.Lane> lanes) {
+        for (org.movsim.network.autogen.opendrive.Lane lane : lanes) {
             if (lane.isSetLink() && lane.getLink().isSetSuccessor()) {
                 int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(roadSegment, lane.getId());
                 int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(sinkRoadSegment, lane.getLink().getSuccessor()

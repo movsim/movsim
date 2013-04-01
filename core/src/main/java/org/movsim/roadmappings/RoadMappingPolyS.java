@@ -26,7 +26,6 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * <p>

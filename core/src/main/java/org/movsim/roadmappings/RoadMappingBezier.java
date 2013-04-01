@@ -28,7 +28,6 @@ package org.movsim.roadmappings;
 
 import java.util.Arrays;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * Road mapping defined by a quadratic Bezier curve.
@@ -63,7 +62,7 @@ public class RoadMappingBezier extends RoadMapping {
      * @param cY
      *            y-position of control point
      */
-    public RoadMappingBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
+    RoadMappingBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
         super(laneCount, x0, y0);
         p0x = x0;
         p0y = y0;
@@ -98,7 +97,7 @@ public class RoadMappingBezier extends RoadMapping {
      * @param c
      * @param d
      */
-    public RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
+    RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
             double b, double c, double d) {
         super(laneCount, x0, y0);
         p0x = x0;
@@ -126,7 +125,7 @@ public class RoadMappingBezier extends RoadMapping {
      * @param t
      *            single degree of freedom in setting the control point
      */
-    public RoadMappingBezier(RoadMapping roadMapping, double x1, double y1, double t) {
+    RoadMappingBezier(RoadMapping roadMapping, double x1, double y1, double t) {
         super(roadMapping.laneCount(), 0, 0);
         final RoadMapping.PosTheta posTheta = roadMapping.endPos();
         p0x = posTheta.x;

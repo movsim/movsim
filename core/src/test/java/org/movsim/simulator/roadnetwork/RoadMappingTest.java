@@ -29,6 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.movsim.roadmappings.RoadMapping;
 
 /**
  * Test module for the RoadMapping class.
@@ -81,7 +82,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#roadLength()}
+     * Test method for {@link org.movsim.roadmappings.RoadMapping#roadLength()}
      */
     @Test
     public void testRoadLength() {
@@ -95,9 +96,9 @@ public class RoadMappingTest {
     public void testRoadWidth() {
         final int LANE_COUNT = 3;
         RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
-        assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth, delta);
+        assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth(), delta);
         roadMapping = new RoadMappingConcrete(LANE_COUNT + 1);
-        assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth, delta);
+        assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth(), delta);
     }
 
     /**
@@ -111,7 +112,7 @@ public class RoadMappingTest {
     //}
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneCount()}
+     * Test method for {@link org.movsim.roadmappings.RoadMapping#laneCount()}
      */
     @Test
     public void testLaneCount() {
@@ -124,7 +125,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneOffset(int)}
+     * Test method for {@link org.movsim.roadmappings.RoadMapping#laneOffset(int)}
      */
     @Test
     public void testLaneOffset() {

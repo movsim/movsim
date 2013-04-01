@@ -29,6 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.movsim.roadmappings.RoadMapping;
 
 /**
  * Test module for the Link class.

@@ -42,10 +42,10 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Slope;

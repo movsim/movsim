@@ -26,7 +26,6 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * <p>
@@ -54,7 +53,7 @@ public class RoadMappingU extends RoadMapping {
      * @param straightLength
      *            length of straight part of U
      */
-    public RoadMappingU(int laneCount, double x0, double y0, double radius, double straightLength) {
+    RoadMappingU(int laneCount, double x0, double y0, double radius, double straightLength) {
         super(laneCount, x0, y0);
         this.radius = radius;
         this.straightLength = straightLength;
@@ -68,7 +67,7 @@ public class RoadMappingU extends RoadMapping {
      * @param x0
      * @param y0
      */
-    protected RoadMappingU(int laneCount, double x0, double y0) {
+    RoadMappingU(int laneCount, double x0, double y0) {
         super(laneCount, x0, y0);
     }
 

@@ -33,6 +33,7 @@ import java.util.Iterator;
 import org.junit.Test;
 import org.movsim.autogen.LaneChangeModelType;
 import org.movsim.autogen.ModelParameterMOBIL;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
@@ -147,7 +148,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.simulator.roadnetwork.RoadMapping)}
+     * {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.roadmappings.RoadMapping)}
      */
     @Test
     public final void testRoadSegmentRoadMapping() {

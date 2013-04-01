@@ -26,7 +26,6 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * Maps a road segment onto a circle.
@@ -49,7 +48,7 @@ public class RoadMappingCircle extends RoadMapping {
      * @param radius
      *            radius of circle
      */
-    public RoadMappingCircle(int laneCount, double x0, double y0, double radius) {
+    RoadMappingCircle(int laneCount, double x0, double y0, double radius) {
         this(laneCount, x0, y0, radius, false);
     }
 

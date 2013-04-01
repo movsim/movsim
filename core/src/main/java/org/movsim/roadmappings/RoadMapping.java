@@ -24,10 +24,11 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.simulator.roadnetwork;
+package org.movsim.roadmappings;
 
 import java.util.ArrayList;
 
+import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**

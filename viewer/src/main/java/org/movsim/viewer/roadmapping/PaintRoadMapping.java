@@ -35,6 +35,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
@@ -44,7 +45,6 @@ import org.movsim.roadmappings.RoadMappingPolyBezier;
 import org.movsim.roadmappings.RoadMappingPolyLine;
 import org.movsim.roadmappings.RoadMappingS;
 import org.movsim.roadmappings.RoadMappingU;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
 /**

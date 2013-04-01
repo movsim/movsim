@@ -15,12 +15,12 @@ public final class OpenDriveHandlerUtils {
         return lane;
     }
 
-    public static int leftLaneIdToLaneIndex(RoadSegment roadSegment, int leftLaneId) {
-        assert leftLaneId >= 0;
-        final int lane = leftLaneId;
-        assert lane >= org.movsim.simulator.roadnetwork.Lane.LANE1;
-        return lane;
-    }
+    // public static int leftLaneIdToLaneIndex(RoadSegment roadSegment, int leftLaneId) {
+    // assert leftLaneId >= 0;
+    // final int lane = leftLaneId;
+    // assert lane >= org.movsim.simulator.roadnetwork.Lane.LANE1;
+    // return lane;
+    // }
 
     public static int laneIdToLaneIndex(RoadSegment roadSegment, int laneId) {
         if (laneId >= 0) {

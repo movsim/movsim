@@ -33,7 +33,7 @@ public class RoadMappingSpiral extends RoadMappingArc {
     double startCurvature;
     double endCurvature;
 
-    public RoadMappingSpiral(int laneCount, double s, double x0, double y0, double theta, double length,
+    RoadMappingSpiral(int laneCount, double s, double x0, double y0, double theta, double length,
             double startCurvature, double endCurvature) {
         // TODO - spiral is approximated by an arc - fix to use proper spiral
         super(laneCount, s, x0, y0, theta, length, (startCurvature + endCurvature) / 2.0);

@@ -26,7 +26,6 @@
 
 package org.movsim.roadmappings;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * This is a WORK IN PROGRESS and not yet ready for use.
@@ -50,7 +49,7 @@ public class RoadMappingCompressedStraight extends RoadMappingLine {
      *            y-position of end of line
      * @param compressionFactor
      */
-    public RoadMappingCompressedStraight(int laneCount, double x0, double y0, double x1, double y1,
+    RoadMappingCompressedStraight(int laneCount, double x0, double y0, double x1, double y1,
             double compressionFactor) {
         super(laneCount, x0, y0, x1, y1);
         this.compressionFactor = compressionFactor;

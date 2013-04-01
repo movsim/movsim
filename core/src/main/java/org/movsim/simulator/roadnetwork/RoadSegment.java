@@ -35,6 +35,7 @@ import java.util.List;
 import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
