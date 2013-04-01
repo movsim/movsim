@@ -11,9 +11,9 @@ Demonstration:
 
 (MovSim v1.2) www.movsim.org/app.shtml
 
-(Routing game) TODO
+(Routing game) www.movsim.org
 
-(Android client) coming soon
+(Android client) Android App
 
 
 Description

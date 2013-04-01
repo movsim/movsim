@@ -1,5 +1,5 @@
-MovSim
-======
+MovSim Viewer
+=============
 
 MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
@@ -13,20 +13,7 @@ Description
 
 MovSim is a microscopic traffic simulator with xml-based configuration and csv text output. 
 
-Features:
-
-- multi-lane simulator including onramps, offrams, "flow-conserving bottlenecks" and traffic-lights
-- multiple models of different model classes (car-following models, coupled-map models and cellular automata)
-  * Intelligent Driver Model (IDM) [Wikipedia](http://en.wikipedia.org/wiki/Intelligent_driver_model)
-  * Enhanced IDM/Adaptive Cruise Control Model [Preprint] (http://arxiv.org/abs/0912.3613)
-  * Optimal Velocity or Bando Model 
-  * Velocity Difference Model 
-  * Gipps Model [Wikipedia] (http://en.wikipedia.org/wiki/Gipps%27_Model)
-  * Krauss Model
-  * Nagel-Schreckenberg Cellular Automaton [Wikipedia] (http://en.wikipedia.org/wiki/Nagel-Schreckenberg_model)
-  * Kerner-Klenov-Wolf Cellular Automaton
-- text-file output of detectors, spatiotemporal fields, floating-car data etc. 
-
+The `viewer` submodule provides a simple GUI interface for visualization.
 
 Installation
 ------------
@@ -37,19 +24,11 @@ For installation see the [README.md](https://github.com/movsim/movsim/blob/maste
 Usage
 -----
 
-To build the MovSim viewer, type `mvn install` from the MovSim viewer directory.
+To build the MovSim viewer with Maven, type `mvn install` from the MovSim viewer directory.
 
-The MovSim viewer can be run directly from the command-line. To see the MovSim options, type:
+The MovSim viewer can be started directly from the command-line. To see the MovSim options, type e.g.:
 
-    java -jar viewer/target/MovsimViewer-1.3.1-SNAPSHOT-jar-with-dependencies.jar -h
-
-
-Logging output
---------------
-
-MovSim's logging output is controlled by a properties file `/config/log4j.properties` for the java app and `/config/log4japplet.properties` for the java applet.
-
-Logging levels are: `DEBUG < INFO < WARN < ERROR`
+    java -jar viewer/target/MovsimViewer-1.5.0-SNAPSHOT-jar-with-dependencies.jar -h
 
 
 Commercial use

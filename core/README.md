@@ -1,5 +1,5 @@
-MovSim
-======
+MovSim Core
+===========
 
 MovSim = **M**ulti-model **o**pen-source **v**ehicular-traffic **Sim**ulator.
 
@@ -13,7 +13,7 @@ Description
 
 MovSim is a microscopic traffic simulator with xml-based configuration and csv text output. 
 
-Features:
+The `core` submodule provides the following features:
 
 - multi-lane simulator including onramps, offrams, "flow-conserving bottlenecks" and traffic-lights
 - multiple models of different model classes (car-following models, coupled-map models and cellular automata)
@@ -37,11 +37,11 @@ For installation see the [README.md](https://github.com/movsim/movsim/blob/maste
 Usage
 -----
 
-To build the MovSim core, type `mvn install` from the MovSim core directory.
+To build the MovSim core with Maven, type `mvn install` from the MovSim `core/` directory.
 
-MovSim core can be run directly from the command-line. To see the MovSim options, type:
+MovSim core can be run directly from the command-line. To see the MovSim options, invoke the target by typing e.g.:
 
-    java -jar target/MovsimCore-1.3.1-SNAPSHOT-jar-with-dependencies.jar -h
+    java -jar target/MovsimCore-1.5.0-SNAPSHOT-jar-with-dependencies.jar -h
 
 There are a number of predefined simulation scenarios defined in the [_sim_ directory](https://github.com/movsim/movsim/tree/master/sim). The `runmovsim` script can be used to run the simulator and gnuplot for plot these scenarios, for example:
 
@@ -51,13 +51,11 @@ There are a number of predefined simulation scenarios defined in the [_sim_ dire
 
 The `.csv` output is put in the directory from which the simulator is called and the graphical output is put in `.eps` (Encapsulated PostScript) files.
 
-The script `cleanmovsim` can be used to delete all simulation output files in the current directory.
-
 
 Logging output
 --------------
 
-MovSim's logging output is controlled the `/config/log4j.properties` properties file.
+MovSim's logging output is controlled by the `/config/log4j.properties` properties file.
 
 Logging levels are: `DEBUG < INFO < WARN < ERROR`
 
