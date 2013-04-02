@@ -53,8 +53,9 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 public class PaintRoadMapping {
     private static final boolean drawBezierPoints = false;
 
-    static public void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        final double lateralOffset = 0.5 * roadMapping.trafficLaneMin() * roadMapping.laneWidth();
+    public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
+        final double lateralOffset = 0; //0.5*roadMapping.laneWidth()*(roadMapping.laneCount()-roadMapping.trafficLaneMax());  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
+        System.out.println("laneCount="+ roadMapping.laneCount() + ", trafficLaneMax="+roadMapping.trafficLaneMax()+" offset="+lateralOffset);
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 

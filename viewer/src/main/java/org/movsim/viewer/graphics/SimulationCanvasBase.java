@@ -237,8 +237,7 @@ public abstract class SimulationCanvasBase extends Canvas {
         if (backgroundBuffer == null)
             return;
         final Graphics2D backgroundGraphics = (Graphics2D) backgroundBuffer.getGraphics();
-        clearBackground(backgroundGraphics); // clear the background before
-                                             // transforms
+        clearBackground(backgroundGraphics); // clear the background before transforms
         backgroundGraphics.setTransform(transform);
         drawBackground(backgroundGraphics); // draw the background to the buffer
         drawForegroundAndBlit(g);

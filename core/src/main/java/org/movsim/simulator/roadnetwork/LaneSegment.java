@@ -38,12 +38,12 @@ import org.slf4j.LoggerFactory;
  * A LaneSegment represents a lane within a RoadSegment.
  * </p>
  * <p>
- * Lanes are of different types including traffic lanes, exit (deceleration) lanes and entrance (acceleration) lanes.
- * Typically vehicle behavior (and especially lane change behavior) is different in each type of lane.
+ * Lanes are of different types including traffic lanes, exit (deceleration) lanes and entrance (acceleration) lanes. Typically vehicle
+ * behavior (and especially lane change behavior) is different in each type of lane.
  * </p>
  * <p>
- * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles
- * in front of and behind a given vehicle can be found efficiently.
+ * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles in front of and
+ * behind a given vehicle can be found efficiently.
  * </p>
  * <p>
  * Vehicles are sorted in order of decreasing position:
@@ -62,6 +62,8 @@ public class LaneSegment implements Iterable<Vehicle> {
     private final RoadSegment roadSegment;
     private LaneSegment sinkLaneSegment;
     private LaneSegment sourceLaneSegment;
+
+    // physical lane, not the laneIndex
     private final int lane;
     private Lanes.Type type;
     final ArrayList<Vehicle> vehicles;
@@ -72,9 +74,11 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @param roadSegment
      * @param lane
+     *            (not the laneIndex)
      */
-    public LaneSegment(RoadSegment roadSegment, int lane) {
+    LaneSegment(RoadSegment roadSegment, int lane) {
         this.roadSegment = roadSegment;
+        assert lane >= Lanes.MOST_INNER_LANE;
         this.lane = lane;
         vehicles = new ArrayList<>(VEHICLES_PER_LANE_INITIAL_SIZE);
         type = Lanes.Type.TRAFFIC;
@@ -82,8 +86,11 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Returns the lane.
+     * <p>
+     * The lane is an identifier of the lane in the physical network starting with a value of 1 for the most inner lane.
+     * </p>
      * 
-     * @return lane
+     * @return lane, not the index of the lane in the roadSegment
      */
     public final int lane() {
         return lane;
@@ -323,7 +330,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void addVehicle(Vehicle vehicle) {
         // TODO assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0 : "vehicleSpeed=" + vehicle.getSpeed();
-        assert vehicle.getLane() == lane;
+        assert vehicle.lane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
@@ -342,7 +349,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public int addVehicleTemp(Vehicle vehicle) {
         // assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.getLane() == lane;
+        assert vehicle.lane() == lane;
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
         int pos = 0;
@@ -380,7 +387,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void appendVehicle(Vehicle vehicle) {
         assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.getLane() == lane;
+        assert vehicle.lane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert laneIsSorted();
         assert assertInvariant();
@@ -751,10 +758,10 @@ public class LaneSegment implements Iterable<Vehicle> {
         final int roadSegmentId = roadSegment.id();
         for (final Vehicle vehicle : vehicles) {
             assert vehicle.roadSegmentId() == roadSegmentId;
-            if (vehicle.getLane() != lane) {
-                logger.info("vehicle lane={}, lane={}", vehicle.getLane(), lane);
+            if (vehicle.lane() != lane) {
+                logger.info("vehicle lane={}, lane={}", vehicle.lane(), lane);
             }
-            assert vehicle.getLane() == lane;
+            assert vehicle.lane() == lane;
         }
         return true;
     }

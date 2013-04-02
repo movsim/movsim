@@ -103,7 +103,7 @@ class FileFloatingCars extends FileOutputBase {
      */
     static void writeData(double time, Vehicle veh, Vehicle frontVeh, PrintWriter writer) {
         final PhysicalQuantities physicalQuantities = veh.physicalQuantities();
-        writer.printf(outputFormat, time, veh.roadSegmentId(), veh.getLane(), physicalQuantities.getFrontPosition(),
+        writer.printf(outputFormat, time, veh.roadSegmentId(), veh.lane(), physicalQuantities.getFrontPosition(),
                 physicalQuantities.totalTravelDistance(), physicalQuantities.getSpeed(), physicalQuantities.getAcc(),
                 physicalQuantities.accModel(), physicalQuantities.getNetDistance(frontVeh),
                 physicalQuantities.getRelSpeed(frontVeh),

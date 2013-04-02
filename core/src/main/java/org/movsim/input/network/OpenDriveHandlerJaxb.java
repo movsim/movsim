@@ -37,7 +37,7 @@ import org.xml.sax.SAXException;
 import com.google.common.base.Preconditions;
 
 public class OpenDriveHandlerJaxb {
-    final static Logger logger = LoggerFactory.getLogger(OpenDriveHandlerJaxb.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OpenDriveHandlerJaxb.class);
 
     /** Set for checking uniqueness of signal id for whole network. */
     private final Set<String> trafficLightIds = new HashSet<>();
@@ -71,7 +71,7 @@ public class OpenDriveHandlerJaxb {
                 }
             }
         }
-        logger.info("created {} roadSegments.", roadNetwork.size());
+        LOG.info("created {} roadSegments.", roadNetwork.size());
 
         joinRoads(openDriveNetwork, roadNetwork);
         handleJunctions(openDriveNetwork, roadNetwork);
@@ -163,7 +163,7 @@ public class OpenDriveHandlerJaxb {
                 .getLaneSection().get(0).getRight().getLane());
 
         if (laneType == Lanes.LaneSectionType.LEFT) {
-            logger.error("left lane section not yet impl.");
+            LOG.error("left lane section not yet impl.");
             System.exit(0);
         }
         // TODO Left/right handling
@@ -177,7 +177,7 @@ public class OpenDriveHandlerJaxb {
         checkLaneIndexConventions(laneType, road.getId(), lanes);
 
         for (Lane lane : lanes) {
-            int laneIndex = OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, lane.getId());
+            int laneIndex = Math.abs(lane.getId()); // OpenDriveHandlerUtils.rightLaneIdToLaneIndex(roadSegment, laneIndex.getId());
             setLaneType(laneIndex, lane, roadSegment);
             // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
             // entries overwrite previous entry
@@ -215,15 +215,16 @@ public class OpenDriveHandlerJaxb {
             maxIndex = Math.max(maxIndex, lane.getId());
             if (lane.getId() == 0) {
                 throw new IllegalArgumentException(
-                        "usage of the lane index={} for a normal lane in xodr. 0 is reserved for a <center> lane-section. roadId="
+                        "usage of the laneIndex index={} for a normal lane in xodr. 0 is reserved for a <center> lane-section. roadId="
                                 + roadId);
             }
             if (laneType == Lanes.LaneSectionType.LEFT && lane.getId() < 0) {
-                throw new IllegalArgumentException("lane indices of a <laneSection><left> must be positive in roadId="
+                throw new IllegalArgumentException(
+"lane indices of a <laneSection><left> must be positive in roadId="
                         + roadId);
             }
             if (laneType == Lanes.LaneSectionType.RIGHT && lane.getId() > 0) {
-                logger.warn("lane indices of a <laneSection><right> must be negative in roadId=" + roadId);
+                LOG.warn("lane indices of a <laneSection><right> must be negative in roadId=" + roadId);
             }
         }
         if (Math.abs(minIndex) != 1 && Math.abs(maxIndex) != 1) {
@@ -231,26 +232,27 @@ public class OpenDriveHandlerJaxb {
             throw new IllegalArgumentException("minimum lane index must start with 1 or -1 in roadId=" + roadId);
         }
         if (Math.abs(Math.abs(maxIndex) - Math.abs(minIndex)) != lanes.size() - 1) {
-            logger.info("minIndex={}, maxIndex={}", minIndex, maxIndex);
-            logger.info("lanes.size={}", lanes.size());
+            LOG.info("minIndex={}, maxIndex={}", minIndex, maxIndex);
+            LOG.info("lanes.size={}", lanes.size());
             throw new IllegalArgumentException("lane indices not continuous in road id=" + roadId);
         }
     }
 
-    private static void setLaneType(int laneIndex, Lane lane, RoadSegment roadSegment) {
+    private static void setLaneType(int laneNumber, Lane lane, RoadSegment roadSegment) {
+        LOG.debug("laneNumber={}, roadSegmentId={}", laneNumber, roadSegment.userId());
         if (lane.getType().equals(Lanes.Type.TRAFFIC.getOpenDriveIdentifier())) {
-            roadSegment.setLaneType(laneIndex, Lanes.Type.TRAFFIC);
+            roadSegment.setLaneType(laneNumber, Lanes.Type.TRAFFIC);
         } else if (lane.getType().equals(Lanes.Type.ENTRANCE.getOpenDriveIdentifier())) {
-            roadSegment.setLaneType(laneIndex, Lanes.Type.ENTRANCE);
-            Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneIndex, 1.0, 1.0);
+            roadSegment.setLaneType(laneNumber, Lanes.Type.ENTRANCE);
+            Vehicle obstacle = new Vehicle(roadSegment.roadLength(), 0.0, laneNumber, 1.0, 1.0);
             obstacle.setType(Vehicle.Type.OBSTACLE);
             roadSegment.addObstacle(obstacle);
         } else if (lane.getType().equals(Lanes.Type.EXIT.getOpenDriveIdentifier())) {
-            roadSegment.setLaneType(laneIndex, Lanes.Type.EXIT);
+            roadSegment.setLaneType(laneNumber, Lanes.Type.EXIT);
         } else if (lane.getType().equals(Lanes.Type.SHOULDER.getOpenDriveIdentifier())) {
-            roadSegment.setLaneType(laneIndex, org.movsim.simulator.roadnetwork.Lanes.Type.SHOULDER);
+            roadSegment.setLaneType(laneNumber, org.movsim.simulator.roadnetwork.Lanes.Type.SHOULDER);
         } else {
-            logger.warn("lane type " + lane + " not supported.");
+            LOG.warn("laneIndex type " + lane + " not supported.");
         }
     }
 
@@ -271,7 +273,7 @@ public class OpenDriveHandlerJaxb {
                 RoadSegment sourceRoadSegment = getSourceRoadSegment(roadNetwork, road);
                 for (LaneSection laneSection : road.getLanes().getLaneSection()) {
                     if (laneSection.isSetCenter()) {
-                        logger.warn("cannot handle center lane");
+                        LOG.warn("cannot handle center lane");
                         continue;
                     }
                     List<org.movsim.network.autogen.opendrive.Lane> lanes = laneSection.isSetLeft() ? laneSection
@@ -291,7 +293,7 @@ public class OpenDriveHandlerJaxb {
                 RoadSegment sinkRoadSegment = getRoadSuccessor(roadNetwork, road);
                 for (LaneSection laneSection : road.getLanes().getLaneSection()) {
                     if (laneSection.isSetCenter()) {
-                        logger.warn("cannot handle center lane");
+                        LOG.warn("cannot handle center lane");
                         continue;
                     }
                     List<Lane> lanes = laneSection.isSetLeft() ? laneSection.getLeft().getLane() : laneSection
@@ -350,7 +352,7 @@ public class OpenDriveHandlerJaxb {
                                 laneLink.getFrom());
                         final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(connenctingRoadSegment,
                                 laneLink.getTo());
-                        logger.debug("lanepair from:" + laneLink.getFrom() + ",to:" + laneLink.getTo());
+                        LOG.debug("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                         Link.addLanePair(fromLane, incomingRoadSegment, toLane, connenctingRoadSegment);
                     }
                 } else if (roadSuccessorIsJunction(junction, road)) {
@@ -359,7 +361,7 @@ public class OpenDriveHandlerJaxb {
                                 laneLink.getFrom());
                         final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(incomingRoadSegment,
                                 laneLink.getTo());
-                        logger.debug("lanepair from:" + laneLink.getFrom() + ",to:" + laneLink.getTo());
+                        LOG.debug("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                         Link.addLanePair(fromLane, connenctingRoadSegment, toLane, incomingRoadSegment);
                     }
                 } else {
@@ -388,7 +390,7 @@ public class OpenDriveHandlerJaxb {
         for (RoadSegment roadSegment : roadNetwork) {
             int laneCount = roadSegment.laneCount();
             boolean hasSink = false;
-            for (int lane = 0; lane < laneCount; ++lane) {
+            for (int lane = Lanes.MOST_INNER_LANE; lane <= laneCount; ++lane) {
                 if (roadSegment.sinkRoadSegment(lane) != null) {
                     hasSink = true;
                     break;

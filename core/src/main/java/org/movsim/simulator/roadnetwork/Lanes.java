@@ -31,8 +31,8 @@ package org.movsim.simulator.roadnetwork;
  * Lanes value constants.
  * </p>
  * <p>
- * Lanes are numbered from the inside lane to the outside lane. So, for example, on a three lane road LANE1 is the
- * inside lane, LANE2 is the middle lane and LANE3 is the outside lane.
+ * Lanes are numbered from the inside laneIndex to the outside laneIndex. So, for example, on a three laneIndex road LANE1 is the
+ * inside laneIndex, LANE2 is the middle laneIndex and LANE3 is the outside laneIndex.
  * </p>
  * Lanes numbering is independent of whether traffic drives on the right or the left, indeed references to "right lanes"
  * and "left lanes" is conscientiously eschewed.
@@ -46,28 +46,26 @@ public final class Lanes {
     }
 
     // from inner to outer lanes
-    public static final int LANE1 = 0; // NOT DRIVABLE TODO avoid lane index 0, opendrive reserves this for middlelane
-    public static final int LANE2 = 1;
-    public static final int LANE3 = 2;
-    public static final int LANE4 = 3;
-    public static final int LANE5 = 4;
-    public static final int LANE6 = 5;
-    public static final int LANE7 = 6;
-    public static final int LANE8 = 7;
+    public static final int LANE1 = 1; // NOT DRIVABLE TODO avoid lane index 0, opendrive reserves this for middlelane
+    public static final int LANE2 = 2;
+    public static final int LANE3 = 3;
+    public static final int LANE4 = 4;
+    public static final int LANE5 = 5;
     public static final int HARD_SHOULDER = -1; // NOT DRIVABLE
     public static final int NONE = -2; // NOT DRIVABLE
 
     // TODO renaming: TO_OUTER, TO_INNER
-    public final static int TO_LEFT = 1; // TODO decrease index
-    public final static int TO_RIGHT = -1; // TODO increase index
+    public final static int TO_LEFT = -1; // TODO decrease index
+    public final static int TO_RIGHT = 1; // TODO increase index
     public final static int NO_CHANGE = 0;
-    public final static int MOST_RIGHT_LANE = LANE1;
+
+    public static final int MOST_INNER_LANE = LANE1;
 
     /**
      * Lanes type.
      * 
      * <p>
-     * Mapping of OpenDRIVE lane types.
+     * Mapping of OpenDRIVE laneIndex types.
      */
     public enum Type {
         /**
@@ -75,23 +73,23 @@ public final class Lanes {
          */
         TRAFFIC("driving"),
         /**
-         * Entrance (acceleration) lane.
+         * Entrance (acceleration) laneIndex.
          */
         ENTRANCE("mwyEntry"),
         /**
-         * Exit (deceleration) lane.
+         * Exit (deceleration) laneIndex.
          */
         EXIT("mwyExit"),
         /**
-         * Shoulder lane.
+         * Shoulder laneIndex.
          */
         SHOULDER("shoulder"),
         /**
-         * Restricted lane, eg bus or multiple-occupancy vehicle lane.
+         * Restricted laneIndex, eg bus or multiple-occupancy vehicle laneIndex.
          */
         RESTRICTED("restricted"),
         /**
-         * Bicycle lane.
+         * Bicycle laneIndex.
          */
         BICYCLE("biking");
 

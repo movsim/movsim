@@ -26,7 +26,6 @@
 package org.movsim.simulator;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -54,8 +53,8 @@ import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
-import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.MicroInflowQueue;
 import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -77,11 +76,12 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Simulator.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
     private long startTimeMillis;
 
@@ -113,7 +113,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public void initialize() throws JAXBException, SAXException {
-        logger.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
+        LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
 
         projectName = projectMetaData.getProjectName();
         // TODO temporary handling of Variable Message Sign until added to XML
@@ -126,7 +126,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             DateTime dateTime = LocalDateTime.parse(inputData.getScenario().getSimulation().getTimeOffset(),
                     DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ")).toDateTime(DateTimeZone.UTC);
             timeOffsetMillis = dateTime.getMillis();
-            logger.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
+            LOG.info("global time offset set={} --> {} milliseconds.", dateTime, timeOffsetMillis);
             ProjectMetaData.getInstance().setTimeOffsetMillis(timeOffsetMillis);
         }
         projectMetaData.setXodrNetworkFilename(inputData.getScenario().getNetworkFilename()); // TODO
@@ -178,13 +178,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                     route.add(roadNetwork.findByUserId(roadInput.getId()));
                 }
                 if (route.size() == 0) {
-                    logger.error("route with name \"{}\" does not contain any roadSegments. Ignore route!",
+                    LOG.error("route with name \"{}\" does not contain any roadSegments. Ignore route!",
                             route.getName());
                     continue;
                 }
                 Route r = routes.put(route.getName(), route);
                 if (r != null) {
-                    logger.error("route with name \"{}\" already defined. Overwrite existing route.", r.getName());
+                    LOG.error("route with name \"{}\" already defined. Overwrite existing route.", r.getName());
                 }
             }
         }
@@ -252,7 +252,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param road
      */
     private void defaultTestingRoadMapping(Road roadInput) {
-        logger.warn("Simulation with test network");
+        LOG.warn("Simulation with test network");
         final int laneCount = 1;
         final double roadLength = 1500;
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
@@ -276,9 +276,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final String xodrFileName = projectMetaData.getXodrNetworkFilename();
         final String xodrPath = projectMetaData.getPathToProjectFile();
         final String fullXodrFileName = xodrPath + xodrFileName;
-        logger.info("try to load {}", fullXodrFileName);
+        LOG.info("try to load {}", fullXodrFileName);
         final boolean loaded = OpenDriveReader.loadRoadNetwork(roadNetwork, fullXodrFileName);
-        logger.info("done with parsing road network {}. Success: {}", fullXodrFileName, loaded);
+        LOG.info("done with parsing road network {}. Success: {}", fullXodrFileName, loaded);
         return loaded;
     }
 
@@ -296,7 +296,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         TrafficCompositionGenerator composition = roadInput.isSetTrafficComposition() ? new TrafficCompositionGenerator(
                 roadInput.getTrafficComposition(), vehicleFactory) : defaultTrafficComposition;
         if (roadInput.isSetTrafficComposition()) {
-            logger.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
+            LOG.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
         }
 
         // set up the traffic source
@@ -361,7 +361,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             setMicroInitialConditions(roadSegment, initialConditions.getMicroIC(), vehGenerator);
         } else {
             // throw new IllegalStateException();
-            logger.warn("no initial conditions defined");
+            LOG.warn("no initial conditions defined");
         }
     }
 
@@ -377,14 +377,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void setMacroInitialConditions(RoadSegment roadSegment, List<MacroIC> macroInitialConditions,
             TrafficCompositionGenerator vehGenerator) {
 
-        logger.info("choose macro initial conditions: generate vehicles from macro-localDensity ");
+        LOG.info("choose macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(macroInitialConditions);
 
-        final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
-        while (laneSegmentIterator.hasNext()) {
-            LaneSegment lane = laneSegmentIterator.next();
-            if (lane.type() != Lanes.Type.TRAFFIC) {
-                logger.debug("no macroscopic initial conditions for non-traffic lanes (slip roads etc).");
+        for (LaneSegment laneSegment : ImmutableList.copyOf(roadSegment.laneSegmentIterator())) {
+            if (laneSegment.type() != Lanes.Type.TRAFFIC) {
+                LOG.debug("no macroscopic initial conditions for non-traffic lanes (slip roads etc).");
                 continue;
             }
 
@@ -395,19 +393,19 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 final double rhoLocal = icMacro.rho(position);
                 double speedInit = icMacro.hasUserDefinedSpeeds() ? icMacro.vInit(position) : testVehicle
                         .getEquilibriumSpeed(rhoLocal);
-                if (logger.isDebugEnabled() && !icMacro.hasUserDefinedSpeeds()) {
-                    logger.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
+                if (LOG.isDebugEnabled() && !icMacro.hasUserDefinedSpeeds()) {
+                    LOG.debug("use equilibrium speed={} in macroscopic initial conditions.", speedInit);
                 }
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(String
                             .format("macroscopic init conditions from input: roadId=%s, x=%.3f, rho(x)=%.3f/km, speed=%.2fkm/h",
                                     roadSegment.id(), position, Units.INVM_TO_INVKM * rhoLocal, Units.MS_TO_KMH
                                             * speedInit));
                 }
 
                 if (rhoLocal <= 0) {
-                    logger.debug("no vehicle added at x={} for vanishing initial localDensity={}.", position, rhoLocal);
+                    LOG.debug("no vehicle added at x={} for vanishing initial localDensity={}.", position, rhoLocal);
                     position -= 50; // move on in upstream direction
                     continue;
                 }
@@ -422,16 +420,16 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 position -= posDecrement;
 
                 if (position <= posDecrement) {
-                    logger.debug("leave minimum gap at origin of road segment and start with next lane, pos={}",
+                    LOG.debug("leave minimum gap at origin of road segment and start with next lane, pos={}",
                             position);
                     break;
                 }
-                final Vehicle leader = lane.rearVehicle();
+                final Vehicle leader = laneSegment.rearVehicle();
                 final double gapToLeader = (leader == null) ? MovsimConstants.GAP_INFINITY : leader.getRearPosition()
                         - position;
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format(
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(String.format(
                             "meanDistance=%.3f, minimumGap=%.2f, posDecrement=%.3f, gapToLeader=%.3f\n",
                             meanDistanceInLane, minimumGap, posDecrement, gapToLeader));
                 }
@@ -439,12 +437,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 if (gapToLeader > 0) {
                     veh.setFrontPosition(position);
                     veh.setSpeed(speedInit);
-                    veh.setLane(lane.lane());
-                    logger.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position,
+                    veh.setLane(laneSegment.lane());
+                    LOG.debug("add vehicle from macroscopic initial conditions at pos={} with speed={}.", position,
                             speedInit);
                     roadSegment.addVehicle(veh);
                 } else {
-                    logger.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position,
+                    LOG.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position,
                             speedInit);
                 }
 
@@ -454,7 +452,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private static void setMicroInitialConditions(RoadSegment roadSegment, List<MicroIC> initialMicroConditions,
             TrafficCompositionGenerator vehGenerator) {
-        logger.debug(("choose micro initial conditions"));
+        LOG.debug(("choose micro initial conditions"));
         int vehicleNumber = 1;
         for (final MicroIC ic : initialMicroConditions) {
             // TODO counter
@@ -466,20 +464,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             // testwise:
             veh.setFrontPosition(Math.round(ic.getPosition() / veh.physicalQuantities().getxScale()));
             veh.setSpeed(Math.round(ic.getSpeed() / veh.physicalQuantities().getvScale()));
-            final int lane = ic.getLane().intValue();
-            if (lane <= 0 || lane > roadSegment.laneCount()) {
-                logger.error("Error: lane=" + lane + " on road id=" + roadSegment.userId()
-                        + " does not exist. Choose as initial condition a lane between 1 and "
-                        + roadSegment.laneCount());
+            final int lane = ic.getLane();
+            if (lane < Lanes.MOST_INNER_LANE || lane > roadSegment.laneCount()) {
                 throw new IllegalArgumentException("lane=" + lane
-                        + " given in initial condition does not exist for road=" + roadSegment.id());
+                        + " given in initial condition does not exist for road=" + roadSegment.id()
+                        + " which has a laneCount of " + roadSegment.laneCount());
             }
-            veh.setLane(lane - 1);
+            veh.setLane(lane);
             roadSegment.addVehicle(veh);
-            logger.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
-                    veh.getLabel(), veh.getLane(), veh.getFrontPosition(), veh.getSpeed()));
+            LOG.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
+                    veh.getLabel(), veh.lane(), veh.getFrontPosition(), veh.getSpeed()));
             if (veh.getLongitudinalModel().isCA()) {
-                logger.info(String.format(
+                LOG.info(String.format(
                         "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
                                 .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
             }
@@ -497,7 +493,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public void runToCompletion() {
-        logger.info("Simulator.run: start simulation at {} seconds of simulation project={}",
+        LOG.info("Simulator.run: start simulation at {} seconds of simulation project={}",
                 simulationRunnable.simulationTime(), projectName);
 
         startTimeMillis = System.currentTimeMillis();
@@ -520,10 +516,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     @Override
     public void simulationComplete(double simulationTime) {
-        logger.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
+        LOG.info(String.format("Simulator.run: stop after time = %.2fs = %.2fh of simulation project=%s",
                 simulationTime, simulationTime / 3600, projectName));
         final double elapsedTime = 0.001 * (System.currentTimeMillis() - startTimeMillis);
-        logger.info(String.format(
+        LOG.info(String.format(
                 "time elapsed = %.3fs --> simulation time warp = %.2f, time per 1000 update steps=%.3fs", elapsedTime,
                 simulationTime / elapsedTime, 1000 * elapsedTime / simulationRunnable.iterationCount()));
     }
@@ -531,8 +527,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         if (iterationCount % 200 == 0) {
-            if (logger.isInfoEnabled()) {
-                logger.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
+            if (LOG.isInfoEnabled()) {
+                LOG.info(String.format("Simulator.update :time = %.2fs = %.2fh, dt = %.2fs, projectName=%s",
                         simulationTime, simulationTime / 3600, dt, projectName));
             }
         }

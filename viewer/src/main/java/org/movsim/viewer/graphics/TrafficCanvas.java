@@ -46,6 +46,7 @@ import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Slope;
@@ -273,10 +274,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         try {
             simulator.loadScenarioFromXml(scenario, path);
         } catch (JAXBException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (SAXException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         properties = ViewProperties.loadProperties(scenario, path);
@@ -606,11 +605,14 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // draw the road edges
         g.setStroke(new BasicStroke());
         g.setColor(roadEdgeColor);
-        // inside edge
-        double offset = roadMapping.laneInsideEdgeOffset(0);
+        // TODO BUGGY HERE, offset not calculated correctly
+        // edge of most inner lane: hack here, lane does not exist
+        double offset = roadMapping.laneInsideEdgeOffset(Lanes.MOST_INNER_LANE - 1);
+        System.out.println("first laneoffset=" + offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
-        // outside edge
-        offset = roadMapping.laneInsideEdgeOffset(laneCount);
+        // edge of most outer edge
+        offset = roadMapping.laneInsideEdgeOffset(roadMapping.laneCount());
+        System.out.println("last laneoffset=" + offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
 
     }
@@ -873,11 +875,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * @param g
      */
     private void drawRoadSectionIds(Graphics2D g) {
-
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            assert roadMapping != null;
-            final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            //final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
 
             // draw the road segment's id

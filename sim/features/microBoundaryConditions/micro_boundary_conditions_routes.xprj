@@ -46,8 +46,9 @@
             </Route>
         </Routes>
         <OutputConfiguration>
-            <FloatingCarOutput n_timestep="1" route="main">
+            <FloatingCarOutput n_timestep="1" route="exit">
                 <FloatingCar number="2" />
+                <FloatingCar number="3" />
             </FloatingCarOutput>
             <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
             <Trajectories dt="1" route="main" offset_position="1000" />

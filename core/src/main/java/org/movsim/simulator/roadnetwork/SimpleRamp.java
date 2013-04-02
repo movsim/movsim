@@ -187,7 +187,7 @@ public class SimpleRamp extends AbstractTrafficSource {
                 return 1;
             }
 
-            // gaps identical, compare lanes, prefer small lane index (i.e. lane to the right)
+            // gaps identical, compare lanes, prefer small laneIndex index (i.e. laneIndex to the right)
             if (this.laneIndex < o.laneIndex) {
                 return -1;
             } else if (this.laneIndex > o.laneIndex) {

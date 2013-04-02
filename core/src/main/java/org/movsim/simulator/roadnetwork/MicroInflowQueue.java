@@ -192,9 +192,12 @@ public final class MicroInflowQueue {
         if (config.isSetColumnLane()) {
             int lane = Integer.parseInt(data[config.getColumnLane() - 1]);
             if (lane > maxLane) {
-                LOG.warn("Parsed lane={} not available on road with max laneIndex={}. Set lane to max laneIndex", lane,
-                        maxLane);
+                LOG.warn("Parsed lane={} not available on road with maxLane={}. ", lane);
                 lane = maxLane;
+            }
+            if (lane < Lanes.MOST_INNER_LANE) {
+                LOG.warn("Parsed lane={} not available on road with minLane={}. ", Lanes.MOST_INNER_LANE);
+                lane = Lanes.MOST_INNER_LANE;
             }
             record.setLane(lane);
         }

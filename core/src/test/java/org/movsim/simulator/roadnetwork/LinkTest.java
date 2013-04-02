@@ -107,27 +107,29 @@ public class LinkTest {
         final RoadSegment r1 = new RoadSegment(m1);
         final RoadMapping m2 = new RoadMappingConcrete(laneCount + offset, 1000.0);
         final RoadSegment r2 = new RoadSegment(m2);
-        r2.setLaneType(Lanes.LANE1, Lanes.Type.ENTRANCE);
+        r2.setLaneType(Lanes.LANE3, Lanes.Type.ENTRANCE);
         final RoadMapping m3 = new RoadMappingConcrete(laneCount, 1000.0);
         final RoadSegment r3 = new RoadSegment(m3);
-        Link.addOffsetJoin(r2.trafficLaneMin() - r1.trafficLaneMin(), r1, r2);
+        Link.addJoin(r1, r2);
+
         assertEquals(r2, r1.sinkRoadSegment(Lanes.LANE1));
         assertEquals(r2, r1.sinkRoadSegment(Lanes.LANE2));
-        assertEquals(Lanes.LANE2, r1.sinkLane(Lanes.LANE1));
-        assertEquals(Lanes.LANE3, r1.sinkLane(Lanes.LANE2));
+        assertEquals(Lanes.LANE1, r1.sinkLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r1.sinkLane(Lanes.LANE2));
+        assertEquals(r1, r2.sourceRoadSegment(Lanes.LANE1));
         assertEquals(r1, r2.sourceRoadSegment(Lanes.LANE2));
-        assertEquals(r1, r2.sourceRoadSegment(Lanes.LANE3));
-        assertEquals(Lanes.LANE1, r2.sourceLane(Lanes.LANE2));
-        assertEquals(Lanes.LANE2, r2.sourceLane(Lanes.LANE3));
-        Link.addOffsetJoin(r3.trafficLaneMin() - r2.trafficLaneMin(), r2, r3);
+        assertEquals(Lanes.LANE1, r2.sourceLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r2.sourceLane(Lanes.LANE2));
+
+        Link.addJoin(r2, r3);
+        assertEquals(r3, r2.sinkRoadSegment(Lanes.LANE1));
         assertEquals(r3, r2.sinkRoadSegment(Lanes.LANE2));
-        assertEquals(r3, r2.sinkRoadSegment(Lanes.LANE3));
-        assertEquals(Lanes.LANE1, r2.sinkLane(Lanes.LANE2));
-        assertEquals(Lanes.LANE2, r2.sinkLane(Lanes.LANE3));
+        assertEquals(Lanes.LANE1, r2.sinkLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r2.sinkLane(Lanes.LANE2));
         assertEquals(r2, r3.sourceRoadSegment(Lanes.LANE1));
         assertEquals(r2, r3.sourceRoadSegment(Lanes.LANE2));
-        assertEquals(Lanes.LANE2, r3.sourceLane(Lanes.LANE1));
-        assertEquals(Lanes.LANE3, r3.sourceLane(Lanes.LANE2));
+        assertEquals(Lanes.LANE1, r3.sourceLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r3.sourceLane(Lanes.LANE2));
     }
 
     /**
@@ -140,22 +142,22 @@ public class LinkTest {
         final int exitLaneCount = 1;
         final RoadSegment r0 = new RoadSegment(300.0, laneCount + exitLaneCount);
         final RoadSegment r1 = new RoadSegment(400.0, laneCount);
-        r0.setLaneType(Lanes.LANE1, Lanes.Type.EXIT);// so Lane1 is exit lane of r1
+        r0.setLaneType(Lanes.LANE3, Lanes.Type.EXIT);// so Lane3 is exit laneIndex of r1
         // join r0 and r1 so vehicles move from r0 to r1
         // lane3 of r0 joins to lane2 of r1
         // lane2 of r0 joins to lane1 of r1
         // lane1 of r0 has no successor
         Link.addJoin(r0, r1);
-        assertEquals(null, r0.sinkRoadSegment(Lanes.LANE1));
+        assertEquals(null, r0.sinkRoadSegment(Lanes.LANE3));
         assertEquals(r1, r0.sinkRoadSegment(Lanes.LANE2));
-        assertEquals(r1, r0.sinkRoadSegment(Lanes.LANE3));
-        assertEquals(Lanes.NONE, r0.sinkLane(Lanes.LANE1));
-        assertEquals(Lanes.LANE1, r0.sinkLane(Lanes.LANE2));
-        assertEquals(Lanes.LANE2, r0.sinkLane(Lanes.LANE3));
+        assertEquals(r1, r0.sinkRoadSegment(Lanes.LANE1));
+        assertEquals(Lanes.NONE, r0.sinkLane(Lanes.LANE3));
+        assertEquals(Lanes.LANE2, r0.sinkLane(Lanes.LANE2));
+        assertEquals(Lanes.LANE1, r0.sinkLane(Lanes.LANE1));
         assertEquals(r0, r1.sourceRoadSegment(Lanes.LANE1));
         assertEquals(r0, r1.sourceRoadSegment(Lanes.LANE2));
-        assertEquals(Lanes.LANE2, r1.sourceLane(Lanes.LANE1));
-        assertEquals(Lanes.LANE3, r1.sourceLane(Lanes.LANE2));
+        assertEquals(Lanes.LANE1, r1.sourceLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r1.sourceLane(Lanes.LANE2));
     }
 
     /**

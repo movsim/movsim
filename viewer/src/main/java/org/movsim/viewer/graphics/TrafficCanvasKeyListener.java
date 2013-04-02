@@ -84,7 +84,7 @@ public class TrafficCanvasKeyListener extends TrafficCanvasController implements
             commandCycleVehicleColors();
             break;
         case 'C':
-            // 'lane Change'
+            // 'laneIndex Change'
             commandToggleVehicleColorMode(VehicleColorMode.LANE_CHANGE);
             break;
         case 'J':
