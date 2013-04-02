@@ -226,7 +226,10 @@ public class OpenDriveHandlerJaxb {
                 logger.warn("lane indices of a <laneSection><right> must be negative in roadId=" + roadId);
             }
         }
-
+        if (Math.abs(minIndex) > 1) {
+            throw new IllegalArgumentException("minimum lane index=" + minIndex
+                    + " but must start with 1 or -1 in roadId=" + roadId);
+        }
         if (Math.abs(Math.abs(maxIndex) - Math.abs(minIndex)) != lanes.size() - 1) {
             logger.info("minIndex={}, maxIndex={}", minIndex, maxIndex);
             logger.info("lanes.size={}", lanes.size());
