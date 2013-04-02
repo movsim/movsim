@@ -162,10 +162,10 @@ public class LaneChangeModel {
             return decision;
         }
         
-        // decision = checkForLaneChangeForEnteringVehicle(roadSegment);
-        // if(!decision.noDecisionMade()){
-        // return decision;
-        // }
+        decision = checkForLaneChangeForEnteringVehicle(roadSegment);
+        if (!decision.noDecisionMade()) {
+            return decision;
+        }
         
         // check discretionary lane changes
         decision = determineDiscretionaryLaneChangeDirection(roadSegment);
