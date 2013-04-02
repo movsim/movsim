@@ -156,14 +156,14 @@ public class LoopDetector implements SimulationTimeStep {
         for (LaneSegment laneSegment : ImmutableList.copyOf(roadSegment.laneSegmentIterator())) {
             for (final Vehicle vehicle : laneSegment) {
                 if ((vehicle.getFrontPositionOld() < detPosition) && (vehicle.getFrontPosition() >= detPosition)) {
-                    countVehiclesAndDataForLane(laneSegment, laneSegment.lane(), vehicle);
+                    countVehiclesAndDataForLane(laneSegment, laneSegment.lane() - 1, vehicle);
                 }
             }
         }
 
         if ((simulationTime - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
-            for (int lane = 0; lane < laneCount; lane++) {
-                calculateAveragesForLane(lane);
+            for (int laneIndex = 0; laneIndex < laneCount; laneIndex++) {
+                calculateAveragesForLane(laneIndex);
             }
             calculateAveragesOverAllLanes();
             if(fileDetector != null){
@@ -176,6 +176,7 @@ public class LoopDetector implements SimulationTimeStep {
     /**
      * @param laneSegment
      * @param laneIndex
+     *            (lane-1)
      * @param veh
      */
     private void countVehiclesAndDataForLane(LaneSegment laneSegment, int laneIndex, Vehicle veh) {

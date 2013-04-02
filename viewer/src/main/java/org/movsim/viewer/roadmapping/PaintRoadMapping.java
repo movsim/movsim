@@ -54,13 +54,11 @@ public class PaintRoadMapping {
     private static final boolean drawBezierPoints = false;
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        final double lateralOffset = 0; //0.5*roadMapping.laneWidth()*(roadMapping.laneCount()-roadMapping.trafficLaneMax());  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
-        System.out.println("laneCount="+ roadMapping.laneCount() + ", trafficLaneMax="+roadMapping.trafficLaneMax()+" offset="+lateralOffset);
+        final double lateralOffset = 0;  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
-
         assert roadMapping != null;
 
         final Line2D.Double line = new Line2D.Double();

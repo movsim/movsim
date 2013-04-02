@@ -605,14 +605,12 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // draw the road edges
         g.setStroke(new BasicStroke());
         g.setColor(roadEdgeColor);
-        // TODO BUGGY HERE, offset not calculated correctly
+        // FIXME BUGGY HERE, offset not calculated correctly
         // edge of most inner lane: hack here, lane does not exist
         double offset = roadMapping.laneInsideEdgeOffset(Lanes.MOST_INNER_LANE - 1);
-        System.out.println("first laneoffset=" + offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
         // edge of most outer edge
         offset = roadMapping.laneInsideEdgeOffset(roadMapping.laneCount());
-        System.out.println("last laneoffset=" + offset);
         PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
 
     }
