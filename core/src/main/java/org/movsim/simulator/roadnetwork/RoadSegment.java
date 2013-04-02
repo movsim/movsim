@@ -88,9 +88,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     public static final int INITIAL_ID = 1;
     private static int nextId = INITIAL_ID;
 
-    public static final int MAX_LANE_COUNT = 80;
-    public static final int MAX_LANE_PAIR_COUNT = 100;// 12;
-
     /** the id is an internally used unique identifier for the road. */
     private final int id;
     /** the userId is the id specified in the .xodr and .xml files. */
@@ -151,7 +148,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public RoadSegment(double roadLength, int laneCount) {
         assert roadLength > 0.0;
-        assert laneCount >= 1 && laneCount <= MAX_LANE_COUNT;
+        assert laneCount >= 1;
         laneSegments = new LaneSegment[laneCount];
         for (int i = 0; i < laneCount; ++i) {
             laneSegments[i] = new LaneSegment(this, i);
@@ -347,22 +344,22 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final LaneSegment laneSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         return laneSegments[lane];
     }
 
     public final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         laneSegments[lane].setSourceLaneSegment(sourceLaneSegment);
     }
 
     public final LaneSegment sourceLaneSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         return laneSegments[lane].sourceLaneSegment();
     }
 
     public final RoadSegment sourceRoadSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         if (laneSegments[lane].sourceLaneSegment() == null) {
             return null;
         }
@@ -370,7 +367,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final int sourceLane(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_PAIR_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         if (laneSegments[lane].sourceLaneSegment() == null) {
             return Lane.NONE;
         }
@@ -378,17 +375,17 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         laneSegments[lane].setSinkLaneSegment(sinkLaneSegment);
     }
 
     public final LaneSegment sinkLaneSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         return laneSegments[lane].sinkLaneSegment();
     }
 
     public final RoadSegment sinkRoadSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         if (laneSegments[lane].sinkLaneSegment() == null) {
             return null;
         }
@@ -396,7 +393,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final int sinkLane(int lane) {
-        assert lane >= Lane.LANE1 && lane < MAX_LANE_COUNT;
+        assert lane >= Lane.LANE1 && lane < laneCount;
         if (laneSegments[lane].sinkLaneSegment() == null) {
             return Lane.NONE;
         }
