@@ -26,7 +26,7 @@
 package org.movsim.simulator.vehicles.lanechange;
 
 import org.movsim.autogen.ModelParameterMOBIL;
-import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -43,7 +43,7 @@ import com.google.common.base.Preconditions;
  * Paper for reference:
  * </p>
  * <p>
- * <a href="http://pubsindex.trb.org/view.aspx?id=801029"> M. Treiber, A. Kesting, D. Helbing, General Lane-Changing
+ * <a href="http://pubsindex.trb.org/view.aspx?id=801029"> M. Treiber, A. Kesting, D. Helbing, General Lanes-Changing
  * Model MOBIL for Car-Following Models. Transportation Research Record, Volume 1999, Pages 86-94 (2007).</a>
  * </p>
  */
@@ -91,7 +91,7 @@ public class MOBIL {
         final int currentLane = me.getLane();
         final int newLane = currentLane + direction;
         final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
-        if (newLaneSegment.type() == Lane.Type.ENTRANCE) {
+        if (newLaneSegment.type() == Lanes.Type.ENTRANCE) {
             // never change lane into an entrance lane
             return prospectiveBalance;
         }
@@ -186,7 +186,7 @@ public class MOBIL {
             double bias;
             final int laneCount = roadSegment.laneCount();
 
-            if (roadSegment.laneSegment(currentLane).type() == Lane.Type.ENTRANCE) {
+            if (roadSegment.laneSegment(currentLane).type() == Lanes.Type.ENTRANCE) {
                 double factor = (currentLane > 0.5 * (laneCount - 1)) ? (laneCount - currentLane) : (currentLane + 1);
                 // System.out.println("currentLane: " + currentLane + " factor*biasForced=" + factor * biasForced);
                 return biasForced * factor;
@@ -259,7 +259,7 @@ public class MOBIL {
 
         // MOBIL's incentive formula
 
-        final int biasSign = (changeTo == Lane.TO_LEFT) ? 1 : -1;
+        final int biasSign = (changeTo == Lanes.TO_LEFT) ? 1 : -1;
 
         prospectiveBalance = meDiffAcc + param.getPoliteness() * (oldBackDiffAcc + newBackDiffAcc)
                 - param.getThresholdAcceleration() - biasSign * param.getRightBiasAcceleration();

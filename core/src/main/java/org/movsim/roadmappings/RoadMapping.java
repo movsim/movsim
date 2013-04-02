@@ -28,7 +28,7 @@ package org.movsim.roadmappings;
 
 import java.util.ArrayList;
 
-import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -183,7 +183,7 @@ public abstract class RoadMapping {
         this.laneCount = laneCount;
         this.x0 = x0;
         this.y0 = y0;
-        trafficLaneMin = Lane.LANE1;
+        trafficLaneMin = Lanes.LANE1;
         trafficLaneMax = laneCount;
         this.laneWidth = laneWidth;
         roadWidth = laneWidth * laneCount;
@@ -397,7 +397,7 @@ public abstract class RoadMapping {
      * @return the offset of the center of the lane
      */
     public final double laneOffset(int lane) {
-        return lane == Lane.NONE ? 0.0 : (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
+        return lane == Lanes.NONE ? 0.0 : (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
     }
 
     /**

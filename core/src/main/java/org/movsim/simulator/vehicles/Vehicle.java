@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -678,13 +678,13 @@ public class Vehicle {
      */
     protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
         assert roadSegment.id() == roadSegmentId;
-        if (exitRoadSegmentId == roadSegment.id() && getLane() != Lane.LANE1) {
+        if (exitRoadSegmentId == roadSegment.id() && getLane() != Lanes.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
             // react to vehicle ahead in exit lane
             // TODO this reaction is in same situations too short-sighted so that the vehicle in the exit lane must be
             // considered already in the upstream segment
-            final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
-            if (exitLaneSegment != null && exitLaneSegment.type() == Lane.Type.EXIT) {
+            final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lanes.MOST_RIGHT_LANE);
+            if (exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT) {
                 // this front vehicle could also result in negative net distances
                 // but the deceleration is limited anyway
                 Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);
@@ -783,7 +783,7 @@ public class Vehicle {
         assert this.lane != lane;
         laneOld = this.lane;
         this.lane = lane;
-        targetLane = Lane.NONE;
+        targetLane = Lanes.NONE;
     }
 
     /**
@@ -843,7 +843,7 @@ public class Vehicle {
         final int laneChangeDirection = lcDecision.getDirection();
 
         // initiates a lane change: set targetLane to new value the lane will be assigned by the vehicle container !!
-        if (laneChangeDirection != Lane.NO_CHANGE) {
+        if (laneChangeDirection != Lanes.NO_CHANGE) {
             setTargetLane(lane + laneChangeDirection);
             resetDelay();
             updateLaneChangeDelay(dt);
@@ -1004,8 +1004,8 @@ public class Vehicle {
         laneOld = lane + delta;
         if (laneOld >= newRoadSegment.laneCount()) {
             laneOld = newRoadSegment.laneCount() - 1;
-        } else if (laneOld < Lane.LANE1) {
-            laneOld = Lane.LANE1;
+        } else if (laneOld < Lanes.LANE1) {
+            laneOld = Lanes.LANE1;
         }
         setRearPosition(newRearPosition);
         setRoadSegment(newRoadSegment.id(), newRoadSegment.roadLength());

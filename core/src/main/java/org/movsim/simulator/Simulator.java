@@ -54,7 +54,7 @@ import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
-import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.MicroInflowQueue;
 import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
@@ -383,7 +383,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final Iterator<LaneSegment> laneSegmentIterator = roadSegment.laneSegmentIterator();
         while (laneSegmentIterator.hasNext()) {
             LaneSegment lane = laneSegmentIterator.next();
-            if (lane.type() != Lane.Type.TRAFFIC) {
+            if (lane.type() != Lanes.Type.TRAFFIC) {
                 logger.debug("no macroscopic initial conditions for non-traffic lanes (slip roads etc).");
                 continue;
             }

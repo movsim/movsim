@@ -58,12 +58,12 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     private static final boolean DEBUG = false;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
-    // Lane linkage
+    // Lanes linkage
     private final RoadSegment roadSegment;
     private LaneSegment sinkLaneSegment;
     private LaneSegment sourceLaneSegment;
     private final int lane;
-    private Lane.Type type;
+    private Lanes.Type type;
     final ArrayList<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
 
@@ -77,7 +77,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         this.roadSegment = roadSegment;
         this.lane = lane;
         vehicles = new ArrayList<>(VEHICLES_PER_LANE_INITIAL_SIZE);
-        type = Lane.Type.TRAFFIC;
+        type = Lanes.Type.TRAFFIC;
     }
 
     /**
@@ -94,9 +94,9 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @param type
      */
-    public final void setType(Lane.Type type) {
+    public final void setType(Lanes.Type type) {
         this.type = type;
-        if (type == Lane.Type.ENTRANCE) {
+        if (type == Lanes.Type.ENTRANCE) {
             setSinkLaneSegment(null);
         }
     }
@@ -106,7 +106,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @return type of lane
      */
-    public final Lane.Type type() {
+    public final Lanes.Type type() {
         return type;
     }
 
@@ -660,7 +660,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // final int prevLaneOnNewRoadSegment = sinkLane[vehicle.previousLane()];
                 final double rearPositionOnNewRoadSegment = vehicle.getRearPosition() - roadLength;
                 double exitEndPos = Vehicle.EXIT_POSITION_NOT_SET;
-                if (sinkLaneSegment.type() == Lane.Type.TRAFFIC) {
+                if (sinkLaneSegment.type() == Lanes.Type.TRAFFIC) {
                     final int exitRoadSegmentId = vehicle.exitRoadSegmentId();
                     if (exitRoadSegmentId == sinkLaneSegment.roadSegment.id()) {
                         // vehicle is on exit exit road segment, so exit end pos is end of this

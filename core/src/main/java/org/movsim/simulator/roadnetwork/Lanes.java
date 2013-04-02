@@ -28,20 +28,20 @@ package org.movsim.simulator.roadnetwork;
 
 /**
  * <p>
- * Lane value constants.
+ * Lanes value constants.
  * </p>
  * <p>
  * Lanes are numbered from the inside lane to the outside lane. So, for example, on a three lane road LANE1 is the
  * inside lane, LANE2 is the middle lane and LANE3 is the outside lane.
  * </p>
- * Lane numbering is independent of whether traffic drives on the right or the left, indeed references to "right lanes"
+ * Lanes numbering is independent of whether traffic drives on the right or the left, indeed references to "right lanes"
  * and "left lanes" is conscientiously eschewed.
  * <p>
  * </p>
  */
-public final class Lane {
+public final class Lanes {
 
-    private Lane() {
+    private Lanes() {
         // private constructor
     }
 
@@ -64,14 +64,14 @@ public final class Lane {
     public final static int MOST_RIGHT_LANE = LANE1;
 
     /**
-     * Lane type.
+     * Lanes type.
      * 
      * <p>
      * Mapping of OpenDRIVE lane types.
      */
     public enum Type {
         /**
-         * Lane for normal traffic.
+         * Lanes for normal traffic.
          */
         TRAFFIC("driving"),
         /**

@@ -25,7 +25,7 @@
  */
 package org.movsim.simulator.vehicles.lanechange;
 
-import org.movsim.simulator.roadnetwork.Lane;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -48,9 +48,9 @@ public class LaneChangeModel {
 
     public enum LaneChangeDecision {
 
-        NONE(Lane.NO_CHANGE), STAY_IN_LANE(Lane.NO_CHANGE), DISCRETIONARY_TO_LEFT(Lane.TO_LEFT), DISCRETIONARY_TO_RIGHT(
-                Lane.TO_RIGHT), MANDATORY_TO_LEFT(Lane.TO_LEFT), MANDATORY_TO_RIGHT(Lane.TO_RIGHT), MANDATORY_STAY_IN_LANE(
-                Lane.NO_CHANGE);
+        NONE(Lanes.NO_CHANGE), STAY_IN_LANE(Lanes.NO_CHANGE), DISCRETIONARY_TO_LEFT(Lanes.TO_LEFT), DISCRETIONARY_TO_RIGHT(
+                Lanes.TO_RIGHT), MANDATORY_TO_LEFT(Lanes.TO_LEFT), MANDATORY_TO_RIGHT(Lanes.TO_RIGHT), MANDATORY_STAY_IN_LANE(
+                Lanes.NO_CHANGE);
 
         private final int laneChangeDirection;
 
@@ -224,22 +224,22 @@ public class LaneChangeModel {
         double accToLeft = -Double.MAX_VALUE;
         double accToRight = -Double.MAX_VALUE;
         // consider lane-changing to right-hand side lane (decreasing lane index)
-        if (currentLane + Lane.TO_RIGHT >= Lane.MOST_RIGHT_LANE) {
-            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
-            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+        if (currentLane + Lanes.TO_RIGHT >= Lanes.MOST_RIGHT_LANE) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lanes.TO_RIGHT);
+            if (newLaneSegment.type() == Lanes.Type.TRAFFIC) {
                 // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane
                 // changing
-                accToRight = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_RIGHT, roadSegment);
+                accToRight = lcModelMOBIL.calcAccelerationBalance(me, Lanes.TO_RIGHT, roadSegment);
             }
         }
 
         // consider lane-changing to left-hand side lane (increasing the lane index)
-        if (currentLane + Lane.TO_LEFT < roadSegment.laneCount()) {
-            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_LEFT);
-            if (newLaneSegment.type() == Lane.Type.TRAFFIC) {
+        if (currentLane + Lanes.TO_LEFT < roadSegment.laneCount()) {
+            final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lanes.TO_LEFT);
+            if (newLaneSegment.type() == Lanes.Type.TRAFFIC) {
                 // only consider lane changes into traffic lanes, other lane changes are handled by mandatory lane
                 // changing
-                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, Lane.TO_LEFT, roadSegment);
+                accToLeft = lcModelMOBIL.calcAccelerationBalance(me, Lanes.TO_LEFT, roadSegment);
             }
         }
 
@@ -260,15 +260,15 @@ public class LaneChangeModel {
         final int currentLane = me.getLane();
         final LaneSegment currentLaneSegment = roadSegment.laneSegment(currentLane);
 
-        if (currentLaneSegment.type() == Lane.Type.ENTRANCE) {
-            int direction = (currentLane == Lane.MOST_RIGHT_LANE) ? Lane.TO_LEFT : Lane.TO_RIGHT;
+        if (currentLaneSegment.type() == Lanes.Type.ENTRANCE) {
+            int direction = (currentLane == Lanes.MOST_RIGHT_LANE) ? Lanes.TO_LEFT : Lanes.TO_RIGHT;
             final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + direction);
             if (newLaneSegment != null && isSafeLaneChange(newLaneSegment)) {
                 double distanceToRoadSegmentEnd = me.getDistanceToRoadSegmentEnd();
                 if (distanceToRoadSegmentEnd < 0) {
                     // just a hack. should not happen.
                     logger.info("check this: roadSegmentLength not set. Do mandatory lane change anyway.");
-                    return (direction == Lane.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
+                    return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
                             : LaneChangeDecision.MANDATORY_TO_RIGHT;
                 }
                 // evaluate additional motivation to leave entrance lane
@@ -281,7 +281,7 @@ public class LaneChangeModel {
                                 .format("change lane: veh.id=%d, distanceToRoadSegmentEnd=%.2f, accInCurrentLane=%.2f, accInNewLane=%.2f, bias=%.2f",
                                         me.getId(), distanceToRoadSegmentEnd, accInCurrentLane, accInNewLane, bias));
                     }
-                    return (direction == Lane.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
+                    return (direction == Lanes.TO_LEFT) ? LaneChangeDecision.MANDATORY_TO_LEFT
                             : LaneChangeDecision.MANDATORY_TO_RIGHT;
                 }
             }
@@ -302,12 +302,12 @@ public class LaneChangeModel {
 
         // consider mandatory lane-change to exit
         if (me.exitRoadSegmentId() == roadSegment.id()) {
-            if (currentLane == Lane.LANE1) {
+            if (currentLane == Lanes.LANE1) {
                 // already in exit lane, so do not move out of it
                 return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
-            } else if (currentLane > Lane.LANE1) {
+            } else if (currentLane > Lanes.LANE1) {
                 // evaluate situation on the right lane
-                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
+                final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lanes.TO_RIGHT);
                 if (isSafeLaneChange(newLaneSegment)) {
 
                     return LaneChangeDecision.MANDATORY_TO_RIGHT;
@@ -322,11 +322,11 @@ public class LaneChangeModel {
             // next road segment is the exit segment
             final double distanceToExit = roadSegment.roadLength() - me.getFrontPosition();
             if (distanceToExit < distanceBeforeExitMustChangeLanes) {
-                if (currentLane == Lane.LANE1) {
+                if (currentLane == Lanes.LANE1) {
                     // already in exit lane, so do not move out of it
                     return LaneChangeDecision.MANDATORY_STAY_IN_LANE;
-                } else if (currentLane > Lane.LANE1) {
-                    final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lane.TO_RIGHT);
+                } else if (currentLane > Lanes.LANE1) {
+                    final LaneSegment newLaneSegment = roadSegment.laneSegment(currentLane + Lanes.TO_RIGHT);
                     if (isSafeLaneChange(newLaneSegment)) {
                         return LaneChangeDecision.MANDATORY_TO_RIGHT;
                     }
@@ -342,8 +342,8 @@ public class LaneChangeModel {
     // TODO first drop of cooperative lane-changing behavior
     private LaneChangeDecision checkForLaneChangeForEnteringVehicle(RoadSegment roadSegment) {
         final int currentLane = me.getLane();
-        LaneSegment entryLaneSegment = roadSegment.laneSegment(Lane.LANE1);
-        if(currentLane == Lane.LANE2 && entryLaneSegment.type() == Lane.Type.ENTRANCE){
+        LaneSegment entryLaneSegment = roadSegment.laneSegment(Lanes.LANE1);
+        if(currentLane == Lanes.LANE2 && entryLaneSegment.type() == Lanes.Type.ENTRANCE){
             if(roadSegment.laneCount()<=2){
                 // change to left not possible
                 return LaneChangeDecision.NONE;
@@ -362,10 +362,10 @@ public class LaneChangeModel {
                                     me.getFrontPosition(), currentLane, me.getNetDistance(frontVehicle), me.getSpeed(),
                                     me.getRelSpeed(frontVehicle), accToFront));
                 }
-                final int newLane = currentLane + Lane.TO_LEFT; 
+                final int newLane = currentLane + Lanes.TO_LEFT; 
                 final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
 
-                if (newLaneSegment.type() == Lane.Type.ENTRANCE) {
+                if (newLaneSegment.type() == Lanes.Type.ENTRANCE) {
                     // never change lane into an entrance lane
                     return LaneChangeDecision.NONE; 
                 }

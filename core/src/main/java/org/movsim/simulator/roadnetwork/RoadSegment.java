@@ -166,7 +166,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public RoadSegment(RoadMapping roadMapping) {
         this(roadMapping.roadLength(), roadMapping.laneCount());
-        assert roadMapping.trafficLaneMin() == Lane.LANE1;
+        assert roadMapping.trafficLaneMin() == Lanes.LANE1;
         assert roadMapping.trafficLaneMax() == laneCount;
         this.roadMapping = roadMapping;
     }
@@ -298,7 +298,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param lane
      * @param laneType
      */
-    public void setLaneType(int lane, Lane.Type laneType) {
+    public void setLaneType(int lane, Lanes.Type laneType) {
         laneSegments[lane].setType(laneType);
         if (roadMapping != null) {
             roadMapping.setTrafficLaneMin(trafficLaneMin());
@@ -313,7 +313,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return type of lane
      */
-    public Lane.Type laneType(int lane) {
+    public Lanes.Type laneType(int lane) {
         return laneSegments[lane].type();
     }
 
@@ -324,7 +324,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public int trafficLaneMin() {
         int trafficLaneMin = 0;
-        while (laneSegments[trafficLaneMin].type() != Lane.Type.TRAFFIC) {
+        while (laneSegments[trafficLaneMin].type() != Lanes.Type.TRAFFIC) {
             ++trafficLaneMin;
         }
         return trafficLaneMin;
@@ -337,29 +337,29 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public int trafficLaneMax() {
         int trafficLaneMax = laneCount - 1;
-        while (laneSegments[trafficLaneMax].type() != Lane.Type.TRAFFIC) {
+        while (laneSegments[trafficLaneMax].type() != Lanes.Type.TRAFFIC) {
             --trafficLaneMax;
         }
         return trafficLaneMax + 1;
     }
 
     public final LaneSegment laneSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         return laneSegments[lane];
     }
 
     public final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         laneSegments[lane].setSourceLaneSegment(sourceLaneSegment);
     }
 
     public final LaneSegment sourceLaneSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         return laneSegments[lane].sourceLaneSegment();
     }
 
     public final RoadSegment sourceRoadSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         if (laneSegments[lane].sourceLaneSegment() == null) {
             return null;
         }
@@ -367,25 +367,25 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final int sourceLane(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         if (laneSegments[lane].sourceLaneSegment() == null) {
-            return Lane.NONE;
+            return Lanes.NONE;
         }
         return laneSegments[lane].sourceLaneSegment().lane();
     }
 
     public final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         laneSegments[lane].setSinkLaneSegment(sinkLaneSegment);
     }
 
     public final LaneSegment sinkLaneSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         return laneSegments[lane].sinkLaneSegment();
     }
 
     public final RoadSegment sinkRoadSegment(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         if (laneSegments[lane].sinkLaneSegment() == null) {
             return null;
         }
@@ -393,9 +393,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final int sinkLane(int lane) {
-        assert lane >= Lane.LANE1 && lane < laneCount;
+        assert lane >= Lanes.LANE1 && lane < laneCount;
         if (laneSegments[lane].sinkLaneSegment() == null) {
-            return Lane.NONE;
+            return Lanes.NONE;
         }
         return laneSegments[lane].sinkLaneSegment().lane();
     }
@@ -403,7 +403,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public boolean exitsOnto(int exitRoadSegmentId) {
         for (int lane = 0; lane < laneCount; ++lane) {
             final LaneSegment laneSegment = laneSegments[lane];
-            if (laneSegment.type() == Lane.Type.EXIT) {
+            if (laneSegment.type() == Lanes.Type.EXIT) {
                 if (laneSegment.sinkLaneSegment().roadSegment().id() == exitRoadSegmentId) {
                     return true;
                 }
@@ -463,7 +463,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return the number of vehicles in the given lane on this road segment
      */
     public int getVehicleCount(int lane) {
-        assert lane >= Lane.LANE1;
+        assert lane >= Lanes.LANE1;
         assert lane < laneCount;
         return laneSegments[lane].vehicleCount();
     }
@@ -733,7 +733,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Lane change.
+     * Lanes change.
      * <p>
      * For each vehicle check if a lane change is desired and safe and, if so, make the lane change.
      * </p>
@@ -762,8 +762,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                 assert vehicle.roadSegmentId() == id;
                 if (vehicle.considerLaneChange(dt, this)) {
                     final int targetLane = vehicle.getTargetLane();
-                    assert targetLane != Lane.NONE;
-                    assert laneSegments[targetLane].type() != Lane.Type.ENTRANCE;
+                    assert targetLane != Lanes.NONE;
+                    assert laneSegments[targetLane].type() != Lanes.Type.ENTRANCE;
                     // iteratorRemove avoids ConcurrentModificationException
                     vehIterator.remove();
                     vehicle.setLane(targetLane);
