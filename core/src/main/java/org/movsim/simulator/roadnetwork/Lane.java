@@ -114,7 +114,6 @@ public final class Lane {
      * 
      */
     public enum LaneSectionType {
-
         LEFT, RIGHT;
     }
 

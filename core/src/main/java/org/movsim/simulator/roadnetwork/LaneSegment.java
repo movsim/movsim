@@ -322,7 +322,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     public void addVehicle(Vehicle vehicle) {
         // TODO assert vehicle.getFrontPosition() >= 0.0;
-        assert vehicle.getSpeed() >= 0.0;
+        assert vehicle.getSpeed() >= 0.0 : "vehicleSpeed=" + vehicle.getSpeed();
         assert vehicle.getLane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert assertInvariant();

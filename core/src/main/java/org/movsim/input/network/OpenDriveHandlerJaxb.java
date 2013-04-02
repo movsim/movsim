@@ -226,9 +226,9 @@ public class OpenDriveHandlerJaxb {
                 logger.warn("lane indices of a <laneSection><right> must be negative in roadId=" + roadId);
             }
         }
-        if (Math.abs(minIndex) > 1) {
-            throw new IllegalArgumentException("minimum lane index=" + minIndex
-                    + " but must start with 1 or -1 in roadId=" + roadId);
+        if (Math.abs(minIndex) != 1 && Math.abs(maxIndex) != 1) {
+            System.out.println("minIndex=" + minIndex + ", maxIndex=" + maxIndex);
+            throw new IllegalArgumentException("minimum lane index must start with 1 or -1 in roadId=" + roadId);
         }
         if (Math.abs(Math.abs(maxIndex) - Math.abs(minIndex)) != lanes.size() - 1) {
             logger.info("minIndex={}, maxIndex={}", minIndex, maxIndex);
@@ -347,19 +347,26 @@ public class OpenDriveHandlerJaxb {
                         roadNetwork.findByUserId(connection.getConnectingRoad()), "Cannot find connecting road: "
                                 + connection.getConnectingRoad());
                 Road road = findByUserId(openDriveNetwork.getRoad(), connection.getConnectingRoad());
-                final boolean roadPredecessorIsJunction = roadPredecessorIsJunction(junction, road);
-                if (roadPredecessorIsJunction && roadSuccessorIsJunction(junction, road)) {
+                if (roadPredecessorIsJunction(junction, road)) {
+                    for (final LaneLink laneLink : connection.getLaneLink()) {
+                        final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(incomingRoadSegment,
+                                laneLink.getFrom());
+                        final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(connenctingRoadSegment,
+                                laneLink.getTo());
+                        logger.debug("lanepair from:" + laneLink.getFrom() + ",to:" + laneLink.getTo());
+                        Link.addLanePair(fromLane, incomingRoadSegment, toLane, connenctingRoadSegment);
+                    }
+                } else if (roadSuccessorIsJunction(junction, road)) {
+                    for (final LaneLink laneLink : connection.getLaneLink()) {
+                        final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(connenctingRoadSegment,
+                                laneLink.getFrom());
+                        final int toLane = OpenDriveHandlerUtils.laneIdToLaneIndex(incomingRoadSegment,
+                                laneLink.getTo());
+                        logger.debug("lanepair from:" + laneLink.getFrom() + ",to:" + laneLink.getTo());
+                        Link.addLanePair(fromLane, connenctingRoadSegment, toLane, incomingRoadSegment);
+                    }
+                } else {
                     throw new IllegalArgumentException("Incorrect junction: id=" + junction.getId());
-                }
-                for (LaneLink laneLink : connection.getLaneLink()) {
-                    int fromLane = roadPredecessorIsJunction ? OpenDriveHandlerUtils.laneIdToLaneIndex(
-                            incomingRoadSegment, laneLink.getFrom()) : OpenDriveHandlerUtils.laneIdToLaneIndex(
-                            connenctingRoadSegment, laneLink.getFrom());
-                    int toLane = roadPredecessorIsJunction ? OpenDriveHandlerUtils.laneIdToLaneIndex(
-                            connenctingRoadSegment, laneLink.getTo()) : OpenDriveHandlerUtils.laneIdToLaneIndex(
-                            incomingRoadSegment, laneLink.getTo());
-                    logger.debug("lanepair from:" + laneLink.getFrom() + ", to:" + laneLink.getTo());
-                    Link.addLanePair(fromLane, incomingRoadSegment, toLane, connenctingRoadSegment);
                 }
             }
         }

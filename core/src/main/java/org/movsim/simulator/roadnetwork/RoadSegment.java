@@ -82,14 +82,14 @@ import com.google.common.base.Preconditions;
 // TODO avoid iterating also over Vehicle.Type.OBSTACLE at lane ends.
 public class RoadSegment implements Iterable<Vehicle> {
 
-    final static Logger logger = LoggerFactory.getLogger(RoadSegment.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RoadSegment.class);
 
     public static final int ID_NOT_SET = -1;
     public static final int INITIAL_ID = 1;
     private static int nextId = INITIAL_ID;
 
-    public static final int MAX_LANE_COUNT = 8;
-    public static final int MAX_LANE_PAIR_COUNT = 12;
+    public static final int MAX_LANE_COUNT = 80;
+    public static final int MAX_LANE_PAIR_COUNT = 100;// 12;
 
     /** the id is an internally used unique identifier for the road. */
     private final int id;
@@ -797,8 +797,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final double x = vehicle.getFrontPosition();
                 final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
                 final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
-                // logger.debug("i={}, x_pos={}", i, x);
-                // logger.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
+                // LOG.debug("i={}, x_pos={}", i, x);
+                // LOG.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
                 // TODO hack for testing acceleration behavior to exit
                 vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment, alphaT, alphaV0);
             }
@@ -1105,7 +1105,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
                 final double netDistance = vehicle.getNetDistance(vehFront);
                 if (netDistance < 0) {
-                    logger.error("Crash happened!!!");
+                    LOG.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
                     sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
@@ -1128,9 +1128,9 @@ public class RoadSegment implements Iterable<Vehicle> {
                                         j, veh.getFrontPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
                                         veh.getLength(), veh.getLane(), veh.getId()));
                     }
-                    logger.error(sb.toString());
+                    LOG.error(sb.toString());
                     if (isWithCrashExit) {
-                        logger.error(" !!! exit after crash !!! ");
+                        LOG.error(" !!! exit after crash !!! ");
                         System.exit(-99);
                     }
                 }

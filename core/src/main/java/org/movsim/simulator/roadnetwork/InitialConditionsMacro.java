@@ -31,6 +31,8 @@ import org.movsim.autogen.MacroIC;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.utilities.Tables;
 import org.movsim.utilities.Units;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -38,6 +40,8 @@ import com.google.common.base.Preconditions;
  * The Class InitialConditionsMacro.
  */
 public class InitialConditionsMacro {
+
+    private static final Logger LOG = LoggerFactory.getLogger(InitialConditionsMacro.class);
 
     /** the positions along the road segment in m */
     double[] pos;
@@ -60,9 +64,9 @@ public class InitialConditionsMacro {
 
         pos = new double[size];
         rho = new double[size];
-if(useUserDefinedSpeeds(macroIC)){
-    speed = new double[size];
-}
+        if (useUserDefinedSpeeds(macroIC)) {
+            speed = new double[size];
+        }
         // case speed = 0 --> set vehicle ast equilibrium speed
 
         // generateMacroFields: rho guaranteed to be > RHOMIN, v to be < VMAX
@@ -75,6 +79,7 @@ if(useUserDefinedSpeeds(macroIC)){
                 rho[i] = rhoLocal;
                 if (hasUserDefinedSpeeds()) {
                     speed[i] = Math.min(localMacroIC.getSpeed(), MovsimConstants.MAX_VEHICLE_SPEED);
+                    LOG.debug("speed={}", speed[i]);
                 }
             }
         }
