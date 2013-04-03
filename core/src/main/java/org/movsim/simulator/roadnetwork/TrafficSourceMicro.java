@@ -120,7 +120,17 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         if (nextInflowRecord.hasComment()) {
             vehicle.setInfoComment(nextInflowRecord.getComment());
         }
+        if (nextInflowRecord.hasLength()) {
+            vehicle.setLength(nextInflowRecord.getLength());
+        }
+        if (nextInflowRecord.hasWeight()) {
+            vehicle.setWeight(nextInflowRecord.getWeight());
+        }
         LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
+        if (nextInflowRecord.hasLength() || nextInflowRecord.hasWeight()) {
+            LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
+                    vehicle.getWeight());
+        }
     }
 
     @Override

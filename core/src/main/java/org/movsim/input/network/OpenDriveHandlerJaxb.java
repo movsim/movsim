@@ -64,10 +64,12 @@ public class OpenDriveHandlerJaxb {
             throws IllegalArgumentException {
         for (Road road : openDriveNetwork.getRoad()) {
             final RoadMapping roadMapping = createRoadMapping(road);
-            for (Lanes.LaneSectionType laneType : LaneSectionType.values()) {
-                if (hasLaneSectionType(road, laneType)) {
-                    RoadSegment roadSegmentRight = createRoadSegment(laneType, roadMapping, road);
-                    roadNetwork.add(roadSegmentRight);
+            for (Lanes.LaneSectionType laneSectionType : LaneSectionType.values()) {
+                if (hasLaneSectionType(road, laneSectionType)) {
+                    RoadSegment roadSegmentRight = createRoadSegment(laneSectionType, roadMapping, road);
+                    if (roadSegmentRight != null) {
+                        roadNetwork.add(roadSegmentRight);
+                    }
                 }
             }
         }
@@ -106,11 +108,11 @@ public class OpenDriveHandlerJaxb {
                 "exactly one <laneSection> needs to be defined, more <laneSection>s cannot be handled!");
 
         int roadLaneCount = 0; // total number of lanes in both driving directions
-        if (road.getLanes().getLaneSection().get(0).isSetRight()) {
-            roadLaneCount += road.getLanes().getLaneSection().get(0).getRight().getLane().size();
-        }
         if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
             roadLaneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
+        }
+        if (road.getLanes().getLaneSection().get(0).isSetRight()) {
+            roadLaneCount += road.getLanes().getLaneSection().get(0).getRight().getLane().size();
         }
         double laneWidth = 0.0;
         if (!road.getLanes().getLaneSection().get(0).getRight().getLane().isEmpty()) {
@@ -163,8 +165,8 @@ public class OpenDriveHandlerJaxb {
                 .getLaneSection().get(0).getRight().getLane());
 
         if (laneType == Lanes.LaneSectionType.LEFT) {
-            LOG.error("left lane section not yet impl.");
-            System.exit(0);
+            LOG.error("left lane section not yet impl. Will be ignored!");
+            return null;
         }
         // TODO Left/right handling
         roadSegment.setUserId(road.getId());

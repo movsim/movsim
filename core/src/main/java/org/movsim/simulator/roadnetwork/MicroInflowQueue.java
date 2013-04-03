@@ -38,6 +38,8 @@ public final class MicroInflowQueue {
         private String route = "";
         private double speed = Double.NaN;
         private int lane = Integer.MAX_VALUE;
+        private double length = Double.NaN;
+        private double weight = Double.NaN;
         private String comment = null;
 
         public MicroInflowRecord(double time, String typeLabel) {
@@ -108,6 +110,30 @@ public final class MicroInflowQueue {
                     + speed + ", lane=" + lane + ", comment=" + comment + "]";
         }
 
+        public double getLength() {
+            return length;
+        }
+
+        public boolean hasLength() {
+            return !Double.isNaN(length);
+        }
+
+        public void setLength(double length) {
+            this.length = length;
+        }
+
+        public double getWeight() {
+            return weight;
+        }
+
+        public void setWeight(double weight) {
+            this.weight = weight;
+        }
+
+        public boolean hasWeight() {
+            return !Double.isNaN(weight);
+        }
+
     }
 
     public static List<MicroInflowRecord> readData(InflowFromFile config, int maxLane, long timeOffsetMillis) {
@@ -173,6 +199,12 @@ public final class MicroInflowQueue {
         if (config.isSetColumnSpeed()) {
             maxColumn = Math.max(maxColumn, config.getColumnSpeed());
         }
+        if (config.isSetColumnLength()) {
+            maxColumn = Math.max(maxColumn, config.getColumnLength());
+        }
+        if (config.isSetColumnWeight()) {
+            maxColumn = Math.max(maxColumn, config.getColumnWeight());
+        }
         return maxColumn;
     }
 
@@ -207,6 +239,12 @@ public final class MicroInflowQueue {
         if (config.isSetColumnSpeed()) {
             double formatFactor = config.isSetFormatSpeed() ? config.getFormatSpeed() : 1;
             record.setSpeed(formatFactor * Double.parseDouble(data[config.getColumnSpeed() - 1]));
+        }
+        if (config.isSetColumnLength()) {
+            record.setLength(Double.parseDouble(data[config.getColumnLength() - 1]));
+        }
+        if (config.isSetColumnWeight()) {
+            record.setWeight(Double.parseDouble(data[config.getColumnWeight() - 1]));
         }
         return record;
     }

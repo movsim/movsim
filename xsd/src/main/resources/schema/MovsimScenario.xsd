@@ -572,6 +572,8 @@
             <xs:attribute name="format_time" type="xs:string" default="" /> 
             <xs:attribute name="column_speed" type="positiveInteger"  />
             <xs:attribute name="format_speed" type="positiveDouble" default="1" />
+            <xs:attribute name="column_length" type="positiveInteger" />
+            <xs:attribute name="column_weight" type="positiveInteger" />
             <xs:attribute name="column_lane" type="positiveInteger" />
             <xs:attribute name="column_comment" type="positiveInteger" />
             <xs:attribute name="column_separator" type="xs:string" default=";" />
