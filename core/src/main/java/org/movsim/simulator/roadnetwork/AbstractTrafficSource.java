@@ -142,8 +142,8 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
      *            the i lane
      * @return the new cyclic lane index for entering
      */
-    protected int getNewCyclicLaneIndexForEntering(int iLane) {
-        return iLane == roadSegment.laneCount() - 1 ? 0 : iLane + 1;
+    protected int getNewCyclicLaneForEntering(int iLane) {
+        return (iLane == roadSegment.laneCount()) ? Lanes.MOST_INNER_LANE : iLane + Lanes.TO_RIGHT;
     }
 
     /**

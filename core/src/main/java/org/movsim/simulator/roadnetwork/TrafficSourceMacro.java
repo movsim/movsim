@@ -61,14 +61,13 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         calcApproximateInflow(dt);
         
         if (nWait >= 1.0) {
-            // try to insert new vehicle at inflow
-            // iterate periodically over n lanes
+            // try to insert new vehicle at inflow, iterate periodically over n lanes
             int iLane = laneEnterLast;
             for (int i = 0, N = roadSegment.laneCount(); i < N; i++) {
-                iLane = getNewCyclicLaneIndexForEntering(iLane);
+                iLane = getNewCyclicLaneForEntering(iLane);
                 // final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
-                // lane index is identical to vehicle's lane number
+                // laneIndex index is identical to vehicle's lanenumber
                 // type of new vehicle
                 final TestVehicle testVehicle = vehGenerator.getTestVehicle();
                 final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);

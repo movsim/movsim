@@ -530,7 +530,8 @@
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
             <xs:attribute name="speed" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="lane" type="xs:integer" default="1" />
+            <!-- By convention the lane index starts with 1 for the most inner lane. --> 
+            <xs:attribute name="lane" type="nonNegativeInteger" default="1" />
             <xs:attribute name="label" type="xs:string" default="" />
         </xs:complexType>
     </xs:element>

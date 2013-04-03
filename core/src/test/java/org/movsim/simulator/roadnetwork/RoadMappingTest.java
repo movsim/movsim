@@ -29,6 +29,7 @@ package org.movsim.simulator.roadnetwork;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.movsim.roadmappings.RoadMapping;
 
 /**
  * Test module for the RoadMapping class.
@@ -81,7 +82,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#roadLength()}
+     * Test method for {@link org.movsim.roadmappings.RoadMapping#roadLength()}
      */
     @Test
     public void testRoadLength() {
@@ -95,9 +96,9 @@ public class RoadMappingTest {
     public void testRoadWidth() {
         final int LANE_COUNT = 3;
         RoadMapping roadMapping = new RoadMappingConcrete(LANE_COUNT);
-        assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth, delta);
+        assertEquals(roadMapping.laneWidth() * LANE_COUNT, roadMapping.roadWidth(), delta);
         roadMapping = new RoadMappingConcrete(LANE_COUNT + 1);
-        assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth, delta);
+        assertEquals(roadMapping.laneWidth() * roadMapping.laneCount(), roadMapping.roadWidth(), delta);
     }
 
     /**
@@ -111,7 +112,7 @@ public class RoadMappingTest {
     //}
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneCount()}
+     * Test method for {@link org.movsim.roadmappings.RoadMapping#laneCount()}
      */
     @Test
     public void testLaneCount() {
@@ -124,7 +125,7 @@ public class RoadMappingTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadMapping#laneOffset(int)}
+     * Test method for {@link org.movsim.roadmappings.RoadMapping#laneOffset(int)}
      */
     @Test
     public void testLaneOffset() {
@@ -132,34 +133,34 @@ public class RoadMappingTest {
         final double laneWidth = roadMapping.laneWidth();
 
         roadMapping = new RoadMappingConcrete(1);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.NONE), delta);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.LANE1), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE1), delta);
 
         roadMapping = new RoadMappingConcrete(3);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.NONE), delta);
-        assertEquals(laneWidth, roadMapping.laneOffset(Lane.LANE1), delta);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.LANE2), delta);
-        assertEquals(-laneWidth, roadMapping.laneOffset(Lane.LANE3), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(-laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE2), delta);
+        assertEquals(+laneWidth, roadMapping.laneOffset(Lanes.LANE3), delta);
 
         roadMapping = new RoadMappingConcrete(5);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.NONE), delta);
-        assertEquals(2 * laneWidth, roadMapping.laneOffset(Lane.LANE1), delta);
-        assertEquals(laneWidth, roadMapping.laneOffset(Lane.LANE2), delta);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.LANE3), delta);
-        assertEquals(-laneWidth, roadMapping.laneOffset(Lane.LANE4), delta);
-        assertEquals(-2 * laneWidth, roadMapping.laneOffset(Lane.LANE5), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(-2 * laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
+        assertEquals(-laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.LANE3), delta);
+        assertEquals(laneWidth, roadMapping.laneOffset(Lanes.LANE4), delta);
+        assertEquals(2 * laneWidth, roadMapping.laneOffset(Lanes.LANE5), delta);
 
         roadMapping = new RoadMappingConcrete(2);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.NONE), delta);
-        assertEquals(0.5 * laneWidth, roadMapping.laneOffset(Lane.LANE1), delta);
-        assertEquals(-0.5 * laneWidth, roadMapping.laneOffset(Lane.LANE2), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(-0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
+        assertEquals(0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
 
         roadMapping = new RoadMappingConcrete(4);
-        assertEquals(0.0, roadMapping.laneOffset(Lane.NONE), delta);
-        assertEquals(1.5 * laneWidth, roadMapping.laneOffset(Lane.LANE1), delta);
-        assertEquals(0.5 * laneWidth, roadMapping.laneOffset(Lane.LANE2), delta);
-        assertEquals(-0.5 * laneWidth, roadMapping.laneOffset(Lane.LANE3), delta);
-        assertEquals(-1.5 * laneWidth, roadMapping.laneOffset(Lane.LANE4), delta);
+        assertEquals(0.0, roadMapping.laneOffset(Lanes.NONE), delta);
+        assertEquals(-1.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE1), delta);
+        assertEquals(-0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE2), delta);
+        assertEquals(0.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE3), delta);
+        assertEquals(1.5 * laneWidth, roadMapping.laneOffset(Lanes.LANE4), delta);
     }
 
     @Test

@@ -27,7 +27,6 @@
 package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * Maps a road segment onto straight line.
@@ -56,7 +55,7 @@ public class RoadMappingLine extends RoadMapping {
      * @param y1
      *            y-position of end of line
      */
-    public RoadMappingLine(int laneCount, double x0, double y0, double x1, double y1) {
+    RoadMappingLine(int laneCount, double x0, double y0, double x1, double y1) {
         super(laneCount, x0, y0);
         this.x1 = x1;
         this.y1 = y1;
@@ -78,7 +77,7 @@ public class RoadMappingLine extends RoadMapping {
      * @param length
      *            length of line
      */
-    public RoadMappingLine(int laneCount, double s, double x0, double y0, double theta, double length) {
+    RoadMappingLine(int laneCount, double s, double x0, double y0, double theta, double length) {
         super(laneCount, x0, y0);
         roadLength = length;
         posTheta.sinTheta = Math.sin(theta);
@@ -94,7 +93,7 @@ public class RoadMappingLine extends RoadMapping {
      * @param x0
      * @param y0
      */
-    protected RoadMappingLine(int laneCount, double x0, double y0) {
+    RoadMappingLine(int laneCount, double x0, double y0) {
         super(laneCount, x0, y0);   
     }
 
@@ -108,7 +107,7 @@ public class RoadMappingLine extends RoadMapping {
      * @param y1
      *            new point, y coordinate
      */
-    public RoadMappingLine(RoadMapping roadMapping, double x1, double y1) {
+    RoadMappingLine(RoadMapping roadMapping, double x1, double y1) {
         super(roadMapping.laneCount(), 0, 0);
         final RoadMapping.PosTheta posTheta = roadMapping.endPos();
         x0 = posTheta.x;
@@ -118,7 +117,7 @@ public class RoadMappingLine extends RoadMapping {
         init();
     }
 
-    public RoadMappingLine(int laneCount, double s, double x, double y, double hdg, double length, double a) {
+    RoadMappingLine(int laneCount, double s, double x, double y, double hdg, double length, double a) {
         this(laneCount, s, x, y, hdg, length);
         laneWidth = a;
         roadWidth = laneWidth * laneCount;

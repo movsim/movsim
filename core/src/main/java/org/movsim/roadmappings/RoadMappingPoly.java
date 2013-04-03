@@ -30,14 +30,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.
  */
 public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping> {
 
-    protected final ArrayList<RoadMapping> roadMappings = new ArrayList<RoadMapping>();
+    protected final ArrayList<RoadMapping> roadMappings = new ArrayList<>();
 
     @Override
     public Iterator<RoadMapping> iterator() {

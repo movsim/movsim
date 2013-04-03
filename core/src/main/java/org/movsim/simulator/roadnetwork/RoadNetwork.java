@@ -152,13 +152,12 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     /**
      * <p>
-     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane changing
-     * decisions. Each update step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise,
-     * inconsistencies would occur. In particular, the complete old state (positions, lanes, speeds ...) is made
-     * available during the complete update step of one timestep. Then the outflow is performed for each road segment,
-     * moving vehicles onto the next road segment (or removing them entirely from the road network) when required. Then
-     * the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Finally
-     * the vehicle detectors are updated.
+     * The main timestep of the simulation. Update of calculation of vehicle accelerations, movements, lane-changing decisions. Each update
+     * step is applied in parallel to all vehicles <i>of the entire network</i>. Otherwise, inconsistencies would occur. In particular, the
+     * complete old state (positions, lanes, speeds ...) is made available during the complete update step of one timestep. Then the outflow
+     * is performed for each road segment, moving vehicles onto the next road segment (or removing them entirely from the road network) when
+     * required. Then the inflow is performed for each road segment, adding any new vehicles supplied by any traffic sources. Finally the
+     * vehicle detectors are updated.
      * </p>
      * 
      * <p>
@@ -181,8 +180,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * </p>
      * 
      * <p>
-     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order
-     * (i),(ii),(iii).
+     * The blocks can be swapped as long as each block is done serially for the whole network in exactly the above order (i),(ii),(iii).
      * </p>
      * 
      * @param dt

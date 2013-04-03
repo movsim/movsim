@@ -1,6 +1,6 @@
 example for microscopic boundary conditions
-time, type, init speed [km/h], lane [movsimindex!], comment	
-00:00:10, ACC1, 100, 0, first car
+time, type, init speed [km/h], lane, comment	
+00:00:10, ACC1, 100, 1, first car
 00:00:30, ACC1, 0, 1, second car
 00:01:00, ACC2, 50, 2, comment
 00:01:20, ACC2, 50, 3, lane does not exist

@@ -38,12 +38,12 @@ import org.slf4j.LoggerFactory;
  * A LaneSegment represents a lane within a RoadSegment.
  * </p>
  * <p>
- * Lanes are of different types including traffic lanes, exit (deceleration) lanes and entrance (acceleration) lanes.
- * Typically vehicle behavior (and especially lane change behavior) is different in each type of lane.
+ * Lanes are of different types including traffic lanes, exit (deceleration) lanes and entrance (acceleration) lanes. Typically vehicle
+ * behavior (and especially lane change behavior) is different in each type of lane.
  * </p>
  * <p>
- * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles
- * in front of and behind a given vehicle can be found efficiently.
+ * The vehicles in a lane segment are stored in a sorted ArrayList. This ArrayList is kept sorted so that the vehicles in front of and
+ * behind a given vehicle can be found efficiently.
  * </p>
  * <p>
  * Vehicles are sorted in order of decreasing position:
@@ -58,12 +58,14 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     private static final boolean DEBUG = false;
     private static final int VEHICLES_PER_LANE_INITIAL_SIZE = 50;
-    // Lane linkage
+    // Lanes linkage
     private final RoadSegment roadSegment;
     private LaneSegment sinkLaneSegment;
     private LaneSegment sourceLaneSegment;
+
+    // physical lane, not the laneIndex
     private final int lane;
-    private Lane.Type type;
+    private Lanes.Type type;
     final ArrayList<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
 
@@ -72,18 +74,23 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @param roadSegment
      * @param lane
+     *            (not the laneIndex)
      */
-    public LaneSegment(RoadSegment roadSegment, int lane) {
+    LaneSegment(RoadSegment roadSegment, int lane) {
         this.roadSegment = roadSegment;
+        assert lane >= Lanes.MOST_INNER_LANE;
         this.lane = lane;
         vehicles = new ArrayList<>(VEHICLES_PER_LANE_INITIAL_SIZE);
-        type = Lane.Type.TRAFFIC;
+        type = Lanes.Type.TRAFFIC;
     }
 
     /**
      * Returns the lane.
+     * <p>
+     * The lane is an identifier of the lane in the physical network starting with a value of 1 for the most inner lane.
+     * </p>
      * 
-     * @return lane
+     * @return lane, not the index of the lane in the roadSegment
      */
     public final int lane() {
         return lane;
@@ -94,9 +101,9 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @param type
      */
-    public final void setType(Lane.Type type) {
+    public final void setType(Lanes.Type type) {
         this.type = type;
-        if (type == Lane.Type.ENTRANCE) {
+        if (type == Lanes.Type.ENTRANCE) {
             setSinkLaneSegment(null);
         }
     }
@@ -106,7 +113,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * 
      * @return type of lane
      */
-    public final Lane.Type type() {
+    public final Lanes.Type type() {
         return type;
     }
 
@@ -322,8 +329,8 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     public void addVehicle(Vehicle vehicle) {
         // TODO assert vehicle.getFrontPosition() >= 0.0;
-        assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.getLane() == lane;
+        assert vehicle.getSpeed() >= 0.0 : "vehicleSpeed=" + vehicle.getSpeed();
+        assert vehicle.lane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
@@ -342,7 +349,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public int addVehicleTemp(Vehicle vehicle) {
         // assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.getLane() == lane;
+        assert vehicle.lane() == lane;
         assert assertInvariant();
         final int index = positionBinarySearch(vehicle.getRearPosition());
         int pos = 0;
@@ -380,7 +387,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public void appendVehicle(Vehicle vehicle) {
         assert vehicle.getFrontPosition() >= 0.0;
         assert vehicle.getSpeed() >= 0.0;
-        assert vehicle.getLane() == lane;
+        assert vehicle.lane() == lane;
         assert vehicle.roadSegmentId() == roadSegment.id();
         assert laneIsSorted();
         assert assertInvariant();
@@ -660,7 +667,7 @@ public class LaneSegment implements Iterable<Vehicle> {
                 // final int prevLaneOnNewRoadSegment = sinkLane[vehicle.previousLane()];
                 final double rearPositionOnNewRoadSegment = vehicle.getRearPosition() - roadLength;
                 double exitEndPos = Vehicle.EXIT_POSITION_NOT_SET;
-                if (sinkLaneSegment.type() == Lane.Type.TRAFFIC) {
+                if (sinkLaneSegment.type() == Lanes.Type.TRAFFIC) {
                     final int exitRoadSegmentId = vehicle.exitRoadSegmentId();
                     if (exitRoadSegmentId == sinkLaneSegment.roadSegment.id()) {
                         // vehicle is on exit exit road segment, so exit end pos is end of this
@@ -751,10 +758,10 @@ public class LaneSegment implements Iterable<Vehicle> {
         final int roadSegmentId = roadSegment.id();
         for (final Vehicle vehicle : vehicles) {
             assert vehicle.roadSegmentId() == roadSegmentId;
-            if (vehicle.getLane() != lane) {
-                logger.info("vehicle lane={}, lane={}", vehicle.getLane(), lane);
+            if (vehicle.lane() != lane) {
+                logger.info("vehicle lane={}, lane={}", vehicle.lane(), lane);
             }
-            assert vehicle.getLane() == lane;
+            assert vehicle.lane() == lane;
         }
         return true;
     }

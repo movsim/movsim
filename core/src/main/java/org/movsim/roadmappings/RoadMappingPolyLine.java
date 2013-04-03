@@ -29,7 +29,6 @@ package org.movsim.roadmappings;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * RoadMapping consisting of a number of consecutive straight sections of road.
@@ -39,7 +38,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
     public static final int RELATIVE_POINTS = 0;
     public static final int ABSOLUTE_POINTS = 1;
 
-    protected final ArrayList<RoadMappingLine> roadMappings = new ArrayList<RoadMappingLine>();
+    protected final ArrayList<RoadMappingLine> roadMappings = new ArrayList<>();
 
     @Override
     public Iterator<RoadMappingLine> iterator() {
@@ -55,7 +54,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
      * @param x1
      * @param y1
      */
-    public RoadMappingPolyLine(int laneCount, double x0, double y0, double x1, double y1) {
+    RoadMappingPolyLine(int laneCount, double x0, double y0, double x1, double y1) {
         super(laneCount, x0, y0);
         final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
         roadLength = roadMapping.roadLength();
@@ -72,7 +71,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
      * @param theta
      * @param length
      */
-    public RoadMappingPolyLine(int laneCount, double s, double x0, double y0, double theta, double length) {
+    RoadMappingPolyLine(int laneCount, double s, double x0, double y0, double theta, double length) {
         super(laneCount, x0, y0);
         final RoadMappingLine roadMapping = new RoadMappingLine(laneCount, s, x0, y0, theta, length);
         roadLength = length;
@@ -86,7 +85,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
      * @param valuesType
      * @param values
      */
-    public RoadMappingPolyLine(int laneCount, int valuesType, double[] values) {
+    RoadMappingPolyLine(int laneCount, int valuesType, double[] values) {
         super(laneCount, values[0], values[1]);
         assert values.length % 2 == 0;
 

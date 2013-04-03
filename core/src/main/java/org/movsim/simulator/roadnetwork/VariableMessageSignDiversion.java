@@ -34,16 +34,16 @@ public class VariableMessageSignDiversion extends VariableMessageSignBase {
 
     @Override
     public void apply(Vehicle vehicle, RoadSegment roadSegment) {
-        if (vehicle.getLane() == Lane.LANE1 && 
-                roadSegment.roadLength() - vehicle.getFrontPosition() <= VISIBILITY_OF_SIGN) {
-            final LaneSegment laneSegment = roadSegment.laneSegment(Lane.LANE1);
+        if (vehicle.lane() == roadSegment.laneCount()
+                && roadSegment.roadLength() - vehicle.getFrontPosition() <= VISIBILITY_OF_SIGN) {
+            final LaneSegment laneSegment = roadSegment.laneSegment(Lanes.LANE1);
             vehicle.setExitRoadSegmentId(laneSegment.sinkLaneSegment().roadSegment().id());
         }
     }
 
     @Override
     public void cancel(Vehicle vehicle, RoadSegment roadSegment) {
-        if (vehicle.getLane() == Lane.LANE1) {
+        if (vehicle.lane() == roadSegment.laneCount()) {
             vehicle.setExitRoadSegmentId(Vehicle.ROAD_SEGMENT_ID_NOT_SET);
         }
     }

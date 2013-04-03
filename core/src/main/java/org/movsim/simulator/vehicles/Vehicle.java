@@ -30,8 +30,8 @@ import javax.annotation.Nullable;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.Lane;
 import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.trafficlights.TrafficLight;
@@ -80,8 +80,8 @@ import com.google.common.base.Preconditions;
  */
 public class Vehicle {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(Vehicle.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(Vehicle.class);
 
     protected static final int INITIAL_ID = 1;
     protected static final int INITIAL_TEMPLATE_ID = -1;
@@ -108,7 +108,7 @@ public class Vehicle {
     private final static double THRESHOLD_BRAKELIGHT_OFF = 0.1;
 
     /** needs to be > 0 */
-    private final static double FINITE_LANE_CHANGE_TIME_S = 5;
+    private final static double FINITE_LANE_CHANGE_TIME_S = 7;
 
     private final String label;
 
@@ -654,7 +654,7 @@ public class Vehicle {
         }
         // check also traffic light on next sink road segment as look-ahead horizon
         // !!! only one segment is checked ahead which may be too short-sighted in some situations
-        RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(getLane());
+        RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane());
         if (sinkRoadSegment != null) {
             trafficLightLocation = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
             if (trafficLightLocation != null) {
@@ -678,21 +678,21 @@ public class Vehicle {
      */
     protected double accelerationConsideringExit(double acc, RoadSegment roadSegment) {
         assert roadSegment.id() == roadSegmentId;
-        if (exitRoadSegmentId == roadSegment.id() && getLane() != Lane.LANE1) {
+        if (exitRoadSegmentId == roadSegment.id() && lane() != Lanes.LANE1) {
             // the vehicle is in the exit road segment, but not in the exit lane
             // react to vehicle ahead in exit lane
             // TODO this reaction is in same situations too short-sighted so that the vehicle in the exit lane must be
             // considered already in the upstream segment
-            final LaneSegment exitLaneSegment = roadSegment.laneSegment(Lane.MOST_RIGHT_LANE);
-            if (exitLaneSegment != null && exitLaneSegment.type() == Lane.Type.EXIT) {
+            final LaneSegment exitLaneSegment = roadSegment.laneSegment(roadSegment.trafficLaneMax());
+            if (exitLaneSegment != null && exitLaneSegment.type() == Lanes.Type.EXIT) {
                 // this front vehicle could also result in negative net distances
                 // but the deceleration is limited anyway
                 Vehicle frontVehicle = exitLaneSegment.frontVehicle(this);
                 double accToVehicleInExitLane = longitudinalModel.calcAcc(this, frontVehicle);
                 final double decelLimit = 4.0;
                 accToVehicleInExitLane = Math.max(accToVehicleInExitLane, -decelLimit);
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug(String
                             .format("considering exit=%d: veh=%d, distance to front veh in exit lane=%.2f, speed=%.2f, accLimit=%.2f",
                                     exitRoadSegmentId, getId(), getNetDistance(frontVehicle), getSpeed(),
                                     accToVehicleInExitLane));
@@ -775,15 +775,16 @@ public class Vehicle {
         }
     }
 
-    public final int getLane() {
+    public final int lane() {
         return lane;
     }
 
     public final void setLane(int lane) {
+        assert lane >= Lanes.MOST_INNER_LANE;
         assert this.lane != lane;
         laneOld = this.lane;
         this.lane = lane;
-        targetLane = Lane.NONE;
+        targetLane = Lanes.NONE;
     }
 
     /**
@@ -843,11 +844,11 @@ public class Vehicle {
         final int laneChangeDirection = lcDecision.getDirection();
 
         // initiates a lane change: set targetLane to new value the lane will be assigned by the vehicle container !!
-        if (laneChangeDirection != Lane.NO_CHANGE) {
+        if (laneChangeDirection != Lanes.NO_CHANGE) {
             setTargetLane(lane + laneChangeDirection);
             resetDelay();
             updateLaneChangeDelay(dt);
-            logger.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
+            LOG.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
             return true;
         }
         return false;
@@ -864,7 +865,7 @@ public class Vehicle {
      *            the new target lane
      */
     private void setTargetLane(int targetLane) {
-        assert targetLane >= 0;
+        assert targetLane >= Lanes.MOST_INNER_LANE;
         assert targetLane != lane;
         this.targetLane = targetLane;
     }
@@ -895,7 +896,7 @@ public class Vehicle {
             final double fractionTimeLaneChange = Math.min(1, tLaneChangeDelay / FINITE_LANE_CHANGE_TIME_S);
             return fractionTimeLaneChange * lane + (1 - fractionTimeLaneChange) * laneOld;
         }
-        return getLane();
+        return lane();
     }
 
     // ---------------------------------------------------------------------------------
@@ -999,14 +1000,10 @@ public class Vehicle {
      */
     public void moveToNewRoadSegment(RoadSegment newRoadSegment, int newLane, double newRearPosition, double exitPos) {
         // distanceTravelledToStartOfRoadSegment += rearPosition - newRearPos;
-        final int delta = laneOld - lane;
-        lane = newLane;
-        laneOld = lane + delta;
-        if (laneOld >= newRoadSegment.laneCount()) {
-            laneOld = newRoadSegment.laneCount() - 1;
-        } else if (laneOld < Lane.LANE1) {
-            laneOld = Lane.LANE1;
-        }
+        final int delta = 0; // laneOld - lane;
+        this.lane = newLane;
+        this.laneOld = lane + delta;
+        laneOld = Math.max(Lanes.MOST_INNER_LANE, Math.min(laneOld, newRoadSegment.laneCount()));
         setRearPosition(newRearPosition);
         setRoadSegment(newRoadSegment.id(), newRoadSegment.roadLength());
         // this.exitEndPos = exitPos;

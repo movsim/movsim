@@ -24,10 +24,11 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.simulator.roadnetwork;
+package org.movsim.roadmappings;
 
 import java.util.ArrayList;
 
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.vehicles.Vehicle;
 
 /**
@@ -182,7 +183,7 @@ public abstract class RoadMapping {
         this.laneCount = laneCount;
         this.x0 = x0;
         this.y0 = y0;
-        trafficLaneMin = Lane.LANE1;
+        trafficLaneMin = Lanes.LANE1; // most inner lane
         trafficLaneMax = laneCount;
         this.laneWidth = laneWidth;
         roadWidth = laneWidth * laneCount;
@@ -233,6 +234,7 @@ public abstract class RoadMapping {
      * @param trafficLaneMin
      */
     public final void setTrafficLaneMin(int trafficLaneMin) {
+        assert trafficLaneMin >= Lanes.MOST_INNER_LANE;
         this.trafficLaneMin = trafficLaneMin;
     }
 
@@ -310,7 +312,7 @@ public abstract class RoadMapping {
      * @return end position of the ramp lane
      */
     public RoadMapping.PosTheta endPosRamp() {
-        final double lateralOffset = laneOffset(0);
+        final double lateralOffset = laneOffset(laneCount);
         return map(roadLength, lateralOffset);
     }
 
@@ -386,7 +388,8 @@ public abstract class RoadMapping {
      * @return the offset of the center of the lane
      */
     private final double laneOffset(double lane) {
-        return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
+        return (lane == Lanes.NONE) ? 0.0 : (0.5 * (1 - laneCount) + (lane - 1)) * laneWidth;
+        // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
     }
 
     /**
@@ -396,7 +399,7 @@ public abstract class RoadMapping {
      * @return the offset of the center of the lane
      */
     public final double laneOffset(int lane) {
-        return lane == Lane.NONE ? 0.0 : (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
+        return laneOffset((double) lane);
     }
 
     /**
@@ -406,7 +409,7 @@ public abstract class RoadMapping {
      * @return the offset of the inside edge of the lane
      */
     public final double laneInsideEdgeOffset(int lane) {
-        return (0.5 * (trafficLaneMin + laneCount) - lane) * laneWidth;
+        return (0.5 * (1 - laneCount + 1) + (lane - 1)) * laneWidth;
     }
 
     /**
@@ -420,7 +423,7 @@ public abstract class RoadMapping {
      */
     public void addClippingRegion(double pos, double length) {
         if (clippingPolygons == null) {
-            clippingPolygons = new ArrayList<RoadMapping.PolygonFloat>();
+            clippingPolygons = new ArrayList<>();
         }
         if (outsideClippingPolygon == null) {
             // !!! TODO - this is temporary code, need to fix clipping region

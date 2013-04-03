@@ -48,13 +48,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         nextInflowRecord = getNextVehicleRecord(simulationTime);
         if (nextInflowRecord != null) {
             int testLane = nextInflowRecord.hasLane() ? nextInflowRecord.getLane()
-                    : getNewCyclicLaneIndexForEntering(laneEnterLast);
-            if (testLane >= roadSegment.laneCount()) {
-                // already handled in parsing, should not occur here
-                LOG.error("Reduce init lane because lane={} not available for roadSegment={}", testLane,
-                        roadSegment.id());
-                testLane = roadSegment.laneCount() - 1;
-            }
+                    : getNewCyclicLaneForEntering(laneEnterLast);
             LaneSegment laneSegment = roadSegment.laneSegment(testLane);
             TestVehicle testVehicle = vehGenerator.getTestVehicle(nextInflowRecord.getTypeLabel());
             final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment);

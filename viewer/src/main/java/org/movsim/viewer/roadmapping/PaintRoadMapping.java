@@ -35,6 +35,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
@@ -44,7 +45,6 @@ import org.movsim.roadmappings.RoadMappingPolyBezier;
 import org.movsim.roadmappings.RoadMappingPolyLine;
 import org.movsim.roadmappings.RoadMappingS;
 import org.movsim.roadmappings.RoadMappingU;
-import org.movsim.simulator.roadnetwork.RoadMapping;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
 /**
@@ -53,13 +53,12 @@ import org.movsim.simulator.roadnetwork.RoadSegment;
 public class PaintRoadMapping {
     private static final boolean drawBezierPoints = false;
 
-    static public void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        final double lateralOffset = 0.5 * roadMapping.trafficLaneMin() * roadMapping.laneWidth();
+    public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
+        final double lateralOffset = 0;  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
-
         assert roadMapping != null;
 
         final Line2D.Double line = new Line2D.Double();

@@ -33,6 +33,7 @@ import java.util.Iterator;
 import org.junit.Test;
 import org.movsim.autogen.LaneChangeModelType;
 import org.movsim.autogen.ModelParameterMOBIL;
+import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
@@ -147,7 +148,7 @@ public class RoadSegmentTest {
 
     /**
      * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.simulator.roadnetwork.RoadMapping)}
+     * {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.roadmappings.RoadMapping)}
      */
     @Test
     public final void testRoadSegmentRoadMapping() {
@@ -319,18 +320,18 @@ public class RoadSegmentTest {
         RoadSegment.resetNextId();
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
         assertEquals(0, roadSegment.getVehicleCount());
-        roadSegment.addVehicle(newVehicle(900.0, 0.0, Lane.LANE1));
+        roadSegment.addVehicle(newVehicle(900.0, 0.0, Lanes.LANE1));
         assertEquals(1, roadSegment.getVehicleCount());
-        roadSegment.addVehicle(newVehicle(800.0, 0.0, Lane.LANE2));
+        roadSegment.addVehicle(newVehicle(800.0, 0.0, Lanes.LANE2));
         assertEquals(2, roadSegment.getVehicleCount());
-        roadSegment.addVehicle(newVehicle(700.0, 0.0, Lane.LANE1));
+        roadSegment.addVehicle(newVehicle(700.0, 0.0, Lanes.LANE1));
         assertEquals(3, roadSegment.getVehicleCount());
-        roadSegment.addVehicle(newVehicle(600.0, 0.0, Lane.LANE2));
+        roadSegment.addVehicle(newVehicle(600.0, 0.0, Lanes.LANE2));
         assertEquals(4, roadSegment.getVehicleCount());
         roadSegment.clearVehicles();
         assertEquals(0, roadSegment.getVehicleCount());
-        assertEquals(0, roadSegment.getVehicleCount(Lane.LANE1));
-        assertEquals(0, roadSegment.getVehicleCount(Lane.LANE2));
+        assertEquals(0, roadSegment.getVehicleCount(Lanes.LANE1));
+        assertEquals(0, roadSegment.getVehicleCount(Lanes.LANE2));
     }
 
     /**
@@ -343,9 +344,9 @@ public class RoadSegmentTest {
         RoadSegment.resetNextId();
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
         assertEquals(0, roadSegment.getVehicleCount());
-        roadSegment.addVehicle(newVehicle(1.0, 0.0, Lane.LANE1));
+        roadSegment.addVehicle(newVehicle(1.0, 0.0, Lanes.LANE1));
         assertEquals(1, roadSegment.getVehicleCount());
-        roadSegment.addVehicle(newVehicle(11.0, 0.0, Lane.LANE1));
+        roadSegment.addVehicle(newVehicle(11.0, 0.0, Lanes.LANE1));
         assertEquals(2, roadSegment.getVehicleCount());
         roadSegment.clearVehicles();
         assertEquals(0, roadSegment.getVehicleCount());
@@ -379,34 +380,34 @@ public class RoadSegmentTest {
         final RoadSegment r0 = new RoadSegment(5000.0, laneCount);
         Vehicle v;
 
-        final Vehicle v0 = newVehicle(3900.0, 1.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(3900.0, 1.0, Lanes.LANE1);
         r0.addVehicle(v0);
-        v = r0.getVehicle(Lane.LANE1, 0);
+        v = r0.getVehicle(Lanes.LANE1, 0);
         assertEquals(v0, v);
-        final Vehicle v1 = newVehicle(3700.0, 2.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(3700.0, 2.0, Lanes.LANE1);
         r0.addVehicle(v1);
-        v = r0.getVehicle(Lane.LANE1, 0);
+        v = r0.getVehicle(Lanes.LANE1, 0);
         assertEquals(v0, v);
-        v = r0.getVehicle(Lane.LANE1, 1);
+        v = r0.getVehicle(Lanes.LANE1, 1);
         assertEquals(v1, v);
-        final Vehicle v2 = newVehicle(3100.0, 3.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(3100.0, 3.0, Lanes.LANE1);
         r0.addVehicle(v2);
-        v = r0.getVehicle(Lane.LANE1, 0);
+        v = r0.getVehicle(Lanes.LANE1, 0);
         assertEquals(v0, v);
-        v = r0.getVehicle(Lane.LANE1, 1);
+        v = r0.getVehicle(Lanes.LANE1, 1);
         assertEquals(v1, v);
-        v = r0.getVehicle(Lane.LANE1, 2);
+        v = r0.getVehicle(Lanes.LANE1, 2);
         assertEquals(v2, v);
 
-        final Vehicle v1a = newVehicle(3500.0, 4.0, Lane.LANE1);
+        final Vehicle v1a = newVehicle(3500.0, 4.0, Lanes.LANE1);
         r0.addVehicle(v1a);
-        v = r0.getVehicle(Lane.LANE1, 0);
+        v = r0.getVehicle(Lanes.LANE1, 0);
         assertEquals(v0, v);
-        v = r0.getVehicle(Lane.LANE1, 1);
+        v = r0.getVehicle(Lanes.LANE1, 1);
         assertEquals(v1, v);
-        v = r0.getVehicle(Lane.LANE1, 2);
+        v = r0.getVehicle(Lanes.LANE1, 2);
         assertEquals(v1a, v);
-        v = r0.getVehicle(Lane.LANE1, 3);
+        v = r0.getVehicle(Lanes.LANE1, 3);
         assertEquals(v2, v);
     }
 
@@ -420,17 +421,17 @@ public class RoadSegmentTest {
         final double roadLength = 1000.0;
         final int laneCount = 1;
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
-        Vehicle vehicle = roadSegment.rearVehicleOnLane(Lane.LANE1);
+        Vehicle vehicle = roadSegment.rearVehicleOnLane(Lanes.LANE1);
         assertEquals(null, vehicle);
 
-        final Vehicle v0 = newVehicle(900.0, 0.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(900.0, 0.0, Lanes.LANE1);
         roadSegment.addVehicle(v0);
-        vehicle = roadSegment.rearVehicleOnLane(Lane.LANE1);
+        vehicle = roadSegment.rearVehicleOnLane(Lanes.LANE1);
         assertEquals(v0.getId(), vehicle.getId());
 
-        final Vehicle v1 = newVehicle(800.0, 0.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(800.0, 0.0, Lanes.LANE1);
         roadSegment.addVehicle(v1);
-        vehicle = roadSegment.rearVehicleOnLane(Lane.LANE1);
+        vehicle = roadSegment.rearVehicleOnLane(Lanes.LANE1);
         assertEquals(v1.getId(), vehicle.getId());
     }
 
@@ -445,56 +446,56 @@ public class RoadSegmentTest {
         final int laneCount = 1;
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
 
-        final Vehicle v0 = newVehicle(900.0, 1.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(900.0, 1.0, Lanes.LANE1);
         roadSegment.addVehicle(v0);
-        Vehicle rV = roadSegment.rearVehicle(Lane.LANE1, 901.0);
+        Vehicle rV = roadSegment.rearVehicle(Lanes.LANE1, 901.0);
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 900.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 900.0);
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 899.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 899.0);
         assertEquals(null, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 0.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 0.0);
         assertEquals(null, rV);
 
-        final Vehicle v1 = newVehicle(800.0, 2.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(800.0, 2.0, Lanes.LANE1);
         roadSegment.addVehicle(v1);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 900.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 900.0);
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 800.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 800.0);
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 901.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 901.0);
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 899.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 899.0);
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 801.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 801.0);
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 799.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 799.0);
         assertEquals(null, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 0.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 0.0);
         assertEquals(null, rV);
 
-        final Vehicle v2 = newVehicle(700.0, 3.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(700.0, 3.0, Lanes.LANE1);
         roadSegment.addVehicle(v2);
         assert roadSegment.eachLaneIsSorted();
-        rV = roadSegment.rearVehicle(Lane.LANE1, v0.getMidPosition());
+        rV = roadSegment.rearVehicle(Lanes.LANE1, v0.getMidPosition());
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, v1.getMidPosition());
+        rV = roadSegment.rearVehicle(Lanes.LANE1, v1.getMidPosition());
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, v2.getMidPosition());
+        rV = roadSegment.rearVehicle(Lanes.LANE1, v2.getMidPosition());
         assertEquals(v2, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 901.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 901.0);
         assertEquals(v0, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 899.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 899.0);
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 801.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 801.0);
         assertEquals(v1, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 799.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 799.0);
         assertEquals(v2, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 701.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 701.0);
         assertEquals(v2, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 699.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 699.0);
         assertEquals(null, rV);
-        rV = roadSegment.rearVehicle(Lane.LANE1, 0.0);
+        rV = roadSegment.rearVehicle(Lanes.LANE1, 0.0);
         assertEquals(null, rV);
     }
 
@@ -512,48 +513,48 @@ public class RoadSegmentTest {
         // join r0 and r1 so vehicles move from r0 to r1
         Link.addJoin(r0, r1);
 
-        final Vehicle v0 = newVehicle(3900.0, 1.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(3900.0, 1.0, Lanes.LANE1);
         assertEquals(3900.0, v0.getRearPosition(), delta);
         r1.addVehicle(v0);
-        final Vehicle v1 = newVehicle(3700.0, 2.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(3700.0, 2.0, Lanes.LANE1);
         r1.addVehicle(v1);
-        final Vehicle v2 = newVehicle(3100.0, 3.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(3100.0, 3.0, Lanes.LANE1);
         r1.addVehicle(v2);
 
-        final Vehicle v3 = newVehicle(600.0, 4.0, Lane.LANE1);
+        final Vehicle v3 = newVehicle(600.0, 4.0, Lanes.LANE1);
         r0.addVehicle(v3);
-        final Vehicle v4 = newVehicle(500.0, 5.0, Lane.LANE1);
+        final Vehicle v4 = newVehicle(500.0, 5.0, Lanes.LANE1);
         r0.addVehicle(v4);
 
-        Vehicle rV = r1.rearVehicle(Lane.LANE1, 3901.0);
+        Vehicle rV = r1.rearVehicle(Lanes.LANE1, 3901.0);
         assertEquals(v0, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 3900.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3900.0);
         assertEquals(v0, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 3700.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3700.0);
         assertEquals(v1, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 3101.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3101.0);
         assertEquals(v2, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 3100.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3100.0);
         assertEquals(v2, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 3099.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3099.0);
         assertEquals(v3.getId(), rV.getId());
         assertEquals(-100.0, rV.getRearPosition(), delta); // pos relative to r1
         assertEquals(v3.getSpeed(), rV.getSpeed(), delta);
 
-        rV = r1.rearVehicle(Lane.LANE1, 3099.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3099.0);
         assertEquals(v3.getId(), rV.getId());
         assertEquals(-100.0, rV.getRearPosition(), delta); // pos relative to r1
-        rV = r0.rearVehicle(Lane.LANE1, 601.0);
+        rV = r0.rearVehicle(Lanes.LANE1, 601.0);
         assertEquals(v3, rV);
-        rV = r0.rearVehicle(Lane.LANE1, 600.0);
+        rV = r0.rearVehicle(Lanes.LANE1, 600.0);
         assertEquals(v3, rV);
-        rV = r0.rearVehicle(Lane.LANE1, 599.0);
+        rV = r0.rearVehicle(Lanes.LANE1, 599.0);
         assertEquals(v4, rV);
-        rV = r0.rearVehicle(Lane.LANE1, 501.0);
+        rV = r0.rearVehicle(Lanes.LANE1, 501.0);
         assertEquals(v4, rV);
-        rV = r0.rearVehicle(Lane.LANE1, 500.0);
+        rV = r0.rearVehicle(Lanes.LANE1, 500.0);
         assertEquals(v4, rV);
-        rV = r0.rearVehicle(Lane.LANE1, 499.0);
+        rV = r0.rearVehicle(Lanes.LANE1, 499.0);
         assertEquals(null, rV);
     }
 
@@ -571,50 +572,46 @@ public class RoadSegmentTest {
         final int exitLaneCount = 1;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
         final RoadSegment r1 = new RoadSegment(200.0, laneCount + exitLaneCount);
-        r1.setLaneType(Lane.LANE1, Lane.Type.EXIT);// so Lane1 is exit lane of r1
-        // join r0 and r1 so vehicles move from r0 to r1
-        // lane2 of r0 joins to lane3 of r1
-        // lane1 of r0 joins to lane2 of r1
-        // lane1 of r1 has no predecessor
+        r1.setLaneType(Lanes.LANE3, Lanes.Type.EXIT);// so Lane3 is exit lane of r1
         Link.addJoin(r0, r1);
-        assertEquals(r0.id(), r1.sourceRoadSegment(Lane.LANE3).id());
-        assertEquals(r0.id(), r1.sourceRoadSegment(Lane.LANE2).id());
-        assertEquals(null, r1.sourceRoadSegment(Lane.LANE1));
+        assertEquals(r0.id(), r1.sourceRoadSegment(Lanes.LANE1).id());
+        assertEquals(r0.id(), r1.sourceRoadSegment(Lanes.LANE2).id());
+        assertEquals(null, r1.sourceRoadSegment(Lanes.LANE3));
 
         // vehicles suffixed 0 are on r0, vehicles suffixed 1 are on r1
-        final Vehicle z1 = newVehicle(5.0, 1.0, Lane.LANE3);
+        final Vehicle z1 = newVehicle(5.0, 1.0, Lanes.LANE1);
         r1.addVehicle(z1);
-        final Vehicle z0 = newVehicle(996.0, 3.0, Lane.LANE2);
+        final Vehicle z0 = newVehicle(996.0, 3.0, Lanes.LANE1);
         r0.addVehicle(z0);
-        final Vehicle y1 = newVehicle(3.0, 4.0, Lane.LANE2);
+        final Vehicle y1 = newVehicle(3.0, 4.0, Lanes.LANE2);
         r1.addVehicle(y1);
-        final Vehicle y0 = newVehicle(998.0, 5.0, Lane.LANE1);
+        final Vehicle y0 = newVehicle(998.0, 5.0, Lanes.LANE2);
         r0.addVehicle(y0);
         // vehicle in exit lane
-        final Vehicle x1 = newVehicle(5.0, 5.0, Lane.LANE1);
+        final Vehicle x1 = newVehicle(5.0, 5.0, Lanes.LANE3);
         r1.addVehicle(x1);
 
-        Vehicle rV = r1.rearVehicle(Lane.LANE3, 6.0);
+        Vehicle rV = r1.rearVehicle(Lanes.LANE1, 6.0);
         assertEquals(z1, rV);
-        rV = r1.rearVehicle(Lane.LANE3, 5.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 5.0);
         assertEquals(z1, rV);
-        rV = r1.rearVehicle(Lane.LANE3, 4.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 4.0);
         assertEquals(z0.getId(), rV.getId());
         assertEquals(-4.0, rV.getRearPosition(), delta);
         assertEquals(3.0, rV.getSpeed(), delta);
-        rV = r1.rearVehicle(Lane.LANE3, 3.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3.0);
         assertEquals(z0.getId(), rV.getId());
 
-        rV = r1.rearVehicle(Lane.LANE2, 4.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 4.0);
         assertEquals(y1, rV);
-        rV = r1.rearVehicle(Lane.LANE2, 3.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 3.0);
         assertEquals(y1, rV);
-        rV = r1.rearVehicle(Lane.LANE2, 2.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 2.0);
         assert rV != null;
         assertEquals(y0.getId(), rV.getId());
         assertEquals(-2.0, rV.getRearPosition(), delta);
         assertEquals(5.0, rV.getSpeed(), delta);
-        rV = r1.rearVehicle(Lane.LANE2, 1.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 1.0);
         assertEquals(y0.getId(), rV.getId());
     }
 
@@ -633,58 +630,55 @@ public class RoadSegmentTest {
         final int exitLaneCount = 1;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount + exitLaneCount);
         final RoadSegment r1 = new RoadSegment(200.0, laneCount);
-        r0.setLaneType(Lane.LANE1, Lane.Type.EXIT);// so Lane1 is exit lane of r1
+        r0.setLaneType(Lanes.LANE3, Lanes.Type.EXIT);// so Lane1 is exit lane of r1
         // join r0 and r1 so vehicles move from r0 to r1
-        // lane3 of r0 joins to lane2 of r1
-        // lane2 of r0 joins to lane1 of r1
-        // lane1 of r1 has no successor
         Link.addJoin(r0, r1);
-        assertEquals(r0.id(), r1.sourceRoadSegment(Lane.LANE2).id());
-        assertEquals(r0.id(), r1.sourceRoadSegment(Lane.LANE1).id());
-        assertEquals(Lane.LANE2, r1.sourceLane(Lane.LANE1));
-        assertEquals(Lane.LANE3, r1.sourceLane(Lane.LANE2));
+        assertEquals(r0.id(), r1.sourceRoadSegment(Lanes.LANE2).id());
+        assertEquals(r0.id(), r1.sourceRoadSegment(Lanes.LANE1).id());
+        assertEquals(Lanes.LANE1, r1.sourceLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r1.sourceLane(Lanes.LANE2));
 
-        assertEquals(r1.id(), r0.sinkRoadSegment(Lane.LANE3).id());
-        assertEquals(r1.id(), r0.sinkRoadSegment(Lane.LANE2).id());
-        assertEquals(null, r0.sinkRoadSegment(Lane.LANE1));
-        assertEquals(Lane.NONE, r0.sinkLane(Lane.LANE1));
-        assertEquals(Lane.LANE1, r0.sinkLane(Lane.LANE2));
-        assertEquals(Lane.LANE2, r0.sinkLane(Lane.LANE3));
+        assertEquals(r1.id(), r0.sinkRoadSegment(Lanes.LANE1).id());
+        assertEquals(r1.id(), r0.sinkRoadSegment(Lanes.LANE2).id());
+        assertEquals(null, r0.sinkRoadSegment(Lanes.LANE3));
+        assertEquals(Lanes.NONE, r0.sinkLane(Lanes.LANE3));
+        assertEquals(Lanes.LANE1, r0.sinkLane(Lanes.LANE1));
+        assertEquals(Lanes.LANE2, r0.sinkLane(Lanes.LANE2));
 
         // vehicles suffixed 0 are on r0, vehicles suffixed 1 are on r1
-        final Vehicle z1 = newVehicle(5.0, 1.0, Lane.LANE2);
+        final Vehicle z1 = newVehicle(5.0, 1.0, Lanes.LANE1);
         r1.addVehicle(z1);
-        final Vehicle z0 = newVehicle(996.0, 3.0, Lane.LANE3);
+        final Vehicle z0 = newVehicle(996.0, 3.0, Lanes.LANE1);
         r0.addVehicle(z0);
-        final Vehicle y1 = newVehicle(3.0, 4.0, Lane.LANE1);
+        final Vehicle y1 = newVehicle(3.0, 4.0, Lanes.LANE2);
         r1.addVehicle(y1);
-        final Vehicle y0 = newVehicle(998.0, 5.0, Lane.LANE2);
+        final Vehicle y0 = newVehicle(998.0, 5.0, Lanes.LANE2);
         r0.addVehicle(y0);
         // vehicle in exit lane
-        final Vehicle x0 = newVehicle(5.0, 5.0, Lane.LANE1);
+        final Vehicle x0 = newVehicle(5.0, 5.0, Lanes.LANE3);
         r0.addVehicle(x0);
 
-        Vehicle rV = r1.rearVehicle(Lane.LANE2, 6.0);
+        Vehicle rV = r1.rearVehicle(Lanes.LANE1, 6.0);
         assertEquals(z1, rV);
-        rV = r1.rearVehicle(Lane.LANE2, 5.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 5.0);
         assertEquals(z1, rV);
-        rV = r1.rearVehicle(Lane.LANE2, 4.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 4.0);
         assertEquals(z0.getId(), rV.getId());
         assertEquals(-4.0, rV.getRearPosition(), delta);
         assertEquals(3.0, rV.getSpeed(), delta);
-        rV = r1.rearVehicle(Lane.LANE2, 3.0);
+        rV = r1.rearVehicle(Lanes.LANE1, 3.0);
         assertEquals(z0.getId(), rV.getId());
 
-        rV = r1.rearVehicle(Lane.LANE1, 4.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 4.0);
         assertEquals(y1, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 3.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 3.0);
         assertEquals(y1, rV);
-        rV = r1.rearVehicle(Lane.LANE1, 2.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 2.0);
         assert rV != null;
         assertEquals(y0.getId(), rV.getId());
         assertEquals(-2.0, rV.getRearPosition(), delta);
         assertEquals(5.0, rV.getSpeed(), delta);
-        rV = r1.rearVehicle(Lane.LANE1, 1.0);
+        rV = r1.rearVehicle(Lanes.LANE2, 1.0);
         assertEquals(y0.getId(), rV.getId());
     }
 
@@ -701,17 +695,17 @@ public class RoadSegmentTest {
         final double roadLength = 1000.0;
         final int laneCount = 1;
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
-        Vehicle vehicle = roadSegment.frontVehicleOnLane(Lane.LANE1);
+        Vehicle vehicle = roadSegment.frontVehicleOnLane(Lanes.LANE1);
         assertEquals(null, vehicle);
 
-        final Vehicle v0 = newVehicle(900.0, 0.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(900.0, 0.0, Lanes.LANE1);
         roadSegment.addVehicle(v0);
-        vehicle = roadSegment.frontVehicleOnLane(Lane.LANE1);
+        vehicle = roadSegment.frontVehicleOnLane(Lanes.LANE1);
         assertEquals(v0.getId(), vehicle.getId());
 
-        final Vehicle v1 = newVehicle(800.0, 0.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(800.0, 0.0, Lanes.LANE1);
         roadSegment.addVehicle(v1);
-        vehicle = roadSegment.frontVehicleOnLane(Lane.LANE1);
+        vehicle = roadSegment.frontVehicleOnLane(Lanes.LANE1);
         assertEquals(v0.getId(), vehicle.getId());
     }
 
@@ -726,57 +720,57 @@ public class RoadSegmentTest {
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
 
         Vehicle.resetNextId();
-        final Vehicle v0 = newVehicle(900.0, 1.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(900.0, 1.0, Lanes.LANE1);
         roadSegment.addVehicle(v0);
-        Vehicle fV = roadSegment.frontVehicle(Lane.LANE1, 900.0);
+        Vehicle fV = roadSegment.frontVehicle(Lanes.LANE1, 900.0);
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 1000.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 1000.0);
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 901.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 901.0);
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 899.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 899.0);
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 0.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 0.0);
         assertEquals(v0, fV);
 
-        final Vehicle v1 = newVehicle(800.0, 2.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(800.0, 2.0, Lanes.LANE1);
         roadSegment.addVehicle(v1);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 900.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 900.0);
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 800.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 800.0);
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 901.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 901.0);
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 899.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 899.0);
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 801.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 801.0);
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 799.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 799.0);
         assertEquals(v1, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 0.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 0.0);
         assertEquals(v1, fV);
 
-        final Vehicle v2 = newVehicle(700.0, 3.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(700.0, 3.0, Lanes.LANE1);
         roadSegment.addVehicle(v2);
-        fV = roadSegment.frontVehicle(Lane.LANE1, v0.getMidPosition());
+        fV = roadSegment.frontVehicle(Lanes.LANE1, v0.getMidPosition());
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, v1.getMidPosition());
+        fV = roadSegment.frontVehicle(Lanes.LANE1, v1.getMidPosition());
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, v2.getMidPosition());
+        fV = roadSegment.frontVehicle(Lanes.LANE1, v2.getMidPosition());
         assertEquals(v1, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 901.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 901.0);
         assertEquals(null, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 899.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 899.0);
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 801.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 801.0);
         assertEquals(v0, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 799.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 799.0);
         assertEquals(v1, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 701.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 701.0);
         assertEquals(v1, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 699.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 699.0);
         assertEquals(v2, fV);
-        fV = roadSegment.frontVehicle(Lane.LANE1, 0.0);
+        fV = roadSegment.frontVehicle(Lanes.LANE1, 0.0);
         assertEquals(v2, fV);
     }
 
@@ -794,38 +788,38 @@ public class RoadSegmentTest {
         // join r0 and r1 so vehicles move from r0 to r1
         Link.addJoin(r0, r1); // r0=source, r1=sink
 
-        final Vehicle v0 = newVehicle(3900.0, 1.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(3900.0, 1.0, Lanes.LANE1);
         r1.addVehicle(v0);
-        final Vehicle v1 = newVehicle(3700.0, 2.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(3700.0, 2.0, Lanes.LANE1);
         r1.addVehicle(v1);
-        final Vehicle v2 = newVehicle(3100.0, 3.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(3100.0, 3.0, Lanes.LANE1);
         r1.addVehicle(v2);
 
-        final Vehicle v3 = newVehicle(600.0, 4.0, Lane.LANE1);
+        final Vehicle v3 = newVehicle(600.0, 4.0, Lanes.LANE1);
         r0.addVehicle(v3);
-        final Vehicle v4 = newVehicle(500.0, 5.0, Lane.LANE1);
+        final Vehicle v4 = newVehicle(500.0, 5.0, Lanes.LANE1);
         r0.addVehicle(v4);
 
-        Vehicle fV = r1.frontVehicle(Lane.LANE1, v0.getMidPosition());
+        Vehicle fV = r1.frontVehicle(Lanes.LANE1, v0.getMidPosition());
         assertEquals(null, fV);
-        fV = r1.frontVehicle(Lane.LANE1, r1.roadLength());
+        fV = r1.frontVehicle(Lanes.LANE1, r1.roadLength());
         assertEquals(null, fV);
-        fV = r1.frontVehicle(Lane.LANE1, v1.getMidPosition());
+        fV = r1.frontVehicle(Lanes.LANE1, v1.getMidPosition());
         assertEquals(v0, fV);
-        fV = r1.frontVehicle(Lane.LANE1, v2.getMidPosition());
+        fV = r1.frontVehicle(Lanes.LANE1, v2.getMidPosition());
         assertEquals(v1, fV);
 
         // vehicle in front of end of road0 is v2
-        fV = r0.frontVehicle(Lane.LANE1, r0.roadLength());
+        fV = r0.frontVehicle(Lanes.LANE1, r0.roadLength());
         assertEquals(v2.getId(), fV.getId());
         assertEquals(v2.getMidPosition() + r0.roadLength(), fV.getMidPosition(), delta);
         assertEquals(v2.getSpeed(), fV.getSpeed(), delta);
         // vehicle in front of v3 is v2
-        fV = r0.frontVehicle(Lane.LANE1, v3.getMidPosition());
+        fV = r0.frontVehicle(Lanes.LANE1, v3.getMidPosition());
         assertEquals(v2.getId(), fV.getId());
-        fV = r0.frontVehicle(Lane.LANE1, v4.getMidPosition());
+        fV = r0.frontVehicle(Lanes.LANE1, v4.getMidPosition());
         assertEquals(v3, fV);
-        fV = r0.frontVehicle(Lane.LANE1, 0.0);
+        fV = r0.frontVehicle(Lanes.LANE1, 0.0);
         assertEquals(v4, fV);
     }
 
@@ -843,42 +837,39 @@ public class RoadSegmentTest {
         final int exitLaneCount = 1;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
         final RoadSegment r1 = new RoadSegment(200.0, laneCount + exitLaneCount);
-        r1.setLaneType(Lane.LANE1, Lane.Type.EXIT);// so Lane1 is exit lane of r1
+        r1.setLaneType(Lanes.LANE3, Lanes.Type.EXIT);// so Lane1 is exit lane of r1
         // join r0 and r1 so vehicles move from r0 to r1
-        // lane2 of r0 joins to lane3 of r1
-        // lane1 of r0 joins to lane2 of r1
-        // lane1 of r1 has no predecessor
         Link.addJoin(r0, r1);
 
         // vehicles suffixed 0 are on r0, vehicles suffixed 1 are on r1
-        final Vehicle z1 = newVehicle(5.0, 1.0, Lane.LANE3);
+        final Vehicle z1 = newVehicle(5.0, 1.0, Lanes.LANE1);
         r1.addVehicle(z1);
-        final Vehicle z0 = newVehicle(996.0, 3.0, Lane.LANE2);
+        final Vehicle z0 = newVehicle(996.0, 3.0, Lanes.LANE1);
         r0.addVehicle(z0);
-        final Vehicle y1 = newVehicle(3.0, 4.0, Lane.LANE2);
+        final Vehicle y1 = newVehicle(3.0, 4.0, Lanes.LANE2);
         r1.addVehicle(y1);
-        final Vehicle y0 = newVehicle(998.0, 5.0, Lane.LANE1);
+        final Vehicle y0 = newVehicle(998.0, 5.0, Lanes.LANE2);
         r0.addVehicle(y0);
         // vehicle in exit lane
-        final Vehicle x1 = newVehicle(5.0, 5.0, Lane.LANE1);
+        final Vehicle x1 = newVehicle(5.0, 5.0, Lanes.LANE3);
         r1.addVehicle(x1);
 
-        Vehicle fV = r0.frontVehicle(Lane.LANE2, 995.0);
+        Vehicle fV = r0.frontVehicle(Lanes.LANE1, 995.0);
         assertEquals(z0, fV);
-        fV = r0.frontVehicle(Lane.LANE2, 996.0);
+        fV = r0.frontVehicle(Lanes.LANE1, 996.0);
         assertEquals(z1.getId(), fV.getId());
         assertEquals(1005.0, fV.getRearPosition(), delta);
         assertEquals(1.0, fV.getSpeed(), delta);
-        fV = r0.frontVehicle(Lane.LANE2, 997.0);
+        fV = r0.frontVehicle(Lanes.LANE1, 997.0);
         assertEquals(z1.getId(), fV.getId());
 
-        fV = r0.frontVehicle(Lane.LANE1, 997.0);
+        fV = r0.frontVehicle(Lanes.LANE2, 997.0);
         assertEquals(y0, fV);
-        fV = r0.frontVehicle(Lane.LANE1, 998.0);
+        fV = r0.frontVehicle(Lanes.LANE2, 998.0);
         assertEquals(y1.getId(), fV.getId());
         assertEquals(1003.0, fV.getRearPosition(), delta);
         assertEquals(4.0, fV.getSpeed(), delta);
-        fV = r0.frontVehicle(Lane.LANE1, 999.0);
+        fV = r0.frontVehicle(Lanes.LANE2, 999.0);
         assertEquals(y1.getId(), fV.getId());
     }
 
@@ -895,9 +886,9 @@ public class RoadSegmentTest {
 
         // set up an obstacle directly in front of a vehicle, so the vehicle will change lanes
         // Obstacle(pos, lane, length, width, color) {
-        final Vehicle obstacle = newObstacle(600.0, Lane.LANE1);
+        final Vehicle obstacle = newObstacle(600.0, Lanes.LANE1);
         r0.addVehicle(obstacle);
-        final Vehicle v0 = newVehicle(593.0, 5.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(593.0, 5.0, Lanes.LANE1);
         final LaneChangeModel lcm = newLaneChangeModel(v0);
         v0.setLaneChangeModel(lcm);
         r0.addVehicle(v0);
@@ -905,10 +896,10 @@ public class RoadSegmentTest {
         final double simulationTime = 0.0;
         final long iterationCount = 0;
         r0.makeLaneChanges(dt, simulationTime, iterationCount);
-        assertEquals(Lane.LANE1, obstacle.getLane());
-        assertEquals(Lane.LANE2, v0.getLane());
-        assertEquals(1, r0.laneSegment(Lane.LANE1).vehicleCount());
-        assertEquals(1, r0.laneSegment(Lane.LANE2).vehicleCount());
+        assertEquals(Lanes.LANE1, obstacle.lane());
+        assertEquals(Lanes.LANE2, v0.lane());
+        assertEquals(1, r0.laneSegment(Lanes.LANE1).vehicleCount());
+        assertEquals(1, r0.laneSegment(Lanes.LANE2).vehicleCount());
     }
 
     /**
@@ -923,11 +914,11 @@ public class RoadSegmentTest {
         final int laneCount = 1;
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
 
-        final Vehicle v0 = newVehicle(900.0, 10.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(900.0, 10.0, Lanes.LANE1);
         roadSegment.addVehicle(v0);
-        final Vehicle v1 = newVehicle(800.0, 20.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(800.0, 20.0, Lanes.LANE1);
         roadSegment.addVehicle(v1);
-        final Vehicle v2 = newVehicle(700.0, 30.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(700.0, 30.0, Lanes.LANE1);
         roadSegment.addVehicle(v2);
 
         final double dt = 0.25;
@@ -952,16 +943,16 @@ public class RoadSegmentTest {
         // join r0 and r1 so vehicles move from r0 to r1
         Link.addJoin(r0, r1);
 
-        final Vehicle v0 = newVehicle(3900.0, 10.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(3900.0, 10.0, Lanes.LANE1);
         r1.addVehicle(v0);
-        final Vehicle v1 = newVehicle(3700.0, 20.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(3700.0, 20.0, Lanes.LANE1);
         r1.addVehicle(v1);
-        final Vehicle v2 = newVehicle(3100.0, 30.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(3100.0, 30.0, Lanes.LANE1);
         r1.addVehicle(v2);
 
-        final Vehicle v3 = newVehicle(695.0, 40.0, Lane.LANE1);
+        final Vehicle v3 = newVehicle(695.0, 40.0, Lanes.LANE1);
         r0.addVehicle(v3);
-        final Vehicle v4 = newVehicle(500.0, 50.0, Lane.LANE1);
+        final Vehicle v4 = newVehicle(500.0, 50.0, Lanes.LANE1);
         r0.addVehicle(v4);
 
         final double dt = 0.25;
@@ -997,16 +988,16 @@ public class RoadSegmentTest {
         // join r0 and r1 so vehicles move from r0 to r1
         Link.addJoin(r0, r0);
 
-        final Vehicle v0 = newVehicle(3895.0, 80.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(3895.0, 80.0, Lanes.LANE1);
         r0.addVehicle(v0);
-        final Vehicle v1 = newVehicle(3700.0, 20.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(3700.0, 20.0, Lanes.LANE1);
         r0.addVehicle(v1);
-        final Vehicle v2 = newVehicle(3100.0, 30.0, Lane.LANE1);
+        final Vehicle v2 = newVehicle(3100.0, 30.0, Lanes.LANE1);
         r0.addVehicle(v2);
 
-        final Vehicle v3 = newVehicle(695.0, 40.0, Lane.LANE1);
+        final Vehicle v3 = newVehicle(695.0, 40.0, Lanes.LANE1);
         r0.addVehicle(v3);
-        final Vehicle v4 = newVehicle(500.0, 50.0, Lane.LANE1);
+        final Vehicle v4 = newVehicle(500.0, 50.0, Lanes.LANE1);
         r0.addVehicle(v4);
 
         final double dt = 0.25;
@@ -1039,15 +1030,15 @@ public class RoadSegmentTest {
         // final int vehicleCount = 5;
         // final ArrayList<Vehicle> vehicles = new ArrayList<Vehicle>(vehicleCount);
         //
-        // final Vehicle v0 = newVehicle(3895.0, 80.0, Lane.LANE1);
+        // final Vehicle v0 = newVehicle(3895.0, 80.0, Lanes.LANE1);
         // r0.addVehicle(v0);
-        // final Vehicle v1 = newVehicle(3700.0, 20.0, Lane.LANE1);
+        // final Vehicle v1 = newVehicle(3700.0, 20.0, Lanes.LANE1);
         // r0.addVehicle(v1);
-        // final Vehicle v2 = newVehicle(3100.0, 30.0, Lane.LANE1);
+        // final Vehicle v2 = newVehicle(3100.0, 30.0, Lanes.LANE1);
         // r0.addVehicle(v2);
-        // final Vehicle v3 = newVehicle(695.0, 40.0, Lane.LANE1);
+        // final Vehicle v3 = newVehicle(695.0, 40.0, Lanes.LANE1);
         // r0.addVehicle(v3);
-        // final Vehicle v4 = newVehicle(500.0, 50.0, Lane.LANE1);
+        // final Vehicle v4 = newVehicle(500.0, 50.0, Lanes.LANE1);
         // r0.addVehicle(v4);
         //
         // final Vehicle w0 = new Vehicle(v0);
@@ -1124,7 +1115,7 @@ public class RoadSegmentTest {
         // // TODO - add random variation to pos and vel
         // final double pos = i * averageSpacing;
         // final double vel = averageVelocity;
-        // final Vehicle v = newVehicle(pos, vel, Lane.LANE1);
+        // final Vehicle v = newVehicle(pos, vel, Lanes.LANE1);
         // r0.addVehicle(v);
         // final Vehicle w = new Vehicle(v);
         // vehicles.add(w);
@@ -1158,7 +1149,7 @@ public class RoadSegmentTest {
         // w0.rungeKuttaIntegrate(dt, null, null);
         // }
         // for (int i = 0; i < vehicleCount; ++i) {
-        // final Vehicle v = r0.getVehicle(Lane.LANE1, i);
+        // final Vehicle v = r0.getVehicle(Lanes.LANE1, i);
         // final Vehicle w = vehicles.get(i);
         // assertEquals(w.getPosition(), v.getPosition(), delta);
         // assertEquals(w.getSpeed(), v.getSpeed(), delta);
@@ -1187,7 +1178,7 @@ public class RoadSegmentTest {
         // join r0 and r1 so vehicles move from r0 to r1
         Link.addJoin(r0, r1);
 
-        final Vehicle v0 = newVehicle(999.0, 40.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(999.0, 40.0, Lanes.LANE1);
         r0.addVehicle(v0);
         final double dt = 0.25;
         final double simulationTime = 0.0;
@@ -1197,7 +1188,7 @@ public class RoadSegmentTest {
         r0.outFlow(dt, simulationTime, iterationCount);
         assertEquals(0, r0.getVehicleCount());
         assertEquals(1, r1.getVehicleCount());
-        final Vehicle v = r1.getVehicle(Lane.LANE1, 0);
+        final Vehicle v = r1.getVehicle(Lanes.LANE1, 0);
         assertEquals(9.0, v.getRearPosition(), delta);
     }
 
@@ -1209,15 +1200,15 @@ public class RoadSegmentTest {
         final int laneCount = 3;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
         final RoadSegment r1 = new RoadSegment(5000.0, laneCount + 1);
-        r1.setLaneType(Lane.LANE1, Lane.Type.ENTRANCE);
+        r1.setLaneType(Lanes.LANE1, Lanes.Type.ENTRANCE);
         // join r0 and r1 so vehicles move from r0 to r1
         Link.addJoin(r0, r1);
 
-        final Vehicle v1 = newVehicle(999.0, 40.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(999.0, 40.0, Lanes.LANE1);
         r0.addVehicle(v1);
-        final Vehicle v2 = newVehicle(998.0, 40.0, Lane.LANE2);
+        final Vehicle v2 = newVehicle(998.0, 40.0, Lanes.LANE2);
         r0.addVehicle(v2);
-        final Vehicle v3 = newVehicle(997.0, 40.0, Lane.LANE3);
+        final Vehicle v3 = newVehicle(997.0, 40.0, Lanes.LANE3);
         r0.addVehicle(v3);
 
         final double dt = 0.25;
@@ -1230,14 +1221,14 @@ public class RoadSegmentTest {
         // r0.outFlow(dt, simulationTime, iterationCount);
         // assertEquals(0, r0.totalVehicleCount());
         // assertEquals(3, r1.totalVehicleCount());
-        // assertEquals(Lane.LANE2, v1.getLane());
-        // assertEquals(Lane.LANE3, v2.getLane());
-        // assertEquals(Lane.LANE4, v3.getLane());
-        // final Vehicle nv1 = r1.getVehicle(Lane.LANE2, 0);
+        // assertEquals(Lanes.LANE2, v1.getLane());
+        // assertEquals(Lanes.LANE3, v2.getLane());
+        // assertEquals(Lanes.LANE4, v3.getLane());
+        // final Vehicle nv1 = r1.getVehicle(Lanes.LANE2, 0);
         // assertEquals(9.0, nv1.getPosition(), delta);
-        // final Vehicle nv2 = r1.getVehicle(Lane.LANE3, 0);
+        // final Vehicle nv2 = r1.getVehicle(Lanes.LANE3, 0);
         // assertEquals(8.0, nv2.getPosition(), delta);
-        // final Vehicle nv3 = r1.getVehicle(Lane.LANE4, 0);
+        // final Vehicle nv3 = r1.getVehicle(Lanes.LANE4, 0);
         // assertEquals(7.0, nv3.getPosition(), delta);
     }
 
@@ -1262,11 +1253,11 @@ public class RoadSegmentTest {
         final int laneCount = 3;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
 
-        final Vehicle v0 = newVehicle(800.0, 1.0, Lane.LANE2);
+        final Vehicle v0 = newVehicle(800.0, 1.0, Lanes.LANE2);
         r0.addVehicle(v0);
-        final Vehicle v1 = newVehicle(700.0, 1.0, Lane.LANE3);
+        final Vehicle v1 = newVehicle(700.0, 1.0, Lanes.LANE3);
         r0.addVehicle(v1);
-        final Vehicle v2 = newVehicle(600.0, 1.0, Lane.LANE3);
+        final Vehicle v2 = newVehicle(600.0, 1.0, Lanes.LANE3);
         r0.addVehicle(v2);
         final Iterator<Vehicle> iterator = r0.iterator();
         assertEquals(true, iterator.hasNext());
@@ -1288,11 +1279,11 @@ public class RoadSegmentTest {
         final int laneCount = 3;
         final RoadSegment r0 = new RoadSegment(1000.0, laneCount);
 
-        final Vehicle v0 = newVehicle(800.0, 1.0, Lane.LANE1);
+        final Vehicle v0 = newVehicle(800.0, 1.0, Lanes.LANE1);
         r0.addVehicle(v0);
-        final Vehicle v1 = newVehicle(700.0, 1.0, Lane.LANE1);
+        final Vehicle v1 = newVehicle(700.0, 1.0, Lanes.LANE1);
         r0.addVehicle(v1);
-        final Vehicle v2 = newVehicle(600.0, 1.0, Lane.LANE3);
+        final Vehicle v2 = newVehicle(600.0, 1.0, Lanes.LANE3);
         r0.addVehicle(v2);
         final Iterator<Vehicle> iterator = r0.iterator();
         assertEquals(true, iterator.hasNext());
@@ -1306,7 +1297,6 @@ public class RoadSegmentTest {
 
     @Test
     public final void testLaneSegmentIterator() {
-        // fail("Not yet implemented");
         RoadSegment.resetNextId();
         Vehicle.resetNextId();
 
@@ -1316,17 +1306,17 @@ public class RoadSegmentTest {
         final Iterator<LaneSegment> iterator = r0.laneSegmentIterator();
 
         assertEquals(true, iterator.hasNext());
-        LaneSegment laneSegment = r0.laneSegment(0);
+        LaneSegment laneSegment = r0.laneSegment(Lanes.LANE1);
         LaneSegment next = iterator.next();
         assertEquals(laneSegment.lane(), next.lane());
 
         assertEquals(true, iterator.hasNext());
-        laneSegment = r0.laneSegment(1);
+        laneSegment = r0.laneSegment(Lanes.LANE2);
         next = iterator.next();
         assertEquals(laneSegment.lane(), next.lane());
 
         assertEquals(true, iterator.hasNext());
-        laneSegment = r0.laneSegment(2);
+        laneSegment = r0.laneSegment(Lanes.LANE3);
         next = iterator.next();
         assertEquals(laneSegment.lane(), next.lane());
     }

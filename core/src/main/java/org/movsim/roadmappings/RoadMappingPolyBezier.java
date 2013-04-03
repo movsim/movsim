@@ -29,7 +29,6 @@ package org.movsim.roadmappings;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.movsim.simulator.roadnetwork.RoadMapping;
 
 /**
  * RoadMapping consisting of a number of consecutive Bezier curves.
@@ -40,7 +39,7 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
     public static final int ABSOLUTE_POINTS = 1;
     public static final int RELATIVE_CALCULATE_CONTROL_POINTS = 2;
 
-    private final ArrayList<RoadMappingBezier> roadMappings = new ArrayList<RoadMappingBezier>();
+    private final ArrayList<RoadMappingBezier> roadMappings = new ArrayList<>();
 
     @Override
     public Iterator<RoadMappingBezier> iterator() {
@@ -58,7 +57,7 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
      * @param cX
      * @param cY
      */
-    public RoadMappingPolyBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
+    RoadMappingPolyBezier(int laneCount, double x0, double y0, double x1, double y1, double cX, double cY) {
         super(laneCount, x0, y0);
         final RoadMappingBezier roadMapping = new RoadMappingBezier(laneCount, x0, y0, x1, y1, cX, cY);
         roadLength = roadMapping.roadLength();
@@ -79,7 +78,7 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
      * @param c
      * @param d
      */
-    public RoadMappingPolyBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
+    RoadMappingPolyBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
             double b, double c, double d) {
         super(laneCount, x0, y0);
         final RoadMappingBezier roadMapping = new RoadMappingBezier(laneCount, s, x0, y0, theta, length, a, b, c, d);
@@ -94,7 +93,7 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
      * @param valuesType
      * @param values
      */
-    public RoadMappingPolyBezier(int laneCount, int valuesType, double[] values) {
+    RoadMappingPolyBezier(int laneCount, int valuesType, double[] values) {
         super(laneCount, values[0], values[1]);
         assert ((valuesType == RELATIVE_CALCULATE_CONTROL_POINTS && values.length % 2 == 0) || values.length % 3 == 0);
 

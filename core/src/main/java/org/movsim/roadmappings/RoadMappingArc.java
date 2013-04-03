@@ -59,7 +59,7 @@ public class RoadMappingArc extends RoadMappingCircle {
      *            start direction of arc, ie angle subtended at center + PI/2
      * @param arcAngle
      */
-    public RoadMappingArc(int laneCount, double x0, double y0, double radius, double startAngle, double arcAngle) {
+    RoadMappingArc(int laneCount, double x0, double y0, double radius, double startAngle, double arcAngle) {
         super(laneCount, x0, y0, radius, arcAngle < 0.0);
         this.startAngle = startAngle;
         this.arcAngle = arcAngle;
@@ -86,7 +86,7 @@ public class RoadMappingArc extends RoadMappingCircle {
      * @param curvature
      *            curvature of arc
      */
-    public RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length,
+    RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length,
             double curvature) {
         super(laneCount, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
         roadLength = length;
@@ -96,11 +96,11 @@ public class RoadMappingArc extends RoadMappingCircle {
         centerY = y0 + radius * Math.sin(startAngle - 0.5 * Math.PI) * (clockwise ? -1 : 1);
     }
 
-    protected RoadMappingArc(int laneCount, double x0, double y0, double radius, boolean clockwise) {
+    RoadMappingArc(int laneCount, double x0, double y0, double radius, boolean clockwise) {
         super(laneCount, x0, y0, radius, clockwise);
     }
 
-    public RoadMappingArc(int laneCount, double s, double x, double y, double hdg, double length, double curvature,
+    RoadMappingArc(int laneCount, double s, double x, double y, double hdg, double length, double curvature,
             double laneWidth) {
         this(laneCount, s, x, y, hdg, length, curvature);
         this.laneWidth = laneWidth;
