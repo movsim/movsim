@@ -3,5 +3,5 @@
 # example for start script for MovSim viewer, see http://www.movsim.org
 # please specify your path to the target output folder and the target version
 # 
-java -jar $HOME/workspace/movsim/viewer/target/MovsimViewer-1.5.0-SNAPSHOT-jar-with-dependencies.jar $@
+java -jar $HOME/workspace/movsim/viewer/target/MovsimViewer-1.6.0-SNAPSHOT-jar-with-dependencies.jar $@
 
