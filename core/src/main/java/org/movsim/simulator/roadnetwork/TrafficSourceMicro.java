@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
-import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
 
 public class TrafficSourceMicro extends AbstractTrafficSource {
 
@@ -25,19 +26,33 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         super(vehGenerator, roadSegment);
         this.routes = routes;
         this.inflowQueue = inflowQueue;
-        checkInput();
+        createVehicleFromInput();
     }
 
-    private void checkInput() {
+    private void createVehicleFromInput() {
         for (MicroInflowRecord record : inflowQueue) {
-            if (!vehGenerator.hasVehicle(record.getTypeLabel())) {
-                throw new IllegalArgumentException(
-                        "vehicle type in microscopic boundary input (from file) not defined in traffic composition="
-                                + record.getTypeLabel());
-            }
-            if (record.hasRoute() && !routes.containsKey(record.getRoute())) {
-                throw new IllegalArgumentException("route=" + record.getRoute()
+            final Vehicle vehicle = vehGenerator.createVehicle(record.getTypeLabel());
+            record.setVehicle(vehicle);
+            if (record.hasRoute()) {
+                Preconditions.checkArgument(routes.containsKey(record.getRoute()), "route=" + record.getRoute()
                         + " in microscopic boundary input on roadSegment=" + roadSegment.id() + " not defined!");
+                Route route = routes.get(record.getRoute());
+                LOG.info("overwrites vehicle's default route by route provided by input file: route={}",
+                        route.getName());
+                vehicle.setRoute(route);
+            }
+            if (record.hasComment()) {
+                vehicle.setInfoComment(record.getComment());
+            }
+            if (record.hasLength()) {
+                vehicle.setLength(record.getLength());
+            }
+            if (record.hasWeight()) {
+                vehicle.setWeight(record.getWeight());
+            }
+            if (record.hasLength() || record.hasWeight()) {
+                LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
+                        vehicle.getWeight());
             }
         }
     }
@@ -50,8 +65,8 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
             int testLane = nextInflowRecord.hasLane() ? nextInflowRecord.getLane()
                     : getNewCyclicLaneForEntering(laneEnterLast);
             LaneSegment laneSegment = roadSegment.laneSegment(testLane);
-            TestVehicle testVehicle = vehGenerator.getTestVehicle(nextInflowRecord.getTypeLabel());
-            final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment);
+            Vehicle vehicle = nextInflowRecord.getVehicle();
+            final boolean isEntered = tryEnteringNewVehicle(vehicle, laneSegment);
             if (isEntered) {
                 nextInflowRecord = null;
                 incrementInflowCount(1);
@@ -73,25 +88,24 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         return microInflowRecord;
     }
 
-    private boolean tryEnteringNewVehicle(TestVehicle testVehicle, LaneSegment laneSegment) {
+    private boolean tryEnteringNewVehicle(Vehicle vehicle, LaneSegment laneSegment) {
         Vehicle leader = laneSegment.rearVehicle();
         double vEnter = nextInflowRecord.hasSpeed() ? nextInflowRecord.getSpeed() : 0;
         if (leader == null) {
-            enterVehicle(laneSegment, vEnter, testVehicle);
+            enterVehicle(laneSegment, vEnter, vehicle);
             return true;
-
         }
         vEnter = Math.min(vEnter, leader.getSpeed());
-        // (2) check if gap to leader is sufficiently large origin of road section is assumed to be zero
+        // check if gap to leader is sufficiently large (xEnter of road section is assumed to be zero)
         final double netGapToLeader = leader.getRearPosition();
-        final double gapAtQMax = 1. / testVehicle.getRhoQMax();
-        // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
-        double minRequiredGap = 0.8 * gapAtQMax;
-        if (testVehicle.getLongModel().isCA()) {
+        // very crude approximation for minimum gap
+        double minRequiredGap = vehicle.getLength() + vehicle.getLongitudinalModel().getMinimumGap() + 2
+                * vehicle.getLongitudinalModel().getDesiredSpeed();
+        if (vehicle.getLongitudinalModel().isCA()) {
             minRequiredGap = leader.getSpeed();
         }
         if (netGapToLeader > minRequiredGap) {
-            enterVehicle(laneSegment, vEnter, testVehicle);
+            enterVehicle(laneSegment, vEnter, vehicle);
             return true;
         }
         return false;
@@ -106,31 +120,10 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
      * @param vehPrototype
      *            the vehicle prototype
      */
-    private void enterVehicle(LaneSegment laneSegment, double vEnter, TestVehicle testVehicle) {
+    private void enterVehicle(LaneSegment laneSegment, double vEnter, Vehicle vehicle) {
         final double xEnter = 0;
-        Vehicle vehicle;
-        if (nextInflowRecord.hasRoute()) {
-            Route route = routes.get(nextInflowRecord.getRoute());
-            LOG.info("overwrites vehicle's default route (from composition) by route from input file: route={}",
-                    nextInflowRecord.getRoute());
-            vehicle = addVehicle(laneSegment, testVehicle, xEnter, vEnter, route);
-        } else {
-            vehicle = addVehicle(laneSegment, testVehicle, xEnter, vEnter);
-        }
-        if (nextInflowRecord.hasComment()) {
-            vehicle.setInfoComment(nextInflowRecord.getComment());
-        }
-        if (nextInflowRecord.hasLength()) {
-            vehicle.setLength(nextInflowRecord.getLength());
-        }
-        if (nextInflowRecord.hasWeight()) {
-            vehicle.setWeight(nextInflowRecord.getWeight());
-        }
+        initVehicle(laneSegment, xEnter, vEnter, vehicle);
         LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
-        if (nextInflowRecord.hasLength() || nextInflowRecord.hasWeight()) {
-            LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
-                    vehicle.getWeight());
-        }
     }
 
     @Override

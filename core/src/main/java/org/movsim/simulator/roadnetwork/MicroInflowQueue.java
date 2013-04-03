@@ -15,6 +15,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ import com.google.common.collect.Lists;
 
 public final class MicroInflowQueue {
 
-    static final Logger LOG = LoggerFactory.getLogger(MicroInflowQueue.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MicroInflowQueue.class);
 
     private MicroInflowQueue() {
         // private constructor
@@ -41,41 +42,42 @@ public final class MicroInflowQueue {
         private double length = Double.NaN;
         private double weight = Double.NaN;
         private String comment = null;
+        private Vehicle vehicle = null;
 
-        public MicroInflowRecord(double time, String typeLabel) {
+        MicroInflowRecord(double time, String typeLabel) {
             this.time = time;
             this.typeLabel = typeLabel;
         }
 
-        public boolean hasSpeed() {
+        boolean hasSpeed() {
             return !Double.isNaN(speed);
         }
 
-        public boolean hasLane() {
+        boolean hasLane() {
             return lane != Integer.MAX_VALUE;
         }
 
-        public double getTime() {
+        double getTime() {
             return time;
         }
 
-        public String getTypeLabel() {
+        String getTypeLabel() {
             return typeLabel;
         }
 
-        public double getSpeed() {
+        double getSpeed() {
             return speed;
         }
 
-        public int getLane() {
+        int getLane() {
             return lane;
         }
 
-        public String getComment() {
+        String getComment() {
             return comment;
         }
 
-        public boolean hasComment() {
+        boolean hasComment() {
             return comment != null;
         }
 
@@ -91,47 +93,56 @@ public final class MicroInflowQueue {
             this.lane = lane;
         }
 
-        public boolean hasRoute() {
+        boolean hasRoute() {
             return route != null && !route.isEmpty();
         }
 
-        public String getRoute() {
+        String getRoute() {
             return route;
         }
 
-        public void setRoute(String route) {
+        void setRoute(String route) {
             Preconditions.checkArgument(!route.isEmpty());
             this.route = route;
+        }
+
+        double getLength() {
+            return length;
+        }
+
+        boolean hasLength() {
+            return !Double.isNaN(length);
+        }
+
+        void setLength(double length) {
+            this.length = length;
+        }
+
+        double getWeight() {
+            return weight;
+        }
+
+        void setWeight(double weight) {
+            this.weight = weight;
+        }
+
+        boolean hasWeight() {
+            return !Double.isNaN(weight);
+        }
+
+        Vehicle getVehicle() {
+            return vehicle;
+        }
+
+        void setVehicle(Vehicle vehicle) {
+            this.vehicle = vehicle;
         }
 
         @Override
         public String toString() {
             return "MicroInflowRecord [time=" + time + ", typeLabel=" + typeLabel + ", route=" + route + ", speed="
-                    + speed + ", lane=" + lane + ", comment=" + comment + "]";
-        }
-
-        public double getLength() {
-            return length;
-        }
-
-        public boolean hasLength() {
-            return !Double.isNaN(length);
-        }
-
-        public void setLength(double length) {
-            this.length = length;
-        }
-
-        public double getWeight() {
-            return weight;
-        }
-
-        public void setWeight(double weight) {
-            this.weight = weight;
-        }
-
-        public boolean hasWeight() {
-            return !Double.isNaN(weight);
+                    + speed + ", lane=" + lane + ", length=" + length + ", weight=" + weight + ", comment=" + comment
+                    + ", vehicle=" + vehicle + "]";
         }
 
     }

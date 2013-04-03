@@ -8,8 +8,6 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-
 
 public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
@@ -111,18 +109,7 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
         return vehicle;
     }
 
-    /**
-     * Adds a the vehicle to the {@link LaneSegment} at initial front position with initial speed and a predefined route.
-     */
-    protected Vehicle addVehicle(LaneSegment laneSegment, TestVehicle testVehicle, double frontPosition, double speed,
-            Route route) {
-        Preconditions.checkNotNull(route);
-        final Vehicle vehicle = vehGenerator.createVehicle(testVehicle, route);
-        initVehicle(laneSegment, frontPosition, speed, vehicle);
-        return vehicle;
-    }
-
-    private void initVehicle(LaneSegment laneSegment, double frontPosition, double speed, final Vehicle vehicle) {
+    protected void initVehicle(LaneSegment laneSegment, double frontPosition, double speed, final Vehicle vehicle) {
         vehicle.setFrontPosition(frontPosition);
         vehicle.setSpeed(speed);
         vehicle.setLane(laneSegment.lane());
@@ -136,11 +123,11 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     }
     
     /**
-     * Gets the new cyclic lane index for entering.
+     * Gets the new cyclic lane for entering.
      * 
      * @param iLane
      *            the i lane
-     * @return the new cyclic lane index for entering
+     * @return the new cyclic lane for entering
      */
     protected int getNewCyclicLaneForEntering(int iLane) {
         return (iLane == roadSegment.laneCount()) ? Lanes.MOST_INNER_LANE : iLane + Lanes.TO_RIGHT;

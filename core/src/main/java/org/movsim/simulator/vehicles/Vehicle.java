@@ -182,7 +182,7 @@ public class Vehicle {
     /** can be null */
     private EnergyFlowModel fuelModel;
     /** can be null */
-    private final Route route;
+    private Route route;
 
     private boolean isBrakeLightOn;
 
@@ -244,7 +244,7 @@ public class Vehicle {
     }
 
     public Vehicle(String label, LongitudinalModelBase longitudinalModel, VehiclePrototypeConfiguration vehInput,
-            @Nullable LaneChangeModel lcModel, @Nullable Route route) {
+            @Nullable LaneChangeModel lcModel) {
         Preconditions.checkNotNull(longitudinalModel);
         Preconditions.checkNotNull(vehInput);
         this.label = label;
@@ -263,7 +263,6 @@ public class Vehicle {
         if (laneChangeModel != null) {
             laneChangeModel.initialize(this);
         }
-        this.route = route;
         trafficLightApproaching = new TrafficLightApproaching();
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
@@ -1226,6 +1225,10 @@ public class Vehicle {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public void setRoute(Route route) {
+        this.route = route;
     }
 
 }

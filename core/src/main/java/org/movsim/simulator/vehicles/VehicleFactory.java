@@ -22,7 +22,7 @@ import com.google.common.base.Preconditions;
 // singleton property
 public final class VehicleFactory {
     private static final Logger LOG = LoggerFactory.getLogger(VehicleFactory.class);
-    
+
     private final Map<String, VehiclePrototype> vehiclePrototypes = new HashMap<>();
 
     private Map<String, Route> routes;
@@ -30,8 +30,7 @@ public final class VehicleFactory {
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
     public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes,
-            @Nullable Consumption consumption,
-            Map<String, Route> routes) {
+            @Nullable Consumption consumption, Map<String, Route> routes) {
         Preconditions.checkNotNull(vehPrototypes);
         Preconditions.checkNotNull(routes);
 
@@ -46,7 +45,7 @@ public final class VehicleFactory {
             writeFundamentalDiagrams(simulationTimestep);
         }
     }
-    
+
     // set route explicitely, e.g. in microscopic initial or boundary conditions
     public Vehicle create(VehicleType vehicleType, @Nullable Route route) {
         VehiclePrototype prototype = getPrototype(vehicleType.getVehiclePrototypeLabel());
@@ -54,20 +53,21 @@ public final class VehicleFactory {
         accelerationModel.setRelativeRandomizationV0(vehicleType.getRelativeV0Randomization(),
                 vehicleType.getV0DistributionType());
         LaneChangeModel laneChangeModel = prototype.createLaneChangeModel();
-        
-        Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
-                laneChangeModel, route);
 
+        Vehicle vehicle = new Vehicle(prototype.getLabel(), accelerationModel, prototype.getConfiguration(),
+                laneChangeModel);
+
+        vehicle.setRoute(route);
         vehicle.setMemory(prototype.createMemoryModel());
         vehicle.setNoise(prototype.createAccNoiseModel());
         vehicle.setFuelModel(prototype.getEnergyFlowModel());
         return vehicle;
     }
-    
+
     // route is determined via the traffic composition
     public Vehicle create(VehicleType vehicleType) {
         Route route = null;
-        if(vehicleType.hasRouteLabel()){
+        if (vehicleType.hasRouteLabel()) {
             route = routes.get(vehicleType.getRouteLabel());
             if (route == null) {
                 throw new IllegalArgumentException("route for label=" + vehicleType.getRouteLabel()
@@ -99,8 +99,7 @@ public final class VehicleFactory {
 
     public VehiclePrototype getPrototype(String label) {
         if (!vehiclePrototypes.containsKey(label)) {
-            throw new IllegalArgumentException("cannot create vehicle for unknown label =\""
-                    + label);
+            throw new IllegalArgumentException("cannot create vehicle for unknown label =\"" + label);
         }
         return vehiclePrototypes.get(label);
     }
@@ -108,7 +107,7 @@ public final class VehicleFactory {
     public Iterable<String> getLabels() {
         return Collections.unmodifiableCollection(vehiclePrototypes.keySet());
     }
-    
+
     private void writeFundamentalDiagrams(double simulationTimestep) {
         final String ignoreLabel = "Obstacle"; // quick hack TODO remove hack
         LOG.info("write fundamental diagrams but ignore label {}.", ignoreLabel);

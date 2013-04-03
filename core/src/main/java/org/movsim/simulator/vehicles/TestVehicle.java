@@ -22,7 +22,7 @@ public class TestVehicle {
         return vehicleType;
     }
 
-    public LongitudinalModelBase getLongModel() {
+    public LongitudinalModelBase getLongitudinalModel() {
         return longitudinalModelBase;
     }
 

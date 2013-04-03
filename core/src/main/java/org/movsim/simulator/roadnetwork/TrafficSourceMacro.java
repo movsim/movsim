@@ -121,7 +121,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram
         double minRequiredGap = 0.8 * gapAtQMax;
-        if (testVehicle.getLongModel().isCA()) {
+        if (testVehicle.getLongitudinalModel().isCA()) {
             minRequiredGap = leader.getSpeed();
         }
         if (netGapToLeader > minRequiredGap) {
