@@ -401,12 +401,8 @@ public class AppMenu extends MovSimMenuBase {
                     try {
                         simulator.loadScenarioFromXml(FileUtils.getProjectName(file),
                                 FileUtils.getCanonicalPathWithoutFilename(file));
-                    } catch (JAXBException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    } catch (SAXException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    } catch (JAXBException  | SAXException e){
+                        throw new IllegalArgumentException(e.toString());
                     }
                     uiDefaultReset();
                     trafficCanvas.forceRepaintBackground();

@@ -1,5 +1,7 @@
 package org.movsim.simulator.roadnetwork;
 
+import javax.annotation.Nullable;
+
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
@@ -54,8 +56,8 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
     final RoadSegment roadSegment;
 
-    public AbstractTrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
-        this.vehGenerator = Preconditions.checkNotNull(vehGenerator);
+    public AbstractTrafficSource(@Nullable TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
+        this.vehGenerator = vehGenerator;
         this.roadSegment = Preconditions.checkNotNull(roadSegment);
         nWait = 0;
         measuredInflow = 0;

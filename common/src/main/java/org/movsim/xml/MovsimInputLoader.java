@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.movsim.autogen.Movsim;
 import org.movsim.utilities.FileUtils;
@@ -56,15 +57,13 @@ public final class MovsimInputLoader {
         return new FileUnmarshaller<Movsim>().load(xmlFile, Movsim.class, SCENARIO_FACTORY, SCENARIO_XSD_URL);
     }
 
-    public static Movsim getInputData(File xmlFile) {
+    public static Movsim getInputData(File xmlFile)  {
         // testwise jaxb unmarshalling
         Movsim inputData = null;
         try {
             System.out.println("try to open file = " + xmlFile.getName());
             inputData = MovsimInputLoader.validateAndLoadScenarioInput(xmlFile);
-        } catch (JAXBException e) {
-            throw new IllegalArgumentException(e.toString());
-        } catch (SAXException e) {
+        } catch (JAXBException  | SAXException e){
             throw new IllegalArgumentException(e.toString());
         }
         if (inputData == null) {

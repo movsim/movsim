@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.movsim.autogen.Movsim;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;

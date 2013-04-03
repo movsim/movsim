@@ -28,6 +28,7 @@ package org.movsim;
 import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.movsim.input.MovsimCommandLine;
 import org.movsim.input.ProjectMetaData;
@@ -51,6 +52,7 @@ public class MovsimCoreMain {
      *            the command line arguments
      * @throws SAXException
      * @throws JAXBException
+     * @throws ParserConfigurationException
      */
     public static void main(String[] args) throws JAXBException, SAXException {
 

@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -217,6 +218,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param path
      * @throws JAXBException
      * @throws SAXException
+     * @throws ParserConfigurationException
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
@@ -266,6 +268,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @return
      * @throws SAXException
      * @throws JAXBException
+     * @throws ParserConfigurationException
      */
     private static boolean parseOpenDriveXml(RoadNetwork roadNetwork, ProjectMetaData projectMetaData)
             throws JAXBException, SAXException {

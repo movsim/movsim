@@ -1,16 +1,24 @@
 package org.movsim.xml;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 import com.google.common.base.Preconditions;
 
@@ -25,13 +33,6 @@ public class FileUnmarshaller<T> {
             SAXException {
         T result;
         synchronized (SYNC_OBJECT) {
-            // TODO check if <xi:include href="test2/b.xml"> could work
-            // SAXParserFactory spf = SAXParserFactory.newInstance();
-            // spf.setXIncludeAware(true);
-            // spf.setNamespaceAware(true);
-            // XMLReader xr = spf.newSAXParser().getXMLReader();
-            // SAXSource src = new SAXSource(xr, new InputSource("test.xml"));
-
             // TODO creating a JaxbContext is expensive, consider pooling.
             Unmarshaller unmarshaller = createUnmarshaller(factory, xsdFile);
             unmarshaller.setEventHandler(new XmlValidationEventHandler());
@@ -39,11 +40,42 @@ public class FileUnmarshaller<T> {
         }
         return result;
     }
+    
+//    public final T load(InputSource source, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException,
+//            SAXException, ParserConfigurationException {
+//        T result;
+//        synchronized (SYNC_OBJECT) {
+//            SAXParserFactory spf = SAXParserFactory.newInstance();
+//            spf.setXIncludeAware(true);
+//            spf.setNamespaceAware(true);
+//            XMLReader xr = spf.newSAXParser().getXMLReader();
+//            SAXSource src = new SAXSource(xr, source);
+//            Unmarshaller unmarshaller = createUnmarshaller(factory, xsdFile);
+//            unmarshaller.setEventHandler(new XmlValidationEventHandler());
+//            result = unmarshaller.unmarshal(src, clazz).getValue();
+//        }
+//        return result;
+//    }
 
     public final T load(File file, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException, SAXException {
         Preconditions.checkNotNull(xsdFile);
         return load(new StreamSource(file), clazz, factory, xsdFile);
     }
+    
+//    public final T load(File file, Class<T> clazz, Class<?> factory, URL xsdFile) throws JAXBException, SAXException, ParserConfigurationException {
+//        Preconditions.checkNotNull(file);
+//        Preconditions.checkNotNull(xsdFile);
+//        FileInputStream fileInputStream = null;
+//        try {
+//            fileInputStream = new FileInputStream(file);
+//            InputSource inputSource = new InputSource(new InputStreamReader(fileInputStream));
+//            inputSource.setEncoding("UTF-8");
+//            return load(inputSource, clazz, factory, xsdFile);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     private final Unmarshaller createUnmarshaller(final Class<?> objectFactoryClass, final URL xsdFile)
             throws JAXBException, SAXException {

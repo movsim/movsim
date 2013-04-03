@@ -178,7 +178,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         super(simulator.getSimulationRunnable());
         this.simulator = simulator;
         this.roadNetwork = simulator.getRoadNetwork();
-        this.properties = properties; 
+        this.properties = properties;
 
         initGraphicConfigFieldsFromProperties();
 
@@ -245,7 +245,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         try {
             simulator.initialize();
         } catch (JAXBException | SAXException e) {
-            throw new RuntimeException("Jaxb exception:"+e.toString());
+            throw new RuntimeException("Jaxb exception:" + e.toString());
         }
         simulator.reset();
         mouseListener.reset();
@@ -266,17 +266,15 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
      * Sets up the given traffic scenario.
      * 
      * @param scenario
-     * @throws SAXException 
-     * @throws JAXBException 
+     * @throws SAXException
+     * @throws JAXBException
      */
     public void setupTrafficScenario(String scenario, String path) {
         reset();
         try {
             simulator.loadScenarioFromXml(scenario, path);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        } catch (JAXBException | SAXException e) {
+            throw new IllegalArgumentException(e.toString());
         }
         properties = ViewProperties.loadProperties(scenario, path);
         initGraphicSettings();
@@ -841,29 +839,29 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping.PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
 
             final double gradient = slope.getGradient() * 100;
-            //if (gradient != 0) {
-                g.setColor(Color.BLACK);
-                final String text = String.valueOf((int) (gradient)) + " %";
-                final int textWidth = fontMetrics.stringWidth(text);
-                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
+            // if (gradient != 0) {
+            g.setColor(Color.BLACK);
+            final String text = String.valueOf((int) (gradient)) + " %";
+            final int textWidth = fontMetrics.stringWidth(text);
+            g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
 
-//            } else {
-//                // Draw a line between points (x1,y1) and (x2,y2)
-//                // draw speed limit clearing
-//                g.setColor(Color.BLACK);
-//                g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
-//                g.setColor(Color.WHITE);
-//                g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
-//                        2 * whiteRadius2);
-//                g.setColor(Color.BLACK);
-//                final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
-//                final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
-//                final Graphics2D g2 = g;
-//                final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
-//                        (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
-//                g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
-//                g2.draw(line);
-//            }
+            // } else {
+            // // Draw a line between points (x1,y1) and (x2,y2)
+            // // draw speed limit clearing
+            // g.setColor(Color.BLACK);
+            // g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
+            // g.setColor(Color.WHITE);
+            // g.fillOval((int) posTheta.x - whiteRadius2, (int) posTheta.y - whiteRadius2, 2 * whiteRadius2,
+            // 2 * whiteRadius2);
+            // g.setColor(Color.BLACK);
+            // final int xOnCircle = (int) (whiteRadius2 * Math.cos(Math.toRadians(45.)));
+            // final int yOnCircle = (int) (whiteRadius2 * Math.sin(Math.toRadians(45.)));
+            // final Graphics2D g2 = g;
+            // final Line2D line = new Line2D.Double((int) posTheta.x - xOnCircle, (int) posTheta.y + yOnCircle,
+            // (int) posTheta.x + xOnCircle, (int) posTheta.y - yOnCircle);
+            // g2.setStroke(new BasicStroke(2)); // thicker than just one pixel when calling g.drawLine
+            // g2.draw(line);
+            // }
         }
     }
 
@@ -875,7 +873,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     private void drawRoadSectionIds(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
-            //final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
+            // final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
             final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
 
             // draw the road segment's id
@@ -908,8 +906,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(Color.BLACK);
                 StringBuilder inflowStringBuilder = new StringBuilder();
                 inflowStringBuilder.append("set/target inflow: ");
-                inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource
-                        .getTotalInflow(simulationTime())));
+                inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.getTotalInflow(simulationTime())));
                 inflowStringBuilder.append("/");
                 inflowStringBuilder.append((int) (Units.INVS_TO_INVH * trafficSource.measuredInflow()));
                 inflowStringBuilder.append(" veh/h");
@@ -940,8 +937,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 g.setColor(sinkColor);
                 posTheta = roadMapping.endPos();
                 g.fillOval((int) posTheta.x - radius / 2, (int) posTheta.y - radius / 2, radius, radius);
-                String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow())
-                        + " veh/h";
+                String outflowString = "outflow: " + (int) (Units.INVS_TO_INVH * sink.measuredOutflow()) + " veh/h";
                 g.drawString(outflowString, (int) (posTheta.x) + radius / 2, (int) (posTheta.y) + radius / 2);
             }
         }

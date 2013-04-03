@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.movsim.network.autogen.opendrive.Lane;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
@@ -53,6 +54,7 @@ public class OpenDriveHandlerJaxb {
      * @return true if the road network file exists and was successfully parsed, false otherwise.
      * @throws JAXBException
      * @throws SAXException
+     * @throws ParserConfigurationException
      */
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException {
         OpenDRIVE openDriveNetwork = NetworkLoadAndValidation.validateAndLoadOpenDriveNetwork(new File(filename));
@@ -221,8 +223,7 @@ public class OpenDriveHandlerJaxb {
                                 + roadId);
             }
             if (laneType == Lanes.LaneSectionType.LEFT && lane.getId() < 0) {
-                throw new IllegalArgumentException(
-"lane indices of a <laneSection><left> must be positive in roadId="
+                throw new IllegalArgumentException("lane indices of a <laneSection><left> must be positive in roadId="
                         + roadId);
             }
             if (laneType == Lanes.LaneSectionType.RIGHT && lane.getId() > 0) {
