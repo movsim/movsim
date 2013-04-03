@@ -544,11 +544,6 @@
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="TrafficSink">
-        <xs:complexType>
-            <xs:attribute name="logging" type="xs:boolean" default="false" />
-        </xs:complexType>
-    </xs:element>
     <xs:element name="Inflow">
 		 <xs:annotation>
         <xs:documentation>Time-dependent macroscopic boundary conditions given by a demand per time (ie traffic flow q) and a defined traffic composition.</xs:documentation>
@@ -577,6 +572,20 @@
             <xs:attribute name="column_lane" type="positiveInteger" />
             <xs:attribute name="column_comment" type="positiveInteger" />
             <xs:attribute name="column_separator" type="xs:string" default=";" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TrafficSink">
+        <xs:complexType>
+			<xs:sequence>
+			  <xs:element ref="Parking" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+            <xs:attribute name="logging" type="xs:boolean" default="false" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Parking">
+        <xs:complexType>
+            <xs:attribute name="source_road_id" type="xs:string" use="required" />
+            <xs:attribute name="time_delay" type="positiveDouble" default="60" />
         </xs:complexType>
     </xs:element>
     <xs:element name="FlowConservingInhomogeneities">

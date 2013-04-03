@@ -230,7 +230,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * 
      * @return the traffic source
      */
-    public final AbstractTrafficSource getTrafficSource() {
+    public final AbstractTrafficSource trafficSource() {
         return trafficSource;
     }
 
@@ -241,7 +241,8 @@ public class RoadSegment implements Iterable<Vehicle> {
      *            the traffic source
      */
     public final void setTrafficSource(AbstractTrafficSource trafficSource) {
-        assert trafficSource != null;
+        Preconditions.checkArgument(this.trafficSource == null, "roadSegment=" + id()
+                + " already has a traffic source.");
         this.trafficSource = trafficSource;
     }
 
@@ -593,6 +594,19 @@ public class RoadSegment implements Iterable<Vehicle> {
             removedVehicleCount += laneSegment.removeVehiclesPastEnd(sink);
         }
         return removedVehicleCount;
+    }
+
+    /**
+     * Returns all vehicles that have moved past the end of this road segment.
+     * 
+     * @return the number of vehicles removed
+     */
+    public Iterable<Vehicle> getVehiclesPastEnd() {
+        ArrayList<Vehicle> vehiclesPastEnd = new ArrayList<>();
+        for (final LaneSegment laneSegment : laneSegments) {
+            vehiclesPastEnd.addAll(laneSegment.getVehiclesPastEnd(sink));
+        }
+        return vehiclesPastEnd;
     }
 
     /**

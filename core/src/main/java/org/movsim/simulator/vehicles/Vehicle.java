@@ -94,7 +94,7 @@ public class Vehicle {
      */
     public static final int ID_NOT_SET = -1;
     private static final int VEHICLE_NUMBER_NOT_SET = -1;
-    private static final int LANE_NOT_SET = -1;
+    public static final int LANE_NOT_SET = -1;
 
     /**
      * 'Not Set' road segment id value, guaranteed not to be used by any vehicles.

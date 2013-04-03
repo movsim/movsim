@@ -900,7 +900,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping.PosTheta posTheta;
 
             // draw the road segment source, if there is one
-            final AbstractTrafficSource trafficSource = roadSegment.getTrafficSource();
+            final AbstractTrafficSource trafficSource = roadSegment.trafficSource();
             if (trafficSource != null) {
                 g.setColor(sourceColor);
                 posTheta = roadMapping.startPos();

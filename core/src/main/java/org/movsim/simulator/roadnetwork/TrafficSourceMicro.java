@@ -1,9 +1,9 @@
 package org.movsim.simulator.roadnetwork;
 
-import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -15,82 +15,51 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
 
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMicro.class);
 
-    private final List<MicroInflowRecord> inflowQueue;
-
-    private MicroInflowRecord nextInflowRecord;
+    private final SortedMap<Long, Vehicle> vehicleQueue = new TreeMap<>();
 
     private Map<String, Route> routes;
 
-    public TrafficSourceMicro(TrafficCompositionGenerator vehGenerator, Map<String, Route> routes,
-            RoadSegment roadSegment, List<MicroInflowRecord> inflowQueue) {
+    public TrafficSourceMicro(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
         super(vehGenerator, roadSegment);
-        this.routes = routes;
-        this.inflowQueue = inflowQueue;
-        createVehicleFromInput();
     }
 
-    private void createVehicleFromInput() {
-        for (MicroInflowRecord record : inflowQueue) {
-            final Vehicle vehicle = vehGenerator.createVehicle(record.getTypeLabel());
-            record.setVehicle(vehicle);
-            if (record.hasRoute()) {
-                Preconditions.checkArgument(routes.containsKey(record.getRoute()), "route=" + record.getRoute()
-                        + " in microscopic boundary input on roadSegment=" + roadSegment.id() + " not defined!");
-                Route route = routes.get(record.getRoute());
-                LOG.info("overwrites vehicle's default route by route provided by input file: route={}",
-                        route.getName());
-                vehicle.setRoute(route);
-            }
-            if (record.hasComment()) {
-                vehicle.setInfoComment(record.getComment());
-            }
-            if (record.hasLength()) {
-                vehicle.setLength(record.getLength());
-            }
-            if (record.hasWeight()) {
-                vehicle.setWeight(record.getWeight());
-            }
-            if (record.hasLength() || record.hasWeight()) {
-                LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
-                        vehicle.getWeight());
-            }
+    public void addVehicleToQueue(long time, Vehicle vehicle) {
+        Preconditions.checkArgument(vehicleQueue.put(time, vehicle) == null);
+        LOG.debug("added vehicle with (re)entering-time={}, queueSize={}", time, vehicleQueue.size());
+        vehicle.setSpeed(0);
+        showQueue();
+    }
+
+    private void showQueue() {
+        for (Long entryTime : vehicleQueue.keySet()) {
+            LOG.debug("entryTime={}", entryTime);
         }
     }
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         calcApproximateInflow(dt);
-        nextInflowRecord = getNextVehicleRecord(simulationTime);
-        if (nextInflowRecord != null) {
-            int testLane = nextInflowRecord.hasLane() ? nextInflowRecord.getLane()
+        if(vehicleQueue.isEmpty()){
+            return;
+        }
+        Long entryTime = vehicleQueue.firstKey();
+        if(simulationTime >= entryTime.longValue()){
+            Vehicle vehicle = vehicleQueue.get(entryTime);
+            int testLane = (vehicle.lane() != Vehicle.LANE_NOT_SET) ? vehicle.lane()
                     : getNewCyclicLaneForEntering(laneEnterLast);
             LaneSegment laneSegment = roadSegment.laneSegment(testLane);
-            Vehicle vehicle = nextInflowRecord.getVehicle();
             final boolean isEntered = tryEnteringNewVehicle(vehicle, laneSegment);
             if (isEntered) {
-                nextInflowRecord = null;
+                vehicleQueue.remove(entryTime);
                 incrementInflowCount(1);
                 recordData(simulationTime, 0);
             }
         }
     }
 
-    private MicroInflowRecord getNextVehicleRecord(double simulationTime) {
-        MicroInflowRecord microInflowRecord = nextInflowRecord;
-        if (microInflowRecord != null) {
-            // not yet entered
-            return microInflowRecord;
-        }
-        if (!inflowQueue.isEmpty() && inflowQueue.get(0).getTime() < simulationTime) {
-            microInflowRecord = inflowQueue.get(0);
-            inflowQueue.remove(0);
-        }
-        return microInflowRecord;
-    }
-
     private boolean tryEnteringNewVehicle(Vehicle vehicle, LaneSegment laneSegment) {
         Vehicle leader = laneSegment.rearVehicle();
-        double vEnter = nextInflowRecord.hasSpeed() ? nextInflowRecord.getSpeed() : 0;
+        double vEnter = vehicle.getSpeed();
         if (leader == null) {
             enterVehicle(laneSegment, vEnter, vehicle);
             return true;
@@ -111,17 +80,8 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         return false;
     }
 
-    /**
-     * Enter vehicle on empty road.
-     * 
-     * @param laneSegment
-     * @param time
-     *            the time
-     * @param vehPrototype
-     *            the vehicle prototype
-     */
     private void enterVehicle(LaneSegment laneSegment, double vEnter, Vehicle vehicle) {
-        final double xEnter = 0;
+        double xEnter = 0;
         initVehicle(laneSegment, xEnter, vEnter, vehicle);
         LOG.info("add vehicle from upstream boundary to empty road: xEnter={}, vEnter={}", xEnter, vEnter);
     }

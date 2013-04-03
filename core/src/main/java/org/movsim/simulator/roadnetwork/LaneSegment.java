@@ -27,6 +27,7 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.movsim.simulator.vehicles.Vehicle;
@@ -298,6 +299,7 @@ public class LaneSegment implements Iterable<Vehicle> {
 
     /**
      * Removes any vehicles that have moved past the end of this road segment.
+     * 
      * @return the number of vehicles removed
      */
     public int removeVehiclesPastEnd(TrafficSink sink) {
@@ -313,6 +315,16 @@ public class LaneSegment implements Iterable<Vehicle> {
             ++count;
         }
         return count;
+    }
+
+    public Collection<? extends Vehicle> getVehiclesPastEnd(TrafficSink sink) {
+        ArrayList<Vehicle> vehiclesPastEnd = new ArrayList<>();
+        int index = 0;
+        while (index < vehicles.size() && vehicles.get(index).getRearPosition() > roadSegment.roadLength()) {
+            vehiclesPastEnd.add(vehicles.get(index));
+            index++;
+        }
+        return vehiclesPastEnd;
     }
 
     /**

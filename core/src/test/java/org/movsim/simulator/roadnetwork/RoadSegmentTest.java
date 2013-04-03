@@ -142,7 +142,7 @@ public class RoadSegmentTest {
         final RoadSegment roadSegment = new RoadSegment(roadLength, laneCount);
         assertEquals(roadLength, roadSegment.roadLength(), delta);
         assertEquals(laneCount, roadSegment.laneCount());
-        assertEquals(null, roadSegment.getTrafficSource());
+        assertEquals(null, roadSegment.trafficSource());
         assertEquals(null, roadSegment.sink());
     }
 
@@ -158,7 +158,7 @@ public class RoadSegmentTest {
         final RoadSegment r = new RoadSegment(m);
         assertEquals(roadLength, r.roadLength(), delta);
         assertEquals(laneCount, r.laneCount());
-        assertEquals(null, r.getTrafficSource());
+        assertEquals(null, r.trafficSource());
         assertEquals(null, r.sink());
     }
 
@@ -187,7 +187,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#getTrafficSource()}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#trafficSource()}
      */
     @Test
     public final void testGetTrafficSource() {

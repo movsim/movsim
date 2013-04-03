@@ -39,9 +39,11 @@ import org.movsim.autogen.InitialConditions;
 import org.movsim.autogen.MacroIC;
 import org.movsim.autogen.MicroIC;
 import org.movsim.autogen.Movsim;
+import org.movsim.autogen.Parking;
 import org.movsim.autogen.Road;
 import org.movsim.autogen.Routes;
 import org.movsim.autogen.Simulation;
+import org.movsim.autogen.TrafficSink;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
@@ -55,8 +57,7 @@ import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
-import org.movsim.simulator.roadnetwork.MicroInflowQueue;
-import org.movsim.simulator.roadnetwork.MicroInflowQueue.MicroInflowRecord;
+import org.movsim.simulator.roadnetwork.MicroInflowFileReader;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
@@ -113,7 +114,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     public void initialize() throws JAXBException, SAXException {
-        LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011, 2012)");
+        LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
         projectName = projectMetaData.getProjectName();
         // TODO temporary handling of Variable Message Sign until added to XML
@@ -139,7 +140,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights());
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
                 inputData.getConsumption(), routes);
-
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
@@ -302,11 +302,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             if (trafficSourceData.isSetInflow()) {
                 InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(trafficSourceData.getInflow());
                 trafficSource = new TrafficSourceMacro(composition, roadSegment, inflowTimeSeries);
-            }
-            else if(trafficSourceData.isSetInflowFromFile()){
-                List<MicroInflowRecord> inflowQueue = MicroInflowQueue.readData(trafficSourceData.getInflowFromFile(),
-                        roadSegment.laneCount() - 1, timeOffsetMillis);
-                trafficSource = new TrafficSourceMicro(composition, routes, roadSegment, inflowQueue);
+            } else if (trafficSourceData.isSetInflowFromFile()) {
+                trafficSource = new TrafficSourceMicro(composition, roadSegment);
+                MicroInflowFileReader reader = new MicroInflowFileReader(trafficSourceData.getInflowFromFile(),
+                        roadSegment.laneCount(), timeOffsetMillis, routes, (TrafficSourceMicro) trafficSource);
+                reader.readData();
             }
             if (trafficSource != null) {
                 if (trafficSourceData.isLogging()) {
@@ -314,6 +314,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 }
                 roadSegment.setTrafficSource(trafficSource);
             }
+        }
+
+        // set up the traffic sink
+        if (roadInput.isSetTrafficSink()) {
+            createParkingSink(roadInput.getTrafficSink(), roadSegment);
         }
 
         // set up simple ramp with dropping mechanism
@@ -345,6 +350,23 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         roadSegment.setTrafficLights(trafficLights);
 
         // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
+    }
+
+    private void createParkingSink(TrafficSink trafficSink, RoadSegment roadSegment) {
+        // setup source which models the re-entrance of vehicles leaving the parking lot
+        if (!trafficSink.isSetParking()) {
+            return;
+        }
+        Parking parking = trafficSink.getParking();
+        RoadSegment sourceRoadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(parking.getSourceRoadId()),
+                "cannot find roadSegment=" + parking.getSourceRoadId() + " specified as re-entrance from the road="
+                        + roadSegment.id());
+        TrafficSourceMicro trafficSource = new TrafficSourceMicro(defaultTrafficComposition, sourceRoadSegment);
+        if (trafficSink.isLogging()) {
+            trafficSource.setRecorder(new FileTrafficSourceData(sourceRoadSegment.userId()));
+        }
+        sourceRoadSegment.setTrafficSource(trafficSource);
+        roadSegment.sink().setupParkingLot(parking, timeOffsetMillis, trafficSource);
     }
 
     private static void initialConditions(RoadSegment roadSegment, InitialConditions initialConditions,
@@ -416,8 +438,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                 position -= posDecrement;
 
                 if (position <= posDecrement) {
-                    LOG.debug("leave minimum gap at origin of road segment and start with next lane, pos={}",
-                            position);
+                    LOG.debug("leave minimum gap at origin of road segment and start with next lane, pos={}", position);
                     break;
                 }
                 final Vehicle leader = laneSegment.rearVehicle();
@@ -438,8 +459,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                             speedInit);
                     roadSegment.addVehicle(veh);
                 } else {
-                    LOG.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position,
-                            speedInit);
+                    LOG.debug("cannot add vehicle due to gap constraints at pos={} with speed={}.", position, speedInit);
                 }
 
             }
@@ -471,9 +491,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             LOG.info(String.format("set vehicle with label = %s on lane=%d with front at x=%.2f, speed=%.2f",
                     veh.getLabel(), veh.lane(), veh.getFrontPosition(), veh.getSpeed()));
             if (veh.getLongitudinalModel().isCA()) {
-                LOG.info(String.format(
-                        "and for the CA in physical quantities: front position at x=%.2f, speed=%.2f", veh
-                                .physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
+                LOG.info(String.format("and for the CA in physical quantities: front position at x=%.2f, speed=%.2f",
+                        veh.physicalQuantities().getFrontPosition(), veh.physicalQuantities().getSpeed()));
             }
         }
     }

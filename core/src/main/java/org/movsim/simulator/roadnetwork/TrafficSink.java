@@ -26,6 +26,7 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.autogen.Parking;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Units;
@@ -37,14 +38,14 @@ import org.slf4j.LoggerFactory;
  */
 public class TrafficSink implements SimulationTimeStep {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(TrafficSink.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficSink.class);
     
     // For sinks roadSegment is the source road
     protected RoadSegment roadSegment;
     // measure actual outflow 
     private static final double MEASURING_INTERVAL_S = 60.0;
-    private int vechiclesRemovedInInterval;
+    private int vehiclesRemovedInInterval;
     private double measuredOutflow;
     private double measuredTime;
     private double dQ;
@@ -52,6 +53,9 @@ public class TrafficSink implements SimulationTimeStep {
     private double totalVehicleTravelDistance;
     private double totalVehicleTravelTime;
     private double totalVehicleFuelUsedLiters;
+
+    private TrafficSourceMicro reEntranceTrafficSource;
+    private double timeDelayReentrance;
 
     /**
      * Constructor.
@@ -140,14 +144,29 @@ public class TrafficSink implements SimulationTimeStep {
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        vechiclesRemovedInInterval += sourceRoad().removeVehiclesPastEnd();
+        if (reEntranceTrafficSource != null) {
+            addVehiclesToSource(simulationTime, sourceRoad().getVehiclesPastEnd());
+        }
+        vehiclesRemovedInInterval += sourceRoad().removeVehiclesPastEnd();
         measuredTime += dt;
         if (measuredTime > MEASURING_INTERVAL_S) {
-            measuredOutflow = vechiclesRemovedInInterval / MEASURING_INTERVAL_S; // vehicles per second
-            vechiclesRemovedInInterval = 0;
+            measuredOutflow = vehiclesRemovedInInterval / MEASURING_INTERVAL_S; // vehicles per second
+            vehiclesRemovedInInterval = 0;
             measuredTime = 0.0;
-            logger.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", 
+            LOG.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", 
                     sourceRoad().id(), measuredOutflow*Units.INVS_TO_INVH);
         }
+    }
+
+    private void addVehiclesToSource(double simulationTime, Iterable<Vehicle> vehiclesPastEnd) {
+        for (Vehicle vehicle : vehiclesPastEnd) {
+            long reEntranceTime = (long) (simulationTime + timeDelayReentrance);
+            reEntranceTrafficSource.addVehicleToQueue(reEntranceTime, vehicle);
+        }
+    }
+
+    public void setupParkingLot(Parking parking, long timeOffsetMillis, TrafficSourceMicro trafficSource) {
+        this.reEntranceTrafficSource = trafficSource;
+        this.timeDelayReentrance = parking.getTimeDelay();
     }
 }

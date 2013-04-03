@@ -389,6 +389,7 @@ public class OpenDriveHandlerJaxb {
     private static void addDefaultSinksForUnconnectedRoad(RoadNetwork roadNetwork) {
         // finally iterate through all the road segments assigning a default sink to
         // any road segment with no sink connections
+        int countSinks = 0;
         for (RoadSegment roadSegment : roadNetwork) {
             int laneCount = roadSegment.laneCount();
             boolean hasSink = false;
@@ -398,9 +399,11 @@ public class OpenDriveHandlerJaxb {
                     break;
                 }
             }
-            if (hasSink == false) {
+            if (!hasSink) {
+                countSinks++;
                 roadSegment.setSink(new TrafficSink(roadSegment));
             }
         }
+        LOG.info("added {} default sinks to unconnected roads.", countSinks);
     }
 }

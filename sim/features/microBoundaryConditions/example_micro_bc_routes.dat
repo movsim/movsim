@@ -1,8 +1,8 @@
 # example for microscopic boundary conditions
 # time, type, init speed [km/h], route, length, weight, comment
 2013-02-01T00:00:20, ACC1, 100, main, 10, 1000,  car1
-2013-02-01T00:00:40, ACC1, 0, exit, 20, 2000, car2 with comment
 2013-02-01T00:01:00, ACC2, 50, main, 30, 3000, car3
+2013-02-01T00:00:40, ACC1, 0, exit, 20, 2000, car2 with comment
 2013-02-01T00:01:20, ACC2, 0, exit, 40, 4000, 
 2013-02-01T00:01:30, ACC2, 0, exit, 30, 3000, comment
 2013-02-01T00:01:40, ACC2, 0, exit, 20, 2000, comment

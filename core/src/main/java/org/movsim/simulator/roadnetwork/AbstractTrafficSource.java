@@ -8,6 +8,7 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 
 public abstract class AbstractTrafficSource implements SimulationTimeStep {
 
@@ -49,14 +50,13 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     /** number of vehicles in the queue as result from integration over demand minus inserted vehicles. */
     double nWait;
 
-
     final TrafficCompositionGenerator vehGenerator;
 
     final RoadSegment roadSegment;
 
     public AbstractTrafficSource(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
-        this.vehGenerator = vehGenerator;
-        this.roadSegment = roadSegment;
+        this.vehGenerator = Preconditions.checkNotNull(vehGenerator);
+        this.roadSegment = Preconditions.checkNotNull(roadSegment);
         nWait = 0;
         measuredInflow = 0;
         measuredTime = 0;
@@ -112,7 +112,9 @@ public abstract class AbstractTrafficSource implements SimulationTimeStep {
     protected void initVehicle(LaneSegment laneSegment, double frontPosition, double speed, final Vehicle vehicle) {
         vehicle.setFrontPosition(frontPosition);
         vehicle.setSpeed(speed);
-        vehicle.setLane(laneSegment.lane());
+        if (vehicle.lane() != laneSegment.lane()) {
+            vehicle.setLane(laneSegment.lane());
+        }
         vehicle.setRoadSegment(roadSegment.id(), roadSegment.roadLength());
         laneSegment.addVehicle(vehicle);
         // status variables of entering vehicle for logging
