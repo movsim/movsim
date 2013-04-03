@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- (c) Arne Kesting, Ralph Germ, Martin Budden, Martin Treiber (2012) -->
 <Movsim>
-    <!-- <ConsumptionCalculation_CONSUMPTION>
-        <CONSUMPTION_MODEL label="carDiesel">
-            <CAR mass="1500" cross_section_surface="2.2" cd_value="0.32" electric_power="3000" const_friction="0.015" v_friction="0" dynamic_tyre_radius="0.31" />
-            <ENGINE max_power_kW="90" cylinder_vol_l="1.4" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="185" pe_min_bar="1" pe_max_bar="22" idle_rotation_rate_invmin="900" max_rotation_rate_invmin="4500">
-                <GEAR_RATIOS>
-                    <GEAR_RATIO phi="16.7" />
-                    <GEAR_RATIO phi="10.1" />
-                    <GEAR_RATIO phi="6.8" />
-                    <GEAR_RATIO phi="5.0" />
-                    <GEAR_RATIO phi="3.8" />
-                    <GEAR_RATIO phi="3.1" />
-                    <GEAR_RATIO phi="2.6" />
-                </GEAR_RATIOS>
-            </ENGINE>
-        </CONSUMPTION_MODEL> 
-    </ConsumptionCalculation_CONSUMPTION>
-    -->
+   <Consumption>
+        <ConsumptionModels>
+            <ConsumptionModel label="carDiesel" output="false">
+                <VehicleData mass="1500" cross_section_surface="2.2" cd_value="0.32" const_friction="0.015" v_friction="0" electric_power="1500" />
+                <EngineCombustionMap max_power_kW="100" cylinder_vol_l="1.8" idle_cons_rate_linvh="0.8" cspec_min_g_per_kwh="225" pe_min_bar="1" pe_max_bar="22" />
+                <RotationModel idle_rotation_rate_invmin="700" max_rotation_rate_invmin="4500" dynamic_tyre_radius="0.31">
+                    <!-- gear box with 7 gears -->
+                    <GearRatio phi="16.7" />
+                    <GearRatio phi="10.1" />
+                    <GearRatio phi="6.8" />
+                    <GearRatio phi="5.0" />
+                    <GearRatio phi="3.8" />
+                    <GearRatio phi="3.1" />
+                    <GearRatio phi="2.6" />
+                </RotationModel>
+            </ConsumptionModel>
+        </ConsumptionModels>
+    </Consumption>
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="40" consumption_model_name="carDiesel">
             <AccelerationModelType>
