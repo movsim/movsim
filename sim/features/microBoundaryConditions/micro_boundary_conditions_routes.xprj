@@ -19,7 +19,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="offramp_1lane.xodr">
+    <Scenario network_filename="offramp_onramp_1lane.xodr">
         <Simulation timestep="0.2" duration="1200" seed="42" time_offset="2013-02-01T00:00:00Z">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.6" relative_v0_randomization="0.2" route_label="main"/>
