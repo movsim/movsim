@@ -87,8 +87,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private final ProjectMetaData projectMetaData;
     private String projectName;
-    private Movsim inputData; // cannot be final, parsing in init TODO
-    // private FuelConsumptionModelPool fuelConsumptionModelPool; TODO
+    private Movsim inputData;
 
     private VehicleFactory vehicleFactory;
     private TrafficCompositionGenerator defaultTrafficComposition;
@@ -98,7 +97,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private Map<String, Route> routes;
     private final SimulationRunnable simulationRunnable;
     private int obstacleCount;
-    long timeOffsetMillis;
+    private long timeOffsetMillis;
+
     /**
      * Constructor.
      * 
@@ -220,10 +220,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      */
     public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
-
-        // String scenario = scenarioWithEnding.substring(0, scenarioWithEnding.length() - 4);
-        // System.out.println("scenario = " + scenario);
-
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
         initialize();
