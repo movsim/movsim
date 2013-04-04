@@ -24,13 +24,14 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private int currentPhaseIndex = 0;
 
+    private double currentPhaseDuration;
+
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
     TrafficLightControlGroup(ControllerGroup controllerGroup) {
         Preconditions.checkNotNull(controllerGroup);
         phases = controllerGroup.getPhase();
         createTrafficlights();
-        // countPossibleLightStates
     }
 
     private void createTrafficlights() {
@@ -47,6 +48,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
+        currentPhaseDuration += dt;
         determinePhase();
         updateTrafficLights();
         if (recordDataCallback != null) {
@@ -54,8 +56,21 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         }
     }
 
+    @Override
+    public void nextPhase() {
+        LOG.debug("triggered next phase for controller group.");
+        currentPhaseDuration = 0; // reset
+        setNextPhaseIndex();
+    }
+
     private void determinePhase() {
-        // TODO
+        Phase phase = phases.get(currentPhaseIndex);
+        if (phase.isSetDuration() && currentPhaseDuration > phase.getDuration()) {
+            nextPhase();
+        }
+        if (!phase.isSetDuration()) {
+            // TODO
+        }
     }
 
     private void updateTrafficLights() {
@@ -71,12 +86,6 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     Iterable<TrafficLight> trafficLights() {
         return ImmutableList.copyOf(trafficLightIterator());
-    }
-
-    @Override
-    public void nextPhase() {
-        LOG.debug("triggered next phase for controller group.");
-        setNextPhaseIndex();
     }
 
     private void setNextPhaseIndex() {

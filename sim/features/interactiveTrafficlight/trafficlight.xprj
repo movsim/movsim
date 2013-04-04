@@ -44,7 +44,7 @@
         </Simulation>
         <TrafficLights>
 <!-- 					<TrafficLight id="tl_1" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" /> -->
-<ControllerGroup name="single trafficlight" offset="0" >
+<ControllerGroup name="single trafficlight" >
   <Phase duration="35"> 
     <TrafficLightState id="tl_1" status="GREEN" />
   </Phase>
