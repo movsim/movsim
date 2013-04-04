@@ -34,7 +34,6 @@ import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
@@ -641,32 +640,36 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-
-        // first find next downstream traffic light
-        TrafficLightLocation trafficLightLocation = roadSegment
-                .getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
+        TrafficLightLocation trafficLightLocation = findNextDownstreamTrafficlight(roadSegment);
         if (trafficLightLocation != null) {
-            TrafficLight trafficLight = trafficLightLocation.getTrafficLight();
-            double distance = trafficLightLocation.position() - getFrontPosition();
-            updateTrafficLightApproaching(trafficLight, distance);
-            return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
-                    trafficLightApproaching.accApproaching()) : acc;
-        }
-        // check also traffic light on next sink road segment as look-ahead horizon
-        // !!! only one segment is checked ahead which may be too short-sighted in some situations
-        RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane());
-        if (sinkRoadSegment != null) {
-            trafficLightLocation = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
-            if (trafficLightLocation != null) {
-                TrafficLight trafficLight = trafficLightLocation.getTrafficLight();
-                double distance = trafficLightLocation.position() + roadSegment.roadLength() - getFrontPosition();
-                updateTrafficLightApproaching(trafficLight, distance);
-                return trafficLightApproaching.considerTrafficLight() ? Math.min(acc,
-                        trafficLightApproaching.accApproaching()) : acc;
+            double distance;
+            if (trafficLightLocation.getTrafficLight().roadSegment() == roadSegment) {
+                // trafficlight located on actual roadsegment
+                distance = trafficLightLocation.position() - getFrontPosition();
+            } else {
+                // traffic light located on next downstream roadsegment
+                distance = trafficLightLocation.position() + roadSegment.roadLength() - getFrontPosition();
+            }
+            updateTrafficLightApproaching(trafficLightLocation, distance);
+            if (trafficLightApproaching.considerTrafficLight()) {
+                moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
             }
         }
-
         return moderatedAcc;
+    }
+
+    private TrafficLightLocation findNextDownstreamTrafficlight(RoadSegment roadSegment) {
+        TrafficLightLocation trafficLightLocation = null;
+        trafficLightLocation = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
+        if (trafficLightLocation == null) {
+            // check also traffic light on next sink road segment as look-ahead horizon
+            // FIXME only one segment is checked ahead which may be too short-sighted in some situations
+            RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane());
+            if (sinkRoadSegment != null) {
+                trafficLightLocation = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
+            }
+        }
+        return trafficLightLocation;
     }
 
     /**
@@ -716,7 +719,7 @@ public class Vehicle {
             return 0.0;
         }
 
-        final double acc;
+        double acc;
 
         if (laneChangeModel != null && laneChangeModel.isInitialized() && laneChangeModel.withEuropeanRules()) {
             acc = longitudinalModel.calcAccEur(laneChangeModel.vCritEurRules(), this, laneSegment, leftLaneSegment,
@@ -787,19 +790,9 @@ public class Vehicle {
         targetLane = Lanes.NONE;
     }
 
-    /**
-     * Update.
-     * 
-     * @param simulationTime
-     *            current simulation time, seconds
-     * @param trafficLight
-     * @param distance
-     */
-    private void updateTrafficLightApproaching(TrafficLight trafficLight, double distance) {
-        if (trafficLight != null) {
-            assert distance >= 0 : distance;
-            trafficLightApproaching.update(this, trafficLight, distance, longitudinalModel);
-        }
+    private void updateTrafficLightApproaching(TrafficLightLocation trafficLightLocation, double distance) {
+        assert distance >= 0 : "distance=" + distance;
+        trafficLightApproaching.update(this, trafficLightLocation.getTrafficLight(), distance, longitudinalModel);
     }
 
     public LaneChangeModel getLaneChangeModel() {

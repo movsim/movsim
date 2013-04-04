@@ -33,21 +33,19 @@ import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.Longitudinal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TrafficLightApproachingImpl.
+ * The class TrafficLightApproaching.
+ * 
  */
 public class TrafficLightApproaching {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(TrafficLightApproaching.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
     private final double maxRangeLookAheadForTrafficlight = 1000;
     
-    /** The consider traffic light. */
     private boolean considerTrafficLight;
 
-    /** The acc traffic light. */
     private double accTrafficLight;
 
     private double distanceToTrafficlight;
@@ -73,7 +71,7 @@ public class TrafficLightApproaching {
         considerTrafficLight = false;
 
         if (distanceToTrafficlight > maxRangeLookAheadForTrafficlight) {
-            logger.debug("traffic light at distance={} to far away -- maxRangeLookAheadForTrafficlight={}",
+            LOG.debug("traffic light at distance={} to far away -- maxRangeLookAheadForTrafficlight={}",
                     distanceToTrafficlight, maxRangeLookAheadForTrafficlight);
             return;
         }
@@ -95,7 +93,7 @@ public class TrafficLightApproaching {
 
                 if (accTrafficLight < 0) {
                     considerTrafficLight = true;
-                    logger.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
+                    LOG.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
                 }
 
                 // TODO: decision logic while approaching yellow traffic light
@@ -118,7 +116,7 @@ public class TrafficLightApproaching {
                     final double minBrakeDist = (speed * speed) / (2 * maxDeceleration);
                     if (accTrafficLight <= -maxDeceleration || minBrakeDist >= distanceToTrafficlight) {
                         // ignore traffic light
-                        logger.info(String
+                        LOG.info(String
                                 .format("veh id=%d in dilemma zone is going to pass red light at distance=%.2fm due to physics (assuming user-defined max. possible braking=%.2fm/s^2!",
                                         me.getId(), distanceToTrafficlight, maxDeceleration));
                         considerTrafficLight = false;
