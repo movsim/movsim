@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficLightStatus;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,6 +56,8 @@ public class TrafficLight {
     private final TriggerCallback triggerCallback;
 
     private final Set<TrafficLightStatus> possibleStati = new HashSet<>();
+
+    private RoadSegment roadSegment;
 
     public TrafficLight(String id, TriggerCallback triggerCallback) {
         this.id = id;
@@ -104,6 +107,15 @@ public class TrafficLight {
      */
     public int lightCount() {
         return Math.min(3, possibleStati.size());
+    }
+
+    public RoadSegment roadSegment() {
+        return Preconditions.checkNotNull(roadSegment);
+    }
+
+    public void setRoadSegment(RoadSegment roadSegment) {
+        Preconditions.checkArgument(this.roadSegment == null, "roadSegment already set");
+        this.roadSegment = roadSegment;
     }
 
 }

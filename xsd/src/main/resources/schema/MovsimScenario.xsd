@@ -643,7 +643,8 @@
                 <xs:element ref="Phase" minOccurs="1" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
-            <!-- <xs:attribute name="offset" type="nonNegativeDouble" default="0" /> -->
+            <!-- spatial range for checking conditions in meters -->
+            <xs:attribute name="range" type="positiveDouble" default="100" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Phase">

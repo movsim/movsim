@@ -9,6 +9,8 @@ import org.movsim.autogen.Phase;
 import org.movsim.autogen.TrafficLightCondition;
 import org.movsim.autogen.TrafficLightState;
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +28,13 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private double currentPhaseDuration;
 
+    private final double conditionRange;
+
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
     TrafficLightControlGroup(ControllerGroup controllerGroup) {
         Preconditions.checkNotNull(controllerGroup);
+        this.conditionRange = controllerGroup.getRange();
         phases = controllerGroup.getPhase();
         createTrafficlights();
     }
@@ -65,21 +70,19 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private void determinePhase() {
         Phase phase = phases.get(currentPhaseIndex);
-        // first check if all "clear" conditions are fullfilled. otherwise do not switch to next phase
-        if (!clearConditionsFullfilled(phase)) {
-            return;
-        }
-        // first check fixed-time schedule for next phase
-        // and secondly check trigger condition for overriding fixed-time scheduler
-        if (currentPhaseDuration > phase.getDuration() || isTriggerConditionFullfilled(phase)) {
+        // first check if all "clear" conditions are fullfilled.
+        // then check fixed-time schedule for next phase
+        // and last check trigger condition for overriding fixed-time scheduler
+        if (isClearConditionsFullfilled(phase)
+                && (currentPhaseDuration > phase.getDuration() || isTriggerConditionFullfilled(phase))) {
             nextPhase();
         }
     }
 
-    private boolean clearConditionsFullfilled(Phase phase) {
+    private boolean isClearConditionsFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
-            if (state.isSetCondition() && state.getCondition() == TrafficLightCondition.CLEAR) {
-                if (!isCleared(trafficLights.get(state.getId()))) {
+            if (state.getCondition() == TrafficLightCondition.CLEAR) {
+                if (vehicleIsInFrontOfLight(trafficLights.get(state.getId()))) {
                     return false;
                 }
             }
@@ -87,15 +90,10 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         return true;
     }
 
-    private boolean isCleared(TrafficLight trafficLight) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
     private boolean isTriggerConditionFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
-            if (state.isSetCondition() && state.getCondition() == TrafficLightCondition.REQUEST) {
-                if (isRequested(trafficLights.get(state.getId()))) {
+            if (state.getCondition() == TrafficLightCondition.REQUEST) {
+                if (vehicleIsInFrontOfLight(trafficLights.get(state.getId()))) {
                     return true;
                 }
             }
@@ -103,8 +101,15 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         return false;
     }
 
-    private boolean isRequested(TrafficLight trafficLight) {
-        // TODO Auto-generated method stub
+    private boolean vehicleIsInFrontOfLight(TrafficLight trafficLight) {
+        for (LaneSegment laneSegment : trafficLight.roadSegment().laneSegments()) {
+            Vehicle vehicle = laneSegment.rearVehicle(trafficLight.position());
+            if (vehicle != null && (trafficLight.position() - vehicle.getFrontPosition() < conditionRange)) {
+                LOG.info("condition check: vehicle is in front of trafficlight: vehPos={}, trafficlightPos={}",
+                        vehicle.getFrontPosition(), trafficLight.position());
+                return true;
+            }
+        }
         return false;
     }
 

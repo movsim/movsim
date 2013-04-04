@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 /**
  * The Class FileTrajectories.
@@ -124,7 +123,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
     private void writeTrajectories(String formattedTime) {
         double positionOnRoute = 0.0;
         for (final RoadSegment roadSegment : route) {
-            for (LaneSegment laneSegment : ImmutableList.copyOf(roadSegment.laneSegmentIterator())) {
+            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
                 for (final Vehicle vehicle : laneSegment) {
                     if (vehicle.type() == Vehicle.Type.OBSTACLE) {
                         continue;

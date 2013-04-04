@@ -78,7 +78,6 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCallback {
 
@@ -400,7 +399,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         LOG.info("choose macro initial conditions: generate vehicles from macro-localDensity ");
         final InitialConditionsMacro icMacro = new InitialConditionsMacro(macroInitialConditions);
 
-        for (LaneSegment laneSegment : ImmutableList.copyOf(roadSegment.laneSegmentIterator())) {
+        for (LaneSegment laneSegment : roadSegment.laneSegments()) {
             if (laneSegment.type() != Lanes.Type.TRAFFIC) {
                 LOG.debug("no macroscopic initial conditions for non-traffic lanes (slip roads etc).");
                 continue;

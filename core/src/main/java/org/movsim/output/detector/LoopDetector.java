@@ -33,8 +33,6 @@ import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * The Class LoopDetector.
  */
@@ -153,7 +151,7 @@ public class LoopDetector implements SimulationTimeStep {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         // brute force search: iterate over all lanes
-        for (LaneSegment laneSegment : ImmutableList.copyOf(roadSegment.laneSegmentIterator())) {
+        for (LaneSegment laneSegment : roadSegment.laneSegments()) {
             for (final Vehicle vehicle : laneSegment) {
                 if ((vehicle.getFrontPositionOld() < detPosition) && (vehicle.getFrontPosition() >= detPosition)) {
                     countVehiclesAndDataForLane(laneSegment, laneSegment.lane() - 1, vehicle);

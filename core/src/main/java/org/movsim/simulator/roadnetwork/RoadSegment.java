@@ -45,11 +45,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 /**
  * <p>
- * A RoadSegment is a unidirectional stretch of road that contains a number of laneIndex segments. A bidirectional stretch of road may be
- * created by combining two road segments running in opposite directions.
+ * A RoadSegment is a unidirectional stretch of road that contains a number of lane segments. A bidirectional stretch of road may be created
+ * by combining two road segments running in opposite directions.
  * </p>
  * <p>
  * RoadSegments may be combined to form a road network.
@@ -60,14 +61,14 @@ import com.google.common.base.Preconditions;
  * and outflow will be controlled directly by source and sink objects.
  * </p>
  * <p>
- * RoadSegments are connected to each other on a laneIndex-wise basis: each sink (outgoing) laneIndex of a road segment may be connected to
- * a source (incoming) laneIndex of another road segment. This allows the forking and merging of road segments, the creation of on-ramps and
- * off-ramps. By connecting the lanes of a number of road segments in this way, complex junctions and interchanges may be created.
+ * RoadSegments are connected to each other on a lane-wise basis: each sink (outgoing) lane of a road segment may be connected to a source
+ * (incoming) lane of another road segment. This allows the forking and merging of road segments, the creation of on-ramps and off-ramps. By
+ * connecting the lanes of a number of road segments in this way, complex junctions and interchanges may be created.
  * </p>
  * <p>
  * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or winding, it just knows
  * about the vehicles it contains and what it is connected to. A vehicle's coordinates on a RoadsSegment are given by the vehicle's position
- * relative to the start of the RoadSegment and the vehicle's laneIndex.
+ * relative to the start of the RoadSegment and the vehicle's lane.
  * </p>
  * <p>
  * A RoadSegment has <code>laneCount</code> lanes. Lanes within a RoadSegment are represented by the LaneSegment class.
@@ -78,7 +79,7 @@ import com.google.common.base.Preconditions;
  * vehicle behavior, in particular a road's curvature and its gradient.
  * </p>
  */
-// TODO avoid iterating also over Vehicle.Type.OBSTACLE at laneIndex ends.
+// TODO avoid iterating also over Vehicle.Type.OBSTACLE at lane ends.
 public class RoadSegment implements Iterable<Vehicle> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadSegment.class);
@@ -293,9 +294,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Sets the type of the given laneIndex.
+     * Sets the type of the given lane.
      * 
-     * @param laneIndex
+     * @param lane
      * @param laneType
      */
     public void setLaneType(int lane, Lanes.Type laneType) {
@@ -307,11 +308,11 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the type of the given laneIndex.
+     * Returns the type of the given lane.
      * 
-     * @param laneIndex
+     * @param lane
      * 
-     * @return type of laneIndex
+     * @return type of lane
      */
     public Lanes.Type laneType(int lane) {
         return laneSegments[lane].type();
@@ -455,11 +456,11 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the number of vehicles in the given laneIndex on this road segment.
+     * Returns the number of vehicles in the given lane on this road segment.
      * 
-     * @param laneIndex
+     * @param lane
      * 
-     * @return the number of vehicles in the given laneIndex on this road segment
+     * @return the number of vehicles in the given lane on this road segment
      */
     public int getVehicleCount(int lane) {
         assert lane >= Lanes.LANE1 && lane <= laneCount;
@@ -553,30 +554,30 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     /**
      * <p>
-     * Returns the vehicle at the given index in the given laneIndex.
+     * Returns the vehicle at the given index in the given lane.
      * </p>
      * 
      * <p>
-     * In each laneIndex vehicles are sorted in order of decreasing position:
+     * In each lane vehicles are sorted in order of decreasing position:
      * </p>
      * 
      * <p>
      * V[n+1].pos < V[n].pos < V[n-1].pos ... < V[1].pos < V[0].pos
      * </p>
      * 
-     * @param laneIndex
+     * @param lane
      * @param index
      * 
-     * @return vehicle at given index in the given laneIndex
+     * @return vehicle at given index in the given lane
      */
     public Vehicle getVehicle(int lane, int index) {
         return laneSegments[lane - 1].getVehicle(index);
     }
 
     /**
-     * Removes the front vehicle on the given laneIndex.
+     * Removes the front vehicle on the given lane.
      * 
-     * @param laneIndex
+     * @param lane
      */
     public void removeFrontVehicleOnLane(int lane) {
         laneSegments[lane - 1].removeFrontVehicleOnLane();
@@ -734,7 +735,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     /**
      * Lanes change.
      * <p>
-     * For each vehicle check if a laneIndex change is desired and safe and, if so, make the laneIndex change.
+     * For each vehicle check if a lane change is desired and safe and, if so, make the lane change.
      * </p>
      * 
      * <p>
@@ -750,10 +751,10 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
         if (laneCount < 2) {
-            // need at least 2 lanes for laneIndex changing
+            // need at least 2 lanes for lane changing
             return;
         }
-        // TODO assure priority for laneIndex changes from slow to fast lanes
+        // TODO assure priority for lane changes from slow to fast lanes
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.assertInvariant();
             for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
@@ -786,7 +787,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             assert laneSegment.assertInvariant();
-            // final int leftLaneIndex = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
+            // final int leftlane = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
             final LaneSegment leftLaneSegment = null; // TODO get left laneIndex ( leftLaneIndex < vehContainers.size() ) ?
                                                       // vehContainers.get(leftLaneIndex) : null;
             for (final Vehicle vehicle : laneSegment) {
@@ -878,20 +879,20 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the rear vehicle on the given laneIndex.
+     * Returns the rear vehicle on the given lane.
      * 
-     * @param laneIndex
-     * @return the rear vehicle on the given laneIndex
+     * @param lane
+     * @return the rear vehicle on the given lane
      */
     public Vehicle rearVehicleOnLane(int lane) {
         return laneSegments[lane - 1].rearVehicle();
     }
 
     /**
-     * Finds the vehicle in the given laneIndex immediately at or behind the given position.
+     * Finds the vehicle in the given lane immediately at or behind the given position.
      * 
-     * @param laneIndex
-     *            laneIndex in which to search
+     * @param lane
+     *            lane in which to search
      * @return reference to the rear vehicle
      */
     public Vehicle rearVehicle(int lane, double vehiclePos) {
@@ -907,32 +908,32 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns the front vehicle on the given laneIndex.
+     * Returns the front vehicle on the given lane.
      * 
-     * @param laneIndex
-     * @return the front vehicle on the given laneIndex
+     * @param lane
+     * @return the front vehicle on the given lane
      */
     public Vehicle frontVehicleOnLane(int lane) {
         return laneSegments[lane - 1].frontVehicle();
     }
 
     /**
-     * Returns the vehicle in front of the given vehicle in its laneIndex.
+     * Returns the vehicle in front of the given vehicle in its lane.
      * 
      * @param vehicle
-     * @return the next downstream vehicle in the laneIndex
+     * @return the next downstream vehicle in the lane
      */
     public Vehicle frontVehicleOnLane(Vehicle vehicle) {
         return laneSegments[vehicle.lane() - 1].frontVehicle(vehicle);
     }
 
     /**
-     * Finds the vehicle in the given laneIndex immediately in front of the given position. That is a vehicle such that
+     * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
      * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
      * be in the rear.
      * 
-     * @param laneIndex
-     *            laneIndex in which to search
+     * @param lane
+     *            lane in which to search
      * @return reference to the front vehicle
      */
     public Vehicle frontVehicle(int lane, double vehiclePos) {
@@ -940,7 +941,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Sets the speed limits for this road segment for all lanes (openDrive defines speed limits per laneIndex)
+     * Sets the speed limits for this road segment for all lanes (openDrive defines speed limits per lane)
      * 
      * @param list
      */
@@ -986,8 +987,8 @@ public class RoadSegment implements Iterable<Vehicle> {
         for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
             TrafficLight trafficLight = trafficLights.get(trafficLightLocation.id());
             trafficLightLocation.setTrafficLight(trafficLight);
-            // not elegant but needed for trafficlight recorder
             trafficLight.setPosition(trafficLightLocation.position());
+            trafficLight.setRoadSegment(this);
         }
     }
 
@@ -1001,9 +1002,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns true if each laneIndex in the vehicle array is sorted.
+     * Returns true if each lane in the vehicle array is sorted.
      * 
-     * @return true if each laneIndex in the vehicle array is sorted
+     * @return true if each lane in the vehicle array is sorted
      */
     public boolean eachLaneIsSorted() {
         for (final LaneSegment laneSegment : laneSegments) {
@@ -1045,7 +1046,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         @Override
         public Vehicle next() {
             if (index < laneSegments[laneIndex].vehicleCount()) {
-                // get the next vehicle in the current laneIndex
+                // get the next vehicle in the current lane
                 ++count;
                 return laneSegments[laneIndex].getVehicle(index++);
             }
@@ -1105,13 +1106,13 @@ public class RoadSegment implements Iterable<Vehicle> {
                     sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on laneIndex=%d\n",
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n",
                                 vehFront.getId(), vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("roadID=").append(id);
                     sb.append(", user roadID=").append(userId);
                     sb.append(", net distance=").append(netDistance);
-                    sb.append(", laneIndex index=").append(laneSegment.lane());
+                    sb.append(", lane=").append(laneSegment.lane());
                     sb.append(", container.size=").append(laneSegment.vehicleCount());
                     sb.append("\n");
 
@@ -1119,7 +1120,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                             .min(index + 8, M - 1); j++) {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String
-                                .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, laneIndex=%d, id=%d%n",
+                                .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, id=%d%n",
                                         j, veh.getFrontPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
                                         veh.getLength(), veh.lane(), veh.getId()));
                     }
@@ -1151,7 +1152,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         @Override
         public LaneSegment next() {
             if (index < laneCount) {
-                // get the next laneIndex segment
+                // get the next lane segment
                 return laneSegments[index++];
             }
             return null;
@@ -1164,12 +1165,21 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Returns an iterator over all the laneIndex segments in this road segment.
+     * Returns an iterator over all the lane segments in this road segment.
      * 
-     * @return an iterator over all the laneIndex segments in this road segment
+     * @return an iterator over all the lane segments in this road segment
      */
     public final Iterator<LaneSegment> laneSegmentIterator() {
         return new LaneSegmentIterator();
+    }
+
+    /**
+     * Returns an iterable over all the lane segments in this road segment.
+     * 
+     * @return an iterable over all the lane segments in this road segment
+     */
+    public Iterable<LaneSegment> laneSegments() {
+        return ImmutableList.copyOf(laneSegmentIterator());
     }
 
     public final LoopDetectors getLoopDetectors() {

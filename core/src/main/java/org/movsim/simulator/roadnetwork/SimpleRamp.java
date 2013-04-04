@@ -36,8 +36,6 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableList;
-
 /**
  * simple onramp model which drops vehicles in the largest gap on the {@link RoadSegment}.
  * 
@@ -97,7 +95,7 @@ public class SimpleRamp extends AbstractTrafficSource {
     private SortedSet<GapCandidate> findLargestPossibleGap(TestVehicle testVehicle) {
         SortedSet<GapCandidate> gapCandidates = new TreeSet<>();
 
-        for (LaneSegment laneSegment : ImmutableList.copyOf(roadSegment.laneSegmentIterator())) {
+        for (LaneSegment laneSegment : roadSegment.laneSegments()) {
             for (Vehicle vehicle : laneSegment) {
                 evaluateVehicle(vehicle, laneSegment, testVehicle, gapCandidates);
             }
