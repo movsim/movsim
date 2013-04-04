@@ -68,9 +68,9 @@ public class TrafficLights implements SimulationTimeStep {
                     "at least one phase must be defined in a controller group.");
             TrafficLightControlGroup group = new TrafficLightControlGroup(controllerGroup);
             if (input.isLogging()) {
-                Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getName()), "controlgroup name="
-                        + controllerGroup.getName() + " not unique.");
-                group.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getName(), input
+                Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getId()), "controlgroup name="
+                        + controllerGroup.getId() + " not unique.");
+                group.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getId(), input
                         .getNTimestep(), group.trafficLights()));
             }
             trafficLightControlGroups.add(group);

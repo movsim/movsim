@@ -20,7 +20,8 @@
             </laneSection>
         </lanes>
         <signals>
-            <signal s="1000" id="tl_1" name="Trafficlight XY" />
+			<signal s="700" id="tl1" name="first" />
+            <signal s="1000" id="tl2" name="second" />
         </signals>
     </road>
 </OpenDRIVE>

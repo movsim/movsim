@@ -43,18 +43,22 @@
             </Road>
         </Simulation>
         <TrafficLights logging="true" n_timestep="5">
-            <ControllerGroup name="group1" >
+            <ControllerGroup id="group1" >
                 <Phase duration="35">
-                    <TrafficLightState id="tl_1" status="GREEN" />
+                    <TrafficLightState id="tl1" status="Green" />
+                    <TrafficLightState id="tl2" status="Red" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState id="tl_1" status="GREENRED" />
+                    <TrafficLightState id="tl1" status="GreenRed" />
+                    <TrafficLightState id="tl2" status="RedGreen" />
                 </Phase>
                 <Phase duration="30">
-                    <TrafficLightState id="tl_1" status="RED" />
+                    <TrafficLightState id="tl1" status="Red" />
+                    <TrafficLightState id="tl2" status="Green" />
                 </Phase>
                 <Phase duration="2">
-                    <TrafficLightState id="tl_1" status="REDGREEN" />
+                    <TrafficLightState id="tl1" status="RedGreen" />
+                    <TrafficLightState id="tl2" status="GreenRed" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>

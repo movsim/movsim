@@ -642,13 +642,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         case GREEN:
             g.setColor(Color.GREEN);
             break;
-        case GREENRED:
+        case GREEN_RED:
             g.setColor(Color.YELLOW);
             break;
         case RED:
             g.setColor(Color.RED);
             break;
-        case REDGREEN:
+        case RED_GREEN:
             g.setColor(Color.ORANGE);
             break;
         }
@@ -707,9 +707,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
 
         // draw the middle light
-        if (trafficLight.status() == TrafficLightStatus.GREENRED) {
+        if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
             g.setColor(Color.YELLOW);
-        } else if (trafficLight.status() == TrafficLightStatus.REDGREEN) {
+        } else if (trafficLight.status() == TrafficLightStatus.RED_GREEN) {
             g.setColor(Color.ORANGE);
         } else {
             g.setColor(Color.LIGHT_GRAY);

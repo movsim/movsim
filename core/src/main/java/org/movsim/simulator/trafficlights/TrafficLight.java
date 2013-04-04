@@ -103,7 +103,7 @@ public class TrafficLight {
      * @return
      */
     public int lightCount() {
-        return Math.max(3, possibleStati.size());
+        return Math.min(3, possibleStati.size());
     }
 
 }

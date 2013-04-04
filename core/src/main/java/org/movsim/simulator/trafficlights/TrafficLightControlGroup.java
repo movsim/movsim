@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;
+import org.movsim.autogen.TrafficLightCondition;
 import org.movsim.autogen.TrafficLightState;
 import org.movsim.simulator.SimulationTimeStep;
 import org.slf4j.Logger;
@@ -64,12 +65,47 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private void determinePhase() {
         Phase phase = phases.get(currentPhaseIndex);
-        if (phase.isSetDuration() && currentPhaseDuration > phase.getDuration()) {
+        // first check if all "clear" conditions are fullfilled. otherwise do not switch to next phase
+        if (!clearConditionsFullfilled(phase)) {
+            return;
+        }
+        // first check fixed-time schedule for next phase
+        // and secondly check trigger condition for overriding fixed-time scheduler
+        if (currentPhaseDuration > phase.getDuration() || isTriggerConditionFullfilled(phase)) {
             nextPhase();
         }
-        if (!phase.isSetDuration()) {
-            // TODO
+    }
+
+    private boolean clearConditionsFullfilled(Phase phase) {
+        for (TrafficLightState state : phase.getTrafficLightState()) {
+            if (state.isSetCondition() && state.getCondition() == TrafficLightCondition.CLEAR) {
+                if (!isCleared(trafficLights.get(state.getId()))) {
+                    return false;
+                }
+            }
         }
+        return true;
+    }
+
+    private boolean isCleared(TrafficLight trafficLight) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    private boolean isTriggerConditionFullfilled(Phase phase) {
+        for (TrafficLightState state : phase.getTrafficLightState()) {
+            if (state.isSetCondition() && state.getCondition() == TrafficLightCondition.REQUEST) {
+                if (isRequested(trafficLights.get(state.getId()))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isRequested(TrafficLight trafficLight) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     private void updateTrafficLights() {

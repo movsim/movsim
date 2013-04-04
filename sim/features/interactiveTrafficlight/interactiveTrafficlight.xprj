@@ -32,40 +32,25 @@
                 <Detectors />
             </Road>
         </Simulation>
-        <TrafficLights>
-			
-<ControllerGroup name="interactive demo" >
-	<!-- duration not needed for interactive trigger-->
-  <Phase duration="30"> 
-    <TrafficLight id="tl_1" status="R" />
-    <TrafficLight id="tl_2" status="R" />
-  </Phase>
-  <!-- wenn 2 trigger,  dann wird phasenplan einfach weiter durchlaufen -->
-  <Phase>  <!-- until trigger && no vehicle in front of tl2 -->
-    <TrafficLight id="tl_1" status="R" trigger="true" />
-    <TrafficLight id="tl_2" status="G" cleared="true"/>
-  </Phase>
-  <Phase duration="30"> 
-    <TrafficLight id="tl_1" status="R" />
-    <TrafficLight id="tl_2" status="R" />
-  </Phase>
-  <Phase>  <!-- until no vehicle in front of tl1 -->
-    <TrafficLight id="tl_1" status="G" />
-    <TrafficLight id="tl_2" status="R" trigger="true" /> <!-- belegt -->
-  </Phase>
-  <Phase duration="30"> 
-    <TrafficLight id="tl_1" status="R" />
-    <TrafficLight id="tl_2" status="R" />
-  </Phase>
-  
-<!-- second phase -->
-<!--  <Phase duration="30">
-    <TrafficLight id="tl_1" status="G" />
-    <TrafficLight id="tl_2" status="R" trigger="true" />
-  </Phase> -->
-</ControllerGroup>
-			
-            <TrafficLight id="tl_1" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" />
+			 <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup id="group1" >
+                <Phase duration="60">
+                    <TrafficLightState id="tl1" status="Red" condition="request"/>
+                    <TrafficLightState id="tl2" status="Green" condition="clear"/>
+                </Phase>
+                <Phase duration="10">
+                    <TrafficLightState id="tl1" status="Red" />
+                    <TrafficLightState id="tl2" status="Red" />
+                </Phase>
+                <Phase duration="60">
+                    <TrafficLightState id="tl1" status="Green" condition="clear"/>
+                    <TrafficLightState id="tl2" status="Red" />
+                </Phase>
+                <Phase duration="10">
+                    <TrafficLightState id="tl1" status="Red" />
+                    <TrafficLightState id="tl2" status="Red" />
+                </Phase>
+            </ControllerGroup>
         </TrafficLights>
     </Scenario>
 </Movsim>

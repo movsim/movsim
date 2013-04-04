@@ -642,7 +642,7 @@
             <xs:sequence>
                 <xs:element ref="Phase" minOccurs="1" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="id" type="xs:string" use="required" />
             <!-- <xs:attribute name="offset" type="nonNegativeDouble" default="0" /> -->
         </xs:complexType>
     </xs:element>
@@ -658,14 +658,22 @@
         <xs:complexType>
             <xs:attribute name="id" type="xs:string" use="required" />
             <xs:attribute name="status" type="TrafficLightStatus" />
+            <xs:attribute name="condition" type="TrafficLightCondition" default="none"/>
         </xs:complexType>
     </xs:element>
     <xs:simpleType name="TrafficLightStatus">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="RED" />
-            <xs:enumeration value="REDGREEN" />
-            <xs:enumeration value="GREEN" />
-            <xs:enumeration value="GREENRED" />
+            <xs:enumeration value="Red" />
+            <xs:enumeration value="RedGreen" />
+            <xs:enumeration value="Green" />
+            <xs:enumeration value="GreenRed" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="TrafficLightCondition">
+        <xs:restriction base="xs:string">
+			<xs:enumeration value="none" />
+            <xs:enumeration value="clear" />
+            <xs:enumeration value="request" />
         </xs:restriction>
     </xs:simpleType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
