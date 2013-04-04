@@ -33,7 +33,7 @@
             </Road>
         </Simulation>
 			 <TrafficLights logging="true" n_timestep="5">
-            <ControllerGroup id="group1" >
+            <ControllerGroup id="group1"  >
                 <Phase duration="60">
                     <TrafficLightState id="tl1" status="Red" condition="request"/>
                     <TrafficLightState id="tl2" status="Green" condition="clear"/>

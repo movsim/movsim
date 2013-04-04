@@ -167,7 +167,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
         }
 
+        connectTrafficLights();
+
         reset();
+    }
+
+    /**
+     * sets up the traffic lights: connect dynamic traffic lights with locations on the road segment.
+     */
+    private void connectTrafficLights() {
+        for (RoadSegment roadSegment : roadNetwork) {
+            roadSegment.setTrafficLights(trafficLights);
+        }
     }
 
     private void createRoutes(Routes routesInput) {
@@ -176,17 +187,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             for (org.movsim.autogen.Route routeInput : routesInput.getRoute()) {
                 final Route route = new Route(routeInput.getLabel());
                 for (org.movsim.autogen.Road roadInput : routeInput.getRoad()) {
-                    route.add(roadNetwork.findByUserId(roadInput.getId()));
+                    RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(roadInput.getId()),
+                            "cannot create route with undefinied road=" + roadInput.getId());
+                    route.add(roadSegment);
                 }
-                if (route.size() == 0) {
-                    LOG.error("route with name \"{}\" does not contain any roadSegments. Ignore route!",
-                            route.getName());
-                    continue;
-                }
-                Route r = routes.put(route.getName(), route);
-                if (r != null) {
-                    LOG.error("route with name \"{}\" already defined. Overwrite existing route.", r.getName());
-                }
+                Preconditions.checkArgument(routes.put(route.getName(), route) == null, "route with name="+route.getName()+" already defined.");
             }
         }
     }
@@ -228,19 +233,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         initialize();
     }
 
-    /**
-     * @param roads
-     */
     private void matchRoadSegmentsAndRoadInput(List<Road> roads) {
         for (final Road roadInput : roads) {
-            final RoadSegment roadSegment = roadNetwork.findByUserId(roadInput.getId());
-            if (roadSegment != null) {
-                addInputToRoadSegment(roadSegment, roadInput);
-            } else {
-                // at least warn user that roadId cannot be matched to xodr roadnetwork
-                throw new IllegalArgumentException("cannot find roadId=" + roadInput.getId()
-                        + " from input in constructed roadNetwork. IGNORE DATA!!!");
-            }
+            RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(roadInput.getId()),
+                    "cannot find roadId=" + roadInput.getId()
+                            + " from input in constructed roadNetwork. IGNORE DATA!!!");
+            addInputToRoadSegment(roadSegment, roadInput);
         }
     }
 
@@ -296,7 +294,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         TrafficCompositionGenerator composition = roadInput.isSetTrafficComposition() ? new TrafficCompositionGenerator(
                 roadInput.getTrafficComposition(), vehicleFactory) : defaultTrafficComposition;
         if (roadInput.isSetTrafficComposition()) {
-            LOG.info("road with id={} has its own vehicle composition generator.", roadSegment.userId());
+            LOG.info("road with id={} has its own vehicle composition generator.", roadSegment.id());
         }
 
         // set up the traffic source
@@ -349,9 +347,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (roadInput.isSetInitialConditions()) {
             initialConditions(roadSegment, roadInput.getInitialConditions(), composition);
         }
-
-        // set up the traffic lights: connect dynamic traffic lights with locations on the road segment
-        roadSegment.setTrafficLights(trafficLights);
 
     }
 

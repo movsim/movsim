@@ -688,7 +688,7 @@
     <xs:element name="Route">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="Road" maxOccurs="unbounded" />
+                <xs:element ref="Road" minOccurs="1" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="label" type="xs:string" use="required" />
         </xs:complexType>

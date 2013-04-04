@@ -91,7 +91,7 @@ public class TrafficLights implements SimulationTimeStep {
 
     public TrafficLight get(String id) {
         if (!trafficLights.containsKey(id)) {
-            throw new IllegalStateException("traffic light with id=" + id + " requested but not configured in input.");
+            throw new IllegalStateException("trafficlight with id=" + id + " requested but not configured in input.");
         }
         return trafficLights.get(id);
     }
