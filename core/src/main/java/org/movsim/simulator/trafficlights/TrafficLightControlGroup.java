@@ -82,7 +82,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private boolean isClearConditionsFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
             if (state.getCondition() == TrafficLightCondition.CLEAR) {
-                if (vehicleIsInFrontOfLight(trafficLights.get(state.getId()))) {
+                if (vehicleIsInFrontOfLightAndDriving(trafficLights.get(state.getId()))) {
                     return false;
                 }
             }
@@ -105,6 +105,19 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         for (LaneSegment laneSegment : trafficLight.roadSegment().laneSegments()) {
             Vehicle vehicle = laneSegment.rearVehicle(trafficLight.position());
             if (vehicle != null && (trafficLight.position() - vehicle.getFrontPosition() < conditionRange)) {
+                LOG.debug("condition check: vehicle is in front of trafficlight: vehPos={}, trafficlightPos={}",
+                        vehicle.getFrontPosition(), trafficLight.position());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean vehicleIsInFrontOfLightAndDriving(TrafficLight trafficLight) {
+        for (LaneSegment laneSegment : trafficLight.roadSegment().laneSegments()) {
+            Vehicle vehicle = laneSegment.rearVehicle(trafficLight.position());
+            if (vehicle != null && (trafficLight.position() - vehicle.getFrontPosition() < conditionRange)
+                    && vehicle.getSpeed() > 0) {
                 LOG.debug("condition check: vehicle is in front of trafficlight: vehPos={}, trafficlightPos={}",
                         vehicle.getFrontPosition(), trafficLight.position());
                 return true;

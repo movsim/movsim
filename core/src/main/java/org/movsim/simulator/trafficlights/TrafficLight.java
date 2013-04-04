@@ -82,7 +82,7 @@ public class TrafficLight {
         this.status = newStatus;
     }
 
-    double position() {
+    public double position() {
         Preconditions.checkArgument(!Double.isNaN(position), "traffic light without position");
         return position;
     }
@@ -116,6 +116,12 @@ public class TrafficLight {
     public void setRoadSegment(RoadSegment roadSegment) {
         Preconditions.checkArgument(this.roadSegment == null, "roadSegment already set");
         this.roadSegment = roadSegment;
+    }
+
+    @Override
+    public String toString() {
+        return "TrafficLight [status=" + status + ", position=" + position + ", id=" + id + ", roadSegment.id="
+                + roadSegment.id() + "]";
     }
 
 }

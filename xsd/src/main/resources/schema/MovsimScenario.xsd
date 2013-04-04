@@ -551,7 +551,7 @@
         <xs:complexType>
             <xs:attribute name="t" type="nonNegativeDouble" use="required" />
             <xs:attribute name="q_per_hour" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="v" type="nonNegativeDouble" default="20" />
+            <xs:attribute name="v" type="nonNegativeDouble" default="0" />
         </xs:complexType>
     </xs:element>
     <xs:element name="InflowFromFile">
@@ -644,7 +644,7 @@
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
             <!-- spatial range for checking conditions in meters -->
-            <xs:attribute name="range" type="positiveDouble" default="100" />
+            <xs:attribute name="range" type="positiveDouble" default="50" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Phase">

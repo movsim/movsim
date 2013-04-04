@@ -33,6 +33,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
 import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
@@ -386,6 +387,15 @@ public class Vehicle {
     }
 
     /**
+     * Returns the vehicle's physical length plus the dynamic contribution from a model's minimum gap.
+     * 
+     * @return the effective length of a vehicle in a standstill
+     */
+    public double getEffectiveLength() {
+        return getLength() + getLongitudinalModel().getMinimumGap();
+    }
+
+    /**
      * Returns this vehicle's width.
      * 
      * @return vehicle's width, in meters
@@ -404,7 +414,7 @@ public class Vehicle {
     }
 
     /**
-     * Sets the position of the rear of this vehicle.
+     * Sets the front position of this vehicle.
      * 
      * @param frontPosition
      *            new front position
@@ -423,7 +433,7 @@ public class Vehicle {
     }
 
     /**
-     * Sets the reference position of this vehicle by the rear position.
+     * Sets the rear position of this vehicle.
      * 
      * @param rearPosition
      *            new rear position
@@ -640,17 +650,11 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficLightLocation trafficLightLocation = findNextDownstreamTrafficlight(roadSegment);
-        if (trafficLightLocation != null) {
-            double distance;
-            if (trafficLightLocation.getTrafficLight().roadSegment() == roadSegment) {
-                // trafficlight located on actual roadsegment
-                distance = trafficLightLocation.position() - getFrontPosition();
-            } else {
-                // traffic light located on next downstream roadsegment
-                distance = trafficLightLocation.position() + roadSegment.roadLength() - getFrontPosition();
-            }
-            updateTrafficLightApproaching(trafficLightLocation, distance);
+        TrafficLightLocationWithDistance location = roadSegment.getNextDownstreamTrafficLight(
+                getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
+        if (location.trafficLightLocation != null) {
+            // LOG.debug("consider tl={}" + location.toString());
+            updateTrafficLightApproaching(location.trafficLightLocation, location.distance);
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
             }
@@ -658,19 +662,11 @@ public class Vehicle {
         return moderatedAcc;
     }
 
-    private TrafficLightLocation findNextDownstreamTrafficlight(RoadSegment roadSegment) {
-        TrafficLightLocation trafficLightLocation = null;
-        trafficLightLocation = roadSegment.getNextDownstreamTrafficLightOnRoadSegment(getFrontPosition());
-        if (trafficLightLocation == null) {
-            // check also traffic light on next sink road segment as look-ahead horizon
-            // FIXME only one segment is checked ahead which may be too short-sighted in some situations
-            RoadSegment sinkRoadSegment = roadSegment.sinkRoadSegment(lane());
-            if (sinkRoadSegment != null) {
-                trafficLightLocation = sinkRoadSegment.getNextDownstreamTrafficLightOnRoadSegment(0);
-            }
-        }
-        return trafficLightLocation;
+    private void updateTrafficLightApproaching(TrafficLightLocation trafficLightLocation, double distance) {
+        assert distance >= 0 : "distance=" + distance;
+        trafficLightApproaching.update(this, trafficLightLocation.getTrafficLight(), distance);
     }
+
 
     /**
      * Returns this vehicle's acceleration considering the exit.
@@ -788,11 +784,6 @@ public class Vehicle {
         laneOld = this.lane;
         this.lane = lane;
         targetLane = Lanes.NONE;
-    }
-
-    private void updateTrafficLightApproaching(TrafficLightLocation trafficLightLocation, double distance) {
-        assert distance >= 0 : "distance=" + distance;
-        trafficLightApproaching.update(this, trafficLightLocation.getTrafficLight(), distance, longitudinalModel);
     }
 
     public LaneChangeModel getLaneChangeModel() {

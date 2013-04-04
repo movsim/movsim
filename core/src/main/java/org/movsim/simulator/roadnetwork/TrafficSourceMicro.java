@@ -39,11 +39,11 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         calcApproximateInflow(dt);
-        if(vehicleQueue.isEmpty()){
+        if (vehicleQueue.isEmpty()) {
             return;
         }
         Long entryTime = vehicleQueue.firstKey();
-        if(simulationTime >= entryTime.longValue()){
+        if (simulationTime >= entryTime.longValue()) {
             Vehicle vehicle = vehicleQueue.get(entryTime);
             int testLane = (vehicle.lane() != Vehicle.LANE_NOT_SET) ? vehicle.lane()
                     : getNewCyclicLaneForEntering(laneEnterLast);
@@ -68,8 +68,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
         // check if gap to leader is sufficiently large (xEnter of road section is assumed to be zero)
         final double netGapToLeader = leader.getRearPosition();
         // very crude approximation for minimum gap
-        double minRequiredGap = vehicle.getLength() + vehicle.getLongitudinalModel().getMinimumGap() + 2
-                * vehicle.getLongitudinalModel().getDesiredSpeed();
+        double minRequiredGap = vehicle.getEffectiveLength() + 2 * vehicle.getLongitudinalModel().getDesiredSpeed();
         if (vehicle.getLongitudinalModel().isCA()) {
             minRequiredGap = leader.getSpeed();
         }

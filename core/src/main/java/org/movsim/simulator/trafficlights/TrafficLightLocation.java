@@ -46,4 +46,9 @@ public class TrafficLightLocation {
         this.trafficLight = trafficLight;
     }
 
+    @Override
+    public String toString() {
+        return "TrafficLightLocation [position = " + position() + ", trafficLight=" + trafficLight + "]";
+    }
+
 }

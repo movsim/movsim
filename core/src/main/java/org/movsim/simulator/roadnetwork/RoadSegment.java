@@ -27,10 +27,11 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
@@ -102,7 +103,17 @@ public class RoadSegment implements Iterable<Vehicle> {
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
-    private List<TrafficLightLocation> trafficLightLocations = new ArrayList<>();
+    private SortedSet<TrafficLightLocation> trafficLightLocations = new TreeSet<>(
+            new Comparator<TrafficLightLocation>() {
+                @Override
+                public int compare(TrafficLightLocation a, TrafficLightLocation b) {
+                    if (a != b && Double.compare(a.position(), b.position()) == 0) {
+                        throw new IllegalStateException("cannot have identical trafficlight positions=" + a.position());
+                    }
+                    return Double.compare(a.position(), b.position());
+                }
+            });
+
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
@@ -663,7 +674,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param position
      * @return the next downstream traffic or null
      */
-    public TrafficLightLocation getNextDownstreamTrafficLightOnRoadSegment(double position) {
+    TrafficLightLocation getNextDownstreamTrafficLight(double position) {
         for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
             double distance = trafficLightLocation.position() - position;
             if (distance > 0) {
@@ -673,6 +684,23 @@ public class RoadSegment implements Iterable<Vehicle> {
             }
         }
         return null;
+    }
+
+    public TrafficLightLocationWithDistance getNextDownstreamTrafficLight(double position, int lane,
+            double maxLookAheadDistance) {
+        TrafficLightLocation trafficLightLocation = getNextDownstreamTrafficLight(position);
+        double distance = (trafficLightLocation != null) ? trafficLightLocation.position() - position : roadLength
+                - position;
+        RoadSegment segment = this;
+        while (trafficLightLocation == null && distance < maxLookAheadDistance) {
+            segment = segment.sinkRoadSegment(lane);
+            if (segment == null) {
+                break;
+            }
+            trafficLightLocation = segment.getNextDownstreamTrafficLight(0);
+            distance += (trafficLightLocation != null) ? trafficLightLocation.position() : segment.roadLength();
+        }
+        return new TrafficLightLocationWithDistance(trafficLightLocation, distance);
     }
 
     private void applySpeedLimits() {
@@ -986,9 +1014,9 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setTrafficLights(TrafficLights trafficLights) {
         for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
             TrafficLight trafficLight = trafficLights.get(trafficLightLocation.id());
-            trafficLightLocation.setTrafficLight(trafficLight);
             trafficLight.setPosition(trafficLightLocation.position());
             trafficLight.setRoadSegment(this);
+            trafficLightLocation.setTrafficLight(trafficLight);
         }
     }
 
@@ -1106,8 +1134,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                     sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n",
-                                vehFront.getId(), vehFront.getFrontPosition(), vehicle.lane()));
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
+                                vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("roadID=").append(id);
                     sb.append(", user roadID=").append(userId);
@@ -1260,14 +1288,21 @@ public class RoadSegment implements Iterable<Vehicle> {
                 + trafficLightLocation.position() + " does not fit onto road-id=" + id() + " with length="
                 + roadLength());
         trafficLightLocations.add(trafficLightLocation);
-        Collections.sort(trafficLightLocations, new Comparator<TrafficLightLocation>() {
-            @Override
-            public int compare(TrafficLightLocation o1, TrafficLightLocation o2) {
-                final Double pos1 = new Double(o1.position());
-                final Double pos2 = new Double(o2.position());
-                return pos1.compareTo(pos2); // sort with increasing x
-            }
-        });
     }
 
+    public final class TrafficLightLocationWithDistance {
+        public final TrafficLightLocation trafficLightLocation;
+        public final double distance;
+
+        public TrafficLightLocationWithDistance(TrafficLightLocation location, double distance) {
+            this.trafficLightLocation = location;
+            this.distance = distance;
+        }
+
+        @Override
+        public String toString() {
+            return "TrafficLightLocationWithDistance [trafficLightLocation=" + trafficLightLocation + ", distance="
+                    + distance + "]";
+        }
+    }
 }

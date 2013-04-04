@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -27,9 +27,9 @@ package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +42,8 @@ public class TrafficLightApproaching {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
-    private final double maxRangeLookAheadForTrafficlight = 1000;
-    
+    public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
+
     private boolean considerTrafficLight;
 
     private double accTrafficLight;
@@ -66,31 +66,45 @@ public class TrafficLightApproaching {
      * @param distanceToTrafficlight
      * @param longModel
      */
-    public void update(Vehicle me, TrafficLight trafficLight, double distanceToTrafficlight, LongitudinalModelBase longModel) {
+    public void update(Vehicle me, TrafficLight trafficLight, double distanceToTrafficlight) {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        if (distanceToTrafficlight > maxRangeLookAheadForTrafficlight) {
-            LOG.debug("traffic light at distance={} to far away -- maxRangeLookAheadForTrafficlight={}",
-                    distanceToTrafficlight, maxRangeLookAheadForTrafficlight);
+        if (distanceToTrafficlight > MAX_LOOK_AHEAD_DISTANCE) {
+            LOG.debug("traffic light at distance={} to far away -- MAX_LOOK_AHEAD_DISTANCE={}", distanceToTrafficlight,
+                    MAX_LOOK_AHEAD_DISTANCE);
             return;
         }
-        
-        //distanceToTrafficlight = trafficLight.position() - me.getFrontPosition();
 
-        // happened earlier
-//        if (distanceToTrafficlight <= 0) {
-//            distanceToTrafficlight = MovsimConstants.INVALID_GAP; // not relevant
-//            return;
-//        }
-
-        if (trafficLight.status() != TrafficLightStatus.GREEN) {
+        // TODO consider refactoring if function really needed
+        if (trafficLight.status() == TrafficLightStatus.GREEN) {
+            // check if space is sufficient
+            TrafficLightLocationWithDistance nextTrafficlight = trafficLight.roadSegment()
+                    .getNextDownstreamTrafficLight(trafficLight.position(), me.lane(), MAX_LOOK_AHEAD_DISTANCE);
+            if (nextTrafficlight.trafficLightLocation != null) {
+                // TODO different roadsegments
+                double distanceBetweenTrafficlights = nextTrafficlight.trafficLightLocation.position()
+                        - trafficLight.position();
+                Vehicle frontVehicle = trafficLight.roadSegment().laneSegment(me.lane()).frontVehicle(me);
+                double effectiveFrontVehicleLength = 0;
+                if (frontVehicle != null
+                        && frontVehicle.getFrontPosition() < nextTrafficlight.trafficLightLocation.position()) {
+                    effectiveFrontVehicleLength = frontVehicle.getEffectiveLength();
+                }
+                if (distanceBetweenTrafficlights < effectiveFrontVehicleLength + me.getEffectiveLength()) {
+                    considerTrafficLight = true;
+                    accTrafficLight = calcAcceleration(me, distanceToTrafficlight);
+                    LOG.debug(
+                            "stop in front of green traffic light because of insufficient space: space to next light={}, space for vehicle(s)={}",
+                            distanceBetweenTrafficlights, effectiveFrontVehicleLength + me.getEffectiveLength());
+                    LOG.debug("...and brake with acc={}", accTrafficLight);
+                }
+            }
+        } else if (trafficLight.status() != TrafficLightStatus.GREEN) {
             // TODO define it as parameter ("range of sight" or so) ?!
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
-                final double speed = me.getSpeed();
-                accTrafficLight = Math.min(0, longModel.calcAccSimple(distanceToTrafficlight, speed, speed));
-
+                accTrafficLight = calcAcceleration(me, distanceToTrafficlight);
                 if (accTrafficLight < 0) {
                     considerTrafficLight = true;
                     LOG.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
@@ -103,7 +117,7 @@ public class TrafficLightApproaching {
                 if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
                     final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
                     final double comfortBrakeDecel = 4;
-                    final double brakeDist = (speed * speed) / (2 * bKinMax);
+                    final double brakeDist = (me.getSpeed() * me.getSpeed()) / (2 * bKinMax);
                     if ((accTrafficLight <= -comfortBrakeDecel || brakeDist >= distanceToTrafficlight)) {
                         // ignore traffic light
                         considerTrafficLight = false;
@@ -113,7 +127,7 @@ public class TrafficLightApproaching {
                 // traffic light is already red
                 if (trafficLight.status() == TrafficLightStatus.RED) {
                     final double maxDeceleration = me.getMaxDeceleration();
-                    final double minBrakeDist = (speed * speed) / (2 * maxDeceleration);
+                    final double minBrakeDist = (me.getSpeed() * me.getSpeed()) / (2 * maxDeceleration);
                     if (accTrafficLight <= -maxDeceleration || minBrakeDist >= distanceToTrafficlight) {
                         // ignore traffic light
                         LOG.info(String
@@ -124,6 +138,12 @@ public class TrafficLightApproaching {
                 }
             }
         }
+    }
+
+    private static double calcAcceleration(Vehicle me, double distanceToTrafficlight) {
+        final double speed = me.getSpeed();
+        return Math.min(0,
+                me.getLongitudinalModel().calcAccSimple(distanceToTrafficlight, speed, speed));
     }
 
     /**
