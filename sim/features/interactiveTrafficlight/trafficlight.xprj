@@ -42,22 +42,21 @@
                 <Detectors />
             </Road>
         </Simulation>
-        <TrafficLights>
-<!-- 					<TrafficLight id="tl_1" green_time="35" green_red_time="3" red_time="40" red_green_time="2" phase_shift="0" /> -->
-<ControllerGroup name="single trafficlight" >
-  <Phase duration="35"> 
-    <TrafficLightState id="tl_1" status="GREEN" />
-  </Phase>
-    <Phase duration="3"> 
-    <TrafficLightState id="tl_1" status="GREENRED" />
-  </Phase>
-  <Phase duration="30"> 
-    <TrafficLightState id="tl_1" status="RED" />
-  </Phase>
-  <Phase duration="2"> 
-    <TrafficLightState id="tl_1" status="REDGREEN" />
-  </Phase>
-</ControllerGroup>
+        <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup name="group1" >
+                <Phase duration="35">
+                    <TrafficLightState id="tl_1" status="GREEN" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState id="tl_1" status="GREENRED" />
+                </Phase>
+                <Phase duration="30">
+                    <TrafficLightState id="tl_1" status="RED" />
+                </Phase>
+                <Phase duration="2">
+                    <TrafficLightState id="tl_1" status="REDGREEN" />
+                </Phase>
+            </ControllerGroup>
         </TrafficLights>
     </Scenario>
 </Movsim>

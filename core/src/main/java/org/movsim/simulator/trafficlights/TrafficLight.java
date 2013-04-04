@@ -74,17 +74,18 @@ public class TrafficLight {
         return status;
     }
 
-    public void setState(TrafficLightStatus newStatus) {
+    void setState(TrafficLightStatus newStatus) {
         this.oldStatus = status;
         this.status = newStatus;
     }
 
     double position() {
-        Preconditions.checkArgument(Double.isNaN(position), "traffic light without position");
+        Preconditions.checkArgument(!Double.isNaN(position), "traffic light without position");
         return position;
     }
 
     public void setPosition(double position) {
+        Preconditions.checkArgument(Double.isNaN(this.position), "position already set");
         this.position = position;
     }
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -34,26 +34,27 @@ import com.google.common.base.Preconditions;
 /**
  * The Class FileTrafficLightControllerRecorder.
  */
-public class FileTrafficLightControllerRecorder extends FileOutputBase implements TrafficLightControlGroup.RecordDataCallback {
+public class FileTrafficLightControllerRecorder extends FileOutputBase implements
+        TrafficLightControlGroup.RecordDataCallback {
 
-    private static final String extensionFormat = ".trafficlights.controllergroup_%s.csv";
-    private final int nDt;
+    private static final String extensionFormat = ".trafficlights_%s.csv";
+    private final int nTimestep;
 
     /**
      * Constructor.
      * 
-     * @param nDt
-     *            the n dt
+     * @param nTimestep
+     *            the n'th timestep
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightControllerRecorder(String controllerGroupName, int nDt, Iterable<TrafficLight> trafficLights) {
+    public FileTrafficLightControllerRecorder(String controllerGroupName, int nTimestep,
+            Iterable<TrafficLight> trafficLights) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         Preconditions.checkArgument(!controllerGroupName.isEmpty());
-        this.nDt = nDt;
-
-        writer = createWriter(String.format(extensionFormat, controllerGroupName));
-        writeHeader(trafficLights);
+        this.nTimestep = nTimestep;
+        String trimmedName = controllerGroupName.replaceAll("\\s", "");
+        writer = Preconditions.checkNotNull(createWriter(String.format(extensionFormat, trimmedName)));
     }
 
     /**
@@ -68,19 +69,18 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
      */
     @Override
     public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights) {
-
-        if (iterationCount % nDt != 0) {
-            // no update; nothing to do
+        if (iterationCount == 0) {
+            writeHeader(trafficLights);
+        }
+        if (iterationCount % nTimestep != 0) {
             return;
         }
-
-        if (writer != null) {
-            writeData(simulationTime, trafficLights);
-        }
+        String formattedTime = ProjectMetaData.getInstance().getFormatedTimeWithOffset(simulationTime);
+        writeData(simulationTime, formattedTime, trafficLights);
     }
 
-    private void writeData(double simulationTime, Iterable<TrafficLight> trafficLights) {
-        writer.printf("%8.2f   ", simulationTime);
+    private void writeData(double simulationTime, String formattedTime, Iterable<TrafficLight> trafficLights) {
+        writer.printf("%8.2f, %s,  ", simulationTime, formattedTime);
         for (final TrafficLight trafficLight : trafficLights) {
             writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status().ordinal());
         }
@@ -95,18 +95,17 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
      */
     private void writeHeader(Iterable<TrafficLight> trafficLights) {
         writer.printf(COMMENT_CHAR + " number codes for traffic lights status: %n");
-        for(TrafficLightStatus status : TrafficLightStatus.values()){
+        for (TrafficLightStatus status : TrafficLightStatus.values()) {
             writer.printf(COMMENT_CHAR + " %s --> %d %n", status.toString(), status.ordinal());
         }
 
-        int counter = 1;
+        int counter = 0;
         for (final TrafficLight trafficLight : trafficLights) {
-            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", counter,
+            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", ++counter,
                     trafficLight.position());
-            counter++;
         }
         writer.printf(COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1", "status[1]_TL1",
-                " etc. ");
+                " etc.");
         writer.flush();
     }
 }

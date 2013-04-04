@@ -633,7 +633,7 @@
             <xs:sequence>
                 <xs:element ref="ControllerGroup" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
-            <xs:attribute name="n_dt" type="positiveInteger" default="1" />
+            <xs:attribute name="n_timestep" type="positiveInteger" default="1" />
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
@@ -662,13 +662,9 @@
     </xs:element>
     <xs:simpleType name="TrafficLightStatus">
         <xs:restriction base="xs:string">
-			<!-- red light --> 
             <xs:enumeration value="RED" />
-            <!-- green light --> 
-            <xs:enumeration value="GREEN" />
-            <!-- red-to-green light --> 
             <xs:enumeration value="REDGREEN" />
-            <!-- greed-to-red light --> 
+            <xs:enumeration value="GREEN" />
             <xs:enumeration value="GREENRED" />
         </xs:restriction>
     </xs:simpleType>

@@ -40,7 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 /**
  * The Class TrafficLights.
@@ -62,26 +61,27 @@ public class TrafficLights implements SimulationTimeStep {
         createTrafficLightMapping();
     }
 
-    private void createControllers(org.movsim.autogen.TrafficLights trafficLightsInput) {
+    private void createControllers(org.movsim.autogen.TrafficLights input) {
         Set<String> controllGroupNames = new HashSet<>();
-        for (ControllerGroup controllerGroup : trafficLightsInput.getControllerGroup()) {
+        for (ControllerGroup controllerGroup : input.getControllerGroup()) {
             Preconditions.checkArgument(!controllerGroup.getPhase().isEmpty(),
                     "at least one phase must be defined in a controller group.");
-            TrafficLightControlGroup trafficLightControlGroup = new TrafficLightControlGroup(controllerGroup);
-            if (trafficLightsInput.isLogging()) {
+            TrafficLightControlGroup group = new TrafficLightControlGroup(controllerGroup);
+            if (input.isLogging()) {
                 Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getName()), "controlgroup name="
                         + controllerGroup.getName() + " not unique.");
-                trafficLightControlGroup.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getName(),
-                        trafficLightsInput.getNDt(), trafficLightControlGroup.trafficLights()));
+                group.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getName(), input
+                        .getNTimestep(), group.trafficLights()));
             }
-            trafficLightControlGroups.add(trafficLightControlGroup);
+            trafficLightControlGroups.add(group);
         }
     }
 
     private void createTrafficLightMapping() {
+        Preconditions.checkArgument(!trafficLightControlGroups.isEmpty());
         for (TrafficLightControlGroup controller : trafficLightControlGroups) {
-            for (TrafficLight trafficLight : ImmutableList.copyOf(controller.trafficLightIterator())) {
-                if(trafficLights.put(trafficLight.id(), trafficLight) != null){
+            for (TrafficLight trafficLight : controller.trafficLights()) {
+                if (trafficLights.put(trafficLight.id(), trafficLight) != null) {
                     throw new IllegalArgumentException("trafficLight=" + trafficLight.toString()
                             + " is referenced in more than one controller group in movsim input.");
                 }

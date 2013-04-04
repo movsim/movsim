@@ -1,7 +1,6 @@
 package org.movsim.simulator.trafficlights;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -80,12 +79,8 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         }
     }
 
-    public Iterator<TrafficLight> trafficLightIterator() {
-        return trafficLights.values().iterator();
-    }
-
     Iterable<TrafficLight> trafficLights() {
-        return ImmutableList.copyOf(trafficLightIterator());
+        return ImmutableList.copyOf(trafficLights.values().iterator());
     }
 
     private void setNextPhaseIndex() {

@@ -42,6 +42,7 @@ public class TrafficLightLocation {
     }
 
     public void setTrafficLight(TrafficLight trafficLight) {
+        Preconditions.checkArgument(this.trafficLight == null);
         this.trafficLight = trafficLight;
     }
 
