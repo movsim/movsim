@@ -25,17 +25,18 @@
  */
 package org.movsim.simulator.trafficlights;
 
+import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
+
+import com.google.common.base.Preconditions;
 
 /**
- * The Class FileTrafficLightRecorder.
+ * The Class FileTrafficLightControllerRecorder.
  */
-public class FileTrafficLightRecorder extends FileOutputBase implements TrafficLights.RecordDataCallback {
+public class FileTrafficLightControllerRecorder extends FileOutputBase implements TrafficLightControlGroup.RecordDataCallback {
 
-    private static final String extensionFormat = ".trafficlights.road_%s.csv";
+    private static final String extensionFormat = ".trafficlights.controllergroup_%s.csv";
     private final int nDt;
 
     /**
@@ -46,11 +47,12 @@ public class FileTrafficLightRecorder extends FileOutputBase implements TrafficL
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightRecorder(int nDt, Iterable<TrafficLight> trafficLights, RoadSegment roadSegment) {
+    public FileTrafficLightControllerRecorder(String controllerGroupName, int nDt, Iterable<TrafficLight> trafficLights) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
+        Preconditions.checkArgument(!controllerGroupName.isEmpty());
         this.nDt = nDt;
 
-        writer = createWriter(String.format(extensionFormat, roadSegment.userId()));
+        writer = createWriter(String.format(extensionFormat, controllerGroupName));
         writeHeader(trafficLights);
     }
 

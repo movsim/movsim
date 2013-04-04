@@ -48,35 +48,34 @@ import com.google.common.base.Preconditions;
 
 /**
  * <p>
- * A RoadSegment is a unidirectional stretch of road that contains a number of laneIndex segments. A bidirectional stretch of
- * road may be created by combining two road segments running in opposite directions.
+ * A RoadSegment is a unidirectional stretch of road that contains a number of laneIndex segments. A bidirectional stretch of road may be
+ * created by combining two road segments running in opposite directions.
  * </p>
  * <p>
  * RoadSegments may be combined to form a road network.
  * </p>
  * <p>
- * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road
- * segment and a sink road to which vehicles exit. RoadSegments at the edge of the network will normally be connected to
- * only one other road segment: traffic inflow and outflow will be controlled directly by source and sink objects.
+ * A RoadSegment is normally connected to two other road segments: a source road from which vehicles enter the road segment and a sink road
+ * to which vehicles exit. RoadSegments at the edge of the network will normally be connected to only one other road segment: traffic inflow
+ * and outflow will be controlled directly by source and sink objects.
  * </p>
  * <p>
- * RoadSegments are connected to each other on a laneIndex-wise basis: each sink (outgoing) laneIndex of a road segment may be
- * connected to a source (incoming) laneIndex of another road segment. This allows the forking and merging of road segments,
- * the creation of on-ramps and off-ramps. By connecting the lanes of a number of road segments in this way, complex
- * junctions and interchanges may be created.
+ * RoadSegments are connected to each other on a laneIndex-wise basis: each sink (outgoing) laneIndex of a road segment may be connected to
+ * a source (incoming) laneIndex of another road segment. This allows the forking and merging of road segments, the creation of on-ramps and
+ * off-ramps. By connecting the lanes of a number of road segments in this way, complex junctions and interchanges may be created.
  * </p>
  * <p>
- * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or
- * winding, it just knows about the vehicles it contains and what it is connected to. A vehicle's coordinates on a
- * RoadsSegment are given by the vehicle's position relative to the start of the RoadSegment and the vehicle's laneIndex.
+ * A RoadSegment is a logical entity, not a physical one. That is a RoadSegment does not know if it is straight or winding, it just knows
+ * about the vehicles it contains and what it is connected to. A vehicle's coordinates on a RoadsSegment are given by the vehicle's position
+ * relative to the start of the RoadSegment and the vehicle's laneIndex.
  * </p>
  * <p>
  * A RoadSegment has <code>laneCount</code> lanes. Lanes within a RoadSegment are represented by the LaneSegment class.
  * </p>
  * <p>
- * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's
- * RoadMapping. Although the RoadMapping is primarily used by software that draws the road network and the vehicles upon
- * it, elements of the RoadMapping may influence vehicle behavior, in particular a road's curvature and its gradient.
+ * The mapping from a position on a RoadSegment to coordinates in physical space is determined by a RoadSegment's RoadMapping. Although the
+ * RoadMapping is primarily used by software that draws the road network and the vehicles upon it, elements of the RoadMapping may influence
+ * vehicle behavior, in particular a road's curvature and its gradient.
  * </p>
  */
 // TODO avoid iterating also over Vehicle.Type.OBSTACLE at laneIndex ends.
@@ -978,7 +977,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Sets the traffic lights for this road segment by connecting the dynamic traffic lights with the road segment
+     * Sets the traffic lights for this road segment by connecting the dynamic trafficlights with the road segment
      * locations parsed from the infrastructure input.
      * 
      * @param trafficLights
@@ -987,7 +986,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
             TrafficLight trafficLight = trafficLights.get(trafficLightLocation.id());
             trafficLightLocation.setTrafficLight(trafficLight);
-            // not elegant but needed for traffic light recorder
+            // not elegant but needed for trafficlight recorder
             trafficLight.setPosition(trafficLightLocation.position());
         }
     }
@@ -1106,8 +1105,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                     sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on laneIndex=%d\n", vehFront.getId(),
-                                vehFront.getFrontPosition(), vehicle.lane()));
+                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on laneIndex=%d\n",
+                                vehFront.getId(), vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("roadID=").append(id);
                     sb.append(", user roadID=").append(userId);
@@ -1240,21 +1239,17 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Adds the {@code TrafficLightLocation} to the {@code RoadSegment} and performs a sorting to assure ascending order
      * of positions along the road stretch.
      * <p>
-     * The caller has to assure that traffic light id is unique in the whole network.
+     * The caller has to assure that trafficlight id is unique in the whole network.
      * </p>
      * 
      * @param trafficLightLocation
      */
     public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
+        Preconditions.checkArgument(trafficLightLocation.position() >= 0
+                && trafficLightLocation.position() <= roadLength, "inconsistent input data: traffic light position="
+                + trafficLightLocation.position() + " does not fit onto road-id=" + id() + " with length="
+                + roadLength());
         trafficLightLocations.add(trafficLightLocation);
-
-        // consistency check
-        if (trafficLightLocation.position() < 0 || trafficLightLocation.position() >= roadLength) {
-            throw new IllegalArgumentException("inconsistent input data: traffic light position="
-                    + trafficLightLocation.position() + " does not fit onto road-id=" + id() + " with lenght="
-                    + roadLength());
-        }
-
         Collections.sort(trafficLightLocations, new Comparator<TrafficLightLocation>() {
             @Override
             public int compare(TrafficLightLocation o1, TrafficLightLocation o2) {
@@ -1263,7 +1258,6 @@ public class RoadSegment implements Iterable<Vehicle> {
                 return pos1.compareTo(pos2); // sort with increasing x
             }
         });
-
     }
 
 }

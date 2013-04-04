@@ -631,24 +631,47 @@
     <xs:element name="TrafficLights">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="TrafficLight" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="ControllerGroup" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:attribute name="n_dt" type="positiveInteger" default="1" />
             <xs:attribute name="logging" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
-    <xs:element name="TrafficLight">
+    <xs:element name="ControllerGroup">
         <xs:complexType>
-            <xs:attribute name="id" type="xs:string" use="required" />
-            <xs:attribute name="green_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="green_red_time" type="nonNegativeDouble" />
-            <xs:attribute name="red_time" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="red_green_time" type="nonNegativeDouble" />
-            <xs:attribute name="phase_shift" type="nonNegativeDouble" default="0" />
-            <xs:attribute name="init" type="nonNegativeInteger" default="0" />
-            <!-- todo: enum type -->
+            <xs:sequence>
+                <xs:element ref="Phase" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <!-- <xs:attribute name="offset" type="nonNegativeDouble" default="0" /> -->
         </xs:complexType>
     </xs:element>
+    <xs:element name="Phase">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="TrafficLightState" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="duration" type="nonNegativeDouble" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TrafficLightState">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required" />
+            <xs:attribute name="status" type="TrafficLightStatus" />
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="TrafficLightStatus">
+        <xs:restriction base="xs:string">
+			<!-- red light --> 
+            <xs:enumeration value="RED" />
+            <!-- green light --> 
+            <xs:enumeration value="GREEN" />
+            <!-- red-to-green light --> 
+            <xs:enumeration value="REDGREEN" />
+            <!-- greed-to-red light --> 
+            <xs:enumeration value="GREENRED" />
+        </xs:restriction>
+    </xs:simpleType>
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
     <xs:element name="Routes">
         <xs:complexType>

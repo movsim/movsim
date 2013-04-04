@@ -25,16 +25,22 @@
  */
 package org.movsim.simulator.trafficlights;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.movsim.autogen.ControllerGroup;
 import org.movsim.simulator.SimulationTimeStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 /**
  * The Class TrafficLights.
@@ -44,46 +50,43 @@ public class TrafficLights implements SimulationTimeStep {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLights.class);
 
+    private final List<TrafficLightControlGroup> trafficLightControlGroups = new ArrayList<>();
+
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
-    public interface RecordDataCallback {
-        /**
-         * Callback to allow the application to process or record the traffic light data.
-         * 
-         * @param simulationTime
-         *            the current logical time in the simulation
-         * @param iterationCount
-         * @param trafficLights
-         */
-        public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights);
+    public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput) {
+        if (trafficLightsInput == null) {
+            return;
+        }
+        createControllers(trafficLightsInput);
+        createTrafficLightMapping();
     }
 
-    private RecordDataCallback recordDataCallback;
-
-    public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput) {
-        if (trafficLightsInput != null) {
-            initializeInput(trafficLightsInput);
+    private void createControllers(org.movsim.autogen.TrafficLights trafficLightsInput) {
+        Set<String> controllGroupNames = new HashSet<>();
+        for (ControllerGroup controllerGroup : trafficLightsInput.getControllerGroup()) {
+            Preconditions.checkArgument(!controllerGroup.getPhase().isEmpty(),
+                    "at least one phase must be defined in a controller group.");
+            TrafficLightControlGroup trafficLightControlGroup = new TrafficLightControlGroup(controllerGroup);
+            if (trafficLightsInput.isLogging()) {
+                Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getName()), "controlgroup name="
+                        + controllerGroup.getName() + " not unique.");
+                trafficLightControlGroup.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getName(),
+                        trafficLightsInput.getNDt(), trafficLightControlGroup.trafficLights()));
+            }
+            trafficLightControlGroups.add(trafficLightControlGroup);
         }
     }
 
-    private void initializeInput(org.movsim.autogen.TrafficLights trafficLightsInput) {
-        Preconditions.checkNotNull(trafficLightsInput);
-        for (final org.movsim.autogen.TrafficLight trafficLightInput : trafficLightsInput.getTrafficLight()) {
-            TrafficLight put = trafficLights.put(trafficLightInput.getId(), new TrafficLight(trafficLightInput));
-            if (put != null) {
-                throw new IllegalArgumentException("traffic light with id=" + trafficLightInput.getId()
-                        + " already exists. Check your input configuration.");
+    private void createTrafficLightMapping() {
+        for (TrafficLightControlGroup controller : trafficLightControlGroups) {
+            for (TrafficLight trafficLight : ImmutableList.copyOf(controller.trafficLightIterator())) {
+                if(trafficLights.put(trafficLight.id(), trafficLight) != null){
+                    throw new IllegalArgumentException("trafficLight=" + trafficLight.toString()
+                            + " is referenced in more than one controller group in movsim input.");
+                }
             }
         }
-    }
-
-    /**
-     * Sets the traffic light recorder.
-     * 
-     * @param recordDataCallback
-     */
-    public void setRecorder(RecordDataCallback recordDataCallback) {
-        this.recordDataCallback = recordDataCallback;
     }
 
     public TrafficLight get(String id) {
@@ -97,7 +100,7 @@ public class TrafficLights implements SimulationTimeStep {
      * Update.
      * 
      * @param dt
-     *            delta-t, simulation time interval, seconds
+     *            simulation time interval, seconds
      * @param simulationTime
      *            current simulation time, seconds
      * @param iterationCount
@@ -105,11 +108,8 @@ public class TrafficLights implements SimulationTimeStep {
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        for (final TrafficLight trafficLight : trafficLights.values()) {
-            trafficLight.update(simulationTime);
-        }
-        if (recordDataCallback != null) {
-            recordDataCallback.recordData(simulationTime, iterationCount, trafficLights.values());
+        for (TrafficLightControlGroup group : trafficLightControlGroups) {
+            group.timeStep(dt, simulationTime, iterationCount);
         }
     }
 

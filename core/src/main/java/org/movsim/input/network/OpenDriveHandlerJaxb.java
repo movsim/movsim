@@ -199,7 +199,7 @@ public class OpenDriveHandlerJaxb {
                     throw new IllegalArgumentException("traffic light signal with id=" + trafficLightLocation.id()
                             + " is not unique in xodr network definition.");
                 }
-                roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal));
+                roadSegment.addTrafficLightLocation(trafficLightLocation);
             }
         }
 

@@ -119,7 +119,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                         return;
                     }
                     if (trafficLightRect.contains(transformedPoint)) {
-                        trafficLightLocation.getTrafficLight().nextState();
+                        trafficLightLocation.getTrafficLight().triggerNextPhase();
                         trafficCanvas.repaint();
                     }
                 }

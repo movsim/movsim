@@ -139,6 +139,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         createRoutes(inputData.getScenario().getRoutes());
 
         trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights());
+
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
                 inputData.getConsumption(), routes);
 
@@ -220,7 +221,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @throws SAXException
      * @throws ParserConfigurationException
      */
-    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
+    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException
+             {
         roadNetwork.clear();
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
@@ -352,7 +354,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         // set up the traffic lights: connect dynamic traffic lights with locations on the road segment
         roadSegment.setTrafficLights(trafficLights);
 
-        // final TrafficSinkData trafficSinkData = roadinput.getTrafficSinkData();
     }
 
     private void createParkingSink(TrafficSink trafficSink, RoadSegment roadSegment) {
@@ -375,14 +376,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private static void initialConditions(RoadSegment roadSegment, InitialConditions initialConditions,
             TrafficCompositionGenerator vehGenerator) {
         Preconditions.checkNotNull(initialConditions);
-
         if (initialConditions.isSetMacroIC()) {
             setMacroInitialConditions(roadSegment, initialConditions.getMacroIC(), vehGenerator);
         } else if (initialConditions.isSetMicroIC()) {
             setMicroInitialConditions(roadSegment, initialConditions.getMicroIC(), vehGenerator);
         } else {
-            // throw new IllegalStateException();
-            LOG.warn("no initial conditions defined");
+            LOG.info("no initial conditions defined");
         }
     }
 

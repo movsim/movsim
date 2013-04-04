@@ -42,6 +42,7 @@ import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
 
+import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
@@ -53,7 +54,6 @@ import org.movsim.simulator.roadnetwork.Slope;
 import org.movsim.simulator.roadnetwork.SpeedLimit;
 import org.movsim.simulator.roadnetwork.TrafficSink;
 import org.movsim.simulator.trafficlights.TrafficLight;
-import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
@@ -642,13 +642,13 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         case GREEN:
             g.setColor(Color.GREEN);
             break;
-        case GREEN_RED:
+        case GREENRED:
             g.setColor(Color.YELLOW);
             break;
         case RED:
             g.setColor(Color.RED);
             break;
-        case RED_GREEN:
+        case REDGREEN:
             g.setColor(Color.ORANGE);
             break;
         }
@@ -707,9 +707,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         g.fillOval((int) (x - radius), (int) (y - radius), (int) (2 * radius), (int) (2 * radius));
 
         // draw the middle light
-        if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
+        if (trafficLight.status() == TrafficLightStatus.GREENRED) {
             g.setColor(Color.YELLOW);
-        } else if (trafficLight.status() == TrafficLightStatus.RED_GREEN) {
+        } else if (trafficLight.status() == TrafficLightStatus.REDGREEN) {
             g.setColor(Color.ORANGE);
         } else {
             g.setColor(Color.LIGHT_GRAY);
@@ -739,8 +739,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
-        for (final TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
-            final Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLightLocation);
+        for (TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
+            Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLightLocation);
             switch (trafficLightLocation.getTrafficLight().lightCount()) {
             case 1:
                 drawTrafficLight1(g, trafficLightLocation.getTrafficLight(), trafficLightRect, radius);

@@ -25,9 +25,9 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel;
 
+import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.trafficlights.TrafficLight;
-import org.movsim.simulator.trafficlights.TrafficLight.TrafficLightStatus;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -102,7 +102,7 @@ public class TrafficLightApproaching {
                 // ignore traffic light if accTL exceeds two times comfortable
                 // deceleration or if kinematic braking is not possible anymore
 
-                if (trafficLight.status() == TrafficLightStatus.GREEN_RED) {
+                if (trafficLight.status() == TrafficLightStatus.GREENRED) {
                     final double bKinMax = 6; // typical value: bIDM < comfortBrakeDecel < bKinMax < bMax
                     final double comfortBrakeDecel = 4;
                     final double brakeDist = (speed * speed) / (2 * bKinMax);
