@@ -46,12 +46,11 @@ public class TrafficLight {
     /** The status. */
     private TrafficLightStatus status;
 
-    /** The old status. */
-    private TrafficLightStatus oldStatus;
-
     private double position = Double.NaN;
 
-    private final String id;
+    private final String name; // not unique in network
+
+    private final String groupId; // unique mapping to infrastructure
 
     private final TriggerCallback triggerCallback;
 
@@ -59,18 +58,29 @@ public class TrafficLight {
 
     private RoadSegment roadSegment;
 
-    public TrafficLight(String id, TriggerCallback triggerCallback) {
-        this.id = id;
+    public TrafficLight(String name, String groupId, TriggerCallback triggerCallback) {
+        this.name = name;
+        this.groupId = groupId;
         this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
     }
 
     /**
-     * Returns the unique id of the trafficlight in the whole network.
+     * Returns the name of the trafficlight as referenced in the movsim input. The name does not reference a unique signal in the
+     * infrastructure.
      * 
-     * @return
+     * @return name
      */
-    public String id() {
-        return id;
+    public String name() {
+        return name;
+    }
+
+    /**
+     * Returns the controllergroup-id which allows for a unique reference to a set of signals in the infrastructure.
+     * 
+     * @return groupId
+     */
+    public String getGroupId() {
+        return groupId;
     }
 
     public TrafficLightStatus status() {
@@ -78,7 +88,6 @@ public class TrafficLight {
     }
 
     void setState(TrafficLightStatus newStatus) {
-        this.oldStatus = status;
         this.status = newStatus;
     }
 
@@ -87,8 +96,12 @@ public class TrafficLight {
         return position;
     }
 
+    public boolean hasPosition() {
+        return !Double.isNaN(position);
+    }
+
     public void setPosition(double position) {
-        Preconditions.checkArgument(Double.isNaN(this.position), "position already set");
+        Preconditions.checkArgument(Double.isNaN(this.position), "position already set: " + toString());
         this.position = position;
     }
 
@@ -120,8 +133,8 @@ public class TrafficLight {
 
     @Override
     public String toString() {
-        return "TrafficLight [status=" + status + ", position=" + position + ", id=" + id + ", roadSegment.id="
-                + roadSegment.id() + "]";
+        return "TrafficLight [status=" + status + ", position=" + position + ", name=" + name + "groupId = " + groupId
+                + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.id()) + "]";
     }
 
 }

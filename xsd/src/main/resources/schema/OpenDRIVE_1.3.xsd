@@ -159,7 +159,7 @@
                                                 <xsd:attribute name="s" type="xsd:double" />
                                                 <xsd:attribute name="a" type="xsd:double" />
                                                 <xsd:attribute name="b" type="xsd:double" />
-                                                <xsd:attribute name="c" type="xsd:double" />
+													<xsd:attribute name="c" type="xsd:double" />
                                                 <xsd:attribute name="d" type="xsd:double" />
                                             </xsd:complexType>
                                         </xsd:element>

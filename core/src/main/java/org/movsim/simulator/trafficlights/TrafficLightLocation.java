@@ -1,5 +1,6 @@
 package org.movsim.simulator.trafficlights;
 
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 
 import com.google.common.base.Preconditions;
@@ -8,14 +9,25 @@ public class TrafficLightLocation {
 
     private final Signal signal;
 
+    private final String controllerId;
+
     private TrafficLight trafficLight;
 
-    public TrafficLightLocation(Signal signal) {
+    private final double position;
+
+    private final Controller controller;
+
+    public TrafficLightLocation(Signal signal, Controller controller) {
+        this.controller = Preconditions.checkNotNull(controller);
         Preconditions.checkNotNull(signal);
-        Preconditions.checkArgument(!signal.getId().isEmpty());
-        Preconditions.checkArgument(signal.isSetId());
-        Preconditions.checkArgument(signal.isSetS());
+        Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
+        Preconditions.checkArgument(!signal.getName().isEmpty(), "empty name!");
+        Preconditions.checkArgument(signal.isSetId(), "id not set");
+        Preconditions.checkArgument(signal.isSetName(), "name not set");
+        Preconditions.checkArgument(signal.isSetS(), "s not set");
         this.signal = signal;
+        this.position = signal.getS();
+        this.controllerId = controller.getId();
     }
 
     /**
@@ -24,7 +36,7 @@ public class TrafficLightLocation {
      * @return the position (m)
      */
     public double position() {
-        return signal.getS();
+        return position;
     }
 
     /**
@@ -32,8 +44,22 @@ public class TrafficLightLocation {
      * 
      * @return the label
      */
-    public String id() {
+    public String signalId() {
         return signal.getId();
+    }
+
+    /**
+     * Returns the name. This name is defined in the infrastructure configuration <signal> element and serves as key for the trafficlight
+     * state.
+     * 
+     * @return the label
+     */
+    public String signalName() {
+        return signal.getName();
+    }
+
+    public String controllerId() {
+        return controllerId;
     }
 
     public TrafficLight getTrafficLight() {
@@ -48,7 +74,12 @@ public class TrafficLightLocation {
 
     @Override
     public String toString() {
-        return "TrafficLightLocation [position = " + position() + ", trafficLight=" + trafficLight + "]";
+        return "TrafficLightLocation [controllerId = " + controllerId + ", signalId = " + signalId() + ", position = "
+                + position + ", trafficLight=" + trafficLight + "]";
+    }
+
+    Controller getController() {
+        return controller;
     }
 
 }

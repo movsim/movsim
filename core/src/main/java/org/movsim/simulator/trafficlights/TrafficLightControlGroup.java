@@ -8,6 +8,7 @@ import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;
 import org.movsim.autogen.TrafficLightCondition;
 import org.movsim.autogen.TrafficLightState;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -24,29 +25,36 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private final List<Phase> phases;
 
+    private final String groupId;
+
     private int currentPhaseIndex = 0;
 
     private double currentPhaseDuration;
 
     private final double conditionRange;
 
+    /** mapping from the signal's name to the trafficlight */
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
-    TrafficLightControlGroup(ControllerGroup controllerGroup) {
+    TrafficLightControlGroup(ControllerGroup controllerGroup, Controller controller) {
         Preconditions.checkNotNull(controllerGroup);
+        Preconditions.checkNotNull(controller);
+        this.groupId = controllerGroup.getId();
         this.conditionRange = controllerGroup.getRange();
-        this.phases = controllerGroup.getPhase();
+        this.phases = ImmutableList.copyOf(controllerGroup.getPhase()); // deep copy
         createTrafficlights();
     }
 
     private void createTrafficlights() {
         for (Phase phase : phases) {
             for(TrafficLightState trafficlightState : phase.getTrafficLightState()){
-                String id = trafficlightState.getId();
-                if (!trafficLights.containsKey(id)) {
-                    trafficLights.put(id, new TrafficLight(id, this));
+                String name = Preconditions.checkNotNull(trafficlightState.getName());
+                TrafficLight trafficLight =trafficLights.get(name); 
+                if (trafficLight == null) {
+                    trafficLight = new TrafficLight(name, groupId, this);
+                    trafficLights.put(name, trafficLight);
                 }
-                trafficLights.get(id).addPossibleState(trafficlightState.getStatus());
+                trafficLight.addPossibleState(trafficlightState.getStatus());
             }
         }
     }
@@ -82,7 +90,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private boolean isClearConditionsFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
             if (state.getCondition() == TrafficLightCondition.CLEAR) {
-                if (vehicleIsInFrontOfLightAndDriving(trafficLights.get(state.getId()))) {
+                if (vehicleIsInFrontOfLightAndDriving(trafficLights.get(state.getName()))) {
                     return false;
                 }
             }
@@ -93,7 +101,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private boolean isTriggerConditionFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
             if (state.getCondition() == TrafficLightCondition.REQUEST) {
-                if (vehicleIsInFrontOfLight(trafficLights.get(state.getId()))) {
+                if (vehicleIsInFrontOfLight(trafficLights.get(state.getName()))) {
                     return true;
                 }
             }
@@ -129,12 +137,17 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private void updateTrafficLights() {
         Phase actualPhase = phases.get(currentPhaseIndex);
         for(TrafficLightState trafficLightState : actualPhase.getTrafficLightState()){
-            trafficLights.get(trafficLightState.getId()).setState(trafficLightState.getStatus());
+            trafficLights.get(trafficLightState.getName()).setState(trafficLightState.getStatus());
         }
     }
 
     Iterable<TrafficLight> trafficLights() {
         return ImmutableList.copyOf(trafficLights.values().iterator());
+    }
+
+    TrafficLight getTrafficLight(String signalName) {
+        return Preconditions.checkNotNull(trafficLights.get(signalName), "signalName=\"" + signalName
+                + "\" not defined in controllerGroup=" + groupId);
     }
 
     private void setNextPhaseIndex() {

@@ -35,6 +35,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import org.movsim.autogen.ControllerGroup;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller.Control;
 import org.movsim.simulator.SimulationTimeStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,49 +52,51 @@ public class TrafficLights implements SimulationTimeStep {
 
     private final List<TrafficLightControlGroup> trafficLightControlGroups = new ArrayList<>();
 
-    private final Map<String, TrafficLight> trafficLights = new HashMap<>();
+    /** mapping from signalIds to controllers */
+    private final Map<String, TrafficLightControlGroup> signalToController = new HashMap<>();
+
+    /** convenience mapping of xodr input */
+    private final Map<String, ControllerGroup> controllerMap = new HashMap<>();
 
     public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput) {
         if (trafficLightsInput == null) {
             return;
         }
-        createControllers(trafficLightsInput);
-        createTrafficLightMapping();
+        createControllerMapping(trafficLightsInput);
     }
 
-    private void createControllers(org.movsim.autogen.TrafficLights input) {
+    public TrafficLight getOrCreate(TrafficLightLocation location) {
+        if (!controllerMap.containsKey(location.controllerId())) {
+            throw new IllegalStateException("no controller for id=" + location.controllerId() + " defined in input");
+        }
+
+        TrafficLightControlGroup group = signalToController.get(location.signalId());
+        if (group == null) {
+            LOG.info("create new controllergroup for location={}", location.toString());
+            group = new TrafficLightControlGroup(controllerMap.get(location.controllerId()), location.getController());
+            trafficLightControlGroups.add(group);
+            for (Control control : location.getController().getControl()) {
+                signalToController.put(control.getSignalId(), group);
+            }
+            // TODO !!!
+            // if (isLogging) {
+            // group.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getId(), input.getNTimestep(),
+            // group.trafficLights()));
+            // }
+        }
+
+        return group.getTrafficLight(location.signalName());
+    }
+
+    private void createControllerMapping(org.movsim.autogen.TrafficLights input) {
         Set<String> controllGroupNames = new HashSet<>();
         for (ControllerGroup controllerGroup : input.getControllerGroup()) {
             Preconditions.checkArgument(!controllerGroup.getPhase().isEmpty(),
                     "at least one phase must be defined in a controller group.");
-            TrafficLightControlGroup group = new TrafficLightControlGroup(controllerGroup);
-            if (input.isLogging()) {
-                Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getId()), "controlgroup name="
-                        + controllerGroup.getId() + " not unique.");
-                group.setRecorder(new FileTrafficLightControllerRecorder(controllerGroup.getId(), input
-                        .getNTimestep(), group.trafficLights()));
-            }
-            trafficLightControlGroups.add(group);
+            Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getId()), "controlgroup name="
+                    + controllerGroup.getId() + " not unique.");
+            controllerMap.put(controllerGroup.getId(), controllerGroup);
         }
-    }
-
-    private void createTrafficLightMapping() {
-        Preconditions.checkArgument(!trafficLightControlGroups.isEmpty());
-        for (TrafficLightControlGroup controller : trafficLightControlGroups) {
-            for (TrafficLight trafficLight : controller.trafficLights()) {
-                if (trafficLights.put(trafficLight.id(), trafficLight) != null) {
-                    throw new IllegalArgumentException("trafficLight=" + trafficLight.toString()
-                            + " is referenced in more than one controller group in movsim input.");
-                }
-            }
-        }
-    }
-
-    public TrafficLight get(String id) {
-        if (!trafficLights.containsKey(id)) {
-            throw new IllegalStateException("trafficlight with id=" + id + " requested but not configured in input.");
-        }
-        return trafficLights.get(id);
     }
 
     /**
@@ -110,6 +113,15 @@ public class TrafficLights implements SimulationTimeStep {
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         for (TrafficLightControlGroup group : trafficLightControlGroups) {
             group.timeStep(dt, simulationTime, iterationCount);
+        }
+    }
+
+    public void checkIfAllTrafficlightsAreReferenced() {
+        for (TrafficLightControlGroup group : trafficLightControlGroups) {
+            for (TrafficLight trafficLight : group.trafficLights()) {
+                Preconditions.checkArgument(trafficLight.hasPosition(), "trafficlight=" + trafficLight.name()
+                        + " within group=" + trafficLight.getGroupId() + " is not referenced to a signal on a road!");
+            }
         }
     }
 

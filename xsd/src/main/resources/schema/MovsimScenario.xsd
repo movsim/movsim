@@ -643,6 +643,7 @@
             <xs:sequence>
                 <xs:element ref="Phase" minOccurs="1" maxOccurs="unbounded" />
             </xs:sequence>
+            <!-- serves as reference to controller-id in xodr -->
             <xs:attribute name="id" type="xs:string" use="required" />
             <!-- spatial range for checking conditions in meters -->
             <xs:attribute name="range" type="positiveDouble" default="100" />
@@ -658,7 +659,8 @@
     </xs:element>
     <xs:element name="TrafficLightState">
         <xs:complexType>
-            <xs:attribute name="id" type="xs:string" use="required" />
+			<!-- serves as reference to the xodr signal.name attribute -->
+            <xs:attribute name="name" type="xs:string" use="required" />
             <xs:attribute name="status" type="TrafficLightStatus" />
             <xs:attribute name="condition" type="TrafficLightCondition" default="none"/>
         </xs:complexType>

@@ -38,9 +38,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
-import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1004,21 +1002,6 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public Iterable<Slope> slopes() {
         return slopes == null ? null : slopes;
-    }
-
-    /**
-     * Sets the traffic lights for this road segment by connecting the dynamic trafficlights with the road segment
-     * locations parsed from the infrastructure input.
-     * 
-     * @param trafficLights
-     */
-    public void setTrafficLights(TrafficLights trafficLights) {
-        for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
-            TrafficLight trafficLight = trafficLights.get(trafficLightLocation.id());
-            trafficLight.setPosition(trafficLightLocation.position());
-            trafficLight.setRoadSegment(this);
-            trafficLightLocation.setTrafficLight(trafficLight);
-        }
     }
 
     /**

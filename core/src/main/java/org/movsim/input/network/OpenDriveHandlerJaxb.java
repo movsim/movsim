@@ -2,8 +2,10 @@ package org.movsim.input.network;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.JAXBException;
@@ -11,12 +13,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.movsim.network.autogen.opendrive.Lane;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller.Control;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction.Connection;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Junction.Connection.LaneLink;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Lanes.LaneSection;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingLine;
@@ -40,8 +45,10 @@ import com.google.common.base.Preconditions;
 public class OpenDriveHandlerJaxb {
     private static final Logger LOG = LoggerFactory.getLogger(OpenDriveHandlerJaxb.class);
 
-    /** Set for checking uniqueness of signal id for whole network. */
-    private final Set<String> trafficLightIds = new HashSet<>();
+    /** Mapping of signal-ids of single trafficlights to controller. */
+    private final Map<String, Controller> signalIdsToController = new HashMap<>();
+    /** Checks uniqueness of signal ids in <road> definitions. */
+    private final Set<String> uniqueTrafficLightIdsInRoads = new HashSet<>();
 
     OpenDriveHandlerJaxb() {
     }
@@ -56,7 +63,8 @@ public class OpenDriveHandlerJaxb {
      * @throws SAXException
      * @throws ParserConfigurationException
      */
-    public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException {
+    public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException,
+            IllegalArgumentException {
         OpenDRIVE openDriveNetwork = NetworkLoadAndValidation.validateAndLoadOpenDriveNetwork(new File(filename));
         OpenDriveHandlerJaxb openDriveHandlerJaxb = new OpenDriveHandlerJaxb();
         return openDriveHandlerJaxb.create(filename, openDriveNetwork, roadNetwork);
@@ -64,6 +72,8 @@ public class OpenDriveHandlerJaxb {
 
     private boolean create(String filename, OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork)
             throws IllegalArgumentException {
+        createControllerMapping(openDriveNetwork);
+
         for (Road road : openDriveNetwork.getRoad()) {
             final RoadMapping roadMapping = createRoadMapping(road);
             for (Lanes.LaneSectionType laneSectionType : LaneSectionType.values()) {
@@ -81,6 +91,17 @@ public class OpenDriveHandlerJaxb {
         handleJunctions(openDriveNetwork, roadNetwork);
         addDefaultSinksForUnconnectedRoad(roadNetwork);
         return true;
+    }
+
+    private void createControllerMapping(OpenDRIVE openDriveNetwork) {
+        for (Controller controller : openDriveNetwork.getController()) {
+            for (Control control : controller.getControl()) {
+                if (signalIdsToController.put(control.getSignalId(), controller) != null) {
+                    throw new IllegalArgumentException("trafficlight id=" + control.getSignalId()
+                            + " is referenced more than once in xodr <controller> definitions.");
+                }
+            }
+        }
     }
 
     private static boolean hasLaneSectionType(Road road, LaneSectionType laneType) {
@@ -191,15 +212,20 @@ public class OpenDriveHandlerJaxb {
         }
 
         if (road.isSetSignals()) {
-            for (OpenDRIVE.Road.Signals.Signal signal : road.getSignals().getSignal()) {
+            for (Signal signal : road.getSignals().getSignal()) {
                 // assure uniqueness of signal id for whole network
-                TrafficLightLocation trafficLightLocation = new TrafficLightLocation(signal);
-                boolean added = trafficLightIds.add(trafficLightLocation.id());
+
+                boolean added = uniqueTrafficLightIdsInRoads.add(signal.getId());
                 if (!added) {
-                    throw new IllegalArgumentException("traffic light signal with id=" + trafficLightLocation.id()
+                    throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
                             + " is not unique in xodr network definition.");
                 }
-                roadSegment.addTrafficLightLocation(trafficLightLocation);
+                Controller controller = signalIdsToController.get(signal.getId());
+                if (controller == null) {
+                    throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
+                            + " is not referenced in xodr <controller> definition.");
+                }
+                roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal, controller));
             }
         }
 
