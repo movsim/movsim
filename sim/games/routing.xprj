@@ -56,10 +56,10 @@
                     <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
                 </TrafficComposition>
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="0" />
-                    <Inflow t="60" q_per_hour="1800" />
-                    <Inflow t="120" q_per_hour="1800" />
-                    <Inflow t="180" q_per_hour="0" />
+                    <Inflow t="0" q_per_hour="0" v="20"/>
+                    <Inflow t="60" q_per_hour="1800" v="20"/>
+                    <Inflow t="120" q_per_hour="1800" v="20" />
+                    <Inflow t="180" q_per_hour="0" v="20" />
                 </TrafficSource>
                 <FlowConservingInhomogeneities>
                     <Inhomogeneity position="0" alpha_T="0.8" alpha_v0="1" />

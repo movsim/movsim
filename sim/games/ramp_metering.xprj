@@ -97,10 +97,15 @@
             </Road>
         </Simulation>
         <TrafficLights>
-            <!-- zero time period means that light will not change automatically from that color -->
-            <!-- negative time period means that light will not use that color -->
-            <!-- ordinal numbers of TrafficLightStatus are GREEN=0, GREEN_RED=1, RED=2, RED_GREEN=3 -->
-            <TrafficLight id="TL_1" green_time="0" red_time="0" phase_shift="0" init="0" />
+            <ControllerGroup id="group1" >
+				<!-- duration set to very long time. State changes will result only from user-interaction -->
+                <Phase duration="10000000">
+                    <TrafficLightState name="first" status="Green" />
+                </Phase>
+                <Phase duration="10000000">
+                    <TrafficLightState name="first" status="Red" />
+                </Phase>
+            </ControllerGroup>
         </TrafficLights>
         <Routes>
             <Route label="north">
