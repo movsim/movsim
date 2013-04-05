@@ -63,10 +63,27 @@
                 </TrafficSource>
             </Road>
         </Simulation>
-        <TrafficLights>
-            <TrafficLight id="tl_r2" green_time="35" green_red_time="3" red_time="30" red_green_time="2" phase_shift="0" />
-            <TrafficLight id="tl_r4" green_time="60" green_red_time="3" red_time="60" red_green_time="2" phase_shift="0" />
+        <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup id="group1"  >
+                <Phase duration="35">
+                    <TrafficLightState name="first" status="Green" />
+                    <TrafficLightState name="second" status="Red" />
+                </Phase>
+                <Phase duration="3">
+                    <TrafficLightState name="first" status="GreenRed" /> 
+                    <!-- <TrafficLightState name="second" status="RedGreen" /> -->
+                </Phase>
+                <Phase duration="40">
+                    <TrafficLightState name="first" status="Red" />
+                    <TrafficLightState name="second" status="Green" />
+                </Phase>
+                <Phase duration="2">
+                    <!-- <TrafficLightState name="first" status="RedGreen" /> -->
+                    <TrafficLightState name="second" status="GreenRed" />
+                </Phase>
+            </ControllerGroup>
         </TrafficLights>
+        
         <Routes>
             <!-- without first road element on purpose -->
             <Route label="main">
@@ -93,7 +110,7 @@
             <SpatioTemporalConfiguration dx="100" dt="40" route="main" />
             <SpatioTemporalConfiguration dx="100" dt="40" route="onramp" />
             <Trajectories dt="1" route="onramp" />
-            <Trajectories dt="1" route="main" dn="1" />
+            <Trajectories dt="1" route="main" />
             <!--  start_time="0" end_time="120" -->
             <TravelTimes route="main" dt="0" tauEMA="40" />
             <TravelTimes route="onramp" dt="0" />
