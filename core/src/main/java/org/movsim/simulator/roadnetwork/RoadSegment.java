@@ -356,22 +356,22 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final LaneSegment laneSegment(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount : "lane=" + lane;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane);
         return laneSegments[lane - 1];
     }
 
     public final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSourceLaneSegment(sourceLaneSegment);
     }
 
     public final LaneSegment sourceLaneSegment(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         return laneSegments[lane - 1].sourceLaneSegment();
     }
 
     public final RoadSegment sourceRoadSegment(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sourceLaneSegment() == null) {
             return null;
         }
@@ -379,7 +379,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final int sourceLane(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sourceLaneSegment() == null) {
             return Lanes.NONE;
         }
@@ -387,17 +387,17 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSinkLaneSegment(sinkLaneSegment);
     }
 
     public final LaneSegment sinkLaneSegment(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         return laneSegments[lane - 1].sinkLaneSegment();
     }
 
     public final RoadSegment sinkRoadSegment(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
             return null;
         }
@@ -405,7 +405,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final int sinkLane(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
             return Lanes.NONE;
         }
@@ -474,7 +474,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @return the number of vehicles in the given lane on this road segment
      */
     public int getVehicleCount(int lane) {
-        assert lane >= Lanes.LANE1 && lane <= laneCount;
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         return laneSegments[lane - 1].vehicleCount();
     }
 
@@ -700,7 +700,8 @@ public class RoadSegment implements Iterable<Vehicle> {
             trafficLightLocation = segment.getNextDownstreamTrafficLight(0);
             distance += (trafficLightLocation != null) ? trafficLightLocation.position() : segment.roadLength();
         }
-        return new TrafficLightLocationWithDistance(trafficLightLocation, distance);
+        return trafficLightLocation == null ? null : new TrafficLightLocationWithDistance(trafficLightLocation,
+                distance);
     }
 
     private void applySpeedLimits() {
@@ -1295,7 +1296,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         public final double distance;
 
         public TrafficLightLocationWithDistance(TrafficLightLocation location, double distance) {
-            this.trafficLightLocation = location;
+            this.trafficLightLocation = Preconditions.checkNotNull(location);
             this.distance = distance;
         }
 

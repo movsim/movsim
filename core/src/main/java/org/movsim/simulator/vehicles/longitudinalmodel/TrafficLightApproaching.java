@@ -76,35 +76,14 @@ public class TrafficLightApproaching {
             return;
         }
 
-        // TODO consider refactoring if function really needed
-        if (trafficLight.status() == TrafficLightStatus.GREEN) {
-            // check if space is sufficient
-            TrafficLightLocationWithDistance nextTrafficlight = trafficLight.roadSegment()
-                    .getNextDownstreamTrafficLight(trafficLight.position(), me.lane(), MAX_LOOK_AHEAD_DISTANCE);
-            if (nextTrafficlight.trafficLightLocation != null) {
-                // TODO different roadsegments
-                double distanceBetweenTrafficlights = nextTrafficlight.trafficLightLocation.position()
-                        - trafficLight.position();
-                Vehicle frontVehicle = trafficLight.roadSegment().laneSegment(me.lane()).frontVehicle(me);
-                double effectiveFrontVehicleLength = 0;
-                if (frontVehicle != null
-                        && frontVehicle.getFrontPosition() < nextTrafficlight.trafficLightLocation.position()) {
-                    effectiveFrontVehicleLength = frontVehicle.getEffectiveLength();
-                }
-                if (distanceBetweenTrafficlights < effectiveFrontVehicleLength + me.getEffectiveLength()) {
-                    considerTrafficLight = true;
-                    accTrafficLight = calcAcceleration(me, distanceToTrafficlight);
-                    LOG.debug(
-                            "stop in front of green traffic light because of insufficient space: space to next light={}, space for vehicle(s)={}",
-                            distanceBetweenTrafficlights, effectiveFrontVehicleLength + me.getEffectiveLength());
-                    LOG.debug("...and brake with acc={}", accTrafficLight);
-                }
-            }
+        if (trafficLight.status() == TrafficLightStatus.GREEN && me.getLength() > 30
+                && distanceToTrafficlight < 0.5 * MAX_LOOK_AHEAD_DISTANCE) {
+            // special case here: only relevant if vehicle is really long and next trafficlight is quite close
+            checkSpaceBeforePassingTrafficlight(me, trafficLight, distanceToTrafficlight);
         } else if (trafficLight.status() != TrafficLightStatus.GREEN) {
-            // TODO define it as parameter ("range of sight" or so) ?!
             final double maxRangeOfSight = MovsimConstants.GAP_INFINITY;
             if (distanceToTrafficlight < maxRangeOfSight) {
-                accTrafficLight = calcAcceleration(me, distanceToTrafficlight);
+                accTrafficLight = calcAccelerationToTrafficlight(me, distanceToTrafficlight);
                 if (accTrafficLight < 0) {
                     considerTrafficLight = true;
                     LOG.debug("distance to trafficLight = {}, accTL = {}", distanceToTrafficlight, accTrafficLight);
@@ -140,10 +119,9 @@ public class TrafficLightApproaching {
         }
     }
 
-    private static double calcAcceleration(Vehicle me, double distanceToTrafficlight) {
+    private static double calcAccelerationToTrafficlight(Vehicle me, double distanceToTrafficlight) {
         final double speed = me.getSpeed();
-        return Math.min(0,
-                me.getLongitudinalModel().calcAccSimple(distanceToTrafficlight, speed, speed));
+        return Math.min(0, me.getLongitudinalModel().calcAccSimple(distanceToTrafficlight, speed, speed));
     }
 
     /**
@@ -171,5 +149,45 @@ public class TrafficLightApproaching {
      */
     public double getDistanceToTrafficlight() {
         return distanceToTrafficlight;
+    }
+
+    private void checkSpaceBeforePassingTrafficlight(Vehicle me, TrafficLight trafficLight,
+            double distanceToTrafficlight) {
+        // relative to position of first traffic light
+        TrafficLightLocationWithDistance nextTrafficlight = trafficLight.roadSegment().getNextDownstreamTrafficLight(
+                trafficLight.position(), me.lane(), MAX_LOOK_AHEAD_DISTANCE);
+        if (nextTrafficlight != null) {
+            double distanceBetweenTrafficlights = nextTrafficlight.distance;
+            if (distanceBetweenTrafficlights < 0.5 * MAX_LOOK_AHEAD_DISTANCE) {
+                double effectiveFrontVehicleLengths = calcEffectiveFrontVehicleLengths(me, trafficLight,
+                        distanceToTrafficlight + distanceBetweenTrafficlights);
+                LOG.debug("distanceBetweenTrafficlights={}, effectiveLengths+ownLength={}",
+                        distanceBetweenTrafficlights, effectiveFrontVehicleLengths + me.getEffectiveLength());
+                if (effectiveFrontVehicleLengths > 0
+                        && distanceBetweenTrafficlights < effectiveFrontVehicleLengths + me.getEffectiveLength()) {
+                    considerTrafficLight = true;
+                    accTrafficLight = calcAccelerationToTrafficlight(me, distanceToTrafficlight);
+                    LOG.debug(
+                            "stop in front of green trafficlight, not sufficient space: nextlight={}, space for vehicle(s)={}",
+                            distanceBetweenTrafficlights, effectiveFrontVehicleLengths + me.getEffectiveLength());
+                }
+            }
+        }
+    }
+
+    private static double calcEffectiveFrontVehicleLengths(Vehicle me, TrafficLight trafficLight,
+            double distanceToSecondTrafficlight) {
+        double sumEffectiveLengths = 0;
+        Vehicle frontVehicle = trafficLight.roadSegment().laneSegment(me.lane()).frontVehicle(me);
+        while (frontVehicle != null && me.getBrutDistance(frontVehicle) < distanceToSecondTrafficlight) {
+            sumEffectiveLengths += frontVehicle.getEffectiveLength();
+            Vehicle prevFront = frontVehicle;
+            frontVehicle = trafficLight.roadSegment().laneSegment(frontVehicle.lane()).frontVehicle(frontVehicle);
+            if (frontVehicle != null && prevFront.getId() == frontVehicle.getId()) {
+                // FIXME seems to be a real bug: get back the *same* vehicle when its entered the downstream roadsegment
+                break;
+            }
+        }
+        return sumEffectiveLengths;
     }
 }

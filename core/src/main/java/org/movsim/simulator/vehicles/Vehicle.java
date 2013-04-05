@@ -652,8 +652,8 @@ public class Vehicle {
         double moderatedAcc = acc;
         TrafficLightLocationWithDistance location = roadSegment.getNextDownstreamTrafficLight(
                 getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
-        if (location.trafficLightLocation != null) {
-            // LOG.debug("consider tl={}" + location.toString());
+        if (location != null) {
+            LOG.debug("consider trafficlight={}", location.toString());
             updateTrafficLightApproaching(location.trafficLightLocation, location.distance);
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());

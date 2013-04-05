@@ -35,7 +35,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     TrafficLightControlGroup(ControllerGroup controllerGroup) {
         Preconditions.checkNotNull(controllerGroup);
         this.conditionRange = controllerGroup.getRange();
-        phases = controllerGroup.getPhase();
+        this.phases = controllerGroup.getPhase();
         createTrafficlights();
     }
 
