@@ -457,6 +457,7 @@
             </xs:sequence>
             <xs:attribute name="timestep" type="positiveDouble" use="required" />
             <xs:attribute name="duration" type="xs:double" default="-1" />
+            <xs:attribute name="with_seed" type="xs:boolean" default="true" />
             <xs:attribute name="seed" type="xs:int" default="42" />
             <xs:attribute name="crash_exit" type="xs:boolean" default="true" />
             <!-- "YYYY-MM-dd'T'HH:mm:ss" -->
@@ -644,7 +645,7 @@
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required" />
             <!-- spatial range for checking conditions in meters -->
-            <xs:attribute name="range" type="positiveDouble" default="50" />
+            <xs:attribute name="range" type="positiveDouble" default="100" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Phase">

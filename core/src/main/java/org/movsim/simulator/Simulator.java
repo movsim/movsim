@@ -151,7 +151,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         simulationRunnable.setDuration(duration < 0 ? Double.MAX_VALUE : duration);
 
-        if (simulationInput.isSetSeed()) {
+        if (simulationInput.isWithSeed()) {
             MyRandom.initializeWithSeed(simulationInput.getSeed());
         }
 
