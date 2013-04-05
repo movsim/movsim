@@ -20,8 +20,14 @@
             </laneSection>
         </lanes>
         <signals>
-            <signal s="1000" id="tl_1" name="Trafficlight XY" />
+			<!-- id is reference to physical device, name is reference to trafficLightState in movsim controller input -->
+            <signal s="1000" id="tl1" name="firstLight" />
         </signals>
     </road>
+     <!-- id maps to movsim controllerGroupID -->
+    <controller id="plan1">
+		<control signalId="tl1"/>
+    </controller>
+    
 </OpenDRIVE>
 

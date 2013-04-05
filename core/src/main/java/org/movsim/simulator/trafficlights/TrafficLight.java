@@ -79,7 +79,7 @@ public class TrafficLight {
      * 
      * @return groupId
      */
-    public String getGroupId() {
+    public String groupId() {
         return groupId;
     }
 

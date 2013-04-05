@@ -65,8 +65,6 @@ import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
 import org.movsim.simulator.roadnetwork.TrafficSourceMacro;
 import org.movsim.simulator.roadnetwork.TrafficSourceMicro;
-import org.movsim.simulator.trafficlights.TrafficLight;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
@@ -167,28 +165,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
         }
 
-        createControllersAndConnectTrafficLights();
+        trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights(), roadNetwork);
 
         reset();
-    }
-
-    /**
-     * Sets the traffic lights for each road segment by connecting the trafficlights (and the controllers) with the road segment
-     * locations parsed from the infrastructure input.
-     * 
-     */
-    private void createControllersAndConnectTrafficLights() {
-        trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights());
-        for (RoadSegment roadSegment : roadNetwork) {        
-            for (TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
-                TrafficLight trafficLight = trafficLights.getOrCreate(trafficLightLocation);
-                trafficLight.setPosition(trafficLightLocation.position());
-                trafficLight.setRoadSegment(roadSegment);
-                trafficLightLocation.setTrafficLight(trafficLight);
-            }
-        }
-        trafficLights.checkIfAllTrafficlightsAreReferenced();
-
     }
 
     private void createRoutes(Routes routesInput) {

@@ -395,7 +395,8 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     public final RoadSegment sinkRoadSegment(int lane) {
-        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane + " but lanecount="
+                + laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
             return null;
         }
@@ -684,6 +685,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return null;
     }
 
+    // TODO profiling ... lookup done quite often even w/o any trafficlights
     public TrafficLightLocationWithDistance getNextDownstreamTrafficLight(double position, int lane,
             double maxLookAheadDistance) {
         TrafficLightLocation trafficLightLocation = getNextDownstreamTrafficLight(position);
@@ -691,7 +693,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                 - position;
         RoadSegment segment = this;
         while (trafficLightLocation == null && distance < maxLookAheadDistance) {
-            segment = segment.sinkRoadSegment(lane);
+            segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
             if (segment == null) {
                 break;
             }

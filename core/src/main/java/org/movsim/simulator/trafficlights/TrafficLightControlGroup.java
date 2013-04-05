@@ -8,7 +8,6 @@ import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;
 import org.movsim.autogen.TrafficLightCondition;
 import org.movsim.autogen.TrafficLightState;
-import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
@@ -27,6 +26,8 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private final String groupId;
 
+    private final String firstSignalId; // for logging
+
     private int currentPhaseIndex = 0;
 
     private double currentPhaseDuration;
@@ -36,10 +37,10 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     /** mapping from the signal's name to the trafficlight */
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
-    TrafficLightControlGroup(ControllerGroup controllerGroup, Controller controller) {
+    TrafficLightControlGroup(ControllerGroup controllerGroup, String firstSignalId) {
         Preconditions.checkNotNull(controllerGroup);
-        Preconditions.checkNotNull(controller);
         this.groupId = controllerGroup.getId();
+        this.firstSignalId = firstSignalId;
         this.conditionRange = controllerGroup.getRange();
         this.phases = ImmutableList.copyOf(controllerGroup.getPhase()); // deep copy
         createTrafficlights();
@@ -47,9 +48,9 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private void createTrafficlights() {
         for (Phase phase : phases) {
-            for(TrafficLightState trafficlightState : phase.getTrafficLightState()){
+            for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
                 String name = Preconditions.checkNotNull(trafficlightState.getName());
-                TrafficLight trafficLight =trafficLights.get(name); 
+                TrafficLight trafficLight = trafficLights.get(name);
                 if (trafficLight == null) {
                     trafficLight = new TrafficLight(name, groupId, this);
                     trafficLights.put(name, trafficLight);
@@ -136,7 +137,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private void updateTrafficLights() {
         Phase actualPhase = phases.get(currentPhaseIndex);
-        for(TrafficLightState trafficLightState : actualPhase.getTrafficLightState()){
+        for (TrafficLightState trafficLightState : actualPhase.getTrafficLightState()) {
             trafficLights.get(trafficLightState.getName()).setState(trafficLightState.getStatus());
         }
     }
@@ -156,6 +157,14 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
             return;
         }
         currentPhaseIndex++;
+    }
+
+    public String groupId() {
+        return groupId;
+    }
+
+    String firstSignalId() {
+        return firstSignalId;
     }
 
     public interface RecordDataCallback {

@@ -37,7 +37,7 @@ import com.google.common.base.Preconditions;
 public class FileTrafficLightControllerRecorder extends FileOutputBase implements
         TrafficLightControlGroup.RecordDataCallback {
 
-    private static final String extensionFormat = ".trafficlights_%s.csv";
+    private static final String extensionFormat = ".controllerGroup_%s.firstSignal_%s.csv";
     private final int nTimestep;
 
     /**
@@ -48,13 +48,14 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightControllerRecorder(String controllerGroupName, int nTimestep,
-            Iterable<TrafficLight> trafficLights) {
+    public FileTrafficLightControllerRecorder(TrafficLightControlGroup group, int nTimestep) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
-        Preconditions.checkArgument(!controllerGroupName.isEmpty());
+        Preconditions.checkArgument(!group.groupId().isEmpty());
+        Preconditions.checkArgument(!group.firstSignalId().isEmpty());
         this.nTimestep = nTimestep;
-        String trimmedName = controllerGroupName.replaceAll("\\s", "");
-        writer = Preconditions.checkNotNull(createWriter(String.format(extensionFormat, trimmedName)));
+        String groupName = group.groupId().replaceAll("\\s", "");
+        String firstSignalId = group.firstSignalId().replaceAll("\\s", "");
+        writer = Preconditions.checkNotNull(createWriter(String.format(extensionFormat, groupName, firstSignalId)));
     }
 
     /**
@@ -81,8 +82,8 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
 
     private void writeData(double simulationTime, String formattedTime, Iterable<TrafficLight> trafficLights) {
         writer.printf("%8.2f, %s,  ", simulationTime, formattedTime);
-        for (final TrafficLight trafficLight : trafficLights) {
-            writer.printf("%.1f  %d  ", trafficLight.position(), trafficLight.status().ordinal());
+        for (TrafficLight trafficLight : trafficLights) {
+            writer.printf("%.1f,  %d,  ", trafficLight.position(), trafficLight.status().ordinal());
         }
         write("%n");
     }
@@ -101,8 +102,8 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
 
         int counter = 0;
         for (final TrafficLight trafficLight : trafficLights) {
-            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2f m%n", ++counter,
-                    trafficLight.position());
+            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2fm, name=%s, groupId=%s%n",
+                    ++counter, trafficLight.position(), trafficLight.name(), trafficLight.groupId());
         }
         writer.printf(COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1", "status[1]_TL1",
                 " etc.");
