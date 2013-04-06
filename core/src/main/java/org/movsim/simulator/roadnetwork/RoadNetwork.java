@@ -81,14 +81,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Given its userId, find a road segment in the road network.
+     * Given its roadId, find a road segment in the road network.
      * 
-     * @param userId
+     * @param roadId
      * @return the road segment with the given userId
      */
-    public RoadSegment findByUserId(String userId) {
+    public RoadSegment findByRoadId(String roadId) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.userId() != null && roadSegment.userId().equals(userId)) {
+            if (roadSegment.hasRoadId() && roadSegment.roadId().equals(roadId)) {
                 return roadSegment;
             }
         }

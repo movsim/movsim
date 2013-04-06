@@ -23,12 +23,12 @@
                     <args>
                         <arg>-XtoString</arg>
                         <arg>-Xequals</arg>
-                        <arg>-XhashCode</arg>
+                        <!-- <arg>-XhashCode</arg> -->
                         <arg>-Xcopyable</arg>
-                        <arg>-Xmergeable</arg>
+                        <!-- <arg>-Xmergeable</arg> -->
                         <arg>-Xinheritance</arg>
                         <arg>-Xannotate</arg>
-                        <!--                         <arg>-Xfluent-api</arg>-->
+                        <!-- <arg>-Xfluent-api</arg>-->
                     </args>
                     <plugins>
 							<plugin>

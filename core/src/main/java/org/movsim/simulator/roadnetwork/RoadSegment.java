@@ -89,8 +89,8 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     /** the id is an internally used unique identifier for the road. */
     private final int id;
-    /** the userId is the id specified in the .xodr and .xml files. */
-    private String userId;
+    /** the roadId is the id specified in the .xodr and .xml files. */
+    private String roadId;
     /** road name specified in the openDrive .xodr network file. */
     private String roadName;
 
@@ -197,23 +197,28 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Set this road segment's userId
+     * Set this road segment's roadId
      * 
-     * @param userId
+     * @param roadId
      * 
      */
-    public final void setUserId(String userId) {
-        this.userId = userId;
+    public final void setRoadId(String roadId) {
+        this.roadId = roadId;
     }
 
     /**
-     * Returns this road segment's userId. The userId is the road's id as set in the .xodr and .xml files.
+     * Returns this road segment's roadId. The roadId is the road's id as set in the .xodr and .xml files.
      * 
-     * @return this road segment's userId
+     * @return this road segment's roadId
      */
-    public final String userId() {
-        return userId == null ? Integer.toString(id) : userId;
+    public final String roadId() {
+        return roadId;
     }
+
+    public final boolean hasRoadId() {
+        return roadId != null;
+    }
+
 
     /**
      * Returns this road segment's road mapping.
@@ -1124,7 +1129,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                                 vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("roadID=").append(id);
-                    sb.append(", user roadID=").append(userId);
+                    sb.append(", user roadID=").append(roadId);
                     sb.append(", net distance=").append(netDistance);
                     sb.append(", lane=").append(laneSegment.lane());
                     sb.append(", container.size=").append(laneSegment.vehicleCount());
@@ -1232,7 +1237,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     @Override
     public String toString() {
-        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadLength=" + roadLength + ", laneCount="
+        return "RoadSegment [id=" + id + ", roadId=" + roadId + ", roadLength=" + roadLength + ", laneCount="
                 + laneCount + "]";
     }
 
