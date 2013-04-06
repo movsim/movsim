@@ -19,7 +19,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="ruralroad.xodr">
+    <Scenario network_filename="one_onramp.xodr">
         <Simulation timestep="0.2">
             <TrafficComposition>
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
@@ -33,6 +33,11 @@
             <Road id="1+">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="1000" v="15" />
+                </TrafficSource>
+            </Road>
+            <Road id="4">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="200" v="5" />
                 </TrafficSource>
             </Road>
         </Simulation>
