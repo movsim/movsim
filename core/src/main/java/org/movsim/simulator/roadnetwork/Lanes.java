@@ -112,7 +112,17 @@ public final class Lanes {
      * 
      */
     public enum LaneSectionType {
-        LEFT, RIGHT;
+        LEFT("-"), RIGHT("+");
+
+        private final String idAppender;
+
+        private LaneSectionType(String idAppender) {
+            this.idAppender = idAppender;
+        }
+
+        public String idAppender() {
+            return idAppender;
+        }
     }
 
     /**

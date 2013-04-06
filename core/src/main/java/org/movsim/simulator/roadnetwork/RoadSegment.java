@@ -219,7 +219,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         return roadId != null;
     }
 
-
     /**
      * Returns this road segment's road mapping.
      * 
@@ -373,7 +372,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1].sourceLaneSegment();
     }
 
-    public final RoadSegment sourceRoadSegment(int lane) {
+    final RoadSegment sourceRoadSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sourceLaneSegment() == null) {
             return null;
@@ -389,17 +388,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1].sourceLaneSegment().lane();
     }
 
-    public final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
+    final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSinkLaneSegment(sinkLaneSegment);
     }
 
-    public final LaneSegment sinkLaneSegment(int lane) {
+    final LaneSegment sinkLaneSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         return laneSegments[lane - 1].sinkLaneSegment();
     }
 
-    public final RoadSegment sinkRoadSegment(int lane) {
+    final RoadSegment sinkRoadSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane + " but lanecount="
                 + laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
@@ -408,7 +407,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1].sinkLaneSegment().roadSegment();
     }
 
-    public final int sinkLane(int lane) {
+    final int sinkLane(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
             return Lanes.NONE;
@@ -1295,5 +1294,14 @@ public class RoadSegment implements Iterable<Vehicle> {
             return "TrafficLightLocationWithDistance [trafficLightLocation=" + trafficLightLocation + ", distance="
                     + distance + "]";
         }
+    }
+
+    public final boolean hasSink() {
+        for (LaneSegment laneSegment : laneSegments) {
+            if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

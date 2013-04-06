@@ -26,6 +26,8 @@
 
 package org.movsim.simulator.roadnetwork;
 
+import com.google.common.base.Preconditions;
+
 /**
  * <p>
  * Simple connection between road segments, where each lane has an unambiguous predecessor and successor. Allows merging and forking of road
@@ -53,18 +55,15 @@ public class Link {
      * Adds a lane pair. Joins a lane in the source road segment to its corresponding lane in the sink road segment.
      * 
      * @param fromLane
-     * @param fromRoadsegment
+     * @param fromRoadSegment
      * @param toLane
      * @param toRoadSegment
      */
-    public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane, RoadSegment toRoadSegment) {
-        // toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
-        // toRoadSegment.setSourceLaneForLane(fromLane, toLane);
-        // fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
-        // fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
-
-        toRoadSegment.setSourceLaneSegmentForLane(fromRoadsegment.laneSegment(fromLane), toLane);
-        fromRoadsegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
+    public static void addLanePair(int fromLane, RoadSegment fromRoadSegment, int toLane, RoadSegment toRoadSegment) {
+        Preconditions.checkNotNull(fromRoadSegment);
+        Preconditions.checkNotNull(toRoadSegment);
+        toRoadSegment.setSourceLaneSegmentForLane(fromRoadSegment.laneSegment(fromLane), toLane);
+        fromRoadSegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
     }
 
     /**
