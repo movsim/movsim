@@ -272,7 +272,7 @@ public abstract class RoadMapping {
      * @return start position of the road
      */
     public RoadMapping.PosTheta startPos() {
-        return map(0.0, 0.0);
+        return startPos(0.0);
     }
 
     /**
@@ -292,7 +292,7 @@ public abstract class RoadMapping {
      * @return end position of the road
      */
     public RoadMapping.PosTheta endPos() {
-        return map(roadLength, 0.0);
+        return endPos(0.0);
     }
 
     /**
@@ -313,7 +313,7 @@ public abstract class RoadMapping {
      */
     public RoadMapping.PosTheta endPosRamp() {
         final double lateralOffset = laneOffset(laneCount);
-        return map(roadLength, lateralOffset);
+        return endPos(lateralOffset);
     }
 
     /**

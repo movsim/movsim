@@ -25,7 +25,7 @@
                 <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
                 <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" />
             </TrafficComposition>
-            <Road id="1-">
+            <Road id="3-">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="500" v="15" />
                 </TrafficSource>

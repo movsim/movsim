@@ -136,9 +136,15 @@ public class OpenDriveHandlerJaxb {
     }
 
     private static Geometry shiftGeometry(boolean hasPeer, LaneSectionType laneSectionType, Geometry geometry) {
+        // HACK HERE !!!
         if (hasPeer && laneSectionType == Lanes.LaneSectionType.LEFT) {
             Geometry copy = (Geometry) geometry.copyTo(null);
-            copy.setY(geometry.getY() - 20); // HACK
+            copy.setY(geometry.getY() - 30);
+            if (laneSectionType.isReverseDirection()) {
+                copy.setX(copy.getX() + copy.getLength() * Math.cos(copy.getHdg()));
+                copy.setY(copy.getY() + copy.getLength() * Math.sin(copy.getHdg()));
+                copy.setHdg(Math.PI - copy.getHdg());
+            }
             return copy;
         }
         return geometry;
