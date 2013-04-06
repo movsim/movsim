@@ -124,7 +124,6 @@ public class AppFrame extends JFrame {
     private void initLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            System.out.println("set to system LaF");
         } catch (final ClassNotFoundException e) {
             e.printStackTrace();
         } catch (final InstantiationException e) {
