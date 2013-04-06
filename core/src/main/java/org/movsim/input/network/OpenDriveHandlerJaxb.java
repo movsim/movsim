@@ -95,12 +95,12 @@ public class OpenDriveHandlerJaxb {
 
     private void createRoadSegments(OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork) {
         for (Road road : openDriveNetwork.getRoad()) {
-            final RoadMapping roadMapping = createRoadMapping(road);
             for (Lanes.LaneSectionType laneSectionType : LaneSectionType.values()) {
                 if (hasLaneSectionType(road, laneSectionType)) {
-                    RoadSegment roadSegmentRight = createRoadSegment(laneSectionType, roadMapping, road);
-                    if (roadSegmentRight != null) {
-                        roadNetwork.add(roadSegmentRight);
+                    RoadMapping roadMapping = createRoadMapping(laneSectionType, road);
+                    RoadSegment roadSegment = createRoadSegment(laneSectionType, roadMapping, road);
+                    if (roadSegment != null) {
+                        roadNetwork.add(roadSegment);
                     }
                 }
             }
@@ -121,31 +121,33 @@ public class OpenDriveHandlerJaxb {
         return false; // CENTER lane not supported
     }
 
-    private static RoadMapping createRoadMapping(Road road) throws IllegalArgumentException {
+    private static RoadMapping createRoadMapping(LaneSectionType laneSectionType, Road road)
+            throws IllegalArgumentException {
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "exactly one <laneSection> needs to be defined, more <laneSection>s cannot be handled!");
-
-        int roadLaneCount = 0; // total number of lanes in both driving directions
-        if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
-            roadLaneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
-        }
-        if (road.getLanes().getLaneSection().get(0).isSetRight()) {
-            roadLaneCount += road.getLanes().getLaneSection().get(0).getRight().getLane().size();
-        }
-        double laneWidth = 0.0;
-        if (!road.getLanes().getLaneSection().get(0).getRight().getLane().isEmpty()) {
-            laneWidth = road.getLanes().getLaneSection().get(0).getRight().getLane().get(0).getWidth().get(0).getA();
-        } else if (!road.getLanes().getLaneSection().get(0).getLeft().getLane().isEmpty()) {
+        Preconditions.checkArgument(laneSectionType == Lanes.LaneSectionType.LEFT ? road.getLanes().getLaneSection()
+                .get(0).isSetLeft() : road.getLanes().getLaneSection().get(0).isSetRight(), "no laneSection="
+                + laneSectionType + " defined");
+        
+        final int laneCount;
+        final double laneWidth;
+        if (laneSectionType == Lanes.LaneSectionType.LEFT) {
+            laneCount = road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
             laneWidth = road.getLanes().getLaneSection().get(0).getLeft().getLane().get(0).getWidth().get(0).getA();
+
+        } else {
+            laneCount = road.getLanes().getLaneSection().get(0).getRight().getLane().size();
+            laneWidth = road.getLanes().getLaneSection().get(0).getRight().getLane().get(0).getWidth().get(0).getA();
         }
 
+        // TODO refactoring / HACK with offset shift !!!
         final RoadMapping roadMapping;
         if (road.getPlanView().getGeometry().size() == 1) {
-            Geometry geometry = road.getPlanView().getGeometry().get(0);
+            Geometry geometry = shiftGeometry(laneSectionType, road.getPlanView().getGeometry().get(0));
             if (geometry.isSetLine()) {
-                roadMapping = RoadMappingLine.create(roadLaneCount, geometry, laneWidth);
+                roadMapping = RoadMappingLine.create(laneCount, geometry, laneWidth);
             } else if (geometry.isSetArc()) {
-                roadMapping = RoadMappingArc.create(roadLaneCount, geometry, laneWidth);
+                roadMapping = RoadMappingArc.create(laneCount, geometry, laneWidth);
             } else if (geometry.isSetPoly3()) {
                 throw new IllegalArgumentException("POLY3 geometry not yet supported (in road: " + road + " )");
             } else if (geometry.isSetSpiral()) {
@@ -154,9 +156,10 @@ public class OpenDriveHandlerJaxb {
                 throw new IllegalArgumentException("Unknown geometry for road: " + road);
             }
         } else {
-            roadMapping = new RoadMappingPoly(roadLaneCount, laneWidth);
+            roadMapping = new RoadMappingPoly(laneCount, laneWidth);
             final RoadMappingPoly roadMappingPoly = (RoadMappingPoly) roadMapping;
-            for (Geometry geometry : road.getPlanView().getGeometry()) {
+            for (Geometry orgiginalGometry : road.getPlanView().getGeometry()) {
+                Geometry geometry = shiftGeometry(laneSectionType, orgiginalGometry);
                 if (geometry.isSetLine()) {
                     roadMappingPoly.addLine(geometry);
                 } else if (geometry.isSetArc()) {
@@ -173,6 +176,16 @@ public class OpenDriveHandlerJaxb {
         return roadMapping;
     }
 
+    private static Geometry shiftGeometry(LaneSectionType laneSectionType, Geometry geometry) {
+        if (laneSectionType == Lanes.LaneSectionType.LEFT) {
+            Geometry copy = (Geometry) geometry.copyTo(null);
+            copy.setY(geometry.getY() - 20); // HACK
+            return copy;
+        }
+        return geometry;
+
+    }
+
     private RoadSegment createRoadSegment(LaneSectionType laneType, RoadMapping roadMapping, Road road) {
         // TODO cstr not working for bidirectional case !!
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
@@ -182,12 +195,13 @@ public class OpenDriveHandlerJaxb {
                 .getLaneSection().get(0).getLeft().getLane()) : Preconditions.checkNotNull(road.getLanes()
                 .getLaneSection().get(0).getRight().getLane());
 
-        if (laneType == Lanes.LaneSectionType.LEFT) {
-            LOG.error("left lane section not yet impl. Will be ignored!");
-            return null;
-        }
-        // TODO Left/right handling
-        roadSegment.setUserId(road.getId());
+        // if (laneType == Lanes.LaneSectionType.LEFT) {
+        // LOG.error("left lane section not yet impl. Will be ignored!");
+        // return null;
+        // }
+        // TODO Left/right handling. can be set in RoadSegment
+        String id = (laneType == Lanes.LaneSectionType.LEFT) ? road.getId() + "-" : road.getId();
+        roadSegment.setUserId(id);
         roadSegment.setUserRoadname(road.getName());
 
         if (road.isSetElevationProfile()) {
