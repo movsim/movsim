@@ -83,8 +83,8 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadSegment.class);
 
-    public static final int ID_NOT_SET = -1;
-    public static final int INITIAL_ID = 1;
+    static final int ID_NOT_SET = -1;
+    static final int INITIAL_ID = 1;
     private static int nextId = INITIAL_ID;
 
     /** the id is an internally used unique identifier for the road. */
@@ -95,8 +95,6 @@ public class RoadSegment implements Iterable<Vehicle> {
     private String roadName;
 
     private final double roadLength;
-    /** total length of road up to start of segment. */
-    private final double cumulativeRoadLength = -1.0;
     private final int laneCount;
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
@@ -287,16 +285,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         return roadLength;
     }
 
-    public final double cumulativeRoadLength() {
-        // if (cumulativeRoadLength >= 0.0) {
-        // return cumulativeRoadLength;
-        // }
-        // final RoadSegment sourceRoadSegment = sourceRoadSegment(trafficLaneMax() - 1);
-        // cumulativeRoadLength = sourceRoadSegment == null ? 0.0 : sourceRoadSegment.cumulativeRoadLength() +
-        // sourceRoadSegment.roadLength();
-        return cumulativeRoadLength;
-    }
-
     /**
      * Returns the number of lanes in this road segment.
      * 
@@ -362,7 +350,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1];
     }
 
-    public final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
+    final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSourceLaneSegment(sourceLaneSegment);
     }

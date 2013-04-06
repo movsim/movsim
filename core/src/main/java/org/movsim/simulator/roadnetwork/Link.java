@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -35,8 +35,9 @@ import com.google.common.base.Preconditions;
  * </p>
  * <p>
  * There are one or more source road segments and one or more sink road segments. Each lane in a source road segment is normally paired with
- * lane in a sink road segment. It is, however, possible to have unpaired lanes in either the source road segment (for example when the road
- * narrows, or at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at the start of an off-ramp).
+ * a lane in a sink road segment. It is, however, possible to have unpaired lanes in either the source road segment (for example when the
+ * road narrows, or at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at the start of an
+ * off-ramp).
  * </p>
  * <p>
  * For complex connections between road segments, for example an urban road junction, or a roundabout, use a <code>Junction</code>.
@@ -78,22 +79,8 @@ public class Link {
         for (int lane = 1; lane <= limit; ++lane) {
             addLanePair(lane, sourceRoad, lane, sinkRoad);
         }
-//        final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
-//        assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
-//        if (offset < 0) {
-//            final int limit = sourceRoad.laneCount() + offset;
-//            for (int i = 0; i < limit; ++i) {
-//                addLanePair(i - offset, sourceRoad, i, sinkRoad);
-//            }
-//        } else {
-//            final int laneCount = sourceRoad.laneCount();
-//            for (int i = 0; i < laneCount; ++i) {
-//                addLanePair(i, sourceRoad, i + offset, sinkRoad);
-//            }
-//        }
         return sinkRoad;
     }
-
 
     /**
      * Convenience function to add a merge of two road segments into a single road segments.
