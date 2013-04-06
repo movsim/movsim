@@ -170,7 +170,7 @@ public abstract class RoadMapping {
     protected ArrayList<PolygonFloat> clippingPolygons;
     protected PolygonFloat outsideClippingPolygon;
 
-    public static final double DEFAULT_LANE_WIDTH = 2;
+    protected static final double DEFAULT_LANE_WIDTH = 2;
 
     /**
      * Constructor.

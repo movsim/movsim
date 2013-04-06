@@ -38,10 +38,10 @@ import org.slf4j.LoggerFactory;
  */
 public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
-    /** The Constant logger. */
-    final static Logger logger = LoggerFactory.getLogger(RoadNetwork.class);
+    /** The Constant LOG. */
+    private static final Logger LOG = LoggerFactory.getLogger(RoadNetwork.class);
 
-    private final ArrayList<RoadSegment> roadSegments = new ArrayList<RoadSegment>();
+    private final ArrayList<RoadSegment> roadSegments = new ArrayList<>();
     private String name;
 
     private boolean isWithCrashExit;
@@ -81,14 +81,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Given its userId, find a road segment in the road network.
+     * Given its roadId, find a road segment in the road network.
      * 
-     * @param userId
+     * @param roadId
      * @return the road segment with the given userId
      */
-    public RoadSegment findByUserId(String userId) {
+    public RoadSegment findByRoadId(String roadId) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.userId() != null && roadSegment.userId().equals(userId)) {
+            if (roadSegment.hasRoadId() && roadSegment.roadId().equals(roadId)) {
                 return roadSegment;
             }
         }
@@ -102,11 +102,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public void clear() {
         name = null;
         hasVariableMessageSign = false;
-        // LaneChangeModel.resetCount();
-        // LongitudinalDriverModel.resetNextId();
         RoadSegment.resetNextId();
-        // TrafficFlowBase.resetNextId();
-        // Vehicle.resetNextId();
         roadSegments.clear();
     }
 
@@ -196,7 +192,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         // being updated twice (for example when a vehicle moves of the end of a road segment
         // onto the next road segment.
 
-        logger.debug("called timeStep: time={}, timestep=", simulationTime, dt);
+        LOG.debug("called timeStep: time={}, timestep=", simulationTime, dt);
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.updateRoadConditions(dt, simulationTime, iterationCount);
         }
@@ -316,7 +312,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * 
      * @return the number of vehicles on given route.
      */
-    public int vehicleCount(Route route) {
+    public static int vehicleCount(Route route) {
         int vehicleCount = 0;
         for (final RoadSegment roadSegment : route) {
             vehicleCount += roadSegment.getVehicleCount();
@@ -340,7 +336,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelTime;
     }
     
-    public double totalVehicleTravelTime(Route route) {
+    public static double totalVehicleTravelTime(Route route) {
         double totalVehicleTravelTime = 0.0;
         for (final RoadSegment roadSegment : route) {
             totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
@@ -351,7 +347,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelTime;
     }
 
-    public double instantaneousTravelTime(Route route) {
+    public static double instantaneousTravelTime(Route route) {
         double instantaneousTravelTime = 0;
         for (final RoadSegment roadSegment : route) {
             instantaneousTravelTime += roadSegment.instantaneousTravelTime();
@@ -375,7 +371,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelDistance;
     }
 
-    public double totalVehicleTravelDistance(Route route) {
+    public static double totalVehicleTravelDistance(Route route) {
         double totalVehicleTravelDistance = 0.0;
         for (final RoadSegment roadSegment : route) {
             totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
@@ -402,7 +398,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleFuelUsedLiters;
     }
 
-    public double instantaneousFuelUsedLiters(Route route) {
+    public static double instantaneousFuelUsedLiters(Route route) {
         double instantaneousConsumption = 0;
         for (final RoadSegment roadSegment : route) {
             instantaneousConsumption += roadSegment.instantaneousConsumptionLitersPerSecond();
