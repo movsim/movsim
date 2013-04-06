@@ -72,8 +72,28 @@ public class OpenDriveHandlerJaxb {
 
     private boolean create(String filename, OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork)
             throws IllegalArgumentException {
-        createControllerMapping(openDriveNetwork);
+        createControllerMapping(openDriveNetwork, roadNetwork);
+        createRoadSegments(openDriveNetwork, roadNetwork);
+        joinRoads(openDriveNetwork, roadNetwork);
+        handleJunctions(openDriveNetwork, roadNetwork);
+        addDefaultSinksForUnconnectedRoad(roadNetwork);
+        return true;
+    }
 
+    private void createControllerMapping(OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork) {
+        Preconditions.checkArgument(roadNetwork.size() == 0, "parse controllers first");
+        for (Controller controller : openDriveNetwork.getController()) {
+            for (Control control : controller.getControl()) {
+                if (signalIdsToController.put(control.getSignalId(), controller) != null) {
+                    throw new IllegalArgumentException("trafficlight id=" + control.getSignalId()
+                            + " is referenced more than once in xodr <controller> definitions.");
+                }
+            }
+        }
+        LOG.info("registered {} traffic light signals in road network.", signalIdsToController.size());
+    }
+
+    private void createRoadSegments(OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork) {
         for (Road road : openDriveNetwork.getRoad()) {
             final RoadMapping roadMapping = createRoadMapping(road);
             for (Lanes.LaneSectionType laneSectionType : LaneSectionType.values()) {
@@ -86,22 +106,6 @@ public class OpenDriveHandlerJaxb {
             }
         }
         LOG.info("created {} roadSegments.", roadNetwork.size());
-
-        joinRoads(openDriveNetwork, roadNetwork);
-        handleJunctions(openDriveNetwork, roadNetwork);
-        addDefaultSinksForUnconnectedRoad(roadNetwork);
-        return true;
-    }
-
-    private void createControllerMapping(OpenDRIVE openDriveNetwork) {
-        for (Controller controller : openDriveNetwork.getController()) {
-            for (Control control : controller.getControl()) {
-                if (signalIdsToController.put(control.getSignalId(), controller) != null) {
-                    throw new IllegalArgumentException("trafficlight id=" + control.getSignalId()
-                            + " is referenced more than once in xodr <controller> definitions.");
-                }
-            }
-        }
     }
 
     private static boolean hasLaneSectionType(Road road, LaneSectionType laneType) {
@@ -115,15 +119,6 @@ public class OpenDriveHandlerJaxb {
             return road.getLanes().getLaneSection().get(0).isSetRight();
         }
         return false; // CENTER lane not supported
-    }
-
-    private static Road findByUserId(Collection<Road> roads, String id) {
-        for (Road road : roads) {
-            if (road.getId().equals(id)) {
-                return road;
-            }
-        }
-        return null;
     }
 
     private static RoadMapping createRoadMapping(Road road) throws IllegalArgumentException {
@@ -286,6 +281,7 @@ public class OpenDriveHandlerJaxb {
     }
 
     private static void joinRoads(OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork) {
+        Preconditions.checkArgument(roadNetwork.size() > 0, "roadNetwork without roads");
         // iterate through all the roads joining them up according to the links
         for (Road road : openDriveNetwork.getRoad()) {
             RoadSegment roadSegment = roadNetwork.findByUserId(road.getId());
@@ -365,7 +361,7 @@ public class OpenDriveHandlerJaxb {
     }
 
     private static void handleJunctions(OpenDRIVE openDriveNetwork, RoadNetwork roadNetwork) {
-        // iterate through all the junctions
+        Map<String, Road> roadById = createLookupMap(openDriveNetwork.getRoad());
         for (Junction junction : openDriveNetwork.getJunction()) {
             for (Connection connection : junction.getConnection()) {
                 RoadSegment incomingRoadSegment = Preconditions.checkNotNull(
@@ -374,7 +370,7 @@ public class OpenDriveHandlerJaxb {
                 RoadSegment connenctingRoadSegment = Preconditions.checkNotNull(
                         roadNetwork.findByUserId(connection.getConnectingRoad()), "Cannot find connecting road: "
                                 + connection.getConnectingRoad());
-                Road road = findByUserId(openDriveNetwork.getRoad(), connection.getConnectingRoad());
+                Road road = Preconditions.checkNotNull(roadById.get(connection.getConnectingRoad()));
                 if (roadPredecessorIsJunction(junction, road)) {
                     for (final LaneLink laneLink : connection.getLaneLink()) {
                         final int fromLane = OpenDriveHandlerUtils.laneIdToLaneIndex(incomingRoadSegment,
@@ -398,6 +394,17 @@ public class OpenDriveHandlerJaxb {
                 }
             }
         }
+    }
+
+    private static Map<String, Road> createLookupMap(Collection<Road> roads) {
+        Map<String, Road> idToRoad = new HashMap<>();
+        for (Road road : roads) {
+            Road other = idToRoad.put(road.getId(), road);
+            if (other != null) {
+                throw new IllegalArgumentException("road with ID=" + road.getId() + " not unique in xodr!");
+            }
+        }
+        return idToRoad;
     }
 
     private static boolean roadSuccessorIsJunction(Junction junction, Road road) {
