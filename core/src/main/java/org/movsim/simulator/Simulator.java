@@ -113,7 +113,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         simulationRunnable.setCompletionCallback(this);
     }
 
-    // TODO refactoring, ordering of init steps is crucial
     public void initialize() throws JAXBException, SAXException {
         LOG.info("Copyright '\u00A9' by Arne Kesting, Martin Treiber, Ralph Germ and Martin Budden (2011-2013)");
 
@@ -177,12 +176,11 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             for (org.movsim.autogen.Route routeInput : routesInput.getRoute()) {
                 final Route route = new Route(routeInput.getLabel());
                 for (org.movsim.autogen.Road roadInput : routeInput.getRoad()) {
-                    RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByRoadId(roadInput.getId()),
+                    RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(roadInput.getId()),
                             "cannot create route with undefinied road=" + roadInput.getId());
                     route.add(roadSegment);
                 }
-                Preconditions.checkArgument(routes.put(route.getName(), route) == null,
-                        "route with name=" + route.getName() + " already defined.");
+                Preconditions.checkArgument(routes.put(route.getName(), route) == null, "route with name="+route.getName()+" already defined.");
             }
         }
     }
@@ -216,7 +214,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @throws SAXException
      * @throws ParserConfigurationException
      */
-    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
+    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException
+             {
         roadNetwork.clear();
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
@@ -225,8 +224,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     private void matchRoadSegmentsAndRoadInput(List<Road> roads) {
         for (final Road roadInput : roads) {
-            RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByRoadId(roadInput.getId()),
-                    "cannot find roadId=\"" + roadInput.getId() + "\" in road network.");
+            RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(roadInput.getId()),
+                    "cannot find roadId=" + roadInput.getId()
+                            + " from input in constructed roadNetwork. IGNORE DATA!!!");
             addInputToRoadSegment(roadSegment, roadInput);
         }
     }
@@ -244,7 +244,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
         final RoadSegment roadSegment = new RoadSegment(roadMapping);
         addInputToRoadSegment(roadSegment, roadInput);
-        roadSegment.setRoadId("1");
+        roadSegment.setUserId("1");
         roadSegment.addDefaultSink();
         roadNetwork.add(roadSegment);
     }
@@ -279,11 +279,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @param roadInput
      */
     private void addInputToRoadSegment(RoadSegment roadSegment, Road roadInput) {
-        Preconditions.checkNotNull(defaultTrafficComposition);
-
-        TrafficCompositionGenerator composition = defaultTrafficComposition;
+        // setup own vehicle generator for roadSegment: needed for trafficSource and initial conditions
+        TrafficCompositionGenerator composition = roadInput.isSetTrafficComposition() ? new TrafficCompositionGenerator(
+                roadInput.getTrafficComposition(), vehicleFactory) : defaultTrafficComposition;
         if (roadInput.isSetTrafficComposition()) {
-            composition = new TrafficCompositionGenerator(roadInput.getTrafficComposition(), vehicleFactory);
             LOG.info("road with id={} has its own vehicle composition generator.", roadSegment.id());
         }
 
@@ -302,7 +301,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
             if (trafficSource != null) {
                 if (trafficSourceData.isLogging()) {
-                    trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.roadId()));
+                    trafficSource.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
                 }
                 roadSegment.setTrafficSource(trafficSource);
             }
@@ -319,7 +318,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(simpleRampData.getInflow());
             SimpleRamp simpleRamp = new SimpleRamp(composition, roadSegment, simpleRampData, inflowTimeSeries);
             if (simpleRampData.isLogging()) {
-                simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.roadId()));
+                simpleRamp.setRecorder(new FileTrafficSourceData(roadSegment.userId()));
             }
             roadSegment.setSimpleRamp(simpleRamp);
         }
@@ -346,12 +345,12 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             return;
         }
         Parking parking = trafficSink.getParking();
-        RoadSegment sourceRoadSegment = Preconditions.checkNotNull(roadNetwork.findByRoadId(parking.getSourceRoadId()),
+        RoadSegment sourceRoadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(parking.getSourceRoadId()),
                 "cannot find roadSegment=" + parking.getSourceRoadId() + " specified as re-entrance from the road="
                         + roadSegment.id());
         TrafficSourceMicro trafficSource = new TrafficSourceMicro(defaultTrafficComposition, sourceRoadSegment);
         if (trafficSink.isLogging()) {
-            trafficSource.setRecorder(new FileTrafficSourceData(sourceRoadSegment.roadId()));
+            trafficSource.setRecorder(new FileTrafficSourceData(sourceRoadSegment.userId()));
         }
         sourceRoadSegment.setTrafficSource(trafficSource);
         roadSegment.sink().setupParkingLot(parking, timeOffsetMillis, trafficSource);

@@ -82,7 +82,7 @@ class VehicleTipWindow extends Window {
         if (vehicle.exitRoadSegmentId() == Vehicle.ROAD_SEGMENT_ID_NOT_SET) {
             exitString = this.trafficCanvas.popupStringExitEndRoad;
         } else {
-            exitString = this.trafficCanvas.roadNetwork.findById(vehicle.exitRoadSegmentId()).roadId();
+            exitString = this.trafficCanvas.roadNetwork.findById(vehicle.exitRoadSegmentId()).userId();
         }
         final PhysicalQuantities vehiclePhysical = vehicle.physicalQuantities();
         final String string = String.format(this.trafficCanvas.popupString, vehicle.getId(), vehicle.getLabel(),

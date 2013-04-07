@@ -112,24 +112,7 @@ public final class Lanes {
      * 
      */
     public enum LaneSectionType {
-        LEFT("-", true), RIGHT("+", false);
-
-        private final String idAppender;
-
-        private final boolean reverseDirection;
-
-        private LaneSectionType(String idAppender, boolean reverseDirection) {
-            this.idAppender = idAppender;
-            this.reverseDirection = reverseDirection;
-        }
-
-        public String idAppender() {
-            return idAppender;
-        }
-
-        public boolean isReverseDirection() {
-            return reverseDirection;
-        }
+        LEFT, RIGHT;
     }
 
     /**

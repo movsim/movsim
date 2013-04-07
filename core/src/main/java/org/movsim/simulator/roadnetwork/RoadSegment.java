@@ -83,18 +83,20 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadSegment.class);
 
-    static final int ID_NOT_SET = -1;
-    static final int INITIAL_ID = 1;
+    public static final int ID_NOT_SET = -1;
+    public static final int INITIAL_ID = 1;
     private static int nextId = INITIAL_ID;
 
     /** the id is an internally used unique identifier for the road. */
     private final int id;
-    /** the roadId is the id specified in the .xodr and .xml files. */
-    private String roadId;
+    /** the userId is the id specified in the .xodr and .xml files. */
+    private String userId;
     /** road name specified in the openDrive .xodr network file. */
     private String roadName;
 
     private final double roadLength;
+    /** total length of road up to start of segment. */
+    private final double cumulativeRoadLength = -1.0;
     private final int laneCount;
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
@@ -195,26 +197,22 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Set this road segment's roadId
+     * Set this road segment's userId
      * 
-     * @param roadId
+     * @param userId
      * 
      */
-    public final void setRoadId(String roadId) {
-        this.roadId = roadId;
+    public final void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**
-     * Returns this road segment's roadId. The roadId is the road's id as set in the .xodr and .xml files.
+     * Returns this road segment's userId. The userId is the road's id as set in the .xodr and .xml files.
      * 
-     * @return this road segment's roadId
+     * @return this road segment's userId
      */
-    public final String roadId() {
-        return roadId;
-    }
-
-    public final boolean hasRoadId() {
-        return roadId != null;
+    public final String userId() {
+        return userId == null ? Integer.toString(id) : userId;
     }
 
     /**
@@ -285,6 +283,16 @@ public class RoadSegment implements Iterable<Vehicle> {
         return roadLength;
     }
 
+    public final double cumulativeRoadLength() {
+        // if (cumulativeRoadLength >= 0.0) {
+        // return cumulativeRoadLength;
+        // }
+        // final RoadSegment sourceRoadSegment = sourceRoadSegment(trafficLaneMax() - 1);
+        // cumulativeRoadLength = sourceRoadSegment == null ? 0.0 : sourceRoadSegment.cumulativeRoadLength() +
+        // sourceRoadSegment.roadLength();
+        return cumulativeRoadLength;
+    }
+
     /**
      * Returns the number of lanes in this road segment.
      * 
@@ -350,7 +358,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1];
     }
 
-    final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
+    public final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSourceLaneSegment(sourceLaneSegment);
     }
@@ -360,7 +368,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1].sourceLaneSegment();
     }
 
-    final RoadSegment sourceRoadSegment(int lane) {
+    public final RoadSegment sourceRoadSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sourceLaneSegment() == null) {
             return null;
@@ -376,17 +384,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1].sourceLaneSegment().lane();
     }
 
-    final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
+    public final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSinkLaneSegment(sinkLaneSegment);
     }
 
-    final LaneSegment sinkLaneSegment(int lane) {
+    public final LaneSegment sinkLaneSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         return laneSegments[lane - 1].sinkLaneSegment();
     }
 
-    final RoadSegment sinkRoadSegment(int lane) {
+    public final RoadSegment sinkRoadSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane + " but lanecount="
                 + laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
@@ -395,7 +403,7 @@ public class RoadSegment implements Iterable<Vehicle> {
         return laneSegments[lane - 1].sinkLaneSegment().roadSegment();
     }
 
-    final int sinkLane(int lane) {
+    public final int sinkLane(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
             return Lanes.NONE;
@@ -1116,7 +1124,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                                 vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("roadID=").append(id);
-                    sb.append(", user roadID=").append(roadId);
+                    sb.append(", user roadID=").append(userId);
                     sb.append(", net distance=").append(netDistance);
                     sb.append(", lane=").append(laneSegment.lane());
                     sb.append(", container.size=").append(laneSegment.vehicleCount());
@@ -1224,7 +1232,7 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     @Override
     public String toString() {
-        return "RoadSegment [id=" + id + ", roadId=" + roadId + ", roadLength=" + roadLength + ", laneCount="
+        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadLength=" + roadLength + ", laneCount="
                 + laneCount + "]";
     }
 
@@ -1282,14 +1290,5 @@ public class RoadSegment implements Iterable<Vehicle> {
             return "TrafficLightLocationWithDistance [trafficLightLocation=" + trafficLightLocation + ", distance="
                     + distance + "]";
         }
-    }
-
-    public final boolean hasSink() {
-        for (LaneSegment laneSegment : laneSegments) {
-            if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
-                return true;
-            }
-        }
-        return false;
     }
 }
