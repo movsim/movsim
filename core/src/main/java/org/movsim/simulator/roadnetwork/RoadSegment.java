@@ -1118,8 +1118,8 @@ public class RoadSegment implements Iterable<Vehicle> {
                         sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
                                 vehFront.getFrontPosition(), vehicle.lane()));
                     }
-                    sb.append("roadID=").append(id);
-                    sb.append(", user roadID=").append(roadId);
+                    sb.append("internal id=").append(id);
+                    sb.append(", roadId=").append(roadId);
                     sb.append(", net distance=").append(netDistance);
                     sb.append(", lane=").append(laneSegment.lane());
                     sb.append(", container.size=").append(laneSegment.vehicleCount());
