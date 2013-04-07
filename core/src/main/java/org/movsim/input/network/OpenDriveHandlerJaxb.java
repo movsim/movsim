@@ -321,29 +321,13 @@ public class OpenDriveHandlerJaxb {
         Preconditions.checkArgument(roadNetwork.size() > 0, "no roads defined in roadNetwork");
         for (Road road : openDriveNetwork.getRoad()) {
             if (!road.isSetLink()) {
+                LOG.info("road=" + road.getId() + " without links to other roads");
                 // addDefaultSinks(roadNetwork, road);
                 continue;
             }
             joinByLanes(roadNetwork, road);
         }
     }
-
-    // NOT NEEDED
-    // private static void addDefaultSinks(RoadNetwork roadNetwork, Road road) {
-    // boolean hasPeer = hasPeer(road);
-    // for (Lanes.LaneSectionType laneType : Lanes.LaneSectionType.values()) {
-    // if (!hasPeer && laneType == Lanes.LaneSectionType.LEFT) {
-    // continue;
-    // }
-    // String roadSegmentId = hasPeer ? road.getId() + laneType.idAppender() : road.getId();
-    // RoadSegment roadSegment = roadNetwork.findByRoadId(roadSegmentId);
-    // if (roadSegment == null) {
-    // throw new IllegalArgumentException("cannot find roadSegment=" + roadSegmentId + " in network for road="
-    // + road.getId());
-    // }
-    // roadSegment.addDefaultSink();
-    // }
-    // }
 
     private static void joinByLanes(RoadNetwork roadNetwork, Road road) {
         Preconditions.checkArgument(road.isSetLink());
@@ -353,11 +337,12 @@ public class OpenDriveHandlerJaxb {
         if (laneSection.isSetCenter()) {
             LOG.warn("cannot handle center lane");
         }
+        // TODO quick hack here, think of better way to formulate this
         if (laneSection.isSetLeft()) {
             joinByLanes(roadNetwork, road, laneSection.getLeft().getLane(),
                     Lanes.LaneSectionType.LEFT.isReverseDirection());
         }
-        if (laneSection.isSetLeft()) {
+        if (laneSection.isSetRight()) {
             joinByLanes(roadNetwork, road, laneSection.getRight().getLane(),
                     Lanes.LaneSectionType.RIGHT.isReverseDirection());
         }
@@ -422,18 +407,35 @@ public class OpenDriveHandlerJaxb {
         for (Junction junction : openDriveNetwork.getJunction()) {
             for (Connection connection : junction.getConnection()) {
                 for (LaneLink laneLink : connection.getLaneLink()) {
-                    LOG.debug("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                     Road road = roadById.get(connection.getConnectingRoad());
                     RoadSegment incomingRoadSegment = getRoadSegment(roadNetwork, connection.getIncomingRoad(),
                             laneLink.getFrom());
                     RoadSegment connectingRoadSegment = getRoadSegment(roadNetwork, connection.getConnectingRoad(),
                             laneLink.getTo());
+                    final boolean isReverse = laneLink.getTo() > 0 || laneLink.getFrom() > 0;
+                    LOG.info("junction={}, road={}", junction.getId(), road.getId());
+                    LOG.info("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
+                    LOG.info("isReverse={}, roadPredecessorIsJunction={}", isReverse,
+                            roadPredecessorIsJunction(junction, road));
+                    LOG.info("incomingRS={}, connectiongRoadSegment={}", incomingRoadSegment.roadId(),
+                            connectingRoadSegment.roadId());
                     if (roadPredecessorIsJunction(junction, road)) {
+                        if (isReverse) {
+                            Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
+                                    laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment);
+                        } else {
                         Link.addLanePair(laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment,
                                 laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment);
+                        }
                     } else if (roadSuccessorIsJunction(junction, road)) {
+                        if (isReverse) {
+                            Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
+                                    laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment);
+                        }
+                        else{
                         Link.addLanePair(laneIdToLaneIndex(laneLink.getFrom()), connectingRoadSegment,
                                 laneIdToLaneIndex(laneLink.getTo()), incomingRoadSegment);
+                        }
                     } else {
                         throw new IllegalArgumentException("Incorrect junction id=" + junction.getId());
                     }
@@ -495,4 +497,21 @@ public class OpenDriveHandlerJaxb {
     private static int laneIdToLaneIndex(int xodrLaneId) {
         return Math.abs(xodrLaneId);
     }
+
+    // NOT NEEDED ANYMORE ?!
+    // private static void addDefaultSinks(RoadNetwork roadNetwork, Road road) {
+    // boolean hasPeer = hasPeer(road);
+    // for (Lanes.LaneSectionType laneType : Lanes.LaneSectionType.values()) {
+    // if (!hasPeer && laneType == Lanes.LaneSectionType.LEFT) {
+    // continue;
+    // }
+    // String roadSegmentId = hasPeer ? road.getId() + laneType.idAppender() : road.getId();
+    // RoadSegment roadSegment = roadNetwork.findByRoadId(roadSegmentId);
+    // if (roadSegment == null) {
+    // throw new IllegalArgumentException("cannot find roadSegment=" + roadSegmentId + " in network for road="
+    // + road.getId());
+    // }
+    // roadSegment.addDefaultSink();
+    // }
+    // }
 }

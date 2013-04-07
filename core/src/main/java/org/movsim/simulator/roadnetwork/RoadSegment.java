@@ -354,7 +354,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
-        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane);
         laneSegments[lane - 1].setSourceLaneSegment(sourceLaneSegment);
     }
 

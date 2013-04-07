@@ -147,7 +147,7 @@
             <laneLink from="-2" to="-2" />
         </connection>
         <connection incomingRoad="2" connectingRoad="5" contactPoint="start">
-            <laneLink from="1" to="-1" />
+            <laneLink from="2" to="-1" />
         </connection>
     </junction>
 </OpenDRIVE>
