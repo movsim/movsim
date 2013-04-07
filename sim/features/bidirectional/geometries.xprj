@@ -48,7 +48,7 @@
                 </TrafficSource>
             </Road>
             <!-- ringroad: special case of arc -->
-          <!--  <Road id="3-">
+           <Road id="3-">
 				<InitialConditions>
                     <MacroIC position="1" density_per_km="8" speed="20" />
                 </InitialConditions>
@@ -58,7 +58,16 @@
                     <MacroIC position="1" density_per_km="8" speed="20" />
                 </InitialConditions>
             </Road>
-            -->
+            <Road id="4-">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="15" />
+                </TrafficSource>
+            </Road> 
+            <Road id="4+">
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="500" v="15" />
+                </TrafficSource>
+            </Road>
         </Simulation>
     </Scenario>
 </Movsim>
