@@ -27,19 +27,25 @@
 package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.roadmappings.geometry.RoadGeometry;
 
 /**
  * Maps a road segment onto straight line.
  */
 public class RoadMappingLine extends RoadMapping {
 
-    protected double x1;
-    protected double y1;
 
-    public static RoadMapping create(int laneCount, Geometry geometry, double laneWidth) {
+    public static RoadMapping create(RoadGeometry roadGeometry) {
+        return create(roadGeometry.laneCount(), roadGeometry.geometry(), roadGeometry.laneWidth());
+    }
+
+    private static RoadMapping create(int laneCount, Geometry geometry, double laneWidth) {
         return new RoadMappingLine(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
                 geometry.getLength(), laneWidth);
     }
+
+    protected double x1;
+    protected double y1;
 
     /**
      * Constructor.

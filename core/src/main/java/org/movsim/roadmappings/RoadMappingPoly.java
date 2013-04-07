@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.roadmappings.geometry.RoadGeometry;
+import org.movsim.roadmappings.geometry.RoadGeometry.GeometryType;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.
@@ -170,5 +172,19 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
         final RoadMappingBezier roadMapping = new RoadMappingBezier(laneCount, s, x0, y0, theta, length, a, b, c, d);
         roadLength += length;
         roadMappings.add(roadMapping);
+    }
+
+    public void add(RoadGeometry roadGeometry) {
+        if (roadGeometry.geometryType() == GeometryType.LINE) {
+            addLine(roadGeometry.geometry());
+        } else if (roadGeometry.geometryType() == GeometryType.ARC) {
+            addArc(roadGeometry.geometry());
+        } else if (roadGeometry.geometryType() == GeometryType.POLY3) {
+            throw new IllegalArgumentException("POLY3 geometry not yet supported");
+        } else if (roadGeometry.geometryType() == GeometryType.SPIRAL) {
+            throw new IllegalArgumentException("SPIRAL geometry not yet supported");
+        } else {
+            throw new IllegalArgumentException("Unknown geometry");
+        }
     }
 }

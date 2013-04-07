@@ -182,6 +182,9 @@ public class RoadSegment implements Iterable<Vehicle> {
      * Sets a default sink for this road segment.
      */
     public final void addDefaultSink() {
+        if (sink != null) {
+            LOG.warn("sink already set on road=" + roadId());
+        }
         sink = new TrafficSink(this);
     }
 
@@ -272,7 +275,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      * @param sink
      *            the traffic sink
      */
-    public final void setSink(TrafficSink sink) {
+    final void setSink(TrafficSink sink) {
         this.sink = sink;
     }
 

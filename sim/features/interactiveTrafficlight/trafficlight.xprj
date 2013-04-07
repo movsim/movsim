@@ -35,11 +35,14 @@
                 <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="1">
-                <InitialConditions />
                 <TrafficSource logging="false">
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
-                <Detectors />
+            </Road>
+            <Road id="2">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
             </Road>
         </Simulation>
         <TrafficLights logging="true" n_timestep="5">

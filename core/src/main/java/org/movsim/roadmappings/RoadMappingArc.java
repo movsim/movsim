@@ -27,6 +27,7 @@
 package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
+import org.movsim.roadmappings.geometry.RoadGeometry;
 
 
 /**
@@ -39,7 +40,11 @@ public class RoadMappingArc extends RoadMappingCircle {
     protected double startAngle;
     protected double arcAngle;
 
-    public static RoadMappingArc create(int laneCount, Geometry geometry, double laneWidth) {
+    public static RoadMappingArc create(RoadGeometry roadGeometry) {
+        return create(roadGeometry.laneCount(), roadGeometry.geometry(), roadGeometry.laneWidth());
+    }
+
+    private static RoadMappingArc create(int laneCount, Geometry geometry, double laneWidth) {
         return new RoadMappingArc(laneCount, geometry.getS(), geometry.getX(), geometry.getY(), geometry.getHdg(),
                 geometry.getLength(), geometry.getArc().getCurvature(), laneWidth);
     }
