@@ -30,6 +30,14 @@ import org.movsim.utilities.Units;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO this class needs a throughout refactoring ...
+// FIXME: ramp_metering.xprj throws assertion error:
+//Exception in thread "main" java.lang.AssertionError
+//at org.movsim.simulator.SimulationRun.setCompletionCallback(SimulationRun.java:180)
+//at org.movsim.viewer.ui.HighscoreFrame.<init>(HighscoreFrame.java:65)
+//at org.movsim.viewer.ui.HighscoreFrame.initialize(HighscoreFrame.java:70)
+//at org.movsim.viewer.ui.AppFrame.<init>(AppFrame.java:103)
+//at org.movsim.viewer.App.main(App.java:88)
 public class HighscoreFrame implements SimulationRun.CompletionCallback, SimulationRunnable.UpdateStatusCallback {
 
     final static Logger logger = LoggerFactory.getLogger(HighscoreFrame.class);
