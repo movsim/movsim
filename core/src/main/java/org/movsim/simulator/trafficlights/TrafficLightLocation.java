@@ -63,7 +63,8 @@ public class TrafficLightLocation {
     }
 
     public TrafficLight getTrafficLight() {
-        Preconditions.checkNotNull(trafficLight);
+        Preconditions.checkNotNull(trafficLight,
+                "trafficLight not set. check the movsim input for referencing controller=" + controllerId());
         return trafficLight;
     }
 
