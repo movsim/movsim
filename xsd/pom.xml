@@ -24,7 +24,7 @@
 						<arg>-Xinheritance</arg>
                         <arg>-Xannotate</arg>
                         <!-- <arg>-XtoString</arg> -->
-                        <arg>-Xfluent-api</arg>
+                        <!-- <arg>-Xfluent-api</arg> -->
                         <!-- <arg>-Xequals</arg> -->
                         <!-- <arg>-XhashCode</arg> -->
                         <!-- <arg>-Xcopyable</arg> -->
