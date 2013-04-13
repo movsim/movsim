@@ -9,7 +9,7 @@ public class OpenDriveReader {
 
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String fullXodrFileName) throws JAXBException,
             SAXException {
-        return OpenDriveHandlerJaxb.loadRoadNetwork(roadNetwork, fullXodrFileName);
+        return OpenDriveHandler.loadRoadNetwork(roadNetwork, fullXodrFileName);
     }
 
 }

@@ -56,7 +56,7 @@ public class RoadMappingCompressedStraight extends RoadMappingLine {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         posTheta.x = x0 + roadPos * posTheta.cosTheta * compressionFactor;
         posTheta.y = y0 + roadPos * posTheta.sinTheta * compressionFactor;
         // lateralOffset offset is perpendicular to road

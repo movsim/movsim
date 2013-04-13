@@ -63,7 +63,7 @@ public class RoadMappingS extends RoadMappingU {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         // lateralOffset is perpendicular to road
         final double curveLength = radius * Math.PI;
         if (roadPos <= curveLength) {

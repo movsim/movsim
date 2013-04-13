@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.movsim.autogen.LaneChangeModelType;
 import org.movsim.autogen.ModelParameterMOBIL;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMappingAbstract;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.IDM;
@@ -62,7 +63,7 @@ public class RoadSegmentTest {
     // lane changing thresholds (m/s^2)
     static final double THRESHOLD_CAR = 0.3;
 
-    protected static class RoadMappingConcrete extends RoadMapping {
+    protected static class RoadMappingConcrete extends RoadMappingAbstract {
         public RoadMappingConcrete(int laneCount) {
             super(laneCount, 0, 0);
         }
@@ -73,7 +74,7 @@ public class RoadSegmentTest {
         }
 
         @Override
-        public RoadMappingConcrete.PosTheta map(double roadPos, double delta) {
+        public PosTheta map(double roadPos, double delta) {
             return posTheta;
         }
     }

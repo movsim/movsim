@@ -1,6 +1,5 @@
 package org.movsim.roadmappings;
 
-import org.movsim.roadmappings.geometry.RoadGeometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

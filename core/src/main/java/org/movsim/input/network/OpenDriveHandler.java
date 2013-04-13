@@ -3,7 +3,6 @@ package org.movsim.input.network;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,10 +23,11 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Lanes.LaneSection;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
+import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.roadmappings.RoadMappings;
-import org.movsim.roadmappings.geometry.RoadGeometry;
-import org.movsim.roadmappings.geometry.RoadGeometryPeer;
+import org.movsim.roadmappings.TotalRoadMapping;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
 import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
@@ -43,8 +43,8 @@ import org.xml.sax.SAXException;
 
 import com.google.common.base.Preconditions;
 
-public class OpenDriveHandlerJaxb {
-    private static final Logger LOG = LoggerFactory.getLogger(OpenDriveHandlerJaxb.class);
+public class OpenDriveHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(OpenDriveHandler.class);
 
     /** Mapping of signal-ids of single trafficlights to controller. */
     private final Map<String, Controller> signalIdsToController = new HashMap<>();
@@ -64,7 +64,7 @@ public class OpenDriveHandlerJaxb {
     public static boolean loadRoadNetwork(RoadNetwork roadNetwork, String filename) throws JAXBException, SAXException,
             IllegalArgumentException {
         OpenDRIVE openDriveNetwork = NetworkLoadAndValidation.validateAndLoadOpenDriveNetwork(new File(filename));
-        OpenDriveHandlerJaxb openDriveHandlerJaxb = new OpenDriveHandlerJaxb();
+        OpenDriveHandler openDriveHandlerJaxb = new OpenDriveHandler();
         return openDriveHandlerJaxb.create(filename, openDriveNetwork, roadNetwork);
     }
 
@@ -97,9 +97,10 @@ public class OpenDriveHandlerJaxb {
             if (hasPeer) {
                 LOG.info("road={} consists of peers", road.getId());
             }
+            final TotalRoadMapping roadMapping = createRoadMappings(road);
             for (LaneSectionType laneType : Lanes.LaneSectionType.values()) {
                 if (hasLaneSectionType(road, laneType)) {
-                    RoadSegment roadSegment = createRoadSegment(laneType, road, hasPeer);
+                    RoadSegment roadSegment = createRoadSegment(laneType, road, hasPeer, roadMapping);
                     if (roadSegment == null) {
                         throw new IllegalStateException("could not create roadSegment for road=" + road.getId());
                     }
@@ -138,7 +139,8 @@ public class OpenDriveHandlerJaxb {
         return false; // CENTER lane not supported
     }
 
-    private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer) {
+    private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer,
+            TotalRoadMapping roadMapping) {
 
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "cannot handle more than one laneSection in roadId=" + road.getId());
@@ -151,8 +153,11 @@ public class OpenDriveHandlerJaxb {
         Preconditions.checkArgument(lanes.size() > 0, "no lanes in laneSection=" + laneType.toString() + " on road="
                 + road.getId() + " defined.");
 
-        final RoadMapping roadMapping = createRoadMapping(laneType, road);
-        final RoadSegment roadSegment = new RoadSegment(roadMapping);
+        // final RoadMapping roadMapping = createRoadMapping(laneType, road);
+
+
+        final RoadSegment roadSegment = laneType.isReverseDirection() ? new RoadSegment(new RoadMappingPeer(
+                roadMapping.getPeer())) : new RoadSegment(roadMapping.getRoadMapping());
 
         roadSegment.setRoadId(getRoadSegmentId(road.getId(), laneType, hasPeer));
         roadSegment.setUserRoadname(road.getName());
@@ -199,37 +204,52 @@ public class OpenDriveHandlerJaxb {
         return roadSegment;
     }
 
-    private static RoadMapping createRoadMapping(LaneSectionType laneSectionType, Road road)
-            throws IllegalArgumentException {
-        // basic consistency checks already done before
-        
-        final boolean isPeer = isPeer(hasPeer(road), laneSectionType);
-        final int laneCount;
-        final double laneWidth;
-        if (laneSectionType == Lanes.LaneSectionType.LEFT) {
-            laneCount = road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
-            laneWidth = road.getLanes().getLaneSection().get(0).getLeft().getLane().get(0).getWidth().get(0).getA();
-        } else {
-            laneCount = road.getLanes().getLaneSection().get(0).getRight().getLane().size();
-            laneWidth = road.getLanes().getLaneSection().get(0).getRight().getLane().get(0).getWidth().get(0).getA();
+    private static TotalRoadMapping createRoadMappings(Road road) throws IllegalArgumentException {
+        Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
+                "cannot handle more than one laneSection in roadId=" + road.getId());
+
+        LaneSection firstLaneSection = road.getLanes().getLaneSection().get(0);
+        RoadMapping roadMappingLeft = null;
+        if (firstLaneSection.isSetLeft()) {
+            int laneCount = firstLaneSection.getLeft().getLane().size();
+            double laneWidth = firstLaneSection.getLeft().getLane().get(0).getWidth().get(0).getA();
+            List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount,
+                    laneWidth);
+            roadMappingLeft = RoadMappings.create(roadGeometries);
         }
 
+        int laneCount = firstLaneSection.getRight().getLane().size();
+        double laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
         List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount,
-                laneWidth, isPeer);
-        return RoadMappings.create(roadGeometries);
+                    laneWidth);
+        RoadMapping roadMappingRight = RoadMappings.create(roadGeometries);
+
+        return new TotalRoadMapping(roadMappingRight, roadMappingLeft);
+        // if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
+        // laneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
+        // // laneWidth = road.getLanes().getLaneSection().get(0).getLeft().getLane().get(0).getWidth().get(0).getA();
+        // }
+
+        // if (laneSection.isSetLeft()) {
+        // this.laneCountPeer = laneSection.getLeft().getLane().size();
+        // this.laneWidthPeer = laneSection.getLeft().getLane().get(0).getWidth().get(0).getA();
+        // Preconditions.checkArgument(laneCountPeer > 0);
+        // Preconditions.checkArgument(laneWidthPeer > 0);
+        // }
+        // List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), firstLaneSection);
+        // return RoadMappings.create(roadGeometries);
     }
 
-    private static List<RoadGeometry> createRoadGeometries(List<Geometry> geometries, int laneCount, double laneWidth,
-           boolean isPeer) {
+    private static List<RoadGeometry> createRoadGeometries(List<Geometry> geometries, int laneCount, double laneWidth) {
         List<RoadGeometry> roadGeometries = new ArrayList<>(geometries.size());
         for (Geometry geometry : geometries) {
-            RoadGeometry roadGeometry = isPeer ? new RoadGeometryPeer(geometry, laneCount, laneWidth) : new RoadGeometry(geometry, laneCount, laneWidth);   
+            RoadGeometry roadGeometry = new RoadGeometry(geometry, laneCount, laneWidth);
             roadGeometries.add(roadGeometry);
         }
-        if (isPeer) {
-            // CHECK if reserved order if correct here. Not tested yet
-            Collections.reverse(roadGeometries);
-        }
+        // if (isPeer) {
+        // // CHECK if reserved order if correct here. Not tested yet
+        // Collections.reverse(roadGeometries);
+        // }
         return roadGeometries;
     }
 
@@ -369,7 +389,8 @@ public class OpenDriveHandlerJaxb {
                     Link.addLanePair(laneIdToLaneIndex(toLane), roadSegment, laneIdToLaneIndex(fromLane),
                             sourceRoadSegment);
                 } else {
-                Link.addLanePair(laneIdToLaneIndex(fromLane), sourceRoadSegment, laneIdToLaneIndex(toLane), roadSegment);
+                    Link.addLanePair(laneIdToLaneIndex(fromLane), sourceRoadSegment, laneIdToLaneIndex(toLane),
+                            roadSegment);
                 }
             }
             if (lane.getLink().isSetSuccessor()) {
@@ -386,7 +407,8 @@ public class OpenDriveHandlerJaxb {
                     Link.addLanePair(laneIdToLaneIndex(toLane), sinkRoadSegment, laneIdToLaneIndex(fromLane),
                             roadSegment);
                 } else {
-                Link.addLanePair(laneIdToLaneIndex(fromLane), roadSegment, laneIdToLaneIndex(toLane), sinkRoadSegment);
+                    Link.addLanePair(laneIdToLaneIndex(fromLane), roadSegment, laneIdToLaneIndex(toLane),
+                            sinkRoadSegment);
                 }
             }
         }
@@ -424,17 +446,16 @@ public class OpenDriveHandlerJaxb {
                             Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
                                     laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment);
                         } else {
-                        Link.addLanePair(laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment,
-                                laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment);
+                            Link.addLanePair(laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment,
+                                    laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment);
                         }
                     } else if (roadSuccessorIsJunction(junction, road)) {
                         if (isReverse) {
                             Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
                                     laneIdToLaneIndex(laneLink.getFrom()), incomingRoadSegment);
-                        }
-                        else{
-                        Link.addLanePair(laneIdToLaneIndex(laneLink.getFrom()), connectingRoadSegment,
-                                laneIdToLaneIndex(laneLink.getTo()), incomingRoadSegment);
+                        } else {
+                            Link.addLanePair(laneIdToLaneIndex(laneLink.getFrom()), connectingRoadSegment,
+                                    laneIdToLaneIndex(laneLink.getTo()), incomingRoadSegment);
                         }
                     } else {
                         throw new IllegalArgumentException("Incorrect junction id=" + junction.getId());

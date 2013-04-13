@@ -27,13 +27,11 @@
 package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
-import org.movsim.roadmappings.geometry.RoadGeometry;
 
 /**
  * Maps a road segment onto straight line.
  */
-public class RoadMappingLine extends RoadMapping {
-
+public class RoadMappingLine extends RoadMappingAbstract {
 
     public static RoadMapping create(RoadGeometry roadGeometry) {
         return create(roadGeometry.laneCount(), roadGeometry.geometry(), roadGeometry.laneWidth());
@@ -115,7 +113,7 @@ public class RoadMappingLine extends RoadMapping {
      */
     RoadMappingLine(RoadMapping roadMapping, double x1, double y1) {
         super(roadMapping.laneCount(), 0, 0);
-        final RoadMapping.PosTheta posTheta = roadMapping.endPos();
+        final PosTheta posTheta = roadMapping.endPos();
         x0 = posTheta.x;
         y0 = posTheta.y;
         this.x1 = x1;
@@ -143,7 +141,7 @@ public class RoadMappingLine extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         // lateralOffset offset is perpendicular to road
         posTheta.x = x0 + roadPos * posTheta.cosTheta + lateralOffset * posTheta.sinTheta;
         posTheta.y = y0 - roadPos * posTheta.sinTheta + lateralOffset * posTheta.cosTheta;

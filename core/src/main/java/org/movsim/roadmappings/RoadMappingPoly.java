@@ -30,13 +30,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
-import org.movsim.roadmappings.geometry.RoadGeometry;
-import org.movsim.roadmappings.geometry.RoadGeometry.GeometryType;
+import org.movsim.roadmappings.RoadGeometry.GeometryType;
 
 /**
  * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.
  */
-public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping> {
+public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<RoadMapping> {
 
     protected final ArrayList<RoadMapping> roadMappings = new ArrayList<>();
 
@@ -65,7 +64,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
      */
     public RoadMappingPoly(int laneCount, double x0, double y0, double x1, double y1) {
         super(laneCount, x0, y0);
-        final RoadMapping roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
+        final RoadMappingAbstract roadMapping = new RoadMappingLine(laneCount, x0, y0, x1, y1);
         roadLength = roadMapping.roadLength();
         roadMappings.add(roadMapping);
     }
@@ -80,22 +79,22 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
     }
 
     @Override
-    public RoadMapping.PosTheta startPos() {
+    public PosTheta startPos() {
         return roadMappings.get(0).startPos();
     }
 
     @Override
-    public RoadMapping.PosTheta startPos(double lateralOffset) {
+    public PosTheta startPos(double lateralOffset) {
         return roadMappings.get(0).startPos(lateralOffset);
     }
 
     @Override
-    public RoadMapping.PosTheta endPos() {
+    public PosTheta endPos() {
         return roadMappings.get(roadMappings.size() - 1).endPos();
     }
 
     @Override
-    public RoadMapping.PosTheta endPos(double lateralOffset) {
+    public PosTheta endPos(double lateralOffset) {
         return roadMappings.get(roadMappings.size() - 1).endPos(lateralOffset);
     }
 
@@ -126,7 +125,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
     public void addLinePointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
+        final PosTheta posTheta = lastRoadMapping.endPos();
         final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);
@@ -144,7 +143,7 @@ public class RoadMappingPoly extends RoadMapping implements Iterable<RoadMapping
 
     public void addArc(double s, double x0, double y0, double theta, double length, double curvature) {
         // final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        // final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
+        // final PosTheta posTheta = lastRoadMapping.endPos();
         // <geometry s="3.66" x="-4.64" y="4.34" hdg="5.29" length="9.19">
         // <arc curvature="-1.2698412698412698e-01"/>
         // </geometry>

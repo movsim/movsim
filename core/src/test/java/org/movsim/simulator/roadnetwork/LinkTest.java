@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMappingAbstract;
 
 /**
  * Test module for the Link class.
@@ -37,7 +38,7 @@ import org.movsim.roadmappings.RoadMapping;
 @SuppressWarnings("static-method")
 public class LinkTest {
 
-    protected static class RoadMappingConcrete extends RoadMapping {
+    protected static class RoadMappingConcrete extends RoadMappingAbstract {
         public RoadMappingConcrete(int laneCount) {
             super(laneCount, 0, 0);
         }
@@ -48,7 +49,7 @@ public class LinkTest {
         }
 
         @Override
-        public RoadMappingConcrete.PosTheta map(double roadPos, double delta) {
+        public PosTheta map(double roadPos, double delta) {
             return posTheta;
         }
     }

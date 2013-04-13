@@ -27,7 +27,6 @@
 package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
-import org.movsim.roadmappings.geometry.RoadGeometry;
 
 
 /**

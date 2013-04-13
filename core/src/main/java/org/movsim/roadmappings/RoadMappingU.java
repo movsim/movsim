@@ -35,7 +35,7 @@ package org.movsim.roadmappings;
  * NOT PART OF ROADXML SPECIFICATION, so do not use if you wish your simulation to be saved as a ROADXML file.
  * </p>
  */
-public class RoadMappingU extends RoadMapping {
+public class RoadMappingU extends RoadMappingAbstract {
 
     protected double radius;
     protected double straightLength; // length(m) of straight sections of U-shape
@@ -90,7 +90,7 @@ public class RoadMappingU extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         // lateralOffset is perpendicular to road
         final double r = radius + lateralOffset;
         if (roadPos <= straightLength) {

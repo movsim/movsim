@@ -36,6 +36,8 @@ import java.awt.geom.Point2D;
 import java.util.Iterator;
 
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMapping.PolygonFloat;
+import org.movsim.roadmappings.RoadMapping.PosTheta;
 import org.movsim.roadmappings.RoadMappingArc;
 import org.movsim.roadmappings.RoadMappingBezier;
 import org.movsim.roadmappings.RoadMappingCircle;
@@ -54,7 +56,7 @@ public class PaintRoadMapping {
     private static final boolean drawBezierPoints = false;
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping) {
-        final double lateralOffset = 0;  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
+        double lateralOffset = 0; //roadMapping.isPeer() ? roadMapping.roadWidth() : 0;  //0.5 * roadMapping.laneCount() /*.trafficLaneMin()*/ * roadMapping.laneWidth();
         paintRoadMapping(g, roadMapping, lateralOffset);
     }
 
@@ -64,12 +66,11 @@ public class PaintRoadMapping {
         final Line2D.Double line = new Line2D.Double();
         final Point2D from = new Point2D.Double();
         final Point2D to = new Point2D.Double();
-        RoadMapping.PosTheta posTheta;
+        PosTheta posTheta;
 
         final double roadLength = roadMapping.roadLength();
 
-        final Class<? extends RoadMapping> roadMappingClass = roadMapping.getClass();
-        if (roadMappingClass == RoadMappingU.class) {
+        if (roadMapping instanceof RoadMappingU) {
             final RoadMappingU mappingU = (RoadMappingU) roadMapping;
             final double straightLength = mappingU.straightLength();
 
@@ -97,7 +98,7 @@ public class PaintRoadMapping {
                     Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMappingClass == RoadMappingS.class) {
+        } else if (roadMapping instanceof RoadMappingS) {
             // } else if (roadMappingClass == RoadMappingArcExtended.class) {
             // final double straightLength =
             // ((RoadMappingArcExtended)roadMapping).straightLength();
@@ -133,7 +134,7 @@ public class PaintRoadMapping {
             // offset, angSt, angExt, Arc2D.OPEN);
             // g.draw(arc2D);
             // return;
-        } else if (roadMappingClass == RoadMappingArc.class) {
+        } else if (roadMapping instanceof RoadMappingArc) {
             final RoadMappingArc arc = (RoadMappingArc) roadMapping;
             posTheta = roadMapping.startPos();
             final double angSt = arc.startAngle() + (arc.clockwise() ? 0.5 * Math.PI : -0.5 * Math.PI);
@@ -145,7 +146,7 @@ public class PaintRoadMapping {
                     Math.toDegrees(arc.arcAngle()), Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMappingClass == RoadMappingCircle.class) {
+        } else if (roadMapping instanceof RoadMappingCircle) {
             final RoadMappingCircle arc = (RoadMappingCircle) roadMapping;
             posTheta = roadMapping.startPos();
             final double radius = arc.radius();
@@ -153,7 +154,7 @@ public class PaintRoadMapping {
             arc2D.setArcByCenter(posTheta.x - radius, posTheta.y, radius + lateralOffset, 0.0, 360.0, Arc2D.OPEN);
             g.draw(arc2D);
             return;
-        } else if (roadMappingClass == RoadMappingLine.class) {
+        } else if (roadMapping instanceof RoadMappingLine) {
             posTheta = roadMapping.startPos(lateralOffset);
             from.setLocation(posTheta.x, posTheta.y);
             posTheta = roadMapping.endPos(lateralOffset);
@@ -161,13 +162,13 @@ public class PaintRoadMapping {
             line.setLine(from, to);
             g.draw(line);
             return;
-        } else if (roadMappingClass == RoadMappingPoly.class) {
+        } else if (roadMapping instanceof RoadMappingPoly) {
             final RoadMappingPoly poly = (RoadMappingPoly) roadMapping;
             for (final RoadMapping map : poly) {
                 paintRoadMapping(g, map, lateralOffset);
             }
             return;
-        } else if (roadMappingClass == RoadMappingPolyLine.class) {
+        } else if (roadMapping instanceof RoadMappingPolyLine) {
             // TODO need to properly handle joins of the lines in the polyline
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyLine polyLine = (RoadMappingPolyLine) roadMapping;
@@ -188,7 +189,7 @@ public class PaintRoadMapping {
                 g.draw(path);
                 return;
             }
-        } else if (roadMappingClass.equals(RoadMappingBezier.class)) {
+        } else if (roadMapping instanceof RoadMappingBezier) {
             if (lateralOffset == 0.0) {
                 // TODO remove this zero condition when Bezier lateral offset
                 // for control points has been fixed
@@ -207,7 +208,7 @@ public class PaintRoadMapping {
                 g.draw(path);
                 return;
             }
-        } else if (roadMappingClass.equals(RoadMappingPolyBezier.class)) {
+        } else if (roadMapping instanceof RoadMappingPolyBezier) {
             if (lateralOffset == 0.0) {
                 final RoadMappingPolyBezier polyBezier = (RoadMappingPolyBezier) roadMapping;
                 final Iterator<RoadMappingBezier> iterator = polyBezier.iterator();
@@ -264,7 +265,7 @@ public class PaintRoadMapping {
         // for (final Inhomogeneity inhomogeneity :
         // roadSection.inhomogeneities()) {
         // final double pos = inhomogeneity.startPosition();
-        // RoadMapping.PosTheta posTheta = roadMapping.map(pos);
+        // PosTheta posTheta = roadMapping.map(pos);
         // final Point2D from = new Point2D.Double();
         // from.setLocation(posTheta.x, posTheta.y);
         // posTheta = roadMapping.map(inhomogeneity.endPosition());
@@ -282,7 +283,7 @@ public class PaintRoadMapping {
             clipPath.reset();
             assert clipPath.getWindingRule() == Path2D.WIND_EVEN_ODD;
             // add the clip regions
-            for (final RoadMapping.PolygonFloat polygon : roadMapping.clippingPolygons()) {
+            for (final PolygonFloat polygon : roadMapping.clippingPolygons()) {
                 clipPath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
                 clipPath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
                 clipPath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);
@@ -292,7 +293,7 @@ public class PaintRoadMapping {
             // add the outer region (encloses whole road), so that everything
             // outside the clip
             // region is drawn
-            final RoadMapping.PolygonFloat polygon = roadMapping.outsideClippingPolygon();
+            final PolygonFloat polygon = roadMapping.outsideClippingPolygon();
             clipPath.moveTo(polygon.xPoints[0], polygon.yPoints[0]);
             clipPath.lineTo(polygon.xPoints[1], polygon.yPoints[1]);
             clipPath.lineTo(polygon.xPoints[2], polygon.yPoints[2]);

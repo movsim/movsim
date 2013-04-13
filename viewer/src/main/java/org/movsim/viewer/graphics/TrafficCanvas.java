@@ -44,6 +44,7 @@ import javax.xml.bind.JAXBException;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.roadmappings.RoadMapping;
+import org.movsim.roadmappings.RoadMapping.PosTheta;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
@@ -559,6 +560,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
+            
+//            if(roadMapping.isPeer()){
+//                logger.info("do not draw peer...");
+//                continue;
+//            }
             drawRoadSegment(g, roadMapping);
             drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!
         }
@@ -622,7 +628,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     public static Rectangle2D trafficLightRect(RoadMapping roadMapping, TrafficLightLocation trafficLightLocation) {
         final double offset = (roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         final double size = 2 * roadMapping.laneWidth();
-        final RoadMapping.PosTheta posTheta = roadMapping.map(trafficLightLocation.position(), offset);
+        final PosTheta posTheta = roadMapping.map(trafficLightLocation.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x - size / 2, posTheta.y - size / 2, size, size
                 * trafficLightLocation.getTrafficLight().lightCount());
         return rect;
@@ -779,7 +785,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final SpeedLimit speedLimit : roadSegment.speedLimits()) {
 
             g.setFont(font);
-            final RoadMapping.PosTheta posTheta = roadMapping.map(speedLimit.getPosition(), offset);
+            final PosTheta posTheta = roadMapping.map(speedLimit.getPosition(), offset);
 
             final double speedLimitValueKmh = speedLimit.getSpeedLimitKmh();
             if (speedLimitValueKmh < 150) {
@@ -836,7 +842,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
         for (final Slope slope : roadSegment.slopes()) {
             g.setFont(font);
-            final RoadMapping.PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
+            final PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
 
             final double gradient = slope.getGradient() * 100;
             // if (gradient != 0) {
@@ -874,7 +880,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             // final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            final RoadMapping.PosTheta posTheta = roadMapping.map(0.0);
+            final PosTheta posTheta = roadMapping.map(0.0);
 
             // draw the road segment's id
             final int fontHeight = 12;
@@ -895,7 +901,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            final RoadMapping.PosTheta posTheta;
+            final PosTheta posTheta;
 
             // draw the road segment source, if there is one
             final AbstractTrafficSource trafficSource = roadSegment.trafficSource();
@@ -929,7 +935,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
             final int radius = (int) ((roadMapping.laneCount() + 2) * roadMapping.laneWidth());
-            final RoadMapping.PosTheta posTheta;
+            final PosTheta posTheta;
 
             // draw the road segment sink, if there is one
             final TrafficSink sink = roadSegment.sink();

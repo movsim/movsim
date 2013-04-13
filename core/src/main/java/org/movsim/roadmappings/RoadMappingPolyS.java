@@ -64,7 +64,7 @@ public class RoadMappingPolyS extends RoadMappingS {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         final double sLength = 2 * (Math.PI * radius + straightLength);
         final int count = (int) (roadPos / sLength);
         final double remainder = roadPos - count * sLength;

@@ -155,7 +155,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public RoadSegment(double roadLength, int laneCount) {
         assert roadLength > 0.0;
-        assert laneCount >= 1;
+        assert laneCount >= 1 : "laneCount=" + laneCount;
         laneSegments = new LaneSegment[laneCount];
         for (int index = 0; index < laneCount; ++index) {
             laneSegments[index] = new LaneSegment(this, index + 1);

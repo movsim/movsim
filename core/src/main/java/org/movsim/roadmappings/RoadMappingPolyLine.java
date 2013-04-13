@@ -33,7 +33,7 @@ import java.util.Iterator;
 /**
  * RoadMapping consisting of a number of consecutive straight sections of road.
  */
-public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMappingLine> {
+public class RoadMappingPolyLine extends RoadMappingAbstract implements Iterable<RoadMappingLine> {
 
     public static final int RELATIVE_POINTS = 0;
     public static final int ABSOLUTE_POINTS = 1;
@@ -113,22 +113,22 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
     }
 
     @Override
-    public RoadMapping.PosTheta startPos() {
+    public PosTheta startPos() {
         return roadMappings.get(0).startPos();
     }
 
     @Override
-    public RoadMapping.PosTheta startPos(double lateralOffset) {
+    public PosTheta startPos(double lateralOffset) {
         return roadMappings.get(0).startPos(lateralOffset);
     }
 
     @Override
-    public RoadMapping.PosTheta endPos() {
+    public PosTheta endPos() {
         return roadMappings.get(roadMappings.size() - 1).endPos();
     }
 
     @Override
-    public RoadMapping.PosTheta endPos(double lateralOffset) {
+    public PosTheta endPos(double lateralOffset) {
         return roadMappings.get(roadMappings.size() - 1).endPos(lateralOffset);
     }
 
@@ -165,7 +165,7 @@ public class RoadMappingPolyLine extends RoadMapping implements Iterable<RoadMap
 
     public void addPointRelative(double dx, double dy) {
         final RoadMapping lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
+        final PosTheta posTheta = lastRoadMapping.endPos();
         final RoadMappingLine roadMapping = new RoadMappingLine(lastRoadMapping, posTheta.x + dx, posTheta.y + dy);
         roadLength += roadMapping.roadLength();
         roadMappings.add(roadMapping);

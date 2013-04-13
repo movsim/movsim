@@ -1,4 +1,4 @@
-package org.movsim.roadmappings.geometry;
+package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.slf4j.Logger;
@@ -26,9 +26,9 @@ public class RoadGeometry {
     protected final double laneWidth;
 
     public RoadGeometry(Geometry geometry, int laneCount, double laneWidth) {
+        this.geometry = Preconditions.checkNotNull(geometry);
         Preconditions.checkArgument(laneCount > 0);
         Preconditions.checkArgument(laneWidth > 0);
-        this.geometry = Preconditions.checkNotNull(geometry);
         this.laneCount = laneCount;
         this.laneWidth = laneWidth;
     }
@@ -42,7 +42,7 @@ public class RoadGeometry {
     }
 
     public double laneWidth() {
-        return laneWidth;
+        return laneWidth; // ignore laneWidth from peer
     }
 
     public GeometryType geometryType() {

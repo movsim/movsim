@@ -30,7 +30,7 @@ package org.movsim.roadmappings;
 /**
  * Maps a road segment onto a circle.
  */
-public class RoadMappingCircle extends RoadMapping {
+public class RoadMappingCircle extends RoadMappingAbstract {
 
     protected double centerX;
     protected double centerY;
@@ -98,7 +98,7 @@ public class RoadMappingCircle extends RoadMapping {
     }
 
     @Override
-    public RoadMapping.PosTheta map(double roadPos, double lateralOffset) {
+    public PosTheta map(double roadPos, double lateralOffset) {
         final double arcTheta = clockwise ? -roadPos / radius : roadPos / radius;
         // road direction, perpendicular to angle position subtends at center
         final double theta = arcTheta + 0.5 * Math.PI;

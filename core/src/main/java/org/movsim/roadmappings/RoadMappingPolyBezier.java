@@ -33,7 +33,7 @@ import java.util.Iterator;
 /**
  * RoadMapping consisting of a number of consecutive Bezier curves.
  */
-public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadMappingBezier> {
+public class RoadMappingPolyBezier extends RoadMappingAbstract implements Iterable<RoadMappingBezier> {
 
     public static final int RELATIVE_POINTS = 0;
     public static final int ABSOLUTE_POINTS = 1;
@@ -127,22 +127,22 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
     }
 
     @Override
-    public RoadMapping.PosTheta startPos() {
+    public PosTheta startPos() {
         return roadMappings.get(0).startPos();
     }
 
     @Override
-    public RoadMapping.PosTheta startPos(double lateralOffset) {
+    public PosTheta startPos(double lateralOffset) {
         return roadMappings.get(0).startPos(lateralOffset);
     }
 
     @Override
-    public RoadMapping.PosTheta endPos() {
+    public PosTheta endPos() {
         return roadMappings.get(roadMappings.size() - 1).endPos();
     }
 
     @Override
-    public RoadMapping.PosTheta endPos(double lateralOffset) {
+    public PosTheta endPos(double lateralOffset) {
         return roadMappings.get(roadMappings.size() - 1).endPos(lateralOffset);
     }
 
@@ -184,7 +184,7 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
     public void addPointRelative(double dx, double dy, double t) {
         assert roadMappings.size() >= 1;
         final RoadMappingBezier lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        final RoadMapping.PosTheta posTheta = lastRoadMapping.endPos();
+        final PosTheta posTheta = lastRoadMapping.endPos();
         final RoadMappingBezier roadMapping = new RoadMappingBezier(lastRoadMapping, posTheta.x + dx, posTheta.y + dy,
                 t);
         roadLength += roadMapping.roadLength();
@@ -194,7 +194,7 @@ public class RoadMappingPolyBezier extends RoadMapping implements Iterable<RoadM
     public void addPointRelative(double dx, double dy) {
         assert roadMappings.size() >= 1;
         final RoadMappingBezier lastRoadMapping = roadMappings.get(roadMappings.size() - 1);
-        RoadMapping.PosTheta posTheta = lastRoadMapping.startPos();
+        PosTheta posTheta = lastRoadMapping.startPos();
         final double startX = posTheta.x;
         final double startY = posTheta.y;
         posTheta = lastRoadMapping.endPos();

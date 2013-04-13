@@ -33,7 +33,7 @@
             </Road> 
             <Road id="1+">
                 <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
+                    <Inflow t="0" q_per_hour="200" v="15" />
                 </TrafficSource>
             </Road>
             <!-- arc -->
