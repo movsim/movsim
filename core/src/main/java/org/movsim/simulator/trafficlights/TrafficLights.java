@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
 
 /**
  * The Class TrafficLights.
@@ -63,6 +64,10 @@ public class TrafficLights implements SimulationTimeStep {
 
     public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput, RoadNetwork roadNetwork) {
         if (trafficLightsInput == null) {
+            if (networkContainsTrafficlights(roadNetwork)) {
+                throw new IllegalStateException(
+                        "inconsistent input: traffic lights defined in network but not in movsim input.");
+            }
             return;
         }
         setUp(trafficLightsInput, roadNetwork);
@@ -70,6 +75,15 @@ public class TrafficLights implements SimulationTimeStep {
         if (trafficLightsInput.isLogging()) {
             setUpLogging(trafficLightsInput.getNTimestep());
         }
+    }
+
+    private static boolean networkContainsTrafficlights(RoadNetwork roadNetwork) {
+        for (RoadSegment roadSegment : roadNetwork) {
+            if (Iterables.size(roadSegment.trafficLightLocations()) > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
