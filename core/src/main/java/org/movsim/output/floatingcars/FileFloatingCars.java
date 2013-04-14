@@ -52,7 +52,7 @@ class FileFloatingCars extends FileOutputBase {
             + "     t[s],    roadId,      lane,      x[m], totalX[m],    v[m/s],  a[m/s^2],aModel[m/s^2], gap[m],   dv[m/s],distToTL[m],fuelFlow[ml/s],frontVehID,slope[rad]";
 
     // note: number before decimal point is total width of field, not width of integer part
-    private static final String outputFormat = "%10.2f,%10d,%10d,%10.1f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d,%8.5f%n";
+    private static final String outputFormat = "%10.2f,%10d,%10d,%10.2f,%10.2f,%10.3f,%10.5f,%10.5f,%10.3f,%10.5f,%10.2f,%10f,%10d,%8.5f%n";
 
     /**
      * Instantiates a new FileFloatingCars.
