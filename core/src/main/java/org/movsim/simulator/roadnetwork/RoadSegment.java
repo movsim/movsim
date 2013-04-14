@@ -1228,7 +1228,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     @Override
     public String toString() {
         return "RoadSegment [id=" + id + ", roadId=" + roadId + ", roadLength=" + roadLength + ", laneCount="
-                + laneCount + "]";
+                + laneCount + ", vehicleCount=" + getVehicleCount() + "]";
     }
 
     /**
