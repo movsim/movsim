@@ -50,8 +50,6 @@ import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
-import org.movsim.roadmappings.RoadMapping;
-import org.movsim.roadmappings.RoadMappingPolyS;
 import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
 import org.movsim.simulator.roadnetwork.InflowTimeSeries;
@@ -135,7 +133,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         Simulation simulationInput = inputData.getScenario().getSimulation();
 
-        final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
+        Preconditions.checkState(parseOpenDriveXml(roadNetwork, projectMetaData), "road network not loaded.");
         createRoutes(inputData.getScenario().getRoutes());
 
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
@@ -159,12 +157,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
-        // final Map<String, RoadInput> roadInputMap = simulationInput.get.getRoadInput();
-        if (loadedRoadNetwork == false && simulationInput.getRoad().size() == 1) {
-            defaultTestingRoadMapping(simulationInput.getRoad().get(0));
-        } else {
-            matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
-        }
+        matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
 
         trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights(), roadNetwork);
 
@@ -237,17 +230,17 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * 
      * @param road
      */
-    private void defaultTestingRoadMapping(Road roadInput) {
-        LOG.warn("Simulation with test network");
-        final int laneCount = 1;
-        final double roadLength = 1500;
-        final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
-        final RoadSegment roadSegment = new RoadSegment(roadMapping);
-        addInputToRoadSegment(roadSegment, roadInput);
-        roadSegment.setRoadId("1");
-        roadSegment.addDefaultSink();
-        roadNetwork.add(roadSegment);
-    }
+    // private void defaultTestingRoadMapping(Road roadInput) {
+    // LOG.warn("Simulation with test network");
+    // final int laneCount = 1;
+    // final double roadLength = 1500;
+    // final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
+    // final RoadSegment roadSegment = new RoadSegment(roadMapping);
+    // addInputToRoadSegment(roadSegment, roadInput);
+    // roadSegment.setRoadId("1");
+    // roadSegment.addDefaultSink();
+    // roadNetwork.add(roadSegment);
+    // }
 
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
