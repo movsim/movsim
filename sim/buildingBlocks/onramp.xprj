@@ -33,8 +33,8 @@
             </TrafficComposition>
             <Road id="1">
                 <TrafficSource logging="false">
-                    <Inflow t="0" q_per_hour="1200" />
-                    <Inflow t="600" q_per_hour="1600" />
+                    <Inflow t="0" q_per_hour="1200" v="20" />
+                    <Inflow t="600" q_per_hour="1600" v="20" />
                 </TrafficSource>
             </Road>
             <Road id="4">
