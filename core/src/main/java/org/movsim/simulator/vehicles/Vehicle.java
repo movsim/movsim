@@ -984,15 +984,11 @@ public class Vehicle {
      */
     public void moveToNewRoadSegment(RoadSegment newRoadSegment, int newLane, double newRearPosition, double exitPos) {
         // distanceTravelledToStartOfRoadSegment += rearPosition - newRearPos;
-        final int delta = 0; // laneOld - lane;
         this.lane = newLane;
-        this.laneOld = lane + delta;
+        this.laneOld = newLane;
         laneOld = Math.max(Lanes.MOST_INNER_LANE, Math.min(laneOld, newRoadSegment.laneCount()));
         setRearPosition(newRearPosition);
         setRoadSegment(newRoadSegment.id(), newRoadSegment.roadLength());
-        // this.exitEndPos = exitPos;
-        // trafficLight = null;
-        // speedLimit = 0.0;
     }
 
     /**
