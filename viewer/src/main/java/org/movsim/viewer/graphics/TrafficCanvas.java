@@ -488,7 +488,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             for (final RoadSegment roadSegment : roadNetwork) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
                 assert roadMapping != null;
-
                 PaintRoadMapping.setClipPath(g, roadMapping, clipPath);
                 for (final Vehicle vehicle : roadSegment) {
                     drawVehicle(g, simulationTime, roadMapping, vehicle);
@@ -560,11 +559,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (final RoadSegment roadSegment : roadNetwork) {
             final RoadMapping roadMapping = roadSegment.roadMapping();
             assert roadMapping != null;
-            
-//            if(roadMapping.isPeer()){
-//                logger.info("do not draw peer...");
-//                continue;
-//            }
             drawRoadSegment(g, roadMapping);
             drawRoadSegmentLines(g, roadMapping); // in one step (parallel or sequential update)?!
         }
