@@ -377,7 +377,7 @@ public class OpenDriveHandler {
             }
             if (lane.getLink().isSetPredecessor()) {
                 if (!hasRoadPredecessor(road)) {
-                    throw new IllegalArgumentException("lane predecessor link but no road link defined for road="
+                    throw new IllegalArgumentException("predecessor lane link but no road link defined for road="
                             + road.getId());
                 }
                 String sourceId = road.getLink().getPredecessor().getElementId();
@@ -395,7 +395,7 @@ public class OpenDriveHandler {
             }
             if (lane.getLink().isSetSuccessor()) {
                 if (!hasRoadSuccessor(road)) {
-                    throw new IllegalArgumentException("lane successor link but no road link defined for road="
+                    throw new IllegalArgumentException("successor lane link but no road link defined for road="
                             + road.getId());
                 }
                 int fromLane = lane.getId();
