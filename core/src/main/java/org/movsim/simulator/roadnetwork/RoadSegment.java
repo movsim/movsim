@@ -1110,8 +1110,12 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
-            for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
-                final Vehicle vehicle = laneSegment.getVehicle(index);
+            int index = -1;
+            for (Vehicle vehicle : laneSegment) {
+                index++;
+                if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                    continue;
+                }
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
                 final double netDistance = vehicle.getNetDistance(vehFront);
                 if (netDistance < 0) {
@@ -1128,6 +1132,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                     sb.append(", net distance=").append(netDistance);
                     sb.append(", lane=").append(laneSegment.lane());
                     sb.append(", container.size=").append(laneSegment.vehicleCount());
+                    sb.append(", obstacles=").append(laneSegment.obstacleCount());
                     sb.append("\n");
 
                     for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math

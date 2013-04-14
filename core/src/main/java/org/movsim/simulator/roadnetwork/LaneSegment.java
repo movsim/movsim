@@ -165,13 +165,7 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the number of vehicles on this lane segment
      */
     public final int vehicleCount() {
-        int vehicleCount = 0;
-        for (final Vehicle vehicle : vehicles) {
-            if (vehicle.type() != Vehicle.Type.OBSTACLE) {
-                ++vehicleCount;
-            }
-        }
-        return vehicleCount;
+        return vehicles.size();
     }
 
     public int stoppedVehicleCount() {
@@ -182,6 +176,12 @@ public class LaneSegment implements Iterable<Vehicle> {
             }
         }
         return stoppedVehicleCount;
+    }
+
+    /** Returns the number of real vehicles (without 'obstacles') n this lane segment. */
+    // TODO think about iterating only over vehicles but not obstacles which are used only internally
+    public final int vehicleCountWithoutObstacles() {
+        return vehicles.size() - obstacleCount();
     }
 
     /**
@@ -491,7 +491,6 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     Vehicle secondLastVehicleOnSinkLanePosAdjusted() {
-
         // subject vehicle is front vehicle on this lane segment, so check sink lane segment
         if (sinkLaneSegment == null) {
             return null;

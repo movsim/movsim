@@ -105,7 +105,7 @@ public class SimpleRamp extends AbstractTrafficSource {
             if (rearVehicleNextLaneSegment != null) {
                 evaluateVehicle(rearVehicleNextLaneSegment, laneSegment, testVehicle, gapCandidates);
             }
-            if (rearVehicleNextLaneSegment == null && laneSegment.vehicleCount() == 0) {
+            if (rearVehicleNextLaneSegment == null && laneSegment.vehicleCountWithoutObstacles() == 0) {
                 gapCandidates.add(new GapCandidate(MovsimConstants.GAP_INFINITY, laneSegment.lane(), 0.5
                         * roadSegment.roadLength() - testVehicle.length(), testVehicle.getRelativeRandomizationV0()));
             }
