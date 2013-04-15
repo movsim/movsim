@@ -35,7 +35,6 @@ import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
 import org.movsim.simulator.roadnetwork.Route;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -654,19 +653,14 @@ public class Vehicle {
                 getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
         if (location != null) {
             LOG.debug("consider trafficlight={}", location.toString());
-            updateTrafficLightApproaching(location.trafficLightLocation, location.distance);
+            assert location.distance >= 0 : "distance=" + location.distance;
+            trafficLightApproaching.update(this, location.trafficLightLocation.getTrafficLight(), location.distance);
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
             }
         }
         return moderatedAcc;
     }
-
-    private void updateTrafficLightApproaching(TrafficLightLocation trafficLightLocation, double distance) {
-        assert distance >= 0 : "distance=" + distance;
-        trafficLightApproaching.update(this, trafficLightLocation.getTrafficLight(), distance);
-    }
-
 
     /**
      * Returns this vehicle's acceleration considering the exit.

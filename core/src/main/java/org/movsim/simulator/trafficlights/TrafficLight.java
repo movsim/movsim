@@ -101,7 +101,8 @@ public class TrafficLight {
     }
 
     public void setPosition(double position) {
-        Preconditions.checkArgument(Double.isNaN(this.position), "position already set: " + toString());
+        Preconditions.checkArgument(Double.isNaN(this.position), "trafficlight with name=\"" + name()
+                + "\" position already set: " + toString());
         this.position = position;
     }
 
@@ -133,8 +134,8 @@ public class TrafficLight {
 
     @Override
     public String toString() {
-        return "TrafficLight [status=" + status + ", position=" + position + ", name=" + name + "groupId = " + groupId
-                + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.id()) + "]";
+        return "TrafficLight [status=" + status + ", position=" + position + ", name=" + name + ", groupId = "
+                + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.roadId()) + "]";
     }
 
 }

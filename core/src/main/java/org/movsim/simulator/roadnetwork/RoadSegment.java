@@ -1266,7 +1266,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
         Preconditions.checkArgument(trafficLightLocation.position() >= 0
                 && trafficLightLocation.position() <= roadLength, "inconsistent input data: traffic light position="
-                + trafficLightLocation.position() + " does not fit onto road-id=" + id() + " with length="
+                + trafficLightLocation.position() + " does not fit onto road-id=" + roadId() + " with length="
                 + roadLength());
         trafficLightLocations.add(trafficLightLocation);
     }
