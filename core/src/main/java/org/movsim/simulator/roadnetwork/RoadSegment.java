@@ -166,17 +166,31 @@ public class RoadSegment implements Iterable<Vehicle> {
         this.laneCount = laneCount;
     }
 
+    public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
+        this.roadMapping = Preconditions.checkNotNull(roadMapping);
+        assert roadLength > 0.0;
+        assert laneCount >= 1 : "laneCount=" + laneCount;
+        laneSegments = new LaneSegment[laneCount];
+        for (int index = 0; index < laneCount; ++index) {
+            laneSegments[index] = new LaneSegment(this, index + 1);
+        }
+        id = nextId++;
+        assert roadLength > 0;
+        this.roadLength = roadLength;
+        this.laneCount = laneCount;
+    }
+
     /**
      * Convenience constructor, creates road segment based on a given road mapping.
      * 
      * @param roadMapping
      */
-    public RoadSegment(RoadMapping roadMapping) {
-        this(roadMapping.roadLength(), roadMapping.laneCount());
-        assert roadMapping.trafficLaneMin() == Lanes.LANE1;
-        assert roadMapping.trafficLaneMax() == laneCount;
-        this.roadMapping = roadMapping;
-    }
+    // public RoadSegment(RoadMapping roadMapping) {
+    // this(roadMapping.roadLength(), roadMapping.laneCount());
+    // assert roadMapping.trafficLaneMin() == Lanes.LANE1;
+    // assert roadMapping.trafficLaneMax() == laneCount;
+    // this.roadMapping = roadMapping;
+    // }
 
     /**
      * Sets a default sink for this road segment.
@@ -306,8 +320,8 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void setLaneType(int lane, Lanes.Type laneType) {
         laneSegments[lane - 1].setType(laneType);
         if (roadMapping != null) {
-            roadMapping.setTrafficLaneMin(trafficLaneMin());
-            roadMapping.setTrafficLaneMax(trafficLaneMax());
+            // roadMapping.setTrafficLaneMin(trafficLaneMin());
+            // roadMapping.setTrafficLaneMax(trafficLaneMax());
         }
     }
 
@@ -1211,8 +1225,8 @@ public class RoadSegment implements Iterable<Vehicle> {
         final RoadMapping roadMapping = roadMapping();
         if (roadMapping != null) {
             assert roadMapping.laneCount() == laneCount();
-            assert roadMapping.trafficLaneMax() == trafficLaneMax();
-            assert roadMapping.trafficLaneMin() == trafficLaneMin();
+            // assert roadMapping.trafficLaneMax() == trafficLaneMax();
+            // assert roadMapping.trafficLaneMin() == trafficLaneMin();
             assert Math.abs(roadMapping.roadLength() - roadLength()) < 0.1;
         }
         for (final LaneSegment laneSegment : laneSegments) {

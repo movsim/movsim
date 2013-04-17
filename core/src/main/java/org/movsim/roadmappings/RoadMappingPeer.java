@@ -1,5 +1,6 @@
 package org.movsim.roadmappings;
 
+import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +20,17 @@ public class RoadMappingPeer extends RoadMappingAbstract {
 
     @Override
     public PosTheta map(double roadPos, double lateralOffset) {
-        return roadMapping.map(roadLength - roadPos, -roadWidth() + lateralOffset);
+        // counterdirection simply be inverting roadPos
+        return roadMapping.map(roadLength - roadPos, lateralOffset);
     }
 
-    // @Override
-    // protected double laneOffset(double lane) {
-    // return (lane == Lanes.NONE) ? 0.0 : -(0.5 * (1 - laneCount) + (lane - 1)) * laneWidth;
-    // // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
-    // }
+    @Override
+    public PolygonFloat mapFloat(Vehicle vehicle, double time) {
+        final PosTheta posTheta = map(vehicle.physicalQuantities().getMidPosition(),
+                -laneOffset(vehicle.getContinousLane()));
+        return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
+    }
+
 
     @Override
     public boolean isPeer() {

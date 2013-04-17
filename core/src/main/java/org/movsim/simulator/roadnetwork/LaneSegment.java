@@ -165,13 +165,14 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return the number of vehicles on this lane segment
      */
     public final int vehicleCount() {
-        int vehicleCount = 0;
-        for (final Vehicle vehicle : vehicles) {
-            if (vehicle.type() != Vehicle.Type.OBSTACLE) {
-                ++vehicleCount;
-            }
-        }
-        return vehicleCount;
+        // int vehicleCount = 0;
+        // for (final Vehicle vehicle : vehicles) {
+//            if (vehicle.type() != Vehicle.Type.OBSTACLE) {
+//                ++vehicleCount;
+//            }
+        // }
+        // return vehicleCount;
+        return vehicles.size();
     }
 
     public int stoppedVehicleCount() {

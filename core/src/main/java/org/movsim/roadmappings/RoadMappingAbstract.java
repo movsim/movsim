@@ -143,21 +143,21 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @param trafficLaneMin
      */
-    @Override
-    public final void setTrafficLaneMin(int trafficLaneMin) {
-        assert trafficLaneMin >= Lanes.MOST_INNER_LANE;
-        this.trafficLaneMin = trafficLaneMin;
-    }
+    // @Override
+    // public final void setTrafficLaneMin(int trafficLaneMin) {
+    // assert trafficLaneMin >= Lanes.MOST_INNER_LANE;
+    // this.trafficLaneMin = trafficLaneMin;
+    // }
 
     /**
      * Returns the minimum traffic lane.
      * 
      * @return the minimum traffic lane
      */
-    @Override
-    public final int trafficLaneMin() {
-        return trafficLaneMin;
-    }
+    // @Override
+    // public final int trafficLaneMin() {
+    // return trafficLaneMin;
+    // }
 
     /**
      * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be
@@ -165,20 +165,20 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * 
      * @param trafficLaneMax
      */
-    @Override
-    public final void setTrafficLaneMax(int trafficLaneMax) {
-        this.trafficLaneMax = trafficLaneMax;
-    }
+    // @Override
+    // public final void setTrafficLaneMax(int trafficLaneMax) {
+    // this.trafficLaneMax = trafficLaneMax;
+    // }
 
     /**
      * Returns the maximum traffic lane.
      * 
      * @return the maximum traffic lane
      */
-    @Override
-    public final int trafficLaneMax() {
-        return trafficLaneMax;
-    }
+    // @Override
+    // public final int trafficLaneMax() {
+    // return trafficLaneMax;
+    // }
 
     /**
      * Convenience function, returns the start position of the road.
@@ -313,7 +313,12 @@ public abstract class RoadMappingAbstract implements RoadMapping {
      * @return the offset of the center of the lane
      */
     protected double laneOffset(double lane) {
-        return (lane == Lanes.NONE) ? 0.0 : (0.5 * (1 - laneCount) + (lane - 1)) * laneWidth;
+        if (laneCount == 1) {
+            // TODO hack here, should be not necessary if relative to centerline
+            return 0;
+        }
+        return (lane == Lanes.NONE) ? 0.0 : (lane - 0.5) * laneWidth;
+        // (0.5 * (1 - laneCount) + (lane - 1)) *
         // return (0.5 * (trafficLaneMin + laneCount - 1) - lane) * laneWidth;
     }
 

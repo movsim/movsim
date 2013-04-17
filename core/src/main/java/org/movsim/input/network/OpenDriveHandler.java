@@ -27,7 +27,6 @@ import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.roadmappings.RoadMappings;
-import org.movsim.roadmappings.TotalRoadMapping;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
 import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
@@ -97,7 +96,7 @@ public class OpenDriveHandler {
             if (hasPeer) {
                 LOG.info("road={} consists of peers", road.getId());
             }
-            final TotalRoadMapping roadMapping = createRoadMappings(road);
+            final RoadMapping roadMapping = createRoadMappings(road);
             for (LaneSectionType laneType : Lanes.LaneSectionType.values()) {
                 if (hasLaneSectionType(road, laneType)) {
                     RoadSegment roadSegment = createRoadSegment(laneType, road, hasPeer, roadMapping);
@@ -139,8 +138,7 @@ public class OpenDriveHandler {
         return false; // CENTER lane not supported
     }
 
-    private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer,
-            TotalRoadMapping roadMapping) {
+    private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer, RoadMapping roadMapping) {
 
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "cannot handle more than one laneSection in roadId=" + road.getId());
@@ -155,9 +153,9 @@ public class OpenDriveHandler {
 
         // final RoadMapping roadMapping = createRoadMapping(laneType, road);
 
-
-        final RoadSegment roadSegment = laneType.isReverseDirection() ? new RoadSegment(new RoadMappingPeer(
-                roadMapping.getPeer())) : new RoadSegment(roadMapping.getRoadMapping());
+        final RoadSegment roadSegment = laneType.isReverseDirection() ? new RoadSegment(roadMapping.roadLength(),
+                lanes.size(), new RoadMappingPeer(roadMapping)) : new RoadSegment(roadMapping.roadLength(),
+                lanes.size(), roadMapping);
 
         roadSegment.setRoadId(getRoadSegmentId(road.getId(), laneType, hasPeer));
         roadSegment.setUserRoadname(road.getName());
@@ -204,27 +202,22 @@ public class OpenDriveHandler {
         return roadSegment;
     }
 
-    private static TotalRoadMapping createRoadMappings(Road road) throws IllegalArgumentException {
+    private static RoadMapping createRoadMappings(Road road) throws IllegalArgumentException {
         Preconditions.checkArgument(road.getLanes().getLaneSection().size() == 1,
                 "cannot handle more than one laneSection in roadId=" + road.getId());
-
+        int laneCount = 0;
+        double laneWidth = 0;
         LaneSection firstLaneSection = road.getLanes().getLaneSection().get(0);
-        RoadMapping roadMappingLeft = null;
+        Preconditions.checkState(firstLaneSection.isSetRight(),
+                "expect always at least a <right> lanesection (development stage)");
         if (firstLaneSection.isSetLeft()) {
-            int laneCount = firstLaneSection.getLeft().getLane().size();
-            double laneWidth = firstLaneSection.getLeft().getLane().get(0).getWidth().get(0).getA();
-            List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount,
-                    laneWidth);
-            roadMappingLeft = RoadMappings.create(roadGeometries);
+            laneCount += firstLaneSection.getLeft().getLane().size();
+            laneWidth = firstLaneSection.getLeft().getLane().get(0).getWidth().get(0).getA();
         }
-
-        int laneCount = firstLaneSection.getRight().getLane().size();
-        double laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
-        List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount,
-                    laneWidth);
-        RoadMapping roadMappingRight = RoadMappings.create(roadGeometries);
-
-        return new TotalRoadMapping(roadMappingRight, roadMappingLeft);
+        laneCount += firstLaneSection.getRight().getLane().size();
+        laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
+        List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount, laneWidth);
+        return RoadMappings.create(roadGeometries);
         // if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
         // laneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
         // // laneWidth = road.getLanes().getLaneSection().get(0).getLeft().getLane().get(0).getWidth().get(0).getA();

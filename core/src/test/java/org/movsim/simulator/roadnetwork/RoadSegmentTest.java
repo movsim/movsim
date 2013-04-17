@@ -156,7 +156,7 @@ public class RoadSegmentTest {
         final int laneCount = 1;
         final double roadLength = 1000.0;
         final RoadMapping m = new RoadMappingConcrete(laneCount, roadLength);
-        final RoadSegment r = new RoadSegment(m);
+        final RoadSegment r = new RoadSegment(roadLength, laneCount, m);
         assertEquals(roadLength, r.roadLength(), delta);
         assertEquals(laneCount, r.laneCount());
         assertEquals(null, r.trafficSource());

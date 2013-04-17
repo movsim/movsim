@@ -62,6 +62,9 @@ public class PaintRoadMapping {
 
     public static void paintRoadMapping(Graphics2D g, RoadMapping roadMapping, double lateralOffset) {
         assert roadMapping != null;
+        if (roadMapping.isPeer()) {
+            return;
+        }
 
         final Line2D.Double line = new Line2D.Double();
         final Point2D from = new Point2D.Double();

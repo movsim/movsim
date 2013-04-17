@@ -63,8 +63,8 @@ public class LinkTest {
         final int laneCount = 1;
         final double roadLength = 1000.0;
         final RoadMapping m = new RoadMappingConcrete(laneCount, roadLength);
-        final RoadSegment r1 = new RoadSegment(m);
-        final RoadSegment r2 = new RoadSegment(m);
+        final RoadSegment r1 = new RoadSegment(roadLength, laneCount, m);
+        final RoadSegment r2 = new RoadSegment(roadLength, laneCount, m);
 
         Link.addLanePair(Lanes.LANE1, r1, Lanes.LANE1, r2);
 
@@ -105,12 +105,12 @@ public class LinkTest {
         final int laneCount = 2;
         final int offset = 1;
         final RoadMapping m1 = new RoadMappingConcrete(laneCount, 1000.0);
-        final RoadSegment r1 = new RoadSegment(m1);
+        final RoadSegment r1 = new RoadSegment(m1.roadLength(), laneCount, m1);
         final RoadMapping m2 = new RoadMappingConcrete(laneCount + offset, 1000.0);
-        final RoadSegment r2 = new RoadSegment(m2);
+        final RoadSegment r2 = new RoadSegment(m2.roadLength(), laneCount + offset, m2);
         r2.setLaneType(Lanes.LANE3, Lanes.Type.ENTRANCE);
         final RoadMapping m3 = new RoadMappingConcrete(laneCount, 1000.0);
-        final RoadSegment r3 = new RoadSegment(m3);
+        final RoadSegment r3 = new RoadSegment(m3.roadLength(), laneCount, m3);
         Link.addJoin(r1, r2);
 
         assertEquals(r2, r1.sinkRoadSegment(Lanes.LANE1));

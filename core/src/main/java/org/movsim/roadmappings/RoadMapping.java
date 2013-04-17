@@ -29,14 +29,14 @@ public interface RoadMapping {
      * 
      * @param trafficLaneMin
      */
-    void setTrafficLaneMin(int trafficLaneMin);
+    // void setTrafficLaneMin(int trafficLaneMin);
 
     /**
      * Returns the minimum traffic lane.
      * 
      * @return the minimum traffic lane
      */
-    int trafficLaneMin();
+    // int trafficLaneMin();
 
     /**
      * Sets the maximum traffic lane. Lanes with <code>lane &gt; trafficLaneMax</code> are not traffic lanes and may be
@@ -44,14 +44,14 @@ public interface RoadMapping {
      * 
      * @param trafficLaneMax
      */
-    void setTrafficLaneMax(int trafficLaneMax);
+    // void setTrafficLaneMax(int trafficLaneMax);
 
     /**
      * Returns the maximum traffic lane.
      * 
      * @return the maximum traffic lane
      */
-    int trafficLaneMax();
+    // int trafficLaneMax();
 
     /**
      * Convenience function, returns the start position of the road.

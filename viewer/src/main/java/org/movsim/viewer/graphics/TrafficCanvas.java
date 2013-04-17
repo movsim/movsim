@@ -589,14 +589,16 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final int laneCount = roadMapping.laneCount();
         for (int lane = 1; lane < laneCount; ++lane) {
             final double offset = roadMapping.laneInsideEdgeOffset(lane);
-            if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
-                // use exit stroke pattern for on-ramps, off-ramps etc
-                final Stroke exitStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
-                        10.0f, new float[] { 5.0f, gapLengthExit }, 5.0f);
-                g.setStroke(exitStroke);
-            } else {
+
+            // FIXME after reimpl
+            // if (lane == roadMapping.trafficLaneMin() || lane == roadMapping.trafficLaneMax()) {
+            // // use exit stroke pattern for on-ramps, off-ramps etc
+            // final Stroke exitStroke = new BasicStroke(lineWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER,
+            // 10.0f, new float[] { 5.0f, gapLengthExit }, 5.0f);
+            // g.setStroke(exitStroke);
+            // } else {
                 g.setStroke(lineStroke);
-            }
+            // }
             PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
         }
 
