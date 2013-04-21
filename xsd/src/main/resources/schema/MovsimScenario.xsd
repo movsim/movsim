@@ -659,8 +659,8 @@
     </xs:element>
     <xs:element name="TrafficLightState">
         <xs:complexType>
-			<!-- serves as reference to the xodr signal.name attribute -->
-            <xs:attribute name="name" type="xs:string" use="required" />
+			<!-- serves as reference to the xodr control.type attribute -->
+            <xs:attribute name="type" type="xs:string" use="required" />
             <xs:attribute name="status" type="TrafficLightStatus" />
             <xs:attribute name="condition" type="TrafficLightCondition" default="none"/>
         </xs:complexType>

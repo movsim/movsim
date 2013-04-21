@@ -34,7 +34,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private final double conditionRange;
 
-    /** mapping from the signal's name to the trafficlight */
+    /** mapping from the controller.control.type to the trafficlight */
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
     TrafficLightControlGroup(ControllerGroup controllerGroup, String firstSignalId) {
@@ -49,11 +49,11 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private void createTrafficlights() {
         for (Phase phase : phases) {
             for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
-                String name = Preconditions.checkNotNull(trafficlightState.getName());
-                TrafficLight trafficLight = trafficLights.get(name);
+                String type = Preconditions.checkNotNull(trafficlightState.getType());
+                TrafficLight trafficLight = trafficLights.get(type);
                 if (trafficLight == null) {
-                    trafficLight = new TrafficLight(name, groupId, this);
-                    trafficLights.put(name, trafficLight);
+                    trafficLight = new TrafficLight(type, groupId, this);
+                    trafficLights.put(type, trafficLight);
                 }
                 trafficLight.addPossibleState(trafficlightState.getStatus());
             }
@@ -91,7 +91,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private boolean isClearConditionsFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
             if (state.getCondition() == TrafficLightCondition.CLEAR) {
-                if (vehicleIsInFrontOfLightAndDriving(trafficLights.get(state.getName()))) {
+                if (vehicleIsInFrontOfLightAndDriving(trafficLights.get(state.getType()))) {
                     return false;
                 }
             }
@@ -102,7 +102,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private boolean isTriggerConditionFullfilled(Phase phase) {
         for (TrafficLightState state : phase.getTrafficLightState()) {
             if (state.getCondition() == TrafficLightCondition.REQUEST) {
-                if (vehicleIsInFrontOfLight(trafficLights.get(state.getName()))) {
+                if (vehicleIsInFrontOfLight(trafficLights.get(state.getType()))) {
                     return true;
                 }
             }
@@ -138,7 +138,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     private void updateTrafficLights() {
         Phase actualPhase = phases.get(currentPhaseIndex);
         for (TrafficLightState trafficLightState : actualPhase.getTrafficLightState()) {
-            trafficLights.get(trafficLightState.getName()).setState(trafficLightState.getStatus());
+            trafficLights.get(trafficLightState.getType()).setState(trafficLightState.getStatus());
         }
     }
 
