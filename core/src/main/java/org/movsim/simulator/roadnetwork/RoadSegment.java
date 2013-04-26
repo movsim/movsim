@@ -1224,7 +1224,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public boolean assertInvariant() {
         final RoadMapping roadMapping = roadMapping();
         if (roadMapping != null) {
-            assert roadMapping.laneCount() == laneCount();
+            // assert roadMapping.laneCount() == laneCount();
             // assert roadMapping.trafficLaneMax() == trafficLaneMax();
             // assert roadMapping.trafficLaneMin() == trafficLaneMin();
             assert Math.abs(roadMapping.roadLength() - roadLength()) < 0.1;
