@@ -563,7 +563,7 @@
 			<xs:attribute name="filename" type="xs:string" use="required" />
             <xs:attribute name="column_time" type="positiveInteger" use="required" />
             <xs:attribute name="column_vehicle_type" type="positiveInteger" use="required" />
-            <xs:attribute name="column_route" type="positiveInteger" />
+            <xs:attribute name="column_route_or_destination" type="positiveInteger" />
             <!-- Notation for JodaTime.DateTimeFormatter, eg "HH:mm:ss" -->
             <xs:attribute name="format_time" type="xs:string" default="" /> 
             <xs:attribute name="column_speed" type="positiveInteger"  />
