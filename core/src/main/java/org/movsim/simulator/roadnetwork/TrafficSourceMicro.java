@@ -1,6 +1,5 @@
 package org.movsim.simulator.roadnetwork;
 
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -16,8 +15,6 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMicro.class);
 
     private final SortedMap<Long, Vehicle> vehicleQueue = new TreeMap<>();
-
-    private Map<String, Route> routes;
 
     public TrafficSourceMicro(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
         super(vehGenerator, roadSegment);
