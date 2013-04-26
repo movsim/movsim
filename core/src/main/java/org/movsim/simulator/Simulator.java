@@ -25,9 +25,7 @@
  */
 package org.movsim.simulator;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,7 +40,6 @@ import org.movsim.autogen.MicroIC;
 import org.movsim.autogen.Movsim;
 import org.movsim.autogen.Parking;
 import org.movsim.autogen.Road;
-import org.movsim.autogen.Routes;
 import org.movsim.autogen.Simulation;
 import org.movsim.autogen.TrafficSink;
 import org.movsim.input.ProjectMetaData;
@@ -61,7 +58,7 @@ import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.MicroInflowFileReader;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.Routing;
 import org.movsim.simulator.roadnetwork.SimpleRamp;
 import org.movsim.simulator.roadnetwork.TrafficSourceMacro;
 import org.movsim.simulator.roadnetwork.TrafficSourceMicro;
@@ -95,7 +92,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     private TrafficLights trafficLights;
     private SimulationOutput simOutput;
     private final RoadNetwork roadNetwork;
-    private Map<String, Route> routes;
+    private Routing routing;
     private final SimulationRunnable simulationRunnable;
     private int obstacleCount;
     private long timeOffsetMillis;
@@ -135,10 +132,10 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         Simulation simulationInput = inputData.getScenario().getSimulation();
 
         final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
-        createRoutes(inputData.getScenario().getRoutes());
-
+        routing = new Routing(inputData.getScenario().getRoutes(), roadNetwork);
+        
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
-                inputData.getConsumption(), routes);
+                inputData.getConsumption(), routing);
 
         roadNetwork.setWithCrashExit(simulationInput.isCrashExit());
 
@@ -170,20 +167,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         reset();
     }
 
-    private void createRoutes(Routes routesInput) {
-        routes = new HashMap<>();
-        if (routesInput != null) {
-            for (org.movsim.autogen.Route routeInput : routesInput.getRoute()) {
-                final Route route = new Route(routeInput.getLabel());
-                for (org.movsim.autogen.Road roadInput : routeInput.getRoad()) {
-                    RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByUserId(roadInput.getId()),
-                            "cannot create route with undefinied road=" + roadInput.getId());
-                    route.add(roadSegment);
-                }
-                Preconditions.checkArgument(routes.put(route.getName(), route) == null, "route with name="+route.getName()+" already defined.");
-            }
-        }
-    }
 
     public Iterable<String> getVehiclePrototypeLabels() {
         return vehicleFactory.getLabels();
@@ -296,7 +279,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             } else if (trafficSourceData.isSetInflowFromFile()) {
                 trafficSource = new TrafficSourceMicro(composition, roadSegment);
                 MicroInflowFileReader reader = new MicroInflowFileReader(trafficSourceData.getInflowFromFile(),
-                        roadSegment.laneCount(), timeOffsetMillis, routes, (TrafficSourceMicro) trafficSource);
+                        roadSegment.laneCount(), timeOffsetMillis, routing, (TrafficSourceMicro) trafficSource);
                 reader.readData();
             }
             if (trafficSource != null) {
@@ -487,7 +470,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         if (inputData.getScenario().isSetOutputConfiguration()) {
             simOutput = new SimulationOutput(simulationRunnable.timeStep(),
                     projectMetaData.isInstantaneousFileOutput(), inputData.getScenario().getOutputConfiguration(),
-                    roadNetwork, routes, vehicleFactory);
+                    roadNetwork, routing, vehicleFactory);
         }
         obstacleCount = roadNetwork.obstacleCount();
     }

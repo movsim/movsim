@@ -70,8 +70,8 @@ public class LocalizationStrings extends ListResourceBundle {
             { "DrawSinks", "Draw Sinks" },
             { "DrawSpeedLimits", "Draw Speed Limits" },
             { "DrawFlowConservingBootleNecks", "Draw Flow-Conserving-Bootlenecks" },
-            { "DrawRoutesTravelTime", "Draw Routes for Travel Time" },
-            { "DrawRoutesSpatioTemporal", "Draw Routes for Spatio-Temporal-Contour" },
+            { "DrawRoutesTravelTime", "Draw Routing for Travel Time" },
+            { "DrawRoutesSpatioTemporal", "Draw Routing for Spatio-Temporal-Contour" },
 
             { "VehicleColorSpectrum", "Color spectrum according to speed" },
             { "VehicleColorBlack", "All Black" },

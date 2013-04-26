@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -31,13 +30,13 @@ public final class MicroInflowFileReader {
     private final InflowFromFile config;
     private final int maxLane;
     private final long timeOffsetMillis;
-    private final Map<String, Route> routes;
+    private final Routing routing;
 
     public MicroInflowFileReader(InflowFromFile config, int laneCount, long timeOffsetMillis,
-            Map<String, Route> routes, TrafficSourceMicro trafficSource) {
+            Routing routing, TrafficSourceMicro trafficSource) {
         this.config = Preconditions.checkNotNull(config);
         this.trafficSource = Preconditions.checkNotNull(trafficSource);
-        this.routes = Preconditions.checkNotNull(routes);
+        this.routing = Preconditions.checkNotNull(routing);
         this.maxLane = laneCount;
         this.timeOffsetMillis = timeOffsetMillis;
     }
@@ -78,10 +77,10 @@ public final class MicroInflowFileReader {
     private Vehicle createVehicle(MicroInflowRecord record) {
         final Vehicle vehicle = trafficSource.vehGenerator.createVehicle(record.getTypeLabel());
         if (record.hasRoute()) {
-            Preconditions.checkArgument(routes.containsKey(record.getRoute()), "route=" + record.getRoute()
+            Preconditions.checkArgument(routing.hasRoute(record.getRoute()), "route=" + record.getRoute()
                     + " in microscopic boundary input on roadSegment=" + trafficSource.roadSegment.id()
                     + " not defined!");
-            Route route = routes.get(record.getRoute());
+            Route route = routing.get(record.getRoute());
             LOG.info("overwrites vehicle's default route by route provided by input file: route={}", route.getName());
             vehicle.setRoute(route);
         }

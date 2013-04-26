@@ -43,7 +43,7 @@ public class Route implements Iterable<RoadSegment> {
      */
     public Route(String name) {
         Preconditions.checkArgument(!name.isEmpty(), "route without name");
-        roadSegments = new LinkedList<RoadSegment>();
+        roadSegments = new LinkedList<>();
         this.name = name;
     }
 
