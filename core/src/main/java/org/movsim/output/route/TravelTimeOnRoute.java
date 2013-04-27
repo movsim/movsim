@@ -65,9 +65,9 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        numberOfVehicles = roadNetwork.vehicleCount(route) - roadNetwork.obstacleCount(route);
+        numberOfVehicles = RoadNetwork.vehicleCount(route) - roadNetwork.obstacleCount(route);
         
-        instantaneousTravelTime = roadNetwork.instantaneousTravelTime(route);
+        instantaneousTravelTime = RoadNetwork.instantaneousTravelTime(route);
 
         totalTravelTime += instantaneousTravelTime;
 

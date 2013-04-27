@@ -30,7 +30,6 @@ import java.util.LinkedList;
 
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
-
 import com.google.common.base.Preconditions;
 
 /**

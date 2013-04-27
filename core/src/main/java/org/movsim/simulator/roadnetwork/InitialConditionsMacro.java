@@ -85,7 +85,7 @@ public class InitialConditionsMacro {
         }
     }
 
-    private boolean useUserDefinedSpeeds(List<MacroIC> macroIC) {
+    private static boolean useUserDefinedSpeeds(List<MacroIC> macroIC) {
         boolean userDefinedSpeed = true;
         for (int i = 0, N = macroIC.size(); i < N; i++) {
             if (i == 0) {

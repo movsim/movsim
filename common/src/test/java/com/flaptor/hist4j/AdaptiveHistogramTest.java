@@ -19,6 +19,7 @@ package com.flaptor.hist4j;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
+
 import junit.framework.TestCase;
 
 /**

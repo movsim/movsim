@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.movsim.autogen.Movsim;
 import org.movsim.utilities.FileUtils;

@@ -26,12 +26,8 @@
 package org.movsim.consumption.model;
 
 import org.movsim.autogen.EngineCombustionMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class EngineEfficiencyModelAnalyticImpl implements EngineEfficienyModel {
-
-    private static final Logger LOG = LoggerFactory.getLogger(EngineEfficiencyModelAnalyticImpl.class);
 
     private static final double HOUR_TO_SECOND = 1 / 3600.;
 

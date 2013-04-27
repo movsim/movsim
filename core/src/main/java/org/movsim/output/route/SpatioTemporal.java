@@ -114,7 +114,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
 
     /** Returns sorted set with increasing vehicle positions along the route. Not efficient but robust. */
     private TreeSet<SpatialTemporal> gatherData() {
-        TreeSet<SpatialTemporal> dataPoints = new TreeSet<SpatialTemporal>(new Comparator<SpatialTemporal>() {
+        TreeSet<SpatialTemporal> dataPoints = new TreeSet<>(new Comparator<SpatialTemporal>() {
             @Override
             public int compare(SpatialTemporal o1, SpatialTemporal o2) {
                 return (new Double(o1.position)).compareTo(new Double(o2.position));

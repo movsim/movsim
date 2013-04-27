@@ -68,7 +68,7 @@ public class SimulationRun {
     public SimulationRun(SimulationTimeStep simulation) {
         assert simulation != null;
         this.simulation = simulation;
-        updateStatusCallbacks = new LinkedList<UpdateStatusCallback>();
+        updateStatusCallbacks = new LinkedList<>();
     }
 
     /**
