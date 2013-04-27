@@ -29,7 +29,7 @@ import java.io.PrintWriter;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;

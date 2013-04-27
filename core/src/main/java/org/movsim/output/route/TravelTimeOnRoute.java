@@ -27,7 +27,7 @@ package org.movsim.output.route;
 
 import org.movsim.autogen.TravelTimes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

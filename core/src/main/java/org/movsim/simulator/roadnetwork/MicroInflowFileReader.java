@@ -12,6 +12,8 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
+import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -82,11 +84,11 @@ public final class MicroInflowFileReader {
 
     private Vehicle createVehicle(MicroInflowRecord record) {
         final Vehicle vehicle = trafficSource.vehGenerator.createVehicle(record.getTypeLabel());
-        if (record.hasRoute()) {
-            Preconditions.checkArgument(routing.hasRoute(record.getRoute()), "route=" + record.getRoute()
-                    + " in microscopic boundary input on roadSegment=" + trafficSource.roadSegment.id()
-                    + " not defined!");
-            Route route = routing.get(record.getRoute());
+        if (record.hasRouteOrDestination()) {
+            Route route = routing.hasRoute(record.getRouteOrDestination()) ? routing
+                    .get(record.getRouteOrDestination()) : routing.findRoute(trafficSource.roadSegment.userId(),
+                    record.getRouteOrDestination());
+
             LOG.info("overwrites vehicle's default route by route provided by input file: route={}", route.getName());
             vehicle.setRoute(route);
         }
@@ -155,7 +157,7 @@ public final class MicroInflowFileReader {
             record.setLane(lane);
         }
         if (config.isSetColumnRouteOrDestination()) {
-            record.setRoute(dataline[config.getColumnRouteOrDestination() - 1]);
+            record.setRouteOrDestination(dataline[config.getColumnRouteOrDestination() - 1]);
         }
         if (config.isSetColumnSpeed()) {
             double formatFactor = config.isSetFormatSpeed() ? config.getFormatSpeed() : 1;
@@ -272,15 +274,15 @@ public final class MicroInflowFileReader {
             this.lane = lane;
         }
 
-        boolean hasRoute() {
+        boolean hasRouteOrDestination() {
             return route != null && !route.isEmpty();
         }
 
-        String getRoute() {
+        String getRouteOrDestination() {
             return route;
         }
 
-        void setRoute(String route) {
+        void setRouteOrDestination(String route) {
             Preconditions.checkArgument(!route.isEmpty());
             this.route = Preconditions.checkNotNull(route);
         }

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficComposition;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.MyRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
