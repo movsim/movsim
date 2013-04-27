@@ -2,7 +2,7 @@ package org.movsim.output.route;
 
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 
 import com.google.common.base.Preconditions;
 

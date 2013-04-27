@@ -23,10 +23,12 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.routing;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import org.movsim.simulator.roadnetwork.RoadSegment;
 
 
 import com.google.common.base.Preconditions;

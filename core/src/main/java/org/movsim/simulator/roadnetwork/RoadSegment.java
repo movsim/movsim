@@ -39,7 +39,6 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.RoadNetwork.NodeType;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -1293,13 +1292,17 @@ public class RoadSegment implements Iterable<Vehicle> {
         }
     }
 
+    public enum NodeType {
+        ORIGIN, DESTINATION;
+    }
+
     EnumMap<NodeType, Long> nodeIds = new EnumMap<>(NodeType.class);
 
     public Long getNode(NodeType nodeType) {
         return nodeIds.get(nodeType);
     }
 
-    void setNode(NodeType nodeType, Long nodeId) {
+    public void setNode(NodeType nodeType, Long nodeId) {
         Preconditions.checkNotNull(nodeId);
         if (getNode(nodeType) != null && getNode(nodeType).longValue() != nodeId.longValue()) {
             throw new IllegalArgumentException("nodetype=" + nodeType.toString() + " of RoadSegment="

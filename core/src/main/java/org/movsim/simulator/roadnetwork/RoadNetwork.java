@@ -29,13 +29,10 @@ package org.movsim.simulator.roadnetwork;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Iterable collection of the road segments in the road network.
@@ -50,54 +47,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
 
     private boolean isWithCrashExit;
     private boolean hasVariableMessageSign;
-
-    UndirectedGraph<Long, RoadSegment> graph;
-    static long vertexId = 0;
-
-    public enum NodeType {
-        ORIGIN, DESTINATION;
-    }
-
-    public UndirectedGraph<Long, RoadSegment> getGraph() {
-        return Preconditions.checkNotNull(graph, "graph needs to be created");
-    }
-
-    public void createGraph() {
-        graph = new SimpleGraph<>(RoadSegment.class);
-        for (RoadSegment roadSegment : roadSegments) {
-            Long fromVertex = getOrCreateVertex(NodeType.ORIGIN, roadSegment);
-            Long toVertex = getOrCreateVertex(NodeType.DESTINATION, roadSegment);
-            graph.addVertex(fromVertex);
-            graph.addVertex(toVertex);
-            graph.addEdge(fromVertex, toVertex, roadSegment);
-            // add vertex to successor links AND to predecessor links of successors
-            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
-                if (laneSegment.sinkLaneSegment() != null) {
-                    RoadSegment successor = laneSegment.sinkLaneSegment().roadSegment();
-                    successor.setNode(NodeType.ORIGIN, toVertex);
-                    for (LaneSegment laneSegmentSuccessor : successor.laneSegments()) {
-                        if (laneSegmentSuccessor.sourceLaneSegment() != null) {
-                            RoadSegment predecessor = laneSegmentSuccessor.sourceLaneSegment().roadSegment();
-                            predecessor.setNode(NodeType.DESTINATION, toVertex);
-                        }
-                    }
-                }
-            }
-        }
-        LOG.info("created graph with " + graph.edgeSet().size() + " edges and " + graph.vertexSet().size() + " nodes.");
-        for (RoadSegment roadSegment : roadSegments) {
-            LOG.info(roadSegment.toString());
-        }
-    }
-
-    private static long getOrCreateVertex(NodeType nodeType, RoadSegment roadSegment) {
-        Long vertex = roadSegment.getNode(nodeType);
-        if (vertex == null) {
-            vertex = vertexId++;
-            roadSegment.setNode(nodeType, vertex);
-        }
-        return vertex;
-    }
 
     /**
      * Sets the name of the road network.
@@ -366,7 +315,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      * 
      * @return the number of vehicles on given route.
      */
-    public int vehicleCount(Route route) {
+    public static int vehicleCount(Route route) {
         int vehicleCount = 0;
         for (final RoadSegment roadSegment : route) {
             vehicleCount += roadSegment.getVehicleCount();
@@ -390,7 +339,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelTime;
     }
 
-    public double totalVehicleTravelTime(Route route) {
+    public static double totalVehicleTravelTime(Route route) {
         double totalVehicleTravelTime = 0.0;
         for (final RoadSegment roadSegment : route) {
             totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
@@ -401,7 +350,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelTime;
     }
 
-    public double instantaneousTravelTime(Route route) {
+    public static double instantaneousTravelTime(Route route) {
         double instantaneousTravelTime = 0;
         for (final RoadSegment roadSegment : route) {
             instantaneousTravelTime += roadSegment.instantaneousTravelTime();
@@ -425,7 +374,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleTravelDistance;
     }
 
-    public double totalVehicleTravelDistance(Route route) {
+    public static double totalVehicleTravelDistance(Route route) {
         double totalVehicleTravelDistance = 0.0;
         for (final RoadSegment roadSegment : route) {
             totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
@@ -452,7 +401,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return totalVehicleFuelUsedLiters;
     }
 
-    public double instantaneousFuelUsedLiters(Route route) {
+    public static double instantaneousFuelUsedLiters(Route route) {
         double instantaneousConsumption = 0;
         for (final RoadSegment roadSegment : route) {
             instantaneousConsumption += roadSegment.instantaneousConsumptionLitersPerSecond();

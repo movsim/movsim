@@ -1,4 +1,29 @@
-package org.movsim.simulator.roadnetwork;
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ * <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
+ * 
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
+ */
+package org.movsim.simulator.roadnetwork.routing;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +31,9 @@ import java.util.Map;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.movsim.autogen.Routes;
-import org.movsim.simulator.roadnetwork.RoadNetwork.NodeType;
+import org.movsim.simulator.roadnetwork.RoadNetwork;
+import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment.NodeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +49,15 @@ public class Routing {
 
     private final RoadNetwork roadNetwork;
 
+    private final UndirectedGraph<Long, RoadSegment> graph;
+
     public Routing(Routes routesInput, RoadNetwork roadNetwork) {
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         predefinedRoutes = Maps.newHashMap();
         if (routesInput != null) {
             createPredefinedRoutes(routesInput);
         }
-        roadNetwork.createGraph();
+        this.graph = NetworkGraph.create(roadNetwork);
     }
 
     private void createPredefinedRoutes(Routes routesInput) {
@@ -75,7 +104,6 @@ public class Routing {
     public Route findRoute(String startRoadId, String destinationRoadId) throws IllegalStateException {
         Preconditions.checkArgument(startRoadId != null && !startRoadId.isEmpty());
         Preconditions.checkArgument(destinationRoadId != null && !destinationRoadId.isEmpty());
-        UndirectedGraph<Long, RoadSegment> graph = Preconditions.checkNotNull(roadNetwork.getGraph());
 
         Route route = new Route(createRouteName(startRoadId, destinationRoadId));
         RoadSegment startRoadSegment = roadNetwork.findByUserId(startRoadId);
