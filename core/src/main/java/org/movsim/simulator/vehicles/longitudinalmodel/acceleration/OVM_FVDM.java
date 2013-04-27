@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 class OVM_FVDM extends LongitudinalModelBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger logger = LoggerFactory.getLogger(OVM_FVDM.class);
 
     enum OptimalVelocityFunction {
@@ -119,7 +119,7 @@ class OVM_FVDM extends LongitudinalModelBase {
             // scale OVM/VDIFF so that v0 represents actual desired speed
             final double v0Prev = v0Local / (1.0 + Math.tanh(betaLoc));
             vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
-            // logger.debug("s = {}, vOpt = {}", s, vOpt);
+            // LOG.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (variant == OptimalVelocityFunctionEnum.TRIANGULAR) {
             // triangular OVM function
             final double T = param.getBeta(); // interpret this as "time headway"

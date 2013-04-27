@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
  */
 class ACC extends LongitudinalModelBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger logger = LoggerFactory.getLogger(ACC.class);
 
     private final IModelParameterACC param;

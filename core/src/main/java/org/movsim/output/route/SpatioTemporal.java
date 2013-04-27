@@ -30,7 +30,7 @@ import java.util.TreeSet;
 
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.simulator.vehicles.Vehicle.Type;
 import org.movsim.utilities.Tables;
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SpatioTemporal extends OutputOnRouteBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(SpatioTemporal.class);
 
     private final double dxOutput;
@@ -98,7 +98,7 @@ public class SpatioTemporal extends OutputOnRouteBase {
         final double[] aMicro = new double[size];
         int j = 0;
         for (SpatialTemporal dp : dataPoints) {
-            // logger.debug("data point for interpolation={}", dp.toString());
+            // LOG.debug("data point for interpolation={}", dp.toString());
             vMicro[j] = dp.speed;
             xMicro[j] = dp.position;
             aMicro[j] = dp.acceleration;

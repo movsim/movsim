@@ -28,6 +28,7 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
@@ -38,6 +39,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.RoadNetwork.NodeType;
 import org.movsim.simulator.trafficlights.TrafficLightLocation;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -1235,12 +1237,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         this.simpleRamp = simpleRamp;
     }
 
-    @Override
-    public String toString() {
-        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadLength=" + roadLength + ", laneCount="
-                + laneCount + "]";
-    }
-
     /**
      * Returns true if the {@code RoadSegment} is connected in downstream direction to the provided argument and false
      * otherwise. Connection exists if at least one {@code LaneSegment} is connected.
@@ -1295,5 +1291,26 @@ public class RoadSegment implements Iterable<Vehicle> {
             return "TrafficLightLocationWithDistance [trafficLightLocation=" + trafficLightLocation + ", distance="
                     + distance + "]";
         }
+    }
+
+    EnumMap<NodeType, Long> nodeIds = new EnumMap<>(NodeType.class);
+
+    public Long getNode(NodeType nodeType) {
+        return nodeIds.get(nodeType);
+    }
+
+    void setNode(NodeType nodeType, Long nodeId) {
+        Preconditions.checkNotNull(nodeId);
+        if (getNode(nodeType) != null && getNode(nodeType).longValue() != nodeId.longValue()) {
+            throw new IllegalArgumentException("nodetype=" + nodeType.toString() + " of RoadSegment="
+                + userId() + " already set=" + getNode(nodeType));
+        }
+        nodeIds.put(nodeType, nodeId);
+    }
+
+    @Override
+    public String toString() {
+        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
+                + ", laneCount=" + laneCount + ", nodeIds=" + nodeIds + "]";
     }
 }

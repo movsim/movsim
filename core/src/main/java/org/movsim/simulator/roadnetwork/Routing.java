@@ -1,10 +1,12 @@
-package org.movsim.simulator.roadnetwork.routing;
+package org.movsim.simulator.roadnetwork;
 
+import java.util.List;
 import java.util.Map;
 
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.DijkstraShortestPath;
 import org.movsim.autogen.Routes;
-import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.RoadNetwork.NodeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,7 @@ public class Routing {
         if (routesInput != null) {
             createPredefinedRoutes(routesInput);
         }
+        roadNetwork.createGraph();
     }
 
     private void createPredefinedRoutes(Routes routesInput) {
@@ -53,9 +56,9 @@ public class Routing {
      * @throws IllegalStateException
      */
     public Route get(String name) throws IllegalStateException {
-        Preconditions.checkArgument(name!=null && !name.isEmpty());
+        Preconditions.checkArgument(name != null && !name.isEmpty());
         Route route = predefinedRoutes.get(name);
-        if(route == null){
+        if (route == null) {
             throw new IllegalStateException("route with name \"" + name + "\" not defined.");
         }
         return route;
@@ -69,21 +72,31 @@ public class Routing {
         return findRoute(start.userId(), destination.userId());
     }
 
-
     public Route findRoute(String startRoadId, String destinationRoadId) throws IllegalStateException {
-        Preconditions.checkArgument(startRoadId!=null && !startRoadId.isEmpty());
-        Preconditions.checkArgument(destinationRoadId!=null && !destinationRoadId.isEmpty());
+        Preconditions.checkArgument(startRoadId != null && !startRoadId.isEmpty());
+        Preconditions.checkArgument(destinationRoadId != null && !destinationRoadId.isEmpty());
+        UndirectedGraph<Long, RoadSegment> graph = Preconditions.checkNotNull(roadNetwork.getGraph());
+
         Route route = new Route(createRouteName(startRoadId, destinationRoadId));
-        RoadSegment roadSegment = roadNetwork.findByUserId(startRoadId);
-        route.add(roadSegment);
+        RoadSegment startRoadSegment = roadNetwork.findByUserId(startRoadId);
+        route.add(startRoadSegment);
+        RoadSegment endRoadSegment = roadNetwork.findByUserId(destinationRoadId);
 
-        // TODO find route...
+        LOG.info("Shortest path from roadSegment={} to={}", startRoadId, destinationRoadId);
+        LOG.info("From node={} to node={}", startRoadSegment.getNode(NodeType.DESTINATION),
+                endRoadSegment.getNode(NodeType.DESTINATION));
 
-        // throw exception if route cannot be build
-        // if (route == null) {
-        // throw new IllegalStateException("cannot find route from startRoadId=" + startRoadId
-        // + " to destinationRoadId=" + destinationRoadId);
-        // }
+        List<RoadSegment> path = DijkstraShortestPath.findPathBetween(graph,
+                startRoadSegment.getNode(NodeType.DESTINATION), endRoadSegment.getNode(NodeType.DESTINATION));
+        if (path == null) {
+            throw new IllegalStateException("cannot find route from startRoadId=" + startRoadId
+                    + " to destinationRoadId=" + destinationRoadId);
+        }
+
+        for (RoadSegment rs : path) {
+            route.add(rs);
+            LOG.info("roadSegment on path={}", rs);
+        }
         return route;
     }
 

@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 class Krauss extends LongitudinalModelBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(Krauss.class);
 
     /**

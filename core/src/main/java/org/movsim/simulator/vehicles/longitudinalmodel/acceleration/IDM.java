@@ -69,7 +69,7 @@ import org.slf4j.LoggerFactory;
 // TODO reduce visibility
 public class IDM extends LongitudinalModelBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(IDM.class);
 
     private final IModelParameterIDM param;

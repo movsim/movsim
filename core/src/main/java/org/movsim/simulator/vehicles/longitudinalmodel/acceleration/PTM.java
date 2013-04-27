@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 // TODO dump out 2D-scans of acceleration
 class PTM extends LongitudinalModelBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(IDM.class);
 
     private final IModelParameterPTM param;

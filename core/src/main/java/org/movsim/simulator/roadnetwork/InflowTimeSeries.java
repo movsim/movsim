@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class InflowTimeSeries {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(InflowTimeSeries.class);
 
     private double[] timeValues;

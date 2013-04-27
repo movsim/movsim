@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 public class EquilibriumPropertiesFactory {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(EquilibriumPropertiesFactory.class);
 
     public static EquilibriumProperties create(double vehLength, LongitudinalModelBase longModel) {

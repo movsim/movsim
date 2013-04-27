@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Memory {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(Memory.class);
 
     /**

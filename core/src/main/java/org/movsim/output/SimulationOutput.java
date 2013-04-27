@@ -43,8 +43,8 @@ import org.movsim.output.route.SpatioTemporal;
 import org.movsim.output.route.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.routing.Route;
-import org.movsim.simulator.roadnetwork.routing.Routing;
+import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.Routing;
 import org.movsim.simulator.vehicles.VehicleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ import com.google.common.base.Preconditions;
  */
 public class SimulationOutput implements SimulationTimeStep {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<FloatingCars> floatingCarOutputs = new ArrayList<>();

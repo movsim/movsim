@@ -12,8 +12,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
-import org.movsim.simulator.roadnetwork.routing.Route;
-import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -88,7 +86,6 @@ public final class MicroInflowFileReader {
             Route route = routing.hasRoute(record.getRouteOrDestination()) ? routing
                     .get(record.getRouteOrDestination()) : routing.findRoute(trafficSource.roadSegment.userId(),
                     record.getRouteOrDestination());
-
             LOG.info("overwrites vehicle's default route by route provided by input file: route={}", route.getName());
             vehicle.setRoute(route);
         }
