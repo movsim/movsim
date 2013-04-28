@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 class EquilibriumPropertiesImpl implements EquilibriumProperties {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger logger = LoggerFactory.getLogger(EquilibriumPropertiesImpl.class);
 
     /** The Constant NRHO. */

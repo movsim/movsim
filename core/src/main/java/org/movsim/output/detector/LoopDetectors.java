@@ -62,7 +62,7 @@ public class LoopDetectors implements SimulationTimeStep {
         }
     }
 
-    private List<Double> getSortedPositions(List<CrossSection> crossSections) {
+    private static List<Double> getSortedPositions(List<CrossSection> crossSections) {
         List<Double> sortedPositions = new ArrayList<>();
         for (final CrossSection crossSection : crossSections) {
             sortedPositions.add(crossSection.getPosition());

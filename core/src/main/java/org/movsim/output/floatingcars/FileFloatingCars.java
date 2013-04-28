@@ -29,7 +29,7 @@ import java.io.PrintWriter;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.PhysicalQuantities;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 
 // TODO output of physical quantities for Cellular Automata. Test scenario test_speedlimits.xml
 class FileFloatingCars extends FileOutputBase {
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(FileFloatingCars.class);
 
     private static final String extensionFormat = ".car.route_%s.%06d.csv";

@@ -1,6 +1,5 @@
 package org.movsim.simulator.roadnetwork;
 
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -17,8 +16,6 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
 
     private final SortedMap<Long, Vehicle> vehicleQueue = new TreeMap<>();
 
-    private Map<String, Route> routes;
-
     public TrafficSourceMicro(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment) {
         super(vehGenerator, roadSegment);
     }
@@ -26,7 +23,7 @@ public class TrafficSourceMicro extends AbstractTrafficSource {
     public void addVehicleToQueue(long time, Vehicle vehicle) {
         Preconditions.checkArgument(vehicleQueue.put(time, vehicle) == null);
         LOG.debug("added vehicle with (re)entering-time={}, queueSize={}", time, vehicleQueue.size());
-        vehicle.setSpeed(0);
+        // vehicle.setSpeed(0);
         showQueue();
     }
 

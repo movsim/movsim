@@ -96,8 +96,9 @@ public class MovsimCommandLine {
 
         OptionBuilder.withArgName("file");
         OptionBuilder.hasArg();
+        ProjectMetaData.getInstance();
         OptionBuilder.withDescription("movsim main configuration file (ending \""
-                + ProjectMetaData.getInstance().getMovsimConfigFileEnding()
+                + ProjectMetaData.getMovsimConfigFileEnding()
                 + "\" will be added automatically if not provided.");
         final Option xmlSimFile = OptionBuilder.create("f");
         options.addOption(xmlSimFile);

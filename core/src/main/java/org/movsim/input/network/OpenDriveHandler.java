@@ -104,7 +104,7 @@ public class OpenDriveHandler {
                         throw new IllegalStateException("could not create roadSegment for road=" + road.getId());
                     }
                     roadNetwork.add(roadSegment);
-                    LOG.info("created roadSegment={} with laneCount={}", roadSegment.roadId(), roadSegment.laneCount());
+                    LOG.info("created roadSegment={} with laneCount={}", roadSegment.userId(), roadSegment.laneCount());
                 }
             }
         }
@@ -157,7 +157,7 @@ public class OpenDriveHandler {
                 lanes.size(), new RoadMappingPeer(roadMapping)) : new RoadSegment(roadMapping.roadLength(),
                 lanes.size(), roadMapping);
 
-        roadSegment.setRoadId(getRoadSegmentId(road.getId(), laneType, hasPeer));
+        roadSegment.setUserId(getRoadSegmentId(road.getId(), laneType, hasPeer));
         roadSegment.setUserRoadname(road.getName());
 
         if (road.isSetElevationProfile()) {
@@ -273,9 +273,9 @@ public class OpenDriveHandler {
     }
 
     private static RoadSegment getRoadSegment(RoadNetwork roadNetwork, String roadId, int lane) {
-        RoadSegment roadSegment = roadNetwork.findByRoadId(roadId);
+        RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
         if (roadSegment == null) {
-            roadSegment = roadNetwork.findByRoadId(roadId + getIdAppender(lane));
+            roadSegment = roadNetwork.findByUserId(roadId + getIdAppender(lane));
         }
         if (roadSegment == null) {
             throw new IllegalArgumentException("Cannot find road:" + roadId);
@@ -314,7 +314,7 @@ public class OpenDriveHandler {
     }
 
     private static void setLaneType(int laneNumber, Lane lane, RoadSegment roadSegment) {
-        LOG.debug("laneNumber={}, roadSegmentId={}", laneNumber, roadSegment.roadId());
+        LOG.debug("laneNumber={}, roadSegmentId={}", laneNumber, roadSegment.userId());
         if (lane.getType().equals(Lanes.Type.TRAFFIC.getOpenDriveIdentifier())) {
             roadSegment.setLaneType(laneNumber, Lanes.Type.TRAFFIC);
         } else if (lane.getType().equals(Lanes.Type.ENTRANCE.getOpenDriveIdentifier())) {
@@ -439,8 +439,8 @@ public class OpenDriveHandler {
                     LOG.info("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                     LOG.info("isReverse={}, roadPredecessorIsJunction={}", isReverse,
                             roadPredecessorIsJunction(junction, road));
-                    LOG.info("incomingRS={}, connectiongRoadSegment={}", incomingRoadSegment.roadId(),
-                            connectingRoadSegment.roadId());
+                    LOG.info("incomingRS={}, connectiongRoadSegment={}", incomingRoadSegment.userId(),
+                            connectingRoadSegment.userId());
                     if (roadPredecessorIsJunction(junction, road)) {
                         if (isReverse) {
                             Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
@@ -502,7 +502,7 @@ public class OpenDriveHandler {
                 countSinks++;
                 // roadSegment.setSink(new TrafficSink(roadSegment));
                 roadSegment.addDefaultSink();
-                LOG.info("added default sink to roadSegment=" + roadSegment.roadId());
+                LOG.info("added default sink to roadSegment=" + roadSegment.userId());
             }
         }
         LOG.info("added {} default sinks to unconnected roads.", countSinks);

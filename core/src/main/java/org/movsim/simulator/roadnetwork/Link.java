@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- * <movsim.org@gmail.com>
+ *                                   <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -26,8 +26,6 @@
 
 package org.movsim.simulator.roadnetwork;
 
-import com.google.common.base.Preconditions;
-
 /**
  * <p>
  * Simple connection between road segments, where each lane has an unambiguous predecessor and successor. Allows merging and forking of road
@@ -35,9 +33,8 @@ import com.google.common.base.Preconditions;
  * </p>
  * <p>
  * There are one or more source road segments and one or more sink road segments. Each lane in a source road segment is normally paired with
- * a lane in a sink road segment. It is, however, possible to have unpaired lanes in either the source road segment (for example when the
- * road narrows, or at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at the start of an
- * off-ramp).
+ * lane in a sink road segment. It is, however, possible to have unpaired lanes in either the source road segment (for example when the road
+ * narrows, or at the end of an on-ramp) or in the sink road segment (for example when the road widens, or at the start of an off-ramp).
  * </p>
  * <p>
  * For complex connections between road segments, for example an urban road junction, or a roundabout, use a <code>Junction</code>.
@@ -56,15 +53,18 @@ public class Link {
      * Adds a lane pair. Joins a lane in the source road segment to its corresponding lane in the sink road segment.
      * 
      * @param fromLane
-     * @param fromRoadSegment
+     * @param fromRoadsegment
      * @param toLane
      * @param toRoadSegment
      */
-    public static void addLanePair(int fromLane, RoadSegment fromRoadSegment, int toLane, RoadSegment toRoadSegment) {
-        Preconditions.checkNotNull(fromRoadSegment);
-        Preconditions.checkNotNull(toRoadSegment);
-        toRoadSegment.setSourceLaneSegmentForLane(fromRoadSegment.laneSegment(fromLane), toLane);
-        fromRoadSegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
+    public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane, RoadSegment toRoadSegment) {
+        // toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
+        // toRoadSegment.setSourceLaneForLane(fromLane, toLane);
+        // fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
+        // fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
+
+        toRoadSegment.setSourceLaneSegmentForLane(fromRoadsegment.laneSegment(fromLane), toLane);
+        fromRoadsegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
     }
 
     /**
@@ -79,8 +79,22 @@ public class Link {
         for (int lane = 1; lane <= limit; ++lane) {
             addLanePair(lane, sourceRoad, lane, sinkRoad);
         }
+//        final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
+//        assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
+//        if (offset < 0) {
+//            final int limit = sourceRoad.laneCount() + offset;
+//            for (int i = 0; i < limit; ++i) {
+//                addLanePair(i - offset, sourceRoad, i, sinkRoad);
+//            }
+//        } else {
+//            final int laneCount = sourceRoad.laneCount();
+//            for (int i = 0; i < laneCount; ++i) {
+//                addLanePair(i, sourceRoad, i + offset, sinkRoad);
+//            }
+//        }
         return sinkRoad;
     }
+
 
     /**
      * Convenience function to add a merge of two road segments into a single road segments.

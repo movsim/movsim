@@ -105,7 +105,7 @@ public class Applet extends JApplet {
     }
 
     /**
-     * Initializes the logger.
+     * Initializes the LOG.
      */
     private static void initializeLogger() {
         // Log Levels: DEBUG < INFO < WARN < ERROR;

@@ -23,10 +23,12 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.routing;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import org.movsim.simulator.roadnetwork.RoadSegment;
 
 import com.google.common.base.Preconditions;
 
@@ -34,6 +36,7 @@ import com.google.common.base.Preconditions;
  * Iterable collection of the road segments that form a route that can be take through the road network.
  */
 public class Route implements Iterable<RoadSegment> {
+
     private final LinkedList<RoadSegment> roadSegments;
     private String name;
     private double length;

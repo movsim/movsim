@@ -41,6 +41,8 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
     
     private final InflowTimeSeries inflowTimeSeries;
 
+    private TestVehicle testVehicle;
+
     /**
      * Instantiates a new upstream boundary .
      * 
@@ -61,17 +63,19 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
         calcApproximateInflow(dt);
         
         if (nWait >= 1.0) {
+            if (testVehicle == null) {
+                testVehicle = vehGenerator.getTestVehicle();
+            }
             // try to insert new vehicle at inflow, iterate periodically over n lanes
             int iLane = laneEnterLast;
             for (int i = 0, N = roadSegment.laneCount(); i < N; i++) {
                 iLane = getNewCyclicLaneForEntering(iLane);
-                // final VehicleContainer vehContainerLane = vehContainers.get(iLane);
                 final LaneSegment laneSegment = roadSegment.laneSegment(iLane);
                 // laneIndex index is identical to vehicle's lanenumber
                 // type of new vehicle
-                final TestVehicle testVehicle = vehGenerator.getTestVehicle();
                 final boolean isEntered = tryEnteringNewVehicle(testVehicle, laneSegment, simulationTime, totalInflow);
                 if (isEntered) {
+                    testVehicle = null;
                     nWait--;
                     incrementInflowCount(1);
                     recordData(simulationTime, totalInflow);

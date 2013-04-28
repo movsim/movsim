@@ -58,7 +58,7 @@ package org.movsim.viewer.ui.charts;
 //
 //public class TravelTimeDiagram extends JFrame implements ObserverInTime {
 //
-//    final static Logger logger = LoggerFactory.getLogger(TravelTimeDiagram.class);
+//    final static Logger LOG = LoggerFactory.getLogger(TravelTimeDiagram.class);
 //
 //    private static final long serialVersionUID = 6632140050281070354L;
 //
@@ -96,7 +96,7 @@ package org.movsim.viewer.ui.charts;
 //            }
 //        });
 //
-//        logger.debug("Constuctor TravelTime diagramm");
+//        LOG.debug("Constuctor TravelTime diagramm");
 //
 //        setLocation(820, 700);
 //
@@ -169,7 +169,7 @@ package org.movsim.viewer.ui.charts;
 //
 //            @Override
 //            public void run() {
-//                logger.debug("being notified: pull data and update view .. ");
+//                LOG.debug("being notified: pull data and update view .. ");
 //                pullData(time);
 //            }
 //        });

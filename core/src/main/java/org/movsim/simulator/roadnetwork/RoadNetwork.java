@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,14 +82,14 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     }
 
     /**
-     * Given its roadId, find a road segment in the road network.
+     * Given its userId, find a road segment in the road network.
      * 
-     * @param roadId
+     * @param userId
      * @return the road segment with the given userId
      */
-    public RoadSegment findByRoadId(String roadId) {
+    public RoadSegment findByUserId(String userId) {
         for (final RoadSegment roadSegment : roadSegments) {
-            if (roadSegment.hasRoadId() && roadSegment.roadId().equals(roadId)) {
+            if (roadSegment.userId() != null && roadSegment.userId().equals(userId)) {
                 return roadSegment;
             }
         }
@@ -102,7 +103,11 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
     public void clear() {
         name = null;
         hasVariableMessageSign = false;
+        // LaneChangeModel.resetCount();
+        // LongitudinalDriverModel.resetNextId();
         RoadSegment.resetNextId();
+        // TrafficFlowBase.resetNextId();
+        // Vehicle.resetNextId();
         roadSegments.clear();
     }
 
@@ -252,7 +257,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return vehicleCount;
     }
-    
+
     public int getStoppedVehicleCount() {
         int stoppedVehicleCount = 0;
         for (final RoadSegment roadSegment : roadSegments) {
@@ -281,7 +286,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return obstacleCount;
     }
-    
+
     /**
      * Returns the number of obstacles for the given route.
      * 
@@ -295,7 +300,6 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         return obstacleCount;
     }
 
-   
     /**
      * Asserts the road network's class invariant. Used for debugging.
      */
@@ -305,8 +309,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return true;
     }
-    
-    
+
     /**
      * Returns the number of vehicles on route.
      * 
@@ -319,7 +322,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return vehicleCount;
     }
-    
+
     /**
      * Returns the total travel time of all vehicles on this road network, including those that have exited.
      * 
@@ -327,7 +330,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public double totalVehicleTravelTime() {
         double totalVehicleTravelTime = 0.0;
-        for(RoadSegment roadSegment : roadSegments){
+        for (RoadSegment roadSegment : roadSegments) {
             totalVehicleTravelTime += roadSegment.totalVehicleTravelTime();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelTime += roadSegment.sink().totalVehicleTravelTime();
@@ -335,7 +338,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
         return totalVehicleTravelTime;
     }
-    
+
     public static double totalVehicleTravelTime(Route route) {
         double totalVehicleTravelTime = 0.0;
         for (final RoadSegment roadSegment : route) {
@@ -362,7 +365,7 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
      */
     public double totalVehicleTravelDistance() {
         double totalVehicleTravelDistance = 0.0;
-        for(RoadSegment roadSegment : roadSegments){
+        for (RoadSegment roadSegment : roadSegments) {
             totalVehicleTravelDistance += roadSegment.totalVehicleTravelDistance();
             if (roadSegment.sink() != null) {
                 totalVehicleTravelDistance += roadSegment.sink().totalVehicleTravelDistance();

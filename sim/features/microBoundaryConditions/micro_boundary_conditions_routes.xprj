@@ -27,7 +27,8 @@
             <Road id="1">
                 <TrafficSource logging="true">
 					<!-- 2013-02-01T00:00:20 -->
-                    <InflowFromFile filename="example_micro_bc_routes.dat"  column_route="4" column_time="1" format_time="YYYY-MM-dd'T'HH:mm:ss" column_vehicle_type="2"  column_speed="3" format_speed="0.27777"
+                    <InflowFromFile filename="example_micro_bc_routes.dat"  column_route_or_destination="4" column_time="1" 
+                        format_time="YYYY-MM-dd'T'HH:mm:ss" column_vehicle_type="2"  column_speed="3" format_speed="0.27777"
                      	column_length="5" column_weight="6" column_comment="7" column_separator=","/>
                     <!-- format_time column_comment column separator -->
                 </TrafficSource>

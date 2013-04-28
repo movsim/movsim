@@ -28,11 +28,13 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
@@ -79,7 +81,9 @@ import com.google.common.collect.ImmutableList;
  * </p>
  */
 // TODO avoid iterating also over Vehicle.Type.OBSTACLE at lane ends.
-public class RoadSegment implements Iterable<Vehicle> {
+public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle> {
+
+    private static final long serialVersionUID = -2991922063982378462L;
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadSegment.class);
 
@@ -89,8 +93,8 @@ public class RoadSegment implements Iterable<Vehicle> {
 
     /** the id is an internally used unique identifier for the road. */
     private final int id;
-    /** the roadId is the id specified in the .xodr and .xml files. */
-    private String roadId;
+    /** the userId is the id specified in the .xodr and .xml files. */
+    private String userId;
     /** road name specified in the openDrive .xodr network file. */
     private String roadName;
 
@@ -197,7 +201,7 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public final void addDefaultSink() {
         if (sink != null) {
-            LOG.warn("sink already set on road=" + roadId());
+            LOG.warn("sink already set on road=" + userId());
         }
         sink = new TrafficSink(this);
     }
@@ -212,26 +216,22 @@ public class RoadSegment implements Iterable<Vehicle> {
     }
 
     /**
-     * Set this road segment's roadId
+     * Set this road segment's userId
      * 
-     * @param roadId
+     * @param userId
      * 
      */
-    public final void setRoadId(String roadId) {
-        this.roadId = roadId;
+    public final void setUserId(String userId) {
+        this.userId = userId;
     }
 
     /**
-     * Returns this road segment's roadId. The roadId is the road's id as set in the .xodr and .xml files.
+     * Returns this road segment's userId. The userId is the road's id as set in the .xodr and .xml files.
      * 
-     * @return this road segment's roadId
+     * @return this road segment's userId
      */
-    public final String roadId() {
-        return roadId;
-    }
-
-    public final boolean hasRoadId() {
-        return roadId != null;
+    public final String userId() {
+        return userId == null ? Integer.toString(id) : userId;
     }
 
     /**
@@ -1119,8 +1119,12 @@ public class RoadSegment implements Iterable<Vehicle> {
      */
     public void checkForInconsistencies(double time, long iterationCount, boolean isWithCrashExit) {
         for (final LaneSegment laneSegment : laneSegments) {
-            for (int index = 0, N = laneSegment.vehicleCount(); index < N; index++) {
-                final Vehicle vehicle = laneSegment.getVehicle(index);
+            int index = -1;
+            for (Vehicle vehicle : laneSegment) {
+                index++;
+                if (vehicle.type() == Vehicle.Type.OBSTACLE) {
+                    continue;
+                }
                 final Vehicle vehFront = laneSegment.frontVehicle(vehicle);
                 final double netDistance = vehicle.getNetDistance(vehFront);
                 if (netDistance < 0) {
@@ -1133,10 +1137,11 @@ public class RoadSegment implements Iterable<Vehicle> {
                                 vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("internal id=").append(id);
-                    sb.append(", roadId=").append(roadId);
+                    sb.append(", roadId=").append(userId);
                     sb.append(", net distance=").append(netDistance);
                     sb.append(", lane=").append(laneSegment.lane());
                     sb.append(", container.size=").append(laneSegment.vehicleCount());
+                    sb.append(", obstacles=").append(laneSegment.obstacleCount());
                     sb.append("\n");
 
                     for (int j = Math.max(0, index - 8), M = laneSegment.vehicleCount(); j <= Math
@@ -1239,12 +1244,6 @@ public class RoadSegment implements Iterable<Vehicle> {
         this.simpleRamp = simpleRamp;
     }
 
-    @Override
-    public String toString() {
-        return "RoadSegment [id=" + id + ", roadId=" + roadId + ", roadLength=" + roadLength + ", laneCount="
-                + laneCount + ", vehicleCount=" + getVehicleCount() + "]";
-    }
-
     /**
      * Returns true if the {@code RoadSegment} is connected in downstream direction to the provided argument and false
      * otherwise. Connection exists if at least one {@code LaneSegment} is connected.
@@ -1280,7 +1279,7 @@ public class RoadSegment implements Iterable<Vehicle> {
     public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
         Preconditions.checkArgument(trafficLightLocation.position() >= 0
                 && trafficLightLocation.position() <= roadLength, "inconsistent input data: traffic light position="
-                + trafficLightLocation.position() + " does not fit onto road-id=" + roadId() + " with length="
+                + trafficLightLocation.position() + " does not fit onto road-id=" + userId() + " with length="
                 + roadLength());
         trafficLightLocations.add(trafficLightLocation);
     }
@@ -1300,7 +1299,7 @@ public class RoadSegment implements Iterable<Vehicle> {
                     + distance + "]";
         }
     }
-
+    
     public final boolean hasSink() {
         for (LaneSegment laneSegment : laneSegments) {
             if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
@@ -1308,5 +1307,30 @@ public class RoadSegment implements Iterable<Vehicle> {
             }
         }
         return false;
+    }
+
+    public enum NodeType {
+        ORIGIN, DESTINATION;
+    }
+
+    EnumMap<NodeType, Long> nodeIds = new EnumMap<>(NodeType.class);
+
+    public Long getNode(NodeType nodeType) {
+        return nodeIds.get(nodeType);
+    }
+
+    public void setNode(NodeType nodeType, Long nodeId) {
+        Preconditions.checkNotNull(nodeId);
+        if (getNode(nodeType) != null && getNode(nodeType).longValue() != nodeId.longValue()) {
+            throw new IllegalArgumentException("nodetype=" + nodeType.toString() + " of RoadSegment="
+                + userId() + " already set=" + getNode(nodeType));
+        }
+        nodeIds.put(nodeType, nodeId);
+    }
+
+    @Override
+    public String toString() {
+        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
+                + ", laneCount=" + laneCount + ", nodeIds=" + nodeIds + "]";
     }
 }

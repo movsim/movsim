@@ -135,7 +135,7 @@ public class TrafficLight {
     @Override
     public String toString() {
         return "TrafficLight [status=" + status + ", position=" + position + ", name=" + name + ", groupId = "
-                + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.roadId()) + "]";
+                + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
     }
 
 }

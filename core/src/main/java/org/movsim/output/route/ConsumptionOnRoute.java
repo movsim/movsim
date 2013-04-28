@@ -2,14 +2,14 @@ package org.movsim.output.route;
 
 import org.movsim.autogen.ConsumptionCalculation;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.utilities.ExponentialMovingAverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConsumptionOnRoute extends OutputOnRouteBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     final static Logger logger = LoggerFactory.getLogger(ConsumptionOnRoute.class);
 
     private final double tauEMA;
@@ -38,10 +38,10 @@ public class ConsumptionOnRoute extends OutputOnRouteBase {
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
-        instantaneousConsumptionRate = roadNetwork.instantaneousFuelUsedLiters(route);
+        instantaneousConsumptionRate = RoadNetwork.instantaneousFuelUsedLiters(route);
         totalConsumption += instantaneousConsumptionRate * dt;
 
-        numberOfVehicles = roadNetwork.vehicleCount(route);
+        numberOfVehicles = RoadNetwork.vehicleCount(route);
 
         instConsumptionEMA = (simulationTime == 0) ? instantaneousConsumptionRate : ExponentialMovingAverage.calc(
                 instantaneousConsumptionRate, instConsumptionEMA, beta);

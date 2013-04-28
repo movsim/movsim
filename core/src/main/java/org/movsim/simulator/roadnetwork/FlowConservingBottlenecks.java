@@ -75,7 +75,7 @@ public class FlowConservingBottlenecks {
             posValues[i] = list.get(i).getPosition();
             alphaTValues[i] = list.get(i).getAlphaT();
             alphaV0Values[i] = list.get(i).getAlphaV0();
-            // logger.debug("add data: alphaT={}, alphaV0={}", alphaTValues[i],
+            // LOG.debug("add data: alphaT={}, alphaV0={}", alphaTValues[i],
             // alphaV0Values[i]);
         }
     }

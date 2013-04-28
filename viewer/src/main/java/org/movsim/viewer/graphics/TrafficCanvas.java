@@ -883,7 +883,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             final Font font = new Font("SansSerif", Font.PLAIN, fontHeight); //$NON-NLS-1$
             g.setFont(font);
             g.setColor(Color.BLACK);
-            g.drawString("R" + roadSegment.roadId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
+            g.drawString("R" + roadSegment.userId(), (int) (posTheta.x), (int) (posTheta.y)); //$NON-NLS-1$
         }
     }
 

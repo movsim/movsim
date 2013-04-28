@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 class NSM extends LongitudinalModelBase {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger logger = LoggerFactory.getLogger(NSM.class);
 
     /** The constant unit time */

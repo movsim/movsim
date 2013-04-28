@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -43,7 +43,8 @@ import org.movsim.output.route.SpatioTemporal;
 import org.movsim.output.route.TravelTimeOnRoute;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.VehicleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ import com.google.common.base.Preconditions;
  */
 public class SimulationOutput implements SimulationTimeStep {
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private static final Logger logger = LoggerFactory.getLogger(SimulationOutput.class);
 
     private List<FloatingCars> floatingCarOutputs = new ArrayList<>();
@@ -70,50 +71,43 @@ public class SimulationOutput implements SimulationTimeStep {
 
     private final RoadNetwork roadNetwork;
 
-    private final Map<String, Route> routes;
+    private final Routing routing;
 
     public SimulationOutput(double simulationTimestep, boolean writeOutput, OutputConfiguration outputConfiguration,
-            RoadNetwork roadNetwork, Map<String, Route> routes, VehicleFactory vehicleFactory) {
+            RoadNetwork roadNetwork, Routing routing, VehicleFactory vehicleFactory) {
 
         Preconditions.checkNotNull(outputConfiguration);
-        Preconditions.checkNotNull(roadNetwork);
-        Preconditions.checkNotNull(routes);
-
-        this.roadNetwork = roadNetwork;
-        this.routes = routes;
+        this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
+        this.routing = Preconditions.checkNotNull(routing);
 
         initFloatingCars(writeOutput, outputConfiguration);
-
         initConsumption(writeOutput, simulationTimestep, outputConfiguration);
-        
         initTravelTimes(writeOutput, simulationTimestep, outputConfiguration);
-
         initSpatioTemporalOutput(writeOutput, outputConfiguration);
-
         initTrajectories(writeOutput, outputConfiguration);
 
     }
 
     private Route getCheckedRoute(final String routeLabel) {
-        Preconditions
-                .checkArgument(routes.containsKey(routeLabel), "route with label=" + routeLabel + " not defined. ");
-        return routes.get(routeLabel);
+        return routing.get(routeLabel);
     }
 
     private void initConsumption(boolean writeOutput, double simulationTimestep,
             final OutputConfiguration outputConfiguration) {
         for (final ConsumptionCalculation fuelRouteInput : outputConfiguration.getConsumptionCalculation()) {
             final Route route = getCheckedRoute(fuelRouteInput.getRoute());
-            final ConsumptionOnRoute consumption = new ConsumptionOnRoute(simulationTimestep, fuelRouteInput, roadNetwork, route, writeOutput);
+            final ConsumptionOnRoute consumption = new ConsumptionOnRoute(simulationTimestep, fuelRouteInput,
+                    roadNetwork, route, writeOutput);
             consumptionOnRoutes.put(route, consumption);
         }
     }
-    
+
     private void initTravelTimes(boolean writeOutput, double simulationTimestep,
             final OutputConfiguration outputConfiguration) {
         for (final TravelTimes travelTimeInput : outputConfiguration.getTravelTimes()) {
             final Route route = getCheckedRoute(travelTimeInput.getRoute());
-            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput, roadNetwork, route, writeOutput);
+            final TravelTimeOnRoute travelTime = new TravelTimeOnRoute(simulationTimestep, travelTimeInput,
+                    roadNetwork, route, writeOutput);
             travelTimeOnRoutes.put(route, travelTime);
         }
     }
@@ -166,8 +160,8 @@ public class SimulationOutput implements SimulationTimeStep {
         for (final TravelTimeOnRoute travelTime : travelTimeOnRoutes.values()) {
             travelTime.timeStep(dt, simulationTime, iterationCount);
         }
-        
-        for (final ConsumptionOnRoute consumption : consumptionOnRoutes.values()){
+
+        for (final ConsumptionOnRoute consumption : consumptionOnRoutes.values()) {
             consumption.timeStep(dt, simulationTime, iterationCount);
         }
 

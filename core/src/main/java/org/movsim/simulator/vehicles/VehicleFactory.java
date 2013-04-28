@@ -11,7 +11,8 @@ import org.movsim.autogen.Consumption;
 import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.autogen.VehiclePrototypes;
 import org.movsim.consumption.model.EnergyFlowModelFactory;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.slf4j.Logger;
@@ -25,16 +26,14 @@ public final class VehicleFactory {
 
     private final Map<String, VehiclePrototype> vehiclePrototypes = new HashMap<>();
 
-    private Map<String, Route> routes;
+    private Routing routing;
 
     private final EnergyFlowModelFactory fuelModelFactory = new EnergyFlowModelFactory();
 
     public VehicleFactory(double simulationTimestep, VehiclePrototypes vehPrototypes,
-            @Nullable Consumption consumption, Map<String, Route> routes) {
+            @Nullable Consumption consumption, Routing routing) {
         Preconditions.checkNotNull(vehPrototypes);
-        Preconditions.checkNotNull(routes);
-
-        this.routes = routes;
+        this.routing = Preconditions.checkNotNull(routing);
 
         if (consumption != null) {
             fuelModelFactory.add(consumption.getConsumptionModels());
@@ -68,11 +67,7 @@ public final class VehicleFactory {
     public Vehicle create(VehicleType vehicleType) {
         Route route = null;
         if (vehicleType.hasRouteLabel()) {
-            route = routes.get(vehicleType.getRouteLabel());
-            if (route == null) {
-                throw new IllegalArgumentException("route for label=" + vehicleType.getRouteLabel()
-                        + " not defined in input!");
-            }
+            route = routing.get(vehicleType.getRouteLabel());
         }
         return create(vehicleType, route);
     }

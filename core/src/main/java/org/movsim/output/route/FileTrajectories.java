@@ -32,7 +32,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.Route;
+import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
             + "     t[s], lane,       x[m],     v[m/s],   a[m/s^2],     gap[m],    dv[m/s], label,           id,  roadId, originId, infoComment, absTime, xWithOffset[m]";
     private static final String outputFormat = "%10.2f, %4d, %10.1f, %10.4f, %10.5f, %10.2f, %10.6f,  %s, %12d, %8d, %8d, %s, %s, %10.4f%n";
 
-    /** The Constant logger. */
+    /** The Constant LOG. */
     private final static Logger logger = LoggerFactory.getLogger(FileTrajectories.class);
 
     private final double positionIntervalStart;

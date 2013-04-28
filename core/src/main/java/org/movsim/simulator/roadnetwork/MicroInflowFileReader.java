@@ -6,13 +6,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
+import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.FileUtils;
 import org.slf4j.Logger;
@@ -31,13 +32,13 @@ public final class MicroInflowFileReader {
     private final InflowFromFile config;
     private final int maxLane;
     private final long timeOffsetMillis;
-    private final Map<String, Route> routes;
+    private final Routing routing;
 
-    public MicroInflowFileReader(InflowFromFile config, int laneCount, long timeOffsetMillis,
-            Map<String, Route> routes, TrafficSourceMicro trafficSource) {
+    public MicroInflowFileReader(InflowFromFile config, int laneCount, long timeOffsetMillis, Routing routing,
+            TrafficSourceMicro trafficSource) {
         this.config = Preconditions.checkNotNull(config);
         this.trafficSource = Preconditions.checkNotNull(trafficSource);
-        this.routes = Preconditions.checkNotNull(routes);
+        this.routing = Preconditions.checkNotNull(routing);
         this.maxLane = laneCount;
         this.timeOffsetMillis = timeOffsetMillis;
     }
@@ -64,24 +65,29 @@ public final class MicroInflowFileReader {
                 LOG.info("expected {} columns, cannot parse data. Ignore line={}", maxColumn, Arrays.toString(line));
                 continue;
             }
+            MicroInflowRecord record = null;
             try {
-                MicroInflowRecord record = parse(line);
-                trafficSource.addVehicleToQueue(record.getTime(), createVehicle(record));
-                count++;
+                record = parse(line);
             } catch (IllegalArgumentException e) {
                 LOG.info("cannot parse data or data is invalid. Ignore line={}", Arrays.toString(line));
             }
+            if (record != null) {
+                trafficSource.addVehicleToQueue(record.getTime(), createVehicle(record));
+                count++;
+            }
         }
         LOG.info("parsed successfully {} from {} lines in input file.", count, input.size());
+        if (count == 0) {
+            LOG.error("no valid lines from {} lines in input file parsed!", input.size());
+        }
     }
 
     private Vehicle createVehicle(MicroInflowRecord record) {
         final Vehicle vehicle = trafficSource.vehGenerator.createVehicle(record.getTypeLabel());
-        if (record.hasRoute()) {
-            Preconditions.checkArgument(routes.containsKey(record.getRoute()), "route=" + record.getRoute()
-                    + " in microscopic boundary input on roadSegment=" + trafficSource.roadSegment.id()
-                    + " not defined!");
-            Route route = routes.get(record.getRoute());
+        if (record.hasRouteOrDestination()) {
+            Route route = routing.hasRoute(record.getRouteOrDestination()) ? routing
+                    .get(record.getRouteOrDestination()) : routing.findRoute(trafficSource.roadSegment.userId(),
+                    record.getRouteOrDestination());
             LOG.info("overwrites vehicle's default route by route provided by input file: route={}", route.getName());
             vehicle.setRoute(route);
         }
@@ -98,6 +104,9 @@ public final class MicroInflowFileReader {
             LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
                     vehicle.getWeight());
         }
+        if (record.hasSpeed()) {
+            vehicle.setSpeed(record.getSpeed());
+        }
         return vehicle;
     }
 
@@ -110,8 +119,8 @@ public final class MicroInflowFileReader {
         if (config.isSetColumnLane()) {
             maxColumn = Math.max(maxColumn, config.getColumnLane());
         }
-        if (config.isSetColumnRoute()) {
-            maxColumn = Math.max(maxColumn, config.getColumnRoute());
+        if (config.isSetColumnRouteOrDestination()) {
+            maxColumn = Math.max(maxColumn, config.getColumnRouteOrDestination());
         }
         if (config.isSetColumnSpeed()) {
             maxColumn = Math.max(maxColumn, config.getColumnSpeed());
@@ -125,21 +134,20 @@ public final class MicroInflowFileReader {
         return maxColumn;
     }
 
-    private MicroInflowRecord parse(String[] data)
-            throws IllegalArgumentException {
-        trim(data);
+    private MicroInflowRecord parse(String[] dataline) throws IllegalArgumentException {
+        trim(dataline);
         Preconditions.checkArgument(config.isSetColumnVehicleType() && config.isSetColumnTime());
-        long time = convertTimeToSeconds(data[config.getColumnTime() - 1]);
+        long time = convertTimeToSeconds(dataline[config.getColumnTime() - 1]);
         if (time < 0) {
             throw new IllegalArgumentException("negative entry time.");
         }
-        String typeLabel = data[config.getColumnVehicleType() - 1];
+        String typeLabel = dataline[config.getColumnVehicleType() - 1];
         MicroInflowRecord record = new MicroInflowRecord(time, typeLabel);
         if (config.isSetColumnComment()) {
-            record.setComment(data[config.getColumnComment() - 1]);
+            record.setComment(dataline[config.getColumnComment() - 1]);
         }
         if (config.isSetColumnLane()) {
-            int lane = Integer.parseInt(data[config.getColumnLane() - 1]);
+            int lane = Integer.parseInt(dataline[config.getColumnLane() - 1]);
             if (lane > maxLane) {
                 LOG.warn("Parsed lane={} not available on road with maxLane={}. ", lane);
                 lane = maxLane;
@@ -150,18 +158,18 @@ public final class MicroInflowFileReader {
             }
             record.setLane(lane);
         }
-        if (config.isSetColumnRoute()) {
-            record.setRoute(data[config.getColumnRoute() - 1]);
+        if (config.isSetColumnRouteOrDestination()) {
+            record.setRouteOrDestination(dataline[config.getColumnRouteOrDestination() - 1]);
         }
         if (config.isSetColumnSpeed()) {
             double formatFactor = config.isSetFormatSpeed() ? config.getFormatSpeed() : 1;
-            record.setSpeed(formatFactor * Double.parseDouble(data[config.getColumnSpeed() - 1]));
+            record.setSpeed(formatFactor * Double.parseDouble(dataline[config.getColumnSpeed() - 1]));
         }
         if (config.isSetColumnLength()) {
-            record.setLength(Double.parseDouble(data[config.getColumnLength() - 1]));
+            record.setLength(Double.parseDouble(dataline[config.getColumnLength() - 1]));
         }
         if (config.isSetColumnWeight()) {
-            record.setWeight(Double.parseDouble(data[config.getColumnWeight() - 1]));
+            record.setWeight(Double.parseDouble(dataline[config.getColumnWeight() - 1]));
         }
         return record;
     }
@@ -208,7 +216,7 @@ public final class MicroInflowFileReader {
         return myEntries;
     }
 
-    public static class MicroInflowRecord {
+    private final static class MicroInflowRecord {
         private final long time;
         private final String typeLabel;
         private String route = "";
@@ -268,17 +276,17 @@ public final class MicroInflowFileReader {
             this.lane = lane;
         }
 
-        boolean hasRoute() {
+        boolean hasRouteOrDestination() {
             return route != null && !route.isEmpty();
         }
 
-        String getRoute() {
+        String getRouteOrDestination() {
             return route;
         }
 
-        void setRoute(String route) {
+        void setRouteOrDestination(String route) {
             Preconditions.checkArgument(!route.isEmpty());
-            this.route = route;
+            this.route = Preconditions.checkNotNull(route);
         }
 
         double getLength() {
