@@ -178,24 +178,22 @@ public class OpenDriveHandler {
 
         if (road.isSetSignals()) {
             for (Signal signal : road.getSignals().getSignal()) {
-                if (hasPeer && signal.isSetOrientation() && !laneType.idAppender().equals(signal.getOrientation())) {
-                    // ignore signal for non-relevant driving direction
+                if (hasPeer && !signal.isSetOrientation()) {
+                    throw new IllegalArgumentException("road="+road.getId()+" is bidirectional but signal orientation not set in signal="+signal.getId());
+                }
+                if (!laneType.idAppender().equals(signal.getOrientation())) {
+                    // ignore signal for other driving direction
                     continue;
                 }
                 // assure uniqueness of signal id for whole network
-                String signalId = signal.getId();
-                if (hasPeer && !signal.isSetOrientation()) {
-                    signalId = signalId + laneType.idAppender();
-                    LOG.info("signal-id={} without orientation modified to new signalId={}", signal.getId(), signalId);
-                }
-                boolean added = uniqueTrafficLightIdsInRoads.add(signalId);
+                boolean added = uniqueTrafficLightIdsInRoads.add(signal.getId());
                 if (!added) {
-                    throw new IllegalArgumentException("trafficlight signal with id=" + signalId
+                    throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
                             + " is not unique in xodr network definition.");
                 }
-                Controller controller = signalIdsToController.get(signalId);
+                Controller controller = signalIdsToController.get(signal.getId());
                 if (controller == null) {
-                    throw new IllegalArgumentException("trafficlight signal with id=" + signalId
+                    throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
                             + " is not referenced in xodr <controller> definition.");
                 }
                 roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal, controller));

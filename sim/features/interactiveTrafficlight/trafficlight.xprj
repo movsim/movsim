@@ -44,6 +44,16 @@
                     <Inflow t="0" q_per_hour="500" />
                 </TrafficSource>
             </Road>
+            <Road id="3+">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+            </Road>
+            <Road id="3-">
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="200" />
+                </TrafficSource>
+            </Road>
         </Simulation>
         <TrafficLights logging="true" n_timestep="5">
             <ControllerGroup id="plan1"  >
