@@ -1,0 +1,10 @@
+# example for microscopic boundary conditions
+# time, type, init speed [km/h], destination, length, weight, comment
+2013-02-01T00:00:20, ACC1, 100, 4, 10, 1000,  car1
+2013-02-01T00:01:00, ACC2, 50, 3, 20, 3000, car2
+2013-02-01T00:00:40, ACC1, 0, 4, 30, 2000, car3 will enter before car2!
+2013-02-01T00:01:20, ACC2, 0, 3, 40, 4000, car4
+2013-02-01T00:01:30, ACC1, 0, 4, 50, 3000, car5
+2013-02-01T00:01:40, ACC2, 0, 3, 60, 2000, car6
+2013-02-01T00:01:50, ACC1, 0, 4, 70, 1000, car7
+2013-02-01T00:02:10, ACC2, 0, 2, 80, 500, car8
