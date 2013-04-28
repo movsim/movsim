@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.network.autogen.opendrive.Lane.Speed;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
@@ -80,7 +81,9 @@ import com.google.common.collect.ImmutableList;
  * </p>
  */
 // TODO avoid iterating also over Vehicle.Type.OBSTACLE at lane ends.
-public class RoadSegment implements Iterable<Vehicle> {
+public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle> {
+
+    private static final long serialVersionUID = -2991922063982378462L;
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadSegment.class);
 

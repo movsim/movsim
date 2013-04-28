@@ -25,8 +25,8 @@
  */
 package org.movsim.simulator.roadnetwork.routing;
 
-import org.jgrapht.UndirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.WeightedGraph;
+import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -45,14 +45,16 @@ final class NetworkGraph {
         // private constructor
     }
 
-    public static UndirectedGraph<Long, RoadSegment> create(RoadNetwork roadNetwork) {
-        UndirectedGraph<Long, RoadSegment> graph = new SimpleGraph<>(RoadSegment.class);
+    public static WeightedGraph<Long, RoadSegment> create(RoadNetwork roadNetwork) {
+        SimpleDirectedWeightedGraph<Long, RoadSegment> graph = new SimpleDirectedWeightedGraph<>(RoadSegment.class);
         for (RoadSegment roadSegment : roadNetwork) {
             Long fromVertex = getOrCreateVertex(NodeType.ORIGIN, roadSegment);
             Long toVertex = getOrCreateVertex(NodeType.DESTINATION, roadSegment);
             graph.addVertex(fromVertex);
             graph.addVertex(toVertex);
             graph.addEdge(fromVertex, toVertex, roadSegment);
+            LOG.info("edge weight={}", graph.getEdgeWeight(roadSegment));
+            graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
             // add vertex to successor links AND to predecessor links of successors
             for (LaneSegment laneSegment : roadSegment.laneSegments()) {
                 if (laneSegment.sinkLaneSegment() != null) {
@@ -82,5 +84,6 @@ final class NetworkGraph {
         }
         return vertex;
     }
+
 
 }

@@ -28,7 +28,7 @@ package org.movsim.simulator.roadnetwork.routing;
 import java.util.List;
 import java.util.Map;
 
-import org.jgrapht.UndirectedGraph;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.movsim.autogen.Routes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
@@ -49,7 +49,8 @@ public class Routing {
 
     private final RoadNetwork roadNetwork;
 
-    private final UndirectedGraph<Long, RoadSegment> graph;
+    // see http://jgrapht.org/ for library documentation
+    private final WeightedGraph<Long, RoadSegment> graph;
 
     public Routing(Routes routesInput, RoadNetwork roadNetwork) {
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
