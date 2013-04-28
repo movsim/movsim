@@ -108,10 +108,17 @@ public class Routing {
         Preconditions.checkArgument(startRoadId != null && !startRoadId.isEmpty());
         Preconditions.checkArgument(destinationRoadId != null && !destinationRoadId.isEmpty());
 
-        Route route = new Route(createRouteName(startRoadId, destinationRoadId));
         RoadSegment startRoadSegment = roadNetwork.findByUserId(startRoadId);
-        route.add(startRoadSegment);
+        if (startRoadSegment == null) {
+            throw new IllegalArgumentException("cannot find roadSegment=" + startRoadId);
+        }
         RoadSegment endRoadSegment = roadNetwork.findByUserId(destinationRoadId);
+        if (endRoadSegment == null) {
+            throw new IllegalArgumentException("cannot find roadSegment=" + destinationRoadId);
+        }
+
+        Route route = new Route(createRouteName(startRoadId, destinationRoadId));
+        route.add(startRoadSegment);
 
         LOG.info("Shortest path from roadSegment={} to={}", startRoadId, destinationRoadId);
         LOG.info("From node={} to node={}", startRoadSegment.getNode(NodeType.DESTINATION),
@@ -124,9 +131,9 @@ public class Routing {
                     + " to destinationRoadId=" + destinationRoadId);
         }
 
-        for (RoadSegment rs : path) {
-            route.add(rs);
-            LOG.info("roadSegment on path={}", rs);
+        for (RoadSegment roadSegment : path) {
+            route.add(roadSegment);
+            LOG.info("add roadSegment={} to route={}", roadSegment, route.getName());
         }
         return route;
     }
