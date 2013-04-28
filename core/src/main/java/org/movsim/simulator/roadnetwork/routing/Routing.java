@@ -50,7 +50,7 @@ public class Routing {
     private final RoadNetwork roadNetwork;
 
     // see http://jgrapht.org/ for library documentation
-    private final WeightedGraph<Long, RoadSegment> graph;
+    private WeightedGraph<Long, RoadSegment> graph;
 
     public Routing(Routes routesInput, RoadNetwork roadNetwork) {
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
@@ -58,7 +58,6 @@ public class Routing {
         if (routesInput != null) {
             createPredefinedRoutes(routesInput);
         }
-        this.graph = NetworkGraph.create(roadNetwork);
     }
 
     private void createPredefinedRoutes(Routes routesInput) {
@@ -103,6 +102,9 @@ public class Routing {
     }
 
     public Route findRoute(String startRoadId, String destinationRoadId) throws IllegalStateException {
+        if (graph == null) {
+            graph = NetworkGraph.create(roadNetwork);
+        }
         Preconditions.checkArgument(startRoadId != null && !startRoadId.isEmpty());
         Preconditions.checkArgument(destinationRoadId != null && !destinationRoadId.isEmpty());
 
