@@ -1,5 +1,6 @@
 package org.movsim.simulator.trafficlights;
 
+import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 
@@ -19,16 +20,25 @@ public class TrafficLightLocation {
 
     public TrafficLightLocation(Signal signal, Controller controller) {
         this.controller = Preconditions.checkNotNull(controller);
+        Preconditions.checkArgument(controllerHasTypes());
         Preconditions.checkNotNull(signal);
         Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
-        Preconditions.checkArgument(!signal.getName().isEmpty(), "empty name!");
         Preconditions.checkArgument(signal.isSetId(), "id not set");
-        Preconditions.checkArgument(signal.isSetName(), "name not set");
         Preconditions.checkArgument(signal.isSetS(), "s not set");
         this.signal = signal;
         this.position = signal.getS();
         this.controllerId = controller.getId();
     }
+
+    private boolean controllerHasTypes() {
+        for (OpenDRIVE.Controller.Control control : controller.getControl()) {
+            if (!control.isSetType()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Returns the position on the road segment.
@@ -46,16 +56,6 @@ public class TrafficLightLocation {
      */
     public String signalId() {
         return signal.getId();
-    }
-
-    /**
-     * Returns the name. This name is defined in the infrastructure configuration <signal> element and serves as key for the trafficlight
-     * state.
-     * 
-     * @return the label
-     */
-    public String signalName() {
-        return signal.getName();
     }
 
     public String controllerId() {

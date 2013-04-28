@@ -133,7 +133,7 @@ public class TrafficLights implements SimulationTimeStep {
             }
         }
 
-        return group.getTrafficLight(location.signalName());
+        return group.getTrafficLight(location.signalType());
     }
 
     private static Map<String, ControllerGroup> createControllerMapping(org.movsim.autogen.TrafficLights input) {
