@@ -26,7 +26,7 @@
 package org.movsim.simulator.roadnetwork.routing;
 
 import org.jgrapht.WeightedGraph;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
@@ -46,7 +46,7 @@ final class NetworkGraph {
     }
 
     public static WeightedGraph<Long, RoadSegment> create(RoadNetwork roadNetwork) {
-        SimpleDirectedWeightedGraph<Long, RoadSegment> graph = new SimpleDirectedWeightedGraph<>(RoadSegment.class);
+        DefaultDirectedWeightedGraph<Long, RoadSegment> graph = new DefaultDirectedWeightedGraph<>(RoadSegment.class);
         for (RoadSegment roadSegment : roadNetwork) {
             Long fromVertex = getOrCreateVertex(NodeType.ORIGIN, roadSegment);
             Long toVertex = getOrCreateVertex(NodeType.DESTINATION, roadSegment);
