@@ -107,6 +107,7 @@ public class TrafficLights implements SimulationTimeStep {
         Map<String, ControllerGroup> controllerGroupInput = createControllerMapping(trafficLightsInput);
         for (RoadSegment roadSegment : roadNetwork) {
             for (TrafficLightLocation location : roadSegment.trafficLightLocations()) {
+                LOG.info("location={}, roadSegment={}", location, roadSegment);
                 ControllerGroup controllerGroup = controllerGroupInput.get(location.controllerId());
                 if (controllerGroup == null) {
                     throw new IllegalStateException("no controllerGroup for id=" + location.controllerId()

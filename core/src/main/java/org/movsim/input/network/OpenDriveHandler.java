@@ -178,15 +178,24 @@ public class OpenDriveHandler {
 
         if (road.isSetSignals()) {
             for (Signal signal : road.getSignals().getSignal()) {
+                if (hasPeer && signal.isSetOrientation() && !laneType.idAppender().equals(signal.getOrientation())) {
+                    // ignore signal for non-relevant driving direction
+                    continue;
+                }
                 // assure uniqueness of signal id for whole network
-                boolean added = uniqueTrafficLightIdsInRoads.add(signal.getId());
+                String signalId = signal.getId();
+                if (hasPeer && !signal.isSetOrientation()) {
+                    signalId = signalId + laneType.idAppender();
+                    LOG.info("signal-id={} without orientation modified to new signalId={}", signal.getId(), signalId);
+                }
+                boolean added = uniqueTrafficLightIdsInRoads.add(signalId);
                 if (!added) {
-                    throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
+                    throw new IllegalArgumentException("trafficlight signal with id=" + signalId
                             + " is not unique in xodr network definition.");
                 }
-                Controller controller = signalIdsToController.get(signal.getId());
+                Controller controller = signalIdsToController.get(signalId);
                 if (controller == null) {
-                    throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
+                    throw new IllegalArgumentException("trafficlight signal with id=" + signalId
                             + " is not referenced in xodr <controller> definition.");
                 }
                 roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal, controller));
@@ -512,20 +521,4 @@ public class OpenDriveHandler {
         return Math.abs(xodrLaneId);
     }
 
-    // NOT NEEDED ANYMORE ?!
-    // private static void addDefaultSinks(RoadNetwork roadNetwork, Road road) {
-    // boolean hasPeer = hasPeer(road);
-    // for (Lanes.LaneSectionType laneType : Lanes.LaneSectionType.values()) {
-    // if (!hasPeer && laneType == Lanes.LaneSectionType.LEFT) {
-    // continue;
-    // }
-    // String roadSegmentId = hasPeer ? road.getId() + laneType.idAppender() : road.getId();
-    // RoadSegment roadSegment = roadNetwork.findByRoadId(roadSegmentId);
-    // if (roadSegment == null) {
-    // throw new IllegalArgumentException("cannot find roadSegment=" + roadSegmentId + " in network for road="
-    // + road.getId());
-    // }
-    // roadSegment.addDefaultSink();
-    // }
-    // }
 }

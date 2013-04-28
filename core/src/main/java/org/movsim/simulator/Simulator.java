@@ -217,30 +217,13 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
     }
 
     private void matchRoadSegmentsAndRoadInput(List<Road> roads) {
-        for (final Road roadInput : roads) {
+        for (Road roadInput : roads) {
+            LOG.info("roadInput.getId()={}", roadInput.getId());
             RoadSegment roadSegment = Preconditions.checkNotNull(roadNetwork.findByRoadId(roadInput.getId()),
                     "cannot find roadId=\"" + roadInput.getId() + "\" in road network.");
             addInputToRoadSegment(roadSegment, roadInput);
         }
     }
-
-    /**
-     * There was no xodr file and there is only one road segment in the MovSimXML file so set up a default s-shaped road
-     * mapping.
-     * 
-     * @param road
-     */
-    // private void defaultTestingRoadMapping(Road roadInput) {
-    // LOG.warn("Simulation with test network");
-    // final int laneCount = 1;
-    // final double roadLength = 1500;
-    // final RoadMapping roadMapping = new RoadMappingPolyS(laneCount, 10, 50, 50, 100.0 / Math.PI, roadLength);
-    // final RoadSegment roadSegment = new RoadSegment(roadMapping);
-    // addInputToRoadSegment(roadSegment, roadInput);
-    // roadSegment.setRoadId("1");
-    // roadSegment.addDefaultSink();
-    // roadNetwork.add(roadSegment);
-    // }
 
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
