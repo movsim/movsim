@@ -4,5 +4,16 @@
         <jxb:schemaBindings>
             <jxb:package name="org.movsim.network.autogen.opendrive"/>
         </jxb:schemaBindings>
+
+    <!-- rename the value element -->
+        <!-- <jxb:bindings node="/////xsd:element[@name='roadMark']">
+            <jxb:bindings node="./xsd:element[@name='type']">
+                <jxb:property name="RoadMarkType"/>
+            </jxb:bindings>
+        </jxb:bindings>
+    -->
+    
     </jxb:bindings>
+        
+        
 </jxb:bindings>
