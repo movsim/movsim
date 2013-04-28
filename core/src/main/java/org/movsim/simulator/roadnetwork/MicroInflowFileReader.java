@@ -104,6 +104,9 @@ public final class MicroInflowFileReader {
             LOG.info("and set individual length or weight: length={}, weight={}", vehicle.getLength(),
                     vehicle.getWeight());
         }
+        if (record.hasSpeed()) {
+            vehicle.setSpeed(record.getSpeed());
+        }
         return vehicle;
     }
 
@@ -213,7 +216,7 @@ public final class MicroInflowFileReader {
         return myEntries;
     }
 
-    private static class MicroInflowRecord {
+    private final static class MicroInflowRecord {
         private final long time;
         private final String typeLabel;
         private String route = "";
