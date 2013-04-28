@@ -9,36 +9,35 @@ import com.google.common.base.Preconditions;
 public class TrafficLightLocation {
 
     private final Signal signal;
-
-    private final String controllerId;
+    private final Controller controller;
+    private final double position;
+    private final String signalType;
 
     private TrafficLight trafficLight;
 
-    private final double position;
-
-    private final Controller controller;
-
     public TrafficLightLocation(Signal signal, Controller controller) {
         this.controller = Preconditions.checkNotNull(controller);
-        Preconditions.checkArgument(controllerHasTypes());
-        Preconditions.checkNotNull(signal);
-        Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
+        this.signal = Preconditions.checkNotNull(signal);
         Preconditions.checkArgument(signal.isSetId(), "id not set");
-        Preconditions.checkArgument(signal.isSetS(), "s not set");
-        this.signal = signal;
+        Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
+        Preconditions.checkArgument(signal.isSetS(), "signal.s not set");
         this.position = signal.getS();
-        this.controllerId = controller.getId();
+        this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
     }
 
-    private boolean controllerHasTypes() {
+    private String checkTypesAndExtractSignalType() {
+        String signalType = null;
         for (OpenDRIVE.Controller.Control control : controller.getControl()) {
             if (!control.isSetType()) {
-                return false;
+                throw new IllegalArgumentException("controller.control.type must be set in xodr for signal="
+                        + signalId());
+            }
+            if (control.getSignalId().equals(signalId())) {
+                signalType = control.getType();
             }
         }
-        return true;
+        return signalType;
     }
-
 
     /**
      * Returns the position on the road segment.
@@ -58,8 +57,22 @@ public class TrafficLightLocation {
         return signal.getId();
     }
 
+    /**
+     * Returns the signal type assigned in the controller.control xodr input. This type links from a 'physical' signal to a 'logical'
+     * representation of the trafficlight state.
+     * 
+     * @return the signal-type id
+     */
+    public String signalType() {
+        return signalType;
+    }
+
     public String controllerId() {
-        return controllerId;
+        return controller.getId();
+    }
+
+    Controller getController() {
+        return controller;
     }
 
     public TrafficLight getTrafficLight() {
@@ -69,18 +82,14 @@ public class TrafficLightLocation {
     }
 
     public void setTrafficLight(TrafficLight trafficLight) {
-        Preconditions.checkArgument(this.trafficLight == null);
-        this.trafficLight = trafficLight;
+        Preconditions.checkArgument(this.trafficLight == null, "trafficLight already set:" + this.toString());
+        this.trafficLight = Preconditions.checkNotNull(trafficLight);
     }
 
     @Override
     public String toString() {
-        return "TrafficLightLocation [controllerId = " + controllerId + ", signalId = " + signalId() + ", position = "
-                + position + ", trafficLight=" + trafficLight + "]";
-    }
-
-    Controller getController() {
-        return controller;
+        return "TrafficLightLocation [controllerId = " + controllerId() + ", signalId = " + signalId()
+                + ", position = " + position + ", trafficLight=" + trafficLight + "]";
     }
 
 }

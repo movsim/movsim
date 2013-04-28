@@ -35,20 +35,20 @@
 			 <TrafficLights logging="true" n_timestep="5">
             <ControllerGroup id="plan1"  >
                 <Phase duration="60">
-                    <TrafficLightState name="first" status="Red" condition="request"/>
-                    <TrafficLightState name="second" status="Green" condition="clear"/>
+                    <TrafficLightState type="first" status="Red" condition="request"/>
+                    <TrafficLightState type="second" status="Green" condition="clear"/>
                 </Phase>
                 <Phase duration="10">
-                    <TrafficLightState name="first" status="Red" />
-                    <TrafficLightState name="second" status="Red" />
+                    <TrafficLightState type="first" status="Red" />
+                    <TrafficLightState type="second" status="Red" />
                 </Phase>
                 <Phase duration="60">
-                    <TrafficLightState name="first" status="Green" condition="clear"/>
-                    <TrafficLightState name="second" status="Red" />
+                    <TrafficLightState type="first" status="Green" condition="clear"/>
+                    <TrafficLightState type="second" status="Red" />
                 </Phase>
                 <Phase duration="10">
-                    <TrafficLightState name="first" status="Red" />
-                    <TrafficLightState name="second" status="Red" />
+                    <TrafficLightState type="first" status="Red" />
+                    <TrafficLightState type="second" status="Red" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>

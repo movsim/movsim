@@ -45,16 +45,16 @@
          <TrafficLights>
             <ControllerGroup id="plan1"  >
                 <Phase duration="35">
-                    <TrafficLightState name="firstLight" status="Green" />
+                    <TrafficLightState type="firstLight" status="Green" />
                 </Phase>
                 <Phase duration="3">
-                    <TrafficLightState name="firstLight" status="GreenRed" />
+                    <TrafficLightState type="firstLight" status="GreenRed" />
                 </Phase>
                 <Phase duration="40">
-                    <TrafficLightState name="firstLight" status="Red" />
+                    <TrafficLightState type="firstLight" status="Red" />
                 </Phase>
                 <Phase duration="2">
-                    <TrafficLightState name="firstLight" status="RedGreen" />
+                    <TrafficLightState type="firstLight" status="RedGreen" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>

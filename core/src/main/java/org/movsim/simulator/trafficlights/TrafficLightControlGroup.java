@@ -26,7 +26,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private final String groupId;
 
-    private final String firstSignalId; // for logging
+    private final String firstSignalId; // needed for logging
 
     private int currentPhaseIndex = 0;
 
@@ -34,7 +34,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private final double conditionRange;
 
-    /** mapping from the controller.control.type to the trafficlight */
+    /** mapping from the 'physical' controller.control.type to the 'logical' trafficlight */
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
     TrafficLightControlGroup(ControllerGroup controllerGroup, String firstSignalId) {
@@ -146,8 +146,8 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         return ImmutableList.copyOf(trafficLights.values().iterator());
     }
 
-    TrafficLight getTrafficLight(String signalName) {
-        return Preconditions.checkNotNull(trafficLights.get(signalName), "signalName=\"" + signalName
+    TrafficLight getTrafficLight(String signalType) {
+        return Preconditions.checkNotNull(trafficLights.get(signalType), "signalType=\"" + signalType
                 + "\" not defined in controllerGroup=" + groupId);
     }
 

@@ -48,7 +48,7 @@ public class TrafficLight {
 
     private double position = Double.NaN;
 
-    private final String name; // not unique in network
+    private final String type; // not unique in network
 
     private final String groupId; // unique mapping to infrastructure
 
@@ -58,20 +58,22 @@ public class TrafficLight {
 
     private RoadSegment roadSegment;
 
-    public TrafficLight(String name, String groupId, TriggerCallback triggerCallback) {
-        this.name = name;
+    public TrafficLight(String type, String groupId, TriggerCallback triggerCallback) {
+        this.type = type;
         this.groupId = groupId;
         this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
     }
 
     /**
-     * Returns the name of the trafficlight as referenced in the movsim input. The name does not reference a unique signal in the
-     * infrastructure.
+     * Returns the type of the trafficlight as referenced in the movsim input.
      * 
-     * @return name
+     * <p>
+     * Note that this 'logical' trafficlight type does not reference a unique signal in the infrastructure.
+     * 
+     * @return type
      */
-    public String name() {
-        return name;
+    public String type() {
+        return type;
     }
 
     /**
@@ -101,7 +103,7 @@ public class TrafficLight {
     }
 
     public void setPosition(double position) {
-        Preconditions.checkArgument(Double.isNaN(this.position), "trafficlight with name=\"" + name()
+        Preconditions.checkArgument(Double.isNaN(this.position), "trafficlight of type=\"" + type()
                 + "\" position already set: " + toString());
         this.position = position;
     }
@@ -134,7 +136,7 @@ public class TrafficLight {
 
     @Override
     public String toString() {
-        return "TrafficLight [status=" + status + ", position=" + position + ", name=" + name + ", groupId = "
+        return "TrafficLight [status=" + status + ", position=" + position + ", type=" + type + ", groupId = "
                 + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
     }
 

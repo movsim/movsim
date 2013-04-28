@@ -181,7 +181,13 @@ public class OpenDriveHandler {
                 if (hasPeer && !signal.isSetOrientation()) {
                     throw new IllegalArgumentException("road="+road.getId()+" is bidirectional but signal orientation not set in signal="+signal.getId());
                 }
-                if (!laneType.idAppender().equals(signal.getOrientation())) {
+                if (hasPeer
+                        && !(signal.getOrientation().equals(LaneSectionType.LEFT.idAppender()) || signal
+                                .getOrientation().equals(LaneSectionType.RIGHT.idAppender()))) {
+                    throw new IllegalArgumentException("signal.orientation= \"" + signal.getOrientation()
+                            + "\" does not match the expected values (+,-).");
+                }
+                if (hasPeer && !laneType.idAppender().equals(signal.getOrientation())) {
                     // ignore signal for other driving direction
                     continue;
                 }

@@ -20,13 +20,13 @@
             </laneSection>
         </lanes>
         <signals>
-			<!-- id is reference to physical device, name is reference to trafficLightState in movsim controller input -->
-            <signal s="1000" id="tl1" name="firstLight" />
+			<!-- id is used to reference this signal in a controller, see below -->
+            <signal s="1000" id="tl1" name="some name for the first and only traffic signal" />
         </signals>
     </road>
-     <!-- id maps to movsim controllerGroupID -->
+     <!-- the controller.id references to a 'logical' trafficlight control scheme in movsim, the type links the physical signal to a 'logical' one. -->
     <controller id="plan1">
-		<control signalId="tl1"/>
+		<control signalId="tl1" type="firstLight"/>
     </controller>
     
 </OpenDRIVE>

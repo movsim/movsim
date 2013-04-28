@@ -20,8 +20,8 @@
             </laneSection>
         </lanes>
         <signals>
-			<signal s="700" id="r1_1" name="first" />
-            <signal s="1000" id="r1_2" name="second" />
+			<signal s="700" id="r1_1" name="first on road in forward direction" />
+            <signal s="1000" id="r1_2" name="second on road in forward direction" />
         </signals>
     </road>
     
@@ -45,8 +45,8 @@
             </laneSection>
         </lanes>
         <signals>
-			<signal s="600" id="r2_1" name="first" />
-            <signal s="900" id="r2_2" name="second" />
+			<signal s="600" id="r2_1" name="first on road in forward direction" />
+            <signal s="900" id="r2_2" name="second on road in forward direction" />
         </signals>
     </road>
     
@@ -77,28 +77,28 @@
             </laneSection>
         </lanes>
         <signals>
-			<signal s="600" id="r3_1+" orientation="+" name="first" />
-            <signal s="900" id="r3_2+" orientation="+" name="second" />
-            <signal s="600" id="r3_1-" orientation="-" name="first" />
-            <signal s="900" id="r3_2-" orientation="-" name="second" />
+			<signal s="600" id="r3_1+" orientation="+" name="first signal on road in forward direction" />
+            <signal s="900" id="r3_2+" orientation="+" name="second signal on road in forward direction" />
+            <signal s="600" id="r3_1-" orientation="-" name="first signal in peer direction (backward)" />
+            <signal s="900" id="r3_2-" orientation="-" name="second in peer direction (backward)" />
         </signals>
     </road>
     <!-- id maps to movsim controllerGroupID -->
     <controller id="plan1">
-		<control signalId="r1_1"/>
-		<control signalId="r1_2"/>
+		<control signalId="r1_1" type="first"/>
+		<control signalId="r1_2" type="second"/>
     </controller>
     <controller id="plan1">
-		<control signalId="r2_1"/>
-		<control signalId="r2_2"/>
+		<control signalId="r2_1" type="first"/>
+		<control signalId="r2_2" type="second"/>
     </controller>
         <controller id="plan1">
-		<control signalId="r3_1-"/>
-		<control signalId="r3_2-"/>
+		<control signalId="r3_1-" type="first"/>
+		<control signalId="r3_2-" type="second"/>
     </controller>
     <controller id="plan1">
-		<control signalId="r3_1+"/>
-		<control signalId="r3_2+"/>
+		<control signalId="r3_1+" type="first"/>
+		<control signalId="r3_2+" type="second"/>
     </controller>
 </OpenDRIVE>
 
