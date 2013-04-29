@@ -53,8 +53,8 @@ final class NetworkGraph {
             graph.addVertex(fromVertex);
             graph.addVertex(toVertex);
             graph.addEdge(fromVertex, toVertex, roadSegment);
-            LOG.info("edge weight={}", graph.getEdgeWeight(roadSegment));
-            LOG.info("create nodes for roadSegment={}", roadSegment);
+            graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
+            LOG.info("create nodes for roadSegment={} with weight={}", roadSegment, graph.getEdgeWeight(roadSegment));
             graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
             // add vertex to successor links AND to predecessor links of successors
             for (LaneSegment laneSegment : roadSegment.laneSegments()) {
@@ -63,7 +63,8 @@ final class NetworkGraph {
                     LOG.info("... and add successor roadSegment={}", successor);
                     successor.setNode(NodeType.ORIGIN, toVertex);
                     for (LaneSegment laneSegmentSuccessor : successor.laneSegments()) {
-                        if (laneSegmentSuccessor.sourceLaneSegment() != null) {
+                        if (laneSegmentSuccessor.sourceLaneSegment() != null
+                                && laneSegmentSuccessor.sourceLaneSegment().roadSegment() != roadSegment) {
                             RoadSegment predecessor = laneSegmentSuccessor.sourceLaneSegment().roadSegment();
                             LOG.info("... add add predecessor roadSegment={}", predecessor);
                             predecessor.setNode(NodeType.DESTINATION, toVertex);
@@ -74,7 +75,7 @@ final class NetworkGraph {
         }
         LOG.info("created graph with " + graph.edgeSet().size() + " edges and " + graph.vertexSet().size() + " nodes.");
         for (RoadSegment roadSegment : roadNetwork) {
-            LOG.info(roadSegment.toString());
+            LOG.info("weight={}, roadSegment={}", graph.getEdgeWeight(roadSegment), roadSegment.toString());
         }
         return graph;
     }
