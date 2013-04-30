@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Movsim>
+    <VehiclePrototypes>
+        <VehiclePrototypeConfiguration label="IDM1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterACC v0="20" T="1.2" s0="3" s1="2" delta="4" a="1.2" b="2.0" coolness="1.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="5.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+        <!-- trucks -->
+        <VehiclePrototypeConfiguration label="IDM2" length="16" maximum_deceleration="9">
+            <AccelerationModelType>
+                <ModelParameterIDM v0="18" T="1.5" s0="4" s1="4" delta="4" a="0.8" b="2.0" />
+            </AccelerationModelType>
+            <LaneChangeModelType european_rules="true" crit_speed_eur="20">
+                <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.3" politeness="0.1" />
+            </LaneChangeModelType>
+        </VehiclePrototypeConfiguration>
+    </VehiclePrototypes>
+    <Scenario network_filename="four_way_junction.xodr">
+        <Simulation timestep="0.2" crash_exit="false">
+            <TrafficComposition>
+                <VehicleType label="IDM1" fraction="0.4" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC1" fraction="0.4" relative_v0_randomization="0.2" />
+                <VehicleType label="IDM2" fraction="0.2" relative_v0_randomization="0.2" />
+            </TrafficComposition>
+            <Road id="1">
+                <InitialConditions />
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+            <Road id="3">
+                <InitialConditions />
+                <TrafficSource logging="false">
+                    <Inflow t="0" q_per_hour="500" />
+                </TrafficSource>
+                <Detectors />
+            </Road>
+        </Simulation>
+        <TrafficLights logging="true" n_timestep="5">
+            <ControllerGroup id="plan1"  >
+                <Phase duration="30">
+                    <TrafficLightState name="first" status="Red" condition="request"/>
+                    <TrafficLightState name="second" status="Green" condition="clear"/>
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState name="first" status="Red" />
+                    <TrafficLightState name="second" status="GreenRed" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState name="first" status="Red" />
+                    <TrafficLightState name="second" status="Red" />
+                </Phase>
+                <Phase duration="30">
+                    <TrafficLightState name="first" status="Green" condition="clear"/>
+                    <TrafficLightState name="second" status="Red" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState name="first" status="GreenRed" />
+                    <TrafficLightState name="second" status="Red" />
+                </Phase>
+                <Phase duration="8">
+                    <TrafficLightState name="first" status="Red" />
+                    <TrafficLightState name="second" status="Red" />
+                </Phase>
+            </ControllerGroup>
+        </TrafficLights>
+    </Scenario>
+</Movsim>
+
