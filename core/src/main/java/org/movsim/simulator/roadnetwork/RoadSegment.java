@@ -122,6 +122,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private TrafficSink sink;
     private RoadMapping roadMapping;
 
+    private RoadSegment peerRoadSegment;
+
     /** simple ramp with dropping mechanism */
     private SimpleRamp simpleRamp;
 
@@ -789,6 +791,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
+        
         if (laneCount < 2) {
             // need at least 2 lanes for lane changing
             return;
@@ -1336,10 +1339,21 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return destination;
     }
 
-
     @Override
     public String toString() {
         return "RoadSegment [id=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
                 + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
+    }
+
+    RoadSegment getPeerRoadSegment() {
+        return peerRoadSegment;
+    }
+
+    public final boolean hasPeer() {
+        return peerRoadSegment != null;
+    }
+
+    public void setPeerRoadSegment(RoadSegment peerRoadSegment) {
+        this.peerRoadSegment = Preconditions.checkNotNull(peerRoadSegment);
     }
 }

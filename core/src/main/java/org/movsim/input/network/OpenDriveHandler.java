@@ -107,6 +107,12 @@ public class OpenDriveHandler {
                     LOG.info("created roadSegment={} with laneCount={}", roadSegment.userId(), roadSegment.laneCount());
                 }
             }
+            if(hasPeer){
+                RoadSegment roadSegmentRight = getRoadSegment(roadNetwork, road.getId(), LaneSectionType.RIGHT);
+                RoadSegment roadSegmentLeft = getRoadSegment(roadNetwork, road.getId(), LaneSectionType.LEFT);
+                roadSegmentLeft.setPeerRoadSegment(roadSegmentRight);
+                roadSegmentRight.setPeerRoadSegment(roadSegmentLeft);
+            }
         }
         LOG.info("created {} roadSegments.", roadNetwork.size());
     }
@@ -126,8 +132,7 @@ public class OpenDriveHandler {
 
     private static boolean hasLaneSectionType(Road road, LaneSectionType laneType) {
         if (!road.isSetLanes()) {
-            LOG.warn("road without lanes defined."); // useful?
-            return false;
+            throw new IllegalArgumentException("road=" + road.getId() + " defined without lanes.");
         }
         if (laneType == Lanes.LaneSectionType.LEFT) {
             return road.getLanes().getLaneSection().get(0).isSetLeft();
@@ -135,7 +140,7 @@ public class OpenDriveHandler {
         if (laneType == Lanes.LaneSectionType.RIGHT) {
             return road.getLanes().getLaneSection().get(0).isSetRight();
         }
-        return false; // CENTER lane not supported
+        return false; // xodr CENTER lane not supported
     }
 
     private RoadSegment createRoadSegment(LaneSectionType laneType, Road road, boolean hasPeer, RoadMapping roadMapping) {
@@ -259,13 +264,6 @@ public class OpenDriveHandler {
         return roadGeometries;
     }
 
-    private static String getRoadSegmentId(String roadId, int lane, boolean hasPeer) {
-        if (hasPeer) {
-            return roadId + getIdAppender(lane);
-        }
-        return roadId; // backwards compatibility
-    }
-
     private static String getRoadSegmentId(String roadId, LaneSectionType laneType, boolean hasPeer) {
         if (hasPeer) {
             return roadId + laneType.idAppender();
@@ -273,20 +271,22 @@ public class OpenDriveHandler {
         return roadId; // backwards compatibility
     }
 
-    private static String getIdAppender(int lane) {
-        // convention: left lanes are defined positively
-        return (lane > 0) ? Lanes.LaneSectionType.LEFT.idAppender() : Lanes.LaneSectionType.RIGHT.idAppender();
-    }
-
-    private static RoadSegment getRoadSegment(RoadNetwork roadNetwork, String roadId, int lane) {
+    private static RoadSegment getRoadSegment(RoadNetwork roadNetwork, String roadId, LaneSectionType type) {
         RoadSegment roadSegment = roadNetwork.findByUserId(roadId);
         if (roadSegment == null) {
-            roadSegment = roadNetwork.findByUserId(roadId + getIdAppender(lane));
+            roadSegment = roadNetwork.findByUserId(roadId
+                    + (type == LaneSectionType.LEFT ? Lanes.LaneSectionType.LEFT.idAppender()
+                            : Lanes.LaneSectionType.RIGHT.idAppender()));
         }
         if (roadSegment == null) {
             throw new IllegalArgumentException("Cannot find road:" + roadId);
         }
         return roadSegment;
+    }
+
+    private static RoadSegment getRoadSegment(RoadNetwork roadNetwork, String roadId, int lane) {
+        return getRoadSegment(roadNetwork, roadId,
+                (lane > 0 ? Lanes.LaneSectionType.LEFT : Lanes.LaneSectionType.RIGHT));
     }
 
     private static void checkLaneIndexConventions(LaneSectionType laneType, String roadId, List<Lane> lanes) {
