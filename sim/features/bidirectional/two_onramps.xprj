@@ -46,6 +46,13 @@
                 </TrafficSource>
             </Road>
         </Simulation>
+            <Routes>
+            <Route label="main">
+                <Road id="1+" />
+                <Road id="2+" />
+                <Road id="3+" />
+            </Route>
+            </Routes>
     </Scenario>
 </Movsim>
 

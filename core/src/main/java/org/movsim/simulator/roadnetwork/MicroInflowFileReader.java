@@ -85,10 +85,18 @@ public final class MicroInflowFileReader {
     private Vehicle createVehicle(MicroInflowRecord record) {
         final Vehicle vehicle = trafficSource.vehGenerator.createVehicle(record.getTypeLabel());
         if (record.hasRouteOrDestination()) {
-            Route route = routing.hasRoute(record.getRouteOrDestination()) ? routing
-                    .get(record.getRouteOrDestination()) : routing.findRoute(trafficSource.roadSegment.userId(),
-                    record.getRouteOrDestination());
-            LOG.info("overwrites vehicle's default route by route provided by input file: route={}", route.getName());
+            Route route;
+            if (routing.hasRoute(record.getRouteOrDestination())) {
+                route = routing.get(record.getRouteOrDestination());
+                LOG.info("overwrites vehicle's default route by input file: route={}", route.getName());
+            } else {
+                route = routing.findRoute(trafficSource.roadSegment.userId(), record.getRouteOrDestination());
+                if (route == null) {
+                    LOG.error("no route assigned to vehicle={}", vehicle);
+                } else {
+                    LOG.info("found route and overwrites vehicle's default route: route={}", route.getName());
+                }
+            }
             vehicle.setRoute(route);
         }
         if (record.hasComment()) {

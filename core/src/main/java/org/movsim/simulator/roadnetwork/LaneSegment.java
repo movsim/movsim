@@ -136,7 +136,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         return roadSegment.roadLength();
     }
 
-    public final void setSourceLaneSegment(LaneSegment sourceLaneSegment) {
+    final void setSourceLaneSegment(LaneSegment sourceLaneSegment) {
         this.sourceLaneSegment = sourceLaneSegment;
     }
 
@@ -144,7 +144,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         return sourceLaneSegment;
     }
 
-    public final void setSinkLaneSegment(LaneSegment sinkLaneSegment) {
+    final void setSinkLaneSegment(LaneSegment sinkLaneSegment) {
         this.sinkLaneSegment = sinkLaneSegment;
     }
 

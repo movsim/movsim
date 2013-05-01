@@ -28,7 +28,6 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
@@ -368,6 +367,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     final void setSourceLaneSegmentForLane(LaneSegment sourceLaneSegment, int lane) {
+        Preconditions.checkNotNull(sourceLaneSegment);
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane);
         laneSegments[lane - 1].setSourceLaneSegment(sourceLaneSegment);
     }
@@ -394,6 +394,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     final void setSinkLaneSegmentForLane(LaneSegment sinkLaneSegment, int lane) {
+        Preconditions.checkNotNull(sinkLaneSegment);
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
         laneSegments[lane - 1].setSinkLaneSegment(sinkLaneSegment);
     }
@@ -1244,24 +1245,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.simpleRamp = simpleRamp;
     }
 
-    /**
-     * Returns true if the {@code RoadSegment} is connected in downstream direction to the provided argument and false
-     * otherwise. Connection exists if at least one {@code LaneSegment} is connected.
-     * 
-     * @param upstreamRoadSegment
-     * @return
-     */
-    public boolean isDownstreamLink(RoadSegment upstreamRoadSegment) {
-        Preconditions.checkNotNull(upstreamRoadSegment);
-        for (final LaneSegment laneSegment : laneSegments) {
-            if (laneSegment.sourceLaneSegment() != null
-                    && upstreamRoadSegment.equals(laneSegment.sourceLaneSegment().roadSegment())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // TODO not yet used
     public void setUserRoadname(String name) {
         this.roadName = name;
@@ -1309,28 +1292,54 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return false;
     }
 
-    public enum NodeType {
-        ORIGIN, DESTINATION;
-    }
+    
+    // TODO new concept, think about refactoring 
+    public class Node {
 
-    EnumMap<NodeType, Long> nodeIds = new EnumMap<>(NodeType.class);
-
-    public Long getNode(NodeType nodeType) {
-        return nodeIds.get(nodeType);
-    }
-
-    public void setNode(NodeType nodeType, Long nodeId) {
-        Preconditions.checkNotNull(nodeId);
-        if (getNode(nodeType) != null && getNode(nodeType).longValue() != nodeId.longValue()) {
-            throw new IllegalArgumentException("nodetype=" + nodeType.toString() + " of RoadSegment="
-                + userId() + " already set=" + getNode(nodeType));
+        private long id = Long.MAX_VALUE;
+        private final String type;
+        
+        public Node(String type) {
+            this.type = Preconditions.checkNotNull(type);
         }
-        nodeIds.put(nodeType, nodeId);
+
+        public boolean hasId() {
+            return id != Long.MAX_VALUE;
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            if (hasId() && this.id != id) {
+                throw new IllegalArgumentException("nodetype=" + this + " already set with value=" + this.id);
+            }
+            this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return "Node[type=" + type + ", id=" + (this.hasId() ? this.getId() : "-") + "]";
+        }
+
     }
+
+    private Node origin = new Node("origin");
+    private Node destination = new Node("destination");
+
+    public Node getOriginNode() {
+        return origin;
+    }
+
+    public Node getDestinationNode() {
+        return destination;
+    }
+
 
     @Override
     public String toString() {
         return "RoadSegment [id=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
-                + ", laneCount=" + laneCount + ", nodeIds=" + nodeIds + "]";
+                + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
     }
 }

@@ -58,12 +58,21 @@ public class Link {
      * @param toRoadSegment
      */
     public static void addLanePair(int fromLane, RoadSegment fromRoadsegment, int toLane, RoadSegment toRoadSegment) {
-        // toRoadSegment.setSourceRoadSegmentForLane(fromRoadsegment, toLane);
-        // toRoadSegment.setSourceLaneForLane(fromLane, toLane);
-        // fromRoadsegment.setSinkRoadSegmentForLane(toRoadSegment, fromLane);
-        // fromRoadsegment.setSinkLaneForLane(toLane, fromLane);
-
+        // check if lanes are already connected: ambiguous xodr!
+        if (toRoadSegment.sourceLaneSegment(toLane) != null
+                && toRoadSegment.sourceLaneSegment(toLane).roadSegment() != fromRoadsegment) {
+            throw new IllegalArgumentException("Ambiguous network input! Cannot connect source roadSegment="
+                    + fromRoadsegment + "\nto lane=" + toLane + " of sink roadSegment=" + toRoadSegment
+                    + ".\n Sink already is=" + toRoadSegment.sourceLaneSegment(toLane).roadSegment());
+        }
         toRoadSegment.setSourceLaneSegmentForLane(fromRoadsegment.laneSegment(fromLane), toLane);
+
+        if (fromRoadsegment.sinkLaneSegment(fromLane) != null
+                && fromRoadsegment.sinkLaneSegment(fromLane).roadSegment() != toRoadSegment) {
+            throw new IllegalArgumentException("Ambiguous network input! Cannot connect sink roadSegment="
+                    + toRoadSegment + "\nfrom lane=" + fromLane + " of source roadSegment=" + toRoadSegment
+                    + ".\n Source already is=" + fromRoadsegment.sinkLaneSegment(fromLane).roadSegment());
+        }
         fromRoadsegment.setSinkLaneSegmentForLane(toRoadSegment.laneSegment(toLane), fromLane);
     }
 

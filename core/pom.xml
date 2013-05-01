@@ -38,10 +38,10 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
-	<groupId>org.jgrapht</groupId>
-	<artifactId>jgrapht-jdk1.5</artifactId>
-	<version>0.7.3</version>
+      <dependency>
+	<groupId>net.sf.jgrapht</groupId>
+	<artifactId>jgrapht</artifactId>
+	<version>0.8.3</version>
 </dependency>
     </dependencies>
     <build>

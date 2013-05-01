@@ -25,14 +25,21 @@
  */
 package org.movsim.simulator.roadnetwork.routing;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
+import org.movsim.input.ProjectMetaData;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegment.NodeType;
+import org.movsim.simulator.roadnetwork.RoadSegment.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Maps;
 
 final class NetworkGraph {
 
@@ -47,47 +54,94 @@ final class NetworkGraph {
 
     public static WeightedGraph<Long, RoadSegment> create(RoadNetwork roadNetwork) {
         DefaultDirectedWeightedGraph<Long, RoadSegment> graph = new DefaultDirectedWeightedGraph<>(RoadSegment.class);
-        for (RoadSegment roadSegment : roadNetwork) {
-            Long fromVertex = getOrCreateVertex(NodeType.ORIGIN, roadSegment);
-            Long toVertex = getOrCreateVertex(NodeType.DESTINATION, roadSegment);
-            graph.addVertex(fromVertex);
-            graph.addVertex(toVertex);
-            graph.addEdge(fromVertex, toVertex, roadSegment);
-            graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
-            LOG.info("create nodes for roadSegment={} with weight={}", roadSegment, graph.getEdgeWeight(roadSegment));
-            graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
-            // add vertex to successor links AND to predecessor links of successors
+        HashMap<RoadSegment, Node> connections = Maps.newLinkedHashMap();
+        for (final RoadSegment roadSegment : roadNetwork) {
+            connections.clear();
+            connections.put(roadSegment, roadSegment.getDestinationNode());
             for (LaneSegment laneSegment : roadSegment.laneSegments()) {
                 if (laneSegment.sinkLaneSegment() != null) {
                     RoadSegment successor = laneSegment.sinkLaneSegment().roadSegment();
-                    LOG.info("... and add successor roadSegment={}", successor);
-                    successor.setNode(NodeType.ORIGIN, toVertex);
+                    connections.put(successor, successor.getOriginNode());
                     for (LaneSegment laneSegmentSuccessor : successor.laneSegments()) {
-                        if (laneSegmentSuccessor.sourceLaneSegment() != null
-                                && laneSegmentSuccessor.sourceLaneSegment().roadSegment() != roadSegment) {
+                        if (laneSegmentSuccessor.sourceLaneSegment() != null) {
                             RoadSegment predecessor = laneSegmentSuccessor.sourceLaneSegment().roadSegment();
-                            LOG.info("... add add predecessor roadSegment={}", predecessor);
-                            predecessor.setNode(NodeType.DESTINATION, toVertex);
+                            connections.put(predecessor, predecessor.getDestinationNode());
                         }
                     }
                 }
             }
+            createOrUpdateNode(connections);
+
+            connections.clear();
+            connections.put(roadSegment, roadSegment.getOriginNode());
+            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
+                if (laneSegment.sourceLaneSegment() != null) {
+                    RoadSegment predecessor = laneSegment.sourceLaneSegment().roadSegment();
+                    connections.put(predecessor, predecessor.getDestinationNode());
+                    for (LaneSegment laneSegmentPredecessor : predecessor.laneSegments()) {
+                        if (laneSegmentPredecessor.sinkLaneSegment() != null) {
+                            RoadSegment successor = laneSegmentPredecessor.sinkLaneSegment().roadSegment();
+                            connections.put(successor, successor.getOriginNode());
+                        }
+                    }
+                }
+            }
+            createOrUpdateNode(connections);
         }
         LOG.info("created graph with " + graph.edgeSet().size() + " edges and " + graph.vertexSet().size() + " nodes.");
         for (RoadSegment roadSegment : roadNetwork) {
+            long fromVertex = roadSegment.getOriginNode().getId();
+            long toVertex = roadSegment.getDestinationNode().getId();
+            graph.addVertex(fromVertex);
+            graph.addVertex(toVertex);
+            graph.addEdge(fromVertex, toVertex, roadSegment);
+            graph.setEdgeWeight(roadSegment, roadSegment.roadLength());
             LOG.info("weight={}, roadSegment={}", graph.getEdgeWeight(roadSegment), roadSegment.toString());
         }
+
+        exportToFile(graph);
         return graph;
     }
 
-    private static long getOrCreateVertex(NodeType nodeType, RoadSegment roadSegment) {
-        Long vertex = roadSegment.getNode(nodeType);
-        if (vertex == null) {
-            vertex = vertexId++;
-            roadSegment.setNode(nodeType, vertex);
+    private static void createOrUpdateNode(HashMap<RoadSegment, Node> connections) {
+        Preconditions.checkArgument(connections.size() > 0);
+        showConnections(connections);
+        long nodeId = determineNodeId(connections);
+        if (nodeId == Long.MAX_VALUE) {
+            nodeId = vertexId++;
         }
-        return vertex;
+        for (Node nodeType : connections.values()) {
+            nodeType.setId(nodeId);
+        }
     }
 
+    private static void showConnections(HashMap<RoadSegment, Node> connections) {
+        LOG.info("connections at node:");
+        for (Map.Entry<RoadSegment, Node> entry : connections.entrySet()) {
+            LOG.info("roadSegment={}, node={}", entry.getKey(), entry.getValue());
+        }
+    }
+
+    private static long determineNodeId(HashMap<RoadSegment, Node> nodes) {
+        long nodeId = Long.MAX_VALUE;
+        for (Map.Entry<RoadSegment, Node> entry : nodes.entrySet()) {
+            Node nodeType = entry.getValue();
+            if (nodeType.hasId()) {
+                if (nodeId != Long.MAX_VALUE && nodeId != nodeType.getId()) {
+                    throw new IllegalArgumentException("nodeId=" + nodeId + " contradicts node=" + nodeType.toString()
+                            + " of roadSegment=" + entry.getKey().userId() + " already set with value="
+                            + nodeType.getId());
+                }
+                nodeId = nodeType.getId();
+            }
+        }
+        return nodeId;
+    }
+
+    private static void exportToFile(DefaultDirectedWeightedGraph<Long, RoadSegment> graph) {
+        String fileName = ProjectMetaData.getInstance().getProjectName() + ".dot";
+        GraphExporter.exportDOT(graph, fileName);
+        LOG.info("export graph to file={}", fileName);
+    }
 
 }

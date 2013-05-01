@@ -20,4 +20,4 @@ Thumbs.db
 *.eps
 *~
 /.project
-
+*.dot
