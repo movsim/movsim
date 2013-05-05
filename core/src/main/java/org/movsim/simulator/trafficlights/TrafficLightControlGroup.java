@@ -52,7 +52,8 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
                 String type = Preconditions.checkNotNull(trafficlightState.getType());
                 TrafficLight trafficLight = trafficLights.get(type);
                 if (trafficLight == null) {
-                    trafficLight = new TrafficLight(type, groupId, this);
+                    trafficLight = new TrafficLight(type, groupId);
+                    trafficLight.setTriggerCallback(this);
                     trafficLights.put(type, trafficLight);
                 }
                 trafficLight.addPossibleState(trafficlightState.getStatus());

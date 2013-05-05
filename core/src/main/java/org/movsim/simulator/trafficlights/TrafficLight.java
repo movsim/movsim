@@ -52,16 +52,15 @@ public class TrafficLight {
 
     private final String groupId; // unique mapping to infrastructure
 
-    private final TriggerCallback triggerCallback;
+    private TriggerCallback triggerCallback;
 
     private final Set<TrafficLightStatus> possibleStati = new HashSet<>();
 
     private RoadSegment roadSegment;
 
-    public TrafficLight(String type, String groupId, TriggerCallback triggerCallback) {
+    public TrafficLight(String type, String groupId) {
         this.type = type;
         this.groupId = groupId;
-        this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
     }
 
     /**
@@ -138,6 +137,10 @@ public class TrafficLight {
     public String toString() {
         return "TrafficLight [status=" + status + ", position=" + position + ", type=" + type + ", groupId = "
                 + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
+    }
+
+    void setTriggerCallback(TriggerCallback triggerCallback) {
+        this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
     }
 
 }
