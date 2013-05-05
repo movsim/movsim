@@ -1,6 +1,7 @@
 package org.movsim.simulator.trafficlights;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-abstract class TrafficLightController implements SimulationTimeStep, TriggerCallback {
+abstract class TrafficLightController implements SimulationTimeStep, TriggerCallback, Iterable<TrafficLight> {
     /** The Constant LOG. */
     static final Logger LOG = LoggerFactory.getLogger(TrafficLightController.class);
 
@@ -70,6 +71,7 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
         return groupId;
     }
 
+    // for logging
     String firstSignalId() {
         return Preconditions.checkNotNull(firstSignalId);
     }
@@ -91,8 +93,9 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
     }
 
     
-    public Iterable<TrafficLight> trafficLights() {
-        return ImmutableList.copyOf(trafficLights.values().iterator());
+    @Override
+    public final Iterator<TrafficLight> iterator() {
+        return trafficLights.values().iterator();
     }
 
     @Override

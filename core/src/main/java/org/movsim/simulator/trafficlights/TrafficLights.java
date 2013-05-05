@@ -139,9 +139,9 @@ public class TrafficLights implements SimulationTimeStep {
     }
 
     private void checkIfAllTrafficlightsAreReferenced() {
-        for (TrafficLightController group : trafficLightControllers) {
-            group.checkIfAllSignalTypesAdded();
-            for (TrafficLight trafficLight : group.trafficLights()) {
+        for (TrafficLightController trafficLightController : trafficLightControllers) {
+            trafficLightController.checkIfAllSignalTypesAdded();
+            for (TrafficLight trafficLight : trafficLightController) {
                 Preconditions.checkArgument(trafficLight.hasTriggerCallback(),
                         "trafficlight-type=" + trafficLight.signalType() + " within group=" + trafficLight.groupId()
                                 + " is not referenced to a signal on a road!");
