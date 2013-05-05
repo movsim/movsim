@@ -742,7 +742,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
             for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
                 if (trafficLight.valid(lane)) {
-                    LOG.info("draw tl for roadSegment={}", roadSegment);
                     drawTrafficLightBar(g, roadMapping, trafficLight, lane);
                 }
             }
@@ -774,7 +773,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, width, height);
 
-        LOG.info("rect={}", rect);
         switch (trafficLight.status()) {
         case GREEN:
             g.setColor(Color.GREEN);
