@@ -33,7 +33,7 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
+import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightWithDistance;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
@@ -649,12 +649,12 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficLightLocationWithDistance location = roadSegment.getNextDownstreamTrafficLight(
+        TrafficLightWithDistance location = roadSegment.getNextDownstreamTrafficLight(
                 getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
         if (location != null) {
             LOG.debug("consider trafficlight={}", location.toString());
             assert location.distance >= 0 : "distance=" + location.distance;
-            trafficLightApproaching.update(this, location.trafficLightLocation.getTrafficLight(), location.distance);
+            trafficLightApproaching.update(this, location.trafficLight, location.distance);
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
             }

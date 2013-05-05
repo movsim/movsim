@@ -102,8 +102,8 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
 
         int counter = 0;
         for (final TrafficLight trafficLight : trafficLights) {
-            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2fm, name=%s, groupId=%s%n",
-                    ++counter, trafficLight.position(), trafficLight.type(), trafficLight.groupId());
+            writer.printf(COMMENT_CHAR + " position of traffic light no. %d: %5.2fm, name=%s, groupId=%s%n", ++counter,
+                    trafficLight.position(), trafficLight.signalType(), trafficLight.groupId());
         }
         writer.printf(COMMENT_CHAR + " %-8s  %-8s  %-8s  %-8s %n", "time[s]", "position[m]_TL1", "status[1]_TL1",
                 " etc.");

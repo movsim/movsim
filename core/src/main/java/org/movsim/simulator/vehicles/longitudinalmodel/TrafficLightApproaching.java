@@ -27,7 +27,7 @@ package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
+import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightWithDistance;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -154,7 +154,7 @@ public class TrafficLightApproaching {
     private void checkSpaceBeforePassingTrafficlight(Vehicle me, TrafficLight trafficLight,
             double distanceToTrafficlight) {
         // relative to position of first traffic light
-        TrafficLightLocationWithDistance nextTrafficlight = trafficLight.roadSegment().getNextDownstreamTrafficLight(
+        TrafficLightWithDistance nextTrafficlight = trafficLight.roadSegment().getNextDownstreamTrafficLight(
                 trafficLight.position(), me.lane(), MAX_LOOK_AHEAD_DISTANCE);
         if (nextTrafficlight != null) {
             double distanceBetweenTrafficlights = nextTrafficlight.distance;

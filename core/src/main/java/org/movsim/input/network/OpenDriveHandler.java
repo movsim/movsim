@@ -33,7 +33,7 @@ import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
 import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.xml.NetworkLoadAndValidation;
 import org.slf4j.Logger;
@@ -202,7 +202,7 @@ public class OpenDriveHandler {
                     throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
                             + " is not referenced in xodr <controller> definition.");
                 }
-                roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal, controller));
+                roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
             }
         }
 

@@ -27,10 +27,8 @@ package org.movsim.simulator.trafficlights;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -59,12 +57,8 @@ public class TrafficLights implements SimulationTimeStep {
 
     private final List<TrafficLightControlGroup> trafficLightControlGroups;
 
-    /** mapping from signalIds to controllers */
-    private final Map<String, TrafficLightControlGroup> signalIdToController;
-
     public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput, RoadNetwork roadNetwork) {
         this.trafficLightControlGroups = new ArrayList<>();
-        this.signalIdToController = new HashMap<>();
         if (trafficLightsInput == null) {
             if (networkContainsTrafficlights(roadNetwork)) {
                 throw new IllegalStateException(
@@ -81,7 +75,7 @@ public class TrafficLights implements SimulationTimeStep {
 
     private static boolean networkContainsTrafficlights(RoadNetwork roadNetwork) {
         for (RoadSegment roadSegment : roadNetwork) {
-            if (Iterables.size(roadSegment.trafficLightLocations()) > 0) {
+            if (Iterables.size(roadSegment.trafficLights()) > 0) {
                 return true;
             }
         }
@@ -106,56 +100,50 @@ public class TrafficLights implements SimulationTimeStep {
     }
 
     private void setUp(org.movsim.autogen.TrafficLights trafficLightsInput, RoadNetwork roadNetwork) {
+        Map<String, TrafficLightControlGroup> signalIdToController = new HashMap<>();
         Map<String, ControllerGroup> controllerGroupInput = createControllerMapping(trafficLightsInput);
+
         for (RoadSegment roadSegment : roadNetwork) {
-            for (TrafficLightLocation location : roadSegment.trafficLightLocations()) {
-                LOG.debug("location={}, roadSegment={}", location, roadSegment);
-                ControllerGroup controllerGroup = controllerGroupInput.get(location.controllerId());
+            for (TrafficLight trafficLight : roadSegment.trafficLights()) {
+                LOG.debug("trafficLight={}, roadSegment={}", trafficLight, roadSegment);
+                ControllerGroup controllerGroup = controllerGroupInput.get(trafficLight.controllerId());
                 if (controllerGroup == null) {
-                    throw new IllegalStateException("no controllerGroup for id=" + location.controllerId()
+                    throw new IllegalStateException("no controllerGroup for id=" + trafficLight.controllerId()
                             + " defined in input");
                 }
-                TrafficLight trafficLight = getOrCreate(location, controllerGroup);
-                trafficLight.setPosition(location.position());
-                trafficLight.setRoadSegment(roadSegment);
-                location.setTrafficLight(trafficLight);
+                TrafficLightControlGroup trafficLightControlGroup = signalIdToController.get(trafficLight.signalId());
+                if (trafficLightControlGroup == null) {
+                    LOG.debug("create new TrafficLightControllerGroup for trafficLight={}", trafficLight.toString());
+                    trafficLightControlGroup = new TrafficLightControlGroup(controllerGroup);
+                    trafficLightControlGroups.add(trafficLightControlGroup);
+                    for (Control control : trafficLight.getController().getControl()) {
+                        signalIdToController.put(control.getSignalId(), trafficLightControlGroup);
+                    }
+                }
+                trafficLightControlGroup.add(trafficLight);
             }
         }
     }
 
     private static Map<String, ControllerGroup> createControllerMapping(org.movsim.autogen.TrafficLights input) {
         Map<String, ControllerGroup> controllerMap = new HashMap<>();
-        Set<String> controllGroupNames = new HashSet<>();
         for (ControllerGroup controllerGroup : input.getControllerGroup()) {
             Preconditions.checkArgument(!controllerGroup.getPhase().isEmpty(),
                     "at least one phase must be defined in a movsim controller group.");
-            Preconditions.checkArgument(controllGroupNames.add(controllerGroup.getId()), "controlgroup name="
+            Preconditions.checkArgument(!controllerMap.containsKey(controllerGroup.getId()), "controlgroup name="
                     + controllerGroup.getId() + " not unique.");
             controllerMap.put(controllerGroup.getId(), controllerGroup);
         }
         return controllerMap;
     }
 
-    private TrafficLight getOrCreate(TrafficLightLocation location, ControllerGroup controllerGroup) {
-        TrafficLightControlGroup group = signalIdToController.get(location.signalId());
-        if (group == null) {
-            LOG.debug("create new controllergroup for location={}", location.toString());
-            group = new TrafficLightControlGroup(controllerGroup, location.getController().getControl().get(0)
-                    .getSignalId());
-            trafficLightControlGroups.add(group);
-            for (Control control : location.getController().getControl()) {
-                signalIdToController.put(control.getSignalId(), group);
-            }
-        }
-
-        return group.getTrafficLight(location.signalType());
-    }
-
     private void checkIfAllTrafficlightsAreReferenced() {
         for (TrafficLightControlGroup group : trafficLightControlGroups) {
+            group.checkIfAllSignalTypesAdded();
             for (TrafficLight trafficLight : group.trafficLights()) {
-                Preconditions.checkArgument(trafficLight.hasPosition(), "trafficlight-type=" + trafficLight.type()
-                        + " within group=" + trafficLight.groupId() + " is not referenced to a signal on a road!");
+                Preconditions.checkArgument(trafficLight.hasTriggerCallback(),
+                        "trafficlight-type=" + trafficLight.signalType() + " within group=" + trafficLight.groupId()
+                                + " is not referenced to a signal on a road!");
             }
         }
     }

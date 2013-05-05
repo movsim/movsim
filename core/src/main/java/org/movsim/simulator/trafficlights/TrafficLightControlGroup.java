@@ -26,7 +26,7 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
 
     private final String groupId;
 
-    private final String firstSignalId; // needed for logging
+    private String firstSignalId; // needed for logging
 
     private int currentPhaseIndex = 0;
 
@@ -37,26 +37,30 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     /** mapping from the 'physical' controller.control.type to the 'logical' trafficlight */
     private final Map<String, TrafficLight> trafficLights = new HashMap<>();
 
-    TrafficLightControlGroup(ControllerGroup controllerGroup, String firstSignalId) {
+    TrafficLightControlGroup(ControllerGroup controllerGroup) {
         Preconditions.checkNotNull(controllerGroup);
         this.groupId = controllerGroup.getId();
-        this.firstSignalId = firstSignalId;
         this.conditionRange = controllerGroup.getRange();
         this.phases = ImmutableList.copyOf(controllerGroup.getPhase()); // deep copy
-        createTrafficlights();
     }
 
-    private void createTrafficlights() {
+    void add(TrafficLight trafficLight) {
+        Preconditions.checkNotNull(trafficLight);
+        Preconditions.checkArgument(!trafficLights.containsKey(trafficLight.signalType()), "trafficLight="
+                + trafficLight + " already added.");
+        if (trafficLights.isEmpty()) {
+            firstSignalId = trafficLight.getController().getControl().get(0).getSignalId();
+        }
+        trafficLight.setTriggerCallback(this);
+        trafficLights.put(trafficLight.signalType(), trafficLight);
+
+        // determine possible states
         for (Phase phase : phases) {
             for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
                 String type = Preconditions.checkNotNull(trafficlightState.getType());
-                TrafficLight trafficLight = trafficLights.get(type);
-                if (trafficLight == null) {
-                    trafficLight = new TrafficLight(type, groupId);
-                    trafficLight.setTriggerCallback(this);
-                    trafficLights.put(type, trafficLight);
+                if(trafficLight.signalType().equals(type)){
+                    trafficLight.addPossibleState(trafficlightState.getStatus());
                 }
-                trafficLight.addPossibleState(trafficlightState.getStatus());
             }
         }
     }
@@ -165,7 +169,17 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
     }
 
     String firstSignalId() {
-        return firstSignalId;
+        return Preconditions.checkNotNull(firstSignalId);
+    }
+
+    void checkIfAllSignalTypesAdded() throws IllegalArgumentException{
+        for(Phase phase : phases){
+            for(TrafficLightState state : phase.getTrafficLightState()){
+                if (!trafficLights.containsKey(state.getType())) {
+                    throw new IllegalArgumentException("signal type in controller"+ groupId + " not been registered");
+                }
+            }
+        }
     }
 
     public interface RecordDataCallback {

@@ -29,6 +29,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficLightStatus;
+import org.movsim.network.autogen.opendrive.OpenDRIVE;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
+import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +41,7 @@ import com.google.common.base.Preconditions;
 /**
  * The Class TrafficLight.
  */
-public class TrafficLight {
+public class TrafficLight implements TrafficSign {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLight.class);
@@ -46,9 +49,7 @@ public class TrafficLight {
     /** The status. */
     private TrafficLightStatus status;
 
-    private double position = Double.NaN;
-
-    private final String type; // not unique in network
+    private final double position;
 
     private final String groupId; // unique mapping to infrastructure
 
@@ -56,23 +57,63 @@ public class TrafficLight {
 
     private final Set<TrafficLightStatus> possibleStati = new HashSet<>();
 
-    private RoadSegment roadSegment;
+    private final RoadSegment roadSegment;
 
-    public TrafficLight(String type, String groupId) {
-        this.type = type;
-        this.groupId = groupId;
+    private final Signal signal;
+    private final Controller controller;
+    private final String signalType;
+
+    public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
+        this.controller = Preconditions.checkNotNull(controller);
+        this.signal = Preconditions.checkNotNull(signal);
+        this.roadSegment = Preconditions.checkNotNull(roadSegment);
+        Preconditions.checkArgument(signal.isSetId(), "id not set");
+        Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
+        Preconditions.checkArgument(signal.isSetS(), "signal.s not set");
+        this.position = signal.getS();
+        this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
+        this.groupId = controller.getId();
+    }
+
+    private String checkTypesAndExtractSignalType() {
+        String signalType = null;
+        for (OpenDRIVE.Controller.Control control : controller.getControl()) {
+            if (!control.isSetType()) {
+                throw new IllegalArgumentException("controller.control.type must be set in xodr for signal="
+                        + signalId());
+            }
+            if (control.getSignalId().equals(signalId())) {
+                signalType = control.getType();
+            }
+        }
+        return signalType;
     }
 
     /**
-     * Returns the type of the trafficlight as referenced in the movsim input.
+     * Returns the id. This id is defined in the infrastructure configuration file.
      * 
-     * <p>
-     * Note that this 'logical' trafficlight type does not reference a unique signal in the infrastructure.
-     * 
-     * @return type
+     * @return the label
      */
-    public String type() {
-        return type;
+    public String signalId() {
+        return signal.getId();
+    }
+
+    /**
+     * Returns the signal type assigned in the controller.control xodr input. This type links from a 'physical' signal to a 'logical'
+     * representation of the trafficlight state.
+     * 
+     * @return the signal-type id
+     */
+    public String signalType() {
+        return signalType;
+    }
+
+    public String controllerId() {
+        return controller.getId();
+    }
+
+    Controller getController() {
+        return controller;
     }
 
     /**
@@ -92,19 +133,10 @@ public class TrafficLight {
         this.status = newStatus;
     }
 
+    @Override
     public double position() {
         Preconditions.checkArgument(!Double.isNaN(position), "traffic light without position");
         return position;
-    }
-
-    public boolean hasPosition() {
-        return !Double.isNaN(position);
-    }
-
-    public void setPosition(double position) {
-        Preconditions.checkArgument(Double.isNaN(this.position), "trafficlight of type=\"" + type()
-                + "\" position already set: " + toString());
-        this.position = position;
     }
 
     public void triggerNextPhase() {
@@ -124,23 +156,24 @@ public class TrafficLight {
         return Math.min(3, possibleStati.size());
     }
 
+    @Override
     public RoadSegment roadSegment() {
-        return Preconditions.checkNotNull(roadSegment);
-    }
-
-    public void setRoadSegment(RoadSegment roadSegment) {
-        Preconditions.checkArgument(this.roadSegment == null, "roadSegment already set");
-        this.roadSegment = roadSegment;
+        return roadSegment;
     }
 
     @Override
     public String toString() {
-        return "TrafficLight [status=" + status + ", position=" + position + ", type=" + type + ", groupId = "
+        return "TrafficLight [controllerId = " + controllerId() + ", signalId = " + signalId() + ", status=" + status
+                + ", position=" + position + ", signalType=" + signalType + ", groupId = "
                 + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
     }
 
     void setTriggerCallback(TriggerCallback triggerCallback) {
         this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
+    }
+
+    boolean hasTriggerCallback() {
+        return triggerCallback != null;
     }
 
 }

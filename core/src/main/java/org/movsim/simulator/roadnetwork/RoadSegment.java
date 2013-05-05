@@ -39,7 +39,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,16 +102,15 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
-    private SortedSet<TrafficLightLocation> trafficLightLocations = new TreeSet<>(
-            new Comparator<TrafficLightLocation>() {
-                @Override
-                public int compare(TrafficLightLocation a, TrafficLightLocation b) {
-                    if (a != b && Double.compare(a.position(), b.position()) == 0) {
-                        throw new IllegalStateException("cannot have identical trafficlight positions=" + a.position());
-                    }
-                    return Double.compare(a.position(), b.position());
-                }
-            });
+    private SortedSet<TrafficLight> trafficLights = new TreeSet<>(new Comparator<TrafficLight>() {
+        @Override
+        public int compare(TrafficLight a, TrafficLight b) {
+            if (a != b && Double.compare(a.position(), b.position()) == 0) {
+                throw new IllegalStateException("cannot have identical trafficlight positions=" + a.position());
+            }
+            return Double.compare(a.position(), b.position());
+        }
+    });
 
     private SpeedLimits speedLimits;
     private Slopes slopes;
@@ -683,34 +682,34 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param position
      * @return the next downstream traffic or null
      */
-    TrafficLightLocation getNextDownstreamTrafficLight(double position) {
-        for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
-            double distance = trafficLightLocation.position() - position;
+    TrafficLight getNextDownstreamTrafficLight(double position) {
+        for (TrafficLight trafficLight : trafficLights) {
+            double distance = trafficLight.position() - position;
             if (distance > 0) {
                 // !!! assume that traffic lights are sorted with increasing position
                 // so that first traffic light can be considered as the next downstream one
-                return trafficLightLocation;
+                return trafficLight;
             }
         }
         return null;
     }
 
     // TODO profiling ... lookup done quite often even w/o any trafficlights
-    public TrafficLightLocationWithDistance getNextDownstreamTrafficLight(double position, int lane,
+    public TrafficLightWithDistance getNextDownstreamTrafficLight(double position, int lane,
             double maxLookAheadDistance) {
-        TrafficLightLocation trafficLightLocation = getNextDownstreamTrafficLight(position);
-        double distance = (trafficLightLocation != null) ? trafficLightLocation.position() - position : roadLength
+        TrafficLight trafficLight = getNextDownstreamTrafficLight(position);
+        double distance = (trafficLight != null) ? trafficLight.position() - position : roadLength
                 - position;
         RoadSegment segment = this;
-        while (trafficLightLocation == null && distance < maxLookAheadDistance) {
+        while (trafficLight == null && distance < maxLookAheadDistance) {
             segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
             if (segment == null) {
                 break;
             }
-            trafficLightLocation = segment.getNextDownstreamTrafficLight(0);
-            distance += (trafficLightLocation != null) ? trafficLightLocation.position() : segment.roadLength();
+            trafficLight = segment.getNextDownstreamTrafficLight(0);
+            distance += (trafficLight != null) ? trafficLight.position() : segment.roadLength();
         }
-        return trafficLightLocation == null ? null : new TrafficLightLocationWithDistance(trafficLightLocation,
+        return trafficLight == null ? null : new TrafficLightWithDistance(trafficLight,
                 distance);
     }
 
@@ -1021,8 +1020,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * 
      * @return an iterable over all the traffic lights in the road segment
      */
-    public Iterable<TrafficLightLocation> trafficLightLocations() {
-        return trafficLightLocations;
+    public Iterable<TrafficLight> trafficLights() {
+        return trafficLights;
     }
 
     /**
@@ -1251,34 +1250,34 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Adds the {@code TrafficLightLocation} to the {@code RoadSegment} and performs a sorting to assure ascending order
+     * Adds the {@link TrafficLight} to the {@link RoadSegment} and performs a sorting to assure ascending order
      * of positions along the road stretch.
      * <p>
      * The caller has to assure that trafficlight id is unique in the whole network.
      * </p>
      * 
-     * @param trafficLightLocation
+     * @param trafficLight
      */
-    public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
-        Preconditions.checkArgument(trafficLightLocation.position() >= 0
-                && trafficLightLocation.position() <= roadLength, "inconsistent input data: traffic light position="
-                + trafficLightLocation.position() + " does not fit onto road-id=" + userId() + " with length="
+    public void addTrafficLight(TrafficLight trafficLight) {
+        Preconditions.checkArgument(trafficLight.position() >= 0
+                && trafficLight.position() <= roadLength, "inconsistent input data: traffic light position="
+                + trafficLight.position() + " does not fit onto road-id=" + userId() + " with length="
                 + roadLength());
-        trafficLightLocations.add(trafficLightLocation);
+        trafficLights.add(trafficLight);
     }
 
-    public final class TrafficLightLocationWithDistance {
-        public final TrafficLightLocation trafficLightLocation;
+    public final class TrafficLightWithDistance {
+        public final TrafficLight trafficLight;
         public final double distance;
 
-        public TrafficLightLocationWithDistance(TrafficLightLocation location, double distance) {
-            this.trafficLightLocation = Preconditions.checkNotNull(location);
+        public TrafficLightWithDistance(TrafficLight location, double distance) {
+            this.trafficLight = Preconditions.checkNotNull(location);
             this.distance = distance;
         }
 
         @Override
         public String toString() {
-            return "TrafficLightLocationWithDistance [trafficLightLocation=" + trafficLightLocation + ", distance="
+            return "TrafficLightWithDistance [trafficLight=" + trafficLight + ", distance="
                     + distance + "]";
         }
     }
