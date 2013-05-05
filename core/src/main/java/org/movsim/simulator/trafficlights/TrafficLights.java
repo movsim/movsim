@@ -115,7 +115,7 @@ public class TrafficLights implements SimulationTimeStep {
                         .signalId());
                 if (trafficLightController == null) {
                     LOG.debug("create new TrafficLightControllerGroup for trafficLight={}", trafficLight.toString());
-                    trafficLightController = new TrafficLightControllerInternal(controllerGroup);
+                    trafficLightController = TrafficLightControllerFactory.create(controllerGroup);
                     trafficLightControllers.add(trafficLightController);
                     for (Control control : trafficLight.getController().getControl()) {
                         signalIdToController.put(control.getSignalId(), trafficLightController);
