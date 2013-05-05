@@ -8,6 +8,7 @@ import java.util.Map;
 import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;
 import org.movsim.autogen.TrafficLightState;
+import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.SimulationTimeStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +26,7 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
     int currentPhaseIndex;
 
     final String groupId;
-    
+
     final List<Phase> phases;
 
     String firstSignalId; // needed for logging
@@ -48,6 +49,7 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
         trafficLight.setTriggerCallback(this);
         trafficLights.put(trafficLight.signalType(), trafficLight);
 
+        trafficLight.setState(getInitTrafficLightState(trafficLight.signalType()));
         // determine possible states
         for (Phase phase : phases) {
             for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
@@ -57,6 +59,18 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
                 }
             }
         }
+    }
+
+    private TrafficLightStatus getInitTrafficLightState(String signalType) {
+        for (Phase phase : phases) {
+            for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
+                String type = Preconditions.checkNotNull(trafficlightState.getType());
+                if (signalType.equals(type)) {
+                    return trafficlightState.getStatus();
+                }
+            }
+        }
+        throw new IllegalStateException("could bot find signal type=" + signalType + " in controller=" + groupId);
     }
 
     void setNextPhaseIndex() {
@@ -92,7 +106,6 @@ abstract class TrafficLightController implements SimulationTimeStep, TriggerCall
         setNextPhaseIndex();
     }
 
-    
     @Override
     public final Iterator<TrafficLight> iterator() {
         return trafficLights.values().iterator();

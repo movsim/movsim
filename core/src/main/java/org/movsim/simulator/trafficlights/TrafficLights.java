@@ -142,6 +142,8 @@ public class TrafficLights implements SimulationTimeStep {
         for (TrafficLightController trafficLightController : trafficLightControllers) {
             trafficLightController.checkIfAllSignalTypesAdded();
             for (TrafficLight trafficLight : trafficLightController) {
+                Preconditions.checkArgument(trafficLight.status() != null, "trafficlight id=" + trafficLight.signalId()
+                        + " without init status");
                 Preconditions.checkArgument(trafficLight.hasTriggerCallback(),
                         "trafficlight-type=" + trafficLight.signalType() + " within group=" + trafficLight.groupId()
                                 + " is not referenced to a signal on a road!");
@@ -150,8 +152,8 @@ public class TrafficLights implements SimulationTimeStep {
     }
 
     private void setUpLogging(int nTimestep) {
-        for (TrafficLightController group : trafficLightControllers) {
-            group.setRecorder(new FileTrafficLightControllerRecorder(group, nTimestep));
+        for (TrafficLightController controller : trafficLightControllers) {
+            controller.setRecorder(new FileTrafficLightControllerRecorder(controller, nTimestep));
         }
     }
 

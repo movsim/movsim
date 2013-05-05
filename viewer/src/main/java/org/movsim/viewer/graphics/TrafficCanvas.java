@@ -763,8 +763,8 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
 
     private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight, int lane) {
         // TODO drawn bar does not seem centered.
-        final double height = roadMapping.laneWidth();
-        final double width = 3;
+        final double height = 5;
+        final double width = roadMapping.laneWidth();
         double offset = lane * roadMapping.laneWidth();
         // TODO hack here: find more elegant solution (sign from lane)
         if(roadMapping instanceof RoadMappingPeer){
