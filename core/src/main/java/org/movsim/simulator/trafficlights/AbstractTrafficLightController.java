@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-class AbstractTrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
+class AbstractTrafficLightController implements SimulationTimeStep, TriggerCallback {
     /** The Constant LOG. */
-    static final Logger LOG = LoggerFactory.getLogger(AbstractTrafficLightControlGroup.class);
+    static final Logger LOG = LoggerFactory.getLogger(AbstractTrafficLightController.class);
 
     /** mapping from the 'physical' controller.control.type to the 'logical' trafficlight */
     final Map<String, TrafficLight> trafficLights;
@@ -29,7 +29,7 @@ class AbstractTrafficLightControlGroup implements SimulationTimeStep, TriggerCal
 
     String firstSignalId; // needed for logging
 
-    AbstractTrafficLightControlGroup(ControllerGroup controllerGroup) {
+    AbstractTrafficLightController(ControllerGroup controllerGroup) {
         trafficLights = new HashMap<>();
         currentPhaseIndex = 0; // init phase
         Preconditions.checkNotNull(controllerGroup);

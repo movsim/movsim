@@ -7,13 +7,13 @@ import org.movsim.autogen.TrafficLightState;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 
-class TrafficLightControlGroup extends AbstractTrafficLightControlGroup {
+class TrafficLightController extends AbstractTrafficLightController {
 
     private double currentPhaseDuration;
 
     private final double conditionRange;
 
-    TrafficLightControlGroup(ControllerGroup controllerGroup) {
+    TrafficLightController(ControllerGroup controllerGroup) {
         super(controllerGroup);
         this.conditionRange = controllerGroup.getRange();
     }

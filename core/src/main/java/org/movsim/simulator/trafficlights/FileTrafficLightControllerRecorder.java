@@ -35,7 +35,7 @@ import com.google.common.base.Preconditions;
  * The Class FileTrafficLightControllerRecorder.
  */
 public class FileTrafficLightControllerRecorder extends FileOutputBase implements
-        TrafficLightControlGroup.RecordDataCallback {
+        TrafficLightController.RecordDataCallback {
 
     private static final String extensionFormat = ".controllerGroup_%s.firstSignal_%s.csv";
     private final int nTimestep;
@@ -48,7 +48,7 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightControllerRecorder(TrafficLightControlGroup group, int nTimestep) {
+    public FileTrafficLightControllerRecorder(TrafficLightController group, int nTimestep) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
         Preconditions.checkArgument(!group.groupId().isEmpty());
         Preconditions.checkArgument(!group.firstSignalId().isEmpty());

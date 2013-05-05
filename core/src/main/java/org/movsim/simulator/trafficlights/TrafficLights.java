@@ -55,10 +55,10 @@ public class TrafficLights implements SimulationTimeStep {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLights.class);
 
-    private final List<TrafficLightControlGroup> trafficLightControlGroups;
+    private final List<TrafficLightController> trafficLightControllers;
 
     public TrafficLights(@Nullable org.movsim.autogen.TrafficLights trafficLightsInput, RoadNetwork roadNetwork) {
-        this.trafficLightControlGroups = new ArrayList<>();
+        this.trafficLightControllers = new ArrayList<>();
         if (trafficLightsInput == null) {
             if (networkContainsTrafficlights(roadNetwork)) {
                 throw new IllegalStateException(
@@ -94,13 +94,13 @@ public class TrafficLights implements SimulationTimeStep {
      */
     @Override
     public void timeStep(double dt, double simulationTime, long iterationCount) {
-        for (TrafficLightControlGroup group : trafficLightControlGroups) {
+        for (TrafficLightController group : trafficLightControllers) {
             group.timeStep(dt, simulationTime, iterationCount);
         }
     }
 
     private void setUp(org.movsim.autogen.TrafficLights trafficLightsInput, RoadNetwork roadNetwork) {
-        Map<String, TrafficLightControlGroup> signalIdToController = new HashMap<>();
+        Map<String, TrafficLightController> signalIdToController = new HashMap<>();
         Map<String, ControllerGroup> controllerGroupInput = createControllerMapping(trafficLightsInput);
 
         for (RoadSegment roadSegment : roadNetwork) {
@@ -111,16 +111,16 @@ public class TrafficLights implements SimulationTimeStep {
                     throw new IllegalStateException("no controllerGroup for id=" + trafficLight.controllerId()
                             + " defined in input");
                 }
-                TrafficLightControlGroup trafficLightControlGroup = signalIdToController.get(trafficLight.signalId());
-                if (trafficLightControlGroup == null) {
+                TrafficLightController trafficLightController = signalIdToController.get(trafficLight.signalId());
+                if (trafficLightController == null) {
                     LOG.debug("create new TrafficLightControllerGroup for trafficLight={}", trafficLight.toString());
-                    trafficLightControlGroup = new TrafficLightControlGroup(controllerGroup);
-                    trafficLightControlGroups.add(trafficLightControlGroup);
+                    trafficLightController = new TrafficLightController(controllerGroup);
+                    trafficLightControllers.add(trafficLightController);
                     for (Control control : trafficLight.getController().getControl()) {
-                        signalIdToController.put(control.getSignalId(), trafficLightControlGroup);
+                        signalIdToController.put(control.getSignalId(), trafficLightController);
                     }
                 }
-                trafficLightControlGroup.add(trafficLight);
+                trafficLightController.add(trafficLight);
             }
         }
     }
@@ -138,7 +138,7 @@ public class TrafficLights implements SimulationTimeStep {
     }
 
     private void checkIfAllTrafficlightsAreReferenced() {
-        for (TrafficLightControlGroup group : trafficLightControlGroups) {
+        for (TrafficLightController group : trafficLightControllers) {
             group.checkIfAllSignalTypesAdded();
             for (TrafficLight trafficLight : group.trafficLights()) {
                 Preconditions.checkArgument(trafficLight.hasTriggerCallback(),
@@ -149,7 +149,7 @@ public class TrafficLights implements SimulationTimeStep {
     }
 
     private void setUpLogging(int nTimestep) {
-        for (TrafficLightControlGroup group : trafficLightControlGroups) {
+        for (TrafficLightController group : trafficLightControllers) {
             group.setRecorder(new FileTrafficLightControllerRecorder(group, nTimestep));
         }
     }
