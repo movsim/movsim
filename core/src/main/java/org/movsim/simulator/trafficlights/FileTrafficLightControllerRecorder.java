@@ -48,13 +48,13 @@ public class FileTrafficLightControllerRecorder extends FileOutputBase implement
      * @param trafficLights
      *            the traffic lights
      */
-    public FileTrafficLightControllerRecorder(TrafficLightController group, int nTimestep) {
+    public FileTrafficLightControllerRecorder(TrafficLightController controller, int nTimestep) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
-        Preconditions.checkArgument(!group.groupId().isEmpty());
-        Preconditions.checkArgument(!group.firstSignalId().isEmpty());
+        Preconditions.checkArgument(!controller.groupId().isEmpty());
+        Preconditions.checkArgument(!controller.firstSignalId().isEmpty());
         this.nTimestep = nTimestep;
-        String groupName = group.groupId().replaceAll("\\s", "");
-        String firstSignalId = group.firstSignalId().replaceAll("\\s", "");
+        String groupName = controller.groupId().replaceAll("\\s", "");
+        String firstSignalId = controller.firstSignalId().replaceAll("\\s", "");
         writer = Preconditions.checkNotNull(createWriter(String.format(extensionFormat, groupName, firstSignalId)));
     }
 

@@ -100,10 +100,10 @@
             <ControllerGroup id="group1" >
 				<!-- duration set to very long time. State changes will result only from user-interaction -->
                 <Phase duration="10000000">
-                    <TrafficLightState name="first" status="Green" />
+                    <TrafficLightState type="first" status="Green" />
                 </Phase>
                 <Phase duration="10000000">
-                    <TrafficLightState name="first" status="Red" />
+                    <TrafficLightState type="first" status="Red" />
                 </Phase>
             </ControllerGroup>
         </TrafficLights>
