@@ -172,6 +172,8 @@ public class OpenDriveHandler {
             // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
             // entries overwrite previous entry
             if (lane.isSetSpeed()) {
+                // TODO speed traffic signs better covered by "roadObjects" in xodr
+                // TODO set s-coordinate for reverse driving direction
                 roadSegment.setSpeedLimits(lane.getSpeed());
             }
         }
@@ -202,12 +204,26 @@ public class OpenDriveHandler {
                     throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
                             + " is not referenced in xodr <controller> definition.");
                 }
+                if (laneType.isReverseDirection()) {
+                    double originalS = signal.getS();
+                    signal.setS(roadSegment.roadLength() - originalS);
+                    LOG.debug(
+                            "Transform signal position from reverse direction: signal={}, originalPosition={}, roadSegment position="
+                                    + signal.getS(), signal.getId(), originalS);
+                }
                 roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
             }
         }
 
         if (road.isSetObjects()) {
             for (OpenDRIVE.Road.Objects.Tunnel tunnel : road.getObjects().getTunnel()) {
+                if (laneType.isReverseDirection()) {
+                    double originalS = tunnel.getS();
+                    tunnel.setS(roadSegment.roadLength() - originalS);
+                    LOG.debug(
+                            "Transform tunnel position for reverse direction: tunnel={}, originalPosition={}, roadSegment position="
+                                    + tunnel.getS(), tunnel.getId(), originalS);
+                }
                 roadMapping.addClippingRegion(tunnel.getS(), tunnel.getLength());
             }
         }

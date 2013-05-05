@@ -45,6 +45,7 @@ import javax.xml.bind.JAXBException;
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PosTheta;
+import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
 import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
@@ -91,7 +92,7 @@ import org.xml.sax.SAXException;
 public class TrafficCanvas extends SimulationCanvasBase implements SimulationRunnable.UpdateDrawingCallback,
         SimulationRunnable.HandleExceptionCallback {
 
-    final static Logger logger = LoggerFactory.getLogger(TrafficCanvas.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TrafficCanvas.class);
     static final long serialVersionUID = 1L;
 
     protected final Simulator simulator;
@@ -159,7 +160,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     double[] velocities;
 
     Color[] accelerationColors;
-    protected final Map<String, Color> labelColors = new HashMap<String, Color>();
+    protected final Map<String, Color> labelColors = new HashMap<>();
 
     private final double[] accelerations = new double[] { -7.5, -0.1, 0.2 };
 
@@ -289,7 +290,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         }
         for (String vehicleTypeLabel : simulator.getVehiclePrototypeLabels()) {
             final Color color = new Color(Colors.randomColor());
-            logger.info("set color for vehicle label={}", vehicleTypeLabel);
+            LOG.info("set color for vehicle label={}", vehicleTypeLabel);
             labelColors.put(vehicleTypeLabel, color);
         }
     }
@@ -596,7 +597,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             // 10.0f, new float[] { 5.0f, gapLengthExit }, 5.0f);
             // g.setStroke(exitStroke);
             // } else {
-                g.setStroke(lineStroke);
+            g.setStroke(lineStroke);
             // }
             PaintRoadMapping.paintRoadMapping(g, roadMapping, offset);
         }
@@ -628,7 +629,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 * trafficLight.lightCount());
         return rect;
     }
-    
+
     /**
      * Draw a traffic light that has only one light
      * 
@@ -731,7 +732,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        assert roadSegment.trafficLights() !=null;
+        assert roadSegment.trafficLights() != null;
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
 
@@ -741,33 +742,39 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
             for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
                 if (trafficLight.valid(lane)) {
+                    LOG.info("draw tl for roadSegment={}", roadSegment);
                     drawTrafficLightBar(g, roadMapping, trafficLight, lane);
                 }
             }
-        
-            //Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
+            // Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
             // TODO draw switch button instead ....
-//            switch (trafficLight.lightCount()) {
-//            case 1:
-//                drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
-//                break;
-//            case 2:
-//                drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
-//                break;
-//            default:
-//                drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
-//                break;
-//            }
+            // switch (trafficLight.lightCount()) {
+            // case 1:
+            // drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
+            // break;
+            // case 2:
+            // drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
+            // break;
+            // default:
+            // drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
+            // break;
+            // }
         }
     }
-    
+
     private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight, int lane) {
+        // TODO drawn bar does not seem centered.
         final double height = roadMapping.laneWidth();
-        final double width = 5; //roadMapping.laneWidth();
-        final double offset = (lane-1)*roadMapping.laneWidth();
+        final double width = 3;
+        double offset = lane * roadMapping.laneWidth();
+        // TODO hack here: find more elegant solution (sign from lane)
+        if(roadMapping instanceof RoadMappingPeer){
+            offset *= -1;
+        }
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
         final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, width, height);
-        
+
+        LOG.info("rect={}", rect);
         switch (trafficLight.status()) {
         case GREEN:
             g.setColor(Color.GREEN);
@@ -782,9 +789,9 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             g.setColor(Color.ORANGE);
             break;
         }
-        g.fill(rect);
+        g.fill(rect); 
     }
-    
+
     private void drawSpeedLimits(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             drawSpeedLimitsOnRoad(g, roadSegment);
