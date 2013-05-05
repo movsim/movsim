@@ -463,7 +463,13 @@ public class LaneSegment implements Iterable<Vehicle> {
         if (sourceLaneSegment != null) {
             // didn't find a rear vehicle in the current road segment, so
             // check the previous (source) road segment
-            final Vehicle sourceFrontVehicle = sourceLaneSegment.frontVehicle();
+            // and continue until a vehicle is found or no further source is connected to laneSegment
+            Vehicle sourceFrontVehicle = null;
+            LaneSegment source = sourceLaneSegment;
+            do{
+                sourceFrontVehicle = source.frontVehicle();
+                source = source.sourceLaneSegment();
+            }while (sourceFrontVehicle == null && source != null);
             if (sourceFrontVehicle != null) {
                 // return a copy of the front vehicle on the source road segment, with its
                 // position set relative to the current road segment
@@ -479,7 +485,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         return rearVehicle(vehicle.getRearPosition());
     }
 
-    public Vehicle rearVehicleOnSinkLanePosAdjusted() {
+    Vehicle rearVehicleOnSinkLanePosAdjusted() {
 
         // subject vehicle is front vehicle on this road segment, so check sink road segment
         if (sinkLaneSegment == null) {
@@ -554,6 +560,9 @@ public class LaneSegment implements Iterable<Vehicle> {
             // didn't find a front vehicle in the current road segment, so
             // check the next (sink) road segment
             // find the rear vehicle in the sink lane on the sink road segment
+
+            // TODO !!! continue until a vehicle is found or no further source is connected to laneSegment
+            // SEE in rearVehicle
             final Vehicle sinkRearVehicle = sinkLaneSegment.rearVehicle();
             if (sinkRearVehicle != null) {
                 // return a copy of the rear vehicle on the sink road segment, with its position

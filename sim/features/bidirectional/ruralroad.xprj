@@ -10,9 +10,9 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
         <!-- trucks -->
-        <VehiclePrototypeConfiguration label="ACC2" length="16" maximum_deceleration="9">
+        <VehiclePrototypeConfiguration label="ACC2" length="40" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterACC v0="30" T="1.2" s0="2" s1="0" delta="4" a="0.8" b="2.0" coolness="1" />
+                <ModelParameterACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="0.8" b="2.0" coolness="1" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.3" politeness="0.1" />
@@ -22,18 +22,22 @@
     <Scenario network_filename="ruralroad.xodr">
         <Simulation timestep="0.2">
             <TrafficComposition>
-                <VehicleType label="ACC1" fraction="0.9" relative_v0_randomization="0.2" />
-                <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="3-">
-                <TrafficSource>
-                    <Inflow t="0" q_per_hour="500" v="15" />
-                </TrafficSource>
+				  <InitialConditions>
+                    <!-- <MicroIC position="80" speed="5" label="ACC1" /> -->
+                    <MicroIC position="100" speed="10" label="ACC2" />
+                    </InitialConditions>
+                <!-- <TrafficSource>              <Inflow t="0" q_per_hour="70" v="15" />               </TrafficSource> -->
             </Road> 
             <Road id="1+">
-                <TrafficSource>
-                    <Inflow t="0" q_per_hour="1000" v="15" />
-                </TrafficSource>
+				<InitialConditions>
+                    <!-- <MicroIC position="10" speed="5" label="ACC1" /> -->
+                    <MicroIC position="30" speed="10" label="ACC2" />
+                    </InitialConditions>
+                <!-- <TrafficSource>                    <Inflow t="0" q_per_hour="60" v="15" />                 </TrafficSource> -->
             </Road>
         </Simulation>
     </Scenario>

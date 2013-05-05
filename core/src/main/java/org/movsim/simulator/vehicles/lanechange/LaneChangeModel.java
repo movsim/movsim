@@ -50,7 +50,7 @@ public class LaneChangeModel {
 
         NONE(Lanes.NO_CHANGE), STAY_IN_LANE(Lanes.NO_CHANGE), DISCRETIONARY_TO_LEFT(Lanes.TO_LEFT), DISCRETIONARY_TO_RIGHT(
                 Lanes.TO_RIGHT), MANDATORY_TO_LEFT(Lanes.TO_LEFT), MANDATORY_TO_RIGHT(Lanes.TO_RIGHT), MANDATORY_STAY_IN_LANE(
-                Lanes.NO_CHANGE);
+                Lanes.NO_CHANGE), OVERTAKE_VIA_PEER(Lanes.TO_LEFT);
 
         private final int laneChangeDirection;
 
@@ -80,11 +80,6 @@ public class LaneChangeModel {
         }
 
     }
-
-    // private final boolean withEuropeanRules;
-    //
-    // /** critical speed for kicking in European rules (in m/s) */
-    // private final double vCritEur;
 
     private Vehicle me;
 
@@ -403,6 +398,11 @@ public class LaneChangeModel {
             }
         }
         return laneChangeDecision;
+    }
+
+    public LaneChangeDecision makeDecisionForOvertaking(Vehicle vehicle, Vehicle vehicleOnPeer) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

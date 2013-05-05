@@ -800,15 +800,42 @@ public class Vehicle {
     // lane-changing related methods
     // ---------------------------------------------------------------------------------
 
+    public boolean considerOvertaking(double dt, RoadSegment roadSegment, RoadSegment peerRoadSegment) {
+        LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
+        LOG.info("vehicle pos={}, vehicle={}", frontPosition, this);
+        double vehiclePositionOnPeer = peerRoadSegment.roadLength() - getFrontPosition();
+        Vehicle vehicleOnPeer = peerRoadSegment.rearVehicle(Lanes.MOST_INNER_LANE, vehiclePositionOnPeer);
+        LOG.info("check for rear vehicle on peer at position={}, see vehicle={}", vehiclePositionOnPeer,
+                (vehicleOnPeer != null ? vehicleOnPeer : "null"));
+        
+        if (vehicleOnPeer != null) {
+            double distance = calcDistance(peerRoadSegment, vehicleOnPeer);
+            if(distance>0){
+                lcDecision = laneChangeModel.makeDecisionForOvertaking(this, vehicleOnPeer);    
+            }
+            LOG.info("========== consider vehicle in other direction of travel: distance={}", distance);
+            LOG.info("net distance from me={}, netDistancefromOther={}", getNetDistance(vehicleOnPeer),
+                    vehicleOnPeer.getNetDistance(this));
+            LOG.info("roadSegmentId={}, vehiclePos={}, vehicleOnPeerPos=" + vehicleOnPeer.getFrontPosition()
+                    + ", vehiclePosOnPeer=" + vehiclePositionOnPeer, roadSegment.userId(), getFrontPosition());
+            LOG.info("vehicle={} evaluates vehicle in peer{}", this, vehicleOnPeer);
+            
+            
+        }
+        return lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER;
+    }
+
+    private double calcDistance(RoadSegment peerRoadSegment, Vehicle vehicleOnPeerRoad) {
+        double vehiclePositionOnPeer = peerRoadSegment.roadLength() - getFrontPosition();
+        return vehiclePositionOnPeer - vehicleOnPeerRoad.getFrontPosition();
+    }
+
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
+        // no lane-changing decision necessary for one-lane road. already checked before
+        assert roadSegment.laneCount() > 1;
 
         // no lane changing when not configured in xml.
         if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
-            return false;
-        }
-
-        // no lane-changing decision necessary for one-lane road
-        if (roadSegment.laneCount() < 2) {
             return false;
         }
 
@@ -1152,9 +1179,9 @@ public class Vehicle {
 
     @Override
     public String toString() {
-        return "Vehicle [label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
+        return "Vehicle [id=" + id + ", label=" + label + ", length=" + length + ", frontPosition=" + frontPosition
                 + ", frontPositionOld=" + frontPositionOld + ", speed=" + speed + ", accModel=" + accModel + ", acc="
-                + acc + ", accOld=" + accOld + ", id=" + id + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
+                + acc + ", accOld=" + accOld + ", vehNumber=" + vehNumber + ", lane=" + lane + "]";
     }
 
     /** returns a constant random number between 0 and 1 */

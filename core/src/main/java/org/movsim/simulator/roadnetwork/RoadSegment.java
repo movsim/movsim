@@ -791,7 +791,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void makeLaneChanges(double dt, double simulationTime, long iterationCount) {
-        
+        if (hasPeer()) {
+            doOvertaking(dt);
+        }
         if (laneCount < 2) {
             // need at least 2 lanes for lane changing
             return;
@@ -811,6 +813,27 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane - 1].addVehicle(vehicle);
                 }
+            }
+        }
+    }
+
+    private void doOvertaking(double dt) {
+        assert hasPeer();
+        if (userId.endsWith("+")) {
+            return;
+        }
+        final LaneSegment laneSegment = laneSegment(Lanes.MOST_INNER_LANE);
+        for (Iterator<Vehicle> vehIterator = laneSegment.iterator(); vehIterator.hasNext();) {
+            Vehicle vehicle = vehIterator.next();
+            assert vehicle.roadSegmentId() == id;
+            if (vehicle.considerOvertaking(dt, this, peerRoadSegment)) {
+                LOG.info("want overtaking: vehicle={}", vehicle);
+                // final int targetLane = vehicle.getTargetLane();
+                // assert targetLane != Lanes.NONE;
+                // assert laneSegments[targetLane - 1].type() != Lanes.Type.ENTRANCE;
+                // vehIterator.remove();
+                // vehicle.setLane(targetLane);
+                // laneSegments[targetLane - 1].addVehicle(vehicle);
             }
         }
     }
@@ -971,7 +994,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     /**
      * Finds the vehicle in the given lane immediately in front of the given position. That is a vehicle such that
-     * vehicle.positon() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
+     * vehicle.position() > vehicePos (strictly greater than). The vehicle whose position equals vehiclePos is deemed to
      * be in the rear.
      * 
      * @param lane
@@ -1354,6 +1377,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public void setPeerRoadSegment(RoadSegment peerRoadSegment) {
-        this.peerRoadSegment = Preconditions.checkNotNull(peerRoadSegment);
+        Preconditions.checkNotNull(peerRoadSegment);
+        Preconditions.checkArgument(!peerRoadSegment.equals(this));
+        this.peerRoadSegment = peerRoadSegment;
     }
 }
