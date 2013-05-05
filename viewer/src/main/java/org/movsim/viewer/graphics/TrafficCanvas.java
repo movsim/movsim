@@ -628,7 +628,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
                 * trafficLight.lightCount());
         return rect;
     }
-
+    
     /**
      * Draw a traffic light that has only one light
      * 
@@ -731,9 +731,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private static void drawTrafficLightsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        if (roadSegment.trafficLights() == null) {
-            return;
-        }
+        assert roadSegment.trafficLights() !=null;
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
 
@@ -741,21 +739,52 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
-            Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
-            switch (trafficLight.lightCount()) {
-            case 1:
-                drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
-                break;
-            case 2:
-                drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
-                break;
-            default:
-                drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
-                break;
+            for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
+                if (trafficLight.valid(lane)) {
+                    drawTrafficLightBar(g, roadMapping, trafficLight, lane);
+                }
             }
+        
+            //Rectangle2D trafficLightRect = trafficLightRect(roadMapping, trafficLight);
+            // TODO draw switch button instead ....
+//            switch (trafficLight.lightCount()) {
+//            case 1:
+//                drawTrafficLight1(g, trafficLight, trafficLightRect, radius);
+//                break;
+//            case 2:
+//                drawTrafficLight2(g, trafficLight, trafficLightRect, radius);
+//                break;
+//            default:
+//                drawTrafficLight3(g, trafficLight, trafficLightRect, radius);
+//                break;
+//            }
         }
     }
-
+    
+    private static void drawTrafficLightBar(Graphics2D g, RoadMapping roadMapping, TrafficLight trafficLight, int lane) {
+        final double height = roadMapping.laneWidth();
+        final double width = 5; //roadMapping.laneWidth();
+        final double offset = (lane-1)*roadMapping.laneWidth();
+        final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
+        final Rectangle2D rect = new Rectangle2D.Double(posTheta.x, posTheta.y, width, height);
+        
+        switch (trafficLight.status()) {
+        case GREEN:
+            g.setColor(Color.GREEN);
+            break;
+        case GREEN_RED:
+            g.setColor(Color.YELLOW);
+            break;
+        case RED:
+            g.setColor(Color.RED);
+            break;
+        case RED_GREEN:
+            g.setColor(Color.ORANGE);
+            break;
+        }
+        g.fill(rect);
+    }
+    
     private void drawSpeedLimits(Graphics2D g) {
         for (final RoadSegment roadSegment : roadNetwork) {
             drawSpeedLimitsOnRoad(g, roadSegment);
