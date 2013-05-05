@@ -55,7 +55,7 @@ public class TrafficLight implements TrafficSign {
 
     private TriggerCallback triggerCallback;
 
-    private final Set<TrafficLightStatus> possibleStati = new HashSet<>();
+    private final Set<TrafficLightStatus> possibleStati = new HashSet<>(); // deprecated, just for drawing trafficlights in viewer
 
     private final RoadSegment roadSegment;
 
@@ -129,20 +129,32 @@ public class TrafficLight implements TrafficSign {
         return status;
     }
 
+    // must be package-private, access only from controller
     void setState(TrafficLightStatus newStatus) {
         this.status = newStatus;
     }
 
     @Override
     public double position() {
-        Preconditions.checkArgument(!Double.isNaN(position), "traffic light without position");
         return position;
     }
 
+    // trigger from viewer via mouse-click (direct communication from signal to controller)
+    // shouldn't be called from external, use controller instead
     public void triggerNextPhase() {
         triggerCallback.nextPhase();
     }
 
+    void setTriggerCallback(TriggerCallback triggerCallback) {
+        this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
+    }
+
+    boolean hasTriggerCallback() {
+        return triggerCallback != null;
+    }
+
+    // not needed in future
+    @Deprecated
     void addPossibleState(TrafficLightStatus status) {
         possibleStati.add(status);
     }
@@ -152,6 +164,7 @@ public class TrafficLight implements TrafficSign {
      * 
      * @return
      */
+    @Deprecated
     public int lightCount() {
         return Math.min(3, possibleStati.size());
     }
@@ -166,14 +179,6 @@ public class TrafficLight implements TrafficSign {
         return "TrafficLight [controllerId = " + controllerId() + ", signalId = " + signalId() + ", status=" + status
                 + ", position=" + position + ", signalType=" + signalType + ", groupId = "
                 + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
-    }
-
-    void setTriggerCallback(TriggerCallback triggerCallback) {
-        this.triggerCallback = Preconditions.checkNotNull(triggerCallback);
-    }
-
-    boolean hasTriggerCallback() {
-        return triggerCallback != null;
     }
 
 }
