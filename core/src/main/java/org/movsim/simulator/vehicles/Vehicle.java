@@ -649,14 +649,18 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficLightWithDistance location = roadSegment.getNextDownstreamTrafficLight(
+        TrafficLightWithDistance traffLightWithDistance = roadSegment.getNextDownstreamTrafficLight(
                 getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
-        if (location != null) {
-            LOG.debug("consider trafficlight={}", location.toString());
-            assert location.distance >= 0 : "distance=" + location.distance;
-            trafficLightApproaching.update(this, location.trafficLight, location.distance);
+        if (traffLightWithDistance != null) {
+            if (traffLightWithDistance.trafficLight.valid(lane())) {
+            LOG.debug("consider trafficlight={}", traffLightWithDistance.toString());
+            assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
+            trafficLightApproaching.update(this, traffLightWithDistance.trafficLight, traffLightWithDistance.distance);
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
+            }
+            } else {
+                LOG.debug("on lane={} ignore trafficlight={}", lane(), traffLightWithDistance.trafficLight);
             }
         }
         return moderatedAcc;

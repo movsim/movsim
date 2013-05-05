@@ -29,9 +29,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.movsim.autogen.TrafficLightStatus;
+import org.movsim.network.autogen.opendrive.LaneValidity;
 import org.movsim.network.autogen.opendrive.OpenDRIVE;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +65,8 @@ public class TrafficLight implements TrafficSign {
     private final Controller controller;
     private final String signalType;
 
+    private boolean validLane[];
+
     public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
         this.controller = Preconditions.checkNotNull(controller);
         this.signal = Preconditions.checkNotNull(signal);
@@ -73,6 +77,21 @@ public class TrafficLight implements TrafficSign {
         this.position = signal.getS();
         this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
         this.groupId = controller.getId();
+        validLane = new boolean[roadSegment.laneCount()];
+        for (int i = 0; i < validLane.length; i++) {
+            validLane[i] = true;
+        }
+        setLaneValidity();
+    }
+
+    private void setLaneValidity() {
+        if (signal.isSetValidity()) {
+            for (LaneValidity laneValidity : signal.getValidity()) {
+                for (int i = Math.abs(laneValidity.getFromLane()); i <= Math.abs(laneValidity.getToLane()); i++) {
+                    validLane[i-1] = false;
+                }
+            }
+        }
     }
 
     private String checkTypesAndExtractSignalType() {
@@ -172,6 +191,12 @@ public class TrafficLight implements TrafficSign {
     @Override
     public RoadSegment roadSegment() {
         return roadSegment;
+    }
+
+    @Override
+    public boolean valid(int lane) {
+        Preconditions.checkArgument(lane >= Lanes.MOST_INNER_LANE && lane <= validLane.length, "invalid lane=" + lane);
+        return validLane[lane - 1];
     }
 
     @Override

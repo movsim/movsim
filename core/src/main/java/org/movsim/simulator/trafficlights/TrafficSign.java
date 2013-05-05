@@ -8,6 +8,6 @@ public interface TrafficSign {
 
     RoadSegment roadSegment();
 
-    // TODO lane specifics
+    boolean valid(int lane);
 
 }
