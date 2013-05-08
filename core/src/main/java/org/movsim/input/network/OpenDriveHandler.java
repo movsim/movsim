@@ -27,6 +27,7 @@ import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.roadmappings.RoadMappings;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
 import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
@@ -74,6 +75,7 @@ public class OpenDriveHandler {
         joinRoads(openDriveNetwork, roadNetwork);
         handleJunctions(openDriveNetwork, roadNetwork);
         addDefaultSinksForUnconnectedRoad(roadNetwork);
+        checkIfAllLanesAreConnected(roadNetwork);
         return true;
     }
 
@@ -181,7 +183,8 @@ public class OpenDriveHandler {
         if (road.isSetSignals()) {
             for (Signal signal : road.getSignals().getSignal()) {
                 if (hasPeer && !signal.isSetOrientation()) {
-                    throw new IllegalArgumentException("road="+road.getId()+" is bidirectional but signal orientation not set in signal="+signal.getId());
+                    throw new IllegalArgumentException("road=" + road.getId()
+                            + " is bidirectional but signal orientation not set in signal=" + signal.getId());
                 }
                 if (hasPeer
                         && !(signal.getOrientation().equals(LaneSectionType.LEFT.idAppender()) || signal
@@ -487,6 +490,25 @@ public class OpenDriveHandler {
         }
     }
 
+    private static void checkIfAllLanesAreConnected(RoadNetwork roadNetwork) {
+        boolean valid = true;
+        for (RoadSegment roadSegment : roadNetwork) {
+            if (roadSegment.hasSink()) {
+                continue;
+            }
+            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
+                if (laneSegment.sinkLaneSegment() == null) {
+                    LOG.error("no sinklane for lane={} on RoadSegment={}", laneSegment.lane(), laneSegment
+                            .roadSegment().userId());
+                    valid = false;
+                }
+            }
+        }
+        if (!valid) {
+            throw new IllegalArgumentException("network file defines unconnected lanes. See error log messages above.");
+        }
+    }
+
     private static Map<String, Road> createLookupMap(Collection<Road> roads) {
         Map<String, Road> idToRoad = new HashMap<>();
         for (Road road : roads) {
@@ -520,7 +542,7 @@ public class OpenDriveHandler {
     private static void addDefaultSinksForUnconnectedRoad(RoadNetwork roadNetwork) {
         int countSinks = 0;
         for (RoadSegment roadSegment : roadNetwork) {
-            if (!roadSegment.hasSink()) {
+            if (!roadSegment.hasDownstreamConnection()) {
                 countSinks++;
                 // roadSegment.setSink(new TrafficSink(roadSegment));
                 roadSegment.addDefaultSink();

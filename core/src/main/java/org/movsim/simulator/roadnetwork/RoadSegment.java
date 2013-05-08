@@ -281,6 +281,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return sink;
     }
 
+    public final boolean hasSink() {
+        return sink != null;
+    }
+
     /**
      * Sets the traffic sink for this road segment.
      * 
@@ -423,6 +427,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public boolean exitsOnto(int exitRoadSegmentId) {
         for (final LaneSegment laneSegment : laneSegments) {
             if (laneSegment.type() == Lanes.Type.EXIT) {
+                assert laneSegment.sinkLaneSegment() != null : "roadSegment=" + userId() + " with lane="
+                        + laneSegment.lane() + " has no downstream connection.";
                 if (laneSegment.sinkLaneSegment().roadSegment().id() == exitRoadSegmentId) {
                     return true;
                 }
@@ -1282,7 +1288,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         }
     }
     
-    public final boolean hasSink() {
+    public final boolean hasDownstreamConnection() {
         for (LaneSegment laneSegment : laneSegments) {
             if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
                 return true;
