@@ -60,7 +60,7 @@ class TrafficSignsImpl implements TrafficSigns {
     @Override
     public <T extends TrafficSign> T getNextTrafficSign(TrafficSignType type, double position, int lane) {
         TrafficSignWithDistance nextTrafficSignWithDistance = getNextTrafficSignWithDistance(type, position, lane);
-        return nextTrafficSignWithDistance.trafficSign();
+        return (T) (nextTrafficSignWithDistance == null ? null : nextTrafficSignWithDistance.trafficSign());
     }
     
     @Override
