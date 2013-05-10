@@ -369,7 +369,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public final LaneSegment sourceLaneSegment(int lane) {
-        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane
+                + " not defined for roadId=" + userId());
         return laneSegments[lane - 1].sourceLaneSegment();
     }
 
