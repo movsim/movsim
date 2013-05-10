@@ -33,8 +33,10 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightWithDistance;
+import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
+import org.movsim.simulator.roadnetwork.TrafficSignWithDistance;
 import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -649,18 +651,16 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficLightWithDistance traffLightWithDistance = roadSegment.getNextDownstreamTrafficLight(
-                getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
-        if (traffLightWithDistance != null) {
-            if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
-            LOG.debug("consider trafficlight={}", traffLightWithDistance.toString());
-            assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
-            trafficLightApproaching.update(this, traffLightWithDistance.trafficLight, traffLightWithDistance.distance);
+        TrafficSignWithDistance trafficSignWithDistance = roadSegment.getTrafficSigns().getNextTrafficSignWithDistance(
+                TrafficSignType.TRAFFICLIGHT, getFrontPosition(), lane());
+        if (trafficSignWithDistance != null) {
+            //if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
+            LOG.debug("consider trafficlight={}", trafficSignWithDistance.trafficSign());
+            //assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
+            TrafficLight trafficLight = trafficSignWithDistance.trafficSign();
+            trafficLightApproaching.update(this, trafficLight, trafficSignWithDistance.distance());
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
-            }
-            } else {
-                LOG.debug("on lane={} ignore trafficlight={}", lane(), traffLightWithDistance.trafficLight);
             }
         }
         return moderatedAcc;

@@ -214,8 +214,8 @@ public class OpenDriveHandler {
                             "Transform signal position from reverse direction: signal={}, originalPosition={}, roadSegment position="
                                     + signal.getS(), signal.getId(), originalS);
                 }
-                roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
-                // roadSegment.getTrafficSigns().add(new TrafficLight(signal, controller, roadSegment));
+                // roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
+                roadSegment.getTrafficSigns().add(new TrafficLight(signal, controller, roadSegment));
             }
         }
 

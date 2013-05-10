@@ -27,11 +27,8 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.network.autogen.opendrive.Lane.Speed;
@@ -39,6 +36,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -102,16 +100,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final LaneSegment laneSegments[];
     private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
-    private SortedSet<TrafficLight> trafficLights = new TreeSet<>(new Comparator<TrafficLight>() {
-        @Override
-        public int compare(TrafficLight a, TrafficLight b) {
-            if (a != b && Double.compare(a.position(), b.position()) == 0) {
-                throw new IllegalStateException("cannot have identical trafficlight positions=" + a.position());
-            }
-            return Double.compare(a.position(), b.position());
-        }
-    });
-
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
@@ -686,43 +674,43 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         applyVariableMessageSigns();
     }
 
-    /**
-     * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
-     * traffic light located.
-     * 
-     * @param position
-     * @return the next downstream traffic or null
-     */
-    TrafficLight getNextDownstreamTrafficLight(double position) {
-        for (TrafficLight trafficLight : trafficLights) {
-            double distance = trafficLight.position() - position;
-            if (distance > 0) {
-                // !!! assume that traffic lights are sorted with increasing position
-                // so that first traffic light can be considered as the next downstream one
-                return trafficLight;
-            }
-        }
-        return null;
-    }
-
-    // TODO profiling ... lookup done quite often even w/o any trafficlights
-    public TrafficLightWithDistance getNextDownstreamTrafficLight(double position, int lane,
-            double maxLookAheadDistance) {
-        TrafficLight trafficLight = getNextDownstreamTrafficLight(position);
-        double distance = (trafficLight != null) ? trafficLight.position() - position : roadLength
-                - position;
-        RoadSegment segment = this;
-        while (trafficLight == null && distance < maxLookAheadDistance) {
-            segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
-            if (segment == null) {
-                break;
-            }
-            trafficLight = segment.getNextDownstreamTrafficLight(0);
-            distance += (trafficLight != null) ? trafficLight.position() : segment.roadLength();
-        }
-        return trafficLight == null ? null : new TrafficLightWithDistance(trafficLight,
-                distance);
-    }
+    // /**
+    // * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
+    // * traffic light located.
+    // *
+    // * @param position
+    // * @return the next downstream traffic or null
+    // */
+    // TrafficLight getNextDownstreamTrafficLight(double position) {
+    // for (TrafficLight trafficLight : trafficLights) {
+    // double distance = trafficLight.position() - position;
+    // if (distance > 0) {
+    // // !!! assume that traffic lights are sorted with increasing position
+    // // so that first traffic light can be considered as the next downstream one
+    // return trafficLight;
+    // }
+    // }
+    // return null;
+    // }
+    //
+    // // TODO profiling ... lookup done quite often even w/o any trafficlights
+    // public TrafficLightWithDistance getNextDownstreamTrafficLight(double position, int lane,
+    // double maxLookAheadDistance) {
+    // TrafficLight trafficLight = getNextDownstreamTrafficLight(position);
+    // double distance = (trafficLight != null) ? trafficLight.position() - position : roadLength
+    // - position;
+    // RoadSegment segment = this;
+    // while (trafficLight == null && distance < maxLookAheadDistance) {
+    // segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
+    // if (segment == null) {
+    // break;
+    // }
+    // trafficLight = segment.getNextDownstreamTrafficLight(0);
+    // distance += (trafficLight != null) ? trafficLight.position() : segment.roadLength();
+    // }
+    // return trafficLight == null ? null : new TrafficLightWithDistance(trafficLight,
+    // distance);
+    // }
 
     private void applySpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {
@@ -1027,15 +1015,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Returns an iterable over all the traffic lights in the road segment.
-     * 
-     * @return an iterable over all the traffic lights in the road segment
-     */
-    public Iterable<TrafficLight> trafficLights() {
-        return trafficLights;
-    }
-
-    /**
      * Returns true if each lane in the vehicle array is sorted.
      * 
      * @return true if each lane in the vehicle array is sorted
@@ -1234,6 +1213,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.flowConservingBottlenecks = flowConservingBottlenecks;
     }
 
+    public Iterable<TrafficLight> trafficLights() {
+        return trafficSigns.values(TrafficSignType.TRAFFICLIGHT);
+    }
+
     /**
      * Asserts the road segment's class invariant. Used for debugging.
      */
@@ -1264,38 +1247,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return trafficSigns;
     }
 
-    /**
-     * Adds the {@link TrafficLight} to the {@link RoadSegment} and performs a sorting to assure ascending order
-     * of positions along the road stretch.
-     * <p>
-     * The caller has to assure that trafficlight id is unique in the whole network.
-     * </p>
-     * 
-     * @param trafficLight
-     */
-    public void addTrafficLight(TrafficLight trafficLight) {
-        Preconditions.checkArgument(trafficLight.position() >= 0
-                && trafficLight.position() <= roadLength, "inconsistent input data: traffic light position="
-                + trafficLight.position() + " does not fit onto road-id=" + userId() + " with length="
-                + roadLength());
-        trafficLights.add(trafficLight);
-    }
-
-    public final class TrafficLightWithDistance {
-        public final TrafficLight trafficLight;
-        public final double distance;
-
-        public TrafficLightWithDistance(TrafficLight location, double distance) {
-            this.trafficLight = Preconditions.checkNotNull(location);
-            this.distance = distance;
-        }
-
-        @Override
-        public String toString() {
-            return "TrafficLightWithDistance [trafficLight=" + trafficLight + ", distance="
-                    + distance + "]";
-        }
-    }
     
     public final boolean hasDownstreamConnection() {
         for (LaneSegment laneSegment : laneSegments) {

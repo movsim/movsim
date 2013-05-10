@@ -739,6 +739,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
+        
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
             for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
                 if (trafficLight.isValidLane(lane)) {
