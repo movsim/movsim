@@ -115,6 +115,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
+    
+    // container for trafficSigns on roadSegment
+    private final TrafficSigns trafficSigns;
 
     // Sources and Sinks
     private AbstractTrafficSource trafficSource;
@@ -166,6 +169,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
+        this.trafficSigns = new TrafficSignsImpl(this);
     }
 
     public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
@@ -180,6 +184,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
+        this.trafficSigns = new TrafficSignsImpl(this);
     }
 
     /**
@@ -1255,6 +1260,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.roadName = name;
     }
 
+    public TrafficSigns getTrafficSigns() {
+        return trafficSigns;
+    }
+
     /**
      * Adds the {@link TrafficLight} to the {@link RoadSegment} and performs a sorting to assure ascending order
      * of positions along the road stretch.
@@ -1347,4 +1356,5 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return "RoadSegment [id=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
                 + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
     }
+
 }

@@ -35,6 +35,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.TrafficSign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +107,11 @@ public class TrafficLight implements TrafficSign {
             }
         }
         return signalType;
+    }
+
+    @Override
+    public TrafficSignType getType() {
+        return TrafficSignType.TRAFFICLIGHT;
     }
 
     /**

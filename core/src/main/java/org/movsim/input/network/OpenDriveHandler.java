@@ -215,6 +215,7 @@ public class OpenDriveHandler {
                                     + signal.getS(), signal.getId(), originalS);
                 }
                 roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
+                // roadSegment.getTrafficSigns().add(new TrafficLight(signal, controller, roadSegment));
             }
         }
 
