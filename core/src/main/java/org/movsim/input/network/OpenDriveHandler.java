@@ -498,7 +498,7 @@ public class OpenDriveHandler {
                 continue;
             }
             for (LaneSegment laneSegment : roadSegment.laneSegments()) {
-                if (laneSegment.sinkLaneSegment() == null) {
+                if (laneSegment.sinkLaneSegment() == null && laneSegment.type() != Lanes.Type.ENTRANCE) {
                     LOG.error("no sinklane for lane={} on RoadSegment={}", laneSegment.lane(), laneSegment
                             .roadSegment().userId());
                     valid = false;
