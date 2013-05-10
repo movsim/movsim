@@ -75,12 +75,15 @@ class TrafficSignsImpl implements TrafficSigns {
 
         if (firstDownstreamOnLane == null) {
             // continue searching in downstream link(s)
-            RoadSegment nextSegment = roadSegment.sinkRoadSegment(lane);
-            while (firstDownstreamOnLane == null && nextSegment != null && distance < type.getLookAheadDistance()) {
-                firstDownstreamOnLane = nextSegment.getTrafficSigns().getNextTrafficSign(type, position, lane);
-                distance += (firstDownstreamOnLane != null) ? firstDownstreamOnLane.position() : nextSegment
+            LaneSegment nextLaneSegment = roadSegment.laneSegment(lane).sinkLaneSegment();
+
+            while (firstDownstreamOnLane == null && nextLaneSegment != null && distance < type.getLookAheadDistance()) {
+                int nextLane = nextLaneSegment.lane();
+                firstDownstreamOnLane = nextLaneSegment.roadSegment().getTrafficSigns()
+                        .getNextTrafficSign(type, position, nextLane);
+                distance += (firstDownstreamOnLane != null) ? firstDownstreamOnLane.position() : nextLaneSegment
                         .roadLength();
-                nextSegment = nextSegment.sinkRoadSegment(lane);
+                nextLaneSegment = nextLaneSegment.sinkLaneSegment();
             }
         }
         return firstDownstreamOnLane == null || distance > type.getLookAheadDistance() ? null
