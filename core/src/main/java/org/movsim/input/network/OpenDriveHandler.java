@@ -465,7 +465,7 @@ public class OpenDriveHandler {
                     LOG.info("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                     LOG.info("isReverse={}, roadPredecessorIsJunction={}", isReverse,
                             roadPredecessorIsJunction(junction, road));
-                    LOG.info("incomingRS={}, connectiongRoadSegment={}", incomingRoadSegment.userId(),
+                    LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
                             connectingRoadSegment.userId());
                     if (roadPredecessorIsJunction(junction, road)) {
                         if (isReverse) {

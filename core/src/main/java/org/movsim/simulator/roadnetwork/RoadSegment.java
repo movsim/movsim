@@ -1285,7 +1285,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
         @Override
         public String toString() {
-            return "Node[type=" + type + ", id=" + (this.hasId() ? this.getId() : "-") + "]";
+            return "Node[type=" + type + ", id=" + (this.hasId() ? this.getId() : "") + "]";
         }
 
     }
