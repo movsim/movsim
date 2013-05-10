@@ -1,10 +1,11 @@
 package org.movsim.simulator.roadnetwork;
 
 
-public interface TrafficSign {
+public interface TrafficSign extends Comparable<TrafficSign> {
 
     public enum TrafficSignType {
-        TRAFFICLIGHT(1000), SPEEDLIMIT(0);
+        TRAFFICLIGHT(1000);
+        /* TODO SPEEDLIMIT(0), VMS, DETECTOR, ....; */
 
         private final double lookAheadDistance;
 
@@ -15,6 +16,7 @@ public interface TrafficSign {
         double getLookAheadDistance() {
             return lookAheadDistance;
         }
+
     }
 
     TrafficSignType getType();
@@ -23,6 +25,6 @@ public interface TrafficSign {
 
     RoadSegment roadSegment();
 
-    boolean valid(int lane);
+    boolean isValidLane(int lane);
 
 }

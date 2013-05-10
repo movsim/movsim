@@ -652,7 +652,7 @@ public class Vehicle {
         TrafficLightWithDistance traffLightWithDistance = roadSegment.getNextDownstreamTrafficLight(
                 getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
         if (traffLightWithDistance != null) {
-            if (traffLightWithDistance.trafficLight.valid(lane())) {
+            if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
             LOG.debug("consider trafficlight={}", traffLightWithDistance.toString());
             assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
             trafficLightApproaching.update(this, traffLightWithDistance.trafficLight, traffLightWithDistance.distance);

@@ -6,7 +6,7 @@ public interface TrafficSigns {
 
     public <T extends TrafficSign> T getNextTrafficSign(TrafficSignType type, double position, int lane);
 
-    public boolean add(TrafficSign trafficSign);
+    public void add(TrafficSign trafficSign);
 
     public boolean hasTrafficSign(TrafficSignType type);
 }

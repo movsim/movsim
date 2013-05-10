@@ -35,7 +35,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.TrafficSign;
+import org.movsim.simulator.roadnetwork.TrafficSignBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ import com.google.common.base.Preconditions;
 /**
  * The Class TrafficLight.
  */
-public class TrafficLight implements TrafficSign {
+public class TrafficLight extends TrafficSignBase {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLight.class);
@@ -52,44 +52,36 @@ public class TrafficLight implements TrafficSign {
     /** The status. */
     private TrafficLightStatus status;
 
-    private final double position;
-
     private final String groupId; // unique mapping to infrastructure
 
     private TriggerCallback triggerCallback;
 
     private final Set<TrafficLightStatus> possibleStati = new HashSet<>(); // deprecated, just for drawing trafficlights in viewer
 
-    private final RoadSegment roadSegment;
-
     private final Signal signal;
     private final Controller controller;
     private final String signalType;
 
-    private boolean validLane[];
-
     public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
+        super(TrafficSignType.TRAFFICLIGHT, signal.getS(), roadSegment);
         this.controller = Preconditions.checkNotNull(controller);
         this.signal = Preconditions.checkNotNull(signal);
-        this.roadSegment = Preconditions.checkNotNull(roadSegment);
         Preconditions.checkArgument(signal.isSetId(), "id not set");
         Preconditions.checkArgument(!signal.getId().isEmpty(), "empty id!");
         Preconditions.checkArgument(signal.isSetS(), "signal.s not set");
-        this.position = signal.getS();
         this.signalType = Preconditions.checkNotNull(checkTypesAndExtractSignalType());
         this.groupId = controller.getId();
-        validLane = new boolean[roadSegment.laneCount()];
-        for (int i = 0; i < validLane.length; i++) {
-            validLane[i] = true;
-        }
         setLaneValidity();
     }
 
     private void setLaneValidity() {
         if (signal.isSetValidity()) {
+            for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
+                setLaneValidity(lane, false);
+            }
             for (LaneValidity laneValidity : signal.getValidity()) {
-                for (int i = Math.abs(laneValidity.getFromLane()); i <= Math.abs(laneValidity.getToLane()); i++) {
-                    validLane[i-1] = false;
+                for (int lane = Math.abs(laneValidity.getFromLane()); lane <= Math.abs(laneValidity.getToLane()); lane++) {
+                    setLaneValidity(lane, true);
                 }
             }
         }
@@ -107,11 +99,6 @@ public class TrafficLight implements TrafficSign {
             }
         }
         return signalType;
-    }
-
-    @Override
-    public TrafficSignType getType() {
-        return TrafficSignType.TRAFFICLIGHT;
     }
 
     /**
@@ -197,12 +184,6 @@ public class TrafficLight implements TrafficSign {
     @Override
     public RoadSegment roadSegment() {
         return roadSegment;
-    }
-
-    @Override
-    public boolean valid(int lane) {
-        Preconditions.checkArgument(lane >= Lanes.MOST_INNER_LANE && lane <= validLane.length, "invalid lane=" + lane);
-        return validLane[lane - 1];
     }
 
     @Override

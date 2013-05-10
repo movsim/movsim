@@ -741,7 +741,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final double radius = 0.8 * roadMapping.laneWidth();
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
             for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
-                if (trafficLight.valid(lane)) {
+                if (trafficLight.isValidLane(lane)) {
                     drawTrafficLightBar(g, roadMapping, trafficLight, lane);
                 }
             }
