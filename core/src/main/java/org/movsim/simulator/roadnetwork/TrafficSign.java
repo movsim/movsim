@@ -1,10 +1,11 @@
 package org.movsim.simulator.roadnetwork;
 
 
+
 public interface TrafficSign extends Comparable<TrafficSign> {
 
     public enum TrafficSignType {
-        TRAFFICLIGHT(1000);
+        TRAFFICLIGHT(1000), SPEEDLIMIT(0);
         /* TODO SPEEDLIMIT(0), VMS, DETECTOR, ....; */
 
         private final double lookAheadDistance;
@@ -27,4 +28,22 @@ public interface TrafficSign extends Comparable<TrafficSign> {
 
     boolean isValidLane(int lane);
 
+    
+    /**
+     * Self-defined OpenDRIVE.Road.Objects.Object.type attribute values.
+     * 
+     */
+    public enum XodrRoadObjectType {
+        SPEEDLIMIT("speedlimit");
+
+        private final String openDriveIdentifier;
+
+        XodrRoadObjectType(String keyword) {
+            this.openDriveIdentifier = keyword;
+        }
+
+        public String xodrIdentifier() {
+            return openDriveIdentifier;
+        }
+    }
 }

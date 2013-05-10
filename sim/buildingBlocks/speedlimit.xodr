@@ -25,6 +25,12 @@
                 </right>
             </laneSection>
         </lanes>
+        <!-- not yet implemented -->
+        <objects> 
+          <object type="speedlimit" s="700" validLength="500" name="speedlimit demo" >
+			  <userData code="valueKMH" value="80" />
+		    </object>
+        </objects>
     </road>
 </OpenDRIVE>
 

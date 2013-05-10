@@ -34,6 +34,8 @@ import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
 import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.SpeedLimit2;
+import org.movsim.simulator.roadnetwork.TrafficSign;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.xml.NetworkLoadAndValidation;
@@ -174,12 +176,39 @@ public class OpenDriveHandler {
             // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
             // entries overwrite previous entry
             if (lane.isSetSpeed()) {
-                // TODO speed traffic signs better covered by "roadObjects" in xodr
-                // TODO set s-coordinate for reverse driving direction
+                LOG.warn("speed limit for lane will be replaced by road.object soon.");
                 roadSegment.setSpeedLimits(lane.getSpeed());
             }
         }
 
+        if (road.isSetObjects()) {
+            for (OpenDRIVE.Road.Objects.Object roadObject : road.getObjects().getObject()) {
+
+                if (hasPeer && !laneType.idAppender().equals(roadObject.getOrientation())) {
+                    // ignore object in other driving direction
+                    continue;
+                }
+
+                if (laneType.isReverseDirection()) {
+                    double originalS = roadObject.getS();
+                    roadObject.setS(roadSegment.roadLength() - originalS);
+                    LOG.debug(
+                            "Transform road object position for backward link: roadObject={}, originalPosition={}, roadSegment position="
+                                    + roadObject.getS(), roadObject.getId(), originalS);
+                }
+
+                String roadObjectType = roadObject.getType();
+
+                if (roadObjectType.equals(TrafficSign.XodrRoadObjectType.SPEEDLIMIT.xodrIdentifier())) {
+                    LOG.debug("add speed limit={}", roadObject.toString());
+                    SpeedLimit2 test = new SpeedLimit2(roadObject, roadSegment);
+                    //roadSegment.getTrafficSigns().add();
+                } else {
+                    LOG.warn("road object type " + roadObjectType + " not supported.");
+                }
+
+            }
+        }
         if (road.isSetSignals()) {
             for (Signal signal : road.getSignals().getSignal()) {
                 if (hasPeer && !signal.isSetOrientation()) {
@@ -214,7 +243,6 @@ public class OpenDriveHandler {
                             "Transform signal position from reverse direction: signal={}, originalPosition={}, roadSegment position="
                                     + signal.getS(), signal.getId(), originalS);
                 }
-                // roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
                 roadSegment.getTrafficSigns().add(new TrafficLight(signal, controller, roadSegment));
             }
         }

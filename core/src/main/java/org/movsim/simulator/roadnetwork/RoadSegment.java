@@ -983,6 +983,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * 
      * @param list
      */
+    @Deprecated
     public void setSpeedLimits(List<Speed> list) {
         this.speedLimits = new SpeedLimits(list);
     }
