@@ -98,8 +98,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final double roadLength;
     private final int laneCount;
     private final LaneSegment laneSegments[];
-    private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
+    // TODO use new trafficSign concept for detectors, speedlimits and VMS
+    private LoopDetectors loopDetectors;
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
@@ -112,7 +113,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private TrafficSink sink;
     private RoadMapping roadMapping;
 
-    /** simple ramp with dropping mechanism */
+    /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
 
     public static class TestCar {
@@ -1239,12 +1240,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.simpleRamp = simpleRamp;
     }
 
-    // TODO not yet used
+    // not yet used
     public void setUserRoadname(String name) {
         this.roadName = name;
     }
 
-    public TrafficSigns getTrafficSigns() {
+    public TrafficSigns trafficSigns() {
         return trafficSigns;
     }
 

@@ -79,7 +79,7 @@ class TrafficSignsImpl implements TrafficSigns {
 
             while (firstDownstreamOnLane == null && nextLaneSegment != null && distance < type.getLookAheadDistance()) {
                 int nextLane = nextLaneSegment.lane();
-                firstDownstreamOnLane = nextLaneSegment.roadSegment().getTrafficSigns()
+                firstDownstreamOnLane = nextLaneSegment.roadSegment().trafficSigns()
                         .getNextTrafficSign(type, position, nextLane);
                 distance += (firstDownstreamOnLane != null) ? firstDownstreamOnLane.position() : nextLaneSegment
                         .roadLength();

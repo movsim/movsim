@@ -651,7 +651,7 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficSignWithDistance trafficSignWithDistance = roadSegment.getTrafficSigns().getNextTrafficSignWithDistance(
+        TrafficSignWithDistance trafficSignWithDistance = roadSegment.trafficSigns().getNextTrafficSignWithDistance(
                 TrafficSignType.TRAFFICLIGHT, getFrontPosition(), lane());
         if (trafficSignWithDistance != null) {
             //if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
