@@ -178,24 +178,17 @@
     </road>
     
     
-    <road name="" length="200" id="10" junction="-1">
+    <road name="exit from forward link" length="200" id="10" junction="-1">
         <link>
             <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
-			<!-- bug when direction is reversed -->
-             <!-- <geometry s="0.0" x="2300" y="320" hdg="4.712" length="200"> -->
-            <geometry s="0.0" x="2320" y="520" hdg="1.571" length="200"> 
+            <geometry s="0.0" x="2300" y="320" hdg="4.712" length="200">
                 <line />
             </geometry>
         </planView>
         <lanes>
             <laneSection s="0.0">
-				 <left>
-                    <lane id="1" type="driving" level="0">
-                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                    </lane>
-                </left>
                 <right>
                     <lane id="-1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
@@ -205,7 +198,29 @@
         </lanes>
     </road>
     
-    <road name="" id="20" junction="-1">
+    <road name="entry to forward link" length="200" id="11" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="30" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="2320" y="520" hdg="1.571" length="200">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
+				<right>
+                    <lane id="-1" type="driving" level="0">
+                        <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
+                    </lane>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+    
+    
+    
+    <road name="entry to backward link" id="20" junction="-1">
         <link>
             <successor elementType="junction" elementId="15" contactPoint="start" />
         </link>
@@ -216,11 +231,26 @@
         </planView>
         <lanes>
             <laneSection s="0.0">
-				<left>
-                    <lane id="1" type="driving" level="0">
+                <right>
+                    <lane id="-1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                     </lane>
-                </left>
+                </right>
+            </laneSection>
+        </lanes>
+    </road>
+
+    <road name="exit from backward link" id="21" junction="-1">
+        <link>
+            <predecessor elementType="junction" elementId="30" contactPoint="start" />
+        </link>
+        <planView>
+            <geometry s="0.0" x="2320" y="280" hdg="1.571" length="200">
+                <line />
+            </geometry>
+        </planView>
+        <lanes>
+            <laneSection s="0.0">
                 <right>
                     <lane id="-1" type="driving" level="0">
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
@@ -231,25 +261,29 @@
     </road>
     
     <junction id="15">
+        <!-- through lanes -->
         <connection incomingRoad="2" connectingRoad="3" contactPoint="start">
             <laneLink from="2" to="2" />
 			<laneLink from="1" to="1" />
             <laneLink from="-1" to="-1" /> 
             <laneLink from="-2" to="-2" />
         </connection>
+        <!-- exit from forward link -->
         <connection incomingRoad="2" connectingRoad="10" contactPoint="start">
-            <laneLink from="-3" to="1" />
+            <laneLink from="-3" to="-1" />
         </connection>
         
-        <connection incomingRoad="10" connectingRoad="3" contactPoint="start">
-            <laneLink from="-1" to="-3" />
-        </connection>
-        
+        <!-- entry from backward link -->
         <connection incomingRoad="2" connectingRoad="20" contactPoint="start">
             <laneLink from="3" to="-1" />
         </connection>
         
-        <connection incomingRoad="20" connectingRoad="3" contactPoint="start">
+        <!-- entry from forward link -->
+        <connection incomingRoad="11" connectingRoad="3" contactPoint="start">
+            <laneLink from="-1" to="-3" />
+        </connection>
+        
+        <connection incomingRoad="21" connectingRoad="3" contactPoint="start">
             <laneLink from="1" to="3" />
         </connection>
     </junction>

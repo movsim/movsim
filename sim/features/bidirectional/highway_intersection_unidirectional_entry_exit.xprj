@@ -19,7 +19,7 @@
             </LaneChangeModelType>
         </VehiclePrototypeConfiguration>
     </VehiclePrototypes>
-    <Scenario network_filename="highway_intersection.xodr">
+    <Scenario network_filename="highway_intersection_unidirectional_entry_exit.xodr">
         <Simulation timestep="0.2">
             <TrafficComposition>
                 <VehicleType label="ACC2" fraction="0.1" relative_v0_randomization="0.2" route_label="west_exit" />
@@ -43,12 +43,12 @@
                 </TrafficSource>
             </Road>
             
-            <Road id="20+">
+            <Road id="20">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="100" v="5" />
                 </TrafficSource>
             </Road>
-            <Road id="10+">
+            <Road id="11">
                 <TrafficSource>
                     <Inflow t="0" q_per_hour="100" v="5" />
                 </TrafficSource>
@@ -64,12 +64,12 @@
             <Route label="west_exit">
                 <Road id="1+" />
                 <Road id="2+" />
-                <Road id="10-" />
+                <Road id="10" />
             </Route>
             <Route label="east_exit">
                 <Road id="4-" />
                 <Road id="3-" />
-                <Road id="20-" />
+                <Road id="21" />
             </Route>
         </Routes>
     </Scenario>

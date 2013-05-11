@@ -460,13 +460,15 @@ public class OpenDriveHandler {
                             laneLink.getFrom());
                     RoadSegment connectingRoadSegment = getRoadSegment(roadNetwork, connection.getConnectingRoad(),
                             laneLink.getTo());
-                    final boolean isReverse = laneLink.getTo() > 0 || laneLink.getFrom() > 0;
+                    // FIXME bug: connections are not correctly set in all connection cases
+                    // example: features/bidirectional/intersection_highway.xodr when the Road=10 is defined reverse
+                    final boolean isReverse = /* laneLink.getTo>0 || */laneLink.getFrom() > 0;
                     LOG.info("junction={}, road={}", junction.getId(), road.getId());
+                    LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
+                            connectingRoadSegment.userId());
                     LOG.info("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                     LOG.info("isReverse={}, roadPredecessorIsJunction={}", isReverse,
                             roadPredecessorIsJunction(junction, road));
-                    LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
-                            connectingRoadSegment.userId());
                     if (roadPredecessorIsJunction(junction, road)) {
                         if (isReverse) {
                             Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
