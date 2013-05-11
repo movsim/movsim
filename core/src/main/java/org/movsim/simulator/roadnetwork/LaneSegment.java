@@ -79,7 +79,8 @@ public class LaneSegment implements Iterable<Vehicle> {
      */
     LaneSegment(RoadSegment roadSegment, int lane) {
         this.roadSegment = roadSegment;
-        assert lane >= Lanes.MOST_INNER_LANE;
+        // overtaking lane is Lane == 0
+        // assert lane >= Lanes.MOST_INNER_LANE;
         this.lane = lane;
         vehicles = new ArrayList<>(VEHICLES_PER_LANE_INITIAL_SIZE);
         type = Lanes.Type.TRAFFIC;

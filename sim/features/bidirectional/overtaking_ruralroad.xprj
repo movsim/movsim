@@ -22,15 +22,19 @@
     <Scenario network_filename="ruralroad.xodr">
         <Simulation timestep="0.2">
             <TrafficComposition>
-                <VehicleType label="ACC1" fraction="0.8" relative_v0_randomization="0.2" />
-                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.2" />
+                <VehicleType label="ACC1" fraction="0.7" relative_v0_randomization="0.4" />
+                <VehicleType label="ACC2" fraction="0.3" relative_v0_randomization="0.2" />
             </TrafficComposition>
             <Road id="3-">
+				<TrafficComposition>
+                <VehicleType label="ACC2" fraction="0.2" />
+            </TrafficComposition>
                 <InitialConditions>
-                    <!-- <MicroIC position="80" speed="5" label="ACC1" /> -->
                     <MicroIC position="100" speed="10" label="ACC2" />
                 </InitialConditions>
-                <!-- <TrafficSource>              <Inflow t="0" q_per_hour="70" v="15" />               </TrafficSource> -->
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="50" />
+                </TrafficSource>
             </Road>
             <Road id="1+">
                 <InitialConditions>
@@ -38,7 +42,9 @@
                     <MicroIC position="100" speed="5" label="ACC2" />
                     <MicroIC position="10" speed="10" label="ACC1" />
                 </InitialConditions>
-                <!-- <TrafficSource>                    <Inflow t="0" q_per_hour="60" v="15" />                 </TrafficSource> -->
+                <TrafficSource>
+                    <Inflow t="0" q_per_hour="60"  />
+                </TrafficSource>
             </Road>
         </Simulation>
     </Scenario>

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -156,12 +156,12 @@ public class LaneChangeModel {
         if (decision.isMandatory()) {
             return decision;
         }
-        
+
         decision = checkForLaneChangeForEnteringVehicle(roadSegment);
         if (!decision.noDecisionMade()) {
             return decision;
         }
-        
+
         // check discretionary lane changes
         decision = determineDiscretionaryLaneChangeDirection(roadSegment);
 
@@ -343,10 +343,10 @@ public class LaneChangeModel {
                 && roadSegment.laneSegment(roadSegment.laneCount()).type() == Lanes.Type.ENTRANCE
                 && currentLane == roadSegment.trafficLaneMax()) {
             Vehicle frontVehicle = roadSegment.laneSegment(roadSegment.trafficLaneMax()).frontVehicle(me);
-            if(frontVehicle==null || frontVehicle.type() == Vehicle.Type.OBSTACLE){
+            if (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) {
                 return LaneChangeDecision.NONE;
             }
-            
+
             double accToFront = me.getLongitudinalModel().calcAcc(me, frontVehicle);
             if (accToFront < -lcModelMOBIL.getParameter().getSafeDeceleration()) {
                 // check own disadvantage to change to left to decide to make room
@@ -356,12 +356,12 @@ public class LaneChangeModel {
                                     me.getFrontPosition(), currentLane, me.getNetDistance(frontVehicle), me.getSpeed(),
                                     me.getRelSpeed(frontVehicle), accToFront));
                 }
-                final int newLane = currentLane + Lanes.TO_LEFT; 
+                final int newLane = currentLane + Lanes.TO_LEFT;
                 final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
 
                 if (newLaneSegment.type() == Lanes.Type.ENTRANCE) {
                     // never change lane into an entrance lane
-                    return LaneChangeDecision.NONE; 
+                    return LaneChangeDecision.NONE;
                 }
                 final Vehicle newFront = newLaneSegment.frontVehicle(me);
                 if (newFront != null) {
@@ -390,7 +390,8 @@ public class LaneChangeModel {
                 newLaneSegment.removeVehicle(index);
                 me.setLane(currentLane);
 
-                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc) || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {
+                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc)
+                        || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {
                     return LaneChangeDecision.NONE;
                 }
                 LOG.debug("finally change to left to make room for vehicle at entrance lane ...");
@@ -400,7 +401,8 @@ public class LaneChangeModel {
         return laneChangeDecision;
     }
 
-    
+    // ---------------------------------------------------------------------------------------------
+
     private double minTargetGap = 100;
     private double maxGapBehindLeader = 200;
     private double safetyTimeGapParameter = 2; // could be taken from IDM family but no access
@@ -417,42 +419,48 @@ public class LaneChangeModel {
 
         LaneChangeDecision decision = LaneChangeDecision.NONE;
 
+        // TODO handling of connecting RS
         Vehicle frontVehicleInLane = roadSegment.frontVehicleOnLane(me);
-        double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
-        if (frontVehicleInLane != null) {
-            LOG.info("brutDistance={}, frontVehicle={}", brutDistanceToFrontVehicleInLane, frontVehicleInLane);
-        }
-        Vehicle secondFrontVehicleInLane = frontVehicleInLane == null ? null : roadSegment.laneSegment(
-                frontVehicleInLane.lane()).frontVehicle(frontVehicleInLane);
-        double spaceOnTargetLane = (frontVehicleInLane != null && secondFrontVehicleInLane != null) ? frontVehicleInLane
-                .getNetDistance(secondFrontVehicleInLane) : 100000 /* infinite gap */;
-        LOG.info("space on targetlane={}", spaceOnTargetLane);
-
         if (frontVehicleInLane != null && !frontVehicleInLane.inProcessOfLaneChange()
-                && me.getLongitudinalModel().getDesiredSpeed() > frontVehicleInLane.getLongitudinalModel()
-                        .getDesiredSpeed()
-                && me.getBrutDistance(frontVehicleInLane) < maxGapBehindLeader && spaceOnTargetLane > minTargetGap) {
+                && frontVehicleInLane.type() == Vehicle.Type.VEHICLE) {
+            double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
+            LOG.debug("brutDistance={}, frontVehicle={}", brutDistanceToFrontVehicleInLane, frontVehicleInLane);
 
-            // if (me.getId() == 8) {
-            // LOG.info("vehicleId=8");
-            // }
-            double spaceToFrontVeh = brutDistanceToFrontVehicleInLane + me.getLongitudinalModel().getMinimumGap();
-            // free model acceleration: large distance, dv=0
-            double accConst = me.getLongitudinalModel().calcAccSimple(10000, me.getSpeed(), 0);
-            accConst /= magicFactorReduceFreeAcc;
+            Vehicle secondFrontVehicleInLane = roadSegment.laneSegment(frontVehicleInLane.lane()).roadSegment()
+                    .frontVehicleOnLane(frontVehicleInLane);
+            double spaceOnTargetLane = (secondFrontVehicleInLane != null) ? frontVehicleInLane
+                    .getNetDistance(secondFrontVehicleInLane) : 100000 /* infinite gap */;
+            LOG.debug("space on targetlane={}", spaceOnTargetLane);
 
-            // time needed when accelerating constantly
-            double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
-            double safetyMargin = critFactorTTC * me.getSpeed() * safetyTimeGapParameter;
-            double neededDist = timeManeuver * (me.getSpeed() + vehicleOnPeer.getSpeed()) + spaceToFrontVeh
-                    + safetyMargin;
-            if (distanceToVehicleOnPeer > neededDist) {
-                LOG.info("overtaking possible...");
-                decision = LaneChangeDecision.OVERTAKE_VIA_PEER;
+            if (me.getLongitudinalModel().getDesiredSpeed() > frontVehicleInLane.getLongitudinalModel()
+                    .getDesiredSpeed()
+                    && me.getBrutDistance(frontVehicleInLane) < maxGapBehindLeader
+                    && spaceOnTargetLane > minTargetGap) {
+
+                double spaceToFrontVeh = brutDistanceToFrontVehicleInLane + me.getLongitudinalModel().getMinimumGap();
+                // free model acceleration: large distance, dv=0
+                double accConst = me.getLongitudinalModel().calcAccSimple(10000, me.getSpeed(), 0);
+                accConst /= magicFactorReduceFreeAcc;
+
+                // time needed when accelerating constantly
+                double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
+                double safetyMargin = critFactorTTC * me.getSpeed() * safetyTimeGapParameter;
+                double neededDist = timeManeuver * (me.getSpeed() + vehicleOnPeer.getSpeed()) + spaceToFrontVeh
+                        + safetyMargin;
+                if (distanceToVehicleOnPeer > neededDist) {
+                    decision = LaneChangeDecision.OVERTAKE_VIA_PEER;
+                }
             }
         }
-
         return decision;
+    }
+
+    public LaneChangeDecision makeDecisionForFinishOvertaking(LaneSegment newLaneSegment) {
+        // evaluate situation on the right lane
+        if (isSafeLaneChange(newLaneSegment)) {
+            return LaneChangeDecision.MANDATORY_TO_RIGHT;
+        }
+        return LaneChangeDecision.NONE;
     }
 
 }

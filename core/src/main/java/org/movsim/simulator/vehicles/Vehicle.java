@@ -615,7 +615,11 @@ public class Vehicle {
         accModel = calcAccModel(laneSegment, leftLaneSegment, alphaTLocal, alphaV0Local, alphaALocal);
 
         // moderate acceleration by traffic lights or for preparing mandatory lane changes to exit sliproads
-        acc = moderateAcceleration(accModel, roadSegment);
+        if (lane() != Lanes.OVERTAKING) {
+            acc = moderateAcceleration(accModel, roadSegment);
+        } else {
+            acc = accModel;
+        }
 
         acc = Math.max(acc + accError, -maxDeceleration); // limited to maximum deceleration
     }
@@ -806,7 +810,14 @@ public class Vehicle {
 
     public boolean considerOvertaking(double dt, RoadSegment roadSegment, RoadSegment peerRoadSegment) {
         LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
-        LOG.debug("vehicle pos={}, vehicle={}", frontPosition, this);
+        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
+            return false;
+        }
+        if (peerRoadSegment == null) {
+            return false;
+        }
+        assert !inProcessOfLaneChange();
+        assert lane() == Lanes.MOST_INNER_LANE;
         double vehiclePositionOnPeer = peerRoadSegment.roadLength() - getFrontPosition();
         Vehicle vehicleOnPeer = peerRoadSegment.rearVehicle(Lanes.MOST_INNER_LANE, vehiclePositionOnPeer);
         LOG.debug("check for rear vehicle on peer at position={}, see vehicle={}", vehiclePositionOnPeer,
@@ -825,8 +836,8 @@ public class Vehicle {
         }
         if (lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER) {
             setTargetLane(Lanes.OVERTAKING);
-            resetDelay();
-            updateLaneChangeDelay(dt);
+            resetDelay(dt);
+            // updateLaneChangeDelay(dt);
             LOG.debug("do overtaking lane change to={} into target lane={}", lcDecision, targetLane);
         }
         return lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER;
@@ -837,19 +848,45 @@ public class Vehicle {
         return vehiclePositionOnPeer - vehicleOnPeerRoad.getFrontPosition();
     }
 
+    public boolean considerFinishOvertaking(double dt, LaneSegment laneSegment) {
+        assert lane() == Lanes.OVERTAKING;
+        assert !inProcessOfLaneChange();
+        if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
+            return false;
+        }
+
+        // if (inProcessOfLaneChange()) {
+        // // need some adaptation time for performing overtaking, void turning back too early
+        // updateLaneChangeDelay(dt);
+        // return false;
+        // }
+
+        LaneChangeDecision lcDecision = laneChangeModel.makeDecisionForFinishOvertaking(laneSegment);
+        if (lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT) {
+            setTargetLane(Lanes.MOST_INNER_LANE);
+            resetDelay(dt);
+            // updateLaneChangeDelay(dt);
+            LOG.info("finish overtaking, turn from lane={} into target lane={}", laneOld, targetLane);
+        }
+        return lcDecision == LaneChangeDecision.MANDATORY_TO_RIGHT;
+    }
+
     public boolean considerLaneChange(double dt, RoadSegment roadSegment) {
-        // no lane-changing decision necessary for one-lane road. already checked before
-        assert roadSegment.laneCount() > 1;
+        if (roadSegment.laneCount() <= 1) {
+            // no lane-changing decision necessary for one-lane road. already checked before
+            return false;
+        }
 
         // no lane changing when not configured in xml.
         if (laneChangeModel == null || !laneChangeModel.isInitialized()) {
             return false;
         }
 
-        if (inProcessOfLaneChange()) {
-            updateLaneChangeDelay(dt);
-            return false;
-        }
+        assert !inProcessOfLaneChange();
+        // if (inProcessOfLaneChange()) {
+        // updateLaneChangeDelay(dt);
+        // return false;
+        // }
 
         // if not in lane-changing process do determine if new lane is more attractive and lane change is possible
         LaneChangeDecision lcDecision = laneChangeModel.makeDecision(roadSegment);
@@ -858,8 +895,8 @@ public class Vehicle {
         // initiates a lane change: set targetLane to new value the lane will be assigned by the vehicle container !!
         if (laneChangeDirection != Lanes.NO_CHANGE) {
             setTargetLane(lane + laneChangeDirection);
-            resetDelay();
-            updateLaneChangeDelay(dt);
+            resetDelay(dt);
+            // updateLaneChangeDelay(dt); // updating when checking for finishing maneuver
             LOG.debug("do lane change to={} into target lane={}", laneChangeDirection, targetLane);
             return true;
         }
@@ -889,8 +926,9 @@ public class Vehicle {
     /**
      * Reset delay.
      */
-    private void resetDelay() {
+    private void resetDelay(double dt) {
         tLaneChangeDelay = 0;
+        updateLaneChangeDelay(dt); // TODO hack that updateLaneChangeDelay must be called for inProcessOfLaneChange being true
     }
 
     /**
@@ -899,7 +937,7 @@ public class Vehicle {
      * @param dt
      *            the dt
      */
-    private void updateLaneChangeDelay(double dt) {
+    public void updateLaneChangeDelay(double dt) {
         tLaneChangeDelay += dt;
     }
 
