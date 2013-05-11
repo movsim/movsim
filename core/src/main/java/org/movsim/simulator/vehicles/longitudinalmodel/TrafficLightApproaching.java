@@ -27,7 +27,8 @@ package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
+import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
+import org.movsim.simulator.roadnetwork.TrafficSignWithDistance;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -42,7 +43,8 @@ public class TrafficLightApproaching {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
-    public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
+
+    // public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
 
     private boolean considerTrafficLight;
 
@@ -70,14 +72,13 @@ public class TrafficLightApproaching {
         accTrafficLight = 0;
         considerTrafficLight = false;
 
-        if (distanceToTrafficlight > MAX_LOOK_AHEAD_DISTANCE) {
-            LOG.debug("traffic light at distance={} to far away -- MAX_LOOK_AHEAD_DISTANCE={}", distanceToTrafficlight,
-                    MAX_LOOK_AHEAD_DISTANCE);
-            return;
-        }
+        // if (distanceToTrafficlight > MAX_LOOK_AHEAD_DISTANCE) {
+        // LOG.debug("traffic light at distance={} to far away -- MAX_LOOK_AHEAD_DISTANCE={}", distanceToTrafficlight,
+        // MAX_LOOK_AHEAD_DISTANCE);
+        // return;
+        // }
 
-        if (trafficLight.status() == TrafficLightStatus.GREEN && me.getLength() > 30
-                && distanceToTrafficlight < 0.5 * MAX_LOOK_AHEAD_DISTANCE) {
+        if (trafficLight.status() == TrafficLightStatus.GREEN && me.getLength() > 30 && distanceToTrafficlight < 500) {
             // special case here: only relevant if vehicle is really long and next trafficlight is quite close
             checkSpaceBeforePassingTrafficlight(me, trafficLight, distanceToTrafficlight);
         } else if (trafficLight.status() != TrafficLightStatus.GREEN) {
@@ -154,11 +155,11 @@ public class TrafficLightApproaching {
     private void checkSpaceBeforePassingTrafficlight(Vehicle me, TrafficLight trafficLight,
             double distanceToTrafficlight) {
         // relative to position of first traffic light
-        TrafficLightLocationWithDistance nextTrafficlight = trafficLight.roadSegment().getNextDownstreamTrafficLight(
-                trafficLight.position(), me.lane(), MAX_LOOK_AHEAD_DISTANCE);
-        if (nextTrafficlight != null) {
-            double distanceBetweenTrafficlights = nextTrafficlight.distance;
-            if (distanceBetweenTrafficlights < 0.5 * MAX_LOOK_AHEAD_DISTANCE) {
+        TrafficSignWithDistance trafficLightWithDistance = trafficLight.roadSegment().trafficSigns()
+                .getNextTrafficSignWithDistance(TrafficSignType.TRAFFICLIGHT, trafficLight.position(), me.lane());
+        if (trafficLightWithDistance != null) {
+            double distanceBetweenTrafficlights = trafficLightWithDistance.distance();
+            if (distanceBetweenTrafficlights < 500) {
                 double effectiveFrontVehicleLengths = calcEffectiveFrontVehicleLengths(me, trafficLight,
                         distanceToTrafficlight + distanceBetweenTrafficlights);
                 LOG.debug("distanceBetweenTrafficlights={}, effectiveLengths+ownLength={}",

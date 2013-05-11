@@ -63,7 +63,7 @@ class GraphExporter {
             @Override
             public Map<String, String> getComponentAttributes(RoadSegment e) {
                 Map<String, String> map = new LinkedHashMap<>();
-                map.put("label", "edge=" + e.userId() + ", length=" + e.roadLength());
+                map.put("label", "edge=" + e.userId() + ", length=" + e.roadLength() + ", lanes=" + e.laneCount());
                 return map;
             }
         };

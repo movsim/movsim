@@ -1,63 +1,21 @@
 package org.movsim.simulator.trafficlights;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.movsim.autogen.ControllerGroup;
 import org.movsim.autogen.Phase;
 import org.movsim.autogen.TrafficLightCondition;
 import org.movsim.autogen.TrafficLightState;
-import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.vehicles.Vehicle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-
-class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
-
-    /** The Constant LOG. */
-    private static final Logger LOG = LoggerFactory.getLogger(TrafficLightControlGroup.class);
-
-    private final List<Phase> phases;
-
-    private final String groupId;
-
-    private final String firstSignalId; // needed for logging
-
-    private int currentPhaseIndex = 0;
+class TrafficLightControllerInternal extends TrafficLightController {
 
     private double currentPhaseDuration;
 
     private final double conditionRange;
 
-    /** mapping from the 'physical' controller.control.type to the 'logical' trafficlight */
-    private final Map<String, TrafficLight> trafficLights = new HashMap<>();
-
-    TrafficLightControlGroup(ControllerGroup controllerGroup, String firstSignalId) {
-        Preconditions.checkNotNull(controllerGroup);
-        this.groupId = controllerGroup.getId();
-        this.firstSignalId = firstSignalId;
+    TrafficLightControllerInternal(ControllerGroup controllerGroup) {
+        super(controllerGroup);
         this.conditionRange = controllerGroup.getRange();
-        this.phases = ImmutableList.copyOf(controllerGroup.getPhase()); // deep copy
-        createTrafficlights();
-    }
-
-    private void createTrafficlights() {
-        for (Phase phase : phases) {
-            for (TrafficLightState trafficlightState : phase.getTrafficLightState()) {
-                String type = Preconditions.checkNotNull(trafficlightState.getType());
-                TrafficLight trafficLight = trafficLights.get(type);
-                if (trafficLight == null) {
-                    trafficLight = new TrafficLight(type, groupId, this);
-                    trafficLights.put(type, trafficLight);
-                }
-                trafficLight.addPossibleState(trafficlightState.getStatus());
-            }
-        }
     }
 
     @Override
@@ -65,16 +23,13 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         currentPhaseDuration += dt;
         determinePhase();
         updateTrafficLights();
-        if (recordDataCallback != null) {
-            recordDataCallback.recordData(simulationTime, iterationCount, trafficLights.values());
-        }
+        super.timeStep(dt, simulationTime, iterationCount);
     }
 
     @Override
     public void nextPhase() {
-        LOG.debug("triggered next phase for controller group.");
+        super.nextPhase();
         currentPhaseDuration = 0; // reset
-        setNextPhaseIndex();
     }
 
     private void determinePhase() {
@@ -140,49 +95,6 @@ class TrafficLightControlGroup implements SimulationTimeStep, TriggerCallback {
         for (TrafficLightState trafficLightState : actualPhase.getTrafficLightState()) {
             trafficLights.get(trafficLightState.getType()).setState(trafficLightState.getStatus());
         }
-    }
-
-    Iterable<TrafficLight> trafficLights() {
-        return ImmutableList.copyOf(trafficLights.values().iterator());
-    }
-
-    TrafficLight getTrafficLight(String signalType) {
-        return Preconditions.checkNotNull(trafficLights.get(signalType), "signalType=\"" + signalType
-                + "\" not defined in controllerGroup=" + groupId);
-    }
-
-    private void setNextPhaseIndex() {
-        if (currentPhaseIndex == phases.size() - 1) {
-            currentPhaseIndex = 0;
-            return;
-        }
-        currentPhaseIndex++;
-    }
-
-    public String groupId() {
-        return groupId;
-    }
-
-    String firstSignalId() {
-        return firstSignalId;
-    }
-
-    public interface RecordDataCallback {
-        /**
-         * Callback to allow the application to process or record the traffic light data.
-         * 
-         * @param simulationTime
-         *            the current logical time in the simulation
-         * @param iterationCount
-         * @param trafficLights
-         */
-        public void recordData(double simulationTime, long iterationCount, Iterable<TrafficLight> trafficLights);
-    }
-
-    private RecordDataCallback recordDataCallback;
-
-    public void setRecorder(RecordDataCallback recordDataCallback) {
-        this.recordDataCallback = recordDataCallback;
     }
 
 }

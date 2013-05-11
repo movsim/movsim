@@ -212,13 +212,13 @@
             </laneSection>
         </lanes>
         <signals>
-            <signal s="300" id="tl1" name="first" />
+            <signal s="300" id="tl1" name="first and only signal" />
         </signals>
     </road>
     
      <!-- id maps to movsim controllerGroupID -->
     <controller id="group1">
-		<control signalId="tl1"/>
+		<control signalId="tl1" type="first"/>
     </controller>
     
     <junction id="1001" name="">

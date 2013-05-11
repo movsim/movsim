@@ -42,7 +42,7 @@ import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.VariableMessageSignBase;
 import org.movsim.simulator.roadnetwork.VariableMessageSignDiversion;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
 import org.movsim.viewer.util.SwingHelper;
@@ -103,10 +103,10 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                 }
                 trafficCanvas.repaint();
             }
-            if (roadSegment.trafficLightLocations() != null) {
+            if (roadSegment.trafficLights() != null) {
                 final RoadMapping roadMapping = roadSegment.roadMapping();
-                for (final TrafficLightLocation trafficLightLocation : roadSegment.trafficLightLocations()) {
-                    final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLightLocation);
+                for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
+                    final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
                     // check if the user has clicked on a traffic light, if they have then change the
                     // traffic light to the next color
                     final Point point = e.getPoint();
@@ -120,7 +120,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                         return;
                     }
                     if (trafficLightRect.contains(transformedPoint)) {
-                        trafficLightLocation.getTrafficLight().triggerNextPhase();
+                        trafficLight.triggerNextPhase();
                         trafficCanvas.repaint();
                     }
                 }

@@ -44,7 +44,7 @@ import com.google.common.base.Preconditions;
  */
 class SpeedLimits implements Iterable<SpeedLimit> {
 
-    final static Logger logger = LoggerFactory.getLogger(SpeedLimits.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SpeedLimits.class);
 
     private double[] positions;
     private double[] speeds;
@@ -102,7 +102,7 @@ class SpeedLimits implements Iterable<SpeedLimit> {
         final double pos = vehicle.getFrontPosition();
         final double speedlimit = calcSpeedLimit(pos);
         vehicle.setSpeedlimit(speedlimit);
-        logger.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
+        LOG.debug("pos={} --> speedlimit in km/h={}", pos, 3.6 * speedlimit);
     }
 
     /**

@@ -647,6 +647,8 @@
             <xs:attribute name="id" type="xs:string" use="required" />
             <!-- spatial range for checking conditions in meters -->
             <xs:attribute name="range" type="positiveDouble" default="100" />
+            <!-- external control of traffic lights, no change within movsim --> 
+            <xs:attribute name="external" type="xs:boolean" default="false" />
         </xs:complexType>
     </xs:element>
     <xs:element name="Phase">
@@ -661,7 +663,7 @@
         <xs:complexType>
 			<!-- serves as reference to the xodr controller.control.type attribute -->
             <xs:attribute name="type" type="xs:string" use="required" />
-            <xs:attribute name="status" type="TrafficLightStatus" />
+            <xs:attribute name="status" type="TrafficLightStatus" use="required" />
             <xs:attribute name="condition" type="TrafficLightCondition" default="none"/>
         </xs:complexType>
     </xs:element>

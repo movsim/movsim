@@ -27,13 +27,14 @@ import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.roadmappings.RoadMappings;
+import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
 import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
 import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.xml.NetworkLoadAndValidation;
 import org.slf4j.Logger;
@@ -74,6 +75,7 @@ public class OpenDriveHandler {
         joinRoads(openDriveNetwork, roadNetwork);
         handleJunctions(openDriveNetwork, roadNetwork);
         addDefaultSinksForUnconnectedRoad(roadNetwork);
+        checkIfAllLanesAreConnected(roadNetwork);
         return true;
     }
 
@@ -177,6 +179,8 @@ public class OpenDriveHandler {
             // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
             // entries overwrite previous entry
             if (lane.isSetSpeed()) {
+                // TODO speed traffic signs better covered by "roadObjects" in xodr
+                // TODO set s-coordinate for reverse driving direction
                 roadSegment.setSpeedLimits(lane.getSpeed());
             }
         }
@@ -184,7 +188,8 @@ public class OpenDriveHandler {
         if (road.isSetSignals()) {
             for (Signal signal : road.getSignals().getSignal()) {
                 if (hasPeer && !signal.isSetOrientation()) {
-                    throw new IllegalArgumentException("road="+road.getId()+" is bidirectional but signal orientation not set in signal="+signal.getId());
+                    throw new IllegalArgumentException("road=" + road.getId()
+                            + " is bidirectional but signal orientation not set in signal=" + signal.getId());
                 }
                 if (hasPeer
                         && !(signal.getOrientation().equals(LaneSectionType.LEFT.idAppender()) || signal
@@ -207,12 +212,27 @@ public class OpenDriveHandler {
                     throw new IllegalArgumentException("trafficlight signal with id=" + signal.getId()
                             + " is not referenced in xodr <controller> definition.");
                 }
-                roadSegment.addTrafficLightLocation(new TrafficLightLocation(signal, controller));
+                if (laneType.isReverseDirection()) {
+                    double originalS = signal.getS();
+                    signal.setS(roadSegment.roadLength() - originalS);
+                    LOG.debug(
+                            "Transform signal position from reverse direction: signal={}, originalPosition={}, roadSegment position="
+                                    + signal.getS(), signal.getId(), originalS);
+                }
+                // roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
+                roadSegment.trafficSigns().add(new TrafficLight(signal, controller, roadSegment));
             }
         }
 
         if (road.isSetObjects()) {
             for (OpenDRIVE.Road.Objects.Tunnel tunnel : road.getObjects().getTunnel()) {
+                if (laneType.isReverseDirection()) {
+                    double originalS = tunnel.getS();
+                    tunnel.setS(roadSegment.roadLength() - originalS);
+                    LOG.debug(
+                            "Transform tunnel position for reverse direction: tunnel={}, originalPosition={}, roadSegment position="
+                                    + tunnel.getS(), tunnel.getId(), originalS);
+                }
                 roadMapping.addClippingRegion(tunnel.getS(), tunnel.getLength());
             }
         }
@@ -440,13 +460,15 @@ public class OpenDriveHandler {
                             laneLink.getFrom());
                     RoadSegment connectingRoadSegment = getRoadSegment(roadNetwork, connection.getConnectingRoad(),
                             laneLink.getTo());
-                    final boolean isReverse = laneLink.getTo() > 0 || laneLink.getFrom() > 0;
+                    // FIXME bug: connections are not correctly set in all connection cases
+                    // example: features/bidirectional/intersection_highway.xodr when the Road=10 is defined reverse
+                    final boolean isReverse = /* laneLink.getTo>0 || */laneLink.getFrom() > 0;
                     LOG.info("junction={}, road={}", junction.getId(), road.getId());
+                    LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
+                            connectingRoadSegment.userId());
                     LOG.info("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                     LOG.info("isReverse={}, roadPredecessorIsJunction={}", isReverse,
                             roadPredecessorIsJunction(junction, road));
-                    LOG.info("incomingRS={}, connectiongRoadSegment={}", incomingRoadSegment.userId(),
-                            connectingRoadSegment.userId());
                     if (roadPredecessorIsJunction(junction, road)) {
                         if (isReverse) {
                             Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,
@@ -468,6 +490,25 @@ public class OpenDriveHandler {
                     }
                 }
             }
+        }
+    }
+
+    private static void checkIfAllLanesAreConnected(RoadNetwork roadNetwork) {
+        boolean valid = true;
+        for (RoadSegment roadSegment : roadNetwork) {
+            if (roadSegment.hasSink()) {
+                continue;
+            }
+            for (LaneSegment laneSegment : roadSegment.laneSegments()) {
+                if (laneSegment.sinkLaneSegment() == null && laneSegment.type() != Lanes.Type.ENTRANCE) {
+                    LOG.error("no sinklane for lane={} on RoadSegment={}", laneSegment.lane(), laneSegment
+                            .roadSegment().userId());
+                    valid = false;
+                }
+            }
+        }
+        if (!valid) {
+            throw new IllegalArgumentException("network file defines unconnected lanes. See error log messages above.");
         }
     }
 
@@ -504,7 +545,7 @@ public class OpenDriveHandler {
     private static void addDefaultSinksForUnconnectedRoad(RoadNetwork roadNetwork) {
         int countSinks = 0;
         for (RoadSegment roadSegment : roadNetwork) {
-            if (!roadSegment.hasSink()) {
+            if (!roadSegment.hasDownstreamConnection()) {
                 countSinks++;
                 // roadSegment.setSink(new TrafficSink(roadSegment));
                 roadSegment.addDefaultSink();

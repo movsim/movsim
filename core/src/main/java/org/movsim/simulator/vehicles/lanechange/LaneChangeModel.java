@@ -400,9 +400,59 @@ public class LaneChangeModel {
         return laneChangeDecision;
     }
 
-    public LaneChangeDecision makeDecisionForOvertaking(Vehicle vehicle, Vehicle vehicleOnPeer) {
-        // TODO Auto-generated method stub
-        return null;
+    
+    private double minTargetGap = 100;
+    private double maxGapBehindLeader = 200;
+    private double safetyTimeGapParameter = 2; // could be taken from IDM family but no access
+
+    private double critFactorTTC = 4; // 6
+    private double magicFactorReduceFreeAcc = 4;
+
+    public LaneChangeDecision makeDecisionForOvertaking(Vehicle vehicleOnPeer, RoadSegment roadSegment,
+            double distanceToVehicleOnPeer) {
+
+        assert me.lane() == Lanes.MOST_INNER_LANE;
+        assert vehicleOnPeer != null;
+        assert distanceToVehicleOnPeer > 0;
+
+        LaneChangeDecision decision = LaneChangeDecision.NONE;
+
+        Vehicle frontVehicleInLane = roadSegment.frontVehicleOnLane(me);
+        double brutDistanceToFrontVehicleInLane = me.getBrutDistance(frontVehicleInLane);
+        if (frontVehicleInLane != null) {
+            LOG.info("brutDistance={}, frontVehicle={}", brutDistanceToFrontVehicleInLane, frontVehicleInLane);
+        }
+        Vehicle secondFrontVehicleInLane = frontVehicleInLane == null ? null : roadSegment.laneSegment(
+                frontVehicleInLane.lane()).frontVehicle(frontVehicleInLane);
+        double spaceOnTargetLane = (frontVehicleInLane != null && secondFrontVehicleInLane != null) ? frontVehicleInLane
+                .getNetDistance(secondFrontVehicleInLane) : 100000 /* infinite gap */;
+        LOG.info("space on targetlane={}", spaceOnTargetLane);
+
+        if (frontVehicleInLane != null && !frontVehicleInLane.inProcessOfLaneChange()
+                && me.getLongitudinalModel().getDesiredSpeed() > frontVehicleInLane.getLongitudinalModel()
+                        .getDesiredSpeed()
+                && me.getBrutDistance(frontVehicleInLane) < maxGapBehindLeader && spaceOnTargetLane > minTargetGap) {
+
+            // if (me.getId() == 8) {
+            // LOG.info("vehicleId=8");
+            // }
+            double spaceToFrontVeh = brutDistanceToFrontVehicleInLane + me.getLongitudinalModel().getMinimumGap();
+            // free model acceleration: large distance, dv=0
+            double accConst = me.getLongitudinalModel().calcAccSimple(10000, me.getSpeed(), 0);
+            accConst /= magicFactorReduceFreeAcc;
+
+            // time needed when accelerating constantly
+            double timeManeuver = Math.sqrt(2 * spaceToFrontVeh / accConst);
+            double safetyMargin = critFactorTTC * me.getSpeed() * safetyTimeGapParameter;
+            double neededDist = timeManeuver * (me.getSpeed() + vehicleOnPeer.getSpeed()) + spaceToFrontVeh
+                    + safetyMargin;
+            if (distanceToVehicleOnPeer > neededDist) {
+                LOG.info("overtaking possible...");
+                decision = LaneChangeDecision.OVERTAKE_VIA_PEER;
+            }
+        }
+
+        return decision;
     }
 
 }

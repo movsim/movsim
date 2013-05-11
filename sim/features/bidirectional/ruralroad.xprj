@@ -3,7 +3,7 @@
     <VehiclePrototypes>
         <VehiclePrototypeConfiguration label="ACC1" length="6" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterACC v0="35" T="1.0" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
+                <ModelParameterACC v0="40" T="1.0" s0="2" s1="0" delta="4" a="1.2" b="2.0" coolness="1" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.1" right_bias_acceleration="0.05" politeness="0.1" />
@@ -12,7 +12,7 @@
         <!-- trucks -->
         <VehiclePrototypeConfiguration label="ACC2" length="40" maximum_deceleration="9">
             <AccelerationModelType>
-                <ModelParameterACC v0="15" T="1.2" s0="2" s1="0" delta="4" a="0.8" b="2.0" coolness="1" />
+                <ModelParameterACC v0="10" T="1.2" s0="2" s1="0" delta="4" a="0.8" b="2.0" coolness="1" />
             </AccelerationModelType>
             <LaneChangeModelType european_rules="true" crit_speed_eur="20">
                 <ModelParameterMOBIL safe_deceleration="4.0" minimum_gap="2.0" threshold_acceleration="0.2" right_bias_acceleration="0.3" politeness="0.1" />
@@ -34,8 +34,9 @@
             </Road> 
             <Road id="1+">
 				<InitialConditions>
-                    <!-- <MicroIC position="10" speed="5" label="ACC1" /> -->
-                    <MicroIC position="30" speed="10" label="ACC2" />
+					<MicroIC position="150" speed="5" label="ACC1" />
+                    <MicroIC position="100" speed="5" label="ACC2" />
+                    <MicroIC position="10" speed="10" label="ACC1" />
                     </InitialConditions>
                 <!-- <TrafficSource>                    <Inflow t="0" q_per_hour="60" v="15" />                 </TrafficSource> -->
             </Road>

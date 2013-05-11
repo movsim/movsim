@@ -33,8 +33,10 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.RoadSegment.TrafficLightLocationWithDistance;
+import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
+import org.movsim.simulator.roadnetwork.TrafficSignWithDistance;
 import org.movsim.simulator.roadnetwork.routing.Route;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
@@ -649,12 +651,14 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficLightLocationWithDistance location = roadSegment.getNextDownstreamTrafficLight(
-                getFrontPosition(), lane(), TrafficLightApproaching.MAX_LOOK_AHEAD_DISTANCE);
-        if (location != null) {
-            LOG.debug("consider trafficlight={}", location.toString());
-            assert location.distance >= 0 : "distance=" + location.distance;
-            trafficLightApproaching.update(this, location.trafficLightLocation.getTrafficLight(), location.distance);
+        TrafficSignWithDistance trafficSignWithDistance = roadSegment.trafficSigns().getNextTrafficSignWithDistance(
+                TrafficSignType.TRAFFICLIGHT, getFrontPosition(), lane());
+        if (trafficSignWithDistance != null) {
+            //if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
+            LOG.debug("consider trafficlight={}", trafficSignWithDistance.trafficSign());
+            //assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
+            TrafficLight trafficLight = trafficSignWithDistance.trafficSign();
+            trafficLightApproaching.update(this, trafficLight, trafficSignWithDistance.distance());
             if (trafficLightApproaching.considerTrafficLight()) {
                 moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
             }
@@ -773,7 +777,7 @@ public class Vehicle {
     }
 
     public final void setLane(int lane) {
-        assert lane >= Lanes.MOST_INNER_LANE;
+        assert lane >= Lanes.MOST_INNER_LANE || lane == Lanes.OVERTAKING;
         assert this.lane != lane;
         laneOld = this.lane;
         this.lane = lane;
@@ -802,25 +806,28 @@ public class Vehicle {
 
     public boolean considerOvertaking(double dt, RoadSegment roadSegment, RoadSegment peerRoadSegment) {
         LaneChangeDecision lcDecision = LaneChangeDecision.NONE;
-        LOG.info("vehicle pos={}, vehicle={}", frontPosition, this);
+        LOG.debug("vehicle pos={}, vehicle={}", frontPosition, this);
         double vehiclePositionOnPeer = peerRoadSegment.roadLength() - getFrontPosition();
         Vehicle vehicleOnPeer = peerRoadSegment.rearVehicle(Lanes.MOST_INNER_LANE, vehiclePositionOnPeer);
-        LOG.info("check for rear vehicle on peer at position={}, see vehicle={}", vehiclePositionOnPeer,
+        LOG.debug("check for rear vehicle on peer at position={}, see vehicle={}", vehiclePositionOnPeer,
                 (vehicleOnPeer != null ? vehicleOnPeer : "null"));
         
         if (vehicleOnPeer != null) {
             double distance = calcDistance(peerRoadSegment, vehicleOnPeer);
-            if(distance>0){
-                lcDecision = laneChangeModel.makeDecisionForOvertaking(this, vehicleOnPeer);    
+            // LOG.info("========== consider vehicle in other direction of travel: distance={}", distance);
+            // LOG.info("net distance from me={}, netDistancefromOther={}", getNetDistance(vehicleOnPeer),
+            // vehicleOnPeer.getNetDistance(this));
+            // LOG.info("roadSegmentId={}, vehiclePos={}, vehicleOnPeerPos=" + vehicleOnPeer.getFrontPosition()
+            // + ", vehiclePosOnPeer=" + vehiclePositionOnPeer, roadSegment.userId(), getFrontPosition());
+            if (distance > 0) {
+                lcDecision = laneChangeModel.makeDecisionForOvertaking(vehicleOnPeer, roadSegment, distance);
             }
-            LOG.info("========== consider vehicle in other direction of travel: distance={}", distance);
-            LOG.info("net distance from me={}, netDistancefromOther={}", getNetDistance(vehicleOnPeer),
-                    vehicleOnPeer.getNetDistance(this));
-            LOG.info("roadSegmentId={}, vehiclePos={}, vehicleOnPeerPos=" + vehicleOnPeer.getFrontPosition()
-                    + ", vehiclePosOnPeer=" + vehiclePositionOnPeer, roadSegment.userId(), getFrontPosition());
-            LOG.info("vehicle={} evaluates vehicle in peer{}", this, vehicleOnPeer);
-            
-            
+        }
+        if (lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER) {
+            setTargetLane(Lanes.OVERTAKING);
+            resetDelay();
+            updateLaneChangeDelay(dt);
+            LOG.debug("do overtaking lane change to={} into target lane={}", lcDecision, targetLane);
         }
         return lcDecision == LaneChangeDecision.OVERTAKE_VIA_PEER;
     }
@@ -870,7 +877,7 @@ public class Vehicle {
      *            the new target lane
      */
     private void setTargetLane(int targetLane) {
-        assert targetLane >= Lanes.MOST_INNER_LANE;
+        assert targetLane >= Lanes.MOST_INNER_LANE || targetLane == Lanes.OVERTAKING;
         assert targetLane != lane;
         this.targetLane = targetLane;
     }

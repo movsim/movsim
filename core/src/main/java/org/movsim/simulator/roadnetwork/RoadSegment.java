@@ -27,11 +27,8 @@
 package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.movsim.network.autogen.opendrive.Lane.Speed;
@@ -39,7 +36,8 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.trafficlights.TrafficLightLocation;
+import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
+import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,22 +98,15 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final double roadLength;
     private final int laneCount;
     private final LaneSegment laneSegments[];
-    private LoopDetectors loopDetectors;
     private FlowConservingBottlenecks flowConservingBottlenecks;
-    private SortedSet<TrafficLightLocation> trafficLightLocations = new TreeSet<>(
-            new Comparator<TrafficLightLocation>() {
-                @Override
-                public int compare(TrafficLightLocation a, TrafficLightLocation b) {
-                    if (a != b && Double.compare(a.position(), b.position()) == 0) {
-                        throw new IllegalStateException("cannot have identical trafficlight positions=" + a.position());
-                    }
-                    return Double.compare(a.position(), b.position());
-                }
-            });
-
+    // TODO use new trafficSign concept for detectors, speedlimits and VMS
+    private LoopDetectors loopDetectors;
     private SpeedLimits speedLimits;
     private Slopes slopes;
     private VariableMessageSigns variableMessageSigns;
+    
+    // container for trafficSigns on roadSegment
+    private final TrafficSigns trafficSigns;
 
     // Sources and Sinks
     private AbstractTrafficSource trafficSource;
@@ -124,7 +115,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private RoadSegment peerRoadSegment;
 
-    /** simple ramp with dropping mechanism */
+    /** simple ramp (source) with dropping mechanism */
     private SimpleRamp simpleRamp;
 
     public static class TestCar {
@@ -169,6 +160,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
+        this.trafficSigns = new TrafficSignsImpl(this);
     }
 
     public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
@@ -183,6 +175,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
+        this.trafficSigns = new TrafficSignsImpl(this);
     }
 
     /**
@@ -284,6 +277,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return sink;
     }
 
+    public final boolean hasSink() {
+        return sink != null;
+    }
+
     /**
      * Sets the traffic sink for this road segment.
      * 
@@ -375,7 +372,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public final LaneSegment sourceLaneSegment(int lane) {
-        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount);
+        Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane
+                + " not defined for roadId=" + userId());
         return laneSegments[lane - 1].sourceLaneSegment();
     }
 
@@ -426,6 +424,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     public boolean exitsOnto(int exitRoadSegmentId) {
         for (final LaneSegment laneSegment : laneSegments) {
             if (laneSegment.type() == Lanes.Type.EXIT) {
+                assert laneSegment.sinkLaneSegment() != null : "roadSegment=" + userId() + " with lane="
+                        + laneSegment.lane() + " has no downstream connection.";
                 if (laneSegment.sinkLaneSegment().roadSegment().id() == exitRoadSegmentId) {
                     return true;
                 }
@@ -678,43 +678,43 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         applyVariableMessageSigns();
     }
 
-    /**
-     * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
-     * traffic light located.
-     * 
-     * @param position
-     * @return the next downstream traffic or null
-     */
-    TrafficLightLocation getNextDownstreamTrafficLight(double position) {
-        for (TrafficLightLocation trafficLightLocation : trafficLightLocations) {
-            double distance = trafficLightLocation.position() - position;
-            if (distance > 0) {
-                // !!! assume that traffic lights are sorted with increasing position
-                // so that first traffic light can be considered as the next downstream one
-                return trafficLightLocation;
-            }
-        }
-        return null;
-    }
-
-    // TODO profiling ... lookup done quite often even w/o any trafficlights
-    public TrafficLightLocationWithDistance getNextDownstreamTrafficLight(double position, int lane,
-            double maxLookAheadDistance) {
-        TrafficLightLocation trafficLightLocation = getNextDownstreamTrafficLight(position);
-        double distance = (trafficLightLocation != null) ? trafficLightLocation.position() - position : roadLength
-                - position;
-        RoadSegment segment = this;
-        while (trafficLightLocation == null && distance < maxLookAheadDistance) {
-            segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
-            if (segment == null) {
-                break;
-            }
-            trafficLightLocation = segment.getNextDownstreamTrafficLight(0);
-            distance += (trafficLightLocation != null) ? trafficLightLocation.position() : segment.roadLength();
-        }
-        return trafficLightLocation == null ? null : new TrafficLightLocationWithDistance(trafficLightLocation,
-                distance);
-    }
+    // /**
+    // * finds the next traffic light in downstream direction relative to the given position. Returns null if there is no
+    // * traffic light located.
+    // *
+    // * @param position
+    // * @return the next downstream traffic or null
+    // */
+    // TrafficLight getNextDownstreamTrafficLight(double position) {
+    // for (TrafficLight trafficLight : trafficLights) {
+    // double distance = trafficLight.position() - position;
+    // if (distance > 0) {
+    // // !!! assume that traffic lights are sorted with increasing position
+    // // so that first traffic light can be considered as the next downstream one
+    // return trafficLight;
+    // }
+    // }
+    // return null;
+    // }
+    //
+    // // TODO profiling ... lookup done quite often even w/o any trafficlights
+    // public TrafficLightWithDistance getNextDownstreamTrafficLight(double position, int lane,
+    // double maxLookAheadDistance) {
+    // TrafficLight trafficLight = getNextDownstreamTrafficLight(position);
+    // double distance = (trafficLight != null) ? trafficLight.position() - position : roadLength
+    // - position;
+    // RoadSegment segment = this;
+    // while (trafficLight == null && distance < maxLookAheadDistance) {
+    // segment = segment.sinkRoadSegment(Math.min(lane, segment.laneCount));
+    // if (segment == null) {
+    // break;
+    // }
+    // trafficLight = segment.getNextDownstreamTrafficLight(0);
+    // distance += (trafficLight != null) ? trafficLight.position() : segment.roadLength();
+    // }
+    // return trafficLight == null ? null : new TrafficLightWithDistance(trafficLight,
+    // distance);
+    // }
 
     private void applySpeedLimits() {
         if (speedLimits != null && speedLimits.isEmpty() == false) {
@@ -808,7 +808,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     final int targetLane = vehicle.getTargetLane();
                     assert targetLane != Lanes.NONE;
                     assert laneSegments[targetLane - 1].type() != Lanes.Type.ENTRANCE;
-                    // iteratorRemove avoids ConcurrentModificationException
                     vehIterator.remove();
                     vehicle.setLane(targetLane);
                     laneSegments[targetLane - 1].addVehicle(vehicle);
@@ -819,7 +818,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     private void doOvertaking(double dt) {
         assert hasPeer();
-        if (userId.endsWith("+")) {
+        if (userId.endsWith("-")) {
+            // HACK FOR DEVELOPMENT
             return;
         }
         final LaneSegment laneSegment = laneSegment(Lanes.MOST_INNER_LANE);
@@ -827,13 +827,13 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
             Vehicle vehicle = vehIterator.next();
             assert vehicle.roadSegmentId() == id;
             if (vehicle.considerOvertaking(dt, this, peerRoadSegment)) {
-                LOG.info("want overtaking: vehicle={}", vehicle);
-                // final int targetLane = vehicle.getTargetLane();
-                // assert targetLane != Lanes.NONE;
+                LOG.info("############################# want overtaking: vehicle={}", vehicle);
+                int targetLane = vehicle.getTargetLane();
+                assert targetLane == Lanes.OVERTAKING;
                 // assert laneSegments[targetLane - 1].type() != Lanes.Type.ENTRANCE;
-                // vehIterator.remove();
-                // vehicle.setLane(targetLane);
-                // laneSegments[targetLane - 1].addVehicle(vehicle);
+                vehIterator.remove();
+                vehicle.setLane(targetLane);
+                laneSegments[targetLane - 1].addVehicle(vehicle);
             }
         }
     }
@@ -1043,15 +1043,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Returns an iterable over all the traffic lights in the road segment.
-     * 
-     * @return an iterable over all the traffic lights in the road segment
-     */
-    public Iterable<TrafficLightLocation> trafficLightLocations() {
-        return trafficLightLocations;
-    }
-
-    /**
      * Returns true if each lane in the vehicle array is sorted.
      * 
      * @return true if each lane in the vehicle array is sorted
@@ -1250,6 +1241,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.flowConservingBottlenecks = flowConservingBottlenecks;
     }
 
+    public Iterable<TrafficLight> trafficLights() {
+        return trafficSigns.values(TrafficSignType.TRAFFICLIGHT);
+    }
+
     /**
      * Asserts the road segment's class invariant. Used for debugging.
      */
@@ -1271,45 +1266,17 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.simpleRamp = simpleRamp;
     }
 
-    // TODO not yet used
+    // not yet used
     public void setUserRoadname(String name) {
         this.roadName = name;
     }
 
-    /**
-     * Adds the {@code TrafficLightLocation} to the {@code RoadSegment} and performs a sorting to assure ascending order
-     * of positions along the road stretch.
-     * <p>
-     * The caller has to assure that trafficlight id is unique in the whole network.
-     * </p>
-     * 
-     * @param trafficLightLocation
-     */
-    public void addTrafficLightLocation(TrafficLightLocation trafficLightLocation) {
-        Preconditions.checkArgument(trafficLightLocation.position() >= 0
-                && trafficLightLocation.position() <= roadLength, "inconsistent input data: traffic light position="
-                + trafficLightLocation.position() + " does not fit onto road-id=" + userId() + " with length="
-                + roadLength());
-        trafficLightLocations.add(trafficLightLocation);
+    public TrafficSigns trafficSigns() {
+        return trafficSigns;
     }
 
-    public final class TrafficLightLocationWithDistance {
-        public final TrafficLightLocation trafficLightLocation;
-        public final double distance;
-
-        public TrafficLightLocationWithDistance(TrafficLightLocation location, double distance) {
-            this.trafficLightLocation = Preconditions.checkNotNull(location);
-            this.distance = distance;
-        }
-
-        @Override
-        public String toString() {
-            return "TrafficLightLocationWithDistance [trafficLightLocation=" + trafficLightLocation + ", distance="
-                    + distance + "]";
-        }
-    }
     
-    public final boolean hasSink() {
+    public final boolean hasDownstreamConnection() {
         for (LaneSegment laneSegment : laneSegments) {
             if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
                 return true;
@@ -1346,7 +1313,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
         @Override
         public String toString() {
-            return "Node[type=" + type + ", id=" + (this.hasId() ? this.getId() : "-") + "]";
+            return "Node[type=" + type + ", id=" + (this.hasId() ? this.getId() : "") + "]";
         }
 
     }
