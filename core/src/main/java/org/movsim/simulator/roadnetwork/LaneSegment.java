@@ -67,7 +67,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     // physical lane, not the laneIndex
     private final int lane;
     private Lanes.Type type;
-    final ArrayList<Vehicle> vehicles;
+    private final ArrayList<Vehicle> vehicles;
     private int removedVehicleCount; // used for calculating traffic flow
 
     /**

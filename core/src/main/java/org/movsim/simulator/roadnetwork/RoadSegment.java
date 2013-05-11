@@ -164,18 +164,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
+        this(roadLength, laneCount);
         this.roadMapping = Preconditions.checkNotNull(roadMapping);
-        assert roadLength > 0.0;
-        assert laneCount >= 1 : "laneCount=" + laneCount;
-        laneSegments = new LaneSegment[laneCount];
-        for (int index = 0; index < laneCount; ++index) {
-            laneSegments[index] = new LaneSegment(this, index + 1);
-        }
-        id = nextId++;
-        assert roadLength > 0;
-        this.roadLength = roadLength;
-        this.laneCount = laneCount;
-        this.trafficSigns = new TrafficSignsImpl(this);
     }
 
     /**
