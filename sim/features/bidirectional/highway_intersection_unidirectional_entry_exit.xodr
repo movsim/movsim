@@ -285,7 +285,7 @@
         
         <!-- exit from backward link -->
         <connection incomingRoad="21" connectingRoad="3" contactPoint="start">
-            <laneLink from="1" to="3" />
+            <laneLink from="-1" to="3" />
         </connection>
     </junction>
     

@@ -237,6 +237,7 @@
             <laneLink from="-1" to="-1" /> 
             <laneLink from="-2" to="-2" />
         </connection>
+        <!-- bug: connection is not handled correctly. -->
         <connection incomingRoad="2" connectingRoad="10" contactPoint="start">
             <laneLink from="-3" to="1" />
         </connection>

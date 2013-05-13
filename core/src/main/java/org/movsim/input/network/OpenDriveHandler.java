@@ -462,7 +462,7 @@ public class OpenDriveHandler {
                             laneLink.getTo());
                     // FIXME bug: connections are not correctly set in all connection cases
                     // example: features/bidirectional/intersection_highway.xodr when the Road=10 is defined reverse
-                    final boolean isReverse = /* laneLink.getTo>0 || */laneLink.getFrom() > 0;
+                    final boolean isReverse = laneLink.getTo() > 0 || laneLink.getFrom() > 0;
                     LOG.info("junction={}, road={}", junction.getId(), road.getId());
                     LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
                             connectingRoadSegment.userId());
