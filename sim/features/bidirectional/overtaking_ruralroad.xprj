@@ -27,7 +27,7 @@
             </TrafficComposition>
             <Road id="3-">
 				<TrafficComposition>
-                <VehicleType label="ACC2" fraction="0.2" />
+                <VehicleType label="ACC2" fraction="0.2" relative_v0_randomization="0.3" />
             </TrafficComposition>
                 <InitialConditions>
                     <MicroIC position="100" speed="10" label="ACC2" />

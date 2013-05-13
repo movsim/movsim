@@ -815,7 +815,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     laneSegments[targetLane - 1].addVehicle(vehicle);
                 } else if (laneSegment.lane() == Lanes.MOST_INNER_LANE && laneCount() == 1
                         && vehicle.considerOvertaking(dt, this, peerRoadSegment)) {
-                    LOG.info("##### perform overtaking: vehicle={}", vehicle);
+                    LOG.info("### perform overtaking: vehicle={}", vehicle);
                     int targetLane = vehicle.getTargetLane();
                     assert targetLane == Lanes.OVERTAKING;
                     vehIterator.remove();
@@ -875,7 +875,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                 // assure update in each simulation timestep
                 vehicle.updateLaneChangeDelay(dt);
             } else if (vehicle.considerFinishOvertaking(dt, lane1)) {
-                LOG.info("##### turn back into lane after overtaking: vehicle={}", vehicle);
+                LOG.info("### turn back into lane after overtaking: vehicle={}", vehicle);
                 int targetLane = vehicle.getTargetLane();
                 assert targetLane == Lanes.MOST_INNER_LANE;
                 vehIterator.remove();
