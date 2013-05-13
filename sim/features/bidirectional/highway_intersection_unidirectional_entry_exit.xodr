@@ -242,7 +242,7 @@
 
     <road name="exit from backward link" id="21" junction="-1">
         <link>
-            <predecessor elementType="junction" elementId="30" contactPoint="start" />
+            <predecessor elementType="junction" elementId="15" contactPoint="start" />
         </link>
         <planView>
             <geometry s="0.0" x="2320" y="280" hdg="1.571" length="200">
@@ -283,6 +283,7 @@
             <laneLink from="-1" to="-3" />
         </connection>
         
+        <!-- exit from backward link -->
         <connection incomingRoad="21" connectingRoad="3" contactPoint="start">
             <laneLink from="1" to="3" />
         </connection>
