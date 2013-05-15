@@ -33,7 +33,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
 import org.movsim.roadmappings.RoadGeometry.GeometryType;
 
 /**
- * RoadMapping consisting of a number of consecutive heterogeneous RoadMappings.
+ * RoadMapping consisting of a number of consecutive heterogeneous RoadMappingUtils.
  */
 public class RoadMappingPoly extends RoadMappingAbstract implements Iterable<RoadMapping> {
 

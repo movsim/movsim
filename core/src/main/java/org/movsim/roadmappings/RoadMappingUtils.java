@@ -13,11 +13,11 @@ import com.google.common.collect.Iterables;
  * created: Apr 7, 2013<br>
  * 
  */
-public final class RoadMappings {
+public final class RoadMappingUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RoadMappings.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RoadMappingUtils.class);
 
-    private RoadMappings() {
+    private RoadMappingUtils() {
         throw new IllegalStateException("do not invoke private constructor.");
     }
 

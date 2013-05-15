@@ -26,7 +26,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
-import org.movsim.roadmappings.RoadMappings;
+import org.movsim.roadmappings.RoadMappingUtils;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
@@ -250,7 +250,7 @@ public class OpenDriveHandler {
         laneCount += firstLaneSection.getRight().getLane().size();
         laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
         List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount, laneWidth);
-        return RoadMappings.create(roadGeometries);
+        return RoadMappingUtils.create(roadGeometries);
         // if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
         // laneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
         // // laneWidth = road.getLanes().getLaneSection().get(0).getLeft().getLane().get(0).getWidth().get(0).getA();
@@ -263,7 +263,7 @@ public class OpenDriveHandler {
         // Preconditions.checkArgument(laneWidthPeer > 0);
         // }
         // List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), firstLaneSection);
-        // return RoadMappings.create(roadGeometries);
+        // return RoadMappingUtils.create(roadGeometries);
     }
 
     private static List<RoadGeometry> createRoadGeometries(List<Geometry> geometries, int laneCount, double laneWidth) {
