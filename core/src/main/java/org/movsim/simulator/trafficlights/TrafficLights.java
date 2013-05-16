@@ -76,7 +76,7 @@ public class TrafficLights implements SimulationTimeStep {
 
     private static boolean networkContainsTrafficlights(RoadNetwork roadNetwork) {
         for (RoadSegment roadSegment : roadNetwork) {
-            if (Iterables.size(roadSegment.getTrafficSigns().values(TrafficSignType.TRAFFICLIGHT)) > 0) {
+            if (Iterables.size(roadSegment.trafficSigns().values(TrafficSignType.TRAFFICLIGHT)) > 0) {
                 return true;
             }
         }
@@ -105,7 +105,7 @@ public class TrafficLights implements SimulationTimeStep {
         Map<String, ControllerGroup> controllerGroupInput = createControllerMapping(trafficLightsInput);
 
         for (RoadSegment roadSegment : roadNetwork) {
-            Iterable<TrafficLight> values = roadSegment.getTrafficSigns().values((TrafficSignType.TRAFFICLIGHT));
+            Iterable<TrafficLight> values = roadSegment.trafficSigns().values((TrafficSignType.TRAFFICLIGHT));
             for (TrafficLight trafficLight : values) {
                 LOG.debug("trafficLight={}, roadSegment={}", trafficLight, roadSegment);
                 ControllerGroup controllerGroup = controllerGroupInput.get(trafficLight.controllerId());

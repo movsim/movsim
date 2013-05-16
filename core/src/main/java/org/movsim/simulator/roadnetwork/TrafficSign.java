@@ -1,5 +1,7 @@
 package org.movsim.simulator.roadnetwork;
 
+import org.movsim.simulator.vehicles.Vehicle;
+
 
 
 public interface TrafficSign extends Comparable<TrafficSign> {
@@ -28,7 +30,8 @@ public interface TrafficSign extends Comparable<TrafficSign> {
 
     boolean isValidLane(int lane);
 
-    
+    void apply(Vehicle vehicle);
+
     /**
      * Self-defined OpenDRIVE.Road.Objects.Object.type attribute values.
      * 
@@ -46,4 +49,6 @@ public interface TrafficSign extends Comparable<TrafficSign> {
             return openDriveIdentifier;
         }
     }
+
+
 }

@@ -26,7 +26,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
-import org.movsim.roadmappings.RoadMappings;
+import org.movsim.roadmappings.RoadMappingUtils;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
@@ -243,7 +243,8 @@ public class OpenDriveHandler {
                             "Transform signal position from reverse direction: signal={}, originalPosition={}, roadSegment position="
                                     + signal.getS(), signal.getId(), originalS);
                 }
-                roadSegment.getTrafficSigns().add(new TrafficLight(signal, controller, roadSegment));
+                // roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
+                roadSegment.trafficSigns().add(new TrafficLight(signal, controller, roadSegment));
             }
         }
 
@@ -278,7 +279,7 @@ public class OpenDriveHandler {
         laneCount += firstLaneSection.getRight().getLane().size();
         laneWidth = firstLaneSection.getRight().getLane().get(0).getWidth().get(0).getA();
         List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), laneCount, laneWidth);
-        return RoadMappings.create(roadGeometries);
+        return RoadMappingUtils.create(roadGeometries);
         // if (road.getLanes().getLaneSection().get(0).isSetLeft()) {
         // laneCount += road.getLanes().getLaneSection().get(0).getLeft().getLane().size();
         // // laneWidth = road.getLanes().getLaneSection().get(0).getLeft().getLane().get(0).getWidth().get(0).getA();
@@ -291,7 +292,7 @@ public class OpenDriveHandler {
         // Preconditions.checkArgument(laneWidthPeer > 0);
         // }
         // List<RoadGeometry> roadGeometries = createRoadGeometries(road.getPlanView().getGeometry(), firstLaneSection);
-        // return RoadMappings.create(roadGeometries);
+        // return RoadMappingUtils.create(roadGeometries);
     }
 
     private static List<RoadGeometry> createRoadGeometries(List<Geometry> geometries, int laneCount, double laneWidth) {
@@ -488,13 +489,15 @@ public class OpenDriveHandler {
                             laneLink.getFrom());
                     RoadSegment connectingRoadSegment = getRoadSegment(roadNetwork, connection.getConnectingRoad(),
                             laneLink.getTo());
+                    // FIXME bug: connections are not correctly set in all connection cases
+                    // example: features/bidirectional/intersection_highway.xodr when the Road=10 is defined reverse
                     final boolean isReverse = laneLink.getTo() > 0 || laneLink.getFrom() > 0;
                     LOG.info("junction={}, road={}", junction.getId(), road.getId());
+                    LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
+                            connectingRoadSegment.userId());
                     LOG.info("lanepair from={} to={}", laneLink.getFrom(), laneLink.getTo());
                     LOG.info("isReverse={}, roadPredecessorIsJunction={}", isReverse,
                             roadPredecessorIsJunction(junction, road));
-                    LOG.info("incomingRS={}, connectingRoadSegment={}", incomingRoadSegment.userId(),
-                            connectingRoadSegment.userId());
                     if (roadPredecessorIsJunction(junction, road)) {
                         if (isReverse) {
                             Link.addLanePair(laneIdToLaneIndex(laneLink.getTo()), connectingRoadSegment,

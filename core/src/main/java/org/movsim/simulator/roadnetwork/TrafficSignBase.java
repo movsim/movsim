@@ -2,8 +2,9 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.Arrays;
 
-import com.google.common.base.Preconditions;
+import org.movsim.simulator.vehicles.Vehicle;
 
+import com.google.common.base.Preconditions;
 
 public class TrafficSignBase implements TrafficSign {
 
@@ -14,7 +15,6 @@ public class TrafficSignBase implements TrafficSign {
     protected final RoadSegment roadSegment;
 
     private boolean laneValidity[];
-    
 
     public TrafficSignBase(TrafficSignType type, double position, RoadSegment roadSegment) {
         this.type = type;
@@ -42,7 +42,7 @@ public class TrafficSignBase implements TrafficSign {
 
     @Override
     public int compareTo(TrafficSign compareSign) {
-        //ascending order
+        // ascending order
         return Double.compare(position, compareSign.position());
     }
 
@@ -73,6 +73,11 @@ public class TrafficSignBase implements TrafficSign {
     @Override
     public String toString() {
         return "TrafficSignBase [roadSegment=" + roadSegment + ", position=" + position + ", type=" + type + "]";
+    }
+
+    @Override
+    public void apply(Vehicle vehicle) {
+        // dummy, overwrite if needed
     }
 
 }

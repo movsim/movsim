@@ -155,7 +155,7 @@ public class TrafficLightApproaching {
     private void checkSpaceBeforePassingTrafficlight(Vehicle me, TrafficLight trafficLight,
             double distanceToTrafficlight) {
         // relative to position of first traffic light
-        TrafficSignWithDistance trafficLightWithDistance = trafficLight.roadSegment().getTrafficSigns()
+        TrafficSignWithDistance trafficLightWithDistance = trafficLight.roadSegment().trafficSigns()
                 .getNextTrafficSignWithDistance(TrafficSignType.TRAFFICLIGHT, trafficLight.position(), me.lane());
         if (trafficLightWithDistance != null) {
             double distanceBetweenTrafficlights = trafficLightWithDistance.distance();
