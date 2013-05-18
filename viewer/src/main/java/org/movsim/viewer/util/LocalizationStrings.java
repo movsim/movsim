@@ -81,7 +81,7 @@ public class LocalizationStrings extends ListResourceBundle {
             { "OnRamp", "on ramp" },
             { "OffRamp", "off ramp" },
             { "FlowConservingBottleNeck", "flow conserving bottleneck" },
-            { "SpeedLimit", "speed limit" },
+            { "SpeedLimitOUTDATED", "speed limit" },
             { "TrafficLight", "traffic light" },
             { "LaneClosing", "laneIndex closure" },
             { "CloverLeaf", "clover leaf" },

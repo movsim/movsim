@@ -29,8 +29,7 @@
                 <TrafficSink />
                 <!-- improve vehicle performance at inflow -->
                 <FlowConservingInhomogeneities>
-                    <Inhomogeneity position="0" alpha_T="0.8" />
-                    <Inhomogeneity position="1500" alpha_T="1" />
+                    <Inhomogeneity position="200" valid_length="1400" adaptation_length="1400" start_alpha_T="0.8" target_alpha_T="1.0"  />
                 </FlowConservingInhomogeneities>
             </Road>
             <Road id="2">

@@ -165,7 +165,7 @@ public class AppMenu extends MovSimMenuBase {
             }
         }));
 
-        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("SpeedLimit")) {
+        scenarioMenu.add(new JMenuItem(new AbstractAction(resourceString("SpeedLimitOUTDATED")) {
             @Override
             public void actionPerformed(ActionEvent e) {
                 trafficCanvas.setupTrafficScenario("speedlimit", "../sim/buildingBlocks/");

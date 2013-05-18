@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 public class Memory {
 
     /** The Constant LOG. */
-    final static Logger logger = LoggerFactory.getLogger(Memory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Memory.class);
 
     /**
      * The tau. relaxation time
@@ -114,8 +114,8 @@ public class Memory {
         alphaV0 = gamma * alphaV0 + (1 - gamma) * (resignationMinAlphaV0 + vRel * (1. - resignationMinAlphaV0));
         alphaA = gamma * alphaA + (1 - gamma) * (resignationMinAlphaA + vRel * (1. - resignationMinAlphaA));
 
-        logger.debug("vRel = {}, v0 = {}", vRel, v0);
-        logger.debug("alphaT = {}, alphaV0 = {}", alphaT, alphaV0);
+        LOG.debug("vRel = {}, v0 = {}", vRel, v0);
+        LOG.debug("alphaT = {}, alphaV0 = {}", alphaT, alphaV0);
 
     }
 

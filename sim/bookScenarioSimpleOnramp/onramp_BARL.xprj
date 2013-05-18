@@ -27,8 +27,6 @@
                     <Inflow t="600" q_per_hour="2050" v="9" />
                 </TrafficSource>
                 <TrafficSink />
-                <!-- improve vehicle performance at inflow -->
-                <FlowConservingInhomogeneities />
                 <Detectors sample_interval="60" logging="true">
                     <CrossSection position="1200" />
                     <CrossSection position="1400" />

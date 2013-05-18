@@ -1,8 +1,8 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
 import org.movsim.autogen.NoiseParameter;
-import org.movsim.simulator.vehicles.Noise;
 import org.movsim.simulator.vehicles.Vehicle;
+import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameter;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.parameter.IModelParameterPTM;
 import org.movsim.utilities.ProbabilityUtils;

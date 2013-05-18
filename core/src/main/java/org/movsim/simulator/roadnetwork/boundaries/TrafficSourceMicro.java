@@ -1,8 +1,10 @@
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.boundaries;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;

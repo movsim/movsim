@@ -23,11 +23,12 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.detector;
+package org.movsim.output;
 
 import org.movsim.input.ProjectMetaData;
 import org.movsim.output.fileoutput.FileOutputBase;
 import org.movsim.simulator.roadnetwork.Lanes;
+import org.movsim.simulator.roadnetwork.controller.LoopDetector;
 import org.movsim.utilities.Units;
 
 /**
@@ -62,7 +63,7 @@ public class FileDetector extends FileOutputBase {
      */
     public FileDetector(LoopDetector detector, String roadId, int laneCount, boolean loggingLanes) {
         super(ProjectMetaData.getInstance().getOutputPath(), ProjectMetaData.getInstance().getProjectName());
-        final int xDetectorInt = (int) detector.getDetPosition();
+        final int xDetectorInt = (int) detector.position();
         this.detector = detector;
         this.laneCount = laneCount;
         this.loggingLanes = (loggingLanes || laneCount == 1) ? true : false;
@@ -99,7 +100,7 @@ public class FileDetector extends FileOutputBase {
      * @param time
      *            the time
      */
-    protected void writeAggregatedData(double time) {
+    public void writeAggregatedData(double time) {
         writer.printf(outputFormatTime, time);
         if (laneCount > 1) {
             writeLaneAverages();

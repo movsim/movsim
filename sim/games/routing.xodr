@@ -236,13 +236,21 @@
                         <width sOffset="0.0" a="10.0" b="0.0" c="0.0" d="0.0" />
                         <width sOffset="200.0" a="6.0" b="0.0" c="0.0" d="0.0" />
                         <width sOffset="400.0" a="10.0" b="0.0" c="0.0" d="0.0" />
-                        <speed sOffset="100" max="22.22" />
-                        <speed sOffset="250" max="11.11" />
-                        <speed sOffset="370" max="22.22" />
                     </lane>
                 </right>
             </laneSection>
         </lanes>
+        <objects>
+            <object type="speedlimit" orientation="+" s="100" name="first speedlimit">
+                <userData code="valueKMH" value="80" />
+            </object>
+            <object type="speedlimit" orientation="+" s="250" name="second speedlimit">
+                <userData code="valueKMH" value="30" />
+            </object>
+            <object type="speedlimit" orientation="+" s="400" validLength="210" name="third speedlimit">
+                <userData code="valueKMH" value="80" />
+            </object>
+        </objects>
     </road>
     <junction id="1009" name="">
         <connection id="0" incomingRoad="10" connectingRoad="2" contactPoint="start">

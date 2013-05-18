@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -40,8 +40,7 @@ import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMapping.PolygonFloat;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.VariableMessageSignBase;
-import org.movsim.simulator.roadnetwork.VariableMessageSignDiversion;
+import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.viewer.graphics.TrafficCanvas.VehicleColorMode;
@@ -56,7 +55,6 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     private final TrafficCanvasController controller;
     private final RoadNetwork roadNetwork;
     private boolean diversionOn;
-    private VariableMessageSignBase variableMessageSign = new VariableMessageSignDiversion();
     private boolean inDrag;
     private int startDragX;
     private int startDragY;
@@ -67,7 +65,8 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
     /**
      * @param trafficCanvas
      */
-    public TrafficCanvasMouseListener(TrafficCanvas trafficCanvas, TrafficCanvasController controller, RoadNetwork roadNetwork) {
+    public TrafficCanvasMouseListener(TrafficCanvas trafficCanvas, TrafficCanvasController controller,
+            RoadNetwork roadNetwork) {
         this.trafficCanvas = trafficCanvas;
         this.controller = controller;
         this.roadNetwork = roadNetwork;
@@ -91,38 +90,33 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
             trafficCanvas.vehicleColorMode = VehicleColorMode.HIGHLIGHT_VEHICLE;
             trafficCanvas.repaint();
         }
+
+        // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
+        diversionOn = !diversionOn;
         for (final RoadSegment roadSegment : roadNetwork) {
-            // TODO for the moment clicking anywhere sets vehicles in lane1 of roadsegment1 to exit in next road segment
-            if (roadNetwork.hasVariableMessageSign() && roadSegment.userId().equals("1")) {
-                if (diversionOn == false) {
-                    diversionOn = true;
-                    roadSegment.addVariableMessageSign(variableMessageSign);
-                } else {
-                    diversionOn = false;
-                    roadSegment.removeVariableMessageSign(variableMessageSign);
-                }
+            for (VariableMessageSignDiversion vmsDiversion : roadSegment.variableMessageSignDiversions()) {
+                vmsDiversion.activateDiversion(diversionOn);
                 trafficCanvas.repaint();
             }
-            if (roadSegment.trafficLights() != null) {
-                final RoadMapping roadMapping = roadSegment.roadMapping();
-                for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
-                    final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
-                    // check if the user has clicked on a traffic light, if they have then change the
-                    // traffic light to the next color
-                    final Point point = e.getPoint();
-                    final Point2D transformedPoint = new Point2D.Float();
-                    final GeneralPath path = new GeneralPath();
-                    try {
-                        // convert from mouse coordinates to canvas coordinates
-                        trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
-                    } catch (final NoninvertibleTransformException e1) {
-                        e1.printStackTrace();
-                        return;
-                    }
-                    if (trafficLightRect.contains(transformedPoint)) {
-                        trafficLight.triggerNextPhase();
-                        trafficCanvas.repaint();
-                    }
+
+            final RoadMapping roadMapping = roadSegment.roadMapping();
+            for (final TrafficLight trafficLight : roadSegment.trafficLights()) {
+                final Rectangle2D trafficLightRect = TrafficCanvas.trafficLightRect(roadMapping, trafficLight);
+                // check if the user has clicked on a traffic light, if they have then change the
+                // traffic light to the next color
+                final Point point = e.getPoint();
+                final Point2D transformedPoint = new Point2D.Float();
+                final GeneralPath path = new GeneralPath();
+                try {
+                    // convert from mouse coordinates to canvas coordinates
+                    trafficCanvas.transform.inverseTransform(new Point2D.Float(point.x, point.y), transformedPoint);
+                } catch (final NoninvertibleTransformException e1) {
+                    e1.printStackTrace();
+                    return;
+                }
+                if (trafficLightRect.contains(transformedPoint)) {
+                    trafficLight.triggerNextPhase();
+                    trafficCanvas.repaint();
                 }
             }
         }
@@ -236,8 +230,7 @@ public class TrafficCanvasMouseListener implements MouseListener, MouseMotionLis
                     path.closePath();
                     if (path.contains(transformedPoint)) {
                         // the mouse is over a vehicle
-                        if (trafficCanvas.vehiclePopup == null
-                                || trafficCanvas.vehiclePopup.getId() != vehicle.getId()) {
+                        if (trafficCanvas.vehiclePopup == null || trafficCanvas.vehiclePopup.getId() != vehicle.getId()) {
                             trafficCanvas.lastVehicleViewed = vehicle.getId();
                             // display popup
                             trafficCanvas.vehicleTipWindow.setVisible(false);

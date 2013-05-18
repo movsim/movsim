@@ -34,6 +34,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
+import org.movsim.autogen.CrossSection;
 import org.movsim.autogen.InitialConditions;
 import org.movsim.autogen.MacroIC;
 import org.movsim.autogen.MicroIC;
@@ -45,20 +46,22 @@ import org.movsim.autogen.TrafficSink;
 import org.movsim.input.ProjectMetaData;
 import org.movsim.input.network.OpenDriveReader;
 import org.movsim.output.SimulationOutput;
-import org.movsim.output.detector.LoopDetectors;
 import org.movsim.output.fileoutput.FileTrafficSourceData;
-import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
-import org.movsim.simulator.roadnetwork.FlowConservingBottlenecks;
-import org.movsim.simulator.roadnetwork.InflowTimeSeries;
 import org.movsim.simulator.roadnetwork.InitialConditionsMacro;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
-import org.movsim.simulator.roadnetwork.MicroInflowFileReader;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.SimpleRamp;
-import org.movsim.simulator.roadnetwork.TrafficSourceMacro;
-import org.movsim.simulator.roadnetwork.TrafficSourceMicro;
+import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
+import org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries;
+import org.movsim.simulator.roadnetwork.boundaries.MicroInflowFileReader;
+import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMicro;
+import org.movsim.simulator.roadnetwork.controller.FlowConservingBottleneck;
+import org.movsim.simulator.roadnetwork.controller.LoopDetector;
+import org.movsim.simulator.roadnetwork.controller.RoadObject;
+import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.trafficlights.TrafficLights;
 import org.movsim.simulator.vehicles.TestVehicle;
@@ -129,9 +132,9 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         Simulation simulationInput = inputData.getScenario().getSimulation();
 
-        final boolean loadedRoadNetwork = parseOpenDriveXml(roadNetwork, projectMetaData);
+        parseOpenDriveXml(roadNetwork, projectMetaData);
         routing = new Routing(inputData.getScenario().getRoutes(), roadNetwork);
-        
+
         vehicleFactory = new VehicleFactory(simulationInput.getTimestep(), inputData.getVehiclePrototypes(),
                 inputData.getConsumption(), routing);
 
@@ -151,15 +154,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         defaultTrafficComposition = new TrafficCompositionGenerator(simulationInput.getTrafficComposition(),
                 vehicleFactory);
 
+        trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights(), roadNetwork);
+
         // For each road in the MovSim XML input data, find the corresponding roadSegment and
         // set its input data accordingly
         matchRoadSegmentsAndRoadInput(simulationInput.getRoad());
 
-        trafficLights = new TrafficLights(inputData.getScenario().getTrafficLights(), roadNetwork);
-
         reset();
     }
-
 
     public Iterable<String> getVehiclePrototypeLabels() {
         return vehicleFactory.getLabels();
@@ -190,8 +192,7 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
      * @throws SAXException
      * @throws ParserConfigurationException
      */
-    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException
-             {
+    public void loadScenarioFromXml(String scenario, String path) throws JAXBException, SAXException {
         roadNetwork.clear();
         projectMetaData.setProjectName(scenario);
         projectMetaData.setPathToProjectXmlFile(path);
@@ -205,8 +206,18 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
                     "cannot find roadId=\"" + roadInput.getId() + "\" in road network.");
             addInputToRoadSegment(roadSegment, roadInput);
         }
+        createSignalPoints();
     }
 
+
+    private void createSignalPoints() {
+        // all RoadObjects must be added to RoadSegment
+        for (RoadSegment roadSegment : roadNetwork) {
+            for (RoadObject roadObject : roadSegment.roadObjects()) {
+                roadObject.createSignalPositions();
+            }
+        }
+    }
 
     /**
      * Parse the OpenDrive (.xodr) file to load the network topology and road layout.
@@ -284,13 +295,32 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
         // set up the detectors
         if (roadInput.isSetDetectors()) {
-            roadSegment.setLoopDetectors(new LoopDetectors(roadSegment, roadInput.getDetectors()));
+            boolean log = roadInput.getDetectors().isLogging();
+            boolean logLanes = roadInput.getDetectors().isLoggingLanes();
+            double sampleDt = roadInput.getDetectors().getSampleInterval();
+            for (CrossSection crossSection : roadInput.getDetectors().getCrossSection()) {
+                LoopDetector det = new LoopDetector(roadSegment, crossSection.getPosition(), sampleDt, log, logLanes);
+                roadSegment.roadObjects().add(det);
+            }
         }
         // set up the flow conserving bottlenecks
         if (roadInput.isSetFlowConservingInhomogeneities()) {
-            roadSegment.setFlowConservingBottlenecks(new FlowConservingBottlenecks(roadInput
-                    .getFlowConservingInhomogeneities()));
+            for (org.movsim.autogen.Inhomogeneity inhomogeneity : roadInput.getFlowConservingInhomogeneities()
+                    .getInhomogeneity()) {
+                FlowConservingBottleneck flowConservingBottleneck = new FlowConservingBottleneck(inhomogeneity,
+                        roadSegment);
+                roadSegment.roadObjects().add(flowConservingBottleneck);
+            }
         }
+
+         if (roadInput.isSetVariableMessageSignDiversions()) {
+            for (org.movsim.autogen.VariableMessageSignDiversion diversion : roadInput
+                    .getVariableMessageSignDiversions().getVariableMessageSignDiversion()) {
+                VariableMessageSignDiversion variableMessageSignDiversion = new VariableMessageSignDiversion(
+                        diversion.getPosition(), diversion.getValidLength(), roadSegment);
+                roadSegment.roadObjects().add(variableMessageSignDiversion);
+             }
+         }
 
         if (roadInput.isSetInitialConditions()) {
             initialConditions(roadSegment, roadInput.getInitialConditions(), composition);
@@ -298,6 +328,8 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
 
     }
 
+    // TODO can be removed because not needed
+    @Deprecated
     private void createParkingSink(TrafficSink trafficSink, RoadSegment roadSegment) {
         // setup source which models the re-entrance of vehicles leaving the parking lot
         if (!trafficSink.isSetParking()) {

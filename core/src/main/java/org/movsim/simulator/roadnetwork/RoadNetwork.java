@@ -221,15 +221,15 @@ public class RoadNetwork implements SimulationTimeStep, Iterable<RoadSegment> {
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
+            roadSegment.updateSignalPoints(simulationTime);
+        }
+
+        for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.outFlow(dt, simulationTime, iterationCount);
         }
 
         for (final RoadSegment roadSegment : roadSegments) {
             roadSegment.inFlow(dt, simulationTime, iterationCount);
-        }
-
-        for (final RoadSegment roadSegment : roadSegments) {
-            roadSegment.updateDetectors(dt, simulationTime, iterationCount);
         }
     }
 

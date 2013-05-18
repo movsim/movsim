@@ -38,6 +38,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.xml.bind.JAXBException;
@@ -48,13 +49,13 @@ import org.movsim.roadmappings.RoadMapping.PosTheta;
 import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.simulator.SimulationRunnable;
 import org.movsim.simulator.Simulator;
-import org.movsim.simulator.roadnetwork.AbstractTrafficSource;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.Slope;
-import org.movsim.simulator.roadnetwork.SpeedLimit;
-import org.movsim.simulator.roadnetwork.TrafficSink;
+import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
+import org.movsim.simulator.roadnetwork.controller.GradientProfile;
+import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Colors;
@@ -739,7 +740,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         // final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
         // final int size = (int) (2 * roadMapping.laneWidth());
         final double radius = 0.8 * roadMapping.laneWidth();
-        
+
         for (TrafficLight trafficLight : roadSegment.trafficLights()) {
             for (int lane = Lanes.MOST_INNER_LANE; lane <= roadSegment.laneCount(); lane++) {
                 if (trafficLight.isValidLane(lane)) {
@@ -768,7 +769,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final double width = roadMapping.laneWidth();
         double offset = lane * roadMapping.laneWidth();
         // TODO hack here: find more elegant solution (sign from lane)
-        if(roadMapping instanceof RoadMappingPeer){
+        if (roadMapping instanceof RoadMappingPeer) {
             offset *= -1;
         }
         final PosTheta posTheta = roadMapping.map(trafficLight.position(), offset);
@@ -788,7 +789,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
             g.setColor(Color.ORANGE);
             break;
         }
-        g.fill(rect); 
+        g.fill(rect);
     }
 
     private void drawSpeedLimits(Graphics2D g) {
@@ -798,10 +799,7 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private void drawSpeedLimitsOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        if (roadSegment.speedLimits() == null) {
-            return;
-        }
-
+        assert roadSegment.speedLimits() != null;
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
         final double offset = -(roadMapping.laneCount() / 2.0 + 1.5) * roadMapping.laneWidth();
@@ -812,12 +810,11 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
         final FontMetrics fontMetrics = getFontMetrics(font);
 
-        for (final SpeedLimit speedLimit : roadSegment.speedLimits()) {
-
+        for (SpeedLimit speedLimit : roadSegment.speedLimits()) {
             g.setFont(font);
-            final PosTheta posTheta = roadMapping.map(speedLimit.getPosition(), offset);
+            final PosTheta posTheta = roadMapping.map(speedLimit.position(), offset);
 
-            final double speedLimitValueKmh = speedLimit.getSpeedLimitKmh();
+            final long speedLimitValueKmh = speedLimit.getSpeedLimitKmh();
             if (speedLimitValueKmh < 150) {
                 g.setColor(Color.RED);
                 g.fillOval((int) posTheta.x - redRadius2, (int) posTheta.y - redRadius2, 2 * redRadius2, 2 * redRadius2);
@@ -855,10 +852,6 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
     }
 
     private void drawSlopesOnRoad(Graphics2D g, RoadSegment roadSegment) {
-        if (roadSegment.slopes() == null) {
-            return;
-        }
-
         final RoadMapping roadMapping = roadSegment.roadMapping();
         assert roadMapping != null;
         final double laneWidth = 10; // ;
@@ -869,18 +862,18 @@ public class TrafficCanvas extends SimulationCanvasBase implements SimulationRun
         final int offsetY = (int) (0.4 * fontHeight);
         final Font font = new Font("SansSerif", Font.BOLD, fontHeight); //$NON-NLS-1$
         final FontMetrics fontMetrics = getFontMetrics(font);
+        g.setFont(font);
+        g.setColor(Color.BLACK);
 
-        for (final Slope slope : roadSegment.slopes()) {
-            g.setFont(font);
-            final PosTheta posTheta = roadMapping.map(slope.getPosition(), offset);
-
-            final double gradient = slope.getGradient() * 100;
-            // if (gradient != 0) {
-            g.setColor(Color.BLACK);
-            final String text = String.valueOf((int) (gradient)) + " %";
-            final int textWidth = fontMetrics.stringWidth(text);
-            g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
-
+        for (GradientProfile slope : roadSegment.gradientProfiles()) {
+            for (Entry<Double, Double> gradientEntry : slope.gradientEntries()) {
+                final PosTheta posTheta = roadMapping.map(gradientEntry.getKey(), offset);
+                final double gradient = gradientEntry.getValue() * 100;
+                // if (gradient != 0) {
+                final String text = String.valueOf((int) (gradient)) + " %";
+                final int textWidth = fontMetrics.stringWidth(text);
+                g.drawString(text, (int) (posTheta.x - textWidth / 2.0), (int) (posTheta.y + offsetY));
+            }
             // } else {
             // // Draw a line between points (x1,y1) and (x2,y2)
             // // draw speed limit clearing

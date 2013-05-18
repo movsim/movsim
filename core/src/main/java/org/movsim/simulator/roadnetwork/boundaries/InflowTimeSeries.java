@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.boundaries;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -26,8 +26,6 @@
                     <Inflow t="600" q_per_hour="2000" v="90" />
                 </TrafficSource>
                 <TrafficSink />
-                <!-- improve vehicle performance at inflow -->
-                <FlowConservingInhomogeneities />
                 <!--             <SimpleRampS>
                 <SimpleRamp position="30000" merge_length="1000" logging="true">
                     <Inflow t="0" q_per_hour="550" />

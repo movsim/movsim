@@ -23,7 +23,7 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.vehicles;
+package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.autogen.NoiseParameter;
 import org.movsim.utilities.MyRandom;

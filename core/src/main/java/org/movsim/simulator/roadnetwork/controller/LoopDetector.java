@@ -23,12 +23,14 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.output.detector;
+package org.movsim.simulator.roadnetwork.controller;
 
+import org.movsim.output.FileDetector;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.RoadSegment;
+import org.movsim.simulator.roadnetwork.SignalPoint;
+import org.movsim.simulator.roadnetwork.SignalPoint.SignalPointType;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +38,11 @@ import org.slf4j.LoggerFactory;
 /**
  * The Class LoopDetector.
  */
-public class LoopDetector implements SimulationTimeStep {
+public class LoopDetector extends RoadObjectController {
 
     final static Logger logger = LoggerFactory.getLogger(LoopDetector.class);
 
-    private final RoadSegment roadSegment;
-    
     private final double dtSample;
-
-    private final double detPosition;
 
     private double timeOffset;
 
@@ -69,8 +67,6 @@ public class LoopDetector implements SimulationTimeStep {
     private final double[] meanSpeedHarmonic;
 
     private final double[] meanTimegapHarmonic;
-
-    private int laneCount;
 
     private double meanSpeedAllLanes;
 
@@ -98,11 +94,10 @@ public class LoopDetector implements SimulationTimeStep {
      * @param loggingLanes
      */
     public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging, boolean loggingLanes) {
-        this.roadSegment = roadSegment;
-        this.detPosition = detPosition;
+        super(RoadObjectType.LOOPDETECTOR, detPosition, roadSegment);
         this.dtSample = dtSample;
-        laneCount = roadSegment.laneCount();
 
+        final int laneCount = roadSegment.laneCount();
         vehCount = new int[laneCount];
         vSum = new double[laneCount];
         occTime = new double[laneCount];
@@ -153,14 +148,14 @@ public class LoopDetector implements SimulationTimeStep {
         // brute force search: iterate over all lanes
         for (LaneSegment laneSegment : roadSegment.laneSegments()) {
             for (final Vehicle vehicle : laneSegment) {
-                if ((vehicle.getFrontPositionOld() < detPosition) && (vehicle.getFrontPosition() >= detPosition)) {
+                if ((vehicle.getFrontPositionOld() < position) && (vehicle.getFrontPosition() >= position)) {
                     countVehiclesAndDataForLane(laneSegment, laneSegment.lane() - 1, vehicle);
                 }
             }
         }
 
         if ((simulationTime - timeOffset + MovsimConstants.SMALL_VALUE) >= dtSample) {
-            for (int laneIndex = 0; laneIndex < laneCount; laneIndex++) {
+            for (int laneIndex = 0; laneIndex < roadSegment().laneCount(); laneIndex++) {
                 calculateAveragesForLane(laneIndex);
             }
             calculateAveragesOverAllLanes();
@@ -209,7 +204,7 @@ public class LoopDetector implements SimulationTimeStep {
 
     private void calculateAveragesOverAllLanes() {
         resetLaneAverages();
-        for (int i = 0; i < laneCount; i++) {
+        for (int i = 0; i < roadSegment().laneCount(); i++) {
             // vehicle count is extensive quantity
             vehCountOutputAllLanes += getVehCountOutput(i);
             // intensive quantities as averages weighted by vehicle counts
@@ -224,7 +219,7 @@ public class LoopDetector implements SimulationTimeStep {
         meanSpeedAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanSpeedAllLanes/vehCountOutputAllLanes;
         meanSpeedHarmonicAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanSpeedHarmonicAllLanes/vehCountOutputAllLanes;
         meanTimegapHarmonicAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanTimegapHarmonicAllLanes/vehCountOutputAllLanes;
-        occupancyAllLanes /= laneCount;
+        occupancyAllLanes /= roadSegment().laneCount();
     }
 
     public double getDensityArithmetic(int i) {
@@ -240,15 +235,11 @@ public class LoopDetector implements SimulationTimeStep {
     }
 
     public double getFlowAllLanes() {
-        return vehCountOutputAllLanes / (dtSample * laneCount);
+        return vehCountOutputAllLanes / (dtSample * roadSegment().laneCount());
     }
 
     public double getDtSample() {
         return dtSample;
-    }
-
-    public double getDetPosition() {
-        return detPosition;
     }
 
     public double getMeanSpeed(int i) {
@@ -297,5 +288,10 @@ public class LoopDetector implements SimulationTimeStep {
 
     public long getVehCumulatedCountOutput(int index) {
         return vehCumulatedCountOutput[index];
+    }
+
+    @Override
+    public void createSignalPositions() {
+        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.START, position, this));
     }
 }

@@ -27,7 +27,6 @@
                     <Inflow t="0" q_per_hour="100" v="11" />
                     <Inflow t="600" q_per_hour="2000" v="9" />
                 </TrafficSource>
-                <!-- improve vehicle performance at inflow -->
                 <!--            <SimpleRampS>
                 <SimpleRamp position="2000" merge_length="100" logging="true">
                     <Inflow t="0" q_per_hour="550" />

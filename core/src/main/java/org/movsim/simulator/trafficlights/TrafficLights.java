@@ -37,7 +37,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller.Control;
 import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
+import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class TrafficLights implements SimulationTimeStep {
 
     private static boolean networkContainsTrafficlights(RoadNetwork roadNetwork) {
         for (RoadSegment roadSegment : roadNetwork) {
-            if (Iterables.size(roadSegment.trafficSigns().values(TrafficSignType.TRAFFICLIGHT)) > 0) {
+            if (Iterables.size(roadSegment.roadObjects().values(RoadObjectType.TRAFFICLIGHT)) > 0) {
                 return true;
             }
         }
@@ -105,7 +105,7 @@ public class TrafficLights implements SimulationTimeStep {
         Map<String, ControllerGroup> controllerGroupInput = createControllerMapping(trafficLightsInput);
 
         for (RoadSegment roadSegment : roadNetwork) {
-            Iterable<TrafficLight> values = roadSegment.trafficSigns().values((TrafficSignType.TRAFFICLIGHT));
+            Iterable<TrafficLight> values = roadSegment.roadObjects().values((RoadObjectType.TRAFFICLIGHT));
             for (TrafficLight trafficLight : values) {
                 LOG.debug("trafficLight={}, roadSegment={}", trafficLight, roadSegment);
                 ControllerGroup controllerGroup = controllerGroupInput.get(trafficLight.controllerId());

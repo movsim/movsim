@@ -27,8 +27,6 @@ package org.movsim.simulator.vehicles.longitudinalmodel;
 
 import org.movsim.autogen.TrafficLightStatus;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
-import org.movsim.simulator.roadnetwork.TrafficSignWithDistance;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -155,25 +153,27 @@ public class TrafficLightApproaching {
     private void checkSpaceBeforePassingTrafficlight(Vehicle me, TrafficLight trafficLight,
             double distanceToTrafficlight) {
         // relative to position of first traffic light
-        TrafficSignWithDistance trafficLightWithDistance = trafficLight.roadSegment().trafficSigns()
-                .getNextTrafficSignWithDistance(TrafficSignType.TRAFFICLIGHT, trafficLight.position(), me.lane());
-        if (trafficLightWithDistance != null) {
-            double distanceBetweenTrafficlights = trafficLightWithDistance.distance();
-            if (distanceBetweenTrafficlights < 500) {
-                double effectiveFrontVehicleLengths = calcEffectiveFrontVehicleLengths(me, trafficLight,
-                        distanceToTrafficlight + distanceBetweenTrafficlights);
-                LOG.debug("distanceBetweenTrafficlights={}, effectiveLengths+ownLength={}",
-                        distanceBetweenTrafficlights, effectiveFrontVehicleLengths + me.getEffectiveLength());
-                if (effectiveFrontVehicleLengths > 0
-                        && distanceBetweenTrafficlights < effectiveFrontVehicleLengths + me.getEffectiveLength()) {
-                    considerTrafficLight = true;
-                    accTrafficLight = calcAccelerationToTrafficlight(me, distanceToTrafficlight);
-                    LOG.debug(
-                            "stop in front of green trafficlight, not sufficient space: nextlight={}, space for vehicle(s)={}",
-                            distanceBetweenTrafficlights, effectiveFrontVehicleLengths + me.getEffectiveLength());
-                }
-            }
-        }
+
+        // FIXME
+        // TrafficSignWithDistance trafficLightWithDistance = trafficLight.roadSegment().roadObjects()
+        // .getNextTrafficSignWithDistance(RoadObjectType.TRAFFICLIGHT, trafficLight.position(), me.lane());
+        // if (trafficLightWithDistance != null) {
+        // double distanceBetweenTrafficlights = trafficLightWithDistance.distance();
+        // if (distanceBetweenTrafficlights < 500) {
+        // double effectiveFrontVehicleLengths = calcEffectiveFrontVehicleLengths(me, trafficLight,
+        // distanceToTrafficlight + distanceBetweenTrafficlights);
+        // LOG.debug("distanceBetweenTrafficlights={}, effectiveLengths+ownLength={}",
+        // distanceBetweenTrafficlights, effectiveFrontVehicleLengths + me.getEffectiveLength());
+        // if (effectiveFrontVehicleLengths > 0
+        // && distanceBetweenTrafficlights < effectiveFrontVehicleLengths + me.getEffectiveLength()) {
+        // considerTrafficLight = true;
+        // accTrafficLight = calcAccelerationToTrafficlight(me, distanceToTrafficlight);
+        // LOG.debug(
+        // "stop in front of green trafficlight, not sufficient space: nextlight={}, space for vehicle(s)={}",
+        // distanceBetweenTrafficlights, effectiveFrontVehicleLengths + me.getEffectiveLength());
+        // }
+        // }
+        // }
     }
 
     private static double calcEffectiveFrontVehicleLengths(Vehicle me, TrafficLight trafficLight,

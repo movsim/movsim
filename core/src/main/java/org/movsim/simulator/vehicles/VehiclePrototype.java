@@ -4,6 +4,7 @@ import org.movsim.autogen.VehiclePrototypeConfiguration;
 import org.movsim.consumption.model.EnergyFlowModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
+import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumProperties;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.EquilibriumPropertiesFactory;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;

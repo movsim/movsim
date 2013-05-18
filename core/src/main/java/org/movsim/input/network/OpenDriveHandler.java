@@ -27,6 +27,7 @@ import org.movsim.roadmappings.RoadGeometry;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.roadmappings.RoadMappingPeer;
 import org.movsim.roadmappings.RoadMappingUtils;
+import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.Lanes.LaneSectionType;
@@ -34,8 +35,9 @@ import org.movsim.simulator.roadnetwork.Lanes.RoadLinkElementType;
 import org.movsim.simulator.roadnetwork.Link;
 import org.movsim.simulator.roadnetwork.RoadNetwork;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.SpeedLimit2;
-import org.movsim.simulator.roadnetwork.TrafficSign;
+import org.movsim.simulator.roadnetwork.controller.GradientProfile;
+import org.movsim.simulator.roadnetwork.controller.RoadObject;
+import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.xml.NetworkLoadAndValidation;
@@ -165,7 +167,8 @@ public class OpenDriveHandler {
         roadSegment.setUserRoadname(road.getName());
 
         if (road.isSetElevationProfile()) {
-            roadSegment.setElevationProfile(road.getElevationProfile());
+            GradientProfile elevationProfile = new GradientProfile(road.getElevationProfile(), roadSegment);
+            roadSegment.roadObjects().add(elevationProfile);
         }
 
         checkLaneIndexConventions(laneType, road.getId(), lanes);
@@ -176,8 +179,8 @@ public class OpenDriveHandler {
             // speed is definied lane-wise, but movsim handles speed limits on road segment level, further
             // entries overwrite previous entry
             if (lane.isSetSpeed()) {
-                LOG.warn("speed limit for lane will be replaced by road.object soon.");
-                roadSegment.setSpeedLimits(lane.getSpeed());
+                LOG.error("speed limit for lane has been replaced by road.object, see building block example.");
+                // roadSegment.setSpeedLimits(lane.getSpeed());
             }
         }
 
@@ -192,19 +195,25 @@ public class OpenDriveHandler {
                 if (laneType.isReverseDirection()) {
                     double originalS = roadObject.getS();
                     roadObject.setS(roadSegment.roadLength() - originalS);
-                    LOG.debug(
-                            "Transform road object position for backward link: roadObject={}, originalPosition={}, roadSegment position="
-                                    + roadObject.getS(), roadObject.getId(), originalS);
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug(
+                                "Transform road object position for backward link: roadObject={}, originalPosition={}, roadSegment position="
+                                        + roadObject.getS(), roadObject.getId(), originalS);
+                    }
                 }
 
                 String roadObjectType = roadObject.getType();
-
-                if (roadObjectType.equals(TrafficSign.XodrRoadObjectType.SPEEDLIMIT.xodrIdentifier())) {
-                    LOG.debug("add speed limit={}", roadObject.toString());
-                    SpeedLimit2 test = new SpeedLimit2(roadObject, roadSegment);
-                    //roadSegment.getTrafficSigns().add();
+                if (roadObjectType.equals(RoadObject.XodrRoadObjectType.SPEEDLIMIT.xodrIdentifier())) {
+                    SpeedLimit speedLimit = new SpeedLimit(roadObject, roadSegment);
+                    LOG.info("add speed limit={}", speedLimit);
+                    roadSegment.roadObjects().add(speedLimit);
+                    if (roadObject.isSetValidLength()) {
+                        double position = roadObject.getS() + roadObject.getValidLength();
+                        roadSegment.roadObjects().add(
+                                new SpeedLimit(position, MovsimConstants.MAX_VEHICLE_SPEED, roadSegment));
+                    }
                 } else {
-                    LOG.warn("road object type " + roadObjectType + " not supported.");
+                    LOG.error("road object type " + roadObjectType + " not supported.");
                 }
 
             }
@@ -244,7 +253,7 @@ public class OpenDriveHandler {
                                     + signal.getS(), signal.getId(), originalS);
                 }
                 // roadSegment.addTrafficLight(new TrafficLight(signal, controller, roadSegment));
-                roadSegment.trafficSigns().add(new TrafficLight(signal, controller, roadSegment));
+                roadSegment.roadObjects().add(new TrafficLight(signal, controller, roadSegment));
             }
         }
 

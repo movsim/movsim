@@ -503,8 +503,7 @@
                 <xs:element ref="TrafficSource" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="TrafficSink" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="FlowConservingInhomogeneities" minOccurs="0" maxOccurs="1" />
-                <!--                 <xs:element ref="SpeedLimits" minOccurs="0" maxOccurs="1" /> -->
-                <!--                 <xs:element ref="Slopes" minOccurs="0" maxOccurs="1" /> -->
+                <xs:element ref="VariableMessageSignDiversions" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="SimpleRamp" minOccurs="0" maxOccurs="1" />
                 <xs:element ref="Detectors" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
@@ -599,8 +598,25 @@
     <xs:element name="Inhomogeneity">
         <xs:complexType>
             <xs:attribute name="position" type="nonNegativeDouble" use="required" />
-            <xs:attribute name="alpha_T" type="nonNegativeDouble" default="1" />
-            <xs:attribute name="alpha_v0" type="nonNegativeDouble" default="1" />
+            <xs:attribute name="valid_length" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="adaptation_length" type="nonNegativeDouble" default="0" />
+            <xs:attribute name="start_alpha_T" type="nonNegativeDouble" default="1" />
+            <xs:attribute name="start_alpha_v0" type="nonNegativeDouble" default="1" />
+            <xs:attribute name="target_alpha_T" type="nonNegativeDouble" default="1" />
+            <xs:attribute name="target_alpha_v0" type="nonNegativeDouble" default="1" />
+        </xs:complexType>
+    </xs:element>
+     <xs:element name="VariableMessageSignDiversions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="VariableMessageSignDiversion" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="VariableMessageSignDiversion">
+        <xs:complexType>
+            <xs:attribute name="position" type="nonNegativeDouble" use="required" />
+            <xs:attribute name="valid_length" type="nonNegativeDouble" use="required" />
         </xs:complexType>
     </xs:element>
     <xs:element name="SimpleRamp">

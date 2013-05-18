@@ -103,35 +103,35 @@ public class Tables {
     // Version using only the index range imin ... imax and extrapolating
     // constant values otherwise; reverse=true means that the array x
     // has x values in decreasing order. NOT TIME OPTIMIZED
-    public static double intpextp(double[] x, double[] y, double pos, boolean reverse) {
-        return intpextp(x, y, pos, 0, x.length - 1, reverse);
-    }
-
-    public static double intpextp(double[] x, double[] y, double pos, int imin, int imax, boolean reverse) {
-
-        final double tinyValue = 0.000001;
-        double intp_value;
-        int i = imin;
-        if (reverse) {
-            while ((x[i] >= pos) && (i < imax)) {
-                i++;
-            }
-        } else {
-            while ((x[i] <= pos) && (i < imax)) {
-                i++;
-            }
-        }
-        if (i == imin) {
-            intp_value = y[imin]; // left extrapolation
-        } else if (i == imax) {
-            intp_value = y[imax]; // right extrapolation
-        } else if (Math.abs(x[i] - x[i - 1]) < tinyValue) {
-            intp_value = y[i]; // same x values
-        } else {
-            intp_value = y[i - 1] + (y[i] - y[i - 1]) * (pos - x[i - 1]) / (x[i] - x[i - 1]); // interpolation
-        }
-        return (intp_value);
-    }
+    // public static double intpextp(double[] x, double[] y, double pos, boolean reverse) {
+    // return intpextp(x, y, pos, 0, x.length - 1, reverse);
+    // }
+    //
+    // public static double intpextp(double[] x, double[] y, double pos, int imin, int imax, boolean reverse) {
+    //
+    // final double tinyValue = 0.000001;
+    // double intp_value;
+    // int i = imin;
+    // if (reverse) {
+    // while ((x[i] >= pos) && (i < imax)) {
+    // i++;
+    // }
+    // } else {
+    // while ((x[i] <= pos) && (i < imax)) {
+    // i++;
+    // }
+    // }
+    // if (i == imin) {
+    // intp_value = y[imin]; // left extrapolation
+    // } else if (i == imax) {
+    // intp_value = y[imax]; // right extrapolation
+    // } else if (Math.abs(x[i] - x[i - 1]) < tinyValue) {
+    // intp_value = y[i]; // same x values
+    // } else {
+    // intp_value = y[i - 1] + (y[i] - y[i - 1]) * (pos - x[i - 1]) / (x[i] - x[i - 1]); // interpolation
+    // }
+    // return (intp_value);
+    // }
 
     // TODO check implementation !!!
     // extrapolate left-hand side values for use in speedlimit

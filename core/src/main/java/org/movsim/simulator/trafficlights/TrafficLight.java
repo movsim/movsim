@@ -35,19 +35,14 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Controller;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.Signals.Signal;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.TrafficSignBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.movsim.simulator.roadnetwork.controller.RoadObjectController;
 
 import com.google.common.base.Preconditions;
 
 /**
  * The Class TrafficLight.
  */
-public class TrafficLight extends TrafficSignBase {
-
-    /** The Constant LOG. */
-    private static final Logger LOG = LoggerFactory.getLogger(TrafficLight.class);
+public class TrafficLight extends RoadObjectController {
 
     /** The status. */
     private TrafficLightStatus status;
@@ -63,7 +58,7 @@ public class TrafficLight extends TrafficSignBase {
     private final String signalType;
 
     public TrafficLight(Signal signal, Controller controller, RoadSegment roadSegment) {
-        super(TrafficSignType.TRAFFICLIGHT, signal.getS(), roadSegment);
+        super(RoadObjectType.TRAFFICLIGHT, signal.getS(), roadSegment);
         this.controller = Preconditions.checkNotNull(controller);
         this.signal = Preconditions.checkNotNull(signal);
         Preconditions.checkArgument(signal.isSetId(), "id not set");
@@ -146,11 +141,6 @@ public class TrafficLight extends TrafficSignBase {
         this.status = newStatus;
     }
 
-    @Override
-    public double position() {
-        return position;
-    }
-
     // trigger from viewer via mouse-click (direct communication from signal to controller)
     // shouldn't be called from external, use controller instead
     public void triggerNextPhase() {
@@ -182,15 +172,20 @@ public class TrafficLight extends TrafficSignBase {
     }
 
     @Override
-    public RoadSegment roadSegment() {
-        return roadSegment;
-    }
-
-    @Override
     public String toString() {
         return "TrafficLight [controllerId = " + controllerId() + ", signalId = " + signalId() + ", status=" + status
                 + ", position=" + position + ", signalType=" + signalType + ", groupId = "
                 + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
+    }
+
+    @Override
+    public void createSignalPositions() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void timeStep(double dt, double simulationTime, long iterationCount) {
+        // nothing to do, single TrafficLight will be controlled by ControllerGroup
     }
 
 }

@@ -1,4 +1,4 @@
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.boundaries;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +12,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.movsim.autogen.InflowFromFile;
+import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.routing.Route;
 import org.movsim.simulator.roadnetwork.routing.Routing;
 import org.movsim.simulator.vehicles.Vehicle;

@@ -33,13 +33,11 @@ import org.movsim.simulator.MovsimConstants;
 import org.movsim.simulator.roadnetwork.LaneSegment;
 import org.movsim.simulator.roadnetwork.Lanes;
 import org.movsim.simulator.roadnetwork.RoadSegment;
-import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
-import org.movsim.simulator.roadnetwork.TrafficSignWithDistance;
 import org.movsim.simulator.roadnetwork.routing.Route;
-import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel;
 import org.movsim.simulator.vehicles.lanechange.LaneChangeModel.LaneChangeDecision;
 import org.movsim.simulator.vehicles.longitudinalmodel.Memory;
+import org.movsim.simulator.vehicles.longitudinalmodel.Noise;
 import org.movsim.simulator.vehicles.longitudinalmodel.TrafficLightApproaching;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase;
 import org.movsim.simulator.vehicles.longitudinalmodel.acceleration.LongitudinalModelBase.ModelName;
@@ -165,20 +163,21 @@ public class Vehicle {
     private double speedlimit;
     private double slope;
 
-    private LongitudinalModelBase longitudinalModel;
-    /** can be null */
-    private LaneChangeModel laneChangeModel;
-
-    /** can be null */
-    private Memory memory = null;
-    /** Acceleration noise model. Can be null */
-    private Noise noise = null;
-
     private int color;
     /** color object cache */
     private Object colorObject;
 
+    private LongitudinalModelBase longitudinalModel;
+    /** can be null */
+    private LaneChangeModel laneChangeModel;
+
+    /** Memory model. Can be null */
+    private Memory memory = null;
+    /** Acceleration noise model. Can be null */
+    private Noise noise = null;
+
     private final TrafficLightApproaching trafficLightApproaching;
+    private final InhomogeneityAdaption inhomogeneity;
 
     /** can be null */
     private EnergyFlowModel fuelModel;
@@ -197,26 +196,6 @@ public class Vehicle {
 
     // information handling
     private String infoComment = "";
-
-    /**
-     * The type of numerical integration.
-     */
-    public static enum IntegrationType {
-        /**
-         * Euler (first order) numerical integration.
-         */
-        EULER,
-        /**
-         * Kinematic (second order) numerical integration.
-         */
-        KINEMATIC,
-        /**
-         * Runge-Kutta (fourth order) numerical integration.
-         */
-        RUNGE_KUTTA
-    }
-
-    private static IntegrationType integrationType = IntegrationType.KINEMATIC;
 
     /**
      * Resets the next id.
@@ -264,12 +243,14 @@ public class Vehicle {
         if (laneChangeModel != null) {
             laneChangeModel.initialize(this);
         }
-        trafficLightApproaching = new TrafficLightApproaching();
 
         // needs to be > 0 to avoid lane-changing over 2 lanes in one update step
         assert FINITE_LANE_CHANGE_TIME_S > 0;
 
         this.color = Colors.randomColor();
+
+        trafficLightApproaching = new TrafficLightApproaching();
+        inhomogeneity = new InhomogeneityAdaption();
     }
 
     /**
@@ -288,7 +269,6 @@ public class Vehicle {
         this.width = width;
         this.color = 0;
         fuelModel = null;
-        trafficLightApproaching = null;
         maxDeceleration = 10.0;
         laneChangeModel = null;
         longitudinalModel = null;
@@ -297,6 +277,8 @@ public class Vehicle {
         speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = 0;
         route = null;
+        trafficLightApproaching = new TrafficLightApproaching();
+        inhomogeneity = new InhomogeneityAdaption();
     }
 
     /**
@@ -305,7 +287,7 @@ public class Vehicle {
      * @param source
      */
     public Vehicle(Vehicle source) {
-        id = source.id; // TODO id not unique in this case
+        id = source.id;
         randomFix = source.randomFix;
         type = source.type;
         frontPosition = source.frontPosition;
@@ -316,6 +298,7 @@ public class Vehicle {
         width = source.width;
         color = source.color;
         trafficLightApproaching = source.trafficLightApproaching;
+        inhomogeneity = source.inhomogeneity;
         maxDeceleration = source.maxDeceleration;
         laneChangeModel = source.laneChangeModel;
         longitudinalModel = source.longitudinalModel;
@@ -331,8 +314,8 @@ public class Vehicle {
         speed = 0;
         acc = 0;
         isBrakeLightOn = false;
-        speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
         slope = 0;
+        unsetSpeedlimit();
     }
 
     public String getLabel() {
@@ -489,6 +472,11 @@ public class Vehicle {
         this.speedlimit = speedlimit;
     }
 
+    public final void unsetSpeedlimit() {
+        this.speedlimit = MovsimConstants.MAX_VEHICLE_SPEED;
+    }
+
+    // TODO acceleration model for slopes, Chapter 20 of "TrafficFlowDynamics"
     public void setSlope(double slope) {
         this.slope = slope;
     }
@@ -583,7 +571,7 @@ public class Vehicle {
     }
 
     public void updateAcceleration(double dt, RoadSegment roadSegment, LaneSegment laneSegment,
-            LaneSegment leftLaneSegment, double alphaT, double alphaV0) {
+            LaneSegment leftLaneSegment) {
 
         accOld = acc;
         // acceleration noise:
@@ -597,9 +585,8 @@ public class Vehicle {
             }
         }
 
-        // TODO extract to super class
-        double alphaTLocal = alphaT;
-        double alphaV0Local = alphaV0;
+        double alphaTLocal = inhomogeneity.alphaT();
+        double alphaV0Local = inhomogeneity.alphaV0();
         double alphaALocal = 1;
 
         // TODO check concept here: combination with alphaV0 (consideration of reference v0 instead of dynamic v0 which
@@ -635,9 +622,7 @@ public class Vehicle {
         // if (acc < -7.5) {
         //     System.out.println("High braking, vehicle:" + id + " acc:" + acc); //$NON-NLS-1$ //$NON-NLS-2$
         // }
-        if (trafficLightApproaching != null) {
-            moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc, roadSegment);
-        }
+        moderatedAcc = accelerationConsideringTrafficLight(moderatedAcc, roadSegment);
         moderatedAcc = accelerationConsideringExit(moderatedAcc, roadSegment);
         return moderatedAcc;
     }
@@ -651,18 +636,20 @@ public class Vehicle {
      */
     protected double accelerationConsideringTrafficLight(double acc, RoadSegment roadSegment) {
         double moderatedAcc = acc;
-        TrafficSignWithDistance trafficSignWithDistance = roadSegment.trafficSigns().getNextTrafficSignWithDistance(
-                TrafficSignType.TRAFFICLIGHT, getFrontPosition(), lane());
-        if (trafficSignWithDistance != null) {
-            //if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
-            LOG.debug("consider trafficlight={}", trafficSignWithDistance.trafficSign());
-            //assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
-            TrafficLight trafficLight = trafficSignWithDistance.trafficSign();
-            trafficLightApproaching.update(this, trafficLight, trafficSignWithDistance.distance());
-            if (trafficLightApproaching.considerTrafficLight()) {
-                moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
-            }
-        }
+
+        // FIXME
+        // TrafficSignWithDistance trafficSignWithDistance = roadSegment.roadObjects().getNextTrafficSignWithDistance(
+        // RoadObjectType.TRAFFICLIGHT, getFrontPosition(), lane());
+        // if (trafficSignWithDistance != null) {
+        // //if (traffLightWithDistance.trafficLight.isValidLane(lane())) {
+        // LOG.debug("consider trafficlight={}", trafficSignWithDistance.trafficSign());
+        // //assert traffLightWithDistance.distance >= 0 : "distance=" + traffLightWithDistance.distance;
+        // TrafficLight trafficLight = trafficSignWithDistance.trafficSign();
+        // trafficLightApproaching.update(this, trafficLight, trafficSignWithDistance.distance());
+        // if (trafficLightApproaching.considerTrafficLight()) {
+        // moderatedAcc = Math.min(acc, trafficLightApproaching.accApproaching());
+        // }
+        // }
         return moderatedAcc;
     }
 
@@ -996,7 +983,7 @@ public class Vehicle {
      * @param roadSegmentLength
      * 
      */
-    
+
     int routeIndex = 0;
 
     public final void setRoadSegment(int roadSegmentId, double roadSegmentLength) {
@@ -1207,6 +1194,10 @@ public class Vehicle {
 
     public void setRoute(Route route) {
         this.route = route;
+    }
+
+    public InhomogeneityAdaption inhomogeneityAdaptation() {
+        return inhomogeneity;
     }
 
 }

@@ -23,12 +23,14 @@
  * 
  * -----------------------------------------------------------------------------------------
  */
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.boundaries;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.movsim.simulator.MovsimConstants;
+import org.movsim.simulator.roadnetwork.LaneSegment;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.TestVehicle;
 import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
 import org.movsim.simulator.vehicles.Vehicle;

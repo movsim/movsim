@@ -28,15 +28,19 @@ package org.movsim.simulator.roadnetwork;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.movsim.network.autogen.opendrive.Lane.Speed;
-import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
-import org.movsim.output.detector.LoopDetectors;
 import org.movsim.roadmappings.RoadMapping;
 import org.movsim.simulator.MovsimConstants;
-import org.movsim.simulator.roadnetwork.TrafficSign.TrafficSignType;
+import org.movsim.simulator.roadnetwork.boundaries.AbstractTrafficSource;
+import org.movsim.simulator.roadnetwork.boundaries.SimpleRamp;
+import org.movsim.simulator.roadnetwork.boundaries.TrafficSink;
+import org.movsim.simulator.roadnetwork.controller.GradientProfile;
+import org.movsim.simulator.roadnetwork.controller.RoadObject;
+import org.movsim.simulator.roadnetwork.controller.RoadObject.RoadObjectType;
+import org.movsim.simulator.roadnetwork.controller.RoadObjects;
+import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
+import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
 import org.movsim.simulator.trafficlights.TrafficLight;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
@@ -44,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterators;
 
 /**
  * <p>
@@ -88,9 +93,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     static final int INITIAL_ID = 1;
     private static int nextId = INITIAL_ID;
 
-    /** the id is an internally used unique identifier for the road. */
+    /** the nodeId is an internally used unique identifier for the road. */
     private final int id;
-    /** the userId is the id specified in the .xodr and .xml files. */
+    /** the userId is the nodeId specified in the .xodr and .xml files. */
     private String userId;
     /** road name specified in the openDrive .xodr network file. */
     private String roadName;
@@ -98,15 +103,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     private final double roadLength;
     private final int laneCount;
     private final LaneSegment laneSegments[];
-    private FlowConservingBottlenecks flowConservingBottlenecks;
-    // TODO use new trafficSign concept for detectors, speedlimits and VMS
-    private LoopDetectors loopDetectors;
-    private SpeedLimits speedLimits;
-    private Slopes slopes;
-    private VariableMessageSigns variableMessageSigns;
-    
-    // container for trafficSigns on roadSegment
-    private final TrafficSigns trafficSigns;
+
+    private final RoadObjects roadObjects;
+    private final SignalPoints signalPoints = new SignalPoints();
 
     // Sources and Sinks
     private AbstractTrafficSource trafficSource;
@@ -124,7 +123,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Resets the next id.
+     * Resets the next nodeId.
      */
     public static void resetNextId() {
         nextId = INITIAL_ID;
@@ -158,7 +157,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
-        this.trafficSigns = new TrafficSignsImpl(this);
+        this.roadObjects = new RoadObjects(this);
     }
 
     public RoadSegment(double roadLength, int laneCount, RoadMapping roadMapping) {
@@ -173,7 +172,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         assert roadLength > 0;
         this.roadLength = roadLength;
         this.laneCount = laneCount;
-        this.trafficSigns = new TrafficSignsImpl(this);
+        this.roadObjects = new RoadObjects(this);
     }
 
     /**
@@ -199,9 +198,9 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Returns this road segment's id
+     * Returns this road segment's nodeId
      * 
-     * @return this road segment's id
+     * @return this road segment's nodeId
      */
     public final int id() {
         return id;
@@ -218,7 +217,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     /**
-     * Returns this road segment's userId. The userId is the road's id as set in the .xodr and .xml files.
+     * Returns this road segment's userId. The userId is the road's nodeId as set in the .xodr and .xml files.
      * 
      * @return this road segment's userId
      */
@@ -402,7 +401,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return laneSegments[lane - 1].sinkLaneSegment();
     }
 
-    final RoadSegment sinkRoadSegment(int lane) {
+    public final RoadSegment sinkRoadSegment(int lane) {
         Preconditions.checkArgument(lane >= Lanes.LANE1 && lane <= laneCount, "lane=" + lane + " but lanecount="
                 + laneCount);
         if (laneSegments[lane - 1].sinkLaneSegment() == null) {
@@ -671,9 +670,15 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      *            the number of iterations that have been executed
      */
     public void updateRoadConditions(double dt, double simulationTime, long iterationCount) {
-        applySpeedLimits();
-        applySlopes();
-        applyVariableMessageSigns();
+        for (RoadObject trafficSign : roadObjects) {
+            trafficSign.timeStep(dt, simulationTime, iterationCount);
+        }
+    }
+
+    public void updateSignalPoints(double simulationTime) {
+        for(SignalPoint signalPoint : signalPoints){
+            signalPoint.registerPassingVehicles(simulationTime, Iterators.filter(iterator(), signalPoint.predicate()));
+        }
     }
 
     // /**
@@ -714,62 +719,16 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     // distance);
     // }
 
-    private void applySpeedLimits() {
-        if (speedLimits != null && speedLimits.isEmpty() == false) {
-            for (final LaneSegment laneSegment : laneSegments) {
-                for (final Vehicle vehicle : laneSegment) {
-                    assert vehicle.roadSegmentId() == id;
-                    speedLimits.apply(vehicle);
-                }
-            }
-        }
-    }
-
-    private void applySlopes() {
-        if (slopes != null && slopes.isEmpty() == false) {
-            for (final LaneSegment laneSegment : laneSegments) {
-                for (final Vehicle vehicle : laneSegment) {
-                    assert vehicle.roadSegmentId() == id;
-                    slopes.apply(vehicle);
-                }
-            }
-        }
-    }
-
-    private void applyVariableMessageSigns() {
-        if (variableMessageSigns != null && variableMessageSigns.isEmpty() == false) {
-            for (final LaneSegment laneSegment : laneSegments) {
-                for (final Vehicle vehicle : laneSegment) {
-                    assert vehicle.roadSegmentId() == id;
-                    variableMessageSigns.apply(vehicle, this);
-                }
-            }
-        }
-    }
-
-    public void addVariableMessageSign(VariableMessageSignBase variableMessageSign) {
-        if (variableMessageSigns == null) {
-            variableMessageSigns = new VariableMessageSigns();
-        }
-        variableMessageSigns.add(variableMessageSign);
-        for (final LaneSegment laneSegment : laneSegments) {
-            for (final Vehicle vehicle : laneSegment) {
-                assert vehicle.roadSegmentId() == id;
-                variableMessageSign.apply(vehicle, this);
-            }
-        }
-    }
-
-    public void removeVariableMessageSign(VariableMessageSignBase variableMessageSign) {
-        assert variableMessageSigns != null;
-        for (final LaneSegment laneSegment : laneSegments) {
-            for (final Vehicle vehicle : laneSegment) {
-                assert vehicle.roadSegmentId() == id;
-                variableMessageSign.cancel(vehicle, this);
-            }
-        }
-        variableMessageSigns.remove(variableMessageSign);
-    }
+    // private void applySlopes() {
+    // if (slopes != null && slopes.isEmpty() == false) {
+    // for (final LaneSegment laneSegment : laneSegments) {
+    // for (final Vehicle vehicle : laneSegment) {
+    // assert vehicle.roadSegmentId() == id;
+    // slopes.apply(vehicle);
+    // }
+    // }
+    // }
+    // }
 
     /**
      * Lanes change.
@@ -826,19 +785,18 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         for (final LaneSegment laneSegment : laneSegments) {
             assert laneSegment.laneIsSorted();
             assert laneSegment.assertInvariant();
-            // final int leftlane = laneSegment.getLaneIndex()+MovsimConstants.TO_LEFT;
-            final LaneSegment leftLaneSegment = null; // TODO get left laneIndex ( leftLaneIndex < vehContainers.size() ) ?
-                                                      // vehContainers.get(leftLaneIndex) : null;
+            final LaneSegment leftLaneSegment = getLeftLane(laneSegment);
             for (final Vehicle vehicle : laneSegment) {
-                final double x = vehicle.getFrontPosition();
-                final double alphaT = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaT(x);
-                final double alphaV0 = (flowConservingBottlenecks == null) ? 1 : flowConservingBottlenecks.alphaV0(x);
-                // LOG.debug("i={}, x_pos={}", i, x);
-                // LOG.debug("alphaT={}, alphaV0={}", alphaT, alphaV0);
-                // TODO hack for testing acceleration behavior to exit
-                vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment, alphaT, alphaV0);
+                vehicle.updateAcceleration(dt, this, laneSegment, leftLaneSegment);
             }
         }
+    }
+
+    private LaneSegment getLeftLane(LaneSegment laneSegment) {
+        if (laneSegment.lane() + Lanes.TO_LEFT >= Lanes.MOST_INNER_LANE) {
+            return laneSegments[laneSegment.lane() + Lanes.TO_LEFT];
+        }
+        return null;
     }
 
     /**
@@ -911,11 +869,11 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
      * @param iterationCount
      *            the number of iterations that have been executed
      */
-    public void updateDetectors(double dt, double simulationTime, long iterationCount) {
-        if (loopDetectors != null) {
-            loopDetectors.timeStep(dt, simulationTime, iterationCount);
-        }
-    }
+    // public void updateDetectors(double dt, double simulationTime, long iterationCount) {
+    // if (loopDetectors != null) {
+    // loopDetectors.timeStep(dt, simulationTime, iterationCount);
+    // }
+    // }
 
     /**
      * Returns the rear vehicle on the given lane.
@@ -945,6 +903,26 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     Vehicle secondLastVehicleOnSinkLanePosAdjusted(int lane) {
         return laneSegments[lane - 1].secondLastVehicleOnSinkLanePosAdjusted();
     }
+
+    // /**
+    // * Finds the most downstream vehicle immediately at or behind the given position.
+    // *
+    // * @param vehiclePos
+    // * @return the nearest vehicle over all lanes
+    // */
+    // Vehicle rearVehicle(double vehiclePos) {
+    // Vehicle mostDownstreamRearVehicle = null;
+    // for (LaneSegment laneSegment : laneSegments) {
+    // Vehicle rearVehicle = laneSegment.rearVehicle(vehiclePos);
+    // if (mostDownstreamRearVehicle == null) {
+    // mostDownstreamRearVehicle = rearVehicle;
+    // } else if (rearVehicle != null
+    // && rearVehicle.getFrontPosition() > mostDownstreamRearVehicle.getFrontPosition()) {
+    // mostDownstreamRearVehicle = rearVehicle;
+    // }
+    // }
+    // return mostDownstreamRearVehicle;
+    // }
 
     /**
      * Returns the front vehicle on the given lane.
@@ -979,43 +957,16 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return laneSegments[lane - 1].frontVehicle(vehiclePos);
     }
 
-    /**
-     * Sets the speed limits for this road segment for all lanes (openDrive defines speed limits per lane)
-     * 
-     * @param list
-     */
-    @Deprecated
-    public void setSpeedLimits(List<Speed> list) {
-        this.speedLimits = new SpeedLimits(list);
-    }
+    // /**
+    // * Sets the slopes for this road segment.
+    // *
+    // * @param slopes
+    // */
+    // public void setElevationProfile(GradientProfile elevationProfile) {
+    // this.slopes = new Slopes(elevationProfile.getElevation());
+    //
+    // }
 
-    /**
-     * Returns an iterable over all the speed limits in the road segment.
-     * 
-     * @return an iterable over all the speed limits in the road segment
-     */
-    public Iterable<SpeedLimit> speedLimits() {
-        return speedLimits;
-    }
-
-    /**
-     * Sets the slopes for this road segment.
-     * 
-     * @param slopes
-     */
-    public void setElevationProfile(ElevationProfile elevationProfile) {
-        this.slopes = new Slopes(elevationProfile.getElevation());
-
-    }
-
-    /**
-     * Returns an iterable over all the slopes in the road segment.
-     * 
-     * @return an iterable over all the slopes in the road segment
-     */
-    public Iterable<Slope> slopes() {
-        return slopes == null ? null : slopes;
-    }
 
     /**
      * Returns true if each lane in the vehicle array is sorted.
@@ -1123,13 +1074,13 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                 if (netDistance < 0) {
                     LOG.error("Crash happened!!!");
                     final StringBuilder sb = new StringBuilder("\n");
-                    sb.append(String.format("Crash of Vehicle i=%d (id=%d) at x=%.4f ", index, vehicle.getId(),
+                    sb.append(String.format("Crash of Vehicle i=%d (nodeId=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (id=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
+                        sb.append(String.format("with veh (nodeId=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
                                 vehFront.getFrontPosition(), vehicle.lane()));
                     }
-                    sb.append("internal id=").append(id);
+                    sb.append("internal nodeId=").append(id);
                     sb.append(", roadId=").append(userId);
                     sb.append(", net distance=").append(netDistance);
                     sb.append(", lane=").append(laneSegment.lane());
@@ -1141,7 +1092,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                             .min(index + 8, M - 1); j++) {
                         final Vehicle veh = laneSegment.getVehicle(j);
                         sb.append(String
-                                .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, id=%d%n",
+                                .format("veh=%d, pos=%6.2f, speed=%4.2f, accModel=%4.3f, acc=%4.3f, length=%3.1f, lane=%d, nodeId=%d%n",
                                         j, veh.getFrontPosition(), veh.getSpeed(), veh.accModel(), veh.getAcc(),
                                         veh.getLength(), veh.lane(), veh.getId()));
                     }
@@ -1203,21 +1154,21 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return ImmutableList.copyOf(laneSegmentIterator());
     }
 
-    public final LoopDetectors getLoopDetectors() {
-        return loopDetectors;
-    }
-
-    public void setLoopDetectors(LoopDetectors loopDetectors) {
-        this.loopDetectors = loopDetectors;
-    }
-
-    public void setFlowConservingBottlenecks(FlowConservingBottlenecks flowConservingBottlenecks) {
-        Preconditions.checkNotNull(flowConservingBottlenecks);
-        this.flowConservingBottlenecks = flowConservingBottlenecks;
-    }
-
+    // convenience methods
     public Iterable<TrafficLight> trafficLights() {
-        return trafficSigns.values(TrafficSignType.TRAFFICLIGHT);
+        return roadObjects.values(RoadObjectType.TRAFFICLIGHT);
+    }
+
+    public Iterable<SpeedLimit> speedLimits() {
+        return roadObjects.values(RoadObjectType.SPEEDLIMIT);
+    }
+
+    public Iterable<VariableMessageSignDiversion> variableMessageSignDiversions() {
+        return roadObjects.values(RoadObjectType.VMS_DIVERSION);
+    }
+
+    public Iterable<GradientProfile> gradientProfiles() {
+        return roadObjects.values(RoadObjectType.GRADIENT_PROFILE);
     }
 
     /**
@@ -1246,8 +1197,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         this.roadName = name;
     }
 
-    public TrafficSigns trafficSigns() {
-        return trafficSigns;
+    public RoadObjects roadObjects() {
+        return roadObjects;
     }
 
     
@@ -1264,7 +1215,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     // TODO new concept, think about refactoring 
     public class Node {
 
-        private long id = Long.MAX_VALUE;
+        private long nodeId = Long.MAX_VALUE;
         private final String type;
         
         public Node(String type) {
@@ -1272,23 +1223,23 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         }
 
         public boolean hasId() {
-            return id != Long.MAX_VALUE;
+            return nodeId != Long.MAX_VALUE;
         }
 
         public long getId() {
-            return id;
+            return nodeId;
         }
 
         public void setId(long id) {
-            if (hasId() && this.id != id) {
-                throw new IllegalArgumentException("nodetype=" + this + " already set with value=" + this.id);
+            if (hasId() && this.nodeId != id) {
+                throw new IllegalArgumentException("nodetype=" + this + " already set with value=" + this.nodeId);
             }
-            this.id = id;
+            this.nodeId = id;
         }
 
         @Override
         public String toString() {
-            return "Node[type=" + type + ", id=" + (this.hasId() ? this.getId() : "") + "]";
+            return "Node[type=" + type + ", nodeId=" + (this.hasId() ? this.getId() : "") + "]";
         }
 
     }
@@ -1307,8 +1258,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     @Override
     public String toString() {
-        return "RoadSegment [id=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
+        return "RoadSegment [nodeId=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
                 + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
+    }
+
+    public SignalPoints signalPoints() {
+        return signalPoints;
     }
 
 }

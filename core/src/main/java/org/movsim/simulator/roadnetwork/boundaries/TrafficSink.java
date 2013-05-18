@@ -24,10 +24,11 @@
  * -----------------------------------------------------------------------------------------
  */
 
-package org.movsim.simulator.roadnetwork;
+package org.movsim.simulator.roadnetwork.boundaries;
 
 import org.movsim.autogen.Parking;
 import org.movsim.simulator.SimulationTimeStep;
+import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.movsim.utilities.Units;
 import org.slf4j.Logger;
@@ -132,7 +133,7 @@ public class TrafficSink implements SimulationTimeStep {
         return totalVehicleFuelUsedLiters;
     }
     
-    void recordRemovedVehicle(Vehicle vehicle) {
+    public void recordRemovedVehicle(Vehicle vehicle) {
         totalVehicleTravelDistance += vehicle.totalTravelDistance();
         totalVehicleTravelTime += vehicle.totalTravelTime();
         totalVehicleFuelUsedLiters += vehicle.totalFuelUsedLiters();
