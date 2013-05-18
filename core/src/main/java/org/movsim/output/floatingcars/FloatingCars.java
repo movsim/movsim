@@ -71,8 +71,7 @@ public class FloatingCars implements SimulationTimeStep {
         Preconditions.checkNotNull(route);
         this.nDtOut = floatingCarOutput.getNTimestep();
         this.randomFraction = (floatingCarOutput.getRandomFraction() < 0 || floatingCarOutput.getRandomFraction() > 1) ? 0
-                : floatingCarOutput
-                .getRandomFraction();
+                : floatingCarOutput.getRandomFraction();
         this.route = route;
         floatingCarVehicleNumbers = new HashSet<>();
         for (org.movsim.autogen.FloatingCar fc : floatingCarOutput.getFloatingCar()) {

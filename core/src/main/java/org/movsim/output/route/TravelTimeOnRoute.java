@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -50,7 +50,7 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     private double meanSpeed;
 
     private double instTravelTimeEMA;
-    
+
     private int numberOfVehicles;
 
     public TravelTimeOnRoute(double simulationTimestep, TravelTimes travelTimeInput, RoadNetwork roadNetwork,
@@ -66,7 +66,7 @@ public class TravelTimeOnRoute extends OutputOnRouteBase {
     public void timeStep(double dt, double simulationTime, long iterationCount) {
 
         numberOfVehicles = RoadNetwork.vehicleCount(route) - roadNetwork.obstacleCount(route);
-        
+
         instantaneousTravelTime = RoadNetwork.instantaneousTravelTime(route);
 
         totalTravelTime += instantaneousTravelTime;

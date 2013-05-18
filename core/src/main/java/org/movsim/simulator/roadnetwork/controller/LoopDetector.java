@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -47,7 +47,7 @@ public class LoopDetector extends RoadObjectController {
     private double timeOffset;
 
     private final int[] vehCount;
-    
+
     private final double[] vSum;
 
     private final double[] occTime;
@@ -61,7 +61,7 @@ public class LoopDetector extends RoadObjectController {
     private final double[] occupancy;
 
     private final int[] vehCountOutput;
-    
+
     private final long[] vehCumulatedCountOutput;
 
     private final double[] meanSpeedHarmonic;
@@ -72,7 +72,7 @@ public class LoopDetector extends RoadObjectController {
 
     /** vehicle count per update aggregation cycle. */
     private int vehCountOutputAllLanes;
-        
+
     /** Cumulated vehicle count. */
     private long vehCumulatedCountOutputAllLanes;
 
@@ -83,7 +83,7 @@ public class LoopDetector extends RoadObjectController {
     private double meanTimegapHarmonicAllLanes;
 
     private final FileDetector fileDetector;
-    
+
     /**
      * Constructor
      * 
@@ -93,7 +93,8 @@ public class LoopDetector extends RoadObjectController {
      * @param logging
      * @param loggingLanes
      */
-    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging, boolean loggingLanes) {
+    public LoopDetector(RoadSegment roadSegment, double detPosition, double dtSample, boolean logging,
+            boolean loggingLanes) {
         super(RoadObjectType.LOOPDETECTOR, detPosition, roadSegment);
         this.dtSample = dtSample;
 
@@ -109,7 +110,7 @@ public class LoopDetector extends RoadObjectController {
         vehCountOutput = new int[laneCount];
         meanSpeedHarmonic = new double[laneCount];
         meanTimegapHarmonic = new double[laneCount];
-        
+
         vehCumulatedCountOutput = new long[laneCount];
         vehCumulatedCountOutputAllLanes = 0;
 
@@ -117,12 +118,13 @@ public class LoopDetector extends RoadObjectController {
 
         for (int i = 0; i < laneCount; i++) {
             reset(i);
-            vehCumulatedCountOutput[i] = 0;  // initalization
+            vehCumulatedCountOutput[i] = 0; // initalization
         }
         resetLaneAverages();
-        
-        fileDetector = (logging) ? new FileDetector(this, roadSegment.userId(), roadSegment.laneCount(), loggingLanes) : null;
-        if(fileDetector != null){
+
+        fileDetector = (logging) ? new FileDetector(this, roadSegment.userId(), roadSegment.laneCount(), loggingLanes)
+                : null;
+        if (fileDetector != null) {
             fileDetector.writeAggregatedData(0);
         }
     }
@@ -159,7 +161,7 @@ public class LoopDetector extends RoadObjectController {
                 calculateAveragesForLane(laneIndex);
             }
             calculateAveragesOverAllLanes();
-            if(fileDetector != null){
+            if (fileDetector != null) {
                 fileDetector.writeAggregatedData(simulationTime);
             }
             timeOffset = simulationTime;
@@ -213,12 +215,14 @@ public class LoopDetector extends RoadObjectController {
             meanSpeedHarmonicAllLanes += getVehCountOutput(i) * getMeanSpeedHarmonic(i);
             meanTimegapHarmonicAllLanes += getVehCountOutput(i) * getMeanTimegapHarmonic(i);
         }
-        
+
         vehCumulatedCountOutputAllLanes += vehCountOutputAllLanes;
 
-        meanSpeedAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanSpeedAllLanes/vehCountOutputAllLanes;
-        meanSpeedHarmonicAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanSpeedHarmonicAllLanes/vehCountOutputAllLanes;
-        meanTimegapHarmonicAllLanes = (vehCountOutputAllLanes==0) ? 0 : meanTimegapHarmonicAllLanes/vehCountOutputAllLanes;
+        meanSpeedAllLanes = (vehCountOutputAllLanes == 0) ? 0 : meanSpeedAllLanes / vehCountOutputAllLanes;
+        meanSpeedHarmonicAllLanes = (vehCountOutputAllLanes == 0) ? 0 : meanSpeedHarmonicAllLanes
+                / vehCountOutputAllLanes;
+        meanTimegapHarmonicAllLanes = (vehCountOutputAllLanes == 0) ? 0 : meanTimegapHarmonicAllLanes
+                / vehCountOutputAllLanes;
         occupancyAllLanes /= roadSegment().laneCount();
     }
 
@@ -253,7 +257,7 @@ public class LoopDetector extends RoadObjectController {
     public int getVehCountOutput(int i) {
         return vehCountOutput[i];
     }
-    
+
     public double getMeanSpeedHarmonic(int i) {
         return meanSpeedHarmonic[i];
     }

@@ -31,7 +31,6 @@ public class RoadMappingPeer extends RoadMappingAbstract {
         return mapFloat(posTheta, vehicle.physicalQuantities().getLength(), vehicle.physicalQuantities().getWidth());
     }
 
-
     @Override
     public boolean isPeer() {
         return true;

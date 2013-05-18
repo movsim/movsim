@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -81,8 +81,7 @@ class NSM extends LongitudinalModelBase {
         if (logger.isDebugEnabled()) {
             if (localV0 < getDesiredSpeed()) {
                 logger.debug(String.format("CA v0=%.2f, localV0=%.2f, external speedlimit=%.2f, v-scaling=%.2f\n",
-                        getDesiredSpeed(),
-                        localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
+                        getDesiredSpeed(), localV0, me.getSpeedlimit(), me.physicalQuantities().getvScale()));
             }
         }
 

@@ -16,5 +16,5 @@ abstract class OutputOnRouteBase implements SimulationTimeStep {
         this.roadNetwork = Preconditions.checkNotNull(roadNetwork);
         this.route = Preconditions.checkNotNull(route);
     }
-    
+
 }

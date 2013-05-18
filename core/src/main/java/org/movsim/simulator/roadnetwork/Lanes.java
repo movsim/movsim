@@ -31,8 +31,8 @@ package org.movsim.simulator.roadnetwork;
  * Lanes value constants.
  * </p>
  * <p>
- * Lanes are numbered from the inside laneIndex to the outside laneIndex. So, for example, on a three laneIndex road LANE1 is the
- * inside laneIndex, LANE2 is the middle laneIndex and LANE3 is the outside laneIndex.
+ * Lanes are numbered from the inside laneIndex to the outside laneIndex. So, for example, on a three laneIndex road LANE1 is the inside
+ * laneIndex, LANE2 is the middle laneIndex and LANE3 is the outside laneIndex.
  * </p>
  * Lanes numbering is independent of whether traffic drives on the right or the left, indeed references to "right lanes"
  * and "left lanes" is conscientiously eschewed.
@@ -131,7 +131,6 @@ public final class Lanes {
             return reverseDirection;
         }
     }
-
 
     /**
      * 

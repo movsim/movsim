@@ -1,13 +1,12 @@
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-
 class EquilibriumCCS extends EquilibriumPropertiesImpl {
 
     public EquilibriumCCS(double length, CCS model) {
         super(length);
 
-//        calcEquilibrium(model);
-//        calcRhoQMax();
+        // calcEquilibrium(model);
+        // calcRhoQMax();
     }
 
     /**

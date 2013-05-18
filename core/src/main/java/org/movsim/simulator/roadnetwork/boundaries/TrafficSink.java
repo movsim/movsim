@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -41,10 +41,10 @@ public class TrafficSink implements SimulationTimeStep {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSink.class);
-    
+
     // For sinks roadSegment is the source road
     protected RoadSegment roadSegment;
-    // measure actual outflow 
+    // measure actual outflow
     private static final double MEASURING_INTERVAL_S = 60.0;
     private int vehiclesRemovedInInterval;
     private double measuredOutflow;
@@ -111,6 +111,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the total travel distance of all vehicles that have been removed by this traffic sink.
+     * 
      * @return total travel distance
      */
     public final double totalVehicleTravelDistance() {
@@ -119,6 +120,7 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the total travel time of all vehicles that have been removed by this traffic sink.
+     * 
      * @return total travel time
      */
     public final double totalVehicleTravelTime() {
@@ -127,12 +129,13 @@ public class TrafficSink implements SimulationTimeStep {
 
     /**
      * Returns the total fuel used by all vehicles that have been removed by this traffic sink.
+     * 
      * @return total fuel used
      */
     public final double totalFuelUsedLiters() {
         return totalVehicleFuelUsedLiters;
     }
-    
+
     public void recordRemovedVehicle(Vehicle vehicle) {
         totalVehicleTravelDistance += vehicle.totalTravelDistance();
         totalVehicleTravelTime += vehicle.totalTravelTime();
@@ -154,8 +157,8 @@ public class TrafficSink implements SimulationTimeStep {
             measuredOutflow = vehiclesRemovedInInterval / MEASURING_INTERVAL_S; // vehicles per second
             vehiclesRemovedInInterval = 0;
             measuredTime = 0.0;
-            LOG.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", 
-                    sourceRoad().id(), measuredOutflow*Units.INVS_TO_INVH);
+            LOG.debug("sink in roadSegment with id={} has measured outflow of {} over all lanes ", sourceRoad().id(),
+                    measuredOutflow * Units.INVS_TO_INVH);
         }
     }
 

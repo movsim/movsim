@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -27,7 +27,6 @@
 package org.movsim.roadmappings;
 
 import java.util.Arrays;
-
 
 /**
  * Road mapping defined by a quadratic Bezier curve.
@@ -97,8 +96,8 @@ public class RoadMappingBezier extends RoadMappingAbstract {
      * @param c
      * @param d
      */
-    RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a,
-            double b, double c, double d) {
+    RoadMappingBezier(int laneCount, double s, double x0, double y0, double theta, double length, double a, double b,
+            double c, double d) {
         super(laneCount, x0, y0);
         p0x = x0;
         p0y = y0;

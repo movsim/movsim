@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -168,9 +168,9 @@ public class LaneSegment implements Iterable<Vehicle> {
     public final int vehicleCount() {
         // int vehicleCount = 0;
         // for (final Vehicle vehicle : vehicles) {
-//            if (vehicle.type() != Vehicle.Type.OBSTACLE) {
-//                ++vehicleCount;
-//            }
+        // if (vehicle.type() != Vehicle.Type.OBSTACLE) {
+        // ++vehicleCount;
+        // }
         // }
         // return vehicleCount;
         return vehicles.size();
@@ -245,7 +245,7 @@ public class LaneSegment implements Iterable<Vehicle> {
         }
         return totalVehicleFuelUsedLiters;
     }
-    
+
     public double instantaneousFuelUsedLitersPerS() {
         double instFuelUsedLiters = 0;
         for (final Vehicle vehicle : vehicles) {
@@ -388,21 +388,21 @@ public class LaneSegment implements Iterable<Vehicle> {
     }
 
     // TODO testwise add vehicle
-//    public void addVehicleTestwise(Vehicle vehicle) {
-//        if (vehicle != null) {
-//            // assert vehicle.getPosition() >= 0.0;
-//            assert vehicle.getSpeed() >= 0.0;
-//            final int index = positionBinarySearch(vehicle.getRearPosition());
-//            if (index < 0) {
-//                vehicles.add(-index - 1, vehicle);
-//            } else if (index == 0) {
-//                vehicles.add(0, vehicle);
-//            } else {
-//                // vehicle is in the same position as an existing vehicle - this should not happen
-//                assert false;
-//            }
-//        }
-//    }
+    // public void addVehicleTestwise(Vehicle vehicle) {
+    // if (vehicle != null) {
+    // // assert vehicle.getPosition() >= 0.0;
+    // assert vehicle.getSpeed() >= 0.0;
+    // final int index = positionBinarySearch(vehicle.getRearPosition());
+    // if (index < 0) {
+    // vehicles.add(-index - 1, vehicle);
+    // } else if (index == 0) {
+    // vehicles.add(0, vehicle);
+    // } else {
+    // // vehicle is in the same position as an existing vehicle - this should not happen
+    // assert false;
+    // }
+    // }
+    // }
 
     public void appendVehicle(Vehicle vehicle) {
         assert vehicle.getFrontPosition() >= 0.0;
@@ -576,7 +576,7 @@ public class LaneSegment implements Iterable<Vehicle> {
     public final Vehicle frontVehicle(Vehicle vehicle) {
         return frontVehicle(vehicle.getRearPosition());
     }
-    
+
     private int positionBinarySearch(double vehiclePos) {
         int low = 0;
         int high = vehicles.size() - 1;

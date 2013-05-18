@@ -43,8 +43,8 @@ import com.google.common.base.Preconditions;
  * Paper for reference:
  * </p>
  * <p>
- * <a href="http://pubsindex.trb.org/view.aspx?id=801029"> M. Treiber, A. Kesting, D. Helbing, General Lanes-Changing
- * Model MOBIL for Car-Following Models. Transportation Research Record, Volume 1999, Pages 86-94 (2007).</a>
+ * <a href="http://pubsindex.trb.org/view.aspx?id=801029"> M. Treiber, A. Kesting, D. Helbing, General Lanes-Changing Model MOBIL for
+ * Car-Following Models. Transportation Research Record, Volume 1999, Pages 86-94 (2007).</a>
  * </p>
  */
 
@@ -53,7 +53,6 @@ public class MOBIL {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(MOBIL.class);
-
 
     private ModelParameterMOBIL param;
 

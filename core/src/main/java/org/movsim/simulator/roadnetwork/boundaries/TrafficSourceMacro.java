@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -40,10 +40,10 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
 
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficSourceMacro.class);
-    
+
     /** upper limit of insertion range, needs to be fixed for placing SignalPositions at the boundary. */
     private static final double MAX_POSITION_ENTER = 200;
-    
+
     private final InflowTimeSeries inflowTimeSeries;
 
     private TestVehicle testVehicle;
@@ -64,9 +64,9 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
     public void timeStep(double dt, double simulationTime, long iterationCount) {
         final double totalInflow = getTotalInflow(simulationTime);
         nWait += totalInflow * dt;
-        
+
         calcApproximateInflow(dt);
-        
+
         if (nWait >= 1.0) {
             if (testVehicle == null) {
                 testVehicle = vehGenerator.getTestVehicle();
@@ -96,16 +96,15 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
      * </p>
      * 
      * <p>
-     * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as possible. Otherwise, one
-     * would activate an "inflow bottleneck", and less vehicles can be entered as one would like to. The crux is that
-     * vehicles can be introduced only at times given by the simulation time step which is generally incommensurate with
-     * the inverse of the inflow. For example, if the simulation time step is 0.4s, capacity is 2400 veh/h, and the
-     * prescribed inflow is 2260 veh/h or one vehicle every 1.59s, you insert one vehicle every 1.6s, most of the time.
-     * However, at some instances, two vehicles are inserted at time headway of 1.2s corresponding macroscopically to
-     * 3000 veh/h, far above capacity. Typical time gaps for this situation are 1.2s most of the time but 0.8s
-     * occasionally. This introduces a perturbation which may "activate" the "inflow bottleneck", unless a flow of 2260
-     * veh/h is absolutely stable which is not always the case. Since the time of insertion cannot be changed, one can
-     * homogenize the inflow by allowing the insertion point to vary by a maximum of one vehicle-vehicle distance.
+     * If the inflow is near capacity, it is crucial to avoid initial perturbations as much as possible. Otherwise, one would activate an
+     * "inflow bottleneck", and less vehicles can be entered as one would like to. The crux is that vehicles can be introduced only at times
+     * given by the simulation time step which is generally incommensurate with the inverse of the inflow. For example, if the simulation
+     * time step is 0.4s, capacity is 2400 veh/h, and the prescribed inflow is 2260 veh/h or one vehicle every 1.59s, you insert one vehicle
+     * every 1.6s, most of the time. However, at some instances, two vehicles are inserted at time headway of 1.2s corresponding
+     * macroscopically to 3000 veh/h, far above capacity. Typical time gaps for this situation are 1.2s most of the time but 0.8s
+     * occasionally. This introduces a perturbation which may "activate" the "inflow bottleneck", unless a flow of 2260 veh/h is absolutely
+     * stable which is not always the case. Since the time of insertion cannot be changed, one can homogenize the inflow by allowing the
+     * insertion point to vary by a maximum of one vehicle-vehicle distance.
      * </p>
      * 
      * @param laneSegment
@@ -125,7 +124,7 @@ public class TrafficSourceMacro extends AbstractTrafficSource {
             return true;
         }
         // (2) check if gap to leader is sufficiently large origin of road section is assumed to be zero
-        final double netGapToLeader = leader.getRearPosition(); 
+        final double netGapToLeader = leader.getRearPosition();
         final double gapAtQMax = 1. / testVehicle.getRhoQMax();
 
         // minimal distance set to 80% of 1/rho at flow maximum in fundamental diagram

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -26,7 +26,6 @@
 
 package org.movsim.roadmappings;
 
-
 /**
  * This is a WORK IN PROGRESS and not yet ready for use.
  */
@@ -49,8 +48,7 @@ public class RoadMappingCompressedStraight extends RoadMappingLine {
      *            y-position of end of line
      * @param compressionFactor
      */
-    RoadMappingCompressedStraight(int laneCount, double x0, double y0, double x1, double y1,
-            double compressionFactor) {
+    RoadMappingCompressedStraight(int laneCount, double x0, double y0, double x1, double y1, double compressionFactor) {
         super(laneCount, x0, y0, x1, y1);
         this.compressionFactor = compressionFactor;
     }

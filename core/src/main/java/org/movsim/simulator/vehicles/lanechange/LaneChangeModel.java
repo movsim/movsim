@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -161,12 +161,12 @@ public class LaneChangeModel {
         if (decision.isMandatory()) {
             return decision;
         }
-        
+
         decision = checkForLaneChangeForEnteringVehicle(roadSegment);
         if (!decision.noDecisionMade()) {
             return decision;
         }
-        
+
         // check discretionary lane changes
         decision = determineDiscretionaryLaneChangeDirection(roadSegment);
 
@@ -348,10 +348,10 @@ public class LaneChangeModel {
                 && roadSegment.laneSegment(roadSegment.laneCount()).type() == Lanes.Type.ENTRANCE
                 && currentLane == roadSegment.trafficLaneMax()) {
             Vehicle frontVehicle = roadSegment.laneSegment(roadSegment.trafficLaneMax()).frontVehicle(me);
-            if(frontVehicle==null || frontVehicle.type() == Vehicle.Type.OBSTACLE){
+            if (frontVehicle == null || frontVehicle.type() == Vehicle.Type.OBSTACLE) {
                 return LaneChangeDecision.NONE;
             }
-            
+
             double accToFront = me.getLongitudinalModel().calcAcc(me, frontVehicle);
             if (accToFront < -lcModelMOBIL.getParameter().getSafeDeceleration()) {
                 // check own disadvantage to change to left to decide to make room
@@ -361,12 +361,12 @@ public class LaneChangeModel {
                                     me.getFrontPosition(), currentLane, me.getNetDistance(frontVehicle), me.getSpeed(),
                                     me.getRelSpeed(frontVehicle), accToFront));
                 }
-                final int newLane = currentLane + Lanes.TO_LEFT; 
+                final int newLane = currentLane + Lanes.TO_LEFT;
                 final LaneSegment newLaneSegment = roadSegment.laneSegment(newLane);
 
                 if (newLaneSegment.type() == Lanes.Type.ENTRANCE) {
                     // never change lane into an entrance lane
-                    return LaneChangeDecision.NONE; 
+                    return LaneChangeDecision.NONE;
                 }
                 final Vehicle newFront = newLaneSegment.frontVehicle(me);
                 if (newFront != null) {
@@ -395,7 +395,8 @@ public class LaneChangeModel {
                 newLaneSegment.removeVehicle(index);
                 me.setLane(currentLane);
 
-                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc) || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {
+                if (lcModelMOBIL.safetyCheckAcceleration(newBackNewAcc)
+                        || lcModelMOBIL.safetyCheckAcceleration(meNewAcc)) {
                     return LaneChangeDecision.NONE;
                 }
                 LOG.debug("finally change to left to make room for vehicle at entrance lane ...");

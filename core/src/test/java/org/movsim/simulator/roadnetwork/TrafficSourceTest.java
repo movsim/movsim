@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -43,74 +43,76 @@ import org.movsim.simulator.vehicles.TrafficCompositionGenerator;
  */
 public class TrafficSourceTest {
 
-	private TrafficSourceMacro trafficSource;
+    private TrafficSourceMacro trafficSource;
 
     /**
-     * Sets up the test fixture. 
+     * Sets up the test fixture.
      * (Called before every test case method.)
      */
     @Before
     public void setUp() throws Exception {
         final TrafficCompositionGenerator vehicleGenerator = null;
-		final RoadSegment roadSegment = new RoadSegment(1000.0, 1);
+        final RoadSegment roadSegment = new RoadSegment(1000.0, 1);
         final List<Inflow> inflowDataPoints = new ArrayList<>();
-		final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
-		trafficSource = new TrafficSourceMacro(vehicleGenerator, roadSegment, inflowTimeSeries);
+        final InflowTimeSeries inflowTimeSeries = new InflowTimeSeries(inflowDataPoints);
+        trafficSource = new TrafficSourceMacro(vehicleGenerator, roadSegment, inflowTimeSeries);
     }
 
     /**
-     * Tears down the test fixture. 
+     * Tears down the test fixture.
      * (Called after every test case method.)
      */
     @After
     public void tearDown() throws Exception {
     }
 
-	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#TrafficSource(org.movsim.simulator.vehicles.VehicleGeneratorOld, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries)}
-	 */
-	@Test
-	public final void testTrafficSource() {
-		assertNotNull(trafficSource);
-	}
+    /**
+     * Test method for
+     * {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#TrafficSource(org.movsim.simulator.vehicles.VehicleGeneratorOld, org.movsim.simulator.roadnetwork.RoadSegment, org.movsim.simulator.roadnetwork.boundaries.InflowTimeSeries)}
+     */
+    @Test
+    public final void testTrafficSource() {
+        assertNotNull(trafficSource);
+    }
 
-	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#setRecorder(org.movsim.simulator.roadnetwork.TrafficSourceMacro.RecordDataCallback)}
-	 */
-	@Test
-	public final void testSetRecorder() {
-		//fail("Not yet implemented");
-	}
+    /**
+     * Test method for
+     * {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#setRecorder(org.movsim.simulator.roadnetwork.TrafficSourceMacro.RecordDataCallback)}
+     */
+    @Test
+    public final void testSetRecorder() {
+        // fail("Not yet implemented");
+    }
 
-	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#getEnteringVehCounter()}
-	 */
-	@Test
-	public final void testGetEnteringVehCounter() {
-		//fail("Not yet implemented");
-	}
+    /**
+     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#getEnteringVehCounter()}
+     */
+    @Test
+    public final void testGetEnteringVehCounter() {
+        // fail("Not yet implemented");
+    }
 
-	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#timeStep(double, double, long)}.
-	 */
-	@Test
-	public final void testTimeStep() {
-		//fail("Not yet implemented");
-	}
+    /**
+     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#timeStep(double, double, long)}.
+     */
+    @Test
+    public final void testTimeStep() {
+        // fail("Not yet implemented");
+    }
 
-	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#setFlowPerLane(double)}.
-	 */
-	@Test
-	public final void testSetFlowPerLane() {
-		//fail("Not yet implemented");
-	}
+    /**
+     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#setFlowPerLane(double)}.
+     */
+    @Test
+    public final void testSetFlowPerLane() {
+        // fail("Not yet implemented");
+    }
 
-	/**
-	 * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#getFlowPerLane(double)}.
-	 */
-	@Test
-	public final void testGetFlowPerLane() {
-		//fail("Not yet implemented");
-	}
+    /**
+     * Test method for {@link org.movsim.simulator.roadnetwork.boundaries.TrafficSourceMacro#getFlowPerLane(double)}.
+     */
+    @Test
+    public final void testGetFlowPerLane() {
+        // fail("Not yet implemented");
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -118,7 +118,8 @@ class OVM_FVDM extends LongitudinalModelBase {
             // standard OVM function (Bando model)
             // scale OVM/VDIFF so that v0 represents actual desired speed
             final double v0Prev = v0Local / (1.0 + Math.tanh(betaLoc));
-            vOptimal = Math.max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
+            vOptimal = Math
+                    .max(v0Prev * (Math.tanh((s - s0) / transitionWidthLoc - betaLoc) - Math.tanh(-betaLoc)), 0.);
             // LOG.debug("s = {}, vOpt = {}", s, vOpt);
         } else if (variant == OptimalVelocityFunctionEnum.TRIANGULAR) {
             // triangular OVM function

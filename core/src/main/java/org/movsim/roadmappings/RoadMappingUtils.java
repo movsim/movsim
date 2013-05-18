@@ -45,10 +45,10 @@ public final class RoadMappingUtils {
 
     public static final RoadMapping create(Iterable<RoadGeometry> roadGeometries) {
         Preconditions.checkArgument(!Iterables.isEmpty(roadGeometries));
-        if(Iterables.size(roadGeometries) == 1){
+        if (Iterables.size(roadGeometries) == 1) {
             return create(Iterables.getOnlyElement(roadGeometries));
         }
-        
+
         LOG.warn("creating of RoadMappingPoly not well tested..."); // TODO
         RoadGeometry first = Iterables.get(roadGeometries, 0);
         RoadMappingPoly roadMapping = new RoadMappingPoly(first.laneCount(), first.laneWidth());

@@ -174,8 +174,8 @@ public class TrafficLight extends RoadObjectController {
     @Override
     public String toString() {
         return "TrafficLight [controllerId = " + controllerId() + ", signalId = " + signalId() + ", status=" + status
-                + ", position=" + position + ", signalType=" + signalType + ", groupId = "
-                + groupId + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
+                + ", position=" + position + ", signalType=" + signalType + ", groupId = " + groupId
+                + ", roadSegment.id=" + ((roadSegment == null) ? "null" : roadSegment.userId()) + "]";
     }
 
     @Override

@@ -77,7 +77,8 @@ public class FileDetector extends FileOutputBase {
      * 
      */
     private void writeHeader() {
-        writer.printf(COMMENT_CHAR + " number of lanes = %d. (most inner lane is = %d and increasing to outer lanes)%n",
+        writer.printf(
+                COMMENT_CHAR + " number of lanes = %d. (most inner lane is = %d and increasing to outer lanes)%n",
                 laneCount, Lanes.MOST_INNER_LANE);
         writer.printf(COMMENT_CHAR + " dtSample in seconds = %-8.4f%n", detector.getDtSample());
         writer.printf(COMMENT_CHAR + " logging lanes = %s%n", loggingLanes);

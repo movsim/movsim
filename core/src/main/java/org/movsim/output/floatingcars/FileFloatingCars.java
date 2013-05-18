@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -76,14 +76,16 @@ class FileFloatingCars extends FileOutputBase {
         writer.println(String.format("%s model label  = %s", COMMENT_CHAR, vehicle.getLabel()));
         writer.println(String.format("%s model category = %s", COMMENT_CHAR, vehicle.getLongitudinalModel().modelName()
                 .getCategory().toString()));
-        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle.getLongitudinalModel()
-                .modelName().getDetailedName(), vehicle.getLongitudinalModel().modelName().getShortName()));
-        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, vehicle.physicalQuantities()
-                .getLength()));
+        writer.println(String.format("%s model name = %s (short name: %s)", COMMENT_CHAR, vehicle
+                .getLongitudinalModel().modelName().getDetailedName(), vehicle.getLongitudinalModel().modelName()
+                .getShortName()));
+        writer.println(String.format("%s physical vehicle length (in m) = %.2f", COMMENT_CHAR, vehicle
+                .physicalQuantities().getLength()));
         writer.println(String.format("%s position x is defined by vehicle front (on the given road segment)",
                 COMMENT_CHAR));
         writer.println(String.format("%s origin roadsegment id= %d, exit roadsegment id= %d (not set=%d)",
-                COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(), Vehicle.ROAD_SEGMENT_ID_NOT_SET));
+                COMMENT_CHAR, vehicle.originRoadSegmentId(), vehicle.exitRoadSegmentId(),
+                Vehicle.ROAD_SEGMENT_ID_NOT_SET));
         writer.println(String.format("%s %s", COMMENT_CHAR, vehicle.getInfoComment()));
         writer.println(String.format("%s %s", COMMENT_CHAR, route.toString()));
         writer.println(outputHeading);

@@ -209,7 +209,6 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
         createSignalPoints();
     }
 
-
     private void createSignalPoints() {
         // all RoadObjects must be added to RoadSegment
         for (RoadSegment roadSegment : roadNetwork) {
@@ -313,14 +312,14 @@ public class Simulator implements SimulationTimeStep, SimulationRun.CompletionCa
             }
         }
 
-         if (roadInput.isSetVariableMessageSignDiversions()) {
+        if (roadInput.isSetVariableMessageSignDiversions()) {
             for (org.movsim.autogen.VariableMessageSignDiversion diversion : roadInput
                     .getVariableMessageSignDiversions().getVariableMessageSignDiversion()) {
                 VariableMessageSignDiversion variableMessageSignDiversion = new VariableMessageSignDiversion(
                         diversion.getPosition(), diversion.getValidLength(), roadSegment);
                 roadSegment.roadObjects().add(variableMessageSignDiversion);
-             }
-         }
+            }
+        }
 
         if (roadInput.isSetInitialConditions()) {
             initialConditions(roadSegment, roadInput.getInitialConditions(), composition);

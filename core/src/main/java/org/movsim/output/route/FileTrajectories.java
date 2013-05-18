@@ -100,7 +100,6 @@ public class FileTrajectories extends FileOutputBase implements SimulationTimeSt
         }
     }
 
-
     private boolean isLargerThanStartTimeInterval() {
         if (!traj.isSetStartTime()) {
             return true;

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -148,8 +148,7 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for
-     * {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.roadmappings.RoadMapping)}
+     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#RoadSegment(org.movsim.roadmappings.RoadMapping)}
      */
     @Test
     public final void testRoadSegmentRoadMapping() {
@@ -196,7 +195,8 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setTrafficSource(org.movsim.simulator.roadnetwork.TrafficSourceMacro)}
+     * Test method for
+     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setTrafficSource(org.movsim.simulator.roadnetwork.TrafficSourceMacro)}
      */
     @Test
     public final void testSetTrafficSource() {
@@ -244,7 +244,8 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSourceLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
+     * Test method for
+     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setSourceLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
      */
     @Test
     public final void testSetSourceLaneSegmentForLane() {
@@ -268,7 +269,8 @@ public class RoadSegmentTest {
     }
 
     /**
-     * Test method for {@link org.movsim.simulator.roadnetwork.RoadSegment#setSinkLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
+     * Test method for
+     * {@link org.movsim.simulator.roadnetwork.RoadSegment#setSinkLaneSegmentForLane(org.movsim.simulator.roadnetwork.LaneSegment, int)}
      */
     @Test
     public final void testSetSinkLaneSegmentForLane() {

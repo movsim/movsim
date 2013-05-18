@@ -63,7 +63,6 @@ public final class ModelParameters {
         return param.getS0() >= 0;
     }
 
-
     private static boolean isValidProbabilityRange(double p) {
         return p >= 0 && p <= 1;
     }
@@ -81,7 +80,7 @@ public final class ModelParameters {
         }
         return true;
     }
-    
+
     public static boolean isValidParameters(IModelParameterIDM param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param) || param.getT() <= 0 || param.getS1() < 0
                 || param.getDelta() <= 0 || param.getA() <= 0 || param.getB() <= 0) {
@@ -111,7 +110,6 @@ public final class ModelParameters {
         }
         return true;
     }
-
 
     public static boolean isValidParameter(IModelParameterNewell param) {
         if (!isValidDesiredSpeed(param) || isValidMinimumGap(param)) {

@@ -19,7 +19,6 @@
  */
 package org.movsim.simulator.vehicles.longitudinalmodel.acceleration;
 
-
 /**
  * The Class EquilibriumNewell.
  */

@@ -181,6 +181,7 @@ public interface RoadMapping {
     PolygonFloat mapFloat(Vehicle vehicle, double time);
 
     boolean isPeer();
+
     /**
      * Polygon with integer coordinates.
      */

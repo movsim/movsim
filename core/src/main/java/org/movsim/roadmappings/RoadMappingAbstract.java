@@ -99,7 +99,6 @@ public abstract class RoadMappingAbstract implements RoadMapping {
         this(laneCount, 1, laneWidth, x0, y0);
     }
 
-
     /**
      * Constructor.
      * 

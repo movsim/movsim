@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -27,7 +27,6 @@
 package org.movsim.roadmappings;
 
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.PlanView.Geometry;
-
 
 /**
  * Maps a road segment onto an arc of a circle. Angles are interpreted as in the Argand diagram, that is 0 is at the 3
@@ -90,8 +89,7 @@ public class RoadMappingArc extends RoadMappingCircle {
      * @param curvature
      *            curvature of arc
      */
-    RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length,
-            double curvature) {
+    RoadMappingArc(int laneCount, double s, double x0, double y0, double startAngle, double length, double curvature) {
         super(laneCount, x0, y0, 1.0 / Math.abs(curvature), curvature < 0.0);
         roadLength = length;
         this.startAngle = startAngle;
@@ -144,5 +142,5 @@ public class RoadMappingArc extends RoadMappingCircle {
     public double arcAngle() {
         return arcAngle;
     }
-   
+
 }

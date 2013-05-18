@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -60,8 +60,9 @@ public abstract class LongitudinalModelBase {
     public enum ModelName {
         IDM(ModelCategory.TIME_CONTINUOUS_MODEL, "Intelligent-Driver-Model"), ACC(ModelCategory.TIME_CONTINUOUS_MODEL,
                 "Adaptive-Cruise-Control-Model"), OVM_FVDM(ModelCategory.TIME_CONTINUOUS_MODEL,
-                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(ModelCategory.ITERATED_COUPLED_MAP_MODEL,
-                "Gipps-Model"), NEWELL(ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"),KRAUSS(
+                "Optimal-Velocity-Model / Full-Velocity-Difference-Model"), GIPPS(
+                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Gipps-Model"), NEWELL(
+                ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Newell-Model"), KRAUSS(
                 ModelCategory.ITERATED_COUPLED_MAP_MODEL, "Krauss-Model"), NSM(ModelCategory.CELLULAR_AUTOMATON,
                 "Nagel-Schreckenberg-Model / Barlovic-Model"), KKW(ModelCategory.CELLULAR_AUTOMATON,
                 "Kerner-Klenov-Wolf-Model"), CCS(ModelCategory.TIME_CONTINUOUS_MODEL, "Cross-Country-Skiing-Model"), PTM(
@@ -132,7 +133,7 @@ public abstract class LongitudinalModelBase {
     public ModelCategory getModelCategory() {
         return modelName.getCategory();
     }
-    
+
     /**
      * Checks if is cellular automaton.
      * 
@@ -199,7 +200,7 @@ public abstract class LongitudinalModelBase {
     public void setRelativeRandomizationV0(double relRandomizationFactor, DistributionTypeEnum distributionType) {
         if (distributionType == DistributionTypeEnum.GAUSSIAN) {
             v0RandomizationFactor = MyRandom.getGaussiansDistributedRandomizedFactor(relRandomizationFactor, 3);
-        }else {
+        } else {
             v0RandomizationFactor = MyRandom.getUniformlyDistributedRandomizedFactor(relRandomizationFactor);
         }
         Preconditions.checkArgument(v0RandomizationFactor > 0, "relative v0 randomization factor must be > 0");

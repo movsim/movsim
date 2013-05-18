@@ -57,8 +57,7 @@ public class SimpleRamp extends AbstractTrafficSource {
     private final InflowTimeSeries inflowTimeSeries;
 
     public SimpleRamp(TrafficCompositionGenerator vehGenerator, RoadSegment roadSegment,
-            org.movsim.autogen.SimpleRamp simpleRampData,
-            InflowTimeSeries inflowTimeSeries) {
+            org.movsim.autogen.SimpleRamp simpleRampData, InflowTimeSeries inflowTimeSeries) {
         super(vehGenerator, roadSegment);
         this.inflowTimeSeries = inflowTimeSeries;
         this.relativeSpeedToLeader = simpleRampData.getRelativeSpeed();
@@ -146,8 +145,8 @@ public class SimpleRamp extends AbstractTrafficSource {
             return;
         }
 
-        double enterFrontPosition = Math.max(testVehicle.length(), vehicle.getRearPosition() - relativeGapToLeader * gap
-                + 0.5 * testVehicle.length());
+        double enterFrontPosition = Math.max(testVehicle.length(), vehicle.getRearPosition() - relativeGapToLeader
+                * gap + 0.5 * testVehicle.length());
         final double gapToLeader = vehicle.getRearPosition() - enterFrontPosition;
         double speed = relativeSpeedToLeader * vehicle.getSpeed();
         gapCandidates.add(new GapCandidate(gapToLeader, laneSegment.lane(), enterFrontPosition, speed));

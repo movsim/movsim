@@ -676,7 +676,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public void updateSignalPoints(double simulationTime) {
-        for(SignalPoint signalPoint : signalPoints){
+        for (SignalPoint signalPoint : signalPoints) {
             signalPoint.registerPassingVehicles(simulationTime, Iterators.filter(iterator(), signalPoint.predicate()));
         }
     }
@@ -967,7 +967,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     //
     // }
 
-
     /**
      * Returns true if each lane in the vehicle array is sorted.
      * 
@@ -1077,8 +1076,8 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
                     sb.append(String.format("Crash of Vehicle i=%d (nodeId=%d) at x=%.4f ", index, vehicle.getId(),
                             vehicle.getFrontPosition()));
                     if (vehFront != null) {
-                        sb.append(String.format("with veh (nodeId=%d) in front at x=%.4f on lane=%d\n", vehFront.getId(),
-                                vehFront.getFrontPosition(), vehicle.lane()));
+                        sb.append(String.format("with veh (nodeId=%d) in front at x=%.4f on lane=%d\n",
+                                vehFront.getId(), vehFront.getFrontPosition(), vehicle.lane()));
                     }
                     sb.append("internal nodeId=").append(id);
                     sb.append(", roadId=").append(userId);
@@ -1201,7 +1200,6 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return roadObjects;
     }
 
-    
     public final boolean hasDownstreamConnection() {
         for (LaneSegment laneSegment : laneSegments) {
             if (laneSegment.sinkLaneSegment() != null && laneSegment.sinkLaneSegment().roadSegment() != null) {
@@ -1211,13 +1209,12 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return false;
     }
 
-    
-    // TODO new concept, think about refactoring 
+    // TODO new concept, think about refactoring
     public class Node {
 
         private long nodeId = Long.MAX_VALUE;
         private final String type;
-        
+
         public Node(String type) {
             this.type = Preconditions.checkNotNull(type);
         }
@@ -1255,11 +1252,10 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
         return destination;
     }
 
-
     @Override
     public String toString() {
-        return "RoadSegment [nodeId=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength=" + roadLength
-                + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
+        return "RoadSegment [nodeId=" + id + ", userId=" + userId + ", roadName=" + roadName + ", roadLength="
+                + roadLength + ", laneCount=" + laneCount + ", " + getOriginNode() + ", " + getDestinationNode() + "]";
     }
 
     public SignalPoints signalPoints() {

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
  * Paper for reference:
  * </p>
  * <p>
- * <a href="http://arxiv.org/abs/physics/0508222"> M. Treiber, A. Kesting, D. Helbing, Understanding widely scattered traffic flows, the capacity drop, and platoons as
- * effects of variance-driven time gaps. Phys. Rev. E 74, 016123 (2006).</a>
+ * <a href="http://arxiv.org/abs/physics/0508222"> M. Treiber, A. Kesting, D. Helbing, Understanding widely scattered traffic flows, the
+ * capacity drop, and platoons as effects of variance-driven time gaps. Phys. Rev. E 74, 016123 (2006).</a>
  * </p>
  */
 
@@ -91,8 +91,8 @@ public class Noise {
         if (isWienerProcess) {
             final double betaAcc = Math.exp(-dt / tauRelaxAcc);
             xiAcc = betaAcc * xiAcc + fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1;
-            LOG.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}",
-                    betaAcc, (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1));
+            LOG.debug("Wiener process: betaAcc={}, stdDevAcc*Math.sqrt(2*dt/tauRelaxAcc)*randomMu0Sigma1= {}", betaAcc,
+                    (fluctStrength * Math.sqrt(2 * dt / tauRelaxAcc) * randomMu0Sigma1));
         } else {
             // delta-correlated acc noise.
             xiAcc = Math.sqrt(fluctStrength / dt) * randomMu0Sigma1;

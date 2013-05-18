@@ -1,3 +1,29 @@
+/*
+ * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
+ * <movsim.org@gmail.com>
+ * -----------------------------------------------------------------------------------------
+ * 
+ * This file is part of
+ * 
+ * MovSim - the multi-model open-source vehicular-traffic simulator.
+ * 
+ * MovSim is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * MovSim is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with MovSim. If not, see <http://www.gnu.org/licenses/>
+ * or <http://www.movsim.org>.
+ * 
+ * -----------------------------------------------------------------------------------------
+ */
+
 package org.movsim.simulator.roadnetwork.controller;
 
 import java.util.Collections;
@@ -27,8 +53,9 @@ public class GradientProfile extends RoadObjectController {
     public GradientProfile(ElevationProfile elevationProfile, RoadSegment roadSegment) {
         super(RoadObjectType.GRADIENT_PROFILE, elevationProfile.getElevation().get(0).getS(), roadSegment);
         createGradientProfile(elevationProfile.getElevation());
-        if(position != gradients.firstKey()){
-            throw new IllegalArgumentException("first given track position="+position+" > lowest position=" + gradients.firstKey()+" in elevation profile");
+        if (position != gradients.firstKey()) {
+            throw new IllegalArgumentException("first given track position=" + position + " > lowest position="
+                    + gradients.firstKey() + " in elevation profile");
         }
         endPosition = gradients.lastKey();
         if (endPosition > roadSegment().roadLength()) {
@@ -67,7 +94,7 @@ public class GradientProfile extends RoadObjectController {
         Double posUpstream = gradients.headMap(vehicle.getFrontPosition()).lastKey();
         double gradient = gradients.get(posUpstream);
         vehicle.setSlope(gradient);
-        LOG.info("pos={} --> slope gradient={}", vehicle.getFrontPosition(), gradient);
+        LOG.debug("pos={} --> slope gradient={}", vehicle.getFrontPosition(), gradient);
     }
 
     private void createGradientProfile(List<Elevation> elevationProfile) {
@@ -75,28 +102,28 @@ public class GradientProfile extends RoadObjectController {
         for (Elevation basePoint : elevationProfile) {
             elevation.put(basePoint.getS(), basePoint.getA());
         }
-        
+
         Entry<Double, Double> previousElevationPoint = null;
-        for(Entry<Double, Double> elevationPoint : elevation.entrySet()){
-            if(previousElevationPoint==null){
+        for (Entry<Double, Double> elevationPoint : elevation.entrySet()) {
+            if (previousElevationPoint == null) {
                 previousElevationPoint = elevationPoint;
                 continue;
             }
-            double deltaPosition = elevationPoint.getKey()-previousElevationPoint.getKey();
-            double deltaHeight = elevationPoint.getValue()-previousElevationPoint.getValue();
-            if(deltaPosition>0){
-                gradients.put(previousElevationPoint.getKey(), deltaHeight/deltaPosition);
+            double deltaPosition = elevationPoint.getKey() - previousElevationPoint.getKey();
+            double deltaHeight = elevationPoint.getValue() - previousElevationPoint.getValue();
+            if (deltaPosition > 0) {
+                gradients.put(previousElevationPoint.getKey(), deltaHeight / deltaPosition);
                 previousElevationPoint = elevationPoint;
             }
         }
         gradients.put(elevation.lastKey(), 0.0);
-//        // note: perhaps is iterating the sorted map even faster?!
-//        Double posUpstream = elevation.headMap(vehiclePosition).lastKey();
-//        Double posDownstream = elevation.headMap(vehiclePosition).lastKey();
-//        double diff = posDownstream - posUpstream;
-//        return diff == 0 ? 0 : (elevation.get(posDownstream) - elevation.get(posUpstream)) / diff;
+        // // note: perhaps is iterating the sorted map even faster?!
+        // Double posUpstream = elevation.headMap(vehiclePosition).lastKey();
+        // Double posDownstream = elevation.headMap(vehiclePosition).lastKey();
+        // double diff = posDownstream - posUpstream;
+        // return diff == 0 ? 0 : (elevation.get(posDownstream) - elevation.get(posUpstream)) / diff;
     }
-    
+
     public Set<Entry<Double, Double>> gradientEntries() {
         return Collections.unmodifiableSet(gradients.entrySet());
     }

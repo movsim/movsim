@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -42,7 +42,7 @@ public interface MovsimConstants {
 
     final double CRITICAL_GAP = 2;
 
-    final double FREE_SPEED = 100 * Units.KMH_TO_MS;  // TODO just adhoc number for travel time definition.
+    final double FREE_SPEED = 100 * Units.KMH_TO_MS; // TODO just adhoc number for travel time definition.
 
     final String EMPTY_STRING = "";
 

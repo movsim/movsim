@@ -41,7 +41,6 @@ public class TrafficLightApproaching {
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(TrafficLightApproaching.class);
 
-
     // public static final double MAX_LOOK_AHEAD_DISTANCE = 1000;
 
     private boolean considerTrafficLight;

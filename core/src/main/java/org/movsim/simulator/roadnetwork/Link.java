@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -88,22 +88,21 @@ public class Link {
         for (int lane = 1; lane <= limit; ++lane) {
             addLanePair(lane, sourceRoad, lane, sinkRoad);
         }
-//        final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
-//        assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
-//        if (offset < 0) {
-//            final int limit = sourceRoad.laneCount() + offset;
-//            for (int i = 0; i < limit; ++i) {
-//                addLanePair(i - offset, sourceRoad, i, sinkRoad);
-//            }
-//        } else {
-//            final int laneCount = sourceRoad.laneCount();
-//            for (int i = 0; i < laneCount; ++i) {
-//                addLanePair(i, sourceRoad, i + offset, sinkRoad);
-//            }
-//        }
+        // final int offset = sinkRoad.trafficLaneMin() - sourceRoad.trafficLaneMin();
+        // assert sourceRoad.laneCount() + offset == sinkRoad.laneCount();
+        // if (offset < 0) {
+        // final int limit = sourceRoad.laneCount() + offset;
+        // for (int i = 0; i < limit; ++i) {
+        // addLanePair(i - offset, sourceRoad, i, sinkRoad);
+        // }
+        // } else {
+        // final int laneCount = sourceRoad.laneCount();
+        // for (int i = 0; i < laneCount; ++i) {
+        // addLanePair(i, sourceRoad, i + offset, sinkRoad);
+        // }
+        // }
         return sinkRoad;
     }
-
 
     /**
      * Convenience function to add a merge of two road segments into a single road segments.

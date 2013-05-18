@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2010, 2011, 2012 by Arne Kesting, Martin Treiber, Ralph Germ, Martin Budden
- *                                   <movsim.org@gmail.com>
+ * <movsim.org@gmail.com>
  * -----------------------------------------------------------------------------------------
  * 
  * This file is part of
@@ -133,8 +133,8 @@ public class SimulationRun {
      * </p>
      * 
      * <p>
-     * This is the logical time in the simulation (that is the sum of the deltaTs), not the amount of real time that has
-     * been required to do the simulation calculations.
+     * This is the logical time in the simulation (that is the sum of the deltaTs), not the amount of real time that has been required to do
+     * the simulation calculations.
      * </p>
      * 
      * @return the simulation time
