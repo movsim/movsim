@@ -445,7 +445,6 @@ public class LaneSegment implements Iterable<Vehicle> {
      * @return reference to the rear vehicle
      */
     public Vehicle rearVehicle(double vehiclePos) {
-
         final int index = positionBinarySearch(vehiclePos);
         final int insertionPoint = -index - 1;
         if (index >= 0) {

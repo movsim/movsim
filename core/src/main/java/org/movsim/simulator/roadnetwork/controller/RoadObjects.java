@@ -42,13 +42,20 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
-public class RoadObjects implements Iterable<RoadObject> {
+/**
+ * Holds the {@link RoadObject}s of a {@link RoadSegment} in ascending order along the road. Provides iterators for single
+ * {@link RoadObjectType}s and over all objects.
+ * 
+ * <br>
+ * created: May 18, 2013<br>
+ * 
+ */
+public final class RoadObjects implements Iterable<RoadObject> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RoadObjects.class);
 
     final RoadSegment roadSegment;
 
-    // sorted in ascending order
     final EnumMap<RoadObjectType, SortedSet<RoadObject>> roadObjects = new EnumMap<>(RoadObjectType.class);
 
     Predicate<RoadObject> predicate = null;
@@ -160,7 +167,7 @@ public class RoadObjects implements Iterable<RoadObject> {
 
     @Override
     public Iterator<RoadObject> iterator() {
-        return Iterables.concat(roadObjects.values()).iterator();
+        return Iterators.unmodifiableIterator(Iterables.concat(roadObjects.values()).iterator());
     }
 
 }

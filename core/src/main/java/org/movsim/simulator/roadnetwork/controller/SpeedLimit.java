@@ -71,7 +71,7 @@ public class SpeedLimit extends RoadObjectController {
 
     @Override
     public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.START, position, this));
+        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.BEGIN, position, this));
     }
 
 }

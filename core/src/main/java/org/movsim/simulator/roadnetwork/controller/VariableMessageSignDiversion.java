@@ -48,7 +48,7 @@ public class VariableMessageSignDiversion extends RoadObjectController {
 
     @Override
     public void createSignalPositions() {
-        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.START, position, this));
+        roadSegment.signalPoints().add(new SignalPoint(SignalPointType.BEGIN, position, this));
 
         // FIXME hack here, use valid length instead and put SP on *all* roadSegments
         RoadSegment sinkRoadSegment = roadSegment().sinkRoadSegment(1);

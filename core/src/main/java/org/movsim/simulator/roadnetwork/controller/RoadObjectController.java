@@ -41,7 +41,14 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterators;
 
-public abstract class RoadObjectController implements RoadObject, Comparable<RoadObject> {
+/**
+ * 
+ * 
+ * <br>
+ * created: May 18, 2013<br>
+ * 
+ */
+public abstract class RoadObjectController implements RoadObject {
 
     protected static final Logger LOG = LoggerFactory.getLogger(RoadObjectController.class);
 
@@ -54,7 +61,9 @@ public abstract class RoadObjectController implements RoadObject, Comparable<Roa
     private boolean laneValidity[];
 
     protected double simulationTime;
+
     protected List<Vehicle> vehiclesPassedStart = new ArrayList<>();
+
     protected List<Vehicle> vehiclesPassedEnd = new ArrayList<>();
 
     public RoadObjectController(RoadObjectType type, double position, RoadSegment roadSegment) {
@@ -83,8 +92,7 @@ public abstract class RoadObjectController implements RoadObject, Comparable<Roa
 
     @Override
     public int compareTo(RoadObject compareSign) {
-        // ascending order
-        return Double.compare(position, compareSign.position());
+        return Double.compare(position, compareSign.position()); // in ascending order
     }
 
     @Override
@@ -122,7 +130,7 @@ public abstract class RoadObjectController implements RoadObject, Comparable<Roa
     public void registerVehicles(SignalPointType signalPointType, double simulationTime,
             Iterator<Vehicle> passedVehicles) {
         this.simulationTime = simulationTime;
-        if (signalPointType == SignalPointType.START) {
+        if (signalPointType == SignalPointType.BEGIN) {
             vehiclesPassedStart.clear();
             Iterators.addAll(vehiclesPassedStart, passedVehicles);
         } else {

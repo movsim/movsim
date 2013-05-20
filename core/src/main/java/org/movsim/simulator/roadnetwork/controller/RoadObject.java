@@ -26,10 +26,15 @@
 
 package org.movsim.simulator.roadnetwork.controller;
 
-import org.movsim.simulator.SimulationTimeStep;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 
-public interface RoadObject extends SimulationTimeStep {
+/**
+ * 
+ * <br>
+ * created: May 18, 2013<br>
+ * 
+ */
+public interface RoadObject extends Comparable<RoadObject> {
 
     public enum RoadObjectType {
         TRAFFICLIGHT, SPEEDLIMIT, LOOPDETECTOR, VMS_DIVERSION, FLOW_CONSERVING_BOTTLENECK, GRADIENT_PROFILE;
@@ -45,8 +50,10 @@ public interface RoadObject extends SimulationTimeStep {
 
     void createSignalPositions();
 
+    void timeStep(double dt, double simulationTime, long iterationCount);
+
     /**
-     * Self-defined OpenDRIVE.Road.Objects.Object.type attribute values.
+     * Self-defined OpenDRIVE.Road.Objects.Object.type attributes.
      * 
      */
     public enum XodrRoadObjectType {

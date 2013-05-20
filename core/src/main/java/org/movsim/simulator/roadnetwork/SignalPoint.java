@@ -39,7 +39,7 @@ import com.google.common.base.Predicate;
 public class SignalPoint {
 
     public enum SignalPointType {
-        START, END;
+        BEGIN, END;
     }
 
     private final SignalPointType type;
@@ -83,6 +83,7 @@ public class SignalPoint {
             if (vehicle == null) {
                 return false;
             }
+            assert vehicle.getFrontPositionOld() <= vehicle.getFrontPosition() : "oldPos > pos!";
             return vehicle.getFrontPositionOld() <= position && vehicle.getFrontPosition() > position;
         }
 

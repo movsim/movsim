@@ -423,6 +423,7 @@ public class Vehicle {
      *            new rear position
      */
     public final void setRearPosition(double rearPosition) {
+
         this.frontPosition = rearPosition + length;
     }
 

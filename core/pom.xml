@@ -6,27 +6,25 @@
         <artifactId>Movsim</artifactId>
         <version>1.6.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>MovsimCore</artifactId>
     <packaging>jar</packaging>
     <name>MovsimCore</name>
     <description>Movsim core simulation component.</description>
-
     <dependencies>
         <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimXsd</artifactId>
-	    <version>${project.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimCommon</artifactId>
-	    <version>${project.version}</version>
+            <version>${project.version}</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.movsim</groupId>
             <artifactId>MovsimConsumption</artifactId>
-	    <version>${project.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
@@ -38,14 +36,14 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-      <dependency>
-	<groupId>net.sf.jgrapht</groupId>
-	<artifactId>jgrapht</artifactId>
-	<version>0.8.3</version>
-</dependency>
+        <dependency>
+            <groupId>net.sf.jgrapht</groupId>
+            <artifactId>jgrapht</artifactId>
+            <version>0.8.3</version>
+        </dependency>
     </dependencies>
     <build>
-        <plugins>		
+        <plugins>
             <!-- build executable jar with all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
