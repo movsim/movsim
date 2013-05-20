@@ -34,19 +34,18 @@ import com.google.common.base.Predicate;
 
 /**
  * TODO
- * <p>
- * Uses rearPosition of vehicle because this is in line with the outflow-update of the roadSegments.
  * 
  * <br>
  * created: May 20, 2013<br>
  * 
  */
-public final class VehiclePassedPosition implements Predicate<Vehicle> {
+public class VehicleWithinRange implements Predicate<Vehicle> {
+    private final double begin;
+    private final double end;
 
-    private final double position;
-
-    public VehiclePassedPosition(double position) {
-        this.position = position;
+    public VehicleWithinRange(double begin, double end) {
+        this.begin = begin;
+        this.end = end;
     }
 
     @Override
@@ -54,8 +53,6 @@ public final class VehiclePassedPosition implements Predicate<Vehicle> {
         if (vehicle == null) {
             return false;
         }
-        assert vehicle.getRearPositionOld() <= vehicle.getRearPosition() : "oldPos > pos!";
-        return vehicle.getRearPositionOld() <= position && vehicle.getRearPosition() > position;
+        return vehicle.getFrontPosition() >= begin && vehicle.getFrontPosition() <= end;
     }
-
 }

@@ -42,7 +42,7 @@ import org.movsim.simulator.roadnetwork.controller.RoadObjects;
 import org.movsim.simulator.roadnetwork.controller.SpeedLimit;
 import org.movsim.simulator.roadnetwork.controller.TrafficLight;
 import org.movsim.simulator.roadnetwork.controller.VariableMessageSignDiversion;
-import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
+import org.movsim.simulator.roadnetwork.predicates.VehicleWithinRange;
 import org.movsim.simulator.vehicles.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -679,6 +679,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
 
     // NOT ELEGANT: must be called twice because vehicles are shifted between roadSegments so that they have to be registered twice!
     // new concept needed here, perhaps temporary vehicle objects, could also be used for LaneChanges
+    // Good test: check for identical numbers of vehicles passing x=xRoadLength and x=0 of successor RoadSegment.
     private boolean updateSignalPointsBeforeOutflowCalled;
     protected void updateSignalPointsBeforeOutflow(double simulationTime) {
         updateSignalPointsBeforeOutflowCalled = true;
@@ -697,7 +698,7 @@ public class RoadSegment extends DefaultWeightedEdge implements Iterable<Vehicle
     }
 
     public Iterator<Vehicle> vehiclesWithinRange(double begin, double end) {
-        return Iterators.filter(iterator(), new VehicleWithRange(begin, end));
+        return Iterators.filter(iterator(), new VehicleWithinRange(begin, end));
     }
 
     public Iterator<Vehicle> filteredVehicles(Predicate<Vehicle> predicate) {

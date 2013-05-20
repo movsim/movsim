@@ -31,7 +31,7 @@ import java.util.Iterator;
 import org.movsim.autogen.Inhomogeneity;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
-import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
+import org.movsim.simulator.roadnetwork.predicates.VehicleWithinRange;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Predicate;
@@ -66,7 +66,7 @@ public class FlowConservingBottleneck extends RoadObjectController {
                     "FlowConservingBottleneckController can only be applied to a single roadSegment, but endPosition="
                             + endPosition + " is larger than road=" + roadSegment().userId());
         }
-        this.vehiclesWithRange = new VehicleWithRange(position, endPosition);
+        this.vehiclesWithRange = new VehicleWithinRange(position, endPosition);
         endSignalPoint = new SignalPoint(endPosition, roadSegment);
     }
 

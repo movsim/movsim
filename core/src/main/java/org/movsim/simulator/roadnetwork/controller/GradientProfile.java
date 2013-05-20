@@ -38,7 +38,7 @@ import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile;
 import org.movsim.network.autogen.opendrive.OpenDRIVE.Road.ElevationProfile.Elevation;
 import org.movsim.simulator.roadnetwork.RoadSegment;
 import org.movsim.simulator.roadnetwork.SignalPoint;
-import org.movsim.simulator.roadnetwork.predicates.VehicleWithRange;
+import org.movsim.simulator.roadnetwork.predicates.VehicleWithinRange;
 import org.movsim.simulator.vehicles.Vehicle;
 
 import com.google.common.base.Predicate;
@@ -76,7 +76,7 @@ public class GradientProfile extends RoadObjectController {
             throw new IllegalArgumentException("elevation profile track position s=" + endPosition
                     + " exceeds roadlength.");
         }
-        this.vehiclesWithRange = new VehicleWithRange(position, endPosition);
+        this.vehiclesWithRange = new VehicleWithinRange(position, endPosition);
         endSignalPoint = new SignalPoint(endPosition, roadSegment);
     }
 
